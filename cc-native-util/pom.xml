@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>cc.creativecomputing</groupId>
+    <artifactId>cc-main</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>2.0-PREVIEW</version>
+  </parent>
+
+  <artifactId>cc-native-util</artifactId>
+  <name>creative computing native utilities</name>
+  
+  <repositories>
+    <!-- This repository should be used only for unreleased development versions, typically all release candidates and post builds -->
+    <repository>
+      <id>jogamp</id>
+      <url>http://jogamp.org/deployment/maven</url>
+    </repository>
+  </repositories>
+  
+  <properties>
+    <jogamp.version>2.3.1</jogamp.version>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.jogamp.gluegen</groupId>
+      <artifactId>gluegen-rt</artifactId>
+      <version>${jogamp.version}</version>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<globject>
+	<name>Buffer</name>
+	<enum>
+		<name>BufferUsage</name>
+		<values>
+			<value>
+				<name>STREAM_DRAW</name>
+				<glname>GL_STREAM_DRAW</glname>
+			</value>
+		</values>
+	</enum>
+	<attribute>
+		<type>int</type>
+		<name>id</name>
+		<creator>glGenBuffers</creator>
+	</attribute>
+	<functions>
+		<function>
+			<name>bind</name>
+			<glfunction>glBindProgramPipeline</glfunction>
+		</function>
+	</functions>
+	
+	<static>
+		<function>
+			<name>isProgramPipeline</name>
+			<glfunction>glIsProgramPipeline</glfunction>
+		</function>
+	</static>
+</globject>

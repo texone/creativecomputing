@@ -1,0 +1,6 @@
+/realtimeCode/
+*.json
+*.classpath
+/.settings/
+/target/
+*.project

@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>cc.creativecomputing</groupId>
+    <artifactId>cc-main</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>2.0-PREVIEW</version>
+  </parent>
+
+  <artifactId>cc-kinect</artifactId>
+  <name>creative computing kinect</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-math</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-app</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-image</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-native-util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.deps.KinectPV2</groupId>
+      <artifactId>KinectPV2</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.deps.KinectPV2</groupId>
+      <artifactId>KinectPV2</artifactId>
+      <version>1.0</version>
+      <classifier>natives-${NATIVE_LIB_CLASSIFIER}</classifier>
+    </dependency>
+  </dependencies>
+  
+  <repositories>
+    <repository>
+      <id>dep.creativecomputing-builds.googlecode.com</id>
+      <url>http://creativecomputing-builds.googlecode.com/svn/m2/dependencies</url>
+    </repository>
+  </repositories>
+</project>

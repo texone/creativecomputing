@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>cc.creativecomputing</groupId>
+    <artifactId>cc-main</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>2.0-PREVIEW</version>
+  </parent>
+
+  <artifactId>cc-control-ui</artifactId>
+  <name>creative computing control ui</name>
+  
+  <build> 
+    <resources>
+    </resources>
+  </build> 
+
+  <dependencies>
+
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>   
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-io</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-app</artifactId>
+      <version>${project.version}</version>
+    </dependency>       
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-data</artifactId>
+      <version>${project.version}</version>
+    </dependency>   
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-control</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.fifesoft</groupId>
+      <artifactId>rsyntaxtextarea</artifactId>
+      <version>2.5.6</version>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<globject>
+	<name>ProgramPipeline</name>
+	<enum>
+		<name></name>
+	</enum>
+	<attribute>
+		<type>int</type>
+		<name>id</name>
+		<creator>glGenProgramPipelines</creator>
+	</attribute>
+	<functions>
+		<function>
+			<name>bind</name>
+			<glfunction>glBindProgramPipeline</glfunction>
+		</function>
+	</functions>
+	
+	<static>
+		<function>
+			<name>isProgramPipeline</name>
+			<glfunction>glIsProgramPipeline</glfunction>
+		</function>
+	</static>
+</globject>

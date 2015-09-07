@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui>
+	<CCControlPresetTab label="app">
+		<uielements>
+			<CCUIComponent label="app">
+				<uielements>
+					<CCUISlider label="max speed">
+						<preset value="107.24999"/>
+					</CCUISlider>
+					<CCUISlider label="max acc">
+						<preset value="150.75"/>
+					</CCUISlider>
+					<CCUISlider label="max jerk">
+						<preset value="45.75"/>
+					</CCUISlider>
+					<CCUISlider label="line">
+						<preset value="0"/>
+					</CCUISlider>
+					<CCUISlider label="line scale">
+						<preset value="790"/>
+					</CCUISlider>
+					<CCUIDropDown label="draw mode">
+						<preset value="POSITION"/>
+					</CCUIDropDown>
+					<CCUIDropDown label="draw style">
+						<preset value="SIMULATIONS"/>
+					</CCUIDropDown>
+				</uielements>
+			</CCUIComponent>
+		</uielements>
+		<presetcontroller numberofpresets="1">
+			<presetnames>
+				<presetname name="Preset:0"/>
+			</presetnames>
+			<switcher selectedPreset="0"/>
+			<blender>
+				<blend preset="Preset:0">0.0</blend>
+			</blender>
+		</presetcontroller>
+	</CCControlPresetTab>
+</ui>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<mappings>
+	<mapping name="lights" columns="16" rows="1" depth="1" frameRate="30" bits="8">
+		<channel id="0" column="0" row="0" depth="0" min="0" max="1"/>
+		<channel id="1" column="1" row="0" depth="0" min="0" max="1"/>
+		<channel id="2" column="2" row="0" depth="0" min="0" max="1"/>
+		<channel id="3" column="3" row="0" depth="0" min="0" max="1"/>
+		<channel id="4" column="4" row="0" depth="0" min="0" max="1"/>
+		<channel id="5" column="5" row="0" depth="0" min="0" max="1"/>
+		<channel id="6" column="6" row="0" depth="0" min="0" max="1"/>
+		<channel id="7" column="7" row="0" depth="0" min="0" max="1"/>
+		<channel id="8" column="8" row="0" depth="0" min="0" max="1"/>
+		<channel id="9" column="9" row="0" depth="0" min="0" max="1"/>
+		<channel id="10" column="10" row="0" depth="0" min="0" max="1"/>
+		<channel id="11" column="11" row="0" depth="0" min="0" max="1"/>
+		<channel id="12" column="12" row="0" depth="0" min="0" max="1"/>
+		<channel id="13" column="13" row="0" depth="0" min="0" max="1"/>
+		<channel id="14" column="14" row="0" depth="0" min="0" max="1"/>
+		<channel id="15" column="15" row="0" depth="0" min="0" max="1"/>
+	</mapping>
+</mappings>

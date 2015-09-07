@@ -1,0 +1,25 @@
+/*
+This file was produced by 3D Exploration Plugin: CPP Export filter.
+
+3D Exploration
+
+Copyright (c) 1999-2000 X Dimension Software
+
+WWW         http://www.xdsoft.com/explorer/
+eMail       info@xdsoft.com
+*/
+
+// 8146 Verticies
+// 8127 Normals
+// 16301 Triangles
+
+// face_indices
+3
+// surface
+{0,1,2,0,0,0},{0,2,3,1,1,1},{0,3,1,2,2,2}
+// vertices
+4
+{0.0f, 0.0f, 0.5f},{-0.3f, 0.7f, 0.0f},{0.2f, 0.0f, 0.5f},{0.0f, -0.9f, -0.0f}
+// normals
+3
+{1.0,1.0,0.0f},{1.0,0.0,1.0f},{0.0,1.0,1.0f}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<sculpture>
+	<elements>
+		<element id="0">
+			<lights>
+				<light id="0"/>
+			</lights>
+		</element>
+		<element id="1">
+			<lights>
+				<light id="1"/>
+			</lights>
+		</element>
+		<element id="2">
+			<lights>
+				<light id="2"/>
+			</lights>
+		</element>
+		<element id="3">
+			<lights>
+				<light id="3"/>
+			</lights>
+		</element>
+		<element id="4">
+			<lights>
+				<light id="4"/>
+			</lights>
+		</element>
+		<element id="5">
+			<lights>
+				<light id="5"/>
+			</lights>
+		</element>
+		<element id="6">
+			<lights>
+				<light id="6"/>
+			</lights>
+		</element>
+		<element id="7">
+			<lights>
+				<light id="7"/>
+			</lights>
+		</element>
+		<element id="8">
+			<lights>
+				<light id="8"/>
+			</lights>
+		</element>
+		<element id="9">
+			<lights>
+				<light id="9"/>
+			</lights>
+		</element>
+		<element id="10">
+			<lights>
+				<light id="10"/>
+			</lights>
+		</element>
+		<element id="11">
+			<lights>
+				<light id="11"/>
+			</lights>
+		</element>
+		<element id="12">
+			<lights>
+				<light id="12"/>
+			</lights>
+		</element>
+		<element id="13">
+			<lights>
+				<light id="13"/>
+			</lights>
+		</element>
+		<element id="14">
+			<lights>
+				<light id="14"/>
+			</lights>
+		</element>
+		<element id="15">
+			<lights>
+				<light id="15"/>
+			</lights>
+		</element>
+	</elements>
+</sculpture>

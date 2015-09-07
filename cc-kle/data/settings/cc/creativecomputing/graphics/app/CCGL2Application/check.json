@@ -1,0 +1,583 @@
+{
+  "_myAnimator": {
+    "name": "animator",
+    "type": "cc.creativecomputing.app.modules.CCAnimator",
+    "value": {
+      "fixedUpdateTime": {
+        "min": 0,
+        "max": 1,
+        "precision": "",
+        "name": "fixed update time",
+        "type": "double",
+        "value": 1
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "framerate",
+        "type": "int",
+        "value": 30
+      },
+      "fixUpdateTime": {
+        "name": "fix update time",
+        "type": "boolean",
+        "value": false
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "type": "cc.creativecomputing.app.modules.CCAnimator$CCAnimationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "type": "cc.creativecomputing.app.modules.CCAnimator$CCExceptionHandling",
+        "value": "THROW"
+      }
+    }
+  },
+  "_myAdapter": {
+    "name": "app",
+    "type": "cc.creativecomputing.gl.app.CCGLAdapter",
+    "value": {
+      "_cBounds": {
+        "name": "bounds",
+        "type": "cc.creativecomputing.kle.elements.motors.CC2Motor1ConnectionBounds",
+        "value": {
+          "_cMaxAcceleration": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "precision": "",
+            "name": "max acceleration",
+            "type": "double",
+            "value": 0
+          },
+          "elementRadiusScale": {
+            "min": 0,
+            "max": 2,
+            "precision": "",
+            "name": "radius scale",
+            "type": "double",
+            "value": 1
+          },
+          "minRopeAngle": {
+            "min": 0,
+            "max": 30,
+            "precision": "",
+            "name": "min rope angle",
+            "type": "double",
+            "value": 6
+          },
+          "_cMaxVelocity": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "precision": "",
+            "name": "max velocity",
+            "type": "double",
+            "value": 0
+          },
+          "_cMaxJerk": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "precision": "",
+            "name": "max jerk",
+            "type": "double",
+            "value": 0
+          },
+          "_cFilter": {
+            "name": "apply filter",
+            "type": "boolean",
+            "value": false
+          },
+          "bottomDistance": {
+            "min": 0,
+            "max": 2000,
+            "precision": "",
+            "name": "bottom distance",
+            "type": "double",
+            "value": 2000
+          },
+          "topDistance": {
+            "min": 0,
+            "max": 2000,
+            "precision": "",
+            "name": "top distance",
+            "type": "double",
+            "value": 0
+          }
+        }
+      },
+      "_myAnalyzer": {
+        "name": "analyzer",
+        "type": "cc.creativecomputing.kle.analyze.CCFileMotionAnalyzer",
+        "value": {
+          "_cNumberOfElements": {
+            "min": 1,
+            "max": 1000,
+            "precision": "",
+            "name": "number of elements",
+            "type": "int",
+            "value": 2
+          },
+          "_cDrawViolations": {
+            "name": "draw violations",
+            "type": "boolean",
+            "value": true
+          },
+          "_cCurveScale": {
+            "min": 0.10000000149011612,
+            "max": 10,
+            "precision": "",
+            "name": "curve scale",
+            "type": "double",
+            "value": 1.5850000381469727
+          },
+          "_cValue": {
+            "name": "value",
+            "type": "cc.creativecomputing.kle.analyze.CCMotionHistoryGraph",
+            "value": {
+              "_cShow": {
+                "name": "show",
+                "type": "boolean",
+                "value": true
+              },
+              "_cMax": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "precision": "",
+                "name": "max",
+                "type": "double",
+                "value": 15000
+              },
+              "_cColor": {
+                "a": 1,
+                "r": 0,
+                "b": 0,
+                "g": 0,
+                "name": "color",
+                "type": "cc.creativecomputing.math.CCColor",
+                "value": "ff000000"
+              }
+            }
+          },
+          "_cHistorySize": {
+            "min": 1,
+            "max": 500,
+            "precision": "",
+            "name": "history size",
+            "type": "int",
+            "value": 1
+          },
+          "_cTimeBased": {
+            "name": "time based",
+            "type": "boolean",
+            "value": false
+          },
+          "_cVelocity": {
+            "name": "velocity",
+            "type": "cc.creativecomputing.kle.analyze.CCMotionHistoryGraph",
+            "value": {
+              "_cShow": {
+                "name": "show",
+                "type": "boolean",
+                "value": true
+              },
+              "_cMax": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "precision": "",
+                "name": "max",
+                "type": "double",
+                "value": 500
+              },
+              "_cColor": {
+                "a": 1,
+                "r": 1,
+                "b": 0,
+                "g": 0,
+                "name": "color",
+                "type": "cc.creativecomputing.math.CCColor",
+                "value": "ffff0000"
+              }
+            }
+          },
+          "_cFadeOut": {
+            "name": "fade out",
+            "type": "boolean",
+            "value": false
+          },
+          "_cDrawPoints": {
+            "name": "draw points",
+            "type": "boolean",
+            "value": false
+          },
+          "_cJerk": {
+            "name": "jerk",
+            "type": "cc.creativecomputing.kle.analyze.CCMotionHistoryGraph",
+            "value": {
+              "_cShow": {
+                "name": "show",
+                "type": "boolean",
+                "value": true
+              },
+              "_cMax": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "precision": "",
+                "name": "max",
+                "type": "double",
+                "value": 700
+              },
+              "_cColor": {
+                "a": 1,
+                "r": 0,
+                "b": 1,
+                "g": 0,
+                "name": "color",
+                "type": "cc.creativecomputing.math.CCColor",
+                "value": "ff0000ff"
+              }
+            }
+          },
+          "_mySequence": {
+            "name": "sequence",
+            "type": "cc.creativecomputing.kle.CCSequenceAsset",
+            "value": {
+              "path": {
+                "path": "/Users/christianr/dev/cc-2.0-new/cc-kle/./data/141128_CoD_Synchronicity_Choreography.kle",
+                "name": "path",
+                "type": "java.nio.file.Path",
+                "value": "/Users/christianr/dev/cc-2.0-new/cc-kle/./data/141128_CoD_Synchronicity_Choreography.kle"
+              },
+              "_cRate": {
+                "min": 1,
+                "max": 120,
+                "precision": "",
+                "name": "rate",
+                "type": "float",
+                "value": 5
+              }
+            }
+          },
+          "_cTimeScale": {
+            "min": 1,
+            "max": 300,
+            "precision": "",
+            "name": "time scale",
+            "type": "double",
+            "value": 40.16899871826172
+          },
+          "_cElement": {
+            "min": 0,
+            "max": 1000,
+            "precision": "",
+            "name": "element",
+            "type": "int",
+            "value": 0
+          },
+          "_cViolationPointSize": {
+            "min": 1,
+            "max": 20,
+            "precision": "",
+            "name": "violation point size",
+            "type": "double",
+            "value": 5
+          },
+          "_cUpdate": {
+            "name": "update",
+            "type": "boolean",
+            "value": true
+          },
+          "_cAcceleration": {
+            "name": "acceleration",
+            "type": "cc.creativecomputing.kle.analyze.CCMotionHistoryGraph",
+            "value": {
+              "_cShow": {
+                "name": "show",
+                "type": "boolean",
+                "value": true
+              },
+              "_cMax": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "precision": "",
+                "name": "max",
+                "type": "double",
+                "value": 500
+              },
+              "_cColor": {
+                "a": 1,
+                "r": 0,
+                "b": 0,
+                "g": 1,
+                "name": "color",
+                "type": "cc.creativecomputing.math.CCColor",
+                "value": "ff00ff00"
+              }
+            }
+          },
+          "_cShowLength": {
+            "name": "show length",
+            "type": "boolean",
+            "value": false
+          },
+          "_cBackgroundAlpha": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "background alpha",
+            "type": "double",
+            "value": 1
+          },
+          "_cValueScale": {
+            "min": 0.10000000149011612,
+            "max": 1,
+            "precision": "",
+            "name": "value scale",
+            "type": "double",
+            "value": 1
+          },
+          "_cPointSize": {
+            "min": 1,
+            "max": 20,
+            "precision": "",
+            "name": "point size",
+            "type": "double",
+            "value": 1
+          },
+          "_cAnalyzeChannels": {
+            "name": "analyze channels",
+            "type": "boolean",
+            "value": true
+          },
+          "_cAlpha": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "alpha",
+            "type": "float",
+            "value": 1
+          },
+          "_cAnalyzeMode": {
+            "name": "mode",
+            "type": "cc.creativecomputing.kle.analyze.CCSequenceAnalyzer$CCAnalyzeMode",
+            "value": "ANALYZE_CURVES"
+          }
+        }
+      },
+      "_myCameraController": {
+        "name": "camera controller",
+        "type": "cc.creativecomputing.graphics.camera.CCCameraController",
+        "value": {
+          "_myRotation": {
+            "name": "rotation",
+            "type": "cc.creativecomputing.math.CCQuaternion",
+            "value": {
+              "w": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "precision": "",
+                "name": "w",
+                "type": "double",
+                "value": 1
+              },
+              "x": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "precision": "",
+                "name": "x",
+                "type": "double",
+                "value": 0
+              },
+              "y": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "precision": "",
+                "name": "y",
+                "type": "double",
+                "value": 0
+              },
+              "z": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "precision": "",
+                "name": "z",
+                "type": "double",
+                "value": 0
+              }
+            }
+          },
+          "_myDistance": {
+            "min": 1,
+            "max": 20000,
+            "precision": "",
+            "name": "distance",
+            "type": "double",
+            "value": 100
+          },
+          "_myCenter": {
+            "name": "center",
+            "type": "cc.creativecomputing.math.CCVector3",
+            "value": {
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "precision": "",
+                "name": "x",
+                "type": "double",
+                "value": 0
+              },
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "precision": "",
+                "name": "y",
+                "type": "double",
+                "value": 0
+              },
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "precision": "",
+                "name": "z",
+                "type": "double",
+                "value": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "_myGLContext": {
+    "name": "gl context",
+    "type": "cc.creativecomputing.graphics.app.CCGL2Context",
+    "value": {
+      "_myContainer": {
+        "name": "container",
+        "type": "cc.creativecomputing.gl.app.container.GLContainer",
+        "value": {
+          "showPointer": {
+            "name": "show pointer",
+            "type": "boolean",
+            "value": false
+          },
+          "decorated": {
+            "name": "decorated",
+            "type": "boolean",
+            "value": false
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "type": "boolean",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCPixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "type": "boolean",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowY",
+        "type": "int",
+        "value": 150
+      },
+      "containerType": {
+        "name": "containerType",
+        "type": "cc.creativecomputing.gl.app.container.GLContainerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowX",
+        "type": "int",
+        "value": 60
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "type": "boolean",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "type": "java.lang.String",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "type": "java.lang.String",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "antialiasing",
+        "type": "int",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "type": "cc.creativecomputing.gl.app.CCDisplayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "type": "boolean",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "type": "boolean",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "type": "cc.creativecomputing.math.CCColor",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "width",
+        "type": "int",
+        "value": 1800
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "type": "boolean",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCCloseOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "height",
+        "type": "int",
+        "value": 900
+      }
+    }
+  }
+}
