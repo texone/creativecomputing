@@ -266,7 +266,7 @@ public class CCLog {
 	private static void log(Level theLevel, String theMessage) {
 		final Throwable myT = new Throwable();
         final StackTraceElement myMethodCaller = myT.getStackTrace()[2];
-        		
+      
 		Logger myLogger = getLogger(myMethodCaller.getClassName());		
 		String myClass  = myMethodCaller.getClassName();
 		String myMethod = myMethodCaller.getMethodName();

@@ -207,12 +207,16 @@ public class CCReflectionUtil {
 	}
 	
 	public static class CCMethod<Type extends Annotation> extends CCMember<Type> {
-		private Method _myMethod;
+		private Method _mySetMethod;
+		private Method _myGetMethod;
 		private Object _myValue;
 		
-		public CCMethod(Method theMethod, Object theParent, Class<Type> theAnnotation){
-			super(theMethod, theParent, theAnnotation);
-			_myMethod = theMethod;
+		public CCMethod(Method theSetMethod, Method theGetMethod, Object theParent, Class<Type> theAnnotation){
+			super(theSetMethod == null ? theGetMethod : theSetMethod, theParent, theAnnotation);
+			_mySetMethod = theSetMethod;
+			_myGetMethod = theGetMethod;
+			
+//			if(_mySetMethod != null && _myGetMethod != null && )
 		}
 		
 //		public Object value(){
@@ -226,41 +230,51 @@ public class CCReflectionUtil {
 		@Override
 		public void value(Object theObject){
 			_myValue = theObject;
+			if(_mySetMethod == null)return;
 			try {
-				_myMethod.invoke(_myParent, theObject);
+				_mySetMethod.invoke(_myParent, theObject);
 			} catch (Exception e) {
-				Class<?>[] myParameters = _myMethod.getParameterTypes();
+				Class<?>[] myParameters = _mySetMethod.getParameterTypes();
 				for(Class<?> myParameter:myParameters){
 					CCLog.info(myParameter.getName());
 				}
 				CCLog.info(theObject.getClass().getName());
-				throw new CCReflectionException("Could not call: " + _myParent.getClass().getName() + "." + _myMethod.getName(),e);
+				throw new CCReflectionException("Could not call: " + _myParent.getClass().getName() + "." + _mySetMethod.getName(),e);
 			}
 		}
 		
 		public void trigger(Object...theObjects){
 			try {
-				_myMethod.invoke(_myParent, theObjects);
+				_mySetMethod.invoke(_myParent, theObjects);
 			} catch (Exception e) {
 				throw new CCReflectionException(e);
 			}
 		}
 		
 		public Method method(){
-			return _myMethod;
+			return _mySetMethod == null ? _myGetMethod : _mySetMethod;
 		}
 
 		@Override
 		public Object value() {
+			if(_myGetMethod != null){
+				try {
+					return _myGetMethod.invoke(_myParent);
+				} catch (Exception e) {
+					throw new CCReflectionException(e);
+				}
+			}
 			if(_myValue == null)return null;
 			return _myValue;
 		}
 
 		@Override
 		public Class<?> type() {
-			if(_myMethod.getParameterCount() <= 0)return null;
-			return _myMethod.getParameterTypes()[0];
+			if(_myGetMethod != null)return _myGetMethod.getReturnType();
+			if(_mySetMethod.getParameterCount() <= 0)return null;
+			return _mySetMethod.getParameterTypes()[0];
 		}
+		
 	}
 	
 	public static void getMethods(final Class<?> theClass, final Class<? extends Annotation>theAnnotation, final List<Method> theMethods) {
@@ -296,7 +310,7 @@ public class CCReflectionUtil {
 		for(Method myMethod:myMethods){
 			try {
 				//Object myValue = myMethod.get(theObject);
-				myResult.add(new CCMethod(myMethod, theObject, null));
+				myResult.add(new CCMethod(myMethod, null,theObject, null));
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			} 
@@ -310,8 +324,26 @@ public class CCReflectionUtil {
 		
 		List<CCMethod<Type>> myResult = new ArrayList<>();
 		for(Method myMethod:myMethods){
+			String myName = myMethod.getName();
+			Method myGetter = null;
+			Method mySetter = null;
+			if(myMethod.getReturnType().equals(Void.TYPE)){
+				mySetter = myMethod;
+			}else{
+				myGetter = myMethod;
+			}
+			for(Method myMethod2:myMethods){
+				if(myMethod == myMethod2)continue;
+				if(myMethod2.getName().equals(myName)){
+					if(myMethod2.getReturnType().equals(Void.TYPE)){
+						mySetter = myMethod2;
+					}else{
+						myGetter = myMethod2;
+					}
+				}
+			}
 			try {
-				myResult.add(new CCMethod<Type>(myMethod, theObject, theAnnotation));
+				myResult.add(new CCMethod<Type>(mySetter,myGetter, theObject, theAnnotation));
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			}
