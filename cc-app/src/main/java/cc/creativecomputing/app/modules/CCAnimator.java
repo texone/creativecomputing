@@ -16,7 +16,6 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 
 // http://www.java-gaming.org/index.php?topic=24220.0
 
@@ -286,6 +285,7 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 	 * Returns the current frame rate of the animator
 	 * @return current frame rate of the animator
 	 */
+	@CCProperty(name = "show frame rate")
 	public double frameRate(){
 		return _myFrameRate;
 	}
