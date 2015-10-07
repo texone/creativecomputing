@@ -123,8 +123,9 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		List<CCMethod<CCProperty>> myMethods = CCReflectionUtil.getMethods(theObject, CCProperty.class);
 		for(CCMethod<CCProperty> myMethod:myMethods){
 			Class<?> myClass = myMethod.type();
+			
 			CCPropertyHandle myProperty = null;
-			if(myClass == null || myClass == CCTriggerProgress.class){
+			if((myClass == null) || myClass == CCTriggerProgress.class){
 				myProperty = new CCEventTriggerHandle(this, myMethod);
 			}else if(myClass == Float.class || myClass == Float.TYPE){
 				myProperty = new CCNumberPropertyHandle<Float>(this, myMethod, CCPropertyMap.floatConverter);
