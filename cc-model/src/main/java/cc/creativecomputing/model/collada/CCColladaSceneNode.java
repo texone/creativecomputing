@@ -64,7 +64,7 @@ public class CCColladaSceneNode extends CCColladaElement{
 	
 	private CCColladaSceneNodeInstanceType _myInstanceType;
 	
-	private CCMesh _myGeometry;
+	private List<CCMesh> _myGeometries = new ArrayList<>();
 	private CCCamera _myCamera;
 
 	public CCColladaSceneNode(CCColladaLoader theLoader, CCXMLElement theNodeXML) {
@@ -135,13 +135,15 @@ public class CCColladaSceneNode extends CCColladaElement{
 					_myDrawMode = CCDrawMode.TRIANGLES;
 					break;
 				}
-				_myGeometry = new CCMesh(_myDrawMode);
+				CCMesh myGeometryMesh = new CCMesh(_myDrawMode);
 				
-				_myGeometry.vertices(myGeometryData.positions());
+				myGeometryMesh.vertices(myGeometryData.positions());
 				if(myGeometryData.hasNormals()){
 					myGeometryData.normals().rewind();
-					_myGeometry.normals(myGeometryData.normals());
+					myGeometryMesh.normals(myGeometryData.normals());
 				}
+				_myGeometries.add(myGeometryMesh);
+				
 				_myInstanceType = CCColladaSceneNodeInstanceType.GEOMETRY;
 				break;
 			}
@@ -239,10 +241,12 @@ public class CCColladaSceneNode extends CCColladaElement{
 //			g.applyMatrix(_myMatrix);
 			break;
 		case GEOMETRY:
-			if(_myGeometry == null)return;
+			
 			g.pushMatrix();
 			g.applyMatrix(_myMatrix);
-			_myGeometry.draw(g);
+			for(CCMesh myGeometry:_myGeometries){
+				myGeometry.draw(g);
+			}
 			g.popMatrix();
 			break;
 		}
