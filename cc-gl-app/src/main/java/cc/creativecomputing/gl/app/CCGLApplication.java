@@ -14,11 +14,11 @@ public abstract class CCGLApplication<GLGraphicsType extends CCGLGraphics, GLCon
 		_myAnimator = new CCAnimator();
 		_myAnimator.framerate = 1;
 		_myAnimator.animationMode = CCAnimationMode.FRAMERATE_PRECISE;
-		_myAnimator.addListener(theGLAdapter);
+		_myAnimator.listener().add(theGLAdapter);
 
 		_myGLContext = theContext;
-		_myGLContext.addListener(theGLAdapter);
-		_myGLContext.addListener(
+		_myGLContext.listener().add(theGLAdapter);
+		_myGLContext.listener().add(
 			new CCGLAdapter() {
 				@Override
 				public void dispose(CCGLGraphics theG) {

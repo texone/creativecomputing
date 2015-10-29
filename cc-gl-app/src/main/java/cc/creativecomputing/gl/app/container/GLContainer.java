@@ -16,6 +16,7 @@ import java.util.Map;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.handles.CCPropertyListener;
+import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.gl.app.CCCursor;
 
 import com.jogamp.opengl.GLAutoDrawable;
@@ -71,6 +72,10 @@ public abstract class GLContainer implements CCPropertyFeedbackObject{
 	public abstract void setVisible(boolean theIsVisible);
 	
 	public abstract void fullScreen(boolean theIsFullScreen);
+	
+	public abstract void pixelScale(CCPixelScale thePixelScale);
+	
+	public abstract void undecorated(boolean theIsDecorated);
 	
 	public abstract String title();
 	

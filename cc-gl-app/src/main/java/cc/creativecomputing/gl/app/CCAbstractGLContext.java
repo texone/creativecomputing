@@ -160,10 +160,9 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	public boolean visible = true;
 	@CCProperty(desc = "flag to define if the window should be shown on top")
 	public boolean alwaysOnTop = false;
-	@CCProperty(desc = "define the pixelscale of the gl container eiter IDENTITY or AUTOMAX default is IDENTITY")
-	public CCPixelScale pixelScale = CCPixelScale.IDENTITY;
+	@CCProperty(desc = "define the pixelscale of the gl container eiter IDENTITY or AUTOMAX default is AUTOMAX")
+	public CCPixelScale pixelScale = CCPixelScale.AUTOMAX;
 	
-	@CCProperty(name = "container")
 	protected GLContainer _myContainer;
 	
 	private GLGraphicsType _myGraphics;
@@ -282,6 +281,21 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 				_myUpdateVsync = true;
 			}
 		});
+		
+		_myListenerMap.put("undecorated", new CCPropertyListener<Boolean>() {
+			@Override
+			public void onChange(Boolean theIsUndecorated){
+				_myContainer.undecorated(theIsUndecorated);
+			}
+		});
+		
+		_myListenerMap.put("pixelScale", new CCPropertyListener<CCPixelScale>() {
+			@Override
+			public void onChange(CCPixelScale thePixelScale){
+				CCLog.info("change pixel scale:" + thePixelScale);
+				_myContainer.pixelScale(thePixelScale);
+			}
+		});
 	}
 	
 	@Override
@@ -331,6 +345,9 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 //					height = theHeight;
 //					windowX = theX;
 //					windowY = theY;
+//					drawable.getSurfaceWidth()
+					
+					CCLog.info(theX+":" + theY+":" + theWidth+":" + theHeight + ":" + drawable.getSurfaceWidth() + ":" +drawable.getSurfaceHeight());
 					_myGraphics.reshape(theX, theY, theWidth, theHeight);
 					_myListeners.proxy().reshape(_myGraphics);
 				}
@@ -497,11 +514,6 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 				_myKeyListener.proxy().keyTyped(theEvent);
 				break;
 		}
-	}
-	
-	@Override
-	public void addListener(CCGLListener theObject) {
-		_myListeners.add((CCGLListener)theObject);
 	}
 	
 	public CCGraphicDeviceSetup deviceSetup(){

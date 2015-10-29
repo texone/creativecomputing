@@ -14,6 +14,7 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.gl.app.CCAbstractGLContext;
 import cc.creativecomputing.gl.app.CCCursor;
+import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 
 import com.jogamp.nativewindow.util.InsetsImmutable;
 import com.jogamp.newt.event.WindowListener;
@@ -123,6 +124,16 @@ public class GLOffsreenContainer extends GLContainer{
 	
 	@Override
 	public void fullScreen(boolean theIsFullScreen) {
+		
+	}
+	
+	@Override
+	public void undecorated(boolean theIsDecorated) {
+		
+	}
+	
+	@Override
+	public void pixelScale(CCPixelScale thePixelScale) {
 		
 	}
 	

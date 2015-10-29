@@ -47,6 +47,7 @@ import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.gl.app.CCAbstractGLContext;
 import cc.creativecomputing.gl.app.CCCursor;
+import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;
 import cc.creativecomputing.gl.app.events.CCMouseEvent;
 import cc.creativecomputing.gl.app.events.CCMouseWheelEvent;
@@ -547,6 +548,16 @@ public class GLJavaComponentContainer extends GLContainer{
 	
 	@Override
 	public void fullScreen(boolean theIsFullScreen) {
+		
+	}
+	
+	@Override
+	public void pixelScale(CCPixelScale thePixelScale) {
+		
+	}
+	
+	@Override
+	public void undecorated(boolean theIsDecorated) {
 		
 	}
 	

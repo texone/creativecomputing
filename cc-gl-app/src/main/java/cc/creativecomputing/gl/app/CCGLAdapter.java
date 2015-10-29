@@ -39,6 +39,11 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics, GLContextType exte
 		return _myContext;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public CCListenerManager<CCGLListener> glListener(){
+		return _myContext.listener();
+	}
+	
 	public CCListenerManager<CCKeyListener> keyListener(){
 		return _myContext.keyListener();
 	}

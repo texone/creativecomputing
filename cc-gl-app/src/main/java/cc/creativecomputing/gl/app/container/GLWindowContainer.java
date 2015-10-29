@@ -14,7 +14,7 @@ import java.awt.Rectangle;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
-import cc.creativecomputing.core.CCProperty;
+//import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCAbstractGLContext;
 import cc.creativecomputing.gl.app.CCCursor;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;
@@ -61,9 +61,9 @@ public class GLWindowContainer extends GLContainer{
 //		_myWindow.setResizable(_myExtension.isResizable());
 		_myWindow.setUndecorated(_myContext.undecorated);
 		_myWindow.setAlwaysOnTop(_myContext.alwaysOnTop);
-		
+		float[] myScale = new float[2];
+		_myWindow.getCurrentSurfaceScale(myScale);
 		_myWindow.setVisible(true);
-		
 		
 		
 		_myWindow.addKeyListener(new KeyAdapter() {
@@ -212,7 +212,6 @@ public class GLWindowContainer extends GLContainer{
 //				_myContext.width = _myWindow.getWidth() - _myWindow.getInsets().getTotalWidth();
 //				_myContext.height = _myWindow.getHeight() - _myWindow.getInsets().getTotalHeight();
 //				_mySkipResize = false;
-//				CCLog.info(_myWindow.getWidth() + " : " + _myWindow.getHeight());
 			}
 			
 			@Override
@@ -305,6 +304,15 @@ public class GLWindowContainer extends GLContainer{
         }.start();
 	}
 	
+	@Override
+	public void pixelScale(CCPixelScale thePixelScale) {
+		new CCWindowThread() {
+            public void windowTask() {
+            	_myWindow.setSurfaceScale(new float[]{_myContext.pixelScale.id(), _myContext.pixelScale.id()});
+            };
+        }.start();
+	}
+	
 	public void alwaysOnTop(boolean theSetAlwaysOnTop){
 		new CCWindowThread() {
             public void windowTask() {
@@ -312,28 +320,30 @@ public class GLWindowContainer extends GLContainer{
             } 
 		}.start();
 	}
-	@CCProperty(name = "decorated")
-	public void decorated(boolean theSetDecorated){
+	
+	@Override
+	public void undecorated(boolean theSetUndecorated){
 		new CCWindowThread() {
             public void windowTask() {
-            	_myWindow.setUndecorated(theSetDecorated);
+            	_myWindow.setUndecorated(theSetUndecorated);
             } 
 		}.start();
 	}
 	
-	@CCProperty(name = "show pointer")
 	public void showPointer(boolean theShowPointer){
 		new CCWindowThread() {
             public void windowTask() {
                 _myWindow.setPointerVisible(theShowPointer);
-        } }.start();
+            } 
+		}.start();
 	}
 	
 	public void title(String theTitle){
 		new CCWindowThread() {
             public void windowTask() {
                 _myWindow.setTitle(theTitle);
-        } }.start();
+            }
+		}.start();
 	}
 	
 
@@ -342,7 +352,8 @@ public class GLWindowContainer extends GLContainer{
 		new CCWindowThread() {
             public void windowTask() {
                 _myWindow.getGL().setSwapInterval(theIsInVsync ? 1 : 0);
-        } }.start();
+            } 
+		}.start();
 	}
 	
 	@Override
