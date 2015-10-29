@@ -17,4 +17,6 @@ public @interface CCProperty {
 	String precision() default "";
 	
 	double defaultValue() default Double.NaN;
+	
+	boolean readBack() default false;
 }
