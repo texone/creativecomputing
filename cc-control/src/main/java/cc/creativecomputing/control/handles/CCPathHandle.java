@@ -21,19 +21,12 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 	}
 	
 	@Override
-	public CCDataObject data() {
-		CCDataObject myResult = super.data();
-		if(value() != null)myResult.put("path", value().toString());
-		return myResult;
-	}
-	
-	@Override
 	public void data(CCDataObject theData) {
-		if(!theData.containsKey("path")){
+		if(!theData.containsKey("value")){
 			value(null, true);
 			return;
 		}
-		value(Paths.get(theData.getString("path")), true);
+		value(Paths.get(theData.getString("value")), true);
 	}
 
 	@Override
