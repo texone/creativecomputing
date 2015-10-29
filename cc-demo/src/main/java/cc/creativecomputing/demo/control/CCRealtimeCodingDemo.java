@@ -20,8 +20,22 @@ import cc.creativecomputing.protocol.serial.dmx.CCDMX;
 
 public class CCRealtimeCodingDemo extends CCGL2Adapter{
 	
-	public static interface CCRealtimeGraph extends CCCompileObject{
-		public void draw(CCGraphics g);
+	public static class CCRealtimeGraph implements CCCompileObject{
+		public void draw(CCGraphics g){
+			
+		}
+
+		@Override
+		public void onRecompile() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Object[] parameters() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 	
 	@CCProperty(name = "real time visual")
@@ -30,12 +44,16 @@ public class CCRealtimeCodingDemo extends CCGL2Adapter{
 	private CCControlApp _myControlApp;
 	
 	@Override
-	public void init(CCGraphics g) {
-
+	public void start(CCAnimator theAnimator) {
 		_myRealTimeGraph = new CCRealtimeCompile<CCRealtimeGraph>(CCRealtimeGraph.class);
 		_myRealTimeGraph.createObject();
+	}
+	
+	@Override
+	public void init(CCGraphics g) {
+
 		
-		_myControlApp = new CCControlApp(this, animator());
+		
 	}
 	
 	@Override

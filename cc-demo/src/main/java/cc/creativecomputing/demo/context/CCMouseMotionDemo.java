@@ -27,11 +27,11 @@ public class CCMouseMotionDemo extends CCGL2Adapter{
 				_myMouseX = theMouseEvent.x();
 				_myMouseY = theMouseEvent.y();
 				
-				CCLog.info(g.width + ":" + g.height + ":" + _myMouseX + ":" + _myMouseY);
+				CCLog.info(g.width() + ":" + g.height() + ":" + _myMouseX + ":" + _myMouseY);
 			}
 		});
 		
-		g.camera(new CCCamera(g.width, g.height));
+		g.camera(new CCCamera(g.width(), g.height()));
 	}
 	
 	
@@ -47,7 +47,7 @@ public class CCMouseMotionDemo extends CCGL2Adapter{
 		g.clear();
 		
 		g.color(255,0,0);
-		g.rect(-g.width/4, - g.height/4, g.width/2, g.height/2);
+		g.rect(-g.width()/4, - g.height()/4, g.width()/2, g.height()/2);
 		g.color(255);
 		g.ellipse(_myMouseX,  _myMouseY, 20);
 

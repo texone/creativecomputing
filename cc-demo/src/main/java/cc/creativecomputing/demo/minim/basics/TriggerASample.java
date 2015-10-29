@@ -101,10 +101,10 @@ public class TriggerASample extends CCGL2Adapter {
 
 		// use the mix buffer to draw the waveforms.
 		g.pushMatrix();
-		g.translate(-g.width/2, -g.height/2);
+		g.translate(-g.width()/2, -g.height()/2);
 		for (int i = 0; i < kick.bufferSize() - 1; i++) {
-			float x1 = CCMath.map(i, 0, kick.bufferSize(), 0, g.width);
-			float x2 = CCMath.map(i + 1, 0, kick.bufferSize(), 0, g.width);
+			float x1 = CCMath.map(i, 0, kick.bufferSize(), 0, g.width());
+			float x2 = CCMath.map(i + 1, 0, kick.bufferSize(), 0, g.width());
 			g.line(x1, 50 - kick.mix.get(i) * 50, x2, 50 - kick.mix.get(i + 1) * 50);
 			g.line(x1, 150 - snare.mix.get(i) * 50, x2, 150 - snare.mix.get(i + 1) * 50);
 		}

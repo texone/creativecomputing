@@ -134,7 +134,7 @@ public class CCScrubbingDemo extends CCGL2Adapter {
 
 		// use the mix buffer to draw the waveforms.
 		g.pushMatrix();
-		g.translate(-g.width / 2, -g.height / 2);
+		g.translate(-g.width() / 2, -g.height() / 2);
 		float centerFrequency = 0;
 
 		g.color(255);
@@ -144,7 +144,7 @@ public class CCScrubbingDemo extends CCGL2Adapter {
 		  // draw the position in the song
 		  // the position is in milliseconds,
 		  // to get a meaningful graphic, we need to map the value to the range [0, width]
-		  float x = CCMath.map(song.position(), 0, song.length(), 0, g.width);
+		  float x = CCMath.map(song.position(), 0, song.length(), 0, g.width());
 		  g.color(255, 0, 0);
 		  g.line(x, 50 - 20, x, 50 + 20);
 

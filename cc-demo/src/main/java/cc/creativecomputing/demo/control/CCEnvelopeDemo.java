@@ -103,7 +103,7 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 //		if(_myAsset == null)return;
 //		g.image(_myAsset.value(), 0, 0);
 		g.color(255);
-		g.rect(-g.width / 4, - g.height / 4, _cRectWidth, g.height / 2);
+		g.rect(-g.width() / 4, - g.height() / 4, _cRectWidth, g.height() / 2);
 		
 //		CCLog.info(g.width + ":" + g.height);
 	}

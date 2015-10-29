@@ -1,28 +1,24 @@
 package cc.creativecomputing.demo.minim.analysis;
 
-import java.util.Arrays;
-
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.core.util.CCArrayUtil;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
-import cc.creativecomputing.gl.app.events.CCMouseAdapter;
-import cc.creativecomputing.gl.app.events.CCMouseEvent;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.graphics.texture.CCTexture2D;
+import cc.creativecomputing.image.CCImage;
+import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.sound.CCAudioPlayer;
 import cc.creativecomputing.sound.CCAudioRecordingStream;
-import cc.creativecomputing.sound.CCAudioSample;
 import cc.creativecomputing.sound.CCFFT;
 import cc.creativecomputing.sound.CCMultiChannelBuffer;
 import cc.creativecomputing.sound.CCSoundIO;
-import ddf.minim.analysis.FFT;
 
 /**
  * This sketch demonstrates the difference between linearly spaced averages and
@@ -38,168 +34,211 @@ import ddf.minim.analysis.FFT;
  * http://code.compartmental.net/minim/
  */
 public class CCFFTOfflineAnalysis extends CCGL2Adapter {
+	
+	private static class CCSpectrogram{
+		
+		private CCImage _mySpectrumImage;
+		private CCImage _mySpectrumAveragesImage;
+		
+		private CCTexture2D _mySpectrumTexture;
+		private CCTexture2D _mySpectrumAveragesTexture;
+		
+		private double[][] _mySpectrumValues;
+		private double[][] _mySpectrumAverageValues;
+		
+		private final CCFFT _myFFT;
+		
 
-	double[][] spectra;
-	double[][] averages;
+		@CCProperty(name = "amp", min = 0, max = 10)
+		private double _cAmp = 1;
+		
+		@CCProperty(name = "pow", min = 0, max = 1)
+		private double _cPow = 1;
+		
+		@CCProperty(name = "averages")
+		private boolean _cAverages = false;
+		
+		@CCProperty(name = "curves")
+		private boolean _cDrawCurves = false;
+
+		@CCProperty(name = "curve scale", min = 0, max = 1000)
+		private double _cCurveScale = 1;
+		
+		@CCProperty(name = "curve step", min = 1, max = 30)
+		private int _cCurveStep = 1;
+		
+		public CCSpectrogram(CCFFT theFFT) {
+			_myFFT = theFFT;
+		}
+		
+		private boolean _myUpdateTexture = false;
+		
+		private double _myChuncksPerSecond = 1;
+		@CCProperty(name = "seconds grid", min = 1, max = 30)
+		private int _cSecondsGrid = 1;
+		
+		@CCProperty(name = "analyze stream")
+		void analyzeUsingAudioRecordingStream() {
+			int fftSize = 512;
+			CCAudioRecordingStream stream = CCSoundIO.loadFileStream(
+				CCNIOUtil.dataPath("sound/01 Verses.wav"), //fair1939.wav
+				fftSize,//
+				false
+			);
+
+			stream.play();
+
+			CCMultiChannelBuffer buffer = new CCMultiChannelBuffer(fftSize, stream.getFormat().getChannels());
+
+			int totalSamples = (int) ((stream.getMillisecondLength() / 1000.0) * stream.getFormat().getSampleRate());
+
+			int totalChunks = (totalSamples / fftSize) + 1;
+			CCLog.info("Analyzing " + totalSamples + " samples for total of " + totalChunks + " chunks." + stream.getMillisecondLength() / 1000.0);
+
+			_myChuncksPerSecond = totalChunks / (stream.getMillisecondLength() / 1000.0);
+			_myFFT.setup(fftSize, stream.getFormat().getSampleRate());
+			_mySpectrumValues = new double[totalChunks][fftSize / 2];
+			
+			double mySpectraMax = 0;
+			double myAvarageMax = 0;
+
+			for (int chunkIdx = 0; chunkIdx < totalChunks; ++chunkIdx) {
+				stream.read(buffer);
+
+				// now analyze the left channel
+				_myFFT.forward(buffer.getChannel(0));
+				if(_mySpectrumAverageValues == null || _mySpectrumAverageValues[0].length != _myFFT.averagesSize()){
+					_mySpectrumAverageValues = new double[totalChunks][_myFFT.averagesSize()];
+				}
+
+				// and copy the resulting spectrum into our spectra array
+				
+				for (int i = 0; i < 256; ++i) {
+					mySpectraMax = CCMath.max(mySpectraMax, _myFFT.spectrum()[i]);
+					_mySpectrumValues[chunkIdx][i] = _myFFT.spectrum()[i];
+				}
+				if(_myFFT.averages() != null && _mySpectrumAverageValues != null){
+					for (int i = 0; i < _myFFT.averagesSize(); ++i) {
+						myAvarageMax = CCMath.max(myAvarageMax, _myFFT.averages()[i]);
+						_mySpectrumAverageValues[chunkIdx][i] = _myFFT.averages()[i];
+					}
+				}
+			}
+			_mySpectrumImage = new CCImage(totalChunks,fftSize / 2);
+			if(_mySpectrumAverageValues != null)_mySpectrumAveragesImage = new CCImage(totalChunks,_myFFT.averagesSize());
+			for (int chunkIdx = 0; chunkIdx < totalChunks; ++chunkIdx) {
+				for (int i = 0; i < 256; ++i) {
+					_mySpectrumValues[chunkIdx][i] /= mySpectraMax;
+//					_mySpectrumImage.setPixel(chunkIdx, i, CCColor.createFromHSB(CCMath.pow(_mySpectrumValues[chunkIdx][i], _cPow) * _cAmp, 1, 1));
+					_mySpectrumImage.setPixel(chunkIdx, i, CCColor.createFromHSB(_mySpectrumValues[chunkIdx][i], 1, 1));
+				}
+				if(_myFFT.averages() != null && _mySpectrumAverageValues != null){
+					for (int i = 0; i < _myFFT.averagesSize(); ++i) {
+						_mySpectrumAverageValues[chunkIdx][i] /= myAvarageMax;
+						_mySpectrumAveragesImage.setPixel(chunkIdx, i,  CCColor.createFromHSB(CCMath.pow(_mySpectrumAverageValues[chunkIdx][i], _cPow) * _cAmp, 1, 1));
+					}
+				}
+			}
+			_myUpdateTexture = true;
+			
+//			CCImageIO.write(_mySpectrumAveragesImage, CCNIOUtil.dataPath("check01.png"));
+		}
+		
+		public void saveImage(){
+			
+		}
+		
+		public void draw(CCGraphics g){
+			if(_mySpectrumValues == null)return;
+			
+			
+			if(_cDrawCurves){
+				for(int x = 0; x < g.width(); x += _myChuncksPerSecond * _cSecondsGrid / _cCurveStep){
+					g.line(x, 0, x, g.height());
+				}
+				if(_cAverages){
+
+					for (int i = 0; i < _mySpectrumAverageValues[0].length - 1; i++) {
+						g.beginShape(CCDrawMode.LINE_STRIP);
+						for (int s = 0; _mySpectrumAverageValues != null && s < _mySpectrumAverageValues.length; s+= _cCurveStep) {
+						// don't draw spectra that are behind the camera or too far away
+	
+							g.color(CCColor.createFromHSB(CCMath.pow(_mySpectrumAverageValues[s][i], _cPow) * _cAmp, 1d, 1d));
+							double y = CCMath.pow(_mySpectrumAverageValues[s][i], _cPow) * _cCurveScale;
+							g.vertex(s / _cCurveStep, y + i * 5);
+	
+						}
+						g.endShape();
+					}
+				}else{
+
+					for (int i = 0; i < _mySpectrumValues[0].length - 1; i++) {
+						g.beginShape(CCDrawMode.LINE_STRIP);
+						for (int s = 0; s < _mySpectrumValues.length & s < g.width(); s+= _cCurveStep) {
+						// don't draw spectra that are behind the camera or too far away
+	
+							g.color(CCColor.createFromHSB(CCMath.pow(_mySpectrumValues[s][i], _cPow) * _cAmp, 1d, 1d));
+							double y = CCMath.pow(_mySpectrumValues[s][i], _cPow) * _cCurveScale;
+						
+							g.vertex(s / _cCurveStep, i * 2 + y);
+	
+						}
+						g.endShape();
+					}
+				}
+			}else{
+				g.beginShape(CCDrawMode.POINTS);
+				
+				if(_cAverages){
+					
+					for (int s = 0; _mySpectrumAverageValues != null && s < _mySpectrumAverageValues.length; s++) {
+						// don't draw spectra that are behind the camera or too far away
+	
+						for (int i = 0; i < _mySpectrumAverageValues[s].length - 1; i++) {
+							g.color(CCColor.createFromHSB(CCMath.pow(_mySpectrumAverageValues[s][i], _cPow) * _cAmp, 1d, 1d));
+							g.vertex(s, i);
+	
+						}
+					}
+				}else{
+					for (int s = 0; s < _mySpectrumValues.length; s++) {
+						// don't draw spectra that are behind the camera or too far away
+	
+						for (int i = 0; i < _mySpectrumValues[s].length - 1; ++i) {
+							g.color(CCColor.createFromHSB(CCMath.pow(_mySpectrumValues[s][i], _cPow) * _cAmp, 1d, 1d));
+							g.vertex(s, i);
+	
+						}
+					}
+				}
+				g.endShape();
+			}
+			
+			
+		}
+	}
+
+	
+
+	
+
 	
 	@CCProperty(name = "fft")
 	private CCFFT _myFFT = new CCFFT();
-
-	void analyzeUsingAudioSample() {
-		CCAudioSample jingle = CCSoundIO.loadSample(CCNIOUtil.dataPath("sound/jingle.mp3"), 2048);
-
-		// get the left channel of the audio as a float array
-		// getChannel is defined in the interface BuffereAudio,
-		// which also defines two constants to use as an argument
-		// BufferedAudio.LEFT and BufferedAudio.RIGHT
-		float[] leftChannel = jingle.getChannel(CCAudioSample.LEFT);
-
-		// then we create an array we'll copy sample data into for the FFT
-		// object
-		// this should be as large as you want your FFT to be. generally
-		// speaking, 1024 is probably fine.
-		int fftSize = 1024;
-		float[] fftSamples = new float[fftSize];
-		_myFFT.setup(fftSize, jingle.sampleRate());
-
-		// now we'll analyze the samples in chunks
-		int totalChunks = (leftChannel.length / fftSize) + 1;
-
-		// allocate a 2-dimentional array that will hold all of the spectrum
-		// data for all of the chunks.
-		// the second dimension if fftSize/2 because the spectrum size is always
-		// half the number of samples analyzed.
-		spectra = new double [totalChunks][fftSize / 2];
-
-		for (int chunkIdx = 0; chunkIdx < totalChunks; ++chunkIdx) {
-			int chunkStartIndex = chunkIdx * fftSize;
-
-			// the chunk size will always be fftSize, except for the
-			// last chunk, which will be however many samples are left in source
-			int chunkSize = CCMath.min(leftChannel.length - chunkStartIndex, fftSize);
-
-			// copy first chunk into our analysis array
-			CCArrayUtil.arraycopy(leftChannel, // source of the copy
-					chunkStartIndex, // index to start in the source
-					fftSamples, // destination of the copy
-					0, // index to copy to
-					chunkSize // how many samples to copy
-					);
-
-			// if the chunk was smaller than the fftSize, we need to pad the
-			// analysis buffer with zeroes
-			if (chunkSize < fftSize) {
-				// we use a system call for this
-				Arrays.fill(fftSamples, chunkSize, fftSamples.length - 1, 0.0f);
-			}
-
-			// now analyze this buffer
-			_myFFT.forward(fftSamples);
-
-			// and copy the resulting spectrum into our spectra array
-			for (int i = 0; i < 512; ++i) {
-				spectra[chunkIdx][i] = _myFFT.spectrum()[i];
-			}
-		}
-
-		jingle.close();
-	}
-
-	@CCProperty(name = "analyze stream")
-	void analyzeUsingAudioRecordingStream() {
-		int fftSize = 512;
-		CCAudioRecordingStream stream = CCSoundIO.loadFileStream(CCNIOUtil.dataPath("sound/fair1939.wav"), fftSize,//01 Verses.wav
-				false);
-
-		// tell it to "play" so we can read from it.
-		stream.play();
-
-		// create the fft we'll use for analysis
-		
-		
-		
-
-		// create the buffer we use for reading from the stream
-		CCMultiChannelBuffer buffer = new CCMultiChannelBuffer(fftSize, stream.getFormat().getChannels());
-
-		// figure out how many samples are in the stream so we can allocate the
-		// correct number of spectra
-		int totalSamples = (int) ((stream.getMillisecondLength() / 1000.0) * stream.getFormat().getSampleRate());
-
-		// now we'll analyze the samples in chunks
-		int totalChunks = (totalSamples / fftSize) + 1;
-		CCLog.info("Analyzing " + totalSamples + " samples for total of " + totalChunks + " chunks.");
-
-		_myFFT.setup(fftSize, stream.getFormat().getSampleRate());
-		// allocate a 2-dimentional array that will hold all of the spectrum
-		// data for all of the chunks.
-		// the second dimension if fftSize/2 because the spectrum size is always
-		// half the number of samples analyzed.
-		spectra = new double[totalChunks][fftSize / 2];
-		if(_myFFT.averages() != null)averages = new double[totalChunks][_myFFT.averages().length];
-		
-
-		for (int chunkIdx = 0; chunkIdx < totalChunks; ++chunkIdx) {
-			CCLog.info("Chunk " + chunkIdx);
-			CCLog.info("  Reading...");
-			stream.read(buffer);
-			CCLog.info("  Analyzing...");
-
-			// now analyze the left channel
-			_myFFT.forward(buffer.getChannel(0));
-
-			// and copy the resulting spectrum into our spectra array
-			CCLog.info("  Copying...");
-			for (int i = 0; i < 256; ++i) {
-				spectra[chunkIdx][i] = _myFFT.spectrum()[i];
-			}
-			if(_myFFT.averages() != null && averages != null){
-				for (int i = 0; i < _myFFT.averagesSize(); ++i) {
-					averages[chunkIdx][i] = _myFFT.averages()[i];
-				}
-			}
-		}
-	}
-
-	@CCProperty(name = "amp", min = 0, max = 3)
-	private double _cAmp = 1;
-	
-	@CCProperty(name = "averages")
-	private boolean _cAverages = false;
+	@CCProperty(name = "spectogram")
+	private CCSpectrogram _mySpectogram = new CCSpectrogram(_myFFT);
 
 	@Override
 	public void start(CCAnimator theAnimator) {
-		// There are two ways you can do offline analysis:
-		// 1. Loading audio data fully into memory using an AudioSample and then
-		// analyzing a channel
-		// analyzeUsingAudioSample();
-
-		// 2. Loading an AudioRecordingStream and reading in a buffer at a time.
-		// This second option is available starting with Minim Beta 2.1.0
-		analyzeUsingAudioRecordingStream();
 	}
 
 	@Override
 	public void init(CCGraphics g) {
 	}
 
-	// how many units to step per second
-	float cameraStep = 100;
-	// our current z position for the camera
-	float cameraPos = 0;
-	// how far apart the spectra are so we can loop the camera back
-	float spectraSpacing = 50;
 
 	@Override
 	public void update(CCAnimator theAnimator) {
-		double dt = 1.0f / theAnimator.frameRate();
-
-		cameraPos += cameraStep * dt;
-
-		// jump back to start position when we get to the end
-		if (cameraPos > spectra.length * spectraSpacing) {
-			cameraPos = 0;
-		}
 	}
 
 	double myMax = 0;
@@ -211,41 +250,9 @@ public class CCFFTOfflineAnalysis extends CCGL2Adapter {
 
 		// use the mix buffer to draw the waveforms.
 		g.pushMatrix();
-		g.translate(-g.width / 2, -g.height / 2);
-		float centerFrequency = 0;
-		g.beginShape(CCDrawMode.POINTS);
-		// render the spectra going back into the screen
+		g.translate(-g.width() / 2, -g.height() / 2);
 		
-		if(_cAverages){
-			
-			for (int s = 0; averages != null && s < averages.length; s++) {
-				// don't draw spectra that are behind the camera or too far away
-
-				for (int i = 0; i < averages[s].length - 1; ++i) {
-					myMax = CCMath.max(averages[s][i], myMax);
-					g.color(averages[s][i] * _cAmp);
-					g.vertex(s, i);
-
-				}
-			}
-		}else{
-			for (int s = 0; s < spectra.length; s++) {
-				// don't draw spectra that are behind the camera or too far away
-
-				for (int i = 0; i < spectra[s].length - 1; ++i) {
-					myMax = CCMath.max(spectra[s][i], myMax);
-					g.color(spectra[s][i] * _cAmp);
-					g.vertex(s, i);
-
-				}
-			}
-		}
-		
-		
-		g.endShape();
-
-		g.color(255);
-		g.text("Spectrum Center Frequency: " + centerFrequency, 5, 15);
+		_mySpectogram.draw(g);
 
 		g.popMatrix();
 	}

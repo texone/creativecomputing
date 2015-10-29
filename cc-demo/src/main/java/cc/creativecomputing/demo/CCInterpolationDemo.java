@@ -119,7 +119,7 @@ public class CCInterpolationDemo extends CCGL2Adapter{
 	private void drawValues(CCGraphics g, List<Double> theValues){
 		g.beginShape(CCDrawMode.LINE_STRIP);
 		for(int i = 0; i < theValues.size();i++){
-			double myX = CCMath.map(i, 0, _cInterpolationResolution, -g.width/2, g.width);
+			double myX = CCMath.map(i, 0, _cInterpolationResolution, -g.width()/2, g.width());
 			g.vertex(myX, theValues.get(i) * _cScale);
 		}
 		g.endShape();
@@ -132,7 +132,7 @@ public class CCInterpolationDemo extends CCGL2Adapter{
 		g.color(1f);
 		g.beginShape(CCDrawMode.LINE_STRIP);
 		for(int i = 0; i < _myValues.size();i++){
-			double myX = CCMath.map(i, 0, _cResolution, -g.width/2, g.width);
+			double myX = CCMath.map(i, 0, _cResolution, -g.width()/2, g.width());
 			g.vertex(myX, _myValues.get(i) * _cScale);
 		}
 		g.endShape();

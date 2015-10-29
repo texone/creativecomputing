@@ -44,8 +44,8 @@ public class BandCenters extends CCGL2Adapter {
 		minim = new CCSoundIO();
 		minim.debugOn();
 
-		height3 = g.height / 3;
-		height23 = 2 * g.height / 3;
+		height3 = g.height() / 3;
+		height23 = 2 * g.height() / 3;
 
 		jingle = minim.loadFile(CCNIOUtil.dataPath("sound/jingle.mp3"), 1024);
 
@@ -89,7 +89,7 @@ public class BandCenters extends CCGL2Adapter {
 
 		// use the mix buffer to draw the waveforms.
 		g.pushMatrix();
-		g.translate(-g.width / 2, -g.height / 2);
+		g.translate(-g.width() / 2, -g.height() / 2);
 		float centerFrequency = 0;
 
 		// perform a forward FFT on the samples in jingle's mix buffer
@@ -112,7 +112,7 @@ public class BandCenters extends CCGL2Adapter {
 		g.text("Spectrum Center Frequency: " + centerFrequency, 5, 15);
 
 		// draw the linear averages
-		int w = (int) (g.width / fftLin.avgSize());
+		int w = (int) (g.width() / fftLin.avgSize());
 		for (int i = 0; i < fftLin.avgSize(); i++) {
 			if (mouseX >= i * w && mouseX <= i * w + w) {
 				centerFrequency = fftLin.getAverageCenterFrequency(i);
@@ -129,7 +129,7 @@ public class BandCenters extends CCGL2Adapter {
 
 		// draw the logarithmic averages
 		fftLog.forward(jingle.mix);
-		w = (int) (g.width / fftLog.avgSize());
+		w = (int) (g.width() / fftLog.avgSize());
 		for (int i = 0; i < fftLog.avgSize(); i++) {
 			if (mouseX >= i * w && mouseX <= i * w + w) {
 				centerFrequency = fftLog.getAverageCenterFrequency(i);
@@ -141,7 +141,7 @@ public class BandCenters extends CCGL2Adapter {
 			}
 			// draw a rectangle for each average, multiply the value by
 			// spectrumScale so we can see it better
-			g.rect(i * w, g.height, i * w + w, g.height - fftLog.getAvg(i) * spectrumScale);
+			g.rect(i * w, g.height(), i * w + w, g.height() - fftLog.getAvg(i) * spectrumScale);
 		}
 		g.popMatrix();
 	}

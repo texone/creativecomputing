@@ -90,23 +90,23 @@ public class CCFFTDemo extends CCGL2Adapter {
 
 		// use the mix buffer to draw the waveforms.
 		g.pushMatrix();
-		g.translate(-g.width / 2, -g.height / 2);
+		g.translate(-g.width() / 2, -g.height() / 2);
 		float centerFrequency = 0;
 
 		double[] mySpectrum = _myFFT.spectrum();
 		
 		// draw the full spectrum
 		for (int i = 0; i < mySpectrum.length; i++) {
-			float myX = CCMath.map(i, 0, mySpectrum.length - 1, 0, g.width);
+			float myX = CCMath.map(i, 0, mySpectrum.length - 1, 0, g.width());
 			g.line(myX, 0, myX, mySpectrum[i] * (_myFFT.isNormalized() ? _cSpectrumScale * 20 : _cSpectrumScale));
 		}
 
 		double[] myAverages = _myFFT.averages();
 		if(myAverages != null){
-			double myWidth = g.width / (double)myAverages.length;
+			double myWidth = g.width() / (double)myAverages.length;
 			for (int i = 0; i < myAverages.length; i++) {
-				float myX = CCMath.map(i, 0, myAverages.length - 1, 0, g.width);
-				g.rect(myX, g.height/2, myWidth, myAverages[i] * (_myFFT.isNormalized() ? _cAverageScale * 20 : _cAverageScale));
+				float myX = CCMath.map(i, 0, myAverages.length - 1, 0, g.width());
+				g.rect(myX, g.height()/2, myWidth, myAverages[i] * (_myFFT.isNormalized() ? _cAverageScale * 20 : _cAverageScale));
 			}
 		}
 

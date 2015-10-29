@@ -37,6 +37,7 @@ public class CCStringDemo extends CCGL2Adapter{
 //			myGraph.draw(g);
 //		}
 		g.textFont(CCFontIO.createTextureMapFont("arial", 12));
+		
 	}
 	
 	@CCProperty(name = "trigger")
@@ -65,7 +66,7 @@ public class CCStringDemo extends CCGL2Adapter{
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1000, 500);
-		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
+		myAppManager.glcontext().pixelScale = CCPixelScale.AUTOMAX;
 		myAppManager.animator().framerate = 30;
 		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
