@@ -15,7 +15,6 @@ import java.util.List;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
-import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
@@ -25,8 +24,6 @@ import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 
 /**
@@ -187,6 +184,7 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 			myCodeBuffer.append("\n");
 			
 			for(Method myMethod:_myBaseClass.getMethods()){
+				
 				myCodeBuffer.append("\tpublic ");
 				if(myMethod.getReturnType() != null){
 					myCodeBuffer.append(myMethod.getReturnType().getSimpleName());
@@ -210,7 +208,7 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 			}
 			myCodeBuffer.append("\n");
 		}else{
-			myCodeBuffer.append("public class " + _myClassName + " extends " + _myBaseClass +"{");
+			myCodeBuffer.append("public class " + _myClassName + " extends " + _myBaseClass.getSimpleName() +"{");
 		}
 		myCodeBuffer.append("");
 		myCodeBuffer.append("}");
