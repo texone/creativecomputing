@@ -33,20 +33,14 @@ import com.jogamp.opengl.glu.GLU;
  * @author christianriekoff
  *
  */
-public class GLGraphics implements CCGLGraphics{
-
-	private GL4 gl;
+public class GLGraphics extends CCGLGraphics<GL4>{
 	
-	private int _myWidth = 0;
-	private int _myHeight = 0;
 	
 	/**
 	 * @param theGL
 	 */
 	public GLGraphics(GL4 theGL4, int theWidth , int theHeight) {
-		gl = theGL4;
-		_myWidth = theWidth;
-		_myHeight = theHeight;
+		super(theGL4, theWidth, theHeight);
 	}
 	
 	public static GL4 currentGL() {
@@ -65,42 +59,6 @@ public class GLGraphics implements CCGLGraphics{
 	public int getInteger(int theGLParameter){
 		gl.glGetIntegerv(theGLParameter, GLBufferUtil.intBuffer());
 		return GLBufferUtil.intBuffer().get();
-	}
-
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.graphics.CCAbstractGraphics#reshape(int, int, int, int)
-	 */
-	public void reshape(int theX, int theY, int theWidth, int theHeight) {
-		_myWidth = theWidth;
-		_myHeight = theHeight;
-	}
-	
-	/**
-	 * Returns the height of the gl context.
-	 * @return height of the gl context
-	 */
-	public int height(){
-		return _myHeight;
-	}
-	
-	/**
-	 * Returns the width of the gl context.
-	 * @return width of the gl context
-	 */
-	public int width(){
-		return _myWidth;
-	}
-	
-	/**
-	 * Returns the aspect ratio of the gl context
-	 * @return aspect ratio of the gl context
-	 */
-	public float aspectRatio(){
-		return (float)_myWidth / (float)_myHeight;
-	}
-	
-	public void viewport(int theLeft, int theTop, int theRight, int theBottom){
-		gl.glViewport(theLeft, theTop, theRight, theBottom);
 	}
 
 	/**

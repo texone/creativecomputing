@@ -52,12 +52,12 @@ public class CCGLModuleDemo implements CCAnimatorListener, CCGLListener<GLGraphi
 		CCGLModuleDemo myDemo = new CCGLModuleDemo();
 		
 		CCAnimator myAnimator = new CCAnimator();
-		myAnimator.addListener(myDemo);
+		myAnimator.listener().add(myDemo);
 		myAnimator.framerate = 1;
 		myAnimator.animationMode = CCAnimationMode.FRAMERATE_PRECISE;
 		
 		CCGL4Context myGLModule = new CCGL4Context(myAnimator);
-		myGLModule.addListener(myDemo);
+		myGLModule.listener().add(myDemo);
 		
 		myGLModule.start();
 		myAnimator.start();

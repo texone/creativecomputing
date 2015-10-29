@@ -23,19 +23,19 @@ public class CCGL4Application {
 		_myAnimator = new CCAnimator();
 		_myAnimator.framerate = 60;
 		_myAnimator.animationMode = CCAnimationMode.FRAMERATE_PRECISE;
-		_myAnimator.addListener(theGLAdapter);
+		_myAnimator.listener().add(theGLAdapter);
 	
 		_myGLContext = new CCGL4Context(_myAnimator);
 		theGLAdapter.glContext(_myGLContext);
 
-		_myGLContext.addListener(new CCGLAdapter<GLGraphics, CCGL4Context>() {
+		_myGLContext.listener().add(new CCGLAdapter<GLGraphics, CCGL4Context>() {
 			@Override
 			public void init(GLGraphics theG) {
 				_myAdapter.init(theG, _myAnimator);
 				_myControlApp = new CCControlApp(CCGL4Application.this);
 			}
 		});
-		_myGLContext.addListener(
+		_myGLContext.listener().add(
 			new CCGLAdapter<GLGraphics, CCGL4Context>() {
 				@Override
 				public void display(GLGraphics theG) {
@@ -43,8 +43,8 @@ public class CCGL4Application {
 				}
 			}
 		);
-		_myGLContext.addListener(theGLAdapter);
-		_myGLContext.addListener(
+		_myGLContext.listener().add(theGLAdapter);
+		_myGLContext.listener().add(
 			new CCGLAdapter<GLGraphics, CCGL4Context>() {
 				@Override
 
@@ -53,7 +53,7 @@ public class CCGL4Application {
 				}
 			}
 		);
-		_myGLContext.addListener(
+		_myGLContext.listener().add(
 			new CCGLAdapter<GLGraphics, CCGL4Context>() {
 				@Override
 				public void dispose(GLGraphics theG) {

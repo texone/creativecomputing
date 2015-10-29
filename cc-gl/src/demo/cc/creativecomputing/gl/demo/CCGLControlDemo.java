@@ -88,18 +88,18 @@ public class CCGLControlDemo implements CCAnimatorListener, CCGLListener<GLGraph
 		
 		
 		CCAnimator myAnimator = new CCAnimator();
-		myAnimator.addListener(myDemo);
+		myAnimator.listener().add(myDemo);
 		myAnimator.framerate = 5;
 		myAnimator.animationMode = CCAnimationMode.FRAMERATE_PRECISE;
 		
 		CCGL4Context myGLModule = new CCGL4Context(myAnimator);
-		myGLModule.addListener(myDemo);
+		myGLModule.listener().add(myDemo);
 		
 		
 		DummyControlSender myRemoteSender = new DummyControlSender();
 		
 		
-		myAnimator.addListener(myRemoteSender);
+		myAnimator.listener().add(myRemoteSender);
 		
 		myGLModule.start();
 		myAnimator.start();
