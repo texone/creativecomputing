@@ -40,7 +40,7 @@ public class CCAppDemo implements CCAnimatorListener, CCBasicAppListener{
 		CCAnimator myAnimator = new CCAnimator();
 		myAnimator.framerate = 1;
 		myAnimator.animationMode = CCAnimationMode.FRAMERATE_PRECISE;
-		myAnimator.addListener(myDemo);
+		myAnimator.listener().add(myDemo);
 		myAnimator.start();
 	}
 }

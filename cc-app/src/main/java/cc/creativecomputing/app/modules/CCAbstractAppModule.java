@@ -29,10 +29,5 @@ public abstract class CCAbstractAppModule<ListenerType> implements CCAppModule<L
 	public CCListenerManager<ListenerType> listener() {
 		return _myListeners;
 	}
-	
-	@Override
-	public void addListener(ListenerType theListener) {
-		_myListeners.add(theListener);
-	}
 
 }
