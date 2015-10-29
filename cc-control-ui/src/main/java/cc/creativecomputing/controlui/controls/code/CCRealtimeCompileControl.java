@@ -34,7 +34,6 @@ import cc.creativecomputing.control.handles.CCRealtimeCompileHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.controls.CCValueControl;
-import cc.creativecomputing.core.logging.CCLog;
 
 public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?>, CCRealtimeCompileHandle>{
 	
@@ -98,7 +97,6 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 				if(theValue.sourceCode().trim().equals("")){
 					_myTextArea.setText(_myHandle.value().codeTemplate());
 				}else{
-					CCLog.info(theValue.sourceCode());
 					_myTextArea.setText(theValue.sourceCode());
 				}
 				_myTriggerEvent = true;

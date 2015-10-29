@@ -76,7 +76,7 @@ public class CCControlApp  {
 				_myControlComponent.propertyMap().rootHandle().update(theAnimator.deltaTime());
 			}
 		};
-		_myAnimator.addListener(_myAnimatorListener);
+		_myAnimator.listener().add(_myAnimatorListener);
 		
 		_myMenuBar = new JMenuBar();
 		_myMenuBar.add(_myControlComponent.view().fileMenu());
@@ -86,6 +86,10 @@ public class CCControlApp  {
 		// Display the window.
 		_myFrame.pack();
 		_myFrame.setVisible(true);
+	}
+	
+	public void afterInit(){
+		_myControlComponent.afterInit();
 	}
 	
 	public TimelineContainer timeline(){
@@ -133,7 +137,7 @@ public class CCControlApp  {
 				_myControlComponent.propertyMap().rootHandle().update(theAnimator.deltaTime());
 			}
 		};
-		_myAnimator.addListener(_myAnimatorListener);
+		_myAnimator.listener().add(_myAnimatorListener);
 		theSynch.timeline(_myControlComponent.timeline());
 		
 		_myMenuBar = new JMenuBar();

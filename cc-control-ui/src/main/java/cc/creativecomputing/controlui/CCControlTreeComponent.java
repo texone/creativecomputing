@@ -89,6 +89,10 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 		setData(_myRootNode, _myPropertyMap.rootHandle(), myObjectControl,1);
 	}
 	
+	public CCObjectPropertyHandle rootHandle(){
+		return _myPropertyMap.rootHandle();
+	}
+	
 	public CCPropertyMap propertyMap(){
 		return _myPropertyMap;
 	}

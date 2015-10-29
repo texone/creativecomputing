@@ -5,7 +5,7 @@ import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.protocol.midi.CCMidiInDevice;
+import cc.creativecomputing.protocol.midi.CCMidiIn;
 import cc.creativecomputing.protocol.midi.CCMidiTimeCode;
 
 public class CCTimelineSynch implements CCAnimatorListener{
@@ -20,7 +20,7 @@ public class CCTimelineSynch implements CCAnimatorListener{
 	private CCAnimator _myAnimator = new CCAnimator();
 	
 	@CCProperty(name = "midi in")
-	private CCMidiInDevice _myMidiIn = new CCMidiInDevice();
+	private CCMidiIn _myMidiIn = new CCMidiIn();
 	
 	@CCProperty(name = "time offset")
 	private double _myTimeOffset = 0;
@@ -34,7 +34,7 @@ public class CCTimelineSynch implements CCAnimatorListener{
 	
 	public CCTimelineSynch(){
 		_myMidiIn.events().add(_myTimeCode);
-		_myAnimator.addListener(this);
+		_myAnimator.listener().add(this);
 	}
 	
 	public void timeline(TimelineContainer theTimeline){
@@ -68,6 +68,8 @@ public class CCTimelineSynch implements CCAnimatorListener{
 			break;
 		case SLAVE:
 			_myTimeline.time(_myTimeCode.time() + _myTimeOffset);
+			break;
+		case MASTER:
 			break;
 		}
 	}

@@ -71,6 +71,7 @@ public class CCControlComponent extends JSplitPane{
 //		_myTimelineView.setSize(1900, 500);
 		
         _myPresetComponent = new CCPresetComponent();
+        _myPresetComponent.setPresets(_myTreeComponent.rootHandle());
         
         JSplitPane myControlsPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
         CCUIStyler.styleSplitPane(myControlsPane);
@@ -213,4 +214,8 @@ public class CCControlComponent extends JSplitPane{
             }
         });
     }
+
+	public void afterInit() {
+        _myPresetComponent.loadFirstPreset();
+	}
 }

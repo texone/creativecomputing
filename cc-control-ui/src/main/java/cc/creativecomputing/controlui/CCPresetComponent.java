@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
@@ -38,6 +39,8 @@ public class CCPresetComponent extends JPanel{
 	
 	private CCObjectPropertyHandle _myPropertyHandle;
 	
+	private boolean _mySelectPreset = true;
+	
 	public CCPresetComponent(){
 		CCNIOUtil.createDirectories(CCNIOUtil.dataPath("settings"));
 		_myPresetList = new JComboBox<String>();
@@ -49,8 +52,25 @@ public class CCPresetComponent extends JPanel{
 			public void itemStateChanged(ItemEvent theE) {
 				switch(theE.getStateChange()){
 				case ItemEvent.SELECTED:
-					loadPreset();
+					if(_mySelectPreset){
+						CCLog.info("selected");
+						loadPreset();
+					}
 					break;
+				}
+			}
+		});
+        _myPresetList.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CCLog.info("action");
+//				JComboBox cb = (JComboBox)e.getSource();
+//		        String petName = (String)cb.getSelectedItem();
+//		        updateLabel(petName);
+
+				if(_mySelectPreset){
+					loadPreset();
 				}
 			}
 		});
@@ -104,22 +124,34 @@ public class CCPresetComponent extends JPanel{
 		_myPresetsPath = theObjectHandle.presetPath();
 		_myPropertyHandle = theObjectHandle;
 		CCNIOUtil.createDirectories(_myPresetsPath);
+		_mySelectPreset = false;
 		_myPresetList.removeAllItems();
+		_myPresetList.addItem("select preset");
 		for(Path myPath:CCNIOUtil.list(_myPresetsPath, "json")){
 			_myPresetList.addItem(CCNIOUtil.fileName(myPath.getFileName().toString()));
 		}
+		if(theObjectHandle.preset() != null){
+			_myPresetList.setSelectedItem(theObjectHandle.preset());
+		}
+		_mySelectPreset = true;
 	}
 	
-	private void loadPreset(){
+	public void loadPreset(){
 		if(_myPresetList.getSelectedItem() == null)return;
-		if(_myPresetList.getSelectedItem().equals(""))return;
-		if(!CCNIOUtil.exists(_myPresetsPath.resolve(Paths.get(_myPresetList.getSelectedItem().toString() + ".json"))))return;
+		loadPreset(_myPresetList.getSelectedItem().toString());
+	}
+	
+	public void loadPreset(String thePreset){
+		CCLog.info("load:" + thePreset);
 		
-		try{
-			_myPropertyHandle.data(CCDataIO.createDataObject(_myPresetsPath.resolve(Paths.get(_myPresetList.getSelectedItem().toString() + ".json"))));
-		}catch(Exception e){
-			
-		}
+		if(thePreset.equals(""))return;
+		if(thePreset.equals("select preset"))return;
+		
+		_myPropertyHandle.preset(thePreset);
+	}
+	
+	public void loadFirstPreset(){
+		if(_myPresetList.getItemCount() > 1)loadPreset(_myPresetList.getItemAt(1).toString());
 	}
 	
 	private boolean addPreset(String thePreset){
@@ -135,7 +167,8 @@ public class CCPresetComponent extends JPanel{
 		if(_myPropertyHandle == null)return;
 		
 		Path myPresetPath = _myPresetsPath.resolve(thePreset + ".json");
-		CCDataIO.saveDataObject(_myPropertyHandle.data(), myPresetPath, CCDataFormats.JSON);
+		CCDataIO.saveDataObject(_myPropertyHandle.presetData(), myPresetPath, CCDataFormats.JSON);
+		_myPropertyHandle.preset(thePreset);
 	}
 	
 	public void removePreset(){
