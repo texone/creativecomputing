@@ -10,7 +10,6 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	
 	private Type _myMin;
 	private Type _myMax;
-	private String _myPrecision;
 	
 	private CCDoubleConverter<Type> _myToType;
 	
@@ -27,8 +26,10 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 			myIsNumberBox && 
 			theParent._myMember != null && 
 			theParent._myMember.annotation() != null && 
-			theParent._myMember.annotation().min() != -1 && 
-			theParent._myMember.annotation().max() != -1;
+			(
+				theParent._myMember.annotation().min() != -1 || 
+				theParent._myMember.annotation().max() != -1
+			);
 	
 		if(myUseParentMinMax){
 			_myMin = _myToType.toType(theParent._myMember.annotation().min());
@@ -38,8 +39,6 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 			_myMax = _myToType.max();
 			_myIsNumberBox = true;
 		}
-		
-		_myPrecision = theMember.annotation().precision();
 	}
 	
 	public boolean isNumberBox(){
@@ -100,7 +99,6 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	@Override
 	public CCDataObject data() {
 		CCDataObject myResult = super.data();
-		myResult.put("precision", _myPrecision);
 		myResult.put("min", _myMin);
 		myResult.put("max", _myMax);
 		return myResult;
@@ -108,7 +106,6 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	
 	@Override
 	public void data(CCDataObject theData) {
-		_myPrecision = theData.getString("precision");
 //		_myMin = _myToType.toType(theData.getDouble("min", 0.0));
 //		_myMax = _myToType.toType(theData.getDouble("max", 1.0));
 		value(_myToType.toType(theData.getDouble("value", 0.0)), true);

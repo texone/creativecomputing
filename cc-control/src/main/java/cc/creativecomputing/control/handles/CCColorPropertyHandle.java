@@ -47,7 +47,6 @@ public class CCColorPropertyHandle extends CCPropertyHandle<CCColor>{
 			theData.getFloat("a",0)
 		);
 		value(myColor, true);
-//		super.data(theData);
 	}
 
 	@Override

@@ -10,13 +10,10 @@ public class CCEventTriggerHandle extends CCPropertyHandle<Object>{
 	
 	private CCTriggerProgress _myProgress;
 	
-	
-
 	protected CCEventTriggerHandle(CCObjectPropertyHandle theParent, CCMethod<CCProperty> theMethod) {
 		super(theParent, theMethod);
 		_myMethod = theMethod;
 		_myProgress = new CCTriggerProgress();
-		
 	}
 	
 	public CCTriggerProgress progress(){
@@ -39,15 +36,12 @@ public class CCEventTriggerHandle extends CCPropertyHandle<Object>{
 	}
 	
 	@Override
-	public void value(Object theValue, boolean theOverWrite) {
-		
-	}
+	public void value(Object theValue, boolean theOverWrite) {}
 	
 	private boolean _myDoTrigger = false;
 	
 	public void trigger(){
 		_myDoTrigger = true;
-		
 	}
 	
 	@Override
@@ -64,12 +58,9 @@ public class CCEventTriggerHandle extends CCPropertyHandle<Object>{
 	@Override
 	public CCDataObject data(){
 		CCDataObject myResult = new CCDataObject();
-		myResult.put("name", name());
 		return myResult;
 	}
 	
 	@Override
-	public void data(CCDataObject theData){
-		
-	}
+	public void data(CCDataObject theData){}
 }

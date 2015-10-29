@@ -41,7 +41,6 @@ public class CCEnvelopeHandle extends CCPropertyHandle<CCEnvelope>{
 			myEnvelope.curves().put(myKey, myCurve);
 		}
 		value(myEnvelope, true);
-//		super.data(theData);
 	}
 
 	@Override

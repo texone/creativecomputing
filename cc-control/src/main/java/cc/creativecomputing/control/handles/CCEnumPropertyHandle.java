@@ -55,9 +55,6 @@ public class CCEnumPropertyHandle extends CCPropertyHandle<Enum<?>>{
 				return;
 			}
 		}
-		
 	}
 	
-	
-
 }
