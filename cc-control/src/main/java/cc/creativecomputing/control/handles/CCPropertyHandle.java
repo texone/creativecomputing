@@ -94,8 +94,13 @@ public abstract class CCPropertyHandle<Type>{
 			
 			onChange();
 		}else{
-			if(_myMember != null && _myMember.value() != null && !_myMember.value().equals(_myValue)){
-				_myValue = (Type)_myMember.value();
+			if(_myMember == null)return;
+			if(_myMember.annotation() == null)return;
+			if(!_myMember.annotation().readBack())return;
+			
+			Object myValue = _myMember.value();
+			if(myValue != null && !myValue.equals(_myValue)){
+				_myValue = (Type)myValue;
 				onChange();
 			}
 		}
@@ -148,7 +153,6 @@ public abstract class CCPropertyHandle<Type>{
 	public CCDataObject data(){
 		CCDataObject myResult = new CCDataObject();
 		myResult.put("name", name());
-		myResult.put("type", _myMember.type().getName());
 		myResult.put("value", dataObject());
 		return myResult;
 	}
