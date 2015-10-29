@@ -113,11 +113,13 @@ public class CCReflectionUtil {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static class CCMapEntry extends CCMember{
 
 		private Map<String, Object> _myMap;
 		private String _myKey;
 		
+		@SuppressWarnings("unchecked")
 		public CCMapEntry(Map<String, Object> theMap, String theKey) {
 			super(null, null, null);
 			_myMap = theMap;
