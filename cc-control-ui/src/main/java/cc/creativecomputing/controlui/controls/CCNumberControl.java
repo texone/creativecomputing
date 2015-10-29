@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -94,7 +96,22 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 				}
 			}
 		});
-        
+        _myValueField.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        		switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					value(value().doubleValue() + 1, true);
+					break;
+				case KeyEvent.VK_DOWN:
+					value(value().doubleValue() - 1, true);
+					break;
+
+				default:
+					break;
+				}
+        	}
+		});
         
         value(_myHandle.value().doubleValue(), true);
 	}
