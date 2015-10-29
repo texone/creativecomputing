@@ -285,7 +285,7 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 	 * Returns the current frame rate of the animator
 	 * @return current frame rate of the animator
 	 */
-	@CCProperty(name = "show frame rate")
+	@CCProperty(name = "show frame rate", readBack = true)
 	public double frameRate(){
 		return _myFrameRate;
 	}
