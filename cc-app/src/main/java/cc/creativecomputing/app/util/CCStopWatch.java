@@ -12,7 +12,6 @@ package cc.creativecomputing.app.util;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
@@ -29,7 +28,7 @@ import cc.creativecomputing.core.util.CCFormatUtil;
 public class CCStopWatch implements CCAnimatorListener {
 
 	@CCProperty(name = "active")
-	protected boolean _cActive = true;
+	protected boolean _cActive = false;
 
 	@CCProperty(name = "samples", min = 50, max = 2000)
 	protected int _cSamples = 200;
