@@ -130,7 +130,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 				if(myField.value() == null)continue;
 				myProperty = new CCObjectPropertyHandle(this, myField);
 			}
-			myResult.put(myProperty.memberName(), myProperty);
+			myResult.put(myProperty.name(), myProperty);
 		}
 		
 		List<CCMethod<CCProperty>> myMethods = CCReflectionUtil.getMethods(theObject, CCProperty.class);
@@ -159,7 +159,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			}else{
 //				myResult.put(myMethod.name(), new CCObjectPropertyHandle(this, myMethod));
 			}
-			if(myProperty != null)myResult.put(myProperty.memberName(), myProperty);
+			if(myProperty != null)myResult.put(myProperty.name(), myProperty);
 		}
 		
 		if((theObject instanceof Map)){
@@ -187,7 +187,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 				}else{
 					myProperty = new CCObjectPropertyHandle(this, myEntry);
 				}
-				myResult.put(myProperty.memberName(), myProperty);
+				myResult.put(myProperty.name(), myProperty);
 			}
 		}
 		if(theObject instanceof CCPropertyFeedbackObject){
@@ -219,7 +219,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		CCDataObject myData = new CCDataObject();
 		for(String myKey:_myChildHandles.keySet()){
 			CCPropertyHandle myHandle = _myChildHandles.get(myKey);
-			myData.put(myHandle.memberName(), myHandle.data());
+			myData.put(myHandle.name(), myHandle.data());
 		}
 		return myData;
 	}
@@ -228,7 +228,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		CCDataObject myData = new CCDataObject();
 		for(String myKey:_myChildHandles.keySet()){
 			CCPropertyHandle myHandle = _myChildHandles.get(myKey);
-			myData.put(myHandle.memberName(), myHandle.data());
+			myData.put(myHandle.name(), myHandle.data());
 		}
 		
 		CCDataObject myResult = new CCDataObject();
@@ -274,7 +274,8 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		
 		for(String myKey:theData.keySet()){
 			CCDataObject myData = theData.getObject(myKey);
-			CCPropertyHandle myHandle = _myChildHandles.get(myKey);
+			String myName = myData.getString("name");
+			CCPropertyHandle myHandle = _myChildHandles.get(myName);
 
 			if(myHandle == null){
 				continue;
