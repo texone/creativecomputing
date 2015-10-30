@@ -13,12 +13,15 @@ package cc.creativecomputing.model.svg;
 import java.awt.Paint;
 import java.util.List;
 
+import cc.creativecomputing.graphics.CCDrawMode;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.util.CCTriangulator;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMatrix32;
+import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 import cc.creativecomputing.model.CCStrokeCap;
 import cc.creativecomputing.model.CCStrokeJoin;
-import cc.creativecomputing.model.svg.CCSVGIO.CCSVGGradient;
 
 
 public abstract class CCSVGElement {
@@ -147,6 +150,60 @@ public abstract class CCSVGElement {
 	public void strokeOpacity(double theOpacity){
 		opacity = theOpacity;
 		strokeColor.a = theOpacity;
+	}
+	
+	public abstract void drawImplementation(CCGraphics g, boolean theFill);
+	
+	public void draw(CCGraphics g){
+		if(matrix != null){
+			g.pushMatrix();
+			g.applyMatrix(matrix);
+		}
+		g.pushAttribute();
+
+		if (fill) {
+			// System.out.println("filling " + PApplet.hex(fillColor));
+			g.color(fillColor);
+			drawImplementation(g, true);
+		} 
+		if (stroke) {
+			g.color(strokeColor);
+			g.strokeWeight(strokeWeight);
+			drawImplementation(g, false);
+		} 
+		
+		g.popAttribute();
+		if(matrix != null){
+			g.popMatrix();
+		}
+	}
+	
+	private CCTriangulator _myTriangulator = null;
+	
+
+	protected void draw(CCGraphics g, CCLinearSpline theSpline, boolean theFill) {
+		if(theFill){
+			if(_myTriangulator == null){
+				_myTriangulator = new CCTriangulator();
+				_myTriangulator.beginPolygon();
+				for(CCVector3 myPoint:theSpline.points()){
+					_myTriangulator.vertex(myPoint);
+				}
+				_myTriangulator.endPolygon();
+			}
+			g.beginShape(CCDrawMode.TRIANGLES);
+			for(CCVector3 myVertex:_myTriangulator.vertices()){
+				g.vertex(myVertex);
+			}
+			g.endShape();
+		}else{
+			if(theSpline.isClosed())g.beginShape(CCDrawMode.LINE_LOOP);
+			else g.beginShape(CCDrawMode.LINE_STRIP);
+			for(CCVector3 myPoint:theSpline.points()){
+				g.vertex(myPoint);
+			}
+			g.endShape();
+		}
 	}
 	
 	public abstract List<CCLinearSpline> contours();

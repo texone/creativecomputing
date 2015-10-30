@@ -13,6 +13,9 @@ package cc.creativecomputing.model.svg;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.graphics.CCDrawMode;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.CCShapeMode;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
@@ -52,5 +55,12 @@ public class CCSVGEllipse extends CCSVGElement{
 		myResult.add(myContour);
 		myContour.endEditSpline();
 		return myResult;
+	}
+	
+	@Override
+	public void drawImplementation(CCGraphics g, boolean theFill) {
+		CCShapeMode myEllipseMode = g.ellipseMode();
+		g.ellipse(_myCenter, _myRadius.x, _myRadius.y, theFill);
+		g.ellipseMode(myEllipseMode);
 	}
 }

@@ -15,6 +15,7 @@ import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 
@@ -81,5 +82,15 @@ public class CCSVGPath extends CCSVGElement{
 		}
 		return _myContours;
 	}
-
+	
+	@Override
+	public void drawImplementation(CCGraphics g, boolean theFill) {
+		if(_myContours == null){
+			createContours();
+		}
+//		System.out.println("DRAW:" + _mySegments.size());
+		for(CCLinearSpline myContour:_myContours){
+			draw(g, myContour, theFill);
+		}
+	}
 }

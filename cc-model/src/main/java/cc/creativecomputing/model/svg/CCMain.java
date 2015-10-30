@@ -16,6 +16,6 @@ public class CCMain {
 //		}*/
 //		CCLog.info(myObject);
 		
-		CCSVGIO.newSVG(CCNIOUtil.dataPath("bot1.svg"));
+		CCSVGIONew.newSVG(CCNIOUtil.dataPath("bot1.svg"));
 	}
 }

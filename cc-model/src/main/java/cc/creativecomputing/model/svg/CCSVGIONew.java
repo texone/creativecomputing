@@ -1,4 +1,4 @@
- /*
+/*
  * Copyright (c) 2013 christianr.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -24,21 +24,27 @@ import java.awt.image.WritableRaster;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCArrayUtil;
 import cc.creativecomputing.core.util.CCStringUtil;
-import cc.creativecomputing.io.xml.CCXMLElement;
-import cc.creativecomputing.io.xml.CCXMLIO;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.io.data.CCDataArray;
+import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
+import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.math.spline.CCLinearSpline;
 import cc.creativecomputing.model.CCStrokeCap;
 import cc.creativecomputing.model.CCStrokeJoin;
 import cc.creativecomputing.model.svg.CCSVGElement.CCShapeFamily;
 import cc.creativecomputing.model.svg.CCSVGElement.CCShapeKind;
 
-public class CCSVGIO {
+public class CCSVGIONew {
 	
 	/**
 	 * Parse a size that may have a suffix for its units. Ignoring cases where
@@ -52,23 +58,23 @@ public class CCSVGIO {
 	 * <LI>"1in" equals "90px" (and therefore 90 user units)
 	 * </UL>
 	 */
-	static protected double parseUnitSize(String text) {
-		int len = text.length() - 2;
+	static protected double parseUnitSize(String theText) {
+		int myLength = theText.length() - 2;
 
-		if (text.endsWith("pt")) {
-			return Double.parseDouble(text.substring(0, len)) * 1.25f;
-		} else if (text.endsWith("pc")) {
-			return Double.parseDouble(text.substring(0, len)) * 15;
-		} else if (text.endsWith("mm")) {
-			return Double.parseDouble(text.substring(0, len)) * 3.543307f;
-		} else if (text.endsWith("cm")) {
-			return Double.parseDouble(text.substring(0, len)) * 35.43307f;
-		} else if (text.endsWith("in")) {
-			return Double.parseDouble(text.substring(0, len)) * 90;
-		} else if (text.endsWith("px")) {
-			return Double.parseDouble(text.substring(0, len));
+		if (theText.endsWith("pt")) {
+			return Double.parseDouble(theText.substring(0, myLength)) * 1.25f;
+		} else if (theText.endsWith("pc")) {
+			return Double.parseDouble(theText.substring(0, myLength)) * 15;
+		} else if (theText.endsWith("mm")) {
+			return Double.parseDouble(theText.substring(0, myLength)) * 3.543307f;
+		} else if (theText.endsWith("cm")) {
+			return Double.parseDouble(theText.substring(0, myLength)) * 35.43307f;
+		} else if (theText.endsWith("in")) {
+			return Double.parseDouble(theText.substring(0, myLength)) * 90;
+		} else if (theText.endsWith("px")) {
+			return Double.parseDouble(theText.substring(0, myLength));
 		} else {
-			return Double.parseDouble(text);
+			return Double.parseDouble(theText);
 		}
 	}
 	
@@ -77,37 +83,38 @@ public class CCSVGIO {
 	 * Used in place of element.getDoubleAttribute(a) because we can have a unit
 	 * suffix (length or coordinate).
 	 * 
-	 * @param element
+	 * @param theDataObject
 	 *            what to parse
-	 * @param attribute
+	 * @param theKey
 	 *            name of the attribute to get
 	 * @return unit-parsed version of the data
 	 */
-	static protected double getDoubleWithUnit(CCXMLElement element, String attribute) {
-		String val = element.attribute(attribute);
-		return (val == null) ? 0 : parseUnitSize(val);
+	static protected double getDoubleWithUnit(CCDataObject theDataObject, String theKey) {
+		String myValue = theDataObject.getString(theKey);
+		return (myValue == null) ? 0 : parseUnitSize(myValue);
 	}
 	
-	static protected HashMap<String, String> parseStyleAttributes(String style) {
-		HashMap<String, String> table = new HashMap<String, String>();
-		String[] pieces = style.split(";");
-		for (int i = 0; i < pieces.length; i++) {
-			String[] parts = pieces[i].split(":");
-			table.put(parts[0], parts[1]);
+	static protected HashMap<String, String> parseStyleAttributes(String theStyle) {
+		HashMap<String, String> myResult = new HashMap<String, String>();
+		String[] myPieces = theStyle.split(";");
+		for (String myPiece:myPieces) {
+			String[] parts = myPiece.split(":");
+			myResult.put(parts[0], parts[1]);
 		}
-		return table;
+		return myResult;
 	}
 	
-	static protected CCMatrix32 parseSingleTransform(String matrixStr) {
+	static protected CCMatrix32 parseSingleTransform(String theMatrixString) {
 		// String[] pieces = PApplet.match(matrixStr,
 		// "^\\s*(\\w+)\\((.*)\\)\\s*$");
-		String[] pieces = CCStringUtil.match(matrixStr, "[,\\s]*(\\w+)\\((.*)\\)");
+		String[] pieces = CCStringUtil.match(theMatrixString, "[,\\s]*(\\w+)\\((.*)\\)");
 		if (pieces == null) {
-			System.err.println("Could not parse transform " + matrixStr);
+			System.err.println("Could not parse transform " + theMatrixString);
 			return null;
 		}
 		String[] m = CCStringUtil.splitTokens(pieces[2], ", ");
-		if (pieces[1].equals("matrix")) {
+		switch(pieces[1]){
+		case "matrix":
 			return new CCMatrix32(
 				Double.parseDouble(m[0]), 
 				Double.parseDouble(m[2]), 
@@ -116,19 +123,19 @@ public class CCSVGIO {
 				Double.parseDouble(m[3]), 
 				Double.parseDouble(m[5])
 			);
-		} else if (pieces[1].equals("translate")) {
+		case "translate":
 			double tx = Double.parseDouble(m[0]);
 			double ty = (m.length == 2) ? Double.parseDouble(m[1]) : Double.parseDouble(m[0]);
 			// return new double[] { 1, 0, tx, 0, 1, ty };
 			return new CCMatrix32(1, 0, tx, 0, 1, ty);
 
-		} else if (pieces[1].equals("scale")) {
+		case "scale":
 			double sx = Double.parseDouble(m[0]);
 			double sy = (m.length == 2) ? Double.parseDouble(m[1]) : Double.parseDouble(m[0]);
 			// return new double[] { sx, 0, 0, 0, sy, 0 };
 			return new CCMatrix32(sx, 0, 0, 0, sy, 0);
 
-		} else if (pieces[1].equals("rotate")) {
+		case "rotate":
 			double angle = Double.parseDouble(m[0]);
 
 			if (m.length == 1) {
@@ -144,10 +151,10 @@ public class CCSVGIO {
 				return mat; // .get(null);
 			}
 
-		} else if (pieces[1].equals("skewX")) {
+		case "skewX":
 			return new CCMatrix32(1, 0, 1, CCMath.tan(Double.parseDouble(m[0])), 0, 0);
 
-		} else if (pieces[1].equals("skewY")) {
+		case "skewY":
 			return new CCMatrix32(1, 0, 1, 0, CCMath.tan(Double.parseDouble(m[0])), 0);
 		}
 		return null;
@@ -160,17 +167,17 @@ public class CCSVGIO {
 	 * href="http://www.w3.org/TR/SVG/coords.html#TransformAttribute">this
 	 * section</a> of the SVG documentation.
 	 * 
-	 * @param matrixStr
+	 * @param theMatrixString
 	 *            text of the matrix param.
 	 * @return a good old-fashioned CCMatrix32
 	 */
-	static protected CCMatrix32 parseTransform(String matrixStr) {
-		matrixStr = matrixStr.trim();
+	static protected CCMatrix32 parseTransform(String theMatrixString) {
+		theMatrixString = theMatrixString.trim();
 		CCMatrix32 outgoing = null;
 		int start = 0;
 		int stop = -1;
-		while ((stop = matrixStr.indexOf(')', start)) != -1) {
-			CCMatrix32 m = parseSingleTransform(matrixStr.substring(start,
+		while ((stop = theMatrixString.indexOf(')', start)) != -1) {
+			CCMatrix32 m = parseSingleTransform(theMatrixString.substring(start,
 					stop + 1));
 			if (outgoing == null) {
 				outgoing = m;
@@ -182,14 +189,16 @@ public class CCSVGIO {
 		return outgoing;
 	}
 	
-	class LinearGradientPaint implements Paint {
+	
+
+	class CCSVGLinearGradientPaint implements Paint {
 		double x1, y1, x2, y2;
 		double[] offset;
 		int[] color;
 		int count;
 		double opacity;
 
-		public LinearGradientPaint(double x1, double y1, double x2, double y2,
+		public CCSVGLinearGradientPaint(double x1, double y1, double x2, double y2,
 				double[] offset, int[] color, int count, double opacity) {
 			this.x1 = x1;
 			this.y1 = y1;
@@ -201,24 +210,28 @@ public class CCSVGIO {
 			this.opacity = opacity;
 		}
 
-		public PaintContext createContext(ColorModel cm,
-				Rectangle deviceBounds, Rectangle2D userBounds,
-				AffineTransform xform, RenderingHints hints) {
+		public PaintContext createContext(
+			ColorModel cm,
+			Rectangle deviceBounds, Rectangle2D userBounds,
+			AffineTransform xform, RenderingHints hints
+		) {
 			Point2D t1 = xform.transform(new Point2D.Double(x1, y1), null);
 			Point2D t2 = xform.transform(new Point2D.Double(x2, y2), null);
-			return new LinearGradientContext((double) t1.getX(),
-					(double) t1.getY(), (double) t2.getX(), (double) t2.getY());
+			return new CCSVGLinearGradientContext(
+				(double) t1.getX(), (double) t1.getY(), 
+				(double) t2.getX(), (double) t2.getY()
+			);
 		}
 
 		public int getTransparency() {
 			return TRANSLUCENT; // why not.. rather than checking each color
 		}
 
-		public class LinearGradientContext implements PaintContext {
+		public class CCSVGLinearGradientContext implements PaintContext {
 			int ACCURACY = 2;
 			double tx1, ty1, tx2, ty2;
 
-			public LinearGradientContext(double tx1, double ty1, double tx2, double ty2) {
+			public CCSVGLinearGradientContext(double tx1, double ty1, double tx2, double ty2) {
 				this.tx1 = tx1;
 				this.ty1 = ty1;
 				this.tx2 = tx2;
@@ -233,8 +246,7 @@ public class CCSVGIO {
 			}
 
 			public Raster getRaster(int x, int y, int w, int h) {
-				WritableRaster raster = getColorModel()
-						.createCompatibleWritableRaster(w, h);
+				WritableRaster raster = getColorModel().createCompatibleWritableRaster(w, h);
 
 				int[] data = new int[w * h * 4];
 
@@ -316,14 +328,14 @@ public class CCSVGIO {
 		}
 	}
 
-	class RadialGradientPaint implements Paint {
+	class CCSVGRadialGradientPaint implements Paint {
 		double cx, cy, radius;
 		double[] offset;
 		int[] color;
 		int count;
 		double opacity;
 
-		public RadialGradientPaint(double cx, double cy, double radius, double[] offset, int[] color, int count, double opacity) {
+		public CCSVGRadialGradientPaint(double cx, double cy, double radius, double[] offset, int[] color, int count, double opacity) {
 			this.cx = cx;
 			this.cy = cy;
 			this.radius = radius;
@@ -336,14 +348,14 @@ public class CCSVGIO {
 		public PaintContext createContext(ColorModel cm,
 				Rectangle deviceBounds, Rectangle2D userBounds,
 				AffineTransform xform, RenderingHints hints) {
-			return new RadialGradientContext();
+			return new CCSVGRadialGradientContext();
 		}
 
 		public int getTransparency() {
 			return TRANSLUCENT;
 		}
 
-		public class RadialGradientContext implements PaintContext {
+		public class CCSVGRadialGradientContext implements PaintContext {
 			int ACCURACY = 5;
 
 			public void dispose() {
@@ -397,24 +409,26 @@ public class CCSVGIO {
 	
 	private CCSVGDocument _myDocument;
 
-	private CCSVGDocument readSVG(CCXMLElement theSVG){
-		if (!theSVG.name().equals("svg")) {
-			throw new RuntimeException("root is not <svg>, it's <" + theSVG.name() + ">");
+	private CCSVGDocument readSVG(CCDataObject theSVG){
+		if (!theSVG.containsKey("svg")) {
+			throw new RuntimeException("root is not <svg>");
 		}
 		
 		_myDocument = new CCSVGDocument();
 
-		readDocumentSize(_myDocument, theSVG);
-		readElement(_myDocument, theSVG);
-		readChildren(_myDocument, theSVG);
+		CCDataObject mySVG = theSVG.getObject("svg");
+		readDocumentSize(_myDocument, mySVG);
+		readElement(_myDocument, mySVG);
+		readChildren(_myDocument, mySVG);
 
 		return _myDocument;
 	}
 	
-	private void readDocumentSize(CCSVGDocument theDocument, CCXMLElement theSVG){
+	private void readDocumentSize(CCSVGDocument theDocument, CCDataObject theSVG){
 		// not proper parsing of the viewBox, but will cover us for cases where
 		// the width and height of the object is not specified
-		String viewBoxStr = theSVG.attribute("viewBox");
+		
+		String viewBoxStr = theSVG.getString("viewBox");
 		if (viewBoxStr != null) {
 			String[] viewBox = CCStringUtil.splitTokens(viewBoxStr);
 			theDocument.width = Double.parseDouble(viewBox[2]);
@@ -424,8 +438,9 @@ public class CCSVGIO {
 		// TODO if viewbox is not same as width/height, then use it to scale
 		// the original objects. for now, viewbox only used when width/height
 		// are empty values (which by the spec means w/h of "100%"
-		String unitWidth = theSVG.attribute("width");
-		String unitHeight = theSVG.attribute("height");
+		CCLog.info(theSVG);
+		String unitWidth = theSVG.getString("width");
+		String unitHeight = theSVG.getString("height");
 		if (unitWidth != null) {
 			theDocument.width = parseUnitSize(unitWidth);
 			theDocument.height = parseUnitSize(unitHeight);
@@ -442,8 +457,8 @@ public class CCSVGIO {
 		}
 	}
 	
-	private void readName(CCSVGElement theElement, CCXMLElement theSVG){
-		String myName = theSVG.attribute("id");
+	private void readName(CCSVGElement theElement, CCDataObject theSVG){
+		String myName = theSVG.getString("id");
 		// @#$(* adobe illustrator mangles names of objects when re-saving
 		if (myName != null) {
 			while (true) {
@@ -457,10 +472,10 @@ public class CCSVGIO {
 		theElement._myName = myName;
 	}
 	
-	private void readOpacity(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("opacity")) return;
+	private void readOpacity(CCSVGElement theElement, CCDataObject theSVG) {
+		if (!theSVG.containsKey("opacity")) return;
 		
-		String opacityText = theSVG.attribute("opacity");
+		String opacityText = theSVG.getString("opacity");
 		theElement.opacity(Double.parseDouble(opacityText));
 	}
 	
@@ -470,20 +485,20 @@ public class CCSVGIO {
 		String sub = theColorText.substring(leftParen, rightParen);
 		String[] values = CCStringUtil.splitTokens(sub, ", ");
 		return new CCColor(
-			Integer.parseInt(values[0]),
-			Integer.parseInt(values[1]),
-			Integer.parseInt(values[2])
+			Double.parseDouble(values[0]),
+			Double.parseDouble(values[1]),
+			Double.parseDouble(values[2])
 		);
 	}
 	
 	private Paint calcGradientPaint(CCSVGGradient gradient, double theOpacity) {
 		if (gradient instanceof CCSVGLinearGradient) {
 			CCSVGLinearGradient grad = (CCSVGLinearGradient) gradient;
-			return new LinearGradientPaint(grad.x1, grad.y1, grad.x2, grad.y2, grad.offset, grad.color, grad.count, theOpacity);
+			return new CCSVGLinearGradientPaint(grad.x1, grad.y1, grad.x2, grad.y2, grad.offset, grad.color, grad.count, theOpacity);
 
 		} else if (gradient instanceof CCSVGRadialGradient) {
 			CCSVGRadialGradient grad = (CCSVGRadialGradient) gradient;
-			return new RadialGradientPaint(grad.cx, grad.cy, grad.r, grad.offset, grad.color, grad.count, theOpacity);
+			return new CCSVGRadialGradientPaint(grad.cx, grad.cy, grad.r, grad.offset, grad.color, grad.count, theOpacity);
 		}
 		return null;
 	}
@@ -544,23 +559,23 @@ public class CCSVGIO {
 		}
 	}
 	
-	private void readStroke(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("stroke")) return;
+	private void readStroke(CCSVGElement theElement, CCDataObject theSVG) {
+		if (!theSVG.containsKey("stroke")) return;
 		
-		String strokeText = theSVG.attribute("stroke");
+		String strokeText = theSVG.getString("stroke");
 		readColor(theElement, strokeText, false);
 	}
 	
-	private void readStrokeOpacity(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("stroke-opacity")) return;
+	private void readStrokeOpacity(CCSVGElement theElement, CCDataObject theSVG) {
+		if (!theSVG.containsKey("stroke-opacity")) return;
 		
-		theElement.strokeOpacity = theSVG.doubleAttribute("stroke-opacity");
+		theElement.strokeOpacity = theSVG.getDouble("stroke-opacity");
 		theElement.strokeColor.a = theElement.strokeOpacity;
 	}
 	
-	private void readStrokeWeight(CCSVGElement theElement, CCXMLElement theSVG){
-		if (!theSVG.hasAttribute("stroke-width")) return;
-		theElement.strokeWeight = parseUnitSize(theSVG.attribute("stroke-width"));
+	private void readStrokeWeight(CCSVGElement theElement, CCDataObject theSVG){
+		if (!theSVG.containsKey("stroke-width")) return;
+		theElement.strokeWeight = parseUnitSize(theSVG.getString("stroke-width"));
 	}
 	
 	private void setStrokeJoin(CCSVGElement theElement, String theStrokeJoin){
@@ -575,10 +590,10 @@ public class CCSVGIO {
 		}
 	}
 	
-	private void readStrokeJoin(CCSVGElement theElement, CCXMLElement theSVG){
-		if (!theSVG.hasAttribute("stroke-linejoin")) return;
+	private void readStrokeJoin(CCSVGElement theElement, CCDataObject theSVG){
+		if (!theSVG.containsKey("stroke-linejoin")) return;
 			
-		setStrokeJoin(theElement, theSVG.attribute("stroke-linejoin"));
+		setStrokeJoin(theElement, theSVG.getString("stroke-linejoin"));
 	}
 	
 	private void setStrokeCap(CCSVGElement theElement, String theStrokeCap){
@@ -593,26 +608,26 @@ public class CCSVGIO {
 		}
 	}
 	
-	private void readStrokeCap(CCSVGElement theElement, CCXMLElement theSVG){
-		if (!theSVG.hasAttribute("stroke-linecap")) return;
+	private void readStrokeCap(CCSVGElement theElement, CCDataObject theSVG){
+		if (!theSVG.containsKey("stroke-linecap")) return;
 			
-		setStrokeCap(theElement, theSVG.attribute("stroke-linecap"));
+		setStrokeCap(theElement, theSVG.getString("stroke-linecap"));
 	}
 	
-	private void readFill(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("fill")) return;
+	private void readFill(CCSVGElement theElement, CCDataObject theSVG) {
+		if (!theSVG.containsKey("fill")) return;
 		
-		String myFillText = theSVG.attribute("fill");
+		String myFillText = theSVG.getString("fill");
 		readColor(theElement, myFillText, true);
 	}
 	
-	private void readFillOpacity(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("fill-opacity")) return;
+	private void readFillOpacity(CCSVGElement theElement, CCDataObject theSVG) {
+		if (!theSVG.containsKey("fill-opacity")) return;
 		
-		theElement.fillOpacity(theSVG.doubleAttribute("fill-opacity"));
+		theElement.fillOpacity(theSVG.getDouble("fill-opacity"));
 	}
 	
-	private void readColors(CCSVGElement theElement, CCXMLElement theSVG) {
+	private void readColors(CCSVGElement theElement, CCDataObject theSVG) {
 		readOpacity(theElement, theSVG);
 		readStroke(theElement, theSVG);
 		readStrokeOpacity(theElement, theSVG);
@@ -623,8 +638,8 @@ public class CCSVGIO {
 		readFillOpacity(theElement, theSVG);
 
 
-		if (theSVG.hasAttribute("style")) {
-			String styleText = theSVG.attribute("style");
+		if (theSVG.containsKey("style")) {
+			String styleText = theSVG.getString("style");
 			String[] styleTokens = CCStringUtil.splitTokens(styleText, ";");
 
 			// PApplet.println(styleTokens);
@@ -657,35 +672,38 @@ public class CCSVGIO {
 		}
 	}
 	
-	private void readVisible(CCSVGElement theElement, CCXMLElement theSVG){
-		String displayStr = theSVG.attribute("display", "inline");
+	private void readVisible(CCSVGElement theElement, CCDataObject theSVG){
+		String displayStr = theSVG.getString("display", "inline");
 		theElement.visible = !displayStr.equals("none");
 	}
 	
-	private void readTransform(CCSVGElement theElement, CCXMLElement theSVG){
-		String transformStr = theSVG.attribute("transform");
+	private void readTransform(CCSVGElement theElement, CCDataObject theSVG){
+		String transformStr = theSVG.getString("transform");
 		if (transformStr != null) {
 			theElement.matrix = parseTransform(transformStr);
 		}
 	}
 	
-	private void readElement(CCSVGElement theElement, CCXMLElement theSVG){
+	private void readElement(CCSVGElement theElement, CCDataObject theSVG){
+		for(String myKey:theSVG.keySet()){
+			CCLog.info(myKey);
+		}
 		readName(theElement, theSVG);
 		readColors(theElement, theSVG);
 		readVisible(theElement, theSVG);
 		readTransform(theElement, theSVG);
 	}
 	
-	private void readGroup(CCSVGGroup theGroup, CCXMLElement theSVG){
+	private void readGroup(CCSVGGroup theGroup, CCDataObject theSVG){
 		readElement(theGroup, theSVG);
 		readChildren(theGroup, theSVG);
 	}
 	
-	private void readDefs(CCSVGGroup theGroup, CCXMLElement theSVG){
+	private void readDefs(CCSVGGroup theGroup, CCDataObject theSVG){
 		readChildren(theGroup, theSVG);
 	}
 	
-	private void readLine(CCSVGLine theLine, CCXMLElement theSVG){
+	private void readLine(CCSVGLine theLine, CCDataObject theSVG){
 		readElement(theLine, theSVG);
 		theLine._myKind = CCShapeKind.LINE;
 		theLine.family = CCShapeFamily.PRIMITIVE;
@@ -699,7 +717,7 @@ public class CCSVGIO {
 		);
 	}
 	
-	private void readEllipse(CCSVGEllipse theEllipse, CCXMLElement theSVG, boolean theIsCircle){
+	private void readEllipse(CCSVGEllipse theEllipse, CCDataObject theSVG, boolean theIsCircle){
 		readElement(theEllipse, theSVG);
 		theEllipse._myKind = CCShapeKind.ELLIPSE;
 		theEllipse.family = CCShapeFamily.PRIMITIVE;
@@ -719,7 +737,7 @@ public class CCSVGIO {
 		theEllipse.radius().set(rx, ry);
 	}
 	
-	private void readRect(CCSVGRectangle theRectangle, CCXMLElement theSVG) {
+	private void readRect(CCSVGRectangle theRectangle, CCDataObject theSVG) {
 		readElement(theRectangle, theSVG);
 		theRectangle._myKind = CCShapeKind.RECT;
 		theRectangle.family = CCShapeFamily.PRIMITIVE;
@@ -740,12 +758,12 @@ public class CCSVGIO {
 	 * @param close
 	 *            true if shape is closed (polygon), false if not (polyline)
 	 */
-	private void readPoly(CCSVGPoly thePath, CCXMLElement theSVG) {
+	private void readPoly(CCSVGPoly thePath, CCDataObject theSVG) {
 		readElement(thePath, theSVG);
 		thePath._myKind = CCShapeKind.POLYGON;
 		thePath.family = CCShapeFamily.PATH;
 
-		String pointsAttr = theSVG.attribute("points");
+		String pointsAttr = theSVG.getString("points");
 		if (pointsAttr != null) {
 			String[] pointsBuffer = CCStringUtil.splitTokens(pointsAttr);
 			thePath.spline().beginEditSpline();
@@ -763,12 +781,12 @@ public class CCSVGIO {
 	
 	private CCSVGPathReader _myPathReader = new CCSVGPathReader();
 	
-	private void readPath(CCSVGPath thePath, CCXMLElement theSVG){
+	private void readPath(CCSVGPath thePath, CCDataObject theSVG){
 		readElement(thePath, theSVG);
 		thePath.family = CCShapeFamily.PATH;
 		thePath._myKind = CCShapeKind.PATH;
 
-		String pathData = theSVG.attribute("d").replaceAll("\\n", "");
+		String pathData = theSVG.getString("d").replaceAll("\\n", "");
 		if (pathData == null || CCStringUtil.trim(pathData).length() == 0) {
 			return;
 		}
@@ -777,102 +795,120 @@ public class CCSVGIO {
 		System.out.println(pathData);
 	}
 	
-	private void readChildren(CCSVGGroup theGroup, CCXMLElement theSVG) {
+	private void readChildren(String theName, CCSVGGroup theGroup, CCDataArray theDataArray){
+		
+	}
+	
+	private void readChildren(String theName, CCSVGGroup theGroup, CCDataObject theObject){
+//		switch(theName){
+//		case "g":
+//			CCSVGGroup myGroup = new CCSVGGroup(theGroup);
+//			myGroup.kind(CCShapeKind.GROUP);
+//			CCLog.info(theSVG.get("g").getClass());
+//			readGroup(myGroup, mySVG);
+//			theGroup.addChild(myGroup);
+//			break;
+//		case "defs":
+//			// generally this will contain gradient info, so may
+//			// as well just throw it into a group element for parsing
+//			// return new BaseObject(this, elem);
+//			if(mySVG == null)continue;
+//			CCSVGGroup myDefGroup = new CCSVGGroup(theGroup);
+//			readDefs(myDefGroup, mySVG);
+//			myDefGroup.kind(CCShapeKind.DEF);
+//			myDefGroup.addChild(myDefGroup);
+//		case "line":
+//			CCSVGLine myLine = new CCSVGLine(theGroup);
+//			readLine(myLine, mySVG);
+//			theGroup.addChild(myLine);
+//		case "circle":
+//			CCSVGEllipse myCircle = new CCSVGEllipse(theGroup);
+//			readEllipse(myCircle, mySVG, true);
+//			theGroup.addChild(myCircle);
+//		case "ellipse":
+//			CCSVGEllipse myEllipe = new CCSVGEllipse(theGroup);
+//			readEllipse(myEllipe, mySVG, false);
+//			theGroup.addChild(myEllipe);
+//		case "rect":
+//			CCSVGRectangle myRect = new CCSVGRectangle(theGroup);
+//			readRect(myRect, mySVG);
+//			theGroup.addChild(myRect);
+//		case "polygon":
+//			CCSVGPoly myPoly = new CCSVGPoly(theGroup, true);
+//			readPoly(myPoly, mySVG);
+//			theGroup.addChild(myPoly);
+//		case "polyline":
+//			CCSVGPoly myPolyline = new CCSVGPoly(theGroup, false);
+//			readPoly(myPolyline, mySVG);
+//			theGroup.addChild(myPolyline);
+//		case "path":
+//			CCSVGPath myPath = new CCSVGPath(theGroup);
+//			readPath(myPath, mySVG);
+//			theGroup.addChild(myPath);
+//			// return new BaseObject(this, elem, PATH);
+////			shape = new PShapeSVG(this, mySVG, true);
+////			shape.parsePath();
+//
+//		case "radialGradient":
+//			theGroup.addChild(new CCSVGRadialGradient(theGroup, mySVG));
+//		case "linearGradient":
+//			theGroup.addChild(new CCSVGLinearGradient(theGroup, mySVG));
+//		case "font":
+////			return new Font(this, mySVG);
+//
+//			// } else if (myName.equals("font-face")) {
+//			// return new FontFace(this, elem);
+//
+//			// } else if (myName.equals("glyph") || myName.equals("missing-glyph"))
+//			// {
+//			// return new FontGlyph(this, elem);
+//
+//		case "metadata":
+//
+//		case "text": // || myName.equals("font")) {
+//			CCLog.warn("Text and fonts in SVG files "
+//					+ "are not currently supported, "
+//					+ "convert text to outlines instead.");
+//
+//		case "filter":
+//			CCLog.warn("Filters are not supported.");
+//		case "mask":
+//			CCLog.warn("Masks are not supported.");
+//		case "pattern":
+//			CCLog.warn("Patterns are not supported.");
+//		case "stop":
+//			// stop tag is handled by gradient parser, so don't warn about it
+//		case "sodipodi:namedview":
+//			// these are always in Inkscape files, the warnings get tedious
+//		default:
+//			if (!myName.startsWith("#")) {
+//				CCLog.warn("Ignoring <" + myName + "> tag.");
+//			}
+//		}
+	}
+	
+	private void readChildren(CCSVGGroup theGroup, CCDataObject theSVG) {
 		theGroup._myChildren = new ArrayList<>();
-
-		for (CCXMLElement mySVG : theSVG) {
-			String myName = mySVG.name();
+		 
+		for (String myName : theSVG.keySet()) {
 			
 			if (myName == null) {
-				// just some whitespace that can be ignored (hopefully)
-			} else if (myName.equals("g")) {
-				CCSVGGroup myGroup = new CCSVGGroup(theGroup);
-				myGroup.kind(CCShapeKind.GROUP);
-				readGroup(myGroup, mySVG);
-				theGroup.addChild(myGroup);
-			} else if (myName.equals("defs")) {
-				// generally this will contain gradient info, so may
-				// as well just throw it into a group element for parsing
-				// return new BaseObject(this, elem);
-				CCSVGGroup myGroup = new CCSVGGroup(theGroup);
-				readDefs(myGroup, mySVG);
-				myGroup.kind(CCShapeKind.DEF);
-				theGroup.addChild(myGroup);
-			} else if (myName.equals("line")) {
-				CCSVGLine myLine = new CCSVGLine(theGroup);
-				readLine(myLine, mySVG);
-				theGroup.addChild(myLine);
-			} else if (myName.equals("circle")) {
-				CCSVGEllipse myEllipe = new CCSVGEllipse(theGroup);
-				readEllipse(myEllipe, mySVG, true);
-				theGroup.addChild(myEllipe);
-			} else if (myName.equals("ellipse")) {
-				CCSVGEllipse myEllipe = new CCSVGEllipse(theGroup);
-				readEllipse(myEllipe, mySVG, false);
-				theGroup.addChild(myEllipe);
-			} else if (myName.equals("rect")) {
-				CCSVGRectangle myRect = new CCSVGRectangle(theGroup);
-				readRect(myRect, mySVG);
-				theGroup.addChild(myRect);
-			} else if (myName.equals("polygon")) {
-				CCSVGPoly myPoly = new CCSVGPoly(theGroup, true);
-				readPoly(myPoly, mySVG);
-				theGroup.addChild(myPoly);
-			} else if (myName.equals("polyline")) {
-				CCSVGPoly myPoly = new CCSVGPoly(theGroup, false);
-				readPoly(myPoly, mySVG);
-				theGroup.addChild(myPoly);
-			} else if (myName.equals("path")) {
-				CCSVGPath myPath = new CCSVGPath(theGroup);
-				readPath(myPath, mySVG);
-				theGroup.addChild(myPath);
-				// return new BaseObject(this, elem, PATH);
-//				shape = new PShapeSVG(this, mySVG, true);
-//				shape.parsePath();
-
-			} else if (myName.equals("radialGradient")) {
-				theGroup.addChild(new CCSVGRadialGradient(theGroup, mySVG));
-			} else if (myName.equals("linearGradient")) {
-				theGroup.addChild(new CCSVGLinearGradient(theGroup, mySVG));
-			} else if (myName.equals("font")) {
-//				return new Font(this, mySVG);
-
-				// } else if (myName.equals("font-face")) {
-				// return new FontFace(this, elem);
-
-				// } else if (myName.equals("glyph") || myName.equals("missing-glyph"))
-				// {
-				// return new FontGlyph(this, elem);
-
-			} else if (myName.equals("metadata")) {
-
-			} else if (myName.equals("text")) { // || myName.equals("font")) {
-				CCLog.warn("Text and fonts in SVG files "
-						+ "are not currently supported, "
-						+ "convert text to outlines instead.");
-
-			} else if (myName.equals("filter")) {
-				CCLog.warn("Filters are not supported.");
-			} else if (myName.equals("mask")) {
-				CCLog.warn("Masks are not supported.");
-			} else if (myName.equals("pattern")) {
-				CCLog.warn("Patterns are not supported.");
-			} else if (myName.equals("stop")) {
-				// stop tag is handled by gradient parser, so don't warn about it
-			} else if (myName.equals("sodipodi:namedview")) {
-				// these are always in Inkscape files, the warnings get tedious
-			} else if (!myName.startsWith("#")) {
-				CCLog.warn("Ignoring <" + myName + "> tag.");
+				continue;
 			}
+			
+			
+			Object mySVG = theSVG.get(myName);
+				
+			
 		}
 	}
 	
-	private static CCSVGIO _myReader;
+	private static CCSVGIONew _myReader;
 	
 	public static CCSVGDocument newSVG(final Path theSVG){
 		if(_myReader == null){
-			_myReader = new CCSVGIO();
+			_myReader = new CCSVGIONew();
 		}
-		return _myReader.readSVG(CCXMLIO.createXMLElement(theSVG));
+		return _myReader.readSVG(CCDataIO.createDataObject(theSVG, CCDataFormats.XML));
 	}
 }

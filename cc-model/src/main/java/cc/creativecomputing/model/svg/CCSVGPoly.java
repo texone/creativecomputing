@@ -13,6 +13,7 @@ package cc.creativecomputing.model.svg;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 
 public class CCSVGPoly extends CCSVGElement{
@@ -33,5 +34,10 @@ public class CCSVGPoly extends CCSVGElement{
 		List<CCLinearSpline> myResult = new ArrayList<>();
 		myResult.add(_mySpline);
 		return myResult;
+	}
+	
+	@Override
+	public void drawImplementation(CCGraphics g, boolean theFill) {
+		draw(g,_mySpline, theFill);
 	}
 }

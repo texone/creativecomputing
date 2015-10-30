@@ -7,7 +7,7 @@ public class CCSVGIOTest {
 
     @Test
     public void testParseUnitSize() {
-    	assertEquals(CCSVGIO.parseUnitSize("1"), 1f, 0f);
+    	assertEquals(CCSVGIONew.parseUnitSize("1"), 1f, 0f);
     }
     
     

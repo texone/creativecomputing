@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 
 public class CCSVGGroup extends CCSVGElement implements Iterable<CCSVGElement>{
@@ -144,5 +146,13 @@ public class CCSVGGroup extends CCSVGElement implements Iterable<CCSVGElement>{
 			myResult.addAll(myChildContours);
 		}
 		return myResult;
+	}
+	
+	@Override
+	public void drawImplementation(CCGraphics g, boolean theFill) {
+		for(CCSVGElement myChild:_myChildren){
+			CCLog.info(myChild.name());
+			myChild.draw(g);
+		}
 	}
 }
