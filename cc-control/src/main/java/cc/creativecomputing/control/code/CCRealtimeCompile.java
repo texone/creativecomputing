@@ -31,6 +31,7 @@ import cc.creativecomputing.io.CCNIOUtil;
  * @author maxg, christian riekoff
  *
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 
 	private static class CCJavaFileObject extends SimpleJavaFileObject {
