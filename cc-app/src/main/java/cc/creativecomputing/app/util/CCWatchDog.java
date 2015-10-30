@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.io.CCIOUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
