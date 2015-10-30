@@ -39,6 +39,11 @@ public class CCKleModulation {
 	@CCProperty(name = "group mod offset", min = -1, max = 1)
 	private double _cGroupModOffset = 0;
 	
+	@CCProperty(name = "group div", min = 2, max = 6)
+	private int _cGroupDiv = 1;
+	@CCProperty(name = "group div offset", min = -1, max = 1)
+	private double _cGroupDivOffset = 0;
+	
 	private final CCRandom _myRandom;
 	private final List<Float> _myRandoms = new ArrayList<>();
 	
@@ -72,6 +77,7 @@ public class CCKleModulation {
 			_cModOffset + 
 			_cDivOffset +
 			_cGroupModOffset + 
+			_cGroupDivOffset +
 			_cOffset;
 	}
 	
@@ -84,11 +90,12 @@ public class CCKleModulation {
 		double myGroupPhase = scaleValue(theMin, theMax, theElement.groupBlend(), _cGroupOffset);
 		double myGlobalPhase = scaleValue(theMin, theMax, theElement.idBlend(), _cGlobalOffset);
 		double myRandomPhase = scaleValue(theMin, theMax, _myRandoms.get(theElement.id()), _cRandomOffset); 
-		double myXPhase = scaleValue(theMin, theMax, theElement.motorSetup().relativeOffset().x, _cXOffset); 
-		double myYPhase = scaleValue(theMin, theMax, theElement.motorSetup().relativeOffset().y, _cYOffset); 
+		double myXPhase = scaleValue(theMin, theMax, theElement.xBlend(), _cXOffset); 
+		double myYPhase = scaleValue(theMin, theMax, theElement.yBlend(), _cYOffset); 
 		double myModPhase = scaleValue(theMin, theMax, (theElement.id() % CCMath.max(1, _cMod)) / (double)(_cMod - 1), _cModOffset); 
 		double myDivPhase = scaleValue(theMin, theMax, (int)((theElement.groupIDBlend() - 0.00001)   * _cDiv) / (double)(_cDiv - 1), _cDivOffset); 
 		double myGroupModPhase = scaleValue(theMin, theMax, (theElement.group() % _cGroupMod) / (double)(_cGroupMod - 1), _cGroupModOffset); 
+		double myGroupDivPhase = scaleValue(theMin, theMax, (int)((theElement.groupBlend() - 0.00001)   * _cGroupDiv) / (double)(_cGroupDiv - 1), _cGroupDivOffset); 
 		double myConstOffset = scaleValue(theMin, theMax, 1f, _cOffset); 
 		
 		return 
@@ -101,6 +108,7 @@ public class CCKleModulation {
 			myModPhase + 
 			myDivPhase +
 			myGroupModPhase + 
+			myGroupDivPhase +
 			myConstOffset;
 	}
 }

@@ -72,9 +72,9 @@ public class CCKleAnalyzerApp extends CCGL2Adapter{
 		_myCameraController.camera().draw(g);
 		
 		if(_myIsRecording){
-			CCScreenCapture.capture("export_" + _myMovie + "/capure_" + CCFormatUtil.nf(_myFrame++, 5) + ".png", g.width, g.height);
+			CCScreenCapture.capture(CCNIOUtil.dataPath("export_" + _myMovie + "/capure_" + CCFormatUtil.nf(_myFrame++, 5) + ".png"), g.width(), g.height());
 			g.color(255,0,0);
-			g.rect(-g.width/2 + 20, -g.height/2 + 20, 100, 100);
+			g.rect(-g.width()/2 + 20, -g.height()/2 + 20, 100, 100);
 		}
 
 		

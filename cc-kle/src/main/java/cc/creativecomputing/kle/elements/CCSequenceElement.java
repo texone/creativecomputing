@@ -3,6 +3,7 @@ package cc.creativecomputing.kle.elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.kle.elements.lights.CCLightBrightnessSetup;
 import cc.creativecomputing.kle.elements.lights.CCLightChannel;
@@ -44,32 +45,46 @@ public class CCSequenceElement  {
 		double theElementRadius
 	){
 		_myID = theID;
+		_myMotorSetup = setMotors(theMotors, theBounds, theElementRadius);
+		_myLightSetup = setLights(theLights);
+	}
+	
+	public CCSequenceElement(int theID, List<CCLightChannel> theLights){
+		this(theID, null, theLights, null, 0);
+	}
+	
+	public CCSequenceElement(int theID, CCLightSetup theLightSetup){
+		_myID = theID;
+		_myMotorSetup = null;
+		_myLightSetup = theLightSetup;
+	}
+	
+	private CCMotorSetup setMotors(List<CCMotorChannel> theMotors, CCMotorBounds theBounds, double theElementRadius){
+		if(theMotors == null)return new CCMotorSetup(theMotors);
 		_myChannels.addAll(theMotors);
 		
 		switch(theMotors.size()){
 		case 2:
 			if(theMotors.get(0).connectionPosition().equals(theMotors.get(1).connectionPosition())){
-				_myMotorSetup = new CC2Motor1ConnectionSetup(theMotors, (CC2Motor1ConnectionBounds)theBounds, theElementRadius);
+				return new CC2Motor1ConnectionSetup(theMotors, (CC2Motor1ConnectionBounds)theBounds, theElementRadius);
 			}else{
-				_myMotorSetup = new CC2Motor2ConnectionSetup(theMotors, (CC2Motor2ConnectionBounds)theBounds, theElementRadius);
+				return new CC2Motor2ConnectionSetup(theMotors, (CC2Motor2ConnectionBounds)theBounds, theElementRadius);
 			}
-			
-			break;
 		default:
-			_myMotorSetup = new CCMotorSetup(theMotors);
+			return new CCMotorSetup(theMotors);
 		}
-		
-
+	}
+	
+	private CCLightSetup setLights(List<CCLightChannel> theLights){
+		if(theLights == null)
 		_myChannels.addAll(theLights);
 		switch(theLights.size()){
 		case 1:
-			_myLightSetup = new CCLightBrightnessSetup(theLights);
-			break;
+			return new CCLightBrightnessSetup(theLights);
 		case 3:
-			_myLightSetup = new CCLightRGBSetup(theLights);
-			break;
+			return new CCLightRGBSetup(theLights);
 		default:
-			_myLightSetup = new CCLightSetup(theLights);
+			return new CCLightSetup(theLights);
 		}
 	}
 	
@@ -91,6 +106,10 @@ public class CCSequenceElement  {
 	
 	public int group(){
 		return _myGroup;
+	}
+	
+	public void group(int theGroup){
+		_myGroup = theGroup;
 	}
 	
 	public double xBlend(){

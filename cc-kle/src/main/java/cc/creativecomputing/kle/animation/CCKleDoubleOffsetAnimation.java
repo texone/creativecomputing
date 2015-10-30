@@ -17,6 +17,7 @@ public class CCKleDoubleOffsetAnimation extends CCKleAnimation<Double> {
 
 	@Override
 	public Double animate(CCSequenceElement theElement) {
-		return CCMath.blend(-_cAmount * _cBlend, _cAmount * _cBlend, _cModulation.modulation(theElement));
+		double myBlend = elementBlend(theElement);
+		return CCMath.blend(-_cAmount * myBlend, _cAmount * myBlend, _cModulation.modulation(theElement));
 	}
 }

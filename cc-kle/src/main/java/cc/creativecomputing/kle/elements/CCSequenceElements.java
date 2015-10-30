@@ -9,8 +9,10 @@ import java.util.Map;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.elements.lights.CCLightChannel;
+import cc.creativecomputing.kle.elements.lights.CCLightRGBSetup;
 import cc.creativecomputing.kle.elements.motors.CCMotorBounds;
 import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
+import cc.creativecomputing.math.CCMath;
 
 public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 	/**
@@ -38,6 +40,23 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 		return myResult;
 	}
 	
+	public static CCSequenceElements createLightMatrix(int theColumns, int theRows){
+		CCSequenceElements myResult = new CCSequenceElements();
+		int i = 0;
+		for(int c = 0; c < theColumns; c++){
+			for(int r = 0; r < theRows; r++){
+				CCSequenceElement myElement = new CCSequenceElement(i, new CCLightRGBSetup(i * 3, i * 3 + 1, i * 3 + 2));
+				myElement._myXBlend = CCMath.norm(c, 0, theColumns - 1);
+				myElement._myYBlend = CCMath.norm(r, 0, theRows - 1);
+				myElement.idBlend(CCMath.norm(i, 0, theColumns * theRows));
+				myResult.add(myElement);
+				i++;
+			}
+		}
+		
+		return myResult;
+	}
+	
 	private Map<CCKleChannelType,CCSequenceMapping<?>> _myMappings = new HashMap<>();
 	
 	public CCSequenceElements(Path theKlePath, CCMotorBounds theMotorBounds, float theElementRadius){
@@ -47,6 +66,28 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 			theMotorBounds,
 			theElementRadius
 		);
+	}
+	
+	public CCSequenceElements(){
+		super();
+	}
+	
+	public List<CCSequenceElement> addMatrix(int theColumns, int theRows, int theGroup){
+		List<CCSequenceElement> myResult = new ArrayList<>();
+		for(int c = 0; c < theColumns; c++){
+			for(int r = 0; r < theRows; r++){
+				int i = size() + myResult.size();
+				CCSequenceElement myElement = new CCSequenceElement(i, new CCLightRGBSetup(i * 3, i * 3 + 1, i * 3 + 2));
+				myElement._myXBlend = CCMath.norm(c, 0, theColumns - 1);
+				myElement._myYBlend = CCMath.norm(r, 0, theRows - 1);
+				myElement.group(theGroup);
+				myElement.groupIDBlend(CCMath.norm(myResult.size(), 0, theColumns * theRows));
+				myElement.idBlend(CCMath.norm(myResult.size(), 0, theColumns * theRows));
+				myResult.add(myElement);
+			}
+		}
+		addAll(myResult);
+		return myResult;
 	}
 	
 	public CCSequenceElements(CCXMLElement theMappingsXML, CCXMLElement mySculptureXML, CCMotorBounds theMotorBounds, float theElementRadius){
@@ -97,6 +138,25 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 			
 			add(myElement);
 		}
+	}
+	
+	private int _myGroups = 0;
+	
+	@Override
+	public boolean add(CCSequenceElement e) {
+		_myGroups = CCMath.max(e.group(), _myGroups);
+		return super.add(e);
+	}
+	
+	public void updateInfos(){
+		_myGroups = 0;
+		for(CCSequenceElement myElement:this){
+			_myGroups = CCMath.max(myElement.group(), _myGroups);
+		}
+	}
+	
+	public int groups(){
+		return _myGroups;
 	}
 
 	public Map<CCKleChannelType, CCSequenceMapping<?>> mappings() {

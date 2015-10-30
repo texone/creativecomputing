@@ -21,10 +21,11 @@ public class CCKleColorOffsetAnimation extends CCKleAnimation<CCColor>{
 			_cSaturationModulation.modulation(theElement) * 2, 
 			_cBrightnessModulation.modulation(theElement) * 2
 		);
-			
-		myResult.r *= _cBlend;
-		myResult.g *= _cBlend;
-		myResult.b *= _cBlend;
+
+		double myBlend = elementBlend(theElement);
+		myResult.r *= myBlend;
+		myResult.g *= myBlend;
+		myResult.b *= myBlend;
 			
 		return myResult;
 	}

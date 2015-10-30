@@ -13,6 +13,7 @@ public class CCKleVector2SignalAnimation extends CCKleAnimation<CCVector2>{
 	@CCProperty(name = "phase speed", min = 0, max = 0.1)
 	private double _cSpeed = 0;
 	
+	
 	private double _myGlobalPhase = 0;
 	
 	
@@ -23,9 +24,10 @@ public class CCKleVector2SignalAnimation extends CCKleAnimation<CCVector2>{
 	}
 	
 	public CCVector2 animate(CCSequenceElement theElement){
+		double myBlend = elementBlend(theElement);
 		return new CCVector2(
-			_myXSignal.value(theElement, _myGlobalPhase, -1, 1) * _cBlend * _myXSignal._cAmount, 
-			_myYSignal.value(theElement, _myGlobalPhase, -1, 1) * _cBlend * _myYSignal._cAmount
+			_myXSignal.value(theElement, _myGlobalPhase, -1, 1) * myBlend * _myXSignal._cAmount, 
+			_myYSignal.value(theElement, _myGlobalPhase, -1, 1) * myBlend * _myYSignal._cAmount
 		);
 	}
 

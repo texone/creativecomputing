@@ -35,8 +35,8 @@ public class CCKleVector2CircleAnimation extends CCKleAnimation<CCVector2> {
 		double myAmount = _cAmountModulation.modulation(theElement, -1, 1);
 		double myX = CCMath.cos(myAngle) * _cXAmount * myAmount;
 		double myY = CCMath.sin(myAngle) * _cYAmount * myAmount;
-
-		return new CCVector2(myX * _cBlend, myY * _cBlend);
+		double myBlend = elementBlend(theElement);
+		return new CCVector2(myX * myBlend, myY * myBlend);
 	}
 	
 	@CCProperty(name = "reset phase")

@@ -3,8 +3,10 @@ package cc.creativecomputing.kle.elements.motors;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCFastMath;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
@@ -36,7 +38,7 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 		_myMotorDistance = motor0.position().distance(motor1.position());
 		
 		_myPlaneDirection = motor0._myPosition.subtract(motor1._myPosition).normalize();
-		_myRotateY = new CCVector2(_myPlaneDirection.x, _myPlaneDirection.z).getPolarAngle();
+		_myRotateY = new CCVector2(_myPlaneDirection.x, _myPlaneDirection.z).getPolarAngle() + CCMath.PI;
 		
 		theBounds.updateBounds(this);
 		
@@ -132,9 +134,9 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 		g.beginShape(CCDrawMode.LINE_LOOP);
 		for(int i = 0; i < 100;i++){
 			double angle = CCMath.blend(0, CCMath.TWO_PI, i / 100f);
-			double x = CCMath.sin(angle) * _myElementRadius * _myPlaneDirection.x + _myElementOffset.x + _myAnimationCenter.x;
-			double y = CCMath.cos(angle) * _myElementRadius + _myElementOffset.y + _myAnimationCenter.y;
-			double z = CCMath.sin(angle) * _myElementRadius * _myPlaneDirection.z + _myElementOffset.z + _myAnimationCenter.z;
+			double x = CCFastMath.sin(angle) * _myElementRadius * _myPlaneDirection.x + _myElementOffset.x + _myAnimationCenter.x;
+			double y = CCFastMath.cos(angle) * _myElementRadius + _myElementOffset.y + _myAnimationCenter.y;
+			double z = CCFastMath.sin(angle) * _myElementRadius * _myPlaneDirection.z + _myElementOffset.z + _myAnimationCenter.z;
 			g.vertex(x,y,z);
 		}
 		g.endShape();
@@ -144,12 +146,14 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 
 		g.beginShape(CCDrawMode.LINE_LOOP);
 		for(CCVector3 myBound:new ArrayList<>(_myMotorBounds)){
+			if(myBound == null)continue;
 			g.vertex(myBound);
 		}
 		g.endShape();
 		
 		g.beginShape(CCDrawMode.LINE_LOOP);
 		for(CCVector3 myBound:new ArrayList<>(_myMotorAnimationBounds)){
+			if(myBound == null)continue;
 			g.vertex(myBound);
 		}
 		g.endShape();

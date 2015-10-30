@@ -11,7 +11,7 @@ public class CCRealtimeSequenceAnalyzer extends CCSequenceAnalyzer implements CC
 	public CCRealtimeSequenceAnalyzer(CCSequenceElements theElements, CCAnimator theAnimator, CCKleChannelType theType) {
 		super(theElements, theType);
 		_myUseHistorySize = true;
-		theAnimator.addListener(this);
+		theAnimator.listener().add(this);
 	}
 
 	@Override

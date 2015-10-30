@@ -1,10 +1,12 @@
 package cc.creativecomputing.kle.animation;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.elements.CCKleChannelType;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.signal.CCSimplexNoise;
 
 public class CCKleColorAnimator extends CCKleAnimator<CCColor>{
 
@@ -36,8 +38,9 @@ public class CCKleColorAnimator extends CCKleAnimator<CCColor>{
 			
 			for(CCKleAnimation<CCColor> myAnimation:values()){
 				if(myAnimation.blend() == 0)continue;
-				
+			
 				CCColor myAnimationColor = myAnimation.animate(myElement);
+				if(myAnimationColor == null)continue;
 				myColorA.r += myAnimationColor.r * (1 - myAnimation.channelBlend());
 				myColorA.g += myAnimationColor.g * (1 - myAnimation.channelBlend());
 				myColorA.b += myAnimationColor.b * (1 - myAnimation.channelBlend());

@@ -59,10 +59,10 @@ public class CCKleColorFFTAnimation extends CCKleAnimation<CCColor>{
 			0, 
 			myBrightness
 		);
-		
-		myResult.r *= _cBlend;
-		myResult.g *= _cBlend;
-		myResult.b *= _cBlend;
+		double myBlend = elementBlend(theElement);
+		myResult.r *= myBlend;
+		myResult.g *= myBlend;
+		myResult.b *= myBlend;
 		
 		return myResult;
 	}

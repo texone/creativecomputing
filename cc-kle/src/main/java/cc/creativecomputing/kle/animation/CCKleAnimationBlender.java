@@ -10,7 +10,7 @@ public abstract class CCKleAnimationBlender<BlendType> {
 	@CCProperty(name = "modulation")
 	private CCKleModulation _cModulation = new CCKleModulation();
 	
-	@CCProperty(name = "")
+	@CCProperty(name = "blend", min = 0, max = 1)
 	private double _cBlend = 0;
 	@CCProperty(name = "apply blend", min = 0, max = 1)
 	private double _cApplyBlendRange = 0f;

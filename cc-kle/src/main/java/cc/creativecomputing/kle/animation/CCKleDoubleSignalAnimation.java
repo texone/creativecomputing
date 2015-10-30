@@ -20,7 +20,7 @@ public class CCKleDoubleSignalAnimation extends CCKleAnimation<Double>{
 	
 	@Override
 	public Double animate(CCSequenceElement theElement){
-		return _mySignal.value(theElement, _myGlobalPhase, -1, 1) * _cBlend * _mySignal._cAmount;
+		return _mySignal.value(theElement, _myGlobalPhase, -1, 1) * elementBlend(theElement) * _mySignal._cAmount;
 	}
 
 }

@@ -94,7 +94,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			double mySize = CCMath.max(_cHistorySize, data.size());
 			g.beginShape(CCDrawMode.LINE_STRIP);
 			for(CCMotionData myData:data){
-				g.vertex(CCMath.map(i, 0, mySize, -g.width / 2, g.width / 2),CCMath.map(myData.length,_myChannel.min(),_myChannel.max(),0,theHeight));
+				g.vertex(CCMath.map(i, 0, mySize, -g.width() / 2, g.width() / 2),CCMath.map(myData.length,_myChannel.min(),_myChannel.max(),0,theHeight));
 				i++;
 			}
 			g.endShape();
@@ -294,7 +294,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			g.pointSize(5);
 			if(_cBackgroundAlpha > 0){
 				g.color(1f, _cBackgroundAlpha);
-				g.rect(-g.width/2,  -g.height/2, g.width, g.height);
+				g.rect(-g.width()/2,  -g.height()/2, g.width(), g.height());
 			}
 			
 			double i = 0;
@@ -315,18 +315,18 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 					if(_cAnalyzeChannels){
 						for(CCChannelAnalyzer myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 							int myNumberOfChannels = myNumberOfElements * myAnalyzer._myChannelAnalyzers.size();
-							double myHeight = g.height / (double)myNumberOfChannels / _myTypes.size();;
+							double myHeight = g.height() / (double)myNumberOfChannels / _myTypes.size();;
 							g.pushMatrix();
-							g.translate(0, -g.height/2 + m * myHeight + _myTypes.size() * myHeight * i);
+							g.translate(0, -g.height()/2 + m * myHeight + _myTypes.size() * myHeight * i);
 							i++;
 							myType.drawCurves(g, myChannelAnalyzer.data, myHeight * _cCurveScale);
 							g.popMatrix();
 						}
 					}else{
-						double myHeight = g.height / (double)myNumberOfElements / _myTypes.size();;
+						double myHeight = g.height() / (double)myNumberOfElements / _myTypes.size();;
 						g.pushMatrix();
 	
-						g.translate(0, -g.height/2 + m * myHeight + _myTypes.size() * myHeight * i);
+						g.translate(0, -g.height()/2 + m * myHeight + _myTypes.size() * myHeight * i);
 						i++;
 						myType.drawCurves(g,myAnalyzer.data, myHeight* _cCurveScale);
 						g.popMatrix();
@@ -335,9 +335,9 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			}
 			if(_cTimeBased){
 				for(int j = 0; j < 10;j++){
-					float myX = CCMath.map(j, 0, 9, -g.width/2, g.width/2);
+					float myX = CCMath.map(j, 0, 9, -g.width()/2, g.width()/2);
 					double mySecs = CCMath.map(j, 0, 10, 0, _cTimeScale) + _cTimeOffset;
-					g.line(myX,  -g.height/2, myX, g.height);
+					g.line(myX,  -g.height()/2, myX, g.height());
 					g.text(mySecs, myX, 0);
 				}
 			}
@@ -348,7 +348,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			g.pointSize(5);
 			if(_cBackgroundAlpha > 0){
 				g.color(1f, _cBackgroundAlpha);
-				g.rect(-g.width/2,  -g.height/2, g.width, g.height);
+				g.rect(-g.width()/2,  -g.height()/2, g.width(), g.height());
 			}
 			
 			
@@ -369,18 +369,18 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 					if(_cAnalyzeChannels){
 						for(CCChannelAnalyzer myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 							int myNumberOfChannels = myNumberOfElements * myAnalyzer._myChannelAnalyzers.size();
-							double myHeight = g.height / (double)myNumberOfChannels / _myTypes.size();
+							double myHeight = g.height() / (double)myNumberOfChannels / _myTypes.size();
 							g.pushMatrix();
-							g.translate(0, -g.height/2 + m * myHeight + _myTypes.size() * myHeight * i);
+							g.translate(0, -g.height()/2 + m * myHeight + _myTypes.size() * myHeight * i);
 //							g.translate(0, CCMath.map(i, 0, myNumberOfChannels, g.height/2  - g.height/ (myNumberOfChannels), -g.height/2));
 							i++;
 							myType.drawSpectogram(g,myChannelAnalyzer.data,0, myHeight);
 							g.popMatrix();
 						}
 					}else{
-						double myHeight = g.height / (double)myNumberOfElements  / _myTypes.size();
+						double myHeight = g.height() / (double)myNumberOfElements  / _myTypes.size();
 						g.pushMatrix();
-						g.translate(0, -g.height/2 + m * myHeight + _myTypes.size() * myHeight * i);
+						g.translate(0, -g.height()/2 + m * myHeight + _myTypes.size() * myHeight * i);
 						i++;
 						
 						myType.drawSpectogram(g, myAnalyzer.data, 0,myHeight);

@@ -69,7 +69,7 @@ public class CCSequenceFormatsTest {
 		myAnimator.put("test", new CCKleTestAnimation());
 		
 		_myAnimator = new CCAnimator();
-		_myAnimator.addListener(myAnimator);
+		_myAnimator.listener().add(myAnimator);
 		_myRecorder = new CCSequenceRecorder(null,_mySequenceElements, _myAnimator);
 		_myRecorder.recording(CCKleChannelType.MOTORS).updateSteps = 1;
 		_myRecorder.recording(CCKleChannelType.LIGHTS).export = false;

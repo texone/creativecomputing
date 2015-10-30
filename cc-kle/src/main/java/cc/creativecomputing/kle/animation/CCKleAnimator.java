@@ -27,6 +27,12 @@ public abstract class CCKleAnimator<Type> extends LinkedHashMap<String, CCKleAni
 		_myChannelType = theChannelType;
 		_myAnimationBlender = theAnimationBlender;
 	}
+	
+	@Override
+	public CCKleAnimation<Type> put(String theKey, CCKleAnimation<Type> theAnimation) {
+		theAnimation.addGroupBlends(_myElements.groups());
+		return super.put(theKey, theAnimation);
+	}
 
 	@Override
 	public void update(CCAnimator theAnimator){}

@@ -54,9 +54,10 @@ public class CCKleVector2SequenceAnimation extends CCKleAnimation<CCVector2> {
 		CCPositionRopeLengthAngle myData = mySetup.twoPointMatrices().dataByRopeLength(myValue0, myValue1);
 		if(myData == null)return new CCVector2(0,0);
 
+		double myBlend = elementBlend(theElement);
 		return new CCVector2(
-			(myData.relativePosition().x * 2 - 1) * _cBlend, 
-			(myData.relativePosition().y * 2 - 1) * _cBlend
+			(myData.relativePosition().x * 2 - 1) * myBlend, 
+			(myData.relativePosition().y * 2 - 1) * myBlend
 		);
 //		return new CCVector2(0,0);
 	}

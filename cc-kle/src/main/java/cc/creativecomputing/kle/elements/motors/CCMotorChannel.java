@@ -33,6 +33,7 @@ public class CCMotorChannel extends CCSequenceChannel{
 		super(theID);
 		_myPosition = theMotorPosition;
 		_myConnectionPosition = theElementConnection;
+		_myAnimatedConnectionPosition = new CCVector3(_myConnectionPosition);
 	}
 	
 	public CCVector3 position(){

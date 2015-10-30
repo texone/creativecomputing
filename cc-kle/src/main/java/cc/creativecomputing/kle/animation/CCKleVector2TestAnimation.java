@@ -63,7 +63,8 @@ public class CCKleVector2TestAnimation extends CCKleAnimation<CCVector2> impleme
 		double myX = CCMath.cos(_myPhase) * _cXAmount;
 		double myY = CCMath.cos(_myPhase) * _cYAmount;
 
-		return new CCVector2(myX * _cBlend, myY * _cBlend);
+		double myBlend = elementBlend(theElement);
+		return new CCVector2(myX * myBlend, myY * myBlend);
 	}
 	
 	@CCProperty(name = "restart")

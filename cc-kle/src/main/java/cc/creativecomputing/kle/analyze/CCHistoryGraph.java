@@ -39,7 +39,7 @@ public abstract class CCHistoryGraph<Type extends CCHistoryData>{
 		g.pointSize(_mySettings._cPointSize);
 		g.beginShape(_mySettings._cDrawPoints ? CCDrawMode.POINTS : CCDrawMode.LINE_STRIP);
 		for(Type myData:new ArrayList<>(theData)){
-			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width / 2, g.width / 2),CCMath.saturate(CCMath.abs(value(myData))/_cMax) * theHeight);
+			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),CCMath.saturate(CCMath.abs(value(myData))/_cMax) * theHeight);
 			myStep += _mySettings._cTimeBased ? myData.timeStep : 1;
 		}
 		g.endShape();
@@ -50,7 +50,7 @@ public abstract class CCHistoryGraph<Type extends CCHistoryData>{
 		g.beginShape(CCDrawMode.POINTS);
 		for(Type myData:new ArrayList<>(theData)){
 			if(CCMath.abs(value(myData))>_cMax)
-				g.vertex(CCMath.map(myStep, 0, myEnd, -g.width / 2, g.width / 2),CCMath.saturate(CCMath.abs(value(myData))/_cMax) * theHeight);
+				g.vertex(CCMath.map(myStep, 0, myEnd, -g.width() / 2, g.width() / 2),CCMath.saturate(CCMath.abs(value(myData))/_cMax) * theHeight);
 			myStep += _mySettings._cTimeBased ? myData.timeStep : 1;
 		}
 		g.endShape();
@@ -67,8 +67,8 @@ public abstract class CCHistoryGraph<Type extends CCHistoryData>{
 		for(Type myData:new ArrayList<>(theData)){
 			double myFactor = CCMath.saturate(CCMath.abs(value(myData))/_cMax);
 			g.color(_cColor.r * myFactor,_cColor.g * myFactor,_cColor.b * myFactor, _mySettings._cAlpha);
-			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width / 2, g.width / 2),theHeight + theOffset);
-			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width / 2, g.width / 2),theOffset);
+			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),theHeight + theOffset);
+			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),theOffset);
 			myStep += _mySettings._cTimeBased ? myData.timeStep : 1;
 		}
 		g.endShape();
@@ -79,8 +79,8 @@ public abstract class CCHistoryGraph<Type extends CCHistoryData>{
 		g.beginShape(CCDrawMode.LINES);
 		for(Type myData:new ArrayList<>(theData)){
 			if(CCMath.abs(value(myData))>_cMax){
-				g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width / 2, g.width / 2),theHeight + theOffset);
-				g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width / 2, g.width / 2),theOffset);
+				g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),theHeight + theOffset);
+				g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),theOffset);
 			}
 			myStep += _mySettings._cTimeBased ? myData.timeStep : 1;
 		}

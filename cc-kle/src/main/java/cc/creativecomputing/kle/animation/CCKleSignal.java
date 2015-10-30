@@ -13,6 +13,8 @@ public class CCKleSignal{
 	
 	@CCProperty(name = "modulation")
 	private CCKleModulation _cModulation = new CCKleModulation();
+	@CCProperty(name = "amount modulation")
+	private CCKleModulation _cAmountModulation = new CCKleModulation();
 
 	@CCProperty(name = "use global phase")
 	private boolean _cUseGlobalPhase = false;
@@ -33,6 +35,7 @@ public class CCKleSignal{
 		double myResult = _mySignal.value(
 			(myPhase + _cModulation.modulation(theElement)) * _cFactor
 		);
+//		myResult *= _cAmountModulation.modulation(theElement, -1, 1);
 		return myResult;
 	}
 	
@@ -41,6 +44,7 @@ public class CCKleSignal{
 		double myResult = _mySignal.value(
 			(myPhase + _cModulation.modulation(theElement)) * _cFactor
 		);
+//		myResult *= _cAmountModulation.modulation(theElement, -1, 1);
 		return CCMath.blend(theMin, theMax, myResult);
 	}
 }

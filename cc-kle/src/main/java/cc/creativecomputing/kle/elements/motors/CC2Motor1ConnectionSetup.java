@@ -30,7 +30,7 @@ public class CC2Motor1ConnectionSetup extends CCMotorSetup{
 		_myMotorDistance = motor0.position().distance(motor1.position());
 		
 		_myPlaneDirection = motor0._myPosition.subtract(motor1._myPosition).normalize();
-		_myRotateY = new CCVector2(_myPlaneDirection.x, _myPlaneDirection.z).getPolarAngle();
+		_myRotateY = new CCVector2(_myPlaneDirection.x, _myPlaneDirection.z).getPolarAngle() + CCMath.PI;
 		
 		theBounds.updateBounds(this);
 		

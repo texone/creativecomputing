@@ -17,6 +17,9 @@ public class CCKleColorSignalAnimation extends CCKleAnimation<CCColor>{
 	
 	private double _myGlobalPhase = 0;
 	
+	@CCProperty(name = "amp", min = 0, max = 10)
+	private double _cAmp = 1;
+	
 	public void update(final double theDeltaTime){
 		_myGlobalPhase += theDeltaTime * _cSpeed;
 		_myHueSignal.update(theDeltaTime);
@@ -26,14 +29,14 @@ public class CCKleColorSignalAnimation extends CCKleAnimation<CCColor>{
 	
 	public CCColor animate(CCSequenceElement theElement){
 		CCColor myResult = CCColor.createFromHSB(
-			_myHueSignal.value(theElement, _myGlobalPhase), 
-			_mySaturationSignal.value(theElement, _myGlobalPhase), 
-			_myBrightnessSignal.value(theElement, _myGlobalPhase)
+			_myHueSignal.value(theElement, _myGlobalPhase) * _myHueSignal._cAmount, 
+			_mySaturationSignal.value(theElement, _myGlobalPhase) * _mySaturationSignal._cAmount, 
+			1 - (_myBrightnessSignal.value(theElement, _myGlobalPhase) * (_myBrightnessSignal._cAmount))
 		);
-		
-		myResult.r *= _cBlend;
-		myResult.g *= _cBlend;
-		myResult.b *= _cBlend;
+		double myBlend = elementBlend(theElement);
+		myResult.r *= myBlend * _cAmp;
+		myResult.g *= myBlend * _cAmp;
+		myResult.b *= myBlend * _cAmp;
 		
 		return myResult;
 	}

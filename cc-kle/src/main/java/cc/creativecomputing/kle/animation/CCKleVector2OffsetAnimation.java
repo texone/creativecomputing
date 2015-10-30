@@ -29,6 +29,7 @@ public class CCKleVector2OffsetAnimation extends CCKleAnimation<CCVector2> {
 		double myX = _cXModulation.modulation(theElement, -1, 1) * _cXAmount * _cXAmountModulation.modulation(theElement, -1, 1);
 		double myY = _cYModulation.modulation(theElement, -1, 1) * _cYAmount * _cYAmountModulation.modulation(theElement, -1, 1);
 
-		return new CCVector2(myX * _cBlend, myY * _cBlend);
+		double myBlend = elementBlend(theElement);
+		return new CCVector2(myX * myBlend, myY * myBlend);
 	}
 }

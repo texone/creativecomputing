@@ -1,5 +1,6 @@
 package cc.creativecomputing.kle.elements.lights;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,7 +18,13 @@ public class CCLightRGBSetup extends CCLightSetup{
 		_myLightR = _myChannels.get(0);
 		_myLightG = _myChannels.get(1);
 		_myLightB = _myChannels.get(2);
-		
+	}
+	
+	public CCLightRGBSetup(int theIDR, int theIDG, int theIDB){
+		super(new ArrayList<>());
+		_myChannels.add(_myLightR = new CCLightChannel(theIDR));
+		_myChannels.add(_myLightG = new CCLightChannel(theIDG));
+		_myChannels.add(_myLightB = new CCLightChannel(theIDB));
 	}
 	
 	@Override
