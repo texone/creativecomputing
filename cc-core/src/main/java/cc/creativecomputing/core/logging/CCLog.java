@@ -238,6 +238,7 @@ public class CCLog {
 		theLogger.setUseParentHandlers(false);
 	}
 
+	@SuppressWarnings("deprecation")
 	private static void log(Level theLevel, Throwable theMessage) {
 		final Throwable myT = new Throwable();
         final StackTraceElement myMethodCaller = myT.getStackTrace()[2];
@@ -263,6 +264,7 @@ public class CCLog {
 		}
 	}	
 
+	@SuppressWarnings("deprecation")
 	private static void log(Level theLevel, String theMessage) {
 		final Throwable myT = new Throwable();
         final StackTraceElement myMethodCaller = myT.getStackTrace()[2];

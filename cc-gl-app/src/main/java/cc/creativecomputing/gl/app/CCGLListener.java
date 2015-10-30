@@ -1,7 +1,7 @@
 package cc.creativecomputing.gl.app;
 
 
-public interface CCGLListener <GLGraphicsType extends CCGLGraphics>{
+public interface CCGLListener <GLGraphicsType extends CCGLGraphics<?>>{
 	public void reshape(GLGraphicsType theContext);
 	
 	public void init(GLGraphicsType theContext);

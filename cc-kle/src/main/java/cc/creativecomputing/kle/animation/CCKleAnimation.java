@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 
 public abstract class CCKleAnimation<Type> {
@@ -27,7 +26,6 @@ public abstract class CCKleAnimation<Type> {
 	
 	public void addGroupBlends(int theGroups){
 		for(int i = 0; i <= theGroups;i++){
-			CCLog.info(groupKey(i));
 			_cGroupBlends.put(groupKey(i), 1d);
 		}
 	}

@@ -26,13 +26,11 @@ import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.CCSelection.CCSelectionListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.protocol.midi.messages.CCMidiMessage;
 
 public class CCMidiIn implements Receiver{
 	
 	private static class CCMidiTransmitter{
-		private final Info _myInfo;
 		/**
 		 * the MidiDevice for this input
 		 */
@@ -42,7 +40,6 @@ public class CCMidiIn implements Receiver{
 		private final CCListenerManager<Receiver> _myReceiver = CCListenerManager.create(Receiver.class);
 		
 		private CCMidiTransmitter(Info theInfo){
-			_myInfo = theInfo;
 			try {
 				_myMidiDevice = MidiSystem.getMidiDevice(theInfo);
 			} catch (MidiUnavailableException e) {
@@ -53,15 +50,12 @@ public class CCMidiIn implements Receiver{
 		
 		private void open(){
 			if(_myInputTransmitter != null)return;
-			CCLog.info("OPEN MIDI");
 			try {
 				_myInputTransmitter = _myMidiDevice.getTransmitter();
-				CCLog.info("SET RECEIVER");
 				_myInputTransmitter.setReceiver(new Receiver() {
 					
 					@Override
 					public void send(MidiMessage message, long timeStamp) {
-						CCLog.info(message);
 						_myReceiver.proxy().send(message, timeStamp);
 					}
 					
@@ -101,7 +95,6 @@ public class CCMidiIn implements Receiver{
 			_myDeviceMap.put("OFF", null);
 			for(Info myInfo:MidiSystem.getMidiDeviceInfo()){
 				String myName = myInfo.getVendor() + " : " + myInfo.getName();
-				CCLog.info(myName);
 				try {
 					MidiDevice myDevice = MidiSystem.getMidiDevice(myInfo);
 					if (myDevice instanceof javax.sound.midi.Sequencer)continue;

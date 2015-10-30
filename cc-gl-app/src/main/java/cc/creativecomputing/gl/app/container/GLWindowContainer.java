@@ -16,6 +16,7 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 //import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCAbstractGLContext;
+import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.gl.app.CCCursor;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;
 import cc.creativecomputing.gl.app.events.CCKeyEvent.CCKeyEventType;
@@ -23,7 +24,6 @@ import cc.creativecomputing.gl.app.events.CCMouseEvent;
 import cc.creativecomputing.gl.app.events.CCMouseEvent.CCMouseEventType;
 import cc.creativecomputing.gl.app.events.CCMouseWheelEvent;
 
-import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.nativewindow.util.InsetsImmutable;
 import com.jogamp.newt.Display.PointerIcon;
 import com.jogamp.newt.event.KeyAdapter;
@@ -48,12 +48,9 @@ public class GLWindowContainer extends GLContainer{
 	
 	private boolean _mySkipResize = false;
 	private boolean _mySkipMove = false;
-	
-	private boolean _myIsInVsync;
 
 	public GLWindowContainer(final CCAbstractGLContext<?> theExtension) {
 		_myContext = theExtension;
-		_myIsInVsync = _myContext.inVsync;
 		
 		_myWindow = GLWindow.create(_myContext.glCapabilities());
 		_myWindow.setSurfaceScale(new float[]{_myContext.pixelScale.id(), _myContext.pixelScale.id()});
@@ -67,7 +64,6 @@ public class GLWindowContainer extends GLContainer{
 		
 		
 		_myWindow.addKeyListener(new KeyAdapter() {
-            int pointerIconIdx = 0;
             float gamma = 1f;
             float brightness = 0f;
             float contrast = 1f;
@@ -92,7 +88,7 @@ public class GLWindowContainer extends GLContainer{
                             final Thread t = _myWindow.setExclusiveContextThread(null);
                             System.err.println("[set pointer-icon pre]");
                             final PointerIcon currentPI = _myWindow.getPointerIcon();
-                            final PointerIcon newPI;
+//                            final PointerIcon newPI;
 //                            if( pointerIconIdx >= pointerIcons.length ) {
 //                                newPI=null;
 //                                pointerIconIdx=0;
@@ -134,23 +130,7 @@ public class GLWindowContainer extends GLContainer{
                             System.err.println("[set mouse pos post]");
                             _myWindow.setExclusiveContextThread(t);
                     } }.start();
-                } else if(e.getKeyChar()=='x') {
-                    final float[] hadSurfacePixelScale = _myWindow.getCurrentSurfaceScale(new float[2]);
-                    final float[] reqSurfacePixelScale;
-                    if( hadSurfacePixelScale[0] == ScalableSurface.IDENTITY_PIXELSCALE ) {
-                        reqSurfacePixelScale = new float[] { ScalableSurface.AUTOMAX_PIXELSCALE, ScalableSurface.AUTOMAX_PIXELSCALE };
-                    } else {
-                        reqSurfacePixelScale = new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE };
-                    }
-                    System.err.println("[set PixelScale pre]: had "+hadSurfacePixelScale[0]+"x"+hadSurfacePixelScale[1]+" -> req "+reqSurfacePixelScale[0]+"x"+reqSurfacePixelScale[1]);
-                    _myWindow.setSurfaceScale(reqSurfacePixelScale);
-                    final float[] valReqSurfacePixelScale = _myWindow.getRequestedSurfaceScale(new float[2]);
-                    final float[] hasSurfacePixelScale1 = _myWindow.getCurrentSurfaceScale(new float[2]);
-                    System.err.println("[set PixelScale post]: "+hadSurfacePixelScale[0]+"x"+hadSurfacePixelScale[1]+" (had) -> "+
-                            reqSurfacePixelScale[0]+"x"+reqSurfacePixelScale[1]+" (req) -> "+
-                            valReqSurfacePixelScale[0]+"x"+valReqSurfacePixelScale[1]+" (val) -> "+
-                            hasSurfacePixelScale1[0]+"x"+hasSurfacePixelScale1[1]+" (has)");
-                }
+                } 
             }
         });
 		

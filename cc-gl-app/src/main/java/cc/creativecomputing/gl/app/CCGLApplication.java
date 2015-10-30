@@ -3,7 +3,7 @@ package cc.creativecomputing.gl.app;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 
-public abstract class CCGLApplication<GLGraphicsType extends CCGLGraphics, GLContextType extends CCAbstractGLContext<GLGraphicsType>> {
+public abstract class CCGLApplication<GLGraphicsType extends CCGLGraphics<?>, GLContextType extends CCAbstractGLContext<GLGraphicsType>> {
 	
 	private CCAnimator _myAnimator;
 	private GLContextType _myGLContext;

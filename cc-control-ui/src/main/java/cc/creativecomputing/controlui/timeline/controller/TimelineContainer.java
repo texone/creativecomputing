@@ -14,7 +14,6 @@ import cc.creativecomputing.controlui.timeline.view.SwingTimelineContainerView;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.controlui.util.UndoHistory.HistoryListener;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 
 
 public class TimelineContainer implements FileManagerListener, HistoryListener{

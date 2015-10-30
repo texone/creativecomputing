@@ -22,10 +22,7 @@ import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedEventPointContent;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.TimelineChangeListener;
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -43,8 +40,6 @@ public class SwingGroupTrackObjectDialog extends JDialog implements ActionListen
 	
 
 	private Path _myPresetsPath;
-	
-	private CCObjectPropertyHandle _myPropertyHandle;
 
 	/** Creates the reusable dialog. */
 	public SwingGroupTrackObjectDialog() {
@@ -88,7 +83,6 @@ public class SwingGroupTrackObjectDialog extends JDialog implements ActionListen
 	
 	public void setPresets(CCObjectPropertyHandle theObjectHandle){
 		_myPresetsPath = theObjectHandle.presetPath();
-		_myPropertyHandle = theObjectHandle;
 		CCNIOUtil.createDirectories(_myPresetsPath);
 		_myPresetList.removeAllItems();
 		for(Path myPath:CCNIOUtil.list(_myPresetsPath, "json")){

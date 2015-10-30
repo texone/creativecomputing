@@ -11,7 +11,7 @@ import cc.creativecomputing.gl.app.events.CCMouseListener;
 import cc.creativecomputing.gl.app.events.CCMouseMotionListener;
 import cc.creativecomputing.gl.app.events.CCMouseWheelListener;
 
-public class CCGLAdapter<GLGraphicsType extends CCGLGraphics, GLContextType extends CCAbstractGLContext<GLGraphicsType>> implements CCAnimatorListener, CCBasicAppListener, CCGLListener<GLGraphicsType> {
+public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType extends CCAbstractGLContext<GLGraphicsType>> implements CCAnimatorListener, CCBasicAppListener, CCGLListener<GLGraphicsType> {
 
 	protected GLContextType _myContext;
 	

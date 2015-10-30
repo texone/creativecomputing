@@ -9,7 +9,6 @@ import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
-import cc.creativecomputing.core.logging.CCLog;
 
 public class CCStringTrackDataRenderer extends SwingTrackDataRenderer{
 

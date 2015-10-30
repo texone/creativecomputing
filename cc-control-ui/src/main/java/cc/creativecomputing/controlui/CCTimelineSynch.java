@@ -1,10 +1,10 @@
 package cc.creativecomputing.controlui;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.protocol.midi.CCMidiIn;
 import cc.creativecomputing.protocol.midi.CCMidiTimeCode;
 
@@ -32,9 +32,15 @@ public class CCTimelineSynch implements CCAnimatorListener{
 	
 	private TimelineContainer _myTimeline = null;
 	
+	public CCTimelineSynch(CCAnimator theAnimator){
+		_myAnimator = theAnimator;
+		_myAnimator.listener().add(this);
+	}
+	
 	public CCTimelineSynch(){
 		_myMidiIn.events().add(_myTimeCode);
 		_myAnimator.listener().add(this);
+		_myAnimator.animationMode = CCAnimationMode.FRAMERATE_PERFORMANT;
 	}
 	
 	public void timeline(TimelineContainer theTimeline){

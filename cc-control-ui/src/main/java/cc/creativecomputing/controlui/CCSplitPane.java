@@ -11,6 +11,11 @@ import javax.swing.plaf.basic.BasicSplitPaneUI;
 
 public class CCSplitPane extends JSplitPane{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6970650628935362049L;
+
 	public CCSplitPane() {
 		super();
 	}
@@ -45,7 +50,12 @@ public class CCSplitPane extends JSplitPane{
 		setUI(new BasicSplitPaneUI() {
 	        public BasicSplitPaneDivider createDefaultDivider() {
 	        return new BasicSplitPaneDivider(this) {
-	            public void setBorder(Border b) {
+	            /**
+				 * 
+				 */
+				private static final long serialVersionUID = -4620415539708917115L;
+
+				public void setBorder(Border b) {
 	            }
 
 	            @Override

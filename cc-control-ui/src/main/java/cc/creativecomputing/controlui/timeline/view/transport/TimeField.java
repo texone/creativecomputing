@@ -16,6 +16,11 @@ import cc.creativecomputing.core.util.CCFormatUtil;
 
 class TimeField extends JTextField implements FocusListener, ActionListener, MouseListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -852810213402377223L;
+
 	private boolean _myIsActive = true;
 	
 	private TimelineContainer _myTimelineContainer;

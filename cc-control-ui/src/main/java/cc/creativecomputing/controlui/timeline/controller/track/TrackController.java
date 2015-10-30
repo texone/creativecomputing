@@ -33,7 +33,6 @@ import cc.creativecomputing.controlui.timeline.controller.ToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
 import cc.creativecomputing.controlui.timeline.controller.Zoomable;
 import cc.creativecomputing.controlui.timeline.view.TimedContentView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.math.CCMath;
 
 

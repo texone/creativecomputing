@@ -85,6 +85,7 @@ public class CCUIStyler {
 	
 	public static void styleSplitPane(JSplitPane thePane) {
 		thePane.setUI(new BasicSplitPaneUI() {
+			@SuppressWarnings("serial")
 			public BasicSplitPaneDivider createDefaultDivider() {
 				return new BasicSplitPaneDivider(this) {
 					public void setBorder(Border b) {

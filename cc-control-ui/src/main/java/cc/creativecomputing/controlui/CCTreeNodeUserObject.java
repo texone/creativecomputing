@@ -1,11 +1,9 @@
 package cc.creativecomputing.controlui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCControl;

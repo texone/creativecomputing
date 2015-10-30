@@ -225,11 +225,6 @@ public class SwingTransportView extends JPanel implements TransportView, ChangeV
 		return true;
 	}
 	
-	
-	private void removeTimeline(){
-		_myTimelines.removeItem(_myTimelines.getSelectedItem());
-	}
-	
 	private boolean containsItem(Object theItem){
 		for(int i = 0; i < _myTimelines.getItemCount();i++){
 			if(_myTimelines.getItemAt(i) != null && _myTimelines.getItemAt(i).equals(theItem))return true;

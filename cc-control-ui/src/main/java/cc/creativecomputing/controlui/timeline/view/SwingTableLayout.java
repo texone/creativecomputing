@@ -59,8 +59,6 @@ public class SwingTableLayout implements LayoutManager2 {
 	private int _myMinimumHeight = 0;
 	private int _myMaximumHeight = 0;
 	
-	private SwingMultiTrackPanel _myParent;
-	
 	public SwingTableLayout() {
 	}
 

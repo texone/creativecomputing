@@ -27,7 +27,6 @@ import cc.creativecomputing.controlui.timeline.controller.CurveToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
 import cc.creativecomputing.controlui.timeline.controller.track.DoubleTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackDataController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
 
 /**

@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
 import javax.tools.Diagnostic;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
@@ -63,9 +62,9 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			for(Diagnostic<?> diagnostic:_myHandle.value().diagnostics()){
-
-			}
+//			for(Diagnostic<?> diagnostic:_myHandle.value().diagnostics()){
+//
+//			}
 //			CCLog.info(theArg0 + ":" + theArg1);
 			return null;
 		}
@@ -79,13 +78,12 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 	
 	private JPanel _myContainer;
 	
-	private String _myCurveKey = null;
-	
 	private final RSyntaxTextArea _myTextArea;
 	private final JTextArea _myErrorArea;
 	
 	private boolean _myTriggerEvent = true;
 
+	@SuppressWarnings("rawtypes")
 	public CCRealtimeCompileControl(CCRealtimeCompileHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		

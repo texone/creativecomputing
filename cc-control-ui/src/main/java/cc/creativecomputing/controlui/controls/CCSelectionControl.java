@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.CCSelection.CCSelectionListener;
-import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyEditListener;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
@@ -24,7 +23,6 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 	private CCSelection _myValue;
 	
 	private boolean _myTriggerEvent = true;
-	private boolean _myIsInEdit = false;
 	static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);
 
 	public CCSelectionControl(CCSelectionPropertyHandle theHandle, CCControlComponent theControlComponent){
@@ -62,12 +60,10 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 			
 			@Override
 			public void endEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = false;
 			}
 			
 			@Override
 			public void beginEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = true;
 			}
 		});
 

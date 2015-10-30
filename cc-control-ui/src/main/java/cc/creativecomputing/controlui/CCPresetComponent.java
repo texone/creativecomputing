@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.swing.ComboBoxEditor;
 import javax.swing.JButton;
@@ -16,7 +15,6 @@ import javax.swing.JPanel;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
@@ -53,7 +51,6 @@ public class CCPresetComponent extends JPanel{
 				switch(theE.getStateChange()){
 				case ItemEvent.SELECTED:
 					if(_mySelectPreset){
-						CCLog.info("selected");
 						loadPreset();
 					}
 					break;
@@ -64,7 +61,6 @@ public class CCPresetComponent extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CCLog.info("action");
 //				JComboBox cb = (JComboBox)e.getSource();
 //		        String petName = (String)cb.getSelectedItem();
 //		        updateLabel(petName);
@@ -142,8 +138,6 @@ public class CCPresetComponent extends JPanel{
 	}
 	
 	public void loadPreset(String thePreset){
-		CCLog.info("load:" + thePreset);
-		
 		if(thePreset.equals(""))return;
 		if(thePreset.equals("select preset"))return;
 		

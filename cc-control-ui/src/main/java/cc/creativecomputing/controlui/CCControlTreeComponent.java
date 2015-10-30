@@ -11,7 +11,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
-import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
@@ -29,7 +28,6 @@ import cc.creativecomputing.control.handles.CCRealtimeCompileHandle;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
-import cc.creativecomputing.controlui.controls.CCPathControl;
 import cc.creativecomputing.controlui.controls.CCBooleanControl;
 import cc.creativecomputing.controlui.controls.CCColorControl;
 import cc.creativecomputing.controlui.controls.CCControl;
@@ -38,6 +36,7 @@ import cc.creativecomputing.controlui.controls.CCEnvelopeControl;
 import cc.creativecomputing.controlui.controls.CCEventTriggerControl;
 import cc.creativecomputing.controlui.controls.CCNumberControl;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
+import cc.creativecomputing.controlui.controls.CCPathControl;
 import cc.creativecomputing.controlui.controls.CCSelectionControl;
 import cc.creativecomputing.controlui.controls.CCStringControl;
 import cc.creativecomputing.controlui.controls.code.CCRealtimeCompileControl;
@@ -97,6 +96,7 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 		return _myPropertyMap;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void setData(DefaultMutableTreeNode theParentNode, CCObjectPropertyHandle theObjectHandle, CCObjectControl theObjectControl, int theDepth){
 		CCTreeNodeUserObject myUserObject = (CCTreeNodeUserObject)theParentNode.getUserObject();
 		for(CCPropertyHandle<?> myPropertyHandle:theObjectHandle.children().values()){

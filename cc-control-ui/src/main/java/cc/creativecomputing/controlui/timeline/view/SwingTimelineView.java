@@ -1,11 +1,9 @@
 package cc.creativecomputing.controlui.timeline.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.nio.file.Path;
@@ -13,9 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -47,7 +43,6 @@ import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
-import cc.creativecomputing.core.logging.CCLog;
 
 
 @SuppressWarnings("serial")
@@ -120,18 +115,6 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		
 		setTopComponent(_myRulerPanel);
 		setBottomComponent(_myPane);
-	}
-
-	private JLabel createColoredLabel(String text, Color color, Point origin) {
-		JLabel label = new JLabel(text);
-		label.setVerticalAlignment(JLabel.TOP);
-		label.setHorizontalAlignment(JLabel.CENTER);
-		label.setOpaque(true);
-		label.setBackground(color);
-		label.setForeground(Color.black);
-		label.setBorder(BorderFactory.createLineBorder(Color.black));
-		label.setBounds(origin.x, origin.y, 140, 140);
-		return label;
 	}
 	
 	public void controller(TimelineController theController){

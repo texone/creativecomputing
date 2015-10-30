@@ -6,7 +6,6 @@ import javax.tools.Diagnostic;
 
 import org.fife.ui.rsyntaxtextarea.parser.Parser;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
-import org.fife.ui.rsyntaxtextarea.parser.ParserNotice.Level;
 
 public class CCRealtimeCompileParseNotice implements ParserNotice{
 	

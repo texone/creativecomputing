@@ -16,7 +16,6 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
 	
 	private JButton _myButton;
 	
-	private JPanel _myParentPanel;
 	private CCProgressWindow _myProgressWindow;
 	
 	public CCEventTriggerControl(CCEventTriggerHandle theHandle, CCControlComponent theControlComponent){
@@ -61,7 +60,6 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		_myParentPanel = thePanel;
 		thePanel.add(_myLabel, 	constraints(0, theY, GridBagConstraints.LINE_END, 	5,  5, 1, 5));
 		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 15, 1, 5));
 	}

@@ -25,7 +25,6 @@ import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.container.GLContainer;
 import cc.creativecomputing.gl.app.container.GLContainerType;
 import cc.creativecomputing.gl.app.container.GLJavaComponentContainer;
@@ -292,7 +291,6 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 		_myListenerMap.put("pixelScale", new CCPropertyListener<CCPixelScale>() {
 			@Override
 			public void onChange(CCPixelScale thePixelScale){
-				CCLog.info("change pixel scale:" + thePixelScale);
 				_myContainer.pixelScale(thePixelScale);
 			}
 		});
@@ -347,7 +345,6 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 //					windowY = theY;
 //					drawable.getSurfaceWidth()
 					
-					CCLog.info(theX+":" + theY+":" + theWidth+":" + theHeight + ":" + drawable.getSurfaceWidth() + ":" +drawable.getSurfaceHeight());
 					_myGraphics.reshape(theX, theY, theWidth, theHeight);
 					_myListeners.proxy().reshape(_myGraphics);
 				}
@@ -357,7 +354,6 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 					_myGraphics = createGraphics(drawable);
 					_myGraphics.clear();
 					_myListeners.proxy().init(_myGraphics);
-					CCLog.info(drawable.getGL().getSwapInterval());
 					drawable.getGL().setSwapInterval(0);
 				}
 				
