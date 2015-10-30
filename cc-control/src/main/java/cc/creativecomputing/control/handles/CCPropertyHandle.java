@@ -24,13 +24,15 @@ public abstract class CCPropertyHandle<Type>{
 	
 	private Path _myPath;
 	
+	private boolean _myReadBack;
+	
 	protected CCPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember){
 		_myParent = theParent;
 		_myMember = theMember;
 		if(_myMember == null)return;
 		_myValue = (Type)_myMember.value();
 		_myOriginalValue = (Type)_myMember.value();
-		
+		_myReadBack = readBack();
 	}
 	
 	public CCListenerManager<CCPropertyListener> events(){
@@ -86,6 +88,21 @@ public abstract class CCPropertyHandle<Type>{
 //		_myMember.value(theValue);
 	}
 	
+	private boolean readBack(){
+		if(
+			_myMember == null || 
+			_myMember.annotation() == null || 
+			!_myMember.annotation().readBack()
+		){
+			return (
+				_myParent != null && 
+				_myParent._myMember != null && 
+				_myParent._myMember.annotation() != null && 
+				_myParent._myMember.annotation().readBack()
+			);
+		}return true;
+	}
+	
 	public void update(final double theDeltaTime){
 		
 		if(_myUpdateMember){
@@ -94,9 +111,7 @@ public abstract class CCPropertyHandle<Type>{
 			
 			onChange();
 		}else{
-			if(_myMember == null)return;
-			if(_myMember.annotation() == null)return;
-			if(!_myMember.annotation().readBack())return;
+			if(!_myReadBack)return;
 			
 			Object myValue = _myMember.value();
 			if(myValue != null && !myValue.equals(_myValue)){
