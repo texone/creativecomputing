@@ -510,18 +510,18 @@ public class CCMath {
 	}
 
 	public final static float sin(float angle) {
-		return (float) Math.sin(angle);
+		return (float) sin((double)angle);
 	}
 
-	public final static double sin(double angle) {
+	public static double sin(double angle) {
 		return Math.sin(angle);
 	}
 
 	public final static float cos(float angle) {
-		return (float) Math.cos(angle);
+		return (float) cos((double)angle);
 	}
 
-	public final static double cos(double angle) {
+	public static double cos(double angle) {
 		return Math.cos(angle);
 	}
 

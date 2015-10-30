@@ -30,7 +30,7 @@ public class CCWorleyNoise extends CCSignal{
 	
 	public static interface CCWorleyFormular{
 		public int neededDistances();
-		public double[] value(double[] values);
+		public double[] value(double[] values, double theAmp);
 	}
 	
 	public static class CCWorleyDefaultFormular implements CCWorleyFormular{
@@ -39,7 +39,7 @@ public class CCWorleyNoise extends CCSignal{
 			return 1;
 		}
 
-		public double[] value(double[] theValues) {
+		public double[] value(double[] theValues, double theAmp) {
 			return theValues;
 		}
 	}
@@ -50,8 +50,8 @@ public class CCWorleyNoise extends CCSignal{
 			return 1;
 		}
 
-		public double[] value(double[] theValues) {
-			return new double[] {theValues[0]};
+		public double[] value(double[] theValues, double theAmp) {
+			return new double[] {theValues[0] * theAmp};
 		}
 		
 	}
@@ -62,8 +62,8 @@ public class CCWorleyNoise extends CCSignal{
 			return 2;
 		}
 
-		public double[] value(double[] theValues) {
-			return new double[] {theValues[1]};
+		public double[] value(double[] theValues, double theAmp) {
+			return new double[] {theValues[1] * theAmp};
 		}
 	}
 	
@@ -73,8 +73,8 @@ public class CCWorleyNoise extends CCSignal{
 			return 3;
 		}
 
-		public double[] value(double[] theValues) {
-			return new double[] {theValues[2]};
+		public double[] value(double[] theValues, double theAmp) {
+			return new double[] {theValues[2] * theAmp};
 		}
 	}
 	
@@ -84,8 +84,8 @@ public class CCWorleyNoise extends CCSignal{
 			return 3;
 		}
 
-		public double[] value(double[] theValues) {
-			return new double[] {theValues[1] - theValues[0]};
+		public double[] value(double[] theValues, double theAmp) {
+			return new double[] {(theValues[1] - theValues[0]) * theAmp};
 		}
 	}
 	
@@ -198,6 +198,10 @@ public class CCWorleyNoise extends CCSignal{
 	
 	@CCProperty(name = "formular")
 	private CCWorleyFormularType _myFormular = CCWorleyFormularType.DEFAULT;
+	
+	@CCProperty(name = "amp", min = 0, max = 10)
+	private double _myAmp = 1;
+	
 	/**
 	* Constructor.
 	*/
@@ -367,7 +371,7 @@ public class CCWorleyNoise extends CCSignal{
 			cd.delta[i][2] *= DENSITY_ADJUSTMENT_INV_3D;
 		}
 
-		return _myFormular._myFormular.value(cd.F);
+		return _myFormular._myFormular.value(cd.F, _myAmp);
 	}
 
 	/**
@@ -498,6 +502,6 @@ public class CCWorleyNoise extends CCSignal{
 			cd.delta[i][0] *= DENSITY_ADJUSTMENT_INV_2D ;
 			cd.delta[i][1] *= DENSITY_ADJUSTMENT_INV_2D ;
 		}
-		return _myFormular._myFormular.value(cd.F);
+		return _myFormular._myFormular.value(cd.F, _myAmp);
 	}
 }
