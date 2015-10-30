@@ -59,7 +59,9 @@ public class CCAudioAsset extends CCAsset<CCAudioPlayer>{
 		if(!_myAsset.isPlaying())_myAsset.play((int)(theEventTime * 1000));
 //		_myAsset.setGain(_cVolume);
 		_myAsset.setBalance(_cPan);
-		if(CCMath.abs(_myAsset.position() / 1000f - theEventTime) > _cMaxTimeOffset){
+		double myOffset = CCMath.abs(_myAsset.position() / 1000f - theEventTime);
+		CCLog.info(myOffset);
+		if(myOffset > _cMaxTimeOffset){
 			_myAsset.skip(-(int)((_myAsset.position() / 1000f - theEventTime) * 1000));
 		}
 	}

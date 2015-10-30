@@ -22,7 +22,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.Control;
 import javax.sound.sampled.SourceDataLine;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.sound.CCAudioOutput;
 
 public final class CCAudioOutput extends Thread implements CCAudioResource{
@@ -67,11 +66,6 @@ public final class CCAudioOutput extends Thread implements CCAudioResource{
 				listener.samples(buffer.getChannel(0), buffer.getChannel(1));
 			}
 
-			CCLog.info("output");
-			
-			for(float myVal:buffer.getChannel(0)){
-				CCLog.info(myVal);
-			}
 			buffer.convertToByteArray(outBytes, 0, format);
 			if (line.available() == line.getBufferSize()) {
 				CCSoundIO.debug("Likely buffer underrun in AudioOutput.");
