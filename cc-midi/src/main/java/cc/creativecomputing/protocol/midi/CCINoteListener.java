@@ -10,6 +10,8 @@
  */
 package cc.creativecomputing.protocol.midi;
 
+import cc.creativecomputing.protocol.midi.messages.CCNote;
+
 public interface CCINoteListener {
 
 	public void onNoteOn(final CCNote theNote);

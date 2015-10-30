@@ -39,7 +39,7 @@ abstract class CCMidiDevice{
 				_myMidiDevice.open();
 			}
 		}catch (Exception e){
-			throw new RuntimeException("You wanted to open an unavailable output device: " + name());
+			throw new RuntimeException("You wanted to open an unavailable output device: " + name(), e);
 		}
 	}
 

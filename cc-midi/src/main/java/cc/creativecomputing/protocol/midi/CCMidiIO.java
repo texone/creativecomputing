@@ -34,7 +34,7 @@ public class CCMidiIO{
 	/**
 	 * Stores all available MIDI input devices
 	 */
-	final private List<CCMidiInDevice> _myMidiInputDevices = new ArrayList<CCMidiInDevice>();
+	final private List<CCMidiIn> _myMidiInputDevices = new ArrayList<CCMidiIn>();
 
 	/**
 	 * Stores all available MIDI output devices

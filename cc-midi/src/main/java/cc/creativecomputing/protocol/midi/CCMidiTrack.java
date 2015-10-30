@@ -16,6 +16,8 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.SysexMessage;
 import javax.sound.midi.Track;
 
+import cc.creativecomputing.protocol.midi.messages.CCMidiMessage;
+
 public class CCMidiTrack {
 
 	private Track _myTrack;

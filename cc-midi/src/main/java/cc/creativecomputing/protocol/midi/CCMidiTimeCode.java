@@ -1,6 +1,8 @@
 package cc.creativecomputing.protocol.midi;
 
-import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.protocol.midi.messages.CCMidiMessage;
+
+//import cc.creativecomputing.core.logging.CCLog;
 
 public class CCMidiTimeCode implements CCMidiListener{
 
@@ -41,6 +43,7 @@ public class CCMidiTimeCode implements CCMidiListener{
 
 	@Override
 	public void receive(CCMidiMessage theMessage) {
+//		CCLog.info(theMessage);
 		try{
 		// if this is not a MTC message...
 		if (theMessage.status() != CCMidiStatus.SYSEX)
@@ -50,7 +53,7 @@ public class CCMidiTimeCode implements CCMidiListener{
 			_myTime += _myTickTime;
 			return;
 		}
-		CCLog.info(theMessage.status() + ":" + theMessage.data().length);
+//		CCLog.info(theMessage.status() + ":" + theMessage.data().length);
 		
 		_myTime = 0;
 
@@ -120,7 +123,7 @@ public class CCMidiTimeCode implements CCMidiListener{
 				szType = " **** unknown SMPTE type ****";
 			}
 		}
-		CCLog.info(messageIndex + ":" + value +":" +timeIndex +":" + _myTimes[MTC_HOURS] +":" +_myTimes[MTC_MINUTES] +":" +_myTimes[SECONDS] +":" +_myTimes[FRAMES] +":" +_myTimes[TICKS] +":" +szType+":" + bNewFrame);
+//		CCLog.info(messageIndex + ":" + value +":" +timeIndex +":" + _myTimes[MTC_HOURS] +":" +_myTimes[MTC_MINUTES] +":" +_myTimes[SECONDS] +":" +_myTimes[FRAMES] +":" +_myTimes[TICKS] +":" +szType+":" + bNewFrame);
 		
 		}catch(Exception e){
 			e.printStackTrace();

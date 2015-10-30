@@ -25,6 +25,7 @@ import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.CCSelection.CCSelectionListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.protocol.midi.messages.CCMidiMessage;
 
 /**
  * This class has no accessible constructor use MidiIO.openOutput() to get a MidiOut. 
