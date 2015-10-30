@@ -127,9 +127,9 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 				CCVector3 myElementPosition = myElement.motorSetup().position();
 				myFrame.data()[myElement.id()][0][0] = myElementPosition.x;
 				myFrame.data()[myElement.id()][0][1] = myElementPosition.y;
-				myFrame.data()[myElement.id()][0][2] = myElementPosition.z;
+				myFrame.data()[myElement.id()][0][2] = -myElementPosition.z;
 				myFrame.data()[myElement.id()][0][3] = myElement.motorSetup().rotateY();
-				myFrame.data()[myElement.id()][0][4] = myElement.motorSetup().rotateZ();
+				myFrame.data()[myElement.id()][0][4] = -myElement.motorSetup().rotateZ();
 			}
 			add(myFrame);
 		}
@@ -188,7 +188,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 			_myRecordings.put(myKey.id(), new CCSequenceChannelRecording(myKey, myMapping));
 		}
 		_myAnimator = theAnimator;
-		_myAnimator.addListener(this);
+		_myAnimator.listener().add(this);
 		
 		_myElementRecording = new CCSequenceElementRecording(30);
 		
