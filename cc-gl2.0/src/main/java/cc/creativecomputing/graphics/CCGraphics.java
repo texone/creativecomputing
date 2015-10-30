@@ -29,6 +29,7 @@ import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCQuaternion;
 import cc.creativecomputing.math.CCVector2;
@@ -62,7 +63,7 @@ import com.jogamp.opengl.glu.GLUtessellator;
  * can be used for drawing.
  * @see CCApp 
  */
-public class CCGraphics implements CCGLGraphics{
+public class CCGraphics extends CCGLGraphics<GL2>{
 	
 	public static CCGraphics instance;
 	
@@ -128,26 +129,15 @@ public class CCGraphics implements CCGLGraphics{
 	 */
 	public GLU glu;
 
-	public GL2 gl;
 	
 	protected CCTexture[] _myTextures;
 	
-	/**
-	 * width of the parent application
-	 */
-	public int width;
-
-	/**
-	 * height of the parent application
-	 */
-	public int height;
+	
 
 	public CCGraphics(final GL2 theGL, int theWidth, int theHeight){
+		super(theGL, theWidth, theHeight);
 		gl = theGL;
 		glu = new GLU();
-		
-		width = theWidth;
-		height = theHeight;
 		
 		gl.glClearDepth(1.0f); // Depth Buffer Setup
 		gl.glDepthFunc(GL.GL_LEQUAL); // The Type Of Depth Testing (Less Or Equal)
@@ -371,13 +361,10 @@ public class CCGraphics implements CCGLGraphics{
 	 */
 	@Override
 	public void reshape(int theX, int theY, int theWidth, int theHeight) {
-		width = theWidth / 2;
-		height = theHeight / 2;
-		
-		
+		super.reshape(theX, theY, theWidth, theHeight);
 		
 		_myCamera = new CCCamera(this);
-		camera().viewport(new CCViewport(theX, theY, width, height));
+		camera().viewport(new CCViewport(theX, theY, width(), height()));
 	}
 	
 	/* (non-Javadoc)
@@ -1445,6 +1432,13 @@ public class CCGraphics implements CCGLGraphics{
 	 */
 	public void applyMatrix(final CCMatrix4x4 theMatrix){
 		gl.glMultMatrixd(theMatrix.toDoubleBuffer());
+	}
+	
+	public void applyMatrix(final CCMatrix32 theMatrix) {
+		applyMatrix(
+			theMatrix.m00, theMatrix.m01, theMatrix.m02, 
+			theMatrix.m10, theMatrix.m11, theMatrix.m12
+		);
 	}
 	
 	public void applyMatrix(final double[] theMatrix) {
@@ -2886,6 +2880,10 @@ public class CCGraphics implements CCGLGraphics{
 		rect(thePosition.x, thePosition.y, theDimension.x, theDimension.y);
 	}
 	
+	public void rect(final CCVector2 thePosition, final CCVector2 theDimension, boolean theFill){
+		rect(thePosition.x, thePosition.y, theDimension.x, theDimension.y, theFill);
+	}
+	
 	public void rect(
 		double theX1, double theY1, 
 		double theX2, double theY2
@@ -3078,6 +3076,10 @@ public class CCGraphics implements CCGLGraphics{
 	
 	public void ellipse(final CCVector2 thePosition, final double theWidth, final double theHeight){
 		ellipse(thePosition.x, thePosition.y, theWidth, theHeight);
+	}
+	
+	public void ellipse(final CCVector2 thePosition, final double theWidth, final double theHeight, boolean theFill){
+		ellipse(thePosition.x, thePosition.y, 0, theWidth, theHeight, theFill);
 	}
 	
 	public void ellipse(final CCVector3 thePosition, final double theDiameter){
@@ -3879,7 +3881,7 @@ public class CCGraphics implements CCGLGraphics{
 	 * 
 	 */
 	public void ortho(){
-		ortho(0, width, 0, height, -10, 10);
+		ortho(0, width(), 0, height(), -10, 10);
 	}
 	
 	public void ortho2D(final int theWidth, final int theHeight){
@@ -3894,7 +3896,7 @@ public class CCGraphics implements CCGLGraphics{
 	}
 
 	public void ortho2D(){
-		ortho2D(width,height);
+		ortho2D(width(),height());
 	}
 	
 	/**
@@ -3929,7 +3931,7 @@ public class CCGraphics implements CCGLGraphics{
 	}
 	
 	public void beginOrtho() {
-		beginOrtho(width, height);
+		beginOrtho(width(), height());
 	}
 
 	/**
@@ -3949,7 +3951,7 @@ public class CCGraphics implements CCGLGraphics{
 	}
 	
 	public void beginOrtho2D(){
-		beginOrtho2D(width,height);
+		beginOrtho2D(width(),height());
 	}
 	
 	public void beginOrtho2D(final int theWidth, final int theHeight){
@@ -4465,9 +4467,9 @@ public class CCGraphics implements CCGLGraphics{
 			dy2 = dy2 - dy1;
 		}
 
-		gl.glWindowPos2i(width/2+dx1, height/2 + dy1);
+		gl.glWindowPos2i(width()/2+dx1, height()/2 + dy1);
 		gl.glPixelZoom((float) dx2 / sx2, (float) dy2 / sy2);
-		gl.glCopyPixels(width/2+sx1, height/2 + sy1, sx2, sy2, GL2.GL_COLOR);
+		gl.glCopyPixels(width()/2+sx1, height()/2 + sy1, sx2, sy2, GL2.GL_COLOR);
 		gl.glPixelZoom(1, 1);
 	}
 	
@@ -4520,22 +4522,22 @@ public class CCGraphics implements CCGLGraphics{
 	public int pixels[];
 
 	public void loadPixels() {
-		if ((pixels == null) || (pixels.length != width * height)) {
-			pixels = new int[width * height];
+		if ((pixels == null) || (pixels.length != width() * height())) {
+			pixels = new int[width() * height()];
 			pixelBuffer = CCBufferUtil.newIntBuffer(pixels.length);
 		}
 
-		gl.glReadPixels(0, 0, width, height, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, pixelBuffer);
+		gl.glReadPixels(0, 0, width(), height(), GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, pixelBuffer);
 		pixelBuffer.get(pixels);
 		pixelBuffer.rewind();
 
 		// flip vertically (opengl stores images upside down),
 		// and swap RGBA components to ARGB (big endian)
 		int index = 0;
-		int yindex = (height - 1) * width;
-		for (int y = 0; y < height / 2; y++) {
+		int yindex = (height() - 1) * width();
+		for (int y = 0; y < height() / 2; y++) {
 			if (CCSystem.endianess == CCEndianess.BIG_ENDIAN) {
-				for (int x = 0; x < width; x++) {
+				for (int x = 0; x < width(); x++) {
 					int temp = pixels[index];
 					// ignores alpha component, just sets it opaque
 					pixels[index] = 0xff000000 | ((pixels[yindex] >> 8) & 0x00ffffff);
@@ -4545,7 +4547,7 @@ public class CCGraphics implements CCGLGraphics{
 					yindex++;
 				}
 			} else { // LITTLE_ENDIAN, convert ABGR to ARGB
-				for (int x = 0; x < width; x++) {
+				for (int x = 0; x < width(); x++) {
 					int temp = pixels[index];
 
 					// identical to updatePixels because only two
@@ -4558,7 +4560,7 @@ public class CCGraphics implements CCGLGraphics{
 					yindex++;
 				}
 			}
-			yindex -= width * 2;
+			yindex -= width() * 2;
 		}
 	}
 
@@ -4568,11 +4570,11 @@ public class CCGraphics implements CCGLGraphics{
 		// flip vertically (opengl stores images upside down),
 
 		int index = 0;
-		int yindex = (height - 1) * width;
-		for (int y = 0; y < height / 2; y++) {
+		int yindex = (height() - 1) * width();
+		for (int y = 0; y < height() / 2; y++) {
 			if (CCSystem.endianess == CCEndianess.BIG_ENDIAN) {
 				// and convert ARGB back to opengl RGBA components (big endian)
-				for (int x = 0; x < width; x++) {
+				for (int x = 0; x < width(); x++) {
 					int temp = pixels[index];
 					pixels[index] = ((pixels[yindex] << 8) & 0xffffff00) | 0xff;
 					pixels[yindex] = ((temp << 8) & 0xffffff00) | 0xff;
@@ -4583,7 +4585,7 @@ public class CCGraphics implements CCGLGraphics{
 
 			} else {
 				// convert ARGB back to native little endian ABGR
-				for (int x = 0; x < width; x++) {
+				for (int x = 0; x < width(); x++) {
 					int temp = pixels[index];
 
 					pixels[index] = 0xff000000 | ((pixels[yindex] << 16) & 0xff0000) | (pixels[yindex] & 0xff00) | ((pixels[yindex] >> 16) & 0xff);
@@ -4594,15 +4596,15 @@ public class CCGraphics implements CCGLGraphics{
 					yindex++;
 				}
 			}
-			yindex -= width * 2;
+			yindex -= width() * 2;
 		}
 
-		gl.glRasterPos2d(EPSILON, height - EPSILON);
+		gl.glRasterPos2d(EPSILON, height() - EPSILON);
 		// gl.glRasterPos2f(width/2, height/2);
 
 		pixelBuffer.put(pixels);
 		pixelBuffer.rewind();
-		gl.glDrawPixels(width, height, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, pixelBuffer);
+		gl.glDrawPixels(width(), height(), GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, pixelBuffer);
 	}
 
 	public void updatePixels(int x, int y, int c, int d) {

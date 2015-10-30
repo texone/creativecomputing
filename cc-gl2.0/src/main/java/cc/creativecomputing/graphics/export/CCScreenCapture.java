@@ -19,12 +19,20 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
 
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCFormatUtil;
+import cc.creativecomputing.gl.app.CCGLAdapter;
+import cc.creativecomputing.gl.app.CCGLGraphics;
+import cc.creativecomputing.gl.app.CCGLListener;
+import cc.creativecomputing.gl.app.events.CCKeyEvent;
+import cc.creativecomputing.gl.app.events.CCKeyEvent.CCKeyCode;
+import cc.creativecomputing.gl.app.events.CCKeyListener;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.CCIOUtil;
+import cc.creativecomputing.io.CCNIOUtil;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
@@ -33,6 +41,64 @@ import com.jogamp.opengl.GLException;
 /** Utilities for taking screenshots of OpenGL applications. */
 
 public class CCScreenCapture {
+	
+	public static class CCScreenCaptureMaker implements CCKeyListener, CCGLListener<CCGLGraphics<?>>{
+		
+		private CCKeyCode _myCaptureKey;
+		
+		private String _myFolder;
+		
+		private String _myFormat;
+		
+		public CCScreenCaptureMaker(CCGLAdapter<?, ?> theApp, CCKeyCode theCaptureKey, String theFolder, String theFormat){
+			_myCaptureKey = theCaptureKey;
+			_myFolder = theFolder;
+			_myFormat = theFormat;
+			theApp.keyListener().add(this);
+			theApp.glListener().add(this);
+		}
+		
+		public CCScreenCaptureMaker(CCGLAdapter<?, ?> theApp){
+			this(theApp, CCKeyCode.VK_C, "export", "png");
+		}
+
+		@Override
+		public void keyPressed(CCKeyEvent theKeyEvent) {}
+		
+		private boolean _myRecordFrame;
+
+		@Override
+		public void keyReleased(CCKeyEvent theKeyEvent) {
+			if(theKeyEvent.keyCode() == _myCaptureKey){
+				_myRecordFrame = true;
+			}
+		}
+
+		@Override
+		public void keyTyped(CCKeyEvent theKeyEvent) {}
+
+		@Override
+		public void reshape(CCGLGraphics<?> theContext) {}
+
+		@Override
+		public void init(CCGLGraphics<?> theContext) {}
+
+		@Override
+		public void dispose(CCGLGraphics<?> theContext) {}
+		
+		private int _myFrame;
+
+		@Override
+		public void display(CCGLGraphics<?> theContext) {
+			if(_myRecordFrame){
+				CCScreenCapture.capture(CCNIOUtil.dataPath(_myFolder + "/frame_" + CCFormatUtil.nf(_myFrame, 5) + "." + _myFormat), theContext.width(), theContext.height());
+				_myFrame++;
+				_myRecordFrame = false;
+			}
+		}
+		
+	}
+	
 	/**
 	 * Utility class which helps take fast screenshots of OpenGL rendering results
 	 * into Targa-format files. Used by the {@link com.sun.opengl.util.Screenshot
@@ -156,8 +222,8 @@ public class CCScreenCapture {
 	 * @param width the width of the desired capture area
 	 * @param height the height of the desired capture area
 	 */
-	public static void writeToTargaFile(final String theFile, int width, int height){
-		writeToTargaFile(theFile, width, height, false);
+	public static void writeToTargaFile(final Path thePath, int width, int height){
+		writeToTargaFile(thePath, width, height, false);
 	}
 
 	/**
@@ -180,8 +246,8 @@ public class CCScreenCapture {
 	 *            whether the alpha channel should be saved. If true, requires
 	 *            GL_EXT_abgr extension to be present.
 	 */
-	public static void writeToTargaFile(final String theFile, int width, int height, boolean alpha){
-		writeToTargaFile(theFile, 0, 0, width, height, alpha);
+	public static void writeToTargaFile(final Path thePath, int width, int height, boolean alpha){
+		writeToTargaFile(thePath, 0, 0, width, height, alpha);
 	}
 
 	/**
@@ -208,7 +274,7 @@ public class CCScreenCapture {
 	 *             if an I/O error occurred while writing the file
 	 */
 	public static void writeToTargaFile(
-		final String theFile, 
+		final Path thePath, 
 		int x, int y, int width, int height, 
 		boolean alpha
 	){
@@ -222,7 +288,7 @@ public class CCScreenCapture {
 			boolean myHasOpen = false;
 			
 			while(!myHasOpen){
-				myHasOpen = myWriter.open(new File(CCIOUtil.savePath(theFile)), width, height, alpha);
+				myHasOpen = myWriter.open(thePath.toFile(), width, height, alpha);
 			}
 			ByteBuffer bgr = myWriter.getImageData();
 	
@@ -385,15 +451,15 @@ public class CCScreenCapture {
 	 * 
 	 * No alpha channel is saved with this variant.
 	 * 
-	 * @param theFile
+	 * @param thePath
 	 *            the file to write containing the screenshot
 	 * @param theWidth
 	 *            the width of the current drawable
 	 * @param theHeight
 	 *            the height of the current drawable
 	 */
-	public static void capture(final String theFile, final int theWidth, final int theHeight) {
-		capture(theFile, theWidth, theHeight, false);
+	public static void capture(final Path thePath, final int theWidth, final int theHeight) {
+		capture(thePath, theWidth, theHeight, false);
 	}
 
 	/**
@@ -422,7 +488,7 @@ public class CCScreenCapture {
 	 *            whether an alpha channel should be saved. If true, requires
 	 *            GL_EXT_abgr extension to be present.
 	 */
-	public static void capture(String file, int width, int height, boolean alpha){
+	public static void capture(Path file, int width, int height, boolean alpha){
 		capture(file, 0, 0, width, height, alpha);
 	}
 
@@ -442,8 +508,6 @@ public class CCScreenCapture {
 	 * channel properly. If the "alpha" argument is specified as true for such a
 	 * file format it will be silently ignored.
 	 * 
-	 * @shortdesc Takes a screenshot and saves it to the specified file on disk.
-	 * 
 	 * @param file the file to write containing the screenshot
 	 * @param x the starting x coordinate of the screenshot, measured from the lower-left
 	 * @param y the starting y coordinate of the screenshot, measured from the lower-left
@@ -452,15 +516,15 @@ public class CCScreenCapture {
 	 * @param alpha whether an alpha channel should be saved
 	 * 
 	 */
-	public static void capture(final String theFile, int x, int y, int width, int height, boolean alpha){
-		String fileSuffix = CCIOUtil.fileExtension(theFile);
+	public static void capture(final Path thePath, int x, int y, int width, int height, boolean alpha){
+		String fileSuffix = CCNIOUtil.fileExtension(thePath);
 		
 		if(fileSuffix == null){
 			throw new CCScreenCaptureException("Not able to perform screen capture because of missing file extension.");
 		}
 		
 		if(fileSuffix.equals("tga")){
-			writeToTargaFile(theFile, x,y,width, height,alpha);
+			writeToTargaFile(thePath, x,y,width, height,alpha);
 			return;
 		}
 		try{
@@ -471,7 +535,8 @@ public class CCScreenCapture {
 			}
 	
 			BufferedImage image = readToBufferedImage(x, y, width, height, alpha);
-			if (!ImageIO.write(image, fileSuffix, new File(CCIOUtil.savePath(theFile)))) {
+			CCNIOUtil.createDirectories(thePath);
+			if (!ImageIO.write(image, fileSuffix, thePath.toFile())) {
 				throw new CCScreenCaptureException("Unsupported file format " + fileSuffix);
 			}
 		}catch(Exception e){

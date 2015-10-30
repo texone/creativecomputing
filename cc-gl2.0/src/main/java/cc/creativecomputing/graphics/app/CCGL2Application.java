@@ -27,21 +27,22 @@ public class CCGL2Application {
 		_myAnimator = new CCAnimator();
 		_myAnimator.framerate = 60;
 		_myAnimator.animationMode = CCAnimationMode.FRAMERATE_PRECISE;
-		_myAnimator.addListener(theGLAdapter);
+		_myAnimator.listener().add(theGLAdapter);
 		
 		_myGLContext = new CCGL2Context(_myAnimator);
 		theGLAdapter.glContext(_myGLContext);
 
-		_myGLContext.addListener(new CCGLAdapter<CCGraphics, CCGL2Context>() {
+		_myGLContext.listener().add(new CCGLAdapter<CCGraphics, CCGL2Context>() {
 			@Override
 			public void init(CCGraphics theG) {
 				_myAdapter.init(theG, _myAnimator);
 				_myControlApp = new CCControlApp(CCGL2Application.this, _mySynch);
+				_myControlApp.afterInit();
 				_mySynch.animator().start();
 				theGLAdapter.controlApp(_myControlApp);
 			}
 		});
-		_myGLContext.addListener(
+		_myGLContext.listener().add(
 			new CCGLAdapter<CCGraphics, CCGL2Context>() {
 				@Override
 				public void display(CCGraphics theG) {
@@ -49,8 +50,8 @@ public class CCGL2Application {
 				}
 			}
 		);
-		_myGLContext.addListener(theGLAdapter);
-		_myGLContext.addListener(
+		_myGLContext.listener().add(theGLAdapter);
+		_myGLContext.listener().add(
 			new CCGLAdapter<CCGraphics, CCGL2Context>() {
 				@Override
 
@@ -59,7 +60,7 @@ public class CCGL2Application {
 				}
 			}
 		);
-		_myGLContext.addListener(
+		_myGLContext.listener().add(
 			new CCGLAdapter<CCGraphics, CCGL2Context>() {
 				@Override
 				public void dispose(CCGraphics theG) {

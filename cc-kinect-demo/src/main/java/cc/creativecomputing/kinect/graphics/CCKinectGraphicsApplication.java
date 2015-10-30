@@ -25,14 +25,14 @@ public class CCKinectGraphicsApplication {
 		_myAnimator = new CCAnimator();
 		_myAnimator.framerate = 1;
 		_myAnimator.animationMode = CCAnimationMode.FRAMERATE_PRECISE;
-		_myAnimator.addListener(theAdapter);
+		_myAnimator.listener().add(theAdapter);
 		
 		_myRemoteControllerModule = new CCRemoteControllerModule ();
 		_myRemoteControllerModule.addControllable(theAdapter, "demo");
 
 		_myGLContext = new CCGLContext(_myAnimator);
-		_myGLContext.addListener(theAdapter);
-		_myGLContext.addListener(
+		_myGLContext.listener().add(theAdapter);
+		_myGLContext.listener().add(
 			new CCGLAdapter() {
 				@Override
 				public void dispose(GLGraphics theG) {
@@ -44,7 +44,7 @@ public class CCKinectGraphicsApplication {
 		);
 		
 		_myKinectModule = new CCKinectModule(_myAnimator);
-		_myKinectModule.addListener(theAdapter);
+		_myKinectModule.listener().add(theAdapter);
 	}
 	
 	public CCKinectGraphicsApplication(){

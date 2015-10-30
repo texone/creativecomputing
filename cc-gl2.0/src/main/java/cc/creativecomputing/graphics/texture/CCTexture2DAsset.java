@@ -22,7 +22,7 @@ public class CCTexture2DAsset extends CCAsset<CCTexture2D>{
 	
 	public CCTexture2DAsset(CCGL2Context theContext){
 		_myAsset = new CCTexture2D();
-		theContext.addListener(new CCGL2Adapter(){
+		theContext.listener().add(new CCGL2Adapter(){
 			@Override
 			public void display(CCGraphics theG) {
 				if(_myImage != null){

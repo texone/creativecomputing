@@ -140,11 +140,11 @@ public class CCCameraController {
 	private final CCDampedAction _myDampedPanX;
 	private final CCDampedAction _myDampedPanY;
 
-	@CCProperty(name = "distance", min = 1, max = 20000)
+	@CCProperty(name = "distance", min = 1, max = 20000, readBack = true)
 	private double _myDistance;
-	@CCProperty(name = "center", min = -10000, max = 10000)
+	@CCProperty(name = "center", min = -10000, max = 10000, readBack = true)
 	private CCVector3 _myCenter;
-	@CCProperty(name = "rotation", min = -1, max = 1)
+	@CCProperty(name = "rotation", min = -1, max = 1, readBack = true)
 	private CCQuaternion _myRotation;
 
 	private Constraint _myDragConstraint = null;
@@ -204,18 +204,19 @@ public class CCCameraController {
 	) {
 		_myApp = theApp;
 		
-		_myApp.animator().addListener(new CCAnimatorAdapter() {
+		_myApp.animator().listener().add(new CCAnimatorAdapter() {
 			@Override
 			public void update(CCAnimator theAnimator) {
 				feed();
 			}
 		});
 		
-		_myApp.glContext().addListener(new CCGLListener<CCGraphics>() {
+		_myApp.glContext().listener().add(new CCGLListener<CCGraphics>() {
 
 			@Override
 			public void reshape(CCGraphics theContext) {
-				_myCamera.viewport(new CCViewport(0, 0, theContext.width, theContext.height));
+				_myCamera = new CCCamera(theContext);
+				_myCamera.viewport(new CCViewport(0, 0, theContext.width(), theContext.height()));
 			}
 
 			@Override
@@ -419,29 +420,29 @@ public class CCCameraController {
 		final int xSign = theMoveX > 0 ? -1 : 1;
 		final int ySign = theMoveY < 0 ? -1 : 1;
 
-		final double eccentricity = CCMath.abs((g.height / 2f) - mouseY) / (g.height / 2f);
-		final double rho = CCMath.abs((g.width / 2f) - mouseX) / (g.width / 2f);
+		final double eccentricity = CCMath.abs((g.height() / 2f) - mouseY) / (g.height() / 2f);
+		final double rho = CCMath.abs((g.width() / 2f) - mouseX) / (g.width() / 2f);
 
 		if (_myDragConstraint == null || _myDragConstraint == Constraint.YAW || _myDragConstraint == Constraint.SUPPRESS_ROLL) {
 			final double adx = Math.abs(theMoveX) * (1 - eccentricity);
 			final CCVector3 vx = u.add(new CCVector3(adx, 0, 0));
-			_myRotateYAction.impulse(CCVector3.angle(u, vx) * xSign);
+			_myRotateYAction.impulse(CCVector3.angle(u, vx) * xSign * 0.1);
 		}
 		if (_myDragConstraint == null || _myDragConstraint == Constraint.PITCH || _myDragConstraint == Constraint.SUPPRESS_ROLL) {
 			final double ady = Math.abs(theMoveY) * (1 - rho);
 			final CCVector3 vy = u.add(new CCVector3(0, ady, 0));
-			_myRotateXAction.impulse(CCVector3.angle(u, vy) * ySign);
+			_myRotateXAction.impulse(CCVector3.angle(u, vy) * ySign * 0.1);
 		}
 		if (_myDragConstraint == null || _myDragConstraint == Constraint.ROLL) {
 			{
 				final double adz = Math.abs(theMoveY) * rho;
 				final CCVector3 vz = u.add(new CCVector3(0, adz, 0));
-				_myRotateZAction.impulse(CCVector3.angle(u, vz) * -ySign * (mouseX < g.width / 2 ? -1 : 1));
+				_myRotateZAction.impulse(CCVector3.angle(u, vz) * -ySign * (mouseX < g.width() / 2 ? -1 : 1) * 0.1);
 			}
 			{
 				final double adz = Math.abs(theMoveX) * eccentricity;
 				final CCVector3 vz = u.add(new CCVector3(0, adz, 0));
-				_myRotateZAction.impulse(CCVector3.angle(u, vz) * xSign * (mouseY > g.height / 2 ? -1 : 1));
+				_myRotateZAction.impulse(CCVector3.angle(u, vz) * xSign * (mouseY > g.height() / 2 ? -1 : 1) * 0.1);
 			}
 		}
 	}

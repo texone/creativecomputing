@@ -30,8 +30,12 @@ public class CCImageAsset extends CCAsset<CCImage>{
 			_myAsset = _myImageMap.get(thePath);
 			return;
 		}
-		_myAsset = CCImageIO.newImage(thePath);
-		_myImageMap.put(_myPath, _myAsset);
+		try{
+			_myAsset = CCImageIO.newImage(thePath);
+			_myImageMap.put(_myPath, _myAsset);
+		}catch(Exception e){
+			
+		}
 	}
 	
 	@Override

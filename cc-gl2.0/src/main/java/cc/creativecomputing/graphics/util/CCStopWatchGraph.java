@@ -10,13 +10,11 @@
  */
 package cc.creativecomputing.graphics.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import cc.creativecomputing.app.util.CCStopWatch;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
@@ -76,7 +74,7 @@ public class CCStopWatchGraph extends CCStopWatch{
 		_myLastColorIdx++;
 		_myLastColorIdx %= 8;
 
-		float myWidth = g.width * _cWidth;
+		float myWidth = g.width() * _cWidth;
 
 		if (theItem.history().size() > 0) {
 			g.text(theItem.name() + " : " + theItem.history().peek(), 10 + myWidth, 10 + (float) (theItem._myLastHeight) * _cScale);
@@ -126,8 +124,8 @@ public class CCStopWatchGraph extends CCStopWatch{
 		}
 
 		g.pushAttribute();
-		float myWidth = g.width * _cWidth;
-		float myHeight = g.height * _cHeight;
+		float myWidth = g.width() * _cWidth;
+		float myHeight = g.height() * _cHeight;
 
 		_myLastHeights = new float[_cSamples];
 		Arrays.fill(_myLastHeights, 0);

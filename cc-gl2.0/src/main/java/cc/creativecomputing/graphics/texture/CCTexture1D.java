@@ -76,10 +76,10 @@ public class CCTexture1D extends CCTexture{
 	 * @param theWidth
 	 */
 	public void updateData(final CCGraphics g, int theDestX, int theSrcX, int theSrcY, int theWidth) {
-		theSrcX = CCMath.constrain(theSrcX, 0, g.width);
-		theSrcY = CCMath.constrain(theSrcY, 0, g.height);
+		theSrcX = CCMath.constrain(theSrcX, 0, g.width());
+		theSrcY = CCMath.constrain(theSrcY, 0, g.height());
 		theDestX = CCMath.constrain(theDestX, 0, _myWidth);
-		theWidth = CCMath.min(theWidth, g.width - theSrcX, _myWidth - theDestX);
+		theWidth = CCMath.min(theWidth, g.width() - theSrcX, _myWidth - theDestX);
 		
 		bind();
 		g.gl.glCopyTexSubImage1D(

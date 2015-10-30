@@ -434,6 +434,10 @@ public class CCImageIO {
 		throw new CCImageException("The given image could not be written.");
 	}
 	
+	public static void write(final CCImage theImage, final Path thePath){
+		write(theImage, thePath, CCWriteMode.OVERWRITE);
+	}
+	
 	/**
 	 * Writes the given texture data to a file. The format is read from the file name. If no
 	 * suitable writer can be found an exception is thrown.

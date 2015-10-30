@@ -149,14 +149,14 @@ public class CCTexture3D extends CCTexture{
 	) {
 		_myPixelMap = null;
 		
-		theSrcX = CCMath.constrain(theSrcX, 0, g.width);
-		theSrcY = CCMath.constrain(theSrcY, 0, g.height);
+		theSrcX = CCMath.constrain(theSrcX, 0, g.width());
+		theSrcY = CCMath.constrain(theSrcY, 0, g.height());
 		
 		theDestX = CCMath.constrain(theDestX, 0, _myWidth);
 		theDestY = CCMath.constrain(theDestY, 0, _myHeight);
 		
-		theWidth = CCMath.min(theWidth, g.width - theSrcX, _myWidth - theDestX);
-		theWidth = CCMath.min(theWidth, g.width - theSrcX, _myWidth - theDestX);
+		theWidth = CCMath.min(theWidth, g.width() - theSrcX, _myWidth - theDestX);
+		theWidth = CCMath.min(theWidth, g.width() - theSrcX, _myWidth - theDestX);
 		
 		bind();
 		g.gl.glCopyTexSubImage3D(

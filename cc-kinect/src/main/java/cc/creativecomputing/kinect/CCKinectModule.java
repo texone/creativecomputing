@@ -26,7 +26,7 @@ public class CCKinectModule extends CCAbstractAppModule<CCKinectListener>{
 		super(CCKinectListener.class, "kinect");
 		_myAnimator = theAnimator;
 		
-		_myAnimator.addListener(new CCAnimatorListener() {
+		_myAnimator.listener().add(new CCAnimatorListener() {
 			
 			@Override
 			public void update(CCAnimator theAnimator) {
@@ -147,7 +147,7 @@ public class CCKinectModule extends CCAbstractAppModule<CCKinectListener>{
 	public static void main(String[] args) {
 		CCKinectModule myKinectModule = new CCKinectModule();
 		CCKinectImage myImage;
-		myKinectModule.addListener(new CCKinectListener() {
+		myKinectModule.listener().add(new CCKinectListener() {
 			
 			@Override
 			public void stop(CCKinectModule theKinectModule) {

@@ -97,7 +97,7 @@ public class CCCamera{
 	 * Create a camera that sits on the z axis
 	 */
 	public CCCamera(final CCGraphics g) {
-		this(g.width,g.height);
+		this(g.width(),g.height());
 	}
 	
 	public CCCamera(final int theWidth, final int theHeight){
@@ -114,7 +114,7 @@ public class CCCamera{
 	 * @param theShotLength
 	 */
 	public CCCamera(final CCGraphics g, final double theShotLength) {
-		this(g.width, g.height, 0, 0, theShotLength,0,0,0);
+		this(g.width(), g.height(), 0, 0, theShotLength,0,0,0);
 	}
 	
 	public CCCamera(final int theWidth, final int theHeight, final CCVector3 thePosition){
@@ -154,7 +154,7 @@ public class CCCamera{
 		);
 
 		_myNearClip = _myShotLength * 0.1f;
-		_myFarClip = _myShotLength * 10f;
+		_myFarClip = _myShotLength * 100f;
 	}
 
 	// Specify all parameters for camera creation
@@ -278,7 +278,7 @@ public class CCCamera{
 		
 		
 		double cameraNear = cameraZ / 10.0f;
-		double cameraFar = cameraZ * 10.0f;
+		double cameraFar = cameraZ * 100.0f;
 
 		set(
 			cameraX, cameraY, cameraZ, 
@@ -291,9 +291,9 @@ public class CCCamera{
 	
 	public void reset(CCGraphics g){
 		_myFoV = 60 * CCMath.DEG_TO_RAD; // at least for now
-		_myAspect = (double) g.width / (double) g.height;
+		_myAspect = (double) g.width() / (double) g.height();
 		
-		_myPosition = new CCVector3(0, 0, g.height / 2.0f / ((double) Math.tan(_myFoV / 2.0f)));
+		_myPosition = new CCVector3(0, 0, g.height() / 2.0f / ((double) Math.tan(_myFoV / 2.0f)));
 		_myTarget = new CCVector3(0,0,0);
 		_myUp = new CCVector3(0,1,0);
 		
@@ -317,7 +317,7 @@ public class CCCamera{
 			_myUp.z = 1;
 		}
 		
-		_myViewport = new CCViewport(0,0,g.width,g.height);
+		_myViewport = new CCViewport(0,0,g.width(),g.height());
 		_myFrustumOffset = new CCVector2();
 
 		updateUp();
