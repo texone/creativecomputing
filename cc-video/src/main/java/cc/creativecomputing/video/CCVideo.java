@@ -47,7 +47,7 @@ public abstract class CCVideo extends CCImage implements CCAnimatorListener{
 	public CCVideo(final CCAnimator theAnimator) {
 		super();
 		_myPixelStorageModes.alignment(1);
-		theAnimator.addListener(this);
+		theAnimator.listener().add(this);
 	}
 	
 	/**
