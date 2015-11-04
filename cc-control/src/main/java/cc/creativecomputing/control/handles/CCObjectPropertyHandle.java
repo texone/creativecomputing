@@ -262,7 +262,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			_myLastData = theData;
 		}
 		
-		if(_myRootObject == null){
+		if(_myRootObject == null || theData.containsKey("value")){
 			theData = theData.getObject("value");
 		}
 
