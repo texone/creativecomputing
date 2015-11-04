@@ -158,6 +158,10 @@ public class CCSequenceElement  {
 		return _myMotorSetup;
 	}
 	
+	public void update(double theDeltaTime){
+		if(_myMotorSetup != null)_myMotorSetup.update(theDeltaTime);
+	}
+	
 	public List<CCSequenceChannel> channels(){
 		return _myChannels;
 	}

@@ -1,6 +1,7 @@
 package cc.creativecomputing.kle.animation;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.elements.CCKleChannelType;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;

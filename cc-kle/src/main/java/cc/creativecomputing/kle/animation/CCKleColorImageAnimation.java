@@ -12,6 +12,9 @@ public class CCKleColorImageAnimation extends CCKleAnimation<CCColor>{
 	private CCKleModulation _cXModulation = new CCKleModulation();
 	@CCProperty(name = "y modulation")
 	private CCKleModulation _cYModulation = new CCKleModulation();
+	@CCProperty(name = "x motion modulation")
+	private CCKleMotionModulation _cXMotionModulation = new CCKleMotionModulation();
+	
 	@CCProperty(name = "amp", min = 1, max = 2)
 	private double _cAmp = 1;
 	@CCProperty(name = "h shift", min = -1, max = 1)
@@ -28,7 +31,7 @@ public class CCKleColorImageAnimation extends CCKleAnimation<CCColor>{
 	public CCColor animate(CCSequenceElement theElement) {
 		if(_myImage.value() == null)return new CCColor();
 		CCColor myResult = _myImage.value().getPixel(
-			_cXModulation.modulation(theElement) * _myImage.value().width(), 
+			(_cXModulation.modulation(theElement) + _cXMotionModulation.modulation(theElement)) * _myImage.value().width(), 
 			_cYModulation.modulation(theElement) * _myImage.value().height()
 		);
 

@@ -46,6 +46,5 @@ public class CCKleVector2Animator extends CCKleAnimator<CCVector2>{
 			myCenter.addLocal(myTranslation);
 		}
 		myCenter.multiplyLocal(1f / _myElements.size());
-
 	}
 }

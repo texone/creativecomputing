@@ -155,6 +155,12 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 		}
 	}
 	
+	public void update(double theDeltaTime){
+		for(CCSequenceElement myElement:this){
+			myElement.update(theDeltaTime);
+		}
+	}
+	
 	public int groups(){
 		return _myGroups;
 	}
