@@ -2,6 +2,8 @@ package cc.creativecomputing.controlui.timeline.controller;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cc.creativecomputing.control.timeline.AbstractTrack;
@@ -147,7 +149,9 @@ public class FileManager {
 			CCDataObject myProjectData = CCDataIO.createDataObject(thePath);
 			CCDataObject myTimelinesObject = myProjectData.getObject(TIMELINES_ELEMENT);
 			
-			for(String myTimeline:myTimelinesObject.keySet()){
+			List<String> myKeys = new ArrayList<>(myTimelinesObject.keySet());
+			Collections.sort(myKeys);
+			for(String myTimeline:myKeys){
 				TimelineController myController = _myTimelineContainer.addTimeline(myTimeline);
 				loadTimeline(myTimelinesObject.getObject(myTimeline), myController);
 			}

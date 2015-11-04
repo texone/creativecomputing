@@ -82,6 +82,11 @@ public class SwingTransportView extends JPanel implements TransportView, ChangeV
 			}
 			
 			@Override
+			public void resetTimelines() {
+				_myTimelines.removeAllItems();
+			}
+			
+			@Override
 			public void addTimeline(String theTimeline) {
 				_myTimelines.addItem(theTimeline);
 				_myTimelines.setSelectedItem(_myTimelineContainer.defaultTimelineKey());

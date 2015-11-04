@@ -29,7 +29,6 @@ import cc.creativecomputing.controlui.timeline.view.SwingTableLayout;
 import cc.creativecomputing.controlui.timeline.view.SwingToolChooserPopup;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
-import cc.creativecomputing.core.logging.CCLog;
 
 
 @SuppressWarnings("serial")
@@ -44,6 +43,18 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 			entryHead.setFont(SwingGuiConstants.ARIAL_11);
 			add(entryHead);
 			addSeparator();
+			
+			JMenuItem myRemoveItem = new JMenuItem("remove track");
+			myRemoveItem.setFont(SwingGuiConstants.ARIAL_11);
+			myRemoveItem.setActionCommand("remove");
+			myRemoveItem.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent theE) {
+					_myTimelineController.removeTrack(_myGroupController.property().path());
+				}
+			});
+			add(myRemoveItem);
 			
 			JMenuItem myColorItem = new JMenuItem("color track");
 			myColorItem.setFont(SwingGuiConstants.ARIAL_11);
@@ -206,7 +217,6 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 				
 				Path myPath = myTrackController.track().path();
 				
-				CCLog.info(myTrackView);
 				_myMultiTrackPanel.insertTrackView(myTrackView.controlView(), myPath, myIndex, SwingTableLayout.DEFAULT_ROW_HEIGHT, true);
 				_myMultiTrackPanel.insertTrackDataView(myTrackView.dataView(), myPath, myIndex);
 				myIndex++;
@@ -217,7 +227,6 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 				
 				Path myPath = myTrackController.track().path();
 				
-				CCLog.info(myTrackView);
 				_myMultiTrackPanel.insertTrackView(myTrackView, myPath, myIndex, SwingTableLayout.DEFAULT_GROUP_HEIGHT, true);
 				_myMultiTrackPanel.insertTrackDataView(myTrackView.dataView(), myPath, myIndex);
 				myIndex++;

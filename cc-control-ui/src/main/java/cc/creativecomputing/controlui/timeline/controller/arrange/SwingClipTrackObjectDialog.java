@@ -55,6 +55,11 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 				_myTimelines.addItem(theTimeline);
 				_myTimelines.setSelectedItem(_myTimelineContainer.defaultTimelineKey());
 			}
+			
+			@Override
+			public void resetTimelines() {
+				_myTimelines.removeAllItems();
+			}
 		});
 
 		_myPanel = new JPanel();

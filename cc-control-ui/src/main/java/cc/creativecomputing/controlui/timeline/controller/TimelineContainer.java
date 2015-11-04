@@ -2,9 +2,9 @@ package cc.creativecomputing.controlui.timeline.controller;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
@@ -19,6 +19,9 @@ import cc.creativecomputing.core.events.CCListenerManager;
 public class TimelineContainer implements FileManagerListener, HistoryListener{
 	
 	public static interface TimelineChangeListener{
+		
+		public void resetTimelines();
+		
 		public void changeTimeline(TimelineController theController);
 		
 		public void addTimeline(String theTimeline);
@@ -35,7 +38,7 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 
 	public TimelineContainer(CCPropertyMap theProperties){
 		_myPropertyMap = theProperties;
-		_myTimelineController = new HashMap<>();
+		_myTimelineController = new TreeMap<>();
 		_myActiveController = new TimelineController(this, _myPropertyMap);
 		_myTimelineController.put("default", _myActiveController);
 		_myFileManager = new FileManager(this);
@@ -46,8 +49,8 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 	
 	public void reset(){
 		_myTimelineController.clear();
-		_myActiveController = new TimelineController(this, _myPropertyMap);
-		_myTimelineController.put("default", _myActiveController);
+		_myTimelineChangeListener.proxy().resetTimelines();
+		addTimeline("default");
 		_myTimelineChangeListener.proxy().changeTimeline(_myActiveController);
 	}
 	
