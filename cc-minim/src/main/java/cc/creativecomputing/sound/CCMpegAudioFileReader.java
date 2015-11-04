@@ -412,6 +412,7 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 	/**
 	 * Returns AudioInputStream from url.
 	 */
+	@SuppressWarnings("resource")
 	public AudioInputStream getAudioInputStream(URL url) throws UnsupportedAudioFileException, IOException {
 		CCSoundIO.debug("MpegAudioFileReader.getAudioInputStream(URL): begin");
 		long lFileLengthInBytes = AudioSystem.NOT_SPECIFIED;
@@ -555,7 +556,7 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 			}
 		} catch (StringIndexOutOfBoundsException e) {
 			// Skip encoding issues.
-			CCSoundIO.error("Cannot chopSubString " + e.getMessage());
+			throw new CCSoundException("Cannot chopSubString ", e);
 		}
 		return str;
 	}
@@ -577,17 +578,15 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 			frames.read(bframes);
 			frames.reset();
 		} catch (IOException e) {
-			CCSoundIO.error("Cannot parse ID3v2 :" + e.getMessage());
+			throw new CCSoundException("Cannot parse ID3v2", e);
 		}
 		if (!"ID3".equals(new String(bframes, 0, 3))) {
-			CCSoundIO.error("No ID3v2 header found!");
-			return;
+			throw new CCSoundException("No ID3v2 header found!");
 		}
 		int v2version = (int) (bframes[3] & 0xFF);
 		props.put("mp3.id3tag.v2.version", String.valueOf(v2version));
 		if (v2version < 2 || v2version > 4) {
-			CCSoundIO.error("Unsupported ID3v2 version " + v2version + "!");
-			return;
+			throw new CCSoundException("Unsupported ID3v2 version " + v2version + "!");
 		}
 		try {
 			CCSoundIO.debug("ID3v2 frame dump='" + new String(bframes, 0, bframes.length) + "'");
@@ -606,8 +605,7 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 					// inc i by 10 because the id3 frame header size is 10 bytes
 					i += 10;
 					if (!codeToPropName.containsKey(code)) {
-						CCSoundIO.error("Don't know the ID3 code " + code);
-						continue;
+						throw new CCSoundException("Don't know the ID3 code " + code);
 					}
 					if (code.equals("COMM") || code.equals("USLT")) {
 						value = parseComment(bframes, i, size);
@@ -630,8 +628,7 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 					size = (int) (0x00000000) + (bframes[i + 3] << 16) + (bframes[i + 4] << 8) + (bframes[i + 5]);
 					i += 6;
 					if (!codeToPropName.containsKey(scode)) {
-						CCSoundIO.error("Don't know the ID3 code " + scode);
-						continue;
+						throw new CCSoundException("Don't know the ID3 code " + scode);
 					}
 					if (scode.equals("COM")) {
 						value = parseText(bframes, i, size, 5);
@@ -648,7 +645,7 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 			}
 		} catch (RuntimeException e) {
 			// Ignore all parsing errors.
-			CCSoundIO.error("Error parsing ID3v2: " + e.getMessage());
+			throw new CCSoundException("Error parsing ID3v2",e);
 		}
 		CCSoundIO.debug("ID3v2 parsed");
 	}
@@ -674,7 +671,7 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 			value = new String(bframes, offset + skip, size - skip, enc);
 			value = chopSubstring(value, 0, value.length());
 		} catch (UnsupportedEncodingException e) {
-			CCSoundIO.error("ID3v2 Encoding error: " + e.getMessage());
+			throw new CCSoundException("ID3v2 Encoding error", e);
 		}
 		return value;
 	}
@@ -707,7 +704,7 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 			value = new String(bframes, offset + skip, size - skip, enc);
 			value = chopSubstring(value, 0, value.length());
 		} catch (UnsupportedEncodingException e) {
-			CCSoundIO.error("ID3v2 Encoding error: " + e.getMessage());
+			throw new CCSoundException("ID3v2 Encoding error",e);
 		}
 		return value;
 	}
@@ -734,5 +731,6 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 				props.put("mp3.shoutcast.metadata." + key, value);
 			}
 		}
+		icy.close();
 	}
 }

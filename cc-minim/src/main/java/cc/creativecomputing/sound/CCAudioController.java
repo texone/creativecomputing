@@ -331,7 +331,7 @@ public class CCAudioController {
 			BooleanControl c = (BooleanControl) getControl(type);
 			v = c.getValue();
 		} else {
-			CCSoundIO.error(type.toString() + " is not supported.");
+			throw new CCSoundException(type.toString() + " is not supported.");
 		}
 		return v;
 	}
@@ -341,7 +341,7 @@ public class CCAudioController {
 			BooleanControl c = (BooleanControl) getControl(type);
 			c.setValue(v);
 		} else {
-			CCSoundIO.error(type.toString() + " is not supported.");
+			throw new CCSoundException(type.toString() + " is not supported.");
 		}
 	}
 
@@ -351,7 +351,7 @@ public class CCAudioController {
 			FloatControl c = (FloatControl) getControl(type);
 			v = c.getValue();
 		} else {
-			CCSoundIO.error(type.toString() + " is not supported.");
+			throw new CCSoundException(type.toString() + " is not supported.");
 		}
 		return v;
 	}
@@ -365,7 +365,7 @@ public class CCAudioController {
 				v = c.getMinimum();
 			c.setValue(v);
 		} else {
-			CCSoundIO.error(type.toString() + " is not supported.");
+			throw new CCSoundException(type.toString() + " is not supported.");
 		}
 	}
 

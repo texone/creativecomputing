@@ -19,21 +19,21 @@
 package ddf.minim.analysis;
 
 import cc.creativecomputing.sound.CCAudioBuffer;
-import cc.creativecomputing.sound.CCSoundIO;
 
 /**
- * The BeatDetect class allows you to analyze an audio stream for beats (rhythmic onsets). 
- * <a href="http://www.gamedev.net/reference/programming/features/beatdetection">Beat
- * Detection Algorithms</a> by Frederic Patin describes beats in the following
- * way: <blockquote> The human listening system determines the rhythm of music
- * by detecting a pseudo periodical succession of beats. The signal which is
- * intercepted by the ear contains a certain energy, this energy is converted
- * into an electrical signal which the brain interprets. Obviously, The more
- * energy the sound transports, the louder the sound will seem. But a sound will
- * be heard as a <em>beat</em> only if his energy is largely superior to the
- * sound's energy history, that is to say if the brain detects a
- * <em>brutal variation in sound energy</em>. Therefore if the ear intercepts
- * a monotonous sound with sometimes big energy peaks it will detect beats,
+ * The BeatDetect class allows you to analyze an audio stream for beats
+ * (rhythmic onsets). <a
+ * href="http://www.gamedev.net/reference/programming/features/beatdetection"
+ * >Beat Detection Algorithms</a> by Frederic Patin describes beats in the
+ * following way: <blockquote> The human listening system determines the rhythm
+ * of music by detecting a pseudo periodical succession of beats. The signal
+ * which is intercepted by the ear contains a certain energy, this energy is
+ * converted into an electrical signal which the brain interprets. Obviously,
+ * The more energy the sound transports, the louder the sound will seem. But a
+ * sound will be heard as a <em>beat</em> only if his energy is largely superior
+ * to the sound's energy history, that is to say if the brain detects a
+ * <em>brutal variation in sound energy</em>. Therefore if the ear intercepts a
+ * monotonous sound with sometimes big energy peaks it will detect beats,
  * however, if you play a continuous loud sound you will not perceive any beats.
  * Thus, the beats are big variations of sound energy. </blockquote> In fact,
  * the two algorithms in this class are based on two algorithms described in
@@ -58,71 +58,73 @@ import cc.creativecomputing.sound.CCSoundIO;
  * <p>
  * In sound energy mode you use <code>isOnset()</code> to query the algorithm
  * and in frequency energy mode you use <code>isOnset(int i)</code>,
- * <code>isKick()</code>, <code>isSnare()</code>, and
- * <code>isRange()</code> to query particular frequnecy bands or ranges of
- * frequency bands. It should be noted that <code>isKick()</code>,
- * <code>isSnare()</code>, and <code>isHat()</code> merely call
- * <code>isRange()</code> with values determined by testing the algorithm
- * against music with a heavy beat and they may not be appropriate for all kinds
- * of music. If you find they are performing poorly with your music, you should
- * use <code>isRange()</code> directly to locate the bands that provide the
- * most meaningful information for you.
+ * <code>isKick()</code>, <code>isSnare()</code>, and <code>isRange()</code> to
+ * query particular frequnecy bands or ranges of frequency bands. It should be
+ * noted that <code>isKick()</code>, <code>isSnare()</code>, and
+ * <code>isHat()</code> merely call <code>isRange()</code> with values
+ * determined by testing the algorithm against music with a heavy beat and they
+ * may not be appropriate for all kinds of music. If you find they are
+ * performing poorly with your music, you should use <code>isRange()</code>
+ * directly to locate the bands that provide the most meaningful information for
+ * you.
  * 
  * @author Damien Di Fede
  * 
  * @example Analysis/SoundEnergyBeatDetection
  */
 
-public class BeatDetect
-{
-	/** Constant used to request frequency energy tracking mode.
-	 * 
-	 *  @example Analysis/FrequencyEnergyBeatDetection
-	 */
-	public static final int	FREQ_ENERGY		= 0;
+public class BeatDetect {
 
-	/** Constant used to request sound energy tracking mode.
-	 * 
-	 *  @example Analysis/SoundEnergyBeatDetection
-	 */
-	public static final int	SOUND_ENERGY	= 1;
+	public static enum BeatDetectionMode {
+		/**
+		 * Constant used to request frequency energy tracking mode.
+		 * 
+		 * @example Analysis/FrequencyEnergyBeatDetection
+		 */
+		FREQ_ENERGY,
+		/**
+		 * Constant used to request sound energy tracking mode.
+		 * 
+		 * @example Analysis/SoundEnergyBeatDetection
+		 */
+		SOUND_ENERGY;
+	}
 
-	private int					algorithm;
-	private int					sampleRate;
-	private int					timeSize;
-	private int					valCnt;
-	private float[]			valGraph;
-	private int					sensitivity;
+	private BeatDetectionMode algorithm;
+	private int sampleRate;
+	private int timeSize;
+	private int valCnt;
+	private float[] valGraph;
+	private int sensitivity;
 	// for circular buffer support
-	private int					insertAt;
+	private int insertAt;
 	// vars for sEnergy
-	private boolean			isOnset;
-	private float[]			eBuffer;
-	private float[]			dBuffer;
-	private long				timer;
+	private boolean isOnset;
+	private float[] eBuffer;
+	private float[] dBuffer;
+	private long timer;
 	// vars for fEnergy
-	private boolean[]			fIsOnset;
-	private FFT					spect;
-	private float[][]			feBuffer;
-	private float[][]			fdBuffer;
-	private long[]				fTimer;
-	private float[]			varGraph;
-	private int					varCnt;
+	private boolean[] fIsOnset;
+	private FFT spect;
+	private float[][] feBuffer;
+	private float[][] fdBuffer;
+	private long[] fTimer;
+	private float[] varGraph;
+	private int varCnt;
 
 	/**
 	 * Create a BeatDetect object that is in SOUND_ENERGY mode.
-	 * <code>timeSize</code> and <code>sampleRate</code> will be set to 1024
-	 * and 44100, respectively, so that it is possible to switch into FREQ_ENERGY
+	 * <code>timeSize</code> and <code>sampleRate</code> will be set to 1024 and
+	 * 44100, respectively, so that it is possible to switch into FREQ_ENERGY
 	 * mode with meaningful values.
 	 * 
 	 */
-	public BeatDetect()
-	{
+	public BeatDetect() {
 		sampleRate = 44100;
 		timeSize = 1024;
 		initSEResources();
 		initGraphs();
-		algorithm = SOUND_ENERGY;
+		algorithm = BeatDetectionMode.SOUND_ENERGY;
 		sensitivity = 10;
 	}
 
@@ -131,19 +133,18 @@ public class BeatDetect
 	 * sample buffer with the requested attributes.
 	 * 
 	 * @param timeSize
-	 *           int: the size of the buffer
+	 *            int: the size of the buffer
 	 * @param sampleRate
-	 *           float: the sample rate of the samples in the buffer
-	 *           
+	 *            float: the sample rate of the samples in the buffer
+	 * 
 	 * @related BeatDetect
 	 */
-	public BeatDetect(int timeSize, float sampleRate)
-	{
+	public BeatDetect(int timeSize, float sampleRate) {
 		this.sampleRate = (int) sampleRate;
 		this.timeSize = timeSize;
 		initFEResources();
 		initGraphs();
-		algorithm = FREQ_ENERGY;
+		algorithm = BeatDetectionMode.FREQ_ENERGY;
 		sensitivity = 10;
 	}
 
@@ -153,48 +154,34 @@ public class BeatDetect
 	 * BeatDetect.SOUND_ENERGY
 	 * 
 	 * @param algo
-	 *           int: either BeatDetect.SOUND_ENERGY or BeatDetect.FREQ_ENERGY
-	 *           
+	 *            int: either BeatDetect.SOUND_ENERGY or BeatDetect.FREQ_ENERGY
+	 * 
 	 * @related BeatDetect
 	 */
-	public void detectMode(int algo)
-	{
-		if (algo < 0 || algo > 1)
-		{
-			CCSoundIO.error("Unrecognized detect mode, defaulting to SOUND_ENERGY.");
-			algo = SOUND_ENERGY;
+	public void detectMode(BeatDetectionMode algo) {
+		if(algo == algorithm)return;
+		switch(algo){
+		case SOUND_ENERGY:
+			releaseFEResources();
+			initSEResources();
+			break;
+		case FREQ_ENERGY:
+			releaseSEResources();
+			initFEResources();
 		}
-		if (algo == SOUND_ENERGY)
-		{
-			if (algorithm == FREQ_ENERGY)
-			{
-				releaseFEResources();
-				initSEResources();
-				initGraphs();
-				algorithm = algo;
-			}
-		}
-		else
-		{
-			if (algorithm == SOUND_ENERGY)
-			{
-				releaseSEResources();
-				initFEResources();
-				initGraphs();
-				algorithm = FREQ_ENERGY;
-			}
-		}
+
+		initGraphs();
+		algorithm = algo;
+		
 	}
 
-	private void initGraphs()
-	{
+	private void initGraphs() {
 		valCnt = varCnt = 0;
 		valGraph = new float[512];
 		varGraph = new float[512];
 	}
 
-	private void initSEResources()
-	{
+	private void initSEResources() {
 		isOnset = false;
 		eBuffer = new float[sampleRate / timeSize];
 		dBuffer = new float[sampleRate / timeSize];
@@ -202,8 +189,7 @@ public class BeatDetect
 		insertAt = 0;
 	}
 
-	private void initFEResources()
-	{
+	private void initFEResources() {
 		spect = new FFT(timeSize, sampleRate);
 		spect.logAverages(60, 3);
 		int numAvg = spect.avgSize();
@@ -212,23 +198,20 @@ public class BeatDetect
 		fdBuffer = new float[numAvg][sampleRate / timeSize];
 		fTimer = new long[numAvg];
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < fTimer.length; i++)
-		{
+		for (int i = 0; i < fTimer.length; i++) {
 			fTimer[i] = start;
 		}
 		insertAt = 0;
 	}
 
-	private void releaseSEResources()
-	{
+	private void releaseSEResources() {
 		isOnset = false;
 		eBuffer = null;
 		dBuffer = null;
 		timer = 0;
 	}
 
-	private void releaseFEResources()
-	{
+	private void releaseFEResources() {
 		spect = null;
 		fIsOnset = null;
 		feBuffer = null;
@@ -237,35 +220,31 @@ public class BeatDetect
 	}
 
 	/**
-	 * Analyze the samples in <code>buffer</code>. 
-	 * This is a cumulative process, so you must call this function every frame.
+	 * Analyze the samples in <code>buffer</code>. This is a cumulative process,
+	 * so you must call this function every frame.
 	 * 
 	 * @param buffer
-	 *           AudioBuffer: the buffer to analyze.
-	 *           
+	 *            AudioBuffer: the buffer to analyze.
+	 * 
 	 * @example Analysis/SoundEnergyBeatDetection
 	 * 
 	 * @related BeatDetect
 	 */
-	public void detect(CCAudioBuffer buffer)
-	{
-		detect( buffer.toArray() );
+	public void detect(CCAudioBuffer buffer) {
+		detect(buffer.toArray());
 	}
-	
 
 	/**
-	 * Analyze the samples in <code>buffer</code>. This is a cumulative
-	 * process, so you must call this function every frame.
+	 * Analyze the samples in <code>buffer</code>. This is a cumulative process,
+	 * so you must call this function every frame.
 	 * 
 	 * @param buffer
-	 *           float[]: the buffer to analyze
-	 *           
+	 *            float[]: the buffer to analyze
+	 * 
 	 * @related BeatDetect
 	 */
-	public void detect(float[] buffer)
-	{
-		switch (algorithm)
-		{
+	public void detect(float[] buffer) {
+		switch (algorithm) {
 		case SOUND_ENERGY:
 			sEnergy(buffer);
 			break;
@@ -274,74 +253,66 @@ public class BeatDetect
 			break;
 		}
 	}
-	
+
 	/**
-	 * In frequency energy mode this returns the number of frequency bands 
+	 * In frequency energy mode this returns the number of frequency bands
 	 * currently being used. In sound energy mode this always returns 0.
 	 * 
 	 * @return int: the length of the FFT's averages array
 	 * 
 	 * @related BeatDetect
 	 */
-	public int dectectSize()
-	{
-	  if ( algorithm == FREQ_ENERGY )
-	  {
-	    return spect.avgSize();
-	  }
+	public int dectectSize() {
+		if (algorithm == BeatDetectionMode.FREQ_ENERGY) {
+			return spect.avgSize();
+		}
 
-	  return 0;
+		return 0;
 	}
-	
+
 	/**
-	 * Returns the center frequency of the i<sup>th</sup> frequency band.
-	 * In sound energy mode this always returns 0.
+	 * Returns the center frequency of the i<sup>th</sup> frequency band. In
+	 * sound energy mode this always returns 0.
 	 * 
 	 * @param i
-	 *     int: which detect band you want the center frequency of.
-	 *     
-	 *  @return float: the center frequency of the i<sup>th</sup> frequency band
-	 *  
-	 *  @related BeatDetect
+	 *            int: which detect band you want the center frequency of.
+	 * 
+	 * @return float: the center frequency of the i<sup>th</sup> frequency band
+	 * 
+	 * @related BeatDetect
 	 */
-	public float getDetectCenterFrequency(int i)
-	{
-	  if ( algorithm == FREQ_ENERGY )
-	  {
-	    return spect.getAverageCenterFrequency(i);
-	  }
+	public float getDetectCenterFrequency(int i) {
+		if (algorithm == BeatDetectionMode.FREQ_ENERGY) {
+			return spect.getAverageCenterFrequency(i);
+		}
 
-	  return 0;
+		return 0;
 	}
 
 	/**
-	 * Sets the sensitivity of the algorithm. After a beat has been detected, the
-	 * algorithm will wait for <code>millis</code> milliseconds before allowing
-	 * another beat to be reported. You can use this to dampen the algorithm if
-	 * it is giving too many false-positives. The default value is 10, which is
-	 * essentially no damping. If you try to set the sensitivity to a negative
-	 * value, an error will be reported and it will be set to 10 instead.
+	 * Sets the sensitivity of the algorithm. After a beat has been detected,
+	 * the algorithm will wait for <code>millis</code> milliseconds before
+	 * allowing another beat to be reported. You can use this to dampen the
+	 * algorithm if it is giving too many false-positives. The default value is
+	 * 10, which is essentially no damping. If you try to set the sensitivity to
+	 * a negative value, an error will be reported and it will be set to 10
+	 * instead.
 	 * 
 	 * @param millis
-	 *           int: the sensitivity in milliseconds
-	 *           
+	 *            int: the sensitivity in milliseconds
+	 * 
 	 * @example Analysis/FrequencyEnergyBeatDetection
 	 * 
 	 * @related BeatDetect
 	 */
-	public void setSensitivity(int millis)
-	{
-		if (millis < 0)
-		{
-			CCSoundIO.error("BeatDetect: sensitivity cannot be less than zero. Defaulting to 10.");
+	public void setSensitivity(int millis) {
+		if (millis < 0) {
 			sensitivity = 10;
-		}
-		else
-		{
+		} else {
 			sensitivity = millis;
 		}
 	}
-	
+
 	/**
 	 * In sound energy mode this returns true when a beat has been detected. In
 	 * frequency energy mode this always returns false.
@@ -352,28 +323,25 @@ public class BeatDetect
 	 * 
 	 * @related BeatDetect
 	 */
-	public boolean isOnset()
-	{
+	public boolean isOnset() {
 		return isOnset;
 	}
 
 	/**
 	 * In frequency energy mode this returns true when a beat has been detect in
-	 * the <code>i<sup>th</sup></code> frequency band. In sound energy mode
-	 * this always returns false.
+	 * the <code>i<sup>th</sup></code> frequency band. In sound energy mode this
+	 * always returns false.
 	 * 
 	 * @param i
-	 *           int: the frequency band to query
+	 *            int: the frequency band to query
 	 * @return boolean: true if a beat has been detected in the requested band
 	 * 
 	 * @example Analysis/SoundEnergyBeatDetection
 	 * 
 	 * @related BeatDetect
 	 */
-	public boolean isOnset(int i)
-	{
-		if (algorithm == SOUND_ENERGY)
-		{
+	public boolean isOnset(int i) {
+		if (algorithm == BeatDetectionMode.SOUND_ENERGY) {
 			return false;
 		}
 		return fIsOnset[i];
@@ -391,10 +359,8 @@ public class BeatDetect
 	 * 
 	 * @related BeatDetect
 	 */
-	public boolean isKick()
-	{
-		if (algorithm == SOUND_ENERGY)
-		{
+	public boolean isKick() {
+		if (algorithm == BeatDetectionMode.SOUND_ENERGY) {
 			return false;
 		}
 		int upper = 6 >= spect.avgSize() ? spect.avgSize() : 6;
@@ -413,10 +379,8 @@ public class BeatDetect
 	 * 
 	 * @related BeatDetect
 	 */
-	public boolean isSnare()
-	{
-		if (algorithm == SOUND_ENERGY)
-		{
+	public boolean isSnare() {
+		if (algorithm == BeatDetectionMode.SOUND_ENERGY) {
 			return false;
 		}
 		int lower = 8 >= spect.avgSize() ? spect.avgSize() : 8;
@@ -427,9 +391,9 @@ public class BeatDetect
 
 	/**
 	 * In frequency energy mode this returns true if a beat corresponding to the
-	 * frequency range of a hi hat has been detected. This has been tuned to work
-	 * well with dance / techno music and may not perform well with other styles
-	 * of music. In sound energy mode this always returns false.
+	 * frequency range of a hi hat has been detected. This has been tuned to
+	 * work well with dance / techno music and may not perform well with other
+	 * styles of music. In sound energy mode this always returns false.
 	 * 
 	 * @return boolean: true if a hi hat beat has been detected
 	 * 
@@ -437,10 +401,8 @@ public class BeatDetect
 	 * 
 	 * @related BeatDetect
 	 */
-	public boolean isHat()
-	{
-		if (algorithm == SOUND_ENERGY)
-		{
+	public boolean isHat() {
+		if (algorithm == BeatDetectionMode.SOUND_ENERGY) {
 			return false;
 		}
 		int lower = spect.avgSize() - 7 < 0 ? 0 : spect.avgSize() - 7;
@@ -455,30 +417,26 @@ public class BeatDetect
 	 * this always returns false.
 	 * 
 	 * @param low
-	 *           int: the index of the lower band
+	 *            int: the index of the lower band
 	 * @param high
-	 *           int: the index of the higher band
+	 *            int: the index of the higher band
 	 * @param threshold
-	 *           int: the smallest number of bands in the range
-	 *           <code>[low, high]</code> that need to have registered a beat
-	 *           for this to return true
-	 * @return boolean: true if at least <code>threshold</code> bands of the bands
-	 *         included in the range <code>[low, high]</code> have registered a
-	 *         beat
-	 *         
+	 *            int: the smallest number of bands in the range
+	 *            <code>[low, high]</code> that need to have registered a beat
+	 *            for this to return true
+	 * @return boolean: true if at least <code>threshold</code> bands of the
+	 *         bands included in the range <code>[low, high]</code> have
+	 *         registered a beat
+	 * 
 	 * @related BeatDetect
 	 */
-	public boolean isRange(int low, int high, int threshold)
-	{
-		if (algorithm == SOUND_ENERGY)
-		{
+	public boolean isRange(int low, int high, int threshold) {
+		if (algorithm == BeatDetectionMode.SOUND_ENERGY) {
 			return false;
 		}
 		int num = 0;
-		for (int i = low; i < high + 1; i++)
-		{
-			if (isOnset(i))
-			{
+		for (int i = low; i < high + 1; i++) {
+			if (isOnset(i)) {
 				num++;
 			}
 		}
@@ -486,55 +444,53 @@ public class BeatDetect
 	}
 
 	/**
-	 * Draws some debugging visuals in the passed PApplet. The visuals drawn when
-	 * in frequency energy mode are a good way to determine what values to use
-	 * with <code>inRange()</code> if the provided drum detecting functions
+	 * Draws some debugging visuals in the passed PApplet. The visuals drawn
+	 * when in frequency energy mode are a good way to determine what values to
+	 * use with <code>inRange()</code> if the provided drum detecting functions
 	 * aren't what you need or aren't working well.
 	 * 
 	 * @param p
-	 *           the PApplet to draw in
+	 *            the PApplet to draw in
 	 */
-//	public void drawGraph(PApplet p)
-//	{
-//		if (algorithm == SOUND_ENERGY)
-//		{
-//			// draw valGraph
-//			for (int i = 0; i < valCnt; i++)
-//			{
-//				p.stroke(255);
-//				p.line(i, (p.height / 2) - valGraph[i], i, (p.height / 2)
-//						+ valGraph[i]);
-//			}
-//			// draw varGraph
-//			for (int i = 0; i < varCnt - 1; i++)
-//			{
-//				p.stroke(255);
-//				p.line(i, p.height - varGraph[i], i + 1, p.height - varGraph[i + 1]);
-//			}
-//		}
-//		else
-//		{
-//			p.strokeWeight(5);
-//			for (int i = 0; i < fTimer.length; i++)
-//			{
-//				int c = (i % 3 == 0) ? p.color(255, 0, 0) : p.color(255);
-//				p.stroke(c);
-//				long clock = System.currentTimeMillis();
-//				if (clock - fTimer[i] < sensitivity)
-//				{
-//					float h = PApplet.map(clock - fTimer[i], 0, sensitivity, 100, 0);
-//					p.line((i * 10), p.height - h, (i * 10), p.height);
-//				}
-//			}
-//		}
-//	}
+	// public void drawGraph(PApplet p)
+	// {
+	// if (algorithm == SOUND_ENERGY)
+	// {
+	// // draw valGraph
+	// for (int i = 0; i < valCnt; i++)
+	// {
+	// p.stroke(255);
+	// p.line(i, (p.height / 2) - valGraph[i], i, (p.height / 2)
+	// + valGraph[i]);
+	// }
+	// // draw varGraph
+	// for (int i = 0; i < varCnt - 1; i++)
+	// {
+	// p.stroke(255);
+	// p.line(i, p.height - varGraph[i], i + 1, p.height - varGraph[i + 1]);
+	// }
+	// }
+	// else
+	// {
+	// p.strokeWeight(5);
+	// for (int i = 0; i < fTimer.length; i++)
+	// {
+	// int c = (i % 3 == 0) ? p.color(255, 0, 0) : p.color(255);
+	// p.stroke(c);
+	// long clock = System.currentTimeMillis();
+	// if (clock - fTimer[i] < sensitivity)
+	// {
+	// float h = PApplet.map(clock - fTimer[i], 0, sensitivity, 100, 0);
+	// p.line((i * 10), p.height - h, (i * 10), p.height);
+	// }
+	// }
+	// }
+	// }
 
-	private void sEnergy(float[] samples)
-	{
+	private void sEnergy(float[] samples) {
 		// compute the energy level
 		float level = 0;
-		for (int i = 0; i < samples.length; i++)
-		{
+		for (int i = 0; i < samples.length; i++) {
 			level += (samples[i] * samples[i]);
 		}
 		level /= samples.length;
@@ -547,29 +503,26 @@ public class BeatDetect
 		// compute C using a linear digression of C with V
 		float C = (-0.0025714f * V) + 1.5142857f;
 		// filter negaive values
-		float diff = (float)Math.max(instant - C * E, 0);
+		float diff = (float) Math.max(instant - C * E, 0);
 		pushVal(diff);
 		// find the average of only the positive values in dBuffer
 		float dAvg = specAverage(dBuffer);
 		// filter negative values
-		float diff2 = (float)Math.max(diff - dAvg, 0);
+		float diff2 = (float) Math.max(diff - dAvg, 0);
 		pushVar(diff2);
 		// report false if it's been less than 'sensitivity'
 		// milliseconds since the last true value
-		if (System.currentTimeMillis() - timer < sensitivity)
-		{
+		if (System.currentTimeMillis() - timer < sensitivity) {
 			isOnset = false;
 		}
 		// if we've made it this far then we're allowed to set a new
 		// value, so set it true if it deserves to be, restart the timer
-		else if (diff2 > 0 && instant > 2)
-		{
+		else if (diff2 > 0 && instant > 2) {
 			isOnset = true;
 			timer = System.currentTimeMillis();
 		}
 		// OMG it wasn't true!
-		else
-		{
+		else {
 			isOnset = false;
 		}
 		eBuffer[insertAt] = instant;
@@ -579,47 +532,37 @@ public class BeatDetect
 			insertAt = 0;
 	}
 
-	private void fEnergy(float[] in)
-	{
+	private void fEnergy(float[] in) {
 		spect.forward(in);
 		float instant, E, V, C, diff, dAvg, diff2;
-		for (int i = 0; i < feBuffer.length; i++)
-		{
+		for (int i = 0; i < feBuffer.length; i++) {
 			instant = spect.getAvg(i);
 			E = average(feBuffer[i]);
 			V = variance(feBuffer[i], E);
 			C = (-0.0025714f * V) + 1.5142857f;
-			diff = (float)Math.max(instant - C * E, 0);
+			diff = (float) Math.max(instant - C * E, 0);
 			dAvg = specAverage(fdBuffer[i]);
-			diff2 = (float)Math.max(diff - dAvg, 0);
-			if (System.currentTimeMillis() - fTimer[i] < sensitivity)
-			{
+			diff2 = (float) Math.max(diff - dAvg, 0);
+			if (System.currentTimeMillis() - fTimer[i] < sensitivity) {
 				fIsOnset[i] = false;
-			}
-			else if (diff2 > 0)
-			{
+			} else if (diff2 > 0) {
 				fIsOnset[i] = true;
 				fTimer[i] = System.currentTimeMillis();
-			}
-			else
-			{
+			} else {
 				fIsOnset[i] = false;
 			}
 			feBuffer[i][insertAt] = instant;
 			fdBuffer[i][insertAt] = diff;
 		}
 		insertAt++;
-		if (insertAt == feBuffer[0].length)
-		{
+		if (insertAt == feBuffer[0].length) {
 			insertAt = 0;
 		}
 	}
 
-	private void pushVal(float v)
-	{
+	private void pushVal(float v) {
 		// println(valCnt);
-		if (valCnt == valGraph.length)
-		{
+		if (valCnt == valGraph.length) {
 			valCnt = 0;
 			valGraph = new float[valGraph.length];
 		}
@@ -627,11 +570,9 @@ public class BeatDetect
 		valCnt++;
 	}
 
-	private void pushVar(float v)
-	{
+	private void pushVar(float v) {
 		// println(valCnt);
-		if (varCnt == varGraph.length)
-		{
+		if (varCnt == varGraph.length) {
 			varCnt = 0;
 			varGraph = new float[varGraph.length];
 		}
@@ -639,42 +580,34 @@ public class BeatDetect
 		varCnt++;
 	}
 
-	private float average(float[] arr)
-	{
+	private float average(float[] arr) {
 		float avg = 0;
-		for (int i = 0; i < arr.length; i++)
-		{
+		for (int i = 0; i < arr.length; i++) {
 			avg += arr[i];
 		}
 		avg /= arr.length;
 		return avg;
 	}
 
-	private float specAverage(float[] arr)
-	{
+	private float specAverage(float[] arr) {
 		float avg = 0;
 		float num = 0;
-		for (int i = 0; i < arr.length; i++)
-		{
-			if (arr[i] > 0)
-			{
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] > 0) {
 				avg += arr[i];
 				num++;
 			}
 		}
-		if (num > 0)
-		{
+		if (num > 0) {
 			avg /= num;
 		}
 		return avg;
 	}
 
-	private float variance(float[] arr, float val)
-	{
+	private float variance(float[] arr, float val) {
 		float V = 0;
-		for (int i = 0; i < arr.length; i++)
-		{
-			V += (float)Math.pow(arr[i] - val, 2);
+		for (int i = 0; i < arr.length; i++) {
+			V += (float) Math.pow(arr[i] - val, 2);
 		}
 		V /= arr.length;
 		return V;

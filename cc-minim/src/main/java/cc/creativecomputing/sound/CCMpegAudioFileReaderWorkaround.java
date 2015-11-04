@@ -47,6 +47,7 @@ final class CCMpegAudioFileReaderWorkaround extends CCMpegAudioFileReader {
 	/**
 	 * Returns AudioInputStream from url and userAgent
 	 */
+	@SuppressWarnings("resource")
 	public AudioInputStream getAudioInputStream(URL url, String userAgent) throws UnsupportedAudioFileException,
 			IOException {
 		CCSoundIO.debug("MpegAudioFileReaderWorkaround.getAudioInputStream(" + url.toString() + ", " + userAgent

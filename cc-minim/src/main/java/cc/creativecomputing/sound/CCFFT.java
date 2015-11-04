@@ -1,7 +1,6 @@
 package cc.creativecomputing.sound;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 import ddf.minim.analysis.FFT;
 import ddf.minim.analysis.WindowFunction;

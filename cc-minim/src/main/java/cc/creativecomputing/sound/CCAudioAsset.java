@@ -14,8 +14,6 @@ public class CCAudioAsset extends CCAsset<CCAudioPlayer>{
 	
 	private Map<Path, CCAudioPlayer> _myPlayerMap = new HashMap<>();
 	
-	private Path _myPath;
-	
 	@CCProperty(name = "min time offset", min = 0.01, max = 1)
 	private float _cMaxTimeOffset = 0.05f;
 	
@@ -32,7 +30,6 @@ public class CCAudioAsset extends CCAsset<CCAudioPlayer>{
 	@Override
 	public void onChangePath(Path thePath) {
 		if(thePath == null){
-			_myPath = thePath;
 			if(_myAsset != null)_myAsset.pause();
 			_myAsset = null;
 			return;
@@ -42,7 +39,7 @@ public class CCAudioAsset extends CCAsset<CCAudioPlayer>{
 			return;
 		}else{
 			try{
-				_myAsset = CCSoundIO.instance().loadFile(thePath, 2048);
+				_myAsset = CCSoundIO.loadFile(thePath, 2048);
 				_myPlayerMap.put(thePath, _myAsset);
 			}catch(Exception e){
 				_myAsset = null;

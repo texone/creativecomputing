@@ -103,7 +103,6 @@ public class CCSampleSignal implements CCAudioSignal {
 		} else if (channelNumber == CCAudioSample.RIGHT) {
 			return buffer.getChannel(1);
 		}
-		CCSoundIO.error("getChannel: Illegal channel number " + channelNumber);
-		return null;
+		throw new CCSoundException("getChannel: Illegal channel number " + channelNumber);
 	}
 }

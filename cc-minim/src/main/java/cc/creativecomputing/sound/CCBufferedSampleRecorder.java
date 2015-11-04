@@ -86,7 +86,7 @@ final class CCBufferedSampleRecorder implements CCSampleRecorder {
 	 */
 	public CCAudioRecordingStream save() {
 		if (isRecording()) {
-			CCSoundIO.error("You must stop recording before you can write to a file.");
+			new CCSoundException("You must stop recording before you can write to a file.");
 		} else {
 			int channels = format.getChannels();
 			int length = left.capacity();
@@ -121,16 +121,13 @@ final class CCBufferedSampleRecorder implements CCSampleRecorder {
 				try {
 					AudioSystem.write(ais, type, out);
 				} catch (IOException e) {
-					CCSoundIO.error("AudioRecorder.save: Error attempting to save buffer to " + name + "\n"
-							+ e.getMessage());
+					new CCSoundException("AudioRecorder.save: Error attempting to save buffer to " + name, e);
 				}
 				if (out.length() == 0) {
-					CCSoundIO.error("AudioRecorder.save: Error attempting to save buffer to " + name
-							+ ", the output file is empty.");
+					new CCSoundException("AudioRecorder.save: Error attempting to save buffer to " + name + ", the output file is empty.");
 				}
 			} else {
-				CCSoundIO.error("AudioRecorder.save: Can't write " + type.toString() + " using format "
-						+ format.toString() + ".");
+				new CCSoundException("AudioRecorder.save: Can't write " + type.toString() + " using format " + format.toString() + ".");
 			}
 		}
 

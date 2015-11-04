@@ -18,7 +18,7 @@
 
 package ddf.minim.analysis;
 
-import cc.creativecomputing.sound.CCSoundIO;
+import cc.creativecomputing.sound.CCSoundException;
 
 /**
  * DFT stands for Discrete Fourier Transform and is the most widely used Fourier
@@ -26,126 +26,111 @@ import cc.creativecomputing.sound.CCSoundIO;
  * brute force implementation of the DFT and as such is quite slow. Use an FFT
  * instead. This exists primarily as a way to ensure that other implementations
  * of the DFT are working properly. This implementation expects an even
- * <code>timeSize</code> and will throw and IllegalArgumentException if this
- * is not the case.
+ * <code>timeSize</code> and will throw and IllegalArgumentException if this is
+ * not the case.
  * 
  * @author Damien Di Fede
  * 
  * @see FourierTransform
  * @see FFT
- * @see <a href="http://www.dspguide.com/ch8.htm">The Discrete Fourier Transform</a>
+ * @see <a href="http://www.dspguide.com/ch8.htm">The Discrete Fourier
+ *      Transform</a>
  * 
  * @invisible
  * 
  */
-public class DFT extends FourierTransform
-{
-  /**
-   * Constructs a DFT that expects audio buffers of length <code>timeSize</code> that 
-   * have been recorded with a sample rate of <code>sampleRate</code>. Will throw an 
-   * IllegalArgumentException if <code>timeSize</code> is not even.
-   * 
-   * @param timeSize the length of the audio buffers you plan to analyze
-   * @param sampleRate the sample rate of the audio samples you plan to analyze
-   */
-  public DFT(int timeSize, float sampleRate)
-  {
-    super(timeSize, sampleRate);
-    if (timeSize % 2 != 0)
-      throw new IllegalArgumentException("DFT: timeSize must be even.");
-    buildTrigTables();
-  }
+public class DFT extends FourierTransform {
+	/**
+	 * Constructs a DFT that expects audio buffers of length
+	 * <code>timeSize</code> that have been recorded with a sample rate of
+	 * <code>sampleRate</code>. Will throw an IllegalArgumentException if
+	 * <code>timeSize</code> is not even.
+	 * 
+	 * @param timeSize
+	 *            the length of the audio buffers you plan to analyze
+	 * @param sampleRate
+	 *            the sample rate of the audio samples you plan to analyze
+	 */
+	public DFT(int timeSize, float sampleRate) {
+		super(timeSize, sampleRate);
+		if (timeSize % 2 != 0)
+			throw new IllegalArgumentException("DFT: timeSize must be even.");
+		buildTrigTables();
+	}
 
-  protected void allocateArrays()
-  {
-    spectrum = new float[timeSize / 2 + 1];
-    real = new float[timeSize / 2 + 1];
-    imag = new float[timeSize / 2 + 1];
-  }
+	protected void allocateArrays() {
+		spectrum = new float[timeSize / 2 + 1];
+		real = new float[timeSize / 2 + 1];
+		imag = new float[timeSize / 2 + 1];
+	}
 
-  /**
-   * Not currently implemented.
-   */
-  public void scaleBand(int i, float s)
-  {
-  }
+	/**
+	 * Not currently implemented.
+	 */
+	public void scaleBand(int i, float s) {
+	}
 
-  /**
-   * Not currently implemented.
-   */
-  public void setBand(int i, float a)
-  {
-  }
+	/**
+	 * Not currently implemented.
+	 */
+	public void setBand(int i, float a) {
+	}
 
-  public void forward(float[] samples)
-  {
-    if (samples.length != timeSize)
-    {
-      CCSoundIO
-          .error("DFT.forward: The length of the passed sample buffer must be equal to DFT.timeSize().");
-      return;
-    }
-    doWindow(samples);
-    int N = samples.length;
-    for (int f = 0; f <= N / 2; f++)
-    {
-      real[f] = 0.0f;
-      imag[f] = 0.0f;
-      for (int t = 0; t < N; t++)
-      {
-        real[f] += samples[t] * cos(t * f);
-        imag[f] += samples[t] * -sin(t * f);
-      }
-    }
-    fillSpectrum();
-  }
+	public void forward(float[] samples) {
+		if (samples.length != timeSize) {
+			throw new CCSoundException("DFT.forward: The length of the passed sample buffer must be equal to DFT.timeSize().");
+		}
+		doWindow(samples);
+		int N = samples.length;
+		for (int f = 0; f <= N / 2; f++) {
+			real[f] = 0.0f;
+			imag[f] = 0.0f;
+			for (int t = 0; t < N; t++) {
+				real[f] += samples[t] * cos(t * f);
+				imag[f] += samples[t] * -sin(t * f);
+			}
+		}
+		fillSpectrum();
+	}
 
-  public void inverse(float[] buffer)
-  {
-    int N = buffer.length;
-    real[0] /= N;
-    imag[0] = -imag[0] / (N / 2);
-    real[N / 2] /= N;
-    imag[N / 2] = -imag[0] / (N / 2);
-    for (int i = 0; i < N / 2; i++)
-    {
-      real[i] /= (N / 2);
-      imag[i] = -imag[i] / (N / 2);
-    }
-    for (int t = 0; t < N; t++)
-    {
-      buffer[t] = 0.0f;
-      for (int f = 0; f < N / 2; f++)
-      {
-        buffer[t] += real[f] * cos(t * f) + imag[f] * sin(t * f);
-      }
-    }
-  }
+	public void inverse(float[] buffer) {
+		int N = buffer.length;
+		real[0] /= N;
+		imag[0] = -imag[0] / (N / 2);
+		real[N / 2] /= N;
+		imag[N / 2] = -imag[0] / (N / 2);
+		for (int i = 0; i < N / 2; i++) {
+			real[i] /= (N / 2);
+			imag[i] = -imag[i] / (N / 2);
+		}
+		for (int t = 0; t < N; t++) {
+			buffer[t] = 0.0f;
+			for (int f = 0; f < N / 2; f++) {
+				buffer[t] += real[f] * cos(t * f) + imag[f] * sin(t * f);
+			}
+		}
+	}
 
-  // lookup table data and functions
+	// lookup table data and functions
 
-  private float[] sinlookup;
-  private float[] coslookup;
+	private float[] sinlookup;
+	private float[] coslookup;
 
-  private void buildTrigTables()
-  {
-    int N = spectrum.length * timeSize;
-    sinlookup = new float[N];
-    coslookup = new float[N];
-    for (int i = 0; i < N; i++)
-    {
-      sinlookup[i] = (float) Math.sin(i * TWO_PI / timeSize);
-      coslookup[i] = (float) Math.cos(i * TWO_PI / timeSize);
-    }
-  }
+	private void buildTrigTables() {
+		int N = spectrum.length * timeSize;
+		sinlookup = new float[N];
+		coslookup = new float[N];
+		for (int i = 0; i < N; i++) {
+			sinlookup[i] = (float) Math.sin(i * TWO_PI / timeSize);
+			coslookup[i] = (float) Math.cos(i * TWO_PI / timeSize);
+		}
+	}
 
-  private float sin(int i)
-  {
-    return sinlookup[i];
-  }
+	private float sin(int i) {
+		return sinlookup[i];
+	}
 
-  private float cos(int i)
-  {
-    return coslookup[i];
-  }
+	private float cos(int i) {
+		return coslookup[i];
+	}
 }

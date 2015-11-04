@@ -106,7 +106,7 @@ public class CCAudioSource extends CCAudioController implements CCAudioResource,
 		// if we have a parent, tell them to stop tracking us
 		// so that we can get garbage collected
 		if (parent != null) {
-			parent.removeSource(this);
+			CCSoundIO.removeSource(this);
 		}
 	}
 

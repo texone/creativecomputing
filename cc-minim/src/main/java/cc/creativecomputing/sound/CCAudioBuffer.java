@@ -63,8 +63,10 @@ public final class CCAudioBuffer {
 
 	public synchronized void set(float[] buffer) {
 		if (buffer.length != samples.length)
-			CCSoundIO.error("AudioBuffer.set: passed array (" + buffer.length + ") " + "must be the same length ("
-					+ samples.length + ") as this AudioBuffer.");
+			throw new CCSoundException(
+				"AudioBuffer.set: passed array (" + buffer.length + ") " + 
+				"must be the same length (" + samples.length + ") as this AudioBuffer."
+			);
 		else
 			samples = buffer;
 	}
@@ -81,7 +83,7 @@ public final class CCAudioBuffer {
 	 */
 	public synchronized void mix(float[] b1, float[] b2) {
 		if ((b1.length != b2.length) || (b1.length != samples.length || b2.length != samples.length)) {
-			CCSoundIO.error("AudioBuffer.mix: The two passed buffers must be the same size as this AudioBuffer.");
+			throw new CCSoundException("AudioBuffer.mix: The two passed buffers must be the same size as this AudioBuffer.");
 		} else {
 			for (int i = 0; i < samples.length; i++) {
 				samples[i] = (b1[i] + b2[i]) / 2;

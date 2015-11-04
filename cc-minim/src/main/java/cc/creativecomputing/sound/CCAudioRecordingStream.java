@@ -227,7 +227,7 @@ public class CCAudioRecordingStream implements Runnable, CCAudioStream {
 			}
 
 		} catch (IOException e) {
-			CCSoundIO.error("Error reading from the file - " + e.getMessage());
+			throw new CCSoundException("Error reading from the file - " + e.getMessage(), e);
 		}
 		totalBytesRead += bytesRead;
 
@@ -300,7 +300,7 @@ public class CCAudioRecordingStream implements Runnable, CCAudioStream {
 			}
 
 		} catch (IOException ioe) {
-			CCSoundIO.error("Error reading from the file - " + ioe.getMessage());
+			throw new CCSoundException("Error reading from the file - " + ioe.getMessage(), ioe);
 		}
 	}
 
@@ -553,8 +553,7 @@ public class CCAudioRecordingStream implements Runnable, CCAudioStream {
 		try {
 			ais.close();
 		} catch (IOException e) {
-			CCSoundIO.error("JSPCMAudioRecordingStream::rewind - Error closing the stream before reload: "
-					+ e.getMessage());
+			throw new CCSoundException("JSPCMAudioRecordingStream::rewind - Error closing the stream before reload", e);
 		}
 		ais = CCSoundIO.getAudioInputStream(meta.fileName());
 	}
@@ -565,7 +564,7 @@ public class CCAudioRecordingStream implements Runnable, CCAudioStream {
 
 		if (toSkip <= 0) {
 			if (toSkip < 0) {
-				CCSoundIO.error("JSBaseAudioRecordingStream.skip :: Tried to skip negative milleseconds!");
+				throw new CCSoundException("JSBaseAudioRecordingStream.skip :: Tried to skip negative milleseconds!");
 			}
 			return 0;
 		}
@@ -601,7 +600,7 @@ public class CCAudioRecordingStream implements Runnable, CCAudioStream {
 				totalSkipped += read;
 			}
 		} catch (IOException e) {
-			CCSoundIO.error("Unable to skip due to read error: " + e.getMessage());
+			throw new CCSoundException("Unable to skip due to read error", e);
 		}
 		CCSoundIO.debug("Total actually skipped was " + totalSkipped + ", which is "
 				+ AudioUtils.bytes2Millis(totalSkipped, ais.getFormat()) + " milliseconds.");

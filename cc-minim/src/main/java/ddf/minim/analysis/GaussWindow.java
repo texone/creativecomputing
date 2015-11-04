@@ -18,45 +18,41 @@
 
 package ddf.minim.analysis;
 
-import cc.creativecomputing.sound.CCSoundIO;
+import cc.creativecomputing.sound.CCSoundException;
 
 /**
  * A Gauss window function.
  *
  * @author Damien Di Fede
  * @author Corban Brook
- * @see   <a href="http://en.wikipedia.org/wiki/Window_function#Gauss_windows">The Gauss Window</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Window_function#Gauss_windows">The Gauss Window</a>
  * 
  * @invisible
  */
-public class GaussWindow extends WindowFunction
-{
-  double alpha;
+public class GaussWindow extends WindowFunction {
+	double alpha;
 
-  /** Constructs a Gauss window function. */
-  public GaussWindow(double alpha)
-  {
-    if (alpha < 0.0 || alpha > 0.5) 
-    {
-      CCSoundIO.error("Range for GaussWindow out of bounds. Value must be <= 0.5");
-      return;
-    }
-    this.alpha = alpha;  
-  }
+	/** Constructs a Gauss window function. */
+	public GaussWindow(double alpha) {
+		if (alpha < 0.0 || alpha > 0.5) {
+			throw new CCSoundException("Range for GaussWindow out of bounds. Value must be <= 0.5");
+		}
+		this.alpha = alpha;
+	}
 
-  /** Constructs a Gauss window with a default alpha value of 0.25 */
-  public GaussWindow()
-  {
-    this(0.25);
-  }
+	/** Constructs a Gauss window with a default alpha value of 0.25 */
+	public GaussWindow() {
+		this(0.25);
+	}
 
-  protected float value(int length, int index) 
-  {
-    return (float) Math.pow(Math.E, -0.5 * Math.pow((index - (length - 1) / (double) 2) / (this.alpha * (length - 1) / (double) 2), (double) 2));
-  }
-  
-  public String toString()
-  {
-	  return "Gauss Window";
-  }
+	protected float value(int length, int index) {
+		return (float) Math.pow(
+				Math.E,
+				-0.5 * Math.pow((index - (length - 1) / (double) 2)
+								/ (this.alpha * (length - 1) / (double) 2),(double) 2));
+	}
+
+	public String toString() {
+		return "Gauss Window";
+	}
 }

@@ -74,11 +74,10 @@ final class CCStreamingSampleRecorder implements CCSampleRecorder {
 		try {
 			aos = AudioSystemShadow.getAudioOutputStream(type, format, AudioSystem.NOT_SPECIFIED, _myPath.toFile());
 		} catch (IOException e) {
-			CCSoundIO.error("Error obtaining new output stream: " + e.getMessage());
+			throw new CCSoundException("Error obtaining new output stream", e);
 		} catch (IllegalArgumentException badarg) {
-			CCSoundIO.error("Error obtaining new output stream for " + thePath + " with type " + type.toString()
-					+ " format " + format.toString() + " and bufferSize " + bufferSize + ".\n" + "The reason is "
-					+ badarg.getMessage());
+			throw new CCSoundException("Error obtaining new output stream for " + thePath + " with type " + type.toString()
+					+ " format " + format.toString() + " and bufferSize " + bufferSize, badarg);
 		}
 		fsb = new CCFloatSampleBuffer(format.getChannels(), bufferSize, format.getSampleRate());
 		recording = false;
@@ -111,7 +110,7 @@ final class CCStreamingSampleRecorder implements CCSampleRecorder {
 		try {
 			aos.close();
 		} catch (IOException e) {
-			CCSoundIO.error("AudioRecorder.save: An error occurred when trying to save the file:\n" + e.getMessage());
+			throw new CCSoundException("AudioRecorder.save: An error occurred when trying to save the file:\n", e);
 		}
 		Path filePath = filePath();
 		AudioInputStream ais = CCSoundIO.getAudioInputStream(filePath);
@@ -131,7 +130,7 @@ final class CCStreamingSampleRecorder implements CCSampleRecorder {
 			try {
 				aos.write(raw, 0, raw.length);
 			} catch (IOException e) {
-				CCSoundIO.error("AudioRecorder: An error occurred while trying to write to the file:\n" + e.getMessage());
+				throw new CCSoundException("AudioRecorder: An error occurred while trying to write to the file", e);
 			}
 		}
 	}
@@ -144,7 +143,7 @@ final class CCStreamingSampleRecorder implements CCSampleRecorder {
 			try {
 				aos.write(raw, 0, raw.length);
 			} catch (IOException e) {
-				CCSoundIO.error("AudioRecorder: An error occurred while trying to write to the file:\n" + e.getMessage());
+				throw new CCSoundException("AudioRecorder: An error occurred while trying to write to the file", e);
 			}
 		}
 	}

@@ -19,6 +19,7 @@
 package ddf.minim.analysis;
 
 import cc.creativecomputing.sound.CCAudioBuffer;
+import cc.creativecomputing.sound.CCSoundException;
 import cc.creativecomputing.sound.CCSoundIO;
 
 /**
@@ -299,8 +300,7 @@ public abstract class FourierTransform {
 
 	protected void setComplex(float[] r, float[] i) {
 		if (real.length != r.length && imag.length != i.length) {
-			CCSoundIO
-					.error("FourierTransform.setComplex: the two arrays must be the same length as their member counterparts.");
+			throw new CCSoundException("FourierTransform.setComplex: the two arrays must be the same length as their member counterparts.");
 		} else {
 			System.arraycopy(r, 0, real, 0, r.length);
 			System.arraycopy(i, 0, imag, 0, i.length);
@@ -374,8 +374,7 @@ public abstract class FourierTransform {
 	 */
 	public void linAverages(int numAvg) {
 		if (numAvg > spectrum.length / 2) {
-			CCSoundIO.error("The number of averages for this transform can be at most " + spectrum.length / 2 + ".");
-			return;
+			throw new CCSoundException("The number of averages for this transform can be at most " + spectrum.length / 2 + ".");
 		} else {
 			averages = new float[numAvg];
 		}
@@ -815,9 +814,7 @@ public abstract class FourierTransform {
 	 */
 	public void forward(float[] buffer, int startAt) {
 		if (buffer.length - startAt < timeSize) {
-			CCSoundIO.error("FourierTransform.forward: not enough samples in the buffer between " + startAt + " and "
-					+ buffer.length + " to perform a transform.");
-			return;
+			throw new CCSoundException("FourierTransform.forward: not enough samples in the buffer between " + startAt + " and " + buffer.length + " to perform a transform.");
 		}
 
 		// copy the section of samples we want to analyze

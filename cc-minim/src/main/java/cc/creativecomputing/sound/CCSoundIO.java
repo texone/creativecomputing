@@ -133,22 +133,6 @@ public class CCSoundIO {
 	/**
 	 * @invisible
 	 * 
-	 *            Used internally to report error messages. These error messages
-	 *            will appear in the console area of the PDE if you are running
-	 *            a sketch from the PDE, otherwise they will appear in the Java
-	 *            Console.
-	 * 
-	 * @param message the error message to report
-	 */
-	public static void error(String message) {
-		System.out.println("=== Minim Error ===");
-		System.out.println("=== " + message);
-		System.out.println();
-	}
-
-	/**
-	 * @invisible
-	 * 
 	 *            Displays a debug message, but only if {@link #debugOn()} has
 	 *            been called. The message will be displayed in the console area
 	 *            of the PDE, if you are running your sketch from the PDE.
@@ -278,11 +262,10 @@ public class CCSoundIO {
 					return line;
 				}
 			} catch (LineUnavailableException e) {
-				error("Couldn't open the line: " + e.getMessage());
+				throw new CCSoundException("Couldn't open the line", e);
 			}
 		}
-		error("Unable to return a SourceDataLine: unsupported format - " + format.toString());
-		return line;
+		throw new CCSoundException("Unable to return a SourceDataLine: unsupported format - " + format.toString());
 	}
 
 	/**
@@ -308,8 +291,8 @@ public class CCSoundIO {
 	}
 
 	private static CCAudioSample getAudioSampleImp(CCFloatSampleBuffer samples, AudioFormat format, int bufferSize) {
-		CCAudioOutput out = getAudioOutput(samples.getChannelCount(), bufferSize, format.getSampleRate(),
-				format.getSampleSizeInBits());
+		CCAudioOutput out = getAudioOutput(samples.getChannelCount(), bufferSize, format.getSampleRate(), format.getSampleSizeInBits());
+		
 		if (out != null) {
 			CCSampleSignal ssig = new CCSampleSignal(samples);
 			out.setAudioSignal(ssig);
@@ -317,10 +300,8 @@ public class CCSoundIO {
 			CCAudioMetaData meta = new CCAudioMetaData(Paths.get(samples.toString()), length, samples.getSampleCount());
 			return new CCAudioSample(meta, ssig, out);
 		} else {
-			error("Couldn't acquire an output.");
+			throw new CCSoundException("Couldn't acquire an output.");
 		}
-
-		return null;
 	}
 
 	/**
@@ -398,8 +379,7 @@ public class CCSoundIO {
 	 * 
 	 * @return an AudioSample that can be triggered to make sound
 	 */
-	public static CCAudioSample createSample(float[] leftSampleData, float[] rightSampleData, AudioFormat format,
-			int bufferSize) {
+	public static CCAudioSample createSample(float[] leftSampleData, float[] rightSampleData, AudioFormat format, int bufferSize) {
 		CCAudioSample sample = getAudioSample(leftSampleData, rightSampleData, format, bufferSize);
 		addSource(sample);
 		return sample;
@@ -480,11 +460,11 @@ public class CCSoundIO {
 			debug("Acquired AudioInputStream.\n" + "It is " + ais.getFrameLength() + " frames long.\n"
 					+ "Marking support: " + ais.markSupported());
 		} catch (IOException ioe) {
-			error("IOException: " + ioe.getMessage());
+			throw new CCSoundException("IOException", ioe);
 		} catch (UnsupportedAudioFileException uafe) {
-			error("Unsupported Audio File: " + uafe.getMessage());
+			throw new CCSoundException("Unsupported Audio File", uafe);
 		} catch (Exception e) {
-			error("Error invoking createInput on the file loader object: " + e.getMessage());
+			throw new CCSoundException("Error invoking createInput on the file loader object", e);
 		}
 		return ais;
 	}
@@ -517,7 +497,6 @@ public class CCSoundIO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	static private Map<String, Object> getID3Tags(Path thePath) {
 		debug("Getting the properties.");
 		Map<String, Object> props = new HashMap<String, Object>();
@@ -530,17 +509,17 @@ public class CCSoundIO {
 				TAudioFileFormat fileFormat = (TAudioFileFormat) baseFileFormat;
 				props = (Map<String, Object>) fileFormat.properties();
 				if (props.size() == 0) {
-					error("No file properties available for " + thePath + ".");
+					throw new CCSoundException("No file properties available for " + thePath + ".");
 				} else {
 					debug("File properties: " + props.toString());
 				}
 			}
 		} catch (UnsupportedAudioFileException e) {
-			error("Couldn't get the file format for " + thePath + ": " + e.getMessage());
+			throw new CCSoundException("Couldn't get the file format for " + thePath, e);
 		} catch (IOException e) {
-			error("Couldn't access " + thePath + ": " + e.getMessage());
+			throw new CCSoundException("Couldn't access " + thePath, e);
 		} catch (Exception e) {
-			error("Error invoking createInput on the file loader object: " + e.getMessage());
+			throw new CCSoundException("Error invoking createInput on the file loader object: " + e);
 		}
 
 		return props;
@@ -562,7 +541,7 @@ public class CCSoundIO {
 			}
 			ais.close();
 		} catch (Exception ioe) {
-			error("Error loading file into memory: " + ioe.getMessage());
+			throw new CCSoundException("Error loading file into memory", ioe);
 		}
 		debug("Needed to read " + toRead + " actually read " + totalRead);
 		samples.initFromByteArray(rawBytes, 0, totalRead, ais.getFormat());
@@ -615,7 +594,7 @@ public class CCSoundIO {
 				out.setAudioSignal(ssig);
 				return new CCAudioSample(meta, ssig, out);
 			} else {
-				error("Couldn't acquire an output.");
+				throw new CCSoundException("Couldn't acquire an output.");
 			}
 		}
 		return null;
@@ -743,7 +722,7 @@ public class CCSoundIO {
 		if (player != null) {
 			addSource(player);
 		} else {
-			error("Couldn't load the file " + filename);
+			throw new CCSoundException("Couldn't load the file " + filename);
 		}
 
 		return player;
@@ -916,10 +895,9 @@ public class CCSoundIO {
 		CCSampleRecorder rec = getSampleRecorder(source, fileName, buffered);
 		if (rec != null) {
 			return new CCAudioRecorder(source, rec);
-		} else {
-			error("Couldn't create an AudioRecorder for " + fileName + ".");
 		}
-		return null;
+		
+		throw new CCSoundException("Couldn't create an AudioRecorder for " + fileName + ".");
 	}
 
 	/**
@@ -999,10 +977,10 @@ public class CCSoundIO {
 						+ line.getFormat().toString() + "\n" + "TargetDataLine info is "
 						+ line.getLineInfo().toString());
 			} catch (Exception e) {
-				error("Error acquiring TargetDataLine: " + e.getMessage());
+				throw new CCSoundException("Error acquiring TargetDataLine", e);
 			}
 		} else {
-			error("Unable to return a TargetDataLine: unsupported format - " + format.toString());
+			throw new CCSoundException("Unable to return a TargetDataLine: unsupported format - " + format.toString());
 		}
 		return line;
 	}
@@ -1058,7 +1036,7 @@ public class CCSoundIO {
 		if (input != null) {
 			addSource(input);
 		} else {
-			error("Minim.getLineIn: attempt failed, could not secure an AudioInput.");
+			throw new CCSoundException("Minim.getLineIn: attempt failed, could not secure an AudioInput.");
 		}
 
 		return input;

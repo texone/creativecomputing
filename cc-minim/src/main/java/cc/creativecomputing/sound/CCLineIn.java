@@ -101,6 +101,7 @@ public class CCLineIn extends CCAudioSource {
 	 * When monitoring is enabled, you will be able to hear the audio that is
 	 * coming through the input.
 	 */
+	@SuppressWarnings("deprecation")
 	public void enableMonitoring() {
 		// make sure we don't make sound
 		if (hasControl(VOLUME)) {
@@ -121,6 +122,7 @@ public class CCLineIn extends CCAudioSource {
 	 * speakers. Otherwise: feedback.
 	 * 
 	 */
+	@SuppressWarnings("deprecation")
 	public void disableMonitoring() {
 		// make sure we don't make sound
 		if (hasControl(VOLUME)) {
