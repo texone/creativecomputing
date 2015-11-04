@@ -30,7 +30,9 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 			public void onChange(String theValue) {
 				try{
 					_myTriggerEvent = false;
-					_myTextField.setText(_myHandle.value());
+					if(!_myHandle.value().equals(_myTextField.getText())){
+						_myTextField.setText(_myHandle.value());
+					}
 				}catch(Exception e){
 					
 				}
@@ -56,6 +58,7 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
         String _myValue = theHandle.value();
         _myTextField = new JTextField(_myValue);
         CCUIStyler.styleTextField(_myTextField, 100);
+        _myTextField.setHorizontalAlignment(JTextField.LEFT);
         _myTextField.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
