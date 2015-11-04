@@ -1,5 +1,6 @@
 package cc.creativecomputing.graphics.font.text;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.font.CCFont;
 
 
@@ -23,6 +24,7 @@ public class CCText extends CCMultiFontText{
 	 * 
 	 * @param theText
 	 */
+	@CCProperty(name = "text")
 	public void text(final String theText) {
 		_myTextParts.get(0).text(theText);
 		breakText();
@@ -54,6 +56,7 @@ public class CCText extends CCMultiFontText{
 		return _myTextParts.get(0).size();
 	}
 
+	@CCProperty(name = "size", min = 0, max = 100)
 	public void size(double theSize) {
 		_myTextParts.get(0).size(theSize);
 	}
@@ -72,6 +75,7 @@ public class CCText extends CCMultiFontText{
 		_myTextParts.get(0).font(theFont, theSize);
 	}
 
+	@CCProperty(name = "leading", min = 0, max = 100)
 	public void leading(double theTextLeading) {
 		_myTextParts.get(0).leading(theTextLeading);
 	}
@@ -84,6 +88,7 @@ public class CCText extends CCMultiFontText{
 		return _myTextParts.get(0).descent();
 	}
 
+	@CCProperty(name = "spacing", min = 0, max = 100)
 	public void spacing(double theSpacing) {
 		_myTextParts.get(0).spacing(theSpacing);
 	}

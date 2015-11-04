@@ -13,6 +13,7 @@ package cc.creativecomputing.graphics.font.text;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -574,6 +575,7 @@ public class CCMultiFontText {
 	private double _myBlockWidth = 0;
 	private double _myBlockHeight = 0;
 
+	@CCProperty(name = "position")
 	protected CCVector3 _myPosition = new CCVector3();
 	
 	protected CCTextGrid _myTextGrid = new CCTextGrid();
@@ -644,7 +646,7 @@ public class CCMultiFontText {
 		breakText();
 	}
 
-	
+	@CCProperty(name = "align")
 	public void align(CCTextAlign theTextAlign) {
 		if(theTextAlign == _myTextAlign)return;
 		_myTextAlign = theTextAlign;
