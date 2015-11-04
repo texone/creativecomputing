@@ -15,7 +15,7 @@ public class CCGL2Application {
 	@CCProperty(name = "gl context")
 	private CCGL2Context _myGLContext;
 	@CCProperty(name = "synch")
-	private CCTimelineSynch _mySynch = new CCTimelineSynch();
+	private CCTimelineSynch _mySynch;
 	
 	@CCProperty(name = "app")
 	private CCGLAdapter<CCGraphics, CCGL2Context> _myAdapter;
@@ -27,6 +27,9 @@ public class CCGL2Application {
 		_myAnimator = new CCAnimator();
 		_myAnimator.framerate = 60;
 		_myAnimator.animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		
+		_mySynch = new CCTimelineSynch(_myAnimator);
+		
 		_myAnimator.listener().add(theGLAdapter);
 		
 		_myGLContext = new CCGL2Context(_myAnimator);
