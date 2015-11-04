@@ -30,8 +30,6 @@ import java.util.List;
 
 import javax.swing.JFileChooser;
 
-import cc.creativecomputing.core.logging.CCLog;
-
 /**
  * @author christianriekoff
  *
@@ -400,13 +398,10 @@ public class CCNIOUtil {
 	static public Path selectOutput(String theMessage, final String theFolder) {
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		CCLog.info("END RECORD file: ");
 		if (theFolder != null)
 			fileChooser.setCurrentDirectory(new File(theFolder));
-		CCLog.info("END RECORD file: ");
 
 		selectedPath = fileChooser.chosePath(theMessage);
-		CCLog.info("END RECORD file: ");
 		return selectedPath;
 	}
 
