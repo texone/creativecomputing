@@ -33,7 +33,7 @@ public class CCKleSignal{
 	public double value(CCSequenceElement theElement, double theGlobalPhase){
 		double myPhase = _cUseGlobalPhase ? theGlobalPhase : _myPhase;
 		double myResult = _mySignal.value(
-			(myPhase + _cModulation.modulation(theElement)) * _cFactor
+			(myPhase + _cModulation.modulation(theElement, -1, 1)) * _cFactor
 		);
 //		myResult *= _cAmountModulation.modulation(theElement, -1, 1);
 		return myResult;

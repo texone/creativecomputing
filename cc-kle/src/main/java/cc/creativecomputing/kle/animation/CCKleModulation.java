@@ -61,9 +61,9 @@ public class CCKleModulation {
 	private double scaleValue(double theMin, double theMax, double theValue, double theOffset){
 		if(theOffset < 0){
 			theOffset = -theOffset;
-			return CCMath.blend(theMin * theOffset, theMax * theOffset, theValue);
+			return CCMath.blend(theMax * theOffset, theMin * theOffset, theValue);
 		}
-		return CCMath.blend(theMax * theOffset, theMin * theOffset, theValue);
+		return CCMath.blend(theMin * theOffset, theMax * theOffset, theValue);
 	}
 	
 	public double offsetSum(){
@@ -91,8 +91,9 @@ public class CCKleModulation {
 		double myGlobalPhase = scaleValue(theMin, theMax, theElement.idBlend(), _cGlobalOffset);
 		double myRandomPhase = scaleValue(theMin, theMax, _myRandoms.get(theElement.id()), _cRandomOffset); 
 		double myXPhase = scaleValue(theMin, theMax, theElement.xBlend(), _cXOffset); 
-		double myYPhase = scaleValue(theMin, theMax, theElement.motorSetup().relativeOffset().y, _cYOffset); 
+		double myYPhase = scaleValue(theMin, theMax, theElement.yBlend(), _cYOffset); 
 		double myModPhase = scaleValue(theMin, theMax, (theElement.id() % CCMath.max(1, _cMod)) / (double)(_cMod - 1), _cModOffset); 
+	
 		double myDivPhase = scaleValue(theMin, theMax, (int)((theElement.groupIDBlend() - 0.00001)   * _cDiv) / (double)(_cDiv - 1), _cDivOffset); 
 		double myGroupModPhase = scaleValue(theMin, theMax, (theElement.group() % _cGroupMod) / (double)(_cGroupMod - 1), _cGroupModOffset); 
 		double myGroupDivPhase = scaleValue(theMin, theMax, (int)((theElement.groupBlend() - 0.00001)   * _cGroupDiv) / (double)(_cGroupDiv - 1), _cGroupDivOffset); 

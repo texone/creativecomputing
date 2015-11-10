@@ -56,6 +56,8 @@ public class CCKleMotionModulation {
 	}
 	
 	public double modulation(CCSequenceElement theElement, double theMin, double theMax) {
+		if(theElement.motorSetup() == null)return 0;
+		
 		CCMotorSetup mySetup = theElement.motorSetup();
 //		T4ElementInfo myInfo = theElement.elementInfo();
 		double myXPhase = scaleValue(theMin, theMax, mySetup.relativeOffset().x, _cXOffset);
