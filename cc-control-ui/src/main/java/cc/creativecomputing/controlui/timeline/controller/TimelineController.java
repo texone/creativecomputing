@@ -529,13 +529,13 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	public void closeGroups(){
 		for(Path myPath:_myGroupOrder){
 			GroupTrackController myGroupTrackController = _myGrouptrackControllerMap.get(myPath);
-			myGroupTrackController.closeGroup();
+			myGroupTrackController.closeGroup(false);
 		}
 	}
 	
 	public void openGroups(){
 		for(GroupTrackController myGroupTrackController:_myGrouptrackControllerMap.values()){
-			myGroupTrackController.openGroup();
+			myGroupTrackController.openGroup(false);
 		}
 	}
 	

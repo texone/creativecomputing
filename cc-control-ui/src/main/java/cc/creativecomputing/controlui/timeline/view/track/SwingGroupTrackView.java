@@ -145,17 +145,9 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 				boolean _myPressedShift = (e.getModifiers() & ActionEvent.SHIFT_MASK) == ActionEvent.SHIFT_MASK;
 				
 				if(_myOpenButton.getText().equals("+")) {
-					if(_myPressedShift){
-						_myTimelineController.openGroups();
-					}else{
-						_myGroupController.openGroup();
-					}
+					_myGroupController.openGroup(_myPressedShift);
 				}else if(_myOpenButton.getText().equals("-")) {
-					if(_myPressedShift){
-						_myTimelineController.closeGroups();
-					}else{
-						_myGroupController.closeGroup();
-					}
+					_myGroupController.closeGroup(true);
 				}
 			}
 		});

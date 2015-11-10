@@ -94,12 +94,15 @@ public class GroupTrackController extends EventTrackController{
 		return _myTracks;
 	}
 	
-	public void closeGroup() {
+	public void closeGroup(boolean theCloseRecursive) {
 		if(!_myGroupTrack.isOpen())return;
-		synchronized(_myTracks){
-			for(TrackController myTrack:_myTracks){
-				if(myTrack instanceof GroupTrackController){
-					((GroupTrackController)myTrack).closeGroup();
+		
+		if(theCloseRecursive){
+			synchronized(_myTracks){
+				for(TrackController myTrack:_myTracks){
+					if(myTrack instanceof GroupTrackController){
+						((GroupTrackController)myTrack).closeGroup(theCloseRecursive);
+					}
 				}
 			}
 		}
@@ -107,15 +110,17 @@ public class GroupTrackController extends EventTrackController{
 		if(_myGroupTrackView!=null)_myGroupTrackView.closeGroup();
 	}
 	
-	public void openGroup() {
+	public void openGroup(boolean theOpenRecursive) {
 		if(_myGroupTrack.isOpen())return;
 		_myGroupTrack.isOpen(true);
 		if(_myGroupTrackView!=null)_myGroupTrackView.openGroup();
 
+		if(!theOpenRecursive)return;
+		
 		synchronized(_myTracks){
 			for(TrackController myTrack:_myTracks){
 				if(myTrack instanceof GroupTrackController){
-					((GroupTrackController)myTrack).openGroup();
+					((GroupTrackController)myTrack).openGroup(theOpenRecursive);
 				}
 			}
 		}
