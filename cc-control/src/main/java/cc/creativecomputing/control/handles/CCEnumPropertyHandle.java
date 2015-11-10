@@ -46,6 +46,24 @@ public class CCEnumPropertyHandle extends CCPropertyHandle<Enum<?>>{
 		return myResult;
 	}
 	
+	private Enum<?> enumForString(String theEnumString){
+		for(Enum<?> myEnumConstant :value().getDeclaringClass().getEnumConstants()){
+			if(myEnumConstant.name().equals(theEnumString)){
+				return myEnumConstant;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public void valueCasted(Object theValue, boolean theOverWrite) {
+		if(theValue instanceof String){
+			value(enumForString((String)theValue), theOverWrite);
+		}else{
+			super.valueCasted(theValue, theOverWrite);
+		}
+	}
+	
 	@Override
 	public void data(CCDataObject theData) {
 		String myName = theData.getString("value");
