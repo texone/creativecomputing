@@ -327,6 +327,7 @@ public class FileManager {
 	}
 	
 	public void loadProject(Path thePath) {
+		_myTimelineContainer.reset();
 		_mySerializer.loadProject(thePath);
 		UndoHistory.instance().clear();
 		_myEvents.proxy().onLoad(thePath);
