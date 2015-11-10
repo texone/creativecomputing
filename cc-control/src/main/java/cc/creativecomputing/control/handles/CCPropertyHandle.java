@@ -154,7 +154,11 @@ public abstract class CCPropertyHandle<Type>{
 	}
 	
 	public void onChange(){
-		_myEvents.proxy().onChange(value());
+		try{
+			_myEvents.proxy().onChange(value());
+		}catch(Exception e){
+			throw new RuntimeException("Problem with property:" + path() + ":" + name()+":" +value()+":" + value().getClass().getName()+":" + _myMember.value()+":" + _myMember.value().getClass().getName(), e);
+		}
 	}
 	
 	public void beginEdit(){

@@ -274,6 +274,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		
 		for(String myKey:theData.keySet()){
 			CCDataObject myData = theData.getObject(myKey);
+			if(myData == null)return;
 			String myName = myData.getString("name");
 			CCPropertyHandle myHandle = _myChildHandles.get(myName);
 
