@@ -172,8 +172,7 @@ public class SwingTimelineMenu extends JMenu{
 			
 			@Override
 			public void actionPerformed(ActionEvent theE) {
-				// TODO fix cut
-//				_myTimelineController.selectionController().cut();
+				_myTimelineContainer.activeTimeline().toolController().selectionController().cut();
 			}
 		});
 		myCutMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.META_MASK));
@@ -185,8 +184,7 @@ public class SwingTimelineMenu extends JMenu{
 			
 			@Override
 			public void actionPerformed(ActionEvent theE) {
-				// TODO fix copy
-//				_myTimelineController.selectionController().copy();
+				_myTimelineContainer.activeTimeline().toolController().selectionController().copy();
 			}
 		});
 		myCopyMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.META_MASK));
@@ -198,8 +196,7 @@ public class SwingTimelineMenu extends JMenu{
 			
 			@Override
 			public void actionPerformed(ActionEvent theE) {
-				// TODO fix insert
-//				_myTimelineController.selectionController().insert();
+				_myTimelineContainer.activeTimeline().toolController().selectionController().insert();
 			}
 		});
 		myPasteMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.META_MASK));
@@ -211,8 +208,7 @@ public class SwingTimelineMenu extends JMenu{
 			
 			@Override
 			public void actionPerformed(ActionEvent theE) {
-				// TODO fix replace
-//				_myTimelineController.selectionController().replace();
+				_myTimelineContainer.activeTimeline().toolController().selectionController().replace();
 			}
 		});
 		myReplaceMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.SHIFT_MASK | ActionEvent.META_MASK));
