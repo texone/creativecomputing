@@ -104,15 +104,12 @@ public class FileManager {
 		}
 		
 		private void loadTrack(CCDataObject theData, TimelineController theTimeline){
-			if(!theData.containsKey("type"))return;
+			CCLog.info(theData);
 			
-			switch(theData.getString("type")){
-			case GroupTrack.GROUP_TRACK_ELEMENT:
+			if(theData.containsKey("tracks")){
 				loadGroupTrack(theData, theTimeline);
-				break;
-			default:
+			}else{
 				loadDataTrack(theData, theTimeline);
-				break;
 			}
 		}
 		
