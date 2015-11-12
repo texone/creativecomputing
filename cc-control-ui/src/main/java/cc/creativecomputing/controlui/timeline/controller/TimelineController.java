@@ -424,21 +424,30 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	}
 	
 	public void removeTrack(Path thePath){
+		TrackController myRemoveController = null;
 		if(_myGrouptrackControllerMap.containsKey(thePath)){
 			GroupTrackController myController = _myGrouptrackControllerMap.remove(thePath);
+			myRemoveController = myController;
 			if(myController == _myRootController)_myRootController = null;
 			_myGroupOrder.remove(thePath);
 			_myTrackController.remove(myController);
 			_myTrackCount--;
-			for(TrackController myTrackController:myController.trackController()) {
+			for(TrackController myTrackController:new ArrayList<>(myController.trackController())) {
 				removeTrack(myTrackController.property().path());
 			}
 		}else if(_myTrackControllerMap.containsKey(thePath)){
 			TrackController myController = _myTrackControllerMap.remove(thePath);
+			myRemoveController = myController;
 			_myZoomController.removeZoomable(myController);
 			_myTrackController.remove(myController);
 			_myClipTrackHandles.remove(myController.property());
 			_myTrackCount--;
+		}
+		try{
+			GroupTrackController myParentController = _myGrouptrackControllerMap.get(thePath.getParent());
+			myParentController.removeTrack(myRemoveController);
+		}catch(Exception e){
+			
 		}
 		
 		if(_myView != null)_myView.removeTrack(thePath);

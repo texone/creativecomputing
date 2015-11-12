@@ -63,6 +63,13 @@ public class GroupTrackController extends EventTrackController{
 		_myGroupTrack.addTrack(theTrackController.track());
 	}
 	
+	public void removeTrack(TrackController theTrackController){
+		_myGroupTrack.tracks().remove(theTrackController.track());
+		synchronized(_myTracks){
+			if(_myTracks.contains(theTrackController))_myTracks.remove(theTrackController);
+		}
+	}
+	
 	@Override
 	public SwingGroupTrackView view() {
 		return _myGroupTrackView;
