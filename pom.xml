@@ -35,8 +35,8 @@
         <module>cc-gl-app</module>
         <module>cc-gl</module>
         <module>cc-kle</module>
-	<module>cc-midi</module>
-	<module>cc-serial</module>
+        <module>cc-midi</module>
+        <module>cc-serial</module>
         <module>cc-gl2.0</module>
         <module>cc-graphics</module>
         <module>cc-image</module>
@@ -44,7 +44,6 @@
         <module>cc-io</module>
         <module>cc-math</module>
         <module>cc-model</module>
-        <module>cc-native-util</module>
         <module>cc-minim</module>
         <module>cc-kinect</module>
         <module>cc-kinect-demo</module>
@@ -394,6 +393,10 @@
       <repository>
         <id>jogamp</id>
         <url>http://jogamp.org/deployment/maven</url>
+      </repository>
+      <repository>
+        <id>purejavacomm</id>
+        <url>http://www.sparetimelabs.com/maven2/</url>
       </repository>
       <repository>
         <id>creativecomputing-builds.googlecode.com</id>
