@@ -1,6 +1,6 @@
 package cc.creativecomputing.protocol.serial;
 
-import gnu.io.SerialPort;
+import purejavacomm.SerialPort;
 
 public enum CCSerialStopBit{
 	STOPBITS_1(SerialPort.STOPBITS_1),

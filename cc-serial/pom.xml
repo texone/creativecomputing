@@ -30,25 +30,14 @@
     </dependency>
     <dependency>
       <groupId>cc.creativecomputing</groupId>
-      <artifactId>cc-native-util</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-core</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>cc.deps.rxtx</groupId>
-      <artifactId>RXTXcomm</artifactId>
-      <version>2.2.2</version>
-    </dependency>
-    <dependency>
-      <groupId>cc.deps.rxtx</groupId>
-      <artifactId>RXTXcomm</artifactId>
-      <version>2.2.2</version>
-      <classifier>natives-${NATIVE_LIB_CLASSIFIER}</classifier>
-    </dependency>
+      <groupId>com.sparetimelabs</groupId>
+      <artifactId>purejavacomm</artifactId>
+      <version>0.0.28</version>
+   </dependency>
   </dependencies>
   
 </project>

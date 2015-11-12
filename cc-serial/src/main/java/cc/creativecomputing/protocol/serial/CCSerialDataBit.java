@@ -1,6 +1,6 @@
 package cc.creativecomputing.protocol.serial;
 
-import gnu.io.SerialPort;
+import purejavacomm.SerialPort;
 
 public enum CCSerialDataBit{
 	DATABITS_5(SerialPort.DATABITS_5),

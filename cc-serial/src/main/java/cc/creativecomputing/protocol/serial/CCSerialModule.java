@@ -10,19 +10,16 @@
  */
 package cc.creativecomputing.protocol.serial;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import purejavacomm.CommPortIdentifier;
+import purejavacomm.SerialPort;
 import cc.creativecomputing.app.modules.CCAbstractAppModule;
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.CCSelection.CCSelectionListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.nativeutil.CCNativeLibUtil;
 
 /**
  * <p>
@@ -112,15 +109,12 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 			_myInput = new CCSerialInput(_myListeners, _myPort);
 			_myOutput = new CCSerialOutput(_myPort);
 		} catch (Throwable e) {
-			throw new RuntimeException(e);
+//			throw new RuntimeException(e);
 		}
 	}
 	
 	@Override
 	public void start() {
-		
-		CCNativeLibUtil.prepareLibraryForLoading(SerialPort.class, "rxtxSerial");
-		
 		try {
 			Enumeration<?> portList = CommPortIdentifier.getPortIdentifiers();
 			while (portList.hasMoreElements()) {
@@ -163,7 +157,6 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 	 * @return list of all available serial ports.
 	 */
 	static public List<String> list() {
-		CCNativeLibUtil.prepareLibraryForLoading(SerialPort.class, "rxtxSerial");
 		List<String> myResult = new ArrayList<String>();
 		try {
 			Enumeration<?> myPorts = CommPortIdentifier.getPortIdentifiers();
@@ -186,5 +179,9 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 		for(String myPort:list()) {
 			System.out.println(myPort);
 		}
+	}
+	
+	public static void main(String[] args) {
+		printPorts();
 	}
 }

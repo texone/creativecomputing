@@ -1,10 +1,10 @@
 package cc.creativecomputing.protocol.serial;
 
-import gnu.io.SerialPort;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.TooManyListenersException;
+
+import purejavacomm.SerialPort;
 
 public class CCSerialOutput{
 	private SerialPort _myPort;

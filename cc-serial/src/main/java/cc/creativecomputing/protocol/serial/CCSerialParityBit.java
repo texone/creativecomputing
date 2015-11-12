@@ -1,6 +1,6 @@
 package cc.creativecomputing.protocol.serial;
 
-import gnu.io.SerialPort;
+import purejavacomm.SerialPort;
 
 public enum CCSerialParityBit{
 	EVEN(SerialPort.PARITY_EVEN),

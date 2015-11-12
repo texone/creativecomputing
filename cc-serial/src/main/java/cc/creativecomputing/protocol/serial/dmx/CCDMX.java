@@ -100,8 +100,8 @@ public class CCDMX implements CCSerialListener {
         _myMessage[2] = (byte)(myDataSize & 255);  
         _myMessage[3] = (byte)((myDataSize >> 8) & 255);
         _myMessage[4] = 0;
-        for (int i = 1; i <= _myUniverseSize; i++){
-            _myMessage[4 + i] = 0;
+        for (int i = 0; i < _myUniverseSize; i++){
+            _myMessage[5 + i] = 0;
         }
         _myMessage[_myUniverseSize + 5] = (byte)DMX_PRO_MESSAGE_END;
 	}
