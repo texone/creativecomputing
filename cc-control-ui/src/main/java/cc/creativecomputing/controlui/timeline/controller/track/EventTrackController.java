@@ -117,9 +117,8 @@ public class EventTrackController extends TrackController {
 	 */
 	@Override
 	public TimedEventPoint createPointImpl(ControlPoint theCurveCoords) {
-		double myBlend = CCMath.blend(_myTrack.minValue(), _myTrack.maxValue(), theCurveCoords.value());
+		double myBlend = theCurveCoords.value();
 		myBlend = CCMath.round(myBlend);
-		myBlend /= _myTrack.maxValue() - _myTrack.minValue();
 
 		TimedEventPoint myStartPoint = new TimedEventPoint(theCurveCoords.time(), myBlend);
 		return myStartPoint;
