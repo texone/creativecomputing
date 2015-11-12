@@ -82,6 +82,8 @@ public class SwingQuantizeMenu extends JMenu {
 		
 		add(createItem("RULER 1", new RulerBasedQuantizer(1)));
 		add(createItem("RULER 2", new RulerBasedQuantizer(2)));
+		add(createItem("RULER 4", new RulerBasedQuantizer(4)));
+		add(createItem("RULER 8", new RulerBasedQuantizer(8)));
 		add(createItem("RULER 5", new RulerBasedQuantizer(5)));
 		add(createItem("RULER 10", new RulerBasedQuantizer(10)));
 		add(createItem("RULER 20", new RulerBasedQuantizer(20)));
