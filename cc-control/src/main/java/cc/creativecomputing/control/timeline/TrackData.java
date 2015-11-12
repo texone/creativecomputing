@@ -173,11 +173,7 @@ public class TrackData extends TreeSet<ControlPoint>{
      * @return
      */
     public double getAccumulatedValue(double theTime) {
-    	return CCMath.blend(
-			_myTrack == null ? 0 : _myTrack.minValue(), 
-			_myTrack == null ? 1 : _myTrack.maxValue(), 
-			value(theTime)
-		);
+    	return value(theTime);
     }
 
 	public double value(double theTime) {

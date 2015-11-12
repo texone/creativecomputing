@@ -105,8 +105,8 @@ public class AccumulatedTrackData extends TrackData{
 			i == 0 ? 0 : 
 				_myAccumulatedValues[i - 1] + 
 				CCMath.blend(
-					_myTrack == null ? 0 : _myTrack.minValue(), 
-					_myTrack == null ? 1 : _myTrack.maxValue(), 
+					0, 
+					1, 
 					super.value(i * _myResolution)
 				);
 		}

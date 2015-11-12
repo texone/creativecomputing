@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataObject;
 
 public class Track extends AbstractTrack{
 
 	private TrackData _myTrackData;
-	
-    private double _myMinValue = 0;
-    private double _myMaxValue = 1;
     
     private boolean _myAccumulateData = false;
 	
@@ -50,19 +48,6 @@ public class Track extends AbstractTrack{
 		return _myAccumulateData;
 	}
 	
-    public void valueRange(double theMinValue, double theMaxValue) {
-        _myMinValue = theMinValue;
-        _myMaxValue = theMaxValue;
-    }
-    
-    public double minValue() {
-    	return _myMinValue;
-    }
-    
-    public double maxValue() {
-    	return _myMaxValue;
-    }
-	
 	public TrackData trackData() {
 		return _myTrackData;
 	}
@@ -87,25 +72,16 @@ public class Track extends AbstractTrack{
 	private static final String MUTE_ATTRIBUTE = "mute";
 	private static final String ACCUMULATE_ATTRIBUTE = "accumulate";
 	
-	protected static final String TYPE_ATTRIBUTE = "type";
-	private static final String MIN_ATTRIBUTE = "min";
-	private static final String MAX_ATTRIBUTE = "max";
-	
 	public CCDataObject data(double theStart, double theEnd) {
 		CCDataObject myTrackData = new CCDataObject();
 		myTrackData.put(PATH_ATTRIBUTE, _myProperty.path().toString());
 		myTrackData.put(MUTE_ATTRIBUTE, mute());
 		myTrackData.put(ACCUMULATE_ATTRIBUTE, accumulateData());
-			
-		myTrackData.put(TYPE_ATTRIBUTE, _myProperty.type().getName());
-		myTrackData.put(MIN_ATTRIBUTE, minValue());
-		myTrackData.put(MAX_ATTRIBUTE, maxValue());
-			
 		myTrackData.put(TrackData.TRACKDATA_ELEMENT, trackData().data(theStart, theEnd));
 		
 		
 		
-		if(_myExtras != null) {
+		if(_myExtras != null && _myExtras.size() > 0) {
 			CCDataObject myExtraData = new CCDataObject();
 			myTrackData.put(TRACK_EXTRAS, myExtraData);
 			for(String myKey:_myExtras.keySet()) {
@@ -116,11 +92,10 @@ public class Track extends AbstractTrack{
 	}
 	
 	public void data(CCDataObject theTrackData) {
+		CCLog.info(theTrackData + ":" + _myProperty.path());
 //		setAddress(theTrackData.getString(ADDRESS_ATTRIBUTE));
 		mute(theTrackData.getBoolean(MUTE_ATTRIBUTE));
 		accumulateData(theTrackData.getBoolean(ACCUMULATE_ATTRIBUTE, false));
-//		trackType(TrackType.valueOf(theTrackData.getString(TYPE_ATTRIBUTE)));
-		valueRange(theTrackData.getDouble(MIN_ATTRIBUTE), theTrackData.getDouble(MAX_ATTRIBUTE));
 		
 		CCDataObject myTrackData = theTrackData.getObject(TrackData.TRACKDATA_ELEMENT);
 //		TrackData myTrackData;

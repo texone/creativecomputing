@@ -41,7 +41,6 @@ public class GroupTrack extends Track{
 	
 	public CCDataObject data(double theStart, double theEnd) {
 		CCDataObject myTrackData = super.data(theStart, theEnd);
-		myTrackData.put(TYPE_ATTRIBUTE,GROUP_TRACK_ELEMENT);
 		myTrackData.put(GROUP_PATH_ATTRIBUTE, path().toString());
 		myTrackData.put(GROUP_OPEN_ATTRIBUTE, isOpen());
 			
