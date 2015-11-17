@@ -16,7 +16,6 @@ import cc.creativecomputing.controlui.timeline.controller.track.CurveTrackContro
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
@@ -120,7 +119,6 @@ public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
 		);
         Point2D p1 = theView.controller().curveToViewSpace(new ControlPoint(myMinPoint.time(), myMinPoint.value()), theStartTime);
 
-        CCLog.info(myMinPoint + ":" + p1);
         GeneralPath myPath = new GeneralPath();
         myPath.moveTo(p1.getX(), p1.getY());
         
@@ -160,8 +158,6 @@ public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
 		if(theTimedEvent.content() == null || theTimedEvent.content().value() == null) {
 			return;
 		}
-		
-		CCLog.info("draw object");
 		
 		TimelineController myTimelineController =_myClipTrack.timelineController(theTimedEvent.content().value().toString());
 		myTimelineController.view();

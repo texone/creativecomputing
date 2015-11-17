@@ -19,6 +19,8 @@
  */
 package cc.creativecomputing.controlui.timeline.view;
 
+import java.awt.Component;
+import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -27,6 +29,7 @@ import javax.swing.JPopupMenu;
 
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
+import cc.creativecomputing.core.logging.CCLog;
 
 
 public  class SwingEventPopup extends JPopupMenu {

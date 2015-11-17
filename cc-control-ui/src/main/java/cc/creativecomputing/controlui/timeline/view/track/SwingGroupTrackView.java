@@ -51,7 +51,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 				
 				@Override
 				public void actionPerformed(ActionEvent theE) {
-					_myTimelineController.removeTrack(_myGroupController.property().path());
+					_myTimelineController.removeTrack(_myGroupController.track().path());
 				}
 			});
 			add(myRemoveItem);
@@ -130,7 +130,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 		setMinimumSize(new Dimension( 100, 20));
 		setPreferredSize(new Dimension(100,20));
 
-		add( Box.createHorizontalStrut((theGroupController.property().path().getNameCount() - 1) * 5));
+		add( Box.createHorizontalStrut((theGroupController.track().path().getNameCount() - 1) * 5));
 		_myOpenButton = new JButton("-");
 		_myOpenButton.setBackground(Color.WHITE);
 		_myOpenButton.setForeground(Color.BLACK);
@@ -154,7 +154,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 		
 		add(_myOpenButton);
 		
-		_myAddressField = new JLabel(theGroupController.property().path().getFileName().toString());
+		_myAddressField = new JLabel(theGroupController.track().path().getFileName().toString());
 		_myAddressField.setPreferredSize(new Dimension(100,15));
 		_myAddressField.setFont(SwingGuiConstants.ARIAL_BOLD_10);
 		_myAddressField.setForeground(Color.WHITE);

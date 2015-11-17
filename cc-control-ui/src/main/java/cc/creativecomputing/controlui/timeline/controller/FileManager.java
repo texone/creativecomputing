@@ -114,14 +114,12 @@ public class FileManager {
 		}
 		
 		private void loadTracks(CCDataObject theTimelineData, TimelineController theTimeline){
-			CCDataObject myTimelineData = theTimelineData.getObject(TIMELINE_ELEMENT);
-			loadTrack(myTimelineData, theTimeline);
+			loadTrack(theTimelineData, theTimeline);
 		}
 		
 		private void loadTimeline(CCDataObject myTimelineData, TimelineController theTimelineController){
 			CCDataObject myTransportData = myTimelineData.getObject(TRANSPORT_ELEMENT);
 			loadTransport(myTransportData, theTimelineController.transportController());
-				
 				
 			if (myTimelineData.containsKey(LOWER_BOUND_ATTRIBUTE)) {
 				theTimelineController.zoomController().setLowerBound(myTimelineData.getDouble(LOWER_BOUND_ATTRIBUTE));
@@ -132,7 +130,15 @@ public class FileManager {
 			}
 			theTimelineController.resetClipTracks();
 			if(myTimelineData.containsKey(TIMELINE_ELEMENT)){
-				loadTracks(myTimelineData, theTimelineController);
+				Object myTimelineObj = myTimelineData.get(TIMELINE_ELEMENT);
+				if(myTimelineObj instanceof CCDataObject){
+					loadTracks((CCDataObject)myTimelineObj, theTimelineController);
+				}else{
+					CCDataArray myDataArray = (CCDataArray)myTimelineObj;
+					for(int i = 0; i < myDataArray.size();i++){
+						loadTracks(myDataArray.getObject(i), theTimelineController);
+					}
+				}
 			}
 		}
 		
@@ -209,12 +215,18 @@ public class FileManager {
 			}
 			
 			myTimelineData.put(TRANSPORT_ELEMENT, createTransportData(theTimelineController.transportController(), myStart, myEnd));
-			
+
+			CCDataArray myTracksData= new CCDataArray();
 			GroupTrackController myRootController = theTimelineController.rootController();
-			CCLog.info("myRootController:" + myRootController);
-			if(myRootController == null)return myTimelineData;
-			
-			myTimelineData.put(TIMELINE_ELEMENT, myRootController.groupTrack().data(myStart, myEnd));
+			if(myRootController != null){
+				myTracksData.add(myRootController.groupTrack().data(myStart, myEnd));
+			}
+			GroupTrackController myClipController = theTimelineController.clipController();
+			if(myClipController != null){
+				myTracksData.add(myClipController.groupTrack().data(myStart, myEnd));
+			}
+
+			myTimelineData.put(TIMELINE_ELEMENT, myTracksData);
 			
 			return myTimelineData;
 		}

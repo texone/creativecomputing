@@ -63,7 +63,13 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 			
 			@Override
 			public void actionPerformed(ActionEvent theE) {
-				Path myPath = CCNIOUtil.selectInput("");
+				Path myOldPath = _myHandle.value();
+				Path myPath;
+				if(myOldPath != null && myOldPath.getParent() != null){
+					myPath = CCNIOUtil.selectInput("", myOldPath);
+				}else{
+					myPath = CCNIOUtil.selectInput("");
+				}
 				if(myPath == null)return;
 				_myHandle.value(myPath, !_myIsInEdit);
 				_myTextField.setText(myPath.toString());

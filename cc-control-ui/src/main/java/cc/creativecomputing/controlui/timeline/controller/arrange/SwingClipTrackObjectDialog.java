@@ -1,6 +1,8 @@
 package cc.creativecomputing.controlui.timeline.controller.arrange;
 
 import java.awt.Dimension;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -25,6 +27,7 @@ import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.Time
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.core.logging.CCLog;
 
 public class SwingClipTrackObjectDialog extends JDialog implements ActionListener, PropertyChangeListener {
 	/**
@@ -63,7 +66,7 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 		});
 
 		_myPanel = new JPanel();
-		_myPanel.setPreferredSize(new Dimension(300,300));
+		_myPanel.setPreferredSize(new Dimension(200,100));
 		createTimelineCombo();
 		// Make this dialog display it.
 		setContentPane(_myPanel);
@@ -83,7 +86,7 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 			}
 		});
 
-		
+		pack();
 	}
 	
 	private TimedEventPoint _myEventPoint;
@@ -92,6 +95,8 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 	public void edit(EventTrackController theController, TimedEventPoint theEventPoint){
 		_myEventPoint = theEventPoint;
 		_myController = theController;
+		Point myLoc = MouseInfo.getPointerInfo().getLocation();
+		setLocation(myLoc.x, myLoc.y);
 		setVisible(true);
 	}
 	

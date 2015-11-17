@@ -66,6 +66,7 @@ public class EventTrackController extends TrackController {
 		GroupTrackController theParent
 	) {
 		super(theTimelineController, theToolController, theTrack, theParent);
+		if(theTrack.property() == null)return;
 		
 		theTrack.property().events().add(new CCPropertyListener() {
 
@@ -384,14 +385,14 @@ public class EventTrackController extends TrackController {
 	@Override
 	public void timeImplementation(double theTime, double theValue) {
 		TimedEventPoint myEventPoint = pointAt(theTime);
+		
     	if(myEventPoint == null || myEventPoint.content() == null || myEventPoint.content().value() == null){
     		_myTrack.property().restore();
     		_myEventTrackListener.proxy().onOut();
     		return;
     	}
-    	
+
     	_myTrack.property().valueCasted(myEventPoint.content().value(), false);
-    	
     	_myEventTrackListener.proxy().onTime(theTime, this, myEventPoint);
 
 //    	for (TimelineListener myListener : _myTimelineListener) {

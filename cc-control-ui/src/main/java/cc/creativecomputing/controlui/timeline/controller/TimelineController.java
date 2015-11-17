@@ -56,7 +56,6 @@ import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 
@@ -69,6 +68,7 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	private TransportController _myTransportController;
 	
 	private GroupTrackController _myRootController;
+	private GroupTrackController _myClipController;
 	private Map<Path, GroupTrackController> _myGrouptrackControllerMap = new HashMap<>();
 	private List<Path> _myGroupOrder = new ArrayList<>();
 	private SwingTimelineView _myView;
@@ -162,6 +162,10 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		return _myRootController;
 	}
 	
+	public GroupTrackController clipController(){
+		return _myClipController;
+	}
+	
 	public void insertTime(){
 		double myLowerBound = _myTransportController.loopStart();
 		double myUpperBound = _myTransportController.loopEnd();
@@ -216,13 +220,9 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		return _myTrackControllerMap.get(thePath);
 	}
 	
-
-	
 	public GroupTrackController createGroupController(CCObjectPropertyHandle theProperty) {
 		if(theProperty.parent() != null){
 			createGroupController(theProperty.parent());
-		}else{
-			
 		}
 		GroupTrackController myResult = group(theProperty.path());
 		
@@ -263,6 +263,7 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		
 		_myTrackCount++;
 		
+		
 		if(theProperty.parent() == null){
 			_myRootController = myResult;
 		}
@@ -294,11 +295,40 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	
 	private List<CCPropertyHandle<?>> _myClipTrackHandles = new ArrayList<CCPropertyHandle<?>>();
 	
+	public GroupTrackController createClipGroup(Path thePath){
+		GroupTrack myGroupTrack = new GroupTrack(thePath);
+		Map<String, String> myExtraMap = new HashMap<>();
+		myExtraMap.put(EventTrackController.EVENT_TYPES,"new");
+		myGroupTrack.extras(myExtraMap);
+//		myGroupTrack.color(CCColorMap.getColor(theProperty.path()));
+		myGroupTrack.isOpen(true);
+		
+		GroupTrackController myResult = new GroupTrackController(this, _myToolController, myGroupTrack);
+		_myGrouptrackControllerMap.put(thePath, myResult);
+		_myGroupOrder.add(thePath);
+		_myTrackController.add(myResult);
+		
+		openGroups();
+		
+		if(_myView != null){
+			SwingGroupTrackView myGroupView = _myView.addGroupTrack(_myTrackCount, myResult);
+			myGroupView.color(myGroupTrack.color());
+			
+			myResult.view(myGroupView);
+		}
+		
+		_myTrackCount++;
+
+		_myZoomController.addZoomable(myResult);
+		return myResult;
+	}
+	
 	public TrackController createClipTrack(Path thePath){
+		if(_myClipController == null)_myClipController = createClipGroup(Paths.get("clip arrange"));
+		
 		CCClipTrackObject myClipTrackObject = new CCClipTrackObject(_myTimelineContainer);
 		CCObjectPropertyHandle myParent = new CCObjectPropertyHandle(myClipTrackObject);
 		myParent.path(Paths.get("clip arrange"));
-		createGroupController(myParent);
 		
 		CCPropertyHandle<?> myProperty = myParent.property("trackID");
 		_myClipTrackHandles.add(myProperty);
@@ -310,7 +340,15 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 			public void onProperties(EventTrackController theController, TimedEventPoint thePoint) {
 				_myView.openClipTrackDialog(theController, thePoint);
 			}
+			
+			@Override
+			public void onTime(double theTime,
+					EventTrackController theController, TimedEventPoint thePoint) {
+				// TODO Auto-generated method stub
+				super.onTime(theTime, theController, thePoint);
+			}
 		});
+		_myClipController.addTrack(myEventController);
 		return myEventController;
 	}
 	
@@ -489,7 +527,6 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	private void insertTrackData(double theInsertTime, double theMaxTime, Track theTrack){
 		TrackController myController = _myTrackControllerMap.get(theTrack.property().path());
 		if(myController == null){
-			CCLog.info("INSERT TIME:" + theTrack.property().path().toString());
 			return;
 		}
 		myController.trackData().insertAll(theInsertTime, theMaxTime, theTrack.trackData().rangeList(0));
@@ -514,10 +551,8 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		
 		
 		for (AbstractTrack myAbstractTrack : theTracks) {
-			CCLog.info(myAbstractTrack);
 			if(myAbstractTrack instanceof GroupTrack) {
 				for(Track myTrack:((GroupTrack)myAbstractTrack).tracks()) {
-					CCLog.info(myTrack.property().path().toString());
 					insertTrackData(myInsertTime, myMaxTime, myTrack);
 				}
 			}else if(myAbstractTrack instanceof Track) {
@@ -596,6 +631,13 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	public void time(double theTime) {
 		for(CCPropertyHandle<?> myHandle:new ArrayList<>(_myClipTrackHandles)){
 			myHandle.update(0);
+		}
+		if(_myClipController != null){
+			_myClipController.time(theTime);
+//			for(TrackController myYO:_myClipController.trackController()){
+//				CCLog.info(myYO.trackData().size());
+//				myYO.time(theTime);
+//			}
 		}
 		if(_myRootController != null)_myRootController.time(theTime);
 	}
