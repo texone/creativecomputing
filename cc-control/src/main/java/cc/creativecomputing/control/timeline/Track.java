@@ -74,12 +74,10 @@ public class Track extends AbstractTrack{
 	
 	public CCDataObject data(double theStart, double theEnd) {
 		CCDataObject myTrackData = new CCDataObject();
-		myTrackData.put(PATH_ATTRIBUTE, _myProperty.path().toString());
+		myTrackData.put(PATH_ATTRIBUTE, path().toString());
 		myTrackData.put(MUTE_ATTRIBUTE, mute());
 		myTrackData.put(ACCUMULATE_ATTRIBUTE, accumulateData());
 		myTrackData.put(TrackData.TRACKDATA_ELEMENT, trackData().data(theStart, theEnd));
-		
-		
 		
 		if(_myExtras != null && _myExtras.size() > 0) {
 			CCDataObject myExtraData = new CCDataObject();

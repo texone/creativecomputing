@@ -1,5 +1,6 @@
 package cc.creativecomputing.control.timeline;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,21 @@ public class GroupTrack extends Track{
 		super(theObjectPropertyHandle);
 		_myTracks = new ArrayList<Track>();
 		_myIsOpen = true;
+	}
+	
+	private Path _myPath;
+	
+	public GroupTrack(Path thePath){
+		super(null);
+		_myPath = thePath;
+		_myTracks = new ArrayList<Track>();
+		_myIsOpen = true;
+	}
+	
+	@Override
+	public Path path() {
+		if(_myPath == null)return super.path();
+		return _myPath;
 	}
 	
 	public List<Track> tracks(){
