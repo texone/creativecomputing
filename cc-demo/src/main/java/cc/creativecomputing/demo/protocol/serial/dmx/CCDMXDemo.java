@@ -1,5 +1,9 @@
 package cc.creativecomputing.demo.protocol.serial.dmx;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.control.CCEnvelope;
@@ -25,10 +29,20 @@ public class CCDMXDemo extends CCGL2Adapter{
 	@CCProperty(name = "dmx")
 	private CCDMX _myDMX;
 	
+	@CCProperty(name = "channel map")
+	private Map<String, Double> _myChannelMap = new LinkedHashMap<>();
+	
+	@Override
+	public void start(CCAnimator theAnimator) {
+		_myDMX = new CCDMX();
+		for(int i = 0; i < 100;i++){
+			_myChannelMap.put("channel " + i, 0d);
+		}
+	}
+	
 	@Override
 	public void init(CCGraphics g) {
 
-		_myDMX = new CCDMX();
 		
 		_myControlApp = new CCControlApp(this, animator());
 //		for(CCRealtimeGraph myGraph:_myRealTimeGraph.instances()){
@@ -46,6 +60,10 @@ public class CCDMXDemo extends CCGL2Adapter{
 	
 	@Override
 	public void update(CCAnimator theAnimator) {
+		for(int i = 0; i < 100;i++){
+			_myDMX.setDMXChannel(i, 255);
+		}
+		_myDMX.send();
 	}
 	
 	@Override
