@@ -69,9 +69,19 @@ public class TimedEventPoint extends ControlPoint {
 	private TimedEventPointContent _myContent;
 	
 	private boolean _myIsSelected;
+	
+	private double _myContentOffset = 0;
 
 	public TimedEventPoint() {
 		super(ControlPointType.TIMED_EVENT);
+	}
+	
+	public double contentOffset(){
+		return _myContentOffset;
+	}
+	
+	public void contentOffset(double theContentOffset){
+		_myContentOffset = theContentOffset;
 	}
 
 	public TimedEventPoint(double theTime, double theValue) {
