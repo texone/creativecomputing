@@ -258,36 +258,6 @@ public class SwingRulerView extends SwingAbstractTrackView implements ChangeValu
 	private Color _myStepColor = new Color(0.8f, 0.8f, 0.8f);
 	private Color _mySubStepColor = new Color(0.9f, 0.9f, 0.9f);
 	
-	private String timeToString(double theTime) {
-		long myTime = (long)(theTime * 1000);
-		long myMillis = myTime % 1000;
-		myTime /= 1000;
-		long mySeconds = myTime % 60;
-		myTime /= 60;
-		long myMinutes = myTime % 60;
-		myTime /= 60;
-		long myHours = myTime;
-		
-		StringBuffer myResult = new StringBuffer();
-		if(myHours != 0) {
-			myResult.append(myHours);
-			myResult.append("h ");
-		}
-		if(myMinutes != 0) {
-			myResult.append(myMinutes);
-			myResult.append("min ");
-		}
-		if(mySeconds != 0) {
-			myResult.append(mySeconds);
-			myResult.append("s ");
-		}
-		if(myMillis != 0) {
-			myResult.append(myMillis);
-			myResult.append("ms ");
-		}
-		return myResult.toString();
-	}
-	
 	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D myG2 = (Graphics2D)g;
@@ -323,7 +293,7 @@ public class SwingRulerView extends SwingAbstractTrackView implements ChangeValu
 				g.drawLine(myX, 0, myX, getHeight() / 10);
 			}
 			
-			String myTimeString = timeToString(step);
+			String myTimeString = _myTransportController.timeToString(step);
 			
 			g.setFont(SwingGuiConstants.ARIAL_BOLD_10);
 	        g.setColor(_myTextColor);

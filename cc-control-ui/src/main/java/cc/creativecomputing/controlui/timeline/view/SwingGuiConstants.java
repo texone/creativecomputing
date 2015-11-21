@@ -36,6 +36,7 @@ public class SwingGuiConstants {
 	
 	public static boolean CREATE_MUTE_BUTTON = true;
 	public static boolean CREATE_SPEED_CONTROL = true;
+	public static boolean CREATE_BPM_CONTROL = true;
 	
 	public static boolean CREATE_EDIT_MENU = true;
 	public static boolean CREATE_UNDO_ENTRIES = true;

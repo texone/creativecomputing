@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -31,7 +32,7 @@ import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.math.CCMath;
 
 @SuppressWarnings("serial")
-public class SwingTransportView extends JPanel implements TransportView, ChangeValueListener, Zoomable{
+public class SwingTransportView extends JPanel implements TransportView, Zoomable{
 	
 	private class PlayButtonAction implements ActionListener {
 
@@ -59,9 +60,12 @@ public class SwingTransportView extends JPanel implements TransportView, ChangeV
 	private JButton _myPlayButton;
 	private JButton _myLoopButton;
 	
+	private JToggleButton _myShowBPMButton;
+	
 	private TimeField _myTimeField;
 	
 	private SwingDraggableValueBox _mySpeedValue;
+	private SwingDraggableValueBox _myBPMValue;
 	
 	private JSlider _mySlider;
 	
@@ -137,6 +141,15 @@ public class SwingTransportView extends JPanel implements TransportView, ChangeV
 		});
 		
 		createTimeField();
+		
+		_myShowBPMButton = createToggle("bpm");
+		_myShowBPMButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_myTimelineContainer.activeTimeline().transportController().useBeats(_myShowBPMButton.isSelected());
+			}
+		});
+		
 		createZoomSlider();
 		createTimelineCombo();
         
@@ -153,13 +166,35 @@ public class SwingTransportView extends JPanel implements TransportView, ChangeV
 		
 		if(SwingGuiConstants.CREATE_SPEED_CONTROL) {
 			_mySpeedValue = new SwingDraggableValueBox(1,0.1f,10,0.1f);
-			_mySpeedValue.addListener(this);
+			_mySpeedValue.addListener(new ChangeValueListener() {
+				
+				@Override
+				public void changeValue(double theValue) {
+					_myTimelineContainer.activeTimeline().transportController().speed(theValue);
+				}
+			});
 			CCUIStyler.styleTransportComponent(_mySpeedValue, 64, 20);
 			add(_mySpeedValue);
 			
 			JLabel mySpeedLabel = new JLabel("speed");
 			mySpeedLabel.setFont(SwingGuiConstants.ARIAL_11);
 			add(mySpeedLabel);
+		}
+		if(SwingGuiConstants.CREATE_SPEED_CONTROL){
+			_myBPMValue = new SwingDraggableValueBox(120,1,360,0.1f);
+			_myBPMValue.addListener(new ChangeValueListener() {
+				
+				@Override
+				public void changeValue(double theValue) {
+					_myTimelineContainer.activeTimeline().transportController().bpm(theValue);
+				}
+			});
+			CCUIStyler.styleTransportComponent(_myBPMValue, 64, 20);
+			add(_myBPMValue);
+			
+			JLabel myBPMLabel = new JLabel("bpm");
+			myBPMLabel.setFont(SwingGuiConstants.ARIAL_11);
+			add(myBPMLabel);
 		}
 	}
 	
@@ -243,13 +278,16 @@ public class SwingTransportView extends JPanel implements TransportView, ChangeV
 		add(myPButton);
 		return myPButton;
 	}
+	
+	private JToggleButton createToggle(String theText){
+		JToggleButton myPButton = new JToggleButton(theText);
+		CCUIStyler.styleTransportComponent(myPButton, 64, 20);
+		add(myPButton);
+		return myPButton;
+	}
 
 	public void speed(double theSpeed){
 		if(_mySpeedValue != null)_mySpeedValue.value(theSpeed);
-	}
-	
-	public void changeValue(double theValue) {
-		_myTimelineContainer.activeTimeline().transportController().speed(theValue);	
 	}
 	
 	/* (non-Javadoc)

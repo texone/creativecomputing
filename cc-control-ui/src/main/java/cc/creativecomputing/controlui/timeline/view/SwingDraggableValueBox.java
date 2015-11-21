@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JTextField;
 
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackControlView;
+import cc.creativecomputing.core.util.CCFormatUtil;
 
 
 public class SwingDraggableValueBox extends JTextField implements MouseListener, MouseMotionListener{
@@ -37,7 +38,7 @@ public class SwingDraggableValueBox extends JTextField implements MouseListener,
 		_myStep = (int)((theValue - theMin)/theStepSize);
 		_myMaxSteps = (int)((theMax - theMin)/theStepSize) + 1;
 		_myStepSize = theStepSize;
-		setEditable(false);
+		setEditable(true);
 		setHorizontalAlignment(JTextField.RIGHT);
 		
 		addMouseListener(this);
@@ -71,7 +72,7 @@ public class SwingDraggableValueBox extends JTextField implements MouseListener,
 			myListener.changeValue(myValue);
 		}
 		
-		setText(SwingTrackControlView.VALUE_FORMAT.format(myValue) + "");
+		setText(CCFormatUtil.nd(myValue, 2));
 	}
 	
 	public void value(double theValue){
