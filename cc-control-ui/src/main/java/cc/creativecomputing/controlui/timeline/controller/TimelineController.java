@@ -334,6 +334,7 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		_myClipTrackHandles.add(myProperty);
 		myProperty.path(thePath);
 		EventTrackController myEventController = (EventTrackController)createController(myProperty, myClipTrackObject);
+		myEventController.splitDrag(true);
 		myEventController.events().add(myClipTrackObject);
 		myEventController.events().add(new EventTrackAdapter() {
 			@Override
@@ -342,8 +343,7 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 			}
 			
 			@Override
-			public void onTime(double theTime,
-					EventTrackController theController, TimedEventPoint thePoint) {
+			public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint) {
 				// TODO Auto-generated method stub
 				super.onTime(theTime, theController, thePoint);
 			}

@@ -39,6 +39,6 @@ public class CCClipTrackObject extends EventTrackAdapter{
 	@Override
 	public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint) {
 		if(_myTimelineController == null)return;
-		_myTimelineController.time(theTime - thePoint.time());
+		_myTimelineController.time(theTime - thePoint.time() - thePoint.contentOffset());
 	}
 }

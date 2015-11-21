@@ -27,7 +27,6 @@ import java.util.List;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.timeline.Track;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
 import cc.creativecomputing.control.timeline.point.ControlPoint.HandleType;
 import cc.creativecomputing.control.timeline.point.HandleControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
@@ -49,7 +48,18 @@ public class EventTrackController extends TrackController {
 	
 	public final static float MIN_EVENT_TIME = 0.0001f;
 	
-	private boolean _myDragBlock = false;
+	private static enum EventAction{
+		DRAG_START, 
+		DRAG_START_OFFSET,
+		DRAG_END, 
+		DRAG_END_OFFSET,
+		DRAG_BLOCK, 
+		DRAG_CONTENT
+	}
+	
+	private EventAction _myDragAction = EventAction.DRAG_START_OFFSET;
+	
+	private boolean _mySplitDrag = false;
 	
 	private CCListenerManager<EventTrackListener> _myEventTrackListener = CCListenerManager.create(EventTrackListener.class);
 
@@ -78,6 +88,10 @@ public class EventTrackController extends TrackController {
 				}
 			}
 		});
+	}
+	
+	public void splitDrag(boolean theSplitDrag){
+		_mySplitDrag = theSplitDrag;
 	}
 	
 	public CCListenerManager<EventTrackListener> events(){
@@ -184,6 +198,67 @@ public class EventTrackController extends TrackController {
         _myHasAdd = true;
         _myTrackView.render();
 	}
+	
+	private void dragStart(ControlPoint theDraggedPoint, ControlPoint theMousePoint){
+		TimedEventPoint myTimedEvent = (TimedEventPoint) theDraggedPoint;
+		
+		double myTime = _myTrackContext.quantize(theMousePoint).time();
+		HandleControlPoint myEnd = myTimedEvent.endPoint();
+		myTime = Math.min(myEnd.time() - MIN_EVENT_TIME, myTime);
+
+		TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint.getPrevious();
+		if(myLowerPoint != null) {
+			myTime = Math.max(myLowerPoint.endTime(), myTime);
+		}
+			
+		theMousePoint.time(myTime);
+		trackData().move(theDraggedPoint, theMousePoint);
+	}
+	
+	private void dragEndHandle(ControlPoint theDraggedPoint, ControlPoint theMousePoint){
+		HandleControlPoint myControlPoint = (HandleControlPoint)theDraggedPoint;
+		ControlPoint myStart = myControlPoint.parent();
+		
+		double myTime = Math.max(myStart.time() + MIN_EVENT_TIME, theMousePoint.time());
+
+		ControlPoint myHigherPoint = myStart.getNext();
+		if(myHigherPoint != null) {
+			myTime = Math.min(myHigherPoint.time(), myTime);
+		}
+		
+        theDraggedPoint.time(myTime);
+		theDraggedPoint.value(theMousePoint.value());
+	}
+	
+	private boolean dragBlock(ControlPoint theDraggedPoint, ControlPoint theMovement){
+		if(_myStartPoints == null)return false;
+		if(_myCurveCoords == null)return false;
+		
+		TimedEventPoint myTimedEvent = (TimedEventPoint) theDraggedPoint;
+		
+		double myMove = theMovement.time();
+		ControlPoint myMovedTarget = new ControlPoint(_myStartPoints.get(0).time() + myMove, 1.0);
+		double myEndOffset = myTimedEvent.endPoint().time() - myTimedEvent.time();
+
+		double myTime = _myTrackContext.quantize(myMovedTarget).time();
+		TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint.getPrevious();
+		if(myLowerPoint != null) {
+			myTime = Math.max(myLowerPoint.endTime(), myTime);
+		}
+		ControlPoint myHigherPoint = theDraggedPoint.getNext();
+		if(myHigherPoint != null) {
+			myTime = Math.min(myHigherPoint.time(), myTime + myEndOffset) - myEndOffset;
+		}
+		myTime = Math.max(0, myTime);
+		
+		myMovedTarget.time(myTime);
+		
+		trackData().move(theDraggedPoint, myMovedTarget);
+		
+		myTimedEvent.endPoint().time(myTimedEvent.time() + myEndOffset);
+		
+		return true;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -192,68 +267,45 @@ public class EventTrackController extends TrackController {
 	 */
 	@Override
 	public void dragPointImp(ControlPoint theDraggedPoint, ControlPoint myTargetPosition, ControlPoint theMovement, boolean theIsPressedShift) {
-		ControlPoint myPoint = _myTrackContext.quantize(myTargetPosition);
-		
-		if (theDraggedPoint.getType().equals(ControlPointType.HANDLE)) {
-            // first get next point:
+		ControlPoint myMousePoint = _myTrackContext.quantize(myTargetPosition);
 			
-			HandleControlPoint myControlPoint = (HandleControlPoint)theDraggedPoint;
-			ControlPoint myStart = myControlPoint.parent();
-			
-			double myTime = Math.max(myStart.time() + MIN_EVENT_TIME, myPoint.time());
-
-			ControlPoint myHigherPoint = myStart.getNext();
-			if(myHigherPoint != null) {
-				myTime = Math.min(myHigherPoint.time(), myTime);
+		switch(_myDragAction){
+		case DRAG_BLOCK:
+			if(!dragBlock(theDraggedPoint, theMovement))return;
+			break;
+		case DRAG_START:
+			dragStart(theDraggedPoint, myMousePoint);
+			break;
+		case DRAG_END:
+			dragEndHandle(theDraggedPoint, myMousePoint);
+			break;
+		case DRAG_START_OFFSET:
+			dragStart(theDraggedPoint, myMousePoint);
+			if(theDraggedPoint != null && theDraggedPoint instanceof TimedEventPoint){
+				TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint;
+				double myTime = _myTrackContext.quantize(theMovement.time());
+				myLowerPoint.contentOffset(_myLastOffset - myTime);
 			}
-			
-            theDraggedPoint.time(myTime);
-			theDraggedPoint.value(myPoint.value());
-			
-			_myEventTrackListener.proxy().onChange(this, _myEditedEvent);
-		}else {
-			TimedEventPoint myTimedStartPoint = (TimedEventPoint) theDraggedPoint;
-			
-			if(_myDragBlock) {
-				if(_myStartPoints == null)return;
-				if(_myCurveCoords == null)return;
-				
-				double myMove = theMovement.time();
-				ControlPoint myMovedTarget = new ControlPoint(_myStartPoints.get(0).time() + myMove, 1.0);
-				double myEndOffset = myTimedStartPoint.endPoint().time() - myTimedStartPoint.time();
+			break;
+		case DRAG_END_OFFSET:
+			dragEndHandle(theDraggedPoint, myMousePoint);
+			if(theDraggedPoint != null && theDraggedPoint instanceof HandleControlPoint){
 
-				double myTime = _myTrackContext.quantize(myMovedTarget).time();
-				TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint.getPrevious();
-				if(myLowerPoint != null) {
-					myTime = Math.max(myLowerPoint.endTime(), myTime);
-				}
-				ControlPoint myHigherPoint = theDraggedPoint.getNext();
-				if(myHigherPoint != null) {
-					myTime = Math.min(myHigherPoint.time(), myTime + myEndOffset) - myEndOffset;
-				}
-				myTime = Math.max(0, myTime);
-				
-				myMovedTarget.time(myTime);
-				
-				trackData().move(theDraggedPoint, myMovedTarget);
-				
-				myTimedStartPoint.endPoint().time(myTimedStartPoint.time() + myEndOffset);
-			}else {
-				double myTime = _myTrackContext.quantize(myPoint).time();
-				HandleControlPoint myEnd = myTimedStartPoint.endPoint();
-				myTime = Math.min(myEnd.time() - MIN_EVENT_TIME, myTime);
-
-				TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint.getPrevious();
-				if(myLowerPoint != null) {
-					myTime = Math.max(myLowerPoint.endTime(), myTime);
-				}
-				
-				myPoint.time(myTime);
-				trackData().move(theDraggedPoint, myPoint);
-				_myEventTrackListener.proxy().onChange(this, _myEditedEvent);
+				HandleControlPoint myControlPoint = (HandleControlPoint)theDraggedPoint;
+				TimedEventPoint myLowerPoint = (TimedEventPoint)(myControlPoint.parent());
+				double myTime = _myTrackContext.quantize(theMovement.time());
+				myLowerPoint.contentOffset(_myLastOffset + myTime);
 			}
-//			viewValue(_myTrack.property());
+			break;
+		case DRAG_CONTENT:
+			if(theDraggedPoint != null && theDraggedPoint instanceof TimedEventPoint){
+				TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint;
+				double myTime = _myTrackContext.quantize(theMovement.time());
+				myLowerPoint.contentOffset(_myLastOffset + myTime);
+			}
+			break;
 		}
+		_myEventTrackListener.proxy().onChange(this, _myEditedEvent);
 	}
 	
 	public TimedEventPoint pointAt(double theTime) {
@@ -278,6 +330,8 @@ public class EventTrackController extends TrackController {
 	private double _myStartEnd;
 	private ControlPoint _myCurveCoords;
 	
+	private double _myLastOffset = 0;
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		_myMouseStartX = e.getX();
@@ -285,15 +339,18 @@ public class EventTrackController extends TrackController {
 				
 		Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
 		_myCurveCoords = viewToCurveSpace(myViewCoords, true);
+		
+		boolean mySwitchAction = _mySplitDrag && _myCurveCoords.value() > 0.5;
 			 
 		if (e.isAltDown()) {
 			_myTrackContext.zoomController().startDrag(myViewCoords);
 			return;
 		}
 		
+		
+		
 		ControlPoint myControlPoint = pickNearestPoint(myViewCoords);
 		HandleControlPoint myHandle = pickHandle(myViewCoords);
-		_myDragBlock = false;
 		
 		_myEditedEvent = null;
 		
@@ -301,10 +358,20 @@ public class EventTrackController extends TrackController {
 			_myDraggedPoints = new ArrayList<ControlPoint>();
 			_myDraggedPoints.add(myHandle);
 			_myEditedEvent = (TimedEventPoint)myHandle.parent();
+			if(!(_mySplitDrag && _myCurveCoords.value() < 0.5)){
+				_myDragAction = EventAction.DRAG_END;
+			}else{
+				_myDragAction = EventAction.DRAG_END_OFFSET;
+			}
 		} else if (myControlPoint != null  && distance(myControlPoint, myViewCoords) < SwingTrackView.PICK_RADIUS){
 			_myDraggedPoints = new ArrayList<ControlPoint>();
 			_myDraggedPoints.add(myControlPoint);
 			_myEditedEvent = (TimedEventPoint)myControlPoint;
+			if(!mySwitchAction){
+				_myDragAction = EventAction.DRAG_START;
+			}else{
+				_myDragAction = EventAction.DRAG_START_OFFSET;
+			}
 		} else {
 			
 			TimedEventPoint myLower = (TimedEventPoint)trackData().lower(_myCurveCoords);
@@ -316,7 +383,13 @@ public class EventTrackController extends TrackController {
 					_myDraggedPoints = new ArrayList<ControlPoint>();
 					_myDraggedPoints.add(myLower);
 					_myEditedEvent = (TimedEventPoint)myLower;
-					_myDragBlock = true;
+					if(!mySwitchAction){
+						_myDragAction = EventAction.DRAG_BLOCK;
+					}else{
+						_myLastOffset = myLower.contentOffset();
+						_myDragAction = EventAction.DRAG_CONTENT;
+					}
+					
 				}
 			}
 //			if(!_myDragBlock) {

@@ -23,6 +23,10 @@ public abstract class EventTrackAdapter implements EventTrackListener{
 	public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint) {}
 	
 	@Override
+	public void onTimeChange(double theTime, double theOffset, EventTrackController theController, TimedEventPoint thePoint) {}
+	
+	
+	@Override
 	public void onOut() {}
 
 }

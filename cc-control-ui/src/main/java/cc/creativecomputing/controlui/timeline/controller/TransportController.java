@@ -47,7 +47,7 @@ public class TransportController extends TrackDataController implements Zoomable
 		
 		private double _myInterval;
 		
-		public RulerInterval(float theMax, float theMin, float theInterval) {
+		public RulerInterval(double theMax, double theMin, double theInterval) {
 			_myMin = theMin;
 			_myMax = theMax;
 			_myInterval = theInterval;
@@ -112,6 +112,10 @@ public class TransportController extends TrackDataController implements Zoomable
 	
 	private RulerInterval _myInterval;
 	
+	private boolean _myUseBeats = false;
+	
+	private double _myBPM = 120;
+	
 	public TransportController(TimelineController theTimelineController) {
 		super(theTimelineController, null);
 		_myTimelineController = theTimelineController;
@@ -123,6 +127,12 @@ public class TransportController extends TrackDataController implements Zoomable
 		
 		_myInterval = new RulerInterval(Float.MAX_VALUE, 0f, 1f);
 		createIntervals();
+	}
+	
+	public void useBeats(boolean theUseBeats){
+		_myUseBeats = theUseBeats;
+		createIntervals();
+		_myInterval = currentInterval();
 	}
 	
 	private RulerInterval currentInterval() {
@@ -138,42 +148,107 @@ public class TransportController extends TrackDataController implements Zoomable
 	}
 	
 	private void createIntervals() {
-		_myIntervals.add(new RulerInterval(18000, 9000, 18000));
-		_myIntervals.add(new RulerInterval(9000, 3600, 7200));
-		_myIntervals.add(new RulerInterval(3600, 1800, 3600));
-		
-		_myIntervals.add(new RulerInterval(1800, 1500, 1800));
-		_myIntervals.add(new RulerInterval(1500, 600, 1200));
-		_myIntervals.add(new RulerInterval(600, 300, 600));
-		
-		_myIntervals.add(new RulerInterval(300, 150, 300));
-		_myIntervals.add(new RulerInterval(150, 60, 120));
-		_myIntervals.add(new RulerInterval(60, 30, 60));
-		
-		_myIntervals.add(new RulerInterval(30, 20, 30));
-		_myIntervals.add(new RulerInterval(20, 10, 20));
-		
-		_myIntervals.add(new RulerInterval(10, 5, 10));
-		_myIntervals.add(new RulerInterval(5, 2, 5));
-		_myIntervals.add(new RulerInterval(2, 1, 2));
-		
-		_myIntervals.add(new RulerInterval(1.0000f, 0.5000f, 1));
-		_myIntervals.add(new RulerInterval(0.5000f, 0.2500f, 0.5f));
-		_myIntervals.add(new RulerInterval(0.2500f, 0.1000f, 0.2f));
-
-		_myIntervals.add(new RulerInterval(0.1000f, 0.0500f, 0.1f));
-		_myIntervals.add(new RulerInterval(0.0500f, 0.0250f, 0.05f));
-		_myIntervals.add(new RulerInterval(0.0250f, 0.0100f, 0.02f));
-
-		_myIntervals.add(new RulerInterval(0.0100f, 0.0050f, 0.01f));
-		_myIntervals.add(new RulerInterval(0.0050f, 0.0025f, 0.005f));
-		_myIntervals.add(new RulerInterval(0.0025f, 0.0010f, 0.002f));
-		
-		_myIntervals.add(new RulerInterval(0.0010f, 0.0000f, 0.001f));
+		_myIntervals.clear();
+		if(_myUseBeats){
+			double myBarTime = (60 / _myBPM) * 4;
+			
+			for(int i = 1; i < 16;i++){
+				double myUpperInterval = myBarTime * CCMath.pow(2, i);
+				double mylowerInterval = myBarTime * CCMath.pow(2, i - 1);
+				_myIntervals.add(new RulerInterval(myUpperInterval, mylowerInterval, myUpperInterval));
+			}
+			for(int i = 1; i < 16;i++){
+				double myUpperInterval = myBarTime * CCMath.pow(0.5, i - 1);
+				double mylowerInterval = myBarTime * CCMath.pow(0.5, i);
+				_myIntervals.add(new RulerInterval(myUpperInterval, mylowerInterval, myUpperInterval));
+			}
+		}else{
+			_myIntervals.add(new RulerInterval(18000, 9000, 18000));
+			_myIntervals.add(new RulerInterval(9000, 3600, 7200));
+			_myIntervals.add(new RulerInterval(3600, 1800, 3600));
+			
+			_myIntervals.add(new RulerInterval(1800, 1500, 1800));
+			_myIntervals.add(new RulerInterval(1500, 600, 1200));
+			_myIntervals.add(new RulerInterval(600, 300, 600));
+			
+			_myIntervals.add(new RulerInterval(300, 150, 300));
+			_myIntervals.add(new RulerInterval(150, 60, 120));
+			_myIntervals.add(new RulerInterval(60, 30, 60));
+			
+			_myIntervals.add(new RulerInterval(30, 20, 30));
+			_myIntervals.add(new RulerInterval(20, 10, 20));
+			
+			_myIntervals.add(new RulerInterval(10, 5, 10));
+			_myIntervals.add(new RulerInterval(5, 2, 5));
+			_myIntervals.add(new RulerInterval(2, 1, 2));
+			
+			_myIntervals.add(new RulerInterval(1.0000, 0.5000f, 1));
+			_myIntervals.add(new RulerInterval(0.5000, 0.2500f, 0.5f));
+			_myIntervals.add(new RulerInterval(0.2500, 0.1000f, 0.2f));
+	
+			_myIntervals.add(new RulerInterval(0.1000, 0.0500f, 0.1f));
+			_myIntervals.add(new RulerInterval(0.0500, 0.0250f, 0.05f));
+			_myIntervals.add(new RulerInterval(0.0250, 0.0100f, 0.02f));
+	
+			_myIntervals.add(new RulerInterval(0.0100, 0.0050f, 0.01f));
+			_myIntervals.add(new RulerInterval(0.0050, 0.0025f, 0.005f));
+			_myIntervals.add(new RulerInterval(0.0025, 0.0010f, 0.002f));
+			
+			_myIntervals.add(new RulerInterval(0.0010, 0.0000f, 0.001f));
+		}
 	}
 	
 	public RulerInterval rulerInterval() {
 		return _myInterval;
+	}
+	
+	public String timeToString(double theTime) {
+		if(_myUseBeats){
+			double barsDeci = theTime / ((60 / _myBPM) * 4);
+			int bar = (int)barsDeci;
+			double beatsDeci = (barsDeci - bar) * 4;
+			int beat = (int)beatsDeci;
+			double divDeci = (beatsDeci - beat) * 4;
+			int div = (int)divDeci;
+			StringBuffer myResult = new StringBuffer();
+			myResult.append(bar);
+			if(beat != 0){
+				myResult.append("." + (beat + 1));
+			}
+			if(div != 0){
+				myResult.append("." + (beat + 1));
+				myResult.append("." + (div + 1));
+			}
+			return myResult.toString();
+		}else{
+			long myTime = (long)(theTime * 1000);
+			long myMillis = myTime % 1000;
+			myTime /= 1000;
+			long mySeconds = myTime % 60;
+			myTime /= 60;
+			long myMinutes = myTime % 60;
+			myTime /= 60;
+			long myHours = myTime;
+			
+			StringBuffer myResult = new StringBuffer();
+			if(myHours != 0) {
+				myResult.append(myHours);
+				myResult.append("h ");
+			}
+			if(myMinutes != 0) {
+				myResult.append(myMinutes);
+				myResult.append("min ");
+			}
+			if(mySeconds != 0) {
+				myResult.append(mySeconds);
+				myResult.append("s ");
+			}
+			if(myMillis != 0) {
+				myResult.append(myMillis);
+				myResult.append("ms ");
+			}
+			return myResult.toString();
+		}
 	}
 	
 	public void addMarkerFromMouse(final String theName, final int theMouseX){
@@ -235,6 +310,18 @@ public class TransportController extends TrackDataController implements Zoomable
 	
 	public double speed() {
 		return _mySpeedFactor;
+	}
+	
+	public double bpm(){
+		return _myBPM;
+	}
+	
+	public void bpm(double theBPM){
+		_myBPM = theBPM;
+		if(_myUseBeats){
+			createIntervals();
+			_myInterval = currentInterval();
+		}
 	}
 	
 	public double loopStart() {

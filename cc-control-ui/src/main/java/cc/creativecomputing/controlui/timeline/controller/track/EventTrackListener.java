@@ -34,5 +34,7 @@ public interface EventTrackListener{
 	
 	public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint);
 	
+	public void onTimeChange(double theTime, double theOffset, EventTrackController theController, TimedEventPoint thePoint);
+	
 	public void onOut();
 }
