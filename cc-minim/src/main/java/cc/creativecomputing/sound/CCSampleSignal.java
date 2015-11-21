@@ -98,11 +98,10 @@ public class CCSampleSignal implements CCAudioSignal {
 	}
 
 	public float[] getChannel(int channelNumber) {
-		if (channelNumber == CCAudioSample.LEFT) {
-			return buffer.getChannel(0);
-		} else if (channelNumber == CCAudioSample.RIGHT) {
-			return buffer.getChannel(1);
+		try{
+			return buffer.getChannel(channelNumber);
+		}catch(Exception e){
+			throw new CCSoundException("getChannel: Illegal channel number " + channelNumber);
 		}
-		throw new CCSoundException("getChannel: Illegal channel number " + channelNumber);
 	}
 }

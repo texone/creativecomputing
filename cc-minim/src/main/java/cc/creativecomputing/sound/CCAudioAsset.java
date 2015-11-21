@@ -6,13 +6,12 @@ import java.util.Map;
 
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
-public class CCAudioAsset extends CCAsset<CCAudioPlayer>{
+
+public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 	
-	
-	private Map<Path, CCAudioPlayer> _myPlayerMap = new HashMap<>();
+	private Map<Path, CCAudioAssetData> _myPlayerMap = new HashMap<>();
 	
 	@CCProperty(name = "min time offset", min = 0.01, max = 1)
 	private float _cMaxTimeOffset = 0.05f;
@@ -30,7 +29,7 @@ public class CCAudioAsset extends CCAsset<CCAudioPlayer>{
 	@Override
 	public void onChangePath(Path thePath) {
 		if(thePath == null){
-			if(_myAsset != null)_myAsset.pause();
+			if(_myAsset != null)_myAsset.player.pause();
 			_myAsset = null;
 			return;
 		}
@@ -39,7 +38,7 @@ public class CCAudioAsset extends CCAsset<CCAudioPlayer>{
 			return;
 		}else{
 			try{
-				_myAsset = CCSoundIO.loadFile(thePath, 2048);
+				_myAsset = new CCAudioAssetData(CCSoundIO.loadFile(thePath, 2048), CCSoundIO.loadSample(thePath).getChannel(0)) ;
 				_myPlayerMap.put(thePath, _myAsset);
 			}catch(Exception e){
 				_myAsset = null;
@@ -53,20 +52,19 @@ public class CCAudioAsset extends CCAsset<CCAudioPlayer>{
 	public void time(double theGlobalTime, double theEventTime) {
 		if(_myAsset == null)return;
 		if(!_myIsPlaying)return;
-		if(!_myAsset.isPlaying())_myAsset.play((int)(theEventTime * 1000));
+		if(!_myAsset.player.isPlaying())_myAsset.player.play((int)(theEventTime * 1000));
 //		_myAsset.setGain(_cVolume);
-		_myAsset.setBalance(_cPan);
-		double myOffset = CCMath.abs(_myAsset.position() / 1000f - theEventTime);
-		CCLog.info(myOffset);
+		_myAsset.player.setBalance(_cPan);
+		double myOffset = CCMath.abs(_myAsset.player.position() / 1000f - theEventTime);
 		if(myOffset > _cMaxTimeOffset){
-			_myAsset.skip(-(int)((_myAsset.position() / 1000f - theEventTime) * 1000));
+			_myAsset.player.skip(-(int)((_myAsset.player.position() / 1000f - theEventTime) * 1000));
 		}
 	}
 	
 	@Override
 	public void out() {
 		if(_myAsset == null)return;
-		_myAsset.pause();
+		_myAsset.player.pause();
 	}
 
 	@Override
@@ -78,6 +76,6 @@ public class CCAudioAsset extends CCAsset<CCAudioPlayer>{
 	public void stop() {
 		_myIsPlaying = false;
 		if(_myAsset == null)return;
-		_myAsset.pause();
+		_myAsset.player.pause();
 	}
 }

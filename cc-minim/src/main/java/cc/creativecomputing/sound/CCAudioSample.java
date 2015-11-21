@@ -52,7 +52,7 @@ public class CCAudioSample extends CCAudioSource {
 	 * @related getChannel ( )
 	 * @related AudioSample
 	 */
-	static public final int LEFT = 1;
+	static public final int LEFT = 0;
 
 	/**
 	 * int used to request the right channel of audio from the getChannel
@@ -61,7 +61,7 @@ public class CCAudioSample extends CCAudioSource {
 	 * @related getChannel ( )
 	 * @related AudioSample
 	 */
-	static public final int RIGHT = 2;
+	static public final int RIGHT = 1;
 	
 	private CCSampleSignal sample;
 	private CCAudioMetaData meta;
