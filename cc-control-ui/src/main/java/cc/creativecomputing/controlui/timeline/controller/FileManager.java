@@ -13,7 +13,6 @@ import cc.creativecomputing.controlui.timeline.controller.track.GroupTrackContro
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
@@ -104,8 +103,6 @@ public class FileManager {
 		}
 		
 		private void loadTrack(CCDataObject theData, TimelineController theTimeline){
-			CCLog.info(theData);
-			
 			if(theData.containsKey("tracks")){
 				loadGroupTrack(theData, theTimeline);
 			}else{

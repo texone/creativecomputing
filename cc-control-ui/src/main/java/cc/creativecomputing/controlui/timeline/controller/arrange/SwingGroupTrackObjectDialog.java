@@ -24,7 +24,6 @@ import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedEventPoi
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class SwingGroupTrackObjectDialog extends JDialog implements ActionListener, PropertyChangeListener {
@@ -102,11 +101,9 @@ public class SwingGroupTrackObjectDialog extends JDialog implements ActionListen
 			
 			@Override
 			public void itemStateChanged(ItemEvent theE) {
-				CCLog.info("item changed");
 				if(_myEventPoint == null)return;
 				switch(theE.getStateChange()){
 				case ItemEvent.SELECTED:
-					CCLog.info("item changed set yo");
 					_myEventPoint.content(new TimedEventPointContent(_myPresetList.getSelectedItem().toString()));
 					_myController.view().render();
 					break;

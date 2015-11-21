@@ -27,7 +27,6 @@ import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.Time
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.core.logging.CCLog;
 
 public class SwingClipTrackObjectDialog extends JDialog implements ActionListener, PropertyChangeListener {
 	/**
