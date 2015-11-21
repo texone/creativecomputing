@@ -19,7 +19,6 @@ import javax.swing.event.ChangeListener;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 
 public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandle>{
@@ -63,7 +62,6 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	    public void actionPerformed(ActionEvent evt) {
 	    	try{
 		        CCColor myColor = (CCColor)_myHandle.member().value();
-		        CCLog.info(myColor);
 		        _myColorChooser.setColor(new Color((float)myColor.r, (float)myColor.g, (float)myColor.b,(float) myColor.a));
 	        }catch(Exception e){
 	        	
