@@ -31,7 +31,7 @@ public class CCObstacle {
 	/** 
 	 * repulsive force 
 	 **/
-	protected float _myRepulsiveForce = 2;
+	protected double _myRepulsiveForce = 2;
 
 	protected CCDomain _myDomain;
 
@@ -63,7 +63,7 @@ public class CCObstacle {
 	 *
 	 * @param    theRepulsiveForce      repulsive force
 	 */
-	public void repulsiveForce(final float theRepulsiveForce) {
+	public void repulsiveForce(final double theRepulsiveForce) {
 		_myRepulsiveForce = theRepulsiveForce;
 	}
 	
@@ -83,7 +83,7 @@ public class CCObstacle {
 	 * Returns the repulsive force
 	 * @return The repulsive force
 	 */
-	public float repulsiveForce() {
+	public double repulsiveForce() {
 		return _myRepulsiveForce;
 	}
 

@@ -10,7 +10,6 @@
  */
 package cc.creativecomputing.simulation.steering;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.simulation.CCParticle;
 import cc.creativecomputing.simulation.force.CCForce;
 
@@ -33,7 +32,7 @@ public class CCAgent extends CCParticle{
 		return _myMind;
 	}
 
-	public void update(final float theDeltaTime){
+	public void update(final double theDeltaTime){
 		_myMind.update(this, theDeltaTime);
 		
 		super.update(theDeltaTime);

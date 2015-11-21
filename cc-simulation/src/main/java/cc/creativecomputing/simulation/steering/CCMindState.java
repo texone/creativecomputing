@@ -104,7 +104,7 @@ public class CCMindState {
 	 * 
 	 * @return The force for this step of animation
 	 */
-	public void update(final CCAgent theAgent,final float theDeltaTime) {
+	public void update(final CCAgent theAgent,final double theDeltaTime) {
 		update(theDeltaTime);
 		for (CCForce myBehavior : _myBehaviors) {
 			if (!myBehavior.isActive(theAgent)){
@@ -127,7 +127,7 @@ public class CCMindState {
 	
 	public void init(){}
 	
-	public void update(final float theDeltaTime){}
+	public void update(final double theDeltaTime){}
 	
 	public void finish(){}
 }

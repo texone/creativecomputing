@@ -86,7 +86,7 @@ public class CCMind{
 	 * 
 	 * @return The force for this step of animation
 	 */
-	public void update(final CCAgent theAgent,final float theDeltaTime) {
+	public void update(final CCAgent theAgent,final double theDeltaTime) {
 		_myCurrentState.update(theAgent, theDeltaTime);
 	}
 

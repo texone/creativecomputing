@@ -40,6 +40,7 @@ public class CCParticleGroup<ParticleType extends CCParticle>{
 	}
 	
 	public void update(final double theDeltaTime){
+
 		for(int i = _myParticles.size() - 1; i >= 0; i--){
 			if(_myParticles.get(i).isKilled()){
 				_myParticles.remove(i);
@@ -51,6 +52,7 @@ public class CCParticleGroup<ParticleType extends CCParticle>{
 				myForce.apply(myParticle, myForceVector, theDeltaTime);
 			}
 			myParticle.applyForce(myForceVector);
+
 			myParticle.update(theDeltaTime);
 		}
 	}

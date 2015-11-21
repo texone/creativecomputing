@@ -18,11 +18,12 @@ public class CCAlignment extends CCNeighborHoodBehavior{
 
 	private boolean deltaHeading = true;
 
-	public CCAlignment(final float theDistance, final float theAngle){
+	public CCAlignment(final double theDistance, final double theAngle){
 		super(theDistance, theAngle);
 	}
 
-	public boolean apply(final CCParticle theAgent, final CCVector3 theForce, float theDeltaTime){
+	@Override
+	public boolean apply(final CCParticle theAgent, final CCVector3 theForce, double theDeltaTime){
 		int myCount = 0;
 		theForce.set(0,0,0);
 		

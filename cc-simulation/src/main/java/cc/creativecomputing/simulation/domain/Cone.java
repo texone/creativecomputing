@@ -34,18 +34,18 @@ public class Cone extends Cylinder{
 
 	public Cone(
 		final CCVector3 i_e0, final CCVector3 i_e1, 
-		final float i_radOut, final float i_radIn
+		final double i_radOut, final double i_radIn
 	){
 		super(i_e0,i_e1,i_radOut,i_radIn);
 	}
 
 	boolean isWithin(
-		final float i_rSqr, final float i_dist
+		final double i_rSqr, final double i_dist
 	){
 		return (i_rSqr <= CCMath.sq(i_dist * radIn)&& i_rSqr >= CCMath.sq(i_dist * radOut));
 	}
 	
-	float scaleCoord(final float i_coord, final float i_dist){
+	double scaleCoord(final double i_coord, final double i_dist){
 		return i_coord * i_dist;
 	}
 }
