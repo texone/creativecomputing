@@ -1,6 +1,7 @@
 package cc.creativecomputing.kle.animation;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -30,7 +31,6 @@ public class CCKleVector2CircleAnimation extends CCKleAnimation<CCVector2> {
 	@Override
 	public CCVector2 animate(CCSequenceElement theElement) {
 		double myPhase = _myPhase;
-
 		double myAngle = (myPhase + _cModulation.modulation(theElement, -0.5f, 0.5f)) * CCMath.TWO_PI;
 		double myAmount = _cAmountModulation.modulation(theElement, -1, 1);
 		double myX = CCMath.cos(myAngle) * _cXAmount * myAmount;

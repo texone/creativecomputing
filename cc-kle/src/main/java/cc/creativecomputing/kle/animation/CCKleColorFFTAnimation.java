@@ -36,7 +36,7 @@ public class CCKleColorFFTAnimation extends CCKleAnimation<CCColor>{
 	public void update(final double theDeltaTime){
 		
 		if(_myAudioAsset.value() == null)return;
-		_myFFT.forward(_myAudioAsset.value());
+		_myFFT.forward(_myAudioAsset.value().player);
 	}
 	
 	public CCColor animate(CCSequenceElement theElement){
