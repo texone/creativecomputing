@@ -97,11 +97,11 @@ public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
         thePath.lineTo(p2.getX(), p2.getY());     
     }
 	
-	private void drawCurve(CurveTrackController _myController, SwingTrackDataView theView, Graphics2D g, double theStartTime, double theEndTime) {
+	private void drawCurve(CurveTrackController _myController, SwingTrackDataView theView, Graphics2D g, TimedEventPoint theEvent) {
     	
         if (_myController.trackData().size() == 0) {
-        	double myLowerBound = CCMath.max(theStartTime, theView.context().lowerBound());
-        	double myUpperBound = CCMath.min(theEndTime, theView.context().upperBound());
+        	double myLowerBound = CCMath.max(theEvent.time(), theView.context().lowerBound());
+        	double myUpperBound = CCMath.min(theEvent.endTime(), theView.context().upperBound());
         	GeneralPath myPath = new GeneralPath();
         	Point2D p1 = theView.controller().curveToViewSpace(new ControlPoint(myLowerBound,_myController.value(0)));
         	Point2D p2 = theView.controller().curveToViewSpace(new ControlPoint(myUpperBound,_myController.value(0)));
@@ -114,32 +114,31 @@ public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
         }
         
         ControlPoint myMinPoint = new ControlPoint(
-        	theView.context().lowerBound() - theStartTime, 
-        	_myController.trackData().value(theView.context().lowerBound() - theStartTime)
+        	theView.context().lowerBound() - theEvent.time(), 
+        	_myController.trackData().value(theView.context().lowerBound() - theEvent.time())
 		);
-        Point2D p1 = theView.controller().curveToViewSpace(new ControlPoint(myMinPoint.time(), myMinPoint.value()), theStartTime);
+        Point2D p1 = theView.controller().curveToViewSpace(new ControlPoint(myMinPoint.time(), myMinPoint.value()), theEvent.time());
 
         GeneralPath myPath = new GeneralPath();
         myPath.moveTo(p1.getX(), p1.getY());
-        
-        ControlPoint myMaxPoint = _myController.trackData().ceiling(new ControlPoint(theView.context().upperBound() - theStartTime, 0));
+        ControlPoint myMaxPoint = _myController.trackData().ceiling(new ControlPoint(theView.context().upperBound() - theEvent.time() + theEvent.contentOffset(), 0));
 		
 		if(myMaxPoint == null){
 			myMaxPoint = new ControlPoint(
-				theView.context().upperBound() - theStartTime, 
-				_myController.trackData().value(theView.context().upperBound() - theStartTime)
+				theView.context().upperBound() - theEvent.time(), 
+				_myController.trackData().value(theView.context().upperBound() - theEvent.time() + theEvent.contentOffset())
 			);
 		}
 		myMaxPoint = _myController.trackData().getLastOnSamePosition(myMaxPoint);
         
-        ControlPoint myCurrentPoint = _myController.trackData().ceiling(new ControlPoint(theView.context().lowerBound() - theStartTime, 0));
+        ControlPoint myCurrentPoint = _myController.trackData().ceiling(new ControlPoint(theView.context().lowerBound() - theEvent.time() + theEvent.contentOffset(), 0));
         ControlPoint myLastPoint = myMinPoint;
         while (myCurrentPoint != null && myCurrentPoint != myMaxPoint) {
-        	drawCurvePiece(_myController, theView, myLastPoint, myCurrentPoint, myPath, theStartTime, theEndTime);
+        	drawCurvePiece(_myController, theView, myLastPoint, myCurrentPoint, myPath, theEvent.time() + theEvent.contentOffset(), theEvent.endTime() + theEvent.contentOffset());
         	myLastPoint = myCurrentPoint;
         	myCurrentPoint = myCurrentPoint.getNext();
 		}
-        drawCurvePiece(_myController, theView,myLastPoint, myMaxPoint, myPath, theStartTime, theEndTime);
+        drawCurvePiece(_myController, theView,myLastPoint, myMaxPoint, myPath, theEvent.time() + theEvent.contentOffset(), theEvent.endTime() + theEvent.contentOffset());
         
 //        myPath.lineTo(theView.getWidth(), theView.getHeight());
 //        myPath.lineTo(0, theView.getHeight());
@@ -164,7 +163,7 @@ public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
 		if(myTimelineController != null){
 			for(TrackController myTrackController:myTimelineController.trackController()){
 				if(myTrackController instanceof CurveTrackController){
-					drawCurve((CurveTrackController)myTrackController, theView, theG2d, theTimedEvent.time(), theTimedEvent.endTime());
+					drawCurve((CurveTrackController)myTrackController, theView, theG2d, theTimedEvent);
 				}
 			}
 		}
