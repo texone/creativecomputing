@@ -40,4 +40,10 @@ public class CCObject {
 	public boolean isActiv(){
 		return _myIsActive;
 	}
+	
+	public void draw(CCGraphics g){
+		for(CCSegment mySegment:_mySegments){
+			mySegment.draw(g);
+		}
+	}
 }

@@ -12,6 +12,9 @@ package cc.creativecomputing.model.obj;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.graphics.CCDrawMode;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.CCVector4;
@@ -199,6 +202,21 @@ public class CCSegment {
 	
 	public List<CCVector4> texCoords(){
 		return _myTexCoords;
+	}
+	
+	private CCMesh _myMesh;
+	
+	public void draw(CCGraphics g){
+		if(_myMesh == null){
+			int myNumberOfVertices = vertices().size();
+			_myMesh = new CCMesh(CCDrawMode.TRIANGLES, myNumberOfVertices);
+			_myMesh.vertices(vertices());
+			if(normals().size() == myNumberOfVertices)_myMesh.normals(normals());
+			if(texCoords().size() == myNumberOfVertices){
+				_myMesh.textureCoords(texCoords());
+			}
+		}
+		_myMesh.draw(g);
 	}
 }
  

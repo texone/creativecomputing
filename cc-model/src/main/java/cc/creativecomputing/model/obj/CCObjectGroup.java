@@ -13,6 +13,8 @@ package cc.creativecomputing.model.obj;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.graphics.CCGraphics;
+
 public class CCObjectGroup {
 	private String _myName;
 	private List<CCObject> _myObjects;
@@ -39,4 +41,9 @@ public class CCObjectGroup {
 		return _myIsActive;
 	}
 	
+	public void draw(CCGraphics g){
+		for(CCObject myObject:_myObjects){
+			myObject.draw(g);
+		}
+	}
 }

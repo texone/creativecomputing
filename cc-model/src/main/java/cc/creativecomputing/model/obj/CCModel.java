@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.CCGraphics.CCColorMaterialMode;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 
@@ -203,5 +205,41 @@ public class CCModel {
 			myGroup.isActiv(false);
 		}
 		activateGroup(theGroupName);
+	}
+	
+	/**
+	 * 
+	 * @param g the graphics object for rendering
+	 * @param theGroup theGroup to draw
+	 */
+	public void draw(CCGraphics g,final String theGroup){
+		CCColorMaterialMode myColorMaterialMode = g.colorMaterial();
+		g.colorMaterial(CCColorMaterialMode.OFF);
+		CCObject myGroup = _myObjectMap.get(theGroup.toLowerCase());
+		if(myGroup != null){
+			for(CCSegment mySegment:myGroup.segments()){
+				mySegment.draw(g);
+			}
+		}
+		g.colorMaterial(myColorMaterialMode);
+	}
+	
+	/**
+	 * Draws all activated groups of the loaded model. By default all groups are
+	 * activated and will be drawn. If you pass a group name to this function only
+	 * this group will be drawn no matter if it is activated or not.
+	 * @param g the graphics object for rendering
+	 */
+	public void draw(CCGraphics g){
+		CCColorMaterialMode myColorMaterialMode = g.colorMaterial();
+		g.colorMaterial(CCColorMaterialMode.OFF);
+		for(CCObject myGroup:_myObjectMap.values()){
+			if(myGroup.isActiv()){
+				for(CCSegment mySegment:myGroup.segments()){
+					mySegment.draw(g);
+				}
+			}
+		}
+		g.colorMaterial(myColorMaterialMode);
 	}
 }
