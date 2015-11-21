@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.GeneralPath;
@@ -437,10 +438,15 @@ public class SwingTrackDataView extends JPanel{
 				g2d.setColor(_myDotColor);
 				g2d.drawLine((int) myLowerCorner.getX(), getHeight(), (int) myLowerCorner.getX(), 0);
 				g2d.drawLine((int) myUpperCorner.getX(), getHeight(), (int) myUpperCorner.getX(), 0);
-				
+				Shape myClip = g2d.getClip();
+				g2d.setClip(
+					(int) myLowerCorner.getX(), 0,
+					(int) myUpperCorner.getX() - (int) myLowerCorner.getX(), getHeight()
+				);
 				if(_myTrackDataRenderer != null) {
 					_myTrackDataRenderer.renderTimedEvent(myPoint, this, g2d);
 				}
+				g2d.setClip(myClip);
 			}
 			
 			myCurrentPoint = myCurrentPoint.getNext();
