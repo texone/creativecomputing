@@ -1,6 +1,7 @@
 package cc.creativecomputing.graphics.app;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCTimelineSynch;
@@ -21,6 +22,8 @@ public class CCGL2Application {
 	private CCGLAdapter<CCGraphics, CCGL2Context> _myAdapter;
 
 	private CCControlApp _myControlApp;
+	
+	private boolean _myIsInitialized = false;
 
 	public CCGL2Application(CCGLAdapter<CCGraphics, CCGL2Context> theGLAdapter) {
 		_myAdapter = theGLAdapter;
@@ -30,7 +33,23 @@ public class CCGL2Application {
 		
 		_mySynch = new CCTimelineSynch(_myAnimator);
 		
-		_myAnimator.listener().add(theGLAdapter);
+		_myAnimator.listener().add(new CCAnimatorListener() {
+			
+			@Override
+			public void update(CCAnimator theAnimator) {
+				if(_myIsInitialized)theGLAdapter.update(theAnimator);
+			}
+			
+			@Override
+			public void stop(CCAnimator theAnimator) {
+				theGLAdapter.start(theAnimator);
+			}
+			
+			@Override
+			public void start(CCAnimator theAnimator) {
+				theGLAdapter.start(theAnimator);
+			}
+		});
 		
 		_myGLContext = new CCGL2Context(_myAnimator);
 		theGLAdapter.glContext(_myGLContext);
@@ -43,6 +62,8 @@ public class CCGL2Application {
 				_myControlApp.afterInit();
 				_mySynch.animator().start();
 				theGLAdapter.controlApp(_myControlApp);
+				
+				_myIsInitialized = true;
 			}
 		});
 		_myGLContext.listener().add(
