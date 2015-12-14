@@ -35,7 +35,7 @@ public class CCColladaCamera extends CCColladaElement{
 			}
 		}
 		
-		_myCamera = new CCCamera(_myFov * CCMath.DEG_TO_RAD, 1f / _myAspect, _myZnear, _myZfar);
+		_myCamera = new CCCamera(_myFov * CCMath.DEG_TO_RAD, 1f / _myAspect, _myZnear, _myZfar * 100);
 	}
 	
 	private void readOptics(CCXMLElement theOpticsXML){
