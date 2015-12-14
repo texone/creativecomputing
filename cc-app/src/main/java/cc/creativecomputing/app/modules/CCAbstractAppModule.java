@@ -6,20 +6,12 @@ public abstract class CCAbstractAppModule<ListenerType> implements CCAppModule<L
 	
 	protected final CCListenerManager<ListenerType> _myListeners;
 	
-	protected Class<ListenerType> _myListenerClass;
-	
 	protected String _myID;
 	
 	protected CCAbstractAppModule(Class<ListenerType> theListenerInterface, String theID){
 		_myListeners = CCListenerManager.create(theListenerInterface);
-		_myListenerClass = theListenerInterface;
 		
 		_myID = theID;
-	}
-
-	@Override
-	public Class<ListenerType> listenerInterface() {
-		return _myListenerClass;
 	}	
 	
 	/**

@@ -8,7 +8,5 @@ public interface CCAppModule<ListenerType> {
 	
 	public void stop();
 	
-	public Class<ListenerType> listenerInterface();
-	
 	public CCListenerManager<ListenerType> listener();
 }

@@ -176,16 +176,10 @@ public class CCStopWatch implements CCAnimatorListener {
 	}
 
 	@Override
-	public void start(CCAnimator theAnimator) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void start(CCAnimator theAnimator) {}
 
 	@Override
-	public void stop(CCAnimator theAnimator) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void stop(CCAnimator theAnimator) {}
 
 	
 }

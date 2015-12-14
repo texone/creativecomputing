@@ -1,8 +1,9 @@
 package cc.creativecomputing.app;
 
-import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
+import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.app.modules.CCAnimatorModule;
+import cc.creativecomputing.app.modules.CCAnimatorModule.CCAnimationMode;
 import cc.creativecomputing.app.modules.CCBasicAppListener;
 import cc.creativecomputing.core.logging.CCLog;
 
@@ -37,7 +38,7 @@ public class CCAppDemo implements CCAnimatorListener, CCBasicAppListener{
 		
 		CCAppDemo myDemo = new CCAppDemo();
 		
-		CCAnimator myAnimator = new CCAnimator();
+		CCAnimatorModule myAnimator = new CCAnimatorModule();
 		myAnimator.framerate = 1;
 		myAnimator.animationMode = CCAnimationMode.FRAMERATE_PRECISE;
 		myAnimator.listener().add(myDemo);
