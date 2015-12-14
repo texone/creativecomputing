@@ -1,22 +1,22 @@
-///**
-// * Copyright (c) 2008-2012 Ardor Labs, Inc.
-// *
-// * This file is part of Ardor3D.
-// *
-// * Ardor3D is free software: you can redistribute it and/or modify it 
-// * under the terms of its license which may be found in the accompanying
-// * LICENSE file or at <http://www.ardor3d.com/LICENSE>.
-// */
-//
-//package cc.creativecomputing.math;
-//
-//import static org.junit.Assert.*;
-//
-//import java.nio.FloatBuffer;
-//
-//import org.junit.Test;
-//
-//public class CCTransformTest {
+/**
+ * Copyright (c) 2008-2012 Ardor Labs, Inc.
+ *
+ * This file is part of Ardor3D.
+ *
+ * Ardor3D is free software: you can redistribute it and/or modify it 
+ * under the terms of its license which may be found in the accompanying
+ * LICENSE file or at <http://www.ardor3d.com/LICENSE>.
+ */
+
+package cc.creativecomputing.math;
+
+import static org.junit.Assert.*;
+
+import java.nio.FloatBuffer;
+
+import org.junit.Test;
+
+public class CCTransformTest {
 //
 //	@Test
 //	public void testGetSet() {
@@ -429,4 +429,4 @@
 //			assertTrue(val == fb.get());
 //		}
 //	}
-//}
+}
