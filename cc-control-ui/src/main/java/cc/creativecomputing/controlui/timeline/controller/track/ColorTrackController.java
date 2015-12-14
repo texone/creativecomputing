@@ -27,26 +27,26 @@ import java.util.List;
 
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.timeline.Track;
+import cc.creativecomputing.control.timeline.point.ColorPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.HandleType;
 import cc.creativecomputing.control.timeline.point.HandleControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedEventPointContent;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.ToolController;
 import cc.creativecomputing.controlui.timeline.controller.actions.AddControlPointAction;
-import cc.creativecomputing.controlui.timeline.controller.actions.MoveEventAction;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
+import cc.creativecomputing.controlui.timeline.controller.actions.MoveColorPointAction;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 
 /**
  * @author christianriekoff
  * 
  */
-public class EventTrackController extends TrackController {
+public class ColorTrackController extends TrackController {
 	
 	public final static float MIN_EVENT_TIME = 0.0001f;
 	
@@ -63,7 +63,7 @@ public class EventTrackController extends TrackController {
 	
 	private boolean _mySplitDrag = false;
 	
-	private CCListenerManager<EventTrackListener> _myEventTrackListener = CCListenerManager.create(EventTrackListener.class);
+	private CCListenerManager<ColorTrackListener> _myColorTrackListener = CCListenerManager.create(ColorTrackListener.class);
 
 	/**
 	 * @param theTimelineController
@@ -71,7 +71,7 @@ public class EventTrackController extends TrackController {
 	 * @param theParent
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public EventTrackController(
+	public ColorTrackController(
 		TimelineController theTimelineController,
 		ToolController theToolController,
 		Track theTrack, 
@@ -84,8 +84,8 @@ public class EventTrackController extends TrackController {
 
 			@Override
 			public void onChange(Object theValue) {
-				if(_myEditedEvent != null && _myEditedEvent.isSelected()){
-					_myEditedEvent.content(new TimedEventPointContent(theValue));
+				if(_myEditedColor != null && _myEditedColor.isSelected()){
+					_myEditedColor.color((CCColor)theValue);
 			        _myTrackView.render();
 				}
 			}
@@ -96,8 +96,8 @@ public class EventTrackController extends TrackController {
 		_mySplitDrag = theSplitDrag;
 	}
 	
-	public CCListenerManager<EventTrackListener> events(){
-		return _myEventTrackListener;
+	public CCListenerManager<ColorTrackListener> events(){
+		return _myColorTrackListener;
 	}
 	
 	public static final String EVENT_TYPES = "eventTypes";
@@ -111,23 +111,23 @@ public class EventTrackController extends TrackController {
 		return myResult;
 	}
 	
-	public void delete(TimedEventPoint theEvent) {
-		_myEventTrackListener.proxy().onDelete(this, theEvent);
+	public void delete(ColorPoint theEvent) {
+		_myColorTrackListener.proxy().onDelete(this, theEvent);
 	}
 	
-	public void properties(TimedEventPoint theEvent) {
-		_myEventTrackListener.proxy().onProperties(this, theEvent);
+	public void properties(ColorPoint theEvent) {
+		_myColorTrackListener.proxy().onProperties(this, theEvent);
 	}
 	
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double upperTime, Graphics2D theG2d){
-		_myEventTrackListener.proxy().renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, upperTime, theG2d);
+	public void renderTimedEvent(ColorPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double upperTime, Graphics2D theG2d){
+		_myColorTrackListener.proxy().renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, upperTime, theG2d);
 	}
 	
 	public void createPoint(MouseEvent theEvent, String theEventType) {
 		Point2D myViewCoords = new Point2D.Double(theEvent.getX(), theEvent.getY());
-		TimedEventPoint myPoint = (TimedEventPoint)createPoint(myViewCoords);
+		ColorPoint myPoint = (ColorPoint)createPoint(myViewCoords);
 		myPoint.eventType(theEventType);
-		_myEventTrackListener.proxy().onCreate(this, myPoint);
+		_myColorTrackListener.proxy().onCreate(this, myPoint);
 		UndoHistory.instance().apply(new AddControlPointAction(this, myPoint));
 	}
 
@@ -137,18 +137,18 @@ public class EventTrackController extends TrackController {
 	 * @see de.artcom.timeline.controller.TrackDataController#createPoint(de.artcom.timeline.model.points.ControlPoint)
 	 */
 	@Override
-	public TimedEventPoint createPointImpl(ControlPoint theCurveCoords) {
+	public ColorPoint createPointImpl(ControlPoint theCurveCoords) {
 		double myBlend = theCurveCoords.value();
 		myBlend = CCMath.round(myBlend);
 
-		TimedEventPoint myStartPoint = new TimedEventPoint(theCurveCoords.time(), myBlend);
+		ColorPoint myStartPoint = new ColorPoint(theCurveCoords.time(), myBlend);
 		return myStartPoint;
 	}
 	
 	@Override
-	protected TimedEventPoint createPoint(Point2D theViewCoords) {
+	protected ColorPoint createPoint(Point2D theViewCoords) {
         ControlPoint myControlPoint = viewToCurveSpace(theViewCoords, true);
-        TimedEventPoint myEventPoint = createPointImpl(myControlPoint);
+        ColorPoint myEventPoint = createPointImpl(myControlPoint);
         	
         trackData().add(myEventPoint);
         
@@ -177,7 +177,7 @@ public class EventTrackController extends TrackController {
 	
 	public void writeValue(double theTime){
 		ControlPoint myControlPoint = new ControlPoint(theTime, _myProperty.normalizedValue());
-		TimedEventPoint myEventPoint = createPointImpl(myControlPoint);
+		ColorPoint myEventPoint = createPointImpl(myControlPoint);
     	
         trackData().add(myEventPoint);
         
@@ -198,7 +198,7 @@ public class EventTrackController extends TrackController {
 			1.0
 		);
 		myEventPoint.endPoint(myEndPoint);
-		myEventPoint.content(new TimedEventPointContent(_myProperty.value()));
+		myEventPoint.color((CCColor)_myProperty.value());
 		
         
         _myHasAdd = true;
@@ -206,13 +206,13 @@ public class EventTrackController extends TrackController {
 	}
 	
 	private void dragStart(ControlPoint theDraggedPoint, ControlPoint theMousePoint){
-		TimedEventPoint myTimedEvent = (TimedEventPoint) theDraggedPoint;
+		ColorPoint myTimedEvent = (ColorPoint) theDraggedPoint;
 		
 		double myTime = _myTrackContext.quantize(theMousePoint).time();
 		HandleControlPoint myEnd = myTimedEvent.endPoint();
 		myTime = Math.min(myEnd.time() - MIN_EVENT_TIME, myTime);
 
-		TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint.getPrevious();
+		ColorPoint myLowerPoint = (ColorPoint)theDraggedPoint.getPrevious();
 		if(myLowerPoint != null) {
 			myTime = Math.max(myLowerPoint.endTime(), myTime);
 		}
@@ -240,14 +240,14 @@ public class EventTrackController extends TrackController {
 		if(_myStartPoints == null)return false;
 		if(_myCurveCoords == null)return false;
 		
-		TimedEventPoint myTimedEvent = (TimedEventPoint) theDraggedPoint;
+		ColorPoint myTimedEvent = (ColorPoint) theDraggedPoint;
 		
 		double myMove = theMovement.time();
 		ControlPoint myMovedTarget = new ControlPoint(_myStartPoints.get(0).time() + myMove, 1.0);
 		double myEndOffset = myTimedEvent.endPoint().time() - myTimedEvent.time();
 
 		double myTime = _myTrackContext.quantize(myMovedTarget).time();
-		TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint.getPrevious();
+		ColorPoint myLowerPoint = (ColorPoint)theDraggedPoint.getPrevious();
 		if(myLowerPoint != null) {
 			myTime = Math.max(myLowerPoint.endTime(), myTime);
 		}
@@ -287,8 +287,8 @@ public class EventTrackController extends TrackController {
 			break;
 		case DRAG_START_OFFSET:
 			dragStart(theDraggedPoint, myMousePoint);
-			if(theDraggedPoint != null && theDraggedPoint instanceof TimedEventPoint){
-				TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint;
+			if(theDraggedPoint != null && theDraggedPoint instanceof ColorPoint){
+				ColorPoint myLowerPoint = (ColorPoint)theDraggedPoint;
 				double myTime = _myTrackContext.quantize(theMovement.time());
 				myLowerPoint.contentOffset(_myLastOffset - myTime);
 			}
@@ -298,25 +298,25 @@ public class EventTrackController extends TrackController {
 			if(theDraggedPoint != null && theDraggedPoint instanceof HandleControlPoint){
 
 				HandleControlPoint myControlPoint = (HandleControlPoint)theDraggedPoint;
-				TimedEventPoint myLowerPoint = (TimedEventPoint)(myControlPoint.parent());
+				ColorPoint myLowerPoint = (ColorPoint)(myControlPoint.parent());
 				double myTime = _myTrackContext.quantize(theMovement.time());
 				myLowerPoint.contentOffset(_myLastOffset + myTime);
 			}
 			break;
 		case DRAG_CONTENT:
-			if(theDraggedPoint != null && theDraggedPoint instanceof TimedEventPoint){
-				TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint;
+			if(theDraggedPoint != null && theDraggedPoint instanceof ColorPoint){
+				ColorPoint myLowerPoint = (ColorPoint)theDraggedPoint;
 				double myTime = _myTrackContext.quantize(theMovement.time());
 				myLowerPoint.contentOffset(_myLastOffset + myTime);
 			}
 			break;
 		}
-		_myEventTrackListener.proxy().onChange(this, _myEditedEvent);
+		_myColorTrackListener.proxy().onChange(this, _myEditedColor);
 	}
 	
-	public TimedEventPoint pointAt(double theTime) {
+	public ColorPoint pointAt(double theTime) {
 		ControlPoint myCurveCoords = new ControlPoint(theTime, 0);
-		TimedEventPoint myLower = (TimedEventPoint)trackData().lower(myCurveCoords);
+		ColorPoint myLower = (ColorPoint)trackData().lower(myCurveCoords);
 		if(myLower == null) return null;
 		ControlPoint myUpper = myLower.endPoint();
 		if(myUpper == null) return null;
@@ -326,13 +326,13 @@ public class EventTrackController extends TrackController {
 		return null;
 	}
 	
-	public TimedEventPoint clickedPoint(MouseEvent e) {
+	public ColorPoint clickedPoint(MouseEvent e) {
 		Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
 		ControlPoint myCurveCoords = viewToCurveSpace(myViewCoords, true);
 		return pointAt(myCurveCoords.time());
 	}
 	
-	private TimedEventPoint _myEditedEvent = null;
+	private ColorPoint _myEditedColor = null;
 	private double _myStartEnd;
 	private ControlPoint _myCurveCoords;
 	
@@ -344,69 +344,67 @@ public class EventTrackController extends TrackController {
 		_myMouseStartY = e.getY();
 				
 		Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
-		_myCurveCoords = viewToCurveSpace(myViewCoords, true);
-		
-		boolean mySwitchAction = _mySplitDrag && _myCurveCoords.value() > 0.5;
-			 
 		if (e.isAltDown()) {
 			_myTrackContext.zoomController().startDrag(myViewCoords);
 			return;
 		}
 		
-		
-		
+		_myCurveCoords = viewToCurveSpace(myViewCoords, true);
+			 
 		ControlPoint myControlPoint = pickNearestPoint(myViewCoords);
 		HandleControlPoint myHandle = pickHandle(myViewCoords);
 		
-		_myEditedEvent = null;
+		_myEditedColor = null;
+		
+		CCLog.info(myControlPoint + ":" + (myControlPoint != null ? distance(myControlPoint, myViewCoords) : ""));
 		
 		if (myHandle != null) {
 			_myDraggedPoints = new ArrayList<ControlPoint>();
 			_myDraggedPoints.add(myHandle);
-			_myEditedEvent = (TimedEventPoint)myHandle.parent();
-			if(!(_mySplitDrag && _myCurveCoords.value() < 0.5)){
-				_myDragAction = EventAction.DRAG_END;
-			}else{
-				_myDragAction = EventAction.DRAG_END_OFFSET;
-			}
+			_myEditedColor = (ColorPoint)myHandle.parent();
+			_myDragAction = EventAction.DRAG_END;
 		} else if (myControlPoint != null  && distance(myControlPoint, myViewCoords) < SwingTrackView.PICK_RADIUS){
 			_myDraggedPoints = new ArrayList<ControlPoint>();
 			_myDraggedPoints.add(myControlPoint);
-			_myEditedEvent = (TimedEventPoint)myControlPoint;
-			if(!mySwitchAction){
-				_myDragAction = EventAction.DRAG_START;
-			}else{
-				_myDragAction = EventAction.DRAG_START_OFFSET;
-			}
+			_myEditedColor = (ColorPoint)myControlPoint;
+			_myDragAction = EventAction.DRAG_START;
 		} else {
 			
-			TimedEventPoint myLower = (TimedEventPoint)trackData().lower(_myCurveCoords);
+			ColorPoint myLower = (ColorPoint)trackData().lower(_myCurveCoords);
+			
 
-			if(myLower != null) {
-				ControlPoint myUpper = myLower.endPoint();
-				ControlPoint myCoords = viewToCurveSpace(myViewCoords, true);
-				if(myCoords.time() > myLower.time() && myCoords.time() < myUpper.time()) {
+//			if(myLower != null) {
+//				ControlPoint myUpper = myLower.endPoint();
+//				ControlPoint myCoords = viewToCurveSpace(myViewCoords, true);
+//				
+//				if(myCoords.time() > myLower.time() && myCoords.time() < myUpper.time()) {
+//					_myDraggedPoints = new ArrayList<ControlPoint>();
+//					_myDraggedPoints.add(myLower);
+//					_myEditedColor = (ColorPoint)myLower;
+//					_myDragAction = EventAction.DRAG_BLOCK;
+//				}
+//			} else {
+				ControlPoint myClick = viewToCurveSpace(myViewCoords, true);
+				ControlPoint myFloor = trackData().floor(myClick);
+				ControlPoint myCeil = trackData().ceiling(myClick);
+				
+				if(e.getClickCount() == 2){
+					_myAddedNewPoint = true;
 					_myDraggedPoints = new ArrayList<ControlPoint>();
-					_myDraggedPoints.add(myLower);
-					_myEditedEvent = (TimedEventPoint)myLower;
-					if(!mySwitchAction){
-						_myDragAction = EventAction.DRAG_BLOCK;
-					}else{
-						_myLastOffset = myLower.contentOffset();
-						_myDragAction = EventAction.DRAG_CONTENT;
+					_myDraggedPoints.add(createPoint(myViewCoords));
+				}else{
+					if(myFloor != null && myCeil != null){	
+						_myDraggedPoints = new ArrayList<ControlPoint>();
+						_myDraggedPoints.add(myFloor);
+						_myDraggedPoints.add(myCeil);
 					}
-					
 				}
-			}
-//			if(!_myDragBlock) {
-//				_myAddedNewPoint = true;
-//				_myDraggedPoint = createPoint(myViewCoords);
 //			}
 			
 		}
 		
-		if(_myEditedEvent != null) {
-			_myStartEnd = _myEditedEvent.endTime();
+		if(_myEditedColor != null) {
+			_myStartEnd = _myEditedColor.endTime();
 		}
 		if(_myDraggedPoints != null) {
 			 _myStartPoints = new ArrayList<ControlPoint>();
@@ -418,12 +416,12 @@ public class EventTrackController extends TrackController {
 	}
 	
 	public void mouseReleased(MouseEvent e) {
-		if(_myEditedEvent != null) {
-			_myEventTrackListener.proxy().onChange(this, _myEditedEvent);
+		if(_myEditedColor != null) {
+			_myColorTrackListener.proxy().onChange(this, _myEditedColor);
 			
 		}else{
 			for(ControlPoint myEvent:trackData()){
-				((TimedEventPoint)myEvent).isSelected(false);
+				((ColorPoint)myEvent).isSelected(false);
 			}
 			_myTrack.property().endEdit();
 			_myTrack.property().restore();
@@ -435,44 +433,75 @@ public class EventTrackController extends TrackController {
 		}
 		
 		if (e.getX() == _myMouseStartX && e.getY() == _myMouseStartY && !_myAddedNewPoint) {
-			_myEventTrackListener.proxy().onClick(this, _myEditedEvent);
+			_myColorTrackListener.proxy().onClick(this, _myEditedColor);
 			if(!e.isMetaDown()){
 				for(ControlPoint myEvent:trackData()){
-					((TimedEventPoint)myEvent).isSelected(false);
+					((ColorPoint)myEvent).isSelected(false);
 				}
 			}
-			if(_myEditedEvent != null){
-				_myTrack.property().valueCasted(_myEditedEvent.content() == null ? null : _myEditedEvent.content().value(), false);
-				_myEditedEvent.isSelected(true);
+			if(_myEditedColor != null){
+				_myTrack.property().valueCasted(_myEditedColor.color() == null ? null : _myEditedColor.color(), false);
+				_myEditedColor.isSelected(true);
 				_myTrack.property().beginEdit();
 		        _myTrackView.render();
 			}
 		}
 		
-		if(_myDraggedPoints != null && _myEditedEvent != null) {
-			UndoHistory.instance().apply(new MoveEventAction(
-				this, _myEditedEvent, 
+		if(_myDraggedPoints != null && _myEditedColor != null) {
+			UndoHistory.instance().apply(new MoveColorPointAction(
+				this, _myEditedColor, 
 				_myStartPoints.get(0),  
-				_myEditedEvent,
+				_myEditedColor,
 				_myStartEnd,
-				_myEditedEvent.endTime()));
+				_myEditedColor.endTime()));
 		}
         _myDraggedPoints = null;
 		_myAddedNewPoint = false;
 	}
+	
+
+	public CCColor color(double theTime){
+		if (trackData().size() == 0) {
+			return new CCColor();
+		}
+		
+		ControlPoint mySample = trackData().createSamplePoint(theTime);
+		ColorPoint myLower = (ColorPoint)trackData().lower(mySample);
+		ColorPoint myCeiling = (ColorPoint)trackData().ceiling(mySample);
+
+		if (myLower == null && myCeiling == null) {
+			return new CCColor();
+		}
+		
+		if (myLower == null && myCeiling != null) {
+			return myCeiling.color();
+		}
+
+		myLower = (ColorPoint)trackData().getLastOnSamePosition(myLower);
+
+		if (myCeiling != null) {
+			double myBlend = (theTime - myLower.time()) / (myCeiling.time() - myLower.time());
+			return CCColor.blend(myLower.color(), myCeiling.color(), myBlend);
+		} else {
+			if (myLower != null) {
+				return myLower.color();
+			}
+		}
+		return new CCColor();
+	}
 
 	@Override
 	public void timeImplementation(double theTime, double theValue) {
-		TimedEventPoint myEventPoint = pointAt(theTime);
+		ColorPoint myEventPoint = pointAt(theTime);
 		
-    	if(myEventPoint == null || myEventPoint.content() == null || myEventPoint.content().value() == null){
+    	if(myEventPoint == null || myEventPoint.color() == null || myEventPoint.color() == null){
     		_myTrack.property().restore();
-    		_myEventTrackListener.proxy().onOut();
+    		_myColorTrackListener.proxy().onOut();
     		return;
     	}
 
-    	_myTrack.property().valueCasted(myEventPoint.content().value(), false);
-    	_myEventTrackListener.proxy().onTime(theTime, this, myEventPoint);
+    	_myTrack.property().valueCasted(color(theTime), false);
+    	_myColorTrackListener.proxy().onTime(theTime, this, myEventPoint);
 
 //    	for (TimelineListener myListener : _myTimelineListener) {
 //			TimedEvent myEvent = new TimedEvent(

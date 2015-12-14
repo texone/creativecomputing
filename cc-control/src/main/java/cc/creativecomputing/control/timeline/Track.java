@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataObject;
 
 public class Track extends AbstractTrack{
@@ -90,7 +89,6 @@ public class Track extends AbstractTrack{
 	}
 	
 	public void data(CCDataObject theTrackData) {
-		CCLog.info(theTrackData + ":" + _myProperty.path());
 //		setAddress(theTrackData.getString(ADDRESS_ATTRIBUTE));
 		mute(theTrackData.getBoolean(MUTE_ATTRIBUTE));
 		accumulateData(theTrackData.getBoolean(ACCUMULATE_ATTRIBUTE, false));

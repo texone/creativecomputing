@@ -20,7 +20,9 @@
 package cc.creativecomputing.controlui.timeline.controller;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import java.util.Map;
 
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
+import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
@@ -47,6 +50,7 @@ import cc.creativecomputing.controlui.CCColorMap;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCPresetTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.track.BooleanTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.ColorTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.DoubleTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackAdapter;
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
@@ -387,6 +391,8 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 			}else if(myNumberProperty.max() instanceof Double){
 				myTrackController = new DoubleTrackController(this, _myCurveToolController, myTrack, myGroup);
 			}
+		}else if(theProperty instanceof CCColorPropertyHandle){
+			myTrackController = new ColorTrackController(this, _myCurveToolController, myTrack, myGroup);
 		}else if(theProperty instanceof CCStringPropertyHandle){
 			myTrackController = new EventTrackController(this, _myToolController, myTrack, myGroup);
 			Map<String, String> myExtraMap = new HashMap<>();
@@ -403,14 +409,20 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 				
 				@Override
 				public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint) {
-					((CCPathHandle)theProperty).time(theTime, theTime - thePoint.time());
+					((CCPathHandle)theProperty).time(theTime, theTime - thePoint.time(), thePoint.contentOffset());
 				}
 				
 				@Override
 				public void onOut() {
 					((CCPathHandle)theProperty).out();
 				}
+				
+				@Override
+				public void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+					((CCPathHandle)theProperty).renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
+				}
 			});
+			myEventController.splitDrag(true);
 			_myTransportController.addStateListener(new TransportStateListener() {
 				
 				@Override

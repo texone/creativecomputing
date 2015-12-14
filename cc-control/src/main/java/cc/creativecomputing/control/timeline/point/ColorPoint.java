@@ -22,43 +22,15 @@ package cc.creativecomputing.control.timeline.point;
 
 import cc.creativecomputing.control.timeline.TrackData;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.math.CCColor;
 
 /**
  * @author christianriekoff
  * 
  */
-public class TimedEventPoint extends ControlPoint {
+public class ColorPoint extends ControlPoint {
 	
-	public static class TimedEventPointContent{
-		
-		private Object _myValue;
-		
-		public TimedEventPointContent(Object theContent){
-			_myValue = theContent;
-		}
-		
-		public CCDataObject data(){
-			CCDataObject myResult = new CCDataObject();
-			myResult.put("value", _myValue);
-			return myResult;
-		}
-		
-		public void data(CCDataObject theData){
-			try{
-				_myValue = theData.get("value");
-			}catch(Exception e){
-				
-			}
-		}
-		
-		public Object value(){
-			return _myValue;
-		}
-		
-		public void value(Object theValue){
-			_myValue = theValue;
-		}
-	}
+	
 
 	private HandleControlPoint _myEndPoint;
 	
@@ -66,14 +38,14 @@ public class TimedEventPoint extends ControlPoint {
 	
 	private String _myEventType;
 	
-	private TimedEventPointContent _myContent;
+	private CCColor _myColor = new CCColor();
 	
 	private boolean _myIsSelected;
 	
 	private double _myContentOffset = 0;
 
-	public TimedEventPoint() {
-		super(ControlPointType.TIMED_EVENT);
+	public ColorPoint() {
+		super(ControlPointType.COLOR);
 	}
 	
 	public double contentOffset(){
@@ -84,8 +56,8 @@ public class TimedEventPoint extends ControlPoint {
 		_myContentOffset = theContentOffset;
 	}
 
-	public TimedEventPoint(double theTime, double theValue) {
-		super(theTime, theValue, ControlPointType.TIMED_EVENT);
+	public ColorPoint(double theTime, double theValue) {
+		super(theTime, theValue, ControlPointType.COLOR);
 		_myID = System.currentTimeMillis();
 	}
 	
@@ -105,12 +77,12 @@ public class TimedEventPoint extends ControlPoint {
 		return _myIsSelected;
 	}
 	
-	public void content(TimedEventPointContent theContent) {
-		_myContent = theContent;
+	public void color(CCColor theContent) {
+		_myColor = theContent;
 	}
 	
-	public TimedEventPointContent content() {
-		return _myContent;
+	public CCColor color() {
+		return _myColor;
 	}
 	
 	public long id() {
@@ -154,8 +126,8 @@ public class TimedEventPoint extends ControlPoint {
 	 * @see de.artcom.timeline.model.points.ControlPoint#clone()
 	 */
 	@Override
-	public TimedEventPoint clone() {
-		TimedEventPoint myResult = new TimedEventPoint(_myTime, _myValue);
+	public ColorPoint clone() {
+		ColorPoint myResult = new ColorPoint(_myTime, _myValue);
 		myResult.endPoint(_myEndPoint);
 		return myResult;
 	}
@@ -166,7 +138,10 @@ public class TimedEventPoint extends ControlPoint {
 		myResult.put("id", _myID);
 		myResult.put("eventType", _myEventType);
 		myResult.put("end", _myEndPoint.data(theStartTime, theEndTime));
-		if(_myContent != null)myResult.put("content", _myContent.data());
+		myResult.put("r", _myColor.r);
+		myResult.put("g", _myColor.g);
+		myResult.put("b", _myColor.b);
+		myResult.put("a", _myColor.a);
 		if(_myContentOffset != 0)myResult.put("offset", _myContentOffset);
 		return myResult;
 	}
@@ -185,8 +160,12 @@ public class TimedEventPoint extends ControlPoint {
 			myEndHandleData.getDouble(TIME_ATTRIBUTE), 
 			myEndHandleData.getDouble(VALUE_ATTRIBUTE)
 		);
-		_myContent = new TimedEventPointContent(null);
-		_myContent.data(theData.getObject("content"));
+		_myColor = new CCColor(
+			myEndHandleData.getDouble("r",0),
+			myEndHandleData.getDouble("g",0),
+			myEndHandleData.getDouble("b",0),
+			myEndHandleData.getDouble("a",0)
+		);
 		_myContentOffset = theData.getDouble("offset", 0);
 	}
 	

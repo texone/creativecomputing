@@ -22,25 +22,24 @@ package cc.creativecomputing.controlui.timeline.controller.track;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
+import cc.creativecomputing.control.timeline.point.ColorPoint;
 
-public interface EventTrackListener{
-	public void onCreate(EventTrackController theController, TimedEventPoint thePoint);
+public interface ColorTrackListener{
+	public void onCreate(ColorTrackController theController, ColorPoint thePoint);
 	
-	public void onChange(EventTrackController theController, TimedEventPoint thePoint);
+	public void onChange(ColorTrackController theController, ColorPoint thePoint);
 	
-	public void onDelete(EventTrackController theController, TimedEventPoint thePoint);
+	public void onDelete(ColorTrackController theController, ColorPoint thePoint);
 	
-	public void onProperties(EventTrackController theController, TimedEventPoint thePoint);
+	public void onProperties(ColorTrackController theController, ColorPoint thePoint);
 	
-	public void onClick(EventTrackController theController, TimedEventPoint thePoint);
+	public void onClick(ColorTrackController theController, ColorPoint thePoint);
 	
-	public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint);
+	public void onTime(double theTime, ColorTrackController theController, ColorPoint thePoint);
 	
-	public void onTimeChange(double theTime, double theOffset, EventTrackController theController, TimedEventPoint thePoint);
+	public void onTimeChange(double theTime, double theOffset, ColorTrackController theController, ColorPoint thePoint);
 	
 	public void onOut();
 	
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d);
+	public void renderTimedEvent(ColorPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d);
 }

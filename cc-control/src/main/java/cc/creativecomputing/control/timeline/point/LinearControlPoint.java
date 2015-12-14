@@ -20,6 +20,7 @@
 package cc.creativecomputing.control.timeline.point;
 
 import cc.creativecomputing.control.timeline.TrackData;
+import cc.creativecomputing.math.CCMath;
 
 /**
  * @author christianriekoff
@@ -62,7 +63,8 @@ public class LinearControlPoint extends ControlPoint{
 			} else if (myHigher == null) {
 				return myLower.value();
 			}
-			return myLower.value() + (myHigher.value() - myLower.value()) / (myHigher.time() - myLower.time()) * (theTime - myLower.time());
+			double myBlend = (theTime - myLower.time()) / (myHigher.time() - myLower.time());
+			return CCMath.blend(myLower.value(), myHigher.value(), myBlend);
 		}
 		
 	}

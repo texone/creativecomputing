@@ -12,6 +12,7 @@ public class ControlPoint {
 		BEZIER, 
 		HANDLE, 
 		MARKER, 
+		COLOR,
 		TIMED_EVENT, 
 		TIMED_DATA_START,
 		TIMED_DATA_END

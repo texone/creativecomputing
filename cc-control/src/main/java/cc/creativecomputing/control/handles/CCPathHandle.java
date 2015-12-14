@@ -1,9 +1,12 @@
 package cc.creativecomputing.control.handles;
 
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import cc.creativecomputing.control.CCAsset;
+import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
@@ -51,9 +54,17 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 		return _myAsset.path().toString();
 	}
 	
-	public void time(double theGlobalTime, double theEventTime){
+	public void time(double theGlobalTime, double theEventTime, double theContentOffset){
 		if(_myAsset == null)return;
-		_myAsset.time(theGlobalTime, theEventTime);
+		_myAsset.time(theGlobalTime, theEventTime, theContentOffset);
+	}
+	
+	public void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+		_myAsset.renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
+	}
+	
+	public CCAsset<?> asset(){
+		return _myAsset;
 	}
 	
 	public void out(){

@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JViewport;
 
+import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
@@ -199,6 +200,10 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		}
 		
 		if(theTrackDataController.track().property() instanceof CCPathHandle){
+			myTrackDataRenderer = new CCPathTrackDataRenderer();
+		}
+		
+		if(theTrackDataController.track().property() instanceof CCColorPropertyHandle){
 			myTrackDataRenderer = new CCPathTrackDataRenderer();
 		}
 		

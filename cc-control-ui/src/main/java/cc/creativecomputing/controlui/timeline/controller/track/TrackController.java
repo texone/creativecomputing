@@ -101,6 +101,7 @@ public abstract class TrackController extends TrackDataController implements Zoo
         _myHasAdd = true;
         _myTrackView.render();
 	}
+	
 
 	public void color(Color theColor) {
 		// TODO fix color track
