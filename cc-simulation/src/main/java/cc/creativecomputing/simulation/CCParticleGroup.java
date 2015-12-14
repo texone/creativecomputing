@@ -17,9 +17,12 @@ import java.util.List;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.force.CCForce;
 
-public class CCParticleGroup<ParticleType extends CCParticle>{
-
-	protected List<ParticleType> _myParticles = new ArrayList<ParticleType>();
+public class CCParticleGroup<ParticleType extends CCParticle> extends ArrayList<ParticleType>{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8601701907871614362L;
 	
 	private List<CCForce> _myForces = new ArrayList<CCForce>();
 	
@@ -27,26 +30,18 @@ public class CCParticleGroup<ParticleType extends CCParticle>{
 		
 	}
 	
-	public void addParticle(final ParticleType theParticle){
-		_myParticles.add(theParticle);
-	}
-	
 	public void addForce(final CCForce theForce){
 		_myForces.add(theForce);
 	}
 	
-	public List<ParticleType> particles(){
-		return _myParticles;
-	}
-	
 	public void update(final double theDeltaTime){
 
-		for(int i = _myParticles.size() - 1; i >= 0; i--){
-			if(_myParticles.get(i).isKilled()){
-				_myParticles.remove(i);
+		for(int i = size() - 1; i >= 0; i--){
+			if(get(i).isKilled()){
+				remove(i);
 			}
 		}
-		for(CCParticle myParticle:_myParticles){
+		for(CCParticle myParticle:this){
 			CCVector3 myForceVector = new CCVector3();
 			for(CCForce myForce:_myForces){
 				myForce.apply(myParticle, myForceVector, theDeltaTime);

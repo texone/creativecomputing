@@ -57,7 +57,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 	 * automatically added to all pre- and post-Simulations as well.
 	 * @param theNewVehicle The vehicle object to add to the scene
 	 */
-	public void addParticle(final AgentType theAgent) {
+	public boolean add(final AgentType theAgent) {
 		// Register this class in all behaviors that need it 
 		CCMind _myMind = theAgent.mind();
 
@@ -67,7 +67,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 			}
 		}
 
-		super.addParticle(theAgent);
+		return super.add(theAgent);
 	}
 	
 	public void add(CCObstacle theObstacle) {
@@ -79,7 +79,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 	 */
 	public void init() {
 		// get number of elements
-		_myNumberOfElements = _myParticles.size();
+		_myNumberOfElements = size();
 
 		// create distance matrix
 		_myDistanceMatrix = new double[_myNumberOfElements][_myNumberOfElements];
@@ -97,7 +97,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 	 * The pre- and post-simulations are also cleared of all objects	 
 	 */
 	public void removeAll() {
-		_myParticles.clear();
+		clear();
 
 		// Reset the element count to force a re-initialization of the distance matrix
 		_myNumberOfElements = 0;
@@ -109,7 +109,8 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 	 * @param theAgents Array of vehicles
 	 */
 	public void agents(final List<AgentType> theAgents) {
-		_myParticles = theAgents;
+		removeAll();
+		addAll(theAgents);
 	}
 
 	/** 
@@ -118,7 +119,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 	 * changed, the distance matrix is completely regenerated.
 	 */
 	public void update(final CCAnimator theAnimator) {
-		if (_myParticles.size() != _myNumberOfElements){
+		if (size() != _myNumberOfElements){
 			init();
 		}
 		
@@ -126,7 +127,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 			for (int j = i + 1; j < _myNumberOfElements; j++) {
 
 				// quadratic distance
-				double lenSqr = _myParticles.get(i).position.distanceSquared(_myParticles.get(j).position);
+				double lenSqr = get(i).position.distanceSquared(get(j).position);
 				_myDistanceMatrix[i][j] = lenSqr;
 				_myDistanceMatrix[j][i] = lenSqr;
 			}
@@ -140,7 +141,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 	 * @return Number of elements in the distance matrix
 	 */
 	public int getCount() {
-		return _myParticles.size();
+		return size();
 	}
 	
 	/** 
@@ -179,7 +180,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 		final List<AgentType> _myResult = new ArrayList<AgentType>();
 
 		// get the index of the vehicle
-		final int myVehicleIndex = _myParticles.indexOf(theAgent);
+		final int myVehicleIndex = indexOf(theAgent);
 		
 		if(myVehicleIndex == -1)return _myResult;
 
@@ -191,7 +192,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 		// query distance matrix and put near vehicles in the result list
 		for (int i = 0; i < _myNumberOfElements; i++) {
 			if ((i != myVehicleIndex) && (_myDistanceMatrix[myVehicleIndex][i] <= distSquared)){
-				_myResult.add(_myParticles.get(i));
+				_myResult.add(get(i));
 			}
 		}
 

@@ -53,7 +53,7 @@ public class CCSimulation{
 	}
 	
 	public void addParticle(final CCParticle theParticle){
-		_myDefaultParticleGroup.addParticle(theParticle);
+		_myDefaultParticleGroup.add(theParticle);
 	}
 	
 	public void addForce(final CCForce theForce){
@@ -61,12 +61,12 @@ public class CCSimulation{
 	}
 	
 	public void addAgent(final CCAgent theAgent){
-		_myDefaultAgentGroup.addParticle(theAgent);
-		_myDefaultParticleGroup.addParticle(theAgent);
+		_myDefaultAgentGroup.add(theAgent);
+		_myDefaultParticleGroup.add(theAgent);
 	}
 	
 	public List<CCAgent> agents(){
-		return _myDefaultAgentGroup.particles();
+		return _myDefaultAgentGroup;
 	}
 	
 	public void addPreListener(final CCAnimatorListener theListener){
