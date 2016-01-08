@@ -39,7 +39,7 @@ public class CCImageAsset extends CCAsset<CCImage>{
 	}
 	
 	@Override
-	public void time(double theGlobalTime, double theEventTime) {
+	public void time(double theGlobalTime, double theEventTime, double theContentOffset) {
 	}
 
 }
