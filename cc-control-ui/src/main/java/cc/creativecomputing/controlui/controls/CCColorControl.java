@@ -12,11 +12,12 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
+import cc.creativecomputing.control.handles.CCPropertyEditListener;
+import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.math.CCColor;
@@ -51,7 +52,7 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 					
 					@Override
 					public void actionPerformed(ActionEvent theE) {
-						_myColorPanel.setBackground(new Color((float)_myLastColor.r, (float)_myLastColor.g,(float) _myLastColor.b, (float)_myLastColor.a));
+						_myColorPanel.setBackground(_myColor.toAWTColor());
 						_myColor.set(_myLastColor);
 						_myHandle.value(_myColor, true);
 					}
@@ -62,7 +63,7 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	    public void actionPerformed(ActionEvent evt) {
 	    	try{
 		        CCColor myColor = (CCColor)_myHandle.member().value();
-		        _myColorChooser.setColor(new Color((float)myColor.r, (float)myColor.g, (float)myColor.b,(float) myColor.a));
+		        _myColorChooser.setColor(_myColor.toAWTColor());
 	        }catch(Exception e){
 	        	
 	        }
@@ -86,6 +87,9 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	private JPanel _myColorPanel;
 	
 	private JColorChooser _myColorChooser;
+	
+	private boolean _myTriggerEvent = true;
+	private boolean _myIsInEdit = false;
 
 	static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);
 
@@ -97,7 +101,19 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 			@Override
 			public void onChange(CCColor theValue) {
 				_myColor = theValue;
-				_myColorPanel.setBackground(new Color((float)_myColor.r, (float)_myColor.g, (float)_myColor.b, (float)_myColor.a));
+				_myColorPanel.setBackground(_myColor.toAWTColor());
+			}
+		});
+		theHandle.editEvents().add(new CCPropertyEditListener() {
+			
+			@Override
+			public void endEdit(CCPropertyHandle<?> theProperty) {
+				_myIsInEdit = false;
+			}
+			
+			@Override
+			public void beginEdit(CCPropertyHandle<?> theProperty) {
+				_myIsInEdit = true;
 			}
 		});
 		
@@ -105,35 +121,23 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
  
         //Create the Button.
 		_myColorPanel = new JPanel();
-		_myColorPanel.setBackground(new Color((float)_myColor.r, (float)_myColor.g, (float)_myColor.b, (float)_myColor.a));
+		_myColorPanel.setBackground(_myColor.toAWTColor());
 
 		// Create a color chooser dialog
-		_myColorChooser = new JColorChooser(new Color((float)_myColor.r, (float)_myColor.g, (float)_myColor.b, (float)_myColor.a));
+		_myColorChooser = CCUIStyler.createColorChooser(_myColor.toAWTColor());
+        
 		_myColorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
 			
 			@Override
 			public void stateChanged(ChangeEvent theE) {
 				Color myColor = _myColorChooser.getColor();
 				_myColorPanel.setBackground(myColor);
-				_myColor = new CCColor(myColor.getRed(), myColor.getGreen(), myColor.getBlue(), myColor.getAlpha());
-				_myHandle.value(_myColor, true);
+				_myColor = new CCColor(myColor);
+				_myHandle.value(_myColor, _myIsInEdit);
 			}
 		});
 		
-        AbstractColorChooserPanel[] panels=_myColorChooser.getChooserPanels();
-        for(AbstractColorChooserPanel p:panels){
-            String displayName=p.getDisplayName();
-            switch (displayName) {
-                case "RGB":
-                case "HSL":
-                case "CMYK":
-                case "Muster":
-                	_myColorChooser.removeChooserPanel(p);
-                    break;
-            }
-        }
-
-        _myColorChooser.setPreviewPanel(new JPanel());
+        
 		
         _myButton = new JButton("edit color");
         CCUIStyler.styleButton(_myButton);
