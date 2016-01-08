@@ -21,6 +21,7 @@ package cc.creativecomputing.control.timeline.point;
 
 
 import cc.creativecomputing.control.timeline.TrackData;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCColor;
 
@@ -78,6 +79,7 @@ public class ColorPoint extends ControlPoint {
 	}
 	
 	public void color(CCColor theContent) {
+		CCLog.info("color:" + theContent);
 		_myColor = theContent;
 	}
 	
@@ -161,10 +163,10 @@ public class ColorPoint extends ControlPoint {
 			myEndHandleData.getDouble(VALUE_ATTRIBUTE)
 		);
 		_myColor = new CCColor(
-			myEndHandleData.getDouble("r",0),
-			myEndHandleData.getDouble("g",0),
-			myEndHandleData.getDouble("b",0),
-			myEndHandleData.getDouble("a",0)
+			theData.getDouble("r",0),
+			theData.getDouble("g",0),
+			theData.getDouble("b",0),
+			theData.getDouble("a",0)
 		);
 		_myContentOffset = theData.getDouble("offset", 0);
 	}

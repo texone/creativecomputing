@@ -2,11 +2,13 @@ package cc.creativecomputing.control.handles;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.control.CCEnvelope;
+import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
@@ -25,6 +27,70 @@ import cc.creativecomputing.math.CCColor;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
+	
+	private static interface CCHandleCreator{
+		public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember);
+	}
+	
+	private static Map<Class<?>, CCHandleCreator> creatorMap = new HashMap<>();
+	static{
+		CCHandleCreator myFloatCreator = new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCNumberPropertyHandle<Float>(theParent, theMember, CCPropertyMap.floatConverter);}
+		};
+		creatorMap.put(Float.class, myFloatCreator);
+		creatorMap.put(Float.TYPE, myFloatCreator);
+
+		CCHandleCreator myDoubleCreator = new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCNumberPropertyHandle<Double>(theParent, theMember, CCPropertyMap.doubleConverter);}
+		};
+		creatorMap.put(Double.class, myDoubleCreator);
+		creatorMap.put(Double.TYPE, myDoubleCreator);
+
+		CCHandleCreator myIntegerCreator = new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCNumberPropertyHandle<Integer>(theParent, theMember, CCPropertyMap.intConverter);}
+		};
+		creatorMap.put(Integer.class, myIntegerCreator);
+		creatorMap.put(Integer.TYPE, myIntegerCreator);
+
+		CCHandleCreator myBooleanCreator = new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCBooleanPropertyHandle(theParent, theMember);}
+		};
+		creatorMap.put(Boolean.class, myBooleanCreator);
+		creatorMap.put(Boolean.TYPE, myBooleanCreator);
+		
+		creatorMap.put(CCColor.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCColorPropertyHandle(theParent, theMember);}
+		});
+		creatorMap.put(CCGradient.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCGradientPropertyHandle(theParent, theMember);}
+		});
+		creatorMap.put(String.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCStringPropertyHandle(theParent, theMember);}
+		});
+		creatorMap.put(CCEnvelope.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCEnvelopeHandle(theParent, theMember);}
+		});
+		creatorMap.put(Path.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCPathHandle(theParent, theMember);}
+		});
+		creatorMap.put(CCSelection.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCSelectionPropertyHandle(theParent, theMember);}
+		});
+		creatorMap.put(CCRealtimeCompile.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCRealtimeCompileHandle(theParent, theMember);}
+		});
+	}
 	
 	private Map<String,CCPropertyHandle> _myChildHandles = new LinkedHashMap<>();
 	
@@ -104,28 +170,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(CCField<CCProperty> myField:myFields){
 			Class<?> myClass = myField.type();
 			CCPropertyHandle myProperty;
-			if(myClass == Float.class || myClass == Float.TYPE){
-				myProperty = new CCNumberPropertyHandle<Float>(this, myField, CCPropertyMap.floatConverter);
-			}else  if(myClass == Double.class || myClass == Double.TYPE){
-				myProperty = new CCNumberPropertyHandle<Double>(this, myField, CCPropertyMap.doubleConverter);
-			}else  if(myClass == Integer.class || myClass == Integer.TYPE){
-				myProperty = new CCNumberPropertyHandle<Integer>(this, myField, CCPropertyMap.intConverter);
-			}else  if(myClass == Boolean.class || myClass == Boolean.TYPE){
-				myProperty = new CCBooleanPropertyHandle(this, myField);
+			if(creatorMap.containsKey(myClass)){
+				myProperty = creatorMap.get(myClass).create(this, myField);
 			}else  if(myClass.isEnum()){
 				myProperty = new CCEnumPropertyHandle(this, myField);
-			}else  if(myClass == CCColor.class){
-				myProperty = new CCColorPropertyHandle(this, myField);
-			}else  if(myClass == String.class){
-				myProperty = new CCStringPropertyHandle(this, myField);
-			}else  if(myClass == CCEnvelope.class){
-				myProperty = new CCEnvelopeHandle(this, myField);
-			}else  if(myClass == Path.class){
-				myProperty = new CCPathHandle(this, myField);
-			}else  if(myClass == CCSelection.class){
-				myProperty = new CCSelectionPropertyHandle(this, myField);
-			}else  if(myClass == CCRealtimeCompile.class){
-				myProperty = new CCRealtimeCompileHandle(this, myField);
 			}else{
 				if(myField.value() == null)continue;
 				myProperty = new CCObjectPropertyHandle(this, myField);
@@ -136,54 +184,31 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		List<CCMethod<CCProperty>> myMethods = CCReflectionUtil.getMethods(theObject, CCProperty.class);
 		for(CCMethod<CCProperty> myMethod:myMethods){
 			Class<?> myClass = myMethod.type();
-			
 			CCPropertyHandle myProperty = null;
-			if((myClass == null) || myClass == CCTriggerProgress.class){
+			if(creatorMap.containsKey(myClass)){
+				myProperty = creatorMap.get(myClass).create(this, myMethod);
+			}else if((myClass == null) || myClass == CCTriggerProgress.class){
 				myProperty = new CCEventTriggerHandle(this, myMethod);
-			}else if(myClass == Float.class || myClass == Float.TYPE){
-				myProperty = new CCNumberPropertyHandle<Float>(this, myMethod, CCPropertyMap.floatConverter);
-			}else if(myClass == Double.class || myClass == Double.TYPE){
-				myProperty = new CCNumberPropertyHandle<Double>(this, myMethod, CCPropertyMap.doubleConverter);
-			}else  if(myClass == Integer.class || myClass == Integer.TYPE){
-				myProperty = new CCNumberPropertyHandle<Integer>(this, myMethod, CCPropertyMap.intConverter);
-			}else  if(myClass == Boolean.class || myClass == Boolean.TYPE){
-				myProperty = new CCBooleanPropertyHandle(this, myMethod);
 			}else  if(myClass.isEnum()){
 				myProperty = new CCEnumPropertyHandle(this, myMethod);
-			}else  if(myClass == CCColor.class){
-				myProperty = new CCColorPropertyHandle(this, myMethod);
-			}else  if(myClass == String.class){
-				myProperty = new CCStringPropertyHandle(this, myMethod);
-			}else  if(myClass == Path.class){
-				myProperty = new CCPathHandle(this, myMethod);
 			}else{
-//				myResult.put(myMethod.name(), new CCObjectPropertyHandle(this, myMethod));
+//				if(myField.value() == null)continue;
+//				myProperty = new CCObjectPropertyHandle(this, myField);
 			}
 			if(myProperty != null)myResult.put(myProperty.name(), myProperty);
 		}
 		
 		if((theObject instanceof Map)){
-		
 			Map<String,Object> myMap = (Map<String, Object>)theObject;
 			for(String myKey:myMap.keySet()){
 				CCMapEntry myEntry = new CCMapEntry(myMap, myKey);
 				
 				Class<?> myClass = myEntry.type();
 				CCPropertyHandle myProperty;
-				if(myClass == Float.class || myClass == Float.TYPE){
-					myProperty = new CCNumberPropertyHandle<Float>(this, myEntry, CCPropertyMap.floatConverter);
-				}else  if(myClass == Double.class || myClass == Double.TYPE){
-					myProperty = new CCNumberPropertyHandle<Double>(this, myEntry, CCPropertyMap.doubleConverter);
-				}else  if(myClass == Integer.class || myClass == Integer.TYPE){
-					myProperty = new CCNumberPropertyHandle<Integer>(this, myEntry, CCPropertyMap.intConverter);
-				}else  if(myClass == Boolean.class || myClass == Boolean.TYPE){
-					myProperty = new CCBooleanPropertyHandle(this, myEntry);
+				if(creatorMap.containsKey(myClass)){
+					myProperty = creatorMap.get(myClass).create(this, myEntry);
 				}else  if(myClass.isEnum()){
 					myProperty = new CCEnumPropertyHandle(this, myEntry);
-				}else  if(myClass == CCColor.class){
-					myProperty = new CCColorPropertyHandle(this, myEntry);
-				}else  if(myClass == String.class){
-					myProperty = new CCStringPropertyHandle(this, myEntry);
 				}else{
 					myProperty = new CCObjectPropertyHandle(this, myEntry);
 				}

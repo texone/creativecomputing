@@ -8,12 +8,14 @@ import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
 import cc.creativecomputing.control.timeline.point.BezierControlPoint;
+import cc.creativecomputing.control.timeline.point.ColorPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
 import cc.creativecomputing.control.timeline.point.LinearControlPoint;
 import cc.creativecomputing.control.timeline.point.MarkerPoint;
 import cc.creativecomputing.control.timeline.point.StepControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCMath;
@@ -563,6 +565,9 @@ public class TrackData extends TreeSet<ControlPoint>{
 				break;
 			case TIMED_EVENT:
 				myPoint = new TimedEventPoint();
+				break;
+			case COLOR:
+				myPoint = new ColorPoint();
 				break;
 			default:
 				myPoint = new LinearControlPoint();

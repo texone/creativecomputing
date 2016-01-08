@@ -6,6 +6,7 @@ import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
+import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
@@ -34,6 +35,8 @@ public class CCPropertyMap {
 		public void onEnum(CCEnumPropertyHandle theHandle);
 		
 		public void onColor(CCColorPropertyHandle theHandle);
+		
+		public void onGradient(CCGradientPropertyHandle theHandle);
 		
 		public void onEnvelope(CCEnvelopeHandle theHandle);
 		
@@ -65,6 +68,8 @@ public class CCPropertyMap {
 				theVisitor.onEnum((CCEnumPropertyHandle)myPropertyHandle);
 			}else  if(myFieldClass == CCColor.class){
 				theVisitor.onColor((CCColorPropertyHandle)myPropertyHandle);
+			}else  if(myFieldClass == CCGradient.class){
+				theVisitor.onGradient((CCGradientPropertyHandle)myPropertyHandle);
 			}else  if(myFieldClass == CCEnvelope.class){
 				theVisitor.onEnvelope((CCEnvelopeHandle)myPropertyHandle);
 			}else{

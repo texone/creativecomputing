@@ -15,9 +15,7 @@ public class CCColorPropertyHandle extends CCPropertyHandle<CCColor>{
 	public void value(CCColor theValue, boolean theOverWrite) {
 		if(theValue == null)return;
 		if(theOverWrite)_myOriginalValue = theValue.clone();
-		CCColor myColor = value();
-		myColor.set(theValue);
-		_myValue = theValue;
+		_myValue = theValue.clone();
 		_myUpdateMember = true;
 	}
 	

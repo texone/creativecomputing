@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
 
@@ -108,7 +109,7 @@ public abstract class CCPropertyHandle<Type>{
 		if(_myUpdateMember){
 			_myMember.value(_myValue);
 			_myUpdateMember = false;
-			
+
 			onChange();
 		}else{
 			if(!_myReadBack)return;
