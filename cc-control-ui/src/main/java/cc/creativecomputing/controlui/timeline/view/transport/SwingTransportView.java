@@ -32,7 +32,7 @@ import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.math.CCMath;
 
 @SuppressWarnings("serial")
-public class SwingTransportView extends JPanel implements TransportView, Zoomable{
+public class SwingTransportView extends JPanel implements Zoomable{
 	
 	private class PlayButtonAction implements ActionListener {
 
@@ -83,6 +83,7 @@ public class SwingTransportView extends JPanel implements TransportView, Zoomabl
 				_myZoomController.removeZoomable(SwingTransportView.this);
 				_myZoomController = theController.zoomController();
 				_myZoomController.addZoomable(SwingTransportView.this);
+				zoomFromSlider();
 			}
 			
 			@Override
@@ -154,6 +155,7 @@ public class SwingTransportView extends JPanel implements TransportView, Zoomabl
 		createTimelineCombo();
         
 		_myZoomController.addZoomable(this);
+		zoomFromSlider();
 	}
 	
 	public JComboBox<String> timelineCombox(){
@@ -205,8 +207,7 @@ public class SwingTransportView extends JPanel implements TransportView, Zoomabl
 			@Override
 			public void stateChanged(ChangeEvent theE) {
 				if(!_myTriggerEvent)return;
-				float myBlend = CCMath.pow(_mySlider.getValue() / (float)MAX_SLIDER_VALUE, CURVE_POW);
-				_myZoomController.setRange(_myZoomController.lowerBound(), _myZoomController.lowerBound() + myBlend * MAX_RANGE);
+				zoomFromSlider();
 			}
 			
 		});
@@ -222,6 +223,11 @@ public class SwingTransportView extends JPanel implements TransportView, Zoomabl
         _mySlider.putClientProperty( "JComponent.sizeVariant", "mini" );
         _mySlider.setPreferredSize(new Dimension(130,17));
         add(_mySlider);
+	}
+	
+	private void zoomFromSlider(){
+		float myBlend = CCMath.pow(_mySlider.getValue() / (float)MAX_SLIDER_VALUE, CURVE_POW);
+		_myZoomController.setRange(_myZoomController.lowerBound(), _myZoomController.lowerBound() + myBlend * MAX_RANGE);
 	}
 	
 	private void createTimelineCombo(){
@@ -293,7 +299,6 @@ public class SwingTransportView extends JPanel implements TransportView, Zoomabl
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.timeline.view.TransportRulerView#time(double)
 	 */
-	@Override
 	public void time(double theTime) {
 		_myTimeField.time(theTime);
 		
