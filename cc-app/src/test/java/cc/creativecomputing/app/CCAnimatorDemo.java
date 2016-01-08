@@ -1,16 +1,15 @@
 package cc.creativecomputing.app;
 
-import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
-import cc.creativecomputing.app.modules.CCAnimatorModule;
-import cc.creativecomputing.app.modules.CCAnimatorModule.CCAnimationMode;
+import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.core.logging.CCLog;
 
 public class CCAnimatorDemo {
 	
 	public static void main(String[] args) {
 		
-		CCAnimatorModule myAnimator = new CCAnimatorModule();
+		CCAnimator myAnimator = new CCAnimator();
 		myAnimator.framerate = 60;
 		myAnimator.animationMode = CCAnimationMode.FRAMERATE_PERFORMANT;
 		myAnimator.listener().add(new CCAnimatorListener() {
