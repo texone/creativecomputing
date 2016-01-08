@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.io;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -80,6 +81,22 @@ public class CCNIOUtil {
 		// Windows, Linux, or when not using a Mac OS X .app file
 		return Paths.get(applicationPath, "data", thePath);
 	}
+	
+	/**
+	 * Prepend the application folder path to the path that is passed in. 
+	 * @param thePath
+	 * @return
+	 */
+	static public Path appPath(String thePath){
+		if (applicationPath == null){
+			throw new RuntimeException("The applet was not inited properly, " + "or security restrictions prevented " + "it from determining its path.");
+		}
+		
+		Path myResult = Paths.get(thePath);
+		if(exists(myResult))return myResult;
+
+		return Paths.get(applicationPath).resolve(thePath);
+	}
 
 	/**
 	 * Returns the path to a resource based on the given class, this looks for files in the package
@@ -128,6 +145,23 @@ public class CCNIOUtil {
 	static public String loadString(Path thePath){
 		try{
 	        return new String(Files.readAllBytes(thePath));
+		}catch (IOException e){
+			throw new RuntimeException("Error inside loadStrings()", e);
+		}
+	}
+	
+	static public List<String> loadStrings(Path thePath){
+		try{
+			BufferedReader reader = Files.newBufferedReader(thePath);
+			List<String> myResult = new ArrayList<>();
+			String line = null;
+			while ((line = reader.readLine()) != null){
+				myResult.add(line);
+			}
+			reader.close();
+
+			return myResult;
+
 		}catch (IOException e){
 			throw new RuntimeException("Error inside loadStrings()", e);
 		}
