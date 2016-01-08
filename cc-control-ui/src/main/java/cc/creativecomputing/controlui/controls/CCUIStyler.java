@@ -11,13 +11,16 @@ import java.awt.Insets;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
@@ -27,6 +30,24 @@ public class CCUIStyler {
 
 	
 	protected static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);
+	
+	public static JColorChooser createColorChooser(Color theColor){
+		JColorChooser myResult = new JColorChooser(theColor);
+		AbstractColorChooserPanel[] panels=myResult.getChooserPanels();
+        for(AbstractColorChooserPanel p:panels){
+            String displayName=p.getDisplayName();
+            switch (displayName) {
+                case "RGB":
+                case "HSL":
+                case "CMYK":
+                case "Muster":
+                	myResult.removeChooserPanel(p);
+                    break;
+            }
+        }
+        myResult.setPreviewPanel(new JPanel());
+        return myResult;
+	}
 	
 	public static void styleButton(AbstractButton theButton, int theWidth, int theHeight){
 		theButton.setMargin(new Insets(2, 0, 0, 0));

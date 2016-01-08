@@ -1,8 +1,7 @@
 package cc.creativecomputing.controlui;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorModule;
-import cc.creativecomputing.app.modules.CCAnimatorModule.CCAnimationMode;
+import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.core.CCProperty;
@@ -18,7 +17,7 @@ public class CCTimelineSynch implements CCAnimatorListener{
 	}
 
 	@CCProperty(name = "animator")
-	private CCAnimatorModule _myAnimator = new CCAnimatorModule();
+	private CCAnimator _myAnimator = new CCAnimator();
 	
 	@CCProperty(name = "midi in")
 	private CCMidiIn _myMidiIn = new CCMidiIn();
@@ -33,7 +32,7 @@ public class CCTimelineSynch implements CCAnimatorListener{
 	
 	private TimelineContainer _myTimeline = null;
 	
-	public CCTimelineSynch(CCAnimatorModule theAnimator){
+	public CCTimelineSynch(CCAnimator theAnimator){
 		_myAnimator = theAnimator;
 		_myAnimator.listener().add(this);
 	}
@@ -48,7 +47,7 @@ public class CCTimelineSynch implements CCAnimatorListener{
 		_myTimeline = theTimeline;
 	}
 	
-	public CCAnimatorModule animator(){
+	public CCAnimator animator(){
 		return _myAnimator;
 	}
 	

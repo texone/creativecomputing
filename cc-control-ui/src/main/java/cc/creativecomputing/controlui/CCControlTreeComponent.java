@@ -12,6 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
 import cc.creativecomputing.control.CCEnvelope;
+import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
@@ -20,6 +21,7 @@ import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
 import cc.creativecomputing.control.handles.CCEventTriggerHandle;
+import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
@@ -34,6 +36,7 @@ import cc.creativecomputing.controlui.controls.CCControl;
 import cc.creativecomputing.controlui.controls.CCEnumControl;
 import cc.creativecomputing.controlui.controls.CCEnvelopeControl;
 import cc.creativecomputing.controlui.controls.CCEventTriggerControl;
+import cc.creativecomputing.controlui.controls.CCGradientControl;
 import cc.creativecomputing.controlui.controls.CCNumberControl;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
 import cc.creativecomputing.controlui.controls.CCPathControl;
@@ -121,6 +124,8 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 				myControlPanel = new CCSelectionControl((CCSelectionPropertyHandle)myPropertyHandle, _myControlCompoent);
 			}else  if(myClass == CCColor.class){
 				myControlPanel = new CCColorControl((CCColorPropertyHandle)myPropertyHandle, _myControlCompoent);
+			}else  if(myClass == CCGradient.class){
+				myControlPanel = new CCGradientControl((CCGradientPropertyHandle)myPropertyHandle, _myControlCompoent);
 			}else  if(myClass == String.class){
 				myControlPanel = new CCStringControl((CCStringPropertyHandle)myPropertyHandle, _myControlCompoent);
 			}else  if(myClass == CCEnvelope.class){

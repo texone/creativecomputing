@@ -52,14 +52,11 @@ public class ColorTrackController extends TrackController {
 	
 	private static enum EventAction{
 		DRAG_START, 
-		DRAG_START_OFFSET,
 		DRAG_END, 
-		DRAG_END_OFFSET,
-		DRAG_BLOCK, 
-		DRAG_CONTENT
+		DRAG_BLOCK
 	}
 	
-	private EventAction _myDragAction = EventAction.DRAG_START_OFFSET;
+	private EventAction _myDragAction = EventAction.DRAG_START;
 	
 	private boolean _mySplitDrag = false;
 	
@@ -84,7 +81,10 @@ public class ColorTrackController extends TrackController {
 
 			@Override
 			public void onChange(Object theValue) {
+
+				CCLog.info("on change" + ":" + theValue + ":" + _myEditedColor);
 				if(_myEditedColor != null && _myEditedColor.isSelected()){
+					CCLog.info("on change" + ":" + theValue + ":" + _myEditedColor.isSelected());
 					_myEditedColor.color((CCColor)theValue);
 			        _myTrackView.render();
 				}
@@ -209,12 +209,17 @@ public class ColorTrackController extends TrackController {
 		ColorPoint myTimedEvent = (ColorPoint) theDraggedPoint;
 		
 		double myTime = _myTrackContext.quantize(theMousePoint).time();
-		HandleControlPoint myEnd = myTimedEvent.endPoint();
-		myTime = Math.min(myEnd.time() - MIN_EVENT_TIME, myTime);
 
-		ColorPoint myLowerPoint = (ColorPoint)theDraggedPoint.getPrevious();
-		if(myLowerPoint != null) {
-			myTime = Math.max(myLowerPoint.endTime(), myTime);
+		ColorPoint myPrev = (ColorPoint)theDraggedPoint.getPrevious();
+		if(myPrev != null) {
+			myTime = Math.max(myPrev.time(), myTime);
+			myPrev.endTime(myPrev.time() + (theDraggedPoint.time() - myPrev.time()) * _myPrevRelation);
+		}
+		
+		ControlPoint myPost = theDraggedPoint.getNext();
+		if(myPost != null) {
+			myTime = Math.min(myPost.time() - MIN_EVENT_TIME, myTime);
+			myTimedEvent.endTime(myTimedEvent.time() + (myPost.time() - myTimedEvent.time()) * _myPostRelation);
 		}
 			
 		theMousePoint.time(myTime);
@@ -285,31 +290,6 @@ public class ColorTrackController extends TrackController {
 		case DRAG_END:
 			dragEndHandle(theDraggedPoint, myMousePoint);
 			break;
-		case DRAG_START_OFFSET:
-			dragStart(theDraggedPoint, myMousePoint);
-			if(theDraggedPoint != null && theDraggedPoint instanceof ColorPoint){
-				ColorPoint myLowerPoint = (ColorPoint)theDraggedPoint;
-				double myTime = _myTrackContext.quantize(theMovement.time());
-				myLowerPoint.contentOffset(_myLastOffset - myTime);
-			}
-			break;
-		case DRAG_END_OFFSET:
-			dragEndHandle(theDraggedPoint, myMousePoint);
-			if(theDraggedPoint != null && theDraggedPoint instanceof HandleControlPoint){
-
-				HandleControlPoint myControlPoint = (HandleControlPoint)theDraggedPoint;
-				ColorPoint myLowerPoint = (ColorPoint)(myControlPoint.parent());
-				double myTime = _myTrackContext.quantize(theMovement.time());
-				myLowerPoint.contentOffset(_myLastOffset + myTime);
-			}
-			break;
-		case DRAG_CONTENT:
-			if(theDraggedPoint != null && theDraggedPoint instanceof ColorPoint){
-				ColorPoint myLowerPoint = (ColorPoint)theDraggedPoint;
-				double myTime = _myTrackContext.quantize(theMovement.time());
-				myLowerPoint.contentOffset(_myLastOffset + myTime);
-			}
-			break;
 		}
 		_myColorTrackListener.proxy().onChange(this, _myEditedColor);
 	}
@@ -317,13 +297,13 @@ public class ColorTrackController extends TrackController {
 	public ColorPoint pointAt(double theTime) {
 		ControlPoint myCurveCoords = new ControlPoint(theTime, 0);
 		ColorPoint myLower = (ColorPoint)trackData().lower(myCurveCoords);
-		if(myLower == null) return null;
-		ControlPoint myUpper = myLower.endPoint();
-		if(myUpper == null) return null;
-		if(myCurveCoords.time() > myLower.time() && myCurveCoords.time() < myUpper.time()) {
-			return myLower;
+		ColorPoint myCeiling = (ColorPoint)trackData().ceiling(myCurveCoords);
+		if(myLower == null && myCeiling == null) {
+			return null;
 		}
-		return null;
+		
+		if(myLower == null) return myCeiling;
+		return myCeiling;
 	}
 	
 	public ColorPoint clickedPoint(MouseEvent e) {
@@ -337,6 +317,9 @@ public class ColorTrackController extends TrackController {
 	private ControlPoint _myCurveCoords;
 	
 	private double _myLastOffset = 0;
+	
+	private double _myPrevRelation = 0.5;
+	private double _myPostRelation = 0.5;
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -356,17 +339,22 @@ public class ColorTrackController extends TrackController {
 		
 		_myEditedColor = null;
 		
-		CCLog.info(myControlPoint + ":" + (myControlPoint != null ? distance(myControlPoint, myViewCoords) : ""));
-		
 		if (myHandle != null) {
 			_myDraggedPoints = new ArrayList<ControlPoint>();
 			_myDraggedPoints.add(myHandle);
-			_myEditedColor = (ColorPoint)myHandle.parent();
 			_myDragAction = EventAction.DRAG_END;
 		} else if (myControlPoint != null  && distance(myControlPoint, myViewCoords) < SwingTrackView.PICK_RADIUS){
 			_myDraggedPoints = new ArrayList<ControlPoint>();
 			_myDraggedPoints.add(myControlPoint);
 			_myEditedColor = (ColorPoint)myControlPoint;
+			if(myControlPoint.hasPrevious()){
+				ColorPoint myPrev = (ColorPoint)myControlPoint.getPrevious();
+				_myPrevRelation = (myPrev.endTime() - myPrev.time()) / (myControlPoint.time() - myPrev.time());
+			}
+			if(myControlPoint.hasNext()){
+				ColorPoint myPost = (ColorPoint)myControlPoint.getNext();
+				_myPostRelation = (_myEditedColor.endTime() - _myEditedColor.time()) / (myPost.time() - _myEditedColor.time());
+			}
 			_myDragAction = EventAction.DRAG_START;
 		} else {
 			
@@ -440,7 +428,7 @@ public class ColorTrackController extends TrackController {
 				}
 			}
 			if(_myEditedColor != null){
-				_myTrack.property().valueCasted(_myEditedColor.color() == null ? null : _myEditedColor.color(), false);
+				_myTrack.property().valueCasted(_myEditedColor.color() == null ? null : _myEditedColor.color().clone(), false);
 				_myEditedColor.isSelected(true);
 				_myTrack.property().beginEdit();
 		        _myTrackView.render();
@@ -474,27 +462,28 @@ public class ColorTrackController extends TrackController {
 		}
 		
 		if (myLower == null && myCeiling != null) {
-			return myCeiling.color();
+			return myCeiling.color().clone();
+		}
+		
+		if(myCeiling == null && myLower != null){
+			return myLower.color().clone();
 		}
 
 		myLower = (ColorPoint)trackData().getLastOnSamePosition(myLower);
 
-		if (myCeiling != null) {
-			double myBlend = (theTime - myLower.time()) / (myCeiling.time() - myLower.time());
-			return CCColor.blend(myLower.color(), myCeiling.color(), myBlend);
-		} else {
-			if (myLower != null) {
-				return myLower.color();
-			}
-		}
-		return new CCColor();
+		double myBlend = (theTime - myLower.time()) / (myCeiling.time() - myLower.time());
+		double myPow = (myLower.endTime() - myLower.time()) / (myCeiling.time() - myLower.time());
+		if(myPow > 0.5)myPow = 1 / CCMath.blend(1, 0, (myPow - 0.5) * 2);
+		else myPow = CCMath.blend(0, 1, (myPow) * 2);
+		return CCColor.blend(myLower.color(), myCeiling.color(),CCMath.pow(myBlend, myPow) );
+		
 	}
 
 	@Override
 	public void timeImplementation(double theTime, double theValue) {
 		ColorPoint myEventPoint = pointAt(theTime);
 		
-    	if(myEventPoint == null || myEventPoint.color() == null || myEventPoint.color() == null){
+    	if(myEventPoint == null){
     		_myTrack.property().restore();
     		_myColorTrackListener.proxy().onOut();
     		return;

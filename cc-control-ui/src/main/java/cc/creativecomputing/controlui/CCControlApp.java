@@ -12,7 +12,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorModule;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
@@ -152,7 +151,7 @@ public class CCControlApp  {
 	}
 	
 	public CCControlApp(Object theRootObject) {
-		this(theRootObject, new CCAnimatorModule());
+		this(theRootObject, new CCAnimator());
 		_myAnimator.start();
 	}
 	

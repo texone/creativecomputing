@@ -33,6 +33,7 @@ import cc.creativecomputing.controlui.timeline.view.SwingEventCreatePopup;
 import cc.creativecomputing.controlui.timeline.view.SwingEventPopup;
 import cc.creativecomputing.controlui.timeline.view.SwingToolChooserPopup;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 
@@ -544,6 +545,11 @@ public class SwingTrackDataView extends JPanel{
     	if (_myController.trackData().size() == 0) {
     		return;
     	}
+    	int i = 0;
+    	for(ControlPoint myPoint:_myController.trackData()){
+    		CCLog.info(i + ":" + ((ColorPoint)myPoint).color());
+    		i++;
+    	}
          
     	ControlPoint myMinPoint = _myController.trackData().floor(new ControlPoint(_myTrackContext.lowerBound(), 0));
  		if(myMinPoint == null){
@@ -574,32 +580,28 @@ public class SwingTrackDataView extends JPanel{
 
  	// paint curve points
  		BasicStroke myThinStroke = new BasicStroke(1.0f);
- 		g2d.setStroke(myThinStroke);
+ 		BasicStroke myThickStroke = new BasicStroke(3.0f);
  		myCurrentPoint = (ColorPoint)_myController.trackData().getFirstPointAt(_myTrackContext.lowerBound());
 
  		while (myCurrentPoint != null) {
  			if (myCurrentPoint.time() > _myTrackContext.upperBound()) {
  				break;
  			}
+
+        	CCColor myColor = myCurrentPoint.color().invert();
+        	Color myAWTColor = new Color((float)myColor.r, (float)myColor.g, (float)myColor.b);
  			int myX = _myController.timeToViewX(myCurrentPoint.time());
- 	 		g2d.setColor(Color.WHITE);
- 			g2d.drawLine(myX, 0, myX, getHeight());
+ 	 		g2d.setColor(myAWTColor);
  	 		if(myCurrentPoint.isSelected())
- 	 			g2d.setColor(Color.RED);
+ 	 			g2d.setStroke(myThickStroke);
  	 		else
- 	 			g2d.setColor(Color.BLACK);
- 			g2d.drawLine(myX + 1, 0, myX + 1, getHeight());
+ 	 			g2d.setStroke(myThinStroke);
+ 			g2d.drawLine(myX, 0, myX, getHeight());
  			
  			myX = _myController.timeToViewX(myCurrentPoint.endTime());
- 	 		g2d.setColor(Color.WHITE);
  			g2d.drawLine(myX, getHeight()/ 2 - 5, myX, getHeight()/ 2 + 5);
  			g2d.drawLine(myX - 5, getHeight() / 2, myX + 5, getHeight() / 2);
- 	 		if(myCurrentPoint.isSelected())
- 	 			g2d.setColor(Color.RED);
- 	 		else
- 	 			g2d.setColor(Color.BLACK);
- 			g2d.drawLine(myX + 1, getHeight()/ 2 - 5, myX + 1, getHeight()/ 2 + 5);
- 			g2d.drawLine(myX - 5, getHeight() / 2 + 1, myX + 5, getHeight() / 2 + 1);
+ 	 		
  				//g2d.drawString(myCurrentPoint.value() +"", (int)myUserPoint.getX(), (int)myUserPoint.getY());
  			
 // 			if (myCurrentPoint.getType() == ControlPointType.BEZIER) {
