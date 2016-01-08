@@ -11,7 +11,6 @@
 package cc.creativecomputing.video;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorModule;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.image.CCImage;
@@ -45,7 +44,7 @@ public abstract class CCVideo extends CCImage implements CCAnimatorListener{
 	 * Creates a new instance, without setting any parameters.
 	 * @param theApp
 	 */
-	public CCVideo(final CCAnimatorModule theAnimator) {
+	public CCVideo(final CCAnimator theAnimator) {
 		super();
 		_myPixelStorageModes.alignment(1);
 		theAnimator.listener().add(this);

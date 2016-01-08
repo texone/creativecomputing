@@ -32,7 +32,6 @@ import org.gstreamer.interfaces.Property;
 import org.gstreamer.interfaces.PropertyProbe;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorModule;
 import cc.creativecomputing.core.CCSystem;
 import cc.creativecomputing.core.CCSystem.CCOS;
 import cc.creativecomputing.core.logging.CCLog;
@@ -236,7 +235,7 @@ public class CCGStreamerCapture extends CCVideo{
 	 * @param theRequestWidth width of the frame
 	 * @param theRequestHeight height of the frame
 	 */
-	public CCGStreamerCapture(CCAnimatorModule theAnimator, int theRequestWidth, int theRequestHeight) {
+	public CCGStreamerCapture(CCAnimator theAnimator, int theRequestWidth, int theRequestHeight) {
 		super(theAnimator);
 		initGStreamer(theAnimator, theRequestWidth, theRequestHeight, CAPTURE_PLUGIN, null, "");
 	}
@@ -246,7 +245,7 @@ public class CCGStreamerCapture extends CCVideo{
 	 * 
 	 * @param theFrameRate number of frames to read per second
 	 */
-	public CCGStreamerCapture(CCAnimatorModule theAnimator, int theRequestWidth, int theRequestHeight, int theFrameRate) {
+	public CCGStreamerCapture(CCAnimator theAnimator, int theRequestWidth, int theRequestHeight, int theFrameRate) {
 		super(theAnimator);
 		initGStreamer(theAnimator, theRequestWidth, theRequestHeight, CAPTURE_PLUGIN, null, theFrameRate + "/1");
 	}
@@ -256,7 +255,7 @@ public class CCGStreamerCapture extends CCVideo{
 	 * 
 	 * @param theCameraName name of the camera
 	 */
-	public CCGStreamerCapture(CCAnimatorModule theAnimator, int theRequestWidth, int theRequestHeight, String theCameraName) {
+	public CCGStreamerCapture(CCAnimator theAnimator, int theRequestWidth, int theRequestHeight, String theCameraName) {
 		super(theAnimator);
 		
 		HashMap<String, Object> properties = new HashMap<String, Object>();
@@ -273,7 +272,7 @@ public class CCGStreamerCapture extends CCVideo{
 	 * <h3>Advanced</h3> This constructor allows to specify the camera name and the desired frame rate, in addition to
 	 * the resolution.
 	 */
-	public CCGStreamerCapture(CCAnimatorModule theAnimator, int theRequestWidth, int theRequestHeight, String theCameraName, int theFrameRate) {
+	public CCGStreamerCapture(CCAnimator theAnimator, int theRequestWidth, int theRequestHeight, String theCameraName, int theFrameRate) {
 		super(theAnimator);
 		HashMap<String, Object> properties = new HashMap<String, Object>();
 		if (DEVICE_PROPERTY_NAME.equals("")) {
@@ -290,7 +289,7 @@ public class CCGStreamerCapture extends CCVideo{
 	 * fraction form).
 	 */
 	public CCGStreamerCapture(
-		CCAnimatorModule theAnimator, 
+		CCAnimator theAnimator, 
 		int theRequestWidth, int theRequestHeight, 
 		String sourceName, HashMap<String, Object> properties, 
 		String theFrameRate
@@ -302,7 +301,7 @@ public class CCGStreamerCapture extends CCVideo{
 
 	// The main initialization here.
 	private void initGStreamer(
-		CCAnimatorModule theAnimator, 
+		CCAnimator theAnimator, 
 		int theRequestWidth, int theRequestHeight, 
 		String theSource, 
 		HashMap<String, Object> properties,

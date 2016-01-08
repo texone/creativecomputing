@@ -32,7 +32,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorModule;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.image.CCImageUtil;
 import cc.creativecomputing.image.CCPixelFormat;
@@ -322,7 +321,7 @@ public class CCScreenCaptureData extends CCVideo {
 	 * @param theAnimator
 	 */
 	public CCScreenCaptureData(
-		final CCAnimatorModule theAnimator, 
+		final CCAnimator theAnimator, 
 		final int theX, final int theY,
 		final int theWidth, final int theHeight, final int theFrameRate,
 		final boolean theRunParallel
@@ -367,7 +366,7 @@ public class CCScreenCaptureData extends CCVideo {
 	}
 	
 	public CCScreenCaptureData(
-		final CCAnimatorModule theAnimator, 
+		final CCAnimator theAnimator, 
 		final int theX, final int theY,
 		final int theWidth, final int theHeight, final int theFrameRate
 	) {

@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.video;
 
-import cc.creativecomputing.app.modules.CCAnimatorModule;
+import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.events.CCListenerManager;
 
 /**
@@ -40,7 +40,7 @@ public abstract class CCMovieData extends CCVideo implements CCMovie{
 	 * Creates a new instance, without setting any parameters.
 	 * @param theAnimator
 	 */
-	public CCMovieData(final CCAnimatorModule theAnimator) {
+	public CCMovieData(final CCAnimator theAnimator) {
 		super(theAnimator);
 	}
 	

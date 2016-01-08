@@ -28,7 +28,6 @@ import org.gstreamer.elements.PlayBin2;
 import org.gstreamer.elements.RGBDataAppSink;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorModule;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.image.CCImageException;
@@ -81,7 +80,7 @@ public class CCGStreamerMovie extends CCMovieData {
 	 * 
 	 * @param thePath
 	 */
-	public CCGStreamerMovie(final CCAnimatorModule theAnimator, final String thePath) {
+	public CCGStreamerMovie(final CCAnimator theAnimator, final String thePath) {
 		super(theAnimator);
 
 		setMovie(thePath);
