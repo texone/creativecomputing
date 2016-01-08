@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.math;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -539,6 +540,16 @@ public class CCColor implements Cloneable{
 		set(theColor);
 	}
 	
+	public CCColor(Color theColor){
+		this();
+		set(
+			theColor.getRed(),
+			theColor.getGreen(),
+			theColor.getBlue(),
+			theColor.getAlpha()
+		);
+	}
+	
 	public CCColor clone(){
 		return new CCColor(r, g,b,a);
 	}
@@ -996,8 +1007,25 @@ public class CCColor implements Cloneable{
 		return darker(DEFAULT_SCALE);
 	}
 	
+	public CCColor invert(){
+		return new CCColor(1 - r, 1 - g, 1 - b, a);
+	}
+	
 	public double[]array(){
 		return new double[] {r,g,b,a};
+	}
+	
+	public Color toAWTColor(){
+		return new Color((float)r,(float)g,(float)b,(float)a);
+	}
+	
+	public void set(Color theColor){
+		set(
+			theColor.getRed(),
+			theColor.getGreen(),
+			theColor.getBlue(),
+			theColor.getAlpha()
+		);
 	}
 
 	/**
