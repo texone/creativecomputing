@@ -92,6 +92,14 @@ public class CCReflectionUtil {
 			}
 		}
 		
+		public Float floatValue(){
+			try {
+				return _myField.getFloat(_myParent);
+			} catch (Exception e) {
+				throw new CCReflectionException(e);
+			}
+		}
+		
 		@Override
 		public void value(Object theObject){
 			try {
@@ -153,16 +161,22 @@ public class CCReflectionUtil {
 		
 	}
 	
-	public static void getFields(final Class<?> theClass, final Class<? extends Annotation>theAnnotation, final List<Field> theFields) {
-		if(theClass.getSuperclass() == null) return;
+	public static Field getField(final Class<?> theClass, final String theFieldName) {
+		try{
+			return theClass.getDeclaredField(theFieldName);
+		}catch(Exception e){
+			if(theClass.getSuperclass() == null) return null;
 			
-		getFields(theClass.getSuperclass(), theAnnotation, theFields);
-		
-		for (Field myField : theClass.getDeclaredFields()) {
-			myField.setAccessible(true);
-			Annotation myAnnotation = myField.getAnnotation(theAnnotation);
-			if (myAnnotation != null)theFields.add(myField);
+			return getField(theClass.getSuperclass(), theFieldName);
 		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static CCField<?> getField(Object theObject, final String theFieldName){
+		Field myField = CCReflectionUtil.getField(theObject.getClass(), theFieldName);
+		if(myField == null)return null;
+		
+		return new CCField(myField, theObject, null);
 	}
 	
 	public static void getFields(final Class<?> theClass, final List<Field> theFields) {
@@ -191,6 +205,18 @@ public class CCReflectionUtil {
 			} 
 		}
 		return myResult;
+	}
+	
+	public static void getFields(final Class<?> theClass, final Class<? extends Annotation>theAnnotation, final List<Field> theFields) {
+		if(theClass.getSuperclass() == null) return;
+			
+		getFields(theClass.getSuperclass(), theAnnotation, theFields);
+		
+		for (Field myField : theClass.getDeclaredFields()) {
+			myField.setAccessible(true);
+			Annotation myAnnotation = myField.getAnnotation(theAnnotation);
+			if (myAnnotation != null)theFields.add(myField);
+		}
 	}
 	
 	public static <Type extends Annotation>List<CCField<Type>> getFields(Object theObject, Class<Type> theAnnotation){
