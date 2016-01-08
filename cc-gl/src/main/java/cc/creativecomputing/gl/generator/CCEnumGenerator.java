@@ -1,8 +1,12 @@
 package cc.creativecomputing.gl.generator;
 
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.io.CCIOUtil;
+import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCEnumGenerator {
 	
@@ -31,11 +35,11 @@ public class CCEnumGenerator {
 	}
 	
 	public static void main(String[] args) {
-		String[] myEnumFiles = CCIOUtil.list("sources/enums");
-		for(String myEnumFile:myEnumFiles){
-			String[] myLines = CCIOUtil.loadStrings("sources/enums/" + myEnumFile);
+		List<Path> myEnumFiles = CCNIOUtil.list(Paths.get("sources/enums"));
+		for(Path myEnumFile:myEnumFiles){
+			List<String> myLines = CCNIOUtil.loadStrings(Paths.get("sources/enums/" + myEnumFile));
 			
-			String myClassName = getClassName(myEnumFile);
+			String myClassName = getClassName(myEnumFile.toString());
 			StringBuffer myJavaCode = new StringBuffer();
 			
 			myJavaCode.append("package " + PACKAGE + ";\n");
@@ -77,7 +81,7 @@ public class CCEnumGenerator {
 			myJavaCode.append("	}\n");
 			
 			myJavaCode.append("}\n");
-			CCIOUtil.saveStrings(CCIOUtil.appPath("src/"+FOLDER+myClassName+".java"), new String[]{myJavaCode.toString()});
+			CCNIOUtil.saveString(CCNIOUtil.appPath("src/"+FOLDER+myClassName+".java"), myJavaCode.toString());
 			
 			CCLog.info(myJavaCode);
 		}
