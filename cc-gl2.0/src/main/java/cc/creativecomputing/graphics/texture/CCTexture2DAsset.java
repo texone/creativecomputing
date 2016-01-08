@@ -49,7 +49,7 @@ public class CCTexture2DAsset extends CCAsset<CCTexture2D>{
 	}
 	
 	@Override
-	public void time(double theGlobalTime, double theEventTime) {
+	public void time(double theGlobalTime, double theEventTime, double theContentOffset) {
 	}
 
 }
