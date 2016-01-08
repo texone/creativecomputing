@@ -4,8 +4,9 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.controlui.timeline.controller.TransportController;
@@ -252,7 +253,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		return _myRecordListeners;
 	}
 	
-	private CCAnimationMode _myAnimationMode;
+	private CCAnimator.CCAnimationMode _myAnimationMode;
 	private boolean _myFixUpdateTime = false;
 	private double _myFixedUpdateTime = 0;
 	
@@ -294,14 +295,14 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 			
 			_mySequenceSteps = CCMath.ceil(_myTransportController.loopRange().length())  * _myBaseRate;
 			_myFadeSteps = _myFadeSeconds * _myBaseRate;
-			_myAnimator.animationMode = CCAnimationMode.AS_FAST_AS_POSSIBLE;
+			_myAnimator.animationMode = CCAnimator.CCAnimationMode.AS_FAST_AS_POSSIBLE;
 			_myAnimator.fixedUpdateTime = 1f / (_myBaseRate);
 			_myAnimator.fixUpdateTime = true;
 			if(_myFadeSteps > 0)_myAnimator.fixedUpdateTime = 0;
 		}else{
 			_mySequenceSteps = (_mySeconds + 2 * _myFadeSeconds)  * _myBaseRate;
 			_myFadeSteps = _myFadeSeconds * _myBaseRate;
-			_myAnimator.animationMode = CCAnimationMode.AS_FAST_AS_POSSIBLE;
+			_myAnimator.animationMode = CCAnimator.CCAnimationMode.AS_FAST_AS_POSSIBLE;
 			_myAnimator.fixedUpdateTime = 1f / (_myBaseRate);
 			_myAnimator.fixUpdateTime = true;
 			if(_myFadeSteps > 0)_myAnimator.fixedUpdateTime = 0;
@@ -322,56 +323,62 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		if(_myProgress != null)_myProgress.end();
 		_myIsRecording = false;
 		
-		
-		switch(_myContainers){
-		case INDIVIDUAL:
-			if(_myFormat == CCSequenceFormats.NONE)return;
-			if(!_myFormat.savePosition()){
-				for(String myKey:_myRecordings.keySet()){
-					Path myPath;
-					CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get(myKey);
-					if(_myFormat.isFolder()){
-						myPath = theRecordPath == null ? CCNIOUtil.selectFolder() : theRecordPath;
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				switch(_myContainers){
+				case INDIVIDUAL:
+					if(_myFormat == CCSequenceFormats.NONE)return;
+					if(!_myFormat.savePosition()){
+						for(String myKey:_myRecordings.keySet()){
+							Path myPath;
+							CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get(myKey);
+							if(!myRecording.export)continue;
+							if(_myFormat.isFolder()){
+								myPath = theRecordPath == null ? CCNIOUtil.selectFolder() : theRecordPath;
+							}else{
+								myPath = theRecordPath == null ? CCNIOUtil.selectOutput() : theRecordPath;
+							}
+							if(myPath == null)return;
+							myRecording.save(myPath);
+						}
 					}else{
-						myPath = theRecordPath == null ? CCNIOUtil.selectOutput() : theRecordPath;
+						Path myPath;
+						if(_myFormat.isFolder()){
+							myPath = theRecordPath == null ? CCNIOUtil.selectFolder() : theRecordPath;
+						}else{
+							myPath = theRecordPath == null ? CCNIOUtil.selectOutput() : theRecordPath;
+						}
+						if(myPath == null)return;
+						_myElementRecording.save(myPath);
 					}
+					break;
+				case KLE_1:
+					Path myPath = theRecordPath == null ? CCNIOUtil.selectOutput() : theRecordPath;
+					
 					if(myPath == null)return;
-					myRecording.save(myPath);
-				}
-			}else{
-				Path myPath;
-				if(_myFormat.isFolder()){
-					myPath = theRecordPath == null ? CCNIOUtil.selectFolder() : theRecordPath;
-				}else{
+		
+					CCSequenceKLE1Container myKLE1Container = new CCSequenceKLE1Container();
+					CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get("motors");
+					if(myRecording != null){
+						myKLE1Container.useStartEndChannels(myRecording._cUseStartEndChannel);
+						myKLE1Container.startChannel(myRecording._cStartChannel);
+						myKLE1Container.endChannel(myRecording._cEndChannel);
+					}
+					myKLE1Container.save(myPath, _myElements, _myRecordings);
+					break;
+				case KLE_2:
 					myPath = theRecordPath == null ? CCNIOUtil.selectOutput() : theRecordPath;
+					if(myPath == null)return;
+		
+					CCSequenceKLE2Container myKLEContainer = new CCSequenceKLE2Container();
+					myKLEContainer.save(myPath, _myElements, _myRecordings);
+					break;
+					
 				}
-				if(myPath == null)return;
-				_myElementRecording.save(myPath);
-			}
-			break;
-		case KLE_1:
-			Path myPath = theRecordPath == null ? CCNIOUtil.selectOutput() : theRecordPath;
-			
-			if(myPath == null)return;
-
-			CCSequenceKLE1Container myKLE1Container = new CCSequenceKLE1Container();
-			CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get("motors");
-			if(myRecording != null){
-				myKLE1Container.useStartEndChannels(myRecording._cUseStartEndChannel);
-				myKLE1Container.startChannel(myRecording._cStartChannel);
-				myKLE1Container.endChannel(myRecording._cEndChannel);
-			}
-			myKLE1Container.save(myPath, _myElements, _myRecordings);
-			break;
-		case KLE_2:
-			myPath = theRecordPath == null ? CCNIOUtil.selectOutput() : theRecordPath;
-			if(myPath == null)return;
-
-			CCSequenceKLE2Container myKLEContainer = new CCSequenceKLE2Container();
-			myKLEContainer.save(myPath, _myElements, _myRecordings);
-			break;
-			
-		}
+			};
+		});
 	}
 	
 	private boolean _myRecordTimeline = false;

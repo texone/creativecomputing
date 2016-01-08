@@ -59,6 +59,12 @@ public class CCSequenceElement  {
 		_myLightSetup = theLightSetup;
 	}
 	
+	public CCSequenceElement(int theID, CCMotorSetup theMotorSetup){
+		_myID = theID;
+		_myMotorSetup = theMotorSetup;
+		_myLightSetup = null;
+	}
+	
 	private CCMotorSetup setMotors(List<CCMotorChannel> theMotors, CCMotorBounds theBounds, double theElementRadius){
 		if(theMotors == null)return new CCMotorSetup(theMotors);
 		_myChannels.addAll(theMotors);

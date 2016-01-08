@@ -1,6 +1,8 @@
 package cc.creativecomputing.kle.elements.motors;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.graphics.CCDrawMode;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
 import cc.creativecomputing.math.CCMath;
@@ -132,4 +134,5 @@ public class CC2Motor2ConnectionBounds extends CCMotorBounds{
 		_myRopeAngle = theAngle;
 		updateBounds();
 	}
+	
 }

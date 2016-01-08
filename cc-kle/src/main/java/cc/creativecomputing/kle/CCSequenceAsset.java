@@ -1,10 +1,13 @@
 package cc.creativecomputing.kle;
 
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 import cc.creativecomputing.control.CCAsset;
+import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.formats.CCSequenceIO;
@@ -72,11 +75,16 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	
 	
 	@Override
-	public void time(double theGlobalTime, double theEventTime) {
+	public void time(double theGlobalTime, double theEventTime, double theContentOffset) {
 		if(_myAsset == null)return;
 		
 		float myFrame = ((float)theEventTime * _cRate) % _myAsset.length();
 		_myFrame = _myAsset.frame(myFrame);
+	}
+	
+	@Override
+	public void renderTimedEvent(TimedEventPoint theTimedEvent,Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+		super.renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
 	}
 	
 	@Override

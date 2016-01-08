@@ -24,7 +24,7 @@ public class CCKleModulation {
 	@CCProperty(name = "y offset", min = -1, max = 1)
 	private double _cYOffset = 0;
 	
-	@CCProperty(name = "mod", min = 2, max = 8)
+	@CCProperty(name = "mod", min = 2, max = 48)
 	private int _cMod = 1;
 	@CCProperty(name = "mod offset", min = -1, max = 1)
 	private double _cModOffset = 0;
