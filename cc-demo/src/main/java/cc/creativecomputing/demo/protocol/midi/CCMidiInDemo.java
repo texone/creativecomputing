@@ -11,7 +11,6 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.protocol.midi.CCMidiIn;
 import cc.creativecomputing.protocol.midi.CCMidiListener;
-import cc.creativecomputing.protocol.midi.CCMidiTimeCode;
 import cc.creativecomputing.protocol.midi.messages.CCMidiMessage;
 
 public class CCMidiInDemo extends CCGL2Adapter{
@@ -64,7 +63,7 @@ public class CCMidiInDemo extends CCGL2Adapter{
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

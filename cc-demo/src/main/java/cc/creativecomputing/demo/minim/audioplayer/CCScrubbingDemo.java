@@ -46,7 +46,7 @@ public class CCScrubbingDemo extends CCGL2Adapter {
 	public void start(CCAnimator theAnimator) {
 		minim = new CCSoundIO();
 		
-		song = minim.loadFile(CCNIOUtil.dataPath("sound/fair1939.wav"), 512);
+		song = CCSoundIO.loadFile(CCNIOUtil.dataPath("sound/fair1939.wav"), 512);
 		
 		// loop the file
 		
@@ -135,7 +135,7 @@ public class CCScrubbingDemo extends CCGL2Adapter {
 		// use the mix buffer to draw the waveforms.
 		g.pushMatrix();
 		g.translate(-g.width() / 2, -g.height() / 2);
-		float centerFrequency = 0;
+//		float centerFrequency = 0;
 
 		g.color(255);
 		  for (int i = 0; i < song.bufferSize() - 1;  i++){
@@ -157,7 +157,7 @@ public class CCScrubbingDemo extends CCGL2Adapter {
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

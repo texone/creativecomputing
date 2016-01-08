@@ -1,16 +1,23 @@
-package cc.creativecomputing.demo;
+package cc.creativecomputing.demo.control;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
-import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.math.CCColor;
 
-public class CCEmptyApp extends CCGL2Adapter{
+public class CCColorControl extends CCGL2Adapter{
+	
+	
+	@CCProperty(name = "color")
+	private CCColor _myColor = new CCColor();
 	
 	
 	
+	@Override
+	public void start(CCAnimator theAnimator) {
+	}
 	
 	@Override
 	public void init(CCGraphics g) {
@@ -19,23 +26,22 @@ public class CCEmptyApp extends CCGL2Adapter{
 	
 	@Override
 	public void update(CCAnimator theAnimator) {
-		
 	}
-	
-	
 	
 	@Override
 	public void display(CCGraphics g) {
-		
+		g.clearColor(_myColor);
 		g.clear();
 		
-		g.rect(0,0,110,100);
+		
+		
+	
 	}
 	
 	public static void main(String[] args) {
 		
 		
-		CCEmptyApp demo = new CCEmptyApp();
+		CCColorControl demo = new CCColorControl();
 		
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);

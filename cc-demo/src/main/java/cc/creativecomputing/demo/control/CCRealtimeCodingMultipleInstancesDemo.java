@@ -36,8 +36,6 @@ public class CCRealtimeCodingMultipleInstancesDemo extends CCGL2Adapter{
 	@CCProperty(name = "settings")
 	private CCRealtimeParticleSettings _cSettings = new CCRealtimeParticleSettings();
 	
-	private CCControlApp _myControlApp;
-	
 	@Override
 	public void init(CCGraphics g) {
 
@@ -76,7 +74,7 @@ public class CCRealtimeCodingMultipleInstancesDemo extends CCGL2Adapter{
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

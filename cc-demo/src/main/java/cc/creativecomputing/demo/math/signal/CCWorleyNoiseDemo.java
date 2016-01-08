@@ -3,8 +3,6 @@ package cc.creativecomputing.demo.math.signal;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.demo.control.CCStringDemo;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -58,7 +56,7 @@ public class CCWorleyNoiseDemo extends CCGL2Adapter{
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.AUTOMAX;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

@@ -64,7 +64,7 @@ public class CCMouseMotionDemo extends CCGL2Adapter{
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

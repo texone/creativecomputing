@@ -2,7 +2,6 @@ package cc.creativecomputing.demo;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
-import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.gl.app.events.CCMouseAdapter;
 import cc.creativecomputing.gl.app.events.CCMouseEvent;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -57,7 +56,7 @@ public class CCMouseDemo extends CCGL2Adapter{
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

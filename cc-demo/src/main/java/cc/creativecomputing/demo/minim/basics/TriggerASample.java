@@ -1,5 +1,6 @@
 package cc.creativecomputing.demo.minim.basics;
 
+import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
@@ -54,7 +55,7 @@ public class TriggerASample extends CCGL2Adapter {
 		minim = new CCSoundIO();
 
 		// load BD.wav from the data folder
-		kick = minim.loadSample(
+		kick = CCSoundIO.loadSample(
 			CCNIOUtil.dataPath("sound/BD.mp3"), // filename
 			512 // buffer size
 		);
@@ -74,7 +75,7 @@ public class TriggerASample extends CCGL2Adapter {
 			CCLog.info("Didn't get kick!");
 
 		// load SD.wav from the data folder
-		snare = minim.loadSample(CCNIOUtil.dataPath("sound/SD.wav"), 512);
+		snare = CCSoundIO.loadSample(CCNIOUtil.dataPath("sound/SD.wav"), 512);
 		if (snare == null)
 			CCLog.info("Didn't get snare!");
 		
@@ -119,7 +120,7 @@ public class TriggerASample extends CCGL2Adapter {
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

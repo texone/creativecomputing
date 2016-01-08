@@ -5,7 +5,6 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
-import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -20,10 +19,6 @@ public class CCInterpolationDemo extends CCGL2Adapter{
 	public static enum CCInterpolationType{
 		LINEAR, CUBIC, HERMITE
 	}
-	
-	
-	private CCControlApp _myControlApp;
-	
 	
 	@CCProperty(name = "scale", min = 0, max = 500)
 	private double _cScale = 0;
@@ -51,7 +46,6 @@ public class CCInterpolationDemo extends CCGL2Adapter{
 	
 	@Override
 	public void init(CCGraphics g) {
-		_myControlApp = new CCControlApp(this);
 	}
 	
 	List<Double> _myValues = new ArrayList<Double>();
@@ -156,7 +150,7 @@ public class CCInterpolationDemo extends CCGL2Adapter{
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

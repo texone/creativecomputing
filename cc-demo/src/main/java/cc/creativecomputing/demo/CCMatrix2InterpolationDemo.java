@@ -12,13 +12,9 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
-import cc.creativecomputing.math.interpolate.CCInterpolator;
 import cc.creativecomputing.math.interpolate.CCInterpolators;
 
 public class CCMatrix2InterpolationDemo extends CCGL2Adapter{
-	
-	
-	private CCControlApp _myControlApp;
 	
 	private CCMatrix2 _myMatrix;
 
@@ -81,7 +77,7 @@ public class CCMatrix2InterpolationDemo extends CCGL2Adapter{
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

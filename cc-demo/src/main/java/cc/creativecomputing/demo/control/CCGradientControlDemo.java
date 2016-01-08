@@ -1,24 +1,26 @@
 package cc.creativecomputing.demo.control;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
+import cc.creativecomputing.control.CCGradient;
+import cc.creativecomputing.control.CCGradientPoint;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCColor;
 
-public class CCEnumDemo extends CCGL2Adapter{
+public class CCGradientControlDemo extends CCGL2Adapter{
 	
 	
-	@CCProperty(name = "draw mode")
-	private CCDrawMode _myDrawMode = CCDrawMode.POINTS;
-	
-	
+	@CCProperty(name = "gradient")
+	private CCGradient _myGradient = new CCGradient();
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
+		_myGradient.add(0, CCColor.WHITE);
+		_myGradient.add(1, CCColor.BLACK);
 	}
 	
 	@Override
@@ -28,31 +30,30 @@ public class CCEnumDemo extends CCGL2Adapter{
 	
 	@Override
 	public void update(CCAnimator theAnimator) {
+		CCLog.info(_myGradient.size());
+		for(CCGradientPoint myPoint:_myGradient){
+			CCLog.info(myPoint.position() + ":" + myPoint.color());
+		}
 	}
 	
 	@Override
 	public void display(CCGraphics g) {
-		g.clearColor(0);
+		g.clearColor(255);
 		g.clear();
 		
-		CCMath.randomSeed(0);
-		g.color(255);
-		g.beginShape(_myDrawMode);
-		for(int i = 0; i < 1000;i++){
-			g.vertex(
-				CCMath.random(-g.width()/2, g.width()/2),
-				CCMath.random(-g.height()/2, g.height()/2)
-			);
+		g.beginShape(CCDrawMode.LINES);
+		for(int x = 0; x < g.width();x++){
+			g.color(_myGradient.color((double)x / g.width()));
+			g.vertex(x - g.width()/2, -50);
+			g.vertex(x - g.width()/2,  50);
 		}
 		g.endShape();
-		
-	
 	}
 	
 	public static void main(String[] args) {
 		
 		
-		CCEnumDemo demo = new CCEnumDemo();
+		CCGradientControlDemo demo = new CCGradientControlDemo();
 		
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);

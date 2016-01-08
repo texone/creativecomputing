@@ -49,7 +49,7 @@ public class CCFFTDemo extends CCGL2Adapter {
 	public void start(CCAnimator theAnimator) {
 		minim = new CCSoundIO();
 		
-		jingle = minim.loadFile(CCNIOUtil.dataPath("sound/fair1939.wav"), 1024);
+		jingle = CCSoundIO.loadFile(CCNIOUtil.dataPath("sound/fair1939.wav"), 1024);
 		
 		// loop the file
 //		jingle.loop();
@@ -122,7 +122,7 @@ public class CCFFTDemo extends CCGL2Adapter {
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

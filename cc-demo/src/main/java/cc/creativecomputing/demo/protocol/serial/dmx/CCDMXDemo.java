@@ -1,30 +1,21 @@
 package cc.creativecomputing.demo.protocol.serial.dmx;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
-import cc.creativecomputing.control.CCEnvelope;
-import cc.creativecomputing.control.code.CCCompileObject;
-import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
-import cc.creativecomputing.graphics.texture.CCTexture2DAsset;
-import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.protocol.serial.dmx.CCDMX;
 
 public class CCDMXDemo extends CCGL2Adapter{
-	
-	private CCControlApp _myControlApp;
 	
 	@CCProperty(name = "dmx")
 	private CCDMX _myDMX;
@@ -44,7 +35,6 @@ public class CCDMXDemo extends CCGL2Adapter{
 	public void init(CCGraphics g) {
 
 		
-		_myControlApp = new CCControlApp(this, animator());
 //		for(CCRealtimeGraph myGraph:_myRealTimeGraph.instances()){
 //			CCLog.info(myGraph);
 //			if(myGraph == null)return;
@@ -61,7 +51,7 @@ public class CCDMXDemo extends CCGL2Adapter{
 	@Override
 	public void update(CCAnimator theAnimator) {
 		for(int i = 0; i < 100;i++){
-			_myDMX.setDMXChannel(i, 255);
+			_myDMX.setDMXChannel(i, _myChannelMap.get("channel " + i));
 		}
 		_myDMX.send();
 	}
@@ -77,7 +67,7 @@ public class CCDMXDemo extends CCGL2Adapter{
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }
