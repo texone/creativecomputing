@@ -6,7 +6,7 @@ import java.util.Map;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 
-public abstract class CCKleAnimation<Type> {
+public abstract class CCKleAnimation {
 	
 	
 	@CCProperty(name = "blend", min = 0, max = 1)
@@ -18,7 +18,21 @@ public abstract class CCKleAnimation<Type> {
 	@CCProperty(name = "group blends", min = 0, max = 1)
 	private Map<String, Double> _cGroupBlends = new LinkedHashMap<>();
 	
-	public abstract Type animate(CCSequenceElement theElement);
+	@CCProperty(name = "modulations")
+	protected Map<String, CCKleModulation> _cModulations = null;
+	
+	protected String[] _myValueNames = new String[0];
+	
+	public abstract double[] animate(CCSequenceElement theElement);
+	
+	public void valueNames(String... theValueNames) {
+		_cModulations = new LinkedHashMap<>();
+		_myValueNames = new String[theValueNames.length];
+		for(int i = 0; i < _myValueNames.length;i++){
+			_myValueNames[i] = theValueNames[i] + " modulation";
+			_cModulations.put(_myValueNames[i], new CCKleModulation());
+		}
+	}
 	
 	public void update(final double theDeltaTime){
 		

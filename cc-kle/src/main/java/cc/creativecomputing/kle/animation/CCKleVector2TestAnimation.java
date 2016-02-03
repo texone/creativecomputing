@@ -6,7 +6,7 @@ import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
-public class CCKleVector2TestAnimation extends CCKleAnimation<CCVector2> implements CCSequenceRecorderListener{
+public class CCKleVector2TestAnimation extends CCKleAnimation implements CCSequenceRecorderListener{
 
 	@CCProperty(name = "x amount", min = 0, max = 1)
 	private double _cXAmount = 0;
@@ -59,12 +59,12 @@ public class CCKleVector2TestAnimation extends CCKleAnimation<CCVector2> impleme
 	}
 
 	@Override
-	public CCVector2 animate(CCSequenceElement theElement) {
+	public double[] animate(CCSequenceElement theElement) {
 		double myX = CCMath.cos(_myPhase) * _cXAmount;
 		double myY = CCMath.cos(_myPhase) * _cYAmount;
 
 		double myBlend = elementBlend(theElement);
-		return new CCVector2(myX * myBlend, myY * myBlend);
+		return new double[]{myX * myBlend, myY * myBlend};
 	}
 	
 	@CCProperty(name = "restart")

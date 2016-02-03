@@ -25,7 +25,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.CCSequenceRecorder;
 import cc.creativecomputing.kle.animation.CCKleAnimation;
-import cc.creativecomputing.kle.animation.CCKleVector2Animator;
+import cc.creativecomputing.kle.animation.CCKleAnimator;
 import cc.creativecomputing.kle.elements.CCKleChannelType;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
@@ -39,7 +39,7 @@ public class CCSequenceFormatsTest {
     private static CCSequenceRecorder _myRecorder;
 	private static CCSequenceElements _mySequenceElements;
 	
-	private static class CCKleTestAnimation extends CCKleAnimation<CCVector2>{
+	private static class CCKleTestAnimation extends CCKleAnimation{
 		
 		private float _myPhase = 0;
 
@@ -50,8 +50,8 @@ public class CCSequenceFormatsTest {
 		}
 		
 		@Override
-		public CCVector2 animate(CCSequenceElement theElement) {
-			return new CCVector2(CCMath.sin(_myPhase), CCMath.sin(_myPhase));
+		public double[] animate(CCSequenceElement theElement) {
+			return new double[]{CCMath.sin(_myPhase), CCMath.sin(_myPhase)};
 		}
 		
 	}
@@ -65,7 +65,7 @@ public class CCSequenceFormatsTest {
 			160
 		);
 		
-		CCKleVector2Animator myAnimator = new CCKleVector2Animator(_mySequenceElements);
+		CCKleAnimator myAnimator = new CCKleAnimator(_mySequenceElements, CCKleChannelType.MOTORS, "x", "y");
 		myAnimator.put("test", new CCKleTestAnimation());
 		
 		_myAnimator = new CCAnimator();

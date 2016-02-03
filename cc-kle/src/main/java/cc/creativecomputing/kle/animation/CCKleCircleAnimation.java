@@ -1,12 +1,10 @@
 package cc.creativecomputing.kle.animation;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
 
-public class CCKleVector2CircleAnimation extends CCKleAnimation<CCVector2> {
+public class CCKleCircleAnimation extends CCKleAnimation {
 
 	@CCProperty(name = "x amount", min = 0, max = 1)
 	private double _cXAmount = 0;
@@ -23,24 +21,40 @@ public class CCKleVector2CircleAnimation extends CCKleAnimation<CCVector2> {
 	private double _cSpeed = 0;
 
 	private double _myPhase = 0;
+	
+	private int _myResultLength = 0;
 
 	public void update(final double theDeltaTime) {
 		_myPhase += theDeltaTime * _cSpeed;
 	}
 
 	@Override
-	public CCVector2 animate(CCSequenceElement theElement) {
+	public double[] animate(CCSequenceElement theElement) {
 		double myPhase = _myPhase;
 		double myAngle = (myPhase + _cModulation.modulation(theElement, -0.5f, 0.5f)) * CCMath.TWO_PI;
 		double myAmount = _cAmountModulation.modulation(theElement, -1, 1);
-		double myX = CCMath.cos(myAngle) * _cXAmount * myAmount;
-		double myY = CCMath.sin(myAngle) * _cYAmount * myAmount;
 		double myBlend = elementBlend(theElement);
-		return new CCVector2(myX * myBlend, myY * myBlend);
+		double myX = CCMath.cos(myAngle) * _cXAmount * myAmount * myBlend;
+		double myY = CCMath.sin(myAngle) * _cYAmount * myAmount * myBlend;
+		
+		double[] myResult = new double[_myResultLength];
+		for(int i = 0; i < myResult.length;i++){
+			if(i % 2 == 0){
+				myResult[i] = myX;
+			}else{
+				myResult[i] = myY;
+			}
+		}
+		return myResult;
 	}
 	
 	@CCProperty(name = "reset phase")
 	public void resetPhase(){
 		_myPhase = 0;
+	}
+
+	@Override
+	public void valueNames(String... theValueNames) {
+		_myResultLength = theValueNames.length;
 	}
 }

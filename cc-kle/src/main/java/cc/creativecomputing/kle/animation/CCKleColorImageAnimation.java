@@ -7,7 +7,7 @@ import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 
-public class CCKleColorImageAnimation extends CCKleAnimation<CCColor>{
+public class CCKleColorImageAnimation extends CCKleAnimation{
 	
 	@CCProperty(name = "x modulation")
 	private CCKleModulation _cXModulation = new CCKleModulation();
@@ -29,8 +29,8 @@ public class CCKleColorImageAnimation extends CCKleAnimation<CCColor>{
 	private CCImageAsset _myImage = new CCImageAsset();
 
 	@Override
-	public CCColor animate(CCSequenceElement theElement) {
-		if(_myImage.value() == null)return new CCColor(255,0,0);
+	public double[] animate(CCSequenceElement theElement) {
+		if(_myImage.value() == null)return new double[0];
 		CCColor myResult = _myImage.value().getPixel(
 			(_cXModulation.modulation(theElement) + _cXMotionModulation.modulation(theElement)) * _myImage.value().width(), 
 			_cYModulation.modulation(theElement) * _myImage.value().height()
@@ -48,7 +48,7 @@ public class CCKleColorImageAnimation extends CCKleAnimation<CCColor>{
 //			CCMath.saturate(hsb[2] + _cBShift)
 //		);
 //		CCLog.info(theMessage);
-		return myResult;
+		return new double[0];
 	}
 
 }

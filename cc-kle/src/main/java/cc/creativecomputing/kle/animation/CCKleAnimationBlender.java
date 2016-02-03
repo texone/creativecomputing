@@ -5,7 +5,7 @@ import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.easing.CCEasing.CCEaseFormular;
 
-public abstract class CCKleAnimationBlender<BlendType> {
+public class CCKleAnimationBlender {
 
 	@CCProperty(name = "modulation")
 	private CCKleModulation _cModulation = new CCKleModulation();
@@ -36,5 +36,7 @@ public abstract class CCKleAnimationBlender<BlendType> {
 		return myBlend = CCEaseFormular.SINE.easing().easeInOut(CCMath.blend(_cBlend, myBlend, _cApplyBlendRange));
 	}
 	
-	public abstract BlendType blend(CCSequenceElement theElement, BlendType theA, BlendType theB);
+	public double[] blend(CCSequenceElement theElement, double[] theA, double[] theB){
+		return CCMath.blend(theA, theB, blend(theElement));
+	}
 }
