@@ -154,7 +154,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(String myPart:myTypeParts){
 			myPresetPath = myPresetPath.resolve(Paths.get(myPart));
 		}
-			
+		CCLog.info(myPresetPath);
 		return myPresetPath;
 	}
 	

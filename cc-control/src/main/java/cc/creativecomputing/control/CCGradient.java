@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector3;
 
 public class CCGradient extends ArrayList<CCGradientPoint>{
 	
@@ -25,7 +23,7 @@ public class CCGradient extends ArrayList<CCGradientPoint>{
 	public CCGradient clone(){
 		CCGradient myResult = new CCGradient();
 		for(CCGradientPoint myPoint:new ArrayList<>(this)){
-			add(myPoint.clone());
+			myResult.add(myPoint.clone());
 		}
 		return myResult;
 	}
