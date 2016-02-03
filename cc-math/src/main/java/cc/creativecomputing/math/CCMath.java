@@ -342,6 +342,14 @@ public class CCMath {
 		return theStart + (theStop - theStart) * theBlend;
 	}
 	
+	static public final double[] blend(final double[] theStart, final double[] theStop, final double theBlend) {
+		double[] result = new double[min(theStart.length, theStop.length)];
+		for(int i = 0; i < result.length; i++){
+			result[i] = blend(theStart[i], theStop[i], theBlend);
+		}
+		return result;
+	}
+	
 	static public double blend(double theBlendU, double theBlendV, double theA, double theB, double theC) {
 		// Compute vectors        
 		double v0 = theC - theA;
@@ -941,6 +949,13 @@ public class CCMath {
 	 */
 	public static boolean isInBetween(double theValue, double theBorder1, double theBorder2) {
 		return theValue > theBorder1 && theValue < theBorder2 || theValue < theBorder1 && theValue > theBorder2;
+	}
+	
+	public static boolean isNaN(double...theValues){
+		for(double myValue:theValues){
+			if(Double.isNaN(myValue))return true;
+		}
+		return false;
 	}
 
 	/** sqrt(a^2 + b^2) without under/overflow. **/
