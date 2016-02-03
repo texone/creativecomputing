@@ -25,6 +25,7 @@ import javax.swing.event.ChangeListener;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCGradientPoint;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 
@@ -138,6 +139,11 @@ public class CCGradientEditor extends JPanel {
 			public void mousePressed(MouseEvent e) {
 				selectPoint(e.getX(), e.getY());
 				repaint(0);
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 1) {
 					if(_mySelectedPoint != null){
 						if(e.isShiftDown())delPoint();
@@ -161,8 +167,6 @@ public class CCGradientEditor extends JPanel {
 			public void mouseMoved(MouseEvent e) {
 			}
 		});
-		
-		setBackground(new Color(255,0,0));
 	}
 	
 	public void gradient(CCGradient theGradient){
@@ -200,7 +204,7 @@ public class CCGradientEditor extends JPanel {
 	}
 
 	private boolean checkPoint(int mx, int my, CCGradientPoint pt) {
-		int dx = (int) Math.abs((10 + (width * pt.position())) - mx);
+		int dx = (int) Math.abs((x + (width * pt.position())) - mx);
 		int dy = Math.abs((y + barHeight + 7) - my);
 
 		if ((dx < 5) && (dy < 7)) {
@@ -320,7 +324,7 @@ public class CCGradientEditor extends JPanel {
 			return;
 		}
 
-		float newPos = (mx - 10) / (float) width;
+		float newPos = (mx - x) / (float) width;
 		newPos = Math.min(1, newPos);
 		newPos = Math.max(0, newPos);
 

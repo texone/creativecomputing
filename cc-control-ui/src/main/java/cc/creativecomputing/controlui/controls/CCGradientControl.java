@@ -16,6 +16,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cc.creativecomputing.control.CCGradient;
+import cc.creativecomputing.control.CCGradientPoint;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyEditListener;
@@ -23,6 +24,7 @@ import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.controls.CCGradientEditor.GradientListener;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 
 public class CCGradientControl extends CCValueControl<CCGradient, CCGradientPropertyHandle>{
@@ -64,6 +66,9 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
 		});
 		
 		_myGradient = theHandle.value().clone();
+		for(CCGradientPoint myPoint:theHandle.value()){
+			CCLog.info(myPoint.position() + ":" + myPoint.color());
+		}
  
         //Create the Button.
 		_myGradientEditor.gradient(_myGradient);
