@@ -154,12 +154,13 @@ public class CCCameraController {
 	private final InterpolationManager centerInterps = new InterpolationManager();
 	private final InterpolationManager distanceInterps = new InterpolationManager();
 
-	private final CCCameraMouseDragHandler panHandler /* ha ha ha */= new CCCameraMouseDragHandler() {
+	private final CCCameraMouseDragHandler panHandler = new CCCameraMouseDragHandler() {
 		public void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY) {
 			_myDampedPanX.impulse(theMoveX / 8f);
 			_myDampedPanY.impulse(theMoveY / 8f);
 		}
 	};
+	
 	private CCCameraMouseDragHandler centerDragHandler = panHandler;
 
 	private final CCCameraMouseDragHandler rotateHandler = new CCCameraMouseDragHandler() {
