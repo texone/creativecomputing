@@ -13,6 +13,7 @@ import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
+import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
@@ -89,6 +90,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		creatorMap.put(CCRealtimeCompile.class, new CCHandleCreator(){
 			@Override
 			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCRealtimeCompileHandle(theParent, theMember);}
+		});
+		creatorMap.put(CCShaderObject.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCShaderCompileHandle(theParent, theMember);}
 		});
 	}
 	
@@ -199,8 +204,8 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		}
 		
 		if((theObject instanceof Map)){
-			Map<String,Object> myMap = (Map<String, Object>)theObject;
-			for(String myKey:myMap.keySet()){
+			Map<Object,Object> myMap = (Map<Object, Object>)theObject;
+			for(Object myKey:myMap.keySet()){
 				CCMapEntry myEntry = new CCMapEntry(myMap, myKey);
 				
 				Class<?> myClass = myEntry.type();
@@ -270,7 +275,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	}
 	
 	@Override
-	public void restore() {
+	public void restorePreset() {
 		data(_myLastData);
 	}
 	

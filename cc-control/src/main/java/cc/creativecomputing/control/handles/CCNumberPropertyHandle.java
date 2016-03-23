@@ -93,7 +93,7 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 
 	@Override
 	public String valueString() {
-		return _myValue.toString();
+		return _myToType.toString(_myValue);
 	}
 	
 	@Override

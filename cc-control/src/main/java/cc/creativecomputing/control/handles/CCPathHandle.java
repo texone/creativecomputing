@@ -31,6 +31,11 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 		}
 		value(Paths.get(theData.getString("value")), true);
 	}
+	
+	public String[] extensions(){
+		if(_myAsset == null)return null;
+		return _myAsset.extensions();
+	}
 
 	@Override
 	public Path convertNormalizedValue(double theValue) {

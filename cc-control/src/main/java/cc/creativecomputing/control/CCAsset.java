@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public abstract class CCAsset <AssetType>{
@@ -40,6 +39,10 @@ public abstract class CCAsset <AssetType>{
 		_myEvents.proxy().onChange(_myAsset);
 	}
 	
+	public String[] extensions(){
+		return null;
+	}
+	
 	public CCListenerManager<CCAssetListener> events(){
 		return _myEvents;
 	}
@@ -55,7 +58,6 @@ public abstract class CCAsset <AssetType>{
 			return;
 		}
 		
-		CCLog.info(theTimedEvent.content().value().toString());
 //		Point2D myPos = theView.controller().curveToViewSpace(new ControlPoint(theTimedEvent.time(),1));
 //		Point2D myEndPos = theView.controller().curveToViewSpace(new ControlPoint(theTimedEvent.endTime(),1));
 //		double width = myEndPos.getX() - myPos.getX();

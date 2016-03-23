@@ -14,15 +14,15 @@ public class CCColorPropertyHandle extends CCPropertyHandle<CCColor>{
 	@Override
 	public void value(CCColor theValue, boolean theOverWrite) {
 		if(theValue == null)return;
-		if(theOverWrite)_myOriginalValue = theValue.clone();
+		if(theOverWrite)_myPresetValue = theValue.clone();
 		_myValue = theValue.clone();
 		_myUpdateMember = true;
 	}
 	
 	@Override
-	public void restore() {
-		if(_myValue != null && _myOriginalValue != null)
-			_myValue.set(_myOriginalValue);
+	public void restorePreset() {
+		if(_myValue != null && _myPresetValue != null)
+			_myValue.set(_myPresetValue);
 	}
 	
 	@Override

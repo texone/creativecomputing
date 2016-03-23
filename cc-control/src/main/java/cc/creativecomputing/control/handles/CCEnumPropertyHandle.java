@@ -11,7 +11,12 @@ public class CCEnumPropertyHandle extends CCPropertyHandle<Enum<?>>{
 
 	protected CCEnumPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
-		_myNumberOfConstants = value().getDeclaringClass().getEnumConstants().length;
+	
+		_myNumberOfConstants = theMember.type().getEnumConstants().length;
+	}
+	
+	public Enum<?>[] enumConstants(){
+		 return (Enum<?>[])_myMember.type().getEnumConstants();
 	}
 	
 	@Override
@@ -67,7 +72,7 @@ public class CCEnumPropertyHandle extends CCPropertyHandle<Enum<?>>{
 	@Override
 	public void data(CCDataObject theData) {
 		String myName = theData.getString("value");
-		for(Enum<?> myEnumConstant :value().getDeclaringClass().getEnumConstants()){
+		for(Enum<?> myEnumConstant :enumConstants()){
 			if(myEnumConstant.name().equals(myName)){
 				value(myEnumConstant, true);
 				return;

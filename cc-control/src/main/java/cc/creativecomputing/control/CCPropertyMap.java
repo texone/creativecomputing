@@ -13,6 +13,7 @@ import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 import cc.creativecomputing.io.data.CCDataObject;
@@ -86,6 +87,8 @@ public class CCPropertyMap {
 		public Type min();
 		
 		public Type max();
+		
+		public String toString(Number theValue);
 	}
 	
 	public static CCDoubleConverter<Float> floatConverter = new CCDoubleConverter<Float>(){
@@ -101,6 +104,11 @@ public class CCPropertyMap {
 		public Float max() {
 			return Float.MAX_VALUE;
 		}
+
+		@Override
+		public String toString(Number theValue) {
+			return CCFormatUtil.nd(theValue.doubleValue(), 4);
+		}
 	};
 	
 	public static CCDoubleConverter<Double> doubleConverter = new CCDoubleConverter<Double>(){
@@ -115,6 +123,11 @@ public class CCPropertyMap {
 		@Override
 		public Double max() {
 			return Double.MAX_VALUE;
+		}
+
+		@Override
+		public String toString(Number theValue) {
+			return CCFormatUtil.nd(theValue.doubleValue(), 4);
 		}
 	};
 	
@@ -132,6 +145,11 @@ public class CCPropertyMap {
 		@Override
 		public Integer max() {
 			return Integer.MAX_VALUE;
+		}
+
+		@Override
+		public String toString(Number theValue) {
+			return theValue.intValue() + "";
 		}
 	};
 	

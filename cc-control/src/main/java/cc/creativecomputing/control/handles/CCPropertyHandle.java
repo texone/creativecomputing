@@ -5,7 +5,6 @@ import java.nio.file.Paths;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
 
@@ -17,7 +16,8 @@ public abstract class CCPropertyHandle<Type>{
 	protected final CCListenerManager<CCPropertyEditListener> _myEditEvents = CCListenerManager.create(CCPropertyEditListener.class);
 	
 	protected Type _myValue = null;
-	protected Type _myOriginalValue = null;
+	protected Type _myPresetValue = null;
+	protected Type _myDefaultValue = null;
 	
 	protected final CCObjectPropertyHandle _myParent;
 	
@@ -32,7 +32,8 @@ public abstract class CCPropertyHandle<Type>{
 		_myMember = theMember;
 		if(_myMember == null)return;
 		_myValue = (Type)_myMember.value();
-		_myOriginalValue = (Type)_myMember.value();
+		_myPresetValue = (Type)_myMember.value();
+		_myDefaultValue = (Type)_myMember.value();
 		_myReadBack = readBack();
 	}
 	
@@ -79,9 +80,8 @@ public abstract class CCPropertyHandle<Type>{
 	
 	public void value(Type theValue, boolean theOverWrite){
 		if(theOverWrite){
-			_myOriginalValue = theValue;
+			_myPresetValue = theValue;
 		}
-
 		
 		if(_myValue == theValue)return;
 		_myValue = theValue;
@@ -150,8 +150,12 @@ public abstract class CCPropertyHandle<Type>{
 	
 	public abstract String valueString();
 	
-	public void restore(){
-		value(_myOriginalValue, true);
+	public void restorePreset(){
+		value(_myPresetValue, true);
+	}
+	
+	public void restoreDefault(){
+		value(_myDefaultValue, true);
 	}
 	
 	public void onChange(){
