@@ -36,11 +36,6 @@
       <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-app</artifactId>
       <version>${project.version}</version>
-    </dependency>       
-    <dependency>
-      <groupId>cc.creativecomputing</groupId>
-      <artifactId>cc-data</artifactId>
-      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>
