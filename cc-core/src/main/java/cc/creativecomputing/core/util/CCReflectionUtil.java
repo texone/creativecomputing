@@ -124,11 +124,11 @@ public class CCReflectionUtil {
 	@SuppressWarnings("rawtypes")
 	public static class CCMapEntry extends CCMember{
 
-		private Map<String, Object> _myMap;
-		private String _myKey;
+		private Map<Object, Object> _myMap;
+		private Object _myKey;
 		
 		@SuppressWarnings("unchecked")
-		public CCMapEntry(Map<String, Object> theMap, String theKey) {
+		public CCMapEntry(Map<Object, Object> theMap, Object theKey) {
 			super(null, null, null);
 			_myMap = theMap;
 			_myKey = theKey;
@@ -136,12 +136,12 @@ public class CCReflectionUtil {
 		
 		@Override
 		public String name() {
-			return _myKey;
+			return _myKey.toString();
 		}
 		
 		@Override
 		public String memberName() {
-			return _myKey;
+			return _myKey.toString();
 		}
 
 		@Override
