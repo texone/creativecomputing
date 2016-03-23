@@ -46,6 +46,6 @@ public class CCPresetTrackObject extends EventTrackAdapter{
 	public void onOut() {
 		if(!_myRestore)return;
 		_myRestore = false;
-		_myPropertyHandle.restore();
+		_myPropertyHandle.restorePreset();
 	}
 }

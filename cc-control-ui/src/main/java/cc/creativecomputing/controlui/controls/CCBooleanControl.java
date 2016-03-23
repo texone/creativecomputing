@@ -39,7 +39,7 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 		}
         boolean _myValue = theHandle.value();
         _myButton = new JToggleButton(theHandle.name(), theHandle.value());
-        CCUIStyler.styleButton(_myButton);
+        CCUIStyler.styleButton(_myButton, 102, 13);
         _myButton.addChangeListener(new ChangeListener() {
 			
 			@Override
@@ -60,7 +60,7 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		thePanel.add(_myLabel, 	constraints(0, theY, GridBagConstraints.LINE_END, 	5,  5, 1, 5));
-		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 15, 1, 5));
+		thePanel.add(_myLabel, 	constraints(0, theY, GridBagConstraints.LINE_END, 	5, 5, 1, 5));
+		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 4, 1, 5));
 	}
 }

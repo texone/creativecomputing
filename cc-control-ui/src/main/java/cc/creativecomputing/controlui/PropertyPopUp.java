@@ -25,6 +25,42 @@ public class PropertyPopUp extends JPopupMenu {
 		}
 	}
 	
+	private class RestorePresetAction implements ActionListener{
+		
+		
+		
+		private CCPropertyHandle<?> _myProperty;
+		
+		public RestorePresetAction(CCPropertyHandle<?> theProperty){
+			_myProperty = theProperty;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent theArg0) {
+			_myControlComponent.timeline().writeValues(_myProperty);
+			
+			_myProperty.restorePreset();
+		}
+	}
+	
+	private class RestoreDefaultAction implements ActionListener{
+		
+		
+		
+		private CCPropertyHandle<?> _myProperty;
+		
+		public RestoreDefaultAction(CCPropertyHandle<?> theProperty){
+			_myProperty = theProperty;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent theArg0) {
+			_myControlComponent.timeline().writeValues(_myProperty);
+			
+			_myProperty.restoreDefault();
+		}
+	}
+	
 	/**
 	 * 
 	 */
@@ -53,6 +89,17 @@ public class PropertyPopUp extends JPopupMenu {
 		myWriteToTimelineAction.setFont(SwingGuiConstants.ARIAL_11);
 		myWriteToTimelineAction.addActionListener(new WriteToTimelineAction());
 		add(myWriteToTimelineAction);
+		
+		JMenuItem myRestoreDefaultItem = new JMenuItem("Restore Default");
+		myRestoreDefaultItem.setFont(SwingGuiConstants.ARIAL_11);
+		myRestoreDefaultItem.addActionListener(new RestoreDefaultAction(theProperty));
+		add(myRestoreDefaultItem);
+		
+		JMenuItem myRestorePresetItem = new JMenuItem("Restore Preset");
+		myRestorePresetItem.setFont(SwingGuiConstants.ARIAL_11);
+		myRestorePresetItem.addActionListener(new RestorePresetAction(theProperty));
+		add(myRestorePresetItem);
+		
 		
 	}
 	

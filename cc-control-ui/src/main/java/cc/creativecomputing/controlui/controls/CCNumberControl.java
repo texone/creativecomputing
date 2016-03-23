@@ -1,11 +1,16 @@
 package cc.creativecomputing.controlui.controls;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
+import java.awt.LinearGradientPaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -13,6 +18,8 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.sun.javafx.geom.Rectangle;
 
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
@@ -75,13 +82,13 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 	        
 	        _mySlider.setPaintTicks(false);
 	        _mySlider.setPaintLabels(false);
-	        _mySlider.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+	        _mySlider.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 	        _mySlider.putClientProperty( "JComponent.sizeVariant", "mini" );
-	        _mySlider.setPreferredSize(new Dimension(130,17));
+	        _mySlider.setPreferredSize(new Dimension(100,14));
         }
         
         _myValueField = new JTextField();
-        CCUIStyler.styleTextField(_myValueField, 45);
+        CCUIStyler.styleTextField(_myValueField, 100);
         
         _myValueField.addActionListener(new ActionListener() {
 			
@@ -111,18 +118,19 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 				}
         	}
 		});
-        
+        _myValueField.setHorizontalAlignment(JTextField.LEFT);
         value(_myHandle.value().doubleValue(), true);
 	}
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,1, 5, 1, 5));
+		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 1, 5));
 		if(_mySlider != null){
-			thePanel.add(_mySlider, constraints(1, theY, GridBagConstraints.PAGE_END,10, 5, 1, 5));
-			thePanel.add(_myValueField, constraints(2, theY, GridBagConstraints.LINE_START,1, 5, 1, 5));
+			thePanel.add(_mySlider, constraints(1, theY, GridBagConstraints.PAGE_END,5, 0, 1, 5));
+			_myValueField.setPreferredSize(new Dimension(68, 13));
+			thePanel.add(_myValueField, constraints(2, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
 		}else{
-			thePanel.add(_myValueField, constraints(1, theY, GridBagConstraints.LINE_START,1, 5, 1, 5));
+			thePanel.add(_myValueField, constraints(1, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
 		}
 	}
 	

@@ -34,6 +34,14 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 		_myLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if(e.isAltDown()){
+					_myHandle.restoreDefault();
+					return;
+				}
+				if(e.isControlDown()){
+					_myHandle.restorePreset();
+					return;
+				}
 				if(e.getButton() == MouseEvent.BUTTON3){
 					_myPopUp.show(_myLabel, e.getX(), e.getY());
 				}

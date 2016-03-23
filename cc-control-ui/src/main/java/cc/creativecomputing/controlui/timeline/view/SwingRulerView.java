@@ -196,6 +196,7 @@ public class SwingRulerView extends SwingAbstractTrackView implements ChangeValu
     			} else if (e.getButton() == MouseEvent.BUTTON1) {
 					_myMarkerFrame.setLocation(e.getXOnScreen(), e.getYOnScreen());
     			}
+
 				_myTransportController.mousePressed(e);
 			}
 		});
@@ -251,15 +252,16 @@ public class SwingRulerView extends SwingAbstractTrackView implements ChangeValu
 		updateUI();
 	}
 	
-	private Stroke _myThinStroke = new BasicStroke(1);
-	private Stroke _myThickStroke = new BasicStroke(2);
+	public static final Stroke THIN_STROKE = new BasicStroke(1);
+	public static final Stroke THICK_STROKE = new BasicStroke(2);
 	
-	private Color _myTextColor = new Color(100);
-	private Color _myStepColor = new Color(0.8f, 0.8f, 0.8f);
-	private Color _mySubStepColor = new Color(0.9f, 0.9f, 0.9f);
+	public static final Color TEXT_COLOR = new Color(100);
+	public static final Color STEP_COLOR = new Color(0.8f, 0.8f, 0.8f);
+	public static final Color SUB_STEP_COLOR = new Color(0.9f, 0.9f, 0.9f);
 	
 	@Override
 	public void paintComponent(Graphics g) {
+		g.translate(2, 0);
 		Graphics2D myG2 = (Graphics2D)g;
 		g.setColor(new Color(255,255,255));
 		g.fillRect(0, 0, getWidth(), getHeight() );
@@ -279,24 +281,24 @@ public class SwingRulerView extends SwingAbstractTrackView implements ChangeValu
 	        int myX = _myTransportController.timeToViewX(step);
 	        if(myX < 0)continue;
 			
-			g.setColor(_myStepColor);
-			myG2.setStroke(_myThickStroke);
+			g.setColor(STEP_COLOR);
+			myG2.setStroke(THICK_STROKE);
 			g.drawLine(myX, 0, myX, getHeight());
 			
 			int myTimeX = myX;
 			
-			g.setColor(_mySubStepColor);
-			myG2.setStroke(_myThinStroke);
+			g.setColor(SUB_STEP_COLOR);
+			myG2.setStroke(THIN_STROKE);
 			
 			for(int i = 1; i < _myTimelineController.drawRaster();i++) {
 				myX = _myTransportController.timeToViewX(step + ri.interval() * i / _myTimelineController.drawRaster());
-				g.drawLine(myX, 0, myX, getHeight() / 10);
+				g.drawLine(myX, 0, myX, getHeight() / 2);
 			}
 			
 			String myTimeString = _myTransportController.timeToString(step);
 			
 			g.setFont(SwingGuiConstants.ARIAL_BOLD_10);
-	        g.setColor(_myTextColor);
+	        g.setColor(TEXT_COLOR);
 			g.drawString(myTimeString, myTimeX + 5, 11);
 		}
 		ControlPoint myCurrentPoint = _myTransportController.trackData().ceiling(new ControlPoint(_myTransportController.lowerBound(),0));

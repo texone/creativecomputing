@@ -31,12 +31,7 @@
       <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-core</artifactId>
       <version>${project.version}</version>
-    </dependency>    
-    <dependency>
-      <groupId>cc.creativecomputing</groupId>
-      <artifactId>cc-data</artifactId>
-      <version>${project.version}</version>
-    </dependency> 
+    </dependency>
     <dependency>   
       <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-io</artifactId>
@@ -46,7 +41,7 @@
       <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-midi</artifactId>
       <version>${project.version}</version>
-    </dependency>   
+    </dependency>
     
     <dependency>
       <groupId>com.fifesoft</groupId>

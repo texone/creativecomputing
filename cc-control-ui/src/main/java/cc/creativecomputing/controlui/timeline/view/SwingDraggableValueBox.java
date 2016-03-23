@@ -24,16 +24,16 @@ public class SwingDraggableValueBox extends JTextField implements MouseListener,
 	private static final long serialVersionUID = 1L;
 	private int _myStep;
 	private int _myMaxSteps;
-	private float _myStepSize;
+	private double _myStepSize;
 	
-	private float _myMin;
+	private double _myMin;
 	
 	private int _myChangeSize = 2;
 	private int _myLastY;
 	
 	private List<ChangeValueListener> _myListener = new ArrayList<ChangeValueListener>();
 
-	public SwingDraggableValueBox(float theValue, float theMin, float theMax, float theStepSize){
+	public SwingDraggableValueBox(double theValue, double theMin, double theMax, double theStepSize){
 		_myMin = theMin;
 		_myStep = (int)((theValue - theMin)/theStepSize);
 		_myMaxSteps = (int)((theMax - theMin)/theStepSize) + 1;

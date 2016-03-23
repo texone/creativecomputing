@@ -467,6 +467,11 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
         _myTrackView.render();
 	}
 	
+	public ControlPoint draggedPoint(){
+		if(_myDraggedPoints == null || _myDraggedPoints.size() == 0)return null;
+		return _myDraggedPoints.get(0);
+	}
+	
 	public void mouseMoved(MouseEvent e, ToolController theToolController) {
 		Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
 

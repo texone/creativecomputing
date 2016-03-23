@@ -412,7 +412,7 @@ public class ColorTrackController extends TrackController {
 				((ColorPoint)myEvent).isSelected(false);
 			}
 			_myTrack.property().endEdit();
-			_myTrack.property().restore();
+			_myTrack.property().restorePreset();
 	        _myTrackView.render();
 		}
 		if (e.isAltDown()) {
@@ -484,7 +484,7 @@ public class ColorTrackController extends TrackController {
 		ColorPoint myEventPoint = pointAt(theTime);
 		
     	if(myEventPoint == null){
-    		_myTrack.property().restore();
+    		_myTrack.property().restorePreset();
     		_myColorTrackListener.proxy().onOut();
     		return;
     	}

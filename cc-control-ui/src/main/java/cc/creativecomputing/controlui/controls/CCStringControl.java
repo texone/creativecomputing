@@ -57,7 +57,7 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 
         String _myValue = theHandle.value();
         _myTextField = new JTextField(_myValue);
-        CCUIStyler.styleTextField(_myTextField, 100);
+        CCUIStyler.styleTextField(_myTextField, 185);
         _myTextField.setHorizontalAlignment(JTextField.LEFT);
         _myTextField.getDocument().addDocumentListener(new DocumentListener() {
 			
@@ -89,6 +89,6 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
 		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 5, 5));
-		thePanel.add(_myTextField, constraints(1, theY, GridBagConstraints.LINE_START,5, 15, 5, 5));
+		thePanel.add(_myTextField, constraints(1, theY, 2, GridBagConstraints.LINE_START,5, 6, 5, 5));
 	}
 }

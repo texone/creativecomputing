@@ -63,7 +63,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		myConstraints.anchor = GridBagConstraints.LINE_START;
 		myConstraints.fill = GridBagConstraints.HORIZONTAL;
 		myConstraints.weightx = 1f;
-		myConstraints.insets = new Insets(5, 5  + 10 * (_myDepth - 1), 5, 5);
+		myConstraints.insets = new Insets(0, 5  + 10 * (_myDepth - 1), 0, 5);
 		JLabel myLabel = new JLabel("[+] " + _myName, SwingConstants.LEFT);
 		myLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		myLabel.setForeground(Color.WHITE);

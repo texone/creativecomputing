@@ -36,7 +36,6 @@ import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.ToolController;
 import cc.creativecomputing.controlui.timeline.controller.actions.AddControlPointAction;
 import cc.creativecomputing.controlui.timeline.controller.actions.MoveEventAction;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
@@ -112,6 +111,7 @@ public class EventTrackController extends TrackController {
 	}
 	
 	public void delete(TimedEventPoint theEvent) {
+		trackData().remove(theEvent);
 		_myEventTrackListener.proxy().onDelete(this, theEvent);
 	}
 	
@@ -417,6 +417,10 @@ public class EventTrackController extends TrackController {
 		
 	}
 	
+	public TimedEventPoint editedEvent(){
+		return _myEditedEvent;
+	}
+	
 	public void mouseReleased(MouseEvent e) {
 		if(_myEditedEvent != null) {
 			_myEventTrackListener.proxy().onChange(this, _myEditedEvent);
@@ -426,7 +430,7 @@ public class EventTrackController extends TrackController {
 				((TimedEventPoint)myEvent).isSelected(false);
 			}
 			_myTrack.property().endEdit();
-			_myTrack.property().restore();
+			_myTrack.property().restorePreset();
 	        _myTrackView.render();
 		}
 		if (e.isAltDown()) {
@@ -466,7 +470,7 @@ public class EventTrackController extends TrackController {
 		TimedEventPoint myEventPoint = pointAt(theTime);
 		
     	if(myEventPoint == null || myEventPoint.content() == null || myEventPoint.content().value() == null){
-    		_myTrack.property().restore();
+    		_myTrack.property().restorePreset();
     		_myEventTrackListener.proxy().onOut();
     		return;
     	}

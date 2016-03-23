@@ -66,9 +66,9 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 				Path myOldPath = _myHandle.value();
 				Path myPath;
 				if(myOldPath != null && myOldPath.getParent() != null){
-					myPath = CCNIOUtil.selectInput("", myOldPath);
+					myPath = CCNIOUtil.selectInput("", myOldPath, _myHandle.extensions());
 				}else{
-					myPath = CCNIOUtil.selectInput("");
+					myPath = CCNIOUtil.selectInput("", null, _myHandle.extensions());
 				}
 				if(myPath == null)return;
 				_myHandle.value(myPath, !_myIsInEdit);
@@ -82,9 +82,11 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 5, 5));
-		thePanel.add(_myTextField, constraints(1, theY, GridBagConstraints.LINE_START,5, 15, 5, 5));
-		thePanel.add(_myOpenButton, constraints(2, theY, GridBagConstraints.LINE_START,5, 15, 5, 5));
+		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 1, 5));
+		thePanel.add(_myTextField, constraints(1, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
+		thePanel.add(_myOpenButton, constraints(2, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
+		
+		
 	}
 
 

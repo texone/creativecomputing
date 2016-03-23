@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileFilter;
 
 import cc.creativecomputing.controlui.timeline.controller.FileManager;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
@@ -28,9 +29,11 @@ public class SwingFileMenu extends JMenu{
 		_myFileManager = theTimelineContainer.fileManager();
 		
 		_myFileChooser = new CCFileChooser();
-		_myFileChooser.addChoosableFileFilter(new CCFileFilter("xml", "xml"));
-		_myFileChooser.addChoosableFileFilter(new CCFileFilter("json", "json"));
-		
+		FileFilter myXMLFilter = new CCFileFilter("xml", "xml");
+		FileFilter myJSONFilter = new CCFileFilter("json", "json");
+		_myFileChooser.addChoosableFileFilter(myXMLFilter);
+		_myFileChooser.addChoosableFileFilter(myJSONFilter);
+		_myFileChooser.setFileFilter(myJSONFilter);
 		addTimelineFileItems();
 	}
 	

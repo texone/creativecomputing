@@ -36,7 +36,6 @@ public  class SwingEventPopup extends JPopupMenu {
 		@Override
 		public void actionPerformed(ActionEvent theArg0) {
 			if(_myEvent != null) {
-				_myEventTrackController.trackData().remove(_myEvent);
 				_myEventTrackController.delete(_myEvent);
 				_myEventTrackController.view().render();
 			}

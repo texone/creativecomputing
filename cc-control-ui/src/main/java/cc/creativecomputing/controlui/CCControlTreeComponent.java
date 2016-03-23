@@ -16,6 +16,7 @@ import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
+import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
@@ -28,6 +29,7 @@ import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCRealtimeCompileHandle;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
+import cc.creativecomputing.control.handles.CCShaderCompileHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.controlui.controls.CCBooleanControl;
@@ -43,6 +45,7 @@ import cc.creativecomputing.controlui.controls.CCPathControl;
 import cc.creativecomputing.controlui.controls.CCSelectionControl;
 import cc.creativecomputing.controlui.controls.CCStringControl;
 import cc.creativecomputing.controlui.controls.code.CCRealtimeCompileControl;
+import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
 import cc.creativecomputing.math.CCColor;
 
 public class CCControlTreeComponent extends JPanel implements TreeSelectionListener{
@@ -134,6 +137,8 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 				myControlPanel = new CCPathControl((CCPathHandle)myPropertyHandle, _myControlCompoent);
 			}else  if(myClass == CCRealtimeCompile.class){
 				myControlPanel = new CCRealtimeCompileControl((CCRealtimeCompileHandle)myPropertyHandle, _myControlCompoent);
+			}else  if(myClass == CCShaderObject.class){
+				myControlPanel = new CCShaderCompileControl((CCShaderCompileHandle)myPropertyHandle, _myControlCompoent);
 			}else{
 				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;
 				CCObjectControl myObjectControl = new CCObjectControl(myObjectHandle, _myControlCompoent, theDepth);

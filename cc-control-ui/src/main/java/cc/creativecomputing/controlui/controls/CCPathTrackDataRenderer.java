@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.nio.file.Path;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
@@ -25,6 +26,7 @@ public class CCPathTrackDataRenderer extends SwingTrackDataRenderer{
 		
 		FontMetrics myMetrix = theG2d.getFontMetrics();
 		String myString = theTimedEvent.content().value().toString();
+		if(myString.contains("/"))myString = myString.substring(myString.lastIndexOf("/"));
 		int myIndex = myString.length() - 1;
 		StringBuffer myText = new StringBuffer();
 		while(myIndex >= 0 && myMetrix.stringWidth(myText.toString() + myString.charAt(myIndex)) < width - 5){

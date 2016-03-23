@@ -28,7 +28,8 @@ import cc.creativecomputing.controlui.timeline.controller.TimelineTool;
  *
  */
 public class SwingGuiConstants {
-	public static Font ARIAL_9 = new Font("Arial", 1, 9);
+
+	public static Font ARIAL_9 = new Font("Arial", 1, 9);//LucidaGrande
 	public static Font ARIAL_BOLD_10 = new Font("Arial", Font.BOLD, 10);
 	public static Font ARIAL_11 = new Font("Arial", 1, 11);
 	

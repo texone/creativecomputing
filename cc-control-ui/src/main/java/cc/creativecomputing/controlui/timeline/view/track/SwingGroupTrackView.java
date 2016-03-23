@@ -127,8 +127,8 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 		
 		setLayout(new FlowLayout(FlowLayout.LEFT, 3,2));
 		
-		setMinimumSize(new Dimension( 100, 20));
-		setPreferredSize(new Dimension(100,20));
+		setMinimumSize(new Dimension(100, 10));
+		setPreferredSize(new Dimension(100,10));
 
 		add( Box.createHorizontalStrut((theGroupController.track().path().getNameCount() - 1) * 5));
 		_myOpenButton = new JButton("-");

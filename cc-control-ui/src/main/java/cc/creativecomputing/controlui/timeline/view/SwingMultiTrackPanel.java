@@ -143,6 +143,9 @@ public class SwingMultiTrackPanel extends JPanel implements Iterable<Component> 
     }
     
     public void insertTrackView(Component theTrackView, Path thePath, int theIndex, int theHeight, boolean theIsFixed) {
+    	if(theIndex > _myTrackViews.size()){
+    		theIndex = _myTrackViews.size();
+    	}
         _myTrackViews.add(theIndex, theTrackView);
         _myTrackViewsMap.put(thePath, theTrackView);
         _myLayout.insertRow(theIndex, theHeight,theIsFixed);
@@ -153,6 +156,7 @@ public class SwingMultiTrackPanel extends JPanel implements Iterable<Component> 
     }
     
     public void insertTrackDataView(Component theTrackDataView, Path thePath, int theIndex) {
+    	if(theIndex > _myTrackDataViews.size())theIndex = _myTrackDataViews.size();
     	_myTrackDataViews.add(theIndex, theTrackDataView);
         _myTrackDataViewsMap.put(thePath, theTrackDataView);
         

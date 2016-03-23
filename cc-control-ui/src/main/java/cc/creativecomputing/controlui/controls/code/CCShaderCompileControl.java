@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.tools.Diagnostic;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -27,14 +26,15 @@ import org.fife.ui.rsyntaxtextarea.parser.Parser;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import cc.creativecomputing.control.code.CCRealtimeCompile;
-import cc.creativecomputing.control.code.CCRealtimeCompile.CCRealtimeCompileListener;
+import cc.creativecomputing.control.code.CCShaderObject;
+import cc.creativecomputing.control.code.CCShaderObject.CCShaderCompileListener;
 import cc.creativecomputing.control.handles.CCPropertyListener;
-import cc.creativecomputing.control.handles.CCRealtimeCompileHandle;
+import cc.creativecomputing.control.handles.CCShaderCompileHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.controls.CCValueControl;
 
-public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?>, CCRealtimeCompileHandle>{
+public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCShaderCompileHandle>{
 	
 	private class CCRealtimeCompileParser implements Parser{
 
@@ -84,7 +84,7 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 	private boolean _myTriggerEvent = true;
 
 	@SuppressWarnings("rawtypes")
-	public CCRealtimeCompileControl(CCRealtimeCompileHandle theHandle, CCControlComponent theControlComponent){
+	public CCShaderCompileControl(CCShaderCompileHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		theHandle.events().add(new CCPropertyListener<CCRealtimeCompile>() {
@@ -92,20 +92,16 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 			@Override
 			public void onChange(CCRealtimeCompile theValue) {
 				_myTriggerEvent = false;
-				if(theValue.sourceCode().trim().equals("")){
-					_myTextArea.setText(_myHandle.value().codeTemplate());
-				}else{
-					_myTextArea.setText(theValue.sourceCode());
-				}
+				_myTextArea.setText(theValue.sourceCode());
 				_myTriggerEvent = true;
 			}
 		});
 		
-		theHandle.value().events().add(new CCRealtimeCompileListener() {
-
+		theHandle.value().events().add(new CCShaderCompileListener() {
+			
 			@Override
-			public void onRecompile(CCRealtimeCompile theCompiler) {
-				_myErrorArea.setText(errorLog());
+			public void onRecompile(CCShaderObject theCompiler) {
+				_myErrorArea.setText(_myHandle.value().errorLog());
 			}
 		});
 		
@@ -115,7 +111,7 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 		_myTextArea = new RSyntaxTextArea(20, 60);
 		_myTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
 		_myTextArea.setCodeFoldingEnabled(true);
-		_myTextArea.setText(_myHandle.value().codeTemplate());
+		_myTextArea.setText(_myHandle.value().sourceCode());
 		_myTextArea.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
@@ -189,34 +185,22 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 			
 			@Override
 			public void actionPerformed(ActionEvent theE) {
-				_myTextArea.setText(_myHandle.value().codeTemplate());
+				_myTextArea.setText(_myHandle.value().sourceCode());
 			}
 		});
         CCUIStyler.styleButton(_myResetButton, 30, 15);
         _myContainer.add(_myResetButton);
 	}
 	
-	private String errorLog(){
-		StringBuffer myResult = new StringBuffer();
-		for(Diagnostic<?> myDiagnostic:_myHandle.value().diagnostics()){
-			myResult.append("\n");
-			myResult.append( myDiagnostic.getKind() + " in " + myDiagnostic.getSource() + "\n");
-			myResult.append( "LINE: " + myDiagnostic.getLineNumber() + "," + myDiagnostic.getMessage( null ) + "\n");
-			myResult.append( "Position/Spalte: "+ myDiagnostic.getPosition()+","+myDiagnostic.getColumnNumber()  +"\n" );
-			myResult.append( "Startpostion/Endposition:" + myDiagnostic.getStartPosition()+ "," + myDiagnostic.getEndPosition()+"\n"  );
-		}
-		return myResult.toString();
-	}
-	
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
 		thePanel.add(_myLabel, 	constraints(0, theY, GridBagConstraints.LINE_END, 	5,  5, 1, 5));
-		thePanel.add(_myContainer, constraints(1, theY, 2, GridBagConstraints.LINE_START, 5, 5, 1, 5));
+		thePanel.add(_myContainer, constraints(1, theY, 2, GridBagConstraints.LINE_START, 5, 15, 1, 5));
 	}
 
 	@Override
-	public CCRealtimeCompile<?> value() {
+	public CCShaderObject value() {
 		// TODO Auto-generated method stub
 		return _myHandle.value();
 	}

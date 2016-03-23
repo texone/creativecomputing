@@ -24,7 +24,7 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
         //Create the Button.
 
         _myButton = new JButton(theHandle.name());
-        CCUIStyler.styleButton(_myButton);
+        CCUIStyler.styleButton(_myButton, 103, 13);
         _myButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -60,7 +60,7 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		thePanel.add(_myLabel, 	constraints(0, theY, GridBagConstraints.LINE_END, 	5,  5, 1, 5));
-		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 15, 1, 5));
+		thePanel.add(_myLabel, 	constraints(0, theY, GridBagConstraints.LINE_END, 	5, 5, 1, 5));
+		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 4, 1, 5));
 	}
 }

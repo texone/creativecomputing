@@ -121,6 +121,7 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
  
         //Create the Button.
 		_myColorPanel = new JPanel();
+		_myColorPanel.setPreferredSize(new Dimension(68,11));
 		_myColorPanel.setBackground(_myColor.toAWTColor());
 
 		// Create a color chooser dialog
@@ -158,8 +159,8 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 		_myButton.addActionListener(new ShowColorChooserAction(_myPanel, _myColorChooser));
 		
 		thePanel.add(_myLabel,  constraints(0, theY, GridBagConstraints.LINE_END, 5, 5, 1, 5));
-		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 15, 1, 5));
-		thePanel.add(_myColorPanel, constraints(2, theY, GridBagConstraints.LINE_START, 5, 15, 1, 5));
+		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 5, 1, 5));
+		thePanel.add(_myColorPanel, constraints(2, theY, GridBagConstraints.LINE_START, 5, 5, 1, 5));
 //		thePanel.add(_myColorPanel, myConstraints);
 	}
 }

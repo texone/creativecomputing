@@ -54,7 +54,7 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
         
         _myEnums = new JComboBox<Enum<?>>();
         CCUIStyler.styleCombo(_myEnums);
-        for(Enum<?> myEnum:_myValue.getDeclaringClass().getEnumConstants()){
+        for(Enum<?> myEnum:_myHandle.enumConstants()){
         	_myEnums.addItem(myEnum);
         }
         _myEnums.addItemListener(new ItemListener() {
@@ -79,7 +79,7 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		thePanel.add(_myLabel, constraints(0,theY, GridBagConstraints.LINE_END, 	15,  5, 1, 5));
-		thePanel.add(_myEnums, constraints(1,theY, GridBagConstraints.LINE_START,	15, 15, 1, 5));
+		thePanel.add(_myLabel, constraints(0,theY, GridBagConstraints.LINE_END, 	5, 5, 1, 5));
+		thePanel.add(_myEnums, constraints(1,theY, GridBagConstraints.LINE_START,	5, 0, 1, 5));
 	}
 }

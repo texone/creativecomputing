@@ -116,8 +116,11 @@ public abstract class TrackController extends TrackDataController implements Zoo
 	public void time(double theTime){
 		if(_myTrackView != null)_myTrackView.update();
 		double myValue = 0;
+		
 		if(_myTrack.property() != null){
-			_myTrack.property().fromNormalizedValue(value(theTime), false);
+			if(!track().mute()){
+				_myTrack.property().fromNormalizedValue(value(theTime), false);
+			}
 			myValue = _myTrack.property().formatNormalizedValue(value(theTime));
 			viewValue(_myTrack.property().valueString());
 		}

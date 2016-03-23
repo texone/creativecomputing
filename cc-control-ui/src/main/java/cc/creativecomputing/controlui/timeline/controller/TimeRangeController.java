@@ -88,40 +88,37 @@ public class TimeRangeController {
 	}
 	
 	public void mouseDragged(MouseEvent e) {
-		_myLoopStart = _myTimeRange.start();
-		_myLoopEnd = _myTimeRange.end();
 		double myCurveX = _myTransportView.viewXToTime(e.getX(), true);
 //		myCurveX = _myTimelineController.snapToRaster(myCurveX);
 
 		switch (_myLoopAction) {
 		case MOVE_BOTH:
-			double myCurveMove = _myTransportView.viewXToTime(e.getX(), true) - _myLastTime;
-			_myNewLoopStart = _myLoopStart + myCurveMove;
-			_myNewLoopEnd = _myLoopEnd + myCurveMove;
+			double myCurveMove = myCurveX - _myLastTime;
+			_myNewLoopStart = _myTrackContext.quantize(_myLoopStart + myCurveMove);
+			_myNewLoopEnd = _myTrackContext.quantize(_myLoopEnd + myCurveMove);
 			break;
 		case MOVE_START:
-			double myCurveMoveStart = _myTransportView.viewXToTime(e.getX(), true);
+			double myCurveMoveStart = myCurveX;
 			_myNewLoopStart = _myTrackContext.quantize(myCurveMoveStart);
-			_myNewLoopEnd = _myLoopEnd;
+			_myNewLoopEnd = _myTimeRange.end();
 			break;
 		case MOVE_END:
-			double myCurveMoveEnd = _myTransportView.viewXToTime(e.getX(), true);
-			_myNewLoopStart = _myLoopStart;
+			double myCurveMoveEnd = myCurveX;
+			_myNewLoopStart = _myTimeRange.start();
 			_myNewLoopEnd = _myTrackContext.quantize(myCurveMoveEnd);
 			break;
 		default:
 			if (e.getX() < _myStartClickX) {
-				_myNewLoopStart = _myTrackContext.quantize(_myTransportView.viewXToTime(e.getX(), true));
+				_myNewLoopStart = _myTrackContext.quantize(myCurveX);
 				_myNewLoopEnd = _myTrackContext.quantize(_myStartTime);
 			} else {
 				_myNewLoopStart = _myTrackContext.quantize(_myStartTime);
-				_myNewLoopEnd = _myTrackContext.quantize(_myTransportView.viewXToTime(e.getX(), true));
+				_myNewLoopEnd = _myTrackContext.quantize(myCurveX);
 			}
 			break;
 		}
 
 		_myTimeRange.range(_myNewLoopStart, _myNewLoopEnd);
-		_myLastTime = myCurveX;
 		
 		_myTrackContext.render();
 	}

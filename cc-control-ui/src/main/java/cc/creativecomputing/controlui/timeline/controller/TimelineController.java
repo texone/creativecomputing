@@ -514,6 +514,9 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		for (TrackController myController : _myTrackControllerMap.values()) {
 			if(myController.view() != null)myController.view().render();
 		}
+		for (TrackController myController : _myGrouptrackControllerMap.values()) {
+			if(myController.view() != null)myController.view().render();
+		}
 	}
 	
 	@SuppressWarnings("unused")

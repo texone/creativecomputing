@@ -11,25 +11,30 @@ import java.awt.Insets;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import javax.swing.text.JTextComponent;
 
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 
 public class CCUIStyler {
 
 	
-	protected static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);
+	protected static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,13);
 	
 	public static JColorChooser createColorChooser(Color theColor){
 		JColorChooser myResult = new JColorChooser(theColor);
@@ -61,7 +66,11 @@ public class CCUIStyler {
 	
 	public static void styleCombo(JComboBox<?> theCombo){
 		theCombo.setFont(SwingGuiConstants.ARIAL_9);
-		theCombo.setPreferredSize(SMALL_BUTTON_SIZE);
+		theCombo.setPreferredSize(new Dimension(113,13));
+		theCombo.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
+		final JTextComponent tcA = (JTextComponent) theCombo.getEditor().getEditorComponent();
+		tcA.setMargin(new Insets(0, 0, 0, 0));
+		tcA.setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 2));
 	}
 	
 	public static void styleLabel(JLabel theLabel){
@@ -74,10 +83,10 @@ public class CCUIStyler {
 	public static void styleTextField(JTextField theValueField, int theWidth) {
 		theValueField.setBackground(Color.WHITE);
 		theValueField.setForeground(Color.BLACK);
-		theValueField.setBorder(BorderFactory.createEmptyBorder());
-		theValueField.setHorizontalAlignment(JTextField.RIGHT);
+		theValueField.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
+		theValueField.setHorizontalAlignment(JTextField.LEFT);
 		theValueField.setFont(SwingGuiConstants.ARIAL_9);
-		theValueField.setPreferredSize(new Dimension(theWidth,15));
+		theValueField.setPreferredSize(new Dimension(theWidth,12));
 	}
 	
 	public static void styleTransportComponent(JComponent theComponent, int theWidth, int theHeight){

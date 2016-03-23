@@ -23,7 +23,7 @@ public class CCTreeNodeUserObject {
 	public void add(CCControl theComponent, int theDepth){
 		if(_myControlComponent == null){
 			_myControlComponent = new JPanel(new GridBagLayout());
-			_myControlComponent.setMinimumSize(new Dimension(600, 10));
+//			_myControlComponent.setPreferredSize(new Dimension(600, 10));
 			_myControlComponent.setBackground(CCColorMap.getColor(_myHandle.path()));
 		}
 		theComponent.addToComponent(_myControlComponent, _myGridY, theDepth);

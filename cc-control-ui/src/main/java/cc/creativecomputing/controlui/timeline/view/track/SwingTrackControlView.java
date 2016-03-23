@@ -125,6 +125,8 @@ public class SwingTrackControlView extends JPanel{
 					}else {
 						_myTrackController.mute(_myMuteButton.isSelected());
 					}
+					_myTrackController.view().dataView().render();
+					repaint();
 				}
 			});
 			

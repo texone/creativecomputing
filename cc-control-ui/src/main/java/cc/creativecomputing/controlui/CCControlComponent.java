@@ -44,6 +44,7 @@ public class CCControlComponent extends JSplitPane{
 		super(JSplitPane.VERTICAL_SPLIT, true);
 		CCUIStyler.styleSplitPane(this);
 		_myInfoPanel = new JPanel();
+		_myInfoPanel.setBackground(Color.RED);
 		_myScrollPane = new JScrollPane(_myInfoPanel);
 		_myScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		_myInfoPanel.setBackground(Color.GRAY);
@@ -55,7 +56,6 @@ public class CCControlComponent extends JSplitPane{
 		setData(theData);
 		_myTimelineView = new SwingTimelineContainerView(theMainFrame);
 		_myTimelineContainer = new TimelineContainer(_myTreeComponent.propertyMap());
-		_myTimelineContainer.view(_myTimelineView);
 		_myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
 			
 			@Override
@@ -71,6 +71,7 @@ public class CCControlComponent extends JSplitPane{
 			public void addTimeline(String theTimeline) {
 			}
 		});
+		_myTimelineContainer.view(_myTimelineView);
 //		_myTimelineView.setSize(1900, 500);
 		
         _myPresetComponent = new CCPresetComponent();
