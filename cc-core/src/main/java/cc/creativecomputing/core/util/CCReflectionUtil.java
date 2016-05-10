@@ -266,7 +266,6 @@ public class CCReflectionUtil {
 				for(Class<?> myParameter:myParameters){
 					CCLog.info(myParameter.getName());
 				}
-				CCLog.info(theObject.getClass().getName());
 				throw new CCReflectionException("Could not call: " + _myParent.getClass().getName() + "." + _mySetMethod.getName(),e);
 			}
 		}
