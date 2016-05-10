@@ -15,7 +15,6 @@ import cc.creativecomputing.control.timeline.point.LinearControlPoint;
 import cc.creativecomputing.control.timeline.point.MarkerPoint;
 import cc.creativecomputing.control.timeline.point.StepControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCMath;
@@ -543,37 +542,51 @@ public class TrackData extends TreeSet<ControlPoint>{
 		return myTrackData;
 	}
 	
+	private ControlPoint createPoint(CCDataObject theData){
+		ControlPoint myPoint;
+		ControlPointType myType = ControlPointType.valueOf(theData.getString(ControlPoint.CONTROL_POINT_TYPE_ATTRIBUTE));
+			
+		switch(myType) {
+		case STEP:
+			myPoint = new StepControlPoint();
+			break;
+		case LINEAR:
+			myPoint = new LinearControlPoint();
+			break;
+		case BEZIER:
+			myPoint = new BezierControlPoint();
+			break;
+		case MARKER:
+			myPoint = new MarkerPoint();
+			break;
+		case TIMED_EVENT:
+			myPoint = new TimedEventPoint();
+			break;
+		case COLOR:
+			myPoint = new ColorPoint();
+			break;
+		default:
+			myPoint = new LinearControlPoint();
+		}
+		myPoint.data(theData);
+		return myPoint;
+	}
+	
 	public void data(CCDataObject theData) {
 		CCDataArray myPointDataArray = theData.getArray("points");
 		for (Object myControlPointObject:myPointDataArray) {
 			CCDataObject myControlPointData = (CCDataObject)myControlPointObject;
-			ControlPoint myPoint;
-			ControlPointType myType = ControlPointType.valueOf(myControlPointData.getString(ControlPoint.CONTROL_POINT_TYPE_ATTRIBUTE));
-				
-			switch(myType) {
-			case STEP:
-				myPoint = new StepControlPoint();
-				break;
-			case LINEAR:
-				myPoint = new LinearControlPoint();
-				break;
-			case BEZIER:
-				myPoint = new BezierControlPoint();
-				break;
-			case MARKER:
-				myPoint = new MarkerPoint();
-				break;
-			case TIMED_EVENT:
-				myPoint = new TimedEventPoint();
-				break;
-			case COLOR:
-				myPoint = new ColorPoint();
-				break;
-			default:
-				myPoint = new LinearControlPoint();
-			}
-			
-			myPoint.data(myControlPointData);
+			add(createPoint(myControlPointData));
+		}
+		
+	}
+	
+	public void insert(CCDataObject theData, double theTime) {
+		CCDataArray myPointDataArray = theData.getArray("points");
+		for (Object myControlPointObject:myPointDataArray) {
+			CCDataObject myControlPointData = (CCDataObject)myControlPointObject;
+			ControlPoint myPoint = createPoint(myControlPointData);
+			myPoint.time(myPoint.time() + theTime);
 			add(myPoint);
 		}
 		

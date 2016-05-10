@@ -2,11 +2,29 @@ package cc.creativecomputing.control.code;
 
 import cc.creativecomputing.core.events.CCListenerManager;
 
-public abstract class CCShaderObject {
+public class CCShaderObject {
 	
-	private String _myShaderSource = "";
+	public static abstract class CCShaderObjectInterface{
+		
+		private String _myShaderSource = "";
+		
+		public void sourceCode(String theSource){
+			_myShaderSource = theSource;
+		}
+		
+		public String sourceCode(){
+			return _myShaderSource;
+		}
+		
+		public abstract String errorLog();
+		
+	}
+	
+	
 	
 	private CCListenerManager<CCShaderCompileListener> _myEvents = CCListenerManager.create(CCShaderCompileListener.class);
+	
+	private final CCShaderObjectInterface _myInterface;
 	
 	public static interface CCShaderCompileListener{
 		public void onRecompile(CCShaderObject theCompiler);
@@ -16,13 +34,19 @@ public abstract class CCShaderObject {
 		return _myEvents;
 	}
 	
+	public CCShaderObject(CCShaderObjectInterface theInterface){
+		_myInterface = theInterface;
+	}
+	
 	public void sourceCode(String theSource){
-		_myShaderSource = theSource;
+		_myInterface.sourceCode(theSource);
 	}
 	
 	public String sourceCode(){
-		return _myShaderSource;
+		return _myInterface.sourceCode();
 	}
 	
-	public abstract String errorLog();
+	public String errorLog(){
+		return _myInterface.errorLog();
+	}
 }

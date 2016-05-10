@@ -37,6 +37,10 @@ public abstract class CCPropertyHandle<Type>{
 		_myReadBack = readBack();
 	}
 	
+	public void mute(boolean theMute){
+		
+	}
+	
 	public CCListenerManager<CCPropertyListener> events(){
 		return _myEvents;
 	}

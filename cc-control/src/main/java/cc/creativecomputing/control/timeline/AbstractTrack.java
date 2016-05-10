@@ -25,6 +25,7 @@ public abstract class AbstractTrack {
 	}
 	
 	public void mute( boolean theFlag ) {
+		_myProperty.mute(theFlag);
 		_myMuteFlag = theFlag;
 	}
 	

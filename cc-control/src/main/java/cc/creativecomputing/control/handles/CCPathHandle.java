@@ -24,6 +24,11 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 	}
 	
 	@Override
+	public void mute(boolean theMute) {
+		_myAsset.mute(theMute);
+	}
+	
+	@Override
 	public void data(CCDataObject theData) {
 		if(!theData.containsKey("value")){
 			value(null, true);

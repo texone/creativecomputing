@@ -93,7 +93,9 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		});
 		creatorMap.put(CCShaderObject.class, new CCHandleCreator(){
 			@Override
-			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCShaderCompileHandle(theParent, theMember);}
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {
+				CCLog.info("SHADER");
+				return new CCShaderCompileHandle(theParent, theMember);}
 		});
 	}
 	
@@ -159,7 +161,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(String myPart:myTypeParts){
 			myPresetPath = myPresetPath.resolve(Paths.get(myPart));
 		}
-		CCLog.info(myPresetPath);
 		return myPresetPath;
 	}
 	
@@ -207,8 +208,8 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			Map<Object,Object> myMap = (Map<Object, Object>)theObject;
 			for(Object myKey:myMap.keySet()){
 				CCMapEntry myEntry = new CCMapEntry(myMap, myKey);
-				
 				Class<?> myClass = myEntry.type();
+				CCLog.info(myKey +":" + myClass.getSuperclass().getTypeName() + ":" + myMap.get(myKey));
 				CCPropertyHandle myProperty;
 				if(creatorMap.containsKey(myClass)){
 					myProperty = creatorMap.get(myClass).create(this, myEntry);
@@ -262,7 +263,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		}
 		
 		CCDataObject myResult = new CCDataObject();
-		CCLog.info(name());
 		myResult.put("value", myData);
 		
 		return myResult;

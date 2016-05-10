@@ -112,6 +112,17 @@ public class Track extends AbstractTrack{
 			_myExtras.put(myKey, myExtrasData.getString(myKey));
 		}
 	}
+	
+	public void insertData(CCDataObject theTrackData, double theTime){
+		CCDataObject myTrackData = theTrackData.getObject(TrackData.TRACKDATA_ELEMENT);
+		_myTrackData.insert(myTrackData, theTime);
+		
+		CCDataObject myExtrasData = theTrackData.getObject(TRACK_EXTRAS);
+		if(myExtrasData == null)return;
+		for(String myKey:myExtrasData.keySet()) {
+			_myExtras.put(myKey, myExtrasData.getString(myKey));
+		}
+	}
 
 	public Path path() {
 		return _myProperty.path();

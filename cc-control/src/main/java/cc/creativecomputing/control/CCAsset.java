@@ -33,10 +33,14 @@ public abstract class CCAsset <AssetType>{
 	
 	@CCProperty(name = "path")
 	public final void path(Path thePath){
-		if(thePath == _myAssetPath)return;
+		if(thePath == _myAssetPath || (thePath != null && thePath.equals(_myAssetPath)))return;
 		_myAssetPath = thePath;
 		onChangePath(thePath);
 		_myEvents.proxy().onChange(_myAsset);
+	}
+	
+	public void mute(boolean theMute){
+		
 	}
 	
 	public String[] extensions(){
