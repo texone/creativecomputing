@@ -10,13 +10,11 @@
  */
 package cc.creativecomputing.model.collada;
 
-import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCCamera;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -135,7 +133,7 @@ public class CCColladaSceneNode extends CCColladaElement{
 					_myDrawMode = CCDrawMode.TRIANGLES;
 					break;
 				}
-				CCMesh myGeometryMesh = new CCMesh(_myDrawMode);
+				CCMesh myGeometryMesh = new CCVBOMesh(_myDrawMode);
 				
 				myGeometryMesh.vertices(myGeometryData.positions());
 				if(myGeometryData.hasNormals()){
@@ -146,14 +144,13 @@ public class CCColladaSceneNode extends CCColladaElement{
 				
 				_myInstanceType = CCColladaSceneNodeInstanceType.GEOMETRY;
 				break;
+			case "node":
+				_myInstanceType = CCColladaSceneNodeInstanceType.NODE;
+				CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, myChild);
+				_myNodeMap.put(myNode.id(), myNode);
+				_myNodes.add(myNode);
+				break;
 			}
-		}
-		
-		
-		for(CCXMLElement myNodeXML:theNodeXML.children("node")) {
-			CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, myNodeXML);
-			_myNodeMap.put(myNode.id(), myNode);
-			_myNodes.add(myNode);
 		}
 	}
 	
@@ -231,13 +228,14 @@ public class CCColladaSceneNode extends CCColladaElement{
 	}
 	
 	public void draw(CCGraphics g){
+		if(_myInstanceType == null)return;
 		switch(_myInstanceType){
 		case CAMERA:
 			if(_myCamera == null)return;
 		
 			
-			_myCamera.viewport(g.camera().viewport());
-			_myCamera.draw(g);
+//			_myCamera.viewport(g.camera().viewport());
+//			_myCamera.draw(g);
 //			g.applyMatrix(_myMatrix);
 			break;
 		case GEOMETRY:
@@ -248,6 +246,20 @@ public class CCColladaSceneNode extends CCColladaElement{
 				myGeometry.draw(g);
 			}
 			g.popMatrix();
+			break;
+		case NODE:
+			g.pushMatrix();
+			g.applyMatrix(_myMatrix);
+			for(CCColladaSceneNode myNode:_myNodes){
+				myNode.draw(g);
+			}
+			g.popMatrix();
+			break;
+		case CONTROLLER:
+			break;
+		case LIGHT:
+			break;
+		default:
 			break;
 		}
 	}
