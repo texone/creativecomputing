@@ -94,7 +94,7 @@ public class OrientedBoundingBox extends CCBoundingVolume {
 
 	@Override
 	public CCPlane.Side whichSide(final CCPlane plane) {
-		final CCVector3 planeNormal = plane.getNormal();
+		final CCVector3 planeNormal = plane.normal();
 		final double fRadius = 
 			CCMath.abs(_extent.x * (planeNormal.dot(_xAxis))) + 
 			CCMath.abs(_extent.y * (planeNormal.dot(_yAxis))) + 

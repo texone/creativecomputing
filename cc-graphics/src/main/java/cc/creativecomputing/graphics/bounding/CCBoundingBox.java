@@ -304,7 +304,7 @@ public class CCBoundingBox extends CCBoundingVolume {
      */
     @Override
     public CCPlane.Side whichSide(final CCPlane plane) {
-        final CCVector3 normal = plane.getNormal();
+        final CCVector3 normal = plane.normal();
         final double radius = CCMath.abs(getXExtent() * normal.x) + CCMath.abs(getYExtent() * normal.y)
                 + CCMath.abs(getZExtent() * normal.z);
 

@@ -281,7 +281,7 @@ public class CCCuller {
 		// distance from the camera location E to the plane is N*(E-C).
 		double NdEmC = plane.distance(mCamera.position());
 
-		CCVector3 normal = plane.getNormal();
+		CCVector3 normal = plane.normal();
 		double NdD = normal.dot(mCamera.direction());
 		double NdU = normal.dot(mCamera.up());
 		double NdR = normal.dot(mCamera.right());
