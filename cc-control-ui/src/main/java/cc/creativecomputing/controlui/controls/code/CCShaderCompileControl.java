@@ -1,6 +1,5 @@
 package cc.creativecomputing.controlui.controls.code;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
@@ -13,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -25,7 +25,6 @@ import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.Parser;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.control.code.CCShaderObject.CCShaderCompileListener;
 import cc.creativecomputing.control.handles.CCPropertyListener;
@@ -83,14 +82,13 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCSha
 	
 	private boolean _myTriggerEvent = true;
 
-	@SuppressWarnings("rawtypes")
 	public CCShaderCompileControl(CCShaderCompileHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(new CCPropertyListener<CCRealtimeCompile>() {
+		theHandle.events().add(new CCPropertyListener<CCShaderObject>() {
 			
 			@Override
-			public void onChange(CCRealtimeCompile theValue) {
+			public void onChange(CCShaderObject theValue) {
 				_myTriggerEvent = false;
 				_myTextArea.setText(theValue.sourceCode());
 				_myTriggerEvent = true;
@@ -106,7 +104,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCSha
 		});
 		
 		_myEditorFrame = new JFrame();
-		JPanel cp = new JPanel(new BorderLayout());
+		JSplitPane mySplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
 
 		_myTextArea = new RSyntaxTextArea(20, 60);
 		_myTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
@@ -118,12 +116,14 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCSha
 			public void removeUpdate(DocumentEvent theE) {
 				if(!_myTriggerEvent)return;
 				_myHandle.value().sourceCode(_myTextArea.getText());
+				_myErrorArea.setText(_myHandle.value().errorLog());
 			}
 				
 			@Override
 			public void insertUpdate(DocumentEvent theE) {
 				if(!_myTriggerEvent)return;
 				_myHandle.value().sourceCode(_myTextArea.getText());
+				_myErrorArea.setText(_myHandle.value().errorLog());
 			}
 				
 			@Override
@@ -132,15 +132,16 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCSha
 		});
 		_myTextArea.addParser(new CCRealtimeCompileParser());
 		RTextScrollPane sp = new RTextScrollPane(_myTextArea);
-		cp.add(sp, BorderLayout.NORTH);
+		mySplitPane.setTopComponent(sp);
+		mySplitPane.setDividerLocation(500);
 		
 		_myErrorArea = new JTextArea();
 		_myErrorArea.setPreferredSize(_myTextArea.getPreferredSize());
 		JScrollPane sp2 = new JScrollPane(_myErrorArea);
-		cp.add(sp2, BorderLayout.CENTER);
+		mySplitPane.setBottomComponent(sp2);
 	      
 
-		_myEditorFrame.setContentPane(cp);
+		_myEditorFrame.setContentPane(mySplitPane);
 		_myEditorFrame.setTitle("Text Editor Demo");
 		_myEditorFrame.pack();
 		_myEditorFrame.setLocationRelativeTo(null);
@@ -165,15 +166,6 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCSha
 			
 			@Override
 			public void actionPerformed(ActionEvent theE) {
-//				if(_myCurveKey == null){
-//					_myCurveFrame.track().trackData(new TrackData(null));
-//				}else{
-//					_myCurveFrame.track().trackData(value().curves().get(_myCurveKey));
-//				}
-//
-//				_myEnvelopeCurve = value().curves().get(_myCurveKey);
-//				value().currentCurve(_myCurveFrame.track().trackData());
-				
 				_myEditorFrame.setVisible(true);
 			}
 		});

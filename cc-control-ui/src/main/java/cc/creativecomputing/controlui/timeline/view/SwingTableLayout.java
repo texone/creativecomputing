@@ -47,9 +47,10 @@ public class SwingTableLayout implements LayoutManager2 {
 		}
 	}
 	
-	public static final int SEPARATOR_WIDTH = 2;
+	public static final int SEPARATOR_WIDTH = 1;
+	public static final int SEPARATOR_MOUSE_WIDTH = 2;
 	public static final int DEFAULT_ROW_HEIGHT = 60;
-	public static final int DEFAULT_GROUP_HEIGHT = 20;
+	public static final int DEFAULT_GROUP_HEIGHT = 15;
 	
 	private Map<Component, TableLayoutConstraints> _myConstraintsMap = new HashMap<Component, TableLayoutConstraints>();
 	private int _myNumRows = 0;
@@ -204,8 +205,8 @@ public class SwingTableLayout implements LayoutManager2 {
 		
 		for ( Float myWeight : _myColumnWeights ) {
 			if (
-				theX <= myWeight * myWidth + SEPARATOR_WIDTH && 
-				theX >= myWeight * myWidth - SEPARATOR_WIDTH
+				theX <= myWeight * myWidth + SEPARATOR_MOUSE_WIDTH && 
+				theX >= myWeight * myWidth - SEPARATOR_MOUSE_WIDTH
 			){
 				if(_myColumnWeights.indexOf(myWeight) != 1)break;
 				mySeparator = new Separator();
@@ -218,7 +219,7 @@ public class SwingTableLayout implements LayoutManager2 {
 		for (int i = 0; i < _myRowHeights.size(); i++) {
 			myPos += _myRowHeights.get(i)._myHeight + SEPARATOR_WIDTH;
 			
-			if (theY <= (myPos + SEPARATOR_WIDTH) && theY >= (myPos - SEPARATOR_WIDTH)) {
+			if (theY <= (myPos + SEPARATOR_MOUSE_WIDTH) && theY >= (myPos - SEPARATOR_MOUSE_WIDTH)) {
 				mySeparator = new Separator();
 				mySeparator.alignment = SeparatorAlignment.HORIZONTAL;
 				mySeparator.index = i;

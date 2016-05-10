@@ -91,7 +91,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	
 	static final Dimension SMALL_BUTTON_SIZE = new Dimension(20,15);
 	static final int RESIZE_HANDLE_HEIGHT = 5;
-	static final Dimension ADDRESS_FIELD_SIZE = new Dimension(100,20);
+	static final Dimension ADDRESS_FIELD_SIZE = new Dimension(100,15);
 
 
     static final public DecimalFormat VALUE_FORMAT;
@@ -102,7 +102,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	
 	private GroupTrackController _myGroupController;
 	private TimelineController _myTimelineController;
-	private JButton _myOpenButton;
+	private JLabel _myOpenButton;
 	private JLabel _myAddressField;
 	private ArrayList<ActionListener> _myListeners;
 	
@@ -131,22 +131,22 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 		setPreferredSize(new Dimension(100,10));
 
 		add( Box.createHorizontalStrut((theGroupController.track().path().getNameCount() - 1) * 5));
-		_myOpenButton = new JButton("-");
-		_myOpenButton.setBackground(Color.WHITE);
-		_myOpenButton.setForeground(Color.BLACK);
+		_myOpenButton = new JLabel("[-]");
+//		_myOpenButton.setBackground(Color.WHITE);
+//		_myOpenButton.setForeground(Color.BLACK);
 //		_myOpenButton.setBorderPainted(false);
-		_myOpenButton.setMargin(new Insets(0, 0, 0, 0));
-		_myOpenButton.setFont(SwingGuiConstants.ARIAL_9);
-		_myOpenButton.setPreferredSize(SMALL_BUTTON_SIZE);
-		_myOpenButton.addActionListener(new ActionListener() {
+//		_myOpenButton.setMargin(new Insets(0, 0, 0, 0));
+		_myOpenButton.setForeground(Color.WHITE);
+		_myOpenButton.setFont(SwingGuiConstants.ARIAL_BOLD_10);
+		_myOpenButton.addMouseListener(new MouseAdapter() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				boolean _myPressedShift = (e.getModifiers() & ActionEvent.SHIFT_MASK) == ActionEvent.SHIFT_MASK;
 				
-				if(_myOpenButton.getText().equals("+")) {
+				if(_myOpenButton.getText().equals("[+]")) {
 					_myGroupController.openGroup(_myPressedShift);
-				}else if(_myOpenButton.getText().equals("-")) {
+				}else if(_myOpenButton.getText().equals("[-]")) {
 					_myGroupController.closeGroup(true);
 				}
 			}
@@ -198,7 +198,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	 * @see de.artcom.timeline.view.GroupTrackView#openGroup()
 	 */
 	public void openGroup() {
-		_myOpenButton.setText("-");
+		_myOpenButton.setText("[-]");
 		int myIndex = _myMultiTrackPanel.index(this) + 1;
 		for(TrackController myTrackController:_myGroupController.trackController()) {
 			if(!_myShowUnusedItems){
@@ -231,7 +231,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	 * @see de.artcom.timeline.view.GroupTrackView#closeGroup()
 	 */
 	public void closeGroup() {
-		_myOpenButton.setText("+");
+		_myOpenButton.setText("[+]");
 		for(TrackController myTrackDataController:_myGroupController.trackController()) {
 //			CCLog.info(myTrackDataController+":"+myTrackDataController.track().address());
 			_myMultiTrackPanel.removeTrackView(myTrackDataController.track().path());
@@ -253,7 +253,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	
 	@Override
 	public void mute(final boolean theMute) {
-		_myOpenButton.setSelected(theMute);
+//		_myOpenButton.setSelected(theMute);
 	}
 
 	@Override

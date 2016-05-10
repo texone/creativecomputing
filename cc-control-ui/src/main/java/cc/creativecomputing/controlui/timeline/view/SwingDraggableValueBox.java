@@ -1,5 +1,9 @@
 package cc.creativecomputing.controlui.timeline.view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -10,6 +14,7 @@ import javax.swing.JTextField;
 
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackControlView;
 import cc.creativecomputing.core.util.CCFormatUtil;
+import cc.creativecomputing.math.CCMath;
 
 
 public class SwingDraggableValueBox extends JTextField implements MouseListener, MouseMotionListener{
@@ -22,27 +27,55 @@ public class SwingDraggableValueBox extends JTextField implements MouseListener,
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int _myStep;
-	private int _myMaxSteps;
+	private double _myValue;
+	private double _myMin;
+	private double _myMax;
+	
 	private double _myStepSize;
 	
-	private double _myMin;
 	
-	private int _myChangeSize = 2;
+	private int _myChangeSize = 3;
 	private int _myLastY;
 	
 	private List<ChangeValueListener> _myListener = new ArrayList<ChangeValueListener>();
 
 	public SwingDraggableValueBox(double theValue, double theMin, double theMax, double theStepSize){
 		_myMin = theMin;
-		_myStep = (int)((theValue - theMin)/theStepSize);
-		_myMaxSteps = (int)((theMax - theMin)/theStepSize) + 1;
+		_myMax = theMax;
 		_myStepSize = theStepSize;
 		setEditable(true);
 		setHorizontalAlignment(JTextField.RIGHT);
 		
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		
+		addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent theE) {
+				try{
+					value(Double.parseDouble(getText()));
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		});
+       addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        		switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					value(_myValue + _myStepSize);
+					break;
+				case KeyEvent.VK_DOWN:
+					value(_myValue - _myStepSize);
+					break;
+
+				default:
+					break;
+				}
+        	}
+		});
 		
 		setText(value() + "");
 	}
@@ -61,26 +94,26 @@ public class SwingDraggableValueBox extends JTextField implements MouseListener,
 		int steps = myChange / _myChangeSize;
 		
 		_myLastY += steps * _myChangeSize;
-		_myStep -= steps;
+
+		value(_myValue - steps * _myStepSize);
 		
-		_myStep = Math.max(_myStep, 0);
-		_myStep = Math.min(_myStep, _myMaxSteps);
-		
-		double myValue = value();
-		
-		for(ChangeValueListener myListener:_myListener){
-			myListener.changeValue(myValue);
-		}
-		
-		setText(CCFormatUtil.nd(myValue, 2));
 	}
 	
 	public void value(double theValue){
-		_myStep = (int)((theValue - _myMin)/_myStepSize);
+		if(theValue == _myValue)return;
+		
+//		_myValue = CCMath.quantize(theValue, _myStepSize);
+		_myValue = CCMath.constrain(_myValue, _myMin, _myMax);
+		
+		for(ChangeValueListener myListener:_myListener){
+			myListener.changeValue(_myValue);
+		}
+		
+		setText(CCFormatUtil.nd(_myValue, 2));
 	}
 	
 	public double value(){
-		return _myStep * _myStepSize + _myMin;
+		return _myValue;
 	}
 
 	@Override

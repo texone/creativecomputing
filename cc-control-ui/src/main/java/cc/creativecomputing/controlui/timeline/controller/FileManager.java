@@ -158,22 +158,57 @@ public class FileManager {
 			
 		}
 		
+		private void insertGroupTrack(CCDataObject theData, TimelineController theTimeline){
+			if(!theData.containsKey("path"))return;
+			Path myPath = Paths.get(theData.getString("path"));
+			GroupTrackController myController = theTimeline.createGroupController(myPath);
+			myController.groupTrack().insertData(theData, theTimeline.transportController().time());
+			
+			Object myData = theData.get(GroupTrack.GROUP_TRACKS);
+			if(myData instanceof CCDataArray){
+				for(Object myObject:(CCDataArray)myData){
+					insertTrack((CCDataObject)myObject, theTimeline);
+				}
+			}else{
+				insertTrack((CCDataObject)myData, theTimeline);
+			}
+			
+		}
+		
+		private void insertDataTrack(CCDataObject theData, TimelineController theTimeline){
+			if(!theData.containsKey("path"))return;
+			Path myPath = Paths.get(theData.getString("path"));
+			TrackController myController = theTimeline.createController(myPath);
+			myController.track().insertData(theData, theTimeline.transportController().time());
+		}
+		
+		private void insertTrack(CCDataObject theData, TimelineController theTimeline){
+			if(theData.containsKey("tracks")){
+				insertGroupTrack(theData, theTimeline);
+			}else{
+				insertDataTrack(theData, theTimeline);
+			}
+		}
+		
+		private void insertTracks(CCDataObject theTimelineData, TimelineController theTimeline){
+			insertTrack(theTimelineData, theTimeline);
+		}
+		
 		public List<AbstractTrack> insertTracks(Path thePath, TimelineController theTimelineController) {
+			
 			try {
 				CCDataObject myTimelineData = CCDataIO.createDataObject(thePath);
 				
 				CCDataObject myTransportData = myTimelineData.getObject(TRANSPORT_ELEMENT);
 				loadTransport(myTransportData, theTimelineController.transportController());
 				
-				CCDataObject myMarkerDataData = myTransportData.getObject(TrackData.TRACKDATA_ELEMENT);
-				TrackData myMarkerData = new TrackData(null);
-				if(myMarkerDataData != null){
-					myMarkerData.data(myMarkerDataData);
-				}
+//				CCDataObject myMarkerDataData = myTransportData.getObject(TrackData.TRACKDATA_ELEMENT);
+//				TrackData myMarkerData = new TrackData(null);
+//				if(myMarkerDataData != null){
+//					myMarkerData.data(myMarkerDataData);
+//				}
 				
-//				List<AbstractTrack> myTracks = loadTracks(myTimelineData);
-//
-//				_myTimelineController.insertTracks(myTracks, myMarkerData);
+				insertTracks(myTimelineData, theTimelineController);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

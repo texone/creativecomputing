@@ -169,15 +169,6 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 			
 			@Override
 			public void actionPerformed(ActionEvent theE) {
-//				if(_myCurveKey == null){
-//					_myCurveFrame.track().trackData(new TrackData(null));
-//				}else{
-//					_myCurveFrame.track().trackData(value().curves().get(_myCurveKey));
-//				}
-//
-//				_myEnvelopeCurve = value().curves().get(_myCurveKey);
-//				value().currentCurve(_myCurveFrame.track().trackData());
-				
 				_myEditorFrame.setVisible(true);
 			}
 		});

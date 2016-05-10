@@ -53,7 +53,6 @@ public class SwingTrackDataView extends JPanel{
 		public void onRender(Graphics2D theG2D);
 	}
 
-    private int _myPointSize;
 
     private BufferedImage _myRenderBuffer;
 
@@ -99,8 +98,6 @@ public class SwingTrackDataView extends JPanel{
     		_myEventPopup = new SwingEventPopup((EventTrackController)_myController);
     		_myCreateEventPopup = new SwingEventCreatePopup((EventTrackController)_myController);
     	}
-    	
-        _myPointSize = 5;
         
         setName("timeline" + (int) Math.floor(100 * Math.random()));
         setBorder(BorderFactory.createLineBorder(Color.gray));
@@ -386,10 +383,6 @@ public class SwingTrackDataView extends JPanel{
 //            g.drawLine((int) myX, 0, (int) myX, this.getHeight());
 //        }
 //    }
-    
-    public double pointSize() {
-    	return _myPointSize;
-    }
 
     public void render() {
     	try{
@@ -440,9 +433,9 @@ public class SwingTrackDataView extends JPanel{
     
     private void point(Point2D thePoint){
     	g2d.fillOval(
-			(int) thePoint.getX() - _myPointSize / 2,
-			(int) thePoint.getY() - _myPointSize / 2, 
-			_myPointSize, _myPointSize
+			(int) thePoint.getX() - SwingConstants.CURVE_POINT_SIZE / 2,
+			(int) thePoint.getY() - SwingConstants.CURVE_POINT_SIZE / 2, 
+			SwingConstants.CURVE_POINT_SIZE, SwingConstants.CURVE_POINT_SIZE
 		);
     }
     
