@@ -13,23 +13,27 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
+import cc.creativecomputing.math.signal.CCMixSignal;
 import cc.creativecomputing.protocol.serial.dmx.CCDMX;
-import cc.creativecomputing.protocol.serial.dmx.CCDMXEnttecOpenDmxUSB;
 
-public class CCDMXEnttecOpen extends CCGL2Adapter{
+public class CCDMXSignalDemo extends CCGL2Adapter{
 	
 	@CCProperty(name = "dmx")
-	private CCDMXEnttecOpenDmxUSB _myDMX;
+	private CCDMX _myDMX;
+	@CCProperty(name = "signal")
+	private CCMixSignal _mySigal = new CCMixSignal();
 	
-	@CCProperty(name = "channel map")
-	private Map<String, Double> _myChannelMap = new LinkedHashMap<>();
+	@CCProperty(name = "speed", min = 0, max = 40)
+	private double _cSpeed = 0;
+	@CCProperty(name = "channel offset", min = 0, max = 40)
+	private double _cChannelOffset = 0;
+	
+	private double _myPhase = 0;
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
-		_myDMX = new CCDMXEnttecOpenDmxUSB();
-		for(int i = 0; i < 100;i++){
-			_myChannelMap.put("channel " + i, 0d);
-		}
+		_myDMX = new CCDMX();
+		
 	}
 	
 	@Override
@@ -51,8 +55,9 @@ public class CCDMXEnttecOpen extends CCGL2Adapter{
 	
 	@Override
 	public void update(CCAnimator theAnimator) {
-		for(int i = 0; i < 100;i++){
-			_myDMX.setDMXChannel(i, _myChannelMap.get("channel " + i));
+		_myPhase += _cSpeed * theAnimator.deltaTime();
+		for(int i = 0; i < _myDMX.universeSize();i++){
+			_myDMX.setDMXChannel(i, _mySigal.value(i * _cChannelOffset + _myPhase));
 		}
 		_myDMX.send();
 	}
@@ -63,7 +68,7 @@ public class CCDMXEnttecOpen extends CCGL2Adapter{
 	}
 	
 	public static void main(String[] args) {
-		CCDMXEnttecOpen demo = new CCDMXEnttecOpen();
+		CCDMXSignalDemo demo = new CCDMXSignalDemo();
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1000, 500);
 		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;

@@ -34,9 +34,9 @@ public class CCGradientControlDemo extends CCGL2Adapter{
 	@Override
 	public void update(CCAnimator theAnimator) {
 //		CCLog.info(_myGradient.size());
-		for(CCGradientPoint myPoint:_myGradient){
+//		for(CCGradientPoint myPoint:_myGradient){
 //			CCLog.info(myPoint.position() + ":" + myPoint.color());
-		}
+//		}
 	}
 	
 	@Override
