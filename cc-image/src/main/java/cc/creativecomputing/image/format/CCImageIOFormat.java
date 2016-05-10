@@ -12,24 +12,22 @@ package cc.creativecomputing.image.format;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageException;
-import cc.creativecomputing.image.CCPixelFormat;
-import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.image.CCImageIO.CCImageFormats;
 import cc.creativecomputing.image.CCImageUtil;
-import cc.creativecomputing.io.CCIOUtil;
+import cc.creativecomputing.image.CCPixelFormat;
+import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCImageIOFormat implements CCImageFormat {
@@ -69,7 +67,7 @@ public class CCImageIOFormat implements CCImageFormat {
 		final String theFileSuffix
 	){
 		try {
-			return createImage(ImageIO.read(theFile.toFile()), theInternalFormat, thePixelFormat, theFileSuffix);
+			return createImage(ImageIO.read(Files.newInputStream(theFile)), theInternalFormat, thePixelFormat, theFileSuffix);
 		} catch (IOException e) {
 			throw new CCImageException(e);
 		}
@@ -123,7 +121,7 @@ public class CCImageIOFormat implements CCImageFormat {
 			myImage = tmpImage;
 		}
 		try {
-			return ImageIO.write(myImage, CCNIOUtil.fileExtension(thePath), thePath.toFile());
+			return ImageIO.write(myImage, CCNIOUtil.fileExtension(thePath), Files.newOutputStream(thePath));
 		} catch (IOException e) {
 			throw new CCImageException(e);
 		}
