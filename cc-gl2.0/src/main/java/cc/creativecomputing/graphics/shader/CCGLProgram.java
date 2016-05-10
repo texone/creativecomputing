@@ -14,8 +14,13 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cc.creativecomputing.control.code.CCShaderObject;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -30,7 +35,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL3;
 
-public class CCGLSLShader extends CCShader{
+public class CCGLProgram{
 	
 	/**
 	 * Tries to create a shader based on the given class and the following name scheme. You need to put 
@@ -41,7 +46,7 @@ public class CCGLSLShader extends CCShader{
 	 * @param theClass class to look for the resources
 	 * @return shader based on the given resources
 	 */
-	public static CCGLSLShader createFromResource(Class<?> theClass) {
+	public static CCGLProgram createFromResource(Class<?> theClass) {
 		Path myVertexShader = CCNIOUtil.classPath(theClass,"vertex.glsl");
 		Path myGeometryShader = CCNIOUtil.classPath(theClass,"geometry.glsl");
 		Path myFragmentShader = CCNIOUtil.classPath(theClass,"fragment.glsl");
@@ -56,7 +61,7 @@ public class CCGLSLShader extends CCShader{
 			);
 		}
 		
-		return new CCGLSLShader(myVertexShader, myGeometryShader, myFragmentShader);
+		return new CCGLProgram(myVertexShader, myGeometryShader, myFragmentShader);
 	}
 	
 	/**
@@ -64,8 +69,21 @@ public class CCGLSLShader extends CCShader{
 	 * @param theObject
 	 * @return shader based on the given resources
 	 */
-	public static CCGLSLShader createFromResource(Object theObject) {
+	public static CCGLProgram createFromResource(Object theObject) {
 		return createFromResource(theObject.getClass());
+	}
+	
+	public static enum CCShaderObjectType{
+		
+		VERTEX(GL2.GL_VERTEX_SHADER),
+		FRAGMENT(GL2.GL_FRAGMENT_SHADER),
+		GEOMETRY(GL3.GL_GEOMETRY_SHADER);
+		
+		int glID;
+		
+		private CCShaderObjectType(final int theGLID) {
+			glID = theGLID;
+		}
 	}
 	
 	public static enum CCGeometryInputType{
@@ -98,166 +116,285 @@ public class CCGLSLShader extends CCShader{
 		}
 	}
 	
-	protected int _myProgramObject;
+	protected int _myProgram;
 	
-	protected int _myVertexShaderID;
-	protected int _myGeometryShaderID;
-	protected int _myFragmentShaderID;
+	private CCGLShader _myVertexShader;
+	private CCGLShader _myFragmentShader;
+	private CCGLShader _myGeometryShader;
 	
-	protected Path[] _myVertexFiles;
-	protected Path[] _myFragmentFiles;
-	protected Path[] _myGeometryFiles;
+	@CCProperty(name = "shader objects")
+	private Map<String, CCShaderObject> _myShaders;
+	
+	private List<CCGLShader> _myShaderList = new ArrayList<>();
 
-	public CCGLSLShader(final Path theVertexShaderFile, final Path theFragmentShaderFile) {
-		super(theVertexShaderFile,theFragmentShaderFile);
+	public CCGLProgram(final Path theVertexShaderPath, final Path theFragmentShaderPath) {
+		this(
+			new Path[] {theVertexShaderPath}, 
+			new Path[] {theFragmentShaderPath}
+		);
 	}
 	
-	public CCGLSLShader(final Path[] theVertexShaderFile, final Path[] theFragmentShaderFile) {
-		super(theVertexShaderFile,theFragmentShaderFile);
+	public CCGLProgram(final Path theVertexShaderPath, final Path theGeometryShaderPath, final Path theFragmentShaderPath) {
+		this(
+			new Path[] {theVertexShaderPath}, 
+			new Path[] {theGeometryShaderPath}, 
+			new Path[] {theFragmentShaderPath}
+		);
 	}
 	
-	public CCGLSLShader(
-		final Path theVertexShaderFile, 
-		final Path theGeometryShaderFile, 
-		final Path theFragmentShaderFile
+	public CCGLProgram(
+		final Path[] theVertexShaderPaths, 
+		final Path[] theFragmentShaderFile
 	) {
-		super(theVertexShaderFile,theFragmentShaderFile);
-
-		if(theGeometryShaderFile != null)loadShader(GL3.GL_GEOMETRY_SHADER, theGeometryShaderFile);
+		this(
+			theVertexShaderPaths,
+			null, 
+			theFragmentShaderFile
+		);
 	}
 	
-	/**
-	 * Returns the underlying gl program id
-	 * @return the underlying gl program id
-	 */
-	public long glProgram() {
-		return _myProgramObject;
-	}
-
-	@Override
-	public void initShader() {
+	public CCGLProgram(
+		final Path[] theVertexShaderPaths, 
+		final Path[] theGeometryShaderPaths, 
+		final Path[] theFragmentShaderPaths
+	) {
 		GL2 gl = CCGraphics.currentGL();
-		_myProgramObject = (int)gl.glCreateProgramObjectARB();
-	}
-	
-	private void loadShader(int theShaderID, final Path...theFiles) {
-		if(theFiles == null || theFiles.length <= 0)return;
-		String shaderSource = buildSource(theFiles);
-
-		GL2 gl = CCGraphics.currentGL();
-		//create an object that act as vertex shader container
+		_myProgram = (int)gl.glCreateProgram();
 		
-		// add the source code of the hader to the object
-		gl.glShaderSourceARB(theShaderID, 1, new String[] { shaderSource },(int[]) null, 0);
-		
-		// finally compile the shader
-		gl.glCompileShader(theShaderID);
-		
-		checkLogInfo(gl, theShaderID, theFiles);
-		
-		// attach vertex shader to this program object
-		gl.glAttachObjectARB(_myProgramObject, theShaderID);
-
-		// delete shader objects this will mark them for deletion
-		// shader object will be deleted when the program object is deleted
-		gl.glDeleteObjectARB(theShaderID);
-	}
-
-	@Override
-	public void loadVertexShader(final Path...theFiles) {
-		GL2 gl = CCGraphics.currentGL();
-		_myVertexShaderID = (int)gl.glCreateShaderObjectARB(GL2.GL_VERTEX_SHADER);
-		_myVertexFiles = theFiles;
-		loadShader(_myVertexShaderID, _myVertexFiles);
-	}
-
-	public void loadGeometryShader(final Path...theFiles) {
-		GL2 gl = CCGraphics.currentGL();
-		_myGeometryShaderID = (int)gl.glCreateShaderObjectARB(GL3.GL_GEOMETRY_SHADER);
-		_myGeometryFiles = theFiles;
-		loadShader(_myGeometryShaderID, _myGeometryFiles);
-	}
-
-	@Override
-	public void loadFragmentShader(final Path...theFiles) {
-		GL2 gl = CCGraphics.currentGL();
-		_myFragmentShaderID = (int)gl.glCreateShaderObjectARB(GL2.GL_FRAGMENT_SHADER);
-		_myFragmentFiles = theFiles;
-		
-		try {
-			loadShader(_myFragmentShaderID, _myFragmentFiles);
+		_myShaders = new HashMap<>();
+		if(theVertexShaderPaths != null && theVertexShaderPaths[0] != null){
+			_myVertexShader = new CCGLShader(CCShaderObjectType.VERTEX, theVertexShaderPaths);
+			_myShaders.put("vertex", new CCShaderObject(_myVertexShader));
+			_myShaderList.add(_myVertexShader);
+			attach(_myVertexShader);
 		}
-		catch (Exception e){
-			System.out.println(e);
+		if(theGeometryShaderPaths != null){
+			_myGeometryShader = new CCGLShader(CCShaderObjectType.GEOMETRY, theGeometryShaderPaths);
+			_myShaders.put("geomtry", new CCShaderObject(_myGeometryShader));
+			_myShaderList.add(_myGeometryShader);
+			attach(_myGeometryShader);
 		}
-	}
-
-	@Override
-	/**
-	 * @invisible
-	 */
-	public void load() {
-		GL2 gl = CCGraphics.currentGL();
-		gl.glLinkProgram(_myProgramObject);
-//		gl.glValidateProgram(_myProgramObject);
-		checkLogInfo(gl, _myProgramObject, null);
+		if(theFragmentShaderPaths != null && theFragmentShaderPaths[0] != null){
+			_myFragmentShader = new CCGLShader(CCShaderObjectType.FRAGMENT, theFragmentShaderPaths);
+			_myShaders.put("fragment", new CCShaderObject(_myFragmentShader));
+			_myShaderList.add(_myFragmentShader);
+			attach(_myFragmentShader);
+		}
+		
+		gl.glLinkProgram(_myProgram);
 	}
 	
 	public void reload() {
-//		finalize();
-//		initShader();
-		loadShader(_myVertexShaderID, _myVertexFiles);
-		loadShader(_myGeometryShaderID, _myGeometryFiles);
-		loadShader(_myFragmentShaderID, _myFragmentFiles);
-		load();
+		if(_myVertexShader != null)_myVertexShader.reload();
+		if(_myFragmentShader != null)_myFragmentShader.reload();
+		if(_myGeometryShader != null)_myGeometryShader.reload();
 	}
 	
 	private boolean _myIsShaderInUse = false;
-
-	@Override
-	public void start() {
+	
+	/**
+	 * In order to create a complete shader program, there must be a way to specify the list 
+	 * of things that will be linked together. CCGLProgram provide this mechanism. Shaders 
+	 * that are to be linked together in a program must first be attached to that program. 
+	 * This attaches the shader object specified by shader to the program. 
+	 * This indicates that shader will be included in link operations that will be performed on program.
+	 * <p>
+	 * All operations that can be performed on a shader object are valid whether or not the shader object 
+	 * is attached to a program. It is permissible to attach a shader object to a program object before 
+	 * source code has been loaded into the shader object or before the shader object has been compiled. 
+	 * It is permissible to attach multiple shader objects of the same type because each may contain a 
+	 * portion of the complete shader. It is also permissible to attach a shader object to more than 
+	 * one program. If a shader object is deleted while it is attached to a program, it will be flagged 
+	 * for deletion, and deletion will not occur until glDetachShader is called to detach it from all 
+	 * programs to which it is attached.
+	 * @param theShader the shader object that is to be attached.
+	 */
+	public void attach(CCGLShader theShader){
 		GL2 gl = CCGraphics.currentGL();
-		gl.glUseProgram(_myProgramObject);
+		gl.glAttachShader(_myProgram, theShader._myShaderID);
+	}
+	
+	/**
+	 * Detaches the shader object specified by shader from the program object specified by program. 
+	 * This command can be used to undo the effect of the command {@linkplain #attach(CCGLShader)}.
+	 * <p>
+	 * If shader has already been flagged for deletion by a call to {@linkplain CCGLShader#delete()} 
+	 * and it is not attached to any other program, it will be deleted after it has been detached.
+	 * @param theShader the shader object to be detached.
+	 */
+	public void detach(CCGLShader theShader){
+		GL2 gl = CCGraphics.currentGL();
+		gl.glDetachShader(_myProgram, theShader._myShaderID);
+	}
+	
+	/**
+	 * Links the program object specified by program. A shader object of type {@link CCShaderObjectType#VERTEX} 
+	 * attached to program is used to create an executable that will run on the programmable vertex processor. 
+	 * A shader object of type {@link CCShaderObjectType#FRAGMENT} attached to program is used to create an 
+	 * executable that will run on the programmable fragment processor.
+	 * <p>
+	 * The status of the link operation will be stored as part of the program object's state. This value will 
+	 * be set to true if the program object was linked without errors and is ready for use, and false otherwise. 
+	 * It can be queried by calling {@linkplain #linkStatus()}
+	 * <p>
+	 * As a result of a successful link operation, all active user-defined uniform variables belonging to program 
+	 * will be initialized to 0, and each of the program object's active uniform variables will be assigned a 
+	 * location that can be queried by calling glGetUniformLocation. Also, any active user-defined attribute v
+	 * ariables that have not been bound to a generic vertex attribute index will be bound to one at this time.
+	 * <p>
+	 * Linking of a program object can fail for a number of reasons as specified in the OpenGL ES Shading Language 
+	 * Specification. The following lists some of the conditions that will cause a link error.
+	 * <ul>
+	 * <li>A vertex shader and a fragment shader are not both present in the program object.
+	 * <li>The number of active attribute variables supported by the implementation has been exceeded.
+	 * <li>The storage limit for uniform variables has been exceeded.
+	 * <li>The number of active uniform variables supported by the implementation has been exceeded.
+	 * <li>The main function is missing for the vertex shader or the fragment shader.
+	 * <li>A varying variable actually used in the fragment shader is not declared in the same way (or is not declared at all) in the vertex shader.
+	 * <li>A reference to a function or variable name is unresolved.
+	 * <li>A shared global is declared with two different types or two different initial values.
+	 * <li>One or more of the attached shader objects has not been successfully compiled (via glCompileShader) or loaded with a pre-compiled shader binary (via glShaderBinary).
+	 * <li>Binding a generic attribute matrix caused some rows of the matrix to fall outside the allowed maximum of GL_MAX_VERTEX_ATTRIBS.
+	 * <li>Not enough contiguous vertex attribute slots could be found to bind attribute matrices.
+	 * </ul>
+	 * When a program object has been successfully linked, the program object can be made part of current state by 
+	 * calling glUseProgram. Whether or not the link operation was successful, the program object's information 
+	 * log will be overwritten. The information log can be retrieved by calling getInfoLog.
+	 * {@linkplain #link()} will also install the generated executables as part of the current rendering state 
+	 * if the link operation was successful and the specified program object is already currently in use as a 
+	 * result of a previous call to glUseProgram. If the program object currently in use is relinked unsuccessfully, 
+	 * its link status will be set to false , but the executables and associated state will remain part of the current 
+	 * state until a subsequent call to glUseProgram removes it from use. After it is removed from use, it cannot 
+	 * be made part of current state until it has been successfully relinked.
+	 * <p>
+	 * The program object's information log is updated and the program is generated at the time of the link operation. 
+	 * After the link operation, applications are free to modify attached shader objects, compile attached shader objects, 
+	 * detach shader objects, delete shader objects, and attach additional shader objects. None of these operations affects 
+	 * the information log or the program that is part of the program object.
+	 */
+	public void link(){
+		GL2 gl = CCGraphics.currentGL();
+		gl.glLinkProgram(_myProgram);
+	}
+	
+	public void validate(){
+		GL2 gl = CCGraphics.currentGL();
+		gl.glValidateProgram(_myProgram);
+	}
+	
+	/**
+	 * returns the value of a parameter.
+	 * <p>
+	 * The following parameters are defined:
+	 * <ul>
+	 * <li><code>GL_DELETE_STATUS</code> returns <code>GL_TRUE</code> if program is currently flagged for deletion, and <code>GL_FALSE</code> otherwise.
+	 * <li><code>GL_LINK_STATUS</code> returns <code>GL_TRUE</code> if the last link operation on program was successful, and <code>GL_FALSE</code> otherwise.
+	 * <li><code>GL_VALIDATE_STATUS</code> returns <code>GL_TRUE</code> if the last validation operation on program was successful, and <code>GL_FALSE</code> otherwise.
+	 * <li><code>GL_INFO_LOG_LENGTH</code> returns the number of characters in the information log for program including the null termination character (i.e., the size of the character buffer required to store the information log). If program has no information log, a value of 0 is returned.
+	 * <li><code>GL_ATTACHED_SHADERS</code> returns the number of shader objects attached to program.
+	 * <li><code>GL_ACTIVE_ATTRIBUTES</code> returns the number of active attribute variables for program.
+	 * <li><code>GL_ACTIVE_ATTRIBUTE_MAX_LENGTH</code> returns the length of the longest active attribute name for program, including the null termination character (i.e., the size of the character buffer required to store the longest attribute name). If no active attributes exist, 0 is returned.
+	 * <li><code>GL_ACTIVE_UNIFORMS</code> returns the number of active uniform variables for program.
+	 * <li><code>GL_ACTIVE_UNIFORM_MAX_LENGTH</code> returns the length of the longest active uniform variable name for program, including the null termination character (i.e., the size of the character buffer required to store the longest uniform variable name). If no active uniform variables exist, 0 is returned.
+	 * </ul>
+	 * @param theParameter
+	 * @return the value of a parameter.
+	 */
+	public int get(int theParameter){
+		IntBuffer iVal = CCBufferUtil.newIntBuffer(1);
+		GL2 gl = CCGraphics.currentGL();
+		gl.glGetProgramiv(_myProgram, theParameter,iVal);
+		return  iVal.get();
+	}
+	
+	/**
+	 * returns <code>true</code> if the last link operation on program was successful, and <code>false</code> otherwise.
+	 * @return
+	 */
+	public boolean linkStatus(){
+		return get(GL2.GL_LINK_STATUS) == GL2.GL_TRUE;
+	}
+	
+	/**
+	 * Returns the number of characters in the information log for shader including the 
+	 * null termination character (i.e., the size of the character buffer required to 
+	 * store the information log). If shader has no information log, a value of 0 is returned.
+	 * @return the number of characters in the information log
+	 */
+	public int infoLogLength(){
+		return get(GL2.GL_INFO_LOG_LENGTH);
+	}
+	
+	/**
+	 * Returns <code>true</code> if the last validation operation on program was successful, and <code>false</code> otherwise.
+	 * @return
+	 */
+	public boolean validateStatus(){
+		return get(GL2.GL_VALIDATE_STATUS) == GL2.GL_TRUE;
+	}
+	
+	/**
+	 * Returns <code>true</code> if shader is currently flagged for deletion, and <code>false</code> otherwise.
+	 * @return
+	 */
+	public boolean deleteStatus(){
+		return get(GL2.GL_DELETE_STATUS) == GL2.GL_TRUE;
+	}
+
+	public void start() {
+//		CCGraphics.debug();
+//		if(_myVertexShader != null)_myVertexShader.checkReload();
+//		if(_myFragmentShader != null)_myFragmentShader.checkReload();
+//		if(_myGeometryShader != null)_myGeometryShader.checkReload();
+		
+		
+//		reload();
+		GL2 gl = CCGraphics.currentGL();
+		boolean myRelink = false;
+		for(CCGLShader myShader:_myShaderList){
+			myRelink = myRelink || myShader.checkReloadSource();
+		}
+		if(myRelink)link();
+		
+		gl.glUseProgram(_myProgram);
 		_myIsShaderInUse = true;
 	}
 
-	@Override
 	public void end() {
 		_myIsShaderInUse = false;
 		GL2 gl = CCGraphics.currentGL();
 		gl.glUseProgram(0);
 	}
 
-	void checkLogInfo(GL2 gl, int theObject, Path[] theFiles) {
+	String getInfoLog(GL2 gl, int theObject, Path[] theFiles) {
 		IntBuffer iVal = CCBufferUtil.newIntBuffer(1);
 		gl.glGetObjectParameterivARB(theObject, GL2.GL_OBJECT_INFO_LOG_LENGTH_ARB,iVal);
 
 		int length = iVal.get();
 		if (length <= 1) {
-			return;
+			return null;
 		}
 		ByteBuffer infoLog = CCBufferUtil.newByteBuffer(length);
 		iVal.flip();
-		gl.glGetInfoLogARB(theObject, length, iVal, infoLog);
+		gl.glGetShaderInfoLog(theObject, length, iVal, infoLog);
 		byte[] infoBytes = new byte[length];
 		infoLog.get(infoBytes);
 		String myReply = new String(infoBytes);
-		if(myReply.startsWith("WARNING:"))return;
+		if(myReply.startsWith("WARNING:"))return null;
 		
-		if(theFiles != null) {
-			StringBuffer myReplyBuffer = new StringBuffer("Problem inside the following shader:");
+		StringBuffer myReplyBuffer = new StringBuffer();
+		if(theFiles != null){
+			myReplyBuffer.append("Problem inside the following shader:");
 			for(Path myFile:theFiles) {
 				myReplyBuffer.append("\n");
 				myReplyBuffer.append(myFile);
 			}
-			myReplyBuffer.append("\n");
-			myReplyBuffer.append("The following Problem occured:\n");
-			myReplyBuffer.append(myReply);
-			myReplyBuffer.append("\n");
-			myReply = myReplyBuffer.toString();
 		}
-		
-		throw new CCShaderException(myReply);
+		myReplyBuffer.append("\n");
+		myReplyBuffer.append("The following Problem occured:\n");
+		myReplyBuffer.append(myReply);
+		myReplyBuffer.append("\n");
+		return myReplyBuffer.toString();
 	}
 	
 	@Override
@@ -266,7 +403,7 @@ public class CCGLSLShader extends CCShader{
 	 */
 	public void finalize(){
 		GL2 gl = CCGraphics.currentGL();
-		gl.glDeleteObjectARB(_myProgramObject);
+		gl.glDeleteObjectARB(_myProgram);
 	}
 	
 // SETTINGS FOR GEOMETRY SHADER
@@ -281,13 +418,13 @@ public class CCGLSLShader extends CCShader{
 	public void geometryInputType(final CCGeometryInputType theInputType) {
 		GL2 gl = CCGraphics.currentGL();
 		//gl.glProgramParameteri(_myProgramObject, GL2GL3.GL_GEOMETRY_INPUT_TYPE_ARB, theInputType.glID);
-		gl.glProgramParameteri(_myProgramObject, GL3.GL_GEOMETRY_INPUT_TYPE, theInputType.glID);
+		gl.glProgramParameteri(_myProgram, GL3.GL_GEOMETRY_INPUT_TYPE, theInputType.glID);
 	}
 	
 	public void geometryVerticesOut(final int theVerticesOut) {
 		GL2 gl = CCGraphics.currentGL();
 		//gl.glProgramParameteri(_myProgramObject, GL2.GL_GEOMETRY_VERTICES_OUT_EXT, theVerticesOut);
-		gl.glProgramParameteri(_myProgramObject, GL3.GL_GEOMETRY_VERTICES_OUT, theVerticesOut);
+		gl.glProgramParameteri(_myProgram, GL3.GL_GEOMETRY_VERTICES_OUT, theVerticesOut);
 	}
 	
 	public int maximumGeometryOutputVertices() {
@@ -300,17 +437,17 @@ public class CCGLSLShader extends CCShader{
 	public void geometryOutputType(final CCGeometryOutputType theOutputType) {
 		GL2 gl = CCGraphics.currentGL();
 		//gl.glProgramParameteri(_myProgramObject, GL2.GL_GEOMETRY_OUTPUT_TYPE_EXT, theOutputType.glID);
-		gl.glProgramParameteri(_myProgramObject, GL3.GL_GEOMETRY_OUTPUT_TYPE, theOutputType.glID);
+		gl.glProgramParameteri(_myProgram, GL3.GL_GEOMETRY_OUTPUT_TYPE, theOutputType.glID);
 	}
 
 	int getAttribLocation(String name) {
 		GL2 gl = CCGraphics.currentGL();
-		return (gl.glGetAttribLocation(_myProgramObject, name));
+		return (gl.glGetAttribLocation(_myProgram, name));
 	}
 
 	public int uniformLocation(final String theName) {
 		GL2 gl = CCGraphics.currentGL();
-		return gl.glGetUniformLocation(_myProgramObject, theName);
+		return gl.glGetUniformLocation(_myProgram, theName);
 	}
 	
 	public void uniform1i(final int theLocation, final int theValue){
@@ -351,7 +488,7 @@ public class CCGLSLShader extends CCShader{
 	public void uniform1fv(final int theLocation, final List<?> theVectors){
 		if(theVectors.size() == 0)return;
 		
-		FloatBuffer myData = FloatBuffer.allocate(theVectors.size() * 4);
+		FloatBuffer myData = FloatBuffer.allocate(theVectors.size());
 		for(Object myObject:theVectors){
 			if(myObject instanceof CCVector1){
 				CCVector1 myVector = (CCVector1)myObject;
@@ -359,6 +496,9 @@ public class CCGLSLShader extends CCShader{
 			}else if(myObject instanceof Float){
 				Float myVector = (Float)myObject;
 				myData.put(myVector);
+			}else if(myObject instanceof Double){
+				Double myVector = (Double)myObject;
+				myData.put(myVector.floatValue());
 			}
 		}
 		myData.rewind();
@@ -399,6 +539,48 @@ public class CCGLSLShader extends CCShader{
 	
 	public void uniform2f(final String theName, final CCVector2 theValue){
 		uniform2f(uniformLocation(theName), theValue);
+	}
+	
+	public void uniform2fv(final int theLocation, final List<CCVector2> theVectors){
+		if(theVectors.size() == 0)return;
+		
+		FloatBuffer myData = FloatBuffer.allocate(theVectors.size() * 2);
+		for(CCVector2 myValue:theVectors){
+			if(myValue == null){
+				myData.put(0);
+				myData.put(0);
+			}else{
+				myData.put((float)myValue.x);
+				myData.put((float)myValue.y);
+			}
+		}
+		myData.rewind();
+		CCGraphics.currentGL().glUniform2fv(theLocation, theVectors.size(), myData);
+	}
+	
+	public void uniform2fv(final int theLocation, CCVector2...theValues){
+		if(theValues.length == 0)return;
+		
+		FloatBuffer myData = FloatBuffer.allocate(theValues.length * 2);
+		for(CCVector2 myValue:theValues){
+			if(myValue == null){
+				myData.put(0);
+				myData.put(0);
+			}else{
+				myData.put((float)myValue.x);
+				myData.put((float)myValue.y);
+			}
+		}
+		myData.rewind();
+		CCGraphics.currentGL().glUniform2fv(theLocation, theValues.length, myData);
+	}
+	
+	public void uniform2fv(final String theName, CCVector2...theValues){
+		uniform2fv(uniformLocation(theName), theValues);
+	}
+	
+	public void uniform2fv(final String theName, List<CCVector2>theValues){
+		uniform2fv(uniformLocation(theName), theValues);
 	}
 	
 	public void uniform3f(final int theLocation, final double theX, final double theY, final double theZ){

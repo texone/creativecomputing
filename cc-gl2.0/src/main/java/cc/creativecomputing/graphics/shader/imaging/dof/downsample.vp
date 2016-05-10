@@ -1,0 +1,14 @@
+uniform float4x4 modelViewProjection : state.matrix.mvp;
+
+
+void main(
+	in 	float4 	iPosition	: POSITION,
+	in  float2  iTexCoord	: TEXCOORD0,
+	
+	out float4 	oPosition	: POSITION,
+	out float2 	oTexCoord	: TEXCOORD0
+){
+	oPosition = mul(modelViewProjection, iPosition);
+	oTexCoord = iTexCoord;
+}
+

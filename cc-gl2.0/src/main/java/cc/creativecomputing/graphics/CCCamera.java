@@ -12,6 +12,7 @@ package cc.creativecomputing.graphics;
 
 import java.nio.FloatBuffer;
 
+import cc.creativecomputing.graphics.CCGraphics.CCMatrixMode;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector2;
@@ -346,13 +347,28 @@ public class CCCamera{
 	public void drawPerspective(CCGraphics g){
 		g.glu.gluPerspective(_myFoV, _myAspect, _myNearClip, _myFarClip);
 	}
+	
+	public void beginDraw(CCGraphics g){
+		CCMatrixMode myMatrixMode = g.matrixMode();
+		g.matrixMode(CCMatrixMode.PROJECTION);
+		g.pushMatrix();
+		g.matrixMode(myMatrixMode);
+		draw(g);
+	}
+	
+	public void endDraw(CCGraphics g){
+		CCMatrixMode myMatrixMode = g.matrixMode();
+		g.matrixMode(CCMatrixMode.PROJECTION);
+		g.popMatrix();
+		g.matrixMode(myMatrixMode);
+	}
 
 	/**
 	 * Send what this camera sees to the view port
 	 */
 	public void draw(CCGraphics g) {
 		if(_myViewport != null)_myViewport.draw(g);
-
+		
 		updateProjectionInfos();
 
 		g.gl.glLoadIdentity();
@@ -440,6 +456,25 @@ public class CCCamera{
 	
 	public void viewport(final CCViewport theViewport){
 		_myViewport = theViewport;
+		// init perspective projection based on new dimensions
+		double cameraFOV = _myFoV; // at least for now
+		double cameraAspect = (double) theViewport.width() / (double) theViewport.height();
+				
+		double cameraX = 0;
+		double cameraY = 0;
+		double cameraZ = theViewport.height() / 2.0f / CCMath.tan(cameraFOV / 2.0f);
+				
+				
+		double cameraNear = cameraZ / 10.0f;
+		double cameraFar = cameraZ * 100.0f;
+
+		set(
+			cameraX, cameraY, cameraZ, 
+			cameraX, cameraY, 0, 
+			0, 1, 0,
+			cameraFOV, cameraAspect,
+			cameraNear, cameraFar
+		);
 	}
 	
 	public CCVector2 frustumOffset(){

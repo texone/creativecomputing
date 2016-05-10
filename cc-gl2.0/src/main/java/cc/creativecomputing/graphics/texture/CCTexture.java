@@ -754,7 +754,7 @@ public abstract class CCTexture{
 	
 	@Override
 	public void finalize() {
-		CCGraphics.currentGL().glDeleteTextures(_myTextureIDs.length, _myTextureIDs, 0);
+//		CCGraphics.currentGL().glDeleteTextures(_myTextureIDs.length, _myTextureIDs, 0);
 	}
 	
 	/**

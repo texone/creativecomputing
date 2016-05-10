@@ -59,8 +59,12 @@ public class CCViewport {
 		_myHeight = theHeight;
 	}
 
-	public boolean pointInside(CCVector2 thePoint) {	
-		return thePoint.x > _myX && thePoint.x < _myX + _myWidth && thePoint.y > _myY && thePoint.y < _myY + _myHeight;
+	public boolean pointInside(CCVector2 thePoint) {
+		return pointInside(thePoint.x, thePoint.y);
+	}
+
+	public boolean pointInside(double theX, double theY) {	
+		return theX > _myX && theX < _myX + _myWidth && theY > _myY && theY < _myY + _myHeight;
 	}
 		
 	public int x(){

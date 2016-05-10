@@ -49,13 +49,13 @@ public class CCVolumeBuffer extends CCTexture3D {
 		g.clear();
 		g.color(0f);
 		g.beginShape(CCDrawMode.QUADS);
-		g.textureCoords(0.0f, 0.0f, z);
+		g.textureCoords3D(0.0f, 0.0f, z);
 		g.vertex(0.0f, 0.0f);
-		g.textureCoords(1.0f, 0.0f, z);
+		g.textureCoords3D(1.0f, 0.0f, z);
 		g.vertex(1.0f, 0.0f);
-		g.textureCoords(1.0f, 1.0f, z);
+		g.textureCoords3D(1.0f, 1.0f, z);
 		g.vertex(1.0f, 1.0f);
-		g.textureCoords(0.0f, 1.0f, z);
+		g.textureCoords3D(0.0f, 1.0f, z);
 		g.vertex(0.0f, 1.0f);
 		g.endShape();
 	}
@@ -69,7 +69,7 @@ public class CCVolumeBuffer extends CCTexture3D {
 				float myX = (x + 0f) / _myWidth;
 				float myY = (y + 0f) / _myHeight;
 				
-				g.textureCoords(0, myX, myY, z);
+				g.textureCoords3D(0, myX, myY, z);
 				g.vertex(myX,myY,z);
 			}
 		}

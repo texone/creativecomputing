@@ -258,37 +258,37 @@ public class CCFrustum {
 
 		// near
 		a = CCVector3.add(_myNearTopRight, _myNearTopLeft, _myNearBottomRight, _myNearBottomLeft).multiplyLocal(0.25f);
-		b = a.add(_myFrustumPlanes[CCFrustumPlane.NEARP.ordinal()].getNormal().multiply(100));
+		b = a.add(_myFrustumPlanes[CCFrustumPlane.NEARP.ordinal()].normal().multiply(100));
 		g.vertex(a);
 		g.vertex(b);
 
 		// far
 		a = CCVector3.add(_myFarTopRight, _myFarTopLeft, _myFarBottomRight, _myFarBottomLeft).multiplyLocal(0.25f);
-		b = a.add(_myFrustumPlanes[CCFrustumPlane.FARP.ordinal()].getNormal().multiply(100));
+		b = a.add(_myFrustumPlanes[CCFrustumPlane.FARP.ordinal()].normal().multiply(100));
 		g.vertex(a);
 		g.vertex(b);
 
 		// left
 		a = CCVector3.add(_myFarTopLeft, _myFarBottomLeft, _myNearBottomLeft, _myNearTopLeft).multiplyLocal(0.25f);
-		b = a.add(_myFrustumPlanes[CCFrustumPlane.LEFT.ordinal()].getNormal().multiply(100));
+		b = a.add(_myFrustumPlanes[CCFrustumPlane.LEFT.ordinal()].normal().multiply(100));
 		g.vertex(a);
 		g.vertex(b);
 
 		// right
 		a = CCVector3.add(_myFarTopRight, _myNearBottomRight, _myFarBottomRight, _myNearTopRight).multiplyLocal(0.25f);
-		b = a.add(_myFrustumPlanes[CCFrustumPlane.RIGHT.ordinal()].getNormal().multiply(100));
+		b = a.add(_myFrustumPlanes[CCFrustumPlane.RIGHT.ordinal()].normal().multiply(100));
 		g.vertex(a);
 		g.vertex(b);
 
 		// top
 		a = CCVector3.add(_myFarTopRight, _myFarTopLeft, _myNearTopRight, _myNearTopLeft).multiplyLocal(0.25f);
-		b = a.add(_myFrustumPlanes[CCFrustumPlane.TOP.ordinal()].getNormal().multiply(100));
+		b = a.add(_myFrustumPlanes[CCFrustumPlane.TOP.ordinal()].normal().multiply(100));
 		g.vertex(a);
 		g.vertex(b);
 
 		// bottom
 		a = CCVector3.add(_myFarBottomRight, _myFarBottomLeft, _myNearBottomRight, _myNearBottomLeft).multiplyLocal(0.25f);
-		b = a.add(_myFrustumPlanes[CCFrustumPlane.BOTTOM.ordinal()].getNormal().multiply(100));
+		b = a.add(_myFrustumPlanes[CCFrustumPlane.BOTTOM.ordinal()].normal().multiply(100));
 		g.vertex(a);
 		g.vertex(b);
 

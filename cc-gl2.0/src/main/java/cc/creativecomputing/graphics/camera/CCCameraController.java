@@ -165,7 +165,7 @@ public class CCCameraController {
 
 	private final CCCameraMouseDragHandler rotateHandler = new CCCameraMouseDragHandler() {
 		public void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY) {
-			mouseRotate(theMoveX, theMoveY, theMouseX, theMouseY);
+			mouseRotate(-theMoveX, theMoveY, theMouseX, theMouseY);
 		}
 	};
 	private CCCameraMouseDragHandler leftDragHandler = rotateHandler;
@@ -191,16 +191,22 @@ public class CCCameraController {
 	private final CCCameraKeyListener _myKeyListener = new CCCameraKeyListener();
 	private boolean _myIsActive = false;
 	
+	private double _myRelX;
+	private double _myRelY;
+	private double _myRelWidth;
+	private double _myRelHeight;
+	
 	private CCCamera _myCamera;
 
 	public CCCameraController(final CCGL2Adapter theApp, final CCGraphics theG, final double theDistance) {
-		this(theApp, theG, 0, 0, 0, theDistance);
+		this(theApp, theG, 0,0,1,1,0, 0, 0, theDistance);
 	}
 
 	public CCCameraController(
 		final CCGL2Adapter theApp, 
 		final CCGraphics theG,  
-		final double theLookAtX, final double theLookAtY, final double theLookAtZ, 
+		final double theRelX, final double theRelY, final double theRelWidth, final double theRelHeight, 
+		final double theLookAtX, final double theLookAtY, final double theLookAtZ,
 		final double theDistance
 	) {
 		_myApp = theApp;
@@ -212,12 +218,34 @@ public class CCCameraController {
 			}
 		});
 		
+		_myRelX = theRelX;
+		_myRelY = theRelY;
+		_myRelWidth = theRelWidth;
+		_myRelHeight = theRelHeight;
+		
+		_myCamera = new CCCamera(theG);
+		_myCamera.viewport(
+			new CCViewport(
+				(int)(theG.width() * _myRelX), 
+				(int)(theG.height() * _myRelY), 
+				(int)(theG.width() * _myRelWidth), 
+				(int)(theG.height() * _myRelHeight)
+			)
+		);
+		
 		_myApp.glContext().listener().add(new CCGLListener<CCGraphics>() {
 
 			@Override
 			public void reshape(CCGraphics theContext) {
 				_myCamera = new CCCamera(theContext);
-				_myCamera.viewport(new CCViewport(0, 0, theContext.width(), theContext.height()));
+				_myCamera.viewport(
+					new CCViewport(
+						(int)(theContext.width() * _myRelX), 
+						(int)(theContext.height() * _myRelY), 
+						(int)(theContext.width() * _myRelWidth), 
+						(int)(theContext.height() * _myRelHeight)
+					)
+				);
 			}
 
 			@Override
@@ -349,6 +377,8 @@ public class CCCameraController {
 		private double _myPMouseX;
 		private double _myPMouseY;
 		
+		private boolean _myIsActive = false;
+		
 		@Override
 		public void mouseReleased(CCMouseEvent theEvent) {
 			_myDragConstraint = null;
@@ -356,25 +386,32 @@ public class CCCameraController {
 		
 		@Override
 		public void mousePressed(CCMouseEvent theEvent) {
+			_myIsActive = _myCamera.viewport().pointInside(theEvent.x(), g.height() - theEvent.y());
+			if(!_myIsActive)return;
+			
 			_myPMouseX = theEvent.x();
-			_myPMouseY = theEvent.y();
+			_myPMouseY = g.height() - theEvent.y();
 		}
 		
 		@Override
 		public void mouseClicked(CCMouseEvent theEvent) {
+			if(!_myIsActive)return;
+			
 			if (resetOnDoubleClick && 2 == (int)theEvent.clickCount()) {
 				reset();
 			}
 		}
 		
 		@Override
-		public void mouseDragged(CCMouseEvent theMouseEvent) {
-			final double theMoveX = theMouseEvent.x() - _myPMouseX;
-			final double theMoveY = _myPMouseY - theMouseEvent.y();
-			_myPMouseX = theMouseEvent.x();
-			_myPMouseY = theMouseEvent.y();
+		public void mouseDragged(CCMouseEvent theEvent) {
+			if(!_myIsActive)return;
+			
+			final double theMoveX = theEvent.x() - _myPMouseX;
+			final double theMoveY = _myPMouseY - (g.height() - theEvent.y());
+			_myPMouseX = theEvent.x();
+			_myPMouseY = g.height() - theEvent.y();
 
-			if (theMouseEvent.isShiftDown()) {
+			if (theEvent.isShiftDown()) {
 				if (_myDragConstraint == null && Math.abs(theMoveX - theMoveY) > 1) {
 					_myDragConstraint = Math.abs(theMoveX) > Math.abs(theMoveY) ? Constraint.YAW : Constraint.PITCH;
 				}
@@ -384,13 +421,13 @@ public class CCCameraController {
 				_myDragConstraint = null;
 			}
 
-			final CCMouseButton b = theMouseEvent.button();
-			if (centerDragHandler != null && (b == CCMouseButton.CENTER || (b == CCMouseButton.LEFT && theMouseEvent.isMetaDown()))) {
-				centerDragHandler.handleDrag(theMoveX, theMoveY, theMouseEvent.x(), theMouseEvent.y());
+			final CCMouseButton b = theEvent.button();
+			if (centerDragHandler != null && (b == CCMouseButton.CENTER || (b == CCMouseButton.LEFT && theEvent.isMetaDown()))) {
+				centerDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
 			} else if (leftDragHandler != null && b == CCMouseButton.LEFT) {
-				leftDragHandler.handleDrag(theMoveX, theMoveY, theMouseEvent.x(), theMouseEvent.y());
+				leftDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
 			} else if (rightDraghandler != null && b == CCMouseButton.RIGHT) {
-				rightDraghandler.handleDrag(theMoveX, theMoveY, theMouseEvent.x(), theMouseEvent.y());
+				rightDraghandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
 			}
 		}
 	}
@@ -411,7 +448,7 @@ public class CCCameraController {
 		final double panScale = CCMath.sqrt(_myDistance * .005f);
 		pan(
 			_myDragConstraint == Constraint.PITCH ? 0 : -dxMouse * panScale,
-			_myDragConstraint == Constraint.YAW ? 0 : -dyMouse * panScale
+			_myDragConstraint == Constraint.YAW ? 0 : dyMouse * panScale
 		);
 	}
 
@@ -421,8 +458,10 @@ public class CCCameraController {
 		final int xSign = theMoveX > 0 ? -1 : 1;
 		final int ySign = theMoveY < 0 ? -1 : 1;
 
-		final double eccentricity = CCMath.abs((g.height() / 2f) - mouseY) / (g.height() / 2f);
-		final double rho = CCMath.abs((g.width() / 2f) - mouseX) / (g.width() / 2f);
+		mouseY -= _myCamera.viewport().y();
+		mouseX -= _myCamera.viewport().x();
+		final double eccentricity = CCMath.abs((_myCamera.viewport().height() / 2f) - mouseY) / (_myCamera.viewport().height() / 2f);
+		final double rho = CCMath.abs((_myCamera.viewport().width() / 2f) - mouseX) / (_myCamera.viewport().width() / 2f);
 
 		if (_myDragConstraint == null || _myDragConstraint == Constraint.YAW || _myDragConstraint == Constraint.SUPPRESS_ROLL) {
 			final double adx = Math.abs(theMoveX) * (1 - eccentricity);
@@ -438,12 +477,12 @@ public class CCCameraController {
 			{
 				final double adz = Math.abs(theMoveY) * rho;
 				final CCVector3 vz = u.add(new CCVector3(0, adz, 0));
-				_myRotateZAction.impulse(CCVector3.angle(u, vz) * -ySign * (mouseX < g.width() / 2 ? -1 : 1) * 0.1);
+				_myRotateZAction.impulse(CCVector3.angle(u, vz) * ySign * (mouseX < _myCamera.viewport().width() / 2 ? -1 : 1) * 0.1);
 			}
 			{
 				final double adz = Math.abs(theMoveX) * eccentricity;
 				final CCVector3 vz = u.add(new CCVector3(0, adz, 0));
-				_myRotateZAction.impulse(CCVector3.angle(u, vz) * xSign * (mouseY > g.height() / 2 ? -1 : 1) * 0.1);
+				_myRotateZAction.impulse(CCVector3.angle(u, vz) * -xSign * (mouseY > _myCamera.viewport().height() / 2 ? -1 : 1) * 0.1);
 			}
 		}
 	}

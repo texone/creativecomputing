@@ -92,6 +92,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 			if(!debug)return GLU.getCurrentGL().getGL2();
 			else return new DebugGL2(GLU.getCurrentGL().getGL2());
 		}catch(Exception e){
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -2032,7 +2033,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	}
 	
 	public void vertex(final double theX, final double theY, final double theU, final double theV){
-		textureCoords(theU,theV);
+		textureCoords2D(theU,theV);
 		gl.glVertex2d(theX,theY);
 	}
 	
@@ -2043,7 +2044,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @param theZ
 	 */
 	public void vertex(final double theX, final double theY, final double theZ, final double theU, final double theV){
-		textureCoords(theU,theV);
+		textureCoords2D(theU,theV);
 		gl.glVertex3d(theX,theY,theZ);
 	}
 	
@@ -2052,7 +2053,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @param theVertex
 	 */
 	public void vertex(final CCVector2 theVertex,final CCVector2 theTextureCoords){
-		textureCoords(theTextureCoords);
+		textureCoords2D(theTextureCoords);
 		gl.glVertex2d(theVertex.x, theVertex.y);
 	}
 	
@@ -2063,7 +2064,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @param i_v
 	 */
 	public void vertex(final CCVector3 theVertex, final CCVector2 theTextureCoords){
-		textureCoords(theTextureCoords);
+		textureCoords2D(theTextureCoords);
 		gl.glVertex3d(theVertex.x, theVertex.y, theVertex.z);
 	}
 	
@@ -3583,47 +3584,47 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		gl.glDisable(CCTextureGenCoord.Q.glGenID);
 	}
 	
-	public void textureCoords(double theX){
+	public void textureCoords1D(double theX){
 		gl.glTexCoord1d(theX);
 	}
 	
-	public void textureCoords(final CCVector2 theTextureCoords){
+	public void textureCoords2D(final CCVector2 theTextureCoords){
 		gl.glTexCoord2d(theTextureCoords.x, theTextureCoords.y);
 	}
 	
-	public void textureCoords(double theX, double theY){
+	public void textureCoords2D(double theX, double theY){
 		gl.glTexCoord2d(theX, theY);
 	}
 	
-	public void textureCoords(final CCVector3 theTextureCoords){
+	public void textureCoords3D(final CCVector3 theTextureCoords){
 		gl.glTexCoord3d(theTextureCoords.x, theTextureCoords.y, theTextureCoords.z);
 	}
 	
-	public void textureCoords(double theX, double theY, double theZ){
+	public void textureCoords3D(double theX, double theY, double theZ){
 		gl.glTexCoord3d(theX, theY, theZ);
 	}
 	
-	public void textureCoords(final int theTextureUnit, final double theX) {
+	public void textureCoords1D(final int theTextureUnit, final double theX) {
 		gl.glMultiTexCoord1d(theTextureUnit, theX);
 	}
 	
-	public void textureCoords(final int theTextureUnit, final CCVector2 theTextureCoords){
+	public void textureCoords2D(final int theTextureUnit, final CCVector2 theTextureCoords){
 		gl.glMultiTexCoord2d(theTextureUnit,theTextureCoords.x, theTextureCoords.y);
 	}
 	
-	public void textureCoords(final int theTextureUnit, double theX, double theY){
+	public void textureCoords2D(final int theTextureUnit, double theX, double theY){
 		gl.glMultiTexCoord2d(theTextureUnit, theX, theY);
 	}
 	
-	public void textureCoords(final int theUnit, CCVector3 theVector){
+	public void textureCoords3D(final int theUnit, CCVector3 theVector){
 		gl.glMultiTexCoord3d(theUnit, theVector.x, theVector.y, theVector.z);
 	}
 	
-	public void textureCoords(final int theUnit, final double theX, final double theY, final double theZ){
+	public void textureCoords3D(final int theUnit, final double theX, final double theY, final double theZ){
 		gl.glMultiTexCoord3d(theUnit, theX, theY, theZ);
 	}
 	
-	public void textureCoords(final int theUnit, final double theX, final double theY, final double theZ, final double theW){
+	public void textureCoords4D(final int theUnit, final double theX, final double theY, final double theZ, final double theW){
 		gl.glMultiTexCoord4d(theUnit, theX, theY, theZ, theW);
 	}
 	
@@ -3881,7 +3882,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * 
 	 */
 	public void ortho(){
-		ortho(0, width(), 0, height(), -10, 10);
+		ortho(0, width(), 0, height(), -1000, 1000);
 	}
 	
 	public void ortho2D(final int theWidth, final int theHeight){

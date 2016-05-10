@@ -20,12 +20,13 @@ public class CCGL2Application {
 	
 	@CCProperty(name = "app")
 	private CCGLAdapter<CCGraphics, CCGL2Context> _myAdapter;
-
-	private CCControlApp _myControlApp;
 	
 	private boolean _myIsInitialized = false;
+	
+	private boolean _myUseUI;
 
-	public CCGL2Application(CCGLAdapter<CCGraphics, CCGL2Context> theGLAdapter) {
+	public CCGL2Application(CCGLAdapter<CCGraphics, CCGL2Context> theGLAdapter, boolean useUI) {
+		_myUseUI = useUI;
 		_myAdapter = theGLAdapter;
 		_myAnimator = new CCAnimator();
 		_myAnimator.framerate = 60;
@@ -58,10 +59,12 @@ public class CCGL2Application {
 			@Override
 			public void init(CCGraphics theG) {
 				_myAdapter.init(theG, _myAnimator);
-				_myControlApp = new CCControlApp(CCGL2Application.this, _mySynch);
-				_myControlApp.afterInit();
+				if(_myUseUI){
+					_myControlApp = new CCControlApp(CCGL2Application.this, _mySynch);
+					_myControlApp.afterInit();
+					theGLAdapter.controlApp(_myControlApp);
+				}
 				_mySynch.animator().start();
-				theGLAdapter.controlApp(_myControlApp);
 				
 				_myIsInitialized = true;
 			}
@@ -94,8 +97,12 @@ public class CCGL2Application {
 		);
 	}
 	
+	public CCGL2Application(CCGLAdapter<CCGraphics, CCGL2Context> theGLAdapter){
+		this(theGLAdapter, true);
+	}
+	
 	public CCGL2Application(){
-		this(null);
+		this(null, true);
 	}
 	
 	public CCAnimator animator(){
