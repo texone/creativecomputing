@@ -64,7 +64,7 @@ public class CCPlane implements Cloneable, Externalizable {
 	 *            the plane to copy from.
 	 */
 	public CCPlane(final CCPlane theSource) {
-		this(theSource.getNormal(), theSource.getConstant());
+		this(theSource.normal(), theSource.constant());
 	}
 
 	/**
@@ -79,12 +79,21 @@ public class CCPlane implements Cloneable, Externalizable {
 		_myConstant = theConstant;
 	}
 	
+	/**
+	 * Creates a plane based on a normal and an origin point lying on the plane
+	 * @param theOrigin point on the plane
+	 * @param theNormal normal of the plane
+	 */
+	public CCPlane(CCVector3 theOrigin, CCVector3 theNormal) {
+		setOriginNormal(theOrigin, theNormal);
+	}
+	
 	public CCPlane(final CCVector3 theV1, final CCVector3 theV2, final CCVector3 theV3){
 		this();
 		setPlanePoints(theV1, theV2, theV3);
 	}
 
-	public double getConstant() {
+	public double constant() {
 		return _myConstant;
 	}
 
@@ -92,7 +101,7 @@ public class CCPlane implements Cloneable, Externalizable {
 	 * 
 	 * @return normal as a readable vector
 	 */
-	public CCVector3 getNormal() {
+	public CCVector3 normal() {
 		return _myNormal;
 	}
 
@@ -106,8 +115,8 @@ public class CCPlane implements Cloneable, Externalizable {
 	 *             if source is null.
 	 */
 	public CCPlane set(final CCPlane theSource) {
-		setConstant(theSource.getConstant());
-		setNormal(theSource.getNormal());
+		setConstant(theSource.constant());
+		setNormal(theSource.normal());
 		return this;
 	}
 
@@ -165,6 +174,17 @@ public class CCPlane implements Cloneable, Externalizable {
 			return Side.Neither;
 		}
 	}
+	
+	/**
+     * Initialize this plane using a point of origin and a normal.
+     *
+     * @param theOrigin
+     * @param theNormal
+     */
+    public void setOriginNormal(CCVector3 theOrigin, CCVector3 theNormal){
+        _myNormal.set(theNormal);
+        _myConstant = theNormal.x * theOrigin.x + theNormal.y * theOrigin.y + theNormal.z * theOrigin.z;
+    }
 
 	/**
 	 * Sets this plane to the plane defined by the given three points.
@@ -216,11 +236,11 @@ public class CCPlane implements Cloneable, Externalizable {
 		if (thePlane == null) {
 			return false;
 		}
-		if (Double.isNaN(thePlane.getConstant()) || Double.isInfinite(thePlane.getConstant())) {
+		if (Double.isNaN(thePlane.constant()) || Double.isInfinite(thePlane.constant())) {
 			return false;
 		}
 
-		return CCVector3.isValid(thePlane.getNormal());
+		return CCVector3.isValid(thePlane.normal());
 	}
 
 	/**
@@ -242,7 +262,7 @@ public class CCPlane implements Cloneable, Externalizable {
 
 		result += 63 * result + _myNormal.hashCode();
 
-		final long c = Double.doubleToLongBits(getConstant());
+		final long c = Double.doubleToLongBits(constant());
 		result += 63 * result + (int) (c ^ c >>> 64);
 
 		return result;
@@ -263,7 +283,7 @@ public class CCPlane implements Cloneable, Externalizable {
 			return false;
 		}
 		final CCPlane comp = (CCPlane) theObject;
-		return getConstant() == comp.getConstant() && _myNormal.equals(comp.getNormal());
+		return constant() == comp.constant() && _myNormal.equals(comp.normal());
 	}
 
 	// /////////////////
@@ -303,6 +323,6 @@ public class CCPlane implements Cloneable, Externalizable {
 	@Override
 	public void writeExternal(final ObjectOutput out) throws IOException {
 		out.writeObject(_myNormal);
-		out.writeDouble(getConstant());
+		out.writeDouble(constant());
 	}
 }

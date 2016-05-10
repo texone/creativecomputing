@@ -13,6 +13,10 @@ package cc.creativecomputing.math;
 public class CCRay3 extends CCLine3Base {
 
 	private static final long serialVersionUID = 1L;
+	
+	public static CCRay3 createFromLine(CCVector3 theStart, CCVector3 theEnd){
+		return new CCRay3(theStart.clone(), theStart.subtract(theEnd).normalize());
+	}
 
 	/**
 	 * Constructs a new ray with an origin at (0,0,0) and a direction of
@@ -273,26 +277,31 @@ public class CCRay3 extends CCLine3Base {
 	 * @throws NullPointerException
 	 *             if the plane is null.
 	 */
-	public boolean intersectsPlane(final CCPlane thePlane, final CCVector3 theLocationStore) {
-		final CCVector3 normal = thePlane.getNormal();
+	public CCVector3 intersectsPlane(final CCPlane thePlane, CCVector3 theLocationStore) {
+		final CCVector3 normal = thePlane.normal();
 		final double denominator = normal.dot(_myDirection);
 
 		if (denominator > -CCMath.FLT_EPSILON && denominator < CCMath.FLT_EPSILON) {
-			return false; // coplanar
+			return null; // coplanar
 		}
 
-		final double numerator = -normal.dot(_myOrigin) + thePlane.getConstant();
+		final double numerator = -normal.dot(_myOrigin) + thePlane.constant();
 		final double ratio = numerator / denominator;
 
 		if (ratio < CCMath.FLT_EPSILON) {
-			return false; // intersects behind _origin
+			return null; // intersects behind _origin
 		}
 
-		if (theLocationStore != null) {
-			theLocationStore.set(_myDirection).multiplyLocal(ratio).addLocal(_myOrigin);
+		if (theLocationStore == null) {
+			theLocationStore = new CCVector3();
 		}
 
-		return true;
+		theLocationStore.set(_myDirection).multiplyLocal(ratio).addLocal(_myOrigin);
+		return theLocationStore;
+	}
+	
+	public CCVector3 intersectsPlane(final CCPlane thePlane){
+		return intersectsPlane(thePlane, new CCVector3());
 	}
 
 	/**

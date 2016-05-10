@@ -24,26 +24,26 @@ public class CCPlaneTest {
     @Test
     public void testGetSet() {
         final CCPlane plane = new CCPlane();
-        assertEquals(CCVector3.UNIT_Y, plane.getNormal());
-        assertTrue(plane.getConstant() == 0.0);
+        assertEquals(CCVector3.UNIT_Y, plane.normal());
+        assertTrue(plane.constant() == 0.0);
 
         plane.setNormal(CCVector3.UNIT_X);
         plane.setConstant(1.0f);
-        assertEquals(CCVector3.UNIT_X, plane.getNormal());
-        assertTrue(plane.getConstant() == 1.0);
+        assertEquals(CCVector3.UNIT_X, plane.normal());
+        assertTrue(plane.constant() == 1.0);
 
         final CCPlane plane2 = new CCPlane(plane);
-        assertEquals(CCVector3.UNIT_X, plane2.getNormal());
-        assertTrue(plane.getConstant() == 1.0);
+        assertEquals(CCVector3.UNIT_X, plane2.normal());
+        assertTrue(plane.constant() == 1.0);
 
         final CCPlane plane3 = new CCPlane(CCVector3.NEG_UNIT_Z, 2.5f);
-        assertEquals(CCVector3.NEG_UNIT_Z, plane3.getNormal());
-        assertTrue(plane3.getConstant() == 2.5);
+        assertEquals(CCVector3.NEG_UNIT_Z, plane3.normal());
+        assertTrue(plane3.constant() == 2.5);
 
         final CCPlane plane4 = new CCPlane().setPlanePoints(new CCVector3(1, 1, 1), new CCVector3(2, 1, 1),
                 new CCVector3(2, 2, 1));
-        assertEquals(CCVector3.UNIT_Z, plane4.getNormal());
-        assertTrue(plane4.getConstant() == 1.0);
+        assertEquals(CCVector3.UNIT_Z, plane4.normal());
+        assertTrue(plane4.constant() == 1.0);
     }
 
     @Test

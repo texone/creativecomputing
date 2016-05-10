@@ -656,22 +656,25 @@ public class CCColor implements Cloneable{
 	 * 0.0 and 1.0
 	 * @return
 	 */
-	public void alpha(final double theAlpha) {
+	public CCColor alpha(final double theAlpha) {
 		CCMath.constrain(theAlpha, 0, 1);
 		a = theAlpha;
+		return this;
 	}
 
-	public void alpha(final int theAlpha) {
+	public CCColor alpha(final int theAlpha) {
 		CCMath.constrain(theAlpha, 0, 255);
 		a = theAlpha/255f;
+		return this;
 	}
 
-	public void set(final double theRed, final double theGreen, final double theBlue, final double theAlpha) {
+	public CCColor set(final double theRed, final double theGreen, final double theBlue, final double theAlpha) {
 		testColorValueRange(theRed, theGreen, theBlue, theAlpha);
 		r = theRed;
 		g = theGreen;
 		b = theBlue;
 		a = theAlpha;
+		return this;
 	}
 
 	public void set(final double theRed, final double theGreen, final double theBlue) {

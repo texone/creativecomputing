@@ -774,12 +774,13 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
 	 * centered at the origin.  Orientation will be random and length will range
 	 * between 0 and 1
 	 */
-	public void randomize(){
+	public CCVector3 randomize(){
 		do{
 			x = CCMath.random() * 2.0F - 1.0F;
 			y = CCMath.random() * 2.0F - 1.0F;
 			z = CCMath.random() * 2.0F - 1.0F;
 		}while (lengthSquared() > 1.0F);
+		return this;
 	}
 
 	/**
@@ -787,12 +788,13 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
 	 * centered at the origin.  Orientation will be random and length will range
 	 * between 0 and 1
 	 */
-	public void randomize(double radius){
+	public CCVector3 randomize(double radius){
 		do{
 			x = radius * (CCMath.random() * 2.0F - 1.0F);
 			y = radius * (CCMath.random() * 2.0F - 1.0F);
 			z = radius * (CCMath.random() * 2.0F - 1.0F);
 		}while (lengthSquared() > radius * radius);
+		return this;
 	}
 
     /**

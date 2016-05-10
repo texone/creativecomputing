@@ -25,6 +25,18 @@ public class CCMatrix2 {
 		_myData = new double[_myColumns][_myRows][_myDepth];
 	}
 	
+	public CCMatrix2(int theColumns, int theRows){
+		this(theColumns, theRows, 1);
+	}
+	
+	public void set(int theColumn, int theRow, double theValue){
+		_myData[theColumn][theRow][0] = theValue;
+	}
+	
+	public void set(int theColumn, int theRow, int theDepth, double theValue){
+		_myData[theColumn][theRow][theDepth] = theValue;
+	}
+	
 	public double[][][] data(){
 		return _myData;
 	}
@@ -39,6 +51,30 @@ public class CCMatrix2 {
 	
 	public int depth(){
 		return _myDepth;
+	}
+	
+	public CCVector2 minMax(){
+		CCVector2 myMinMax = new CCVector2(Double.MAX_VALUE,-Double.MAX_VALUE);
+		for (int c = 0; c < _myColumns; c++) {
+			for (int r = 0; r < _myRows; r++) {
+				for (int d = 0; d < _myDepth; d++) {
+					myMinMax.x = CCMath.min(myMinMax.x, _myData[c][r][d]);
+					myMinMax.y = CCMath.max(myMinMax.y, _myData[c][r][d]);
+				}
+			}
+		}
+		return myMinMax;
+	}
+	
+	public CCVector2 minMax(int d){
+		CCVector2 myMinMax = new CCVector2(Double.MAX_VALUE,-Double.MAX_VALUE);
+		for (int c = 0; c < _myColumns; c++) {
+			for (int r = 0; r < _myRows; r++) {
+				myMinMax.x = CCMath.min(myMinMax.x, _myData[c][r][d]);
+				myMinMax.y = CCMath.max(myMinMax.y, _myData[c][r][d]);
+			}
+		}
+		return myMinMax;
 	}
 	
 	public double[] get(int theColumn, int theRow){

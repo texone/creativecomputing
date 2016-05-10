@@ -177,17 +177,17 @@ public class CCMath {
 
 	// lots of convenience methods for math with floats.
 	
-	public static final int abs(int x) {
-		int y = x >> 31;
-		return (x ^ y) - y;
+	public static final int abs(int theValue) {
+		int y = theValue >> 31;
+		return (theValue ^ y) - y;
 	}
 
-	public static final float abs(float x) {
-		return x < 0 ? -x : x;
+	public static final float abs(float theValue) {
+		return theValue < 0 ? -theValue : theValue;
 	}
 
-	public static final double abs(double x) {
-		return x < 0 ? -x : x;
+	public static final double abs(double theValue) {
+		return theValue < 0 ? -theValue : theValue;
 	}
 
 	static public final float sq(float a) {
@@ -585,28 +585,36 @@ public class CCMath {
 		return degrees * CCMath.DEG_TO_RAD;
 	}
 
-	static public final int ceil(float what) {
-		return (int)Math.ceil(what);
+	static public final int ceil(float theValue) {
+		return (int)Math.ceil(theValue);
 	}
 
-	static public final int ceil(double what) {
-		return (int)Math.ceil(what);
+	static public final int ceil(double theValue) {
+		return (int)Math.ceil(theValue);
 	}
 
-	static public final int floor(float what) {
-		return (int)Math.floor(what);
+	static public final int floor(float theValue) {
+		return (int)Math.floor(theValue);
 	}
 
-	static public final int floor(double what) {
-		return (int)Math.floor(what);
+	static public final int floor(double theValue) {
+		return (int)Math.floor(theValue);
 	}
 
-	static public final int round(float what) {
-		return (int) Math.round(what);
+	static public final int round(float theValue) {
+		return (int) Math.round(theValue);
 	}
 
-	static public final int round(double what) {
-		return (int) Math.round(what);
+	static public final int round(double theValue) {
+		return (int) Math.round(theValue);
+	}
+	
+	public static double floorMod(double theA, double theB){
+		return (theA % theB + theB) % theB;
+	}
+	
+	public static double frac(double theValue) {
+		return (theValue - CCMath.floor(theValue));
 	}
 
 	/**

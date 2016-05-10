@@ -994,6 +994,15 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 
 		return this;
 	}
+	
+	public CCMatrix4x4 translate(final double theX, final double theY, final double theZ) {
+		m30 += m00 * theX + m10 * theY + m20 * theZ + m30;
+		m31 += m01 * theX + m11 * theY + m21 * theZ + m31;
+		m32 += m02 * theX + m12 * theY + m22 * theZ + m32;
+		m33 += m03 * theX + m13 * theY + m23 * theZ + m33;
+
+		return this;
+	}
 
 	/**
 	 * T*M

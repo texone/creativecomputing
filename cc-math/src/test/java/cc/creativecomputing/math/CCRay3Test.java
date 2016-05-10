@@ -144,45 +144,45 @@ public class CCRay3Test {
         CCPlane plane = new CCPlane(new CCVector3(0, 1, 0), 2);
 
         CCRay3 pickRay = new CCRay3(new CCVector3(0, 3, 0), new CCVector3(0, 0, 1));
-        assertFalse(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, 3, 0), new CCVector3(0, 1, 0));
-        assertFalse(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, 2, 0), new CCVector3(0, 1, 0));
-        assertFalse(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, 1, 0), new CCVector3(0, 1, 0));
-        assertTrue(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNotNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, 0, 0), new CCVector3(1, 0, 0));
-        assertFalse(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, -3, 0), new CCVector3(0, 0, 1));
-        assertFalse(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, 3, 0), new CCVector3(0, -1, 0));
-        assertTrue(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNotNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, -3, 0), new CCVector3(1, 1, 1));
-        assertTrue(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNotNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, -3, 0), new CCVector3(-1, -1, -1));
-        assertFalse(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         plane = new CCPlane(new CCVector3(1, 1, 1), -2);
 
         pickRay = new CCRay3(new CCVector3(0, 0, 0), new CCVector3(1, -1, 1));
-        assertFalse(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, -1, 0), new CCVector3(0, 1, 0));
-        assertFalse(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, -2, 0), new CCVector3(0, 1, 0));
-        assertFalse(pickRay.intersectsPlane(plane, intersectionPoint));
+        assertNull(pickRay.intersectsPlane(plane, intersectionPoint));
 
         pickRay = new CCRay3(new CCVector3(0, -3, 0), new CCVector3(0, 1, 0));
-        assertTrue(pickRay.intersectsPlane(plane, null));
+        assertNotNull(pickRay.intersectsPlane(plane, null));
     }
 
     @Test
