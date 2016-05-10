@@ -1,10 +1,9 @@
-package cc.creativecomputing.kle.animation;
+package cc.creativecomputing.effects;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCMath;
 
-public class CCKleCircleAnimation extends CCKleAnimation {
+public class CCCircleEffect extends CCEffect {
 
 	@CCProperty(name = "x amount", min = 0, max = 1)
 	private double _cXAmount = 0;
@@ -12,13 +11,16 @@ public class CCKleCircleAnimation extends CCKleAnimation {
 	private double _cYAmount = 0;
 
 	@CCProperty(name = "modulation")
-	private CCKleModulation _cModulation = new CCKleModulation();
+	private CCEffectModulation _cModulation = new CCEffectModulation();
 
 	@CCProperty(name = "amount modulation")
-	private CCKleModulation _cAmountModulation = new CCKleModulation();
+	private CCEffectModulation _cAmountModulation = new CCEffectModulation();
 
 	@CCProperty(name = "phase speed", min = 0, max = 0.1)
 	private double _cSpeed = 0;
+	
+	@CCProperty(name = "angle max", min = 1, max = 10)
+	private double _cAngleMax= 0;
 
 	private double _myPhase = 0;
 	
@@ -29,11 +31,10 @@ public class CCKleCircleAnimation extends CCKleAnimation {
 	}
 
 	@Override
-	public double[] animate(CCSequenceElement theElement) {
-		double myPhase = _myPhase;
-		double myAngle = (myPhase + _cModulation.modulation(theElement, -0.5f, 0.5f)) * CCMath.TWO_PI;
-		double myAmount = _cAmountModulation.modulation(theElement, -1, 1);
-		double myBlend = elementBlend(theElement);
+	public double[] applyTo(CCEffectable theEffectable) {
+		double myAngle = (_myPhase + _cModulation.modulation(theEffectable, -1f, 1f)) * CCMath.PI * _cAngleMax;
+		double myAmount = _cAmountModulation.modulation(theEffectable, -1, 1);
+		double myBlend = elementBlend(theEffectable);
 		double myX = CCMath.cos(myAngle) * _cXAmount * myAmount * myBlend;
 		double myY = CCMath.sin(myAngle) * _cYAmount * myAmount * myBlend;
 		

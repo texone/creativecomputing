@@ -2,15 +2,13 @@ package cc.creativecomputing.kle.formats;
 
 import java.nio.file.Path;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
-import cc.creativecomputing.image.CCImage;
-import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.image.format.CCPNGImage;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.elements.CCSequenceChannel;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
-import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
 
@@ -40,38 +38,35 @@ public class CCSequencePNGFormat implements CCSequenceFormat{
 		Path myExportPath = _myUseMappingFolder ? thePath.resolve(theMapping.type().id()) : thePath;
 		
 		CCNIOUtil.createDirectories(myExportPath);
+		CCLog.info(myExportPath.toAbsolutePath());
 				
 		for (CCMatrix2 frame : theSequence) {
 			CCPNGImage myPNGImage = new CCPNGImage (frame.columns(), frame.rows(), theMapping.bitDepth(), frame.depth() <= 2, frame.depth() == 2 || frame.depth() == 4);
-			CCImage myImage = new CCImage(frame.columns(), frame.rows());
+//			CCImage myImage = new CCImage(frame.columns(), frame.rows());
 			
 			
-				for(int c = 0; c < theMapping.columns();c++){
-					for(int r = 0; r < theMapping.rows();r++){
-						CCColor myColor = new CCColor();
-						if(theMapping.depth() == 3){
-							myColor = new CCColor(
-								CCMath.saturate(frame.data()[c][r][0]),
-								CCMath.saturate(frame.data()[c][r][1]),
-								CCMath.saturate(frame.data()[c][r][2])
-							);
-						}
-						myImage.setPixel(c, r, myColor);
+			for(int c = 0; c < theMapping.columns();c++){
+				for(int r = 0; r < theMapping.rows();r++){
+//						CCColor myColor = new CCColor();
+//						if(theMapping.depth() == 3){
+//							myColor = new CCColor(
+//								CCMath.saturate(frame.data()[c][r][0]),
+//								CCMath.saturate(frame.data()[c][r][1]),
+//								CCMath.saturate(frame.data()[c][r][2])
+//							);
+//						}
+//						myImage.setPixel(c, r, myColor);
+					for(int d = 0; d < theMapping.depth();d++){
+						double myValue = frame.data()[c][r][d];
+						myValue = CCMath.norm(myValue, theMapping.min(c,r,d), theMapping.max(c,r,d));
+						myPNGImage.pixelChannel(c, r, d, myValue);
 					}
 				}
-				
-//				double myValue = frame.data()[myChannel.column()][myChannel.row()][myChannel.depth()];
-//				myValue = CCMath.norm(myValue, myChannel.min(), myChannel.max());
-//					
-//				int x = myChannel.column();
-//				int y = myChannel.row();
-//					
-//				myPNGImage.pixelChannel(x, y, myChannel.depth(), myValue);
-			
-				
-			String numString = CCFormatUtil.nf(frameCount, digits);
-//			myPNGImage.write();
-			CCImageIO.write(myImage, myExportPath.resolve("frame_" +numString+ ".png").toString());
+			}
+			Path myImagePath = CCNIOUtil.addExtension(myExportPath.resolve("frame_" + CCFormatUtil.nf(frameCount, digits)), "png");
+			CCLog.info(myImagePath);
+			myPNGImage.write(myImagePath);
+//			CCImageIO.write(myImage, CCNIOUtil.addExtension(myExportPath, "png"));
 			frameCount += 1;
 		}
 	}

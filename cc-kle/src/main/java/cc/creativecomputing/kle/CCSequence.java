@@ -78,8 +78,8 @@ public class CCSequence extends ArrayList<CCMatrix2>{
 		return get(theIndex);
 	}
 	
-	public CCMatrix2 frame(float theFrame){
-		float myBlend = theFrame - (int)theFrame;
+	public CCMatrix2 frame(double theFrame){
+		double myBlend = theFrame - (int)theFrame;
 		CCMatrix2 myLower = frame((int)theFrame);
 		CCMatrix2 myUpper = frame(CCMath.min((int)theFrame + 1, size() - 1));
 		
@@ -94,6 +94,13 @@ public class CCSequence extends ArrayList<CCMatrix2>{
 		}
 
 		return myResult;
+	}
+	
+	public double value(double theFrame, int theColumn, int theRow, int theDepth){
+		double myBlend = theFrame - (int)theFrame;
+		CCMatrix2 myLower = frame((int)theFrame);
+		CCMatrix2 myUpper = frame(CCMath.min((int)theFrame + 1, size() - 1));
+		return CCMath.blend(myLower.data()[theColumn][theRow][theDepth], myUpper.data()[theColumn][theRow][theDepth], myBlend);
 	}
 	
 	public int length(){

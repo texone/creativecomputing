@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.elements.lights.CCLightChannel;
@@ -14,7 +15,7 @@ import cc.creativecomputing.kle.elements.motors.CCMotorBounds;
 import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
 
-public class CCSequenceElements extends ArrayList<CCSequenceElement>{
+public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 	/**
 	 * 
 	 */
@@ -139,38 +140,8 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 			add(myElement);
 		}
 	}
-	
-	private int _myGroups = 0;
-	
-	@Override
-	public boolean add(CCSequenceElement e) {
-		_myGroups = CCMath.max(e.group(), _myGroups);
-		return super.add(e);
-	}
-	
-	public void updateInfos(){
-		_myGroups = 0;
-		for(CCSequenceElement myElement:this){
-			_myGroups = CCMath.max(myElement.group(), _myGroups);
-		}
-	}
-	
-	public void update(double theDeltaTime){
-		for(CCSequenceElement myElement:this){
-			myElement.update(theDeltaTime);
-		}
-	}
-	
-	public int groups(){
-		return _myGroups;
-	}
 
 	public Map<CCKleChannelType, CCSequenceMapping<?>> mappings() {
 		return _myMappings;
-	}
-	
-	public static void main(String[] args) {
-		
-//		CCLog.info(mapping(new CCTestSequenceElements()));
 	}
 }

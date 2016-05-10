@@ -1,12 +1,11 @@
-package cc.creativecomputing.kle.animation;
+package cc.creativecomputing.effects;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
 
-public class CCKleArpeggegiatorAnimation extends CCKleAnimation{
+public class CCArpeggegiatorEffect extends CCEffect{
 	
 	public enum CCArpegio{
 		UP,
@@ -15,7 +14,7 @@ public class CCKleArpeggegiatorAnimation extends CCKleAnimation{
 	}
 	
 	@CCProperty(name = "modulations")
-	private Map<String, CCKleModulation> _cModulations = new LinkedHashMap<>();
+	private Map<String, CCEffectModulation> _cModulations = new LinkedHashMap<>();
 	
 	private String[] _myValueNames = new String[0];
 
@@ -29,14 +28,14 @@ public class CCKleArpeggegiatorAnimation extends CCKleAnimation{
 	public CCArpegio _cMode = CCArpegio.UP_DOWN;
 	
 	@Override
-	public double[] animate(CCSequenceElement theElement) {
-		double myBlend = elementBlend(theElement);
+	public double[] applyTo(CCEffectable theEffectable) {
+		double myBlend = elementBlend(theEffectable);
 		double myProgress = (_cProgress * _cProgressScale) % 1;
 		
 		double[] myResult = new double[_myValueNames.length];
 		for(int i = 0; i < _myValueNames.length;i++){
 			double myBrightness = 1d;
-			double myMod = _cModulations.get(_myValueNames[i]).modulation(theElement, -1, 1);
+			double myMod = _cModulations.get(_myValueNames[i]).modulation(theEffectable, -1, 1);
 			
 			switch(_cMode){
 			case UP:

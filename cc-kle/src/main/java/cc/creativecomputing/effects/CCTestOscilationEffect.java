@@ -1,12 +1,10 @@
-package cc.creativecomputing.kle.animation;
+package cc.creativecomputing.effects;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceRecorderListener;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
 
-public class CCKleVector2TestAnimation extends CCKleAnimation implements CCSequenceRecorderListener{
+public class CCTestOscilationEffect extends CCEffect implements CCSequenceRecorderListener{
 
 	@CCProperty(name = "x amount", min = 0, max = 1)
 	private double _cXAmount = 0;
@@ -59,7 +57,7 @@ public class CCKleVector2TestAnimation extends CCKleAnimation implements CCSeque
 	}
 
 	@Override
-	public double[] animate(CCSequenceElement theElement) {
+	public double[] applyTo(CCEffectable theElement) {
 		double myX = CCMath.cos(_myPhase) * _cXAmount;
 		double myY = CCMath.cos(_myPhase) * _cYAmount;
 

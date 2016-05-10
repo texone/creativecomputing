@@ -3,6 +3,8 @@ package cc.creativecomputing.kle.elements.lights;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.math.CCColor;
+
 
 
 public class CCLightRGBSetup extends CCLightSetup{
@@ -29,15 +31,25 @@ public class CCLightRGBSetup extends CCLightSetup{
 	
 	@Override
 	public void setByRelativePosition(double... theValues) {
+		if(theValues.length == 1){
+			_myLightR.value(theValues[0]);
+			_myLightG.value(theValues[0]);
+			_myLightB.value(theValues[0]);
+			
+			_myColor.set(theValues[0]);
+			return;
+		}
 
 		double myR = theValues != null && theValues.length > 0 ? theValues[0] : 0.5f;
 		double myG = theValues != null && theValues.length > 1 ? theValues[1] : 0.5f;
 		double myB = theValues != null && theValues.length > 2 ? theValues[2] : 0.5f;
 		
-		_myLightR.value(myR);
-		_myLightG.value(myG);
-		_myLightB.value(myB);
+		CCColor myCol = CCColor.createFromHSB(myR, myG, myB);
 		
-		_myColor.set(myR, myG, myB);
+		_myLightR.value(myCol.r);
+		_myLightG.value(myCol.g);
+		_myLightB.value(myCol.b);
+		
+		_myColor.set(myCol);
 	}
 }

@@ -3,7 +3,7 @@ package cc.creativecomputing.kle.elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.kle.elements.lights.CCLightBrightnessSetup;
 import cc.creativecomputing.kle.elements.lights.CCLightChannel;
@@ -17,22 +17,12 @@ import cc.creativecomputing.kle.elements.motors.CCMotorSetup;
 import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionBounds;
 import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionSetup;
 
-public class CCSequenceElement  {
-
-	private final int _myID;
+public class CCSequenceElement extends CCEffectable{
 	
 	private final List<CCSequenceChannel> _myChannels = new ArrayList<>();
 
 	private final CCMotorSetup _myMotorSetup;
 	private final CCLightSetup _myLightSetup;
-	
-	private double _myIDBlend;
-	private double _myGroupIDBlend;
-	private double _myGroupBlend;
-	private int _myGroup;
-
-	public double _myXBlend;
-	public double _myYBlend;
 	
 	public CCSequenceElement(
 		int theID, 
@@ -44,7 +34,7 @@ public class CCSequenceElement  {
 		
 		double theElementRadius
 	){
-		_myID = theID;
+		super(theID);
 		_myMotorSetup = setMotors(theMotors, theBounds, theElementRadius);
 		_myLightSetup = setLights(theLights);
 	}
@@ -54,14 +44,20 @@ public class CCSequenceElement  {
 	}
 	
 	public CCSequenceElement(int theID, CCLightSetup theLightSetup){
-		_myID = theID;
+		super(theID);
 		_myMotorSetup = null;
 		_myLightSetup = theLightSetup;
 	}
 	
 	public CCSequenceElement(int theID, CCMotorSetup theMotorSetup){
-		_myID = theID;
+		super(theID);
 		_myMotorSetup = theMotorSetup;
+		_myLightSetup = null;
+	}
+	
+	public CCSequenceElement(int theID){
+		super(theID);
+		_myMotorSetup = null;
 		_myLightSetup = null;
 	}
 	
@@ -74,7 +70,7 @@ public class CCSequenceElement  {
 			if(theMotors.get(0).connectionPosition().equals(theMotors.get(1).connectionPosition())){
 				return new CC2Motor1ConnectionSetup(theMotors, (CC2Motor1ConnectionBounds)theBounds, theElementRadius);
 			}else{
-				return new CC2Motor2ConnectionSetup(theMotors, (CC2Motor2ConnectionBounds)theBounds, theElementRadius);
+				return new CC2Motor2ConnectionSetup(this, theMotors, (CC2Motor2ConnectionBounds)theBounds, theElementRadius);
 			}
 		default:
 			return new CCMotorSetup(theMotors);
@@ -92,58 +88,6 @@ public class CCSequenceElement  {
 		default:
 			return new CCLightSetup(theLights);
 		}
-	}
-	
-	public double groupIDBlend(){
-		return _myGroupIDBlend;
-	}
-	
-	public void groupIDBlend(double theGroupIDBlend){
-		_myGroupIDBlend = theGroupIDBlend;
-	}
-	
-	public double groupBlend(){
-		return _myGroupBlend;
-	}
-	
-	public void groupBlend(double theGroupBlend){
-		_myGroupBlend = theGroupBlend;
-	}
-	
-	public int group(){
-		return _myGroup;
-	}
-	
-	public void group(int theGroup){
-		_myGroup = theGroup;
-	}
-	
-	public double xBlend(){
-		return _myXBlend;
-	}
-	
-	public void xBlend(double theXBlend){
-		_myXBlend = theXBlend;
-	}
-	
-	public double yBlend(){
-		return _myYBlend;
-	}
-	
-	public void yBlend(double theYBlend){
-		_myYBlend = theYBlend;
-	}
-	
-	public int id(){
-		return _myID;
-	}
-	
-	public double idBlend(){
-		return _myIDBlend;
-	}
-	
-	public void idBlend(double theIDBlend){
-		_myIDBlend = theIDBlend;
 	}
 	
 	public CCMotorSetup motorSetup(){

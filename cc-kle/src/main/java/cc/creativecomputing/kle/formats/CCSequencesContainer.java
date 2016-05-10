@@ -10,7 +10,7 @@ import cc.creativecomputing.kle.elements.CCSequenceMapping;
 
 public abstract class CCSequencesContainer  {
 	
-	public abstract void save(Path theFile, CCSequenceElements theElements, Map<String,CCSequence> theSequences);
+	public abstract void save(Path theFile, CCSequenceElements theElements, Map<CCKleChannelType,CCSequence> theSequences);
 
 	public abstract Map<CCKleChannelType,CCSequence> load(Path theFile, Map<CCKleChannelType,CCSequenceMapping<?>> theMappings);
 	

@@ -1,12 +1,15 @@
 package cc.creativecomputing.kle.elements.motors;
 
+import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.math.filter.CCMotionLimiter;
 
 public class CC2Motor2ConnectionBounds extends CCMotorBounds{
 	
@@ -17,44 +20,31 @@ public class CC2Motor2ConnectionBounds extends CCMotorBounds{
 	
 	private CCSequenceElements _myElements;
 	
+	@CCProperty(name = "x limiter")
+	public CCMotionLimiter _myXMotionLimiter;
+	@CCProperty(name = "y limiter")
+	public CCMotionLimiter _myYMotionLimiter;
+	
 	public void setElements(CCSequenceElements theElements){
 		_myElements = theElements;
+		_myXMotionLimiter = new CCMotionLimiter(_myElements.size());
+		_myYMotionLimiter = new CCMotionLimiter(_myElements.size());
 	}
 	
-	@CCProperty(name = "max velocity")
-	private double _cMaxVelocity = 0;
-	@CCProperty(name = "max acceleration")
-	private double _cMaxAcceleration = 0;
-	@CCProperty(name = "max jerk")
-	private double _cMaxJerk = 0;
-	@CCProperty(name = "apply filter")
-	private boolean _cFilter = false;
 	
-	private double _myDeltaTime;
+	private double _myTime;
 	
-	public boolean applyFilter(){
-		return _cFilter;
+	public void update(CCAnimator theAnimator){
+		_myTime = theAnimator.time();
 	}
 	
-	public void update(double theDeltaTime){
-		_myDeltaTime = theDeltaTime;
+	public CCVector2 filter(int theChannel, CCVector2 thePosition){
+		return new CCVector2(
+			_myXMotionLimiter.process(theChannel, thePosition.x, _myTime),
+			_myYMotionLimiter.process(theChannel, thePosition.y, _myTime)
+		);
 	}
 	
-	public double deltaTime(){
-		return _myDeltaTime;
-	}
-	
-	public double maxVelocity(){
-		return _cMaxVelocity;
-	}
-	
-	public double maxAcceleration(){
-		return _cMaxAcceleration;
-	}
-	
-	public double maxJerk(){
-		return _cMaxJerk;
-	}
 	
 	public void updateBounds(CC2Motor2ConnectionSetup mySetup){
 		mySetup.bounds().clear();

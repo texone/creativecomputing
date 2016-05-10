@@ -9,13 +9,14 @@ import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.math.CCMatrix2;
 
+@SuppressWarnings("rawtypes")
 public class CCSequenceTXTFormat implements CCSequenceFormat{
 	
 	public CCSequenceTXTFormat(){
 	}
 
 	@Override
-	public void save(Path thePath, CCSequenceMapping<?> theMapping, CCSequence theSequence) {
+	public void save(Path thePath, CCSequenceMapping theMapping, CCSequence theSequence) {
 		
 		CCNIOUtil.createDirectories(thePath);
 		
@@ -41,7 +42,7 @@ public class CCSequenceTXTFormat implements CCSequenceFormat{
 	}
 
 	@Override
-	public CCSequence load(Path thePath, CCSequenceMapping<?> theMapping) {
+	public CCSequence load(Path thePath, CCSequenceMapping theMapping) {
 		
 		Path myImportPath = thePath.resolve(theMapping.type().id());
 		CCSequence result = new CCSequence (theMapping.columns(), theMapping.rows(), theMapping.depth());

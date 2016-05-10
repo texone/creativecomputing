@@ -3,9 +3,9 @@ package cc.creativecomputing.kle.elements.motors;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCFastMath;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -24,11 +24,14 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 	
 	protected CCTwoPointMatrices _myTwoPointMatrices;
 	
-	protected CCMotorTwoPointFilter _myFilter;
+	protected CC2Motor2ConnectionBounds _myBounds;
 	
+	protected CCSequenceElement _myElement;
 	
-	public CC2Motor2ConnectionSetup(List<CCMotorChannel> theChannels, CC2Motor2ConnectionBounds theBounds, double theElementRadius){
+	public CC2Motor2ConnectionSetup(CCSequenceElement theElement, List<CCMotorChannel> theChannels, CC2Motor2ConnectionBounds theBounds, double theElementRadius){
 		super(theChannels);
+		_myElement = theElement;
+		_myBounds = theBounds;
 
 		_myElementRadius = theElementRadius;
 		
@@ -52,8 +55,14 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 			theBounds.bottomDistance(),
 			theBounds.minRopeAngle()
 		);
-		
-		_myFilter = new CCMotorTwoPointFilter(theBounds);
+	}
+	
+	public CCMotorChannel motor0(){
+		return motor0;
+	}
+	
+	public CCMotorChannel motor1(){
+		return motor1;
 	}
 	
 	public double elementRadius(){
@@ -82,7 +91,7 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 		double myY = theValues != null && theValues.length > 1 ? theValues[1] : 0.5f;
 		
 		_myRelativeOffset.set(myX, myY,0);
-		_myElementOffset.set(_myFilter.filterOffset(_myElementOffset, animationPosition(myX, myY)));
+		_myElementOffset.set(animationPosition(myX, myY));
 		
 		double myDistance = new CCVector2(motor0._myPosition.x, motor0._myPosition.z).distance(_myElementOffset.x + _myAnimationCenter.x,_myElementOffset.z + _myAnimationCenter.z);
 		myDistance /= _myMotorDistance;

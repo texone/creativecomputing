@@ -19,7 +19,7 @@ public class CCFileMotionAnalyzer extends CCSequenceAnalyzer {
 	public CCFileMotionAnalyzer(CCSequenceElements theElements, CCAnimator theAnimator, CCKleChannelType theType) {
 		super(theElements, theType);
 		_myUseHistorySize = false;
-		_mySequence = new CCSequenceAsset(theElements.mappings().get(CCKleChannelType.MOTORS));
+		_mySequence = new CCSequenceAsset(theElements.mappings().get(CCKleChannelType.MOTORS), "kle", "bin");
 		_mySequence.events().add(new CCAssetListener<CCSequence>() {
 			@Override
 			public void onChange(CCSequence theAsset) {

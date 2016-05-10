@@ -1,13 +1,12 @@
-package cc.creativecomputing.kle.animation;
+package cc.creativecomputing.effects;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.image.CCImageAsset;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.signal.CCMixSignal;
 
-public class CCKleGradientAnimation extends CCKleAnimation{
+public class CCGradientEffect extends CCEffect{
 	
 	@CCProperty(name = "offset 1")
 	private CCMixSignal _myOffset1Signal = new CCMixSignal();
@@ -15,9 +14,9 @@ public class CCKleGradientAnimation extends CCKleAnimation{
 	private CCMixSignal _myOffset2Signal = new CCMixSignal();
 	
 	@CCProperty(name = "offset 1 modulation")
-	private CCKleModulation _cOffset1Modulation = new CCKleModulation();
+	private CCEffectModulation _cOffset1Modulation = new CCEffectModulation();
 	@CCProperty(name = "offset 2 modulation")
-	private CCKleModulation _cOffset2Modulation = new CCKleModulation();
+	private CCEffectModulation _cOffset2Modulation = new CCEffectModulation();
 	
 	@CCProperty(name = "phase speed", min = 0, max = 10)
 	private double _cSpeed = 0;
@@ -50,13 +49,13 @@ public class CCKleGradientAnimation extends CCKleAnimation{
 		_myGlobalPhase += theDeltaTime * _cSpeed;
 	}
 	
-	public double[] animate(CCSequenceElement theElement){
+	public double[] applyTo(CCEffectable theEffectable){
 		double[] myResult = new double[_myResultLength];
 		if(_myImage.value() == null)return myResult;
 		CCColor myColor = _myImage.value().getPixel(
 			(
-				_myOffset1Signal.value(_myGlobalPhase + _cOffset1Modulation.modulation(theElement)) * _cOffset1Amp + 
-				_myOffset2Signal.value(_myGlobalPhase + _cOffset2Modulation.modulation(theElement)) * _cOffset2Amp +
+				_myOffset1Signal.value(_myGlobalPhase + _cOffset1Modulation.modulation(theEffectable)) * _cOffset1Amp + 
+				_myOffset2Signal.value(_myGlobalPhase + _cOffset2Modulation.modulation(theEffectable)) * _cOffset2Amp +
 				_cOffset1Add
 			) * _myImage.value().width() % _myImage.value().width(), 
 			0
@@ -68,7 +67,7 @@ public class CCKleGradientAnimation extends CCKleAnimation{
 			CCMath.saturate(hsb[2] + _cBShift)
 		);
 
-		double myBlend = elementBlend(theElement);
+		double myBlend = elementBlend(theEffectable);
 		for(int i = 0; i < _myResultLength;i++){
 			switch(_myResultLength % 3){
 			case 0:

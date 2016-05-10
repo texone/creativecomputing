@@ -4,24 +4,31 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.elements.CCKleChannelType;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 
-public class CCSequenceIO {
-
-	
+public class CCSequenceIO {	
 	
 	public static CCSequence load(Path thePath, CCSequenceMapping<?> theMapping){
+		String myExtension = CCNIOUtil.fileExtension(thePath);
+		
+		if(myExtension != null){
+			switch(myExtension){
+			case "bin":
+				return new CCSequenceBinFormat().load(thePath, theMapping);
+			case "cca":
+				return new CCSequenceCCAFormat().load(thePath, theMapping);
+			}
+		}
+		
 		for(CCSequenceFormats myFormatEnum:CCSequenceFormats.values()){
 			try{
 				CCSequence mySequence = null;
 				switch(myFormatEnum){
 				case ANIM:
 					mySequence = new CCSequenceAnimFormat().load(thePath, theMapping);
-					break;
-				case BIN:
-					mySequence = new CCSequenceBinFormat().load(thePath, theMapping);
 					break;
 				case CSV:
 					mySequence = new CCSequenceCSVFormat().load(thePath, theMapping);

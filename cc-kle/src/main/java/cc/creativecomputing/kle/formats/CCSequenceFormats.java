@@ -2,15 +2,14 @@ package cc.creativecomputing.kle.formats;
 
 import java.nio.file.Path;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
-
+@SuppressWarnings("rawtypes")
 public enum CCSequenceFormats {
 	NONE(new CCSequenceFormat(){
 
 		@Override
-		public void save(Path theFile, CCSequenceMapping theMapping, CCSequence theSequence) {}
+		public void save(Path theFile,  CCSequenceMapping theMapping, CCSequence theSequence) {}
 
 		@Override
 		public CCSequence load(Path theFile, CCSequenceMapping theMapping) {
@@ -27,7 +26,8 @@ public enum CCSequenceFormats {
 	BIN(new CCSequenceBinFormat(), false),
 	CSV(new CCSequenceCSVFormat(), false),
 	PNG(new CCSequencePNGFormat(), false),
-	TXT(new CCSequenceTXTFormat(), true);
+	TXT(new CCSequenceTXTFormat(), true),
+	CCA(new CCSequenceCCAFormat(), true);
 	
 	private final CCSequenceFormat _myFormat;
 	private final boolean _mySavePosition;

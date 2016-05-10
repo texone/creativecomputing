@@ -2,17 +2,14 @@ package cc.creativecomputing.kle;
 
 import java.nio.file.Path;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.shader.CCGLSLShader;
+import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataIO;
-import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 import cc.creativecomputing.io.data.CCDataObject;
-import cc.creativecomputing.kle.formats.CCSequenceBinFormat;
 import cc.creativecomputing.math.CCMath;
 
 public class CCSequenceViewer {
@@ -25,11 +22,11 @@ public class CCSequenceViewer {
 	private float[][] _myMin;
 	private float[][] _myMax;
 	
-	private CCGLSLShader _myInitValueShader;
-	private CCGLSLShader _myDrawValueShader;
+	private CCGLProgram _myInitValueShader;
+	private CCGLProgram _myDrawValueShader;
 	
-	private CCGLSLShader _myDrawGraphShader;
-	private CCGLSLShader _myDrawSimShader;
+	private CCGLProgram _myDrawGraphShader;
+	private CCGLProgram _myDrawSimShader;
 	
 	private CCShaderBuffer _myMotionData;
 	private CCGraphics g;
@@ -84,29 +81,25 @@ public class CCSequenceViewer {
 			_myMax[myColumn][myRow] = myChannelObject.getFloat("max");
 		}
 		
-		_myInitValueShader = new CCGLSLShader(
+		_myInitValueShader = new CCGLProgram(
 			CCNIOUtil.classPath(this, "init_values_vert.glsl"), 
 			CCNIOUtil.classPath(this, "init_values_frag.glsl")
 		);
-		_myInitValueShader.load();
 		
-		_myDrawValueShader = new CCGLSLShader(
+		_myDrawValueShader = new CCGLProgram(
 			CCNIOUtil.classPath(this, "draw_shader_vert.glsl"), 
 			CCNIOUtil.classPath(this, "draw_shader_frag.glsl")
 		);
-		_myDrawValueShader.load();
 		
-		_myDrawGraphShader = new CCGLSLShader(
+		_myDrawGraphShader = new CCGLProgram(
 			CCNIOUtil.classPath(this, "drawLine_vert.glsl"), 
 			CCNIOUtil.classPath(this, "drawLine_frag.glsl")
 		);
-		_myDrawGraphShader.load();
 		
-		_myDrawSimShader = new CCGLSLShader(
+		_myDrawSimShader = new CCGLProgram(
 			CCNIOUtil.classPath(this, "drawSim_vert.glsl"), 
 			CCNIOUtil.classPath(this, "drawSim_frag.glsl")
 		);
-		_myDrawSimShader.load();
 	}
 	
 	public void maxSpeed(float theMaxSpeed){
@@ -148,13 +141,13 @@ public class CCSequenceViewer {
 		_myDrawValueShader.uniform1f("maxJerk", _myMaxJerk);
 		_myDrawValueShader.uniform1i("drawMode", _myDrawMode.ordinal());
 		g.beginShape(CCDrawMode.QUADS);
-		g.textureCoords(0,0,0);
+		g.textureCoords2D(0,0,0);
 		g.vertex(0, 0);
-		g.textureCoords(0,_myMotionData.width(),0);
+		g.textureCoords2D(0,_myMotionData.width(),0);
 		g.vertex(_myMotionData.width(), 0);
-		g.textureCoords(0,_myMotionData.width(),_myMotionData.height());
+		g.textureCoords2D(0,_myMotionData.width(),_myMotionData.height());
 		g.vertex(_myMotionData.width(),   _myMotionData.height());
-		g.textureCoords(0,0,_myMotionData.height());
+		g.textureCoords2D(0,0,_myMotionData.height());
 		g.vertex(0,   _myMotionData.height());
 		g.endShape();
 		_myDrawValueShader.end();
@@ -171,7 +164,7 @@ public class CCSequenceViewer {
 		for(int line = theStartLine; line < theStartLine + theLines; line++){
 			g.beginShape(CCDrawMode.LINE_STRIP);
 			for(int i = 0; i < _myOutputBuffer.width();i++){
-				g.textureCoords(0,i + 0.5f, line + 0.5f);
+				g.textureCoords2D(0,i + 0.5f, line + 0.5f);
 				float x = CCMath.map(i + 0.5f, 0, _myOutputBuffer.width(), -_myOutputBuffer.width() / 2, _myOutputBuffer.width() / 2);
 				g.vertex(x, 0);
 			}
@@ -190,7 +183,7 @@ public class CCSequenceViewer {
 		for(int line = theStartLine; line < theStartLine + theLines; line++){
 			g.beginShape(CCDrawMode.LINE_STRIP);
 			for(int i = 0; i < _myOutputBuffer.width();i+=2){
-				g.textureCoords(0,i + 0.5f, line + 0.5f);
+				g.textureCoords2D(0,i + 0.5f, line + 0.5f);
 				float x = CCMath.map(i + 0.5f, 0, _myOutputBuffer.width(), -_myOutputBuffer.width() / 2, _myOutputBuffer.width() / 2);
 				g.vertex(x, 0);
 			}
@@ -252,7 +245,7 @@ public class CCSequenceViewer {
 					float myY = c * _myRows + r;
 					
 					double myValue = CCMath.norm(_mySequence.frame(i).data()[c][r][0] * 10, _myMin[c][r], _myMax[c][r]);
-					g.textureCoords(0, (float)_mySequence.frame(i).data()[c][r][0] * 10, _myMin[c][r], _myMax[c][r]);
+					g.textureCoords3D(0, (float)_mySequence.frame(i).data()[c][r][0] * 10, _myMin[c][r], _myMax[c][r]);
 //					g.textureCoords(0, myValue, myValue, myValue);
 					g.vertex(i,myY);
 				}

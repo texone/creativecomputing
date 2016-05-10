@@ -215,8 +215,6 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 	
 	@CCProperty(name = "curve scale", min = 0.1f, max = 10)
 	private double _cCurveScale = 1;
-	@CCProperty(name = "value scale", min = 0.1f, max = 1)
-	private double _cValueScale = 1;
 	
 	@CCProperty(name = "background alpha", min = 0, max = 1)
 	private double _cBackgroundAlpha = 1f;

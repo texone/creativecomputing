@@ -1,13 +1,11 @@
-package cc.creativecomputing.kle.animation;
+package cc.creativecomputing.effects;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
 
-public abstract class CCKleAnimation {
-	
+public abstract class CCEffect {
 	
 	@CCProperty(name = "blend", min = 0, max = 1)
 	protected double _cBlend = 0;
@@ -19,18 +17,18 @@ public abstract class CCKleAnimation {
 	private Map<String, Double> _cGroupBlends = new LinkedHashMap<>();
 	
 	@CCProperty(name = "modulations")
-	protected Map<String, CCKleModulation> _cModulations = null;
+	protected Map<String, CCEffectModulation> _cModulations = null;
 	
 	protected String[] _myValueNames = new String[0];
 	
-	public abstract double[] animate(CCSequenceElement theElement);
+	public abstract double[] applyTo(CCEffectable theEffectable);
 	
 	public void valueNames(String... theValueNames) {
 		_cModulations = new LinkedHashMap<>();
 		_myValueNames = new String[theValueNames.length];
 		for(int i = 0; i < _myValueNames.length;i++){
 			_myValueNames[i] = theValueNames[i] + " modulation";
-			_cModulations.put(_myValueNames[i], new CCKleModulation());
+			_cModulations.put(_myValueNames[i], new CCEffectModulation());
 		}
 	}
 	
@@ -52,12 +50,12 @@ public abstract class CCKleAnimation {
 		return  _cBlend;
 	}
 	
-	private String groupKey(int theGroup){
+	public String groupKey(int theGroup){
 		return "group_" + theGroup;
 	}
 	
-	public double elementBlend(CCSequenceElement theElement){
-		String myGroupKey =groupKey(theElement.group());
+	public double elementBlend(CCEffectable theEffectable){
+		String myGroupKey =groupKey(theEffectable.group());
 		Double myGroupBlend = _cGroupBlends.get(myGroupKey);
 		if(myGroupBlend == null)myGroupBlend = 1d;
 		return _cBlend * myGroupBlend;

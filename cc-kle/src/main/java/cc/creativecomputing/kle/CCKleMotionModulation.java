@@ -1,13 +1,9 @@
-package cc.creativecomputing.kle.animation;
-
-import java.util.ArrayList;
-import java.util.List;
+package cc.creativecomputing.kle;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.motors.CCMotorSetup;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.random.CCRandom;
 
 public class CCKleMotionModulation {
 	@CCProperty(name = "x offset", min = -1, max = 1)

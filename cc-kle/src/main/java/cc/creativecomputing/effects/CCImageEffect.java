@@ -1,20 +1,17 @@
-package cc.creativecomputing.kle.animation;
+package cc.creativecomputing.effects;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImageAsset;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.math.CCMath;
 
-public class CCKleColorImageAnimation extends CCKleAnimation{
+public class CCImageEffect extends CCEffect{
 	
 	@CCProperty(name = "x modulation")
-	private CCKleModulation _cXModulation = new CCKleModulation();
+	private CCEffectModulation _cXModulation = new CCEffectModulation();
 	@CCProperty(name = "y modulation")
-	private CCKleModulation _cYModulation = new CCKleModulation();
-	@CCProperty(name = "x motion modulation")
-	private CCKleMotionModulation _cXMotionModulation = new CCKleMotionModulation();
+	private CCEffectModulation _cYModulation = new CCEffectModulation();
+//	@CCProperty(name = "x motion modulation")
+//	private CCKleMotionModulation _cXMotionModulation = new CCKleMotionModulation();
 	
 	@CCProperty(name = "amp", min = 1, max = 2)
 	private double _cAmp = 1;
@@ -27,13 +24,15 @@ public class CCKleColorImageAnimation extends CCKleAnimation{
 	
 	@CCProperty(name = "image")
 	private CCImageAsset _myImage = new CCImageAsset();
+	
+	private int _myResultLength = 0;
 
 	@Override
-	public double[] animate(CCSequenceElement theElement) {
+	public double[] applyTo(CCEffectable theEffectable) {
 		if(_myImage.value() == null)return new double[0];
 		CCColor myResult = _myImage.value().getPixel(
-			(_cXModulation.modulation(theElement) + _cXMotionModulation.modulation(theElement)) * _myImage.value().width(), 
-			_cYModulation.modulation(theElement) * _myImage.value().height()
+			(_cXModulation.modulation(theEffectable) ) * _myImage.value().width(), //+ _cXMotionModulation.modulation(theEffectable)
+			_cYModulation.modulation(theEffectable) * _myImage.value().height()
 		);
 
 //		double myBlend = elementBlend(theElement);
@@ -48,7 +47,23 @@ public class CCKleColorImageAnimation extends CCKleAnimation{
 //			CCMath.saturate(hsb[2] + _cBShift)
 //		);
 //		CCLog.info(theMessage);
-		return new double[0];
+		double[] myResultA = new double[_myResultLength];
+		for(int i = 0; i < myResultA.length;i++){
+			if(i % 4 == 0){
+				myResultA[i] = myResult.r;
+			}else if(i % 4 == 1){
+				myResultA[i] = myResult.g;
+			}else if(i % 4 == 2){
+				myResultA[i] = myResult.b;
+			}else{
+				myResultA[i] = myResult.a;
+			}
+		}
+		return myResultA;
 	}
 
+	@Override
+	public void valueNames(String... theValueNames) {
+		_myResultLength = theValueNames.length;
+	}
 }

@@ -26,17 +26,21 @@ public class CCSequenceBinFormat implements CCSequenceFormat {
 				}
 			}
 		}
+		
+		fileChannel.close();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public CCSequence load(Path thePath, CCSequenceMapping<?> theMapping) {
+	public CCSequence load(Path thePath, CCSequenceMapping theMapping) {
 		CCFileInputChannel fileChannel = new CCFileInputChannel(thePath);
+		
 		float numberOfFrames = (float)fileChannel.size() / theMapping.columns() / theMapping.rows() / theMapping.depth() / 8;
-		
+				
 		CCSequence result = new CCSequence(theMapping.columns(), theMapping.rows(), theMapping.depth());
-
+	
 		if(numberOfFrames - (int)numberOfFrames > 0)return result;
-		
+				
 		for (int i = 0; i < numberOfFrames; i++) {
 			CCMatrix2 frame = new CCMatrix2(theMapping.columns(), theMapping.rows(), theMapping.depth());
 			for (int c = 0; c < theMapping.columns(); c++) {
@@ -48,6 +52,7 @@ public class CCSequenceBinFormat implements CCSequenceFormat {
 			}
 			result.add(frame);
 		}
+				
 		return result;
 	}
 	
@@ -55,4 +60,5 @@ public class CCSequenceBinFormat implements CCSequenceFormat {
 	public String extension() {
 		return "bin";
 	}
+
 }

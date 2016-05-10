@@ -7,6 +7,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 
+@SuppressWarnings("rawtypes")
 public class CCFormatConverter {
 
 	public final static void convert(

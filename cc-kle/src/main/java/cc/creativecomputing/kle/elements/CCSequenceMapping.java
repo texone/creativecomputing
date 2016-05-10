@@ -3,6 +3,7 @@ package cc.creativecomputing.kle.elements;
 import java.util.ArrayList;
 
 import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.math.CCMath;
 
 public class CCSequenceMapping<ChannelType extends CCSequenceChannel> extends ArrayList<ChannelType> {
 	
@@ -23,8 +24,14 @@ public class CCSequenceMapping<ChannelType extends CCSequenceChannel> extends Ar
 	private final int[] _myColumnIDs;
 	private final int[] _myRowIDs;
 	private final int[] _myDepthIDs;
-	private final float[] _myMins;
-	private final float[] _myMaxs;
+	private final double[] _myMins;
+	private final double[] _myMaxs;
+	
+	private final double[][][] _myMinMatrix;
+	private final double[][][] _myMaxMatrix;
+	
+	private double _myOverallMin = Double.MAX_VALUE;
+	private double _myOverallMax = -Double.MAX_VALUE;
 	
 	public CCSequenceMapping(CCXMLElement theMappingXML){
 		_myType = CCKleChannelType.valueOf(theMappingXML.attribute("name").toUpperCase());
@@ -34,12 +41,15 @@ public class CCSequenceMapping<ChannelType extends CCSequenceChannel> extends Ar
 		_myFrameRate = theMappingXML.intAttribute("frameRate");
 		_myBitDepth = theMappingXML.intAttribute("bits");
 		
+		_myMinMatrix = new double[_myColumns][_myRows][_myDepth];
+		_myMaxMatrix = new double[_myColumns][_myRows][_myDepth];
+		
 		int myChannels = theMappingXML.countChildren();
 		_myColumnIDs = new int[myChannels];
 		_myRowIDs = new int[myChannels];
 		_myDepthIDs = new int[myChannels];
-		_myMins = new float[myChannels];
-		_myMaxs = new float[myChannels];
+		_myMins = new double[myChannels];
+		_myMaxs = new double[myChannels];
 		int counter = 0;
 		
 		for(CCXMLElement myChannelXML:theMappingXML){
@@ -47,14 +57,20 @@ public class CCSequenceMapping<ChannelType extends CCSequenceChannel> extends Ar
 			int myColumn = myChannelXML.intAttribute("column", 0);
 			int myRow = myChannelXML.intAttribute("row", 0);
 			int myDepth = myChannelXML.intAttribute("depth", 0);
-			float myMin = myChannelXML.floatAttribute("min", 0);
-			float myMax = myChannelXML.floatAttribute("max", 1);
+			double myMin = myChannelXML.doubleAttribute("min", 0);
+			double myMax = myChannelXML.doubleAttribute("max", 1);
 			
 			_myColumnIDs[myID] = myColumn;
 			_myRowIDs[myID] = myRow;
 			_myDepthIDs[myID] = myDepth;
 			_myMins[myID] = myMin;
 			_myMaxs[myID] = myMax;
+			
+			_myMinMatrix[myColumn][myRow][myDepth] = myMin;
+			_myMaxMatrix[myColumn][myRow][myDepth] = myMax;
+			
+			_myOverallMin = CCMath.min(_myOverallMin, myMin);
+			_myOverallMax = CCMath.max(_myOverallMax, myMax);
 		}
 	}
 	
@@ -90,6 +106,22 @@ public class CCSequenceMapping<ChannelType extends CCSequenceChannel> extends Ar
 	
 	public int bitDepth(){
 		return _myBitDepth;
+	}
+	
+	public double min(int theColumn, int theRow, int theDepth){
+		return _myMinMatrix[theColumn][theRow][theDepth];
+	}
+	
+	public double max(int theColumn, int theRow, int theDepth){
+		return _myMaxMatrix[theColumn][theRow][theDepth];
+	}
+	
+	public double min(){
+		return _myOverallMin;
+	}
+	
+	public double max(){
+		return _myOverallMax;
 	}
 	
 	public CCXMLElement toXML(){
