@@ -18,29 +18,35 @@
 
 package cc.creativecomputing.sound;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.sound.sampled.BooleanControl;
 import javax.sound.sampled.Control;
+import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 
+import cc.creativecomputing.math.CCMath;
+import ddf.minim.AudioOutput;
+
 /**
- * <code>Controller</code> is the base class of all Minim classes that deal with
- * audio I/O. It provides control over the underlying <code>DataLine</code>,
- * which is a low-level JavaSound class that talks directly to the audio
- * hardware of the computer. This means that you can make changes to the audio
- * without having to manipulate the samples directly. The downside to this is
- * that when outputting sound to the system (such as with an
- * <code>AudioOutput</code>), these changes will not be present in the samples
- * made available to your program.
+ * <code>{@linkplain CCAudioController}</code> is the base class of all Minim
+ * classes that deal with audio I/O. It provides control over the underlying
+ * <code>{@linkplain DataLine}</code>, which is a low-level JavaSound class that
+ * talks directly to the audio hardware of the computer. This means that you can
+ * make changes to the audio without having to manipulate the samples directly.
+ * The downside to this is that when outputting sound to the system (such as
+ * with an <code>{@linkplain AudioOutput}</code>), these changes will not be
+ * present in the samples made available to your program.
  * <p>
  * The {@link #volume()}, {@link #gain()}, {@link #pan()}, and
- * {@link #balance()} methods return objects of type <code>FloatControl</code>,
- * which is a class defined by the JavaSound API. A <code>FloatControl</code>
- * represents a control of a line that holds a <code>float</code> value. This
- * value has an associated maximum and minimum value (such as between -1 and 1
- * for pan), and also a unit type (such as dB for gain). You should refer to the
- * <a href=
- * "http://java.sun.com/j2se/1.5.0/docs/api/javax/sound/sampled/FloatControl.html"
- * >FloatControl Javadoc</a> for the full description of the methods available.
+ * {@link #balance()} methods return objects of type
+ * <code>{@linkplain FloatControl}</code>, which is a class defined by the
+ * JavaSound API. A <code>{@linkplain FloatControl}</code> represents a control
+ * of a line that holds a <code>float</code> value. This value has an associated
+ * maximum and minimum value (such as between -1 and 1 for pan), and also a unit
+ * type (such as dB for gain). You should refer to the {@link FloatControl}
+ * Javadoc for the full description of the methods available.
  * <p>
  * Not all controls are available on all objects. Before calling the methods
  * mentioned above, you should call
@@ -50,47 +56,35 @@ import javax.sound.sampled.FloatControl;
  * trying to manipulate is not available.
  * 
  * @author Damien Di Fede
- * @invisible
  * 
  */
 public class CCAudioController {
 	/**
-	 * @invisible The volume control type.
+	 * The volume control type.
 	 */
-	@Deprecated
-	public static FloatControl.Type VOLUME = FloatControl.Type.VOLUME;
+	protected static FloatControl.Type VOLUME = FloatControl.Type.VOLUME;
 
 	/**
-	 * @invisible The gain control type.
+	 * The gain control type.
 	 */
-	@Deprecated
-	public static FloatControl.Type GAIN = FloatControl.Type.MASTER_GAIN;
+	protected static FloatControl.Type GAIN = FloatControl.Type.MASTER_GAIN;
 
 	/**
-	 * @invisible The balance control type.
+	 * The balance control type.
 	 */
-	@Deprecated
-	public static FloatControl.Type BALANCE = FloatControl.Type.BALANCE;
+	private static FloatControl.Type BALANCE = FloatControl.Type.BALANCE;
 
 	/**
-	 * @invisible The pan control type.
+	 * The pan control type.
 	 */
-	@Deprecated
-	public static FloatControl.Type PAN = FloatControl.Type.PAN;
+	private static FloatControl.Type PAN = FloatControl.Type.PAN;
 
 	/**
-	 * @invisible The sample rate control type.
+	 * The mute control type.
 	 */
-	@Deprecated
-	public static FloatControl.Type SAMPLE_RATE = FloatControl.Type.SAMPLE_RATE;
+	private static BooleanControl.Type MUTE = BooleanControl.Type.MUTE;
 
-	/**
-	 * @invisible The mute control type.
-	 */
-	@Deprecated
-	public static BooleanControl.Type MUTE = BooleanControl.Type.MUTE;
-
-	private Control[] controls;
+	private Map<Control.Type, Control> _myControlMap = new HashMap<>();
 	// the starting value for shifting
 	private ValueShifter vshifter, gshifter, bshifter, pshifter;
 	private boolean vshift, gshift, bshift, pshift;
@@ -99,11 +93,11 @@ public class CCAudioController {
 	 * Constructs a <code>Controller</code> for the given <code>Line</code>.
 	 * 
 	 * @param cntrls an array of Controls that this Controller will manipulate
-	 * 
-	 * @invisible
 	 */
-	public CCAudioController(Control[] cntrls) {
-		controls = cntrls;
+	public CCAudioController(Control[] theControls) {
+		for (Control myControl : theControls) {
+			_myControlMap.put(myControl.getType(), myControl);
+		}
 		vshift = gshift = bshift = pshift = false;
 	}
 
@@ -111,25 +105,25 @@ public class CCAudioController {
 	// that a new buffer has been read/written
 	void update() {
 		if (vshift) {
-			setVolume(vshifter.value());
+			volume(vshifter.value());
 			if (vshifter.done())
 				vshift = false;
 		}
 
 		if (gshift) {
-			setGain(gshifter.value());
+			gain(gshifter.value());
 			if (gshifter.done())
 				gshift = false;
 		}
 
 		if (bshift) {
-			setBalance(bshifter.value());
+			balance(bshifter.value());
 			if (bshifter.done())
 				bshift = false;
 		}
 
 		if (pshift) {
-			setPan(pshifter.value());
+			pan(pshifter.value());
 			if (pshifter.done())
 				pshift = false;
 		}
@@ -159,41 +153,38 @@ public class CCAudioController {
 	}
 
 	/**
-	 * @invisible
 	 * 
-	 *            Prints the available controls and their ranges to the console.
-	 *            Not all lines have all of the controls available on them so
-	 *            this is a way to find out what is available.
+	 * Prints the available controls and their ranges to the console. Not all
+	 * lines have all of the controls available on them so this is a way to find
+	 * out what is available.
 	 * 
 	 */
 	public void printControls() {
-		if (controls.length > 0) {
-			System.out.println("Available controls are:");
-			for (int i = 0; i < controls.length; i++) {
-				Control.Type type = controls[i].getType();
-				System.out.print("  " + type.toString());
-				if (type == VOLUME || type == GAIN || type == BALANCE || type == PAN) {
-					FloatControl fc = (FloatControl) controls[i];
-					String shiftSupported = "does";
-					if (fc.getUpdatePeriod() == -1) {
-						shiftSupported = "doesn't";
-					}
-					System.out.println(", which has a range of " + fc.getMaximum() + " to " + fc.getMinimum() + " and "
-							+ shiftSupported + " support shifting.");
-				} else {
-					System.out.println("");
-				}
-			}
-		} else {
+		if (_myControlMap.size() <= 0) {
 			System.out.println("There are no controls available for this line.");
+			return;
+		}
+
+		System.out.println("Available controls are:");
+		for (Control.Type type : _myControlMap.keySet()) {
+			System.out.print("  " + type.toString());
+			if (type == VOLUME || type == GAIN || type == BALANCE || type == PAN) {
+				FloatControl fc = (FloatControl) _myControlMap.get(type);
+				String shiftSupported = "does";
+				if (fc.getUpdatePeriod() == -1) {
+					shiftSupported = "doesn't";
+				}
+				System.out.println(", which has a range of " + fc.getMaximum() + " to " + fc.getMinimum() + " and "
+						+ shiftSupported + " support shifting.");
+			} else {
+				System.out.println("");
+			}
 		}
 	}
 
 	/**
-	 * @invisible
-	 * 
-	 *            Returns whether or not the particular control type is
-	 *            supported by the Line being controlled.
+	 * Returns whether or not the particular control type is supported by the
+	 * Line being controlled.
 	 * 
 	 * @see #VOLUME
 	 * @see #GAIN
@@ -204,113 +195,8 @@ public class CCAudioController {
 	 * 
 	 * @return true if the control is available
 	 */
-	@Deprecated
 	public boolean hasControl(Control.Type type) {
-		for (int i = 0; i < controls.length; i++) {
-			if (controls[i].getType().equals(type)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * @invisible
-	 * 
-	 *            Returns an array of all the available <code>Control</code>s
-	 *            for the <code>DataLine</code> being controlled. You can use
-	 *            this if you want to access the controls directly, rather than
-	 *            using the convenience methods provided by this class.
-	 * 
-	 * @return an array of all available controls
-	 */
-	@Deprecated
-	public Control[] getControls() {
-		return controls;
-	}
-
-	@Deprecated
-	public Control getControl(Control.Type type) {
-		for (int i = 0; i < controls.length; i++) {
-			if (controls[i].getType().equals(type)) {
-				return controls[i];
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @invisible Gets the volume control for the <code>Line</code>, if it
-	 *            exists. You should check for the availability of a volume
-	 *            control by using
-	 *            {@link #hasControl(javax.sound.sampled.Control.Type)} before
-	 *            calling this method.
-	 * 
-	 * @return the volume control
-	 */
-	@Deprecated
-	public FloatControl volume() {
-		return (FloatControl) getControl(VOLUME);
-	}
-
-	/**
-	 * @invisible Gets the gain control for the <code>Line</code>, if it exists.
-	 *            You should check for the availability of a gain control by
-	 *            using {@link #hasControl(javax.sound.sampled.Control.Type)}
-	 *            before calling this method.
-	 * 
-	 * @return the gain control
-	 */
-	@Deprecated
-	public FloatControl gain() {
-		return (FloatControl) getControl(GAIN);
-	}
-
-	/**
-	 * @invisible Gets the balance control for the <code>Line</code>, if it
-	 *            exists. You should check for the availability of a balance
-	 *            control by using
-	 *            {@link #hasControl(javax.sound.sampled.Control.Type)} before
-	 *            calling this method.
-	 * 
-	 * @return the balance control
-	 */
-	@Deprecated
-	public FloatControl balance() {
-		return (FloatControl) getControl(BALANCE);
-	}
-
-	/**
-	 * @invisible Gets the pan control for the <code>Line</code>, if it exists.
-	 *            You should check for the availability of a pan control by
-	 *            using {@link #hasControl(javax.sound.sampled.Control.Type)}
-	 *            before calling this method.
-	 * 
-	 * @return the pan control
-	 */
-	@Deprecated
-	public FloatControl pan() {
-		return (FloatControl) getControl(PAN);
-	}
-
-	/**
-	 * Mutes the sound.
-	 * 
-	 * @related unmute ( )
-	 * @related isMuted ( )
-	 */
-	public void mute() {
-		setValue(MUTE, true);
-	}
-
-	/**
-	 * Unmutes the sound.
-	 * 
-	 * @related mute ( )
-	 * @related isMuted ( )
-	 */
-	public void unmute() {
-		setValue(MUTE, false);
+		return _myControlMap.containsKey(type);
 	}
 
 	/**
@@ -318,17 +204,20 @@ public class CCAudioController {
 	 * 
 	 * @return the current mute state
 	 * 
-	 * @related mute ( )
-	 * @related unmute ( )
+	 * @see #isMuted(boolean)
 	 */
 	public boolean isMuted() {
-		return getValue(MUTE);
+		return value(MUTE);
 	}
 
-	private boolean getValue(BooleanControl.Type type) {
+	public void isMuted(boolean theIsMuted) {
+		value(MUTE, theIsMuted);
+	}
+
+	private boolean value(BooleanControl.Type type) {
 		boolean v = false;
 		if (hasControl(type)) {
-			BooleanControl c = (BooleanControl) getControl(type);
+			BooleanControl c = (BooleanControl) _myControlMap.get(type);
 			v = c.getValue();
 		} else {
 			throw new CCSoundException(type.toString() + " is not supported.");
@@ -336,19 +225,19 @@ public class CCAudioController {
 		return v;
 	}
 
-	private void setValue(BooleanControl.Type type, boolean v) {
+	private void value(BooleanControl.Type type, boolean v) {
 		if (hasControl(type)) {
-			BooleanControl c = (BooleanControl) getControl(type);
+			BooleanControl c = (BooleanControl) _myControlMap.get(type);
 			c.setValue(v);
 		} else {
 			throw new CCSoundException(type.toString() + " is not supported.");
 		}
 	}
 
-	private float getValue(FloatControl.Type type) {
+	private float value(FloatControl.Type type) {
 		float v = 0;
 		if (hasControl(type)) {
-			FloatControl c = (FloatControl) getControl(type);
+			FloatControl c = (FloatControl) _myControlMap.get(type);
 			v = c.getValue();
 		} else {
 			throw new CCSoundException(type.toString() + " is not supported.");
@@ -356,17 +245,12 @@ public class CCAudioController {
 		return v;
 	}
 
-	private void setValue(FloatControl.Type type, float v) {
-		if (hasControl(type)) {
-			FloatControl c = (FloatControl) getControl(type);
-			if (v > c.getMaximum())
-				v = c.getMaximum();
-			else if (v < c.getMinimum())
-				v = c.getMinimum();
-			c.setValue(v);
-		} else {
-			throw new CCSoundException(type.toString() + " is not supported.");
-		}
+	private void value(FloatControl.Type type, float v) {
+		if (!hasControl(type))
+			return;
+
+		FloatControl c = (FloatControl) _myControlMap.get(type);
+		c.setValue(CCMath.constrain(v, c.getMinimum(), c.getMaximum()));
 	}
 
 	/**
@@ -374,30 +258,26 @@ public class CCAudioController {
 	 * returns 0. Note that the volume is not the same thing as the
 	 * <code>level()</code> of an AudioBuffer!
 	 * 
-	 * @shortdesc Returns the current volume.
-	 * 
 	 * @return the current volume or zero if a volume control is unavailable
 	 * 
-	 * @related setVolume ( )
-	 * @related shiftVolume ( )
+	 * @see #volume(float)
+	 * @see #shiftVolume(float, float, int)
 	 */
-	public float getVolume() {
-		return getValue(VOLUME);
+	public float volume() {
+		return value(VOLUME);
 	}
 
 	/**
 	 * Sets the volume. If a volume control is not available, this does nothing.
 	 * 
-	 * @shortdesc Sets the volume.
-	 * 
 	 * @param value float: the new value for the volume, usually in the range
 	 *            [0,1].
 	 * 
-	 * @related getVolume ( )
-	 * @related shiftVolume ( )
+	 * @see #volume()
+	 * @see #shiftVolume(float, float, int)
 	 */
-	public void setVolume(float value) {
-		setValue(VOLUME, value);
+	public void volume(float value) {
+		value(VOLUME, value);
 	}
 
 	/**
@@ -407,12 +287,12 @@ public class CCAudioController {
 	 * @param to float: the ending volume
 	 * @param millis int: the length of the transition in milliseconds
 	 * 
-	 * @related getVolume ( )
-	 * @related setVolume ( )
+	 * @see #volume()
+	 * @see #volume(float)
 	 */
 	public void shiftVolume(float from, float to, int millis) {
 		if (hasControl(VOLUME)) {
-			setVolume(from);
+			volume(from);
 			vshifter = new ValueShifter(from, to, millis);
 			vshift = true;
 		}
@@ -421,7 +301,7 @@ public class CCAudioController {
 	/**
 	 * Returns the current gain. If a gain control is not available, this
 	 * returns 0. Note that the gain is not the same thing as the
-	 * <code>level()</code> of an AudioBuffer! Gain describes the current volume
+	 * <code>{@linkplain CCAudioBuffer#level()}</code> of an AudioBuffer! Gain describes the current volume
 	 * of the sound in decibels, which is a logarithmic, rather than linear,
 	 * scale. A gain of 0dB means the sound is not being amplified or
 	 * attenuated. Negative gain values will reduce the volume of the sound, and
@@ -431,30 +311,26 @@ public class CCAudioController {
 	 * href="http://wikipedia.org/wiki/Decibel">http://wikipedia.org/wiki
 	 * /Decibel</a>
 	 * 
-	 * @shortdesc Returns the current gain.
-	 * 
 	 * @return float: the current gain or zero if a gain control is unavailable.
 	 *         the gain is expressed in decibels.
 	 * 
-	 * @related setGain ( )
-	 * @related shiftGain ( )
+	 * @see #gain(float)
+	 * @see #shiftGain(float, float, int)
 	 */
-	public float getGain() {
-		return getValue(GAIN);
+	public float gain() {
+		return value(GAIN);
 	}
 
 	/**
 	 * Sets the gain. If a gain control is not available, this does nothing.
 	 * 
-	 * @shortdesc Sets the gain.
-	 * 
 	 * @param value float: the new value for the gain, expressed in decibels.
 	 * 
-	 * @related getGain ( )
-	 * @related shiftGain ( )
+	 * @see #gain()
+	 * @see #shiftGain ()
 	 */
-	public void setGain(float value) {
-		setValue(GAIN, value);
+	public void gain(float value) {
+		value(GAIN, value);
 	}
 
 	/**
@@ -464,12 +340,12 @@ public class CCAudioController {
 	 * @param to float: the ending gain
 	 * @param millis int: the length of the transition in milliseconds
 	 * 
-	 * @related getGain ( )
-	 * @related setGain ( )
+	 * @see #gain()
+	 * @see #gain(float)
 	 */
 	public void shiftGain(float from, float to, int millis) {
 		if (hasControl(GAIN)) {
-			setGain(from);
+			gain(from);
 			gshifter = new ValueShifter(from, to, millis);
 			gshift = true;
 		}
@@ -481,31 +357,27 @@ public class CCAudioController {
 	 * describes how much attenuation should be applied to the left and right
 	 * channels. If a balance control is not available, this will do nothing.
 	 * 
-	 * @shortdesc Returns the current balance.
-	 * 
 	 * @return float: the current balance or zero if a balance control is
 	 *         unavailable
 	 * 
-	 * @related setBalance ( )
-	 * @related shiftBalance ( )
+	 * @see #balance(float)
+	 * @see #shiftBalance(float, float, int)
 	 */
-	public float getBalance() {
-		return getValue(BALANCE);
+	public float balance() {
+		return value(BALANCE);
 	}
 
 	/**
 	 * Sets the balance. The value should be in the range [-1, 1]. If a balance
 	 * control is not available, this will do nothing.
 	 * 
-	 * @shortdesc Sets the balance.
-	 * 
 	 * @param value float: the new value for the balance
 	 * 
-	 * @related getBalance ( )
-	 * @related shiftBalance ( )
+	 * @see #balance()
+	 * @see #shiftBalance(float, float, int)
 	 */
-	public void setBalance(float value) {
-		setValue(BALANCE, value);
+	public void balance(float value) {
+		value(BALANCE, value);
 	}
 
 	/**
@@ -515,12 +387,12 @@ public class CCAudioController {
 	 * @param to float: the ending balance
 	 * @param millis int: the length of the transition in milliseconds
 	 * 
-	 * @related getBalance ( )
-	 * @related setBalance ( )
+	 * @see #balance()
+	 * @see #balance(float)
 	 */
 	public void shiftBalance(float from, float to, int millis) {
 		if (hasControl(BALANCE)) {
-			setBalance(from);
+			balance(from);
 			bshifter = new ValueShifter(from, to, millis);
 			bshift = true;
 		}
@@ -533,30 +405,26 @@ public class CCAudioController {
 	 * only in the left speaker and 1 will place the sound only in the right
 	 * speaker.
 	 * 
-	 * @shortdesc Returns the current pan.
-	 * 
 	 * @return float: the current pan or zero if a pan control is unavailable
 	 * 
-	 * @related setPan ( )
-	 * @related shiftPan ( )
+	 * @see #pan(float)
+	 * @see #shiftPan(float, float, int)
 	 */
-	public float getPan() {
-		return getValue(PAN);
+	public float pan() {
+		return value(PAN);
 	}
 
 	/**
 	 * Sets the pan. The provided value should be in the range [-1, 1]. If a pan
 	 * control is not present, this does nothing.
 	 * 
-	 * @shortdesc Sets the pan.
-	 * 
 	 * @param value float: the new value for the pan
 	 * 
-	 * @related getPan ( )
-	 * @related shiftPan ( )
+	 * @see #pan()
+	 * @see #shiftPan(float, float, int)
 	 */
-	public void setPan(float value) {
-		setValue(PAN, value);
+	public void pan(float value) {
+		value(PAN, value);
 	}
 
 	/**
@@ -566,12 +434,12 @@ public class CCAudioController {
 	 * @param to float: the ending pan
 	 * @param millis int: the length of the transition in milliseconds
 	 * 
-	 * @related getPan ( )
-	 * @related setPan ( )
+	 * @see #pan()
+	 * @see #pan(float)
 	 */
 	public void shiftPan(float from, float to, int millis) {
 		if (hasControl(PAN)) {
-			setPan(from);
+			pan(from);
 			pshifter = new ValueShifter(from, to, millis);
 			pshift = true;
 		}

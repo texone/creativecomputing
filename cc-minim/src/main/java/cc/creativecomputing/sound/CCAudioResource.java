@@ -19,7 +19,6 @@
 package cc.creativecomputing.sound;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.Control;
 
 public interface CCAudioResource {
 	/**
@@ -33,14 +32,6 @@ public interface CCAudioResource {
 	 * 
 	 */
 	void close();
-
-	/**
-	 * Returns the Controls available for this AudioResource.
-	 * 
-	 * @return an array of Control objects, that can be used to manipulate the
-	 *         resource
-	 */
-	Control[] getControls();
 
 	/**
 	 * Returns the AudioFormat of this AudioResource.

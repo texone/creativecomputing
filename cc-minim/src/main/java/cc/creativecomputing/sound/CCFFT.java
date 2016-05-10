@@ -36,7 +36,7 @@ public class CCFFT {
 	private FFT _myFFT;
 	
 	@CCProperty(name = "window type")
-	private CCFFTWindowType _cWindowType = CCFFTWindowType.NONE;
+	private CCFFTWindowType _cWindowType = CCFFTWindowType.GAUSS;
 	@CCProperty(name = "averaging")
 	private CCFFTAveraging _cAveraging = CCFFTAveraging.NONE;
 	
