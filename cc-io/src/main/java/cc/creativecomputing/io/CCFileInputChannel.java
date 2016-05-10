@@ -97,6 +97,14 @@ public class CCFileInputChannel {
 		}
 	}
 	
+	public boolean isFinished(){
+		try {
+			return _myFileChannel.position() >= _myFileChannel.size();
+		} catch (IOException e) {
+			return false;
+		}
+	}
+	
 	public void close() {
 		try {
 			_myFileChannel.close();

@@ -239,9 +239,15 @@ public class CCNIOUtil {
 	 * @return the extension of the file
 	 */
 	public static String fileExtension(final Path thePath) {
+		if(thePath == null)return null;
+		if(thePath.getFileName() == null)return null;
 		String myPathString = thePath.getFileName().toString();
 		if(myPathString.lastIndexOf(".") < 0)return null;
 		return myPathString.substring(myPathString.lastIndexOf(".") + 1 , myPathString.length());
+	}
+	
+	public static Path addExtension(Path thePath, String theExtension){
+		return thePath.resolveSibling(thePath.getFileName() + "." + theExtension);
 	}
 	
 	/**
@@ -250,8 +256,10 @@ public class CCNIOUtil {
 	 * @return name of the given file without an extension.
 	 */
 	public static String fileName(final String theFile){
-		final int myIndex = theFile.lastIndexOf('.');
+		int myIndex = theFile.lastIndexOf('.');
 		final int mySeperator = theFile.lastIndexOf(FileSystems.getDefault().getSeparator());
+		if(myIndex < mySeperator)myIndex = -1;
+		if(myIndex < 0)return theFile.substring(Math.max(0, mySeperator));
 		return theFile.substring(Math.max(0, mySeperator),myIndex);
 	}
 	
@@ -334,7 +342,6 @@ public class CCNIOUtil {
 	// ////////////////////////////////////////////////////////////
 	// FILE/FOLDER SELECTION
 
-	private static CCFileChooser fileChooser = new CCFileChooser();
 	private static Path selectedPath;
 
 	static {
@@ -368,8 +375,14 @@ public class CCNIOUtil {
 		return selectInput(prompt, null);
 	}
 
-	static public Path selectInput(String prompt, Path theFolder) {
-		fileChooser.setFileFilter(new CCFileFilter(""));
+	static public Path selectInput(String prompt, Path theFolder,String... theExtensions) {
+		CCFileChooser fileChooser = new CCFileChooser();
+		if(theExtensions != null && theExtensions.length > 0){
+			fileChooser.setAcceptAllFileFilterUsed(false);
+			for(String myExtension:theExtensions){
+				fileChooser.addChoosableFileFilter(new CCFileFilter(myExtension));
+			}
+		}
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		
@@ -378,6 +391,8 @@ public class CCNIOUtil {
 		}
 
 		selectedPath = fileChooser.chosePath(prompt);
+
+		fileChooser.setFileFilter(null);
 		return selectedPath;
 	}
 
@@ -394,12 +409,7 @@ public class CCNIOUtil {
 	 * @see #selectFolder(String)
 	 */
 	static public Path selectFilteredInput(String... theExtensions) {
-		fileChooser.setFileFilter(new CCFileFilter("", theExtensions));
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-
-		selectedPath = fileChooser.chosePath("Select a file...");
-		return selectedPath;
+		return selectInput("Select a file...", null, theExtensions);
 	}
 
 	/**
@@ -428,13 +438,18 @@ public class CCNIOUtil {
 	static public Path selectOutput(String theMessage) {
 		return selectOutput(theMessage, null);
 	}
+	
+	public static void main(String[] args) {
+		selectOutput("yo", null, "bin");
+	}
 
-	static public Path selectOutput(String theMessage, final String theFolder) {
+	static public Path selectOutput(String theMessage, final String theFolder, String ... theExtensions) {
+		CCFileChooser fileChooser = new CCFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		if (theFolder != null)
 			fileChooser.setCurrentDirectory(new File(theFolder));
-
+	
 		selectedPath = fileChooser.chosePath(theMessage);
 		return selectedPath;
 	}
@@ -459,6 +474,7 @@ public class CCNIOUtil {
 	}
 
 	static public Path selectFolder(final String theMessage, String theFolder) {
+		CCFileChooser fileChooser = new CCFileChooser();
 		fileChooser.setDialogTitle(theMessage);
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		if (theFolder != null)

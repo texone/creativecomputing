@@ -2,11 +2,14 @@ package cc.creativecomputing.io.data.format;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -15,12 +18,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import cc.creativecomputing.core.io.format.CCDataHolder;
 import cc.creativecomputing.core.io.format.CCDataSerializable;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataException;
+import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.io.data.CCDataUtil;
 
@@ -646,6 +651,8 @@ public class CCJsonFormat implements CCDataFormat<String>{
 		try {
 			Map<String, Object> myResult = new HashMap<String, Object>();
 			read(new InputStreamReader(Files.newInputStream(theDocumentPath, theOptions)), myResult, new CCJavaGenericConstructs());
+			
+			
 			return myResult;
 		} catch (IOException e) {
 			throw new CCDataException(e);
@@ -657,6 +664,27 @@ public class CCJsonFormat implements CCDataFormat<String>{
 		try {
 			CCDataObject myResult = new CCDataObject();
 			read(new InputStreamReader(Files.newInputStream(theDocumentPath, theOptions)), myResult, new CCDataConstructs());
+			return myResult;
+		} catch (IOException e) {
+			throw new CCDataException(e);
+		}
+	}
+	
+	@Override
+	public CCDataObject loadAsDataObject(URL theDocumentURL, boolean theIgnoreLineFeed, String theUser, String theKey) {
+		try {
+			CCDataObject myResult = new CCDataObject();
+			
+			URLConnection myUrlConnection = theDocumentURL.openConnection();
+			
+			if(theUser != null && theKey != null){
+				String userpass = theUser + ":" + theKey;
+				String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userpass.getBytes());
+		
+				myUrlConnection.setRequestProperty ("Authorization", basicAuth);
+			}
+			
+			read(new InputStreamReader(myUrlConnection.getInputStream()), myResult, new CCDataConstructs());
 			return myResult;
 		} catch (IOException e) {
 			throw new CCDataException(e);

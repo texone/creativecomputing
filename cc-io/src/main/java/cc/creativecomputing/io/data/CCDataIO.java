@@ -10,13 +10,13 @@
  */
 package cc.creativecomputing.io.data;
 
+import java.net.URL;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.format.CCDataFormat;
 import cc.creativecomputing.io.data.format.CCJsonFormat;
@@ -62,8 +62,23 @@ public class CCDataIO{
 		return myFormat.loadAsDataObject(theDocumentPath, theIgnoreLineFeed, theOptions);
 	}
 	
-	public static Map<String, Object> createMap(final Path theDocumentPath, final boolean theIgnoreLineFeed, final CCDataFormats theFormat, OpenOption...theOptions){
-		return createDataObject(theDocumentPath, theIgnoreLineFeed, theFormat, theOptions);
+	/**
+	 * Returns a {@linkplain CCDataObject} containing the data document as graph structure.
+	 * @param theDocumentURL
+	 * @return data for the given url
+	 */
+	public static CCDataObject createDataObject(final URL theDocumentURL, final boolean theIgnoreLineFeed, final CCDataFormats theFormat, String theUser, String theKey){
+		CCDataFormat<?> myFormat = formatMap.get(theFormat);
+		return myFormat.loadAsDataObject(theDocumentURL, theIgnoreLineFeed, theUser, theKey);
+	}
+	
+	/**
+	 * Returns a {@linkplain CCDataObject} containing the data document as graph structure.
+	 * @param theDocumentURL
+	 * @return data for the given url
+	 */
+	public static CCDataObject createDataObject(final URL theDocumentURL, final boolean theIgnoreLineFeed, final CCDataFormats theFormat){
+		return createDataObject(theDocumentURL, theIgnoreLineFeed, theFormat, null, null);
 	}
 	
 	public static CCDataObject createDataObject(final Path theDocumentPath){
@@ -115,10 +130,11 @@ public class CCDataIO{
 	
 	public static void saveDataObject(final CCDataObject theDataObject, Path theDocumentPath){
 		String myExtension = CCNIOUtil.fileExtension(theDocumentPath);
-		CCLog.info(myExtension);
-		if(myExtension == null)myExtension = "json";
-		theDocumentPath = Paths.get(theDocumentPath.toString() + ".json");
-		CCDataFormats myFormat = CCDataFormats.XML;
+		if(myExtension == null){
+			myExtension = "json";
+			theDocumentPath = Paths.get(theDocumentPath.toString() + ".json");
+		}
+		CCDataFormats myFormat = CCDataFormats.JSON;
 		switch(myExtension){
 		case "xml":
 			myFormat = CCDataFormats.XML;
@@ -129,5 +145,4 @@ public class CCDataIO{
 		}
 		saveDataObject(theDataObject, theDocumentPath, myFormat);
 	}
-
 }

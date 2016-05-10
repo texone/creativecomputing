@@ -24,6 +24,10 @@ public class CCFileFilter extends FileFilter implements FilenameFilter{
 		_myExtensions = theExtensions;
 		_myDescribtion = theDescribtion;
 	}
+	
+	public CCFileFilter(String theExtension) {
+		this(theExtension, theExtension);
+	}
 
 	@Override
 	public boolean accept(File pathname) {

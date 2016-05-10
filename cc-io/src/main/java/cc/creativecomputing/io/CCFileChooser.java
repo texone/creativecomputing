@@ -34,19 +34,41 @@ public class CCFileChooser extends JFileChooser{
 
 	private Path _myCurrentDirectory;
 	
+	public int show(String theText){
+		setCurrentDirectory(_myCurrentDirectory.toFile());
+		return showDialog(getParent(),theText);
+	}
+	
+	public Path path(){
+		Path myChoosenPath = getSelectedFile().toPath();
+		_myCurrentDirectory = myChoosenPath.getParent();
+		return myChoosenPath;
+	}
+	
+	public String extension(){
+		if(getFileFilter() instanceof CCFileFilter){
+			return getFileFilter().getDescription();
+		}
+		return null;
+	}
+	
 	public Path chosePath(final String theText) {
 		setCurrentDirectory(_myCurrentDirectory.toFile());
 		int myRetVal = showDialog(getParent(),theText);
 		if (myRetVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				Path myChoosenPath = getSelectedFile().toPath();
+				String myExtension = _myExtension;
+				if(getFileFilter() instanceof CCFileFilter){
+					myExtension = getFileFilter().getDescription();
+				}
 				CCLog.info(getSelectedFile());
 				CCLog.info(myChoosenPath);
-				if(_myExtension != null && getDialogType() != OPEN_DIALOG  && getFileSelectionMode() != DIRECTORIES_ONLY){
+				if(myExtension != null && getDialogType() != OPEN_DIALOG  && getFileSelectionMode() != DIRECTORIES_ONLY){
 				
-					String myExtension = CCNIOUtil.fileExtension(myChoosenPath);
-					if(myExtension == null){
-						myChoosenPath = myChoosenPath.getParent().resolve(CCNIOUtil.fileName(myChoosenPath) + "." + _myExtension);
+					String myEnteredExtension = CCNIOUtil.fileExtension(myChoosenPath);
+					if(myEnteredExtension == null){
+						myChoosenPath = myChoosenPath.getParent().resolve(CCNIOUtil.fileName(myChoosenPath) + "." + myExtension);
 					}
 				}
 				
