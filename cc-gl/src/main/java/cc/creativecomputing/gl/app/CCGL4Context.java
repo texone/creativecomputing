@@ -29,7 +29,7 @@ public class CCGL4Context extends CCAbstractGLContext<GLGraphics>{
 
 	@Override
 	public GLGraphics createGraphics(GLAutoDrawable drawable) {
-		return new GLGraphics(drawable.getGL().getGL4(), width, height);
+		return new GLGraphics(drawable.getGL().getGL4bc(), width, height);
 	}
 	
 	@Override

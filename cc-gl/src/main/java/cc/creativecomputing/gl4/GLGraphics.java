@@ -26,6 +26,7 @@ import cc.creativecomputing.math.CCColor;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL4;
+import com.jogamp.opengl.GL4bc;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
 
@@ -33,26 +34,26 @@ import com.jogamp.opengl.glu.GLU;
  * @author christianriekoff
  *
  */
-public class GLGraphics extends CCGLGraphics<GL4>{
+public class GLGraphics extends CCGLGraphics<GL4bc>{
 	
 	
 	/**
 	 * @param theGL
 	 */
-	public GLGraphics(GL4 theGL4, int theWidth , int theHeight) {
+	public GLGraphics(GL4bc theGL4, int theWidth , int theHeight) {
 		super(theGL4, theWidth, theHeight);
 	}
 	
-	public static GL4 currentGL() {
-		return GLU.getCurrentGL().getGL4();
+	public static GL4bc currentGL() {
+		return GLU.getCurrentGL().getGL4bc();
 		//else return new DebugGL4(GLU.getCurrentGL().getGL4());
 	}
 
 	public void updateGL(GLAutoDrawable theDrawable) {
-		gl = theDrawable.getGL().getGL4();
+		gl = theDrawable.getGL().getGL4bc();
 	}
 	
-	public GL4 gl(){
+	public GL4bc gl(){
 		return gl;
 	}
 	
