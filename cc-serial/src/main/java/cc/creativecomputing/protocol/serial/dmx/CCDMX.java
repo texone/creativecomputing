@@ -294,4 +294,8 @@ public class CCDMX implements CCSerialListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public int universeSize() {
+		return _myUniverseSize;
+	}
 }

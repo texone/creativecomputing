@@ -65,7 +65,7 @@ public class CCSerialTest implements CCSerialListener, CCBasicAppListener{
 //		mySerialModule. = "COM1";
 		mySerialModule.rate = 57600;
 		
-		for(String myPort:mySerialModule.list()){
+		for(String myPort:CCSerialModule.list()){
 			CCLog.info(myPort);
 		}
 		
