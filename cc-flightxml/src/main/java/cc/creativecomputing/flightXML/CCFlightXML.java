@@ -29,9 +29,9 @@ public class CCFlightXML {
 	private void cache(String theQuery, CCDataObject theObject){
 		String[] myQueryParts = theQuery.split(Pattern.quote("?"));
 		CCNIOUtil.createDirectories(CCNIOUtil.dataPath("flightxml/" + myQueryParts[0]));
-		CCDataIO.saveDataObject(theObject, CCNIOUtil.dataPath(myQueryParts[0]).resolve(myQueryParts[1]));
+		CCDataIO.saveDataObject(theObject, CCNIOUtil.dataPath("flightxml/" + myQueryParts[0]).resolve(myQueryParts[1]));
 
-		CCLog.info("CACHE:" + theQuery + ":" + theObject);
+		CCLog.info("CACHE:" + theQuery + ":" + theObject + ":" + CCNIOUtil.dataPath(myQueryParts[0]).resolve(myQueryParts[1]));
 	}
 	
 	private CCDataObject checkCached(String theQuery){
@@ -47,6 +47,7 @@ public class CCFlightXML {
 		try {
 			CCDataObject myObject = checkCached(theQuery);
 			if(myObject != null){
+				System.out.println("FOUND CACHE:"+theQuery);
 				return myObject;
 			}
 			myObject = CCDataIO.createDataObject(new URL( FLIGHT_XML_URL + theQuery), true, CCDataFormats.JSON, _myUser, _myKey);
@@ -87,6 +88,26 @@ public class CCFlightXML {
 	 */
 	public List<CCArrivalFlightStruct> arrived(String theAirport){
 		CCDataArray myResultObject = query("Arrived?airport=" + theAirport+"&howMany=5000").getObject("ArrivedResult").getArray("arrivals");
+		List<CCArrivalFlightStruct> myResult = new ArrayList<>();
+		
+		for(int i = 0; i < myResultObject.size();i++){
+			myResult.add(new CCArrivalFlightStruct(myResultObject.getObject(i)));
+		}
+		
+		return myResult;
+	}
+	
+	/**
+	 *  Returns information about already departed flights for a specified airport and maximum number 
+	 *  of flights to be returned. Departed flights are returned in order from most recently to least 
+	 *  recently departed. Only flights that have departed within the last 24 hours are considered.
+
+Times returned are seconds since 1970 (UNIX epoch seconds).
+	 *  @param theAirport the ICAO airport ID (e.g., KLAX, KSFO, KIAH, KHOU, KJFK, KEWR, KORD, KATL, etc.)
+	 * @return
+	 */
+	public List<CCArrivalFlightStruct> departed(String theAirport){
+		CCDataArray myResultObject = query("Departed?airport=" + theAirport+"&howMany=5000").getObject("ArrivedResult").getArray("arrivals");
 		List<CCArrivalFlightStruct> myResult = new ArrayList<>();
 		
 		for(int i = 0; i < myResultObject.size();i++){
