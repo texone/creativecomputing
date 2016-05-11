@@ -31,7 +31,6 @@
         <module>cc-control</module>
         <module>cc-control-ui</module>
         <module>cc-core</module>
-        <module>cc-demo</module>
         <module>cc-gl-app</module>
         <module>cc-gl</module>
         <module>cc-kle</module>
@@ -43,8 +42,10 @@
         <module>cc-video</module>
         <module>cc-io</module>
         <module>cc-math</module>
+        <module>cc-flightxml</module>
         <module>cc-model</module>
         <module>cc-minim</module>
+        <module>cc-demo</module>
         <module>cc-kinect</module>
         <module>cc-kinect-demo</module>
         <module>cc-input</module>
