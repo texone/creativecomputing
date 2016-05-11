@@ -66,5 +66,10 @@
       <artifactId>cc-minim</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-flightxml</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
