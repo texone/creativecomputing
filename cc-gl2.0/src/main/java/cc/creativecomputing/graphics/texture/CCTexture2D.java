@@ -113,6 +113,11 @@ public class CCTexture2D extends CCTexture{
 		allocateData(theWidth, theHeight);
 	}
 	
+	public CCTexture2D(final int theWidth, final int theHeight, final CCTextureAttributes theTextureAttributes) {
+		this(theTextureAttributes);
+		allocateData(theWidth, theHeight);
+	}
+	
 	public CCTexture2D(final int theWidth, final int theHeight, CCTextureTarget theTarget) {
 		this(theTarget);
 		allocateData(theWidth, theHeight);
@@ -326,7 +331,7 @@ public class CCTexture2D extends CCTexture{
 			
 			int myWidth = CCMath.min(theWidth, _myWidth - theDestX);
 			int myHeight = CCMath.min(theHeight, _myHeight - theDestY);
-			
+			CCLog.info(myWidth + ":" + myHeight);
 			gl.glTexSubImage2D(
 				_myTarget.glID, 0, 
 				theDestX, theDestY, 
