@@ -111,6 +111,7 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 		}
 		
 		CCLog.info(_myRecordPath);
+		if(CCNIOUtil.fileExtension(_myRecordPath) == null)CCNIOUtil.addExtension(_myRecordPath, _myFormat.fileExtension);
 		if(_mySequenceSteps == 1){
 			CCScreenCapture.capture(_myRecordPath, myCaptureX, myCaptureY, myCaptureWidth, myCaptureHeight, _cAlpha);
 		}else{
