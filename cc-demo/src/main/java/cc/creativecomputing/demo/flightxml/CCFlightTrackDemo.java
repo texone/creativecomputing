@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.util.CCStopWatch;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.flightXML.CCArrivalFlightStruct;
@@ -14,12 +13,10 @@ import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
-import cc.creativecomputing.graphics.CCGraphics.CCPolygonMode;
 import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
-import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureMipmapFilter;
@@ -31,9 +28,6 @@ import cc.creativecomputing.math.CCMath;
 
 public class CCFlightTrackDemo extends CCGL2Adapter{
 	
-	
-	
-
 	@CCProperty(name = "camera controller")
 	private CCCameraController _myCameraController;
 	
