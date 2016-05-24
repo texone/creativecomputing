@@ -31,6 +31,8 @@ import java.util.List;
 
 import javax.swing.JFileChooser;
 
+import cc.creativecomputing.core.logging.CCLog;
+
 /**
  * @author christianriekoff
  *
@@ -39,7 +41,7 @@ public class CCNIOUtil {
 	private static List<String> optionalAssetPaths = new ArrayList<>();
 	
 	/** Path to sketch folder */
-	static public String applicationPath = System.getProperty("user.dir");
+	static public Path applicationPath = Paths.get(System.getProperty("user.dir"));
 	
 	public static void addAssetPath(String thePath){
 		optionalAssetPaths.add(thePath);
@@ -47,10 +49,6 @@ public class CCNIOUtil {
 	
 	public static void addAssetPaths(List<String> thePaths){
 		optionalAssetPaths.addAll(thePaths);
-	}
-	
-	static public Path applicationPath(String thePath){
-		return Paths.get(applicationPath, thePath);
 	}
 	
 	/**
@@ -79,7 +77,7 @@ public class CCNIOUtil {
 		}
 		
 		// Windows, Linux, or when not using a Mac OS X .app file
-		return Paths.get(applicationPath, "data", thePath);
+		return Paths.get("data", thePath);
 	}
 	
 	/**
@@ -95,7 +93,7 @@ public class CCNIOUtil {
 		Path myResult = Paths.get(thePath);
 		if(exists(myResult))return myResult;
 
-		return Paths.get(applicationPath).resolve(thePath);
+		return Paths.get(thePath);
 	}
 
 	/**
@@ -438,10 +436,6 @@ public class CCNIOUtil {
 	static public Path selectOutput(String theMessage) {
 		return selectOutput(theMessage, null);
 	}
-	
-	public static void main(String[] args) {
-		selectOutput("yo", null, "bin");
-	}
 
 	static public Path selectOutput(String theMessage, final String theFolder, String ... theExtensions) {
 		CCFileChooser fileChooser = new CCFileChooser();
@@ -484,5 +478,11 @@ public class CCNIOUtil {
 		
 		selectedPath = fileChooser.chosePath(theMessage);
 		return selectedPath;
+	}
+
+	
+	public static void main(String[] args) {
+//		selectOutput("yo", null, "bin");
+		CCLog.info(dataPath("YP"));
 	}
 }

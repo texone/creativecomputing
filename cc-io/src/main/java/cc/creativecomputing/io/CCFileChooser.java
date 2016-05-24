@@ -58,20 +58,22 @@ public class CCFileChooser extends JFileChooser{
 		if (myRetVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				Path myChoosenPath = getSelectedFile().toPath();
+				
+				if(myChoosenPath.startsWith(CCNIOUtil.applicationPath)){
+					myChoosenPath = CCNIOUtil.applicationPath.relativize(myChoosenPath);
+				}
 				String myExtension = _myExtension;
 				if(getFileFilter() instanceof CCFileFilter){
 					myExtension = getFileFilter().getDescription();
 				}
-				CCLog.info(getSelectedFile());
-				CCLog.info(myChoosenPath);
 				if(myExtension != null && getDialogType() != OPEN_DIALOG  && getFileSelectionMode() != DIRECTORIES_ONLY){
 				
 					String myEnteredExtension = CCNIOUtil.fileExtension(myChoosenPath);
 					if(myEnteredExtension == null){
-						myChoosenPath = myChoosenPath.getParent().resolve(CCNIOUtil.fileName(myChoosenPath) + "." + myExtension);
+						myChoosenPath = myChoosenPath.resolveSibling(myChoosenPath.getFileName() + "." + myExtension);
 					}
 				}
-				
+
 				_myCurrentDirectory = myChoosenPath.getParent();
 				
 				return myChoosenPath;

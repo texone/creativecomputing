@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.format.CCDataFormat;
 import cc.creativecomputing.io.data.format.CCJsonFormat;
@@ -132,7 +133,7 @@ public class CCDataIO{
 		String myExtension = CCNIOUtil.fileExtension(theDocumentPath);
 		if(myExtension == null){
 			myExtension = "json";
-			theDocumentPath = Paths.get(theDocumentPath.toString() + ".json");
+			theDocumentPath = theDocumentPath.resolveSibling(theDocumentPath.getFileName() + "." + myExtension);
 		}
 		CCDataFormats myFormat = CCDataFormats.JSON;
 		switch(myExtension){
