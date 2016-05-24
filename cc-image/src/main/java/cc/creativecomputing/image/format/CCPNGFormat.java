@@ -35,7 +35,7 @@ public class CCPNGFormat implements CCImageFormat{
 	}
 
 	@Override
-	public boolean write(Path theFile, CCImage theData) throws CCImageException {
+	public boolean write(Path theFile, CCImage theData, final double theQuality) throws CCImageException {
 		return false;
 		
 	}

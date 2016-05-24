@@ -160,7 +160,7 @@ public class CCDDSFormat implements CCImageFormat {
 	}
 	
 	@Override
-	public boolean write(Path file, CCImage data){
+	public boolean write(Path file, CCImage data, double theQuality){
 			// See whether the DDS writer can handle this TextureData
 			CCPixelFormat pixelFormat = data.pixelFormat();
 			CCPixelType pixelType = data.pixelType();

@@ -55,7 +55,7 @@ public class CCSGIFormat extends CCStreamBasedTextureFormat {
 	}
 	
 	@Override
-	public boolean write(final Path theFile, final CCImage theData) throws CCImageException {
+	public boolean write(final Path theFile, final CCImage theData, final double theQuality) throws CCImageException {
 		String fileSuffix = CCNIOUtil.fileExtension(theFile);
 		if (
 			CCImageFormats.SGI.fileExtension.equals(fileSuffix) || 

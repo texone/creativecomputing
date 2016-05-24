@@ -32,13 +32,13 @@ import java.nio.file.Path;
 
 import cc.creativecomputing.core.logging.CCLog;
 
-public class KTXFile {
+public class CCKTXImage {
 
-	private KTXHeader header;
+	private CCKTXHeader header;
 	private KTXMetaData meta;
 	private KTXTextureData textureData;
 
-	public KTXFile() {
+	public CCKTXImage() {
 		clear0();
 	}
 
@@ -48,7 +48,7 @@ public class KTXFile {
 	}
 
 	private void clear0() {
-		header = new KTXHeader();
+		header = new CCKTXHeader();
 		meta = new KTXMetaData();
 		textureData = new KTXTextureData();
 	}
@@ -73,14 +73,14 @@ public class KTXFile {
 				type = GLConstants.GL_UNSIGNED_INT_8_8_8_8_REV;
 				typeSize = 4;
 			}
-			header.setGLFormat(GLConstants.GL_RGBA8, GLConstants.GL_RGBA, fmt, type, typeSize);
+			header.glFormat(GLConstants.GL_RGBA8, GLConstants.GL_RGBA, fmt, type, typeSize);
 		} else {
 			fmt = GLConstants.GL_RGB;
 			type = GLConstants.GL_UNSIGNED_BYTE;
 			typeSize = 1;
-			header.setGLFormat(GLConstants.GL_RGB8, GLConstants.GL_RGB, fmt, type, typeSize);
+			header.glFormat(GLConstants.GL_RGB8, GLConstants.GL_RGB, fmt, type, typeSize);
 		}
-		header.setDimensions(iw, ih, 0);
+		header.dimensions(iw, ih, 0);
 
 		int bytesPerPixel = (hasAlpha ? 4 : 3);
 		int bytesPerRow = KTXUtil.align4(iw * bytesPerPixel);
@@ -127,15 +127,15 @@ public class KTXFile {
 
 		header.read(in);
 		CCLog.info(header.toString());
-		meta.read(in, header.getByteOrder(), header.getBytesOfKeyValueData());
+		meta.read(in, header.byteOrder(), header.bytesOfKeyValueData());
 		CCLog.info(meta.toString());
 		textureData.readMipmaps(
 			in, 
-			header.getByteOrder(), 
-			header.getGLTypeSize(), 
-			Math.max(1, header.getNumberOfMipmapLevels()),
-			Math.max(1, header.getNumberOfArrayElements()), 
-			header.getNumberOfFaces()
+			header.byteOrder(), 
+			header.glTypeSize(), 
+			Math.max(1, header.numberOfMipmapLevels()),
+			Math.max(1, header.numberOfArrayElements()), 
+			header.numberOfFaces()
 		);
 	}	
 
@@ -149,11 +149,11 @@ public class KTXFile {
 	}
 
 	public void write(OutputStream out) throws IOException {
-		header.setBytesOfKeyValueData(meta.calculateRequiredBytes());
+		header.bytesOfKeyValueData(meta.calculateRequiredBytes());
 
 		header.write(out);
 		meta.write(out);
-		textureData.writeMipmaps(out, header.getByteOrder(), header.getGLTypeSize());
+		textureData.writeMipmaps(out, header.byteOrder(), header.glTypeSize());
 	}
 
 	@Override
@@ -162,7 +162,7 @@ public class KTXFile {
 	}
 
 	// Getters
-	public KTXHeader getHeader() {
+	public CCKTXHeader getHeader() {
 		return header;
 	}
 

@@ -12,7 +12,6 @@ package cc.creativecomputing.image;
 
 import java.awt.Image;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -89,7 +88,7 @@ public class CCImageIO {
 		SGI_RGB("rgb"),
 		GIF("gif"),
 		JPG("jpg"),
-		JPEG("jpeg"),
+		JPEG("jpg"),
 		PNG("png"),
 		TGA("tga"),
 		TIFF("tiff");
@@ -415,7 +414,7 @@ public class CCImageIO {
 	 * @param thePath file to save to
 	 * @param theWriteMode
 	 */
-	public static void write(final CCImage theImage, final Path thePath, final CCWriteMode theWriteMode){
+	public static void write(final CCImage theImage, final Path thePath, final CCWriteMode theWriteMode, double theQuality){
 		switch(theWriteMode){
 		case KEEP:
 			if(CCNIOUtil.exists(thePath))return;
@@ -427,15 +426,15 @@ public class CCImageIO {
 		
 		if(myFormat == null)throw new CCImageException("The Image format:" + myExtension + " is not supported.");
 		
-		if (myFormat.write(thePath, theImage)) {
+		if (myFormat.write(thePath, theImage, theQuality)) {
 			return;
 		}
 		
 		throw new CCImageException("The given image could not be written.");
 	}
 	
-	public static void write(final CCImage theImage, final Path thePath){
-		write(theImage, thePath, CCWriteMode.OVERWRITE);
+	public static void write(final CCImage theImage, final Path thePath, double theQuality){
+		write(theImage, thePath, CCWriteMode.OVERWRITE, theQuality);
 	}
 	
 	/**
@@ -444,9 +443,9 @@ public class CCImageIO {
 	 * @param theImage the data to be written to disk
 	 * @param thePath file to save to
 	 */
-	public static void write(final CCImage theImage, final String thePath){
+	public static void write(final CCImage theImage, final String thePath, double theQuality){
 		try {
-			write(theImage,thePath,CCWriteMode.OVERWRITE);
+			write(theImage,thePath,CCWriteMode.OVERWRITE, theQuality);
 		} catch (Exception e) {
 			throw new RuntimeException("Problems writing file "+thePath,e);
 		}
@@ -459,9 +458,9 @@ public class CCImageIO {
 	 * @param thePath file to save to
 	 * @param theWriteMode
 	 */
-	public static void write(final CCImage theImage, final String thePath, final CCWriteMode theWriteMode){
+	public static void write(final CCImage theImage, final String thePath, final CCWriteMode theWriteMode, double theQuality){
 		try {
-			write(theImage,CCNIOUtil.dataPath(thePath),theWriteMode);
+			write(theImage,CCNIOUtil.dataPath(thePath),theWriteMode, theQuality);
 		} catch (Exception e) {
 			throw new RuntimeException("Problems writing file "+thePath,e);
 		}

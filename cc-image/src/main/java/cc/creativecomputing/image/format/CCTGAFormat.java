@@ -53,7 +53,7 @@ public class CCTGAFormat extends CCStreamBasedTextureFormat {
 	}
 
 	@Override
-	public boolean write(final Path theFile, final CCImage theData) throws CCImageException {
+	public boolean write(final Path theFile, final CCImage theData, final double theQuality) throws CCImageException {
 		// See whether the TGA writer can handle this TextureData
 		CCPixelFormat pixelFormat = theData.pixelFormat();
 		CCPixelType pixelType = theData.pixelType();

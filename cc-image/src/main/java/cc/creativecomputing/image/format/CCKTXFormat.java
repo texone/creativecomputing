@@ -1,24 +1,21 @@
 package cc.creativecomputing.image.format;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageException;
+import cc.creativecomputing.image.CCImageIO.CCImageFormats;
 import cc.creativecomputing.image.CCPixelFormat;
 import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCPixelType;
-import cc.creativecomputing.image.CCImageIO.CCImageFormats;
 import cc.creativecomputing.image.format.ktx.GLConstants;
-import cc.creativecomputing.image.format.ktx.KTXFile;
-import cc.creativecomputing.io.CCIOUtil;
+import cc.creativecomputing.image.format.ktx.CCKTXImage;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCKTXFormat implements CCImageFormat{
@@ -33,7 +30,7 @@ public class CCKTXFormat implements CCImageFormat{
 			CCImageFormats.KTX.fileExtension.equals(theFileSuffix) || 
 			CCImageFormats.KTX.fileExtension.equals(CCNIOUtil.fileExtension(theFile))
 		) {
-			KTXFile image = new KTXFile();
+			CCKTXImage image = new CCKTXImage();
 			try {
 				image.read(theFile);
 			} catch (Exception e) {
@@ -51,20 +48,18 @@ public class CCKTXFormat implements CCImageFormat{
 		final CCPixelInternalFormat theInternalFormat, final CCPixelFormat thePixelFormat, 
 		final String theFileSuffix
 	){
-		if (CCImageFormats.KTX.fileExtension.equals(theFileSuffix)) {
+		if (!CCImageFormats.KTX.fileExtension.equals(theFileSuffix)) return null;
 			
-			KTXFile image = new KTXFile();
-			try {
-				image.read(theStream);
-				theStream.close();
-			} catch (Exception e) {
-				throw new CCImageException(e);
-			}
-			
-			return createImage(image, theInternalFormat, thePixelFormat);
+		CCKTXImage image = new CCKTXImage();
+		try {
+			image.read(theStream);
+			theStream.close();
+		} catch (Exception e) {
+			throw new CCImageException(e);
 		}
-
-		return null;
+			
+		return createImage(image, theInternalFormat, thePixelFormat);
+		
 	}
 
 	@Override
@@ -83,19 +78,17 @@ public class CCKTXFormat implements CCImageFormat{
 	}
 
 	private CCImage createImage(
-		final KTXFile theImage, 
+		final CCKTXImage theImage, 
 		CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat
 	) {
-//		theImage.getTextureData().
-//		CCDDSImage.ImageInfo info = theImage.getMipMap(0);
 		
 		boolean myIsCompressed = false;
 		
-		CCLog.info("thePixelFormat:" + thePixelFormat + " : " + Integer.toHexString(theImage.getHeader().getGLInternalFormat()));
+		CCLog.info("thePixelFormat:" + thePixelFormat + " : " + Integer.toHexString(theImage.getHeader().glInternalFormat()));
 		
 		if (thePixelFormat == null) {
 			
-			switch (theImage.getHeader().getGLInternalFormat()) {
+			switch (theImage.getHeader().glInternalFormat()) {
 			case GLConstants.GL_RED:
 				thePixelFormat = CCPixelFormat.RED;
 				theInternalFormat = CCPixelInternalFormat.RED;
@@ -170,8 +163,8 @@ public class CCKTXFormat implements CCImageFormat{
 		
 		CCImage data;
 		int myNumberOfMipMaps = theImage.getTextureData().getNumberOfMipmapLevels();
-		int myImageWidth = theImage.getHeader().getPixelWidth();
-		int myImageHeight = theImage.getHeader().getPixelHeight();
+		int myImageWidth = theImage.getHeader().pixelWidth();
+		int myImageHeight = theImage.getHeader().pixelHeight();
 		if (theImage.getTextureData().getNumberOfMipmapLevels() > 1) {
 			CCLog.info("MIP MAP");
 			Buffer[] mipmapData = new Buffer[myNumberOfMipMaps];
@@ -197,7 +190,7 @@ public class CCKTXFormat implements CCImageFormat{
 	}
 	
 	@Override
-	public boolean write(Path file, CCImage data){
+	public boolean write(Path file, CCImage data, final double theQuality){
 //		if (CCFileFormat.KTX.fileExtension.equals(CCIOUtil.fileExtension(file))) {
 //			// See whether the DDS writer can handle this TextureData
 //			CCPixelFormat pixelFormat = data.pixelFormat();

@@ -18,7 +18,11 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
@@ -67,8 +71,10 @@ public class CCImageIOFormat implements CCImageFormat {
 		final String theFileSuffix
 	){
 		try {
+			ImageIO.setUseCache(false);
 			return createImage(ImageIO.read(Files.newInputStream(theFile)), theInternalFormat, thePixelFormat, theFileSuffix);
 		} catch (IOException e) {
+			if(e.getMessage().equals("closed"))return null;
 			throw new CCImageException(e);
 		}
 	}
@@ -81,6 +87,7 @@ public class CCImageIOFormat implements CCImageFormat {
 	){
 
 		try {
+			
 			return createImage(ImageIO.read(theStream), theInternalFormat, thePixelFormat, theFileSuffix);
 		} catch (IOException e) {
 			throw new CCImageException(e);
@@ -106,24 +113,45 @@ public class CCImageIOFormat implements CCImageFormat {
 		}
 	}
 	
+	public boolean write(final Path thePath, BufferedImage theData, final double theQuality) throws CCImageException {
+			
+			
+		// Happened to notice that writing RGBA images to JPEGS is broken
+		if (CCImageFormats.JPG.fileExtension.equals(CCNIOUtil.fileExtension(thePath)) && theData.getType() == BufferedImage.TYPE_4BYTE_ABGR) {
+			BufferedImage tmpImage = new BufferedImage(theData.getWidth(), theData.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+			Graphics g = tmpImage.getGraphics();
+			g.drawImage(theData, 0, 0, null);
+			g.dispose();
+			theData = tmpImage;
+		}
+		try {
+			String myExtension = CCNIOUtil.fileExtension(thePath);
+			if(myExtension.equals("jpg")){
+				ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
+				ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
+				jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+				jpgWriteParam.setCompressionQuality((float)theQuality);
+
+				ImageOutputStream outputStream = ImageIO.createImageOutputStream(Files.newOutputStream(thePath)); // For example implementations see below
+				jpgWriter.setOutput(outputStream);
+				IIOImage outputImage = new IIOImage(theData, null, null);
+				jpgWriter.write(null, outputImage, jpgWriteParam);
+				jpgWriter.dispose();
+				return true;
+			}else{
+				return ImageIO.write(theData, myExtension, Files.newOutputStream(thePath));
+			}
+		} catch (IOException e) {
+			throw new CCImageException(e);
+		}
+	}
+	
 	@Override
-	public boolean write(final Path thePath, final CCImage theData) throws CCImageException {
+	public boolean write(final Path thePath, final CCImage theData, final double theQuality) throws CCImageException {
 			
 		// Convert Image to appropriate BufferedImage
 		BufferedImage myImage = CCImageUtil.toBufferedImage(theData);
 			
-		// Happened to notice that writing RGBA images to JPEGS is broken
-		if (CCImageFormats.JPG.fileExtension.equals(CCNIOUtil.fileExtension(thePath)) && myImage.getType() == BufferedImage.TYPE_4BYTE_ABGR) {
-			BufferedImage tmpImage = new BufferedImage(myImage.getWidth(), myImage.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-			Graphics g = tmpImage.getGraphics();
-			g.drawImage(myImage, 0, 0, null);
-			g.dispose();
-			myImage = tmpImage;
-		}
-		try {
-			return ImageIO.write(myImage, CCNIOUtil.fileExtension(thePath), Files.newOutputStream(thePath));
-		} catch (IOException e) {
-			throw new CCImageException(e);
-		}
+		return write(thePath, myImage, theQuality);
 	}
 }

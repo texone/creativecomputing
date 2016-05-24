@@ -99,5 +99,5 @@ public interface CCImageFormat {
 	 * writing of the file, otherwise false. May throw IOException if either this writer did not support certain
 	 * parameters of the TextureData or if an I/O error occurred.
 	 */
-	public boolean write(Path theFile, CCImage theData) throws CCImageException;
+	public boolean write(Path theFile, CCImage theData, double theQuality) throws CCImageException;
 }
