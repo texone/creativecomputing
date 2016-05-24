@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMath;
 
 public class CCGradient extends ArrayList<CCGradientPoint>{
 	
@@ -68,8 +69,7 @@ public class CCGradient extends ArrayList<CCGradientPoint>{
 		
 		double myPos0 = get(myIndex - 1).position();
 		double myPos1 = get(myIndex).position();
-		double myRange = myPos1 - myPos0;
-		double myBlend = (thePosition - myPos0) / myRange;
+		double myBlend = CCMath.smoothStep(myPos0, myPos1, thePosition);
 		
 		return CCColor.blend(get(myIndex - 1).color(), get(myIndex).color(), myBlend);
 	}
