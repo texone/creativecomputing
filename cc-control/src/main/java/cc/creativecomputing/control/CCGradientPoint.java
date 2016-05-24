@@ -31,4 +31,9 @@ public class CCGradientPoint implements Comparable<CCGradientPoint>{
 	public int compareTo(CCGradientPoint o) {
 		return new Double(this.position()).compareTo(o.position());
 	}
+	
+	@Override
+	public String toString() {
+		return _myPosition + " : " + _myColor;
+	}
 }
