@@ -101,7 +101,7 @@ public class CCMosaicTriangleFragmentDemo extends CCGL2Adapter {
 		
 		g.texture(0, _myAsset0.value());
 		g.texture(1, _myAsset1.value());
-//		g.texture(2, _myTexture);
+		g.texture(2, _myTexture);
 		
 		_myTriShader.start();
 		_myTriShader.uniform2f("resolution", g.width(), g.height());

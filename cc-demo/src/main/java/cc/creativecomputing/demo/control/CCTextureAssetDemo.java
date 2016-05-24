@@ -1,8 +1,6 @@
 package cc.creativecomputing.demo.control;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
-import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -21,12 +19,6 @@ public class CCTextureAssetDemo extends CCGL2Adapter{
 		
 		_myAsset = new CCTexture2DAsset(glContext());
 		
-		_myControlApp = new CCControlApp(this, animator());
-//		for(CCRealtimeGraph myGraph:_myRealTimeGraph.instances()){
-//			CCLog.info(myGraph);
-//			if(myGraph == null)return;
-//			myGraph.draw(g);
-//		}
 		g.textFont(CCFontIO.createTextureMapFont("arial", 12));
 	}
 	

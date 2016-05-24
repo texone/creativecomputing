@@ -1,8 +1,6 @@
 package cc.creativecomputing.demo;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
-import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -29,8 +27,6 @@ public class CCMatrix2InterpolationDemo extends CCGL2Adapter{
 	
 	@Override
 	public void init(CCGraphics g) {
-		
-		_myControlApp = new CCControlApp(this, animator());
 		
 		_myMatrix = new CCMatrix2(10, 10, 1);
 

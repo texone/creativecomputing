@@ -95,8 +95,8 @@ public class CCMosaicTriangleMeshDemo extends CCGL2Adapter {
 		_myParticleTriangleMesh = new CCMosaicTriangleMesh(g, myTriangles, 6);
 		_myParticleTriangleMesh.textureSize(g.width(), g.height());
 
-		_myParticleTriangleMesh.texture0(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/01.png"))));
-		_myParticleTriangleMesh.texture1(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/02.png"))));
+		_myParticleTriangleMesh.texture0(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/09_FlightInfo_b.png"))));
+		_myParticleTriangleMesh.texture1(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/10_Wolken.jpg"))));
 	}
 
 	@Override

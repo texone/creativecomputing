@@ -1,10 +1,8 @@
 package cc.creativecomputing.demo.control;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.control.code.CCCompileObject;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
-import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -43,8 +41,6 @@ public class CCRealtimeCodingMultipleInstancesDemo extends CCGL2Adapter{
 		for(int i = 0; i < 100;i++){
 			_myRealTimeGraph.createObject(_cSettings);
 		}
-		
-		_myControlApp = new CCControlApp(this, animator());
 	}
 	
 	@Override

@@ -74,16 +74,6 @@ public class CCSunPositionDemo extends CCGL2Adapter{
 		);
 	}
 	
-	private CCVector3 getMoonPosPoint(CCDate date) { // NEU MOND
-		CCMoonInfo pos = CCMoonCalc.getMoonPosition(date, _myLatitude, _myLongitude);
-		double angle = CCMath.PI/2 + pos.azimuth;
-		return new CCVector3(
-			RADIUS * CCMath.cos(angle) * CCMath.cos(pos.altitude),
-			RADIUS * CCMath.sin(angle) * CCMath.cos(pos.altitude),
-			pos.altitude
-		);
-	}
-	
 	private void drawCurvePath(CCGraphics g, CCSunInfo di) {
 		CCDate start = di.sunrise.start;
 		CCDate end = di.sunset.end;
@@ -102,24 +92,7 @@ public class CCSunPositionDemo extends CCGL2Adapter{
 		g.endShape();
 	}
 	
-	// Linie Mondbahn berechnen
-	private void drawCurvePath(CCGraphics g, CCMoonInfo mi){
-		CCDate start = mi.aufgang;
-		CCDate end = mi.untergang;
-		
-		boolean	belowHorizon = true;
-		
-		CCLog.info(start + ":" + end);
-		
-		g.beginShape(CCDrawMode.LINE_STRIP);
-		for (long time = start.timeInMilliSeconds(); time < end.timeInMilliSeconds(); time += 10 * 60 * 1000) {
-			
-			CCVector3 posPoint = getSunPosPoint(new CCDate(time));
-//			CCLog.info(new CCDate(time) + ":" + posPoint);
-			g.vertex(posPoint.x, posPoint.y);
-		}
-		g.endShape();
-	}
+	
 	
 	private void drawSectorPath(CCGraphics g, CCDate date1, CCDate date2) {
 		CCVector3 p1 = getSunPosPoint(date1);
@@ -149,30 +122,15 @@ public class CCSunPositionDemo extends CCGL2Adapter{
 	
 	
 	
-	private void drawPosPathMoon(CCGraphics g, CCDate date) { // NEU MOND
-		CCVector3 posPoint = getMoonPosPoint(date);
-		//if (posPoint.altitude < -0.018) { return ''; } // LÃ¶sste den Fehler aus !!!!!!!
-		g.line(0, 0, posPoint.x, posPoint.y);
-	}
+	
 	
 	private void drawCurrentDayInfo(CCGraphics g) {
-//		CCSunInfo di = getDayInfo(_myDate);
-//		drawPositionPath(g,di.sunrise.start);
-//		drawPositionPath(g,di.sunset.end);
-//		drawCurvePath(g, di);
+		CCSunInfo di = getDayInfo(_myDate);
+		drawPositionPath(g,di.sunrise.start);
+		drawPositionPath(g,di.sunset.end);
+		drawCurvePath(g, di);
 		
-		CCMoonInfo pos = CCMoonCalc.getMoonPosition(_myDate, _myLatitude, _myLongitude);
-//
-		drawPosPathMoon(g, pos.aufgang); // Mondaufgang
-		drawPosPathMoon(g, pos.untergang);// Monduntergang
-		drawCurvePath(g, pos);
-		//this._currentCurve.attr('path', this._getCurvePathStrMoon(DateA, DateU, this._date)); // Mondbahn
-//		
-//		// Mondschein-Sector berrechnen
-//		var sunriseSectorPath = this._getSectorPathStr(this._date);
-//		// Mondschein-Sector1 zeichnen
-//		this._sunriseSector1.attr('path', sunriseSectorPath.sector1); 
-//		this._sunriseSector2.attr('path', sunriseSectorPath.sector2); 
+		
 	}
 	
 	private void drawCurrentTimeInfo(CCGraphics g) {
@@ -194,9 +152,9 @@ public class CCSunPositionDemo extends CCGL2Adapter{
 	
 	private void draw(CCGraphics g) {
 		
-//		drawYearInfo(g);
+		drawYearInfo(g);
 		drawCurrentDayInfo(g);
-//		drawCurrentTimeInfo(g);
+		drawCurrentTimeInfo(g);
 		
 	}
 	

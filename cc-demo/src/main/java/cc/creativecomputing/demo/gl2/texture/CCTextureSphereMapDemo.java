@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jogamp.opengl.GL3;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
@@ -23,7 +22,6 @@ import cc.creativecomputing.graphics.texture.CCTexture3D;
 import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.signal.CCMixSignal;
 import cc.creativecomputing.model.collada.CCColladaLoader;
 import cc.creativecomputing.model.collada.CCColladaScene;
@@ -101,9 +99,6 @@ public class CCTextureSphereMapDemo extends CCGL2Adapter{
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		
-		int[] myRes = g.getIntArray(GL3.GL_MAX_3D_TEXTURE_SIZE, 3);
-		System.out.println(myRes[]);
 		
 		List<Path> myFiles = CCNIOUtil.list(_myFolder, "png");
 		_myTexture = new CCTexture3D(CCImageIO.newImage(myFiles.get(0)), myFiles.size());

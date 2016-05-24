@@ -2,28 +2,33 @@ package cc.creativecomputing.demo.control;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCGradient;
-import cc.creativecomputing.control.CCGradientPoint;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMath;
 
 public class CCGradientControlDemo extends CCGL2Adapter{
 	
 	
-	@CCProperty(name = "gradient")
-	private CCGradient _myGradient = new CCGradient();
+	@CCProperty(name = "gradient a")
+	private CCGradient _myGradientA = new CCGradient();
+	@CCProperty(name = "gradient b")
+	private CCGradient _myGradientB = new CCGradient();
+	@CCProperty(name = "gradient c")
+	private CCGradient _myGradientC = new CCGradient();
+	
+	@CCProperty(name = "slide", min = 0, max = 1)
+	private double slider = 0;
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
-		_myGradient.add(0, CCColor.WHITE);
-		_myGradient.add(1, CCColor.BLACK);
-		for(CCGradientPoint myPoint:_myGradient){
-			CCLog.info(myPoint.position() + ":" + myPoint.color());
-		}
+//		_myGradient.add(0, CCColor.WHITE);
+//		_myGradient.add(1, CCColor.BLACK);
+//		for(CCGradientPoint myPoint:_myGradient){
+//			CCLog.info(myPoint.position() + ":" + myPoint.color());
+//		}
 	}
 	
 	@Override
@@ -39,18 +44,33 @@ public class CCGradientControlDemo extends CCGL2Adapter{
 //		}
 	}
 	
+	private void drawGradient(CCGraphics g, CCGradient theA, CCGradient theB, int theRes, int theStartY, int theEndY){
+		for(int x = -g.width() / 2; x < g.width() / 2;x+=theRes){
+			double xBlend = CCMath.norm(x, -g.width() / 2, g.width() / 2);
+			CCColor myColorA = theA.color(xBlend);
+			CCColor myColorB = theB.color(xBlend);
+			for(int y = theStartY; y < theEndY;y+=theRes){
+				double yBlend =	CCMath.smoothStep(theStartY, theEndY, y);
+				g.color(CCColor.blend(myColorA, myColorB, yBlend));
+				g.rect(x,y,theRes, theRes);
+			}
+		}
+	}
+	
 	@Override
 	public void display(CCGraphics g) {
 		g.clearColor(255);
 		g.clear();
 		
-		g.beginShape(CCDrawMode.LINES);
-		for(int x = 0; x < g.width();x++){
-			g.color(_myGradient.color((double)x / g.width()));
-			g.vertex(x - g.width()/2, -50);
-			g.vertex(x - g.width()/2,  50);
-		}
-		g.endShape();
+//		g.beginShape(CCDrawMode.LINES);
+//		for(int x = 0; x < g.width();x++){
+//			g.color(_myGradient.color((double)x / g.width()));
+//			g.vertex(x - g.width()/2, -50);
+//			g.vertex(x - g.width()/2,  50);
+//		}
+//		g.endShape();
+		drawGradient(g, _myGradientA, _myGradientB, 10, -g.height()/2, 0);
+		drawGradient(g, _myGradientB, _myGradientC, 10, 0, g.height()/2);
 	}
 	
 	public static void main(String[] args) {

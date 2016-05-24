@@ -68,19 +68,6 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 
 			g.beginShape(CCDrawMode.QUADS);
 
-			// front
-//			g.normal(0,0,-1);
-//			g.gl.glMultiTexCoord2f(0,0,1);
-//			g.vertex(x1, y2, z1);
-//			g.gl.glMultiTexCoord2f(0,1,1);
-//			g.vertex(x2, y2, z1);
-//			g.gl.glMultiTexCoord2f(0,1,0);
-//			g.vertex(x2, y1, z1);
-//			g.gl.glMultiTexCoord2f(0,0,0);
-//			g.vertex(x1, y1, z1);
-
-//			// right
-//			g.normal(1,0,0);
 			g.gl.glMultiTexCoord2d(0,(y2) / texwidth,(z1) / texheight);
 			g.vertex(0, y2, z2);
 			g.gl.glMultiTexCoord2d(0,(y1) / texwidth,(z1) / texheight);
@@ -89,50 +76,7 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 			g.vertex(0, y1, z1);
 			g.gl.glMultiTexCoord2d(0,(y2) / texwidth,(z2) / texheight);
 			g.vertex(0, y1, z2);
-//
-//			// back
-//			g.normal(0,0,1);
-//			g.gl.glMultiTexCoord2f(2,0,1);
-//			g.vertex(x2, y2, z2);
-//			g.gl.glMultiTexCoord2f(2,1,1);
-//			g.vertex(x1, y2, z2);
-//			g.gl.glMultiTexCoord2f(2,1,0);
-//			g.vertex(x1, y1, z2);
-//			g.gl.glMultiTexCoord2f(2,0,0);
-//			g.vertex(x2, y1, z2);
-//
-//			// left
-//			g.normal(-1,0,0);
-//			g.gl.glMultiTexCoord2f(3,0,1);
-//			g.vertex(x1, y2, z2);
-//			g.gl.glMultiTexCoord2f(3,1,1);
-//			g.vertex(x1, y2, z1);
-//			g.gl.glMultiTexCoord2f(3,1,0);
-//			g.vertex(x1, y1, z1);
-//			g.gl.glMultiTexCoord2f(3,0,0);
-//			g.vertex(x1, y1, z2);
-//
-//			// top
-//			g.normal(0,-1,0);
-//			g.gl.glMultiTexCoord2f(4,0,1);
-//			g.vertex(x1, y1, z1);
-//			g.gl.glMultiTexCoord2f(4,1,1);
-//			g.vertex(x2, y1, z1);
-//			g.gl.glMultiTexCoord2f(4,1,0);
-//			g.vertex(x2, y1, z2);
-//			g.gl.glMultiTexCoord2f(4,0,0);
-//			g.vertex(x1, y1, z2);
-//
-//			// bottom
-//			g.normal(0,1,0);
-//			g.gl.glMultiTexCoord2f(5,0,1);
-//			g.vertex(x1, y2, z2);
-//			g.gl.glMultiTexCoord2f(5,1,1);
-//			g.vertex(x2, y2, z2);
-//			g.gl.glMultiTexCoord2f(5,1,0);
-//			g.vertex(x2, y2, z1);
-//			g.gl.glMultiTexCoord2f(5,0,0);
-//			g.vertex(x1, y2, z1);
+
 
 			g.endShape();
 		}
@@ -202,12 +146,12 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 		_myEffectManager.put("offset2", new CCOffsetEffect());
 		_myEffectManager.put("signal", new CCSignalEffect());
 
-		_myTextures[0] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("yo.png")));
-		_myTextures[1] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("insta01.png")));
-		_myTextures[2] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/03.png")));
-		_myTextures[3] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/04.png")));
-		_myTextures[4] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/05.png")));
-		_myTextures[5] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/06.png")));
+//		_myTextures[0] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("yo.png")));
+//		_myTextures[1] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("insta01.png")));
+//		_myTextures[2] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/03.png")));
+//		_myTextures[3] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/04.png")));
+//		_myTextures[4] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/05.png")));
+//		_myTextures[5] = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/06.png")));
 		
 		_myScreenCaptureController = new CCScreenCaptureController(this, theAnimator);
 	}
@@ -228,14 +172,14 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 //			g.texture(i,_myTextures[i]);
 //		}
 		g.color(1f);
-		g.image(_myTextures[1], 0,0);
-		g.noDepthTest();
-		_myTextures[1].textureFilter(CCTextureFilter.LINEAR);
-		g.texture(0,_myTextures[0]);
+//		g.image(_myTextures[1], 0,0);
+//		g.noDepthTest();
+//		_myTextures[1].textureFilter(CCTextureFilter.LINEAR);
+//		g.texture(0,_myTextures[0]);
 		for(CCCubeEffectable myCube:_myCubes){
 			myCube.draw(g);
 		}
-		g.noTexture();
+//		g.noTexture();
 		
 	}
 	
