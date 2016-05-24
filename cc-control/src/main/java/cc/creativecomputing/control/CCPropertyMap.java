@@ -157,8 +157,11 @@ public class CCPropertyMap {
 	
 	private CCObjectPropertyHandle _myRootHandle;
 
-	public CCPropertyMap(Object theRootObject, String theName){
-		_myRootHandle = new CCObjectPropertyHandle(theRootObject);
+	public CCPropertyMap(){
+	}
+	
+	public void setData(Object theRootObject, String thePresetPath){
+		_myRootHandle = new CCObjectPropertyHandle(theRootObject, thePresetPath);
 	}
 	
 	public CCObjectPropertyHandle rootHandle(){
@@ -185,7 +188,8 @@ public class CCPropertyMap {
 	}
 	
 	public static void main(String[] args) {
-		CCPropertyMap myHandler = new CCPropertyMap(new CCTestClass2(), "test");
+		CCPropertyMap myHandler = new CCPropertyMap();
+		myHandler.setData(new CCTestClass2(), "settings");
 		String myJsonString = (String)CCDataIO.toFormatType(myHandler.rootHandle().data(), CCDataFormats.JSON);
 		CCLog.info(myJsonString);
 		

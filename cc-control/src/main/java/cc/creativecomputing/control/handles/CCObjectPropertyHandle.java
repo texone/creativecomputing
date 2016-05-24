@@ -106,15 +106,19 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	private final Path _myPresetPath;
 	
 	private String _myPreset = null;
+	
+	private final String _mySettingsPath;
 
-	protected CCObjectPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
+	protected CCObjectPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember, String theSettingsPath) {
 		super(theParent, theMember);
+		_mySettingsPath = theSettingsPath;
 		_myChildHandles = link(theMember.value());
 		_myPresetPath = createPresetPath();
 	}
 
-	public CCObjectPropertyHandle(Object theObject){
+	public CCObjectPropertyHandle(Object theObject, String theSettingsPath){
 		super(null, null);
+		_mySettingsPath = theSettingsPath;
 		_myRootObject = theObject;
 		_myChildHandles = link(theObject);
 		_myPresetPath = createPresetPath();
@@ -155,7 +159,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	}
 	
 	private Path createPresetPath(){
-		Path myPresetPath = CCNIOUtil.dataPath("settings");
+		Path myPresetPath = CCNIOUtil.dataPath(_mySettingsPath);
 			
 		String[] myTypeParts = type().getName().split("\\.");
 		for(String myPart:myTypeParts){
@@ -182,7 +186,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 				myProperty = new CCEnumPropertyHandle(this, myField);
 			}else{
 				if(myField.value() == null)continue;
-				myProperty = new CCObjectPropertyHandle(this, myField);
+				myProperty = new CCObjectPropertyHandle(this, myField, _mySettingsPath);
 			}
 			myResult.put(myProperty.name(), myProperty);
 		}
@@ -216,7 +220,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 				}else  if(myClass.isEnum()){
 					myProperty = new CCEnumPropertyHandle(this, myEntry);
 				}else{
-					myProperty = new CCObjectPropertyHandle(this, myEntry);
+					myProperty = new CCObjectPropertyHandle(this, myEntry, _mySettingsPath);
 				}
 				myResult.put(myProperty.name(), myProperty);
 			}
