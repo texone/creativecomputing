@@ -62,7 +62,11 @@ public class CCTexture2DAsset extends CCAsset<CCTexture2D>{
 			_myAsset = _myTextureMap.get(thePath);
 			return;
 		}
-		_myImage = CCImageIO.newImage(thePath);
+		try{
+			_myImage = CCImageIO.newImage(thePath);
+		}catch(Exception e){
+			
+		}
 	}
 	
 	@Override

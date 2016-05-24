@@ -41,7 +41,7 @@ public class CCTextureAttributes {
 		_myTextureWrapS = CCTextureWrap.CLAMP_TO_EDGE;
 		_myTextureWrapT = CCTextureWrap.CLAMP_TO_EDGE;
 		_myFilter = CCTextureFilter.LINEAR;
-		_myMipmapFilter = CCTextureMipmapFilter.LINEAR;
+		_myMipmapFilter = CCTextureMipmapFilter.NEAREST;
 		
 		_myGenerateMipmaps = false;
 		
