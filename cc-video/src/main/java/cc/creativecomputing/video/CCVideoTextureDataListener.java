@@ -10,12 +10,14 @@
  */
 package cc.creativecomputing.video;
 
+import cc.creativecomputing.image.CCImage;
+
 /**
  * 
  * @author christian riekoff
  *
  */
 public interface CCVideoTextureDataListener{
-	public void onInit(final CCVideo theData);
-	public void onUpdate(final CCVideo theData);
+	public void onInit(final CCImage theData);
+	public void onUpdate(final CCImage theData);
 }
