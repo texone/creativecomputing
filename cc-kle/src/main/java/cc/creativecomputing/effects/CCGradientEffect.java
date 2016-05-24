@@ -1,7 +1,8 @@
 package cc.creativecomputing.effects;
 
+import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.image.CCImageAsset;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.signal.CCMixSignal;
@@ -30,7 +31,7 @@ public class CCGradientEffect extends CCEffect{
 	
 
 	@CCProperty(name = "gradient")
-	private CCImageAsset _myImage = new CCImageAsset();
+	private CCGradient _myGradient = new CCGradient();
 	private int _myResultLength = 0;
 	
 	private double _myGlobalPhase = 0;
@@ -51,14 +52,11 @@ public class CCGradientEffect extends CCEffect{
 	
 	public double[] applyTo(CCEffectable theEffectable){
 		double[] myResult = new double[_myResultLength];
-		if(_myImage.value() == null)return myResult;
-		CCColor myColor = _myImage.value().getPixel(
-			(
-				_myOffset1Signal.value(_myGlobalPhase + _cOffset1Modulation.modulation(theEffectable)) * _cOffset1Amp + 
-				_myOffset2Signal.value(_myGlobalPhase + _cOffset2Modulation.modulation(theEffectable)) * _cOffset2Amp +
-				_cOffset1Add
-			) * _myImage.value().width() % _myImage.value().width(), 
-			0
+		CCColor myColor = _myGradient.color(
+			_myOffset1Signal.value(_myGlobalPhase + _cOffset1Modulation.modulation(theEffectable)) * _cOffset1Amp + 
+			_myOffset2Signal.value(_myGlobalPhase + _cOffset2Modulation.modulation(theEffectable)) * _cOffset2Amp +
+			_cOffset1Add
+			
 		);
 		double[] hsb = myColor.hsb();
 		myColor.setHSB(
@@ -66,10 +64,10 @@ public class CCGradientEffect extends CCEffect{
 			CCMath.saturate(hsb[1] + _cSShift),
 			CCMath.saturate(hsb[2] + _cBShift)
 		);
-
+		
 		double myBlend = elementBlend(theEffectable);
 		for(int i = 0; i < _myResultLength;i++){
-			switch(_myResultLength % 3){
+			switch(i % 3){
 			case 0:
 				myResult[i] = CCMath.saturate(myColor.r * myBlend * _cAmp);
 				break;

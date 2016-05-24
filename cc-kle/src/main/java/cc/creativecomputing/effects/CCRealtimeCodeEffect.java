@@ -37,7 +37,7 @@ public class CCRealtimeCodeEffect extends CCEffect {
 	}
 
 	public double[] applyTo(CCEffectable theEffectable) {
-		if(_myRealTimeAnimation.instance() == null)return null;
+		if(_myRealTimeAnimation.instance() == null)return new double[_myValueNames.length];
 		
 		double myBlend = elementBlend(theEffectable);
 		double[] myResult = new double[_myValueNames.length];

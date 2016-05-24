@@ -6,6 +6,7 @@ import java.util.Map;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.filter.CCFilter;
 
 public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<String, CCEffect> implements CCAnimatorListener{
