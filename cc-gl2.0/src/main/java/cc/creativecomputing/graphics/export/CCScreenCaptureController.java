@@ -37,9 +37,14 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 	
 	@CCProperty(name = "capture rate", min = 1, max = 60)
 	private int _myCaptureRate;
+	@CCProperty(name = "quality", min = 0, max = 1)
+	private double _cQuality = 1;
 	
 	@CCProperty(name = "alpha")
 	private boolean _cAlpha = false;
+	
+	@CCProperty(name = "prepend")
+	private String _cPrepend = "frame_";
 	
 	@CCProperty(name = "x", readBack = true)
 	private int _cX = 0;
@@ -71,6 +76,10 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 		_myCaptureRate = 1;
 		_myAnimator = theAnimator;
 		_myAnimator.listener().add(this);
+	}
+	
+	public CCScreenCaptureController(CCGL2Adapter theGLAdapter){
+		this(theGLAdapter, theGLAdapter.animator());
 	}
 	
 	private int _myStep = 0;
@@ -113,9 +122,9 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 		CCLog.info(_myRecordPath);
 		if(CCNIOUtil.fileExtension(_myRecordPath) == null)CCNIOUtil.addExtension(_myRecordPath, _myFormat.fileExtension);
 		if(_mySequenceSteps == 1){
-			CCScreenCapture.capture(_myRecordPath, myCaptureX, myCaptureY, myCaptureWidth, myCaptureHeight, _cAlpha);
+			CCScreenCapture.capture(_myRecordPath, myCaptureX, myCaptureY, myCaptureWidth, myCaptureHeight, _cAlpha, _cQuality);
 		}else{
-			CCScreenCapture.capture(_myRecordPath.resolve("frame_" + CCFormatUtil.nf(_myStep, 5) + "." + _myFormat.fileExtension), myCaptureX, myCaptureY, myCaptureWidth, myCaptureHeight, _cAlpha);
+			CCScreenCapture.capture(_myRecordPath.resolve(_cPrepend + "_" + CCFormatUtil.nf(_myStep, 5) + "." + _myFormat.fileExtension), myCaptureX, myCaptureY, myCaptureWidth, myCaptureHeight, _cAlpha, _cQuality);
 		}
 		_myStep++;
 		_myAnimator.fixedUpdateTime = 1f / (_myCaptureRate);

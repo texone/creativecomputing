@@ -32,6 +32,8 @@ import cc.creativecomputing.gl.app.events.CCKeyEvent;
 import cc.creativecomputing.gl.app.events.CCKeyEvent.CCKeyCode;
 import cc.creativecomputing.gl.app.events.CCKeyListener;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.image.CCImageIO;
+import cc.creativecomputing.image.format.CCImageIOFormat;
 import cc.creativecomputing.io.CCNIOUtil;
 
 import com.jogamp.opengl.GL;
@@ -489,8 +491,10 @@ public class CCScreenCapture {
 	 *            GL_EXT_abgr extension to be present.
 	 */
 	public static void capture(Path file, int width, int height, boolean alpha){
-		capture(file, 0, 0, width, height, alpha);
+		capture(file, 0, 0, width, height, alpha, 1);
 	}
+	
+	private static CCImageIOFormat _myFormat = new CCImageIOFormat();
 
 	/**
 	 * Takes a screenshot of the current OpenGL drawable to the specified file
@@ -516,7 +520,7 @@ public class CCScreenCapture {
 	 * @param alpha whether an alpha channel should be saved
 	 * 
 	 */
-	public static void capture(final Path thePath, int x, int y, int width, int height, boolean alpha){
+	public static void capture(final Path thePath, int x, int y, int width, int height, boolean alpha, double theQuality){
 		String fileSuffix = CCNIOUtil.fileExtension(thePath);
 		
 		if(fileSuffix == null){
@@ -535,8 +539,8 @@ public class CCScreenCapture {
 			}
 	
 			BufferedImage image = readToBufferedImage(x, y, width, height, alpha);
-			CCNIOUtil.createDirectories(thePath);
-			if (!ImageIO.write(image, fileSuffix, thePath.toFile())) {
+			_myFormat.write(thePath, image, theQuality);
+			if (!_myFormat.write(thePath, image, theQuality)) {
 				throw new CCScreenCaptureException("Unsupported file format " + fileSuffix);
 			}
 		}catch(Exception e){
