@@ -764,6 +764,13 @@ public class CCVector2 implements Cloneable, Externalizable {
 			a.y * t1 * t1 * t1 + 3 * b.y * t * t1 * t1 + 3 * c.y * t * t * t1 + d.y * t * t * t
 		);
 	}
+	
+	public static CCVector2 circlePoint(double theAngle, double theRadius, double theMX, double theMY){
+		return new CCVector2(
+			CCMath.cos(theAngle) * theRadius + theMX,
+			CCMath.sin(theAngle) * theRadius + theMY
+		);
+	}
 
     /**
      * @return the magnitude of this vector, or the distance between the origin (0, 0) and the point described by (x,
