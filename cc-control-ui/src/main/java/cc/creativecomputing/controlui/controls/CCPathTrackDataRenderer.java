@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.nio.file.Path;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;

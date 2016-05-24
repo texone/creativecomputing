@@ -38,7 +38,6 @@ import cc.creativecomputing.controlui.timeline.controller.actions.MoveColorPoint
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 
@@ -57,8 +56,6 @@ public class ColorTrackController extends TrackController {
 	}
 	
 	private EventAction _myDragAction = EventAction.DRAG_START;
-	
-	private boolean _mySplitDrag = false;
 	
 	private CCListenerManager<ColorTrackListener> _myColorTrackListener = CCListenerManager.create(ColorTrackListener.class);
 
@@ -82,9 +79,7 @@ public class ColorTrackController extends TrackController {
 			@Override
 			public void onChange(Object theValue) {
 
-				CCLog.info("on change" + ":" + theValue + ":" + _myEditedColor);
 				if(_myEditedColor != null && _myEditedColor.isSelected()){
-					CCLog.info("on change" + ":" + theValue + ":" + _myEditedColor.isSelected());
 					_myEditedColor.color((CCColor)theValue);
 			        _myTrackView.render();
 				}
@@ -93,7 +88,6 @@ public class ColorTrackController extends TrackController {
 	}
 	
 	public void splitDrag(boolean theSplitDrag){
-		_mySplitDrag = theSplitDrag;
 	}
 	
 	public CCListenerManager<ColorTrackListener> events(){
@@ -316,8 +310,6 @@ public class ColorTrackController extends TrackController {
 	private double _myStartEnd;
 	private ControlPoint _myCurveCoords;
 	
-	private double _myLastOffset = 0;
-	
 	private double _myPrevRelation = 0.5;
 	private double _myPostRelation = 0.5;
 	
@@ -358,7 +350,6 @@ public class ColorTrackController extends TrackController {
 			_myDragAction = EventAction.DRAG_START;
 		} else {
 			
-			ColorPoint myLower = (ColorPoint)trackData().lower(_myCurveCoords);
 			
 
 //			if(myLower != null) {

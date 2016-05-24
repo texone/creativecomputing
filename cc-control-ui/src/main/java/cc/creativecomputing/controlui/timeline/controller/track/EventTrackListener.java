@@ -23,7 +23,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
 
 public interface EventTrackListener{
 	public void onCreate(EventTrackController theController, TimedEventPoint thePoint);

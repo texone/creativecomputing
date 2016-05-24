@@ -1,16 +1,11 @@
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
-import java.awt.LinearGradientPaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Point2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -18,8 +13,6 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import com.sun.javafx.geom.Rectangle;
 
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;

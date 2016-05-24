@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.swing.JTextField;
 
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackControlView;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.math.CCMath;
 
