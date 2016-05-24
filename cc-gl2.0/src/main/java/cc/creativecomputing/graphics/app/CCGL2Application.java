@@ -21,6 +21,8 @@ public class CCGL2Application {
 	@CCProperty(name = "app")
 	private CCGLAdapter<CCGraphics, CCGL2Context> _myAdapter;
 	
+	public String presetPath = null;
+	
 	private boolean _myIsInitialized = false;
 	
 	private boolean _myUseUI;
@@ -54,21 +56,30 @@ public class CCGL2Application {
 		
 		_myGLContext = new CCGL2Context(_myAnimator);
 		theGLAdapter.glContext(_myGLContext);
-
-		_myGLContext.listener().add(new CCGLAdapter<CCGraphics, CCGL2Context>() {
+		if(presetPath == null){
+			presetPath = "settings/" + _myAdapter.getClass().getName() + "/";
+		}
+		CCGLAdapter<CCGraphics, CCGL2Context> myGLAdapter = new CCGLAdapter<CCGraphics, CCGL2Context>() {
+			
+			
 			@Override
 			public void init(CCGraphics theG) {
 				_myAdapter.init(theG, _myAnimator);
 				if(_myUseUI){
-					_myControlApp = new CCControlApp(CCGL2Application.this, _mySynch);
-					_myControlApp.afterInit();
+					_myControlApp.setData(CCGL2Application.this, presetPath);
 					theGLAdapter.controlApp(_myControlApp);
+					_myControlApp.update(0);
 				}
 				_mySynch.animator().start();
 				
 				_myIsInitialized = true;
 			}
-		});
+		};
+		
+		
+		myGLAdapter.controlApp(new CCControlApp(_mySynch));
+
+		_myGLContext.listener().add(myGLAdapter);
 		_myGLContext.listener().add(
 			new CCGLAdapter<CCGraphics, CCGL2Context>() {
 				@Override
