@@ -62,8 +62,6 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 	
 	private CCControlComponent _myControlCompoent;
 	
-	
-	
 	private CCPropertyMap _myPropertyMap;
 
 	public CCControlTreeComponent(String theTopNode, CCControlComponent theControlComponent){
@@ -84,10 +82,12 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 //        _myTree.addTreeSelectionListener(this);
         JScrollPane treeView = new JScrollPane(_myTree);
         add(treeView);
+        
+        _myPropertyMap = new CCPropertyMap();
 	}
 	
-	public void setData(Object theObject){
-		_myPropertyMap = new CCPropertyMap(theObject, "app");
+	public void setData(Object theObject, String thePresetPath){
+		_myPropertyMap.setData(theObject, thePresetPath);
 
 		CCObjectPropertyHandle myRootHandle = _myPropertyMap.rootHandle();
 		_myRootNode.setUserObject(new CCTreeNodeUserObject(myRootHandle));

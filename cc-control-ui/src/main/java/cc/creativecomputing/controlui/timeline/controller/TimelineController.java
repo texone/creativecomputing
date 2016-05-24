@@ -331,7 +331,7 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		if(_myClipController == null)_myClipController = createClipGroup(Paths.get("clip arrange"));
 		
 		CCClipTrackObject myClipTrackObject = new CCClipTrackObject(_myTimelineContainer);
-		CCObjectPropertyHandle myParent = new CCObjectPropertyHandle(myClipTrackObject);
+		CCObjectPropertyHandle myParent = new CCObjectPropertyHandle(myClipTrackObject, "cliptrack");
 		myParent.path(Paths.get("clip arrange"));
 		
 		CCPropertyHandle<?> myProperty = myParent.property("trackID");

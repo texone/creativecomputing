@@ -63,7 +63,7 @@ public class CCControlApp  {
         _myFrame = new JFrame("Creative Computing Controls");
         _myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		_myControlComponent = new CCControlComponent(_myFrame, theRootObject);
+		_myControlComponent = new CCControlComponent(_myFrame);
 
 		// Add content to the window.
 		_myFrame.add(_myControlComponent);
@@ -72,8 +72,7 @@ public class CCControlApp  {
 		_myAnimatorListener = new CCAnimatorAdapter() {
 			@Override
 			public void update(CCAnimator theAnimator) {
-				_myControlComponent.timeline().update(theAnimator.deltaTime());
-				_myControlComponent.propertyMap().rootHandle().update(theAnimator.deltaTime());
+				CCControlApp.this.update(theAnimator.deltaTime());
 			}
 		};
 		_myAnimator.listener().add(_myAnimatorListener);
@@ -88,15 +87,20 @@ public class CCControlApp  {
 		_myFrame.setVisible(true);
 	}
 	
-	public void afterInit(){
-		_myControlComponent.afterInit();
+	public void update(double theDeltaTime){
+		_myControlComponent.timeline().update(theDeltaTime);
+		_myControlComponent.propertyMap().rootHandle().update(theDeltaTime);
+	}
+	
+	public void setData(Object theData, String thePresetPath){
+		_myControlComponent.setData(theData, thePresetPath);
 	}
 	
 	public TimelineContainer timeline(){
 		return _myControlComponent.timeline();
 	}
 	
-	public CCControlApp(Object theRootObject, CCTimelineSynch theSynch) {
+	public CCControlApp(CCTimelineSynch theSynch) {
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Test");
         try {
@@ -125,7 +129,7 @@ public class CCControlApp  {
         _myFrame = new JFrame("Creative Computing Controls");
         _myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		_myControlComponent = new CCControlComponent(_myFrame, theRootObject);
+		_myControlComponent = new CCControlComponent(_myFrame);
 
 		// Add content to the window.
 		_myFrame.add(_myControlComponent);
@@ -134,6 +138,9 @@ public class CCControlApp  {
 		_myAnimatorListener = new CCAnimatorAdapter() {
 			@Override
 			public void update(CCAnimator theAnimator) {
+				if(_myControlComponent.propertyMap().rootHandle() == null){
+					return;
+				}
 				_myControlComponent.propertyMap().rootHandle().update(theAnimator.deltaTime());
 			}
 		};

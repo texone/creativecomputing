@@ -40,7 +40,7 @@ public class CCControlComponent extends JSplitPane{
 	private TimelineContainer _myTimelineContainer;
 	private SwingTimelineContainerView _myTimelineView;
 	
-	public CCControlComponent(JFrame theMainFrame, Object theData){
+	public CCControlComponent(JFrame theMainFrame){
 		super(JSplitPane.VERTICAL_SPLIT, true);
 		CCUIStyler.styleSplitPane(this);
 		_myInfoPanel = new JPanel();
@@ -53,7 +53,6 @@ public class CCControlComponent extends JSplitPane{
 		_myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		_myTreeComponent = new CCControlTreeComponent("app", this);
-		setData(theData);
 		_myTimelineView = new SwingTimelineContainerView(theMainFrame);
 		_myTimelineContainer = new TimelineContainer(_myTreeComponent.propertyMap());
 		_myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
@@ -75,7 +74,6 @@ public class CCControlComponent extends JSplitPane{
 //		_myTimelineView.setSize(1900, 500);
 		
         _myPresetComponent = new CCPresetComponent();
-        _myPresetComponent.setPresets(_myTreeComponent.rootHandle());
         
         JSplitPane myControlsPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
         CCUIStyler.styleSplitPane(myControlsPane);
@@ -161,8 +159,10 @@ public class CCControlComponent extends JSplitPane{
 		return _myInfoPanel;
 	}
 	
-	public void setData(Object theData){
-		_myTreeComponent.setData(theData);
+	public void setData(Object theData, String thePresetPath){
+		_myTreeComponent.setData(theData, thePresetPath);
+        _myPresetComponent.setPresets(_myTreeComponent.rootHandle());
+        _myPresetComponent.loadFirstPreset();
 	}
 	
 	public CCPropertyMap propertyMap(){
@@ -187,7 +187,8 @@ public class CCControlComponent extends JSplitPane{
         JFrame frame = new JFrame("TreeDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  
-        CCControlComponent myControlComponent = new CCControlComponent(frame, new CCTestClass2());
+        CCControlComponent myControlComponent = new CCControlComponent(frame);
+        myControlComponent.setData(new CCTestClass2(), "settings");
 //        myControlComponent.setData();
         
         //Add content to the window.
@@ -222,7 +223,4 @@ public class CCControlComponent extends JSplitPane{
         });
     }
 
-	public void afterInit() {
-        _myPresetComponent.loadFirstPreset();
-	}
 }
