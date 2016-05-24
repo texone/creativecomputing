@@ -32,6 +32,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.image.CCImageUtil;
 import cc.creativecomputing.image.CCPixelFormat;
@@ -60,7 +61,8 @@ public class CCScreenCaptureData extends CCVideo {
 		
 		private CCListenerManager<CCScreenGrabAreaListener> _mEvents = new CCListenerManager<CCScreenGrabAreaListener>(CCScreenGrabAreaListener.class);
 		
-		private boolean _myIsActive = true;
+		
+		private boolean _myIsActive = false;
 
 		public CCScreenGrabArea() {
 			super("GradientTranslucentWindow");
@@ -82,6 +84,7 @@ public class CCScreenCaptureData extends CCVideo {
 			AWTUtilities.setWindowOpaque(this, false);
 		}
 		
+		@CCProperty(name = "draw area")
 		public void isActive(boolean theIsActive) {
 			_myIsActive = theIsActive;
 			setVisible(_myIsActive);
@@ -297,10 +300,14 @@ public class CCScreenCaptureData extends CCVideo {
 	protected int _myCropX;
 	protected int _myCropY;
 	
+	@CCProperty(name = "x", readBack = true)
 	private int _myCaptureX;
+	@CCProperty(name = "y", readBack = true)
 	private int _myCaptureY;
 
+	@CCProperty(name = "width", readBack = true)
 	protected int _myCaptureWidth;
+	@CCProperty(name = "width", readBack = true)
 	protected int _myCaptureHeight;
 
 	protected BufferedImage _myScreenShot;
@@ -315,6 +322,7 @@ public class CCScreenCaptureData extends CCVideo {
 	 */
 	private boolean _myIsDataUpdated = false;
 	
+	@CCProperty(name = "grab area")
 	private CCScreenGrabArea _myGrabArea;
 
 	/**
@@ -498,5 +506,7 @@ public class CCScreenCaptureData extends CCVideo {
 			_myListener.proxy().onUpdate(this);
 		}
 	}
+	
+	
 
 }
