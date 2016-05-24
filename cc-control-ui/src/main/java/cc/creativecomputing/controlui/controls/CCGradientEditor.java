@@ -14,7 +14,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Collections;
 
-import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -25,7 +24,6 @@ import javax.swing.event.ChangeListener;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCGradientPoint;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 
@@ -68,7 +66,7 @@ public class CCGradientEditor extends JPanel {
 
 	    public void open() {
 	    	try{
-		    	_myLastColor = _mySelectedPoint.color().toAWTColor();
+		    	_myLastColor = _myGradient.get(_mySelectedPoint).color().toAWTColor();
 		        _myColorChooser.setColor(_myLastColor);
 	        }catch(Exception e){
 	        	
@@ -83,7 +81,7 @@ public class CCGradientEditor extends JPanel {
 	    }
 	};
 
-	private CCGradientPoint _mySelectedPoint;
+	private int _mySelectedPoint;
 
 	private CCGradient _myGradient = new CCGradient();
 	/** The polygon used for the markers */
@@ -117,7 +115,7 @@ public class CCGradientEditor extends JPanel {
 
 		x = 5;
 		y = 5;
-		barHeight = 10;
+		barHeight = 5;
 
 		_myColorChooser = CCUIStyler.createColorChooser(new Color(0,0,0));
 		_myColorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
@@ -145,7 +143,7 @@ public class CCGradientEditor extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 1) {
-					if(_mySelectedPoint != null){
+					if(_mySelectedPoint != -1){
 						if(e.isShiftDown())delPoint();
 						else editPoint();
 					}else{
@@ -218,18 +216,9 @@ public class CCGradientEditor extends JPanel {
 	 * Add a new control point
 	 */
 	private void addPoint(double thePosition) {
-		CCGradientPoint point = new CCGradientPoint(0.5, CCColor.WHITE.clone());
-//		for (int i = 0; i < _myGradient.size() - 1; i++) {
-//			CCGradientPoint now = _myGradient.get(i);
-//			CCGradientPoint next =  _myGradient.get(i + 1);
-//			if ((now.position() <= 0.5f) && (next.position() >= 0.5f)) {
-//				_myGradient.add(i + 1, point);
-//				break;
-//			}
-//
-//		}
-		_myGradient.add(new CCGradientPoint(thePosition, CCColor.WHITE.clone()));
-		_mySelectedPoint = point;
+		CCGradientPoint point = new CCGradientPoint(thePosition, CCColor.WHITE.clone());
+		_myGradient.add(point);
+		_mySelectedPoint = _myGradient.indexOf(point);
 		repaint(0);
 
 		fireUpdate();
@@ -241,17 +230,16 @@ public class CCGradientEditor extends JPanel {
 	 *
 	 */
 	private void editPoint() {
-		if (_mySelectedPoint == null) {
+		if (_mySelectedPoint == -1) {
 			return;
 		}
-		_myColorChooser.setColor(_mySelectedPoint.color().toAWTColor());
+		_myColorChooser.setColor(_myGradient.get(_mySelectedPoint).color().toAWTColor());
 		_myAction.open();
 	}
 	
 	private void setColor(Color theColor){
 		if(theColor == null)return;
-
-		_mySelectedPoint.color().set(theColor);
+		_myGradient.get(_mySelectedPoint).color().set(theColor);
 		repaint(0);
 		fireUpdate();
 	}
@@ -264,26 +252,30 @@ public class CCGradientEditor extends JPanel {
 	 */
 	private void selectPoint(int mx, int my) {
 		if (!isEnabled()) {
+			_mySelectedPoint = -1;
 			return;
 		}
-		if(_myGradient.size() == 0)return;
+		if(_myGradient.size() == 0){
+			_mySelectedPoint = -1;
+			return;
+		}
 
 		for (int i = 1; i < _myGradient.size() - 1; i++) {
 			if (checkPoint(mx, my,  _myGradient.get(i))) {
-				_mySelectedPoint =  _myGradient.get(i);
+				_mySelectedPoint =  i;
 				return;
 			}
 		}
 		if (checkPoint(mx, my,  _myGradient.get(0))) {
-			_mySelectedPoint =  _myGradient.get(0);
+			_mySelectedPoint =  0;
 			return;
 		}
 		if (checkPoint(mx, my,  _myGradient.get(_myGradient.size() - 1))) {
-			_mySelectedPoint =  _myGradient.get(_myGradient.size() - 1);
+			_mySelectedPoint =  _myGradient.size() - 1;
 			return;
 		}
 
-		_mySelectedPoint = null;
+		_mySelectedPoint = -1;
 	}
 
 	/**
@@ -294,7 +286,7 @@ public class CCGradientEditor extends JPanel {
 			return;
 		}
 
-		if (_mySelectedPoint == null) {
+		if (_mySelectedPoint == -1) {
 			return;
 		}
 		if (_myGradient.indexOf(_mySelectedPoint) == 0) {
@@ -320,7 +312,7 @@ public class CCGradientEditor extends JPanel {
 			return;
 		}
 
-		if (_mySelectedPoint == null) {
+		if (_mySelectedPoint == -1) {
 			return;
 		}
 
@@ -328,7 +320,7 @@ public class CCGradientEditor extends JPanel {
 		newPos = Math.min(1, newPos);
 		newPos = Math.max(0, newPos);
 
-		_mySelectedPoint.position(newPos);
+		_myGradient.get(_mySelectedPoint).position(newPos);
 		Collections.sort(_myGradient);
 		fireUpdate();
 	}
@@ -337,6 +329,7 @@ public class CCGradientEditor extends JPanel {
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	public void paintComponent(Graphics g1d) {
+		setBackground(getParent().getBackground());
 		super.paintComponent(g1d);
 
 		Graphics2D g = (Graphics2D) g1d;
@@ -359,7 +352,7 @@ public class CCGradientEditor extends JPanel {
 			g.setColor(Color.black);
 			g.drawPolygon(poly);
 
-			if (pt == _mySelectedPoint) {
+			if (i == _mySelectedPoint) {
 				g.drawLine(-4, 10, 4, 10);
 			}
 			g.translate(-x - (width * pt.position()), -y - barHeight);
