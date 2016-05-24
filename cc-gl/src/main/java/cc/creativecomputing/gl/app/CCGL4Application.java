@@ -16,6 +16,8 @@ public class CCGL4Application {
 	@CCProperty(name = "app")
 	private CCGLAdapter<GLGraphics, CCGL4Context> _myAdapter;
 	
+	public String presetPath;
+	
 	private CCControlApp _myControlApp;
 
 	public CCGL4Application(CCGLAdapter<GLGraphics, CCGL4Context> theGLAdapter) {
@@ -27,6 +29,8 @@ public class CCGL4Application {
 	
 		_myGLContext = new CCGL4Context(_myAnimator);
 		theGLAdapter.glContext(_myGLContext);
+		
+		
 
 		_myGLContext.listener().add(new CCGLAdapter<GLGraphics, CCGL4Context>() {
 			@Override
