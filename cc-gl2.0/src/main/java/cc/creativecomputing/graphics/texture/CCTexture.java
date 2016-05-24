@@ -371,7 +371,7 @@ public abstract class CCTexture{
 		gl.glPixelStorei(GL2.GL_PACK_SKIP_IMAGES, theStorageModes.skipImages());
 	}
 	
-	protected CCPixelFormat pixelFormat(CCImage theImage){
+	public static CCPixelFormat pixelFormat(CCImage theImage){
 		switch(theImage.pixelFormat()){
 		case RG: return CCPixelFormat.RGB;
 		case RG_INTEGER: return CCPixelFormat.RG_INTEGER;
@@ -406,7 +406,7 @@ public abstract class CCTexture{
 		throw new RuntimeException("no pixel format for image pixelformat:" + theImage.pixelFormat());
 	}
 	
-	protected CCPixelInternalFormat internalFormat(CCImage theImage){
+	public static CCPixelInternalFormat internalFormat(CCImage theImage){
 		switch(theImage.internalFormat()){
 		case ALPHA: return CCPixelInternalFormat.ALPHA;
 		case ALPHA4: return CCPixelInternalFormat.ALPHA4;
@@ -508,7 +508,7 @@ public abstract class CCTexture{
 		throw new RuntimeException("no pixel internal format for image pixel internal format:" + theImage.internalFormat());
 	}
 	
-	protected CCPixelType pixelType(CCImage theImage){
+	public static CCPixelType pixelType(CCImage theImage){
 		switch(theImage.pixelType()){
 		case UNSIGNED_BYTE: return CCPixelType.UNSIGNED_BYTE;
 		case BYTE: return CCPixelType.BYTE;
