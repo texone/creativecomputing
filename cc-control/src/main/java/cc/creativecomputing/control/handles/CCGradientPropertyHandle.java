@@ -34,7 +34,8 @@ public class CCGradientPropertyHandle extends CCPropertyHandle<CCGradient>{
 		CCGradient myGradient = value();
 		CCDataArray myPoints = new CCDataArray();
 		for(CCGradientPoint myPoint:myGradient){
-			CCDataObject myPointJson = super.data();
+			CCDataObject myPointJson = new CCDataObject();
+			myResult.put("name", name());
 			myPointJson.put("r", myPoint.color().r);
 			myPointJson.put("g", myPoint.color().g);
 			myPointJson.put("b", myPoint.color().b);
@@ -55,10 +56,10 @@ public class CCGradientPropertyHandle extends CCPropertyHandle<CCGradient>{
 			CCGradientPoint myPoint = new CCGradientPoint(
 				myPointJson.getDouble("position"), 
 				new CCColor(
-					theData.getDouble("r",0),
-					theData.getDouble("g",0),
-					theData.getDouble("b",0),
-					theData.getDouble("a",0)
+					myPointJson.getDouble("r",0),
+					myPointJson.getDouble("g",0),
+					myPointJson.getDouble("b",0),
+					myPointJson.getDouble("a",0)
 				)
 			);
 			myGradient.add(myPoint);
