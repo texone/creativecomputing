@@ -249,6 +249,11 @@ public class CCMath {
 		return Math.max(a, b);
 //		return (a > b) ? a : b;
 	}
+	
+	static public final long max(long a, long b) {
+		//return Math.max(a, b);
+		return (a > b) ? a : b;
+	}
 
 	static public final double max(double a, double b) {
 		//return Math.max(a, b);
@@ -282,6 +287,11 @@ public class CCMath {
 	}
 
 	static public final float min(float a, float b) {
+//		return Math.min(a, b);
+		return (a < b) ? a : b;
+	}
+
+	static public final long min(long a, long b) {
 //		return Math.min(a, b);
 		return (a < b) ? a : b;
 	}
