@@ -7,12 +7,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 public class CCDate {
 
 //	public static String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 	public static final String ISO_8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+	
+	private static DateFormat OUTPUT_FORMAT = new SimpleDateFormat(ISO_8601_FORMAT);
 	
 	/**
      * first month of the year in the Gregorian and Julian calendars.
@@ -198,6 +201,10 @@ public class CCDate {
 		return _myCalendar.get(Calendar.DAY_OF_MONTH);
 	}
 	
+	public int dayOfYear(){
+		return _myCalendar.get(Calendar.DAY_OF_YEAR);
+	}
+	
 	/**
 	 * Set the hour of the day for the 24-hour clock.
      * E.g., at 10:04:15.250 PM the hour is 22.
@@ -239,6 +246,10 @@ public class CCDate {
 	
 	public double dayProgress(){
 		return (((hours() * 60 + minutes()) * 60) + seconds()) / (24d * 60d * 60d);
+	}
+	
+	public double yearProgress(){
+		return _myCalendar.get(Calendar.DAY_OF_YEAR) / 365d;
 	}
 	
 	public void set(int theYear, int theMonth, int theDate){
@@ -297,6 +308,16 @@ public class CCDate {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(Calendar.getInstance());
+//		System.out.println(Calendar.getInstance());
+		CCLog.info(1463520941000l + "");
+		CCLog.info(new CCDate(1463520941000l).timeInMilliSeconds());
+		CCLog.info(new CCDate(1463520941000l).toString());
+
+		CCLog.info(new CCDate().timeInMilliSeconds() + ":" + 1463520941);
+	}
+	
+	@Override
+	public String toString() {
+		return OUTPUT_FORMAT.format(_myCalendar.getTime());
 	}
 }
