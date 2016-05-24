@@ -10,14 +10,11 @@
  */
 package cc.creativecomputing.graphics.texture;
 
-import java.nio.file.Path;
+import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
-import cc.creativecomputing.graphics.texture.CCTexture2D;
-import cc.creativecomputing.graphics.texture.CCTextureAttributes;
 import cc.creativecomputing.image.CCImage;
-import cc.creativecomputing.image.CCImageIO;
 
 
 /**
@@ -31,22 +28,22 @@ public class CCSequenceTexture extends CCTexture2D implements CCAnimatorListener
 	/**
 	 * frame rate of the sequence
 	 */
-	private float _myFrameRate = 15;
+	private double _myFrameRate = 15;
 	
 	/**
 	 * play back rate of the sequence
 	 */
-	private float _myRate = 1;
+	private double _myRate = 1;
 	
 	/**
 	 * Duration of the movie in seconds
 	 */
-	private float _myDuration = 0;
+	private double _myDuration = 0;
 	
 	/**
 	 * Current time of the sequence in seconds
 	 */
-	private float _myTime = 0;
+	private double _myTime = 0;
 	
 	/**
 	 * true if the movie is looping otherwise false
@@ -64,30 +61,11 @@ public class CCSequenceTexture extends CCTexture2D implements CCAnimatorListener
 	 * @param theAttributes  attributes of the texture to be generated
 	 * @param theTextureData array containing the texture data
 	 */
-	public CCSequenceTexture(CCTextureTarget theTarget, CCTextureAttributes theAttributes, CCImage[] theTextureData) {
-		super(theTarget, theAttributes, theTextureData.length);
+	public CCSequenceTexture(CCTextureTarget theTarget, CCTextureAttributes theAttributes, List<CCImage> theTextureData) {
+		super(theTarget, theAttributes, theTextureData.size());
 		
 		for(CCImage myData:theTextureData) {
 			data(myData);
-			_myTextureID++;
-		}
-		_myTextureID = 0;
-		_myIsRunning = false;
-		
-		_myDuration = _myTextureIDs.length / (_myFrameRate);
-	}
-	
-	/**
-	 * Creates a new sequence texture from the given texture data objects.
-	 * @param theApp reference to the active app needed for updating
-	 * @param theTarget texture target can be <code>TEXTURE_RECT</code> or <code>TEXTURE_2D</code>
-	 * @param theAttributes  attributes of the texture to be generated
-	 * @param theFiles array containing the image files
-	 */
-	public CCSequenceTexture(CCTextureTarget theTarget, CCTextureAttributes theAttributes, final Path[] theFiles) {
-		super(theTarget, theAttributes, theFiles.length);
-		for(Path file:theFiles){
-			data(CCImageIO.newImage(file));
 			_myTextureID++;
 		}
 		_myTextureID = 0;
@@ -131,15 +109,15 @@ public class CCSequenceTexture extends CCTexture2D implements CCAnimatorListener
 	 * Use this to define the frame rate of you texture sequence
 	 * @param theFrameRate frame rate of the texture sequence
 	 */
-	public void frameRate(final float theFrameRate) {
+	public void frameRate(final double theFrameRate) {
 		_myFrameRate = theFrameRate;
 	}
 	
-	public float frameRate() {
+	public double frameRate() {
 		return _myFrameRate;
 	}
 
-	public float duration() {
+	public double duration() {
 		return _myDuration;
 	}
 
@@ -166,15 +144,15 @@ public class CCSequenceTexture extends CCTexture2D implements CCAnimatorListener
 		_myIsLooping = theDoLoop;
 	}
 
-	public float progress() {
-		return time() / (float) duration();
+	public double progress() {
+		return time() / (double) duration();
 	}
 
-	public void rate(float theRate) {
+	public void rate(double theRate) {
 		_myRate = theRate;
 	}
 
-	public float rate() {
+	public double rate() {
 		return _myRate;
 	}
 
@@ -199,20 +177,20 @@ public class CCSequenceTexture extends CCTexture2D implements CCAnimatorListener
 		_myIsRunning = false;
 	}
 
-	public float time() {
+	public double time() {
 		return _myTime;
 	}
 
-	public void time(float theNewtime) {
+	public void time(double theNewtime) {
 		_myTime = 0;
 		_myTextureID = (int)(_myTime/_myDuration);
 	}
 
-	public float volume() {
+	public double volume() {
 		return 0;
 	}
 
-	public void volume(float theVolume) {
+	public void volume(double theVolume) {
 	}
 
 	@Override
