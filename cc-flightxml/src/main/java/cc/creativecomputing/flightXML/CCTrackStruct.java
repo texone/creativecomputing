@@ -48,7 +48,7 @@ public class CCTrackStruct {
 		latitude = theData.getFloat("latitude");
 		longitude = theData.getFloat("longitude");
 		
-		timestamp = new CCDate(theData.getInt("timestamp") * 1000);
+		timestamp = new CCDate(theData.getLong("timestamp") * 1000);
 		updateType = theData.getString("updateType");
 	}
 }
