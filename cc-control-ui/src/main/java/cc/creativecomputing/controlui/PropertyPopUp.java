@@ -8,8 +8,13 @@ import javax.swing.JPopupMenu;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.io.data.CCDataIO;
+import cc.creativecomputing.io.data.CCDataObject;
 
 public class PropertyPopUp extends JPopupMenu {
+	
+	private static CCDataObject clipboard = null;
 	
 	private class AddToTimelineAction implements ActionListener{
 		@Override
@@ -27,37 +32,52 @@ public class PropertyPopUp extends JPopupMenu {
 	
 	private class RestorePresetAction implements ActionListener{
 		
-		
-		
-		private CCPropertyHandle<?> _myProperty;
-		
-		public RestorePresetAction(CCPropertyHandle<?> theProperty){
-			_myProperty = theProperty;
-		}
-		
 		@Override
 		public void actionPerformed(ActionEvent theArg0) {
 			_myControlComponent.timeline().writeValues(_myProperty);
-			
 			_myProperty.restorePreset();
 		}
 	}
 	
 	private class RestoreDefaultAction implements ActionListener{
 		
-		
-		
-		private CCPropertyHandle<?> _myProperty;
-		
-		public RestoreDefaultAction(CCPropertyHandle<?> theProperty){
-			_myProperty = theProperty;
-		}
-		
 		@Override
 		public void actionPerformed(ActionEvent theArg0) {
 			_myControlComponent.timeline().writeValues(_myProperty);
-			
 			_myProperty.restoreDefault();
+		}
+	}
+	
+	private class CopyAction implements ActionListener{
+		
+		@Override
+		public void actionPerformed(ActionEvent theArg0) {
+			clipboard = _myProperty.data();
+		}
+	}
+
+	private class PasteAction implements ActionListener{
+	
+		@Override
+		public void actionPerformed(ActionEvent theArg0) {
+			if(clipboard == null)return;
+			_myProperty.data(clipboard);
+		}
+	}
+	
+	private class ExportAction implements ActionListener{
+		
+		@Override
+		public void actionPerformed(ActionEvent theArg0) {
+			CCDataIO.saveDataObject(_myProperty.data(), CCNIOUtil.selectOutput("export preset", null, "json"));
+		}
+	}
+
+	private class ImportAction implements ActionListener{
+	
+		@Override
+		public void actionPerformed(ActionEvent theArg0) {
+			_myProperty.data(CCDataIO.createDataObject(CCNIOUtil.selectInput("import preset", null, "json")));
 		}
 	}
 	
@@ -92,13 +112,35 @@ public class PropertyPopUp extends JPopupMenu {
 		
 		JMenuItem myRestoreDefaultItem = new JMenuItem("Restore Default");
 		myRestoreDefaultItem.setFont(SwingGuiConstants.ARIAL_11);
-		myRestoreDefaultItem.addActionListener(new RestoreDefaultAction(theProperty));
+		myRestoreDefaultItem.addActionListener(new RestoreDefaultAction());
 		add(myRestoreDefaultItem);
 		
 		JMenuItem myRestorePresetItem = new JMenuItem("Restore Preset");
 		myRestorePresetItem.setFont(SwingGuiConstants.ARIAL_11);
-		myRestorePresetItem.addActionListener(new RestorePresetAction(theProperty));
+		myRestorePresetItem.addActionListener(new RestorePresetAction());
 		add(myRestorePresetItem);
+		
+		addSeparator();
+		
+		JMenuItem myCopyItem = new JMenuItem("copy");
+		myCopyItem.setFont(SwingGuiConstants.ARIAL_11);
+		myCopyItem.addActionListener(new CopyAction());
+		add(myCopyItem);
+		
+		JMenuItem myPasteItem = new JMenuItem("paste");
+		myPasteItem.setFont(SwingGuiConstants.ARIAL_11);
+		myPasteItem.addActionListener(new PasteAction());
+		add(myPasteItem);
+		
+		JMenuItem myExportItem = new JMenuItem("export");
+		myExportItem.setFont(SwingGuiConstants.ARIAL_11);
+		myExportItem.addActionListener(new ExportAction());
+		add(myExportItem);
+		
+		JMenuItem myImportItem = new JMenuItem("import");
+		myImportItem.setFont(SwingGuiConstants.ARIAL_11);
+		myImportItem.addActionListener(new ImportAction());
+		add(myImportItem);
 		
 		
 	}
