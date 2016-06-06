@@ -1070,5 +1070,14 @@ public class CCColor implements Cloneable{
 		return sa + sr + sg + sb;
 	}
 
+	public String rgbString(){
+		int r = (int)(this.r*255);
+		int g = (int)(this.g*255);
+		int b = (int)(this.b*255);
+		String sr = ((Integer.toHexString(r)).length() == 1) ? "0" + Integer.toHexString(r) : Integer.toHexString(r);
+		String sg = ((Integer.toHexString(g)).length() == 1) ? "0" + Integer.toHexString(g) : Integer.toHexString(g);
+		String sb = ((Integer.toHexString(b)).length() == 1) ? "0" + Integer.toHexString(b) : Integer.toHexString(b);
+		return sr + sg + sb;
+	}
 	
 }

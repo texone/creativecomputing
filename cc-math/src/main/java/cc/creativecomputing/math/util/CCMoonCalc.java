@@ -1,6 +1,5 @@
 package cc.creativecomputing.math.util;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.time.CCDate;
 
@@ -484,10 +483,6 @@ public class CCMoonCalc {
 
 		RiseSet rise1 = new RiseSet(coor1, lon, lat, altitude);
 		RiseSet rise2 = new RiseSet(coor2, lon, lat, altitude);
-		
-		CCLog.info("rise 1:" + rise1);
-		CCLog.info("rise 2:" + rise2);
-
 
 		// unwrap GMST in case we move across 24h -> 0h
 		if (rise1.transit > rise2.transit && Math.abs(rise1.transit - rise2.transit) > 18)
@@ -530,8 +525,6 @@ public class CCMoonCalc {
 		rise.transit = GMST2UT(jd0UT, InterpolateGMST(T0, rise1.transit, rise2.transit, timeinterval));
 		rise.rise = GMST2UT(jd0UT, InterpolateGMST(T0, rise1.rise, rise2.rise, timeinterval) - dt);
 		rise.set = GMST2UT(jd0UT, InterpolateGMST(T0, rise1.set, rise2.set, timeinterval) + dt);
-		
-		CCLog.info(rise);
 		
 		return rise;
 	}
@@ -720,15 +713,15 @@ public class CCMoonCalc {
 		public String distance;
 		public String phase;
 		public double fraction;
-		public CCDate aufgang;
-		public CCDate untergang;
+		public CCDate rise;
+		public CCDate set;
 		public CCDate kulmination;
 		public double alterday;
 		public double altergrad;
 		
 	}
 
-	public static CCMoonInfo getMoonPosition (CCDate date, double Lat, double Lng) {
+	public static CCMoonInfo moonInfo (CCDate date, double Lat, double Lng) {
 
 		/*
 		if (eval(form.Year.value)<=1900 || eval(form.Year.value)>=2100 ) {
@@ -765,25 +758,24 @@ public class CCMoonCalc {
 	  
 	 
 		String Distance = round10(moonCoor.distance) +""; // Entfernung Erdmittelpunkt zum Mond in km
-		String Phase = moonCoor.moonPhase; // Name der Mondphase
 		double Fraction = round1000(moonCoor.phase); // Beleuchtung des Mondes 0 - 1, http://de.wikipedia.org/wiki/Mondphase
 
 	  
 	  
 		CCMoonInfo result = new CCMoonInfo();
 
-	  result.altitude = (moonCoor.alt*CCMath.RAD_TO_DEG+Refraction(moonCoor.alt))*CCMath.DEG_TO_RAD;  // including refraction in Bogenmass (Radians);
-	  result.azimuth = (moonCoor.myaz); // in Bogenmass (Radians);
-	  result.distance = Distance;
-	  result.phase = moonCoor.moonPhase; // Name der Mondphase
-	  result.fraction = Fraction;
-	  result.aufgang = date.clone().fromDoubleTime(moonRise.rise);
-	  result.untergang = date.clone().fromDoubleTime(moonRise.set);
+		result.altitude = (moonCoor.alt*CCMath.RAD_TO_DEG+Refraction(moonCoor.alt))*CCMath.DEG_TO_RAD;  // including refraction in Bogenmass (Radians);
+		result.azimuth = (moonCoor.myaz); // in Bogenmass (Radians);
+		result.distance = Distance;
+		result.phase = moonCoor.moonPhase; // Name der Mondphase
+		result.fraction = Fraction;
+		result.rise = date.clone().fromDoubleTime(moonRise.rise);
+		result.set = date.clone().fromDoubleTime(moonRise.set);
 	  
 	  
-	  result.kulmination = date.clone().fromDoubleTime(moonRise.transit);
-	  result.altergrad = round1000(moonCoor.moonAge*CCMath.RAD_TO_DEG); // Mondalter in Grad, brauche aber Tage 29,5 Tage ist 360°;
-	  result.alterday = 29.5 / 360 * result.altergrad;
+		result.kulmination = date.clone().fromDoubleTime(moonRise.transit);
+		result.altergrad = round1000(moonCoor.moonAge*CCMath.RAD_TO_DEG); // Mondalter in Grad, brauche aber Tage 29,5 Tage ist 360°;
+		result.alterday = 29.5 / 360 * result.altergrad;
 	    
 	  // Neu
 	  MAlter = result.altergrad;

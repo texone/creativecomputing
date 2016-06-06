@@ -352,6 +352,10 @@ public class CCMath {
 		return theStart + (theStop - theStart) * theBlend;
 	}
 	
+	static public final long blend(final long theStart, final long theStop, final double theBlend) {
+		return (long)(theStart + (theStop - theStart) * theBlend);
+	}
+	
 	static public final double[] blend(final double[] theStart, final double[] theStop, final double theBlend) {
 		double[] result = new double[min(theStart.length, theStop.length)];
 		for(int i = 0; i < result.length; i++){

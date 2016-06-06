@@ -3,6 +3,7 @@ package cc.creativecomputing.math.util;
 
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.time.CCDate;
 import cc.creativecomputing.math.time.CCTimeRange;
 
@@ -104,6 +105,16 @@ public class CCSunCalc {
 		return getSunPosition(date.toJulianDate(), -lng * CCMath.DEG_TO_RAD, lat * CCMath.DEG_TO_RAD );
 	}
 	
+	public static CCVector3 sunPosition3D(CCDate date, double lat, double lng){
+		CCVector2 pos = CCSunCalc.sunPosition(date, lat, lng);
+		double angle = Math.PI / 2 + pos.x;
+		return new CCVector3(
+			CCMath.cos(angle) * CCMath.cos(pos.y),
+			CCMath.sin(angle) * CCMath.cos(pos.y),
+			CCMath.sin(pos.y)
+		);
+	}
+	
 	public static class CCSunInfo{
 		
 		public CCDate dawn;
@@ -197,4 +208,19 @@ public class CCSunCalc {
 		return myResult;		
 	}
 	
+	public static double lightBlend(CCDate theDate, double theLatitude, double theLongitude){
+		CCSunInfo mySunInfo = CCSunCalc.sunInfo(theDate, theLatitude, theLongitude, false);
+		double mySunRiseStart = mySunInfo.dawn.dayProgress();
+		double mySunRiseEnd = mySunInfo.sunrise.end.dayProgress();
+		double mySunSetStart = mySunInfo.sunset.start.dayProgress();
+		double mySunSetEnd = mySunInfo.dusk.dayProgress();
+		
+		double myDay = theDate.dayProgress();
+		if(myDay < mySunRiseStart)return 0;
+		if(myDay < mySunRiseEnd)return CCMath.norm(myDay, mySunRiseStart, mySunRiseEnd);
+		if(myDay < mySunSetStart)return 1;
+		if(myDay < mySunSetEnd)return CCMath.norm(myDay, mySunSetEnd, mySunSetStart);
+		return 0;
+		
+	}
 }

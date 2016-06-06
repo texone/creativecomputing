@@ -113,6 +113,11 @@ public class CCDate {
 		return myResult;
 	}
 
+	public static CCDate blend(CCDate theStartDate, CCDate theEndDate, double theBlend){
+		long myBlendedMillis = CCMath.blend(theStartDate.timeInMilliSeconds(), theEndDate.timeInMilliSeconds(), theBlend);
+		return new CCDate(myBlendedMillis);
+	}
+	
 	private Calendar _myCalendar;
 	
 	public CCDate(long theTime){
@@ -199,6 +204,10 @@ public class CCDate {
 	
 	public int day(){
 		return _myCalendar.get(Calendar.DAY_OF_MONTH);
+	}
+	
+	public void dayOfYear(int theDay){
+		_myCalendar.set(Calendar.DAY_OF_YEAR, theDay);
 	}
 	
 	public int dayOfYear(){
@@ -310,7 +319,7 @@ public class CCDate {
 	public static void main(String[] args) {
 //		System.out.println(Calendar.getInstance());
 		CCLog.info(1463520941000l + "");
-		CCLog.info(new CCDate(1463520941000l).timeInMilliSeconds());
+		CCLog.info(new CCDate(1458518390).timeInMilliSeconds());
 		CCLog.info(new CCDate(1463520941000l).toString());
 
 		CCLog.info(new CCDate().timeInMilliSeconds() + ":" + 1463520941);
