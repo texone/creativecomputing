@@ -10,33 +10,14 @@
  */
 package cc.creativecomputing.model.svg;
 
-import java.awt.Paint;
-import java.awt.PaintContext;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.ColorModel;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
-import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
-import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.model.CCStrokeCap;
-import cc.creativecomputing.model.CCStrokeJoin;
-import cc.creativecomputing.model.svg.CCSVGElement.CCShapeFamily;
-import cc.creativecomputing.model.svg.CCSVGElement.CCShapeKind;
 
 public class CCSVGIO {
 	
@@ -170,8 +151,7 @@ public class CCSVGIO {
 		int start = 0;
 		int stop = -1;
 		while ((stop = matrixStr.indexOf(')', start)) != -1) {
-			CCMatrix32 m = parseSingleTransform(matrixStr.substring(start,
-					stop + 1));
+			CCMatrix32 m = parseSingleTransform(matrixStr.substring(start, stop + 1));
 			if (outgoing == null) {
 				outgoing = m;
 			} else {
@@ -181,219 +161,18 @@ public class CCSVGIO {
 		}
 		return outgoing;
 	}
+
+	static protected String writeMatrix(CCMatrix32 theMatrix) {
+		StringBuffer myResult = new StringBuffer("matrix(");
+		myResult.append(theMatrix.m00 + " ");
+		myResult.append(theMatrix.m10 + " ");
+		myResult.append(theMatrix.m01 + " ");
+		myResult.append(theMatrix.m11 + " ");
+		myResult.append(theMatrix.m02 + " ");
+		myResult.append(theMatrix.m12 + ")");
+		return myResult.toString();
+	}
 	
-	class LinearGradientPaint implements Paint {
-		double x1, y1, x2, y2;
-		double[] offset;
-		int[] color;
-		int count;
-		double opacity;
-
-		public LinearGradientPaint(double x1, double y1, double x2, double y2,
-				double[] offset, int[] color, int count, double opacity) {
-			this.x1 = x1;
-			this.y1 = y1;
-			this.x2 = x2;
-			this.y2 = y2;
-			this.offset = offset;
-			this.color = color;
-			this.count = count;
-			this.opacity = opacity;
-		}
-
-		public PaintContext createContext(ColorModel cm,
-				Rectangle deviceBounds, Rectangle2D userBounds,
-				AffineTransform xform, RenderingHints hints) {
-			Point2D t1 = xform.transform(new Point2D.Double(x1, y1), null);
-			Point2D t2 = xform.transform(new Point2D.Double(x2, y2), null);
-			return new LinearGradientContext((double) t1.getX(),
-					(double) t1.getY(), (double) t2.getX(), (double) t2.getY());
-		}
-
-		public int getTransparency() {
-			return TRANSLUCENT; // why not.. rather than checking each color
-		}
-
-		public class LinearGradientContext implements PaintContext {
-			int ACCURACY = 2;
-			double tx1, ty1, tx2, ty2;
-
-			public LinearGradientContext(double tx1, double ty1, double tx2, double ty2) {
-				this.tx1 = tx1;
-				this.ty1 = ty1;
-				this.tx2 = tx2;
-				this.ty2 = ty2;
-			}
-
-			public void dispose() {
-			}
-
-			public ColorModel getColorModel() {
-				return ColorModel.getRGBdefault();
-			}
-
-			public Raster getRaster(int x, int y, int w, int h) {
-				WritableRaster raster = getColorModel()
-						.createCompatibleWritableRaster(w, h);
-
-				int[] data = new int[w * h * 4];
-
-				// make normalized version of base vector
-				double nx = tx2 - tx1;
-				double ny = ty2 - ty1;
-				double len = (double) Math.sqrt(nx * nx + ny * ny);
-				if (len != 0) {
-					nx /= len;
-					ny /= len;
-				}
-
-				int span = (int) CCMath.dist(tx1, ty1, tx2, ty2) * ACCURACY;
-				if (span <= 0) {
-					// System.err.println("span is too small");
-					// annoying edge case where the gradient isn't legit
-					int index = 0;
-					for (int j = 0; j < h; j++) {
-						for (int i = 0; i < w; i++) {
-							data[index++] = 0;
-							data[index++] = 0;
-							data[index++] = 0;
-							data[index++] = 255;
-						}
-					}
-
-				} else {
-					int[][] interp = new int[span][4];
-					int prev = 0;
-					for (int i = 1; i < count; i++) {
-						int c0 = color[i - 1];
-						int c1 = color[i];
-						int last = (int) (offset[i] * (span - 1));
-						// System.out.println("last is " + last);
-						for (int j = prev; j <= last; j++) {
-							double btwn = CCMath.norm(j, prev, last);
-							interp[j][0] = (int) CCMath.blend((c0 >> 16) & 0xff, (c1 >> 16) & 0xff, btwn);
-							interp[j][1] = (int) CCMath.blend((c0 >> 8) & 0xff, (c1 >> 8) & 0xff, btwn);
-							interp[j][2] = (int) CCMath.blend(c0 & 0xff, c1 & 0xff, btwn);
-							interp[j][3] = (int) (CCMath.blend((c0 >> 24) & 0xff, (c1 >> 24) & 0xff, btwn) * opacity);
-							// System.out.println(j + " " + interp[j][0] + " " +
-							// interp[j][1] + " " + interp[j][2]);
-						}
-						prev = last;
-					}
-
-					int index = 0;
-					for (int j = 0; j < h; j++) {
-						for (int i = 0; i < w; i++) {
-							// double distance = 0; //PApplet.dist(cx, cy, x + i,
-							// y + j);
-							// int which = PApplet.min((int) (distance *
-							// ACCURACY), interp.length-1);
-							double px = (x + i) - tx1;
-							double py = (y + j) - ty1;
-							// distance up the line is the dot product of the
-							// normalized
-							// vector of the gradient start/stop by the point
-							// being tested
-							int which = (int) ((px * nx + py * ny) * ACCURACY);
-							if (which < 0)
-								which = 0;
-							if (which > interp.length - 1)
-								which = interp.length - 1;
-							// if (which > 138) System.out.println("grabbing " +
-							// which);
-
-							data[index++] = interp[which][0];
-							data[index++] = interp[which][1];
-							data[index++] = interp[which][2];
-							data[index++] = interp[which][3];
-						}
-					}
-				}
-				raster.setPixels(0, 0, w, h, data);
-
-				return raster;
-			}
-		}
-	}
-
-	class RadialGradientPaint implements Paint {
-		double cx, cy, radius;
-		double[] offset;
-		int[] color;
-		int count;
-		double opacity;
-
-		public RadialGradientPaint(double cx, double cy, double radius, double[] offset, int[] color, int count, double opacity) {
-			this.cx = cx;
-			this.cy = cy;
-			this.radius = radius;
-			this.offset = offset;
-			this.color = color;
-			this.count = count;
-			this.opacity = opacity;
-		}
-
-		public PaintContext createContext(ColorModel cm,
-				Rectangle deviceBounds, Rectangle2D userBounds,
-				AffineTransform xform, RenderingHints hints) {
-			return new RadialGradientContext();
-		}
-
-		public int getTransparency() {
-			return TRANSLUCENT;
-		}
-
-		public class RadialGradientContext implements PaintContext {
-			int ACCURACY = 5;
-
-			public void dispose() {
-			}
-
-			public ColorModel getColorModel() {
-				return ColorModel.getRGBdefault();
-			}
-
-			public Raster getRaster(int x, int y, int w, int h) {
-				WritableRaster raster = getColorModel()
-						.createCompatibleWritableRaster(w, h);
-
-				int span = (int) radius * ACCURACY;
-				int[][] interp = new int[span][4];
-				int prev = 0;
-				for (int i = 1; i < count; i++) {
-					int c0 = color[i - 1];
-					int c1 = color[i];
-					int last = (int) (offset[i] * (span - 1));
-					for (int j = prev; j <= last; j++) {
-						double btwn = CCMath.norm(j, prev, last);
-						interp[j][0] = (int) CCMath.blend((c0 >> 16) & 0xff,(c1 >> 16) & 0xff, btwn);
-						interp[j][1] = (int) CCMath.blend((c0 >> 8) & 0xff,
-								(c1 >> 8) & 0xff, btwn);
-						interp[j][2] = (int) CCMath.blend(c0 & 0xff, c1 & 0xff, btwn);
-						interp[j][3] = (int) (CCMath.blend((c0 >> 24) & 0xff,(c1 >> 24) & 0xff, btwn) * opacity);
-					}
-					prev = last;
-				}
-
-				int[] data = new int[w * h * 4];
-				int index = 0;
-				for (int j = 0; j < h; j++) {
-					for (int i = 0; i < w; i++) {
-						double distance = CCMath.dist(cx, cy, x + i, y + j);
-						int which = CCMath.min((int) (distance * ACCURACY), interp.length - 1);
-
-						data[index++] = interp[which][0];
-						data[index++] = interp[which][1];
-						data[index++] = interp[which][2];
-						data[index++] = interp[which][3];
-					}
-				}
-				raster.setPixels(0, 0, w, h, data);
-
-				return raster;
-			}
-		}
-	}
 	
 	private CCSVGDocument _myDocument;
 
@@ -403,469 +182,40 @@ public class CCSVGIO {
 		}
 		
 		_myDocument = new CCSVGDocument();
-
-		readDocumentSize(_myDocument, theSVG);
-		readElement(_myDocument, theSVG);
-		readChildren(_myDocument, theSVG);
+		_myDocument.read(theSVG);
 
 		return _myDocument;
 	}
 	
-	private void readDocumentSize(CCSVGDocument theDocument, CCXMLElement theSVG){
-		// not proper parsing of the viewBox, but will cover us for cases where
-		// the width and height of the object is not specified
-		String viewBoxStr = theSVG.attribute("viewBox");
-		if (viewBoxStr != null) {
-			String[] viewBox = CCStringUtil.splitTokens(viewBoxStr);
-			theDocument.width = Double.parseDouble(viewBox[2]);
-			theDocument.height = Double.parseDouble(viewBox[3]);
-		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
-		// TODO if viewbox is not same as width/height, then use it to scale
-		// the original objects. for now, viewbox only used when width/height
-		// are empty values (which by the spec means w/h of "100%"
-		String unitWidth = theSVG.attribute("width");
-		String unitHeight = theSVG.attribute("height");
-		if (unitWidth != null) {
-			theDocument.width = parseUnitSize(unitWidth);
-			theDocument.height = parseUnitSize(unitHeight);
-		} else {
-			if ((_myDocument.width == 0) || (_myDocument.height == 0)) {
-				// throw new RuntimeException("width/height not specified");
-				CCLog.warn("The width and/or height is not readable in the <svg> tag of this file.");
-				// For the spec, the default is 100% and 100%. For purposes
-				// here, insert a dummy value because this is prolly just a
-				// font or something for which the w/h doesn't matter.
-				theDocument.width = 1;
-				theDocument.height = 1;
-			}
-		}
-	}
 	
-	private void readName(CCSVGElement theElement, CCXMLElement theSVG){
-		String myName = theSVG.attribute("id");
-		// @#$(* adobe illustrator mangles names of objects when re-saving
-		if (myName != null) {
-			while (true) {
-				String[] m = CCStringUtil.match(myName, "_x([A-Za-z0-9]{2})_");
-				if (m == null)
-					break;
-				char repair = (char) Integer.parseInt(m[1],16);
-				myName = myName.replace(m[0], "" + repair);
-			}
-		}
-		theElement._myName = myName;
-	}
 	
-	private void readOpacity(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("opacity")) return;
-		
-		String opacityText = theSVG.attribute("opacity");
-		theElement.opacity(Double.parseDouble(opacityText));
-	}
-	
-	private CCColor readRGB(String theColorText) {
-		int leftParen = theColorText.indexOf('(') + 1;
-		int rightParen = theColorText.indexOf(')');
-		String sub = theColorText.substring(leftParen, rightParen);
-		String[] values = CCStringUtil.splitTokens(sub, ", ");
-		return new CCColor(
-			Integer.parseInt(values[0]),
-			Integer.parseInt(values[1]),
-			Integer.parseInt(values[2])
-		);
-	}
-	
-	private Paint calcGradientPaint(CCSVGGradient gradient, double theOpacity) {
-		if (gradient instanceof CCSVGLinearGradient) {
-			CCSVGLinearGradient grad = (CCSVGLinearGradient) gradient;
-			return new LinearGradientPaint(grad.x1, grad.y1, grad.x2, grad.y2, grad.offset, grad.color, grad.count, theOpacity);
 
-		} else if (gradient instanceof CCSVGRadialGradient) {
-			CCSVGRadialGradient grad = (CCSVGRadialGradient) gradient;
-			return new RadialGradientPaint(grad.cx, grad.cy, grad.r, grad.offset, grad.color, grad.count, theOpacity);
-		}
-		return null;
-	}
 	
-	private void readColor(CCSVGElement theElement, String theColorText, boolean isFill) {
-		double myAlpha = theElement.fillColor.a;
-		boolean myIsColorVisible = true;
-		CCColor myColor = new CCColor();
-		String name = "";
-		CCSVGGradient myGradient = null;
-		Paint myPaint = null;
-		
-		if (theColorText.equals("none")) {
-			myIsColorVisible = false;
-		} else if (theColorText.equals("black")) {
-			myColor = CCColor.BLACK.clone();
-			myColor.a = myAlpha;
-		} else if (theColorText.equals("white")) {
-			myColor = CCColor.WHITE.clone();
-			myColor.a = myAlpha;
-		} else if (theColorText.startsWith("#")) {
-			if (theColorText.length() == 4) {
-				// Short form: #ABC, transform to long form #AABBCC
-				theColorText = theColorText.replaceAll("^#(.)(.)(.)$", "#$1$1$2$2$3$3");
-			}
-			myColor = CCColor.parseFromString(theColorText);
-			myColor.a = myAlpha;
-			// System.out.println("hex for fill is " + PApplet.hex(fillColor));
-		} else if (theColorText.startsWith("rgb")) {
-			myColor = readRGB(theColorText);
-			myColor.a = myAlpha;
-		} else if (theColorText.startsWith("url(#")) {
-			name = theColorText.substring(5, theColorText.length() - 1);
-			// PApplet.println("looking for " + name);
-			CCSVGElement myElement = _myDocument.findChild(name);
-			// PApplet.println("found " + fillObject);
-			if (myElement instanceof CCSVGGradient) {
-				myGradient = (CCSVGGradient) myElement;
-				myPaint = calcGradientPaint(myGradient, myAlpha);
-				// PApplet.println("got filla " + fillObject);
-			} else {
-				// visible = false;
-				System.err.println("url " + name + " refers to unexpected data: " + myElement);
-			}
-		}
-		if (isFill) {
-			theElement.fill = myIsColorVisible;
-			theElement.fillColor = myColor;
-			theElement.fillName = name;
-			theElement.fillGradient = myGradient;
-			theElement.fillGradientPaint = myPaint;
-		} else {
-			theElement.stroke = myIsColorVisible;
-			theElement.strokeColor = myColor;
-			theElement.strokeName = name;
-			theElement.strokeGradient = myGradient;
-			theElement.strokeGradientPaint = myPaint;
-		}
-	}
 	
-	private void readStroke(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("stroke")) return;
-		
-		String strokeText = theSVG.attribute("stroke");
-		readColor(theElement, strokeText, false);
-	}
 	
-	private void readStrokeOpacity(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("stroke-opacity")) return;
-		
-		theElement.strokeOpacity = theSVG.doubleAttribute("stroke-opacity");
-		theElement.strokeColor.a = theElement.strokeOpacity;
-	}
-	
-	private void readStrokeWeight(CCSVGElement theElement, CCXMLElement theSVG){
-		if (!theSVG.hasAttribute("stroke-width")) return;
-		theElement.strokeWeight = parseUnitSize(theSVG.attribute("stroke-width"));
-	}
-	
-	private void setStrokeJoin(CCSVGElement theElement, String theStrokeJoin){
-		if (theStrokeJoin.equals("inherit")) {
-			// do nothing, will inherit automatically
-		} else if (theStrokeJoin.equals("miter")) {
-			theElement.strokeJoin = CCStrokeJoin.MITER;
-		} else if (theStrokeJoin.equals("round")) {
-			theElement.strokeJoin = CCStrokeJoin.ROUND;
-		} else if (theStrokeJoin.equals("bevel")) {
-			theElement.strokeJoin = CCStrokeJoin.BEVEL;
-		}
-	}
-	
-	private void readStrokeJoin(CCSVGElement theElement, CCXMLElement theSVG){
-		if (!theSVG.hasAttribute("stroke-linejoin")) return;
-			
-		setStrokeJoin(theElement, theSVG.attribute("stroke-linejoin"));
-	}
-	
-	private void setStrokeCap(CCSVGElement theElement, String theStrokeCap){
-		if (theStrokeCap.equals("inherit")) {
-			// do nothing, will inherit automatically
-		} else if (theStrokeCap.equals("butt")) {
-			theElement.strokeCap = CCStrokeCap.SQUARE;
-		} else if (theStrokeCap.equals("round")) {
-			theElement.strokeCap = CCStrokeCap.ROUND;
-		} else if (theStrokeCap.equals("square")) {
-			theElement.strokeCap = CCStrokeCap.PROJECT;
-		}
-	}
-	
-	private void readStrokeCap(CCSVGElement theElement, CCXMLElement theSVG){
-		if (!theSVG.hasAttribute("stroke-linecap")) return;
-			
-		setStrokeCap(theElement, theSVG.attribute("stroke-linecap"));
-	}
-	
-	private void readFill(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("fill")) return;
-		
-		String myFillText = theSVG.attribute("fill");
-		readColor(theElement, myFillText, true);
-	}
-	
-	private void readFillOpacity(CCSVGElement theElement, CCXMLElement theSVG) {
-		if (!theSVG.hasAttribute("fill-opacity")) return;
-		
-		theElement.fillOpacity(theSVG.doubleAttribute("fill-opacity"));
-	}
-	
-	private void readColors(CCSVGElement theElement, CCXMLElement theSVG) {
-		readOpacity(theElement, theSVG);
-		readStroke(theElement, theSVG);
-		readStrokeOpacity(theElement, theSVG);
-		readStrokeWeight(theElement, theSVG);
-		readStrokeJoin(theElement, theSVG);
-		readStrokeCap(theElement, theSVG);
-		readFill(theElement, theSVG);
-		readFillOpacity(theElement, theSVG);
-
-
-		if (theSVG.hasAttribute("style")) {
-			String styleText = theSVG.attribute("style");
-			String[] styleTokens = CCStringUtil.splitTokens(styleText, ";");
-
-			// PApplet.println(styleTokens);
-			for (int i = 0; i < styleTokens.length; i++) {
-				String[] tokens = CCStringUtil.splitTokens(styleTokens[i], ":");
-				// PApplet.println(tokens);
-
-				tokens[0] = CCStringUtil.trim(tokens[0]);
-
-				if (tokens[0].equals("fill")) {
-					readColor(theElement, tokens[1], true);
-
-				} else if (tokens[0].equals("fill-opacity")) {
-					theElement.fillOpacity(Double.parseDouble(tokens[1]));
-				} else if (tokens[0].equals("stroke")) {
-					readColor(theElement, tokens[1], false);
-
-				} else if (tokens[0].equals("stroke-width")) {
-					theElement.strokeWeight = parseUnitSize(tokens[1]);
-				} else if (tokens[0].equals("stroke-linecap")) {
-					setStrokeCap(theElement, tokens[1]);
-				} else if (tokens[0].equals("stroke-linejoin")) {
-					setStrokeJoin(theElement,tokens[1]);
-				} else if (tokens[0].equals("stroke-opacity")) {
-					theElement.strokeOpacity(Double.parseDouble(tokens[1]));
-				} else if (tokens[0].equals("opacity")) {
-					theElement.opacity(Double.parseDouble(tokens[1]));
-				}
-			}
-		}
-	}
-	
-	private void readVisible(CCSVGElement theElement, CCXMLElement theSVG){
-		String displayStr = theSVG.attribute("display", "inline");
-		theElement.visible = !displayStr.equals("none");
-	}
-	
-	private void readTransform(CCSVGElement theElement, CCXMLElement theSVG){
-		String transformStr = theSVG.attribute("transform");
-		if (transformStr != null) {
-			theElement.matrix = parseTransform(transformStr);
-		}
-	}
-	
-	private void readElement(CCSVGElement theElement, CCXMLElement theSVG){
-		readName(theElement, theSVG);
-		readColors(theElement, theSVG);
-		readVisible(theElement, theSVG);
-		readTransform(theElement, theSVG);
-	}
-	
-	private void readGroup(CCSVGGroup theGroup, CCXMLElement theSVG){
-		readElement(theGroup, theSVG);
-		readChildren(theGroup, theSVG);
-	}
-	
-	private void readDefs(CCSVGGroup theGroup, CCXMLElement theSVG){
-		readChildren(theGroup, theSVG);
-	}
-	
-	private void readLine(CCSVGLine theLine, CCXMLElement theSVG){
-		readElement(theLine, theSVG);
-		theLine._myKind = CCShapeKind.LINE;
-		theLine.family = CCShapeFamily.PRIMITIVE;
-		theLine.a().set(
-			getDoubleWithUnit(theSVG, "x1"),
-			getDoubleWithUnit(theSVG, "y1")
-		);
-		theLine.b().set(
-			getDoubleWithUnit(theSVG, "x2"),
-			getDoubleWithUnit(theSVG, "y2")
-		);
-	}
-	
-	private void readEllipse(CCSVGEllipse theEllipse, CCXMLElement theSVG, boolean theIsCircle){
-		readElement(theEllipse, theSVG);
-		theEllipse._myKind = CCShapeKind.ELLIPSE;
-		theEllipse.family = CCShapeFamily.PRIMITIVE;
-
-		theEllipse.center().set(
-			getDoubleWithUnit(theSVG, "cx"),
-			getDoubleWithUnit(theSVG, "cy")
-		);
-
-		double rx, ry;
-		if (theIsCircle) {
-			rx = ry = getDoubleWithUnit(theSVG, "r");
-		} else {
-			rx = getDoubleWithUnit(theSVG, "rx");
-			ry = getDoubleWithUnit(theSVG, "ry");
-		}
-		theEllipse.radius().set(rx, ry);
-	}
-	
-	private void readRect(CCSVGRectangle theRectangle, CCXMLElement theSVG) {
-		readElement(theRectangle, theSVG);
-		theRectangle._myKind = CCShapeKind.RECT;
-		theRectangle.family = CCShapeFamily.PRIMITIVE;
-		
-		theRectangle.center().set(
-			getDoubleWithUnit(theSVG, "x"),
-			getDoubleWithUnit(theSVG, "y")
-		);
-		theRectangle.dimension().set(
-			getDoubleWithUnit(theSVG, "width"),
-			getDoubleWithUnit(theSVG, "height")
-		);
-	}
-	
-	/**
-	 * Parse a polyline or polygon from an SVG file.
-	 * 
-	 * @param close
-	 *            true if shape is closed (polygon), false if not (polyline)
-	 */
-	private void readPoly(CCSVGPoly thePath, CCXMLElement theSVG) {
-		readElement(thePath, theSVG);
-		thePath._myKind = CCShapeKind.POLYGON;
-		thePath.family = CCShapeFamily.PATH;
-
-		String pointsAttr = theSVG.attribute("points");
-		if (pointsAttr != null) {
-			String[] pointsBuffer = CCStringUtil.splitTokens(pointsAttr);
-			thePath.spline().beginEditSpline();
-			for (int i = 0; i < pointsBuffer.length; i++) {
-				String pb[] = CCStringUtil.split(pointsBuffer[i], ',');
-				thePath.spline().addPoint(new CCVector3(
-					Double.valueOf(pb[0]),
-					Double.valueOf(pb[1])
-				));
-			}
-			thePath.spline().endEditSpline();
-		}
-
-	}
-	
-	private CCSVGPathReader _myPathReader = new CCSVGPathReader();
-	
-	private void readPath(CCSVGPath thePath, CCXMLElement theSVG){
-		readElement(thePath, theSVG);
-		thePath.family = CCShapeFamily.PATH;
-		thePath._myKind = CCShapeKind.PATH;
-
-		String pathData = theSVG.attribute("d").replaceAll("\\n", "");
-		if (pathData == null || CCStringUtil.trim(pathData).length() == 0) {
-			return;
-		}
-		
-		thePath._myPath = _myPathReader.buildPath(pathData, GeneralPath.WIND_EVEN_ODD);
-		System.out.println(pathData);
-	}
-	
-	private void readChildren(CCSVGGroup theGroup, CCXMLElement theSVG) {
-		theGroup._myChildren = new ArrayList<>();
-
-		for (CCXMLElement mySVG : theSVG) {
-			String myName = mySVG.name();
-			
-			if (myName == null) {
-				// just some whitespace that can be ignored (hopefully)
-			} else if (myName.equals("g")) {
-				CCSVGGroup myGroup = new CCSVGGroup(theGroup);
-				myGroup.kind(CCShapeKind.GROUP);
-				readGroup(myGroup, mySVG);
-				theGroup.addChild(myGroup);
-			} else if (myName.equals("defs")) {
-				// generally this will contain gradient info, so may
-				// as well just throw it into a group element for parsing
-				// return new BaseObject(this, elem);
-				CCSVGGroup myGroup = new CCSVGGroup(theGroup);
-				readDefs(myGroup, mySVG);
-				myGroup.kind(CCShapeKind.DEF);
-				theGroup.addChild(myGroup);
-			} else if (myName.equals("line")) {
-				CCSVGLine myLine = new CCSVGLine(theGroup);
-				readLine(myLine, mySVG);
-				theGroup.addChild(myLine);
-			} else if (myName.equals("circle")) {
-				CCSVGEllipse myEllipe = new CCSVGEllipse(theGroup);
-				readEllipse(myEllipe, mySVG, true);
-				theGroup.addChild(myEllipe);
-			} else if (myName.equals("ellipse")) {
-				CCSVGEllipse myEllipe = new CCSVGEllipse(theGroup);
-				readEllipse(myEllipe, mySVG, false);
-				theGroup.addChild(myEllipe);
-			} else if (myName.equals("rect")) {
-				CCSVGRectangle myRect = new CCSVGRectangle(theGroup);
-				readRect(myRect, mySVG);
-				theGroup.addChild(myRect);
-			} else if (myName.equals("polygon")) {
-				CCSVGPoly myPoly = new CCSVGPoly(theGroup, true);
-				readPoly(myPoly, mySVG);
-				theGroup.addChild(myPoly);
-			} else if (myName.equals("polyline")) {
-				CCSVGPoly myPoly = new CCSVGPoly(theGroup, false);
-				readPoly(myPoly, mySVG);
-				theGroup.addChild(myPoly);
-			} else if (myName.equals("path")) {
-				CCSVGPath myPath = new CCSVGPath(theGroup);
-				readPath(myPath, mySVG);
-				theGroup.addChild(myPath);
-				// return new BaseObject(this, elem, PATH);
-//				shape = new PShapeSVG(this, mySVG, true);
-//				shape.parsePath();
-
-			} else if (myName.equals("radialGradient")) {
-				theGroup.addChild(new CCSVGRadialGradient(theGroup, mySVG));
-			} else if (myName.equals("linearGradient")) {
-				theGroup.addChild(new CCSVGLinearGradient(theGroup, mySVG));
-			} else if (myName.equals("font")) {
-//				return new Font(this, mySVG);
-
-				// } else if (myName.equals("font-face")) {
-				// return new FontFace(this, elem);
-
-				// } else if (myName.equals("glyph") || myName.equals("missing-glyph"))
-				// {
-				// return new FontGlyph(this, elem);
-
-			} else if (myName.equals("metadata")) {
-
-			} else if (myName.equals("text")) { // || myName.equals("font")) {
-				CCLog.warn("Text and fonts in SVG files "
-						+ "are not currently supported, "
-						+ "convert text to outlines instead.");
-
-			} else if (myName.equals("filter")) {
-				CCLog.warn("Filters are not supported.");
-			} else if (myName.equals("mask")) {
-				CCLog.warn("Masks are not supported.");
-			} else if (myName.equals("pattern")) {
-				CCLog.warn("Patterns are not supported.");
-			} else if (myName.equals("stop")) {
-				// stop tag is handled by gradient parser, so don't warn about it
-			} else if (myName.equals("sodipodi:namedview")) {
-				// these are always in Inkscape files, the warnings get tedious
-			} else if (!myName.startsWith("#")) {
-				CCLog.warn("Ignoring <" + myName + "> tag.");
-			}
-		}
-	}
 	
 	private static CCSVGIO _myReader;
 	

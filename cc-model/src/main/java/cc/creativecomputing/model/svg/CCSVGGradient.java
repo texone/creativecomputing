@@ -9,16 +9,32 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 
-class CCSVGGradient extends CCSVGElement {
+abstract class CCSVGGradient extends CCSVGElement {
 	AffineTransform transform;
 
 	double[] offset;
 	int[] color;
 	int count;
 
-	CCSVGGradient(CCSVGGroup parent, CCXMLElement theSVG) {
-		super(parent);
+	CCSVGGradient(CCSVGGroup parent) {
+		super(parent, null, null);
 
+		
+	}
+	
+
+	
+	@Override
+	public void drawImplementation(CCGraphics g, boolean theFill) {}
+
+	@Override
+	public List<CCLinearSpline> contours() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public void read(CCXMLElement theSVG) {
 		offset = new double[theSVG.countChildren()];
 		color = new int[theSVG.countChildren()];
 		
@@ -56,16 +72,5 @@ class CCSVGGradient extends CCSVGElement {
 
 		offset = CCArrayUtil.subset(offset, 0, count);
 		color = CCArrayUtil.subset(color, 0, count);
-	}
-	
-
-	
-	@Override
-	public void drawImplementation(CCGraphics g, boolean theFill) {}
-
-	@Override
-	public List<CCLinearSpline> contours() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

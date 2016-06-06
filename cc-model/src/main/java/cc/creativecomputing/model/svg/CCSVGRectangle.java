@@ -15,6 +15,7 @@ import java.util.List;
 
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCShapeMode;
+import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
@@ -26,7 +27,7 @@ public class CCSVGRectangle extends CCSVGElement{
 	private CCVector2 _myDimension;
 	
 	public CCSVGRectangle(CCSVGGroup theParent) {
-		super(theParent);
+		super(theParent, CCShapeKind.RECT, CCShapeFamily.PRIMITIVE);
 		_myCenter = new CCVector2();
 		_myDimension = new CCVector2();
 	}
@@ -58,5 +59,24 @@ public class CCSVGRectangle extends CCSVGElement{
 		CCShapeMode myRectMode = g.rectMode();
 		g.rect(_myCenter, _myDimension, theFill);
 		g.rectMode(myRectMode);
+	}
+	
+	@Override
+	public void read(CCXMLElement theSVG) {
+		super.read(theSVG);
+		
+		center().set(
+			CCSVGIO.getDoubleWithUnit(theSVG, "x"),
+			CCSVGIO.getDoubleWithUnit(theSVG, "y")
+		);
+		dimension().set(
+			CCSVGIO.getDoubleWithUnit(theSVG, "width"),
+			CCSVGIO.getDoubleWithUnit(theSVG, "height")
+		);
+	}
+	
+	@Override
+	public String svgTag() {
+		return "rect";
 	}
 }

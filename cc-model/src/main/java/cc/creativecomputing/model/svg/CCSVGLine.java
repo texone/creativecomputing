@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
@@ -24,7 +25,7 @@ public class CCSVGLine extends CCSVGElement{
 	private CCVector2 _myB;
 
 	public CCSVGLine(CCSVGGroup theParent) {
-		super(theParent);
+		super(theParent, CCShapeKind.LINE, CCShapeFamily.PRIMITIVE);
 		_myA = new CCVector2();
 		_myB = new CCVector2();
 	}
@@ -52,5 +53,34 @@ public class CCSVGLine extends CCSVGElement{
 	@Override
 	public void drawImplementation(CCGraphics g, boolean theFill) {
 		g.line(_myA, _myB);
+	}
+	
+	@Override
+	public CCXMLElement write() {
+		CCXMLElement myResult = super.write();
+		myResult.addAttribute("x1", _myA.x);
+		myResult.addAttribute("y1", _myA.x);
+		myResult.addAttribute("x2", _myB.y);
+		myResult.addAttribute("y2", _myB.y);
+		return myResult;
+	}
+	
+	@Override
+	public void read(CCXMLElement theSVG) {
+		super.read(theSVG);
+		
+		_myA.set(
+			CCSVGIO.getDoubleWithUnit(theSVG, "x1"),
+			CCSVGIO.getDoubleWithUnit(theSVG, "y1")
+		);
+		_myB.set(
+			CCSVGIO.getDoubleWithUnit(theSVG, "x2"),
+			CCSVGIO.getDoubleWithUnit(theSVG, "y2")
+		);
+	}
+	
+	@Override
+	public String svgTag() {
+		return "line";
 	}
 }

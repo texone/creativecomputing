@@ -17,15 +17,17 @@ import java.util.List;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.math.spline.CCLinearSpline;
+import cc.creativecomputing.model.svg.CCSVGElement.CCShapeKind;
 
 public class CCSVGGroup extends CCSVGElement implements Iterable<CCSVGElement>{
 	
 	protected List<CCSVGElement> _myChildren;
 	protected HashMap<String, CCSVGElement> _myNameTable;
 
-	public CCSVGGroup(CCSVGGroup theParent) {
-		super(theParent);
+	public CCSVGGroup(CCSVGGroup theParent, CCShapeKind theShapeKind) {
+		super(theParent, theShapeKind, CCShapeFamily.GROUP);
 	}
 	
 	public List<CCSVGElement> children(){
@@ -154,5 +156,125 @@ public class CCSVGGroup extends CCSVGElement implements Iterable<CCSVGElement>{
 			CCLog.info(myChild.name());
 			myChild.draw(g);
 		}
+	}
+	
+	@Override
+	public void read(CCXMLElement theSVG) {
+		if(_myKind == CCShapeKind.GROUP)super.read(theSVG);
+		
+		_myChildren = new ArrayList<>();
+
+		for (CCXMLElement mySVG : theSVG) {
+			String myName = mySVG.name();
+			if(myName == null)continue;
+			switch(myName){
+			case "g":
+				CCSVGGroup myGroup = new CCSVGGroup(this, CCShapeKind.GROUP);
+				myGroup.read(mySVG);
+				addChild(myGroup);
+				break;
+			case "defs":
+				// generally this will contain gradient info, so may
+				// as well just throw it into a group element for parsing
+				// return new BaseObject(this, elem);
+				CCSVGGroup myDefs = new CCSVGGroup(this, CCShapeKind.DEF);
+				myDefs.read(mySVG);
+				addChild(myDefs);
+				break;
+			case "line":
+				CCSVGLine myLine = new CCSVGLine(this);
+				myLine.read(mySVG);
+				addChild(myLine);
+				break;
+			case "circle":
+				CCSVGEllipse myCircle = new CCSVGEllipse(this, true);
+				myCircle.read(mySVG);
+				addChild(myCircle);
+				break;
+			case "ellipse":
+				CCSVGEllipse myEllipse = new CCSVGEllipse(this, false);
+				myEllipse.read(mySVG);
+				addChild(myEllipse);
+				break;
+			case "rect":
+				CCSVGRectangle myRect = new CCSVGRectangle(this);
+				myRect.read(mySVG);
+				addChild(myRect);
+				break;
+			case "polygon":
+				CCSVGPoly myPoly = new CCSVGPoly(this, true);
+				myPoly.read(mySVG);
+				addChild(myPoly);
+				break;
+			case "polyline":
+				CCSVGPoly myPolyLine = new CCSVGPoly(this, false);
+				myPolyLine.read(mySVG);
+				addChild(myPolyLine);
+				break;
+			case "path":
+				CCSVGPath myPath = new CCSVGPath(this);
+				myPath.read(mySVG);
+				addChild(myPath);
+					// return new BaseObject(this, elem, PATH);
+//					shape = new PShapeSVG(this, mySVG, true);
+//					shape.parsePath();
+				break;
+
+			case "radialGradient":
+				CCSVGRadialGradient myRadialGradient = new CCSVGRadialGradient(this);
+				myRadialGradient.read(mySVG);
+				addChild(myRadialGradient);
+				break;
+			case "linearGradient":
+				CCSVGLinearGradient myLinearGradient = new CCSVGLinearGradient(this);
+				myLinearGradient.read(mySVG);
+				addChild(myLinearGradient);
+				break;
+			case "font":
+//					return new Font(this, mySVG);
+
+					// } else if (myName.equals("font-face")) {
+					// return new FontFace(this, elem);
+
+					// } else if (myName.equals("glyph") || myName.equals("missing-glyph"))
+					// {
+					// return new FontGlyph(this, elem);
+
+					break;
+			case "metadata":
+				break;
+			case "text": // || myName.equals("font")) {
+				CCLog.warn("Text and fonts in SVG files "
+						+ "are not currently supported, "
+						+ "convert text to outlines instead.");
+				break;
+			case "filter":
+				CCLog.warn("Filters are not supported.");
+				break;
+			case "mask":
+				CCLog.warn("Masks are not supported.");
+				break;
+			case "pattern":
+				CCLog.warn("Patterns are not supported.");
+				break;
+			case "stop":
+				// stop tag is handled by gradient parser, so don't warn about it
+				break;
+			case "sodipodi:namedview":
+				// these are always in Inkscape files, the warnings get tedious
+				break;
+			default:
+				if (!myName.startsWith("#")) {
+					CCLog.warn("Ignoring <" + myName + "> tag.");
+				}
+				break;
+			}
+		}
+	}
+	
+	@Override
+	public String svgTag() {
+		if(_myKind == CCShapeKind.GROUP)return "g";
+		return "defs";
 	}
 }

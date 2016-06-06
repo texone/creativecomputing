@@ -705,8 +705,6 @@ public class CCSVGIONew {
 	
 	private void readLine(CCSVGLine theLine, CCDataObject theSVG){
 		readElement(theLine, theSVG);
-		theLine._myKind = CCShapeKind.LINE;
-		theLine.family = CCShapeFamily.PRIMITIVE;
 		theLine.a().set(
 			getDoubleWithUnit(theSVG, "x1"),
 			getDoubleWithUnit(theSVG, "y1")
@@ -719,8 +717,6 @@ public class CCSVGIONew {
 	
 	private void readEllipse(CCSVGEllipse theEllipse, CCDataObject theSVG, boolean theIsCircle){
 		readElement(theEllipse, theSVG);
-		theEllipse._myKind = CCShapeKind.ELLIPSE;
-		theEllipse.family = CCShapeFamily.PRIMITIVE;
 
 		theEllipse.center().set(
 			getDoubleWithUnit(theSVG, "cx"),
@@ -739,8 +735,6 @@ public class CCSVGIONew {
 	
 	private void readRect(CCSVGRectangle theRectangle, CCDataObject theSVG) {
 		readElement(theRectangle, theSVG);
-		theRectangle._myKind = CCShapeKind.RECT;
-		theRectangle.family = CCShapeFamily.PRIMITIVE;
 		
 		theRectangle.center().set(
 			getDoubleWithUnit(theSVG, "x"),
@@ -760,8 +754,6 @@ public class CCSVGIONew {
 	 */
 	private void readPoly(CCSVGPoly thePath, CCDataObject theSVG) {
 		readElement(thePath, theSVG);
-		thePath._myKind = CCShapeKind.POLYGON;
-		thePath.family = CCShapeFamily.PATH;
 
 		String pointsAttr = theSVG.getString("points");
 		if (pointsAttr != null) {
@@ -779,21 +771,8 @@ public class CCSVGIONew {
 
 	}
 	
-	private CCSVGPathReader _myPathReader = new CCSVGPathReader();
 	
-	private void readPath(CCSVGPath thePath, CCDataObject theSVG){
-		readElement(thePath, theSVG);
-		thePath.family = CCShapeFamily.PATH;
-		thePath._myKind = CCShapeKind.PATH;
-
-		String pathData = theSVG.getString("d").replaceAll("\\n", "");
-		if (pathData == null || CCStringUtil.trim(pathData).length() == 0) {
-			return;
-		}
-		
-		thePath._myPath = _myPathReader.buildPath(pathData, GeneralPath.WIND_EVEN_ODD);
-		System.out.println(pathData);
-	}
+	
 	
 	private void readChildren(String theName, CCSVGGroup theGroup, CCDataArray theDataArray){
 		

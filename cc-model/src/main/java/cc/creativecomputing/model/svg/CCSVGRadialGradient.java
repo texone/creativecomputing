@@ -8,9 +8,15 @@ import cc.creativecomputing.io.xml.CCXMLElement;
 class CCSVGRadialGradient extends CCSVGGradient {
 	double cx, cy, r;
 
-	public CCSVGRadialGradient(CCSVGGroup parent, CCXMLElement theSVG) {
-		super(parent, theSVG);
+	public CCSVGRadialGradient(CCSVGGroup parent) {
+		super(parent);
 
+		
+	}
+	
+	@Override
+	public void read(CCXMLElement theSVG) {
+		super.read(theSVG);
 		this.cx = CCSVGIO.getDoubleWithUnit(theSVG, "cx");
 		this.cy = CCSVGIO.getDoubleWithUnit(theSVG, "cy");
 		this.r = CCSVGIO.getDoubleWithUnit(theSVG, "r");
@@ -31,5 +37,10 @@ class CCSVGRadialGradient extends CCSVGGradient {
 			this.cy = (double) t1.getY();
 			this.r = (double) (t2.getX() - t1.getX());
 		}
+	}
+	
+	@Override
+	public String svgTag() {
+		return "radialGradient";
 	}
 }
