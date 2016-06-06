@@ -21,6 +21,10 @@ public abstract class CCEffectable {
 		
 	}
 	
+	public void parameters(String...theParameters){
+		
+	}
+	
 	public void apply(double...theValues){
 		
 	}

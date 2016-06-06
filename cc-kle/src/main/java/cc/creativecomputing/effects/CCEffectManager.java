@@ -6,7 +6,6 @@ import java.util.Map;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.filter.CCFilter;
 
 public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<String, CCEffect> implements CCAnimatorListener{
@@ -83,6 +82,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 //		double myCenter = 0;
 		int index = 0;
 		for(Type myEffectable:_myEffectables){
+			myEffectable.parameters(_myValueNames);
 			double[] myValueA = new double[_myValueNames.length];
 			double[] myValueB = new double[_myValueNames.length];
 			for(CCEffect myEffect:values()){
@@ -129,7 +129,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 				index++;
 			}
 			
-			apply(myEffectable, myValues);
+			myEffectable.apply(myValues);
 		}
 	}
 	
