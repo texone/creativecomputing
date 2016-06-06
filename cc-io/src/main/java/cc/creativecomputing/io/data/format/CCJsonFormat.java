@@ -513,6 +513,12 @@ public class CCJsonFormat implements CCDataFormat<String>{
     	_myLine = 1;
             
     	read(theData, theDataHolder);
+    	
+    	try {
+			_myReader.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
     }
 
 	/**
@@ -663,7 +669,9 @@ public class CCJsonFormat implements CCDataFormat<String>{
 	public CCDataObject loadAsDataObject(Path theDocumentPath, boolean theIgnoreLineFeed, OpenOption... theOptions) {
 		try {
 			CCDataObject myResult = new CCDataObject();
+			InputStream myStream = Files.newInputStream(theDocumentPath, theOptions);
 			read(new InputStreamReader(Files.newInputStream(theDocumentPath, theOptions)), myResult, new CCDataConstructs());
+			myStream.close();
 			return myResult;
 		} catch (IOException e) {
 			throw new CCDataException(e);

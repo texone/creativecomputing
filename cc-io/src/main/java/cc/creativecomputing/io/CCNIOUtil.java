@@ -262,7 +262,7 @@ public class CCNIOUtil {
 	}
 	
 	public static String fileName(final Path thePath){
-		return fileName(thePath.toString());
+		return fileName(thePath.getFileName().toString());
 	}
 	
 	public static Path filePath(final Path thePath){
@@ -275,7 +275,28 @@ public class CCNIOUtil {
 	 * @return array of files in the given folder
 	 */
 	static public List<Path> list(final Path theFolder){
-		return listImplementation(theFolder, null);
+		return listImplementation(theFolder, new DirectoryStream.Filter<Path>() {
+			
+			@Override
+			public boolean accept(Path entry) throws IOException {
+				return true;
+			}
+		});
+	}
+	
+	/**
+	 * Returns an array of files in the given folder
+	 * @param theFolder
+	 * @return array of files in the given folder
+	 */
+	static public List<Path> listFolder(final Path theFolder){
+		return listImplementation(theFolder, new DirectoryStream.Filter<Path>() {
+			
+			@Override
+			public boolean accept(Path entry) throws IOException {
+				return entry.toFile().isDirectory();
+			}
+		});
 	}
 	
 	static private class FileExtensionFilter implements DirectoryStream.Filter<Path> {

@@ -127,6 +127,12 @@ public class CCFileInputChannel {
 		return _my4ByteBuffer.getInt(0);
 	}
 	
+	public long readLong() {
+		_my8ByteBuffer.position(0);
+		read(_my8ByteBuffer);
+		return _my8ByteBuffer.getLong(0);
+	}
+	
 	public float readFloat() {
 		_my4ByteBuffer.position(0);
 		read(_my4ByteBuffer);
