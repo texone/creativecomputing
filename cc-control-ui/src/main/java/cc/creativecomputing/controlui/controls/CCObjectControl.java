@@ -23,7 +23,7 @@ import javax.swing.SwingConstants;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.controlui.CCColorMap;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.PropertyPopUp;
+import cc.creativecomputing.controlui.CCPropertyPopUp;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 
 public class CCObjectControl extends JPanel implements CCControl{
@@ -41,7 +41,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 	private int _myDepth;
 	
 	private String _myName;
-	protected PropertyPopUp _myPopUp;
+	protected CCPropertyPopUp _myPopUp;
 
 	public CCObjectControl(CCObjectPropertyHandle thePropertyHandle, CCControlComponent theInfoPanel, int theDepth){
 		setBackground(CCColorMap.getColor(thePropertyHandle.path()));
@@ -54,7 +54,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		_myName = thePropertyHandle.name();
 		
 
-		_myPopUp = new PropertyPopUp(thePropertyHandle, theInfoPanel);
+		_myPopUp = new CCPropertyPopUp(thePropertyHandle, theInfoPanel);
 		
 		GridBagConstraints myConstraints = new GridBagConstraints();
 		myConstraints.gridx = 0;

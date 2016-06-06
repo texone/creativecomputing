@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.PropertyPopUp;
+import cc.creativecomputing.controlui.CCPropertyPopUp;
 
 public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>> implements CCControl{
 	
@@ -17,7 +17,7 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 	
 	protected JLabel _myLabel;
 	
-	protected PropertyPopUp _myPopUp;
+	protected CCPropertyPopUp _myPopUp;
 	
 	protected CCControlComponent _myControlComponent;
 
@@ -26,7 +26,7 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 		_myHandle = theHandle;
 		_myControlComponent = theControlComponent;
 		
-		_myPopUp = new PropertyPopUp(theHandle, _myControlComponent);
+		_myPopUp = new CCPropertyPopUp(theHandle, _myControlComponent);
 		
         //Create the label.
 		_myLabel = new JLabel(_myHandle.name(), JLabel.LEFT);
