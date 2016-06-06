@@ -1,7 +1,7 @@
 package cc.creativecomputing.flightXML;
 
+import cc.creativecomputing.geo.CCGeoTrackPoint;
 import cc.creativecomputing.io.data.CCDataObject;
-import cc.creativecomputing.math.time.CCDate;
 
 /**
  *  It returns an array of positions, with each including the timestamp, longitude, latitude, groundspeed, altitude, altitudestatus, updatetype, and altitudechange. 
@@ -11,11 +11,8 @@ import cc.creativecomputing.math.time.CCDate;
  * @author christianr
  *
  */
-public class CCTrackStruct {
-	/**
-	 * Altitude is in hundreds of feet or Flight Level
-	 */
-	public int altitude;
+public class CCTrackStruct extends CCGeoTrackPoint{
+	
 	/**
 	 * Altitude change is 'C' if the aircraft is climbing (compared to the previous position reported), 
 	 * 'D' for descending, and empty if it is level.
@@ -28,27 +25,18 @@ public class CCTrackStruct {
 	 */
 	public final String altitudeStatus;	
 	public final int groundspeed;	
-	public final float latitude;	
-	public final float longitude;	
-	/**
-	 * Timestamp is integer seconds since 1970 (UNIX epoch time).
-	 */
-	public final CCDate timestamp;	
+	
 	/**
 	 * TP=projected, TO=oceanic, TZ=radar, TA=broadcast
 	 */
 	public final String updateType;
 	
 	public CCTrackStruct(CCDataObject theData){
-		altitude = theData.getInt("altitude");
+		super(theData.getFloat("longitude"), theData.getFloat("latitude"), theData.getInt("altitude") * 100, theData.getLong("timestamp") * 1000);
 		altitudeChange = theData.getString("altitudeChange");
 		altitudeStatus = theData.getString("altitudeStatus");
 
 		groundspeed = theData.getInt("groundspeed");
-		latitude = theData.getFloat("latitude");
-		longitude = theData.getFloat("longitude");
-		
-		timestamp = new CCDate(theData.getLong("timestamp") * 1000);
 		updateType = theData.getString("updateType");
 	}
 }

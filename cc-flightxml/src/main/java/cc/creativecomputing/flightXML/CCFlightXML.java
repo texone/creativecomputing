@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.geo.CCGeoTrack;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataIO;
@@ -20,10 +21,30 @@ public class CCFlightXML {
 	
 	private String _myUser;
 	private String _myKey;
+	
+	private int _myQueries = 0;
+	private double _myCosts = 0;
 
 	public CCFlightXML(String theUser, String theKey){
 		_myUser = theUser;
 		_myKey = theKey;
+		
+//		try{
+//			String myCosts = CCNIOUtil.loadString(CCNIOUtil.dataPath("flightxml/datacosts.txt"));
+//			String[] myCostParts = myCosts.split(",");
+//			_myQueries = Integer.parseInt(myCostParts[0]);
+//			_myCosts = Double.parseDouble(myCostParts[1]);
+//		}catch(Exception e){
+//			
+//		}
+	}
+	
+	private void addCost(int theClass, int theSize){
+		_myQueries++;
+		switch(theClass){
+		
+		}
+		CCNIOUtil.saveString(CCNIOUtil.dataPath("flightxml/datacosts.txt"), _myQueries + "," + _myCosts);
 	}
 	
 	private void cache(String theQuery, CCDataObject theObject){
@@ -45,12 +66,15 @@ public class CCFlightXML {
 	
 	private CCDataObject query(String theQuery){   
 		try {
+//			CCLog.info(theQuery);
 			CCDataObject myObject = checkCached(theQuery);
 			if(myObject != null){
-				System.out.println("FOUND CACHE:"+theQuery);
+//				CCLog.info("FOUND CACHE:"+theQuery);
+				myObject.put("cached", true);
 				return myObject;
 			}
 			myObject = CCDataIO.createDataObject(new URL( FLIGHT_XML_URL + theQuery), true, CCDataFormats.JSON, _myUser, _myKey);
+			myObject.put("cached", false);
 			cache(theQuery, myObject);
 			return myObject;
 		} catch (MalformedURLException e) {
@@ -75,7 +99,7 @@ public class CCFlightXML {
 	 * @param theMaxSize
 	 */
 	public void setMaximumResultSize(int theMaxSize){
-		CCLog.info(query("SetMaximumResultSize?max_size=" + theMaxSize));
+		query("SetMaximumResultSize?max_size=" + theMaxSize);
 	}
 	
 	/**
@@ -95,6 +119,19 @@ public class CCFlightXML {
 		}
 		
 		return myResult;
+	}
+	
+	/**
+	 * Returns information about an airport given an ICAO airport code such as KLAX, KSFO, KORD, KIAH, O07, etc. 
+	 * Data returned includes name (Houston Intercontinental Airport), location (typically city and state), 
+	 * latitude and longitude, and timezone (:America/Chicago).
+	 * @param theAirport
+	 * @return
+	 */
+	public CCAirportInfoStruct aipportInfo(String theAirport){
+		CCDataObject myResultObject = query("AirportInfo?airportCode=" + theAirport).getObject("AirportInfoResult");
+		if(myResultObject == null)return null;
+		return new CCAirportInfoStruct(myResultObject);
 	}
 	
 	/**
@@ -137,8 +174,8 @@ Times returned are seconds since 1970 (UNIX epoch seconds).
 	 * Codeshares and alternate idents are automatically searched.
 	 * @param theIdent requested tail number
 	 */
-	public List<CCTrackStruct> lastTrack(String theIdent){
-		List<CCTrackStruct> myResult = new ArrayList<>();
+	public CCGeoTrack<CCTrackStruct> lastTrack(String theIdent){
+		CCGeoTrack<CCTrackStruct> myResult = new CCGeoTrack<>();
 		CCDataObject myRes = query("GetLastTrack?ident=" + theIdent);
 		if(myRes.containsKey("error")){
 			return myResult;
@@ -164,7 +201,7 @@ Times returned are seconds since 1970 (UNIX epoch seconds).
 		if(myRes.containsKey("error")){
 			return myResult;
 		}
-		System.out.println(myRes);
+		
 		CCDataArray myResultObject = myRes.getObject("GetHistoricalTrackResult").getArray("data");
 		
 		for(int i = 0; i < myResultObject.size();i++){
@@ -195,21 +232,23 @@ Times returned are seconds since 1970 (UNIX epoch seconds).
 	 * Times are in integer seconds since 1970 (UNIX epoch time), except for estimated time enroute, which is in hours and minutes.
 	 * @param theIdent
 	 */
-	public void flightInfoEx(String theIdent){
-		List<CCTrackStruct> myResult = new ArrayList<>();
+	public List<CCFlightInfoExStruct> flightInfoEx(String theIdent){
+		List<CCFlightInfoExStruct> myResult = new ArrayList<>();
 		CCDataObject myRes = query("FlightInfoEx?ident=" + theIdent);
-		System.out.println(myRes);
-//		if(myRes.containsKey("error")){
-//			return myResult;
-//		}
-//		System.out.println(myRes);
-//		CCDataArray myResultObject = myRes.getObject("GetHistoricalTrackResult").getArray("data");
-//		
-//		for(int i = 0; i < myResultObject.size();i++){
-//			myResult.add(new CCTrackStruct(myResultObject.getObject(i)));
-//		}
-//		
-//		return myResult;
+		
+		if(myRes.containsKey("error")){
+			return myResult;
+		}
+		//{FlightInfoExResult={flights=[{aircrafttype=A321, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1464766289-airline-0137, filed_departuretime=1464942600, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=0, estimatedarrivaltime=1464948300, destinationName=London Heathrow, filed_ete=01:25:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1464766289, filed_airspeed_mach=, actualarrivaltime=0, originName=Aberdeen}, {aircrafttype=A320, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1464672413-airline-0286, filed_departuretime=1464856200, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=0, estimatedarrivaltime=1464862020, destinationName=London Heathrow, filed_ete=01:27:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1464672413, filed_airspeed_mach=, actualarrivaltime=0, originName=Aberdeen}, {aircrafttype=A320, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1464586017-airline-0195:0, filed_departuretime=1464769800, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=1464770640, estimatedarrivaltime=1464775320, destinationName=London Heathrow, filed_ete=01:18:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1464701340, filed_airspeed_mach=, actualarrivaltime=1464775302, originName=Aberdeen}, {aircrafttype=A319, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1464499582-airline-0053:0, filed_departuretime=1464683400, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=1464684791, estimatedarrivaltime=1464690120, destinationName=London Heathrow, filed_ete=01:23:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1464635717, filed_airspeed_mach=, actualarrivaltime=1464690126, originName=Aberdeen}, {aircrafttype=A320, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1464413557-airline-0119:0, filed_departuretime=1464597000, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=1464596603, estimatedarrivaltime=1464601260, destinationName=London Heathrow, filed_ete=01:34:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1464507788, filed_airspeed_mach=, actualarrivaltime=1464601260, originName=Aberdeen}, {aircrafttype=A319, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1464154073-airline-0086:0, filed_departuretime=1464337800, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=1464338484, estimatedarrivaltime=1464343620, destinationName=London Heathrow, filed_ete=01:18:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1464238443, filed_airspeed_mach=, actualarrivaltime=1464343638, originName=Aberdeen}, {aircrafttype=A320, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1464067596-airline-0164:0, filed_departuretime=1464251400, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=1464251561, estimatedarrivaltime=1464255720, destinationName=London Heathrow, filed_ete=01:26:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1464151682, filed_airspeed_mach=, actualarrivaltime=1464255756, originName=Aberdeen}, {aircrafttype=A320, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1463981209-airline-0224:0, filed_departuretime=1464165000, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=1464165360, estimatedarrivaltime=1464170700, destinationName=London Heathrow, filed_ete=01:22:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1464065532, filed_airspeed_mach=, actualarrivaltime=1464170727, originName=Aberdeen}, {aircrafttype=A319, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1463894837-airline-0132:0, filed_departuretime=1464078600, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=1464078480, estimatedarrivaltime=1464083940, destinationName=London Heathrow, filed_ete=01:27:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1463983075, filed_airspeed_mach=, actualarrivaltime=1464083940, originName=Aberdeen}, {aircrafttype=A319, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1463808445-airline-0088:0, filed_departuretime=1463992200, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=1463992440, estimatedarrivaltime=1463997120, destinationName=London Heathrow, filed_ete=01:18:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1463898186, filed_airspeed_mach=, actualarrivaltime=1463997151, originName=Aberdeen}, {aircrafttype=A320, ident=BAW1305, filed_airspeed_kts=247, origin=EGPD, destination=EGLL, faFlightID=BAW1305-1463549226-airline-0039:0, filed_departuretime=1463733000, destinationCity=London, England GB, diverted=, route=, actualdeparturetime=1463733377, estimatedarrivaltime=1463737980, destinationName=London Heathrow, filed_ete=01:24:00, originCity=Aberdeen, Scotland GB, filed_altitude=0, filed_time=1463668015, filed_airspeed_mach=, actualarrivaltime=1463738020, originName=Aberdeen}], next_offset=-1}}
+
+		
+		CCDataArray myResultObject = myRes.getObject("FlightInfoExResult").getArray("flights");
+		
+		for(int i = 0; i < myResultObject.size();i++){
+			myResult.add(new CCFlightInfoExStruct(myResultObject.getObject(i)));
+		}
+		
+		return myResult;
 	}
 	
 	public static void main(String[] args) {
@@ -226,7 +265,7 @@ Times returned are seconds since 1970 (UNIX epoch seconds).
 			if(mySize > 0){
 //				mySize = myFlightXML.historicalTrack(myFlight.ident).size();
 //				myFlightXML.flightInfoEx(myFlight.ident);
-				System.out.println(myFlight.ident + ":" + mySize + ":" + myFlight.originCity);
+//				CCLog.info(myFlight.ident + ":" + mySize + ":" + myFlight.originCity);
 			}
 		}
 		int flightID = 0;
@@ -242,7 +281,7 @@ Times returned are seconds since 1970 (UNIX epoch seconds).
 					double difLon = CCMath.abs(myPoint1.longitude - myPoint0.longitude);
 					double difLat = CCMath.abs(myPoint1.latitude - myPoint0.latitude);
 					boolean projected = myPoint0.updateType.equals("TP") || myPoint1.updateType.equals("TP");
-					if((difLat > 1 || difLon > 1) && projected)CCLog.info(flightID + ":" + i + ":" + myFlight.ident + ":" + myFlight.originName + ":" + difLat + ":" + difLon);
+//					if((difLat > 1 || difLon > 1) && projected)CCLog.info(flightID + ":" + i + ":" + myFlight.ident + ":" + myFlight.originName + ":" + difLat + ":" + difLon);
 					if(myPoint0.updateType.equals("TP") && myPoint1.updateType.equals("TP")){
 //						myPoint.altitude = myLastAltitude;
 					}
@@ -251,6 +290,6 @@ Times returned are seconds since 1970 (UNIX epoch seconds).
 				flightID++;
 			}
 		}
-		CCLog.info(myArrivedFlights.size());
+//		CCLog.info(myArrivedFlights.size());
 	}
 }

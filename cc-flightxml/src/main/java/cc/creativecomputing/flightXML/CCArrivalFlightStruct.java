@@ -7,11 +7,15 @@ public class CCArrivalFlightStruct {
 	/**
 	 * filed time of departure (seconds since 1970)
 	 */
-	public final CCDate arrivaltime;	
+	public final long arrivaltime;	
+	
+	public double arrivalDayProgress;
 	/**
 	 * actual time of departure (seconds since 1970)
 	 */
-	public final CCDate departuretime;
+	public final long departuretime;
+	
+	public double departureDayProgress;
 	/**
 	 * aircraft type ID
 	 */
@@ -19,7 +23,7 @@ public class CCArrivalFlightStruct {
 	/**
 	 * the destination ICAO airport ID
 	 */
-	public final String destination;	
+	public String destination;	
 	public final String destinationCity;	
 	public final String destinationName;	
 	/**
@@ -34,8 +38,11 @@ public class CCArrivalFlightStruct {
 	public final String originName;
 	
 	public CCArrivalFlightStruct(CCDataObject theData){
-		arrivaltime = new CCDate(theData.getLong("actualarrivaltime") * 1000);
-		departuretime = new CCDate(theData.getLong("actualdeparturetime") * 1000);
+		arrivaltime = theData.getLong("actualarrivaltime") * 1000;
+		departuretime = theData.getLong("actualdeparturetime") * 1000;
+		
+		arrivalDayProgress = new CCDate(arrivaltime).dayProgress();
+		departureDayProgress = new CCDate(departuretime).dayProgress();
 		
 		aircrafttype = theData.getString("aircrafttype");
 
