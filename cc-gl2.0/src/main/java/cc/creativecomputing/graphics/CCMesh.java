@@ -194,6 +194,29 @@ public class CCMesh {
     	vertices(theVertices,false);
     }
     
+    protected FloatBuffer[] createVertexBufferFromList4(final List<CCVector4> theVertices, final boolean theGenerateNormals){
+    	FloatBuffer[] myResult = new FloatBuffer[2];
+    	
+    	if(theVertices.size() == 0){
+    		return null;
+    	}
+    	
+    	_myVertexSize = 4;
+    	_myNumberOfVertices = theVertices.size();
+    	myResult[0] = CCBufferUtil.newDirectFloatBuffer(_myNumberOfVertices * _myVertexSize);
+    	
+    	myResult[0].rewind();
+    	for(CCVector4 myVertex:theVertices){
+    		myResult[0].put((float)myVertex.x);
+    		myResult[0].put((float)myVertex.y);
+    		myResult[0].put((float)myVertex.z);
+    		myResult[0].put((float)myVertex.w);
+    	}
+    	myResult[0].rewind();
+    	
+    	return myResult;
+    }
+    
     protected FloatBuffer[] createVertexBufferFromList(final List<CCVector3> theVertices, final boolean theGenerateNormals){
     	FloatBuffer[] myResult = new FloatBuffer[2];
     	
@@ -260,6 +283,17 @@ public class CCMesh {
     	
     	FloatBuffer[] myVertexBuffer = createVertexBufferFromList(theVertices, theGenerateNormals);
     	if(myVertexBuffer[0] != null)vertices(myVertexBuffer[0]);
+    	if(myVertexBuffer[1] != null)normals(myVertexBuffer[1]);
+    	
+    }
+    
+    public void vertices4(final List<CCVector4> theVertices, final boolean theGenerateNormals){
+    	if(theVertices.size() == 0){
+    		return;
+    	}
+    	
+    	FloatBuffer[] myVertexBuffer = createVertexBufferFromList4(theVertices, theGenerateNormals);
+    	if(myVertexBuffer[0] != null)vertices(myVertexBuffer[0], 4);
     	if(myVertexBuffer[1] != null)normals(myVertexBuffer[1]);
     	
     }
