@@ -38,45 +38,33 @@ public abstract class CCEasing {
 		IN, OUT, IN_OUT
 	}
 	
-	public float easeIn(final float theBlend){
-		return (float)easeIn((double)theBlend);
-	}
-	
 	public abstract double easeIn(final double theBlend);
-	
-	public float easeOut(final float theBlend){
-		return (float)easeOut((double)theBlend);
-	}
 	
 	public abstract double easeOut(final double theBlend);
 	
-	public float easeInOut(final float theBlend){
-		return (float)easeInOut((double)theBlend);
-	}
-	
 	public abstract double easeInOut(final double theBlend);
 	
-	public float easeIn(final float theStart, final float theStop, final float theBlend){
+	public double easeIn(final double theStart, final double theStop, final double theBlend){
 		return CCMath.blend(theStart, theStop, easeIn(theBlend));
 	}
 	
-	public float easeOut(final float theStart, final float theStop, final float theBlend){
+	public double easeOut(final double theStart, final double theStop, final double theBlend){
 		return CCMath.blend(theStart, theStop, easeOut(theBlend));
 	}
 	
-	public float easeInOut(final float theStart, final float theStop, final float theBlend){
+	public double easeInOut(final double theStart, final double theStop, final double theBlend){
 		return CCMath.blend(theStart, theStop, easeInOut(theBlend));
 	}
 	
-	public float easeIn(final float theStart, final float theStop, final float theTime, final float theDuration){
+	public double easeIn(final double theStart, final double theStop, final double theTime, final double theDuration){
 		return CCMath.blend(theStart, theStop, easeIn(theTime/theDuration));
 	}
 	
-	public float easeOut(final float theStart, final float theStop, final float theTime, final float theDuration){
+	public double easeOut(final double theStart, final double theStop, final double theTime, final double theDuration){
 		return CCMath.blend(theStart, theStop, easeOut(theTime/theDuration));
 	}
 	
-	public float easeInOut(final float theStart, final float theStop, final float theTime, final float theDuration){
+	public double easeInOut(final double theStart, final double theStop, final double theTime, final double theDuration){
 		return CCMath.blend(theStart, theStop, easeInOut(theTime/theDuration));
 	}
 	
@@ -91,11 +79,7 @@ public abstract class CCEasing {
 		return easeInOut(theBlend);
 	}
 	
-	public float ease(final CCEaseMode theMode, final float theBlend){
-		return (float)ease(theMode, (double)theBlend);
-	}
-	
-	public float ease(final CCEaseMode theMode, final float theStart, final float theStop, final float theBlend){
+	public double ease(final CCEaseMode theMode, final double theStart, final double theStop, final double theBlend){
 		switch(theMode){
 		case IN:
 			return easeIn(theStart, theStop, theBlend);
@@ -106,7 +90,7 @@ public abstract class CCEasing {
 		return easeInOut(theStart, theStop, theBlend);
 	}
 	
-	public float ease(final CCEaseMode theMode, final float theStart, final float theStop, final float theTime, final float theDuration){
+	public double ease(final CCEaseMode theMode, final double theStart, final double theStop, final double theTime, final double theDuration){
 		switch(theMode){
 		case IN:
 			return easeIn(theStart, theStop, theTime, theDuration);
