@@ -429,12 +429,21 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * defined mask.
 	 */
 	public void beginMask(){
-		colorMask(false, false, false, false);
-		gl.glClearStencil(0x1);
-		gl.glEnable(GL.GL_STENCIL_TEST);
+//		colorMask(false, false, false, false);
+//		gl.glClearStencil(0x1);
+//		gl.glEnable(GL.GL_STENCIL_TEST);
+//        gl.glClear(GL.GL_STENCIL_BUFFER_BIT);
+//        gl.glStencilFunc (GL.GL_ALWAYS, 0x1, 0x1);
+//        gl.glStencilOp (GL.GL_REPLACE, GL.GL_REPLACE, GL.GL_REPLACE);
+        
+        gl.glEnable(GL.GL_STENCIL_TEST);
+        gl.glColorMask(false, false, false, false);
+        gl.glStencilFunc(GL.GL_NEVER, 1, 0xFF);
+        gl.glStencilOp(GL.GL_REPLACE, GL.GL_KEEP, GL.GL_KEEP);  // draw 1s on test fail (always)
+
+        // draw stencil pattern
+        gl.glStencilMask(0xFF);
         gl.glClear(GL.GL_STENCIL_BUFFER_BIT);
-        gl.glStencilFunc (GL.GL_ALWAYS, 0x1, 0x1);
-        gl.glStencilOp (GL.GL_REPLACE, GL.GL_REPLACE, GL.GL_REPLACE);
         
 	}
 
@@ -442,9 +451,17 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * Ends the mask
 	 */
 	public void endMask(){
-		colorMask(true, true, true, true);
-		gl.glStencilFunc (GL.GL_NOTEQUAL, 0x1, 0x1);
-		gl.glStencilOp (GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
+//		colorMask(true, true, true, true);
+//		gl.glStencilFunc (GL.GL_NOTEQUAL, 0x1, 0x1);
+//		gl.glStencilOp (GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
+		
+		gl.glColorMask(true, true, true, true);
+		gl.glStencilMask(0x00);
+		  // draw where stencil's value is 0
+		gl.glStencilFunc(GL.GL_EQUAL, 0, 0xFF);
+		  /* (nothing to draw) */
+		  // draw only where stencil's value is 1
+		gl.glStencilFunc(GL.GL_EQUAL, 1, 0xFF);
 	}
 
 	/**
