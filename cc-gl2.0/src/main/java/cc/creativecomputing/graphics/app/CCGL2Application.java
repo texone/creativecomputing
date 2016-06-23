@@ -3,6 +3,7 @@ package cc.creativecomputing.graphics.app;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
+import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCTimelineSynch;
 import cc.creativecomputing.core.CCProperty;
@@ -69,6 +70,8 @@ public class CCGL2Application {
 					_myControlApp.setData(CCGL2Application.this, presetPath);
 					theGLAdapter.controlApp(_myControlApp);
 					_myControlApp.update(0);
+				}else{
+					new CCPropertyMap().setData(CCGL2Application.this, presetPath);
 				}
 				_mySynch.animator().start();
 				
@@ -77,7 +80,7 @@ public class CCGL2Application {
 		};
 		
 		
-		myGLAdapter.controlApp(new CCControlApp(_mySynch));
+		if(_myUseUI)myGLAdapter.controlApp(new CCControlApp(_mySynch));
 
 		_myGLContext.listener().add(myGLAdapter);
 		_myGLContext.listener().add(

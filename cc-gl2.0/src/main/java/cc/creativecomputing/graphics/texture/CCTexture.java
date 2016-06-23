@@ -14,6 +14,7 @@ package cc.creativecomputing.graphics.texture;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCPixelStorageModes;
@@ -931,6 +932,7 @@ public abstract class CCTexture{
 	 * </ul>
 	 * @param theTextureWrap mode for texture wrapping 
 	 */
+//	@CCProperty(name = "wrap")
 	public void wrap(final CCTextureWrap theTextureWrap){
 		parameter(GL2.GL_TEXTURE_WRAP_R, theTextureWrap.glID);
 		parameter(GL.GL_TEXTURE_WRAP_S, theTextureWrap.glID);
@@ -995,6 +997,7 @@ public abstract class CCTexture{
 	 * 1 for the maximum available amount.
 	 * @param theAmount the amount of filtering number between 0 and 1
 	 */
+//	@CCProperty(name = "anisotropic filtering", min = 0, max = 1)
 	public void anisotropicFiltering(final float theAmount) {
 		GL2 gl = CCGraphics.currentGL();
 		FloatBuffer floatBuff = FloatBuffer.allocate(1);
@@ -1021,6 +1024,7 @@ public abstract class CCTexture{
 	 * The default is {@link CCTextureFilter#LINEAR}.       
 	 * @param theFilter
 	 */
+	@CCProperty(name = "filter")
 	public void textureFilter(final CCTextureFilter theFilter){
 		_myTextureFilter = theFilter;
 		updateFilter();
@@ -1042,6 +1046,7 @@ public abstract class CCTexture{
 	 *              
 	 * @param theFilter
 	 */
+//	@CCProperty(name = "mip map filter")
 	public void textureMipmapFilter(final CCTextureMipmapFilter theFilter){
 		_myTextureMipmapFilter = theFilter;
 		updateFilter();
@@ -1052,6 +1057,7 @@ public abstract class CCTexture{
 	 * underlying geometry.
 	 * @param theMode
 	 */
+//	@CCProperty(name = "environment mode")
 	public void textureEnvironmentMode(final CCTextureEnvironmentMode theMode) {
 		_myEnvironmentMode = theMode;
 	}
