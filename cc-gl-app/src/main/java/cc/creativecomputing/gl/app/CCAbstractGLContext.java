@@ -311,6 +311,7 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 			_myCapabilities = new GLCapabilities(myProfile);
 			_myCapabilities.setSampleBuffers(antialiasing > 0);
 			_myCapabilities.setNumSamples(antialiasing);
+			_myCapabilities.setStencilBits(8);
 			
 			GLAutoDrawable myAutoDrawable = null;
 			Component myComponent = null;

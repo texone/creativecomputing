@@ -51,7 +51,6 @@ public class GLWindowContainer extends GLContainer{
 
 	public GLWindowContainer(final CCAbstractGLContext<?> theExtension) {
 		_myContext = theExtension;
-		
 		_myWindow = GLWindow.create(_myContext.glCapabilities());
 		_myWindow.setSurfaceScale(new float[]{_myContext.pixelScale.id(), _myContext.pixelScale.id()});
 		_myWindow.setTitle(_myContext.title);
