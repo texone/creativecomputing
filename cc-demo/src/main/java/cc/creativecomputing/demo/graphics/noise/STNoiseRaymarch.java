@@ -10,6 +10,7 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
@@ -23,8 +24,6 @@ import cc.creativecomputing.math.random.CCRandom;
 
 public class STNoiseRaymarch extends CCGL2Adapter{
 
-	@CCProperty(name = "shader")
-	private CCGLProgram _myShader;
 	
 	private CCTexture2D _myRandomTexture;
 	
@@ -112,16 +111,19 @@ public class STNoiseRaymarch extends CCGL2Adapter{
 	@CCProperty(name = "origin z", min = -10, max = 10)
 	private float _cOriginZ = 0f; 
 	
-	private long myLastFileTime = 0;
+
+	@CCProperty(name = "shader")
+	private CCGLProgram _myShader;
+	
+	@CCProperty(name = "screen capture")
+	private CCScreenCaptureController _myScreenCaptureController;
 	
 	@Override
-	public void init(CCGraphics g) {
+	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myShader = new CCGLProgram(
 			null,
 			CCNIOUtil.classPath(this, "noise_raymarch.glsl")
 		);
-		
-		myLastFileTime = new File(CCIOUtil.classPath(this, "noise_raymarch.glsl")).lastModified();
 		
 		CCColor[][] myBaseColorMap = new CCColor[256][256];
 		
@@ -150,7 +152,9 @@ public class STNoiseRaymarch extends CCGL2Adapter{
 		_myRandomTexture.textureFilter(CCTextureFilter.LINEAR);
 		_myRandomTexture.wrap(CCTextureWrap.REPEAT);
 		
-		_myInputMask = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.classPath(this, "texone.png")));
+		_myInputMask = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.classPath(this, "satelite.png")));
+		
+		_myScreenCaptureController = new CCScreenCaptureController(this);
 	}
 	
 	private float _myTime = 0;
@@ -167,7 +171,6 @@ public class STNoiseRaymarch extends CCGL2Adapter{
 	
 	@Override
 	public void display(CCGraphics g) {
-		_myShader.reload();
 		g.clear();
 		g.texture(0,_myRandomTexture);
 		g.texture(1,_myInputMask);

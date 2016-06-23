@@ -125,9 +125,9 @@ public class CCFlightTrackDemo extends CCGL2Adapter{
 //						myPoint.altitude = myLastAltitude;
 					}
 					
-					_myMesh.addVertex(myPoint0.longitude, myPoint0.latitude, myPoint0.altitude,myPoint0.timestamp.dayProgress());
-					_myMesh.addVertex(myPoint1.longitude, myPoint1.latitude, myPoint1.altitude,myPoint1.timestamp.dayProgress());
-					System.out.println(myPoint0.timestamp.dayProgress());
+					_myMesh.addVertex(myPoint0.longitude, myPoint0.latitude, myPoint0.altitude,myPoint0.dayProgress);
+					_myMesh.addVertex(myPoint1.longitude, myPoint1.latitude, myPoint1.altitude,myPoint1.dayProgress);
+					System.out.println(myPoint0.dayProgress);
 //					_myMesh.addColor(CCColor.createFromHSB(myPoint0.timestamp.dayProgress(), 1d, 1d));
 //					_myMesh.addColor(CCColor.createFromHSB(myPoint1.timestamp.dayProgress(), 1d, 1d));
 				}

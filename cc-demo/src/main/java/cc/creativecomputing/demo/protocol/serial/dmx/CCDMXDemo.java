@@ -26,7 +26,7 @@ public class CCDMXDemo extends CCGL2Adapter{
 	@Override
 	public void start(CCAnimator theAnimator) {
 		_myDMX = new CCDMX();
-		for(int i = 0; i < 100;i++){
+		for(int i = 0; i < 512;i++){
 			_myChannelMap.put("channel " + i, 0d);
 		}
 	}
@@ -50,7 +50,7 @@ public class CCDMXDemo extends CCGL2Adapter{
 	
 	@Override
 	public void update(CCAnimator theAnimator) {
-		for(int i = 0; i < 100;i++){
+		for(int i = 0; i < 512;i++){
 			_myDMX.setDMXChannel(i, _myChannelMap.get("channel " + i));
 		}
 		_myDMX.send();
