@@ -2,6 +2,7 @@ package cc.creativecomputing.flightXML;
 
 import cc.creativecomputing.geo.CCGeoTrackPoint;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.math.time.CCDate;
 
 /**
  *  It returns an array of positions, with each including the timestamp, longitude, latitude, groundspeed, altitude, altitudestatus, updatetype, and altitudechange. 
@@ -31,6 +32,8 @@ public class CCTrackStruct extends CCGeoTrackPoint{
 	 */
 	public final String updateType;
 	
+	public double dayProgress;
+	
 	public CCTrackStruct(CCDataObject theData){
 		super(theData.getFloat("longitude"), theData.getFloat("latitude"), theData.getInt("altitude") * 100, theData.getLong("timestamp") * 1000);
 		altitudeChange = theData.getString("altitudeChange");
@@ -38,5 +41,7 @@ public class CCTrackStruct extends CCGeoTrackPoint{
 
 		groundspeed = theData.getInt("groundspeed");
 		updateType = theData.getString("updateType");
+		
+		dayProgress = new CCDate(timeStamp).dayProgress();
 	}
 }
