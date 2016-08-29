@@ -4,7 +4,7 @@
     <groupId>cc.creativecomputing</groupId>
     <artifactId>cc-main</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>2.0-PREVIEW</version>
+    <version>2.0</version>
   </parent>
 
   <artifactId>cc-simulation</artifactId>
@@ -13,7 +13,32 @@
   <dependencies>
     <dependency>
       <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-app</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-control-ui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-gl-app</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-gl2.0</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-image</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -25,6 +50,17 @@
       <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-math</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>ST4</artifactId>
+      <version>4.0.8</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>

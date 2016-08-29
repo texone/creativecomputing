@@ -1,0 +1,264 @@
+{"value": {
+  "emit radius": {
+    "min": 0,
+    "max": 400,
+    "name": "emit radius",
+    "value": 0
+  },
+  "particles": {
+    "name": "particles",
+    "value": {"forces": {
+      "name": "forces",
+      "value": {
+        "attractor5_force": {
+          "name": "attractor5_force",
+          "value": {
+            "strength": {
+              "min": 0,
+              "max": 10,
+              "name": "strength",
+              "value": 1
+            },
+            "position": {
+              "name": "position",
+              "value": {
+                "x": {
+                  "min": -1000,
+                  "max": 1000,
+                  "name": "x",
+                  "value": -99
+                },
+                "y": {
+                  "min": -1000,
+                  "max": 1000,
+                  "name": "y",
+                  "value": 41
+                },
+                "z": {
+                  "min": -1000,
+                  "max": 1000,
+                  "name": "z",
+                  "value": 0
+                }
+              }
+            },
+            "radius": {
+              "min": 0,
+              "max": 1000,
+              "name": "radius",
+              "value": 0
+            }
+          }
+        },
+        "gravity3_force": {
+          "name": "gravity3_force",
+          "value": {
+            "strength": {
+              "min": 0,
+              "max": 10,
+              "name": "strength",
+              "value": 0.9200000166893005
+            },
+            "direction": {
+              "name": "direction",
+              "value": {
+                "x": {
+                  "min": -1,
+                  "max": 1,
+                  "name": "x",
+                  "value": 1
+                },
+                "y": {
+                  "min": -1,
+                  "max": 1,
+                  "name": "y",
+                  "value": 0
+                },
+                "z": {
+                  "min": -1,
+                  "max": 1,
+                  "name": "z",
+                  "value": 0
+                }
+              }
+            }
+          }
+        },
+        "ViscousDrag1_force": {
+          "name": "ViscousDrag1_force",
+          "value": {
+            "strength": {
+              "min": 0,
+              "max": 10,
+              "name": "strength",
+              "value": 1.5800000429153442
+            },
+            "drag": {
+              "min": 0,
+              "max": 1,
+              "name": "drag",
+              "value": 0.30000001192092896
+            }
+          }
+        },
+        "NoiseCurveForceFieldFollow2_force": {
+          "name": "NoiseCurveForceFieldFollow2_force",
+          "value": {
+            "octaves": {
+              "min": 0,
+              "max": 5,
+              "name": "octaves",
+              "value": 2
+            },
+            "strength": {
+              "min": 0,
+              "max": 10,
+              "name": "strength",
+              "value": 10
+            },
+            "prediction": {
+              "min": 0,
+              "max": 1,
+              "name": "prediction",
+              "value": 0.2370000034570694
+            },
+            "scale": {
+              "min": 0,
+              "max": 1,
+              "name": "scale",
+              "value": 0.01
+            },
+            "radius": {
+              "min": 0,
+              "max": 400,
+              "name": "radius",
+              "value": 126.40000915527344
+            },
+            "lacunarity": {
+              "min": 0,
+              "max": 4,
+              "name": "lacunarity",
+              "value": 2
+            },
+            "curveOutputScale": {
+              "min": 0,
+              "max": 200,
+              "name": "curveOutputScale",
+              "value": 200
+            },
+            "speed": {
+              "min": 0,
+              "max": 1,
+              "name": "speed",
+              "value": 0.3160000145435333
+            },
+            "gain": {
+              "min": 0,
+              "max": 1,
+              "name": "gain",
+              "value": 0.5
+            }
+          }
+        },
+        "NoiseForceField4_force": {
+          "name": "NoiseForceField4_force",
+          "value": {
+            "octaves": {
+              "min": 0,
+              "max": 5,
+              "name": "octaves",
+              "value": 1
+            },
+            "strength": {
+              "min": 0,
+              "max": 10,
+              "name": "strength",
+              "value": 5.130000114440918
+            },
+            "scale": {
+              "min": 0,
+              "max": 1,
+              "name": "scale",
+              "value": 0.5
+            },
+            "lacunarity": {
+              "min": 0,
+              "max": 4,
+              "name": "lacunarity",
+              "value": 2
+            },
+            "gain": {
+              "min": 0,
+              "max": 1,
+              "name": "gain",
+              "value": 0.5
+            }
+          }
+        }
+      }
+    }}
+  },
+  "camera": {
+    "name": "camera",
+    "value": {
+      "distance": {
+        "min": 1,
+        "max": 20000,
+        "name": "distance",
+        "value": 663.2584364220226
+      },
+      "center": {
+        "name": "center",
+        "value": {
+          "x": {
+            "min": -10000,
+            "max": 10000,
+            "name": "x",
+            "value": 0
+          },
+          "y": {
+            "min": -10000,
+            "max": 10000,
+            "name": "y",
+            "value": 0
+          },
+          "z": {
+            "min": -10000,
+            "max": 10000,
+            "name": "z",
+            "value": 0
+          }
+        }
+      },
+      "rotation": {
+        "name": "rotation",
+        "value": {
+          "w": {
+            "min": -1,
+            "max": 1,
+            "name": "w",
+            "value": 0.892317755659492
+          },
+          "x": {
+            "min": -1,
+            "max": 1,
+            "name": "x",
+            "value": -0.4464069799911231
+          },
+          "y": {
+            "min": -1,
+            "max": 1,
+            "name": "y",
+            "value": -0.05691995747175591
+          },
+          "z": {
+            "min": -1,
+            "max": 1,
+            "name": "z",
+            "value": 0.03535462616727246
+          }
+        }
+      }
+    }
+  }
+}}

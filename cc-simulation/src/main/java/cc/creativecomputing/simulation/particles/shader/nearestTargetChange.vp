@@ -1,0 +1,13 @@
+
+uniform samplerRECT particleTargetInfos;
+uniform float4x4 mvp : state.matrix.mvp;
+
+void main(
+	in float4 iPosition : POSITION,
+	out float4 oPosition :POSITION,
+	out float4 oColor : TEXCOORD0
+){
+	float4 targetPosition = texRECT(particleTargetInfos, iPosition.xy);
+	oPosition = mul(mvp, targetPosition);
+	oColor = iPosition;
+}

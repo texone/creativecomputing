@@ -1,0 +1,26 @@
+uniform float4x4 modelViewProjection : state.matrix.mvp;
+uniform float4x4 modelView : state.matrix.modelview[0];
+
+uniform float tanHalfFOV;
+
+uniform samplerRECT positions : TEXUNIT0;
+
+void main (
+	in float4 iPosition : POSITION,
+	in float4 iColor : COLOR,
+	out float4 oPosition : POSITION,
+	out float2 oTexID : TEXCOORD0,
+	out float4 oColor : COLOR,
+	out float oPointSize : PSIZ
+){
+	float4 myPosition = texRECT(positions, iPosition.xy);
+	oPosition = mul(modelViewProjection, myPosition);
+	oTexID = iPosition.xy;
+	
+	// Compute point size.
+	float4 posViewSpace = mul(modelView, myPosition);
+	oPointSize = max(tanHalfFOV / -posViewSpace.z, 1);
+	
+	oColor = min(iColor * oPointSize * oPointSize, iColor);
+}
+	           
