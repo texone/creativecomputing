@@ -15,6 +15,7 @@ import java.util.List;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.protocol.serial.CCSerialInput;
 import cc.creativecomputing.protocol.serial.CCSerialListener;
 import cc.creativecomputing.protocol.serial.CCSerialModule;
@@ -89,6 +90,7 @@ public class CCDMX implements CCSerialListener {
 	public CCDMX(int theUniverseSize) {
 		
 		_mySerial = new CCSerialModule("enttec dmx", 115200);
+		_mySerial.printPorts();
 		_mySerial.listener().add(this);
 		_myUniverseSize = theUniverseSize;
 		int myDataSize = _myUniverseSize + 1;
@@ -139,6 +141,18 @@ public class CCDMX implements CCSerialListener {
 	 */
     public void setDMXChannel(final int theChannel, final double theValue){
     	setDMXChannel(theChannel, (int)(theValue * 255));
+    }
+    
+    /**
+	 * Writes value to the channel.
+	 * 
+	 * @param theChannel
+	 * @param theValue
+	 */
+    public void setDMXChannel(final int theChannel, final CCColor theColor){
+    	setDMXChannel(theChannel, theColor.r);
+    	setDMXChannel(theChannel + 1, theColor.g);
+    	setDMXChannel(theChannel + 2, theColor.b);
     }
     
     /**
