@@ -4,6 +4,8 @@ import cc.creativecomputing.core.events.CCListenerManager;
 
 public class CCShaderObject {
 	
+	
+	
 	public static abstract class CCShaderObjectInterface{
 		
 		private String _myShaderSource = "";
@@ -19,8 +21,6 @@ public class CCShaderObject {
 		public abstract String errorLog();
 		
 	}
-	
-	
 	
 	private CCListenerManager<CCShaderCompileListener> _myEvents = CCListenerManager.create(CCShaderCompileListener.class);
 	
