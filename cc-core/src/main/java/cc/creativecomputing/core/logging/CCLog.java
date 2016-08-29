@@ -319,6 +319,34 @@ public class CCLog {
 	public static void info(String theMessage, Throwable theCause) {		
 		log(Level.INFO, new RuntimeException(theMessage, theCause));
 	}
+
+	/**
+	 * Log an exception with INFO level.
+	 * @param theMessage the message to be logged
+	 */
+	public static void fine(Throwable theMessage) {		
+		log(Level.FINE, theMessage);
+	}
+	/**
+	 * Log a message with INFO level.
+	 * @param theMessage the message to be logged
+	 */
+	public static void fine(Object theMessage) {
+		if (theMessage == null) {
+			log(Level.FINE, "null");
+			return;
+		} 
+		log(Level.FINE, theMessage.toString());
+	}
+
+	/**
+	 * Log an exception with INFO level and a causing exception
+	 * @param theMessage the message to be logged
+	 * @param theCause the causing exception
+	 */	
+	public static void fine(String theMessage, Throwable theCause) {		
+		log(Level.FINE, new RuntimeException(theMessage, theCause));
+	}
 	
 	/**
 	 * Log a message with WARNING level.
@@ -351,6 +379,7 @@ public class CCLog {
 			return;
 		} 
 		log(Level.SEVERE, theMessage.toString());
+		
 	}
 
 	/**
