@@ -70,6 +70,7 @@ public class CCGL2Application {
 					_myControlApp.setData(CCGL2Application.this, presetPath);
 					theGLAdapter.controlApp(_myControlApp);
 					_myControlApp.update(0);
+					_myAdapter.setupControls(_myControlApp);
 				}else{
 					new CCPropertyMap().setData(CCGL2Application.this, presetPath);
 				}
