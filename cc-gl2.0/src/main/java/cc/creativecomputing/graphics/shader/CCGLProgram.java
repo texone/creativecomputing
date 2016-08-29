@@ -75,14 +75,17 @@ public class CCGLProgram{
 	
 	public static enum CCShaderObjectType{
 		
-		VERTEX(GL2.GL_VERTEX_SHADER),
-		FRAGMENT(GL2.GL_FRAGMENT_SHADER),
-		GEOMETRY(GL3.GL_GEOMETRY_SHADER);
+		VERTEX(GL2.GL_VERTEX_SHADER, "vertex"),
+		FRAGMENT(GL2.GL_FRAGMENT_SHADER, "fragment"),
+		GEOMETRY(GL3.GL_GEOMETRY_SHADER, "geometry");
 		
 		int glID;
 		
-		private CCShaderObjectType(final int theGLID) {
+		String typeString;
+		
+		private CCShaderObjectType(final int theGLID, String theTypeString) {
 			glID = theGLID;
+			typeString = theTypeString;
 		}
 	}
 	
@@ -118,9 +121,9 @@ public class CCGLProgram{
 	
 	protected int _myProgram;
 	
-	private CCGLShader _myVertexShader;
-	private CCGLShader _myFragmentShader;
-	private CCGLShader _myGeometryShader;
+	protected CCGLShader _myVertexShader;
+	protected CCGLShader _myFragmentShader;
+	protected CCGLShader _myGeometryShader;
 	
 	@CCProperty(name = "shader objects")
 	private Map<String, CCShaderObject> _myShaders;
@@ -153,35 +156,55 @@ public class CCGLProgram{
 		);
 	}
 	
+	protected CCGLProgram(){
+		GL2 gl = CCGraphics.currentGL();
+		_myProgram = (int)gl.glCreateProgram();
+		_myShaders = new HashMap<>();
+	}
+	
 	public CCGLProgram(
 		final Path[] theVertexShaderPaths, 
 		final Path[] theGeometryShaderPaths, 
 		final Path[] theFragmentShaderPaths
 	) {
-		GL2 gl = CCGraphics.currentGL();
-		_myProgram = (int)gl.glCreateProgram();
+		this();
 		
-		_myShaders = new HashMap<>();
-		if(theVertexShaderPaths != null && theVertexShaderPaths[0] != null){
-			_myVertexShader = new CCGLShader(CCShaderObjectType.VERTEX, theVertexShaderPaths);
-			_myShaders.put("vertex", new CCShaderObject(_myVertexShader));
-			_myShaderList.add(_myVertexShader);
-			attach(_myVertexShader);
-		}
-		if(theGeometryShaderPaths != null){
-			_myGeometryShader = new CCGLShader(CCShaderObjectType.GEOMETRY, theGeometryShaderPaths);
-			_myShaders.put("geomtry", new CCShaderObject(_myGeometryShader));
-			_myShaderList.add(_myGeometryShader);
-			attach(_myGeometryShader);
-		}
-		if(theFragmentShaderPaths != null && theFragmentShaderPaths[0] != null){
-			_myFragmentShader = new CCGLShader(CCShaderObjectType.FRAGMENT, theFragmentShaderPaths);
-			_myShaders.put("fragment", new CCShaderObject(_myFragmentShader));
-			_myShaderList.add(_myFragmentShader);
-			attach(_myFragmentShader);
-		}
+		_myVertexShader = attachShader(theVertexShaderPaths, CCShaderObjectType.VERTEX);
+		_myGeometryShader = attachShader(theGeometryShaderPaths, CCShaderObjectType.GEOMETRY);
+		_myFragmentShader = attachShader(theFragmentShaderPaths, CCShaderObjectType.FRAGMENT);
+
+		link();
+	}
+	
+	private CCGLShader attachShader(final Path[] theShaderPaths, CCShaderObjectType theType){
+		if(theShaderPaths == null || theShaderPaths[0] == null)return null;
 		
-		gl.glLinkProgram(_myProgram);
+		CCGLShader myShader = new CCGLShader(theType, theShaderPaths);
+		_myShaders.put(theType.typeString, new CCShaderObject(myShader));
+		_myShaderList.add(myShader);
+		attach(myShader);
+		
+		return myShader;
+	}
+	
+	protected void init(String theVertexSource, String theGeometrySource, String theFragmentSource){
+		
+		_myVertexShader = attachShader(theVertexSource, CCShaderObjectType.VERTEX);
+		_myGeometryShader = attachShader(theGeometrySource, CCShaderObjectType.GEOMETRY);
+		_myFragmentShader = attachShader(theFragmentSource, CCShaderObjectType.FRAGMENT);
+
+		link();
+	}
+	
+	private CCGLShader attachShader(final String theSource, CCShaderObjectType theType){
+		if(theSource == null)return null;
+		
+		CCGLShader myShader = new CCGLShader(theType, theSource);
+		_myShaders.put(theType.typeString, new CCShaderObject(myShader));
+		_myShaderList.add(myShader);
+		attach(myShader);
+		
+		return myShader;
 	}
 	
 	public void reload() {
@@ -340,6 +363,8 @@ public class CCGLProgram{
 	public boolean deleteStatus(){
 		return get(GL2.GL_DELETE_STATUS) == GL2.GL_TRUE;
 	}
+	
+	private int _myTexIndex = 0;
 
 	public void start() {
 //		CCGraphics.debug();
@@ -358,6 +383,7 @@ public class CCGLProgram{
 		
 		gl.glUseProgram(_myProgram);
 		_myIsShaderInUse = true;
+		_myTexIndex = 0;
 	}
 
 	public void end() {

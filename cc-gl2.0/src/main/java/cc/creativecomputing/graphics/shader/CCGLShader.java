@@ -15,6 +15,36 @@ import com.jogamp.opengl.GL2;
 
 public class CCGLShader extends CCShaderObjectInterface{
 	
+	/**
+	 * Takes the given files and merges them to one String. 
+	 * This method is used to combine the different shader sources and get rid of the includes
+	 * inside the shader files.
+	 * @param thePaths
+	 * @return
+	 */
+	public static String buildSource(final Path...thePaths) {
+		StringBuffer myBuffer = new StringBuffer();
+		
+		for(Path myPath:thePaths) {
+			myBuffer.append(CCNIOUtil.loadString(myPath));
+			myBuffer.append("\n");
+		}
+		
+		return myBuffer.toString();
+	}
+	
+	public static CCShaderSource buildSourceObject(final Path...thePaths) {
+		CCShaderSource mySource = new CCShaderSource();
+		
+		for(Path myPath:thePaths) {
+			for(String myLine:CCNIOUtil.loadStrings(myPath)){
+				mySource.addLine(myLine);
+			}
+		}
+		
+		return mySource;
+	}
+	
 	protected CCShaderObjectType _myType;
 	protected Path[] _myFiles;
 	
@@ -33,29 +63,21 @@ public class CCGLShader extends CCShaderObjectInterface{
 		
 		loadShader(_myFiles);
 	}
+	
+	CCGLShader(CCShaderObjectType theType, String theSource){
+		_myType = theType;
+		GL2 gl = CCGraphics.currentGL();
+		_myShaderID = (int)gl.glCreateShader(_myType.glID);
+		
+		loadShader(theSource, true, "");
+	}
 
 	@Override
 	public String errorLog() {
 		return _myInfoLog;
 	}
 	
-	/**
-	 * Takes the given files and merges them to one String. 
-	 * This method is used to combine the different shader sources and get rid of the includes
-	 * inside the shader files.
-	 * @param thePaths
-	 * @return
-	 */
-	protected String buildSource(final Path...thePaths) {
-		StringBuffer myBuffer = new StringBuffer();
-		
-		for(Path myPath:thePaths) {
-			myBuffer.append(CCNIOUtil.loadString(myPath));
-			myBuffer.append("\n");
-		}
-		
-		return myBuffer.toString();
-	}
+	
 	
 	/**
 	 * returns the value of a parameter.

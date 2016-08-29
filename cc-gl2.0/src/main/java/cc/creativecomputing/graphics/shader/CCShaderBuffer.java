@@ -375,6 +375,14 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 		endDraw();
 	}
 	
+	public void clear(int theAttachment){
+		beginDraw(theAttachment);
+		GL gl = CCGraphics.currentGL();
+		gl.glClearStencil(0);
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
+		endDraw();
+	}
+	
 	public FloatBuffer getData(){
 		return getData(0, 0, 0, _myWidth, _myHeight);
 	}
