@@ -160,9 +160,15 @@ public class CCArrayUtil{
 	}
 	
 	public static float[]copyOf(float[] original, int newLength) {
-		float[] copy = new float[newLength];
-        System.arraycopy(original, 0, copy, 0, Math.min(original.length, newLength));
-        return copy;
+        return Arrays.copyOf(original, newLength);
+	}
+	
+	public static byte[]copyOf(byte[] original) {
+		return copyOf(original, original.length);
+	}
+	
+	public static byte[]copyOf(byte[] original, int newLength) {
+        return Arrays.copyOf(original, newLength);
 	}
 	
 	/**
