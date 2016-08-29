@@ -1,6 +1,7 @@
 package cc.creativecomputing.demo.control;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.code.CCCompileObject;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.core.CCProperty;
@@ -13,6 +14,7 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.texture.CCTexture2DAsset;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMath;
 
 public class CCEnvelopeDemo extends CCGL2Adapter{
 	
@@ -20,8 +22,8 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 		public void draw(CCGraphics g);
 	}
 	
-//	@CCProperty(name = "envelope")
-//	private CCEnvelope _myEnvelope = new CCEnvelope();
+	@CCProperty(name = "envelope")
+	private CCEnvelope _myEnvelope = new CCEnvelope();
 	
 	@CCProperty(name = "clear color")
 	private CCColor _myClearColor = new CCColor();
@@ -82,26 +84,30 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 		g.clearColor(_myClearColor);
 		g.clear();
 		
-		for(CCRealtimeGraph myGraph:_myRealTimeGraph.instances()){
-//			CCLog.info(myGraph);
-			if(myGraph == null)continue;
-			myGraph.draw(g);
-		}
+//		for(CCRealtimeGraph myGraph:_myRealTimeGraph.instances()){
+////			CCLog.info(myGraph);
+//			if(myGraph == null)continue;
+//			myGraph.draw(g);
+//		}
+		g.color(255);
 		
+		g.ortho();
+		g.color(1d);
 		g.beginShape(_myDrawMode);
 		for(int i = 0; i < 1000;i++){
-//			g.vertex(i - 500, _myEnvelope.value(i / 1000f) * 200);
+			System.out.println(_myEnvelope.value(i / 1000f));
+			g.vertex(i,CCMath.random(200,400));// _myEnvelope.value(i / 1000f) * 200
 		}
 		g.endShape();
 		
-		if(_cDrawText)g.text(_myString,_cTextX,0);
-		
-//		if(_myAsset == null)return;
-//		g.image(_myAsset.value(), 0, 0);
-		g.color(255);
-		g.rect(-g.width() / 4, - g.height() / 4, _cRectWidth, g.height() / 2);
-		
-//		CCLog.info(g.width + ":" + g.height);
+//		if(_cDrawText)g.text(_myString,_cTextX,0);
+//		
+////		if(_myAsset == null)return;
+////		g.image(_myAsset.value(), 0, 0);
+//		g.color(255);
+////		g.rect(-g.width() / 4, - g.height() / 4, _cRectWidth, g.height() / 2);
+//		
+////		CCLog.info(g.width + ":" + g.height);
 	}
 	
 	public static void main(String[] args) {
