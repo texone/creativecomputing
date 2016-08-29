@@ -25,6 +25,7 @@ import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.container.GLContainer;
 import cc.creativecomputing.gl.app.container.GLContainerType;
 import cc.creativecomputing.gl.app.container.GLJavaComponentContainer;
@@ -160,7 +161,7 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	@CCProperty(desc = "flag to define if the window should be shown on top")
 	public boolean alwaysOnTop = false;
 	@CCProperty(desc = "define the pixelscale of the gl container eiter IDENTITY or AUTOMAX default is AUTOMAX")
-	public CCPixelScale pixelScale = CCPixelScale.AUTOMAX;
+	public CCPixelScale pixelScale = CCPixelScale.IDENTITY;
 	
 	protected GLContainer _myContainer;
 	

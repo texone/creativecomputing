@@ -79,6 +79,10 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 	public void init(GLGraphicsType g, CCAnimator theAnimator){
 		
 	}
+	
+	public void setupControls(CCControlApp theControlApp){
+		
+	}
 
 	@Override
 	public void reshape(GLGraphicsType g) {

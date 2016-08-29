@@ -52,7 +52,6 @@ public class GLWindowContainer extends GLContainer{
 	public GLWindowContainer(final CCAbstractGLContext<?> theExtension) {
 		_myContext = theExtension;
 		_myWindow = GLWindow.create(_myContext.glCapabilities());
-		_myWindow.setSurfaceScale(new float[]{_myContext.pixelScale.id(), _myContext.pixelScale.id()});
 		_myWindow.setTitle(_myContext.title);
 //		_myWindow.setResizable(_myExtension.isResizable());
 		_myWindow.setUndecorated(_myContext.undecorated);
@@ -61,6 +60,7 @@ public class GLWindowContainer extends GLContainer{
 		_myWindow.getCurrentSurfaceScale(myScale);
 		_myWindow.setVisible(true);
 		
+		_myWindow.setSurfaceScale(new float[]{_myContext.pixelScale.id(), _myContext.pixelScale.id()});
 		
 		_myWindow.addKeyListener(new KeyAdapter() {
             float gamma = 1f;
@@ -377,8 +377,8 @@ public class GLWindowContainer extends GLContainer{
     			final InsetsImmutable myInsets = _myWindow.getInsets();
     			//get insets to adjust frame size
     			_myWindow.setSize(
-    				theWidth + myInsets.getLeftWidth() + myInsets.getRightWidth(), 
-    				theHeight + myInsets.getTopHeight() + myInsets.getBottomHeight()
+    				theWidth, 
+    				theHeight
     			);
             }
 		}.start();
