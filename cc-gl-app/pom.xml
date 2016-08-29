@@ -4,7 +4,7 @@
     <groupId>cc.creativecomputing</groupId>
     <artifactId>cc-main</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>2.0-PREVIEW</version>
+    <version>2.0</version>
   </parent>
 
   <artifactId>cc-gl-app</artifactId>
@@ -44,17 +44,6 @@
       <artifactId>jogl-all</artifactId>
       <version>${jogamp.version}</version>
 	  <classifier>natives-${NATIVE_LIB_CLASSIFIER}</classifier>
-    </dependency>
-    <dependency>
-        <groupId>org.jogamp.jogl</groupId>
-        <artifactId>jogl-cg</artifactId>
-        <version>2.1.1</version>
-    </dependency>
-    <dependency>
-        <groupId>org.jogamp.jogl</groupId>
-        <artifactId>jogl-cg</artifactId>
-        <version>2.1.1</version>
-        <classifier>natives-${NATIVE_LIB_CLASSIFIER}</classifier>
     </dependency>
 
     <dependency>
