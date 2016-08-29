@@ -114,7 +114,7 @@ public class CCImageIOFormat implements CCImageFormat {
 	}
 	
 	public boolean write(final Path thePath, BufferedImage theData, final double theQuality) throws CCImageException {
-			
+		CCNIOUtil.createDirectories(thePath);
 			
 		// Happened to notice that writing RGBA images to JPEGS is broken
 		if (CCImageFormats.JPG.fileExtension.equals(CCNIOUtil.fileExtension(thePath)) && theData.getType() == BufferedImage.TYPE_4BYTE_ABGR) {
