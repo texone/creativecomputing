@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.math.signal;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -17,16 +18,19 @@ import cc.creativecomputing.math.CCMath;
  *
  */
 public class CCTriSignal extends CCSignal{
+	@CCProperty(name = "ratio", min = 0, max = 1)
+	private double _cRatio = 0.5;
 	
 	private double triValue(double theInput){
+		theInput %= 1;
 		if(theInput < 0){
-			theInput = -theInput + 0.5f;
+			theInput = 1+theInput;
 		}
-		theInput = (theInput + 0.25f) * 2 % 2;
-		if(theInput < 1){
-			return theInput;
+		
+		if(theInput <= _cRatio){
+			return theInput / _cRatio;
 		}
-		return 2 - theInput;
+		return 1 - (theInput - _cRatio) / (1 - _cRatio);
 	}
 
 	@Override

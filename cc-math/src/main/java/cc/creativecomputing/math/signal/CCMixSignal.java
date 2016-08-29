@@ -30,7 +30,9 @@ public class CCMixSignal extends CCSignal{
 	@CCProperty(name = "worley setup")
 	private CCWorleyNoise _myWorley;
 	private CCSinSignal _mySine;
+	@CCProperty(name = "square setup")
 	private CCSquareSignal _mySquare;
+	@CCProperty(name = "tri setup")
 	private CCTriSignal _myTri;
 	private CCSlopedTriSignal _mySlopedTri;
 	
@@ -55,10 +57,10 @@ public class CCMixSignal extends CCSignal{
 	}
 	
 	@Override
-	protected void bandsImplementation(double theBands) {
-		super.bandsImplementation(theBands);
+	protected void octavesImplementation(double theBands) {
+		super.octavesImplementation(theBands);
 		for(CCSignal mySignal:_mySignals){
-			mySignal.bands(theBands);
+			mySignal.octaves(theBands);
 		}
 	}
 	

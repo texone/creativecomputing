@@ -273,15 +273,15 @@ public abstract class CCSignal {
 	 * @param theBands
 	 */
 	@CCProperty(name = "octaves", min = 1, max = 10, defaultValue = 2)
-	public void bands(final double theBands) {
-		bandsImplementation(theBands);
+	public void octaves(final double theBands) {
+		octavesImplementation(theBands);
 	}
 	
-	protected void bandsImplementation(final double theBands){
+	protected void octavesImplementation(final double theBands){
 		_myOctaves = CCMath.max(1.0f,theBands);
 	}
 	
-	public double bands() {
+	public double octaves() {
 		return _myOctaves;
 	}
 	

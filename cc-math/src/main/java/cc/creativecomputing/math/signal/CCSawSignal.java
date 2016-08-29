@@ -25,7 +25,7 @@ public class CCSawSignal extends CCSignal{
 
 	@Override
 	public double[] signalImpl(double theX, double theY, double theZ) {
-		return new double[]{CCMath.average(saw(theX), saw(theY))};
+		return new double[]{CCMath.average(saw(theX), saw(theY), saw(theZ))};
 	}
 	
 	/* (non-Javadoc)

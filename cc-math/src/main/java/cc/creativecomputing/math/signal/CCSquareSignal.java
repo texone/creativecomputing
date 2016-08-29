@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.math.signal;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -17,10 +18,16 @@ import cc.creativecomputing.math.CCMath;
  *
  */
 public class CCSquareSignal extends CCSignal{
+	@CCProperty(name = "pulsewidth", min = 0, max = 1)
+	private double _cPulseWidth = 0.5;
 	
 	private double square(double theValue){
 		if(theValue < 0) theValue = -theValue + 0.5f;
-		return 1 - (int)(theValue * 2) % 2;
+		if(theValue % 1 < _cPulseWidth){
+			return 1;
+		}else{
+			return 0;
+		}
 	}
 
 	/* (non-Javadoc)
