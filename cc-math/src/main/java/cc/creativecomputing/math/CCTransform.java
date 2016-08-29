@@ -16,6 +16,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.nio.DoubleBuffer;
 
+import cc.creativecomputing.core.CCProperty;
+
 /**
  * Transform models a transformation in 3d space as: Y = M*X+T, with M being a
  * Matrix3 and T is a Vector3. Generally M will be a rotation only matrix in
@@ -39,7 +41,9 @@ public class CCTransform implements Cloneable, Externalizable {
 	public static final CCTransform IDENTITY = new CCTransform(CCMatrix3x3.IDENTITY, CCVector3.ONE, CCVector3.ZERO, true, true, true);
 
 	protected final CCMatrix3x3 _myMatrix = new CCMatrix3x3(CCMatrix3x3.IDENTITY);
+	@CCProperty(name = "translate")
 	protected final CCVector3 _myTranslation = new CCVector3(CCVector3.ZERO);
+	@CCProperty(name = "scale")
 	protected final CCVector3 _myScale = new CCVector3(CCVector3.ONE);
 
 	/**
@@ -192,6 +196,32 @@ public class CCTransform implements Cloneable, Externalizable {
 		_myMatrix.set(theRotation);
 		updateFlags(true);
 		return this;
+	}
+	
+	private double _myXRotation = 0;
+	private double _myYRotation = 0;
+	private double _myZRotation = 0;
+	
+	private void updateRotation(){
+		CCQuaternion myQuat = new CCQuaternion();
+		myQuat.fromEulerAngles(_myYRotation, _myZRotation, _myXRotation);
+		rotation(myQuat);
+	}
+	
+	@CCProperty(name = "rotate x")
+	public void rotateX(double theRotateX){
+		_myXRotation = CCMath.radians(theRotateX);
+		updateRotation();
+	}
+	@CCProperty(name = "rotate y")
+	public void rotateY(double theRotateY){
+		_myXRotation = CCMath.radians(theRotateY);
+		updateRotation();
+	}
+	@CCProperty(name = "rotate z")
+	public void rotateZ(double theRotateX){
+		_myXRotation = CCMath.radians(theRotateX);
+		updateRotation();
 	}
 	
 	public void rotation(final double theAngle, final double theX, final double theY, final double theZ){

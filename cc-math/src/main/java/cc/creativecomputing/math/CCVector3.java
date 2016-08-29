@@ -796,6 +796,43 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
 		}while (lengthSquared() > radius * radius);
 		return this;
 	}
+	
+	/**
+	 * given a vector, return a vector perpendicular to it. arbitrarily selects
+	 * one of the infinitely many perpendicular vectors. a zero vector maps to
+	 * itself, otherwise length is irrelevant (empirically, output length seems
+	 * to remain within 20% of input length).
+	 */
+	public CCVector3 perp(){
+		// to be filled in:
+		CCVector3 quasiPerp; // a direction which is "almost perpendicular"
+
+		// three mutually perpendicular basis vectors
+
+		// measure the projection of "direction" onto each of the axes
+		final double id = UNIT_X.dot(this);
+		final double jd = UNIT_Y.dot(this);
+		final double kd = UNIT_Z.dot(this);
+
+		// set quasiPerp to the basis which is least parallel to "direction"
+		if ((id <= jd) && (id <= kd)){
+			//	projection onto i was the smallest
+			quasiPerp = UNIT_X; 
+		}else{
+			if ((jd <= id) && (jd <= kd)){
+				//projection onto j was the smallest
+				quasiPerp = UNIT_Y; 
+			}else{
+				//projection onto k was the smallest
+				quasiPerp = UNIT_Z; 
+			}
+		}
+
+		// return the cross product (direction x quasiPerp)
+		// which is guaranteed to be perpendicular to both of them
+		return cross(quasiPerp);
+	}
+
 
     /**
      * Performs a linear interpolation between this vector and the given end vector, using the given scalar as a

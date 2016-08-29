@@ -140,7 +140,7 @@ public class CCPolygon2 implements Iterable<CCVector2>{
 	}
 
 	public Iterator<CCVector2> iterator() {
-		return _myVertices.iterator();
+		return new ArrayList<>(_myVertices).iterator();
 	}
 	
 	public List<CCVector2> vertices(){

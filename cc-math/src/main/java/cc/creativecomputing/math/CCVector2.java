@@ -884,6 +884,14 @@ public class CCVector2 implements Cloneable, Externalizable {
         final double dotProduct = dot(theOtherVector);
         return CCMath.acos(dotProduct);
     }
+    
+    public CCVector2 cross(){
+    	return new CCVector2(y, -x);
+    }
+    
+    public CCVector2 crossLocal(){
+    	return set(y, -x);
+    }
 
     /**
      * Check a vector... if it is null or its doubles are NaN or infinite, return false. Else return true.
