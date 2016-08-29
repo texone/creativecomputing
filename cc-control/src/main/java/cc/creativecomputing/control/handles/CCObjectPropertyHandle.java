@@ -21,6 +21,7 @@ import cc.creativecomputing.core.util.CCReflectionUtil.CCField;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMapEntry;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMethod;
+import cc.creativecomputing.core.util.CCReflectionUtil.CCMethodParameter;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
@@ -112,7 +113,11 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	protected CCObjectPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember, String theSettingsPath) {
 		super(theParent, theMember);
 		_mySettingsPath = theSettingsPath;
-		_myChildHandles = link(theMember.value());
+		if(theMember instanceof CCMethod){
+			_myChildHandles = linkMethod((CCMethod)theMember);
+		}else{
+			_myChildHandles = link(theMember.value());
+		}
 		_myPresetPath = createPresetPath();
 	}
 
@@ -155,6 +160,9 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	@Override
 	public Class<?> type() {
 		if(_myRootObject != null)return _myRootObject.getClass();
+		if(_myMember instanceof CCMethod){
+			return Object.class;
+		}
 		return super.type();
 	}
 	
@@ -170,6 +178,26 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	
 	public Path presetPath(){
 		return _myPresetPath;
+	}
+	
+	private Map<String,CCPropertyHandle> linkMethod(CCMethod theObject){
+		Map<String,CCPropertyHandle> myResult = new LinkedHashMap<>();
+	
+		for(Object myParameter:theObject.parameter()){
+			CCMethodParameter<CCProperty> myMethodParameter = (CCMethodParameter<CCProperty>)myParameter;
+			Class<?> myClass = myMethodParameter.type();
+			CCPropertyHandle myProperty;
+			if(creatorMap.containsKey(myClass)){
+				myProperty = creatorMap.get(myClass).create(this, myMethodParameter);
+			}else  if(myClass.isEnum()){
+				myProperty = new CCEnumPropertyHandle(this, myMethodParameter);
+			}else{
+				if(myMethodParameter.value() == null)continue;
+				myProperty = new CCObjectPropertyHandle(this, myMethodParameter, _mySettingsPath);
+			}
+			myResult.put(myProperty.name(), myProperty);
+		}
+		return myResult;
 	}
 	
 	private Map<String,CCPropertyHandle> link(Object theObject){
@@ -193,17 +221,22 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		
 		List<CCMethod<CCProperty>> myMethods = CCReflectionUtil.getMethods(theObject, CCProperty.class);
 		for(CCMethod<CCProperty> myMethod:myMethods){
-			Class<?> myClass = myMethod.type();
+
 			CCPropertyHandle myProperty = null;
-			if(creatorMap.containsKey(myClass)){
-				myProperty = creatorMap.get(myClass).create(this, myMethod);
-			}else if((myClass == null) || myClass == CCTriggerProgress.class){
-				myProperty = new CCEventTriggerHandle(this, myMethod);
-			}else  if(myClass.isEnum()){
-				myProperty = new CCEnumPropertyHandle(this, myMethod);
+			if(myMethod.method().getParameterCount() > 1){
+				myProperty = new CCObjectPropertyHandle(this, myMethod, _mySettingsPath);
 			}else{
-//				if(myField.value() == null)continue;
-//				myProperty = new CCObjectPropertyHandle(this, myField);
+				Class<?> myClass = myMethod.type();
+				if(creatorMap.containsKey(myClass)){
+					myProperty = creatorMap.get(myClass).create(this, myMethod);
+				}else if((myClass == null) || myClass == CCTriggerProgress.class){
+					myProperty = new CCEventTriggerHandle(this, myMethod);
+				}else  if(myClass.isEnum()){
+					myProperty = new CCEnumPropertyHandle(this, myMethod);
+				}else{
+	//				if(myField.value() == null)continue;
+	//				myProperty = new CCObjectPropertyHandle(this, myField);
+				}
 			}
 			if(myProperty != null)myResult.put(myProperty.name(), myProperty);
 		}
@@ -213,7 +246,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			for(Object myKey:myMap.keySet()){
 				CCMapEntry myEntry = new CCMapEntry(myMap, myKey);
 				Class<?> myClass = myEntry.type();
-				CCLog.info(myKey +":" + myClass.getSuperclass().getTypeName() + ":" + myMap.get(myKey));
 				CCPropertyHandle myProperty;
 				if(creatorMap.containsKey(myClass)){
 					myProperty = creatorMap.get(myClass).create(this, myEntry);

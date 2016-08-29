@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
+import cc.creativecomputing.io.data.CCDataException;
 import cc.creativecomputing.io.data.CCDataObject;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -179,10 +180,14 @@ public abstract class CCPropertyHandle<Type>{
 	}
 	
 	public CCDataObject data(){
-		CCDataObject myResult = new CCDataObject();
-		myResult.put("name", name());
-		myResult.put("value", dataObject());
-		return myResult;
+		try{
+			CCDataObject myResult = new CCDataObject();
+			myResult.put("name", name());
+			myResult.put("value", dataObject());
+			return myResult;
+		}catch(Exception e){
+			throw new RuntimeException("Problem serializing: " + path(),e);
+		}
 	}
 	
 	public void data(CCDataObject theData){
