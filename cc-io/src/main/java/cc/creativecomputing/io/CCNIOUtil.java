@@ -384,17 +384,17 @@ public class CCNIOUtil {
 	 * This function returns the full path to the selected file as a
 	 * <b>String</b>, or <b>null</b> if no selection.
 	 * 
-	 * @param prompt message you want the user to see in the file chooser
+	 * @param theMessage message you want the user to see in the file chooser
 	 * @return full path to the selected file, or null if canceled.
 	 * 
 	 * @see #selectOutput(String)
 	 * @see #selectFolder(String)
 	 */
-	static public Path selectInput(String prompt) {
-		return selectInput(prompt, null);
+	static public Path selectInput(String theMessage) {
+		return selectInput(theMessage, null);
 	}
 
-	static public Path selectInput(String prompt, Path theFolder,String... theExtensions) {
+	static public Path selectInput(String theMessage, Path theFolder,String... theExtensions) {
 		CCFileChooser fileChooser = new CCFileChooser();
 		if(theExtensions != null && theExtensions.length > 0){
 			fileChooser.setAcceptAllFileFilterUsed(false);
@@ -408,8 +408,19 @@ public class CCNIOUtil {
 		if (theFolder != null) {
 			fileChooser.setCurrentDirectory(theFolder.toFile());
 		}
+		
+		if (theFolder != null)
+			fileChooser.setCurrentDirectory(theFolder.toFile());
+		else if(selectedPath != null){
 
-		selectedPath = fileChooser.chosePath(prompt);
+			Path myChosenPath = selectedPath;
+			if(!CCNIOUtil.exists(selectedPath)){
+				myChosenPath = selectedPath.getParent();
+			}
+			fileChooser.setDirectory(myChosenPath);
+		}
+
+		selectedPath = fileChooser.chosePath(theMessage);
 
 		fileChooser.setFileFilter(null);
 		return selectedPath;
@@ -464,6 +475,14 @@ public class CCNIOUtil {
 		fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		if (theFolder != null)
 			fileChooser.setCurrentDirectory(new File(theFolder));
+		else if(selectedPath != null){
+
+			Path myChosenPath = selectedPath;
+			if(!CCNIOUtil.exists(selectedPath)){
+				myChosenPath = selectedPath.getParent();
+			}
+			fileChooser.setDirectory(myChosenPath);
+		}
 	
 		selectedPath = fileChooser.chosePath(theMessage);
 		return selectedPath;

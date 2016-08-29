@@ -52,6 +52,10 @@ public class CCFileChooser extends JFileChooser{
 		return null;
 	}
 	
+	public void setDirectory(Path thePath){
+		_myCurrentDirectory = thePath;
+	}
+	
 	public Path chosePath(final String theText) {
 		setCurrentDirectory(_myCurrentDirectory.toFile());
 		int myRetVal = showDialog(getParent(),theText);
