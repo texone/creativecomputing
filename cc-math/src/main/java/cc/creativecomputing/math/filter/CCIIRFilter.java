@@ -162,6 +162,7 @@ public abstract class CCIIRFilter extends CCFilter{
 	 * 
 	 * @return the current cutoff frequency (in Hz).
 	 */
+	@CCProperty(name = "freqency")
 	public final double frequency() {
 		return _myFrequency;
 	}

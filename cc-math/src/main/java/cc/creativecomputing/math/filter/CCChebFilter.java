@@ -111,6 +111,7 @@ public class CCChebFilter extends CCIIRFilter {
 	/**
 	 * Returns the type of the filter.
 	 */
+	@CCProperty(name = "type")
 	public ChebFilterType type() {
 		return _myType;
 	}
@@ -133,6 +134,7 @@ public class CCChebFilter extends CCIIRFilter {
 	 * 
 	 * @return the ripple percentage
 	 */
+	@CCProperty(name = "ripple")
 	public double ripple() {
 		return _myRipple;
 	}
