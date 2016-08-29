@@ -1,6 +1,5 @@
 package cc.creativecomputing.effects;
 
-
 public class CCOffsetEffect extends CCEffect{
 
 	@Override

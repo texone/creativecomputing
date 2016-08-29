@@ -6,6 +6,7 @@ import java.util.Map;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.filter.CCFilter;
 
 public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<String, CCEffect> implements CCAnimatorListener{
@@ -35,6 +36,10 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	private boolean _cNormalize = false;
 	@CCProperty(name = "bypass amount")
 	private boolean _cBypassAmount = false;
+	@CCProperty(name = "end scale")
+	private double _scale = 1;
+	@CCProperty(name = "end add")
+	private double _add = 0;
 	
 	
 	
@@ -95,7 +100,6 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 					myValueA[i] += myValue * (1 - myEffect.channelBlend());
 					myValueB[i] += myValue * (myEffect.channelBlend());
 				}
-				
 			}
 			
 			if(_cNormalize){
@@ -121,15 +125,14 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 			for(int i = 0; i < myValues.length;i++){
 				String myValueName = _myValueNames[i];
 				
-				myValues[i] = myValues[i] * _cScales.get(myValueName + " scale") * myAmountValue * 0.5 + 0.5;
-				
+				myValues[i] = myValues[i] * _cScales.get(myValueName + " scale") * myAmountValue * _scale + _add;
 				for(CCFilter myFilter:_cFilters.values()){
 					myValues[i] = myFilter.process(index, myValues[i], 0);
 				}
 				index++;
 			}
 			
-			myEffectable.apply(myValues);
+			apply(myEffectable, myValues);
 		}
 	}
 	

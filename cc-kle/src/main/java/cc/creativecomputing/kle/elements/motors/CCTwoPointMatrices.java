@@ -201,8 +201,7 @@ public class CCTwoPointMatrices implements UnivariateFunction {
 					// CCLog.info(myPoint.x+":" + myVec0.x+":" + myVec1.x+":" +
 					// myXBlend+":" + myYBlend);
 
-					_myPositionAngleMatrix.setObject(new CCPositionRopeLengthAngle(myPoint, ll, lr, new CCVector2(
-							myXBlend, myYBlend)), x, y);
+					_myPositionAngleMatrix.setObject(new CCPositionRopeLengthAngle(myPoint, ll, lr, new CCVector2(myXBlend, myYBlend)), x, y);
 				}
 			}
 		}

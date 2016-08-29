@@ -9,39 +9,39 @@ import cc.creativecomputing.math.random.CCRandom;
 
 public class CCEffectModulation {
 	@CCProperty(name = "element offset", min = -1, max = 1)
-	private double _cElementOffset = 0;
+	public double elementOffset = 0;
 	@CCProperty(name = "group offset", min = -1, max = 1)
-	private double _cGroupOffset = 0;
+	public double groupOffset = 0;
 	@CCProperty(name = "global offset", min = -1, max = 1)
-	private double _cGlobalOffset = 0;
+	public double globalOffset = 0;
 	@CCProperty(name = "offset", min = -1, max = 1)
-	private double _cOffset = 0;
+	public double offset = 0;
 	@CCProperty(name = "random offset", min = -1, max = 1)
-	private double _cRandomOffset = 0;
+	public double randomOffset = 0;
 	@CCProperty(name = "x offset", min = -1, max = 1)
-	private double _cXOffset = 0;
+	public double xOffset = 0;
 	@CCProperty(name = "y offset", min = -1, max = 1)
-	private double _cYOffset = 0;
+	public double yOffset = 0;
 	
 	@CCProperty(name = "mod", min = 2, max = 48)
-	private double _cMod = 1;
+	public double mod = 1;
 	@CCProperty(name = "mod offset", min = -1, max = 1)
-	private double _cModOffset = 0;
+	public double modOffset = 0;
 	
 	@CCProperty(name = "div", min = 2, max = 8)
-	private double _cDiv = 1;
+	public double div = 1;
 	@CCProperty(name = "div offset", min = -1, max = 1)
-	private double _cDivOffset = 0;
+	public double divOffset = 0;
 	
 	@CCProperty(name = "group mod", min = 2, max = 6)
-	private double _cGroupMod = 1;
+	public double groupMod = 1;
 	@CCProperty(name = "group mod offset", min = -1, max = 1)
-	private double _cGroupModOffset = 0;
+	public double groupModOffset = 0;
 	
 	@CCProperty(name = "group div", min = 2, max = 6)
-	private double _cGroupDiv = 1;
+	public double groupDiv = 1;
 	@CCProperty(name = "group div offset", min = -1, max = 1)
-	private double _cGroupDivOffset = 0;
+	public double groupDivOffset = 0;
 	
 	private final CCRandom _myRandom;
 	private final List<Float> _myRandoms = new ArrayList<>();
@@ -67,17 +67,17 @@ public class CCEffectModulation {
 	
 	public double offsetSum(){
 		return 
-			_cElementOffset + 
-			_cGroupOffset + 
-			_cGlobalOffset + 
-			_cRandomOffset + 
-			_cXOffset + 
-			_cYOffset + 
-			_cModOffset + 
-			_cDivOffset +
-			_cGroupModOffset + 
-			_cGroupDivOffset +
-			_cOffset;
+			elementOffset + 
+			groupOffset + 
+			globalOffset + 
+			randomOffset + 
+			xOffset + 
+			yOffset + 
+			modOffset + 
+			divOffset +
+			groupModOffset + 
+			groupDivOffset +
+			offset;
 	}
 	
 	private static abstract class CCStepBlender{
@@ -133,20 +133,20 @@ public class CCEffectModulation {
 			_myRandoms.add(_myRandom.random());
 		}
 //		T4ElementInfo myInfo = theElement.elementInfo();
-		double myElementPhase = scaleValue(theMin, theMax, theElement.groupIDBlend(), _cElementOffset);
-		double myGroupPhase = scaleValue(theMin, theMax, theElement.groupBlend(), _cGroupOffset);
-		double myGlobalPhase = scaleValue(theMin, theMax, theElement.idBlend(), _cGlobalOffset);
-		double myRandomPhase = scaleValue(theMin, theMax, _myRandoms.get(theElement.id()), _cRandomOffset); 
-		double myXPhase = scaleValue(theMin, theMax, theElement.xBlend(), _cXOffset); 
-		double myYPhase = scaleValue(theMin, theMax, theElement.yBlend(), _cYOffset); 
+		double myElementPhase = scaleValue(theMin, theMax, theElement.groupIDBlend(), elementOffset);
+		double myGroupPhase = scaleValue(theMin, theMax, theElement.groupBlend(), groupOffset);
+		double myGlobalPhase = scaleValue(theMin, theMax, theElement.idBlend(), globalOffset);
+		double myRandomPhase = scaleValue(theMin, theMax, _myRandoms.get(theElement.id()), randomOffset); 
+		double myXPhase = scaleValue(theMin, theMax, theElement.xBlend(), xOffset); 
+		double myYPhase = scaleValue(theMin, theMax, theElement.yBlend(), yOffset); 
 		
-		double myModPhase = _myModBlender.value(theElement, theMin, theMax, _cMod, _cModOffset); 
-		double myDivPhase = _myDivBlender.value(theElement, theMin, theMax, _cDiv, _cDivOffset);
+		double myModPhase = _myModBlender.value(theElement, theMin, theMax, mod, modOffset); 
+		double myDivPhase = _myDivBlender.value(theElement, theMin, theMax, div, divOffset);
 		
-		double myGroupModPhase = _myGroupModBlender.value(theElement, theMin, theMax, _cGroupMod, _cGroupModOffset); 
-		double myGroupDivPhase = _myGroupDivBlender.value(theElement, theMin, theMax, _cGroupDiv, _cGroupDivOffset);
+		double myGroupModPhase = _myGroupModBlender.value(theElement, theMin, theMax, groupMod, groupModOffset); 
+		double myGroupDivPhase = _myGroupDivBlender.value(theElement, theMin, theMax, groupDiv, groupDivOffset);
 		
-		double myConstOffset = scaleValue(theMin, theMax, 1f, _cOffset); 
+		double myConstOffset = scaleValue(theMin, theMax, 1f, offset); 
 		
 		return 
 			myElementPhase + 

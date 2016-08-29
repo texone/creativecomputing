@@ -2,6 +2,7 @@ package cc.creativecomputing.kle.elements;
 
 import java.util.ArrayList;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.math.CCMath;
 

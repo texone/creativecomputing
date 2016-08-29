@@ -8,6 +8,7 @@ import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.kle.elements.lights.CCLightBrightnessSetup;
 import cc.creativecomputing.kle.elements.lights.CCLightChannel;
 import cc.creativecomputing.kle.elements.lights.CCLightRGBSetup;
+import cc.creativecomputing.kle.elements.lights.CCLightRGBWSetup;
 import cc.creativecomputing.kle.elements.lights.CCLightSetup;
 import cc.creativecomputing.kle.elements.motors.CC2Motor1ConnectionBounds;
 import cc.creativecomputing.kle.elements.motors.CC2Motor1ConnectionSetup;
@@ -85,6 +86,8 @@ public class CCSequenceElement extends CCEffectable{
 			return new CCLightBrightnessSetup(theLights);
 		case 3:
 			return new CCLightRGBSetup(theLights);
+		case 4:
+			return new CCLightRGBWSetup(theLights);
 		default:
 			return new CCLightSetup(theLights);
 		}

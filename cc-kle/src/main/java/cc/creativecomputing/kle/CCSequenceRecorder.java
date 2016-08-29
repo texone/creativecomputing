@@ -23,7 +23,6 @@ import cc.creativecomputing.kle.elements.CCSequenceChannel;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
-import cc.creativecomputing.kle.formats.CCSequenceContainers;
 import cc.creativecomputing.kle.formats.CCSequenceFormats;
 import cc.creativecomputing.kle.formats.CCSequenceKLE1Container;
 import cc.creativecomputing.kle.formats.CCSequenceKLE2Container;
@@ -67,6 +66,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		
 		public CCSequenceChannelRecording(CCKleChannelType theMappingType, CCSequenceMapping<?> theMapping){
 			super(theMapping.columns(), theMapping.rows(), theMapping.depth());
+			CCLog.info(theMappingType + ":" + theMapping.size());
 			_myMapping = theMapping;
 			_myMappingType = theMappingType;
 			_myRateBrake = _myBaseRate / (theMapping.frameRate() * updateSteps);

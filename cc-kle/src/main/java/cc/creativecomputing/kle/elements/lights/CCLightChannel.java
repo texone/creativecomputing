@@ -7,6 +7,7 @@ public class CCLightChannel extends CCSequenceChannel{
 
 	public CCLightChannel(CCXMLElement theLightXML) {
 		super(theLightXML.intAttribute("id"));
+		System.out.println(theLightXML.intAttribute("id"));
 	}
 	
 	public CCLightChannel(int theID){
