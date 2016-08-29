@@ -309,7 +309,7 @@ public class CCTesselator implements GLUtessellatorCallback{
 		vertex(theVertex.x, theVertex.y, theVertex.z);
 	}
 	
-	public void normal(final float theX, final float theY, final float theZ) {
+	public void normal(final double theX, final double theY, final double theZ) {
 		_myHasNormalData = true;
 		_myVertexData[NORMAL_X] = theX;
 		_myVertexData[NORMAL_Y] = theY;

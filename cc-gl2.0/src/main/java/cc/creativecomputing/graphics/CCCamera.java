@@ -13,6 +13,7 @@ package cc.creativecomputing.graphics;
 import java.nio.FloatBuffer;
 
 import cc.creativecomputing.graphics.CCGraphics.CCMatrixMode;
+import cc.creativecomputing.graphics.util.CCFrustum;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector2;
@@ -93,6 +94,8 @@ public class CCCamera{
 	 * Distance differences between camera and target
 	 */
 	private CCVector3 _myDelta;
+	
+	private CCFrustum _myFrustum;
 
 	/**
 	 * Create a camera that sits on the z axis
@@ -107,6 +110,7 @@ public class CCCamera{
 	
 	public CCCamera(final int theWidth, final int theHeight, final double theFov){
 		set(theWidth, theHeight, theFov);
+		_myFrustum = new CCFrustum(this);
 	}
 
 	/**
@@ -228,6 +232,8 @@ public class CCCamera{
 
 		updateUp();
 		updateProjectionInfos();
+		
+		_myFrustum = new CCFrustum(this);
 	}
 	
 	public void set(
@@ -483,6 +489,10 @@ public class CCCamera{
 
 	public void frustumOffset(CCVector2 theOffset){
 		_myFrustumOffset.set(theOffset);
+	}
+	
+	public CCFrustum frustum(){
+		return _myFrustum;
 	}
 
 	//////////////////////////////////////////////////
@@ -834,6 +844,8 @@ public class CCCamera{
 
 		// update the up vector
 		updateUp();
+		
+		_myFrustum.updateFromCamera();
 	}
 
 	/**
