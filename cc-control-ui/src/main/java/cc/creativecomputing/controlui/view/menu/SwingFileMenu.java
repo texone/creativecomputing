@@ -42,39 +42,31 @@ public class SwingFileMenu extends JMenu{
 		setMnemonic(KeyEvent.VK_F);
 		
 		JMenuItem myLoadItem = new JMenuItem("Load");
-		myLoadItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				Path myPath = _myFileChooser.chosePath("Load Project");
-				if (myPath == null) return;
-				
-				_myFileManager.loadProject(myPath);
-			}
+		myLoadItem.addActionListener(e -> {
+			Path myPath = _myFileChooser.chosePath("Load Project");
+			if (myPath == null) return;
+			_myFileManager.loadProject(myPath);
+			
 		});
 		myLoadItem.setToolTipText("Loads an existing project.");
 		myLoadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.META_MASK));
 		add(myLoadItem);
 		
 		JMenuItem myNewItem = new JMenuItem("New");
-		myNewItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myFileChooser.resetPath();
-				_myFileManager.newProject();
-			}
+		myNewItem.addActionListener(e -> {
+			_myFileChooser.resetPath();
+			_myFileManager.newProject();
+			
 		});
 		myNewItem.setToolTipText("Creates a new Project.");
 		myNewItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.META_MASK));
 		add(myNewItem);
 		
 		JMenuItem mySaveItem = new JMenuItem("Save");
-		mySaveItem.addActionListener(new ActionListener() {
+		mySaveItem.addActionListener(e -> {
+			Path myPath = _myFileChooser.chosePath("Save Project");
+			if(myPath != null)_myFileManager.saveProject(myPath);
 			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				Path myPath = _myFileChooser.chosePath("Save Project");
-				if(myPath != null)_myFileManager.saveProject(myPath);
-			}
 		});
 		mySaveItem.setToolTipText("Saves the content of all tracks.");
 		mySaveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.META_MASK));
@@ -96,13 +88,9 @@ public class SwingFileMenu extends JMenu{
 //		add(mySaveAsItem);
 //		
 		JMenuItem mySaveSelectionItem = new JMenuItem("Export Selection");
-		mySaveSelectionItem.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				Path myPath = _myFileChooser.chosePath("save selection");
-				if (myPath != null) _myFileManager.exportCurrentTimelineSelection(myPath);
-			}
+		mySaveSelectionItem.addActionListener(e -> {
+			Path myPath = _myFileChooser.chosePath("save selection");
+			if (myPath != null) _myFileManager.exportCurrentTimelineSelection(myPath);
 		});
 		mySaveSelectionItem.setToolTipText("Saves the content of all tracks.");
 		add(mySaveSelectionItem);

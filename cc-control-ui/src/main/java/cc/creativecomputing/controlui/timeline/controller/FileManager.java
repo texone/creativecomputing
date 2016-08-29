@@ -87,7 +87,11 @@ public class FileManager {
 			Object myData = theData.get(GroupTrack.GROUP_TRACKS);
 			if(myData instanceof CCDataArray){
 				for(Object myObject:(CCDataArray)myData){
-					loadTrack((CCDataObject)myObject, theTimeline);
+					try{
+						loadTrack((CCDataObject)myObject, theTimeline);
+					}catch(Exception e){
+						e.printStackTrace();
+					}
 				}
 			}else{
 				loadTrack((CCDataObject)myData, theTimeline);
@@ -368,10 +372,12 @@ public class FileManager {
 	}
 	
 	public void loadProject(Path thePath) {
+		
 		_myTimelineContainer.reset();
 		_mySerializer.loadProject(thePath);
 		UndoHistory.instance().clear();
 		_myEvents.proxy().onLoad(thePath);
+		
 	}
 
 	public void newProject(){

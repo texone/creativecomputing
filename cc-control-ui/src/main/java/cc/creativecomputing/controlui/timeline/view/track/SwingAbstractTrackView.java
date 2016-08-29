@@ -10,16 +10,16 @@ import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingToolChooserPopup;
 
-public abstract class SwingAbstractTrackView extends JPanel{
+public abstract class SwingAbstractTrackView extends JPanel implements CCTrackView{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7700094752340157349L;
 	
-	protected final SwingTrackDataView _myDataView;
+	protected SwingTrackDataView _myDataView;
 	
-	protected final JFrame _myMainFrame;
+	protected JFrame _myMainFrame;
 	
 	public SwingAbstractTrackView(
 		JFrame theMainFrame,
@@ -35,6 +35,10 @@ public abstract class SwingAbstractTrackView extends JPanel{
 	public SwingAbstractTrackView(JFrame theMainFrame){
 		_myMainFrame = theMainFrame;
 		_myDataView = null;
+	}
+	
+	public SwingAbstractTrackView(){
+		
 	}
 
 	public abstract void mute(final boolean theMute);

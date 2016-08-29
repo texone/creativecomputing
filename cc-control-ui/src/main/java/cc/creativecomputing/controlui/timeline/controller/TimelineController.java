@@ -60,6 +60,7 @@ import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 
@@ -277,6 +278,7 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	}
 	
 	public GroupTrackController createGroupController(Path thePath){
+		CCLog.info(thePath);
 		return createGroupController((CCObjectPropertyHandle)_myPropertyMap.property(thePath));
 	}
 	

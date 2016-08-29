@@ -47,7 +47,7 @@ import cc.creativecomputing.math.CCMath;
 
 
 @SuppressWarnings("serial")
-public class SwingTrackDataView extends JPanel{
+public class SwingTrackDataView extends JPanel {
 	
 	public static interface SwingTrackDataViewListener{
 		public void onRender(Graphics2D theG2D);
@@ -690,6 +690,9 @@ public class SwingTrackDataView extends JPanel{
 	}
 	
 	private void drawTimelineBack(Graphics g){
+		if(_myTimelineController == null){
+			return;
+		}
 		Graphics2D myG2 = (Graphics2D)g;
 		TransportController myTransportController = _myTimelineController.transportController();
 		RulerInterval ri = myTransportController.rulerInterval();

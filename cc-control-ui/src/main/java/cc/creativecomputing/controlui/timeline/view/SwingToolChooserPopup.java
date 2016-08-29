@@ -22,8 +22,10 @@ package cc.creativecomputing.controlui.timeline.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 
 import cc.creativecomputing.controlui.timeline.controller.TimelineTool;
 import cc.creativecomputing.controlui.timeline.controller.ToolController;
@@ -72,11 +74,14 @@ public class SwingToolChooserPopup extends JPopupMenu {
 		add(entryHead);
 		addSeparator();
 		
+		ButtonGroup myToolGroup = new ButtonGroup();
 		for(TimelineTool myTool:theToolController.tools()) {
-			JMenuItem myStepItem = new JMenuItem(myTool.name());
+			JRadioButtonMenuItem myStepItem = new JRadioButtonMenuItem(myTool.name());
 			myStepItem.setFont(SwingGuiConstants.ARIAL_11);
 			myStepItem.addActionListener(new SwingToolChooserAction(myTool));
 			add(myStepItem);
+			if(myTool.name().equals("LINEAR"))myStepItem.setSelected(true);
+			myToolGroup.add(myStepItem);
 		}
 		
 		addSeparator();

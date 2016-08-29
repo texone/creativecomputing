@@ -19,41 +19,46 @@
  */
 package cc.creativecomputing.controlui.timeline.view;
 
+import java.awt.Color;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+
+import javax.swing.JFrame;
 
 import cc.creativecomputing.control.timeline.Track;
 import cc.creativecomputing.controlui.timeline.controller.CurveToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
 import cc.creativecomputing.controlui.timeline.controller.track.DoubleTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
 
 /**
  * @author christianriekoff
  *
  */
-public class SwingCurvePanel implements ComponentListener{
+public class SwingCurvePanel extends SwingAbstractTrackView implements ComponentListener{
 
-	private SwingTrackDataView _myTrackDataView;
 	private TrackContext _myTrackContext;
 	private TrackController _myTrackController;
 	private Track _myTrack;
 	
-	public SwingCurvePanel() {
+	public SwingCurvePanel(JFrame theFrame) {
+		_myMainFrame = theFrame;
 		_myTrackContext = new TrackContext();
 		_myTrack = new Track(null);
 		CurveToolController myCurveToolController = new CurveToolController(_myTrackContext);
 		_myTrackController = new DoubleTrackController(_myTrackContext, myCurveToolController,_myTrack, null);
-		_myTrackDataView = new SwingTrackDataView(new SwingToolChooserPopup(myCurveToolController), null, null, _myTrackController);
+		_myDataView = new SwingTrackDataView(new SwingToolChooserPopup(myCurveToolController), null, null, _myTrackController);
+		_myTrackController.view(this);
 //		((TrackDataController)_myTrackController).trackDataView(_myTrackDataView);
 		
-		_myTrackDataView.addComponentListener(this);
+		_myDataView.addComponentListener(this);
 		_myTrackContext.zoomController().addZoomable(_myTrackController);
 	}
 	
 	public SwingTrackDataView view() {
-		return _myTrackDataView;
+		return _myDataView;
 	}
 	
 	public Track track(){
@@ -74,7 +79,7 @@ public class SwingCurvePanel implements ComponentListener{
 
 	@Override
 	public void componentResized(ComponentEvent theArg0) {
-		_myTrackDataView.render();
+		_myDataView.render();
 	}
 
 	@Override
@@ -82,6 +87,18 @@ public class SwingCurvePanel implements ComponentListener{
 	}
 	
 	public void updateView(){
-		_myTrackDataView.render();
+		_myDataView.render();
+	}
+
+	@Override
+	public void mute(boolean theMute) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void color(Color theColor) {
+		// TODO Auto-generated method stub
+		
 	}
 }

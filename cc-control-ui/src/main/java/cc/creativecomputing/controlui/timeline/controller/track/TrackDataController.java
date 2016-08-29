@@ -98,7 +98,11 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
     
     @Override
     public double viewXToTime(int theViewX, boolean theGetPos) {
+    	try{
         return (double) theViewX / (double) _myTrackView.width() * (_myTrackContext.viewTime()) + (theGetPos ? _myTrackContext.lowerBound() : 0);
+    	}catch(Exception e){
+    		return 0;
+    	}
     }
 
     @Override

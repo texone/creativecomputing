@@ -35,12 +35,12 @@ public class SwingCurveFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private SwingCurvePanel _myCurvePanel;
 
-	public SwingCurveFrame() {
-		_myCurvePanel = new SwingCurvePanel();
+	public SwingCurveFrame(String theTitle) {
+		super(theTitle);
+		_myCurvePanel = new SwingCurvePanel(this);
 		
 		getContentPane().add(_myCurvePanel.view());
 		pack();
-		setVisible(true);
 	}
 	
 	public Track track(){
@@ -56,6 +56,7 @@ public class SwingCurveFrame extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		new SwingCurveFrame();
+		SwingCurveFrame myFrame = new SwingCurveFrame("check it");
+		myFrame.setVisible(true);
 	}
 }

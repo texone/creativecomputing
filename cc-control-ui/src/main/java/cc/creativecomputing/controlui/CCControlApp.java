@@ -16,9 +16,29 @@ import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 
 public class CCControlApp  {
 	
+	public static class ExceptionHandler implements Thread.UncaughtExceptionHandler {
+		  public void uncaughtException(Thread t, Throwable e) {
+		    handle(e);
+		  }
+
+		  public void handle(Throwable throwable) {
+		    try {
+		      // insert your e-mail code here
+		    } catch (Throwable t) {
+		    	CCLog.info("bla");
+		      t.printStackTrace();
+		    }
+		  }
+
+		  public static void registerExceptionHandler() {
+		    Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+		    System.setProperty("sun.awt.exception.handler", ExceptionHandler.class.getName());
+		  }
+		}
 
 	private Map<String, CCCustomMenu> _myCustomMenues = new HashMap<String, CCCustomMenu>();
 	
@@ -85,6 +105,8 @@ public class CCControlApp  {
 		// Display the window.
 		_myFrame.pack();
 		_myFrame.setVisible(true);
+		
+		ExceptionHandler.registerExceptionHandler();
 	}
 	
 	public void update(double theDeltaTime){
