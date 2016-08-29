@@ -19,6 +19,16 @@ public class CCDataException extends RuntimeException {
     public CCDataException(String message) {
         super(message);
     }
+    
+    /**
+     * Constructs a JSONException with an explanatory message.
+     *
+     * @param message
+     *            Detail about the reason for the exception.
+     */
+    public CCDataException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
     /**
      * Constructs a new JSONException with the specified cause.
