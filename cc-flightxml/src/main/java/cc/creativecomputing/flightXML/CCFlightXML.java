@@ -52,7 +52,7 @@ public class CCFlightXML {
 		CCNIOUtil.createDirectories(CCNIOUtil.dataPath("flightxml/" + myQueryParts[0]));
 		CCDataIO.saveDataObject(theObject, CCNIOUtil.dataPath("flightxml/" + myQueryParts[0]).resolve(myQueryParts[1]));
 
-		CCLog.info("CACHE:" + theQuery + ":" + theObject + ":" + CCNIOUtil.dataPath(myQueryParts[0]).resolve(myQueryParts[1]));
+//		CCLog.info("CACHE:" + theQuery + ":" + theObject + ":" + CCNIOUtil.dataPath(myQueryParts[0]).resolve(myQueryParts[1]));
 	}
 	
 	private CCDataObject checkCached(String theQuery){
