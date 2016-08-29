@@ -17,29 +17,15 @@ public class CCEnvelopeHandle extends CCPropertyHandle<CCEnvelope>{
 	public CCDataObject data() {
 		CCDataObject myResult = super.data();
 		CCEnvelope myEnvelope = value();
-		CCDataArray myArray = myResult.createArray("curves");
-		for(String myKey:myEnvelope.curves().keySet()){
-			TrackData myCurve = myEnvelope.curves().get(myKey);
-			CCDataObject myCurveObject = new CCDataObject();
-			myCurveObject.put("key", myKey);
-			myCurveObject.put("curve", myCurve.data());
-			myArray.add(myCurveObject);
-		}
+		TrackData myCurve = myEnvelope.curve();
+		myResult.put("curve", myCurve.data());
 		return myResult;
 	}
 	
 	@Override
 	public void data(CCDataObject theData) {
 		CCEnvelope myEnvelope = new CCEnvelope();
-		myEnvelope.curves().clear();
-		CCDataArray myCurvesData = theData.getArray("curves");
-		for(int i = 0; i < myCurvesData.size();i++){
-			CCDataObject myCurveObject = myCurvesData.getObject(i);
-			TrackData myCurve = new TrackData(null);
-			myCurve.data(myCurveObject.getObject("curve"));
-			String myKey = myCurveObject.getString("key");
-			myEnvelope.curves().put(myKey, myCurve);
-		}
+		myEnvelope.curve().data(theData.getObject("curve"));
 		value(myEnvelope, true);
 	}
 
