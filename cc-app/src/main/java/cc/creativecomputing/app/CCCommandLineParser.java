@@ -157,9 +157,22 @@ public class CCCommandLineParser {
 		addOption(theOption, false, theDescription);
 	}
 	
-	public String optionValue(String theOption){
-		if(!_mySetOptions.containsKey(theOption))return null;
+	public String optionString(String theOption, String theDefault){
+		if(!_mySetOptions.containsKey(theOption))return theDefault;
 		return _mySetOptions.get(theOption).value();
+	}
+	
+	public String optionString(String theOption){
+		return optionString(theOption, null);
+	}
+	
+	public int optionInt(String theOption, int theDefault){
+		if(!_mySetOptions.containsKey(theOption))return theDefault;
+		try{
+			return Integer.parseInt(_mySetOptions.get(theOption).value());
+		}catch(Exception e){
+			return theDefault;
+		}
 	}
 	
 	public List<String> optionValues(String theOption){
