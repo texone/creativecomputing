@@ -573,6 +573,7 @@ public class TrackData extends TreeSet<ControlPoint>{
 	}
 	
 	public void data(CCDataObject theData) {
+		if(theData == null)return;
 		CCDataArray myPointDataArray = theData.getArray("points");
 		for (Object myControlPointObject:myPointDataArray) {
 			CCDataObject myControlPointData = (CCDataObject)myControlPointObject;
