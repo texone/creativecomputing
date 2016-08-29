@@ -21,18 +21,8 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 
-import javax.imageio.ImageIO;
-
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.core.util.CCFormatUtil;
-import cc.creativecomputing.gl.app.CCGLAdapter;
-import cc.creativecomputing.gl.app.CCGLGraphics;
-import cc.creativecomputing.gl.app.CCGLListener;
-import cc.creativecomputing.gl.app.events.CCKeyEvent;
-import cc.creativecomputing.gl.app.events.CCKeyEvent.CCKeyCode;
-import cc.creativecomputing.gl.app.events.CCKeyListener;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.image.format.CCImageIOFormat;
 import cc.creativecomputing.io.CCNIOUtil;
 
@@ -43,63 +33,6 @@ import com.jogamp.opengl.GLException;
 /** Utilities for taking screenshots of OpenGL applications. */
 
 public class CCScreenCapture {
-	
-	public static class CCScreenCaptureMaker implements CCKeyListener, CCGLListener<CCGLGraphics<?>>{
-		
-		private CCKeyCode _myCaptureKey;
-		
-		private String _myFolder;
-		
-		private String _myFormat;
-		
-		public CCScreenCaptureMaker(CCGLAdapter<?, ?> theApp, CCKeyCode theCaptureKey, String theFolder, String theFormat){
-			_myCaptureKey = theCaptureKey;
-			_myFolder = theFolder;
-			_myFormat = theFormat;
-			theApp.keyListener().add(this);
-			theApp.glListener().add(this);
-		}
-		
-		public CCScreenCaptureMaker(CCGLAdapter<?, ?> theApp){
-			this(theApp, CCKeyCode.VK_C, "export", "png");
-		}
-
-		@Override
-		public void keyPressed(CCKeyEvent theKeyEvent) {}
-		
-		private boolean _myRecordFrame;
-
-		@Override
-		public void keyReleased(CCKeyEvent theKeyEvent) {
-			if(theKeyEvent.keyCode() == _myCaptureKey){
-				_myRecordFrame = true;
-			}
-		}
-
-		@Override
-		public void keyTyped(CCKeyEvent theKeyEvent) {}
-
-		@Override
-		public void reshape(CCGLGraphics<?> theContext) {}
-
-		@Override
-		public void init(CCGLGraphics<?> theContext) {}
-
-		@Override
-		public void dispose(CCGLGraphics<?> theContext) {}
-		
-		private int _myFrame;
-
-		@Override
-		public void display(CCGLGraphics<?> theContext) {
-			if(_myRecordFrame){
-				CCScreenCapture.capture(CCNIOUtil.dataPath(_myFolder + "/frame_" + CCFormatUtil.nf(_myFrame, 5) + "." + _myFormat), theContext.width(), theContext.height());
-				_myFrame++;
-				_myRecordFrame = false;
-			}
-		}
-		
-	}
 	
 	/**
 	 * Utility class which helps take fast screenshots of OpenGL rendering results

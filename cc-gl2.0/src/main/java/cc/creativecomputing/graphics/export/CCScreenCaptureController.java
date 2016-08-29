@@ -12,6 +12,8 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
+import cc.creativecomputing.gl.app.events.CCKeyAdapter;
+import cc.creativecomputing.gl.app.events.CCKeyEvent;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -65,6 +67,9 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 	@CCProperty(name = "draw bounds")
 	private boolean _cDrawCaptureBounds = false;
 	
+	@CCProperty(name = "record key")
+	private boolean _cRecordKey = true;
+	
 	
 	private final CCAnimator _myAnimator;
 	
@@ -73,6 +78,12 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 	public CCScreenCaptureController(CCGL2Adapter theGLAdapter, CCAnimator theAnimator){
 		_myGLAdapter = theGLAdapter;
 		_myGLAdapter.glListener().add(this);
+		_myGLAdapter.keyListener().add(new CCKeyAdapter() {
+			@Override
+			public void keyReleased(CCKeyEvent theKeyEvent) {
+//				recordFrame();
+			}
+		});
 		_myCaptureRate = 1;
 		_myAnimator = theAnimator;
 		_myAnimator.listener().add(this);
