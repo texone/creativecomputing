@@ -116,8 +116,8 @@ public class ReadCoilsTestTCP {
 			con.setPort(Modbus.DEFAULT_PORT);
 			con.connect();
 
-			req = new ReadCoilsRequest(1,100);
-			req.setUnitID(255);
+			req = new ReadCoilsRequest(0,10);
+			req.setUnitID(1);
 			if (Modbus.debug)
 				CCLog.info("Request: " + req.getHexMessage());
 
@@ -129,8 +129,7 @@ public class ReadCoilsTestTCP {
 //00 00 00 00 00 06 ff 01 00 64 00 64
 //00 00 00 00 00 02 ff 01			
 //00 00 00 00 00 00 00 00 04 01 01 10
-			if (trans instanceof ModbusTCPTransaction)
-				((ModbusTCPTransaction) trans).setReconnecting(true);
+				trans.setReconnecting(true);
 
 			// 5. Execute the transaction repeat times
 			int k = 0;
