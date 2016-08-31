@@ -253,8 +253,12 @@ public class CCDate {
 		return _myCalendar.get(Calendar.SECOND);
 	}
 	
+	public int milliSeconds(){
+		return _myCalendar.get(Calendar.MILLISECOND);
+	}
+	
 	public double dayProgress(){
-		return (((hours() * 60 + minutes()) * 60) + seconds()) / (24d * 60d * 60d);
+		return (((hours() * 60 + minutes()) * 60) + seconds() + milliSeconds() / 1000d) / (24d * 60d * 60d);
 	}
 	
 	public double yearProgress(){
