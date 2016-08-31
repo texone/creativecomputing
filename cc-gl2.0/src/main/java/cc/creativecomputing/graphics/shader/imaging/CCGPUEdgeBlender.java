@@ -17,8 +17,6 @@ import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 
-import com.jogamp.opengl.cg.CGparameter;
-
 /**
  * @author info
  *

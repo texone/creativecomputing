@@ -17,8 +17,6 @@ import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.texture.CCFrameBufferObjectAttributes;
 import cc.creativecomputing.io.CCNIOUtil;
 
-import com.jogamp.opengl.cg.CGparameter;
-
 /**
  * @author christianriekoff
  * 
@@ -34,8 +32,6 @@ public class CCGPUDepthOfField {
 	private CCGLProgram _myFifthShader;
 	
 //	private CCCGShader _mySceneShader;
-	private CGparameter _myFocalDistanceParameter;
-	private CGparameter _myFocalRangeParameter;
 	
 //	private CCCGShader _myDownSampleShader;
 
