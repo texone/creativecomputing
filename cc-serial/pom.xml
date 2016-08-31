@@ -12,8 +12,8 @@
   
   <repositories>
     <repository>
-      <id>dep.creativecomputing-builds.googlecode.com</id>
-      <url>http://creativecomputing-builds.googlecode.com/svn/m2/dependencies</url>
+      <id>sparetimelabs</id>
+      <url>http://www.sparetimelabs.com/maven2/</url>
     </repository>
   </repositories> 
   
