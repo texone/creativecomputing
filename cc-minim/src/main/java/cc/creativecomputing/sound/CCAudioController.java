@@ -27,7 +27,6 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 
 import cc.creativecomputing.math.CCMath;
-import ddf.minim.AudioOutput;
 
 /**
  * <code>{@linkplain CCAudioController}</code> is the base class of all Minim
