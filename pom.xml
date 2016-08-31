@@ -48,6 +48,7 @@
         <module>cc-model</module>
         <module>cc-minim</module>
         <module>cc-demo</module>
+        <module>cc-modbus</module>
 <!--
         <module>cc-simulation</module>
 
