@@ -47,7 +47,7 @@ public interface Modbus {
    * JVM flag for debug mode. Can be set passing the system property
    * com.ghgande.j2mod.modbus.debug=false|true (-D flag to the jvm).
    */
-  public static boolean debug = true;//"true".equals(System.getProperty("com.ghgande.modbus.debug"));
+  public static boolean debug = false;//"true".equals(System.getProperty("com.ghgande.modbus.debug"));
   
   /**
    * Defines the class 1 function code
