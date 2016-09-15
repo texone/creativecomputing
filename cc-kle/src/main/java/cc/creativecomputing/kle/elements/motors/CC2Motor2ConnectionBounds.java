@@ -52,6 +52,12 @@ public class CC2Motor2ConnectionBounds extends CCMotorBounds{
 		mySetup.bounds().add(boundPoint(mySetup, 1, 0, _myTopDistance));
 		mySetup.bounds().add(boundPoint(mySetup, 1, 0, _myBottomDistance));
 		mySetup.bounds().add(boundPoint(mySetup, 0, 1, _myBottomDistance));
+
+		mySetup.bounds2D().clear();
+		mySetup.bounds2D().add(boundPoint2D(mySetup, 0, 1, _myTopDistance));
+		mySetup.bounds2D().add(boundPoint2D(mySetup, 1, 0, _myTopDistance));
+		mySetup.bounds2D().add(boundPoint2D(mySetup, 1, 0, _myBottomDistance));
+		mySetup.bounds2D().add(boundPoint2D(mySetup, 0, 1, _myBottomDistance));
 		
 		CCVector3 myPlaneDirection = mySetup.planeDirection();
 		CCVector3 animBound0  = mySetup.bounds().get(0).subtract(myPlaneDirection.multiply(mySetup.elementRadius() * _myElementRadiusScale));
@@ -87,6 +93,17 @@ public class CC2Motor2ConnectionBounds extends CCMotorBounds{
 		CCVector3 myResult = myMotorPos0.subtract(myDirection.multiply(CCMath.tan(CCMath.radians(_myRopeAngle)) * theTopDistance));
 		myResult.y -= theTopDistance;
 		return myResult;
+	}
+	
+	private CCVector2 boundPoint2D(CCMotorSetup theSetup, int theID0, int theID1, double theTopDistance){
+		CCVector3 myMotorPos0 = theSetup.channels().get(theID0)._myPosition;
+		CCVector3 myMotorPos1 = theSetup.channels().get(theID1)._myPosition;
+		double myLeft = myMotorPos0.distance(myMotorPos1);
+		if(theID0 > theID1)myLeft = -myLeft;
+		return new CCVector2(
+			myLeft - CCMath.sign(myLeft) * CCMath.tan(CCMath.radians(6)) * theTopDistance,
+			-theTopDistance
+		);
 	}
 	
 	@CCProperty(name = "radius scale", min = 0, max = 2, defaultValue = 1)
