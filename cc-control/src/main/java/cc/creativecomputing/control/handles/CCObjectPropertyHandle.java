@@ -214,6 +214,9 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 				myProperty = new CCEnumPropertyHandle(this, myField);
 			}else{
 				if(myField.value() == null)continue;
+				if(myField.value() instanceof Map && ((Map)myField.value()).size() <= 0){
+					continue;
+				}
 				myProperty = new CCObjectPropertyHandle(this, myField, _mySettingsPath);
 			}
 			myResult.put(myProperty.name(), myProperty);
