@@ -15,6 +15,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import java.util.Map;
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.texture.CCTexture;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
@@ -117,6 +119,31 @@ public class CCGLProgram{
 		private CCGeometryOutputType(final int theGLID) {
 			glID = theGLID;
 		}
+	}
+	
+	public static class CCGLTextureUniform{
+		public CCTexture texture;
+		public int unit;
+		public String parameter;
+		
+		public CCGLTextureUniform(CCTexture theTexture, String theParameter){
+			texture = theTexture;
+			parameter = theParameter;
+			unit = -1;
+		}
+	}
+	
+	protected Map<String, CCGLTextureUniform> _myTextures = new HashMap<>();
+	
+	public void setTextureUniform(String theParameter, CCTexture theTexture){
+		if(_myTextures.containsKey(theParameter)){
+			_myTextures.get(theParameter).texture = theTexture;
+		}
+		_myTextures.put(theParameter, new CCGLTextureUniform(theTexture, theParameter));
+	}
+	
+	public Collection<CCGLTextureUniform> textures(){
+		return _myTextures.values();
 	}
 	
 	protected int _myProgram;
