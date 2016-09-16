@@ -213,13 +213,12 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	public void update(CCAnimator theAnimator) {
 		if(!_myIsRecording)return;
 		
-		recordFrame();
 		_myStep++;
 		if(_myRecordTimeline){
 			_myAnimator.fixedUpdateTime = 1f / (_myBaseRate);
 			_myTimelineTime += _myAnimator.deltaTime();
 			_myTransportController.time(_myTimelineTime);
-			CCLog.info(_myTimelineTime);
+			recordFrame();
 		}else{
 			if(_myFadeSteps > 0){
 				if(_myStep < _myFadeSteps){
@@ -231,6 +230,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 					_myAnimator.fixedUpdateTime = 1f / (_myBaseRate);
 				}
 			}
+			recordFrame();
 		}
 		double myProgress = (double)_myStep / (double)_mySequenceSteps;
 		if(_myProgress != null)_myProgress.progress(myProgress);
@@ -493,7 +493,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	}
 	
 	@CCProperty(name = "record timeline loop")
-	public void recordFromTimelien(CCTriggerProgress theProgress){
+	public void recordFromTimeline(CCTriggerProgress theProgress){
 		_myRecordTimeline = true;
 		_myRecordPath = null;
 		_myProgress = theProgress;
