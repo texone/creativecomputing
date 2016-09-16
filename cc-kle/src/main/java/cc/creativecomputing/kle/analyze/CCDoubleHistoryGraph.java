@@ -7,14 +7,14 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 
 
-public class CCFloatHistoryGraph extends CCHistoryGraph<CCDoubleHistoryData>{
+public class CCDoubleHistoryGraph extends CCHistoryGraph<CCDoubleHistoryData>{
 	
 	@CCProperty(name = "graph")
 	private CCAnalyzeSettings _cSettings;
 	
 	protected final List<CCDoubleHistoryData> data;
 	
-	public CCFloatHistoryGraph() {
+	public CCDoubleHistoryGraph() {
 		_mySettings = _cSettings = new CCAnalyzeSettings();
 		data = new ArrayList<>();
 	}
