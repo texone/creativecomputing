@@ -278,7 +278,6 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	}
 	
 	public GroupTrackController createGroupController(Path thePath){
-		CCLog.info(thePath);
 		return createGroupController((CCObjectPropertyHandle)_myPropertyMap.property(thePath));
 	}
 	
