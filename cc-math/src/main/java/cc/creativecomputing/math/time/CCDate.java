@@ -148,8 +148,6 @@ public class CCDate {
 	public CCDate(int theYear, int theMonth, int theDate, int theHour, int theMinute, int theSecond){
 		this();
 		set(theYear, theMonth, theDate, theHour, theMinute, theSecond);
-		
-		
 	}
 	
 	public CCDate(String theDate, String thePattern){
@@ -257,6 +255,10 @@ public class CCDate {
 		return _myCalendar.get(Calendar.MILLISECOND);
 	}
 	
+	public double hourProgress(){
+		return (minutes() * 60 + seconds() + milliSeconds() / 1000d) / (60d * 60d);
+	}
+	
 	public double dayProgress(){
 		return (((hours() * 60 + minutes()) * 60) + seconds() + milliSeconds() / 1000d) / (24d * 60d * 60d);
 	}
@@ -318,6 +320,36 @@ public class CCDate {
 	
 	public int timezoneOffset(){
 		return -(_myCalendar.get(Calendar.ZONE_OFFSET) + _myCalendar.get(Calendar.DST_OFFSET)) / (60 * 1000);
+	}
+	
+	/**
+	 * Returns whether this date is before the given date
+	 * @param theDate the date to check
+	 * @return <code>true</code> if this date is before the given date <code>false</code> otherwise
+	 */
+	public boolean before(CCDate theDate){
+		return _myCalendar.before(theDate._myCalendar);
+	}
+	
+	/**
+	 * Returns whether this date is after the given date
+	 * @param theDate the date to check
+	 * @return <code>true</code> if this date is after the given date <code>false</code> otherwise
+	 */
+	public boolean after(CCDate theDate){
+		return _myCalendar.after(theDate._myCalendar);
+	}
+	
+	/**
+	 * Returns whether this date is between the given dates
+	 * @param theDate0 the date to check
+	 * @param theDate1 the date to check
+	 * @return <code>true</code> if this date is between the given dates <code>false</code> otherwise
+	 */
+	public boolean between(CCDate theDate0, CCDate theDate1){
+		if(theDate1.after(theDate0))return after(theDate0) && before(theDate1);
+		
+		return after(theDate1) && before(theDate0);
 	}
 	
 	public static void main(String[] args) {
