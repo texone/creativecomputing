@@ -70,13 +70,9 @@ import java.net.InetAddress;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.modbus.Modbus;
-import cc.creativecomputing.modbus.io.ModbusSerialTransport;
 import cc.creativecomputing.modbus.io.ModbusTCPTransaction;
-import cc.creativecomputing.modbus.io.ModbusTransaction;
-import cc.creativecomputing.modbus.io.ModbusTransport;
 import cc.creativecomputing.modbus.msg.ReadCoilsRequest;
 import cc.creativecomputing.modbus.msg.ReadCoilsResponse;
-import cc.creativecomputing.modbus.net.ModbusMasterFactory;
 import cc.creativecomputing.modbus.net.TCPMasterConnection;
 
 /**
@@ -108,7 +104,7 @@ public class ReadCoilsTestTCP {
 
 			// 1. Setup the parameters
 			
-			addr = InetAddress.getByName("parallels.com");
+			addr = InetAddress.getByName("172.18.26.206");
 				
 
 			// 2. Open the connection
@@ -116,7 +112,7 @@ public class ReadCoilsTestTCP {
 			con.setPort(Modbus.DEFAULT_PORT);
 			con.connect();
 
-			req = new ReadCoilsRequest(0,10);
+			req = new ReadCoilsRequest(0,16);
 			req.setUnitID(1);
 			if (Modbus.debug)
 				CCLog.info("Request: " + req.getHexMessage());

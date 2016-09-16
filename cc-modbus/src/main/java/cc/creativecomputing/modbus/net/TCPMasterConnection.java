@@ -94,8 +94,6 @@ public class TCPMasterConnection {
 	 */
 	public synchronized void connect() throws Exception {
 		if (! isConnected()) {
-			if (Modbus.debug)
-				System.out.println("connect()");
 			
 			m_Socket = new Socket(m_Address, m_Port);
 			m_Socket.setReuseAddress(true);
