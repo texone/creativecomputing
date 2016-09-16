@@ -7,8 +7,10 @@ import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.gl.app.events.CCKeyListener;
+import cc.creativecomputing.gl.app.events.CCMouseDraggedListener;
 import cc.creativecomputing.gl.app.events.CCMouseListener;
 import cc.creativecomputing.gl.app.events.CCMouseMotionListener;
+import cc.creativecomputing.gl.app.events.CCMouseMovedListener;
 import cc.creativecomputing.gl.app.events.CCMouseWheelListener;
 
 public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType extends CCAbstractGLContext<GLGraphicsType>> implements CCAnimatorListener, CCBasicAppListener, CCGLListener<GLGraphicsType> {
@@ -54,6 +56,14 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 	
 	public CCListenerManager<CCMouseMotionListener> mouseMotionListener(){
 		return _myContext.mouseMotionListener();
+	}
+	
+	public CCListenerManager<CCMouseMovedListener> mouseMoved(){
+		return _myContext.mouseMoved();
+	}
+	
+	public CCListenerManager<CCMouseDraggedListener> mouseDragged(){
+		return _myContext.mouseDragged();
 	}
 	
 	public CCListenerManager<CCMouseWheelListener> mouseWheelListener(){

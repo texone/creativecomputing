@@ -25,7 +25,6 @@ import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.container.GLContainer;
 import cc.creativecomputing.gl.app.container.GLContainerType;
 import cc.creativecomputing.gl.app.container.GLJavaComponentContainer;
@@ -33,9 +32,11 @@ import cc.creativecomputing.gl.app.container.GLOffsreenContainer;
 import cc.creativecomputing.gl.app.container.GLWindowContainer;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;
 import cc.creativecomputing.gl.app.events.CCKeyListener;
+import cc.creativecomputing.gl.app.events.CCMouseDraggedListener;
 import cc.creativecomputing.gl.app.events.CCMouseEvent;
 import cc.creativecomputing.gl.app.events.CCMouseListener;
 import cc.creativecomputing.gl.app.events.CCMouseMotionListener;
+import cc.creativecomputing.gl.app.events.CCMouseMovedListener;
 import cc.creativecomputing.gl.app.events.CCMouseWheelEvent;
 import cc.creativecomputing.gl.app.events.CCMouseWheelListener;
 import cc.creativecomputing.math.CCColor;
@@ -174,6 +175,8 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	
 	protected CCListenerManager<CCMouseListener> _myMouseListener;
 	protected CCListenerManager<CCMouseMotionListener> _myMouseMotionListener;
+	protected CCListenerManager<CCMouseMovedListener> _myMouseMoveListener;
+	protected CCListenerManager<CCMouseDraggedListener> _myMouseDraggedListener;
 	protected CCListenerManager<CCMouseWheelListener> _myMouseWheelListener;
 	protected CCListenerManager<CCKeyListener> _myKeyListener;
 	
@@ -191,6 +194,8 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 
 		_myMouseListener = CCListenerManager.create(CCMouseListener.class);
 		_myMouseMotionListener = CCListenerManager.create(CCMouseMotionListener.class);
+		_myMouseMoveListener = CCListenerManager.create(CCMouseMovedListener.class);
+		_myMouseDraggedListener = CCListenerManager.create(CCMouseDraggedListener.class);
 		_myMouseWheelListener = CCListenerManager.create(CCMouseWheelListener.class);
 		_myKeyListener = CCListenerManager.create(CCKeyListener.class);
 	}
@@ -413,6 +418,22 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	}
 
 	/**
+	 * Returns the mouse moved listener manager to register to mouse motion events.
+	 * @see CCMouseMovedListener
+	 */
+	public CCListenerManager<CCMouseMovedListener> mouseMoved() {
+		return _myMouseMoveListener;
+	}
+
+	/**
+	 * Returns the mouse dragged listener manager to register to mouse motion events.
+	 * @see CCMouseDraggedListener
+	 */
+	public CCListenerManager<CCMouseDraggedListener> mouseDragged() {
+		return _myMouseDraggedListener;
+	}
+
+	/**
 	 * Returns the mouse motion listener manager to register to mouse motion events.
 	 * @see CCMouseMotionListener
 	 */
@@ -474,9 +495,11 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 				break;
 			case MOUSE_DRAGGED:
 				_myMouseMotionListener.proxy().mouseDragged(theEvent);
+				_myMouseDraggedListener.proxy().mouseDragged(theEvent);
 				break;
 			case MOUSE_MOVED:
 				_myMouseMotionListener.proxy().mouseMoved(theEvent);
+				_myMouseMoveListener.proxy().mouseMoved(theEvent);
 				break;
 			case MOUSE_CLICKED:
 				_myMouseListener.proxy().mouseClicked(theEvent);
