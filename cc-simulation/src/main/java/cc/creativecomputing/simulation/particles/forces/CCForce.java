@@ -13,9 +13,10 @@ package cc.creativecomputing.simulation.particles.forces;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.simulation.particles.CCGPUShaderInterface;
+import cc.creativecomputing.simulation.particles.CCGLProgramInterface;
+import cc.creativecomputing.simulation.particles.CCParticles;
 
-public abstract class CCForce extends CCGPUShaderInterface{
+public abstract class CCForce extends CCGLProgramInterface{
 	
 	@CCProperty(name = "strength", min = 0, max = 10)
 	protected double _cStrength = 1;
@@ -31,6 +32,10 @@ public abstract class CCForce extends CCGPUShaderInterface{
 	public void setUniforms() {
 		super.setUniforms();
 		_myShader.uniform1f(_myStrengthParameter, _cStrength);
+	}
+	
+	public void setParticles(CCParticles theParticles){
+		
 	}
 
 	/**

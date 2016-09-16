@@ -33,7 +33,7 @@ import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCGPUConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
-import cc.creativecomputing.simulation.particles.forces.CCGPUTextureForceField;
+import cc.creativecomputing.simulation.particles.forces.CCTextureForceField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
 public class CCPathFollowTest2 extends CCApp {
@@ -62,7 +62,7 @@ public class CCPathFollowTest2 extends CCApp {
 
 	private CCParticles _myParticles;
 	private CCGPUIndexParticleEmitter _myEmitter;
-	private CCGPUTextureForceField _myForceField;
+	private CCTextureForceField _myForceField;
 
 	private CCArcball _myArcball;
 
@@ -84,7 +84,7 @@ public class CCPathFollowTest2 extends CCApp {
 
 		_myTesselator = new CCTesselator();
 
-		_myForceField = new CCGPUTextureForceField(_myPathForceFieldTexture.attachment(0), new CCVector2f(1, 1), new CCVector2f(200, 200));
+		_myForceField = new CCTextureForceField(_myPathForceFieldTexture.attachment(0), new CCVector2f(1, 1), new CCVector2f(200, 200));
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 		myForces.add(_myForceField);
 		myForces.add(new CCViscousDrag(0.3f));

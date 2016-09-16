@@ -16,23 +16,21 @@ import java.util.List;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCTesselator;
-import cc.creativecomputing.graphics.shader.CCCGShader;
+import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
-import cc.creativecomputing.io.CCIOUtil;
-import cc.creativecomputing.math.CCVecMath;
-import cc.creativecomputing.math.CCVector2f;
-import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCVector2;
 
 /**
  * @author christian riekoff
  *
  */
-public class CCGPUPathFollow extends CCGPUTextureForceField{
+public class CCGPUPathFollow extends CCTextureForceField{
 	
-	public static class CCGPUPath{
+	public static class CCPathFollowPath{
 		
-		private List<CCVector2f> _myPoints = new ArrayList<CCVector2f>();
-		private List<CCVector2f> _myDirections = new ArrayList<CCVector2f>(); 
+		private List<CCVector2> _myPoints = new ArrayList<CCVector2>();
+		private List<CCVector2> _myDirections = new ArrayList<CCVector2>(); 
 		
 		private float _myContourForce = 0.1f;
 		private float _myAreaForce = 1f;
@@ -41,7 +39,7 @@ public class CCGPUPathFollow extends CCGPUTextureForceField{
 		
 		private float _myContourWeight = 1f;
 		
-		public CCGPUPath() {
+		public CCPathFollowPath() {
 		}
 		
 		public void clear() {
@@ -63,16 +61,16 @@ public class CCGPUPathFollow extends CCGPUTextureForceField{
 			_myAreaForce = theAreaForce;
 		}
 		
-		public void addPoint(final CCVector2f thePoint) {
+		public void addPoint(final CCVector2 thePoint) {
 			_myPoints.add(thePoint);
 		}
 		
 		public void draw(CCTesselator theTesselator) {
 			if(_myHasChanged) {
 				for(int i = 0; i < _myPoints.size() - 1;i++) {
-					CCVector2f myPoint1 = _myPoints.get(i);
-					CCVector2f myPoint2 = _myPoints.get(i + 1);
-					CCVector2f myDirection  = CCVecMath.subtract(myPoint2, myPoint1).normalize();
+					CCVector2 myPoint1 = _myPoints.get(i);
+					CCVector2 myPoint2 = _myPoints.get(i + 1);
+					CCVector2 myDirection  = myPoint2.subtract(myPoint1).normalizeLocal();
 					
 					_myDirections.add(myDirection);
 				}
@@ -82,15 +80,15 @@ public class CCGPUPathFollow extends CCGPUTextureForceField{
 			
 			theTesselator.beginContour();
 			for(int i = 0; i < _myPoints.size();i++) {
-				CCVector2f myDirection = _myDirections.get(i);
-				CCVector2f myPoint = _myPoints.get(i);
+				CCVector2 myDirection = _myDirections.get(i);
+				CCVector2 myPoint = _myPoints.get(i);
 				
 				theTesselator.normal(myDirection.y * _myAreaForce, -myDirection.x * _myAreaForce, 0);
 				theTesselator.vertex(myPoint.x - myDirection.y, myPoint.y + myDirection.x);
 			}
 			for(int i = _myPoints.size() - 1; i >= 0;i--) {
-				CCVector2f myDirection = _myDirections.get(i);
-				CCVector2f myPoint = _myPoints.get(i);
+				CCVector2 myDirection = _myDirections.get(i);
+				CCVector2 myPoint = _myPoints.get(i);
 				
 				theTesselator.normal(-myDirection.y * _myAreaForce, myDirection.x * _myAreaForce, 0);
 				theTesselator.vertex(myPoint.x + myDirection.y, myPoint.y - myDirection.x);
@@ -102,8 +100,8 @@ public class CCGPUPathFollow extends CCGPUTextureForceField{
 			g.color(255,0,0);
 			g.beginShape(CCDrawMode.TRIANGLE_STRIP);
 			for(int i = 0; i < _myPoints.size();i++) {
-				CCVector2f myDirection = _myDirections.get(i);
-				CCVector2f myPoint = _myPoints.get(i);
+				CCVector2 myDirection = _myDirections.get(i);
+				CCVector2 myPoint = _myPoints.get(i);
 				
 				g.normal(myDirection.x * _myContourForce, myDirection.y * _myContourForce, 0);
 				g.vertex(myPoint.x - myDirection.y * _myContourWeight, myPoint.y + myDirection.x * _myContourWeight);
@@ -115,46 +113,43 @@ public class CCGPUPathFollow extends CCGPUTextureForceField{
 	
 	private CCShaderBuffer _myPathForceFieldTexture;
 	
-	private CCCGShader _myContourShader;
+	private CCGLProgram _myContourShader;
 	
-	private CCGraphics _myGraphics;
 	private CCTesselator _myTesselator;
 	
-	private List<CCGPUPath> _myPaths = new ArrayList<>();
+	private List<CCPathFollowPath> _myPaths = new ArrayList<>();
 
 	/**
 	 * @param theTexture
 	 * @param theTextureScale
 	 * @param theTextureOffset
 	 */
-	public CCGPUPathFollow(CCGraphics g, int theWidth, int theHeight, CCVector2f theTextureScale, CCVector2f theTextureOffset) {
+	public CCGPUPathFollow(int theWidth, int theHeight, CCVector2 theTextureScale, CCVector2 theTextureOffset) {
 		super(null, theTextureScale, theTextureOffset);
 		_myPathForceFieldTexture = new CCShaderBuffer(theWidth, theHeight);
 		_myTexture = _myPathForceFieldTexture.attachment(0);
 		
-		_myContourShader = new CCCGShader(
-			CCIOUtil.classPath(CCParticles.class,"shader/contour.vp"), 
-			CCIOUtil.classPath(CCParticles.class,"shader/contour.fp")
+		_myContourShader = new CCGLProgram(
+			CCNIOUtil.classPath(this,"CCPathFollowContourVertex.glsl"), 
+			CCNIOUtil.classPath(this,"CCPathFollowContourFragment.glsl")
 		);
-		_myContourShader.load();
 		
-		_myGraphics = g;
 		_myTesselator = new CCTesselator();
 	}
 	
-	public CCGPUPathFollow(CCGraphics g, int theWidth, int theHeight){
-		this(g, theWidth, theHeight, new CCVector2f(1f,1f), new CCVector2f(theWidth / 2, theHeight / 2));
+	public CCGPUPathFollow( int theWidth, int theHeight){
+		this(theWidth, theHeight, new CCVector2(1f,1f), new CCVector2(theWidth / 2, theHeight / 2));
 	}
 	
-	public void addPath(CCGPUPath thePath){
+	public void addPath(CCPathFollowPath thePath){
 		_myPaths.add(thePath);
 	}
-
+	
 	@Override
-	public void update(float theDeltaTime) {
+	public void preDisplay(CCGraphics g) {
 		_myPathForceFieldTexture.beginDraw();
-		_myGraphics.clearColor(0);
-		_myGraphics.clear();
+		g.clearColor(0);
+		g.clear();
 		_myContourShader.start();
 		_myTesselator.beginPolygon();
 		_myTesselator.beginContour();
@@ -175,14 +170,14 @@ public class CCGPUPathFollow extends CCGPUTextureForceField{
 //			_myTesselator.vertex(0, i);
 //		}
 		_myTesselator.endContour();
-		for(CCGPUPath myPath:_myPaths){
+		for(CCPathFollowPath myPath:_myPaths){
 			_myTesselator.beginContour();
 			myPath.draw(_myTesselator);
 			_myTesselator.endContour();
 		}
 		_myTesselator.endPolygon();
-		for(CCGPUPath myPath:_myPaths){
-			myPath.drawContour(_myGraphics);
+		for(CCPathFollowPath myPath:_myPaths){
+			myPath.drawContour(g);
 		}
 		
 		_myContourShader.end();

@@ -24,6 +24,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
+import cc.creativecomputing.graphics.shader.CCGLProgram.CCGLTextureUniform;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -148,6 +149,12 @@ public class CCParticles{
 		_myUpdateShader = new CCGPUUpdateShader(this, g,theForces, theConstraints, theImpulse,_myWidth,_myHeight);
 		
 		reset(g);
+		
+		_myUpdateShader.setTextureUniform("positionTexture", _myCurrentDataTexture.attachment(0));
+		_myUpdateShader.setTextureUniform("infoTexture", _myCurrentDataTexture.attachment(1));
+		_myUpdateShader.setTextureUniform("velocityTexture", _myCurrentDataTexture.attachment(2));
+		_myUpdateShader.setTextureUniform("colorTexture", _myCurrentDataTexture.attachment(3));
+		_myUpdateShader.setTextureUniform("staticPositions", null);
 	}
 	
 	public CCParticles(
@@ -416,20 +423,28 @@ public class CCParticles{
 		CCShaderBuffer myTemp = _myDestinationDataTexture;
 		_myDestinationDataTexture = _myCurrentDataTexture;
 		_myCurrentDataTexture = myTemp;
+		_myUpdateShader.setTextureUniform("positionTexture", _myCurrentDataTexture.attachment(0));
+		_myUpdateShader.setTextureUniform("infoTexture", _myCurrentDataTexture.attachment(1));
+		_myUpdateShader.setTextureUniform("velocityTexture", _myCurrentDataTexture.attachment(2));
+		_myUpdateShader.setTextureUniform("colorTexture", _myCurrentDataTexture.attachment(3));
 	}
 	
 	public void display(CCGraphics g) {
 		g.pushAttribute();
 		g.noBlend();
 		beforeUpdate(g);
-		
-		g.texture(0, _myCurrentDataTexture.attachment(0));
-		g.texture(1, _myCurrentDataTexture.attachment(1));
-		g.texture(2, _myCurrentDataTexture.attachment(2));
-		g.texture(3, _myCurrentDataTexture.attachment(3));
-		if(_myStaticPositionTexture != null)g.texture(4, _myCurrentDataTexture.attachment(4));
-		g.texture(5, _myUpdateShader.randomTexture());
+
+		_myUpdateShader.preDisplay(g);
 		_myUpdateShader.start();
+		int myTextureUnit = 0;
+		for(CCGLTextureUniform myTextureUniform:_myUpdateShader.textures()){
+			if(myTextureUniform.texture == null)continue;
+				
+			g.texture(myTextureUnit, myTextureUniform.texture);
+			_myUpdateShader.uniform1i(myTextureUniform.parameter, myTextureUnit);
+//			CCLog.info(myTextureUnit + " : " + myTextureUniform.parameter  + " : " + myTextureUniform.texture);
+			myTextureUnit++;
+		}
 		_myDestinationDataTexture.draw();
 		_myUpdateShader.end();
 		g.noTexture();

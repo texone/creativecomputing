@@ -12,7 +12,7 @@ package cc.creativecomputing.simulation.particles.forces;
 
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.math.CCVector2f;
-import cc.creativecomputing.simulation.particles.fluidfield.CCGPUFluid;
+import cc.creativecomputing.simulation.particles.fluidfield.CCFluid;
 
 import com.jogamp.opengl.cg.CGparameter;
 
@@ -37,10 +37,10 @@ public class CCGPUFluidForceField extends CCForce{
 	private CGparameter _myTextureSizeParameter;
 	
 	private CCTexture2D _myTexture;
-	private CCGPUFluid _myFluid;
+	private CCFluid _myFluid;
 	
 	public CCGPUFluidForceField(
-		final CCGPUFluid theFluid,
+		final CCFluid theFluid,
 		final CCVector2f theTextureScale,
 		final CCVector2f theTextureOffset
 	){
@@ -61,7 +61,7 @@ public class CCGPUFluidForceField extends CCForce{
 		_myTextureSizeParameter = parameter("textureSize");
 	}
 	
-	public CCGPUFluid fluid() {
+	public CCFluid fluid() {
 		return _myFluid;
 	}
 

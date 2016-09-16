@@ -10,31 +10,7 @@ interface Force{
 
 
 
-/* 
- * Force to move particles on a terrain
- */
-struct TerrainForce : Force{
-	float strength;
-	samplerRECT texture;
-	
-	float2 textureSize;
-	float3 scale;
-	float3 offset;
-	
-	float exponent;
 
-	float3 force(float3 thePosition, float3 theVelocity, float2 theTexID, float theDeltaTime){
-
-		float3 fPosition = thePosition + theVelocity * theDeltaTime;
-		
-		float2 terrainPos = fPosition.xz / scale.xz + offset.xz;
-		float height = texRECT(texture, terrainPos);
-			
-		float displacement = fPosition.y - height * scale.y + offset.y + theVelocity.y;
-		
-		return float3(0,clamp(-displacement,-1,1),0);
-	}
-};
 
 struct OffsetNoiseForceField : Force{
 	float noiseScale;
@@ -111,47 +87,7 @@ struct PointCurveForceFieldFollow : Force{
 };
 
 
-struct TextureForceFieldXZ : Force{
-	samplerRECT texture;
-	
-	float2 textureSize;
-	float2 textureScale;
-	float2 textureOffset;
-	
-	float strength;
-	
-	float3 force(float3 thePosition, float3 theVelocity, float2 theTexID, float theDeltaTime){
-		float2 texturePos = thePosition.xz / textureScale.xy + textureOffset.xy;
-		float3 force = texRECT(texture, texturePos);
-		force *= 2;
-		force -= 1;
-		force.z = force.y;
-		force.y = 0;
-		
-		return force * strength;
-	}
-};
 
-struct TextureForceFieldXY : Force{
-	samplerRECT texture;
-	
-	float2 textureSize;
-	float2 textureScale;
-	float2 textureOffset;
-	
-	float strength;
-	
-	float3 force(float3 thePosition, float3 theVelocity, float2 theTexID, float theDeltaTime){
-		float2 texturePos = thePosition.xy / textureScale.xy + textureOffset.xy;
-		//texturePos.y = textureSize.y - texturePos.y;
-		float3 force = texRECT(texture, texturePos);
-		force *= 2;
-		force -= 1;
-		force.z = 0;
-		
-		return force * strength;
-	}
-};
 
 struct Texture3DForceField : Force{
 	sampler3D texture;

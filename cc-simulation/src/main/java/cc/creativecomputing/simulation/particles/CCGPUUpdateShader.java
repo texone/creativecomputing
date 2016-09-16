@@ -78,6 +78,7 @@ public class CCGPUUpdateShader extends CCGLProgram{
 		_myForces = theForces;
 		for(CCForce myForce:_myForces){
 			myForce.setShader(this);
+			myForce.setParticles(theParticles);
 			myForcesBuffer.append(myForce.shaderSource());
 			myApplyBuffer.append("	acceleration = acceleration + " + myForce.parameter("function") + "(position,velocity,texID,deltaTime);\n");
 //			myForce.setShader(theParticles, this, myIndex++, theWidth, theHeight);
@@ -114,6 +115,7 @@ public class CCGPUUpdateShader extends CCGLProgram{
 		_myStaticPositionBlendParameter = "staticPositionBlend";
 		_myDeltaTimeParameter = "deltaTime";
 		
+		setTextureUniform(CCGLShaderNoise.textureUniform, _myRandomTexture);
 		
 //		for(CCGPUForce myForce:theForces){
 //			myForce.setupParameter(theWidth, theHeight);
@@ -165,17 +167,25 @@ public class CCGPUUpdateShader extends CCGLProgram{
 		return _myRandomTexture;
 	}
 	
+	public void preDisplay(CCGraphics g){
+		for(CCForce myForce:_myForces){
+			myForce.preDisplay(g);
+		}
+	}
+	
 	@Override
 	public void start() {
 		super.start();
 		
-		uniform1i(_myPositionTextureParameter, 0);
-		uniform1i(_myInfoTextureParameter, 1);
-		uniform1i(_myVelocityTextureParameter, 2);
-		uniform1i(_myColorTextureParameter, 3);
-		uniform1i(_myStaticPositionTextureParameter, 4);
+		int myTextureUnit = 0;
 		
-		uniform1i(_myNoiseTextureParameter,5);;
+		uniform1i(_myPositionTextureParameter, myTextureUnit++);
+		uniform1i(_myInfoTextureParameter, myTextureUnit++);
+		uniform1i(_myVelocityTextureParameter, myTextureUnit++);
+		uniform1i(_myColorTextureParameter, myTextureUnit++);
+		uniform1i(_myStaticPositionTextureParameter, myTextureUnit++);
+		
+		uniform1i(_myNoiseTextureParameter,myTextureUnit++);;
 
 		uniform1f(_myDeltaTimeParameter, _myDeltaTime);
 		uniform1f(_myStaticPositionBlendParameter, _myStaticPositionBlend);
