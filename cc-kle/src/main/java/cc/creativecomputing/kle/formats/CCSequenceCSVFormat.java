@@ -1,6 +1,8 @@
 package cc.creativecomputing.kle.formats;
 
+import java.io.BufferedWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import cc.creativecomputing.core.util.CCFormatUtil;
@@ -25,22 +27,21 @@ public class CCSequenceCSVFormat implements CCSequenceFormat{
 				for (int r = 0; r < theSequence.rows(); r++) {
 					for (int d = 0; d < theSequence.depth(); d++) {
 					
-						PrintWriter writer = new PrintWriter(
-							myExportPath.resolve(
+						BufferedWriter myWriter = Files.newBufferedWriter(myExportPath.resolve(
 								"c" + CCFormatUtil.nf(c, 3) + 
 								"_r" + CCFormatUtil.nf(r, 3) + 
 								"_d" + CCFormatUtil.nf(d, 3) + ".csv"
-							).toFile()
-						);
+							));
+						
 						
 						int i = 0;
 						
 						for (CCMatrix2 frame : theSequence) {
 							double data = frame.data()[c][r][d];
-							writer.write(i + "," + data + "\n");
+							myWriter.write(i + "," + data + "\n");
 							i += 1;
 						}
-						writer.close();
+						myWriter.close();
 					}
 				}
 			}

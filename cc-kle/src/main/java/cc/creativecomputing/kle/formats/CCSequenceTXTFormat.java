@@ -1,6 +1,8 @@
 package cc.creativecomputing.kle.formats;
 
+import java.io.BufferedWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import cc.creativecomputing.core.util.CCFormatUtil;
@@ -23,10 +25,9 @@ public class CCSequenceTXTFormat implements CCSequenceFormat{
 		try{
 			for (int c = 0; c < theSequence.columns(); c++) {
 					
-				PrintWriter writer = new PrintWriter(thePath.resolve("e" + CCFormatUtil.nf(c, 3) + ".txt").toFile());
-					
+				BufferedWriter myWriter = Files.newBufferedWriter(thePath.resolve("e" + CCFormatUtil.nf(c, 3) + ".txt"));	
 				for (CCMatrix2 frame : theSequence) {
-					writer.write(
+					myWriter.write(
 						frame.data()[c][0][0] + " " + 
 						frame.data()[c][0][1] + " " + 
 						frame.data()[c][0][2] + " " + 
@@ -34,7 +35,7 @@ public class CCSequenceTXTFormat implements CCSequenceFormat{
 						frame.data()[c][0][4] + "\n"
 					);
 				}
-				writer.close();
+				myWriter.close();
 			}
 		}catch(Exception e){
 			e.printStackTrace();

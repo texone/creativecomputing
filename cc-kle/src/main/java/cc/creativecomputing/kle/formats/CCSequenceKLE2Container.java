@@ -19,10 +19,12 @@ import cc.creativecomputing.kle.elements.CCSequenceMapping;
 public class CCSequenceKLE2Container extends CCSequencesContainer{
 	private CCSequencePNGFormat _myPNGFormat;
 	private CCSequenceBinFormat _myBINFormat;
+	private CCSequenceCSVFormat _myCSVFormat;
 	
 	public CCSequenceKLE2Container(){
 		_myPNGFormat = new CCSequencePNGFormat();
 		_myBINFormat = new CCSequenceBinFormat();
+		_myCSVFormat = new CCSequenceCSVFormat();
 	}
 	
 	@Override
@@ -34,6 +36,7 @@ public class CCSequenceKLE2Container extends CCSequencesContainer{
 
         try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes);) {
         	Path myFramesFolder = fs.getPath("frames");
+        	Path myCsvFolder = fs.getPath("csv");
 			CCNIOUtil.createDirectories(myFramesFolder);
 			
         	for(CCKleChannelType myKey:theElements.mappings().keySet()){
@@ -45,6 +48,7 @@ public class CCSequenceKLE2Container extends CCSequencesContainer{
 	        	}
 		        
 				_myPNGFormat.save(myFramesFolder, myMapping, mySequence);
+				_myCSVFormat.save(myCsvFolder, myMapping, mySequence);
 				_myBINFormat.save(CCNIOUtil.addExtension(myFramesFolder.resolve(myMapping.type().id()), "bin"), myMapping, mySequence);
 	        }
 	
