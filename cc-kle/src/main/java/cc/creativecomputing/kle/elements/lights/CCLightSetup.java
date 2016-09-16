@@ -25,7 +25,9 @@ public class CCLightSetup extends CCChannelSetup<CCLightChannel>{
 	
 	public CCXMLElement toXML(){
 		CCXMLElement myLightsXML = new CCXMLElement("lights");
+		if(_myChannels == null)return myLightsXML;
 		for(CCLightChannel myChannel:_myChannels){
+			if(myChannel == null)continue;
 			myLightsXML.addChild(myChannel.toXML());
 		}
 		return myLightsXML;

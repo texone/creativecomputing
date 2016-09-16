@@ -10,6 +10,8 @@ import cc.creativecomputing.kle.elements.lights.CCLightChannel;
 import cc.creativecomputing.kle.elements.lights.CCLightRGBSetup;
 import cc.creativecomputing.kle.elements.lights.CCLightRGBWSetup;
 import cc.creativecomputing.kle.elements.lights.CCLightSetup;
+import cc.creativecomputing.kle.elements.motors.CC1Motor1ConnectionBounds;
+import cc.creativecomputing.kle.elements.motors.CC1Motor1ConnectionSetup;
 import cc.creativecomputing.kle.elements.motors.CC2Motor1ConnectionBounds;
 import cc.creativecomputing.kle.elements.motors.CC2Motor1ConnectionSetup;
 import cc.creativecomputing.kle.elements.motors.CCMotorBounds;
@@ -64,6 +66,7 @@ public class CCSequenceElement extends CCEffectable{
 	
 	private CCMotorSetup setMotors(List<CCMotorChannel> theMotors, CCMotorBounds theBounds, double theElementRadius){
 		if(theMotors == null)return new CCMotorSetup(theMotors);
+		
 		_myChannels.addAll(theMotors);
 		
 		switch(theMotors.size()){
@@ -73,14 +76,18 @@ public class CCSequenceElement extends CCEffectable{
 			}else{
 				return new CC2Motor2ConnectionSetup(this, theMotors, (CC2Motor2ConnectionBounds)theBounds, theElementRadius);
 			}
-		default:
+		case 1:
+			return new CC1Motor1ConnectionSetup(theMotors, (CC1Motor1ConnectionBounds)theBounds);
+		default:;
 			return new CCMotorSetup(theMotors);
 		}
 	}
 	
 	private CCLightSetup setLights(List<CCLightChannel> theLights){
-		if(theLights == null)
+		if(theLights == null)return new CCLightSetup(theLights);
+			
 		_myChannels.addAll(theLights);
+		
 		switch(theLights.size()){
 		case 1:
 			return new CCLightBrightnessSetup(theLights);
