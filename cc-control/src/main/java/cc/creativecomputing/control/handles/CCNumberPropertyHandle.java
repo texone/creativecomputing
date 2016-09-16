@@ -96,6 +96,10 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 		return _myToType.toString(_myValue);
 	}
 	
+	public Class<?> numberType(){
+		return _myToType.type();
+	}
+	
 	@Override
 	public CCDataObject data() {
 		CCDataObject myResult = super.data();

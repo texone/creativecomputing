@@ -89,6 +89,8 @@ public class CCPropertyMap {
 		public Type max();
 		
 		public String toString(Number theValue);
+		
+		public Class<Type> type();
 	}
 	
 	public static CCDoubleConverter<Float> floatConverter = new CCDoubleConverter<Float>(){
@@ -109,6 +111,11 @@ public class CCPropertyMap {
 		public String toString(Number theValue) {
 			return CCFormatUtil.nd(theValue.doubleValue(), 4);
 		}
+
+		@Override
+		public Class<Float> type() {
+			return Float.class;
+		}
 	};
 	
 	public static CCDoubleConverter<Double> doubleConverter = new CCDoubleConverter<Double>(){
@@ -128,6 +135,11 @@ public class CCPropertyMap {
 		@Override
 		public String toString(Number theValue) {
 			return CCFormatUtil.nd(theValue.doubleValue(), 4);
+		}
+
+		@Override
+		public Class<Double> type() {
+			return Double.class;
 		}
 	};
 	
@@ -150,6 +162,11 @@ public class CCPropertyMap {
 		@Override
 		public String toString(Number theValue) {
 			return theValue.intValue() + "";
+		}
+
+		@Override
+		public Class<Integer> type() {
+			return Integer.class;
 		}
 	};
 	
