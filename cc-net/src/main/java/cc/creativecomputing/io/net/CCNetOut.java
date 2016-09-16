@@ -85,14 +85,16 @@ public abstract class CCNetOut<ChannelType extends SelectableChannel, MessageTyp
 
 	@Override
 	public void disconnect() {
-		_myByteBuffer = null;
-		if (_myChannel != null) {
-			try {
-				_myChannel.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+		synchronized (_myBufferSyncObject) {
+			_myByteBuffer = null;
+			if (_myChannel != null) {
+				try {
+					_myChannel.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				_myChannel = null;
 			}
-			_myChannel = null;
 		}
 	}
 

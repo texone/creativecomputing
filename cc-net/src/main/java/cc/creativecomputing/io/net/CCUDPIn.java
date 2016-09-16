@@ -27,68 +27,37 @@ public class CCUDPIn<MessageType> extends CCNetIn <DatagramChannel, MessageType>
 		super(theCodec);
 	}
 
-	protected void setChannel(DatagramChannel theChannel) throws IOException {
-		synchronized (_myGeneralSync) {
-			if (_myIsConnected)
-				throw new CCNetException("Cannot be performed while channel is active");
-
-			_myChannel = theChannel;
-			if (!_myChannel.isBlocking()) {
-				_myChannel.configureBlocking(true);
-			}
-			if (_myChannel.isConnected())
-				throw new CCNetException("channel must not be connected");
-		}
-	}
-
 	@Override
-	public void connect(InetSocketAddress theAddress) {
-		synchronized (_myGeneralSync) {
-			if (_myIsConnected)
-				throw new CCNetException("Cannot be performed while channel is active");
-
-			if ((_myChannel != null) && !_myChannel.isOpen()) {
-				_myChannel = null;
-			}
-			if (_myChannel == null) {
-				try {
-					final DatagramChannel newCh = DatagramChannel.open();
-
-					CCLog.info("BIND IN" + theAddress.toString());
-					newCh.socket().bind(theAddress);
-					setChannel(newCh);
-					
-					_myConnectedAddress = theAddress;
-				} catch (Exception e) {
-					throw new CCNetException(e);
-				}
-			}
-		}
+	protected void setChannel(DatagramChannel theChannel) {
+		if (_myChannel.isConnected())
+			throw new CCNetException("channel must not be connected");
+		
+		super.setChannel(theChannel);
 	}
-
+	
 	@Override
-	public boolean isConnected() {
-		CCLog.info("udp in conn: " +_myChannel);
-		synchronized (_myGeneralSync) {
-			return ((_myChannel != null) && _myChannel.isOpen());
+	public DatagramChannel createChannel(InetSocketAddress theAddress) {
+		try {
+			final DatagramChannel myResult = DatagramChannel.open();
+			myResult.socket().bind(theAddress);
+			return myResult;
+		} catch (Exception e) {
+			throw new CCNetException(e);
 		}
 	}
 	
 	@Override
-	public void disconnect() {
-		super.disconnect();
-		_myConnectedAddress = null;
-	}
-
-	@Override
-	protected void closeChannel() throws IOException {
-		if (_myChannel != null) {
-			try {
-				_myChannel.close();
-			} finally {
-				_myChannel = null;
-			}
+	public void connectChannel(DatagramChannel theChannel, InetSocketAddress theAddress) {
+		try {
+			theChannel.connect(theAddress);
+		} catch (IOException e) {
+			throw new CCNetException(e);
 		}
+	}
+	
+	@Override
+	public boolean isChannelConnected(DatagramChannel theChannel) {
+		return theChannel.isOpen() && theChannel.isConnected();
 	}
 
 	/**

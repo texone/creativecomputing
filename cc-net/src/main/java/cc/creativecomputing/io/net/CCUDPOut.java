@@ -24,6 +24,10 @@ public class CCUDPOut<MessageType> extends CCNetOut<DatagramChannel, MessageType
 		super(theCodec, theTargetAddress, theTargetPort);
 	}
 	
+	public CCUDPOut(CCNetPacketCodec<MessageType> theCodec){
+		super(theCodec);
+	}
+	
 	public CCUDPOut(CCNetPacketCodec<MessageType> theCodec, int theTargetPort){
 		this(theCodec, "0.0.0.0", theTargetPort);
 	}
@@ -55,23 +59,25 @@ public class CCUDPOut<MessageType> extends CCNetOut<DatagramChannel, MessageType
 
 	@Override
 	public void send(MessageType theMessage, SocketAddress theTarget){
-		try {
-			synchronized (_myBufferSyncObject) {
-				// if( _myChannel == null ) throw new NotYetConnectedException();
-				if (_myChannel == null)
-					throw new CCNetException("Channel not connected");
-
-				checkBuffer();
-				_myByteBuffer.clear();
-				_myCodec.encode(theMessage, _myByteBuffer);
-				_myByteBuffer.flip();
-				System.out.println(theTarget);
-				_myChannel.send(_myByteBuffer, theTarget);
+		synchronized (_myBufferSyncObject) {
+			if(!isConnected())return;
+			try {
+				
+					// if( _myChannel == null ) throw new NotYetConnectedException();
+					if (_myChannel == null)
+						throw new CCNetException("Channel not connected");
+	
+					checkBuffer();
+					_myByteBuffer.clear();
+					_myCodec.encode(theMessage, _myByteBuffer);
+					_myByteBuffer.flip();
+					_myChannel.send(_myByteBuffer, theTarget);
+				
+			} catch (BufferOverflowException e1) {
+				throw new CCNetException("Buffer Overflow or Underflow" + theMessage.getClass().getName());
+			} catch (IOException e) {
+				throw new CCNetException(e);
 			}
-		} catch (BufferOverflowException e1) {
-			throw new CCNetException("Buffer Overflow or Underflow" + theMessage.getClass().getName());
-		} catch (IOException e) {
-			throw new CCNetException(e);
 		}
 	}
 }

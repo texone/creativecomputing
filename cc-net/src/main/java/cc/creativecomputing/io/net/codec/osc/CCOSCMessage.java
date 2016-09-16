@@ -115,6 +115,14 @@ public class CCOSCMessage extends CCOSCPacket {
 		_myAddress = theAddress;
 		_myArguments = theArguments;
 	}
+	
+	public CCOSCMessage(String theAddress, Object...theArguments) {
+		this(theAddress);
+		
+		for(Object myArgument:theArguments){
+			add(myArgument);
+		}
+	}
 
 	/**
 	 * Returns the OSC command of this message

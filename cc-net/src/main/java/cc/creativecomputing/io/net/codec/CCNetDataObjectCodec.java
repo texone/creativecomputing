@@ -14,7 +14,12 @@ public class CCNetDataObjectCodec implements CCNetPacketCodec<CCDataObject>{
 		byte[] myArray = new byte[theBuffer.limit()];
 		theBuffer.get(myArray);
 		String myXMLString = new String(myArray);
-		return CCDataIO.parseToObject(myXMLString, CCDataFormats.JSON);
+		try{
+			return CCDataIO.parseToObject(myXMLString, CCDataFormats.JSON);
+		}catch(Exception e){
+			CCLog.info(myXMLString);
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override

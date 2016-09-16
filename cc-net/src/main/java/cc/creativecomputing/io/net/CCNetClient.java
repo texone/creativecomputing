@@ -109,7 +109,7 @@ public class CCNetClient<ChannelType extends SelectableChannel, MessageType> ext
 			_myOut.connect(theAddress);
 			try {
 				_myIn.setChannel(_myOut.channel());
-			} catch (IOException e) {
+			} catch (Exception e) {
 				throw new CCNetException(e);
 			}
 		}

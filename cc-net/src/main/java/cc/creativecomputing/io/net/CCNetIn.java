@@ -74,6 +74,10 @@ public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType
 	public CCListenerManager<CCNetListener> events(){
 		return _myEvents;
 	}
+	
+	public abstract ChannelType createChannel(InetSocketAddress theAddress);
+	
+	public abstract void connectChannel(ChannelType theChannel, InetSocketAddress theAddress);
 
 	/**
 	 * Starts to wait for incoming messages. See the class constructor
@@ -95,23 +99,28 @@ public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType
 	public void connect(InetSocketAddress theAddress) {
 		synchronized (_myGeneralSync) {
 			if (Thread.currentThread() == _myThread)
-				throw new CCNetException(
-						"Method call not allowed in this thread");
+				throw new CCNetException("Method call not allowed in this thread");
+			
+			if (isConnected())
+				throw new CCNetException("Channel is already connected");
 
-			if (_myIsConnected && ((_myThread == null) || !_myThread.isAlive())) {
-				_myIsConnected = false;
-			}
-			if (!_myIsConnected) {
-				CCLog.info("BEFOE conn:" + isConnected());
-				if (!isConnected())
-					connect(theAddress);
-				_myIsConnected = true;
-				_myThread = new Thread(this, "OSCReceiver");
-				_myThread.setDaemon(true);
-				_myThread.start();
-			}
+			if ((_myChannel != null) && !_myChannel.isOpen()) 
+				_myChannel = null;
+			
+			_myChannel = createChannel(theAddress);
+			setChannel(_myChannel);
+			connectChannel(_myChannel, theAddress);
+
+			_myConnectedAddress = theAddress;
+			
+			_myIsConnected = true;
+			_myThread = new Thread(this, "OSCReceiver");
+			_myThread.setDaemon(true);
+			_myThread.start();
 		}
 	}
+	
+	public abstract boolean isChannelConnected(ChannelType theChannel);
 
 	/**
 	 * Queries whether the {@linkplain CCNetIn} is listening or not.
@@ -119,7 +128,7 @@ public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType
 	@Override
 	public boolean isConnected() {
 		synchronized (_myGeneralSync) {
-			return _myIsConnected;
+			return ((_myChannel != null) && isChannelConnected(_myChannel));
 		}
 	}
 
@@ -174,6 +183,7 @@ public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType
 				}
 				_myThread = null;
 			}
+			_myConnectedAddress = null;
 		}
 	}
 
@@ -199,9 +209,31 @@ public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType
 
 	protected abstract void sendGuardSignal() throws IOException;
 
-	protected abstract void setChannel(ChannelType theChannel)throws IOException;
+	protected void setChannel(ChannelType theChannel){
+		synchronized (_myGeneralSync) {
+			if (_myIsConnected)
+				throw new CCNetException("Cannot be performed while channel is active");
 
-	protected abstract void closeChannel() throws IOException;
+			_myChannel = theChannel;
+			if (!_myChannel.isBlocking()) {
+				try{
+					_myChannel.configureBlocking(true);
+				}catch(Exception e){
+					throw new CCNetException(e);
+				}
+			}
+		}
+	}
+
+	protected void closeChannel() throws IOException {
+		if (_myChannel != null) {
+			try {
+				_myChannel.close();
+			} finally {
+				_myChannel = null;
+			}
+		}
+	}
 
 	protected static String debugTimeString() {
 		return new java.text.SimpleDateFormat("HH:mm:ss.SSS").format(new java.util.Date());
@@ -226,4 +258,5 @@ public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType
 		_myEvents.proxy().messageReceived(theMessage);
 	}
 
+	
 }
