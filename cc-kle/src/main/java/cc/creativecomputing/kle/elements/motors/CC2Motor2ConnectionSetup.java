@@ -3,6 +3,7 @@ package cc.creativecomputing.kle.elements.motors;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
@@ -102,11 +103,13 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 		
 		
 		CCPositionRopeLengthAngle myData = _myTwoPointMatrices.dataByPosition(_myElementOffset2D.x, _myElementOffset2D.y);
+		double myAngle =  -(myX - 0.5) * CCMath.radians(60) + 0.5;
+		CCLog.info(myData.angle() + ":" + myAngle);
 		
 		if(myData != null){
-			_myRotateZ = -myData.angle() + _myTwoPointMatrices.centerAngle();
-			motor0._myAnimatedConnectionPosition = _myTwoPointMatrices.leftConnection(_myElementOffset.add(_myAnimationCenter), _myPlaneDirection, myData.angle());
-			motor1._myAnimatedConnectionPosition = _myTwoPointMatrices.rightConnection(_myElementOffset.add(_myAnimationCenter), _myPlaneDirection, myData.angle());
+			_myRotateZ = -myAngle + _myTwoPointMatrices.centerAngle();
+			motor0._myAnimatedConnectionPosition = _myTwoPointMatrices.leftConnection(_myElementOffset.add(_myAnimationCenter), _myPlaneDirection, myAngle);
+			motor1._myAnimatedConnectionPosition = _myTwoPointMatrices.rightConnection(_myElementOffset.add(_myAnimationCenter), _myPlaneDirection, myAngle);
 		}
 			
 //		motor0._myAnimatedConnectionPosition =  motor0._myConnectionPosition.add(_myElementOffset).addLocal(0, _myAnimationCenter.y, 0); 

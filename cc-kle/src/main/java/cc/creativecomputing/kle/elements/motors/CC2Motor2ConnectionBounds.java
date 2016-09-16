@@ -53,11 +53,11 @@ public class CC2Motor2ConnectionBounds extends CCMotorBounds{
 		mySetup.bounds().add(boundPoint(mySetup, 1, 0, _myBottomDistance));
 		mySetup.bounds().add(boundPoint(mySetup, 0, 1, _myBottomDistance));
 
-		mySetup.bounds2D().clear();
-		mySetup.bounds2D().add(boundPoint2D(mySetup, 0, 1, _myTopDistance));
-		mySetup.bounds2D().add(boundPoint2D(mySetup, 1, 0, _myTopDistance));
-		mySetup.bounds2D().add(boundPoint2D(mySetup, 1, 0, _myBottomDistance));
-		mySetup.bounds2D().add(boundPoint2D(mySetup, 0, 1, _myBottomDistance));
+//		mySetup.bounds2D().clear();
+//		mySetup.bounds2D().add(boundPoint2D(mySetup, 0, 1, _myTopDistance));
+//		mySetup.bounds2D().add(boundPoint2D(mySetup, 1, 0, _myTopDistance));
+//		mySetup.bounds2D().add(boundPoint2D(mySetup, 1, 0, _myBottomDistance));
+//		mySetup.bounds2D().add(boundPoint2D(mySetup, 0, 1, _myBottomDistance));
 		
 		CCVector3 myPlaneDirection = mySetup.planeDirection();
 		CCVector3 animBound0  = mySetup.bounds().get(0).subtract(myPlaneDirection.multiply(mySetup.elementRadius() * _myElementRadiusScale));

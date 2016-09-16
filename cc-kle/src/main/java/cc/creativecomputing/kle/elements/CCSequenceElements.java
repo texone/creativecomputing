@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.io.xml.CCXMLIO;

@@ -34,13 +34,11 @@ public class CCLightRGBWSetup extends CCLightRGBSetup{
 		double myB = theValues != null && theValues.length > 2 ? theValues[2] : 0.5f;
 		double myW = theValues != null && theValues.length > 3 ? theValues[3] : 0.5f;
 		
-		CCColor myCol = CCColor.createFromHSB(myR, myG, myB, myW);
-		
-		_myLightR.value(myCol.r);
-		_myLightG.value(myCol.g);
-		_myLightB.value(myCol.b);
+		_myLightR.value(myR);
+		_myLightG.value(myG);
+		_myLightB.value(myB);
 		_myLightW.value(myW);
 		
-		_myColor.set(myCol);
+		_myColor.set(myR, myG, myB, myW);
 	}
 }

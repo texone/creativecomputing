@@ -201,7 +201,8 @@ public class CCTwoPointMatrices implements UnivariateFunction {
 					// CCLog.info(myPoint.x+":" + myVec0.x+":" + myVec1.x+":" +
 					// myXBlend+":" + myYBlend);
 
-					_myPositionAngleMatrix.setObject(new CCPositionRopeLengthAngle(myPoint, ll, lr, new CCVector2(myXBlend, myYBlend)), x, y);
+					_myPositionAngleMatrix.setObject(new CCPositionRopeLengthAngle(myPoint, ll, lr, new CCVector2(
+							myXBlend, myYBlend)), x, y);
 				}
 			}
 		}
@@ -269,11 +270,8 @@ public class CCTwoPointMatrices implements UnivariateFunction {
 
 	public CCVector3 leftConnection(CCVector3 thePosition, CCVector3 thePlaneDirection, double theAngle) {
 
-		return new CCVector3(
-			thePosition.x + f * CCMath.cos(theAngle) * thePlaneDirection.x, 
-			thePosition.y + f * CCMath.sin(theAngle), 
-			thePosition.z + f * CCMath.cos(theAngle) * thePlaneDirection.z
-		);
+		return new CCVector3(thePosition.x + f * CCMath.cos(theAngle) * thePlaneDirection.x, thePosition.y + f
+				* CCMath.sin(theAngle), thePosition.z + f * CCMath.cos(theAngle) * thePlaneDirection.z);
 	}
 
 	public CCVector3 rightConnection(CCVector3 thePosition, CCVector3 thePlaneDirection, double theAngle) {
