@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.objecthunter.exp4j.ExpressionBuilder;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
@@ -36,7 +37,6 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 	public CCNumberControl(CCNumberPropertyHandle<Number> theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
  
-		
         //Create the label.
 		theHandle.events().add(new CCPropertyListener<Number>() {
 			
@@ -45,7 +45,11 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 				_myTriggerEvent = false;
 				_myValue = theValue.doubleValue();
 				updateSlider(_myValue);
-				_myValueField.setText(CCFormatUtil.nfc((float)_myValue, 2) + "");
+				if(_myHandle.numberType() == Integer.class){
+					_myValueField.setText((int)_myValue + "");
+				}else{
+					_myValueField.setText(CCFormatUtil.nd((float)_myValue, 2) + "");
+				}
 				_myTriggerEvent = true;
 			}
 		});
@@ -88,7 +92,7 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 			@Override
 			public void actionPerformed(ActionEvent theE) {
 				try{
-					value(Double.parseDouble(_myValueField.getText()), true);
+					value(new ExpressionBuilder(_myValueField.getText()).build().evaluate(), true);
 				}catch(Exception e){
 					e.printStackTrace();
 					value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);

@@ -48,5 +48,11 @@
       <artifactId>rsyntaxtextarea</artifactId>
       <version>2.5.6</version>
     </dependency>
+    
+    <dependency>
+      <groupId>net.objecthunter</groupId>
+      <artifactId>exp4j</artifactId>
+      <version>0.4.7</version>
+    </dependency>
   </dependencies>
 </project>
