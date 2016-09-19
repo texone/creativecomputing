@@ -6,10 +6,6 @@ import cc.creativecomputing.math.CCColor;
 
 public class CCImageEffect extends CCEffect{
 	
-	@CCProperty(name = "x modulation")
-	private CCEffectModulation _cXModulation = new CCEffectModulation();
-	@CCProperty(name = "y modulation")
-	private CCEffectModulation _cYModulation = new CCEffectModulation();
 //	@CCProperty(name = "x motion modulation")
 //	private CCKleMotionModulation _cXMotionModulation = new CCKleMotionModulation();
 	
@@ -31,8 +27,8 @@ public class CCImageEffect extends CCEffect{
 	public double[] applyTo(CCEffectable theEffectable) {
 		if(_myImage.value() == null)return new double[0];
 		CCColor myResult = _myImage.value().getPixel(
-			(_cXModulation.modulation(theEffectable) ) * _myImage.value().width(), //+ _cXMotionModulation.modulation(theEffectable)
-			_cYModulation.modulation(theEffectable) * _myImage.value().height()
+			(_cModulations.get("x").modulation(theEffectable) ) * _myImage.value().width(), //+ _cXMotionModulation.modulation(theEffectable)
+			_cModulations.get("y").modulation(theEffectable) * _myImage.value().height()
 		);
 
 //		double myBlend = elementBlend(theElement);
@@ -63,7 +59,8 @@ public class CCImageEffect extends CCEffect{
 	}
 
 	@Override
-	public void valueNames(String... theValueNames) {
+	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
 		_myResultLength = theValueNames.length;
+		super.valueNames(theEffectables, "x", "y");
 	}
 }

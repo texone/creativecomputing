@@ -1,8 +1,5 @@
 package cc.creativecomputing.effects;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import cc.creativecomputing.core.CCProperty;
 
 public class CCArpeggegiatorEffect extends CCEffect{
@@ -12,11 +9,6 @@ public class CCArpeggegiatorEffect extends CCEffect{
 		DOWN,
 		UP_DOWN
 	}
-	
-	@CCProperty(name = "modulations")
-	private Map<String, CCEffectModulation> _cModulations = new LinkedHashMap<>();
-	
-	private String[] _myValueNames = new String[0];
 
 	@CCProperty(name = "progress", min = 0, max = 1)
 	private double _cProgress = 0;

@@ -1,8 +1,5 @@
 package cc.creativecomputing.effects;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import cc.creativecomputing.control.code.CCCompileObject;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.core.CCProperty;
@@ -15,9 +12,6 @@ public class CCRealtimeCodeEffect extends CCEffect {
 		
 		public double animate(CCEffectable theEffectable, CCEffectModulation theModulation);
 	}
-
-	@CCProperty(name = "modulations")
-	private Map<String, CCEffectModulation> _cModulations = new LinkedHashMap<>();
 	
 	private String[] _myValueNames = new String[0];
 	
@@ -49,16 +43,6 @@ public class CCRealtimeCodeEffect extends CCEffect {
 			}
 		}
 		return myResult;
-	}
-
-	@Override
-	public void valueNames(String... theValueNames) {
-		_cModulations.clear();
-		_myValueNames = new String[theValueNames.length];
-		for(int i = 0; i < _myValueNames.length;i++){
-			_myValueNames[i] = theValueNames[i] + " modulation";
-			_cModulations.put(_myValueNames[i], new CCEffectModulation());
-		}
 	}
 }
 

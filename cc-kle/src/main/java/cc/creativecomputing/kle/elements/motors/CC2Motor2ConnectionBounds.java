@@ -2,20 +2,14 @@ package cc.creativecomputing.kle.elements.motors;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.graphics.CCDrawMode;
-import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.filter.CCMotionLimiter;
 
-public class CC2Motor2ConnectionBounds extends CCMotorBounds{
+public class CC2Motor2ConnectionBounds extends CCMotorBounds<CC2Motor2ConnectionSetup>{
 	
-	private double _myElementRadiusScale = 1;
-	private double _myTopDistance = 300;
-	private double _myBottomDistance = 1600;
 	private double _myRopeAngle = 6;
 	
 	private CCSequenceElements _myElements;
@@ -45,7 +39,7 @@ public class CC2Motor2ConnectionBounds extends CCMotorBounds{
 		);
 	}
 	
-	
+	@Override
 	public void updateBounds(CC2Motor2ConnectionSetup mySetup){
 		mySetup.bounds().clear();
 		mySetup.bounds().add(boundPoint(mySetup, 0, 1, _myTopDistance));
@@ -75,15 +69,6 @@ public class CC2Motor2ConnectionBounds extends CCMotorBounds{
 		mySetup.animationBounds().add(animBound2);
 		mySetup.animationBounds().add(animBound3);
 	}
-	
-	private void updateBounds(){
-		if(_myElements == null)return;
-		for(CCSequenceElement myElement:_myElements){
-			CCMotorSetup mySetup = myElement.motorSetup();
-			if(!(mySetup instanceof CC2Motor2ConnectionSetup))continue;
-			updateBounds((CC2Motor2ConnectionSetup)mySetup);
-		}
-	}
 
 	private CCVector3 boundPoint(CCMotorSetup theSetup, int theID0, int theID1, double theTopDistance){
 		CCVector3 myMotorPos0 = theSetup.channels().get(theID0)._myPosition;
@@ -110,26 +95,6 @@ public class CC2Motor2ConnectionBounds extends CCMotorBounds{
 	public void elementRadiusScale(double theElementRadiusScale){
 		_myElementRadiusScale = theElementRadiusScale;
 		updateBounds();
-	}
-	
-	@CCProperty(name = "top distance", min = 0, max = 2000, defaultValue = 0)
-	public void topDistance(double theTopDistance){
-		_myTopDistance = theTopDistance;
-		updateBounds();
-	}
-	
-	public double topDistance(){
-		return _myTopDistance;
-	}
-	
-	@CCProperty(name = "bottom distance", min = 0, max = 2000, defaultValue = 2000)
-	public void bottomDistance(double theBottomDistance){
-		_myBottomDistance = theBottomDistance;
-		updateBounds();
-	}
-	
-	public double bottomDistance(){
-		return _myBottomDistance;
 	}
 	
 	public double minRopeAngle(){

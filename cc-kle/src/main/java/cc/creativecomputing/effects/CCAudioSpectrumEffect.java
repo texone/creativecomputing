@@ -6,7 +6,6 @@ import java.util.Map;
 
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.sound.CCAudioAsset;
 
@@ -33,11 +32,10 @@ public class CCAudioSpectrumEffect extends CCEffect{
 	}
 	
 	@Override
-	public void valueNames(String... theValueNames) {
-		super.valueNames(theValueNames);
+	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
+		super.valueNames(theEffectables, theValueNames);
 		
 		for(String myValueName:_myValueNames){
-			CCLog.info(myValueName);
 			_cApplies.put(myValueName, 0d);
 			_cDefaults.put(myValueName, 1d);
 		}

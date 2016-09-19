@@ -7,7 +7,7 @@ import cc.creativecomputing.math.easing.CCEasing.CCEaseFormular;
 public class CCEffectBlender {
 
 	@CCProperty(name = "modulation")
-	private CCEffectModulation _cModulation = new CCEffectModulation();
+	private CCEffectModulation _cModulation;
 	
 	@CCProperty(name = "blend", min = 0, max = 1)
 	private double _cBlend = 0;
@@ -18,6 +18,10 @@ public class CCEffectBlender {
 	
 	@CCProperty(name = "reverse")
 	private boolean _cReverse = true;
+	
+	public CCEffectBlender(CCEffectables<?> theEffectables){
+		_cModulation = new CCEffectModulation(theEffectables);
+	}
 	
 	protected double blend(CCEffectable theEffectable){
 		double myOffsetSum = _cModulation.offsetSum();

@@ -47,13 +47,13 @@ public class CCSignalEffect extends CCEffect{
 	}
 
 	@Override
-	public void valueNames(String... theValueNames) {
-		super.valueNames(theValueNames);
+	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
+		super.valueNames(theEffectables, theValueNames);
 		_cAmountModulations = new LinkedHashMap<>();
 		_myAmountNames = new String[theValueNames.length];
 		for(int i = 0; i < _myValueNames.length;i++){
 			_myAmountNames[i] = theValueNames[i] + " amount modulation";
-			_cAmountModulations.put(_myAmountNames[i], new CCEffectModulation());
+			_cAmountModulations.put(_myAmountNames[i], new CCEffectModulation(theEffectables));
 		}
 	}
 

@@ -2,7 +2,6 @@ package cc.creativecomputing.effects;
 
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.signal.CCMixSignal;
@@ -13,11 +12,6 @@ public class CCGradientEffect extends CCEffect{
 	private CCMixSignal _myOffset1Signal = new CCMixSignal();
 	@CCProperty(name = "ofset2")
 	private CCMixSignal _myOffset2Signal = new CCMixSignal();
-	
-	@CCProperty(name = "offset 1 modulation")
-	private CCEffectModulation _cOffset1Modulation = new CCEffectModulation();
-	@CCProperty(name = "offset 2 modulation")
-	private CCEffectModulation _cOffset2Modulation = new CCEffectModulation();
 	
 	@CCProperty(name = "phase speed", min = 0, max = 10)
 	private double _cSpeed = 0;
@@ -53,8 +47,8 @@ public class CCGradientEffect extends CCEffect{
 	public double[] applyTo(CCEffectable theEffectable){
 		double[] myResult = new double[_myResultLength];
 		CCColor myColor = _myGradient.color(
-			_myOffset1Signal.value(_myGlobalPhase + _cOffset1Modulation.modulation(theEffectable)) * _cOffset1Amp + 
-			_myOffset2Signal.value(_myGlobalPhase + _cOffset2Modulation.modulation(theEffectable)) * _cOffset2Amp +
+			_myOffset1Signal.value(_myGlobalPhase + _cModulations.get("offset1").modulation(theEffectable)) * _cOffset1Amp + 
+			_myOffset2Signal.value(_myGlobalPhase + _cModulations.get("offset2").modulation(theEffectable)) * _cOffset2Amp +
 			_cOffset1Add
 			
 		);
@@ -84,7 +78,8 @@ public class CCGradientEffect extends CCEffect{
 	}
 	
 	@Override
-	public void valueNames(String... theValueNames) {
+	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
 		_myResultLength = theValueNames.length;
+		super.valueNames(theEffectables, "offset1", "offset2");
 	}
 }

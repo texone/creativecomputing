@@ -1,59 +1,14 @@
 package cc.creativecomputing.kle.elements.motors;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
-import cc.creativecomputing.kle.elements.CCSequenceElements;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 
-public class CC2Motor1ConnectionBounds extends CCMotorBounds{
-	
-	private double _myElementRadiusScale = 1;
-	private double _myTopDistance = 300;
-	private double _myBottomDistance = 1600;
+public class CC2Motor1ConnectionBounds extends CCMotorBounds<CC2Motor1ConnectionSetup>{
+
 	private double _myRopeAngle = 6;
 	
-	private CCSequenceElements _myElements;
-	
-	public void setElements(CCSequenceElements theElements){
-		_myElements = theElements;
-	}
-	
-	@CCProperty(name = "max velocity")
-	private double _cMaxVelocity = 0;
-	@CCProperty(name = "max acceleration")
-	private double _cMaxAcceleration = 0;
-	@CCProperty(name = "max jerk")
-	private double _cMaxJerk = 0;
-	@CCProperty(name = "apply filter")
-	private boolean _cFilter = false;
-	
-	private double _myDeltaTime;
-	
-	public boolean applyFilter(){
-		return _cFilter;
-	}
-	
-	public void update(double theDeltaTime){
-		_myDeltaTime = theDeltaTime;
-	}
-	
-	public double deltaTime(){
-		return _myDeltaTime;
-	}
-	
-	public double maxVelocity(){
-		return _cMaxVelocity;
-	}
-	
-	public double maxAcceleration(){
-		return _cMaxAcceleration;
-	}
-	
-	public double maxJerk(){
-		return _cMaxJerk;
-	}
-	
+	@Override
 	public void updateBounds(CC2Motor1ConnectionSetup mySetup){
 		mySetup.bounds().clear();
 		mySetup.bounds().add(boundPoint(mySetup, 0, 1, _myTopDistance));
@@ -77,15 +32,6 @@ public class CC2Motor1ConnectionBounds extends CCMotorBounds{
 		mySetup.animationBounds().add(animBound2);
 		mySetup.animationBounds().add(animBound3);
 	}
-	
-	private void updateBounds(){
-		if(_myElements == null)return;
-		for(CCSequenceElement myElement:_myElements){
-			CCMotorSetup mySetup = myElement.motorSetup();
-			if(!(mySetup instanceof CC2Motor1ConnectionSetup))continue;
-			updateBounds((CC2Motor1ConnectionSetup)mySetup);
-		}
-	}
 
 	private CCVector3 boundPoint(CCMotorSetup theSetup, int theID0, int theID1, double theTopDistance){
 		CCVector3 myMotorPos0 = theSetup.channels().get(theID0)._myPosition;
@@ -95,32 +41,6 @@ public class CC2Motor1ConnectionBounds extends CCMotorBounds{
 		CCVector3 myResult = myMotorPos0.subtract(myDirection.multiply(CCMath.tan(CCMath.radians(_myRopeAngle)) * theTopDistance));
 		myResult.y -= theTopDistance;
 		return myResult;
-	}
-	
-	@CCProperty(name = "radius scale", min = 0, max = 2, defaultValue = 1)
-	public void elementRadiusScale(double theElementRadiusScale){
-		_myElementRadiusScale = theElementRadiusScale;
-		updateBounds();
-	}
-	
-	@CCProperty(name = "top distance", min = 0, max = 2000, defaultValue = 0)
-	public void topDistance(double theTopDistance){
-		_myTopDistance = theTopDistance;
-		updateBounds();
-	}
-	
-	public double topDistance(){
-		return _myTopDistance;
-	}
-	
-	@CCProperty(name = "bottom distance", min = 0, max = 2000, defaultValue = 2000)
-	public void bottomDistance(double theBottomDistance){
-		_myBottomDistance = theBottomDistance;
-		updateBounds();
-	}
-	
-	public double bottomDistance(){
-		return _myBottomDistance;
 	}
 	
 	public double minRopeAngle(){

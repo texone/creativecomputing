@@ -5,9 +5,8 @@ import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCEffect;
-import cc.creativecomputing.effects.CCEffectModulation;
 import cc.creativecomputing.effects.CCEffectable;
-import cc.creativecomputing.kle.elements.CCKleChannelType;
+import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.formats.CCSequenceFormats;
 import cc.creativecomputing.math.CCMatrix2;
@@ -16,10 +15,6 @@ public class CCKleSequenceAnimation extends CCEffect {
 	
 	@CCProperty(name = "sequence")
 	private CCSequenceAsset _mySequenceAsset;
-	@CCProperty(name = "amount modulation")
-	private CCEffectModulation _cAmountModulation = new CCEffectModulation();
-	@CCProperty(name = "offset modulation")
-	private CCEffectModulation _cOffsetModulation = new CCEffectModulation();
 	
 
 	@CCProperty(name = "group id inverts")
@@ -54,9 +49,9 @@ public class CCKleSequenceAnimation extends CCEffect {
 	}
 	
 	private double value(CCEffectable theEffectable, double theBLend, int theID){
-		double myOffset = _cOffsetModulation.modulation(theEffectable, -1, 1) * _mySequenceAsset.length();
+		double myOffset = _cModulations.get("offset").modulation(theEffectable, -1, 1) * _mySequenceAsset.length();
 		double myValue = _mySequenceAsset.value(myOffset, theEffectable.id(), 0, theID) * 2 - 1;
-		return myValue * theBLend * _cAmountModulation.modulation(theEffectable, -1, 1);
+		return myValue * theBLend * _cModulations.get("amount").modulation(theEffectable, -1, 1);
 	}
 
 	public double[] applyTo(CCEffectable theEffectable) {
@@ -72,7 +67,8 @@ public class CCKleSequenceAnimation extends CCEffect {
 	}
 	
 	@Override
-	public void valueNames(String... theValueNames) {
+	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
 		_myResultLength = theValueNames.length;
+		super.valueNames(theEffectables, "offset", "amount");
 	}
 }

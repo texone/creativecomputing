@@ -33,7 +33,7 @@ public class CCSequenceElement extends CCEffectable{
 		List<CCMotorChannel> theMotors,
 		List<CCLightChannel> theLights,
 		
-		CCMotorBounds theBounds,
+		CCMotorBounds<?> theBounds,
 		
 		double theElementRadius
 	){
@@ -64,7 +64,7 @@ public class CCSequenceElement extends CCEffectable{
 		_myLightSetup = null;
 	}
 	
-	private CCMotorSetup setMotors(List<CCMotorChannel> theMotors, CCMotorBounds theBounds, double theElementRadius){
+	private CCMotorSetup setMotors(List<CCMotorChannel> theMotors, CCMotorBounds<?> theBounds, double theElementRadius){
 		if(theMotors == null)return new CCMotorSetup(theMotors);
 		
 		_myChannels.addAll(theMotors);

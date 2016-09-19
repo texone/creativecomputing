@@ -11,7 +11,6 @@ import java.util.Map;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.formats.CCSequenceIO;
 import cc.creativecomputing.math.CCMath;

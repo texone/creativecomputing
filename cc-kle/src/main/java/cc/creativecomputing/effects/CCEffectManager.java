@@ -6,7 +6,6 @@ import java.util.Map;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.filter.CCFilter;
 
 public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<String, CCEffect> implements CCAnimatorListener{
@@ -43,26 +42,37 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	
 	
 	
-	public CCEffectManager(CCEffectables<Type> theElements, String...theValueNames){
-		_myEffectables = theElements;
-		_myAnimationBlender = new CCEffectBlender();
+	
+	public CCEffectManager(CCEffectables<Type> theEffectables, String...theValueNames){
+		_myEffectables = theEffectables;
+		_myAnimationBlender = new CCEffectBlender(theEffectables);
 		_myValueNames = theValueNames;
 		for(String myValueName:_myValueNames){
 			_cScales.put(myValueName + " scale", 1.0);
 		}
+		
+		for(String myIdSource:theEffectables.idSources()){
+			theEffectables.addRelativeSources(myIdSource);
+		}
+		for(CCEffectable myEffectable:theEffectables){
+			for(String myIdSource:theEffectables.idSources()){
+				myEffectable.addRelativeSource(myIdSource, myEffectable.idSource(myIdSource) / (double)theEffectables.idMax(myIdSource));
+			}
+		}
+		
 	}
 	
 	@Override
-	public CCEffect put(String theKey, CCEffect theAnimation) {
-		theAnimation.addGroupBlends(_myEffectables.groups());
-		theAnimation.valueNames(_myValueNames);
-		return super.put(theKey, theAnimation);
+	public CCEffect put(String theKey, CCEffect theEffect) {
+		theEffect.addGroupBlends(_myEffectables.groups());
+		theEffect.valueNames(_myEffectables, _myValueNames);
+		return super.put(theKey, theEffect);
 	}
 	
-	public CCEffect amountAnimation(String theKey, CCEffect theAnimation) {
-		theAnimation.addGroupBlends(_myEffectables.groups());
-		theAnimation.valueNames("amount");
-		return _cAmountAnimation.put(theKey, theAnimation);
+	public CCEffect amountAnimation(String theKey, CCEffect theEffect) {
+		theEffect.addGroupBlends(_myEffectables.groups());
+		theEffect.valueNames(_myEffectables, "amount");
+		return _cAmountAnimation.put(theKey, theEffect);
 	}
 	
 	public void addFilter(String theKey, CCFilter theFilter){

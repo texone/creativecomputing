@@ -23,13 +23,17 @@ public abstract class CCEffect {
 	
 	public abstract double[] applyTo(CCEffectable theEffectable);
 	
-	public void valueNames(String... theValueNames) {
+	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
 		_cModulations = new LinkedHashMap<>();
 		_myValueNames = new String[theValueNames.length];
 		for(int i = 0; i < _myValueNames.length;i++){
 			_myValueNames[i] = theValueNames[i] + " modulation";
-			_cModulations.put(_myValueNames[i], new CCEffectModulation());
+			createModulation(_myValueNames[i], theEffectables);
 		}
+	}
+	
+	protected void createModulation(String theKey,CCEffectables<?> theEffectables){
+		_cModulations.put(theKey, new CCEffectModulation(theEffectables));
 	}
 	
 	public void update(final double theDeltaTime){
@@ -55,10 +59,10 @@ public abstract class CCEffect {
 	}
 	
 	public double elementBlend(CCEffectable theEffectable){
-		String myGroupKey =groupKey(theEffectable.group());
+		String myGroupKey = groupKey(theEffectable.group());
 		Double myGroupBlend = _cGroupBlends.get(myGroupKey);
 		if(myGroupBlend == null)myGroupBlend = 1d;
-		return _cBlend * myGroupBlend;
+		return _cBlend;// * myGroupBlend;
 	}
 	
 	public void blend(double theBlend){

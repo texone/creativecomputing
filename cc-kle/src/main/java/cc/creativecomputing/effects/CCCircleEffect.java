@@ -10,11 +10,7 @@ public class CCCircleEffect extends CCEffect {
 	@CCProperty(name = "y amount", min = 0, max = 1)
 	private double _cYAmount = 0;
 
-	@CCProperty(name = "modulation")
-	private CCEffectModulation _cModulation = new CCEffectModulation();
-
-	@CCProperty(name = "amount modulation")
-	private CCEffectModulation _cAmountModulation = new CCEffectModulation();
+	
 
 	@CCProperty(name = "phase speed", min = 0, max = 0.1)
 	private double _cSpeed = 0;
@@ -32,8 +28,8 @@ public class CCCircleEffect extends CCEffect {
 
 	@Override
 	public double[] applyTo(CCEffectable theEffectable) {
-		double myAngle = (_myPhase + _cModulation.modulation(theEffectable, -1f, 1f)) * CCMath.PI * _cAngleMax;
-		double myAmount = _cAmountModulation.modulation(theEffectable, -1, 1);
+		double myAngle = (_myPhase + _cModulations.get("angle").modulation(theEffectable, -1f, 1f)) * CCMath.PI * _cAngleMax;
+		double myAmount = _cModulations.get("amount").modulation(theEffectable, -1, 1);
 		double myBlend = elementBlend(theEffectable);
 		double myX = CCMath.cos(myAngle) * _cXAmount * myAmount * myBlend;
 		double myY = CCMath.sin(myAngle) * _cYAmount * myAmount * myBlend;
@@ -55,7 +51,8 @@ public class CCCircleEffect extends CCEffect {
 	}
 
 	@Override
-	public void valueNames(String... theValueNames) {
+	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
 		_myResultLength = theValueNames.length;
+		super.valueNames(theEffectables, "angle", "amount");
 	}
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
@@ -13,7 +14,6 @@ import cc.creativecomputing.kle.elements.lights.CCLightChannel;
 import cc.creativecomputing.kle.elements.lights.CCLightRGBSetup;
 import cc.creativecomputing.kle.elements.motors.CCMotorBounds;
 import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
-import cc.creativecomputing.math.CCMath;
 
 public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 	/**
@@ -24,7 +24,7 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 	public static CCXMLElement mapping(CCSequenceElements theElements){
 		CCXMLElement myMappingsXML = new CCXMLElement("mappings");
 		for(CCKleChannelType myKey:theElements.mappings().keySet()){
-			CCSequenceMapping myMapping = theElements.mappings().get(myKey);
+			CCSequenceMapping<?> myMapping = theElements.mappings().get(myKey);
 			myMappingsXML.addChild(myMapping.toXML());
 		}
 		return myMappingsXML;
@@ -43,13 +43,13 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 	
 	public static CCSequenceElements createLightMatrix(int theColumns, int theRows){
 		CCSequenceElements myResult = new CCSequenceElements();
+		myResult.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		int i = 0;
 		for(int c = 0; c < theColumns; c++){
 			for(int r = 0; r < theRows; r++){
 				CCSequenceElement myElement = new CCSequenceElement(i, new CCLightRGBSetup(i * 3, i * 3 + 1, i * 3 + 2));
-				myElement._myXBlend = CCMath.norm(c, 0, theColumns - 1);
-				myElement._myYBlend = CCMath.norm(r, 0, theRows - 1);
-				myElement.idBlend(CCMath.norm(i, 0, theColumns * theRows));
+				myElement.column(c);;
+				myElement.row(r);
 				myResult.add(myElement);
 				i++;
 			}
@@ -60,7 +60,7 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 	
 	private Map<CCKleChannelType,CCSequenceMapping<?>> _myMappings = new HashMap<>();
 	
-	public CCSequenceElements(Path theKlePath, CCMotorBounds theMotorBounds, float theElementRadius){
+	public CCSequenceElements(Path theKlePath, CCMotorBounds<?> theMotorBounds, float theElementRadius){
 		this(
 			CCXMLIO.createXMLElement(theKlePath.resolve("mapping.xml")),
 			CCXMLIO.createXMLElement(theKlePath.resolve("sculpture.xml")),
@@ -74,16 +74,15 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 	}
 	
 	public List<CCSequenceElement> addMatrix(int theColumns, int theRows, int theGroup){
+		addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		List<CCSequenceElement> myResult = new ArrayList<>();
 		for(int c = 0; c < theColumns; c++){
 			for(int r = 0; r < theRows; r++){
 				int i = size() + myResult.size();
 				CCSequenceElement myElement = new CCSequenceElement(i, new CCLightRGBSetup(i * 3, i * 3 + 1, i * 3 + 2));
-				myElement._myXBlend = CCMath.norm(c, 0, theColumns - 1);
-				myElement._myYBlend = CCMath.norm(r, 0, theRows - 1);
+				myElement.column(c);
+				myElement.row(r);
 				myElement.group(theGroup);
-				myElement.groupIDBlend(CCMath.norm(myResult.size(), 0, theColumns * theRows));
-				myElement.idBlend(CCMath.norm(myResult.size(), 0, theColumns * theRows));
 				myResult.add(myElement);
 			}
 		}
@@ -91,6 +90,7 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 		return myResult;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CCSequenceElements(CCXMLElement theMappingsXML, CCXMLElement mySculptureXML, CCMotorBounds theMotorBounds, float theElementRadius){
 		super();
 		for(CCXMLElement myMappingXML:theMappingsXML){
@@ -138,6 +138,8 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 			);
 			
 			add(myElement);
+			
+			theMotorBounds.setElements(this);
 		}
 	}
 
