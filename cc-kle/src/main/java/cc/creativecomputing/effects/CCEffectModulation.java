@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 public class CCEffectModulation {
@@ -118,8 +117,6 @@ public class CCEffectModulation {
 			myResultPhase += _myModBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.mod, myIdSource2.modAmount); 
 			myResultPhase += _myDivBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.div, myIdSource2.divAmount);
 		}
-
-		CCLog.info(myResultPhase);
 		
 		return myResultPhase;
 	}
