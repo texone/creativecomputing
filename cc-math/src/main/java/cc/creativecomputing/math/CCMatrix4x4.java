@@ -1280,6 +1280,7 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 	 *             16 values.
 	 */
 	public DoubleBuffer toDoubleBuffer(final DoubleBuffer theStore, final boolean theRowMajor) {
+		theStore.rewind();
 		theStore.put(toArray(_mybufferContainer, theRowMajor));
 		theStore.rewind();
 		return theStore;
