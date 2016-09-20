@@ -14,6 +14,7 @@ public abstract class CCEffectable {
 	public static final String COLUMN_SOURCE = "column";
 	public static final String ROW_SOURCE = "row";
 	public static final String GROUP_SOURCE = "group";
+	public static final String GROUP_ID_SOURCE = "group id";
 
 	protected final int _myID;
 	
@@ -26,11 +27,11 @@ public abstract class CCEffectable {
 		addRelativeSource(RANDOM_SOURCE, CCMath.random());
 	}
 	
-	protected void addRelativeSource(String theKey, double theValue){
+	public void addRelativeSource(String theKey, double theValue){
 		_myRelativeSources.put(theKey, theValue);
 	}
 	
-	protected void addIdBasedSource(String theKey, int theValue){
+	public void addIdBasedSource(String theKey, int theValue){
 		_myIdBasedSources.put(theKey, theValue);
 	}
 	
