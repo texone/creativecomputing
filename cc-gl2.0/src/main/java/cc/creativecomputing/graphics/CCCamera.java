@@ -335,7 +335,7 @@ public class CCCamera{
 	 * @param g
 	 */
 	public void drawFrustum(CCGraphics g){
-		_myAspect = _myViewport.aspectRatio();
+		if(_myViewport != null)_myAspect = _myViewport.aspectRatio();
 		
 		double ymax = _myNearClip * (double) Math.tan(_myFoV / 2.0f);
 		double ymin = -ymax;
