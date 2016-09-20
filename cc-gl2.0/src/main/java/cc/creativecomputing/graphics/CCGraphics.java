@@ -32,6 +32,7 @@ import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCQuaternion;
+import cc.creativecomputing.math.CCTransform;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 
@@ -1432,6 +1433,8 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		//gl.glTranslatef(0,0,-400.00001f);
 	}
 	
+	private DoubleBuffer _myDoubleBuffer = DoubleBuffer.allocate(16);
+	
 	/**
 	 * Replaces the current matrix with the one specified in m. The current matrix 
 	 * is the projection matrix, modelview matrix, or texture matrix, determined 
@@ -1440,7 +1443,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @related matrixMode ( )
 	 */
 	public void loadMatrix(final CCMatrix4x4 theMatrix){
-		gl.glLoadMatrixd(theMatrix.toDoubleBuffer());
+		gl.glLoadMatrixd(theMatrix.toDoubleBuffer(_myDoubleBuffer));
 	}
 	
 	/**
@@ -1449,7 +1452,11 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @param theMatrix
 	 */
 	public void applyMatrix(final CCMatrix4x4 theMatrix){
-		gl.glMultMatrixd(theMatrix.toDoubleBuffer());
+		gl.glMultMatrixd(theMatrix.toDoubleBuffer(_myDoubleBuffer));
+	}
+	
+	public void applyTransform(final CCTransform theTransform){
+		gl.glMultMatrixd(theTransform.getGLApplyMatrix(_myDoubleBuffer));
 	}
 	
 	public void applyMatrix(final CCMatrix32 theMatrix) {
