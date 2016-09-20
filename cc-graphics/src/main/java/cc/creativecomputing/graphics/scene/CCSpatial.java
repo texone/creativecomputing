@@ -138,7 +138,7 @@ public abstract class CCSpatial extends CCControlledObject{
 			_myWorldTransform.set(_myLocalTransform);
 		}
 		
-		_myWorldTransform.getHomogeneousMatrix(_myModelMatrix);
+		_myWorldTransform.toMatrix(_myModelMatrix);
 	}
 	
 	protected void updateWorldBound () {

@@ -682,7 +682,7 @@ public class CCTransform implements Cloneable, Externalizable {
 	 * 0 0 0 1
 	 * </pre>
 	 */
-	public CCMatrix4x4 getHomogeneousMatrix(final CCMatrix4x4 store) {
+	public CCMatrix4x4 toMatrix(final CCMatrix4x4 store) {
 		CCMatrix4x4 result = store;
 		if (result == null) {
 			result = new CCMatrix4x4();
@@ -721,34 +721,43 @@ public class CCTransform implements Cloneable, Externalizable {
 
 		return result;
 	}
+	
+	public CCMatrix4x4 toMatrix(){
+		return toMatrix(null);
+	}
 
-	public void getGLApplyMatrix(final DoubleBuffer store) {
+	public DoubleBuffer getGLApplyMatrix(final DoubleBuffer theStore) {
+		theStore.rewind();
+		
 		if (_myIsRotationMatrix) {
-			store.put(0, _myScale.x * _myMatrix._m00);
-			store.put(1, _myScale.x * _myMatrix._m10);
-			store.put(2, _myScale.x * _myMatrix._m20);
-			store.put(4, _myScale.y * _myMatrix._m01);
-			store.put(5, _myScale.y * _myMatrix._m11);
-			store.put(6, _myScale.y * _myMatrix._m21);
-			store.put(8, _myScale.z * _myMatrix._m02);
-			store.put(9, _myScale.z * _myMatrix._m12);
-			store.put(10, _myScale.z * _myMatrix._m22);
+			theStore.put(0, _myScale.x * _myMatrix._m00);
+			theStore.put(1, _myScale.x * _myMatrix._m10);
+			theStore.put(2, _myScale.x * _myMatrix._m20);
+			theStore.put(4, _myScale.y * _myMatrix._m01);
+			theStore.put(5, _myScale.y * _myMatrix._m11);
+			theStore.put(6, _myScale.y * _myMatrix._m21);
+			theStore.put(8, _myScale.z * _myMatrix._m02);
+			theStore.put(9, _myScale.z * _myMatrix._m12);
+			theStore.put(10, _myScale.z * _myMatrix._m22);
 		} else {
-			store.put(0, _myMatrix._m00);
-			store.put(1, _myMatrix._m10);
-			store.put(2, _myMatrix._m20);
-			store.put(4, _myMatrix._m01);
-			store.put(5, _myMatrix._m11);
-			store.put(6, _myMatrix._m21);
-			store.put(8, _myMatrix._m02);
-			store.put(9, _myMatrix._m12);
-			store.put(10, _myMatrix._m22);
+			theStore.put(0, _myMatrix._m00);
+			theStore.put(1, _myMatrix._m10);
+			theStore.put(2, _myMatrix._m20);
+			theStore.put(4, _myMatrix._m01);
+			theStore.put(5, _myMatrix._m11);
+			theStore.put(6, _myMatrix._m21);
+			theStore.put(8, _myMatrix._m02);
+			theStore.put(9, _myMatrix._m12);
+			theStore.put(10, _myMatrix._m22);
 		}
 
-		store.put(12, _myTranslation.x);
-		store.put(13, _myTranslation.y);
-		store.put(14, _myTranslation.z);
-		store.put(15, 1.0f);
+		theStore.put(12, _myTranslation.x);
+		theStore.put(13, _myTranslation.y);
+		theStore.put(14, _myTranslation.z);
+		theStore.put(15, 1.0f);
+		theStore.rewind();
+		
+		return theStore;
 	}
 
 	/**
