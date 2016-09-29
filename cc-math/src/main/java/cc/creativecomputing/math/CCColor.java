@@ -765,10 +765,12 @@ public class CCColor implements Cloneable{
 	 * @return    the RGB value of the color with the indicated hue, 
 	 *                            saturation, and brightness.
 	 */
-	public CCColor setHSB(final double theHue, final double theSaturation, final double theBrightness, final double theAlpha) {
-
+	public CCColor setHSB(double theHue, final double theSaturation, final double theBrightness, final double theAlpha) {
 		a = theAlpha;
 
+		theHue %= 1;
+		if(theHue < 0)theHue = 1 + theHue;
+		
 		if (theSaturation == 0) {
 			r = g = b = theBrightness;
 		} else {
