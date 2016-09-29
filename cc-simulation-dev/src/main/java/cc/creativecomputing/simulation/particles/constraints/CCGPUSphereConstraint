@@ -1,0 +1,26 @@
+
+
+uniform float3 center;
+uniform float radius;
+	
+uniform float resilience;
+uniform float friction;
+uniform float minimalVelocity;
+
+uniform float inside;
+	
+float3 constraint(float3 theVelocity, float3 thePosition, float2 theTexID,float theDeltaTime){
+	float3 delta = (thePosition + theVelocity * theDeltaTime) - center;
+	float dist = length(delta);
+
+	if ((dist - radius) * inside < 0) return theVelocity;
+		
+	return bounceReflection(
+		theVelocity, 
+		delta / dist,
+		distance(thePosition, center) - radius,
+		resilience, 
+		friction, 
+		minimalVelocity
+	);
+}
