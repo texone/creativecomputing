@@ -49,8 +49,8 @@
         <module>cc-minim</module>
         <module>cc-demo</module>
         <module>cc-modbus</module>
-<!--
         <module>cc-simulation</module>
+<!--
 
         <module>cc-kinect</module>
         <module>cc-kinect-demo</module>
