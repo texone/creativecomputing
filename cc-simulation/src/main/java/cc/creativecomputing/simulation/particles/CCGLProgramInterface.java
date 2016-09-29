@@ -8,6 +8,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.io.CCNIOUtil;
 
+@SuppressWarnings("unused")
 public class CCGLProgramInterface {
 	
 	private String _myFunctionName;

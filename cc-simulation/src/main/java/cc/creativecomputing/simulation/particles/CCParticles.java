@@ -29,7 +29,7 @@ import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.constraints.CCGPUConstraint;
+import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.impulses.CCGPUImpulse;
 import cc.creativecomputing.simulation.particles.render.CCGPUParticlePointRenderer;
@@ -52,6 +52,7 @@ import cc.creativecomputing.simulation.particles.render.CCGPUParticleRenderer;
  * @demo cc.creativecomputing.gpu.particles.demo.CCParticlesNoiseFlowFieldTest
  * @see CCGPUQuadParticles
  */
+@SuppressWarnings("unused")
 public class CCParticles{
 	
 	protected Map<Integer, CCVector3> _myPositionUpdates = new HashMap<Integer, CCVector3>();
@@ -60,7 +61,7 @@ public class CCParticles{
 	private List<CCGPUParticleEmitter> _myEmitter = new ArrayList<CCGPUParticleEmitter>();
 	
 	protected List<CCForce> _myForces;
-	protected List<CCGPUConstraint> _myConstraints;
+	protected List<CCConstraint> _myConstraints;
 	protected List<CCGPUImpulse> _myImpulses;
 	
 	protected final int _myWidth;
@@ -114,7 +115,7 @@ public class CCParticles{
 		final CCGraphics g,
 		final CCGPUParticleRenderer theRender,
 		final List<CCForce> theForces, 
-		final List<CCGPUConstraint> theConstraints, 
+		final List<CCConstraint> theConstraints, 
 		final List<CCGPUImpulse> theImpulse, 
 		final int theWidth, final int theHeight
 	){
@@ -161,22 +162,22 @@ public class CCParticles{
 		final CCGraphics g,
 		CCGPUParticleRenderer theRender, 
 		List<CCForce> theForces, 
-		List<CCGPUConstraint> theConstraints, 
+		List<CCConstraint> theConstraints, 
 		int theWidth, int theHeight
 	) {
 		this(g, theRender, theForces, theConstraints, new ArrayList<CCGPUImpulse>(), theWidth, theHeight);
 	}
 
-	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCGPUConstraint> theConstraints, int theWidth, int theHeight) {
+	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCConstraint> theConstraints, int theWidth, int theHeight) {
 		this(g, new CCGPUParticlePointRenderer(), theForces, theConstraints, theWidth, theHeight);
 	}
 
-	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCGPUConstraint> theConstraints) {
+	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCConstraint> theConstraints) {
 		this(g, theForces, theConstraints,200,200);
 	}
 
 	public CCParticles(final CCGraphics g,List<CCForce> theForces) {
-		this(g, theForces, new ArrayList<CCGPUConstraint>());
+		this(g, theForces, new ArrayList<CCConstraint>());
 	}
 	
 	public void addEmitter(CCGPUParticleEmitter theEmitter) {
@@ -405,7 +406,7 @@ public class CCParticles{
 			myForce.update(theAnimator);
 		}
 		
-		for(CCGPUConstraint myConstraint:_myConstraints) {
+		for(CCConstraint myConstraint:_myConstraints) {
 			myConstraint.update(theAnimator);
 		}
 		

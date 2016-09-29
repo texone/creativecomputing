@@ -11,21 +11,19 @@
 package cc.creativecomputing.simulation.particles;
 
 import java.nio.file.Path;
-import java.text.MessageFormat;
 import java.util.List;
 
-import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLShader;
 import cc.creativecomputing.graphics.shader.CCGLShaderNoise;
 import cc.creativecomputing.graphics.shader.CCShaderSource;
-import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
+import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.simulation.particles.constraints.CCGPUConstraint;
+import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.impulses.CCGPUImpulse;
 
@@ -36,6 +34,7 @@ import cc.creativecomputing.simulation.particles.impulses.CCGPUImpulse;
  * @author info
  *
  */
+@SuppressWarnings("unused")
 public class CCGPUUpdateShader extends CCGLProgram{
 
 	protected String _myVelocityTextureParameter;
@@ -59,7 +58,7 @@ public class CCGPUUpdateShader extends CCGLProgram{
 		final CCParticles theParticles,
 		final CCGraphics theGraphics, 
 		final List<CCForce> theForces , 
-		final List<CCGPUConstraint> theConstrains,
+		final List<CCConstraint> theConstrains,
 		final List<CCGPUImpulse> theImpulses,
 		final Path[] theShaderFile,
 		final int theWidth,
@@ -97,7 +96,7 @@ public class CCGPUUpdateShader extends CCGLProgram{
 		
 		
 		int myConstraintIndex = 0;
-		for(CCGPUConstraint myConstraint:theConstrains){
+		for(CCConstraint myConstraint:theConstrains){
 //			myConstraint.setShader(this, myConstraintIndex++, theWidth, theHeight);
 		}
 		
@@ -127,7 +126,7 @@ public class CCGPUUpdateShader extends CCGLProgram{
 		final CCParticles theParticles,
 		final CCGraphics theGraphics, 
 		final List<CCForce> theForces, 
-		final List<CCGPUConstraint> theConstrains,
+		final List<CCConstraint> theConstrains,
 		final List<CCGPUImpulse> theImpulses,
 		final int theWidth,
 		final int theHeight

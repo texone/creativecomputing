@@ -102,12 +102,6 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 				}
 				_myOffset++;
 				_myOffset %= _myWaitLists.length;
-				
-				int mySize = 0;
-				for(List<?> myList:_myWaitLists){
-					if(myList == null)continue;
-					mySize += myList.size();
-				}
 			}
 		}
 		

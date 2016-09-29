@@ -12,52 +12,42 @@ package cc.creativecomputing.simulation.particles.impulses;
 
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.simulation.particles.CCGLProgramInterface;
 import cc.creativecomputing.simulation.particles.CCGPUUpdateShader;
 
-import com.jogamp.opengl.cg.CGparameter;
-import com.jogamp.opengl.cg.CgGL;
-
-
-public abstract class CCGPUImpulse {
+public abstract class CCGPUImpulse extends CCGLProgramInterface{
 	
 	protected String _myParameterIndex;
 	protected String _myShaderTypeName;
 	protected CCGPUUpdateShader _myVelocityShader;
 	
-	private float _myStrength;
+	@CCProperty(name = "strength", min = 0, max = 10)
+	protected double _cStrength = 1;
 	
-	private CGparameter _myStrengthParameter;
+	private String _myStrengthParameter;
 	
-	public CCGPUImpulse(final String theShaderTypeName, final float theStrength){
-		_myShaderTypeName = theShaderTypeName;
+	public CCGPUImpulse(final String theShaderTypeName, final double theStrength){
+		super(theShaderTypeName);
 
-		_myStrength = theStrength;
-	}
-	
-	public void setShader(CCGPUUpdateShader theShader, final int theIndex, final int theWidth, final int theHeight){
-		_myVelocityShader = theShader;
-		_myParameterIndex = "impulses["+theIndex+"]";
-		CgGL.cgConnectParameter(
-			_myVelocityShader.createFragmentParameter(_myShaderTypeName), 
-			_myVelocityShader.fragmentParameter(_myParameterIndex)
-		);
-		
 		_myStrengthParameter  = parameter("strength");
-
-		strength(_myStrength);
 		
-		setupParameter(theWidth, theHeight);
-		_myVelocityShader.checkError("Problem creating constrain.");
+		_cStrength = theStrength;
 	}
 	
-	public abstract void setupParameter(final int theWidth, final int theHeight);
-	
-	public CGparameter parameter(final String theName){
-		return _myVelocityShader.fragmentParameter(_myParameterIndex+"."+theName);
+	public void strength(final double theStrength) {
+		_cStrength = theStrength;
 	}
 	
-	public void strength(final float theStrength) {
-		_myStrength = theStrength;
+	@Override
+	public void setUniforms() {
+		super.setUniforms();
+		if(_myTrigger) {
+			_myTrigger = false;
+			_myShader.uniform1f(_myStrengthParameter, _cStrength);
+		}else {
+			_myShader.uniform1f(_myStrengthParameter, 0);
+		}
 	}
 	
 	private boolean _myTrigger = false;
@@ -71,11 +61,6 @@ public abstract class CCGPUImpulse {
 	}
 	
 	public void update(final CCAnimator theAnimator) {
-		if(_myTrigger) {
-			_myTrigger = false;
-			_myVelocityShader.parameter(_myStrengthParameter, _myStrength);
-		}else {
-			_myVelocityShader.parameter(_myStrengthParameter, 0);
-		}
+		
 	}
 }
