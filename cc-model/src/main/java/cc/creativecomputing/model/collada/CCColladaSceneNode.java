@@ -12,6 +12,7 @@ package cc.creativecomputing.model.collada;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
+import cc.creativecomputing.math.CCTransform;
 import cc.creativecomputing.math.CCVector3;
 
 /**
@@ -40,7 +42,7 @@ import cc.creativecomputing.math.CCVector3;
  * @author christianriekoff
  *
  */
-public class CCColladaSceneNode extends CCColladaElement{
+public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCColladaSceneNode>{
 	
 	public enum CCColladaSceneNodeType{
 		JOINT, NODE
@@ -58,9 +60,10 @@ public class CCColladaSceneNode extends CCColladaElement{
 	private List<CCColladaSceneNode> _myNodes = new ArrayList<CCColladaSceneNode>();
 	
 	private CCMatrix4x4 _myMatrix;
+	private CCTransform _myTransform;
 	private CCColladaSceneNodeType _myType;
 	
-	private CCColladaSceneNodeInstanceType _myInstanceType;
+	private CCColladaSceneNodeInstanceType _myInstanceType = null;
 	
 	private List<CCMesh> _myGeometries = new ArrayList<>();
 	private CCCamera _myCamera;
@@ -71,6 +74,7 @@ public class CCColladaSceneNode extends CCColladaElement{
 		_myType = CCColladaSceneNodeType.valueOf(theNodeXML.attribute("type", "NODE"));
 		
 		_myMatrix = new CCMatrix4x4();
+		_myTransform = new CCTransform();
 		
 		for(CCXMLElement myChild:theNodeXML){
 			switch(myChild.name()){
@@ -84,15 +88,31 @@ public class CCColladaSceneNode extends CCColladaElement{
 				break;
 			case "translate":
 				String[] myTranslattion = myChild.content().split("\\s");
-				_myMatrix.applyTranslationPre(
+				
+//				_myMatrix.applyTranslationPre(
+//					Float.parseFloat(myTranslattion[0]), 
+//					Float.parseFloat(myTranslattion[1]), 
+//					Float.parseFloat(myTranslattion[2])
+//				);
+				
+				_myTransform.translation(
 					Float.parseFloat(myTranslattion[0]), 
 					Float.parseFloat(myTranslattion[1]), 
 					Float.parseFloat(myTranslattion[2])
 				);
+				
 				break;
 			case "rotate":
 				String[] myRotation = myChild.content().split("\\s");
-				_myMatrix.applyRotation(
+	
+//				_myMatrix.applyRotation(
+//					CCMath.radians(Float.parseFloat(myRotation[3])),
+//					Float.parseFloat(myRotation[0]), 
+//					Float.parseFloat(myRotation[1]), 
+//					Float.parseFloat(myRotation[2])
+//				);
+				
+				_myTransform.rotate(
 					CCMath.radians(Float.parseFloat(myRotation[3])),
 					Float.parseFloat(myRotation[0]), 
 					Float.parseFloat(myRotation[1]), 
@@ -101,7 +121,14 @@ public class CCColladaSceneNode extends CCColladaElement{
 				break;
 			case "scale":
 				String[] myScale = myChild.content().split("\\s");
-				_myMatrix.scale(
+				
+//				_myMatrix.scale(
+//					Float.parseFloat(myScale[0]), 
+//					Float.parseFloat(myScale[1]), 
+//					Float.parseFloat(myScale[2])
+//				);
+				
+				_myTransform.scale(
 					Float.parseFloat(myScale[0]), 
 					Float.parseFloat(myScale[1]), 
 					Float.parseFloat(myScale[2])
@@ -115,6 +142,9 @@ public class CCColladaSceneNode extends CCColladaElement{
 				CCVector3 myCameraTarget = _myCamera.target();
 				_myMatrix.applyPostPoint(myCameraPosition, myCameraPosition);
 				_myMatrix.applyPostPoint(myCameraTarget, myCameraTarget);
+				
+				_myTransform.applyForward(myCameraPosition, myCameraPosition);
+				_myTransform.applyForward(myCameraTarget, myCameraTarget);
 				
 				_myCamera.position(myCameraPosition);
 				_myCamera.target(myCameraTarget);
@@ -145,17 +175,26 @@ public class CCColladaSceneNode extends CCColladaElement{
 				_myInstanceType = CCColladaSceneNodeInstanceType.GEOMETRY;
 				break;
 			case "node":
-				_myInstanceType = CCColladaSceneNodeInstanceType.NODE;
+				if(_myInstanceType == null)_myInstanceType = CCColladaSceneNodeInstanceType.NODE;
 				CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, myChild);
 				_myNodeMap.put(myNode.id(), myNode);
 				_myNodes.add(myNode);
 				break;
 			}
 		}
+		
+	}
+	
+	public boolean hasChildren(){
+		return _myNodes != null && _myNodes.size() > 1;
 	}
 	
 	public List<CCColladaSceneNode> children(){
 		return _myNodes;
+	}
+	
+	public List<CCMesh> geometries(){
+		return _myGeometries;
 	}
 	
 	/**
@@ -210,6 +249,10 @@ public class CCColladaSceneNode extends CCColladaElement{
 	public CCMatrix4x4 matrix() {
 		return _myMatrix;
 	}
+	
+	public CCTransform transform(){
+		return _myTransform;
+	}
 
 	public CCColladaSceneNodeType type() {
 		return _myType;
@@ -242,6 +285,7 @@ public class CCColladaSceneNode extends CCColladaElement{
 			
 			g.pushMatrix();
 			g.applyMatrix(_myMatrix);
+			g.applyMatrix(_myTransform.toMatrix());
 			for(CCMesh myGeometry:_myGeometries){
 				myGeometry.draw(g);
 			}
@@ -250,6 +294,7 @@ public class CCColladaSceneNode extends CCColladaElement{
 		case NODE:
 			g.pushMatrix();
 			g.applyMatrix(_myMatrix);
+			g.applyMatrix(_myTransform.toMatrix());
 			for(CCColladaSceneNode myNode:_myNodes){
 				myNode.draw(g);
 			}
@@ -262,5 +307,10 @@ public class CCColladaSceneNode extends CCColladaElement{
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public Iterator<CCColladaSceneNode> iterator() {
+		return _myNodes.iterator();
 	}
 }
