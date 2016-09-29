@@ -88,6 +88,10 @@ public class CCTransform implements Cloneable, Externalizable {
 		_myIsUniformScale = theSource.isUniformScale();
 
 	}
+	
+	public CCMatrix3x3 matrix(){
+		return _myMatrix;
+	}
 
 	/**
 	 * Internal only constructor, generally used for making an immutable
@@ -225,11 +229,25 @@ public class CCTransform implements Cloneable, Externalizable {
 	}
 	
 	public void rotation(final double theAngle, final double theX, final double theY, final double theZ){
-		rotation(new CCQuaternion().applyRotation(theAngle, theX, theY, theZ));
+		_myMatrix.fromAngleNormalAxis(theAngle, theX, theY, theZ);
+		updateFlags(true);
+//		rotation(new CCQuaternion().applyRotation(theAngle, theX, theY, theZ));
 	}
 	
 	public void rotation(final double theAngle, final CCVector3 theAxis){
-		rotation(new CCQuaternion().applyRotation(theAngle, theAxis.x, theAxis.y, theAxis.z));
+		_myMatrix.fromAngleNormalAxis(theAngle, theAxis);
+		updateFlags(true);
+//		rotation(new CCQuaternion().applyRotation(theAngle, theAxis.x, theAxis.y, theAxis.z));
+	}
+	
+	public void rotate(final double theAngle, final double theX, final double theY, final double theZ){
+		_myMatrix.applyRotation(theAngle, theX, theY, theZ);
+		updateFlags(true);
+//		rotation(new CCQuaternion().applyRotation(theAngle, theX, theY, theZ));
+	}
+	
+	public void rotate(final double theAngle, final CCVector3 theAxis){
+		rotate(theAngle, theAxis.x, theAxis.y, theAxis.z);
 	}
 
 	public CCVector3 translation() {
