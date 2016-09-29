@@ -4,2210 +4,2186 @@
 		<element id="0">
 			<motors>
 				<motor id="0">
-					<position x="-8772.059" y="1273.5" z="-130.74019"/>
-					<connectionPosition x="-8609.67" y="86.596" z="85.53819"/>
-				</motor>
-				<motor id="1">
-					<position x="-8291.719" y="1273.5" z="509.0042"/>
-					<connectionPosition x="-8453.705" y="86.117" z="293.2616"/>
+					<position x="-99.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="-117.0"/>
 				</motor>
 				<bounds>
-					<point x="-8753.126" y="973.5" z="-105.52523"/>
-					<point x="-8310.651" y="973.5" z="483.78925"/>
-					<point x="-8392.69" y="-326.5" z="374.5244"/>
-					<point x="-8671.087" y="-326.5" z="3.7395935"/>
+					<point x="-99.0" y="0.0" z="-117.0"/>
+					<point x="-99.0" y="380.0" z="-117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="0"/>
-				<light id="1"/>
-				<light id="2"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="1">
 			<motors>
-				<motor id="2">
-					<position x="-8734.474" y="1273.5" z="-158.96019"/>
-					<connectionPosition x="-8571.737" y="84.248" z="57.781998"/>
-				</motor>
-				<motor id="3">
-					<position x="-8254.134" y="1273.5" z="480.78418"/>
-					<connectionPosition x="-8427.578" y="84.058" z="249.78128"/>
+				<motor id="1">
+					<position x="-99.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="-99.0"/>
 				</motor>
 				<bounds>
-					<point x="-8715.541" y="973.5" z="-133.74524"/>
-					<point x="-8273.066" y="973.5" z="455.5692"/>
-					<point x="-8355.105" y="-326.5" z="346.30438"/>
-					<point x="-8633.502" y="-326.5" z="-24.480408"/>
+					<point x="-99.0" y="0.0" z="-99.0"/>
+					<point x="-99.0" y="380.0" z="-99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="3"/>
-				<light id="4"/>
-				<light id="5"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="2">
 			<motors>
-				<motor id="4">
-					<position x="-8696.889" y="1273.5" z="-187.18022"/>
-					<connectionPosition x="-8528.605" y="78.031" z="36.94864"/>
-				</motor>
-				<motor id="5">
-					<position x="-8216.549" y="1273.5" z="452.56415"/>
-					<connectionPosition x="-8395.505" y="77.896" z="214.2194"/>
+				<motor id="2">
+					<position x="-99.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="-81.0"/>
 				</motor>
 				<bounds>
-					<point x="-8677.956" y="973.5" z="-161.96527"/>
-					<point x="-8235.481" y="973.5" z="427.34918"/>
-					<point x="-8317.5205" y="-326.5" z="318.08435"/>
-					<point x="-8595.917" y="-326.5" z="-52.70044"/>
+					<point x="-99.0" y="0.0" z="-81.0"/>
+					<point x="-99.0" y="380.0" z="-81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="6"/>
-				<light id="7"/>
-				<light id="8"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="3">
 			<motors>
-				<motor id="6">
-					<position x="-8659.304" y="1273.5" z="-215.40022"/>
-					<connectionPosition x="-8485.206" y="70.177" z="16.473526"/>
-				</motor>
-				<motor id="7">
-					<position x="-8178.9634" y="1273.5" z="424.34418"/>
-					<connectionPosition x="-8358.86" y="70.054" z="184.7471"/>
+				<motor id="3">
+					<position x="-99.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="-63.0"/>
 				</motor>
 				<bounds>
-					<point x="-8640.371" y="973.5" z="-190.18527"/>
-					<point x="-8197.8955" y="973.5" z="399.12924"/>
-					<point x="-8279.936" y="-326.5" z="289.8645"/>
-					<point x="-8558.332" y="-326.5" z="-80.92044"/>
+					<point x="-99.0" y="0.0" z="-63.0"/>
+					<point x="-99.0" y="380.0" z="-63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="9"/>
-				<light id="10"/>
-				<light id="11"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="4">
 			<motors>
-				<motor id="8">
-					<position x="-8621.719" y="1273.5" z="-243.62022"/>
-					<connectionPosition x="-8444.173" y="54.196" z="-7.1539154"/>
-				</motor>
-				<motor id="9">
-					<position x="-8141.3784" y="1273.5" z="396.12415"/>
-					<connectionPosition x="-8315.009" y="54.119" z="164.87335"/>
+				<motor id="4">
+					<position x="-99.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="-45.0"/>
 				</motor>
 				<bounds>
-					<point x="-8602.786" y="973.5" z="-218.40527"/>
-					<point x="-8160.3105" y="973.5" z="370.9092"/>
-					<point x="-8242.351" y="-326.5" z="261.64447"/>
-					<point x="-8520.747" y="-326.5" z="-109.14044"/>
+					<point x="-99.0" y="0.0" z="-45.0"/>
+					<point x="-99.0" y="380.0" z="-45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="12"/>
-				<light id="13"/>
-				<light id="14"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="5">
 			<motors>
-				<motor id="10">
-					<position x="-8584.134" y="1273.5" z="-271.8402"/>
-					<connectionPosition x="-8404.578" y="47.615" z="-32.698196"/>
-				</motor>
-				<motor id="11">
-					<position x="-8103.7935" y="1273.5" z="367.90414"/>
-					<connectionPosition x="-8278.842" y="47.552" z="134.7645"/>
+				<motor id="5">
+					<position x="-99.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="-27.0"/>
 				</motor>
 				<bounds>
-					<point x="-8565.201" y="973.5" z="-246.62524"/>
-					<point x="-8122.7256" y="973.5" z="342.6892"/>
-					<point x="-8204.766" y="-326.5" z="233.42447"/>
-					<point x="-8483.162" y="-326.5" z="-137.36043"/>
+					<point x="-99.0" y="0.0" z="-27.0"/>
+					<point x="-99.0" y="380.0" z="-27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="15"/>
-				<light id="16"/>
-				<light id="17"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="6">
 			<motors>
-				<motor id="12">
-					<position x="-8546.549" y="1273.5" z="-300.06024"/>
-					<connectionPosition x="-8366.748" y="42.536" z="-60.59114"/>
-				</motor>
-				<motor id="13">
-					<position x="-8066.2085" y="1273.5" z="339.68414"/>
-					<connectionPosition x="-8242.718" y="42.504" z="104.598854"/>
+				<motor id="6">
+					<position x="-99.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="-9.0"/>
 				</motor>
 				<bounds>
-					<point x="-8527.616" y="973.5" z="-274.84528"/>
-					<point x="-8085.1406" y="973.5" z="314.4692"/>
-					<point x="-8167.18" y="-326.5" z="205.20447"/>
-					<point x="-8445.577" y="-326.5" z="-165.58046"/>
+					<point x="-99.0" y="0.0" z="-9.0"/>
+					<point x="-99.0" y="380.0" z="-9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="18"/>
-				<light id="19"/>
-				<light id="20"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="7">
 			<motors>
-				<motor id="14">
-					<position x="-8508.964" y="1273.5" z="-328.28027"/>
-					<connectionPosition x="-8329.748" y="39.062" z="-89.59004"/>
-				</motor>
-				<motor id="15">
-					<position x="-8028.6235" y="1273.5" z="311.4641"/>
-					<connectionPosition x="-8206.463" y="39.05" z="74.608345"/>
+				<motor id="7">
+					<position x="-99.0" y="0.0" z="9.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="9.0"/>
 				</motor>
 				<bounds>
-					<point x="-8490.031" y="973.5" z="-303.0653"/>
-					<point x="-8047.5557" y="973.5" z="286.24918"/>
-					<point x="-8129.595" y="-326.5" z="176.98444"/>
-					<point x="-8407.992" y="-326.5" z="-193.80049"/>
+					<point x="-99.0" y="0.0" z="9.0"/>
+					<point x="-99.0" y="380.0" z="9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="21"/>
-				<light id="22"/>
-				<light id="23"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="8">
 			<motors>
-				<motor id="16">
-					<position x="-8471.379" y="1273.5" z="-356.50024"/>
-					<connectionPosition x="-8293.548" y="39.129" z="-119.6541"/>
-				</motor>
-				<motor id="17">
-					<position x="-7991.0386" y="1273.5" z="283.2441"/>
-					<connectionPosition x="-8170.3096" y="39.14" z="44.48111"/>
+				<motor id="8">
+					<position x="-99.0" y="0.0" z="27.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="27.0"/>
 				</motor>
 				<bounds>
-					<point x="-8452.446" y="973.5" z="-331.28528"/>
-					<point x="-8009.9707" y="973.5" z="258.02917"/>
-					<point x="-8092.0103" y="-326.5" z="148.76443"/>
-					<point x="-8370.407" y="-326.5" z="-222.02046"/>
+					<point x="-99.0" y="0.0" z="27.0"/>
+					<point x="-99.0" y="380.0" z="27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="24"/>
-				<light id="25"/>
-				<light id="26"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="9">
 			<motors>
-				<motor id="18">
-					<position x="-8433.794" y="1273.5" z="-384.72028"/>
-					<connectionPosition x="-8257.113" y="42.511" z="-149.40633"/>
-				</motor>
-				<motor id="19">
-					<position x="-7953.4536" y="1273.5" z="255.0241"/>
-					<connectionPosition x="-8133.548" y="42.543" z="15.164734"/>
+				<motor id="9">
+					<position x="-99.0" y="0.0" z="45.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="45.0"/>
 				</motor>
 				<bounds>
-					<point x="-8414.861" y="973.5" z="-359.5053"/>
-					<point x="-7972.3857" y="973.5" z="229.80916"/>
-					<point x="-8054.4253" y="-326.5" z="120.54442"/>
-					<point x="-8332.822" y="-326.5" z="-250.2405"/>
+					<point x="-99.0" y="0.0" z="45.0"/>
+					<point x="-99.0" y="380.0" z="45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="27"/>
-				<light id="28"/>
-				<light id="29"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="10">
 			<motors>
-				<motor id="20">
-					<position x="-8396.209" y="1273.5" z="-412.94025"/>
-					<connectionPosition x="-8221.014" y="47.568" z="-179.60551"/>
-				</motor>
-				<motor id="21">
-					<position x="-7915.8687" y="1273.5" z="226.8041"/>
-					<connectionPosition x="-8095.268" y="47.631" z="-12.130051"/>
+				<motor id="10">
+					<position x="-99.0" y="0.0" z="63.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="63.0"/>
 				</motor>
 				<bounds>
-					<point x="-8377.276" y="973.5" z="-387.72528"/>
-					<point x="-7934.801" y="973.5" z="201.58916"/>
-					<point x="-8016.8403" y="-326.5" z="92.32443"/>
-					<point x="-8295.237" y="-326.5" z="-278.4605"/>
+					<point x="-99.0" y="0.0" z="63.0"/>
+					<point x="-99.0" y="380.0" z="63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="30"/>
-				<light id="31"/>
-				<light id="32"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="11">
 			<motors>
-				<motor id="22">
-					<position x="-8358.624" y="1273.5" z="-441.16034"/>
-					<connectionPosition x="-8184.8286" y="54.119" z="-209.68959"/>
-				</motor>
-				<motor id="23">
-					<position x="-7878.2837" y="1273.5" z="198.58406"/>
-					<connectionPosition x="-8055.6387" y="54.196" z="-37.627167"/>
+				<motor id="11">
+					<position x="-99.0" y="0.0" z="81.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="81.0"/>
 				</motor>
 				<bounds>
-					<point x="-8339.691" y="973.5" z="-415.94537"/>
-					<point x="-7897.216" y="973.5" z="173.36913"/>
-					<point x="-7979.2554" y="-326.5" z="64.104385"/>
-					<point x="-8257.652" y="-326.5" z="-306.68054"/>
+					<point x="-99.0" y="0.0" z="81.0"/>
+					<point x="-99.0" y="380.0" z="81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="33"/>
-				<light id="34"/>
-				<light id="35"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="12">
 			<motors>
-				<motor id="24">
-					<position x="-8321.039" y="1273.5" z="-469.3803"/>
-					<connectionPosition x="-8141.0854" y="70.043" z="-229.70808"/>
-				</motor>
-				<motor id="25">
-					<position x="-7840.6987" y="1273.5" z="170.36406"/>
-					<connectionPosition x="-8014.6733" y="70.166" z="-61.344955"/>
+				<motor id="12">
+					<position x="-99.0" y="0.0" z="99.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="99.0"/>
 				</motor>
 				<bounds>
-					<point x="-8302.106" y="973.5" z="-444.16534"/>
-					<point x="-7859.631" y="973.5" z="145.14912"/>
-					<point x="-7941.6704" y="-326.5" z="35.884384"/>
-					<point x="-8220.067" y="-326.5" z="-334.9005"/>
+					<point x="-99.0" y="0.0" z="99.0"/>
+					<point x="-99.0" y="380.0" z="99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="36"/>
-				<light id="37"/>
-				<light id="38"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="13">
 			<motors>
-				<motor id="26">
-					<position x="-8283.454" y="1273.5" z="-497.60028"/>
-					<connectionPosition x="-8104.481" y="77.921" z="-259.23395"/>
-				</motor>
-				<motor id="27">
-					<position x="-7803.114" y="1273.5" z="142.14406"/>
-					<connectionPosition x="-7971.384" y="78.056" z="-81.96718"/>
+				<motor id="13">
+					<position x="-99.0" y="0.0" z="117.0"/>
+					<connectionPosition x="-99.0" y="190.0" z="117.0"/>
 				</motor>
 				<bounds>
-					<point x="-8264.521" y="973.5" z="-472.3853"/>
-					<point x="-7822.046" y="973.5" z="116.92912"/>
-					<point x="-7904.0854" y="-326.5" z="7.664383"/>
-					<point x="-8182.4824" y="-326.5" z="-363.12054"/>
+					<point x="-99.0" y="0.0" z="117.0"/>
+					<point x="-99.0" y="380.0" z="117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="39"/>
-				<light id="40"/>
-				<light id="41"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="14">
 			<motors>
-				<motor id="28">
-					<position x="-8245.869" y="1273.5" z="-525.8204"/>
-					<connectionPosition x="-8072.2344" y="84.074" z="-294.56396"/>
-				</motor>
-				<motor id="29">
-					<position x="-7765.5283" y="1273.5" z="113.92403"/>
-					<connectionPosition x="-7928.064" y="84.264" z="-102.549484"/>
+				<motor id="14">
+					<position x="-81.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="-117.0"/>
 				</motor>
 				<bounds>
-					<point x="-8226.937" y="973.5" z="-500.60544"/>
-					<point x="-7784.4604" y="973.5" z="88.70909"/>
-					<point x="-7866.5" y="-326.5" z="-20.555649"/>
-					<point x="-8144.8975" y="-326.5" z="-391.3407"/>
+					<point x="-81.0" y="0.0" z="-117.0"/>
+					<point x="-81.0" y="380.0" z="-117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="42"/>
-				<light id="43"/>
-				<light id="44"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="15">
 			<motors>
-				<motor id="30">
-					<position x="-8208.284" y="1273.5" z="-554.04034"/>
-					<connectionPosition x="-8045.8955" y="86.596" z="-337.76196"/>
-				</motor>
-				<motor id="31">
-					<position x="-7727.9434" y="1273.5" z="85.704025"/>
-					<connectionPosition x="-7889.93" y="86.117" z="-130.03859"/>
+				<motor id="15">
+					<position x="-81.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="-99.0"/>
 				</motor>
 				<bounds>
-					<point x="-8189.352" y="973.5" z="-528.8254"/>
-					<point x="-7746.8755" y="973.5" z="60.489086"/>
-					<point x="-7828.915" y="-326.5" z="-48.77565"/>
-					<point x="-8107.3125" y="-326.5" z="-419.56067"/>
+					<point x="-81.0" y="0.0" z="-99.0"/>
+					<point x="-81.0" y="380.0" z="-99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="45"/>
-				<light id="46"/>
-				<light id="47"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="16">
 			<motors>
-				<motor id="32">
-					<position x="-5291.7188" y="1273.5" z="-554.0362"/>
-					<connectionPosition x="-5454.1074" y="86.596" z="-337.7578"/>
-				</motor>
-				<motor id="33">
-					<position x="-5772.0596" y="1273.5" z="85.70819"/>
-					<connectionPosition x="-5610.073" y="86.117" z="-130.03441"/>
+				<motor id="16">
+					<position x="-81.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="-81.0"/>
 				</motor>
 				<bounds>
-					<point x="-5310.651" y="973.5" z="-528.8212"/>
-					<point x="-5753.1274" y="973.5" z="60.49325"/>
-					<point x="-5671.088" y="-326.5" z="-48.771484"/>
-					<point x="-5392.6904" y="-326.5" z="-419.55652"/>
+					<point x="-81.0" y="0.0" z="-81.0"/>
+					<point x="-81.0" y="380.0" z="-81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="48"/>
-				<light id="49"/>
-				<light id="50"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="17">
 			<motors>
-				<motor id="34">
-					<position x="-5254.134" y="1273.5" z="-525.81616"/>
-					<connectionPosition x="-5416.871" y="84.248" z="-309.07397"/>
-				</motor>
-				<motor id="35">
-					<position x="-5734.4746" y="1273.5" z="113.92819"/>
-					<connectionPosition x="-5561.0303" y="84.058" z="-117.07471"/>
+				<motor id="17">
+					<position x="-81.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="-63.0"/>
 				</motor>
 				<bounds>
-					<point x="-5273.066" y="973.5" z="-500.60123"/>
-					<point x="-5715.5425" y="973.5" z="88.71326"/>
-					<point x="-5633.503" y="-326.5" z="-20.551483"/>
-					<point x="-5355.1055" y="-326.5" z="-391.3365"/>
+					<point x="-81.0" y="0.0" z="-63.0"/>
+					<point x="-81.0" y="380.0" z="-63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="51"/>
-				<light id="52"/>
-				<light id="53"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="18">
 			<motors>
-				<motor id="36">
-					<position x="-5216.549" y="1273.5" z="-497.59616"/>
-					<connectionPosition x="-5384.832" y="78.031" z="-273.46732"/>
-				</motor>
-				<motor id="37">
-					<position x="-5696.8896" y="1273.5" z="142.14822"/>
-					<connectionPosition x="-5517.9326" y="77.896" z="-96.19656"/>
+				<motor id="18">
+					<position x="-81.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="-45.0"/>
 				</motor>
 				<bounds>
-					<point x="-5235.481" y="973.5" z="-472.38123"/>
-					<point x="-5677.9575" y="973.5" z="116.93329"/>
-					<point x="-5595.918" y="-326.5" z="7.6685486"/>
-					<point x="-5317.5205" y="-326.5" z="-363.1165"/>
+					<point x="-81.0" y="0.0" z="-45.0"/>
+					<point x="-81.0" y="380.0" z="-45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="54"/>
-				<light id="55"/>
-				<light id="56"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="19">
 			<motors>
-				<motor id="38">
-					<position x="-5178.964" y="1273.5" z="-469.37616"/>
-					<connectionPosition x="-5353.062" y="70.177" z="-237.50241"/>
-				</motor>
-				<motor id="39">
-					<position x="-5659.3047" y="1273.5" z="170.36823"/>
-					<connectionPosition x="-5479.407" y="70.054" z="-69.22885"/>
+				<motor id="19">
+					<position x="-81.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="-27.0"/>
 				</motor>
 				<bounds>
-					<point x="-5197.896" y="973.5" z="-444.16122"/>
-					<point x="-5640.3726" y="973.5" z="145.15329"/>
-					<point x="-5558.333" y="-326.5" z="35.88855"/>
-					<point x="-5279.9355" y="-326.5" z="-334.89648"/>
+					<point x="-81.0" y="0.0" z="-27.0"/>
+					<point x="-81.0" y="380.0" z="-27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="57"/>
-				<light id="58"/>
-				<light id="59"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="20">
 			<motors>
-				<motor id="40">
-					<position x="-5141.379" y="1273.5" z="-441.15616"/>
-					<connectionPosition x="-5318.9253" y="54.196" z="-204.68983"/>
-				</motor>
-				<motor id="41">
-					<position x="-5621.7197" y="1273.5" z="198.58823"/>
-					<connectionPosition x="-5448.089" y="54.119" z="-32.662567"/>
+				<motor id="20">
+					<position x="-81.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="-9.0"/>
 				</motor>
 				<bounds>
-					<point x="-5160.311" y="973.5" z="-415.94122"/>
-					<point x="-5602.7876" y="973.5" z="173.37329"/>
-					<point x="-5520.748" y="-326.5" z="64.10855"/>
-					<point x="-5242.3506" y="-326.5" z="-306.67648"/>
+					<point x="-81.0" y="0.0" z="-9.0"/>
+					<point x="-81.0" y="380.0" z="-9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="60"/>
-				<light id="61"/>
-				<light id="62"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="21">
 			<motors>
-				<motor id="42">
-					<position x="-5103.794" y="1273.5" z="-412.93616"/>
-					<connectionPosition x="-5283.3496" y="47.615" z="-173.7941"/>
-				</motor>
-				<motor id="43">
-					<position x="-5584.135" y="1273.5" z="226.80823"/>
-					<connectionPosition x="-5409.086" y="47.552" z="-6.3314056"/>
+				<motor id="21">
+					<position x="-81.0" y="0.0" z="9.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="9.0"/>
 				</motor>
 				<bounds>
-					<point x="-5122.726" y="973.5" z="-387.72122"/>
-					<point x="-5565.2026" y="973.5" z="201.59329"/>
-					<point x="-5483.163" y="-326.5" z="92.32855"/>
-					<point x="-5204.7656" y="-326.5" z="-278.45648"/>
+					<point x="-81.0" y="0.0" z="9.0"/>
+					<point x="-81.0" y="380.0" z="9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="63"/>
-				<light id="64"/>
-				<light id="65"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="22">
 			<motors>
-				<motor id="44">
-					<position x="-5066.209" y="1273.5" z="-384.71613"/>
-					<connectionPosition x="-5246.0103" y="42.536" z="-145.24701"/>
-				</motor>
-				<motor id="45">
-					<position x="-5546.55" y="1273.5" z="255.02826"/>
-					<connectionPosition x="-5370.04" y="42.504" z="19.942993"/>
+				<motor id="22">
+					<position x="-81.0" y="0.0" z="27.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="27.0"/>
 				</motor>
 				<bounds>
-					<point x="-5085.141" y="973.5" z="-359.5012"/>
-					<point x="-5527.6177" y="973.5" z="229.81332"/>
-					<point x="-5445.578" y="-326.5" z="120.548584"/>
-					<point x="-5167.1807" y="-326.5" z="-250.23645"/>
+					<point x="-81.0" y="0.0" z="27.0"/>
+					<point x="-81.0" y="380.0" z="27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="66"/>
-				<light id="67"/>
-				<light id="68"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="23">
 			<motors>
-				<motor id="46">
-					<position x="-5028.624" y="1273.5" z="-356.4961"/>
-					<connectionPosition x="-5207.8403" y="39.062" z="-117.80588"/>
-				</motor>
-				<motor id="47">
-					<position x="-5508.965" y="1273.5" z="283.2483"/>
-					<connectionPosition x="-5331.1255" y="39.05" z="46.392517"/>
+				<motor id="23">
+					<position x="-81.0" y="0.0" z="45.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="45.0"/>
 				</motor>
 				<bounds>
-					<point x="-5047.556" y="973.5" z="-331.28116"/>
-					<point x="-5490.0327" y="973.5" z="258.03336"/>
-					<point x="-5407.993" y="-326.5" z="148.76862"/>
-					<point x="-5129.5957" y="-326.5" z="-222.01642"/>
+					<point x="-81.0" y="0.0" z="45.0"/>
+					<point x="-81.0" y="380.0" z="45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="69"/>
-				<light id="70"/>
-				<light id="71"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="24">
 			<motors>
-				<motor id="48">
-					<position x="-4991.039" y="1273.5" z="-328.27612"/>
-					<connectionPosition x="-5168.8706" y="39.129" z="-91.42993"/>
-				</motor>
-				<motor id="49">
-					<position x="-5471.3794" y="1273.5" z="311.46826"/>
-					<connectionPosition x="-5292.109" y="39.14" z="72.70526"/>
+				<motor id="24">
+					<position x="-81.0" y="0.0" z="63.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="63.0"/>
 				</motor>
 				<bounds>
-					<point x="-5009.971" y="973.5" z="-303.06116"/>
-					<point x="-5452.4473" y="973.5" z="286.25333"/>
-					<point x="-5370.4077" y="-326.5" z="176.98859"/>
-					<point x="-5092.0107" y="-326.5" z="-193.79634"/>
+					<point x="-81.0" y="0.0" z="63.0"/>
+					<point x="-81.0" y="380.0" z="63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="72"/>
-				<light id="73"/>
-				<light id="74"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="25">
 			<motors>
-				<motor id="50">
-					<position x="-4953.454" y="1273.5" z="-300.0561"/>
-					<connectionPosition x="-5130.1353" y="42.511" z="-64.74211"/>
-				</motor>
-				<motor id="51">
-					<position x="-5433.7944" y="1273.5" z="339.6883"/>
-					<connectionPosition x="-5253.7007" y="42.543" z="99.82892"/>
+				<motor id="25">
+					<position x="-81.0" y="0.0" z="81.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="81.0"/>
 				</motor>
 				<bounds>
-					<point x="-4972.386" y="973.5" z="-274.84113"/>
-					<point x="-5414.8623" y="973.5" z="314.47336"/>
-					<point x="-5332.8228" y="-326.5" z="205.20862"/>
-					<point x="-5054.426" y="-326.5" z="-165.57631"/>
+					<point x="-81.0" y="0.0" z="81.0"/>
+					<point x="-81.0" y="380.0" z="81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="75"/>
-				<light id="76"/>
-				<light id="77"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="26">
 			<motors>
-				<motor id="52">
-					<position x="-4915.869" y="1273.5" z="-271.8361"/>
-					<connectionPosition x="-5091.0645" y="47.568" z="-38.501312"/>
-				</motor>
-				<motor id="53">
-					<position x="-5396.2095" y="1273.5" z="367.90826"/>
-					<connectionPosition x="-5216.81" y="47.631" z="128.97415"/>
+				<motor id="26">
+					<position x="-81.0" y="0.0" z="99.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="99.0"/>
 				</motor>
 				<bounds>
-					<point x="-4934.8013" y="973.5" z="-246.62112"/>
-					<point x="-5377.2773" y="973.5" z="342.69333"/>
-					<point x="-5295.238" y="-326.5" z="233.42859"/>
-					<point x="-5016.841" y="-326.5" z="-137.35631"/>
+					<point x="-81.0" y="0.0" z="99.0"/>
+					<point x="-81.0" y="380.0" z="99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="78"/>
-				<light id="79"/>
-				<light id="80"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="27">
 			<motors>
-				<motor id="54">
-					<position x="-4878.284" y="1273.5" z="-243.61606"/>
-					<connectionPosition x="-5052.0796" y="54.119" z="-12.14534"/>
-				</motor>
-				<motor id="55">
-					<position x="-5358.6245" y="1273.5" z="396.12836"/>
-					<connectionPosition x="-5181.2695" y="54.196" z="159.91711"/>
+				<motor id="27">
+					<position x="-81.0" y="0.0" z="117.0"/>
+					<connectionPosition x="-81.0" y="190.0" z="117.0"/>
 				</motor>
 				<bounds>
-					<point x="-4897.2163" y="973.5" z="-218.4011"/>
-					<point x="-5339.6924" y="973.5" z="370.91342"/>
-					<point x="-5257.653" y="-326.5" z="261.64868"/>
-					<point x="-4979.256" y="-326.5" z="-109.13628"/>
+					<point x="-81.0" y="0.0" z="117.0"/>
+					<point x="-81.0" y="380.0" z="117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="81"/>
-				<light id="82"/>
-				<light id="83"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="28">
 			<motors>
-				<motor id="56">
-					<position x="-4840.699" y="1273.5" z="-215.39606"/>
-					<connectionPosition x="-5020.653" y="70.043" z="24.276184"/>
-				</motor>
-				<motor id="57">
-					<position x="-5321.0396" y="1273.5" z="424.34833"/>
-					<connectionPosition x="-5147.065" y="70.166" z="192.63931"/>
+				<motor id="28">
+					<position x="-63.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="-117.0"/>
 				</motor>
 				<bounds>
-					<point x="-4859.6313" y="973.5" z="-190.18109"/>
-					<point x="-5302.1074" y="973.5" z="399.1334"/>
-					<point x="-5220.068" y="-326.5" z="289.86865"/>
-					<point x="-4941.671" y="-326.5" z="-80.916275"/>
+					<point x="-63.0" y="0.0" z="-117.0"/>
+					<point x="-63.0" y="380.0" z="-117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="84"/>
-				<light id="85"/>
-				<light id="86"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="29">
 			<motors>
-				<motor id="58">
-					<position x="-4803.1143" y="1273.5" z="-187.17606"/>
-					<connectionPosition x="-4982.0874" y="77.921" z="51.190308"/>
-				</motor>
-				<motor id="59">
-					<position x="-5283.4546" y="1273.5" z="452.5683"/>
-					<connectionPosition x="-5115.1846" y="78.056" z="228.45709"/>
+				<motor id="29">
+					<position x="-63.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="-99.0"/>
 				</motor>
 				<bounds>
-					<point x="-4822.0464" y="973.5" z="-161.96109"/>
-					<point x="-5264.5225" y="973.5" z="427.35336"/>
-					<point x="-5182.483" y="-326.5" z="318.08862"/>
-					<point x="-4904.086" y="-326.5" z="-52.696274"/>
+					<point x="-63.0" y="0.0" z="-99.0"/>
+					<point x="-63.0" y="380.0" z="-99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="87"/>
-				<light id="88"/>
-				<light id="89"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="30">
 			<motors>
-				<motor id="60">
-					<position x="-4765.5293" y="1273.5" z="-158.95602"/>
-					<connectionPosition x="-4939.164" y="84.074" z="72.300385"/>
-				</motor>
-				<motor id="61">
-					<position x="-5245.8696" y="1273.5" z="480.7884"/>
-					<connectionPosition x="-5083.3345" y="84.264" z="264.31485"/>
+				<motor id="30">
+					<position x="-63.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="-81.0"/>
 				</motor>
 				<bounds>
-					<point x="-4784.4614" y="973.5" z="-133.74106"/>
-					<point x="-5226.9375" y="973.5" z="455.57346"/>
-					<point x="-5144.898" y="-326.5" z="346.30872"/>
-					<point x="-4866.501" y="-326.5" z="-24.476242"/>
+					<point x="-63.0" y="0.0" z="-81.0"/>
+					<point x="-63.0" y="380.0" z="-81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="90"/>
-				<light id="91"/>
-				<light id="92"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="31">
 			<motors>
-				<motor id="62">
-					<position x="-4727.9443" y="1273.5" z="-130.73602"/>
-					<connectionPosition x="-4890.333" y="86.596" z="85.54236"/>
-				</motor>
-				<motor id="63">
-					<position x="-5208.2847" y="1273.5" z="509.00836"/>
-					<connectionPosition x="-5046.2983" y="86.117" z="293.26575"/>
+				<motor id="31">
+					<position x="-63.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="-63.0"/>
 				</motor>
 				<bounds>
-					<point x="-4746.8765" y="973.5" z="-105.521065"/>
-					<point x="-5189.3525" y="973.5" z="483.79343"/>
-					<point x="-5107.313" y="-326.5" z="374.5287"/>
-					<point x="-4828.916" y="-326.5" z="3.7437592"/>
+					<point x="-63.0" y="0.0" z="-63.0"/>
+					<point x="-63.0" y="380.0" z="-63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="93"/>
-				<light id="94"/>
-				<light id="95"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="32">
 			<motors>
-				<motor id="64">
-					<position x="-2772.0593" y="1273.5" z="-130.74019"/>
-					<connectionPosition x="-2609.6704" y="86.596" z="85.53819"/>
-				</motor>
-				<motor id="65">
-					<position x="-2291.7185" y="1273.5" z="509.0042"/>
-					<connectionPosition x="-2453.705" y="86.117" z="293.2616"/>
+				<motor id="32">
+					<position x="-63.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="-45.0"/>
 				</motor>
 				<bounds>
-					<point x="-2753.1272" y="973.5" z="-105.52525"/>
-					<point x="-2310.6506" y="973.5" z="483.78928"/>
-					<point x="-2392.6902" y="-326.5" z="374.52454"/>
-					<point x="-2671.0876" y="-326.5" z="3.7394867"/>
+					<point x="-63.0" y="0.0" z="-45.0"/>
+					<point x="-63.0" y="380.0" z="-45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="96"/>
-				<light id="97"/>
-				<light id="98"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="33">
 			<motors>
-				<motor id="66">
-					<position x="-2734.474" y="1273.5" z="-158.96019"/>
-					<connectionPosition x="-2571.7373" y="84.248" z="57.781998"/>
-				</motor>
-				<motor id="67">
-					<position x="-2254.1335" y="1273.5" z="480.78418"/>
-					<connectionPosition x="-2427.5781" y="84.058" z="249.78128"/>
+				<motor id="33">
+					<position x="-63.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="-27.0"/>
 				</motor>
 				<bounds>
-					<point x="-2715.542" y="973.5" z="-133.74525"/>
-					<point x="-2273.0657" y="973.5" z="455.56924"/>
-					<point x="-2355.1052" y="-326.5" z="346.30444"/>
-					<point x="-2633.5024" y="-326.5" z="-24.480515"/>
+					<point x="-63.0" y="0.0" z="-27.0"/>
+					<point x="-63.0" y="380.0" z="-27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="99"/>
-				<light id="100"/>
-				<light id="101"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="34">
 			<motors>
-				<motor id="68">
-					<position x="-2696.8892" y="1273.5" z="-187.18022"/>
-					<connectionPosition x="-2528.6062" y="78.031" z="36.94864"/>
-				</motor>
-				<motor id="69">
-					<position x="-2216.5486" y="1273.5" z="452.56415"/>
-					<connectionPosition x="-2395.5056" y="77.896" z="214.2194"/>
+				<motor id="34">
+					<position x="-63.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="-9.0"/>
 				</motor>
 				<bounds>
-					<point x="-2677.957" y="973.5" z="-161.96529"/>
-					<point x="-2235.4807" y="973.5" z="427.3492"/>
-					<point x="-2317.5203" y="-326.5" z="318.0844"/>
-					<point x="-2595.9175" y="-326.5" z="-52.700546"/>
+					<point x="-63.0" y="0.0" z="-9.0"/>
+					<point x="-63.0" y="380.0" z="-9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="102"/>
-				<light id="103"/>
-				<light id="104"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="35">
 			<motors>
-				<motor id="70">
-					<position x="-2659.3042" y="1273.5" z="-215.40022"/>
-					<connectionPosition x="-2485.206" y="70.177" z="16.473526"/>
-				</motor>
-				<motor id="71">
-					<position x="-2178.9636" y="1273.5" z="424.34418"/>
-					<connectionPosition x="-2358.8608" y="70.054" z="184.7471"/>
+				<motor id="35">
+					<position x="-63.0" y="0.0" z="9.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="9.0"/>
 				</motor>
 				<bounds>
-					<point x="-2640.372" y="973.5" z="-190.18529"/>
-					<point x="-2197.8958" y="973.5" z="399.12924"/>
-					<point x="-2279.9353" y="-326.5" z="289.86444"/>
-					<point x="-2558.3325" y="-326.5" z="-80.92055"/>
+					<point x="-63.0" y="0.0" z="9.0"/>
+					<point x="-63.0" y="380.0" z="9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="105"/>
-				<light id="106"/>
-				<light id="107"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="36">
 			<motors>
-				<motor id="72">
-					<position x="-2621.7192" y="1273.5" z="-243.62022"/>
-					<connectionPosition x="-2444.1729" y="54.196" z="-7.1539154"/>
-				</motor>
-				<motor id="73">
-					<position x="-2141.3787" y="1273.5" z="396.12415"/>
-					<connectionPosition x="-2315.0093" y="54.119" z="164.87335"/>
+				<motor id="36">
+					<position x="-63.0" y="0.0" z="27.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="27.0"/>
 				</motor>
 				<bounds>
-					<point x="-2602.787" y="973.5" z="-218.40529"/>
-					<point x="-2160.3108" y="973.5" z="370.9092"/>
-					<point x="-2242.3503" y="-326.5" z="261.6444"/>
-					<point x="-2520.7476" y="-326.5" z="-109.14055"/>
+					<point x="-63.0" y="0.0" z="27.0"/>
+					<point x="-63.0" y="380.0" z="27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="108"/>
-				<light id="109"/>
-				<light id="110"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="37">
 			<motors>
-				<motor id="74">
-					<position x="-2584.1343" y="1273.5" z="-271.8402"/>
-					<connectionPosition x="-2404.5789" y="47.615" z="-32.698196"/>
-				</motor>
-				<motor id="75">
-					<position x="-2103.7937" y="1273.5" z="367.90414"/>
-					<connectionPosition x="-2278.8425" y="47.552" z="134.7645"/>
+				<motor id="37">
+					<position x="-63.0" y="0.0" z="45.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="45.0"/>
 				</motor>
 				<bounds>
-					<point x="-2565.2021" y="973.5" z="-246.62527"/>
-					<point x="-2122.7258" y="973.5" z="342.6892"/>
-					<point x="-2204.7654" y="-326.5" z="233.42441"/>
-					<point x="-2483.1626" y="-326.5" z="-137.36053"/>
+					<point x="-63.0" y="0.0" z="45.0"/>
+					<point x="-63.0" y="380.0" z="45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="111"/>
-				<light id="112"/>
-				<light id="113"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="38">
 			<motors>
-				<motor id="76">
-					<position x="-2546.5493" y="1273.5" z="-300.06024"/>
-					<connectionPosition x="-2366.7483" y="42.536" z="-60.59114"/>
-				</motor>
-				<motor id="77">
-					<position x="-2066.2087" y="1273.5" z="339.68414"/>
-					<connectionPosition x="-2242.7183" y="42.504" z="104.598854"/>
+				<motor id="38">
+					<position x="-63.0" y="0.0" z="63.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="63.0"/>
 				</motor>
 				<bounds>
-					<point x="-2527.6172" y="973.5" z="-274.8453"/>
-					<point x="-2085.1409" y="973.5" z="314.4692"/>
-					<point x="-2167.1804" y="-326.5" z="205.2044"/>
-					<point x="-2445.5776" y="-326.5" z="-165.58057"/>
+					<point x="-63.0" y="0.0" z="63.0"/>
+					<point x="-63.0" y="380.0" z="63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="114"/>
-				<light id="115"/>
-				<light id="116"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="39">
 			<motors>
-				<motor id="78">
-					<position x="-2508.9644" y="1273.5" z="-328.28027"/>
-					<connectionPosition x="-2329.748" y="39.062" z="-89.59004"/>
-				</motor>
-				<motor id="79">
-					<position x="-2028.6238" y="1273.5" z="311.4641"/>
-					<connectionPosition x="-2206.4626" y="39.05" z="74.608345"/>
+				<motor id="39">
+					<position x="-63.0" y="0.0" z="81.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="81.0"/>
 				</motor>
 				<bounds>
-					<point x="-2490.0322" y="973.5" z="-303.06534"/>
-					<point x="-2047.5559" y="973.5" z="286.24918"/>
-					<point x="-2129.5955" y="-326.5" z="176.98438"/>
-					<point x="-2407.9927" y="-326.5" z="-193.8006"/>
+					<point x="-63.0" y="0.0" z="81.0"/>
+					<point x="-63.0" y="380.0" z="81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="117"/>
-				<light id="118"/>
-				<light id="119"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="40">
 			<motors>
-				<motor id="80">
-					<position x="-2471.3794" y="1273.5" z="-356.50024"/>
-					<connectionPosition x="-2293.5476" y="39.129" z="-119.6541"/>
-				</motor>
-				<motor id="81">
-					<position x="-1991.0387" y="1273.5" z="283.2441"/>
-					<connectionPosition x="-2170.3096" y="39.14" z="44.48111"/>
+				<motor id="40">
+					<position x="-63.0" y="0.0" z="99.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="99.0"/>
 				</motor>
 				<bounds>
-					<point x="-2452.4473" y="973.5" z="-331.2853"/>
-					<point x="-2009.9708" y="973.5" z="258.02917"/>
-					<point x="-2092.0103" y="-326.5" z="148.7644"/>
-					<point x="-2370.4077" y="-326.5" z="-222.02057"/>
+					<point x="-63.0" y="0.0" z="99.0"/>
+					<point x="-63.0" y="380.0" z="99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="120"/>
-				<light id="121"/>
-				<light id="122"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="41">
 			<motors>
-				<motor id="82">
-					<position x="-2433.7944" y="1273.5" z="-384.72028"/>
-					<connectionPosition x="-2257.113" y="42.511" z="-149.40633"/>
-				</motor>
-				<motor id="83">
-					<position x="-1953.4537" y="1273.5" z="255.0241"/>
-					<connectionPosition x="-2133.5479" y="42.543" z="15.164734"/>
+				<motor id="41">
+					<position x="-63.0" y="0.0" z="117.0"/>
+					<connectionPosition x="-63.0" y="190.0" z="117.0"/>
 				</motor>
 				<bounds>
-					<point x="-2414.8623" y="973.5" z="-359.50534"/>
-					<point x="-1972.3859" y="973.5" z="229.80914"/>
-					<point x="-2054.4253" y="-326.5" z="120.54439"/>
-					<point x="-2332.8228" y="-326.5" z="-250.2406"/>
+					<point x="-63.0" y="0.0" z="117.0"/>
+					<point x="-63.0" y="380.0" z="117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="123"/>
-				<light id="124"/>
-				<light id="125"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="42">
 			<motors>
-				<motor id="84">
-					<position x="-2396.2095" y="1273.5" z="-412.94025"/>
-					<connectionPosition x="-2221.0142" y="47.568" z="-179.60551"/>
-				</motor>
-				<motor id="85">
-					<position x="-1915.8688" y="1273.5" z="226.8041"/>
-					<connectionPosition x="-2095.268" y="47.631" z="-12.130051"/>
+				<motor id="42">
+					<position x="-45.00000000000001" y="0.0" z="-117.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="-117.0"/>
 				</motor>
 				<bounds>
-					<point x="-2377.2773" y="973.5" z="-387.7253"/>
-					<point x="-1934.8009" y="973.5" z="201.58916"/>
-					<point x="-2016.8405" y="-326.5" z="92.3244"/>
-					<point x="-2295.2378" y="-326.5" z="-278.46057"/>
+					<point x="-45.00000000000001" y="0.0" z="-117.0"/>
+					<point x="-45.00000000000001" y="380.0" z="-117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="126"/>
-				<light id="127"/>
-				<light id="128"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="43">
 			<motors>
-				<motor id="86">
-					<position x="-2358.6245" y="1273.5" z="-441.16034"/>
-					<connectionPosition x="-2184.8289" y="54.119" z="-209.68959"/>
-				</motor>
-				<motor id="87">
-					<position x="-1878.2838" y="1273.5" z="198.58406"/>
-					<connectionPosition x="-2055.6387" y="54.196" z="-37.627167"/>
+				<motor id="43">
+					<position x="-45.00000000000001" y="0.0" z="-99.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="-99.0"/>
 				</motor>
 				<bounds>
-					<point x="-2339.6924" y="973.5" z="-415.9454"/>
-					<point x="-1897.216" y="973.5" z="173.36911"/>
-					<point x="-1979.2555" y="-326.5" z="64.104355"/>
-					<point x="-2257.6528" y="-326.5" z="-306.68066"/>
+					<point x="-45.00000000000001" y="0.0" z="-99.0"/>
+					<point x="-45.00000000000001" y="380.0" z="-99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="129"/>
-				<light id="130"/>
-				<light id="131"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="44">
 			<motors>
-				<motor id="88">
-					<position x="-2321.0396" y="1273.5" z="-469.3803"/>
-					<connectionPosition x="-2141.086" y="70.043" z="-229.70808"/>
-				</motor>
-				<motor id="89">
-					<position x="-1840.6989" y="1273.5" z="170.36406"/>
-					<connectionPosition x="-2014.6733" y="70.166" z="-61.344955"/>
+				<motor id="44">
+					<position x="-45.00000000000001" y="0.0" z="-81.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="-81.0"/>
 				</motor>
 				<bounds>
-					<point x="-2302.1074" y="973.5" z="-444.16537"/>
-					<point x="-1859.631" y="973.5" z="145.14911"/>
-					<point x="-1941.6705" y="-326.5" z="35.884354"/>
-					<point x="-2220.0679" y="-326.5" z="-334.90063"/>
+					<point x="-45.00000000000001" y="0.0" z="-81.0"/>
+					<point x="-45.00000000000001" y="380.0" z="-81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="132"/>
-				<light id="133"/>
-				<light id="134"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="45">
 			<motors>
-				<motor id="90">
-					<position x="-2283.4546" y="1273.5" z="-497.60028"/>
-					<connectionPosition x="-2104.4814" y="77.921" z="-259.23395"/>
-				</motor>
-				<motor id="91">
-					<position x="-1803.1138" y="1273.5" z="142.14406"/>
-					<connectionPosition x="-1971.3838" y="78.056" z="-81.96718"/>
+				<motor id="45">
+					<position x="-45.00000000000001" y="0.0" z="-63.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="-63.0"/>
 				</motor>
 				<bounds>
-					<point x="-2264.5225" y="973.5" z="-472.38535"/>
-					<point x="-1822.046" y="973.5" z="116.92912"/>
-					<point x="-1904.0854" y="-326.5" z="7.664383"/>
-					<point x="-2182.483" y="-326.5" z="-363.1206"/>
+					<point x="-45.00000000000001" y="0.0" z="-63.0"/>
+					<point x="-45.00000000000001" y="380.0" z="-63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="135"/>
-				<light id="136"/>
-				<light id="137"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="46">
 			<motors>
-				<motor id="92">
-					<position x="-2245.8694" y="1273.5" z="-525.8204"/>
-					<connectionPosition x="-2072.2349" y="84.074" z="-294.56396"/>
-				</motor>
-				<motor id="93">
-					<position x="-1765.5288" y="1273.5" z="113.92403"/>
-					<connectionPosition x="-1928.0641" y="84.264" z="-102.549484"/>
+				<motor id="46">
+					<position x="-45.00000000000001" y="0.0" z="-45.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="-45.0"/>
 				</motor>
 				<bounds>
-					<point x="-2226.9373" y="973.5" z="-500.60544"/>
-					<point x="-1784.4609" y="973.5" z="88.70908"/>
-					<point x="-1866.5005" y="-326.5" z="-20.55568"/>
-					<point x="-2144.8977" y="-326.5" z="-391.34067"/>
+					<point x="-45.00000000000001" y="0.0" z="-45.0"/>
+					<point x="-45.00000000000001" y="380.0" z="-45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="138"/>
-				<light id="139"/>
-				<light id="140"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="47">
 			<motors>
-				<motor id="94">
-					<position x="-2208.2844" y="1273.5" z="-554.04034"/>
-					<connectionPosition x="-2045.8958" y="86.596" z="-337.76196"/>
-				</motor>
-				<motor id="95">
-					<position x="-1727.9438" y="1273.5" z="85.704025"/>
-					<connectionPosition x="-1889.9304" y="86.117" z="-130.03859"/>
+				<motor id="47">
+					<position x="-45.00000000000001" y="0.0" z="-27.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="-27.0"/>
 				</motor>
 				<bounds>
-					<point x="-2189.3523" y="973.5" z="-528.8254"/>
-					<point x="-1746.876" y="973.5" z="60.489082"/>
-					<point x="-1828.9155" y="-326.5" z="-48.77568"/>
-					<point x="-2107.3127" y="-326.5" z="-419.56064"/>
+					<point x="-45.00000000000001" y="0.0" z="-27.0"/>
+					<point x="-45.00000000000001" y="380.0" z="-27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="141"/>
-				<light id="142"/>
-				<light id="143"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="48">
 			<motors>
-				<motor id="96">
-					<position x="2208.2808" y="1273.5" z="-554.03656"/>
-					<connectionPosition x="2045.8923" y="86.596" z="-337.75793"/>
-				</motor>
-				<motor id="97">
-					<position x="1727.9412" y="1273.5" z="85.70856"/>
-					<connectionPosition x="1889.9272" y="86.117" z="-130.03429"/>
+				<motor id="48">
+					<position x="-45.00000000000001" y="0.0" z="-9.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="-9.0"/>
 				</motor>
 				<bounds>
-					<point x="2189.3486" y="973.5" z="-528.8216"/>
-					<point x="1746.8733" y="973.5" z="60.493584"/>
-					<point x="1828.9126" y="-326.5" z="-48.771286"/>
-					<point x="2107.3093" y="-326.5" z="-419.5567"/>
+					<point x="-45.00000000000001" y="0.0" z="-9.0"/>
+					<point x="-45.00000000000001" y="380.0" z="-9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="144"/>
-				<light id="145"/>
-				<light id="146"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="49">
 			<motors>
-				<motor id="98">
-					<position x="2245.8657" y="1273.5" z="-525.8166"/>
-					<connectionPosition x="2083.1292" y="84.248" z="-309.07416"/>
-				</motor>
-				<motor id="99">
-					<position x="1765.5261" y="1273.5" z="113.92853"/>
-					<connectionPosition x="1938.9702" y="84.058" z="-117.07466"/>
+				<motor id="49">
+					<position x="-45.00000000000001" y="0.0" z="9.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="9.0"/>
 				</motor>
 				<bounds>
-					<point x="2226.9336" y="973.5" z="-500.60162"/>
-					<point x="1784.4583" y="973.5" z="88.713554"/>
-					<point x="1866.4976" y="-326.5" z="-20.551315"/>
-					<point x="2144.8943" y="-326.5" z="-391.33673"/>
+					<point x="-45.00000000000001" y="0.0" z="9.0"/>
+					<point x="-45.00000000000001" y="380.0" z="9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="147"/>
-				<light id="148"/>
-				<light id="149"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="50">
 			<motors>
-				<motor id="100">
-					<position x="2283.451" y="1273.5" z="-497.59665"/>
-					<connectionPosition x="2115.168" y="78.031" z="-273.46753"/>
-				</motor>
-				<motor id="101">
-					<position x="1803.1111" y="1273.5" z="142.14847"/>
-					<connectionPosition x="1982.0677" y="77.896" z="-96.19656"/>
+				<motor id="50">
+					<position x="-45.00000000000001" y="0.0" z="27.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="27.0"/>
 				</motor>
 				<bounds>
-					<point x="2264.5188" y="973.5" z="-472.38168"/>
-					<point x="1822.0432" y="973.5" z="116.9335"/>
-					<point x="1904.0825" y="-326.5" z="7.66864"/>
-					<point x="2182.4795" y="-326.5" z="-363.11682"/>
+					<point x="-45.00000000000001" y="0.0" z="27.0"/>
+					<point x="-45.00000000000001" y="380.0" z="27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="150"/>
-				<light id="151"/>
-				<light id="152"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="51">
 			<motors>
-				<motor id="102">
-					<position x="2321.036" y="1273.5" z="-469.37668"/>
-					<connectionPosition x="2146.938" y="70.177" z="-237.50266"/>
-				</motor>
-				<motor id="103">
-					<position x="1840.6962" y="1273.5" z="170.36844"/>
-					<connectionPosition x="2020.593" y="70.054" z="-69.22891"/>
+				<motor id="51">
+					<position x="-45.00000000000001" y="0.0" z="45.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="45.0"/>
 				</motor>
 				<bounds>
-					<point x="2302.1038" y="973.5" z="-444.1617"/>
-					<point x="1859.6283" y="973.5" z="145.15347"/>
-					<point x="1941.6676" y="-326.5" z="35.888596"/>
-					<point x="2220.0645" y="-326.5" z="-334.89685"/>
+					<point x="-45.00000000000001" y="0.0" z="45.0"/>
+					<point x="-45.00000000000001" y="380.0" z="45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="153"/>
-				<light id="154"/>
-				<light id="155"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="52">
 			<motors>
-				<motor id="104">
-					<position x="2358.6208" y="1273.5" z="-441.15674"/>
-					<connectionPosition x="2181.0747" y="54.196" z="-204.69012"/>
-				</motor>
-				<motor id="105">
-					<position x="1878.2812" y="1273.5" z="198.58838"/>
-					<connectionPosition x="2051.9114" y="54.119" z="-32.662674"/>
+				<motor id="52">
+					<position x="-45.00000000000001" y="0.0" z="63.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="63.0"/>
 				</motor>
 				<bounds>
-					<point x="2339.6887" y="973.5" z="-415.94177"/>
-					<point x="1897.2134" y="973.5" z="173.37341"/>
-					<point x="1979.2527" y="-326.5" z="64.10855"/>
-					<point x="2257.6494" y="-326.5" z="-306.67688"/>
+					<point x="-45.00000000000001" y="0.0" z="63.0"/>
+					<point x="-45.00000000000001" y="380.0" z="63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="156"/>
-				<light id="157"/>
-				<light id="158"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="53">
 			<motors>
-				<motor id="106">
-					<position x="2396.206" y="1273.5" z="-412.93677"/>
-					<connectionPosition x="2216.651" y="47.615" z="-173.79443"/>
-				</motor>
-				<motor id="107">
-					<position x="1915.8662" y="1273.5" z="226.80835"/>
-					<connectionPosition x="2090.9146" y="47.552" z="-6.3315735"/>
+				<motor id="53">
+					<position x="-45.00000000000001" y="0.0" z="81.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="81.0"/>
 				</motor>
 				<bounds>
-					<point x="2377.274" y="973.5" z="-387.7218"/>
-					<point x="1934.7983" y="973.5" z="201.59338"/>
-					<point x="2016.8376" y="-326.5" z="92.32852"/>
-					<point x="2295.2346" y="-326.5" z="-278.45694"/>
+					<point x="-45.00000000000001" y="0.0" z="81.0"/>
+					<point x="-45.00000000000001" y="380.0" z="81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="159"/>
-				<light id="160"/>
-				<light id="161"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="54">
 			<motors>
-				<motor id="108">
-					<position x="2433.791" y="1273.5" z="-384.7168"/>
-					<connectionPosition x="2253.9902" y="42.536" z="-145.2474"/>
-				</motor>
-				<motor id="109">
-					<position x="1953.4513" y="1273.5" z="255.02832"/>
-					<connectionPosition x="2129.9604" y="42.504" z="19.942764"/>
+				<motor id="54">
+					<position x="-45.00000000000001" y="0.0" z="99.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="99.0"/>
 				</motor>
 				<bounds>
-					<point x="2414.859" y="973.5" z="-359.50183"/>
-					<point x="1972.3834" y="973.5" z="229.81335"/>
-					<point x="2054.4229" y="-326.5" z="120.54848"/>
-					<point x="2332.8196" y="-326.5" z="-250.23697"/>
+					<point x="-45.00000000000001" y="0.0" z="99.0"/>
+					<point x="-45.00000000000001" y="380.0" z="99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="162"/>
-				<light id="163"/>
-				<light id="164"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="55">
 			<motors>
-				<motor id="110">
-					<position x="2471.376" y="1273.5" z="-356.49686"/>
-					<connectionPosition x="2292.1602" y="39.062" z="-117.80635"/>
-				</motor>
-				<motor id="111">
-					<position x="1991.0363" y="1273.5" z="283.24823"/>
-					<connectionPosition x="2168.8748" y="39.05" z="46.392212"/>
+				<motor id="55">
+					<position x="-45.00000000000001" y="0.0" z="117.0"/>
+					<connectionPosition x="-45.00000000000001" y="190.0" z="117.0"/>
 				</motor>
 				<bounds>
-					<point x="2452.4438" y="973.5" z="-331.2819"/>
-					<point x="2009.9684" y="973.5" z="258.03326"/>
-					<point x="2092.0078" y="-326.5" z="148.76839"/>
-					<point x="2370.4045" y="-326.5" z="-222.01703"/>
+					<point x="-45.00000000000001" y="0.0" z="117.0"/>
+					<point x="-45.00000000000001" y="380.0" z="117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="165"/>
-				<light id="166"/>
-				<light id="167"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="56">
 			<motors>
-				<motor id="112">
-					<position x="2508.961" y="1273.5" z="-328.2769"/>
-					<connectionPosition x="2331.1296" y="39.129" z="-91.43045"/>
-				</motor>
-				<motor id="113">
-					<position x="2028.6213" y="1273.5" z="311.4682"/>
-					<connectionPosition x="2207.8918" y="39.14" z="72.704956"/>
+				<motor id="56">
+					<position x="-27.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="-117.0"/>
 				</motor>
 				<bounds>
-					<point x="2490.0288" y="973.5" z="-303.06192"/>
-					<point x="2047.5535" y="973.5" z="286.25323"/>
-					<point x="2129.5928" y="-326.5" z="176.98833"/>
-					<point x="2407.9895" y="-326.5" z="-193.79706"/>
+					<point x="-27.0" y="0.0" z="-117.0"/>
+					<point x="-27.0" y="380.0" z="-117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="168"/>
-				<light id="169"/>
-				<light id="170"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="57">
 			<motors>
-				<motor id="114">
-					<position x="2546.546" y="1273.5" z="-300.05695"/>
-					<connectionPosition x="2369.865" y="42.511" z="-64.742676"/>
-				</motor>
-				<motor id="115">
-					<position x="2066.2063" y="1273.5" z="339.68817"/>
-					<connectionPosition x="2246.3" y="42.543" z="99.82855"/>
+				<motor id="57">
+					<position x="-27.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="-99.0"/>
 				</motor>
 				<bounds>
-					<point x="2527.6138" y="973.5" z="-274.84198"/>
-					<point x="2085.1384" y="973.5" z="314.4732"/>
-					<point x="2167.1777" y="-326.5" z="205.2083"/>
-					<point x="2445.5745" y="-326.5" z="-165.57712"/>
+					<point x="-27.0" y="0.0" z="-99.0"/>
+					<point x="-27.0" y="380.0" z="-99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="171"/>
-				<light id="172"/>
-				<light id="173"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="58">
 			<motors>
-				<motor id="116">
-					<position x="2584.131" y="1273.5" z="-271.83698"/>
-					<connectionPosition x="2408.936" y="47.568" z="-38.501923"/>
-				</motor>
-				<motor id="117">
-					<position x="2103.7913" y="1273.5" z="367.90814"/>
-					<connectionPosition x="2283.1904" y="47.631" z="128.97372"/>
+				<motor id="58">
+					<position x="-27.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="-81.0"/>
 				</motor>
 				<bounds>
-					<point x="2565.199" y="973.5" z="-246.62201"/>
-					<point x="2122.7234" y="973.5" z="342.69318"/>
-					<point x="2204.7627" y="-326.5" z="233.42831"/>
-					<point x="2483.1597" y="-326.5" z="-137.35715"/>
+					<point x="-27.0" y="0.0" z="-81.0"/>
+					<point x="-27.0" y="380.0" z="-81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="174"/>
-				<light id="175"/>
-				<light id="176"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="59">
 			<motors>
-				<motor id="118">
-					<position x="2621.716" y="1273.5" z="-243.617"/>
-					<connectionPosition x="2447.921" y="54.119" z="-12.146027"/>
-				</motor>
-				<motor id="119">
-					<position x="2141.3765" y="1273.5" z="396.1281"/>
-					<connectionPosition x="2318.731" y="54.196" z="159.91663"/>
+				<motor id="59">
+					<position x="-27.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="-63.0"/>
 				</motor>
 				<bounds>
-					<point x="2602.784" y="973.5" z="-218.40202"/>
-					<point x="2160.3086" y="973.5" z="370.91315"/>
-					<point x="2242.348" y="-326.5" z="261.6483"/>
-					<point x="2520.7446" y="-326.5" z="-109.13713"/>
+					<point x="-27.0" y="0.0" z="-63.0"/>
+					<point x="-27.0" y="380.0" z="-63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="177"/>
-				<light id="178"/>
-				<light id="179"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="60">
 			<motors>
-				<motor id="120">
-					<position x="2659.3013" y="1273.5" z="-215.39706"/>
-					<connectionPosition x="2479.348" y="70.043" z="24.275452"/>
-				</motor>
-				<motor id="121">
-					<position x="2178.9614" y="1273.5" z="424.34808"/>
-					<connectionPosition x="2352.9355" y="70.166" z="192.63876"/>
+				<motor id="60">
+					<position x="-27.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="-45.0"/>
 				</motor>
 				<bounds>
-					<point x="2640.3691" y="973.5" z="-190.1821"/>
-					<point x="2197.8936" y="973.5" z="399.13312"/>
-					<point x="2279.9329" y="-326.5" z="289.86826"/>
-					<point x="2558.3298" y="-326.5" z="-80.91724"/>
+					<point x="-27.0" y="0.0" z="-45.0"/>
+					<point x="-27.0" y="380.0" z="-45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="180"/>
-				<light id="181"/>
-				<light id="182"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="61">
 			<motors>
-				<motor id="122">
-					<position x="2696.8862" y="1273.5" z="-187.1771"/>
-					<connectionPosition x="2517.9133" y="77.921" z="51.189545"/>
-				</motor>
-				<motor id="123">
-					<position x="2216.5464" y="1273.5" z="452.56805"/>
-					<connectionPosition x="2384.816" y="78.056" z="228.45651"/>
+				<motor id="61">
+					<position x="-27.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="-27.0"/>
 				</motor>
 				<bounds>
-					<point x="2677.954" y="973.5" z="-161.96213"/>
-					<point x="2235.4785" y="973.5" z="427.3531"/>
-					<point x="2317.5178" y="-326.5" z="318.08823"/>
-					<point x="2595.9148" y="-326.5" z="-52.697266"/>
+					<point x="-27.0" y="0.0" z="-27.0"/>
+					<point x="-27.0" y="380.0" z="-27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="183"/>
-				<light id="184"/>
-				<light id="185"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="62">
 			<motors>
-				<motor id="124">
-					<position x="2734.4712" y="1273.5" z="-158.95715"/>
-					<connectionPosition x="2560.837" y="84.074" z="72.2995"/>
-				</motor>
-				<motor id="125">
-					<position x="2254.1313" y="1273.5" z="480.78796"/>
-					<connectionPosition x="2416.6665" y="84.264" z="264.3142"/>
+				<motor id="62">
+					<position x="-27.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="-9.0"/>
 				</motor>
 				<bounds>
-					<point x="2715.539" y="973.5" z="-133.74219"/>
-					<point x="2273.0635" y="973.5" z="455.573"/>
-					<point x="2355.1028" y="-326.5" z="346.30814"/>
-					<point x="2633.4998" y="-326.5" z="-24.477325"/>
+					<point x="-27.0" y="0.0" z="-9.0"/>
+					<point x="-27.0" y="380.0" z="-9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="186"/>
-				<light id="187"/>
-				<light id="188"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="63">
 			<motors>
-				<motor id="126">
-					<position x="2772.0562" y="1273.5" z="-130.73718"/>
-					<connectionPosition x="2609.6677" y="86.596" z="85.54144"/>
-				</motor>
-				<motor id="127">
-					<position x="2291.7166" y="1273.5" z="509.00793"/>
-					<connectionPosition x="2453.7026" y="86.117" z="293.26508"/>
+				<motor id="63">
+					<position x="-27.0" y="0.0" z="9.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="9.0"/>
 				</motor>
 				<bounds>
-					<point x="2753.124" y="973.5" z="-105.52222"/>
-					<point x="2310.6487" y="973.5" z="483.79297"/>
-					<point x="2392.688" y="-326.5" z="374.52808"/>
-					<point x="2671.0847" y="-326.5" z="3.7426453"/>
+					<point x="-27.0" y="0.0" z="9.0"/>
+					<point x="-27.0" y="380.0" z="9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="189"/>
-				<light id="190"/>
-				<light id="191"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="64">
 			<motors>
-				<motor id="128">
-					<position x="4727.9404" y="1273.5" z="-130.74019"/>
-					<connectionPosition x="4890.329" y="86.596" z="85.53819"/>
-				</motor>
-				<motor id="129">
-					<position x="5208.2812" y="1273.5" z="509.0042"/>
-					<connectionPosition x="5046.295" y="86.117" z="293.2616"/>
+				<motor id="64">
+					<position x="-27.0" y="0.0" z="27.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="27.0"/>
 				</motor>
 				<bounds>
-					<point x="4746.8726" y="973.5" z="-105.52525"/>
-					<point x="5189.349" y="973.5" z="483.78928"/>
-					<point x="5107.3096" y="-326.5" z="374.52454"/>
-					<point x="4828.912" y="-326.5" z="3.7394867"/>
+					<point x="-27.0" y="0.0" z="27.0"/>
+					<point x="-27.0" y="380.0" z="27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="192"/>
-				<light id="193"/>
-				<light id="194"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="65">
 			<motors>
-				<motor id="130">
-					<position x="4765.5254" y="1273.5" z="-158.96019"/>
-					<connectionPosition x="4928.2627" y="84.248" z="57.781998"/>
-				</motor>
-				<motor id="131">
-					<position x="5245.866" y="1273.5" z="480.78418"/>
-					<connectionPosition x="5072.422" y="84.058" z="249.78128"/>
+				<motor id="65">
+					<position x="-27.0" y="0.0" z="45.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="45.0"/>
 				</motor>
 				<bounds>
-					<point x="4784.4575" y="973.5" z="-133.74525"/>
-					<point x="5226.934" y="973.5" z="455.56924"/>
-					<point x="5144.8945" y="-326.5" z="346.3045"/>
-					<point x="4866.497" y="-326.5" z="-24.480515"/>
+					<point x="-27.0" y="0.0" z="45.0"/>
+					<point x="-27.0" y="380.0" z="45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="195"/>
-				<light id="196"/>
-				<light id="197"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="66">
 			<motors>
-				<motor id="132">
-					<position x="4803.1104" y="1273.5" z="-187.18022"/>
-					<connectionPosition x="4971.3936" y="78.031" z="36.94864"/>
-				</motor>
-				<motor id="133">
-					<position x="5283.451" y="1273.5" z="452.56415"/>
-					<connectionPosition x="5104.494" y="77.896" z="214.2194"/>
+				<motor id="66">
+					<position x="-27.0" y="0.0" z="63.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="63.0"/>
 				</motor>
 				<bounds>
-					<point x="4822.0425" y="973.5" z="-161.96529"/>
-					<point x="5264.519" y="973.5" z="427.3492"/>
-					<point x="5182.4795" y="-326.5" z="318.08447"/>
-					<point x="4904.082" y="-326.5" z="-52.700546"/>
+					<point x="-27.0" y="0.0" z="63.0"/>
+					<point x="-27.0" y="380.0" z="63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="198"/>
-				<light id="199"/>
-				<light id="200"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="67">
 			<motors>
-				<motor id="134">
-					<position x="4840.6953" y="1273.5" z="-215.40022"/>
-					<connectionPosition x="5014.794" y="70.177" z="16.473526"/>
-				</motor>
-				<motor id="135">
-					<position x="5321.036" y="1273.5" z="424.34418"/>
-					<connectionPosition x="5141.139" y="70.054" z="184.7471"/>
+				<motor id="67">
+					<position x="-27.0" y="0.0" z="81.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="81.0"/>
 				</motor>
 				<bounds>
-					<point x="4859.6274" y="973.5" z="-190.18529"/>
-					<point x="5302.104" y="973.5" z="399.12924"/>
-					<point x="5220.0645" y="-326.5" z="289.8645"/>
-					<point x="4941.667" y="-326.5" z="-80.92055"/>
+					<point x="-27.0" y="0.0" z="81.0"/>
+					<point x="-27.0" y="380.0" z="81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="201"/>
-				<light id="202"/>
-				<light id="203"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="68">
 			<motors>
-				<motor id="136">
-					<position x="4878.2803" y="1273.5" z="-243.62022"/>
-					<connectionPosition x="5055.827" y="54.196" z="-7.1539154"/>
-				</motor>
-				<motor id="137">
-					<position x="5358.621" y="1273.5" z="396.12415"/>
-					<connectionPosition x="5184.9907" y="54.119" z="164.87335"/>
+				<motor id="68">
+					<position x="-27.0" y="0.0" z="99.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="99.0"/>
 				</motor>
 				<bounds>
-					<point x="4897.2124" y="973.5" z="-218.40529"/>
-					<point x="5339.689" y="973.5" z="370.9092"/>
-					<point x="5257.6494" y="-326.5" z="261.64447"/>
-					<point x="4979.252" y="-326.5" z="-109.14055"/>
+					<point x="-27.0" y="0.0" z="99.0"/>
+					<point x="-27.0" y="380.0" z="99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="204"/>
-				<light id="205"/>
-				<light id="206"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="69">
 			<motors>
-				<motor id="138">
-					<position x="4915.865" y="1273.5" z="-271.8402"/>
-					<connectionPosition x="5095.421" y="47.615" z="-32.698196"/>
-				</motor>
-				<motor id="139">
-					<position x="5396.206" y="1273.5" z="367.90414"/>
-					<connectionPosition x="5221.157" y="47.552" z="134.7645"/>
+				<motor id="69">
+					<position x="-27.0" y="0.0" z="117.0"/>
+					<connectionPosition x="-27.0" y="190.0" z="117.0"/>
 				</motor>
 				<bounds>
-					<point x="4934.7974" y="973.5" z="-246.62527"/>
-					<point x="5377.274" y="973.5" z="342.6892"/>
-					<point x="5295.2344" y="-326.5" z="233.42447"/>
-					<point x="5016.837" y="-326.5" z="-137.36053"/>
+					<point x="-27.0" y="0.0" z="117.0"/>
+					<point x="-27.0" y="380.0" z="117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="207"/>
-				<light id="208"/>
-				<light id="209"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="70">
 			<motors>
-				<motor id="140">
-					<position x="4953.45" y="1273.5" z="-300.06024"/>
-					<connectionPosition x="5133.2515" y="42.536" z="-60.59114"/>
-				</motor>
-				<motor id="141">
-					<position x="5433.791" y="1273.5" z="339.68414"/>
-					<connectionPosition x="5257.2812" y="42.504" z="104.598854"/>
+				<motor id="70">
+					<position x="-9.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="-117.0"/>
 				</motor>
 				<bounds>
-					<point x="4972.3823" y="973.5" z="-274.8453"/>
-					<point x="5414.859" y="973.5" z="314.4692"/>
-					<point x="5332.8193" y="-326.5" z="205.20447"/>
-					<point x="5054.422" y="-326.5" z="-165.58057"/>
+					<point x="-9.0" y="0.0" z="-117.0"/>
+					<point x="-9.0" y="380.0" z="-117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="210"/>
-				<light id="211"/>
-				<light id="212"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="71">
 			<motors>
-				<motor id="142">
-					<position x="4991.035" y="1273.5" z="-328.28027"/>
-					<connectionPosition x="5170.2515" y="39.062" z="-89.59004"/>
-				</motor>
-				<motor id="143">
-					<position x="5471.376" y="1273.5" z="311.4641"/>
-					<connectionPosition x="5293.537" y="39.05" z="74.608345"/>
+				<motor id="71">
+					<position x="-9.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="-99.0"/>
 				</motor>
 				<bounds>
-					<point x="5009.9673" y="973.5" z="-303.06534"/>
-					<point x="5452.444" y="973.5" z="286.24918"/>
-					<point x="5370.4043" y="-326.5" z="176.98444"/>
-					<point x="5092.007" y="-326.5" z="-193.8006"/>
+					<point x="-9.0" y="0.0" z="-99.0"/>
+					<point x="-9.0" y="380.0" z="-99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="213"/>
-				<light id="214"/>
-				<light id="215"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="72">
 			<motors>
-				<motor id="144">
-					<position x="5028.6206" y="1273.5" z="-356.50024"/>
-					<connectionPosition x="5206.452" y="39.129" z="-119.6541"/>
-				</motor>
-				<motor id="145">
-					<position x="5508.961" y="1273.5" z="283.2441"/>
-					<connectionPosition x="5329.69" y="39.14" z="44.48111"/>
+				<motor id="72">
+					<position x="-9.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="-81.0"/>
 				</motor>
 				<bounds>
-					<point x="5047.5527" y="973.5" z="-331.2853"/>
-					<point x="5490.029" y="973.5" z="258.02914"/>
-					<point x="5407.9893" y="-326.5" z="148.76433"/>
-					<point x="5129.5923" y="-326.5" z="-222.02057"/>
+					<point x="-9.0" y="0.0" z="-81.0"/>
+					<point x="-9.0" y="380.0" z="-81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="216"/>
-				<light id="217"/>
-				<light id="218"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="73">
 			<motors>
-				<motor id="146">
-					<position x="5066.2056" y="1273.5" z="-384.72028"/>
-					<connectionPosition x="5242.8867" y="42.511" z="-149.40633"/>
-				</motor>
-				<motor id="147">
-					<position x="5546.546" y="1273.5" z="255.0241"/>
-					<connectionPosition x="5366.4517" y="42.543" z="15.164734"/>
+				<motor id="73">
+					<position x="-9.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="-63.0"/>
 				</motor>
 				<bounds>
-					<point x="5085.1377" y="973.5" z="-359.50534"/>
-					<point x="5527.614" y="973.5" z="229.80914"/>
-					<point x="5445.574" y="-326.5" z="120.54431"/>
-					<point x="5167.1772" y="-326.5" z="-250.2406"/>
+					<point x="-9.0" y="0.0" z="-63.0"/>
+					<point x="-9.0" y="380.0" z="-63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="219"/>
-				<light id="220"/>
-				<light id="221"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="74">
 			<motors>
-				<motor id="148">
-					<position x="5103.7905" y="1273.5" z="-412.94025"/>
-					<connectionPosition x="5278.9854" y="47.568" z="-179.60551"/>
-				</motor>
-				<motor id="149">
-					<position x="5584.131" y="1273.5" z="226.8041"/>
-					<connectionPosition x="5404.7314" y="47.631" z="-12.130051"/>
+				<motor id="74">
+					<position x="-9.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="-45.0"/>
 				</motor>
 				<bounds>
-					<point x="5122.7227" y="973.5" z="-387.7253"/>
-					<point x="5565.1987" y="973.5" z="201.58914"/>
-					<point x="5483.159" y="-326.5" z="92.32434"/>
-					<point x="5204.762" y="-326.5" z="-278.46057"/>
+					<point x="-9.0" y="0.0" z="-45.0"/>
+					<point x="-9.0" y="380.0" z="-45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="222"/>
-				<light id="223"/>
-				<light id="224"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="75">
 			<motors>
-				<motor id="150">
-					<position x="5141.3755" y="1273.5" z="-441.16034"/>
-					<connectionPosition x="5315.171" y="54.119" z="-209.68959"/>
-				</motor>
-				<motor id="151">
-					<position x="5621.716" y="1273.5" z="198.58406"/>
-					<connectionPosition x="5444.361" y="54.196" z="-37.627167"/>
+				<motor id="75">
+					<position x="-9.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="-27.0"/>
 				</motor>
 				<bounds>
-					<point x="5160.3076" y="973.5" z="-415.9454"/>
-					<point x="5602.7837" y="973.5" z="173.36911"/>
-					<point x="5520.744" y="-326.5" z="64.10428"/>
-					<point x="5242.347" y="-326.5" z="-306.68066"/>
+					<point x="-9.0" y="0.0" z="-27.0"/>
+					<point x="-9.0" y="380.0" z="-27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="225"/>
-				<light id="226"/>
-				<light id="227"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="76">
 			<motors>
-				<motor id="152">
-					<position x="5178.9604" y="1273.5" z="-469.3803"/>
-					<connectionPosition x="5358.914" y="70.043" z="-229.70808"/>
-				</motor>
-				<motor id="153">
-					<position x="5659.301" y="1273.5" z="170.36406"/>
-					<connectionPosition x="5485.326" y="70.166" z="-61.344955"/>
+				<motor id="76">
+					<position x="-9.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="-9.0"/>
 				</motor>
 				<bounds>
-					<point x="5197.8926" y="973.5" z="-444.16537"/>
-					<point x="5640.3687" y="973.5" z="145.14911"/>
-					<point x="5558.329" y="-326.5" z="35.884277"/>
-					<point x="5279.932" y="-326.5" z="-334.90063"/>
+					<point x="-9.0" y="0.0" z="-9.0"/>
+					<point x="-9.0" y="380.0" z="-9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="228"/>
-				<light id="229"/>
-				<light id="230"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="77">
 			<motors>
-				<motor id="154">
-					<position x="5216.5454" y="1273.5" z="-497.60028"/>
-					<connectionPosition x="5395.5186" y="77.921" z="-259.23395"/>
-				</motor>
-				<motor id="155">
-					<position x="5696.8857" y="1273.5" z="142.14406"/>
-					<connectionPosition x="5528.616" y="78.056" z="-81.96718"/>
+				<motor id="77">
+					<position x="-9.0" y="0.0" z="9.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="9.0"/>
 				</motor>
 				<bounds>
-					<point x="5235.4775" y="973.5" z="-472.38535"/>
-					<point x="5677.9536" y="973.5" z="116.9291"/>
-					<point x="5595.914" y="-326.5" z="7.664276"/>
-					<point x="5317.517" y="-326.5" z="-363.1206"/>
+					<point x="-9.0" y="0.0" z="9.0"/>
+					<point x="-9.0" y="380.0" z="9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="231"/>
-				<light id="232"/>
-				<light id="233"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="78">
 			<motors>
-				<motor id="156">
-					<position x="5254.1304" y="1273.5" z="-525.8204"/>
-					<connectionPosition x="5427.765" y="84.074" z="-294.56396"/>
-				</motor>
-				<motor id="157">
-					<position x="5734.4707" y="1273.5" z="113.92403"/>
-					<connectionPosition x="5571.9355" y="84.264" z="-102.549484"/>
+				<motor id="78">
+					<position x="-9.0" y="0.0" z="27.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="27.0"/>
 				</motor>
 				<bounds>
-					<point x="5273.0625" y="973.5" z="-500.60544"/>
-					<point x="5715.5386" y="973.5" z="88.70907"/>
-					<point x="5633.499" y="-326.5" z="-20.555756"/>
-					<point x="5355.102" y="-326.5" z="-391.3407"/>
+					<point x="-9.0" y="0.0" z="27.0"/>
+					<point x="-9.0" y="380.0" z="27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="234"/>
-				<light id="235"/>
-				<light id="236"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="79">
 			<motors>
-				<motor id="158">
-					<position x="5291.7153" y="1273.5" z="-554.04034"/>
-					<connectionPosition x="5454.104" y="86.596" z="-337.76196"/>
-				</motor>
-				<motor id="159">
-					<position x="5772.0557" y="1273.5" z="85.704025"/>
-					<connectionPosition x="5610.0693" y="86.117" z="-130.03859"/>
+				<motor id="79">
+					<position x="-9.0" y="0.0" z="45.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="45.0"/>
 				</motor>
 				<bounds>
-					<point x="5310.6475" y="973.5" z="-528.8254"/>
-					<point x="5753.1235" y="973.5" z="60.489067"/>
-					<point x="5671.084" y="-326.5" z="-48.775757"/>
-					<point x="5392.687" y="-326.5" z="-419.56067"/>
+					<point x="-9.0" y="0.0" z="45.0"/>
+					<point x="-9.0" y="380.0" z="45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="237"/>
-				<light id="238"/>
-				<light id="239"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="80">
 			<motors>
-				<motor id="160">
-					<position x="8208.281" y="1273.5" z="-554.0362"/>
-					<connectionPosition x="8045.8926" y="86.596" z="-337.7578"/>
-				</motor>
-				<motor id="161">
-					<position x="7727.9404" y="1273.5" z="85.70819"/>
-					<connectionPosition x="7889.927" y="86.117" z="-130.03441"/>
+				<motor id="80">
+					<position x="-9.0" y="0.0" z="63.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="63.0"/>
 				</motor>
 				<bounds>
-					<point x="8189.349" y="973.5" z="-528.8212"/>
-					<point x="7746.8726" y="973.5" z="60.49325"/>
-					<point x="7828.912" y="-326.5" z="-48.771484"/>
-					<point x="8107.3096" y="-326.5" z="-419.55652"/>
+					<point x="-9.0" y="0.0" z="63.0"/>
+					<point x="-9.0" y="380.0" z="63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="240"/>
-				<light id="241"/>
-				<light id="242"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="81">
 			<motors>
-				<motor id="162">
-					<position x="8245.866" y="1273.5" z="-525.81616"/>
-					<connectionPosition x="8083.129" y="84.248" z="-309.07397"/>
-				</motor>
-				<motor id="163">
-					<position x="7765.5254" y="1273.5" z="113.92819"/>
-					<connectionPosition x="7938.9697" y="84.058" z="-117.07471"/>
+				<motor id="81">
+					<position x="-9.0" y="0.0" z="81.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="81.0"/>
 				</motor>
 				<bounds>
-					<point x="8226.934" y="973.5" z="-500.60123"/>
-					<point x="7784.4575" y="973.5" z="88.71326"/>
-					<point x="7866.497" y="-326.5" z="-20.551483"/>
-					<point x="8144.8945" y="-326.5" z="-391.3365"/>
+					<point x="-9.0" y="0.0" z="81.0"/>
+					<point x="-9.0" y="380.0" z="81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="243"/>
-				<light id="244"/>
-				<light id="245"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="82">
 			<motors>
-				<motor id="164">
-					<position x="8283.451" y="1273.5" z="-497.59616"/>
-					<connectionPosition x="8115.168" y="78.031" z="-273.46732"/>
-				</motor>
-				<motor id="165">
-					<position x="7803.1104" y="1273.5" z="142.14822"/>
-					<connectionPosition x="7982.0674" y="77.896" z="-96.19656"/>
+				<motor id="82">
+					<position x="-9.0" y="0.0" z="99.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="99.0"/>
 				</motor>
 				<bounds>
-					<point x="8264.519" y="973.5" z="-472.38123"/>
-					<point x="7822.0425" y="973.5" z="116.93329"/>
-					<point x="7904.082" y="-326.5" z="7.6685486"/>
-					<point x="8182.4795" y="-326.5" z="-363.1165"/>
+					<point x="-9.0" y="0.0" z="99.0"/>
+					<point x="-9.0" y="380.0" z="99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="246"/>
-				<light id="247"/>
-				<light id="248"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="83">
 			<motors>
-				<motor id="166">
-					<position x="8321.036" y="1273.5" z="-469.37616"/>
-					<connectionPosition x="8146.938" y="70.177" z="-237.50241"/>
-				</motor>
-				<motor id="167">
-					<position x="7840.6953" y="1273.5" z="170.36823"/>
-					<connectionPosition x="8020.593" y="70.054" z="-69.22885"/>
+				<motor id="83">
+					<position x="-9.0" y="0.0" z="117.0"/>
+					<connectionPosition x="-9.0" y="190.0" z="117.0"/>
 				</motor>
 				<bounds>
-					<point x="8302.104" y="973.5" z="-444.16122"/>
-					<point x="7859.6274" y="973.5" z="145.15329"/>
-					<point x="7941.667" y="-326.5" z="35.88855"/>
-					<point x="8220.064" y="-326.5" z="-334.89648"/>
+					<point x="-9.0" y="0.0" z="117.0"/>
+					<point x="-9.0" y="380.0" z="117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="249"/>
-				<light id="250"/>
-				<light id="251"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="84">
 			<motors>
-				<motor id="168">
-					<position x="8358.621" y="1273.5" z="-441.15616"/>
-					<connectionPosition x="8181.0747" y="54.196" z="-204.68983"/>
-				</motor>
-				<motor id="169">
-					<position x="7878.2803" y="1273.5" z="198.58823"/>
-					<connectionPosition x="8051.911" y="54.119" z="-32.662567"/>
+				<motor id="84">
+					<position x="8.999999999999986" y="0.0" z="-117.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="-117.0"/>
 				</motor>
 				<bounds>
-					<point x="8339.688" y="973.5" z="-415.94122"/>
-					<point x="7897.2124" y="973.5" z="173.37329"/>
-					<point x="7979.252" y="-326.5" z="64.10855"/>
-					<point x="8257.649" y="-326.5" z="-306.67648"/>
+					<point x="8.999999999999986" y="0.0" z="-117.0"/>
+					<point x="8.999999999999986" y="380.0" z="-117.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="252"/>
-				<light id="253"/>
-				<light id="254"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="85">
 			<motors>
-				<motor id="170">
-					<position x="8396.206" y="1273.5" z="-412.93616"/>
-					<connectionPosition x="8216.65" y="47.615" z="-173.7941"/>
-				</motor>
-				<motor id="171">
-					<position x="7915.865" y="1273.5" z="226.80823"/>
-					<connectionPosition x="8090.914" y="47.552" z="-6.3314056"/>
+				<motor id="85">
+					<position x="8.999999999999986" y="0.0" z="-99.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="-99.0"/>
 				</motor>
 				<bounds>
-					<point x="8377.273" y="973.5" z="-387.72122"/>
-					<point x="7934.7974" y="973.5" z="201.59329"/>
-					<point x="8016.837" y="-326.5" z="92.32855"/>
-					<point x="8295.234" y="-326.5" z="-278.45648"/>
+					<point x="8.999999999999986" y="0.0" z="-99.0"/>
+					<point x="8.999999999999986" y="380.0" z="-99.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="255"/>
-				<light id="256"/>
-				<light id="257"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="86">
 			<motors>
-				<motor id="172">
-					<position x="8433.791" y="1273.5" z="-384.71613"/>
-					<connectionPosition x="8253.99" y="42.536" z="-145.24701"/>
-				</motor>
-				<motor id="173">
-					<position x="7953.45" y="1273.5" z="255.02826"/>
-					<connectionPosition x="8129.96" y="42.504" z="19.942993"/>
+				<motor id="86">
+					<position x="8.999999999999986" y="0.0" z="-81.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="-81.0"/>
 				</motor>
 				<bounds>
-					<point x="8414.858" y="973.5" z="-359.50116"/>
-					<point x="7972.3823" y="973.5" z="229.81334"/>
-					<point x="8054.422" y="-326.5" z="120.548706"/>
-					<point x="8332.819" y="-326.5" z="-250.23634"/>
+					<point x="8.999999999999986" y="0.0" z="-81.0"/>
+					<point x="8.999999999999986" y="380.0" z="-81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="258"/>
-				<light id="259"/>
-				<light id="260"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="87">
 			<motors>
-				<motor id="174">
-					<position x="8471.376" y="1273.5" z="-356.4961"/>
-					<connectionPosition x="8292.16" y="39.062" z="-117.80588"/>
-				</motor>
-				<motor id="175">
-					<position x="7991.035" y="1273.5" z="283.2483"/>
-					<connectionPosition x="8168.8745" y="39.05" z="46.392517"/>
+				<motor id="87">
+					<position x="8.999999999999986" y="0.0" z="-63.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="-63.0"/>
 				</motor>
 				<bounds>
-					<point x="8452.443" y="973.5" z="-331.2812"/>
-					<point x="8009.9673" y="973.5" z="258.03333"/>
-					<point x="8092.007" y="-326.5" z="148.76851"/>
-					<point x="8370.404" y="-326.5" z="-222.01654"/>
+					<point x="8.999999999999986" y="0.0" z="-63.0"/>
+					<point x="8.999999999999986" y="380.0" z="-63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="261"/>
-				<light id="262"/>
-				<light id="263"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="88">
 			<motors>
-				<motor id="176">
-					<position x="8508.961" y="1273.5" z="-328.27612"/>
-					<connectionPosition x="8331.129" y="39.129" z="-91.42993"/>
-				</motor>
-				<motor id="177">
-					<position x="8028.6206" y="1273.5" z="311.46826"/>
-					<connectionPosition x="8207.892" y="39.14" z="72.70526"/>
+				<motor id="88">
+					<position x="8.999999999999986" y="0.0" z="-45.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="-45.0"/>
 				</motor>
 				<bounds>
-					<point x="8490.028" y="973.5" z="-303.06116"/>
-					<point x="8047.5527" y="973.5" z="286.25333"/>
-					<point x="8129.5923" y="-326.5" z="176.98859"/>
-					<point x="8407.989" y="-326.5" z="-193.79634"/>
+					<point x="8.999999999999986" y="0.0" z="-45.0"/>
+					<point x="8.999999999999986" y="380.0" z="-45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="264"/>
-				<light id="265"/>
-				<light id="266"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="89">
 			<motors>
-				<motor id="178">
-					<position x="8546.546" y="1273.5" z="-300.0561"/>
-					<connectionPosition x="8369.864" y="42.511" z="-64.74211"/>
-				</motor>
-				<motor id="179">
-					<position x="8066.2056" y="1273.5" z="339.6883"/>
-					<connectionPosition x="8246.3" y="42.543" z="99.82892"/>
+				<motor id="89">
+					<position x="8.999999999999986" y="0.0" z="-27.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="-27.0"/>
 				</motor>
 				<bounds>
-					<point x="8527.613" y="973.5" z="-274.84113"/>
-					<point x="8085.1377" y="973.5" z="314.47336"/>
-					<point x="8167.1772" y="-326.5" z="205.20862"/>
-					<point x="8445.574" y="-326.5" z="-165.57631"/>
+					<point x="8.999999999999986" y="0.0" z="-27.0"/>
+					<point x="8.999999999999986" y="380.0" z="-27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="267"/>
-				<light id="268"/>
-				<light id="269"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="90">
 			<motors>
-				<motor id="180">
-					<position x="8584.131" y="1273.5" z="-271.8361"/>
-					<connectionPosition x="8408.936" y="47.568" z="-38.501312"/>
-				</motor>
-				<motor id="181">
-					<position x="8103.7905" y="1273.5" z="367.90826"/>
-					<connectionPosition x="8283.189" y="47.631" z="128.97415"/>
+				<motor id="90">
+					<position x="8.999999999999986" y="0.0" z="-9.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="-9.0"/>
 				</motor>
 				<bounds>
-					<point x="8565.198" y="973.5" z="-246.62112"/>
-					<point x="8122.7227" y="973.5" z="342.69333"/>
-					<point x="8204.763" y="-326.5" z="233.42859"/>
-					<point x="8483.159" y="-326.5" z="-137.35631"/>
+					<point x="8.999999999999986" y="0.0" z="-9.0"/>
+					<point x="8.999999999999986" y="380.0" z="-9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="270"/>
-				<light id="271"/>
-				<light id="272"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="91">
 			<motors>
-				<motor id="182">
-					<position x="8621.716" y="1273.5" z="-243.61606"/>
-					<connectionPosition x="8447.92" y="54.119" z="-12.14534"/>
-				</motor>
-				<motor id="183">
-					<position x="8141.3755" y="1273.5" z="396.12836"/>
-					<connectionPosition x="8318.73" y="54.196" z="159.91711"/>
+				<motor id="91">
+					<position x="8.999999999999986" y="0.0" z="9.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="9.0"/>
 				</motor>
 				<bounds>
-					<point x="8602.783" y="973.5" z="-218.4011"/>
-					<point x="8160.3076" y="973.5" z="370.91342"/>
-					<point x="8242.348" y="-326.5" z="261.64868"/>
-					<point x="8520.744" y="-326.5" z="-109.13628"/>
+					<point x="8.999999999999986" y="0.0" z="9.0"/>
+					<point x="8.999999999999986" y="380.0" z="9.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="273"/>
-				<light id="274"/>
-				<light id="275"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="92">
 			<motors>
-				<motor id="184">
-					<position x="8659.301" y="1273.5" z="-215.39606"/>
-					<connectionPosition x="8479.348" y="70.043" z="24.276184"/>
-				</motor>
-				<motor id="185">
-					<position x="8178.9604" y="1273.5" z="424.34833"/>
-					<connectionPosition x="8352.935" y="70.166" z="192.63931"/>
+				<motor id="92">
+					<position x="8.999999999999986" y="0.0" z="27.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="27.0"/>
 				</motor>
 				<bounds>
-					<point x="8640.368" y="973.5" z="-190.18109"/>
-					<point x="8197.893" y="973.5" z="399.1334"/>
-					<point x="8279.933" y="-326.5" z="289.86865"/>
-					<point x="8558.329" y="-326.5" z="-80.916275"/>
+					<point x="8.999999999999986" y="0.0" z="27.0"/>
+					<point x="8.999999999999986" y="380.0" z="27.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="276"/>
-				<light id="277"/>
-				<light id="278"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="93">
 			<motors>
-				<motor id="186">
-					<position x="8696.886" y="1273.5" z="-187.17606"/>
-					<connectionPosition x="8517.913" y="77.921" z="51.190308"/>
-				</motor>
-				<motor id="187">
-					<position x="8216.545" y="1273.5" z="452.5683"/>
-					<connectionPosition x="8384.815" y="78.056" z="228.45709"/>
+				<motor id="93">
+					<position x="8.999999999999986" y="0.0" z="45.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="45.0"/>
 				</motor>
 				<bounds>
-					<point x="8677.953" y="973.5" z="-161.96114"/>
-					<point x="8235.478" y="973.5" z="427.35333"/>
-					<point x="8317.517" y="-326.5" z="318.0885"/>
-					<point x="8595.914" y="-326.5" z="-52.696503"/>
+					<point x="8.999999999999986" y="0.0" z="45.0"/>
+					<point x="8.999999999999986" y="380.0" z="45.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="279"/>
-				<light id="280"/>
-				<light id="281"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="94">
 			<motors>
-				<motor id="188">
-					<position x="8734.471" y="1273.5" z="-158.95602"/>
-					<connectionPosition x="8560.836" y="84.074" z="72.300385"/>
-				</motor>
-				<motor id="189">
-					<position x="8254.13" y="1273.5" z="480.7884"/>
-					<connectionPosition x="8416.666" y="84.264" z="264.31485"/>
+				<motor id="94">
+					<position x="8.999999999999986" y="0.0" z="63.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="63.0"/>
 				</motor>
 				<bounds>
-					<point x="8715.538" y="973.5" z="-133.74106"/>
-					<point x="8273.0625" y="973.5" z="455.5735"/>
-					<point x="8355.102" y="-326.5" z="346.30884"/>
-					<point x="8633.499" y="-326.5" z="-24.476242"/>
+					<point x="8.999999999999986" y="0.0" z="63.0"/>
+					<point x="8.999999999999986" y="380.0" z="63.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="282"/>
-				<light id="283"/>
-				<light id="284"/>
-			</lights>
+			<lights/>
 		</element>
 		<element id="95">
 			<motors>
-				<motor id="190">
-					<position x="8772.056" y="1273.5" z="-130.73602"/>
-					<connectionPosition x="8609.667" y="86.596" z="85.54236"/>
-				</motor>
-				<motor id="191">
-					<position x="8291.715" y="1273.5" z="509.00836"/>
-					<connectionPosition x="8453.702" y="86.117" z="293.26575"/>
+				<motor id="95">
+					<position x="8.999999999999986" y="0.0" z="81.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="81.0"/>
 				</motor>
 				<bounds>
-					<point x="8753.123" y="973.5" z="-105.5211"/>
-					<point x="8310.647" y="973.5" z="483.7934"/>
-					<point x="8392.687" y="-326.5" z="374.52856"/>
-					<point x="8671.084" y="-326.5" z="3.7435303"/>
+					<point x="8.999999999999986" y="0.0" z="81.0"/>
+					<point x="8.999999999999986" y="380.0" z="81.0"/>
 				</bounds>
 			</motors>
-			<lights>
-				<light id="285"/>
-				<light id="286"/>
-				<light id="287"/>
-			</lights>
+			<lights/>
+		</element>
+		<element id="96">
+			<motors>
+				<motor id="96">
+					<position x="8.999999999999986" y="0.0" z="99.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="99.0"/>
+				</motor>
+				<bounds>
+					<point x="8.999999999999986" y="0.0" z="99.0"/>
+					<point x="8.999999999999986" y="380.0" z="99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="97">
+			<motors>
+				<motor id="97">
+					<position x="8.999999999999986" y="0.0" z="117.0"/>
+					<connectionPosition x="8.999999999999986" y="190.0" z="117.0"/>
+				</motor>
+				<bounds>
+					<point x="8.999999999999986" y="0.0" z="117.0"/>
+					<point x="8.999999999999986" y="380.0" z="117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="98">
+			<motors>
+				<motor id="98">
+					<position x="27.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="27.0" y="190.0" z="-117.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="-117.0"/>
+					<point x="27.0" y="380.0" z="-117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="99">
+			<motors>
+				<motor id="99">
+					<position x="27.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="27.0" y="190.0" z="-99.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="-99.0"/>
+					<point x="27.0" y="380.0" z="-99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="100">
+			<motors>
+				<motor id="100">
+					<position x="27.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="27.0" y="190.0" z="-81.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="-81.0"/>
+					<point x="27.0" y="380.0" z="-81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="101">
+			<motors>
+				<motor id="101">
+					<position x="27.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="27.0" y="190.0" z="-63.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="-63.0"/>
+					<point x="27.0" y="380.0" z="-63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="102">
+			<motors>
+				<motor id="102">
+					<position x="27.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="27.0" y="190.0" z="-45.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="-45.0"/>
+					<point x="27.0" y="380.0" z="-45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="103">
+			<motors>
+				<motor id="103">
+					<position x="27.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="27.0" y="190.0" z="-27.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="-27.0"/>
+					<point x="27.0" y="380.0" z="-27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="104">
+			<motors>
+				<motor id="104">
+					<position x="27.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="27.0" y="190.0" z="-9.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="-9.0"/>
+					<point x="27.0" y="380.0" z="-9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="105">
+			<motors>
+				<motor id="105">
+					<position x="27.0" y="0.0" z="9.0"/>
+					<connectionPosition x="27.0" y="190.0" z="9.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="9.0"/>
+					<point x="27.0" y="380.0" z="9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="106">
+			<motors>
+				<motor id="106">
+					<position x="27.0" y="0.0" z="27.0"/>
+					<connectionPosition x="27.0" y="190.0" z="27.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="27.0"/>
+					<point x="27.0" y="380.0" z="27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="107">
+			<motors>
+				<motor id="107">
+					<position x="27.0" y="0.0" z="45.0"/>
+					<connectionPosition x="27.0" y="190.0" z="45.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="45.0"/>
+					<point x="27.0" y="380.0" z="45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="108">
+			<motors>
+				<motor id="108">
+					<position x="27.0" y="0.0" z="63.0"/>
+					<connectionPosition x="27.0" y="190.0" z="63.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="63.0"/>
+					<point x="27.0" y="380.0" z="63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="109">
+			<motors>
+				<motor id="109">
+					<position x="27.0" y="0.0" z="81.0"/>
+					<connectionPosition x="27.0" y="190.0" z="81.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="81.0"/>
+					<point x="27.0" y="380.0" z="81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="110">
+			<motors>
+				<motor id="110">
+					<position x="27.0" y="0.0" z="99.0"/>
+					<connectionPosition x="27.0" y="190.0" z="99.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="99.0"/>
+					<point x="27.0" y="380.0" z="99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="111">
+			<motors>
+				<motor id="111">
+					<position x="27.0" y="0.0" z="117.0"/>
+					<connectionPosition x="27.0" y="190.0" z="117.0"/>
+				</motor>
+				<bounds>
+					<point x="27.0" y="0.0" z="117.0"/>
+					<point x="27.0" y="380.0" z="117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="112">
+			<motors>
+				<motor id="112">
+					<position x="45.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="45.0" y="190.0" z="-117.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="-117.0"/>
+					<point x="45.0" y="380.0" z="-117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="113">
+			<motors>
+				<motor id="113">
+					<position x="45.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="45.0" y="190.0" z="-99.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="-99.0"/>
+					<point x="45.0" y="380.0" z="-99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="114">
+			<motors>
+				<motor id="114">
+					<position x="45.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="45.0" y="190.0" z="-81.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="-81.0"/>
+					<point x="45.0" y="380.0" z="-81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="115">
+			<motors>
+				<motor id="115">
+					<position x="45.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="45.0" y="190.0" z="-63.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="-63.0"/>
+					<point x="45.0" y="380.0" z="-63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="116">
+			<motors>
+				<motor id="116">
+					<position x="45.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="45.0" y="190.0" z="-45.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="-45.0"/>
+					<point x="45.0" y="380.0" z="-45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="117">
+			<motors>
+				<motor id="117">
+					<position x="45.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="45.0" y="190.0" z="-27.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="-27.0"/>
+					<point x="45.0" y="380.0" z="-27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="118">
+			<motors>
+				<motor id="118">
+					<position x="45.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="45.0" y="190.0" z="-9.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="-9.0"/>
+					<point x="45.0" y="380.0" z="-9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="119">
+			<motors>
+				<motor id="119">
+					<position x="45.0" y="0.0" z="9.0"/>
+					<connectionPosition x="45.0" y="190.0" z="9.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="9.0"/>
+					<point x="45.0" y="380.0" z="9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="120">
+			<motors>
+				<motor id="120">
+					<position x="45.0" y="0.0" z="27.0"/>
+					<connectionPosition x="45.0" y="190.0" z="27.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="27.0"/>
+					<point x="45.0" y="380.0" z="27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="121">
+			<motors>
+				<motor id="121">
+					<position x="45.0" y="0.0" z="45.0"/>
+					<connectionPosition x="45.0" y="190.0" z="45.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="45.0"/>
+					<point x="45.0" y="380.0" z="45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="122">
+			<motors>
+				<motor id="122">
+					<position x="45.0" y="0.0" z="63.0"/>
+					<connectionPosition x="45.0" y="190.0" z="63.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="63.0"/>
+					<point x="45.0" y="380.0" z="63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="123">
+			<motors>
+				<motor id="123">
+					<position x="45.0" y="0.0" z="81.0"/>
+					<connectionPosition x="45.0" y="190.0" z="81.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="81.0"/>
+					<point x="45.0" y="380.0" z="81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="124">
+			<motors>
+				<motor id="124">
+					<position x="45.0" y="0.0" z="99.0"/>
+					<connectionPosition x="45.0" y="190.0" z="99.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="99.0"/>
+					<point x="45.0" y="380.0" z="99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="125">
+			<motors>
+				<motor id="125">
+					<position x="45.0" y="0.0" z="117.0"/>
+					<connectionPosition x="45.0" y="190.0" z="117.0"/>
+				</motor>
+				<bounds>
+					<point x="45.0" y="0.0" z="117.0"/>
+					<point x="45.0" y="380.0" z="117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="126">
+			<motors>
+				<motor id="126">
+					<position x="63.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="63.0" y="190.0" z="-117.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="-117.0"/>
+					<point x="63.0" y="380.0" z="-117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="127">
+			<motors>
+				<motor id="127">
+					<position x="63.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="63.0" y="190.0" z="-99.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="-99.0"/>
+					<point x="63.0" y="380.0" z="-99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="128">
+			<motors>
+				<motor id="128">
+					<position x="63.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="63.0" y="190.0" z="-81.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="-81.0"/>
+					<point x="63.0" y="380.0" z="-81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="129">
+			<motors>
+				<motor id="129">
+					<position x="63.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="63.0" y="190.0" z="-63.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="-63.0"/>
+					<point x="63.0" y="380.0" z="-63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="130">
+			<motors>
+				<motor id="130">
+					<position x="63.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="63.0" y="190.0" z="-45.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="-45.0"/>
+					<point x="63.0" y="380.0" z="-45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="131">
+			<motors>
+				<motor id="131">
+					<position x="63.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="63.0" y="190.0" z="-27.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="-27.0"/>
+					<point x="63.0" y="380.0" z="-27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="132">
+			<motors>
+				<motor id="132">
+					<position x="63.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="63.0" y="190.0" z="-9.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="-9.0"/>
+					<point x="63.0" y="380.0" z="-9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="133">
+			<motors>
+				<motor id="133">
+					<position x="63.0" y="0.0" z="9.0"/>
+					<connectionPosition x="63.0" y="190.0" z="9.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="9.0"/>
+					<point x="63.0" y="380.0" z="9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="134">
+			<motors>
+				<motor id="134">
+					<position x="63.0" y="0.0" z="27.0"/>
+					<connectionPosition x="63.0" y="190.0" z="27.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="27.0"/>
+					<point x="63.0" y="380.0" z="27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="135">
+			<motors>
+				<motor id="135">
+					<position x="63.0" y="0.0" z="45.0"/>
+					<connectionPosition x="63.0" y="190.0" z="45.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="45.0"/>
+					<point x="63.0" y="380.0" z="45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="136">
+			<motors>
+				<motor id="136">
+					<position x="63.0" y="0.0" z="63.0"/>
+					<connectionPosition x="63.0" y="190.0" z="63.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="63.0"/>
+					<point x="63.0" y="380.0" z="63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="137">
+			<motors>
+				<motor id="137">
+					<position x="63.0" y="0.0" z="81.0"/>
+					<connectionPosition x="63.0" y="190.0" z="81.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="81.0"/>
+					<point x="63.0" y="380.0" z="81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="138">
+			<motors>
+				<motor id="138">
+					<position x="63.0" y="0.0" z="99.0"/>
+					<connectionPosition x="63.0" y="190.0" z="99.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="99.0"/>
+					<point x="63.0" y="380.0" z="99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="139">
+			<motors>
+				<motor id="139">
+					<position x="63.0" y="0.0" z="117.0"/>
+					<connectionPosition x="63.0" y="190.0" z="117.0"/>
+				</motor>
+				<bounds>
+					<point x="63.0" y="0.0" z="117.0"/>
+					<point x="63.0" y="380.0" z="117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="140">
+			<motors>
+				<motor id="140">
+					<position x="81.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="81.0" y="190.0" z="-117.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="-117.0"/>
+					<point x="81.0" y="380.0" z="-117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="141">
+			<motors>
+				<motor id="141">
+					<position x="81.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="81.0" y="190.0" z="-99.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="-99.0"/>
+					<point x="81.0" y="380.0" z="-99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="142">
+			<motors>
+				<motor id="142">
+					<position x="81.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="81.0" y="190.0" z="-81.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="-81.0"/>
+					<point x="81.0" y="380.0" z="-81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="143">
+			<motors>
+				<motor id="143">
+					<position x="81.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="81.0" y="190.0" z="-63.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="-63.0"/>
+					<point x="81.0" y="380.0" z="-63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="144">
+			<motors>
+				<motor id="144">
+					<position x="81.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="81.0" y="190.0" z="-45.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="-45.0"/>
+					<point x="81.0" y="380.0" z="-45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="145">
+			<motors>
+				<motor id="145">
+					<position x="81.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="81.0" y="190.0" z="-27.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="-27.0"/>
+					<point x="81.0" y="380.0" z="-27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="146">
+			<motors>
+				<motor id="146">
+					<position x="81.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="81.0" y="190.0" z="-9.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="-9.0"/>
+					<point x="81.0" y="380.0" z="-9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="147">
+			<motors>
+				<motor id="147">
+					<position x="81.0" y="0.0" z="9.0"/>
+					<connectionPosition x="81.0" y="190.0" z="9.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="9.0"/>
+					<point x="81.0" y="380.0" z="9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="148">
+			<motors>
+				<motor id="148">
+					<position x="81.0" y="0.0" z="27.0"/>
+					<connectionPosition x="81.0" y="190.0" z="27.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="27.0"/>
+					<point x="81.0" y="380.0" z="27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="149">
+			<motors>
+				<motor id="149">
+					<position x="81.0" y="0.0" z="45.0"/>
+					<connectionPosition x="81.0" y="190.0" z="45.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="45.0"/>
+					<point x="81.0" y="380.0" z="45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="150">
+			<motors>
+				<motor id="150">
+					<position x="81.0" y="0.0" z="63.0"/>
+					<connectionPosition x="81.0" y="190.0" z="63.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="63.0"/>
+					<point x="81.0" y="380.0" z="63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="151">
+			<motors>
+				<motor id="151">
+					<position x="81.0" y="0.0" z="81.0"/>
+					<connectionPosition x="81.0" y="190.0" z="81.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="81.0"/>
+					<point x="81.0" y="380.0" z="81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="152">
+			<motors>
+				<motor id="152">
+					<position x="81.0" y="0.0" z="99.0"/>
+					<connectionPosition x="81.0" y="190.0" z="99.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="99.0"/>
+					<point x="81.0" y="380.0" z="99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="153">
+			<motors>
+				<motor id="153">
+					<position x="81.0" y="0.0" z="117.0"/>
+					<connectionPosition x="81.0" y="190.0" z="117.0"/>
+				</motor>
+				<bounds>
+					<point x="81.0" y="0.0" z="117.0"/>
+					<point x="81.0" y="380.0" z="117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="154">
+			<motors>
+				<motor id="154">
+					<position x="99.0" y="0.0" z="-117.0"/>
+					<connectionPosition x="99.0" y="190.0" z="-117.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="-117.0"/>
+					<point x="99.0" y="380.0" z="-117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="155">
+			<motors>
+				<motor id="155">
+					<position x="99.0" y="0.0" z="-99.0"/>
+					<connectionPosition x="99.0" y="190.0" z="-99.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="-99.0"/>
+					<point x="99.0" y="380.0" z="-99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="156">
+			<motors>
+				<motor id="156">
+					<position x="99.0" y="0.0" z="-81.0"/>
+					<connectionPosition x="99.0" y="190.0" z="-81.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="-81.0"/>
+					<point x="99.0" y="380.0" z="-81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="157">
+			<motors>
+				<motor id="157">
+					<position x="99.0" y="0.0" z="-63.0"/>
+					<connectionPosition x="99.0" y="190.0" z="-63.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="-63.0"/>
+					<point x="99.0" y="380.0" z="-63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="158">
+			<motors>
+				<motor id="158">
+					<position x="99.0" y="0.0" z="-45.0"/>
+					<connectionPosition x="99.0" y="190.0" z="-45.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="-45.0"/>
+					<point x="99.0" y="380.0" z="-45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="159">
+			<motors>
+				<motor id="159">
+					<position x="99.0" y="0.0" z="-27.0"/>
+					<connectionPosition x="99.0" y="190.0" z="-27.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="-27.0"/>
+					<point x="99.0" y="380.0" z="-27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="160">
+			<motors>
+				<motor id="160">
+					<position x="99.0" y="0.0" z="-9.0"/>
+					<connectionPosition x="99.0" y="190.0" z="-9.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="-9.0"/>
+					<point x="99.0" y="380.0" z="-9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="161">
+			<motors>
+				<motor id="161">
+					<position x="99.0" y="0.0" z="9.0"/>
+					<connectionPosition x="99.0" y="190.0" z="9.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="9.0"/>
+					<point x="99.0" y="380.0" z="9.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="162">
+			<motors>
+				<motor id="162">
+					<position x="99.0" y="0.0" z="27.0"/>
+					<connectionPosition x="99.0" y="190.0" z="27.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="27.0"/>
+					<point x="99.0" y="380.0" z="27.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="163">
+			<motors>
+				<motor id="163">
+					<position x="99.0" y="0.0" z="45.0"/>
+					<connectionPosition x="99.0" y="190.0" z="45.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="45.0"/>
+					<point x="99.0" y="380.0" z="45.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="164">
+			<motors>
+				<motor id="164">
+					<position x="99.0" y="0.0" z="63.0"/>
+					<connectionPosition x="99.0" y="190.0" z="63.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="63.0"/>
+					<point x="99.0" y="380.0" z="63.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="165">
+			<motors>
+				<motor id="165">
+					<position x="99.0" y="0.0" z="81.0"/>
+					<connectionPosition x="99.0" y="190.0" z="81.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="81.0"/>
+					<point x="99.0" y="380.0" z="81.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="166">
+			<motors>
+				<motor id="166">
+					<position x="99.0" y="0.0" z="99.0"/>
+					<connectionPosition x="99.0" y="190.0" z="99.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="99.0"/>
+					<point x="99.0" y="380.0" z="99.0"/>
+				</bounds>
+			</motors>
+			<lights/>
+		</element>
+		<element id="167">
+			<motors>
+				<motor id="167">
+					<position x="99.0" y="0.0" z="117.0"/>
+					<connectionPosition x="99.0" y="190.0" z="117.0"/>
+				</motor>
+				<bounds>
+					<point x="99.0" y="0.0" z="117.0"/>
+					<point x="99.0" y="380.0" z="117.0"/>
+				</bounds>
+			</motors>
+			<lights/>
 		</element>
 	</elements>
 </sculpture>
