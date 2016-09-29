@@ -1,0 +1,14 @@
+public static byte[] toArray(ByteBuf theBuf){
+		if (theBuf.hasArray()) {
+			byte[] array = theBuf.array();
+			int offset = theBuf.arrayOffset() + theBuf.readerIndex();
+			int length = theBuf.readableBytes();
+			CCArrayUtil.
+			handleArray(array, offset, length);
+		}else{
+			int length = theBuf.readableBytes();
+			byte[] array = new byte[length];
+			directBuf.getBytes(directBuf.readerIndex(), array);
+			handleArray(array, 0, length); 
+		}
+	}

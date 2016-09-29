@@ -370,18 +370,18 @@ public class CCOSCPacketCodec implements CCNetPacketCodec<CCOSCPacket>{
 		return result;
 	}
 
-	protected CCOSCBundle decodeBundle(ByteBuffer b){
+	private CCOSCBundle decodeBundle(ByteBuffer theBuffer){
 		final CCOSCBundle bndl = new CCOSCBundle();
-		final int totalLimit = b.limit();
+		final int totalLimit = theBuffer.limit();
 
-		bndl.setTimeTagRaw(b.getLong());
+		bndl.setTimeTagRaw(theBuffer.getLong());
 
 		try {
-			while (b.hasRemaining()) {
-				b.limit(b.getInt() + b.position()); // msg size
+			while (theBuffer.hasRemaining()) {
+				theBuffer.limit(theBuffer.getInt() + theBuffer.position()); // msg size
 				// bndl.addPacket( CCOSCPacket.decode( b, m ));
-				bndl.addPacket(decode(b));
-				b.limit(totalLimit);
+				bndl.addPacket(decode(theBuffer));
+				theBuffer.limit(totalLimit);
 			}
 			return bndl;
 		} catch (IllegalArgumentException e1) { // throws by b.limit if bundle size is corrupted
