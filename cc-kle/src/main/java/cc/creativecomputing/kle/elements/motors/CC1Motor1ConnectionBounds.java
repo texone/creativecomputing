@@ -1,14 +1,11 @@
 package cc.creativecomputing.kle.elements.motors;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCVector3;
 
 public class CC1Motor1ConnectionBounds extends CCMotorBounds<CC1Motor1ConnectionSetup>{
 
 	@Override
 	public void updateBounds(CC1Motor1ConnectionSetup mySetup){
-		
-		CCLog.info("update Bounds");
 		mySetup.bounds().clear();
 		mySetup.bounds().add(boundPoint(mySetup, _myTopDistance));
 		mySetup.bounds().add(boundPoint(mySetup, _myBottomDistance));
