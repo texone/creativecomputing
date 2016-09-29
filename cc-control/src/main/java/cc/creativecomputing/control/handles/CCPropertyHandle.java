@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
-import cc.creativecomputing.io.data.CCDataException;
 import cc.creativecomputing.io.data.CCDataObject;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
