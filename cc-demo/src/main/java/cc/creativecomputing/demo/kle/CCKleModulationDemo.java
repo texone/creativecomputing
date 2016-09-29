@@ -23,12 +23,10 @@ public class CCKleModulationDemo extends CCGL2Adapter{
 		_mySequenceElements = new CCSequenceElements();
 		for(int i = 0; i < 20;i++){
 			CCSequenceElement myElement = new CCSequenceElement(i);
-			myElement.idBlend(i / 20f);
-			myElement.groupIDBlend(i / 20f);
 			_mySequenceElements.add(myElement);
 		}
 		
-		_cModulation = new CCEffectModulation();
+		_cModulation = new CCEffectModulation(_mySequenceElements);
 	}
 	
 	@Override

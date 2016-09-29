@@ -5,7 +5,6 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.effects.CCEffectables;
@@ -16,7 +15,6 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
-import cc.creativecomputing.kle.elements.CCKleChannelType;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
@@ -26,8 +24,6 @@ public class CCTriangleEffectableDemo extends CCGL2Adapter{
 	public class CCTriangleFront extends CCEffectable{
 		public CCTriangleFront(int theId) {
 			super(theId);
-			idBlend(theId / 90d);
-			groupIDBlend(theId / 90d);
 		}
 
 		private CCColor _myColor = new CCColor();
@@ -35,7 +31,6 @@ public class CCTriangleEffectableDemo extends CCGL2Adapter{
 		@Override
 		public void apply(double... theValues) {
 			_myColor = CCColor.createFromHSB(theValues[0], theValues[1], theValues[2]);
-			CCLog.info(_myColor);
 		}
 	}
 	
@@ -50,8 +45,6 @@ public class CCTriangleEffectableDemo extends CCGL2Adapter{
 		
 		public CCTriangleElement(int theID, CCVector3 thePosition, int theX){
 			super(theID);
-			idBlend(theID / 30d);
-			groupIDBlend(theID / 30d);
 			_myPosition = thePosition;
 			x = theX;
 			for(int i = 0; i < 3;i++){
@@ -121,13 +114,14 @@ public class CCTriangleEffectableDemo extends CCGL2Adapter{
 			double tx = CCMath.map(x, 0, 30 - 1, -800, 800);
 			_myTriangleElements.add(new CCTriangleElement(x, new CCVector3(tx, 0, 0), x));
 		}
+		_myTriangleElements.updateInfos();
 		
 		_myRotationManager = new CCEffectManager<CCTriangleElement>(_myTriangleElements, "r");
 		
 		_myRotationManager.put("offset", new CCOffsetEffect());
 		_myRotationManager.put("offset2", new CCOffsetEffect());
 		_myRotationManager.put("signal", new CCSignalEffect());
-		
+		_myTriangleFronts.updateInfos();
 		_myColorManager = new CCEffectManager<CCTriangleFront>(_myTriangleFronts, "h", "s", "b");
 		_myColorManager.put("offset", new CCOffsetEffect());
 		

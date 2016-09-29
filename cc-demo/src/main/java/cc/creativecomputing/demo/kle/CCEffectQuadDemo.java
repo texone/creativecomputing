@@ -64,14 +64,14 @@ public class CCEffectQuadDemo extends CCGL2Adapter {
 		public void apply(double... theValues) {
 			_myYAnimation = theValues[0] * _cYMax;
 
-			_myY = yBlend() * (_cScreenHeight + _cScreenSpace) * (rows - 1) * 0.5 + _myYAnimation;
+			_myY = rowBlend() * (_cScreenHeight + _cScreenSpace) * (rows - 1) * 0.5 + _myYAnimation;
 			
 			_myo0 = theValues[1];
 			_myo1 = theValues[2];
 		}
 		
 		public void drawContent(CCGraphics g){
-			double _myX0 = xBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
+			double _myX0 = columnBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
 			double _myY0 = _myY;
 			double _myX1 = _myX0 + _cScreenWidth;
 			double _myY1 = _myY0 + _cScreenHeight;
@@ -85,7 +85,7 @@ public class CCEffectQuadDemo extends CCGL2Adapter {
 		}
 		
 		public void drawLine(CCGraphics g, int i){
-			double _myX0 = xBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
+			double _myX0 = columnBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
 			double _myX1 = _myX0 + _cScreenWidth;
 			
 			CCColor myColor = CCColor.createFromHSB(
@@ -99,13 +99,13 @@ public class CCEffectQuadDemo extends CCGL2Adapter {
 		}
 		
 		public CCVector3 getLineVertex(){
-			double _myX0 = xBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
+			double _myX0 = columnBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
 			double _myX1 = _myX0 + _cScreenWidth;
 			return new CCVector3((_myX0 + _myX1) / 2, _myY + _cScreenHeight / 2);
 		}
 		
 		public void drawScreen(CCGraphics g){
-			double _myX0 = xBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
+			double _myX0 = columnBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
 			double _myY0 = _myConstrainedY;
 			double _myX1 = _myX0 + _cScreenWidth;
 			double _myY1 = _myY0 + _cScreenHeight;
@@ -117,7 +117,7 @@ public class CCEffectQuadDemo extends CCGL2Adapter {
 		}
 		
 		public void drawTextured(CCGraphics g){
-			double _myX0 = xBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
+			double _myX0 = columnBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
 			double _myY0 = _myConstrainedY;
 			double _myX1 = _myX0 + _cScreenWidth;
 			double _myY1 = _myY0 + _cScreenHeight;
@@ -138,7 +138,7 @@ public class CCEffectQuadDemo extends CCGL2Adapter {
 		}
 		
 		public void drawFace(CCGraphics g){
-			double _myX0 = xBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
+			double _myX0 = columnBlend() * (_cScreenWidth + _cScreenSpace) * (columns - 1) * 0.5;
 			double _myY0 = _myConstrainedY;
 			double _myX1 = _myX0 + _cScreenWidth;
 			double _myY1 = _myY0 + _cScreenHeight;
@@ -302,21 +302,16 @@ public class CCEffectQuadDemo extends CCGL2Adapter {
 		for(int x = 0; x < columns;x++){
 			CCScreenColumn myScreenColumn = new CCScreenColumn();
 			for(int y = 0; y < rows;y++){
-				double myX = CCMath.map(x, 0, columns - 1, -1, 1);
-				double myY = CCMath.map(y, 0, rows - 1, -1, 1);
-				double myID = CCMath.map(id, 0, columns * rows - 1,0,1);
 				CCScreenEffectable myScreen0 = new CCScreenEffectable(id++, x, y, _cColors[y]);
-				myScreen0._myXBlend = myX;
-				myScreen0._myYBlend = myY;
-				myScreen0.groupIDBlend(myID);
-				myScreen0.idBlend(myID);
-				myScreen0.groupBlend(0);
-				myScreen0.group(0);
+				myScreen0.column(x);
+				myScreen0.row(y);
 				_myScreens.add(myScreen0);
 				myScreenColumn._myScreens.add(myScreen0);
 			}
 			_myScreenColumns.add(myScreenColumn);
 		}
+		
+		_myScreens.addRelativeSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		
 		_myEffectManager = new CCEffectManager<CCScreenEffectable>(_myScreens, "y", "o0", "o1");
 		_myEffectManager.put("offset", new CCOffsetEffect());

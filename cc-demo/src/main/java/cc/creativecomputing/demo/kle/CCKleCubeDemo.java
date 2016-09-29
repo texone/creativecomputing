@@ -2,7 +2,6 @@ package cc.creativecomputing.demo.kle;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.effects.CCEffectables;
@@ -14,10 +13,7 @@ import cc.creativecomputing.graphics.CCGraphics.CCMatrixMode;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.export.CCScreenCaptureController;
-import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
-import cc.creativecomputing.image.CCImageIO;
-import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
@@ -30,10 +26,6 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 	private class CCCubeEffectable extends CCEffectable{
 		
 		private CCVector2 _myCenter;
-		
-		private double _myRotateX;
-		private double _myRotateY;
-		private double _myRotateZ;
 		
 
 		private double _myAlpha;
@@ -49,9 +41,6 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 		
 		@Override
 		public void apply(double...theValues) {
-			_myRotateX = theValues[0] * 180;
-			_myRotateY = theValues[1] * 180;
-			_myRotateZ = theValues[2] * 180;
 			
 			_myAlpha = theValues[0];
 			_myScale = theValues[1] * 2;
@@ -133,13 +122,14 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 		for(int c = 0; c < 9 * 28; c++){
 			for(int r = 0; r < 16; r++){
 				CCCubeEffectable myCube = new CCCubeEffectable(i, new CCVector2(c * 12 + 6 , r * 12 + 6));
-				myCube._myXBlend = CCMath.norm(c, 0, 9 * 28 - 1);
-				myCube._myYBlend = CCMath.norm(r, 0, 15);
-				myCube.idBlend(CCMath.norm(i, 0, 16 * 9 * 28));
+				myCube.column(c);
+				myCube.row(r);
 				_myCubes.add(myCube);
 				i++;
 			}
 		}
+		_myCubes.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
+		
 		_myEffectManager = new CCEffectManager<CCCubeEffectable>(_myCubes, "x", "y", "z");
 		
 		_myEffectManager.put("offset", new CCOffsetEffect());

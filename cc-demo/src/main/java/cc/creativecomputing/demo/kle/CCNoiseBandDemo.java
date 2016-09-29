@@ -17,10 +17,6 @@ import cc.creativecomputing.math.CCVector2;
 
 public class CCNoiseBandDemo extends CCGL2Adapter{
 	
-	private double texheight = 16 * 12;
-	private double texwidth = 9 * 28 * 12;
-	
-	
 	private class CCStickEffectable extends CCEffectable{
 		
 		private CCVector2 _myCenter;
@@ -29,14 +25,9 @@ public class CCNoiseBandDemo extends CCGL2Adapter{
 		private double _myRotateY;
 		private double _myRotateZ;
 		
-
-		private double _myAlpha;
 		private double _myScale;
-		private double _myRotation;
 		private double _myY;
 		
-		
-
 		public CCStickEffectable(int theId, CCVector2 theCenter) {
 			super(theId);
 			_myCenter = theCenter;
@@ -107,11 +98,10 @@ public class CCNoiseBandDemo extends CCGL2Adapter{
 	public void init( CCGraphics g, CCAnimator theAnimator) {
 		int i = 0;
 		for(int c = 0; c < 100; c++){
-				CCStickEffectable myCube = new CCStickEffectable(i, new CCVector2(CCMath.map(c, 0, 99, -1, 1) ,0));
-				myCube._myXBlend = CCMath.norm(c, 0, 199);
-				myCube.idBlend(CCMath.norm(i, 0, 400));
-				_myCubes.add(myCube);
-				i++;
+			CCStickEffectable myCube = new CCStickEffectable(i, new CCVector2(CCMath.map(c, 0, 99, -1, 1) ,0));
+			myCube.column(c);
+			_myCubes.add(myCube);
+			i++;
 		}
 		_myEffectManager = new CCEffectManager<CCStickEffectable>(_myCubes, "x", "y", "z", "scale", "y move");
 		
