@@ -21,6 +21,7 @@ public class CCEffectables<Type extends CCEffectable> extends ArrayList<Type>{
 	
 	public CCEffectables(){
 		super();
+		_myRelativeSources.add(CCEffectable.CONSTANT_SOURCE);
 		_myRelativeSources.add(CCEffectable.RANDOM_SOURCE);
 		_myIdSources.add(CCEffectable.ID_SOURCE);
 	}

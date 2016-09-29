@@ -107,12 +107,17 @@ public class CCEffectModulation {
 		double myResultPhase = 0;
 		for(String myRelativeSource:_myEffectables.relativeSources()){
 			double scaleValue = scaleValue(theMin, theMax, theElement.relativeSource(myRelativeSource), _myRelativeAmounts.get(myRelativeSource));
+			if(Double.isNaN(scaleValue))continue;
 			myResultPhase += scaleValue;
 		}
 		
 		
 		for(String myIdSource:_myEffectables.idSources()){
 			CCIdSource myIdSource2 = _myIdAmounts.get(myIdSource);
+			double myModPhase = _myModBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.mod, myIdSource2.modAmount);
+			double myDivPhase = _myDivBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.div, myIdSource2.divAmount);
+			
+			if(Double.isNaN(myModPhase) || Double.isNaN(myDivPhase))continue;
 			
 			myResultPhase += _myModBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.mod, myIdSource2.modAmount); 
 			myResultPhase += _myDivBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.div, myIdSource2.divAmount);

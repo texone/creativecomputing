@@ -8,6 +8,7 @@ import cc.creativecomputing.math.CCMath;
 
 public abstract class CCEffectable {
 	
+	public static final String CONSTANT_SOURCE = "constant";
 	public static final String RANDOM_SOURCE = "random";
 	
 	public static final String ID_SOURCE = "id";
@@ -23,8 +24,10 @@ public abstract class CCEffectable {
 	
 	public CCEffectable(int theId){
 		_myID = theId;
-		addIdBasedSource(ID_SOURCE, _myID);
+		addRelativeSource(CONSTANT_SOURCE, 1);
 		addRelativeSource(RANDOM_SOURCE, CCMath.random());
+
+		addIdBasedSource(ID_SOURCE, _myID);
 	}
 	
 	public void addRelativeSource(String theKey, double theValue){
@@ -49,12 +52,32 @@ public abstract class CCEffectable {
 		addIdBasedSource(COLUMN_SOURCE, theColumn);
 	}
 	
+	public int column(){
+		return idSource(COLUMN_SOURCE);
+	}
+	
+	public double columnBlend(){
+		return relativeSource(CCEffectable.COLUMN_SOURCE);
+	}
+	
 	public void row(int theRow){
 		addIdBasedSource(ROW_SOURCE, theRow);
 	}
 	
+	public int row(){
+		return idSource(ROW_SOURCE);
+	}
+	
+	public double rowBlend(){
+		return relativeSource(CCEffectable.ROW_SOURCE);
+	}
+	
 	public void group(int theGroup){
 		addIdBasedSource(GROUP_SOURCE, theGroup);
+	}
+	
+	public double groupBlend(){
+		return relativeSource(CCEffectable.GROUP_SOURCE);
 	}
 	
 	public int group(){

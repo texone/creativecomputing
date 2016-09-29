@@ -1,6 +1,7 @@
 package cc.creativecomputing.kle.elements;
 
 import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffectManager;
 
 public class CCSequenceElementEffectManager extends CCEffectManager<CCSequenceElement> implements CCAnimatorListener{

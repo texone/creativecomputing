@@ -141,6 +141,7 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 			
 			theMotorBounds.setElements(this);
 		}
+		updateInfos();
 	}
 
 	public Map<CCKleChannelType, CCSequenceMapping<?>> mappings() {
