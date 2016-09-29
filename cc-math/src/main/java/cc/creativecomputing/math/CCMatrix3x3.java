@@ -520,28 +520,25 @@ public class CCMatrix3x3 implements Cloneable, Externalizable{
 
     /**
      * Sets this matrix to the rotation indicated by the given angle and a unit-length axis of rotation.
-     * 
-     * @param angle
-     *            the angle to rotate (in radians).
-     * @param axis
-     *            the axis of rotation (already normalized).
+     * @param angle  the angle to rotate (in radians).
+     * @param theX the axis of rotation (already normalized).
+     * @param theY the axis of rotation (already normalized).
+     * @param theZ the axis of rotation (already normalized).
      * @return this matrix for chaining
-     * @throws NullPointerException
-     *             if axis is null.
      */
-    public CCMatrix3x3 fromAngleNormalAxis(final double angle, final CCVector3 axis) {
+    public CCMatrix3x3 fromAngleNormalAxis(final double angle, final double theX, final double theY, final double theZ) {
         final double fCos = CCMath.cos(angle);
         final double fSin = CCMath.sin(angle);
         final double fOneMinusCos = 1.0f - fCos;
-        final double fX2 = axis.x * axis.x;
-        final double fY2 = axis.y * axis.y;
-        final double fZ2 = axis.z * axis.z;
-        final double fXYM = axis.x * axis.y * fOneMinusCos;
-        final double fXZM = axis.x * axis.z * fOneMinusCos;
-        final double fYZM = axis.y * axis.z * fOneMinusCos;
-        final double fXSin = axis.x * fSin;
-        final double fYSin = axis.y * fSin;
-        final double fZSin = axis.z * fSin;
+        final double fX2 = theX * theX;
+        final double fY2 = theY * theY;
+        final double fZ2 = theZ * theZ;
+        final double fXYM = theX * theY * fOneMinusCos;
+        final double fXZM = theX * theZ * fOneMinusCos;
+        final double fYZM = theY * theZ * fOneMinusCos;
+        final double fXSin = theX * fSin;
+        final double fYSin = theY * fSin;
+        final double fZSin = theZ * fSin;
 
         _m00 = fX2 * fOneMinusCos + fCos;
         _m01 = fXYM - fZSin;
@@ -554,6 +551,21 @@ public class CCMatrix3x3 implements Cloneable, Externalizable{
         _m22 = fZ2 * fOneMinusCos + fCos;
 
         return this;
+    }
+    
+    /**
+     * Sets this matrix to the rotation indicated by the given angle and a unit-length axis of rotation.
+     * 
+     * @param angle
+     *            the angle to rotate (in radians).
+     * @param axis
+     *            the axis of rotation (already normalized).
+     * @return this matrix for chaining
+     * @throws NullPointerException
+     *             if axis is null.
+     */
+    public CCMatrix3x3 fromAngleNormalAxis(final double angle, final CCVector3 axis) {
+    	return fromAngleNormalAxis(angle, axis.x, axis.y, axis.z);
     }
 
     /**
