@@ -94,7 +94,6 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 				try{
 					value(new ExpressionBuilder(_myValueField.getText()).build().evaluate(), true);
 				}catch(Exception e){
-					e.printStackTrace();
 					value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
 				}
 			}
