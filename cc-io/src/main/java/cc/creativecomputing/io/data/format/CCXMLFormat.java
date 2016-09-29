@@ -621,6 +621,7 @@ public class CCXMLFormat extends CCJsonFormat {
 	 * @return A string.
 	 * @throws CCDataException
 	 */
+	@SuppressWarnings({"unchecked", "unused", "rawtypes"})
 	private String toString(Object theObject, String theTagName) throws CCDataException {
 		StringBuilder sb = new StringBuilder();
 
@@ -746,4 +747,11 @@ public class CCXMLFormat extends CCJsonFormat {
 	public String toFormatType(Map<String, Object> theObject) {
 		return toString(theObject);
 	}
+	
+
+    
+    @Override
+    public CCDataFormat<String> create() {
+    	return new CCXMLFormat();
+    }
 }

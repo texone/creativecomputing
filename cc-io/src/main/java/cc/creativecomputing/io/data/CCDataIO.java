@@ -13,11 +13,9 @@ package cc.creativecomputing.io.data;
 import java.net.URL;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.format.CCDataFormat;
 import cc.creativecomputing.io.data.format.CCJsonFormat;
@@ -60,7 +58,7 @@ public class CCDataIO{
 	 */
 	public static CCDataObject createDataObject(final Path theDocumentPath, final boolean theIgnoreLineFeed, final CCDataFormats theFormat, OpenOption...theOptions){
 		CCDataFormat<?> myFormat = formatMap.get(theFormat);
-		return myFormat.loadAsDataObject(theDocumentPath, theIgnoreLineFeed, theOptions);
+		return myFormat.create().loadAsDataObject(theDocumentPath, theIgnoreLineFeed, theOptions);
 	}
 	
 	/**
@@ -70,7 +68,7 @@ public class CCDataIO{
 	 */
 	public static CCDataObject createDataObject(final URL theDocumentURL, final boolean theIgnoreLineFeed, final CCDataFormats theFormat, String theUser, String theKey){
 		CCDataFormat<?> myFormat = formatMap.get(theFormat);
-		return myFormat.loadAsDataObject(theDocumentURL, theIgnoreLineFeed, theUser, theKey);
+		return myFormat.create().loadAsDataObject(theDocumentURL, theIgnoreLineFeed, theUser, theKey);
 	}
 	
 	/**
@@ -103,19 +101,19 @@ public class CCDataIO{
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static CCDataObject parseToObject(Object theDocument, final CCDataFormats theFormat){
 		CCDataFormat myFormat = formatMap.get(theFormat);
-		return myFormat.parseAsDataObject(theDocument);
+		return myFormat.create().parseAsDataObject(theDocument);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Map<String, Object> parseToMap(Object theDocument, final CCDataFormats theFormat){
 		CCDataFormat myFormat = formatMap.get(theFormat);
-		return myFormat.parseAsDataObject(theDocument);
+		return myFormat.create().parseAsDataObject(theDocument);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked"})
 	public static Object toFormatType(Map<String, Object> theObject, final CCDataFormats theFormat){
 		CCDataFormat myFormat = formatMap.get(theFormat);
-		return myFormat.toFormatType(theObject);
+		return myFormat.create().toFormatType(theObject);
 	}
 
 	/**
@@ -126,7 +124,7 @@ public class CCDataIO{
 	 */
 	public static void saveDataObject(final CCDataObject theDataObject, Path theDocumentPath, final CCDataFormats theFormat){
 		CCDataFormat<?> myFormat = formatMap.get(theFormat);
-		myFormat.save(theDataObject, theDocumentPath);
+		myFormat.create().save(theDataObject, theDocumentPath);
 	}
 	
 	public static void saveDataObject(final CCDataObject theDataObject, Path theDocumentPath){

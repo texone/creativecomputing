@@ -8,8 +8,6 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
 
-import cc.creativecomputing.core.io.format.CCDataSerializable;
-
 
 public class CCDataUtil {
 //	/**

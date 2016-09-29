@@ -16,4 +16,6 @@ public interface CCDataFormat<InputType> extends CCIOFormat<InputType, Map<Strin
 	public CCDataObject loadAsDataObject(URL theDocumentPath, boolean theIgnoreLineFeed, String theUser, String theKey);
 	
 	public CCDataObject parseAsDataObject(InputType theDocument);
+	
+	public CCDataFormat<InputType> create();
 }

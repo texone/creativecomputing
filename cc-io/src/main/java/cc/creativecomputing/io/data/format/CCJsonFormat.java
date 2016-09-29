@@ -18,14 +18,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import cc.creativecomputing.core.io.format.CCDataHolder;
 import cc.creativecomputing.core.io.format.CCDataSerializable;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataException;
-import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.io.data.CCDataUtil;
 
@@ -382,7 +380,8 @@ public class CCJsonFormat implements CCDataFormat<String>{
      * @return The requested character, or zero if the requested character
      * is not found.
      */
-    private char skipTo(char to) throws CCDataException {
+    @SuppressWarnings("unused")
+	private char skipTo(char to) throws CCDataException {
         char c;
         try {
             long startIndex = _myIndex;
@@ -705,8 +704,7 @@ public class CCJsonFormat implements CCDataFormat<String>{
 		read(new StringReader(theDocument), myResult,  new CCJavaGenericConstructs());
 		return myResult;
 	}
-
-
+	
 	@Override
 	public CCDataObject parseAsDataObject(String theDocument) {
 		CCDataObject myResult = new CCDataObject();
@@ -743,5 +741,8 @@ public class CCJsonFormat implements CCDataFormat<String>{
         }
 	}
     
-    
+    @Override
+    public CCDataFormat<String> create() {
+    	return new CCJsonFormat();
+    }
 }
