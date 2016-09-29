@@ -18,8 +18,8 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	protected CCNumberPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember, CCDoubleConverter<Type> theToType) {
 		super(theParent, theMember);
 		_myToType = theToType;
-		_myMin = theMember.annotation() == null ? _myToType.toType(0) : _myToType.toType(theMember.annotation().min());
-		_myMax = theMember.annotation() == null ? _myToType.toType(1) :_myToType.toType(theMember.annotation().max());
+		_myMin = theMember.annotation() == null ? _myToType.toType(-1) : _myToType.toType(theMember.annotation().min());
+		_myMax = theMember.annotation() == null ? _myToType.toType(-1) :_myToType.toType(theMember.annotation().max());
 		
 		boolean myIsNumberBox = _myMin.doubleValue() == -1 && _myMax.doubleValue() == -1;
 		boolean myUseParentMinMax = 
@@ -30,7 +30,7 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 				theParent._myMember.annotation().min() != -1 || 
 				theParent._myMember.annotation().max() != -1
 			);
-	
+		
 		if(myUseParentMinMax){
 			_myMin = _myToType.toType(theParent._myMember.annotation().min());
 			_myMax = _myToType.toType(theParent._myMember.annotation().max());
