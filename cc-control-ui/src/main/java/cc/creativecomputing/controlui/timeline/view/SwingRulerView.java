@@ -380,15 +380,15 @@ public class SwingRulerView extends SwingAbstractTrackView implements ChangeValu
 	}
 
 	@Override
-	public void mute(boolean theMute) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mute(boolean theMute) {}
+	
+	@Override
+	public void min(double theMin) {}
+	
+	@Override
+	public void max(double theMax) {}
 
 	@Override
-	public void color(Color theColor) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void color(Color theColor) {}
 
 }

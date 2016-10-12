@@ -23,10 +23,13 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.timeline.controller.track.BooleanTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CurveTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 
 @SuppressWarnings("serial")
@@ -83,6 +86,8 @@ public class SwingTrackControlView extends JPanel{
 	private TimelineController _myTimelineController;
 	private TrackController _myTrackController;
 	private JToggleButton _myMuteButton;
+	private JTextField _myMinField;
+	private JTextField _myMaxField;
 	private JTextField _myValueField;
 	private JLabel _myAddressField;
 	private ArrayList<ActionListener> _myListeners;
@@ -101,7 +106,7 @@ public class SwingTrackControlView extends JPanel{
 		setMinimumSize(new Dimension( 150, 50));
 		setPreferredSize(new Dimension(150,50));
 
-		add( Box.createHorizontalStrut((theTrackController.property().path().getNameCount() - 1) * 5));
+		add( Box.createHorizontalStrut(0));//(theTrackController.property().path().getNameCount() - 1) * 5));
 		
 		if(SwingGuiConstants.CREATE_MUTE_BUTTON) {
 			_myMuteButton = new JToggleButton("m");
@@ -133,16 +138,33 @@ public class SwingTrackControlView extends JPanel{
 			add(_myMuteButton);
 		}
 		
-		if(theTrackController instanceof CurveTrackController) {
-			_myValueField = new JTextField();
-			_myValueField.setBackground(Color.WHITE);
-			_myValueField.setForeground(Color.BLACK);
-			_myValueField.setBorder(BorderFactory.createEmptyBorder());
-			_myValueField.setHorizontalAlignment(JTextField.RIGHT);
-			_myValueField.setFont(SwingGuiConstants.ARIAL_9);
-			_myValueField.setText("0.0");
-			_myValueField.setPreferredSize(new Dimension(45,15));
-			
+		if(
+			theTrackController instanceof CurveTrackController && 
+			!(theTrackController instanceof BooleanTrackController)
+		) {
+			_myMinField = createTextField();
+			_myMinField.addActionListener(theE -> {
+				try{
+					_myTrackController.min(new ExpressionBuilder(_myMinField.getText()).build().evaluate());
+				}catch(Exception e){
+					_myMinField.setText(_myTrackController.track().min() + "");
+				}
+					
+			});
+			_myMinField.setText(_myTrackController.track().min() + "");
+			add(_myMinField);
+			_myMaxField = createTextField();
+			_myMaxField.addActionListener(theE -> {
+				try{
+					_myTrackController.max(new ExpressionBuilder(_myMaxField.getText()).build().evaluate());
+				}catch(Exception e){
+					_myMaxField.setText(_myTrackController.track().max() + "");
+				}
+					
+			});
+			add(_myMaxField);
+			_myMaxField.setText(_myTrackController.track().max() + "");
+			_myValueField = createTextField();
 			add(_myValueField);
 		}
 		
@@ -168,6 +190,14 @@ public class SwingTrackControlView extends JPanel{
 		
 	}
 	
+	private JTextField createTextField(){
+		JTextField myTextField = new JTextField();
+		CCUIStyler.styleTextField(myTextField, 45);
+		myTextField.setHorizontalAlignment(JTextField.RIGHT);
+		myTextField.setText("0.0");
+		return myTextField;
+	}
+	
 	public void color(Color theColor) {
 		setBackground(theColor);
 	}
@@ -182,6 +212,14 @@ public class SwingTrackControlView extends JPanel{
 	
 	public void mute(final boolean theMute) {
 		if(_myMuteButton != null)_myMuteButton.setSelected(theMute);
+	}
+	
+	public void min(final double theMin){
+		if(_myMinField != null)_myMinField.setText(theMin + ":");
+	}
+	
+	public void max(final double theMax){
+		if(_myMaxField != null)_myMaxField.setText(theMax + ":");
 	}
 
 	public void address(final String theAddress) {

@@ -23,6 +23,7 @@ import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
+import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
@@ -190,7 +191,8 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		if(
 			theTrackDataController.track().property() instanceof CCStringPropertyHandle || 
 			theTrackDataController.track().property() instanceof CCEnumPropertyHandle || 
-			theTrackDataController.track().property() instanceof CCObjectPropertyHandle
+			theTrackDataController.track().property() instanceof CCObjectPropertyHandle || 
+			theTrackDataController.track().property() instanceof CCSelectionPropertyHandle
 		){
 			if(theObject == null){
 				myTrackDataRenderer = _myStringDataRenderer;

@@ -71,6 +71,16 @@ public class SwingTrackView extends SwingAbstractTrackView{
 	public void mute(boolean theIsMuted) {
 		_myControlView.mute(theIsMuted);
 	}
+	
+	@Override
+	public void min(double theMin) {
+		_myControlView.min(theMin);
+	}
+	
+	@Override
+	public void max(double theMax) {
+		_myControlView.max(theMax);
+	}
 
 	@Override
 	public void value(String theValue) {

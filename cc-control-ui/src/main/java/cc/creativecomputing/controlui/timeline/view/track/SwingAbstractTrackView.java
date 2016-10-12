@@ -43,6 +43,10 @@ public abstract class SwingAbstractTrackView extends JPanel implements CCTrackVi
 
 	public abstract void mute(final boolean theMute);
 
+	public abstract void min(final double theMin);
+
+	public abstract void max(final double theMax);
+
 	public abstract void color(Color theColor);
 
 	public void value(String theValue) {}

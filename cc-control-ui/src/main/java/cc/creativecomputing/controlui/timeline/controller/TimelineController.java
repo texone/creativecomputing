@@ -34,11 +34,13 @@ import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
+import cc.creativecomputing.control.handles.CCEventTriggerHandle;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
+import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.control.timeline.AbstractTrack;
 import cc.creativecomputing.control.timeline.GroupTrack;
@@ -57,6 +59,7 @@ import cc.creativecomputing.controlui.timeline.controller.track.EventTrackContro
 import cc.creativecomputing.controlui.timeline.controller.track.GroupTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.IntegerTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.TriggerTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
@@ -383,6 +386,8 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		TrackController myTrackController = null;
 		if(theProperty instanceof CCBooleanPropertyHandle){
 			myTrackController = new BooleanTrackController(this, _myCurveToolController, myTrack, myGroup);
+		}else if(theProperty instanceof CCEventTriggerHandle){
+			myTrackController = new TriggerTrackController(this, _myCurveToolController, myTrack, myGroup);
 		}else if(theProperty instanceof CCNumberPropertyHandle<?>){
 			CCNumberPropertyHandle<?> myNumberProperty = (CCNumberPropertyHandle<?>)theProperty;
 			if(myNumberProperty.max() instanceof Integer){
@@ -400,6 +405,11 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 			myExtraMap.put(EventTrackController.EVENT_TYPES,"new");
 			myTrack.extras(myExtraMap);
 		}else if(theProperty instanceof CCEnumPropertyHandle){
+			myTrackController = new EventTrackController(this, _myToolController, myTrack, myGroup);
+			Map<String, String> myExtraMap = new HashMap<>();
+			myExtraMap.put(EventTrackController.EVENT_TYPES,"new");
+			myTrack.extras(myExtraMap);
+		}else if(theProperty instanceof CCSelectionPropertyHandle){
 			myTrackController = new EventTrackController(this, _myToolController, myTrack, myGroup);
 			Map<String, String> myExtraMap = new HashMap<>();
 			myExtraMap.put(EventTrackController.EVENT_TYPES,"new");

@@ -39,6 +39,7 @@ import cc.creativecomputing.controlui.timeline.controller.actions.MoveEventActio
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -83,6 +84,7 @@ public class EventTrackController extends TrackController {
 
 			@Override
 			public void onChange(Object theValue) {
+				CCLog.info("the value:" + theValue);
 				if(_myEditedEvent != null && _myEditedEvent.isSelected()){
 					_myEditedEvent.content(new TimedEventPointContent(theValue));
 			        _myTrackView.render();

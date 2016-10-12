@@ -33,6 +33,7 @@ import cc.creativecomputing.controlui.timeline.controller.ToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
 import cc.creativecomputing.controlui.timeline.controller.Zoomable;
 import cc.creativecomputing.controlui.timeline.view.TimedContentView;
+import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCMath;
 
 
@@ -73,16 +74,37 @@ public abstract class TrackController extends TrackDataController implements Zoo
 		return _myToolController;
 	}
 	
+	private void updateView(){
+		if(_myTrackView == null)return;
+		_myTrackView.mute(_myTrack.mute());
+		_myTrackView.min(_myTrack.min());
+		_myTrackView.max(_myTrack.max());
+		_myTrackView.render();
+	}
+	
+	public void data(CCDataObject theData){
+		_myTrack.data(theData);
+		updateView();
+	}
+	
 	public void trackData(Track theTrack) {
 		_myTrack = theTrack;
-		if(_myTrackView == null)return;
-		_myTrackView.mute(theTrack.mute());
-		_myTrackView.render();
+		updateView();
 	}
 	
 	public void mute(boolean theIsMuted) {
 		_myTrack.mute(theIsMuted);
 		if(_myTrackView != null)_myTrackView.mute(theIsMuted);
+	}
+	
+	public void min(double theMin) {
+		_myTrack.min(theMin);
+		if(_myTrackView != null)_myTrackView.min(theMin);
+	}
+	
+	public void max(double theMax) {
+		_myTrack.max(theMax);
+		if(_myTrackView != null)_myTrackView.max(theMax);
 	}
 	
 	public void muteGroup(boolean theIsMuted){
@@ -155,7 +177,7 @@ public abstract class TrackController extends TrackDataController implements Zoo
 			if(_myTrack.property() == null)return 0;
 			return _myTrack.property().normalizedValue();
 		}
-    	return trackData().value(theTime);
+    	return CCMath.blend(track().min(), track().max(), trackData().value(theTime)) ;
     }
     
 //	/**

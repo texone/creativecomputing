@@ -48,7 +48,7 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 				if(_myHandle.numberType() == Integer.class){
 					_myValueField.setText((int)_myValue + "");
 				}else{
-					_myValueField.setText(CCFormatUtil.nd((float)_myValue, 2) + "");
+					_myValueField.setText(CCFormatUtil.nd((float)_myValue, theHandle.digits()) + "");
 				}
 				_myTriggerEvent = true;
 			}

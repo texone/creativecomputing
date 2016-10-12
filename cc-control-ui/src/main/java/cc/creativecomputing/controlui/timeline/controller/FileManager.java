@@ -13,6 +13,7 @@ import cc.creativecomputing.controlui.timeline.controller.track.GroupTrackContro
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
@@ -81,7 +82,13 @@ public class FileManager {
 		private void loadGroupTrack(CCDataObject theData, TimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
-			GroupTrackController myController = theTimeline.createGroupController(myPath);
+			GroupTrackController myController;
+			try{
+				myController = theTimeline.createGroupController(myPath);
+			}catch(Exception e){
+				CCLog.info(myPath);
+				return;
+			}
 			myController.groupTrack().data(theData);
 			
 			Object myData = theData.get(GroupTrack.GROUP_TRACKS);
@@ -102,8 +109,14 @@ public class FileManager {
 		private void loadDataTrack(CCDataObject theData, TimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
-			TrackController myController = theTimeline.createController(myPath);
-			myController.track().data(theData);
+			TrackController myController;
+			try{
+				myController = theTimeline.createController(myPath);
+			}catch(Exception e){
+				CCLog.info(myPath);
+				return;
+			}
+			myController.data(theData);
 		}
 		
 		private void loadTrack(CCDataObject theData, TimelineController theTimeline){

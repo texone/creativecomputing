@@ -250,9 +250,13 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	}
 	
 	@Override
-	public void mute(final boolean theMute) {
-//		_myOpenButton.setSelected(theMute);
-	}
+	public void mute(final boolean theMute) {}
+	
+	@Override
+	public void min(double theMin) {}
+	
+	@Override
+	public void max(double theMax) {}
 
 	@Override
 	public void finalize() {

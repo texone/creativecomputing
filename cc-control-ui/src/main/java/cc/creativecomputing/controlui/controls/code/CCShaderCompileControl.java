@@ -142,7 +142,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCSha
 	      
 
 		_myEditorFrame.setContentPane(mySplitPane);
-		_myEditorFrame.setTitle("Text Editor Demo");
+		_myEditorFrame.setTitle(theHandle.path().toString());
 		_myEditorFrame.pack();
 		_myEditorFrame.setLocationRelativeTo(null);
 		
