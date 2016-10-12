@@ -32,6 +32,9 @@ import cc.creativecomputing.gl.app.container.GLOffsreenContainer;
 import cc.creativecomputing.gl.app.container.GLWindowContainer;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;
 import cc.creativecomputing.gl.app.events.CCKeyListener;
+import cc.creativecomputing.gl.app.events.CCKeyPressedListener;
+import cc.creativecomputing.gl.app.events.CCKeyReleasedListener;
+import cc.creativecomputing.gl.app.events.CCKeyTypedListener;
 import cc.creativecomputing.gl.app.events.CCMouseDraggedListener;
 import cc.creativecomputing.gl.app.events.CCMouseEvent;
 import cc.creativecomputing.gl.app.events.CCMouseListener;
@@ -178,7 +181,11 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	protected CCListenerManager<CCMouseMovedListener> _myMouseMoveListener;
 	protected CCListenerManager<CCMouseDraggedListener> _myMouseDraggedListener;
 	protected CCListenerManager<CCMouseWheelListener> _myMouseWheelListener;
+	
 	protected CCListenerManager<CCKeyListener> _myKeyListener;
+	protected CCListenerManager<CCKeyPressedListener> _myKeyPressedListener;
+	protected CCListenerManager<CCKeyReleasedListener> _myKeyReleasedListener;
+	protected CCListenerManager<CCKeyTypedListener> _myKeyTypedListener;
 	
 	private Queue<CCMouseEvent> _myMouseEventQueue = new LinkedList<CCMouseEvent>();
 	private Queue<CCMouseWheelEvent> _myMouseWheelEventQueue = new LinkedList<CCMouseWheelEvent>();
@@ -197,7 +204,11 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 		_myMouseMoveListener = CCListenerManager.create(CCMouseMovedListener.class);
 		_myMouseDraggedListener = CCListenerManager.create(CCMouseDraggedListener.class);
 		_myMouseWheelListener = CCListenerManager.create(CCMouseWheelListener.class);
+		
 		_myKeyListener = CCListenerManager.create(CCKeyListener.class);
+		_myKeyPressedListener = CCListenerManager.create(CCKeyPressedListener.class);
+		_myKeyReleasedListener = CCListenerManager.create(CCKeyReleasedListener.class);
+		_myKeyTypedListener = CCListenerManager.create(CCKeyTypedListener.class);
 	}
 	
 	@Override
@@ -447,6 +458,30 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	 */
 	public CCListenerManager<CCKeyListener> keyListener() {
 		return _myKeyListener;
+	}
+	
+	/**
+	 * Returns the key pressed listener manager to register to key events.
+	 * @see CCKeyPressedListener
+	 */
+	public CCListenerManager<CCKeyPressedListener> keyPressedListener() {
+		return _myKeyPressedListener;
+	}
+	
+	/**
+	 * Returns the key released listener manager to register to key events.
+	 * @see CCKeyReleasedListener
+	 */
+	public CCListenerManager<CCKeyReleasedListener> keyReleasedListener() {
+		return _myKeyReleasedListener;
+	}
+	
+	/**
+	 * Returns the key typed listener manager to register to key events.
+	 * @see CCKeyTypedListener
+	 */
+	public CCListenerManager<CCKeyTypedListener> keyTypedListener() {
+		return _myKeyTypedListener;
 	}
 
 

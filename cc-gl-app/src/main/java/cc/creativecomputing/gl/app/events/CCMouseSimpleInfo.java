@@ -20,12 +20,14 @@ public class CCMouseSimpleInfo extends CCMouseAdapter{
 	
 	public CCVector2 lastPosition = new CCVector2();
 	public CCVector2 position = new CCVector2();
+	public CCVector2 motion = new CCVector2();
 	
 	public boolean isPressed = false;
 	
 	private void updatePositions(CCMouseEvent theEvent){
 		lastPosition.set(position);
 		position.set(theEvent.x(), theEvent.y());
+		motion.set(position.subtract(lastPosition));
 	}
 
 	public void mouseClicked(CCMouseEvent theEvent) {

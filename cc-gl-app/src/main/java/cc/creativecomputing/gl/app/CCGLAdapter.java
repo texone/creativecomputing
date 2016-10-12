@@ -7,6 +7,9 @@ import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.gl.app.events.CCKeyListener;
+import cc.creativecomputing.gl.app.events.CCKeyPressedListener;
+import cc.creativecomputing.gl.app.events.CCKeyReleasedListener;
+import cc.creativecomputing.gl.app.events.CCKeyTypedListener;
 import cc.creativecomputing.gl.app.events.CCMouseDraggedListener;
 import cc.creativecomputing.gl.app.events.CCMouseListener;
 import cc.creativecomputing.gl.app.events.CCMouseMotionListener;
@@ -48,6 +51,18 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 	
 	public CCListenerManager<CCKeyListener> keyListener(){
 		return _myContext.keyListener();
+	}
+	
+	public CCListenerManager<CCKeyPressedListener> keyPressedListener(){
+		return _myContext.keyPressedListener();
+	}
+	
+	public CCListenerManager<CCKeyReleasedListener> keyReleasedListener(){
+		return _myContext.keyReleasedListener();
+	}
+	
+	public CCListenerManager<CCKeyTypedListener> keyTypedListener(){
+		return _myContext.keyTypedListener();
 	}
 	
 	public CCListenerManager<CCMouseListener> mouseListener(){
