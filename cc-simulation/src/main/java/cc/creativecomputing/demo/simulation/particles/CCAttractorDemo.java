@@ -12,7 +12,7 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCAttractor;
@@ -23,7 +23,7 @@ public class CCAttractorDemo extends CCGL2Adapter {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
-	private CCGPUIndexParticleEmitter _myEmitter;
+	private CCParticlesIndexParticleEmitter _myEmitter;
 	
 	private List<CCAttractor> _myAttractors = new ArrayList<CCAttractor>();
 
@@ -49,7 +49,7 @@ public class CCAttractorDemo extends CCGL2Adapter {
 		}
 		
 		_myParticles = new CCParticles(g,myForces, new ArrayList<CCConstraint>(),600,600);
-		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
+		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		_myParticles.reset(g);
 		
 		_cCameraController = new CCCameraController(this, g, 100);

@@ -11,7 +11,7 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
@@ -21,7 +21,7 @@ public class CCGravityDemo extends CCGL2Adapter {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
-	private CCGPUIndexParticleEmitter _myEmitter;
+	private CCParticlesIndexParticleEmitter _myEmitter;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
@@ -29,7 +29,7 @@ public class CCGravityDemo extends CCGL2Adapter {
 		myForces.add(new CCGravity(new CCVector3(0,-1,0)));
 		
 		_myParticles = new CCParticles(g,myForces, new ArrayList<CCConstraint>(),600,600);
-		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
+		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		_myParticles.reset(g);
 	}
 

@@ -11,7 +11,7 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
@@ -22,7 +22,7 @@ public class CCNoiseHeightMapDemo extends CCGL2Adapter {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
-	private CCGPUIndexParticleEmitter _myEmitter;
+	private CCParticlesIndexParticleEmitter _myEmitter;
 	
 	@CCProperty(name = "camera")
 	private CCCameraController _cCameraController;
@@ -36,7 +36,7 @@ public class CCNoiseHeightMapDemo extends CCGL2Adapter {
 		myForces.add(_myForceField = new CCNoiseHeightMapForce());
 		
 		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 1000,1000);
-		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
+		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);
 	}

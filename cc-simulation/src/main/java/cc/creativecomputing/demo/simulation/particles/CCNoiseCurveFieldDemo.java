@@ -14,7 +14,7 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCAttractor;
@@ -30,7 +30,7 @@ public class CCNoiseCurveFieldDemo extends CCGL2Adapter {
 	private CCParticles _myParticles;
 	private CCForceField _myForceField = new CCForceField();
 	private CCAttractor _myAttractor;
-	private CCGPUIndexParticleEmitter _myEmitter;
+	private CCParticlesIndexParticleEmitter _myEmitter;
 	
 	@CCProperty(name = "emit radius", min = 0, max = 400)
 	private float _cEmitRadius = 0;
@@ -50,7 +50,7 @@ public class CCNoiseCurveFieldDemo extends CCGL2Adapter {
 		myForces.add(_myAttractor = new CCAttractor());
 		
 		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 1000,1000);
-		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
+		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);
 		

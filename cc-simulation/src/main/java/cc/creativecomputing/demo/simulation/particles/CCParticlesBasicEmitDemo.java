@@ -11,14 +11,14 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 
 public class CCParticlesBasicEmitDemo extends CCGL2Adapter {
 	
 	private CCParticles _myParticles;
-	private CCGPUIndexParticleEmitter _myEmitter;
+	private CCParticlesIndexParticleEmitter _myEmitter;
 	
 	@CCProperty(name = "camera")
 	private CCCameraController _cCameraController;
@@ -26,7 +26,7 @@ public class CCParticlesBasicEmitDemo extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myParticles = new CCParticles(g,new ArrayList<>(), new ArrayList<CCConstraint>(),600,600);
-		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
+		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		_myParticles.reset(g);
 		
 		_cCameraController = new CCCameraController(this, g, 100);

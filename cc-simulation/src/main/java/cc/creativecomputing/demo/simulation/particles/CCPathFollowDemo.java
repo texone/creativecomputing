@@ -26,7 +26,7 @@ import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.signal.CCSignal;
 import cc.creativecomputing.math.signal.CCSimplexNoise;
-import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
@@ -60,7 +60,7 @@ public class CCPathFollowDemo extends CCGL2Adapter {
 
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
-	private CCGPUIndexParticleEmitter _myEmitter;
+	private CCParticlesIndexParticleEmitter _myEmitter;
 	private CCPathFollow _myPathFollow;
 
 	@CCProperty(name = "camera")
@@ -83,7 +83,7 @@ public class CCPathFollowDemo extends CCGL2Adapter {
 		myForces.add(new CCViscousDrag(0.3f));
 		// myForces.add(new CCGPUGravity(new CCVector3(50,0,0)));
 		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 700, 700);
-		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
+		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		// _myParticles.make2D(true);
 
 		_cCameraController = new CCCameraController(this, g, 100);

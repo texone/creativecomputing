@@ -26,7 +26,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
@@ -52,7 +52,7 @@ public class CCTextureForceFieldDemo extends CCGL2Adapter {
 
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
-	private CCGPUIndexParticleEmitter _myEmitter;
+	private CCParticlesIndexParticleEmitter _myEmitter;
 	private CCTextureForceField _myForceField;
 	private CCTexture2D _myForceFieldTexture;
 
@@ -65,7 +65,7 @@ public class CCTextureForceFieldDemo extends CCGL2Adapter {
 		myForces.add(new CCViscousDrag(0.3f));
 		
 		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 700, 700);
-		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
+		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 	}
 
 	@Override
