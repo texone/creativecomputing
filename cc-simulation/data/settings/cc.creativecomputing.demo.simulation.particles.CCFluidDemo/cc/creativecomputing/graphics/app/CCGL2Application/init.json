@@ -1,0 +1,276 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "animator": {
+        "name": "animator",
+        "value": {
+          "fixed update time": {
+            "min": 0,
+            "max": 1,
+            "name": "fixed update time",
+            "value": 1
+          },
+          "fix update time": {
+            "name": "fix update time",
+            "value": false
+          },
+          "framerate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "framerate",
+            "value": 30
+          },
+          "animationMode": {
+            "name": "animationMode",
+            "value": "FRAMERATE_PRECISE"
+          },
+          "show frame rate": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "show frame rate",
+            "value": 29.321702235064347
+          },
+          "exceptionHandling": {
+            "name": "exceptionHandling",
+            "value": "THROW"
+          }
+        }
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "show boundary": {
+        "name": "show boundary",
+        "value": false
+      },
+      "fluid": {
+        "name": "fluid",
+        "value": {
+          "add color": {
+            "name": "add color",
+            "value": {
+              "shader objects": {
+                "name": "shader objects",
+                "value": {"fragment": {
+                  "name": "fragment",
+                  "source": "#version 120 \n\nuniform vec2 windowDimension;\nuniform vec2 position;\n\nuniform vec4 color;\n\nuniform float radius;\n\nuniform sampler2DRect baseTexture;\n\nvoid main(){\n\tvec2 pos = position - gl_TexCoord[0].xy / windowDimension;\n\tfloat myRadius = radius / windowDimension.x;\n\tfloat gaussian = exp(-dot(pos,pos) / myRadius);\n\t\n\tgl_FragColor = texture2DRect(baseTexture, gl_TexCoord[0].xy) + color *  gaussian;\n}\n",
+                  "value": "cc.creativecomputing.control.code.CCShaderObject@4bf7afd9"
+                }}
+              },
+              "radius": {
+                "min": 0,
+                "max": 1,
+                "name": "radius",
+                "value": 1
+              }
+            }
+          },
+          "advect speed": {
+            "min": 0,
+            "max": 100,
+            "name": "advect speed",
+            "value": 30.30000114440918
+          },
+          "darking": {
+            "min": 0,
+            "max": 0.0010000000474974513,
+            "name": "darking",
+            "value": 2.600000152597204E-5
+          },
+          "viscousity": {
+            "min": 0,
+            "max": 1,
+            "name": "viscousity",
+            "value": 0.40700000524520874
+          },
+          "advect": {
+            "name": "advect",
+            "value": {"shader objects": {
+              "name": "shader objects",
+              "value": {"fragment": {
+                "name": "fragment",
+                "source": "#version 120 \n\n/**\n * This program performs a semi-lagrangian advection of a passive field by \n * a moving velocity field.  It works by tracing backwards from each fragment\n * along the velocity field, and moving the passive value at its destination\n * forward to the starting point.  It performs bilinear interpolation at the \n * destination to get a smooth resulting field.\n */\n \nuniform float timeStep;\n\n// mass dissipation constant.\nuniform float dissipation;\n\n// 1 / grid scale. \nuniform float rdx;\n\n// \nuniform float darkening;\n\n// the velocity field.    \nuniform sampler2DRect velocityTexture;\n\n// the field to be advected.       \nuniform sampler2DRect targetTexture;\n\n/**\n * These methods perform texture lookups at the four nearest neighbors of the \n * position s and bilinearly interpolate them.\n */ \n\nvec4 bilerp(vec2 s){\n  vec4 st;\n  st.xy = floor(s - 0.5) + 0.5;\n  st.zw = st.xy + 1;\n  \n  vec2 t = s - st.xy; //interpolating factors \n    \n  vec4 tex11 = texture2DRect(targetTexture, st.xy);\n  vec4 tex21 = texture2DRect(targetTexture, st.zy);\n  vec4 tex12 = texture2DRect(targetTexture, st.xw);\n  vec4 tex22 = texture2DRect(targetTexture, st.zw);\n\n  // bilinear interpolation\n  return mix(mix(tex11, tex21, t.x), mix(tex12, tex22, t.x), t.y);\n}\n\nvoid main(){\n  \n\t// Trace backwards along trajectory (determined by current velocity)\n\t// distance = rate * time, but since the grid might not be unit-scale,\n\t// we need to also scale by the grid cell size.\n\tvec2 pos = gl_FragCoord.xy - timeStep * rdx * texture2DRect(velocityTexture, gl_FragCoord.xy).xy;\n\n\t// Example:\n\t//    the \"particle\" followed a trajectory and has landed like this:\n\t//\n\t//   (x1,y2)----(x2,y2)    (xN,yN)\n\t//      |          |    /----/  (trajectory: (xN,yN) = start, x = end)\n\t//      |          |---/\n\t//      |      /--/|    ^\n\t//      |  pos/    |     \\_ v.xy (the velocity)\n\t//      |          |\n\t//      |          |\n\t//   (x1,y1)----(x2,y1)\n\t//\n\t// x1, y1, x2, and y2 are the coordinates of the 4 nearest grid points\n\t// around the destination.  We compute these using offsets and the floor \n\t// operator.  The \"-0.5\" and +0.5 used below are due to the fact that\n\t// the centers of texels in a TEXTURE_RECTANGLE_NV are at 0.5, 1.5, 2.5, \n\t// etc.\n\n\t// The function f4texRECTbilerp computes the above 4 points and interpolates \n\t// a value from texture lookups at each point.Rendering this value will \n\t// effectively place the interpolated value back at the starting point \n\t// of the advection.\n\t \n\t// So that we can have dissipating scalar fields (like smoke), we\n\t// multiply the interpolated value by a [0, 1] dissipation scalar \n\t// (1 = lasts forever, 0 = instantly dissipates.  At high frame rates, \n\t// useful values are in [0.99, 1].\n\t\n\tgl_FragColor = dissipation * bilerp(pos) - 0.01;// * timeStep;\n\tgl_FragColor = clamp(gl_FragColor, 0.0, 1.0);\n} \n",
+                "value": "cc.creativecomputing.control.code.CCShaderObject@212f6545"
+              }}
+            }}
+          },
+          "add impulse": {
+            "name": "add impulse",
+            "value": {
+              "shader objects": {
+                "name": "shader objects",
+                "value": {"fragment": {
+                  "name": "fragment",
+                  "source": "#version 120 \n\nuniform vec2 windowDimension;\nuniform vec2 position;\n\nuniform vec4 color;\n\nuniform float radius;\n\nuniform sampler2DRect baseTexture;\n\nvoid main(){\n\tvec2 pos = position - gl_TexCoord[0].xy / windowDimension;\n\tfloat myRadius = radius / windowDimension.x;\n\tfloat gaussian = exp(-dot(pos,pos) / myRadius);\n\t\n\tvec4 direction = color * 2 - 1;\n\tdirection.w = 1;\n\t\n\tgl_FragColor = texture2DRect(baseTexture, gl_TexCoord[0].xy) + direction *  gaussian;\n}\n",
+                  "value": "cc.creativecomputing.control.code.CCShaderObject@3e4279a5"
+                }}
+              },
+              "radius": {
+                "min": 0,
+                "max": 1,
+                "name": "radius",
+                "value": 0.289000004529953
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {}
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.321702235064347
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}}

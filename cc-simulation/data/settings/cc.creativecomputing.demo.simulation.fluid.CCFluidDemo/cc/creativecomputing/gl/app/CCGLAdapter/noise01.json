@@ -1,0 +1,127 @@
+{"value": {
+  "mouse impulse": {
+    "min": 0,
+    "max": 1,
+    "name": "mouse impulse",
+    "value": 0.2370000034570694
+  },
+  "speed x": {
+    "min": -1,
+    "max": 1,
+    "name": "speed x",
+    "value": 1
+  },
+  "update": {
+    "name": "update",
+    "value": true
+  },
+  "speed y": {
+    "min": -1,
+    "max": 1,
+    "name": "speed y",
+    "value": 0.05200004577636719
+  },
+  "time": {
+    "name": "time",
+    "value": {"step": {
+      "min": 0,
+      "max": 1,
+      "name": "step",
+      "value": 1
+    }}
+  },
+  "speed z": {
+    "min": -1,
+    "max": 1,
+    "name": "speed z",
+    "value": 0.44599997997283936
+  },
+  "solver": {
+    "name": "solver",
+    "value": {
+      "noise field": {
+        "name": "noise field",
+        "value": {"shader objects": {
+          "name": "shader objects",
+          "value": {"fragment": {
+            "name": "fragment",
+            "source": "uniform sampler2D velocity;\n\nuniform vec2 gridSize;\n\nuniform sampler2D randomTexture;\n\nfloat noise( in vec3 x ){\n    vec3 p = floor(x);\n    vec3 f = fract(x);\n\tf = f * f * (3.0 - 2.0 * f);\n\t\n\tvec2 uv = (p.xy + vec2(37.0, 17.0) * p.z) + f.xy;\n\tvec2 rg = texture2D( randomTexture, (uv+ 0.5) / 256.0 ).yx;//, -100.0\n\treturn mix( rg.x, rg.y, f.z );\n}\n\nfloat octavedNoise(in vec3 p, int octaves, float gain, float lacunarity){\n\tfloat result = 0.0;\n\tfloat myFallOff = gain;\n\tfloat myAmp = 0.0;\n\t\n\tvec3 q = p;\n\tfor(int i = 0; i < octaves; i++){\n\t\tmyAmp += myFallOff;\n\t\tresult += myFallOff * noise( q ); \n\t\tq = q * lacunarity;\n\t\tmyFallOff *= gain;\n\t}\n\t\n\treturn result / myAmp;\n}\n\nuniform float scale;\nuniform vec3 offset;\n\nuniform int octaves;\nuniform float gain;\nuniform float lacunarity; \n\nuniform float noiseAmount;\n\nvoid main()\n{\n    vec2 uv = gl_FragCoord.xy / gridSize.xy;\n\n    vec2 oldForce = texture2D(velocity, uv).xy;\n    \n    vec3 noisePosition = vec3(uv * scale, 0) + offset;\n\tvec2 result = vec2(\n\t\toctavedNoise(noisePosition, octaves, gain, lacunarity),\n\t\toctavedNoise(noisePosition+1000.0, octaves, gain, lacunarity)\n\t) *2.0 - 1.0;\n\n    gl_FragColor = vec4(mix(oldForce, result, noiseAmount), 0.0, 1.0);\n}\n",
+            "value": "cc.creativecomputing.control.code.CCShaderObject@37494a27"
+          }}
+        }}
+      },
+      "curl": {
+        "min": 0,
+        "max": 1,
+        "name": "curl",
+        "value": 0.3
+      },
+      "noise octaves": {
+        "min": 0,
+        "max": 5,
+        "name": "noise octaves",
+        "value": 2
+      },
+      "noise gain": {
+        "min": 0,
+        "max": 1,
+        "name": "noise gain",
+        "value": 0.5
+      },
+      "noise amount": {
+        "min": 0,
+        "max": 10,
+        "name": "noise amount",
+        "value": 0.03
+      },
+      "noise scale": {
+        "min": 0,
+        "max": 100,
+        "name": "noise scale",
+        "value": 86.69999694824219
+      },
+      "fluid draw mode": {
+        "name": "fluid draw mode",
+        "value": "DENSITY"
+      },
+      "color radius": {
+        "min": 0,
+        "max": 1,
+        "name": "color radius",
+        "value": 0.11800000071525574
+      },
+      "viscosity": {
+        "min": 0,
+        "max": 1,
+        "name": "viscosity",
+        "value": 0.3
+      },
+      "velocity radius": {
+        "min": 0,
+        "max": 1,
+        "name": "velocity radius",
+        "value": 0.10400000214576721
+      },
+      "apply vorticity": {
+        "name": "apply vorticity",
+        "value": false
+      },
+      "noise lacunarity": {
+        "min": 0,
+        "max": 4,
+        "name": "noise lacunarity",
+        "value": 2
+      },
+      "dissipation": {
+        "min": 0.9,
+        "max": 1,
+        "name": "dissipation",
+        "value": 1
+      },
+      "apply viscosity": {
+        "name": "apply viscosity",
+        "value": false
+      }
+    }
+  }
+}}
