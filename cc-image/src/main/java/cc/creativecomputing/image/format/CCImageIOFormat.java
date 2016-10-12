@@ -14,6 +14,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -115,7 +116,9 @@ public class CCImageIOFormat implements CCImageFormat {
 	
 	public boolean write(final Path thePath, BufferedImage theData, final double theQuality) throws CCImageException {
 		CCNIOUtil.createDirectories(thePath);
-			
+
+		ImageIO.setUseCache(false);
+		
 		// Happened to notice that writing RGBA images to JPEGS is broken
 		if (CCImageFormats.JPG.fileExtension.equals(CCNIOUtil.fileExtension(thePath)) && theData.getType() == BufferedImage.TYPE_4BYTE_ABGR) {
 			BufferedImage tmpImage = new BufferedImage(theData.getWidth(), theData.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
@@ -132,11 +135,14 @@ public class CCImageIOFormat implements CCImageFormat {
 				jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 				jpgWriteParam.setCompressionQuality((float)theQuality);
 
-				ImageOutputStream outputStream = ImageIO.createImageOutputStream(Files.newOutputStream(thePath)); // For example implementations see below
+				OutputStream myStream = Files.newOutputStream(thePath);
+				ImageOutputStream outputStream = ImageIO.createImageOutputStream(myStream); // For example implementations see below
 				jpgWriter.setOutput(outputStream);
 				IIOImage outputImage = new IIOImage(theData, null, null);
 				jpgWriter.write(null, outputImage, jpgWriteParam);
 				jpgWriter.dispose();
+				outputStream.close();
+				myStream.close();
 				return true;
 			}else{
 				return ImageIO.write(theData, myExtension, Files.newOutputStream(thePath));
@@ -144,6 +150,10 @@ public class CCImageIOFormat implements CCImageFormat {
 		} catch (IOException e) {
 			throw new CCImageException(e);
 		}
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(ImageIO.getUseCache());
 	}
 	
 	@Override
