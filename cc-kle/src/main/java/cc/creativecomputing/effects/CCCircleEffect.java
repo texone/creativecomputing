@@ -28,8 +28,8 @@ public class CCCircleEffect extends CCEffect {
 
 	@Override
 	public double[] applyTo(CCEffectable theEffectable) {
-		double myAngle = (_myPhase + _cModulations.get("angle").modulation(theEffectable, -1f, 1f)) * CCMath.PI * _cAngleMax;
-		double myAmount = _cModulations.get("amount").modulation(theEffectable, -1, 1);
+		double myAngle = (_myPhase + modulation("angle").modulation(theEffectable, -1f, 1f)) * CCMath.PI * _cAngleMax;
+		double myAmount = modulation("amount").modulation(theEffectable, -1, 1);
 		double myBlend = elementBlend(theEffectable);
 		double myX = CCMath.cos(myAngle) * _cXAmount * myAmount * myBlend;
 		double myY = CCMath.sin(myAngle) * _cYAmount * myAmount * myBlend;

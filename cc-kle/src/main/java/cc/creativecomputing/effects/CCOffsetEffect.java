@@ -8,7 +8,7 @@ public class CCOffsetEffect extends CCEffect{
 		double myBlend = elementBlend(theEffectable);
 		double[] myResult = new double[_myValueNames.length];
 		for(int i = 0; i < _myValueNames.length;i++){
-			myResult[i] = _cModulations.get(_myValueNames[i]).modulation(theEffectable, -1, 1) * myBlend;
+			myResult[i] = modulation(_myValueNames[i]).modulation(theEffectable, -1, 1) * myBlend;
 		}
 		return myResult;
 	}

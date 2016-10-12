@@ -37,7 +37,7 @@ public class CCRealtimeCodeEffect extends CCEffect {
 		double[] myResult = new double[_myValueNames.length];
 		for(int i = 0; i < _myValueNames.length;i++){
 			try{
-				myResult[i] = _myRealTimeAnimation.instance().animate(theEffectable,_cModulations.get(_myValueNames[i])) * myBlend;
+				myResult[i] = _myRealTimeAnimation.instance().animate(theEffectable,modulation(_myValueNames[i])) * myBlend;
 			}catch(Exception e){
 				
 			}

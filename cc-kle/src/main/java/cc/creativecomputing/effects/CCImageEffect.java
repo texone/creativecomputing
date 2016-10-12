@@ -27,8 +27,8 @@ public class CCImageEffect extends CCEffect{
 	public double[] applyTo(CCEffectable theEffectable) {
 		if(_myImage.value() == null)return new double[0];
 		CCColor myResult = _myImage.value().getPixel(
-			(_cModulations.get("x").modulation(theEffectable) ) * _myImage.value().width(), //+ _cXMotionModulation.modulation(theEffectable)
-			_cModulations.get("y").modulation(theEffectable) * _myImage.value().height()
+			modulation("x").modulation(theEffectable) * _myImage.value().width(), //+ _cXMotionModulation.modulation(theEffectable)
+			modulation("y").modulation(theEffectable) * _myImage.value().height()
 		);
 
 //		double myBlend = elementBlend(theElement);

@@ -3,7 +3,6 @@ package cc.creativecomputing.kle.elements.motors;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
@@ -104,7 +103,6 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 		
 		CCPositionRopeLengthAngle myData = _myTwoPointMatrices.dataByPosition(_myElementOffset2D.x, _myElementOffset2D.y);
 		double myAngle =  -(myX - 0.5) * CCMath.radians(60) + 0.5;
-		CCLog.info(myData.angle() + ":" + myAngle);
 		
 		if(myData != null){
 			_myRotateZ = -myAngle + _myTwoPointMatrices.centerAngle();

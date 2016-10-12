@@ -49,9 +49,9 @@ public class CCKleSequenceAnimation extends CCEffect {
 	}
 	
 	private double value(CCEffectable theEffectable, double theBLend, int theID){
-		double myOffset = _cModulations.get("offset").modulation(theEffectable, -1, 1) * _mySequenceAsset.length();
+		double myOffset = modulation("offset").modulation(theEffectable, -1, 1) * _mySequenceAsset.length();
 		double myValue = _mySequenceAsset.value(myOffset, theEffectable.id(), 0, theID) * 2 - 1;
-		return myValue * theBLend * _cModulations.get("amount").modulation(theEffectable, -1, 1);
+		return myValue * theBLend * modulation("amount").modulation(theEffectable, -1, 1);
 	}
 
 	public double[] applyTo(CCEffectable theEffectable) {

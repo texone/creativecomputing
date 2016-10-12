@@ -53,7 +53,7 @@ public class CCAudioSpectrumEffect extends CCEffect{
 		if(_myAudioAsset == null || _myAudioAsset.value() == null)return myResult;
 		for(int i = 0; i < _myValueNames.length;i++){
 			double myNameBlend = _cApplies.get(_myValueNames[i]);
-			double mySpectrum = _myAudioAsset.spectrum(_cModulations.get(_myValueNames[i]).modulation(theElement));
+			double mySpectrum = _myAudioAsset.spectrum(modulation(_myValueNames[i]).modulation(theElement));
 			myResult[i] = CCMath.blend(_cDefaults.get(_myValueNames[i]), mySpectrum, myNameBlend) * myBlend;
 		}
 		return myResult;

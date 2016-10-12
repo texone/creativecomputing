@@ -21,9 +21,8 @@ public class CCEffectables<Type extends CCEffectable> extends ArrayList<Type>{
 	
 	public CCEffectables(){
 		super();
-		_myRelativeSources.add(CCEffectable.CONSTANT_SOURCE);
-		_myRelativeSources.add(CCEffectable.RANDOM_SOURCE);
-		_myIdSources.add(CCEffectable.ID_SOURCE);
+		addRelativeSources(CCEffectable.CONSTANT_SOURCE, CCEffectable.RANDOM_SOURCE);
+		addIdSources(CCEffectable.ID_SOURCE);
 	}
 	
 	public void addRelativeSources(String...theRelativeSources){
@@ -43,7 +42,7 @@ public class CCEffectables<Type extends CCEffectable> extends ArrayList<Type>{
 		}
 	}
 	
-	private void updaeMaxIds(){
+	private void updateMaxIds(){
 		for(CCEffectable myEffectable:this){
 			updateMaxIds(myEffectable);
 		}
@@ -52,8 +51,9 @@ public class CCEffectables<Type extends CCEffectable> extends ArrayList<Type>{
 	public void addIdSources(String...theIdSources){
 		for(String mySource:theIdSources){
 			_myIdSources.add(mySource);
+			_myRelativeSources.add(mySource);
 		}
-		updaeMaxIds();
+		updateMaxIds();
 	}
 	
 	public Set<String> relativeSources(){
@@ -69,8 +69,6 @@ public class CCEffectables<Type extends CCEffectable> extends ArrayList<Type>{
 		return result == null ? 0 : result;
 	}
 	
-	private int _myGroups = 0;
-	
 	@Override
 	public boolean add(Type e) {
 		
@@ -84,7 +82,6 @@ public class CCEffectables<Type extends CCEffectable> extends ArrayList<Type>{
 					_myMaxIds.put(myIdSource, 0);
 				}
 				int myLastMax = _myMaxIds.get(myIdSource);
-				
 				_myMaxIds.put(myIdSource, CCMath.max(myElement.idSource(myIdSource), myLastMax));
 			}
 		}
@@ -97,6 +94,6 @@ public class CCEffectables<Type extends CCEffectable> extends ArrayList<Type>{
 	}
 	
 	public int groups(){
-		return _myGroups;
+		return idMax(CCEffectable.GROUP_SOURCE);
 	}
 }

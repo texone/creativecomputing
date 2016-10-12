@@ -42,6 +42,10 @@ public abstract class CCEffectable {
 		Double result = _myRelativeSources.get(theKey);
 		return result == null ? 0 : result;
 	}
+	
+	public double randomBlend(){
+		return relativeSource(CCEffectable.RANDOM_SOURCE);
+	}
 
 	public int idSource(String theKey){
 		Integer result = _myIdBasedSources.get(theKey);
@@ -82,6 +86,18 @@ public abstract class CCEffectable {
 	
 	public int group(){
 		return idSource(GROUP_SOURCE);
+	}
+	
+	public void groupID(int theGroup){
+		addIdBasedSource(GROUP_ID_SOURCE, theGroup);
+	}
+	
+	public double groupIDBlend(){
+		return relativeSource(CCEffectable.GROUP_ID_SOURCE);
+	}
+	
+	public int groupID(){
+		return idSource(GROUP_ID_SOURCE);
 	}
 	
 	public void update(double theDeltaTime){

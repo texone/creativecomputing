@@ -47,8 +47,8 @@ public class CCGradientEffect extends CCEffect{
 	public double[] applyTo(CCEffectable theEffectable){
 		double[] myResult = new double[_myResultLength];
 		CCColor myColor = _myGradient.color(
-			_myOffset1Signal.value(_myGlobalPhase + _cModulations.get("offset1").modulation(theEffectable)) * _cOffset1Amp + 
-			_myOffset2Signal.value(_myGlobalPhase + _cModulations.get("offset2").modulation(theEffectable)) * _cOffset2Amp +
+			_myOffset1Signal.value(_myGlobalPhase + modulation("offset1").modulation(theEffectable)) * _cOffset1Amp + 
+			_myOffset2Signal.value(_myGlobalPhase + modulation("offset2").modulation(theEffectable)) * _cOffset2Amp +
 			_cOffset1Add
 			
 		);

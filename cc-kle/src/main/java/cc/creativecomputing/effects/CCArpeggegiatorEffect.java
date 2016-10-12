@@ -27,7 +27,7 @@ public class CCArpeggegiatorEffect extends CCEffect{
 		double[] myResult = new double[_myValueNames.length];
 		for(int i = 0; i < _myValueNames.length;i++){
 			double myBrightness = 1d;
-			double myMod = _cModulations.get(_myValueNames[i]).modulation(theEffectable, -1, 1);
+			double myMod = modulation(_myValueNames[i]).modulation(theEffectable, -1, 1);
 			
 			switch(_cMode){
 			case UP:
