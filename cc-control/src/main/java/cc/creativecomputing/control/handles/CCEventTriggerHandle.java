@@ -32,7 +32,7 @@ public class CCEventTriggerHandle extends CCPropertyHandle<Object>{
 
 	@Override
 	public String valueString() {
-		return null;
+		return "";
 	}
 	
 	@Override

@@ -207,7 +207,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		List<CCField<CCProperty>> myFields = CCReflectionUtil.getFields(theObject, CCProperty.class);
 		for(CCField<CCProperty> myField:myFields){
 			Class<?> myClass = myField.type();
-			CCPropertyHandle myProperty;
+			CCPropertyHandle myProperty = null;
 			if(creatorMap.containsKey(myClass)){
 				myProperty = creatorMap.get(myClass).create(this, myField);
 			}else  if(myClass.isEnum()){
@@ -217,9 +217,16 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 				if(myField.value() instanceof Map && ((Map)myField.value()).size() <= 0){
 					continue;
 				}
-				myProperty = new CCObjectPropertyHandle(this, myField, _mySettingsPath);
+				if(myField.annotation().hide()){
+					Map<String,CCPropertyHandle> myHandles = link(myField.value());
+					for(String myKey:myHandles.keySet()){
+						myResult.put(myKey, myHandles.get(myKey));
+					}
+				}else{
+					myProperty = new CCObjectPropertyHandle(this, myField, _mySettingsPath);
+				}
 			}
-			myResult.put(myProperty.name(), myProperty);
+			if(myProperty != null)myResult.put(myProperty.name(), myProperty);
 		}
 		
 		List<CCMethod<CCProperty>> myMethods = CCReflectionUtil.getMethods(theObject, CCProperty.class);

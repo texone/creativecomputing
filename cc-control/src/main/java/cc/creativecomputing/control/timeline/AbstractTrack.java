@@ -13,6 +13,9 @@ public abstract class AbstractTrack {
 	private boolean _myMuteFlag;
 	
 	protected boolean _myDirtyFlag;
+	
+	protected double _myMin = 0;
+	protected double _myMax = 1;
 
 	public AbstractTrack(CCPropertyHandle<?> theProperty) {
 		_myMuteFlag = false;
@@ -31,6 +34,22 @@ public abstract class AbstractTrack {
 	
 	public boolean mute() {
 		return _myMuteFlag;
+	}
+	
+	public double min(){
+		return _myMin;
+	}
+	
+	public void min(double theMin){
+		_myMin = theMin;
+	}
+	
+	public double max(){
+		return _myMax;
+	}
+	
+	public void max(double theMax){
+		_myMax = theMax;
 	}
 	
 	public Color color() {

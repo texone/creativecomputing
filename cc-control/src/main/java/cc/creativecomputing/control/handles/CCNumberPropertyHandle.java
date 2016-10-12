@@ -41,6 +41,11 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 		}
 	}
 	
+	public int digits(){
+		if(_myMember == null || _myMember.annotation() == null)return 2;
+		return _myMember.annotation().digits();
+	}
+	
 	public boolean isNumberBox(){
 		return _myIsNumberBox;
 	}

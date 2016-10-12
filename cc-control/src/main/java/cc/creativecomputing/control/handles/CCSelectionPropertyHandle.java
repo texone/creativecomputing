@@ -1,6 +1,7 @@
 package cc.creativecomputing.control.handles;
 
 import cc.creativecomputing.control.CCSelection;
+import cc.creativecomputing.control.CCSelection.CCSelectionListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
@@ -13,6 +14,19 @@ public class CCSelectionPropertyHandle extends CCPropertyHandle<CCSelection>{
 	protected CCSelectionPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
 		_myNumberOfConstants = value().values().size();
+		value().events().add(new CCSelectionListener() {
+			
+			@Override
+			public void onChangeValues(CCSelection theSelection) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onChange(String theValue) {
+				_myEvents.proxy().onChange(value());
+			}
+		});
 	}
 	
 	@Override

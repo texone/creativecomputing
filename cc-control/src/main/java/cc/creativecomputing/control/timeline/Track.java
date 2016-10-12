@@ -70,12 +70,16 @@ public class Track extends AbstractTrack{
 	public static final String PATH_ATTRIBUTE = "path";
 	private static final String MUTE_ATTRIBUTE = "mute";
 	private static final String ACCUMULATE_ATTRIBUTE = "accumulate";
+	private static final String MIN_ATTRIBUTE = "min";
+	private static final String MAX_ATTRIBUTE = "max";
 	
 	public CCDataObject data(double theStart, double theEnd) {
 		CCDataObject myTrackData = new CCDataObject();
 		myTrackData.put(PATH_ATTRIBUTE, path().toString());
 		myTrackData.put(MUTE_ATTRIBUTE, mute());
 		myTrackData.put(ACCUMULATE_ATTRIBUTE, accumulateData());
+		myTrackData.put(MIN_ATTRIBUTE, min());
+		myTrackData.put(MAX_ATTRIBUTE, max());
 		myTrackData.put(TrackData.TRACKDATA_ELEMENT, trackData().data(theStart, theEnd));
 		
 		if(_myExtras != null && _myExtras.size() > 0) {
@@ -91,6 +95,8 @@ public class Track extends AbstractTrack{
 	public void data(CCDataObject theTrackData) {
 //		setAddress(theTrackData.getString(ADDRESS_ATTRIBUTE));
 		mute(theTrackData.getBoolean(MUTE_ATTRIBUTE));
+		min(theTrackData.getDouble(MIN_ATTRIBUTE, 0));
+		max(theTrackData.getDouble(MAX_ATTRIBUTE, 1));
 		accumulateData(theTrackData.getBoolean(ACCUMULATE_ATTRIBUTE, false));
 		
 		CCDataObject myTrackData = theTrackData.getObject(TrackData.TRACKDATA_ELEMENT);
