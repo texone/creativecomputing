@@ -12,23 +12,23 @@ package cc.creativecomputing.protocol.midi.messages;
 
 import javax.sound.midi.ShortMessage;
 
-public class CCNoteOn extends CCNote{
+public class CCMidiNoteOn extends CCNote{
 	
 	/**
 	 * the length of the note in milliSeconds
 	 */
 	private int _myLength;
 
-	public CCNoteOn(int thePitch, int theVelocity, int theLength) {
+	public CCMidiNoteOn(int thePitch, int theVelocity, int theLength) {
 		super(ShortMessage.NOTE_ON, thePitch, theVelocity);
 		_myLength = theLength;
 	}
 
-	public CCNoteOn(int thePitch, int theVelocity) {
+	public CCMidiNoteOn(int thePitch, int theVelocity) {
 		this( thePitch, theVelocity,0);
 	}
 
-	public CCNoteOn(ShortMessage theShortMessage) {
+	public CCMidiNoteOn(ShortMessage theShortMessage) {
 		super(theShortMessage);
 		_myLength = 0;
 	}

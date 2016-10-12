@@ -12,13 +12,13 @@ package cc.creativecomputing.protocol.midi.messages;
 
 import javax.sound.midi.ShortMessage;
 
-public class CCNoteOff extends CCNote{
+public class CCMidiNoteOff extends CCNote{
 
-	public CCNoteOff(int thePitch) {
+	public CCMidiNoteOff(int thePitch) {
 		super(ShortMessage.NOTE_OFF, thePitch, 0);
 	}
 
-	public CCNoteOff(ShortMessage theShortMessage) {
+	public CCMidiNoteOff(ShortMessage theShortMessage) {
 		super(theShortMessage);
 	}
 }

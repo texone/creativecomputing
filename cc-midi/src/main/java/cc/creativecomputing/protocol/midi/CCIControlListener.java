@@ -10,9 +10,9 @@
  */
 package cc.creativecomputing.protocol.midi;
 
-import cc.creativecomputing.protocol.midi.messages.CCController;
+import cc.creativecomputing.protocol.midi.messages.CCMidiControl;
 
 public interface CCIControlListener {
 
-	public void onControl(final CCController theController);
+	public void onControl(final CCMidiControl theController);
 }

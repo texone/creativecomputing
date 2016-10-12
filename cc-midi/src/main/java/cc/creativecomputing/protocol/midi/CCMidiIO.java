@@ -12,13 +12,9 @@ package cc.creativecomputing.protocol.midi;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Path;
 
 import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
 
 /**
  * MidiIO is the base class for managing the available MIDI ports. 
@@ -30,16 +26,6 @@ import javax.sound.midi.MidiUnavailableException;
  * all devices available on your system.
  */
 public class CCMidiIO{
-
-	/**
-	 * Stores all available MIDI input devices
-	 */
-	final private List<CCMidiIn> _myMidiInputDevices = new ArrayList<CCMidiIn>();
-
-	/**
-	 * Stores all available MIDI output devices
-	 */
-	final private List<CCMidiOutDevice> _myMidiOutDevices = new ArrayList<CCMidiOutDevice>();
 
 
 	/**
@@ -67,9 +53,9 @@ public class CCMidiIO{
 		
 	}
 	
-	public static void writeFile(CCMidiFile theFile, String thePath){
+	public static void writeFile(CCMidiFile theFile, Path thePath){
 		try {
-			MidiSystem.write(theFile._mySequence, 1, new File(thePath));
+			MidiSystem.write(theFile._mySequence, 1, thePath.toFile());
 		} catch (IOException e) {
 			throw new CCMidiException("Problem writing midi file! ", e);
 		}

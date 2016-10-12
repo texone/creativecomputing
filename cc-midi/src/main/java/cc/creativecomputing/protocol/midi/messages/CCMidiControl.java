@@ -12,19 +12,23 @@ package cc.creativecomputing.protocol.midi.messages;
 
 import javax.sound.midi.ShortMessage;
 
+import cc.creativecomputing.protocol.midi.CCMidiControllerNumber;
+
 /**
  * Controller represents a MIDI controller. It has a number and a value. You can
  * receive Controller values from MIDI ins and send them to MIDI outs.
  */
-public class CCController extends CCMidiMessage{
+public class CCMidiControl extends CCMidiMessage{
+	
+	
 
 	/**
 	 * Initializes a new Controller object.
 	 * @param theNumber number of a controller
 	 * @param theValue value of a controller
 	 */
-	public CCController(final int theNumber, final int theValue){
-		super(CONTROL_CHANGE, theNumber, theValue);
+	public CCMidiControl(final CCMidiControllerNumber theNumber, final int theValue){
+		super(CONTROL_CHANGE, theNumber.number, theValue);
 	}
 	
 	/**
@@ -32,7 +36,7 @@ public class CCController extends CCMidiMessage{
 	 * @param theShortMessage
 	 * @invisible
 	 */
-	CCController(ShortMessage theShortMessage){
+	CCMidiControl(ShortMessage theShortMessage){
 		super(theShortMessage);
 	}
 

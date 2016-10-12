@@ -37,16 +37,11 @@ package cc.creativecomputing.protocol.midi;
 
 import java.io.PrintStream;
 
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.Track;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.MidiMessage;
-import javax.sound.midi.ShortMessage;
 import javax.sound.midi.MetaMessage;
-import javax.sound.midi.SysexMessage;
+import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.SysexMessage;
 
 /**
  * Displays the file format information of a MIDI file.
@@ -99,17 +94,14 @@ public class CCMidiInCommandManager implements Receiver {
 	};
 
 	private PrintStream m_printStream;
-	private boolean m_bDebug;
 	private boolean m_bPrintTimeStampAsTicks;
 
 	public CCMidiInCommandManager(PrintStream printStream) {
 		this(printStream, false);
 	}
 
-	public CCMidiInCommandManager(PrintStream printStream,
-			boolean bPrintTimeStampAsTicks) {
+	public CCMidiInCommandManager(PrintStream printStream, boolean bPrintTimeStampAsTicks) {
 		m_printStream = printStream;
-		m_bDebug = false;
 		m_bPrintTimeStampAsTicks = bPrintTimeStampAsTicks;
 	}
 
@@ -238,9 +230,7 @@ public class CCMidiInCommandManager implements Receiver {
 	}
 
 	public String decodeMetaMessage(MetaMessage message) {
-		byte[] abMessage = message.getMessage();
 		byte[] abData = message.getData();
-		int nDataLength = message.getLength();
 		String strMessage = null;
 		// System.out.println("data array length: " + abData.length);
 		switch (message.getType()) {
@@ -352,10 +342,6 @@ public class CCMidiInCommandManager implements Receiver {
 		return (nLowerPart & 0x7F) | ((nHigherPart & 0x7F) << 7);
 	}
 
-	private static int signedByteToUnsigned(byte b) {
-		return b & 0xFF;
-	}
-
 	// convert from microseconds per quarter note to beats per minute and vice
 	// versa
 	private static float convertTempo(float value) {
@@ -365,8 +351,7 @@ public class CCMidiInCommandManager implements Receiver {
 		return 60000000.0f / value;
 	}
 
-	private static char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
-			'8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+	private static char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 	public static String getHexString(byte[] aByte) {
 		StringBuffer sbuf = new StringBuffer(aByte.length * 3 + 2);
