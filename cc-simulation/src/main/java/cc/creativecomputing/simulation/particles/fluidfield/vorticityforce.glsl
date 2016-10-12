@@ -10,44 +10,43 @@
  */ 
 
 // 0.5 / gridscale
-uniform half halfrdx;
+uniform float halfrdx;
 
 // vorticity confinement scale
-uniform half2 dxscale;
+uniform vec2 dxscale;
 
-const half EPSILON = 2.4414e-4; // 2^-12
+const float EPSILON = 2.4414e-4; // 2^-12
 
-uniform half deltaTime;
+uniform float deltaTime;
 
-uniform samplerRECT vorticityTexture;
-uniform samplerRECT velocityTexture;
+uniform sampler2DRect vorticityTexture;
+uniform sampler2DRect velocityTexture;
 
-void main(
-	in half2 iCoords : WPOS,
-	out half4 uNew   : COLOR
-){
+void main(){
 
-	half vorticityLeft 		= h4texRECT(vorticityTexture, iCoords - half2(1,0)).x;
-	half vorticityRight		= h4texRECT(vorticityTexture, iCoords + half2(1,0)).x;
-	half vorticityBottom	= h4texRECT(vorticityTexture, iCoords - half2(0,1)).x;
-	half vorticityTop		= h4texRECT(vorticityTexture, iCoords + half2(0,1)).x;
-	half vorticityCenter	= h4texRECT(vorticityTexture, iCoords).x;
+	float vorticityLeft 	= texture2DRect(vorticityTexture, gl_FragCoord.xy - vec2(1,0)).x;
+	float vorticityRight	= texture2DRect(vorticityTexture, gl_FragCoord.xy + vec2(1,0)).x;
+	float vorticityBottom	= texture2DRect(vorticityTexture, gl_FragCoord.xy - vec2(0,1)).x;
+	float vorticityTop		= texture2DRect(vorticityTexture, gl_FragCoord.xy + vec2(0,1)).x;
+	float vorticityCenter	= texture2DRect(vorticityTexture, gl_FragCoord.xy).x;
   
-	half2 force = halfrdx * half2(abs(vorticityTop) - abs(vorticityBottom), abs(vorticityRight) - abs(vorticityLeft));
+	vec2 force = halfrdx * vec2(abs(vorticityTop) - abs(vorticityBottom), abs(vorticityRight) - abs(vorticityLeft));
   
 	// safe normalize
 	
-	//half magSqr = max(EPSILON, dot(force, force)); 
+	//float magSqr = max(EPSILON, dot(force, force)); 
 	//force = force * rsqrt(magSqr); 
 
-	//force *= dxscale * vorticityCenter * half2(1, -1);
+	//force *= dxscale * vorticityCenter * vec2(1, -1);
 	  /*
 	force += 1;
 	force *= 0.5;*/
 
-	uNew = h4texRECT(velocityTexture, iCoords);
+	vec4 uNew = texture2DRect(velocityTexture, gl_FragCoord.xy);
 
-	uNew += deltaTime * float4(force.x,force.y,0,1);
-	uNew = deltaTime * 100 * float4(force.x,force.y,0,1);
-	uNew = float4(vorticityCenter,vorticityCenter,vorticityCenter,1);
+	uNew += deltaTime * vec4(force.x,force.y,0,1);
+	uNew = deltaTime * 100.0 * vec4(force.x,force.y,0,1);
+	uNew = vec4(vorticityCenter,vorticityCenter,vorticityCenter,1);
+	
+	gl_FragColor = uNew;
 } 

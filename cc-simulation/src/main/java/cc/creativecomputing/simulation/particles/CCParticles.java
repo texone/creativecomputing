@@ -26,6 +26,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLProgram.CCGLTextureUniform;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
+import cc.creativecomputing.graphics.texture.CCGLSwapBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCVector3;
@@ -56,9 +57,9 @@ import cc.creativecomputing.simulation.particles.render.CCGPUParticleRenderer;
 public class CCParticles{
 	
 	protected Map<Integer, CCVector3> _myPositionUpdates = new HashMap<Integer, CCVector3>();
-	protected List<CCGPUParticle> _myLifetimeUpdates = new ArrayList<CCGPUParticle>();
+	protected List<CCParticle> _myLifetimeUpdates = new ArrayList<CCParticle>();
 	
-	private List<CCGPUParticleEmitter> _myEmitter = new ArrayList<CCGPUParticleEmitter>();
+	private List<CCParticleEmitter> _myEmitter = new ArrayList<CCParticleEmitter>();
 	
 	protected List<CCForce> _myForces;
 	protected List<CCConstraint> _myConstraints;
@@ -67,12 +68,11 @@ public class CCParticles{
 	protected final int _myWidth;
 	protected final int _myHeight;
 	
-	protected CCGPUUpdateShader _myUpdateShader;
+	protected CCParticlesUpdateShader _myUpdateShader;
 	
 	protected CCGLProgram _myInitValueShader;
 	
-	protected CCShaderBuffer _myCurrentDataTexture;
-	protected CCShaderBuffer _myDestinationDataTexture;
+	protected CCGLSwapBuffer _mySwapTexture;
 	
 	protected double _myCurrentTime = 0;
 	
@@ -133,28 +133,18 @@ public class CCParticles{
 		
 		_myInitValueShader = new CCGLProgram(null,CCNIOUtil.classPath(this, "initvalue01.glsl"));
 		
-		_myCurrentDataTexture = new CCShaderBuffer(32,4,4,_myWidth,_myHeight);
-		g.clearColor(0,0,0,0);
-		_myCurrentDataTexture.beginDraw(0);
-		g.clear();
-		_myCurrentDataTexture.endDraw();
-		_myCurrentDataTexture.beginDraw(1);
-		g.clear();
-		_myCurrentDataTexture.endDraw();
-		g.clearColor(0);
-		
-		_myDestinationDataTexture = new CCShaderBuffer(32,4,4,_myWidth,_myHeight);
+		_mySwapTexture = new CCGLSwapBuffer(32,4,4,_myWidth,_myHeight);
 		
 		_myParticleRender = theRender;
 		_myParticleRender.setup(this);
-		_myUpdateShader = new CCGPUUpdateShader(this, g,theForces, theConstraints, theImpulse,_myWidth,_myHeight);
+		_myUpdateShader = new CCParticlesUpdateShader(this, g,theForces, theConstraints, theImpulse,_myWidth,_myHeight);
 		
 		reset(g);
 		
-		_myUpdateShader.setTextureUniform("positionTexture", _myCurrentDataTexture.attachment(0));
-		_myUpdateShader.setTextureUniform("infoTexture", _myCurrentDataTexture.attachment(1));
-		_myUpdateShader.setTextureUniform("velocityTexture", _myCurrentDataTexture.attachment(2));
-		_myUpdateShader.setTextureUniform("colorTexture", _myCurrentDataTexture.attachment(3));
+		_myUpdateShader.setTextureUniform("positionTexture", _mySwapTexture.attachment(0));
+		_myUpdateShader.setTextureUniform("infoTexture", _mySwapTexture.attachment(1));
+		_myUpdateShader.setTextureUniform("velocityTexture", _mySwapTexture.attachment(2));
+		_myUpdateShader.setTextureUniform("colorTexture", _mySwapTexture.attachment(3));
 		_myUpdateShader.setTextureUniform("staticPositions", null);
 	}
 	
@@ -180,7 +170,7 @@ public class CCParticles{
 		this(g, theForces, new ArrayList<CCConstraint>());
 	}
 	
-	public void addEmitter(CCGPUParticleEmitter theEmitter) {
+	public void addEmitter(CCParticleEmitter theEmitter) {
 		_myEmitter.add(theEmitter);
 	}
 	
@@ -194,13 +184,13 @@ public class CCParticles{
 	
 	public void reset(CCGraphics g){
 
-		for(CCGPUParticleEmitter myEmitter:_myEmitter) {
+		for(CCParticleEmitter myEmitter:_myEmitter) {
 			myEmitter.reset();
 		}
 		
-		_myCurrentDataTexture.clear();
+		_mySwapTexture.clear();
 		
-		_myCurrentDataTexture.beginDraw();
+		_mySwapTexture.beginDraw();
 		_myInitValueShader.start();
 		
 		g.beginShape(CCDrawMode.POINTS);
@@ -214,7 +204,7 @@ public class CCParticles{
 		g.endShape();
 		
 		_myInitValueShader.end();
-		_myCurrentDataTexture.endDraw();
+		_mySwapTexture.endDraw();
 		
 		for(CCForce myForce:_myForces) {
 			myForce.reset();
@@ -246,7 +236,7 @@ public class CCParticles{
 	 * @return texture containing the positions of the particles
 	 */
 	public CCShaderBuffer dataBuffer() {
-		return _myCurrentDataTexture;
+		return _mySwapTexture.currentBuffer();
 	}
 	
 	/**
@@ -256,7 +246,7 @@ public class CCParticles{
 	 * @param theParticle the particle to query
 	 * @return the position of the given particle
 	 */
-	public CCVector3 position(CCGPUParticle theParticle) {
+	public CCVector3 position(CCParticle theParticle) {
 		return position(theParticle, new CCVector3());
 	}
 	
@@ -266,8 +256,8 @@ public class CCParticles{
 	 * @param theVector vector to store the position
 	 * @return the position of the particle as vector
 	 */
-	public CCVector3 position(CCGPUParticle theParticle, CCVector3 theVector){
-		FloatBuffer myResult = _myCurrentDataTexture.getData(theParticle.x(), theParticle.y(), 1, 1);
+	public CCVector3 position(CCParticle theParticle, CCVector3 theVector){
+		FloatBuffer myResult = _mySwapTexture.getData(theParticle.x(), theParticle.y(), 1, 1);
 		theVector.x = myResult.get();
 		theVector.y = myResult.get();
 		theVector.z = myResult.get();
@@ -275,7 +265,7 @@ public class CCParticles{
 	}
 
 	public CCShaderBuffer destinationDataTexture() {
-		return _myDestinationDataTexture;
+		return _mySwapTexture.destinationBuffer();
 	}
 	
 	/**
@@ -294,7 +284,7 @@ public class CCParticles{
 		}
 		
 		// Render manually changed positions into the texture.
-		_myCurrentDataTexture.beginDraw(0);
+		_mySwapTexture.beginDraw(0);
 		_myInitValueShader.start();
 		
 		g.beginShape(CCDrawMode.POINTS);
@@ -311,7 +301,7 @@ public class CCParticles{
 		g.endShape();
 		
 		_myInitValueShader.end();
-		_myCurrentDataTexture.endDraw();
+		_mySwapTexture.endDraw();
 		
 		_myPositionUpdates.clear();
 	}
@@ -321,7 +311,7 @@ public class CCParticles{
 	 * the particle instance.
 	 * @param theParticle particle instance containing new lifetime data
 	 */
-	public void updateLifecyle(CCGPUParticle theParticle) {
+	public void updateLifecyle(CCParticle theParticle) {
 		_myLifetimeUpdates.add(theParticle);
 	}
 	
@@ -329,7 +319,7 @@ public class CCParticles{
 		// Render velocity.
 		
 		// Render current position into texture.
-		for(CCGPUParticleEmitter myEmitter:_myEmitter) {
+		for(CCParticleEmitter myEmitter:_myEmitter) {
 			myEmitter.setData(g);
 		}
 		
@@ -396,7 +386,7 @@ public class CCParticles{
 	public void update(final CCAnimator theAnimator){
 		if(theAnimator.deltaTime() <= 0)return;
 		
-		for(CCGPUParticleEmitter myEmitter:_myEmitter) {
+		for(CCParticleEmitter myEmitter:_myEmitter) {
 			myEmitter.update(theAnimator);
 		}
 		
@@ -421,13 +411,11 @@ public class CCParticles{
 	}
 	
 	public void swapDataTextures(){
-		CCShaderBuffer myTemp = _myDestinationDataTexture;
-		_myDestinationDataTexture = _myCurrentDataTexture;
-		_myCurrentDataTexture = myTemp;
-		_myUpdateShader.setTextureUniform("positionTexture", _myCurrentDataTexture.attachment(0));
-		_myUpdateShader.setTextureUniform("infoTexture", _myCurrentDataTexture.attachment(1));
-		_myUpdateShader.setTextureUniform("velocityTexture", _myCurrentDataTexture.attachment(2));
-		_myUpdateShader.setTextureUniform("colorTexture", _myCurrentDataTexture.attachment(3));
+		_mySwapTexture.swap();
+		_myUpdateShader.setTextureUniform("positionTexture", _mySwapTexture.attachment(0));
+		_myUpdateShader.setTextureUniform("infoTexture", _mySwapTexture.attachment(1));
+		_myUpdateShader.setTextureUniform("velocityTexture", _mySwapTexture.attachment(2));
+		_myUpdateShader.setTextureUniform("colorTexture", _mySwapTexture.attachment(3));
 	}
 	
 	public void display(CCGraphics g) {
@@ -446,7 +434,7 @@ public class CCParticles{
 //			CCLog.info(myTextureUnit + " : " + myTextureUniform.parameter  + " : " + myTextureUniform.texture);
 			myTextureUnit++;
 		}
-		_myDestinationDataTexture.draw();
+		_mySwapTexture.draw();
 		_myUpdateShader.end();
 		g.noTexture();
 		

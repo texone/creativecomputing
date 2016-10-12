@@ -13,7 +13,7 @@ package cc.creativecomputing.simulation.particles;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.graphics.CCGraphics;
 
-public interface CCGPUParticleEmitter {
+public interface CCParticleEmitter {
 
 	public void setData(CCGraphics g);
 	

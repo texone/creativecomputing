@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.simulation.particles.fluidfield;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
@@ -71,6 +72,7 @@ public class CCFluidAddColorOrImpulseShader extends CCGLProgram{
 		_myColor.set(theColor);
 	}
 	
+	@CCProperty(name = "radius", min = 0, max = 1)
 	public void radius(final double theRadius) {
 		_myRadius = theRadius;
 	}

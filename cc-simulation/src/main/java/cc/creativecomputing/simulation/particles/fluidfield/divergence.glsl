@@ -18,9 +18,10 @@ uniform float halfrdx;
 uniform sampler2DRect w;             
         
 void main(){
-	vec4 vL = texture2DRect(w,gl_FragCoord + vec2(-1,  0));
-	vec4 vR = texture2DRect(w,gl_FragCoord + vec2( 1,  0));
-	vec4 vB = texture2DRect(w,gl_FragCoord + vec2( 0, -1));
-	vec4 vT = texture2DRect(w,gl_FragCoord + vec2( 0,  1));
-	gl_FragColor = halfrdx * (vR.x - vL.x + vT.y - vB.y);
+	vec4 vL = texture2DRect(w,gl_FragCoord.xy + vec2(-1,  0));
+	vec4 vR = texture2DRect(w,gl_FragCoord.xy + vec2( 1,  0));
+	vec4 vB = texture2DRect(w,gl_FragCoord.xy + vec2( 0, -1));
+	vec4 vT = texture2DRect(w,gl_FragCoord.xy + vec2( 0,  1));
+	float result = halfrdx * (vR.x - vL.x + vT.y - vB.y);
+	gl_FragColor = vec4(result, result, result, 1.0);
 } 

@@ -14,13 +14,13 @@ package cc.creativecomputing.simulation.particles.impulses;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.simulation.particles.CCGLProgramInterface;
-import cc.creativecomputing.simulation.particles.CCGPUUpdateShader;
+import cc.creativecomputing.simulation.particles.CCParticlesUpdateShader;
 
 public abstract class CCGPUImpulse extends CCGLProgramInterface{
 	
 	protected String _myParameterIndex;
 	protected String _myShaderTypeName;
-	protected CCGPUUpdateShader _myVelocityShader;
+	protected CCParticlesUpdateShader _myVelocityShader;
 	
 	@CCProperty(name = "strength", min = 0, max = 10)
 	protected double _cStrength = 1;

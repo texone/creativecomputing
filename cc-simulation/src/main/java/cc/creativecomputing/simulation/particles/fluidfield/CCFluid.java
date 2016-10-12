@@ -11,10 +11,12 @@
 package cc.creativecomputing.simulation.particles.fluidfield;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
+import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.math.CCAABoundingRectangle;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector2;
@@ -28,9 +30,13 @@ public class CCFluid {
 	private CCFluidBoundaryShader _myBoundaryShader;
 //	private CCShaderBuffer _myBoundaryTexture;
 	
+//	@CCProperty(name = "advect")
 	private CCFluidAdvectShader _myAdvectShader;
 	
+//	@CCProperty(name = "add impulse")
 	private CCFluidAddColorOrImpulseShader _myAddImpulseShader;
+	
+//	@CCProperty(name = "add color")
 	private CCFluidAddColorOrImpulseShader _myAddColorShader;
 	
 	private CCFluidVorticityShader _myVorticityShader;
@@ -41,7 +47,7 @@ public class CCFluid {
 	
 	private CCFluidDiffusionShader _myDiffusionShader;
 	private double _myViscousity = 0.5f;
-	private double _myDiffusionSteps = 5;
+	private double _myDiffusionSteps = 15;
 	
 	private double _myColorDarking = 0;
 	private double _myAdvectSpeed = 1;
@@ -56,7 +62,7 @@ public class CCFluid {
 	private CCShaderBuffer _myVelocityBuffer;
 	private CCShaderBuffer _myTmpVelocityBuffer;
 	
-	private CCShaderBuffer _myColorTexture;
+	private CCShaderBuffer _myColorBuffer;
 	private CCShaderBuffer _myTmpColorTexture;
 	
 	private CCShaderBuffer _myPressureBuffer;
@@ -75,12 +81,16 @@ public class CCFluid {
 		_myOffBoundaryRect = new CCAABoundingRectangle(1, 1, _myWidth - 1, _myHeight - 1);
 		
 		_myVelocityBuffer = new CCShaderBuffer(_myWidth, _myHeight);
+		_myVelocityBuffer.clear();
 		_myTmpVelocityBuffer = new CCShaderBuffer(_myWidth, _myHeight);
+		_myTmpVelocityBuffer.clear();
 		
-		_myColorTexture = new CCShaderBuffer(_myWidth, _myHeight);
-		_myColorTexture.attachment(0).textureFilter(CCTextureFilter.LINEAR);
+		_myColorBuffer = new CCShaderBuffer(_myWidth, _myHeight);
+		_myColorBuffer.attachment(0).textureFilter(CCTextureFilter.LINEAR);
+		_myColorBuffer.clear();
 		_myTmpColorTexture = new CCShaderBuffer(_myWidth, _myHeight);
 		_myTmpColorTexture.attachment(0).textureFilter(CCTextureFilter.LINEAR);
+		_myTmpColorTexture.clear();
 		
 		_myBoundaryShader = new CCFluidBoundaryShader();
 //		_myBoundaryTexture = new CCShaderBuffer(32, 3,_myWidth,_myHeight);
@@ -115,7 +125,9 @@ public class CCFluid {
 		_mySubtractGradientShader.halfRdx(0.5f);
 		
 		_myPressureBuffer = new CCShaderBuffer(32, 3,_myWidth,_myHeight);
+		_myPressureBuffer.clear();
 		_myTmpPressureBuffer = new CCShaderBuffer(32, 3,_myWidth,_myHeight);
+		_myTmpPressureBuffer.clear();
 	}
 	
 	public void colorRadius(final double theColorRadius) {
@@ -126,6 +138,7 @@ public class CCFluid {
 		_myAddImpulseShader.radius(theImpulseRadius);
 	}
 	
+	@CCProperty(name = "viscousity", min = 0, max = 1)
 	public void viscousity(final double theViscousity) {
 		_myViscousity = theViscousity;
 	}
@@ -137,8 +150,8 @@ public class CCFluid {
 	}
 	
 	private void swapColors() {
-		CCShaderBuffer myTmpTexture = _myColorTexture;
-		_myColorTexture = _myTmpColorTexture;
+		CCShaderBuffer myTmpTexture = _myColorBuffer;
+		_myColorBuffer = _myTmpColorTexture;
 		_myTmpColorTexture = myTmpTexture;
 	}
 	
@@ -161,7 +174,7 @@ public class CCFluid {
 	}
 	
 	public void addColor(CCGraphics g, final CCVector2 thePosition, final CCColor theColor) {
-		g.texture(0, _myColorTexture.attachment(0));
+		g.texture(0, _myColorBuffer.attachment(0));
 		_myAddColorShader.baseTexture(0);
 		_myAddColorShader.start();
 		_myAddColorShader.position(thePosition);
@@ -214,6 +227,7 @@ public class CCFluid {
 
 	}
 	
+	@CCProperty(name = "advect speed", min = 0, max = 100)
 	public void advectSpeed(final double theAdvectSpeed) {
 		_myAdvectSpeed = theAdvectSpeed;
 	}
@@ -248,12 +262,13 @@ public class CCFluid {
 		swapVelocities();
 	}
 	
+	@CCProperty(name = "darking", min = 0, max = 0.001f, digits = 4)
 	public void colorDarking(final double theColorDarking) {
 		_myColorDarking = theColorDarking;
 	}
 	
 	private void advectColors(CCGraphics g, final double theDeltaTime) {
-		g.texture(0, _myColorTexture.attachment(0));
+		g.texture(0, _myColorBuffer.attachment(0));
 		_myBoundaryShader.texture(0);
 		_myBoundaryShader.start();
 		_myBoundaryShader.scale(0);
@@ -263,7 +278,7 @@ public class CCFluid {
 		_myBoundaryShader.end();
 		g.noTexture();
 
-		g.texture(0, _myColorTexture.attachment(0));
+		g.texture(0, _myColorBuffer.attachment(0));
 		g.texture(1, _myVelocityBuffer.attachment(0));
 		_myAdvectShader.targetTexture(0);
 		_myAdvectShader.velocityTexture(1);
@@ -279,10 +294,10 @@ public class CCFluid {
 		swapColors();
 	}
 	
-//	/**
-//	 * Applies vorticity confinement
-//	 * @param theDeltaTime
-//	 */
+	/**
+	 * Applies vorticity confinement
+	 * @param theDeltaTime
+	 */
 //	private void vorticity(final double theDeltaTime) {
 //		_myVorticityShader.velocityTexture(_myVelocityBuffer.attachment(0));
 //		_myVorticityShader.start();
@@ -452,7 +467,7 @@ public class CCFluid {
 	public void display(CCGraphics g){
 		advectVelocities(g, _myDeltaTime);
 		advectColors(g,_myDeltaTime);
-//		vorticity(theDeltaTime);
+//		vorticity(g,_myDeltaTime);
 		diffuseVelocity(g, _myDeltaTime);
 		divergence(g);
 		pressure(g);
@@ -463,7 +478,15 @@ public class CCFluid {
 		return _myVelocityBuffer;
 	}
 	
+	public CCTexture2D velocityTexture() {
+		return _myVelocityBuffer.attachment(0);
+	}
+	
 	public CCShaderBuffer colorBuffer() {
-		return _myColorTexture;
+		return _myColorBuffer;
+	}
+	
+	public CCTexture2D colorTexture() {
+		return _myColorBuffer.attachment(0);
 	}
 }

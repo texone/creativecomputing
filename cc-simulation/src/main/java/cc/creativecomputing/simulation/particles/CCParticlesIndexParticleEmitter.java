@@ -28,13 +28,13 @@ import cc.creativecomputing.math.CCVector3;
  * @author christianriekoff
  *
  */
-public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
+public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 	
 	public class CCParticleWaitingList {
 		
 		private float _myTimeStep;
 		private int _myOffset = 0;
-		private List<CCGPUParticle>[] _myWaitLists;
+		private List<CCParticle>[] _myWaitLists;
 
 		@SuppressWarnings("unchecked")
 		public CCParticleWaitingList(float theTimeStep) {
@@ -45,19 +45,19 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 			_myWaitLists = new ArrayList[myNumberOfSteps];
 		}
 		
-		public void add(CCGPUParticle theParticle) {
+		public void add(CCParticle theParticle) {
 			_myPendingParticles.remove(theParticle);
 			int myStep = (int)(theParticle.lifeTime() / _myTimeStep);
 			myStep += _myOffset;
 			myStep %= _myWaitLists.length;
 			
-			if(_myWaitLists[myStep] == null)_myWaitLists[myStep] = new ArrayList<CCGPUParticle>();
+			if(_myWaitLists[myStep] == null)_myWaitLists[myStep] = new ArrayList<CCParticle>();
 			_myWaitLists[myStep].add(theParticle);
 		}
 		
 		private float _myStepTime = 0;
 		private int _myCurrentWorkedIndex = 0;
-		private List<CCGPUParticle> _myCurrentWaitList = null;
+		private List<CCParticle> _myCurrentWaitList = null;
 		
 		private void handleCurrentWaitList(CCAnimator theAnimator){
 			if(_myCurrentWaitList == null)return;
@@ -66,7 +66,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 			int myChecksPerFrame = CCMath.ceil(_myCurrentWaitList.size() / myFramesPerStep);
 			
 			for(int i = 0; i < myChecksPerFrame && _myCurrentWorkedIndex < _myCurrentWaitList.size(); i++, _myCurrentWorkedIndex++){
-				CCGPUParticle myParticle = _myCurrentWaitList.get(_myCurrentWorkedIndex);
+				CCParticle myParticle = _myCurrentWaitList.get(_myCurrentWorkedIndex);
 				
 				if(myParticle.isPermanent()) {
 					_myPendingParticles.add(myParticle);
@@ -85,7 +85,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 				_myStepTime -= _myTimeStep;
 				if(_myCurrentWaitList != null){
 					for(;_myCurrentWorkedIndex < _myCurrentWaitList.size(); _myCurrentWorkedIndex++){
-						CCGPUParticle myParticle = _myCurrentWaitList.get(_myCurrentWorkedIndex);
+						CCParticle myParticle = _myCurrentWaitList.get(_myCurrentWorkedIndex);
 						
 						if(myParticle.isPermanent()) {
 							_myPendingParticles.add(myParticle);
@@ -116,13 +116,13 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 	
 	protected CCParticles _myParticles;
 	
-	private List<CCGPUParticle> _myAllocatedParticles = new ArrayList<CCGPUParticle>();
-	private List<CCGPUParticle> _myPendingParticles = new LinkedList<CCGPUParticle>();
-	private List<CCGPUParticle> _myStateChanges = new ArrayList<CCGPUParticle>();
+	private List<CCParticle> _myAllocatedParticles = new ArrayList<CCParticle>();
+	private List<CCParticle> _myPendingParticles = new LinkedList<CCParticle>();
+	private List<CCParticle> _myStateChanges = new ArrayList<CCParticle>();
 	private List<Integer> _myFreeIndices;
 	
 	private CCParticleWaitingList _myParticleWaitingList;
-	protected final CCGPUParticle[] _myActiveParticlesArray;
+	protected final CCParticle[] _myActiveParticlesArray;
 	
 	protected CCMesh _myEmitMesh;
 	private FloatBuffer _myVertexBuffer;
@@ -136,7 +136,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 	
 	protected double _myCurrentTime = 0;
 	
-	public CCGPUIndexParticleEmitter(CCParticles theParticles, int theStart, int theNumberParticles) {
+	public CCParticlesIndexParticleEmitter(CCParticles theParticles, int theStart, int theNumberParticles) {
 		_myParticles = theParticles;
 		
 		_myStart = theStart;
@@ -145,10 +145,10 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		_myFreeIndices = new ArrayList<Integer>(_myNumberOfParticles);
 		
 		_myParticleWaitingList = new CCParticleWaitingList(0.5f);
-		_myActiveParticlesArray = new CCGPUParticle[_myNumberOfParticles];
+		_myActiveParticlesArray = new CCParticle[_myNumberOfParticles];
 		for(int i = 0; i < _myActiveParticlesArray.length;i++) {
 			int myIndex = _myStart + i;
-			_myActiveParticlesArray[i] = new CCGPUParticle(_myParticles, myIndex);
+			_myActiveParticlesArray[i] = new CCParticle(_myParticles, myIndex);
 			_myFreeIndices.add(myIndex);
 		}
 		
@@ -161,11 +161,11 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		_myFillArray = new float[1000 * 4];
 	}
 	
-	public CCGPUIndexParticleEmitter(CCParticles theParticles) {
+	public CCParticlesIndexParticleEmitter(CCParticles theParticles) {
 		this(theParticles, 0, theParticles.size());
 	}
 	
-	public List<CCGPUParticle> pendingParticles(){
+	public List<CCParticle> pendingParticles(){
 		return _myPendingParticles;
 	}
 	
@@ -200,7 +200,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		return _myFreeIndices.get(_myFreeIndices.size() - 1);
 	}
 	
-	public CCGPUParticle nextParticle(){
+	public CCParticle nextParticle(){
 		if (_myFreeIndices.isEmpty())
 			return null;
 		
@@ -217,13 +217,13 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		return (_myStart + theIndex) / _myParticles.width();
 	}
 	
-	public void changeParticle(CCGPUParticle theParticle) {
+	public void changeParticle(CCParticle theParticle) {
 		_myParticleWaitingList.add(theParticle);
 		_myStateChanges.add(theParticle);
 	}
 	
 	public void kill(){
-		for(CCGPUParticle myParticle:new ArrayList<>(pendingParticles())){
+		for(CCParticle myParticle:new ArrayList<>(pendingParticles())){
 			myParticle.isPermanent(false);
 			changeParticle(myParticle);
 		}
@@ -246,7 +246,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 	 * @param theIsPermanent <code>true</code> if the particle is permanent otherwise<code>false</code>
 	 * @return the allocated particle or <code>null</code>
 	 */
-	public CCGPUParticle emit(
+	public CCParticle emit(
 		final CCColor theColor,
 		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
@@ -260,7 +260,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		return emit(myFreeIndex, theColor, thePosition, theVelocity, theLifeTime, theIsPermanent);
 	}
 	
-	public CCGPUParticle emit(
+	public CCParticle emit(
 		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
 		final float theLifeTime, 
@@ -281,7 +281,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 	 * @param theIsPermanent <code>true</code> if the particle is permanent otherwise<code>false</code>
 	 * @return the allocated particle or <code>null</code>
 	 */
-	public CCGPUParticle emit(
+	public CCParticle emit(
 		final int theIndex,
 		final CCColor theColor,
 		final CCVector3 thePosition, 
@@ -291,7 +291,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 	){
 //		_myAvailableIndices.remove(theIndex);
 		int myIndex = theIndex - _myStart;
-		CCGPUParticle myActiveParticle = _myActiveParticlesArray[myIndex];
+		CCParticle myActiveParticle = _myActiveParticlesArray[myIndex];
 		myActiveParticle.color().set(theColor);
 		myActiveParticle.position().set(thePosition);
 		myActiveParticle.velocity().set(theVelocity);
@@ -318,7 +318,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 	 * @param theLifeTime lifetime of the particle
 	 * @return the allocated particle or <code>null</code>
 	 */
-	public CCGPUParticle emit(
+	public CCParticle emit(
 		final CCColor theColor,
 		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
@@ -327,7 +327,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		return emit(theColor, thePosition, theVelocity, theLifeTime, false);
 	}
 	
-	public CCGPUParticle emit(
+	public CCParticle emit(
 		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
 		final float theLifeTime
@@ -354,13 +354,13 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		return _myNumberOfParticles;
 	}
 	
-	public CCGPUParticle particle(final int theID) {
+	public CCParticle particle(final int theID) {
 		return _myActiveParticlesArray[theID - _myStart];
 	}
 	
-	public void fillColorData(FloatBuffer theBuffer, List<CCGPUParticle> theParticles){
+	public void fillColorData(FloatBuffer theBuffer, List<CCParticle> theParticles){
 		int i = 0;
-		for (CCGPUParticle myParticle:theParticles){
+		for (CCParticle myParticle:theParticles){
 			_myFillArray[i * 4 + 0] = (float)myParticle.color().r;
 			_myFillArray[i * 4 + 1] = (float)myParticle.color().g;
 			_myFillArray[i * 4 + 2] = (float)myParticle.color().b;
@@ -370,9 +370,9 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		theBuffer.put(_myFillArray, 0, theParticles.size() * 4);
 	}
 	
-	public void fillPositionData(FloatBuffer theBuffer, List<CCGPUParticle> theParticles){
+	public void fillPositionData(FloatBuffer theBuffer, List<CCParticle> theParticles){
 		int i = 0;
-		for (CCGPUParticle myParticle:theParticles){
+		for (CCParticle myParticle:theParticles){
 			_myFillArray[i * 3 + 0] = (float)myParticle.position().x;
 			_myFillArray[i * 3 + 1] = (float)myParticle.position().y;
 			_myFillArray[i * 3 + 2] = (float)myParticle.position().z;
@@ -381,9 +381,9 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		theBuffer.put(_myFillArray, 0, theParticles.size() * 3);
 	}
 	
-	public void fillInfoData(FloatBuffer theBuffer, List<CCGPUParticle> theParticles){
+	public void fillInfoData(FloatBuffer theBuffer, List<CCParticle> theParticles){
 		int i = 0;
-		for (CCGPUParticle myParticle:theParticles){
+		for (CCParticle myParticle:theParticles){
 			_myFillArray[i * 4 + 0] = myParticle.age();
 			_myFillArray[i * 4 + 1] = myParticle.lifeTime();
 			_myFillArray[i * 4 + 2] = myParticle.isPermanent() ? 1 : 0;//, myParticle.step();
@@ -393,9 +393,9 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		theBuffer.put(_myFillArray, 0, theParticles.size() * 4);
 	}
 	
-	public void fillVelocityData(FloatBuffer theBuffer, List<CCGPUParticle> theParticles){
+	public void fillVelocityData(FloatBuffer theBuffer, List<CCParticle> theParticles){
 		int i = 0;
-		for (CCGPUParticle myParticle:theParticles){
+		for (CCParticle myParticle:theParticles){
 			_myFillArray[i * 3 + 0] = (float)myParticle.velocity().x;
 			_myFillArray[i * 3 + 1] = (float)myParticle.velocity().y;
 			_myFillArray[i * 3 + 2] = (float)myParticle.velocity().z;
@@ -442,7 +442,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		synchronized(_myAllocatedParticles){
 			prepareBuffer(_myAllocatedParticles.size());
 			
-			for (CCGPUParticle myParticle:_myAllocatedParticles){
+			for (CCParticle myParticle:_myAllocatedParticles){
 				_myVertexBuffer.put(myParticle.x() + 0.5f);
 				_myVertexBuffer.put(myParticle.y() + 0.5f);
 				_myVertexBuffer.put(0);
@@ -497,7 +497,7 @@ public class CCGPUIndexParticleEmitter implements CCGPUParticleEmitter{
 		
 		prepareBuffer(_myStateChanges.size());
 		
-		for (CCGPUParticle myParticle:_myStateChanges){
+		for (CCParticle myParticle:_myStateChanges){
 			_myVertexBuffer.put(myParticle.x() + 0.5f);
 			_myVertexBuffer.put(myParticle.y() + 0.5f);
 			_myVertexBuffer.put(0);

@@ -27,14 +27,14 @@ uniform sampler2DRect pressureTexture;
 uniform sampler2DRect velocityTexture;
       
 void main(){
-	float pL = texture2DRect(pressureTexture, gl_FragCoord + vec2(-1, 0)).r;
-	float pR = texture2DRect(pressureTexture, gl_FragCoord + vec2( 1, 0)).r;
-	float pB = texture2DRect(pressureTexture, gl_FragCoord + vec2( 0,-1)).r;
-	float pT = texture2DRect(pressureTexture, gl_FragCoord + vec2( 0, 1)).r;
+	float pL = texture2DRect(pressureTexture, gl_FragCoord.xy + vec2(-1, 0)).r;
+	float pR = texture2DRect(pressureTexture, gl_FragCoord.xy + vec2( 1, 0)).r;
+	float pB = texture2DRect(pressureTexture, gl_FragCoord.xy + vec2( 0,-1)).r;
+	float pT = texture2DRect(pressureTexture, gl_FragCoord.xy + vec2( 0, 1)).r;
 
   	vec2 grad = vec2(pR - pL, pT - pB) * halfrdx;
   	
 
-  	gl_FragColor = texture2DRect(velocityTexture, gl_FragCoord);
+  	gl_FragColor = texture2DRect(velocityTexture, gl_FragCoord.xy);
   	gl_FragColor.xy -= grad;
 } 

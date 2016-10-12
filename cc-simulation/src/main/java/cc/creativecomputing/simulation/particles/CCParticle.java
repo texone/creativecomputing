@@ -14,7 +14,7 @@ import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector3;
 
 
-public class CCGPUParticle implements Comparable<CCGPUParticle>{
+public class CCParticle implements Comparable<CCParticle>{
 	private double _myTimeOfDeath;
 	private float _myLifeTime;
 	private boolean _myIsAllocated;
@@ -33,7 +33,7 @@ public class CCGPUParticle implements Comparable<CCGPUParticle>{
 	
 	private float _myAge;
 	
-	public CCGPUParticle(CCParticles theParticles, int theIndex) {
+	public CCParticle(CCParticles theParticles, int theIndex) {
 		_myParticles = theParticles;
 		_myIndex = theIndex;
 		_myColor = new CCColor();
@@ -87,7 +87,7 @@ public class CCGPUParticle implements Comparable<CCGPUParticle>{
 		return _myVelocity;
 	}
 
-	public int compareTo(CCGPUParticle theParticle) {
+	public int compareTo(CCParticle theParticle) {
 		if(_myTimeOfDeath < theParticle._myTimeOfDeath)return -1;
 		return 1;
 	}

@@ -35,7 +35,7 @@ import cc.creativecomputing.simulation.particles.impulses.CCGPUImpulse;
  *
  */
 @SuppressWarnings("unused")
-public class CCGPUUpdateShader extends CCGLProgram{
+public class CCParticlesUpdateShader extends CCGLProgram{
 
 	protected String _myVelocityTextureParameter;
 	protected String _myPositionTextureParameter;
@@ -54,7 +54,7 @@ public class CCGPUUpdateShader extends CCGLProgram{
 	
 	private CCTexture2D _myRandomTexture;
 	
-	protected CCGPUUpdateShader(
+	protected CCParticlesUpdateShader(
 		final CCParticles theParticles,
 		final CCGraphics theGraphics, 
 		final List<CCForce> theForces , 
@@ -122,7 +122,7 @@ public class CCGPUUpdateShader extends CCGLProgram{
 //		CCGPUNoise.attachFragmentNoise(this);
 	}
 	
-	public CCGPUUpdateShader(
+	public CCParticlesUpdateShader(
 		final CCParticles theParticles,
 		final CCGraphics theGraphics, 
 		final List<CCForce> theForces, 
@@ -142,7 +142,7 @@ public class CCGPUUpdateShader extends CCGLProgram{
 //				CCNIOUtil.classPath(CCGPUUpdateShader.class,"shader/forces.fp"),
 //				CCNIOUtil.classPath(CCGPUUpdateShader.class,"shader/constraints.fp"),
 //				CCNIOUtil.classPath(CCGPUUpdateShader.class,"shader/impulses.fp"),
-				CCNIOUtil.classPath(CCGPUUpdateShader.class,"update.glsl")
+				CCNIOUtil.classPath(CCParticlesUpdateShader.class,"update.glsl")
 			},
 			theWidth, theHeight
 		);

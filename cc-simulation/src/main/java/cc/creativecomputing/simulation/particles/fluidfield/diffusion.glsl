@@ -36,12 +36,12 @@ uniform sampler2DRect x;
 uniform sampler2DRect b;
     
 void main(){
-	vec4 xL = texture2DRect(x,gl_FragCoord + vec2(-1, 0));
-	vec4 xR = texture2DRect(x,gl_FragCoord + vec2( 1, 0));
-	vec4 xB = texture2DRect(x,gl_FragCoord + vec2( 0,-1));
-	vec4 xT = texture2DRect(x,gl_FragCoord + vec2( 0, 1));
+	vec4 xL = texture2DRect(x,gl_FragCoord.xy + vec2(-1, 0));
+	vec4 xR = texture2DRect(x,gl_FragCoord.xy + vec2( 1, 0));
+	vec4 xB = texture2DRect(x,gl_FragCoord.xy + vec2( 0,-1));
+	vec4 xT = texture2DRect(x,gl_FragCoord.xy + vec2( 0, 1));
 	
-	vec4 bC = texture2DRect(b, gl_FragCoord);
+	vec4 bC = texture2DRect(b, gl_FragCoord.xy);
 
 	gl_FragColor = (xL + xR + xB + xT + alpha * bC) * rBeta;
 } 

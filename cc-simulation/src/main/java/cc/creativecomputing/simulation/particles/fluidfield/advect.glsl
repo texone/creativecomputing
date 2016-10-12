@@ -43,7 +43,7 @@ vec4 bilerp(vec2 s){
   vec4 tex22 = texture2DRect(targetTexture, st.zw);
 
   // bilinear interpolation
-  return lerp(lerp(tex11, tex21, t.x), lerp(tex12, tex22, t.x), t.y);
+  return mix(mix(tex11, tex21, t.x), mix(tex12, tex22, t.x), t.y);
 }
 
 void main(){
@@ -51,7 +51,7 @@ void main(){
 	// Trace backwards along trajectory (determined by current velocity)
 	// distance = rate * time, but since the grid might not be unit-scale,
 	// we need to also scale by the grid cell size.
-	vec2 pos = gl_FragCoord - timeStep * rdx * texture2DRect(velocityTexture, gl_FragCoord).xy;
+	vec2 pos = gl_FragCoord.xy - timeStep * rdx * texture2DRect(velocityTexture, gl_FragCoord.xy).xy;
 
 	// Example:
 	//    the "particle" followed a trajectory and has landed like this:
@@ -81,6 +81,6 @@ void main(){
 	// (1 = lasts forever, 0 = instantly dissipates.  At high frame rates, 
 	// useful values are in [0.99, 1].
 	
-	gl_FragColor = dissipation * bilerp(pos) - darkening * timeStep;
-	if(darkening > 0)gl_FragColor = saturate(gl_FragColor);
+	gl_FragColor = dissipation * bilerp(pos);
+	//if(darkening > 0)gl_FragColor = clamp(gl_FragColor, 0.0, 1.0);
 } 

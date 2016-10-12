@@ -63,7 +63,7 @@ public class CCFluidVorticityForceShader extends CCGLProgram{
 		_myHalfRdx = theGridScale;
 	}
 	
-	public void deltaTime(final float theDeltaTime) {
+	public void deltaTime(final double theDeltaTime) {
 		_myDeltaTime = theDeltaTime;
 	}
 	

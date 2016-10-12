@@ -14,13 +14,13 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.simulation.particles.CCGLProgramInterface;
-import cc.creativecomputing.simulation.particles.CCGPUUpdateShader;
+import cc.creativecomputing.simulation.particles.CCParticlesUpdateShader;
 import cc.creativecomputing.simulation.particles.CCParticles;
 
 public abstract class CCConstraint extends CCGLProgramInterface {
 	
 	protected String _myParameterIndex;
-	protected CCGPUUpdateShader _myVelocityShader;
+	protected CCParticlesUpdateShader _myVelocityShader;
 	
 	@CCProperty(name = "resilience", min = 0, max = 1)
 	private double _myResilience;

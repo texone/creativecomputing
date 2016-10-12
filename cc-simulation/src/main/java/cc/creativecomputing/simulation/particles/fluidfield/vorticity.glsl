@@ -44,10 +44,10 @@ uniform float halfrdx;
 uniform sampler2DRect velocityTexture;
 
 void main(){
-	vec4 velocityLeft		= texture2DRect(velocityTexture, gl_FragCoord - vec2(1,0));
-	vec4 velocityRight		= texture2DRect(velocityTexture, gl_FragCoord + vec2(1,0));
-	vec4 velocityBottom		= texture2DRect(velocityTexture, gl_FragCoord - vec2(0,1));
-	vec4 velocityTop		= texture2DRect(velocityTexture, gl_FragCoord + vec2(0,1));
+	vec4 velocityLeft		= texture2DRect(velocityTexture, gl_FragCoord.xy - vec2(1,0));
+	vec4 velocityRight		= texture2DRect(velocityTexture, gl_FragCoord.xy + vec2(1,0));
+	vec4 velocityBottom		= texture2DRect(velocityTexture, gl_FragCoord.xy - vec2(0,1));
+	vec4 velocityTop		= texture2DRect(velocityTexture, gl_FragCoord.xy + vec2(0,1));
   
 	float vorticity =  (velocityRight.y - velocityLeft.y) - (velocityTop.x - velocityBottom.x);
 	gl_FragColor = halfrdx + vec4(vorticity,vorticity,vorticity,1);
