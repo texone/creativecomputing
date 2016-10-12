@@ -18,9 +18,13 @@ import cc.creativecomputing.math.CCMath;
 
 public class CCGPUGaussianBlur extends CCGPUConvolutionShader{
 
-	public CCGPUGaussianBlur(CCGraphics theGraphics, double theRadius) {
-		super();
+	public CCGPUGaussianBlur(boolean theUseRect, CCGraphics theGraphics, double theRadius) {
+		super(theUseRect);
 		makeKernel(theRadius);
+	}
+	
+	public CCGPUGaussianBlur(CCGraphics theGraphics, double theRadius) {
+		this(false, theGraphics, theRadius);
 	}
 
 	/**

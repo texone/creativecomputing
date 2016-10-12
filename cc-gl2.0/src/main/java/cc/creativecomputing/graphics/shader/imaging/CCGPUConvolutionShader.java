@@ -14,13 +14,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderException;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.math.CCVector2;
 
 public class CCGPUConvolutionShader extends CCGLProgram{
 	
@@ -34,31 +32,46 @@ public class CCGPUConvolutionShader extends CCGLProgram{
 	protected List<Double> _myKernel;
 	protected List<Double> _myOffsets;
 	
-	public CCGPUConvolutionShader() {
+	public CCGPUConvolutionShader(boolean theUseRect) {
 		super(
-			CCNIOUtil.dataPath("shader/convolution.vp"), 
-			CCNIOUtil.dataPath("shader/convolution.fp")
+			CCNIOUtil.classPath(CCGPUConvolutionShader.class,"convolution_vertex.glsl"), 
+			theUseRect ? 
+				CCNIOUtil.classPath(CCGPUConvolutionShader.class,"convolution_fragment_rect.glsl") :
+				CCNIOUtil.classPath(CCGPUConvolutionShader.class,"convolution_fragment.glsl") 
 		);
 	}
 	
-	public CCGPUConvolutionShader(final CCGraphics theGraphics, final Path theShader) {
+	public CCGPUConvolutionShader() {
+		this(false);
+	}
+	
+	public CCGPUConvolutionShader(boolean theUseRect, final CCGraphics theGraphics, final Path theShader) {
 		super(null, theShader);
 	}
 	
-	public CCGPUConvolutionShader(final int theKernelWidth, final int theKernelHeight) {
-		super(
-			CCNIOUtil.dataPath("shader/convolution.vp"), 
-			CCNIOUtil.dataPath("shader/convolution.fp")
-		);
+	public CCGPUConvolutionShader(final CCGraphics theGraphics, final Path theShader) {
+		this(false, null, theShader);
+	}
+	
+	public CCGPUConvolutionShader(boolean theUseRect, final int theKernelWidth, final int theKernelHeight) {
+		this(theUseRect);
 		
 		_myKernelWidth = theKernelWidth;
 		_myKernelHeight = theKernelHeight;
 		_myKernelSize = _myKernelWidth * _myKernelHeight;
 	}
 	
-	public CCGPUConvolutionShader(final List<Double> theKernel, final int theKernelWidth, final int theKernelHeight) {
-		this(theKernelWidth,theKernelHeight);
+	public CCGPUConvolutionShader(final int theKernelWidth, final int theKernelHeight) {
+		this(false, theKernelWidth, theKernelHeight);
+	}
+	
+	public CCGPUConvolutionShader(boolean theUseRect, final List<Double> theKernel, final int theKernelWidth, final int theKernelHeight) {
+		this(theUseRect, theKernelWidth,theKernelHeight);
 		initKernel(theKernel);
+	}
+	
+	public CCGPUConvolutionShader(final List<Double> theKernel, final int theKernelWidth, final int theKernelHeight) {
+		this(false, theKernelWidth,theKernelHeight);
 	}
 	
 	protected void setKernel(final List<Double> theKernel, final int theKernelWidth, final int theKernelHeight) {
@@ -81,8 +94,12 @@ public class CCGPUConvolutionShader extends CCGLProgram{
 	}
 	
 	public void texture(final CCTexture2D theTexture) {
-		_myPixelWidth = 1f/theTexture.width();
-		_myPixelHeight = 1f/theTexture.height();
+		dimension(theTexture.width(), theTexture.height());
+	}
+	
+	public void dimension(int theWidth, int theHeight){
+		_myPixelWidth = 1f / theWidth;
+		_myPixelHeight = 1f / theHeight;
 	
 		updateOffsets();
 	}
