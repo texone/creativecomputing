@@ -19,4 +19,8 @@ public @interface CCProperty {
 	double defaultValue() default Double.NaN;
 	
 	boolean readBack() default false;
+	
+	int digits() default 2;
+	
+	boolean hide() default false;
 }
