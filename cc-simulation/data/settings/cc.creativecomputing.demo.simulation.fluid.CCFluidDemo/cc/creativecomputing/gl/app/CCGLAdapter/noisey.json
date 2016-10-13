@@ -3,13 +3,13 @@
     "min": 0,
     "max": 1,
     "name": "mouse impulse",
-    "value": 0.2370000034570694
+    "value": 0
   },
   "speed x": {
     "min": -1,
     "max": 1,
     "name": "speed x",
-    "value": 0.026000022888183594
+    "value": 0
   },
   "update": {
     "name": "update",
@@ -19,7 +19,7 @@
     "min": -1,
     "max": 1,
     "name": "speed y",
-    "value": 0.05200004577636719
+    "value": 0
   },
   "time": {
     "name": "time",
@@ -34,87 +34,27 @@
     "min": -1,
     "max": 1,
     "name": "speed z",
-    "value": 0.21000003814697266
-  },
-  "screen capture": {
-    "name": "screen capture",
-    "value": {
-      "full window": {},
-      "record key": {
-        "name": "record key",
-        "value": true
-      },
-      "format": {
-        "name": "format",
-        "value": "JPG"
-      },
-      "prepend": {
-        "name": "prepend",
-        "value": "frame_"
-      },
-      "draw bounds": {
-        "name": "draw bounds",
-        "value": false
-      },
-      "quality": {
-        "min": 0,
-        "max": 1,
-        "name": "quality",
-        "value": 1
-      },
-      "seconds": {
-        "min": 1,
-        "max": 1000,
-        "name": "seconds",
-        "value": 100
-      },
-      "record frame": {},
-      "alpha": {
-        "name": "alpha",
-        "value": false
-      },
-      "x": {
-        "min": -2147483648,
-        "max": 2147483647,
-        "name": "x",
-        "value": 0
-      },
-      "width": {
-        "min": -2147483648,
-        "max": 2147483647,
-        "name": "width",
-        "value": 1280
-      },
-      "y": {
-        "min": -2147483648,
-        "max": 2147483647,
-        "name": "y",
-        "value": 0
-      },
-      "capture rate": {
-        "min": 1,
-        "max": 60,
-        "name": "capture rate",
-        "value": 30
-      },
-      "record sequence": {},
-      "height": {
-        "min": -2147483648,
-        "max": 2147483647,
-        "name": "height",
-        "value": 720
-      },
-      "record timeline loop": {}
-    }
+    "value": 1
   },
   "solver": {
     "name": "solver",
     "value": {
+      "noise field": {
+        "name": "noise field",
+        "value": {"shader objects": {
+          "name": "shader objects",
+          "value": {"fragment": {
+            "name": "fragment",
+            "source": "uniform sampler2D velocity;\n\nuniform vec2 gridSize;\n\nuniform sampler2D randomTexture;\n\nfloat noise( in vec3 x ){\n    vec3 p = floor(x);\n    vec3 f = fract(x);\n\tf = f * f * (3.0 - 2.0 * f);\n\t\n\tvec2 uv = (p.xy + vec2(37.0, 17.0) * p.z) + f.xy;\n\tvec2 rg = texture2D( randomTexture, (uv+ 0.5) / 256.0 ).yx;//, -100.0\n\treturn mix( rg.x, rg.y, f.z );\n}\n\nfloat octavedNoise(in vec3 p, int octaves, float gain, float lacunarity){\n\tfloat result = 0.0;\n\tfloat myFallOff = gain;\n\tfloat myAmp = 0.0;\n\t\n\tvec3 q = p;\n\tfor(int i = 0; i < octaves; i++){\n\t\tmyAmp += myFallOff;\n\t\tresult += myFallOff * noise( q ); \n\t\tq = q * lacunarity;\n\t\tmyFallOff *= gain;\n\t}\n\t\n\treturn result / myAmp;\n}\n\nuniform float scale;\nuniform vec3 offset;\n\nuniform int octaves;\nuniform float gain;\nuniform float lacunarity; \n\nuniform float noiseAmount;\n\nuniform float minX;\nuniform float maxX;\n\nvoid main()\n{\n    vec2 uv = gl_FragCoord.xy / gridSize.xy;\n    \n    float amount = smoothstep(minX, maxX, uv.x);\n\n    vec2 oldForce = texture2D(velocity, uv).xy;\n    \n    vec3 noisePosition = vec3(uv * scale, 0) + offset;\n\tvec2 result = vec2(\n\t\toctavedNoise(noisePosition, octaves, gain, lacunarity),\n\t\toctavedNoise(noisePosition+1000.0, octaves, gain, lacunarity)\n\t) *2.0 - 1.0;\n\n    gl_FragColor = vec4(mix(oldForce, result, noiseAmount * amount), 0.0, 1.0);\n}\n",
+            "value": "cc.creativecomputing.control.code.CCShaderObject@249f80a"
+          }}
+        }}
+      },
       "curl": {
         "min": 0,
         "max": 1,
         "name": "curl",
-        "value": 0.7110000252723694
+        "value": 0.3
       },
       "noise octaves": {
         "min": 0,
@@ -132,29 +72,29 @@
         "min": 0,
         "max": 1,
         "name": "noise amount",
-        "value": 0.9727272727272728
+        "value": 0.03
       },
       "noise fade": {
         "min": -1,
         "max": 1,
         "name": "noise fade",
-        "value": -0.44999998807907104
+        "value": 0.07599997520446777
       },
       "noise scale": {
         "min": 0,
         "max": 100,
         "name": "noise scale",
-        "value": 28.799999237060547
+        "value": 78.79999542236328
       },
       "fluid draw mode": {
         "name": "fluid draw mode",
-        "value": "DENSITY"
+        "value": "VELOCITY"
       },
       "color radius": {
         "min": 0,
         "max": 1,
         "name": "color radius",
-        "value": 0
+        "value": 0.01
       },
       "viscosity": {
         "min": 0,
@@ -166,7 +106,7 @@
         "min": 0,
         "max": 1,
         "name": "velocity radius",
-        "value": 0.10400000214576721
+        "value": 0.01
       },
       "apply vorticity": {
         "name": "apply vorticity",
@@ -176,13 +116,7 @@
         "min": 0,
         "max": 1,
         "name": "noise border",
-        "value": 1
-      },
-      "noise dissipation": {
-        "min": 0,
-        "max": 1,
-        "name": "noise dissipation",
-        "value": 1
+        "value": 0
       },
       "noise lacunarity": {
         "min": 0,
@@ -194,7 +128,7 @@
         "min": 0.9,
         "max": 1,
         "name": "dissipation",
-        "value": 0.9855833406527231
+        "value": 1
       },
       "apply viscosity": {
         "name": "apply viscosity",
