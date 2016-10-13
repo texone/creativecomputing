@@ -143,6 +143,11 @@ public class CCGLSwapBuffer {
 	public void draw() {
 		_myDestinationDataTexture.draw();
 	}
+	
+	public void draw(double theX0, double theY0, double theX1, double theY1) {
+		_myDestinationDataTexture.draw(theX0, theY0, theX1, theY1);
+	}
+	
 	public void draw(CCAABoundingRectangle theRect) {
 		_myDestinationDataTexture.draw(theRect);
 	}
