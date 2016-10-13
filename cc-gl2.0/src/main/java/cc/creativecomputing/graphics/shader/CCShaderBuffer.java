@@ -299,72 +299,70 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 		releaseFBO();
 	}
 	
-	public void draw(){
+	public void drawQuad(double theX0, double theY0, double theX1, double theY1) {
+
+		double myU0 = theX0;
+		double myV0 = theY0;
+		double myU1 = theX1;
+		double myV1 = theY1;
+		
+		if(_myTarget == CCTextureTarget.TEXTURE_2D){
+			myU0 /= _myWidth;
+			myV0 /= _myHeight;
+			myU1 /= _myWidth;
+			myV1 /= _myHeight;
+		}
+		
+		GL2 gl = CCGraphics.currentGL();
+		
+		gl.glBegin(GL2.GL_QUADS);
+		gl.glTexCoord2d(myU0, myV0);
+		gl.glVertex2d(theX0, theY0);
+		gl.glTexCoord2d(myU1, myV0);
+		gl.glVertex2d(theX1, theY0);
+		gl.glTexCoord2d(myU1, myV1);
+		gl.glVertex2d(theX1, theY1);
+		gl.glTexCoord2d(myU0, myV1);
+		gl.glVertex2d(theX0, theY1);
+		gl.glEnd();
+	}
+	
+	public void drawQuad() {
+		drawQuad(0,0,_myWidth, _myHeight);
+	}
+	
+	public void draw(CCAABoundingRectangle theRectangle) {
+		beginDraw();
+		drawQuad(theRectangle.min().x, theRectangle.min().y, theRectangle.max().x, theRectangle.max().y);
+		endDraw();
+	}
+	
+	public void draw(double theX0, double theY0, double theX1, double theY1){
 		beginDraw();
 	
 		GL2 gl = CCGraphics.currentGL();
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
-		drawQuad();
+		drawQuad(theX0, theY0, theX1, theY1);
+		
+		endDraw();
+	}
+	
+	public void draw(){
+		draw(0, 0, _myWidth, _myHeight);
+	}
+	
+	public void draw(int theAttachmentID, double theX0, double theY0, double theX1, double theY1){
+		beginDraw(theAttachmentID);
+	
+		GL2 gl = CCGraphics.currentGL();
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
+		drawQuad(theX0, theY0, theX1, theY1);
 		
 		endDraw();
 	}
 	
 	public void draw(int theAttachmentID){
-		beginDraw(theAttachmentID);
-	
-		GL2 gl = CCGraphics.currentGL();
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
-		drawQuad();
-		
-		endDraw();
-	}
-	
-	public void drawQuad() {
-
-		GL2 gl = CCGraphics.currentGL();
-		switch (_myTarget) {
-		case TEXTURE_2D:
-			gl.glBegin(GL2.GL_QUADS);
-			gl.glTexCoord2f(0, 0);
-			gl.glVertex2f(0, 0);
-			gl.glTexCoord2f(1f, 0);
-			gl.glVertex2f(_myWidth, 0);
-			gl.glTexCoord2f(1f, 1f);
-			gl.glVertex2f(_myWidth, _myHeight);
-			gl.glTexCoord2f(0, 1f);
-			gl.glVertex2f(0, _myHeight);
-			gl.glEnd();
-			break;
-
-		default:
-			gl.glBegin(GL2.GL_QUADS);
-			gl.glTexCoord2f(0, 0);
-			gl.glVertex2f(0, 0);
-			gl.glTexCoord2f(_myWidth, 0);
-			gl.glVertex2f(_myWidth, 0);
-			gl.glTexCoord2f(_myWidth, _myHeight);
-			gl.glVertex2f(_myWidth, _myHeight);
-			gl.glTexCoord2f(0, _myHeight);
-			gl.glVertex2f(0, _myHeight);
-			gl.glEnd();
-			break;
-		}
-	}
-	
-	public void draw(CCAABoundingRectangle theRectangle) {
-		beginDraw();
-		GL2 gl = CCGraphics.currentGL();
-		gl.glBegin(GL2.GL_QUADS);
-		gl.glTexCoord2d(theRectangle.min().x, theRectangle.min().y);
-		gl.glVertex2d(theRectangle.min().x, theRectangle.min().y);
-		gl.glTexCoord2d(theRectangle.max().x, theRectangle.min().y);
-		gl.glVertex2d(theRectangle.max().x, theRectangle.min().y);
-		gl.glTexCoord2d(theRectangle.max().x, theRectangle.max().y);
-		gl.glVertex2d(theRectangle.max().x, theRectangle.max().y);
-		gl.glTexCoord2d(theRectangle.min().x, theRectangle.max().y);
-		gl.glVertex2d(theRectangle.min().x, theRectangle.max().y);
-		gl.glEnd();
-		endDraw();
+		draw(theAttachmentID, 0, 0, _myWidth, _myHeight);
 	}
 	
 	public void clear() {
