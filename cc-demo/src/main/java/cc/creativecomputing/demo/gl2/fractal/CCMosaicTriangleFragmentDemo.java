@@ -71,7 +71,7 @@ public class CCMosaicTriangleFragmentDemo extends CCGL2Adapter {
 			CCNIOUtil.classPath(this, "tri_fragment.glsl")
 		);
 		
-		List<Path> myFiles = CCNIOUtil.list(CCNIOUtil.classPath(this, "storyboard"), "jpg");
+		List<Path> myFiles = CCNIOUtil.list(CCNIOUtil.dataPath("textures"), "jpg");
 		_myTexture = new CCTexture3D(CCImageIO.newImage(myFiles.get(0)), myFiles.size());
 		_myTexture.wrap(CCTextureWrap.REPEAT);
 		_myTexture.textureFilter(CCTextureFilter.LINEAR);
