@@ -39,17 +39,24 @@ uniform float lacunarity;
 
 uniform float noiseAmount;
 
+uniform float minX;
+uniform float maxX;
+
+uniform float dissipation;
+
 void main()
 {
     vec2 uv = gl_FragCoord.xy / gridSize.xy;
-
-    vec2 oldForce = texture2D(velocity, uv).xy;
     
-    vec3 noisePosition = vec3(uv * scale, 0) + offset;
+    float amount = smoothstep(minX, maxX, uv.x);
+
+    vec2 oldForce = texture2D(velocity, uv).xy * dissipation;
+    
+    vec3 noisePosition = vec3(uv * scale * vec2(1,gridSize.y / gridSize.x), 0) + offset;
 	vec2 result = vec2(
 		octavedNoise(noisePosition, octaves, gain, lacunarity),
 		octavedNoise(noisePosition+1000.0, octaves, gain, lacunarity)
 	) *2.0 - 1.0;
 
-    gl_FragColor = vec4(mix(oldForce, result, noiseAmount), 0.0, 1.0);
+    gl_FragColor = vec4(mix(oldForce, result, noiseAmount * amount), 0.0, 1.0);
 }

@@ -26,12 +26,12 @@ public class CCFluidDisplay extends CCGLProgram{
         this.scale.set(v, v, v);
     }
 
-    public void display(CCGraphics g, CCTexture2D read) {
+    public void display(CCGraphics g, CCTexture2D read, int theX, int theY, int theWidth, int theHeight) {
     	start();
     	uniform1i("read", 0);
     	uniform3f("bias", bias);
     	uniform3f("scale", scale);
-    	g.image(read, -g.width()/2, -g.height()/2, g.width(), g.height());
+    	g.image(read,theX, theY, theWidth, theHeight);
     	end();
     }
 }

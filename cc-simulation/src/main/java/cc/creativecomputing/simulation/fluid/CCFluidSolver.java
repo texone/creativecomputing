@@ -47,7 +47,7 @@ public class CCFluidSolver {
 	private CCFluidJacobi poissonPressureEq;
 	private CCGLProgram gradient;
 	private CCGLProgram splat;
-	@CCProperty(name = "noise field")
+	
 	private CCGLProgram noiseField;
 	
 	private CCTexture2D _myRandomTexture;
@@ -60,8 +60,14 @@ public class CCFluidSolver {
 	private double _cNoiseGain = 0.5;
 	@CCProperty(name = "noise lacunarity", min = 0, max = 4)
 	private double _cNoiseLacunarity = 2;
-	@CCProperty(name = "noise amount", min = 0, max = 10)
+	@CCProperty(name = "noise amount", min = 0, max = 1)
 	private double _cNoiseAmount = 0;
+	@CCProperty(name = "noise border", min = 0, max = 1)
+	private double _cNoiseBorder = 0;
+	@CCProperty(name = "noise fade", min = -1, max = 1)
+	private double _cNoiseFade = 0;
+	@CCProperty(name = "noise dissipation", min = 0, max = 1)
+	private double _cNoiseDissipation = 0;
 	
 	private CCVector3 _myNoiseOffset = new CCVector3();
 	
@@ -278,6 +284,11 @@ public class CCFluidSolver {
 		noiseField.uniform1f("lacunarity", _cNoiseLacunarity);
 
 		noiseField.uniform1f("noiseAmount", _cNoiseAmount);
+		
+		noiseField.uniform1f("minX", _cNoiseBorder);
+		noiseField.uniform1f("maxX", _cNoiseBorder + _cNoiseFade);
+
+		noiseField.uniform1f("dissipation", _cNoiseDissipation);
 
         velocity.draw();
         noiseField.end();
@@ -287,7 +298,7 @@ public class CCFluidSolver {
 		
 	}
 	
-	public void step(CCGraphics g, CCMouseSimpleInfo mouse) {
+	public void step(CCGraphics g) {
 		// we only want the quantity carried by the velocity field to be
 		// affected by the dissipation
 
@@ -315,13 +326,14 @@ public class CCFluidSolver {
         splat.uniform3f("color", theInput);
         splat.uniform2f("point", thePosition);
         splat.uniform1f("radius", theRadius);
+//        theTarget.draw(thePosition.x - theRadius, thePosition.y - theRadius, thePosition.x + theRadius, thePosition.y + theRadius);
         theTarget.draw();
         splat.end();
         g.noTexture();
         theTarget.swap();
 	}
 	
-	public void addColor(CCGraphics g, CCVector2 thePosition, CCColor theColor){
+	public void addColor(CCGraphics g, CCVector2 thePosition, CCColor theColor, double theRadius){
 		CCVector2 point = new CCVector2();
 
 		point.set(thePosition.x, this.windowSize.y - thePosition.y);
@@ -329,10 +341,14 @@ public class CCFluidSolver {
 		point.x *= grid.size.x / windowSize.x;
 		point.y *= grid.size.y / windowSize.y;
 	     
-		splat(g, density, new CCVector3(theColor.r,theColor.g,theColor.b), point, colorRadius);
+		splat(g, density, new CCVector3(theColor.r,theColor.g,theColor.b), point, theRadius);
 	}
 	
-	public void addForce(CCGraphics g, CCVector2 thePosition, CCVector2 theForce){
+	public void addColor(CCGraphics g, CCVector2 thePosition, CCColor theColor){
+		addColor(g, thePosition, theColor, colorRadius);
+	}
+	
+	public void addForce(CCGraphics g, CCVector2 thePosition, CCVector2 theForce, double theRadius){
 		CCVector2 point = new CCVector2();
 
 		point.set(thePosition.x, this.windowSize.y - thePosition.y);
@@ -340,7 +356,11 @@ public class CCFluidSolver {
 		point.x *= grid.size.x / windowSize.x;
 		point.y *= grid.size.y / windowSize.y;
 		
-		splat(g, velocity, new CCVector3(theForce.x, theForce.y, 0), point, velocityRadius);	
+		splat(g, velocity, new CCVector3(theForce.x, theForce.y, 0), point, theRadius);	
+	}
+	
+	public void addForce(CCGraphics g, CCVector2 thePosition, CCVector2 theForce){
+		addForce(g, thePosition, theForce, velocityRadius);
 	}
 
 	public void addForces(CCGraphics g, CCMouseSimpleInfo mouse) {
@@ -360,7 +380,7 @@ public class CCFluidSolver {
 		splat(g, density, source, point, velocityRadius);
 	}
 
-	public void display(CCGraphics g) {
+	public void display(CCGraphics g, int theX, int theY, int theWidth, int theHeight) {
 		CCFluidDisplay display = null;
 		CCTexture2D read = null;
 			 
@@ -387,8 +407,12 @@ public class CCFluidSolver {
 			read = pressure.attachment(0);
 			break;
 		}
-		display.display(g, read);
+		display.display(g, read, theX, theY, theWidth, theHeight);
 		
+	}
+	
+	public void display(CCGraphics g){
+		display(g,  -g.width()/2, -g.height()/2, g.width(), g.height());
 	}
 
 }

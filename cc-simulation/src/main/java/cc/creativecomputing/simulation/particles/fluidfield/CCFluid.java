@@ -255,7 +255,7 @@ public class CCFluid {
 		_myAdvectShader.start();
 		_myAdvectShader.dissipation(1);
 		_myAdvectShader.timeStep(theDeltaTime * _myAdvectSpeed);
-		_myTmpVelocityBuffer.draw(_myOffBoundaryRect);
+		_myTmpVelocityBuffer.drawQuad(_myOffBoundaryRect);
 		_myAdvectShader.end();
 		g.noTexture();
 		
@@ -286,7 +286,7 @@ public class CCFluid {
 		_myAdvectShader.dissipation(1);
 		_myAdvectShader.timeStep(theDeltaTime * _myAdvectSpeed);
 		_myAdvectShader.darking(_myColorDarking);
-		_myTmpColorTexture.draw(_myOffBoundaryRect);
+		_myTmpColorTexture.drawQuad(_myOffBoundaryRect);
 		_myAdvectShader.darking(0);
 		_myAdvectShader.end();
 		g.noTexture();
@@ -340,7 +340,7 @@ public class CCFluid {
 			_myDiffusionShader.start();
 			_myDiffusionShader.alpha(myCenterFactor);
 			_myDiffusionShader.rBeta(myStencilFactor);
-			_myTmpVelocityBuffer.draw(_myOffBoundaryRect);
+			_myTmpVelocityBuffer.drawQuad(_myOffBoundaryRect);
 			_myDiffusionShader.end();
 			g.noTexture();
 			swapVelocities();
@@ -358,7 +358,7 @@ public class CCFluid {
 		g.texture(0, _myVelocityBuffer.attachment(0));
 		_myDivergenceShader.velocityTexture(0);
 		_myDivergenceShader.start();
-		_myDivergencyTexture.draw(_myOffBoundaryRect);
+		_myDivergencyTexture.drawQuad(_myOffBoundaryRect);
 		_myDivergenceShader.end();
 		g.noTexture();
 	}
@@ -408,7 +408,7 @@ public class CCFluid {
 			_myDiffusionShader.start();
 			_myDiffusionShader.alpha(-_myGridScale * _myGridScale);
 			_myDiffusionShader.rBeta(0.25f);
-			_myTmpPressureBuffer.draw(_myOffBoundaryRect);
+			_myTmpPressureBuffer.drawQuad(_myOffBoundaryRect);
 			_myDiffusionShader.end();
 			g.noTexture();
 
@@ -422,7 +422,7 @@ public class CCFluid {
 		_mySubtractGradientShader.pressureTexture(0);
 		_mySubtractGradientShader.velocityTexture(1);
 		_mySubtractGradientShader.start();
-		_myTmpVelocityBuffer.draw(_myOffBoundaryRect);
+		_myTmpVelocityBuffer.drawQuad(_myOffBoundaryRect);
 		_mySubtractGradientShader.end();
 		g.noTexture();
 		
