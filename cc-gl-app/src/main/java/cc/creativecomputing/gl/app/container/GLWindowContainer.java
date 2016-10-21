@@ -14,6 +14,7 @@ import java.awt.Rectangle;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
+import cc.creativecomputing.core.logging.CCLog;
 //import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCAbstractGLContext;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
@@ -224,7 +225,8 @@ public class GLWindowContainer extends GLContainer{
 			
 			@Override
 			public void mouseWheelMoved(MouseEvent theEvent) {
-				_myContext.enqueueMouseWheelEvent(new CCMouseWheelEvent(false, theEvent.getRotation()[0]));
+				
+				_myContext.enqueueMouseWheelEvent(new CCMouseWheelEvent(theEvent.getRotationScale(), theEvent.getRotation()));
 			}
 			
 			@Override

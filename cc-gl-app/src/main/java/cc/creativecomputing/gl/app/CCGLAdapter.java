@@ -1,6 +1,7 @@
 package cc.creativecomputing.gl.app;
 
 import cc.creativecomputing.app.modules.CCAnimatorListener;
+
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCBasicAppListener;
 import cc.creativecomputing.controlui.CCControlApp;
@@ -10,10 +11,16 @@ import cc.creativecomputing.gl.app.events.CCKeyListener;
 import cc.creativecomputing.gl.app.events.CCKeyPressedListener;
 import cc.creativecomputing.gl.app.events.CCKeyReleasedListener;
 import cc.creativecomputing.gl.app.events.CCKeyTypedListener;
+import cc.creativecomputing.gl.app.events.CCMouseClickedListener;
 import cc.creativecomputing.gl.app.events.CCMouseDraggedListener;
+import cc.creativecomputing.gl.app.events.CCMouseEnteredListener;
+import cc.creativecomputing.gl.app.events.CCMouseExitedListener;
 import cc.creativecomputing.gl.app.events.CCMouseListener;
 import cc.creativecomputing.gl.app.events.CCMouseMotionListener;
 import cc.creativecomputing.gl.app.events.CCMouseMovedListener;
+import cc.creativecomputing.gl.app.events.CCMousePressedListener;
+import cc.creativecomputing.gl.app.events.CCMouseReleasedListener;
+import cc.creativecomputing.gl.app.events.CCMouseSimpleInfo;
 import cc.creativecomputing.gl.app.events.CCMouseWheelListener;
 
 public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType extends CCAbstractGLContext<GLGraphicsType>> implements CCAnimatorListener, CCBasicAppListener, CCGLListener<GLGraphicsType> {
@@ -21,7 +28,8 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 	protected GLContextType _myContext;
 	
 	protected CCControlApp _myControlApp;
-	
+
+	protected CCMouseSimpleInfo _myMouseInfo = new CCMouseSimpleInfo();
 	
 	
 	public CCControlApp controlApp(){
@@ -38,10 +46,16 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 	
 	public void glContext(GLContextType theContext){
 		_myContext = theContext;
+		mouseListener().add(_myMouseInfo);
+		mouseMotionListener().add(_myMouseInfo);
 	}
 	
 	public GLContextType glContext(){
 		return _myContext;
+	}
+	
+	public CCMouseSimpleInfo mouse(){
+		return _myMouseInfo;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -67,6 +81,26 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 	
 	public CCListenerManager<CCMouseListener> mouseListener(){
 		return _myContext.mouseListener();
+	}
+	
+	public CCListenerManager<CCMousePressedListener> mousePressed(){
+		return _myContext.mousePressed();
+	}
+	
+	public CCListenerManager<CCMouseReleasedListener> mouseReleased(){
+		return _myContext.mouseReleased();
+	}
+	
+	public CCListenerManager<CCMouseEnteredListener> mouseEntered(){
+		return _myContext.mouseEntered();
+	}
+	
+	public CCListenerManager<CCMouseExitedListener> mouseExited(){
+		return _myContext.mouseExited();
+	}
+	
+	public CCListenerManager<CCMouseClickedListener> mouseClicked(){
+		return _myContext.mouseClicked();
 	}
 	
 	public CCListenerManager<CCMouseMotionListener> mouseMotionListener(){

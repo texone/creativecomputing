@@ -25,12 +25,28 @@ public class CCMouseWheelEvent extends CCEvent{
 	public CCMouseWheelEvent(MouseWheelEvent theEvent){
 		_myIsHorizontal = theEvent.isShiftDown();
 		_myRotation = (float)theEvent.getPreciseWheelRotation();
+	
 	}
 	
-	public CCMouseWheelEvent(boolean theIsHorizontal, float theRotation){
-		_myIsHorizontal = theIsHorizontal;
+	public CCMouseWheelEvent(float theRotationScale, float...theRotation){
 		//_myRotation = theEvent.getWheelRotation();
-		_myRotation = theRotation;
+		
+		if(theRotation.length > 1){
+			if(theRotation[0] != 0){
+				_myIsHorizontal = true;
+				_myRotation = theRotation[0];
+			}else{
+				_myIsHorizontal = false;
+				_myRotation = theRotation[1];
+			}
+		}else{
+			_myIsHorizontal = false;
+			_myRotation = theRotation[0];
+		}
+		
+		_myRotation *= theRotationScale;
+		
+		
 	}
 	
 	public float rotation(){
