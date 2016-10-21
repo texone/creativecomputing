@@ -11,6 +11,7 @@ import java.util.Map;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.formats.CCSequenceIO;
 import cc.creativecomputing.math.CCMath;
@@ -34,6 +35,8 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	
 	private String[] _myExtensions;
 	
+	private Path _myPath;
+	
 	public CCSequenceAsset(CCSequenceMapping<?> theMapping, String...theExtensions){
 		_myAsset = null;
 		_myFrame = null;
@@ -52,10 +55,12 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 
 	@Override
 	public void onChangePath(Path thePath) {
+		CCLog.info((_myAsset == null ? "null" : _myPath) + " " + thePath) ;
 		if(thePath == null){
 			_myAsset = null;
 			return;
 		}
+		_myPath = thePath;
 		if(_mySequenceMap.containsKey(thePath)){
 			_myAsset = _mySequenceMap.get(thePath);
 			return;
@@ -100,6 +105,7 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	
 	@Override
 	public void time(double theGlobalTime, double theEventTime, double theContentOffset) {
+		CCLog.info(theGlobalTime + ":" + this + ":" + (_myAsset == null ? "null" : _myPath)) ;
 		if(_myAsset == null)return;
 		
 		_myTime = (theEventTime - theContentOffset) * _cSpeed;
@@ -177,7 +183,7 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	
 	@Override
 	public void out() {
-		_myAsset = null;
+//		_myAsset = null;
 		_myFrame = null;
 	}
 
