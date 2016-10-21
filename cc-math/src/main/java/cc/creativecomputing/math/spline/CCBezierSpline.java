@@ -36,6 +36,11 @@ public class CCBezierSpline extends CCSpline {
 		super(CCSplineType.BEZIER, theIsClosed);
 		_myInterpolationIncrease = 3;
 	}
+	
+	public CCBezierSpline (){
+		this(false);
+	}
+	
 
 	/**
 	 * Create a spline
@@ -87,9 +92,10 @@ public class CCBezierSpline extends CCSpline {
 			_myPoints.add(theControlPoint);
 			return;
 		}
-		
-		_myPoints.add(_myPoints.get(_myPoints.size() - 1));
-		_myPoints.add(theControlPoint);
+
+		CCVector3 myLastPoint = _myPoints.get(_myPoints.size() - 1);
+		_myPoints.add(myLastPoint.lerp(theControlPoint, 0.25));
+		_myPoints.add(myLastPoint.lerp(theControlPoint, 0.75));
 		_myPoints.add(theControlPoint);
 	}
 	
@@ -178,6 +184,7 @@ public class CCBezierSpline extends CCSpline {
 
 	@Override
 	public CCVector3 interpolate(double value, int currentControlPoint) {
+		if(currentControlPoint + 3 >= _myPoints.size())return _myPoints.get(currentControlPoint);
 		return CCVector3.bezierPoint(
 			_myPoints.get(currentControlPoint), 
 			_myPoints.get(currentControlPoint + 1), 

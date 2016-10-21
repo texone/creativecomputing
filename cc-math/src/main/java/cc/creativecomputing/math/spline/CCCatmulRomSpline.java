@@ -150,6 +150,7 @@ public class CCCatmulRomSpline extends CCSpline {
 	@Override
 	public CCVector3 interpolate(double value, int currentControlPoint) {
 		endEditSpline();
+		if(currentControlPoint + 3 >= _myPoints.size())return _myPoints.get(currentControlPoint);
 		return CCVector3.catmulRomPoint(
 			_myPoints.get(currentControlPoint), 
 			_myPoints.get(currentControlPoint + 1), 
