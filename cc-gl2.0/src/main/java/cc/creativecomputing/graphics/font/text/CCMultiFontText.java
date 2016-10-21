@@ -625,20 +625,16 @@ public class CCMultiFontText {
 		_myTextListeners.proxy().onChangeText(this);
 	}
 	
-	public CCTextPart addText(String theText, CCFont<?> theFont, int theSize){
-		CCTextPart myResult = new CCTextPart(theText, theFont, theSize, null);
-		_myTextParts.add(myResult);
-		return myResult;
+	public void addText(String theText, CCFont<?> theFont, int theSize){
+		_myTextParts.add(new CCTextPart(theText, theFont, theSize, null));
 	}
 	
-	public CCTextPart addText(String theText, CCFont<?> theFont, int theSize, CCColor theColor){
-		CCTextPart myResult = new CCTextPart(theText, theFont, theSize, theColor);
-		_myTextParts.add(myResult);
-		return myResult;
+	public void addText(String theText, CCFont<?> theFont, int theSize, CCColor theColor){
+		_myTextParts.add(new CCTextPart(theText, theFont, theSize, theColor));
 	}
 	
-	public CCTextPart addText(String theText, CCFont<?> theFont){
-		return addText(theText, theFont, theFont.size());
+	public void addText(String theText, CCFont<?> theFont){
+		addText(theText, theFont, theFont.size());
 	}
 	
 	public void reset(){

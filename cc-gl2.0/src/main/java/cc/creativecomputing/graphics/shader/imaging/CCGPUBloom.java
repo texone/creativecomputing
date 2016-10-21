@@ -65,7 +65,7 @@ public class CCGPUBloom {
 		myAttributes.samples(8);
 		_myRenderTexture = new CCRenderBuffer(g, myAttributes, _myWidth, _myHeight);
 		
-		_myBlur = new CCGPUSeperateGaussianBlur(10, _myWidth, _myHeight, 1);
+		_myBlur = new CCGPUSeperateGaussianBlur(5, _myWidth, _myHeight, 1);
 		
 		_myBloomShader = new CCGLProgram(
 			CCNIOUtil.classPath(this, "shader/bloom_vert.glsl"), 

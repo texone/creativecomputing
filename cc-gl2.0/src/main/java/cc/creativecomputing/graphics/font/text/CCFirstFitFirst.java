@@ -255,6 +255,6 @@ public class CCFirstFitFirst extends CCLineBreaking {
 		
 		
 		theText.changeWidth(theText.blockWidth());
-		theText.changeHeight(-myPartY);
+		theText.changeHeight(-myPartY + myLineLeading);
 	}
 }

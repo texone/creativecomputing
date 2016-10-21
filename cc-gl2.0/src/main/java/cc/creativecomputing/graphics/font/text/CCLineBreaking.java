@@ -89,6 +89,6 @@ public class CCLineBreaking {
 		
 
 		theText.changeWidth(myWidth);
-		theText.changeHeight(-myY);
+		theText.changeHeight(-myY + myMaxLeading);
 	}
 }

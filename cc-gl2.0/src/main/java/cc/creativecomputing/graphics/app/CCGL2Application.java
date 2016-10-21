@@ -132,5 +132,7 @@ public class CCGL2Application {
 	public void start(){
 		_myGLContext.start();
 		_myAnimator.start();
+		
+		
 	}
 }
