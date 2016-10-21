@@ -4,7 +4,6 @@ import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.timeline.TrackData;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
-import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataObject;
 
 public class CCEnvelopeHandle extends CCPropertyHandle<CCEnvelope>{

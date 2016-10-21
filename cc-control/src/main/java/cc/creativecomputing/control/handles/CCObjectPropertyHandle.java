@@ -26,6 +26,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.spline.CCSpline;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
@@ -79,6 +80,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		creatorMap.put(CCEnvelope.class, new CCHandleCreator(){
 			@Override
 			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCEnvelopeHandle(theParent, theMember);}
+		});
+		creatorMap.put(CCSpline.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCSplineHandle(theParent, theMember);}
 		});
 		creatorMap.put(Path.class, new CCHandleCreator(){
 			@Override
