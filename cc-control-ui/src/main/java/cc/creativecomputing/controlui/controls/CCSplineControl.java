@@ -12,22 +12,24 @@ import javax.swing.JPanel;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
+import cc.creativecomputing.control.handles.CCSplineHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
+import cc.creativecomputing.math.spline.CCSpline;
 
-public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHandle>{
+public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 
 	private JButton _myButton;
 	
-	private CCEnvelopeEditor _myCurveFrame;
+	private CCSplineEditor _myCurveFrame;
 
-	public CCEnvelopeControl(CCEnvelopeHandle theHandle, CCControlComponent theControlComponent){
+	public CCSplineControl(CCSplineHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		theHandle.events().add(theValue -> {
-			_myHandle.value((CCEnvelope)theValue, false);
+			_myHandle.value((CCSpline)theValue, false);
 		});
 		
-		_myCurveFrame = new CCEnvelopeEditor(theHandle.name());
+		_myCurveFrame = new CCSplineEditor(theHandle.name());
 		_myCurveFrame.setSize(300, 100);
 		_myCurveFrame.addWindowListener(new WindowAdapter() {
 			
@@ -39,7 +41,7 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
         
         _myButton = new JButton("edit");
         _myButton.addActionListener(theE -> {
-        	_myCurveFrame.track().trackData(value().curve());				
+        	_myCurveFrame.spline(value());				
         	_myCurveFrame.setVisible(true);
 		});
         CCUIStyler.styleButton(_myButton, 30, 15);
@@ -53,7 +55,7 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 	}
 
 	@Override
-	public CCEnvelope value() {
+	public CCSpline value() {
 		// TODO Auto-generated method stub
 		return _myHandle.value();
 	}

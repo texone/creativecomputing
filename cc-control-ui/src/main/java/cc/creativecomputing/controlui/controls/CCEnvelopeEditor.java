@@ -17,17 +17,18 @@
  * This file incorporates work covered by the following copyright and  
  * permission notice:  
  */
-package cc.creativecomputing.controlui.timeline.view;
+package cc.creativecomputing.controlui.controls;
 
 import javax.swing.JFrame;
 
 import cc.creativecomputing.control.timeline.Track;
+import cc.creativecomputing.controlui.timeline.view.SwingCurvePanel;
 
 /**
  * @author christianriekoff
  *
  */
-public class SwingCurveFrame extends JFrame{
+public class CCEnvelopeEditor extends JFrame{
 	
 	/**
 	 * 
@@ -35,7 +36,7 @@ public class SwingCurveFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private SwingCurvePanel _myCurvePanel;
 
-	public SwingCurveFrame(String theTitle) {
+	public CCEnvelopeEditor(String theTitle) {
 		super(theTitle);
 		_myCurvePanel = new SwingCurvePanel(this);
 		
@@ -56,7 +57,7 @@ public class SwingCurveFrame extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		SwingCurveFrame myFrame = new SwingCurveFrame("check it");
+		CCEnvelopeEditor myFrame = new CCEnvelopeEditor("check it");
 		myFrame.setVisible(true);
 	}
 }

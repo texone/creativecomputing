@@ -48,14 +48,10 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	        	modal,
 	            theColorChooser, 
 	            null, 
-	            new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent theE) {
-						_myColorPanel.setBackground(_myColor.toAWTColor());
-						_myColor.set(_myLastColor);
-						_myHandle.value(_myColor, true);
-					}
+	            theE -> {
+	            	_myColorPanel.setBackground(_myColor.toAWTColor());
+	            	_myColor.set(_myLastColor);
+	            	_myHandle.value(_myColor, true);
 				}
 	        );
 	    }

@@ -2,8 +2,6 @@ package cc.creativecomputing.controlui.controls;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -11,15 +9,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import net.objecthunter.exp4j.ExpressionBuilder;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
+import cc.creativecomputing.controlui.CCSwingDraggableValueBox;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.math.CCMath;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHandle<Number>>{
 	
@@ -29,7 +25,7 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 	private double _myMax;
 	private double _myValue;
 	
-	private JTextField _myValueField;
+	private CCSwingDraggableValueBox _myValueField;
 	private JSlider _mySlider;
 	
 	private boolean _myTriggerEvent = true;
@@ -38,20 +34,17 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 		super(theHandle, theControlComponent);
  
         //Create the label.
-		theHandle.events().add(new CCPropertyListener<Number>() {
-			
-			@Override
-			public void onChange(Number theValue) {
-				_myTriggerEvent = false;
-				_myValue = theValue.doubleValue();
-				updateSlider(_myValue);
-				if(_myHandle.numberType() == Integer.class){
-					_myValueField.setText((int)_myValue + "");
-				}else{
-					_myValueField.setText(CCFormatUtil.nd((float)_myValue, theHandle.digits()) + "");
-				}
-				_myTriggerEvent = true;
+		theHandle.events().add(theValue -> {
+			_myTriggerEvent = false;
+			_myValue = ((Number)theValue).doubleValue();
+			updateSlider(_myValue);
+			if(_myHandle.numberType() == Integer.class){
+				_myValueField.setText((int)_myValue + "");
+			}else{
+				_myValueField.setText(CCFormatUtil.nd((float)_myValue, theHandle.digits()) + "");
 			}
+			_myTriggerEvent = true;
+			
 		});
  
         //Create the slider.
@@ -62,14 +55,9 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
         	_mySlider = null;
         }else{
 	        _mySlider = new JSlider(JSlider.HORIZONTAL, 0, MAX_SLIDER_VALUE, 0);
-	        _mySlider.addChangeListener(new ChangeListener() {
-				
-				@Override
-				public void stateChanged(ChangeEvent theE) {
-					if(!_myTriggerEvent)return;
-					value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
-				}
-				
+	        _mySlider.addChangeListener(theE -> {
+	        	if(!_myTriggerEvent)return;
+	        	value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
 			});
 	 
 	        //Turn on labels at major tick marks.
@@ -84,19 +72,18 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 	        _mySlider.setPreferredSize(new Dimension(100,14));
         }
         
-        _myValueField = new JTextField();
+        _myValueField = new CCSwingDraggableValueBox(_myValue, _myMin, _myMax, CCMath.pow(0.1, theHandle.digits()));
         CCUIStyler.styleTextField(_myValueField, 100);
         
-        _myValueField.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				try{
-					value(new ExpressionBuilder(_myValueField.getText()).build().evaluate(), true);
-				}catch(Exception e){
-					value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
-				}
-			}
+        _myValueField.changeEvents().add(theValue -> {
+        	value(theValue, true);
+        });
+        _myValueField.addActionListener(theE -> {
+        	try{
+        		value(new ExpressionBuilder(_myValueField.getText()).build().evaluate(), true);
+        	}catch(Exception e){
+        		value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
+        	}
 		});
         _myValueField.addKeyListener(new KeyAdapter() {
         	@Override

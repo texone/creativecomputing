@@ -63,7 +63,6 @@ import cc.creativecomputing.controlui.timeline.controller.track.TriggerTrackCont
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 

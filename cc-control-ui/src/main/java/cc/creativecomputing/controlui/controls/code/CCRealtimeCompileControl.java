@@ -3,8 +3,6 @@ package cc.creativecomputing.controlui.controls.code;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
@@ -27,8 +25,6 @@ import org.fife.ui.rsyntaxtextarea.parser.Parser;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import cc.creativecomputing.control.code.CCRealtimeCompile;
-import cc.creativecomputing.control.code.CCRealtimeCompile.CCRealtimeCompileListener;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.handles.CCRealtimeCompileHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
@@ -87,28 +83,6 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 	public CCRealtimeCompileControl(CCRealtimeCompileHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(new CCPropertyListener<CCRealtimeCompile>() {
-			
-			@Override
-			public void onChange(CCRealtimeCompile theValue) {
-				_myTriggerEvent = false;
-				if(theValue.sourceCode().trim().equals("")){
-					_myTextArea.setText(_myHandle.value().codeTemplate());
-				}else{
-					_myTextArea.setText(theValue.sourceCode());
-				}
-				_myTriggerEvent = true;
-			}
-		});
-		
-		theHandle.value().events().add(new CCRealtimeCompileListener() {
-
-			@Override
-			public void onRecompile(CCRealtimeCompile theCompiler) {
-				_myErrorArea.setText(errorLog());
-			}
-		});
-		
 		_myEditorFrame = new JFrame();
 		JPanel cp = new JPanel(new BorderLayout());
 
@@ -155,33 +129,39 @@ public class CCRealtimeCompileControl extends CCValueControl<CCRealtimeCompile<?
 			public void windowClosing(WindowEvent theE) {
 			}
 		});
+		
+		theHandle.events().add(theValue -> {
+			_myTriggerEvent = false;
+				
+			if(((CCRealtimeCompile)theValue).sourceCode().trim().equals("")){
+				_myTextArea.setText(_myHandle.value().codeTemplate());
+			}else{
+				_myTextArea.setText(((CCRealtimeCompile)theValue).sourceCode());
+			}
+			_myTriggerEvent = true;
+			
+		});
+		
+		theHandle.value().events().add(theCompiler -> {
+			_myErrorArea.setText(errorLog());
+		});
  
         //Create the Button.
-		
 		_myContainer = new JPanel();
         ((FlowLayout)_myContainer.getLayout()).setVgap(0);
         ((FlowLayout)_myContainer.getLayout()).setHgap(0);
        
-        
-        
+  
         _myButton = new JButton("edit");
-        _myButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myEditorFrame.setVisible(true);
-			}
+        _myButton.addActionListener(theE -> {
+        	_myEditorFrame.setVisible(true);
 		});
         CCUIStyler.styleButton(_myButton, 30, 15);
         _myContainer.add(_myButton);
         
         _myResetButton = new JButton("reset");
-        _myResetButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTextArea.setText(_myHandle.value().codeTemplate());
-			}
+        _myResetButton.addActionListener(theE -> {
+        	_myTextArea.setText(_myHandle.value().codeTemplate());
 		});
         CCUIStyler.styleButton(_myResetButton, 30, 15);
         _myContainer.add(_myResetButton);

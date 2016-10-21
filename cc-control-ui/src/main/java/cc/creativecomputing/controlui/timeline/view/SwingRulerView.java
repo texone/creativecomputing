@@ -30,14 +30,14 @@ import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
 import cc.creativecomputing.control.timeline.point.MarkerPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.controlui.CCSwingDraggableValueBox.CCChangeValueBoxListener;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.TransportController;
 import cc.creativecomputing.controlui.timeline.controller.TransportController.RulerInterval;
-import cc.creativecomputing.controlui.timeline.view.SwingDraggableValueBox.ChangeValueListener;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 
 @SuppressWarnings("serial")
-public class SwingRulerView extends SwingAbstractTrackView implements ChangeValueListener{
+public class SwingRulerView extends SwingAbstractTrackView implements CCChangeValueBoxListener{
 	
 	private class InsertTimeDialog extends JDialog implements ActionListener, PropertyChangeListener {
 		private String typedText = null;

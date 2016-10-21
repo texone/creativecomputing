@@ -2,8 +2,6 @@ package cc.creativecomputing.controlui.controls.code;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
@@ -26,8 +24,6 @@ import org.fife.ui.rsyntaxtextarea.parser.Parser;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import cc.creativecomputing.control.code.CCShaderObject;
-import cc.creativecomputing.control.code.CCShaderObject.CCShaderCompileListener;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.handles.CCShaderCompileHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
@@ -85,24 +81,6 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCSha
 	public CCShaderCompileControl(CCShaderCompileHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(new CCPropertyListener<CCShaderObject>() {
-			
-			@Override
-			public void onChange(CCShaderObject theValue) {
-				_myTriggerEvent = false;
-				_myTextArea.setText(theValue.sourceCode());
-				_myTriggerEvent = true;
-			}
-		});
-		
-		theHandle.value().events().add(new CCShaderCompileListener() {
-			
-			@Override
-			public void onRecompile(CCShaderObject theCompiler) {
-				_myErrorArea.setText(_myHandle.value().errorLog());
-			}
-		});
-		
 		_myEditorFrame = new JFrame();
 		JSplitPane mySplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
 
@@ -152,6 +130,17 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCSha
 			public void windowClosing(WindowEvent theE) {
 			}
 		});
+		
+		theHandle.events().add(theValue -> {
+			_myTriggerEvent = false;
+			_myTextArea.setText(((CCShaderObject)theValue).sourceCode());
+			_myTriggerEvent = true;
+
+		});
+		
+		theHandle.value().events().add(theCompiler -> {
+			_myErrorArea.setText(_myHandle.value().errorLog());
+		});
  
         //Create the Button.
 		
@@ -159,26 +148,16 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCSha
         ((FlowLayout)_myContainer.getLayout()).setVgap(0);
         ((FlowLayout)_myContainer.getLayout()).setHgap(0);
        
-        
-        
         _myButton = new JButton("edit");
-        _myButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myEditorFrame.setVisible(true);
-			}
+        _myButton.addActionListener(theE -> {
+        	_myEditorFrame.setVisible(true);
 		});
         CCUIStyler.styleButton(_myButton, 30, 15);
         _myContainer.add(_myButton);
         
         _myResetButton = new JButton("reset");
-        _myResetButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTextArea.setText(_myHandle.value().sourceCode());
-			}
+        _myResetButton.addActionListener(theE -> {
+        	_myTextArea.setText(_myHandle.value().sourceCode());
 		});
         CCUIStyler.styleButton(_myResetButton, 30, 15);
         _myContainer.add(_myResetButton);

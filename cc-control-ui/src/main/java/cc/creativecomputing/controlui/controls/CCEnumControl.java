@@ -2,8 +2,6 @@ package cc.creativecomputing.controlui.controls;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -11,7 +9,6 @@ import javax.swing.JPanel;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyEditListener;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 
 public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>{
@@ -27,15 +24,11 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
 	public CCEnumControl(CCEnumPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
  
-		theHandle.events().add(new CCPropertyListener<Enum<?>>() {
-			
-			@Override
-			public void onChange(Enum<?> theValue) {
-				_myValue = theValue;
-				_myTriggerEvent = false;
-				 _myEnums.setSelectedItem(_myHandle.value());
-				 _myTriggerEvent = true;
-			}
+		theHandle.events().add( theValue -> {
+			_myValue = (Enum<?>)theValue;
+			_myTriggerEvent = false;
+			_myEnums.setSelectedItem(_myHandle.value());
+			_myTriggerEvent = true;
 		});
 		theHandle.editEvents().add(new CCPropertyEditListener() {
 			
@@ -57,15 +50,10 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
         for(Enum<?> myEnum:_myHandle.enumConstants()){
         	_myEnums.addItem(myEnum);
         }
-        _myEnums.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent theE) {
-				if(!_myTriggerEvent)return;
-				if(_myEnums.getSelectedItem() == null)return;
-				_myHandle.value((Enum<?>)_myEnums.getSelectedItem(), !_myIsInEdit);
-				
-			}
+        _myEnums.addItemListener(the -> {
+        	if(!_myTriggerEvent)return;
+        	if(_myEnums.getSelectedItem() == null)return;
+        	_myHandle.value((Enum<?>)_myEnums.getSelectedItem(), !_myIsInEdit);
 		});
         _myEnums.setSelectedItem(_myHandle.value());
 	}

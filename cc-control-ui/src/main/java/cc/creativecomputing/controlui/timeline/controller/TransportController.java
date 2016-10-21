@@ -525,7 +525,7 @@ public class TransportController extends TrackDataController implements Zoomable
 	}
 	
 	public void rewind() {
-		_myCurrentTime = 0;
+		_myCurrentTime = _myLoopStart;
 		_myTimeListener.proxy().time(_myCurrentTime);
 	}
 	

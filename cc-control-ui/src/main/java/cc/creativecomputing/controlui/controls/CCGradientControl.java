@@ -4,16 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 
-import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyEditListener;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.controls.CCGradientEditor.GradientListener;
 
 public class CCGradientControl extends CCValueControl<CCGradient, CCGradientPropertyHandle>{
 	
@@ -29,13 +26,9 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
 	public CCGradientControl(CCGradientPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(new CCPropertyListener<CCGradient>() {
-			
-			@Override
-			public void onChange(CCGradient theValue) {
-				_myGradient = theValue.clone();
-				_myGradientEditor.gradient(_myGradient);
-			}
+		theHandle.events().add(theValue -> {
+			_myGradient = ((CCGradient)theValue).clone();
+			_myGradientEditor.gradient(_myGradient);
 		});
 		theHandle.editEvents().add(new CCPropertyEditListener() {
 			
@@ -54,12 +47,8 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
  
         //Create the Button.
 		_myGradientEditor.gradient(_myGradient);
-		_myGradientEditor.events().add(new GradientListener() {
-			
-			@Override
-			public void onChange(CCGradient theGradient) {
-				_myHandle.value(theGradient, false);
-			}
+		_myGradientEditor.events().add(theGradient -> {
+			_myHandle.value(theGradient, false);
 		});
 	}
 	

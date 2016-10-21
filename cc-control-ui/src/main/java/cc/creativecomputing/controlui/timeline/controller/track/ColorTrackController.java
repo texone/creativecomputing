@@ -78,11 +78,11 @@ public class ColorTrackController extends TrackController {
 
 			@Override
 			public void onChange(Object theValue) {
-
-				if(_myEditedColor != null && _myEditedColor.isSelected()){
-					_myEditedColor.color((CCColor)theValue);
-			        _myTrackView.render();
-				}
+				if(_myEditedColor == null)return;
+				if(!_myEditedColor.isSelected())return;
+				
+				_myEditedColor.color((CCColor)theValue);
+				_myTrackView.render();
 			}
 		});
 	}

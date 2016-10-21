@@ -30,6 +30,7 @@ import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCRealtimeCompileHandle;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCShaderCompileHandle;
+import cc.creativecomputing.control.handles.CCSplineHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.controlui.controls.CCBooleanControl;
@@ -43,6 +44,7 @@ import cc.creativecomputing.controlui.controls.CCNumberControl;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
 import cc.creativecomputing.controlui.controls.CCPathControl;
 import cc.creativecomputing.controlui.controls.CCSelectionControl;
+import cc.creativecomputing.controlui.controls.CCSplineControl;
 import cc.creativecomputing.controlui.controls.CCStringControl;
 import cc.creativecomputing.controlui.controls.code.CCRealtimeCompileControl;
 import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
@@ -134,6 +136,8 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 				myControlPanel = new CCStringControl((CCStringPropertyHandle)myPropertyHandle, _myControlCompoent);
 			}else  if(myClass == CCEnvelope.class){
 				myControlPanel = new CCEnvelopeControl((CCEnvelopeHandle)myPropertyHandle, _myControlCompoent);
+			}else  if(myPropertyHandle.getClass() == CCSplineHandle.class){
+				myControlPanel = new CCSplineControl((CCSplineHandle)myPropertyHandle, _myControlCompoent);
 			}else  if(myClass == Path.class){
 				myControlPanel = new CCPathControl((CCPathHandle)myPropertyHandle, _myControlCompoent);
 			}else  if(myClass == CCRealtimeCompile.class){

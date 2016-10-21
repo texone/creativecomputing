@@ -39,7 +39,6 @@ import cc.creativecomputing.controlui.timeline.controller.actions.MoveEventActio
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -84,11 +83,11 @@ public class EventTrackController extends TrackController {
 
 			@Override
 			public void onChange(Object theValue) {
-				CCLog.info("the value:" + theValue);
-				if(_myEditedEvent != null && _myEditedEvent.isSelected()){
-					_myEditedEvent.content(new TimedEventPointContent(theValue));
-			        _myTrackView.render();
-				}
+				if(_myEditedEvent == null)return;
+				if(!_myEditedEvent.isSelected())return;
+				
+				_myEditedEvent.content(new TimedEventPointContent(theValue));
+				_myTrackView.render();
 			}
 		});
 	}
@@ -216,9 +215,9 @@ public class EventTrackController extends TrackController {
 
 		TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint.getPrevious();
 		if(myLowerPoint != null) {
-			myTime = Math.max(myLowerPoint.endTime(), myTime);
+			if(myTime < myLowerPoint.endTime())myLowerPoint.endTime(myTime);
+			if(myTime < myLowerPoint.time())trackData().remove(myLowerPoint);
 		}
-			
 		theMousePoint.time(myTime);
 		trackData().move(theDraggedPoint, theMousePoint);
 	}
@@ -229,9 +228,10 @@ public class EventTrackController extends TrackController {
 		
 		double myTime = Math.max(myStart.time() + MIN_EVENT_TIME, theMousePoint.time());
 
-		ControlPoint myHigherPoint = myStart.getNext();
+		TimedEventPoint myHigherPoint = (TimedEventPoint)myStart.getNext();
 		if(myHigherPoint != null) {
-			myTime = Math.min(myHigherPoint.time(), myTime);
+			if(myTime > myHigherPoint.time())myHigherPoint.time(myTime);
+			if(myTime > myHigherPoint.endTime())trackData().remove(myHigherPoint);
 		}
 		
         theDraggedPoint.time(myTime);
@@ -355,8 +355,6 @@ public class EventTrackController extends TrackController {
 			return;
 		}
 		
-		
-		
 		ControlPoint myControlPoint = pickNearestPoint(myViewCoords);
 		HandleControlPoint myHandle = pickHandle(myViewCoords);
 		
@@ -442,16 +440,18 @@ public class EventTrackController extends TrackController {
 		
 		if (e.getX() == _myMouseStartX && e.getY() == _myMouseStartY && !_myAddedNewPoint) {
 			_myEventTrackListener.proxy().onClick(this, _myEditedEvent);
-			if(!e.isMetaDown()){
-				for(ControlPoint myEvent:trackData()){
-					((TimedEventPoint)myEvent).isSelected(false);
-				}
-			}
+			
 			if(_myEditedEvent != null){
 				_myTrack.property().valueCasted(_myEditedEvent.content() == null ? null : _myEditedEvent.content().value(), false);
-				_myEditedEvent.isSelected(true);
+				_myEditedEvent.isSelected(!_myEditedEvent.isSelected());
 				_myTrack.property().beginEdit();
 		        _myTrackView.render();
+			}else{
+				if(!e.isMetaDown()){
+					for(ControlPoint myEvent:trackData()){
+						((TimedEventPoint)myEvent).isSelected(false);
+					}
+				}
 			}
 		}
 		

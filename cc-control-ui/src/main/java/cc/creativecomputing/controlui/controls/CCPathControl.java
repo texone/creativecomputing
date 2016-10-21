@@ -1,8 +1,6 @@
 package cc.creativecomputing.controlui.controls;
 
 import java.awt.GridBagConstraints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.nio.file.Path;
 
 import javax.swing.JButton;
@@ -12,7 +10,6 @@ import javax.swing.JTextField;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCPropertyEditListener;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.io.CCNIOUtil;
 
@@ -27,17 +24,14 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 	public CCPathControl(CCPathHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(new CCPropertyListener<Path>() {
-			
-			@Override
-			public void onChange(Path theValue) {
-				try{
-					if(_myHandle.value() == null)_myTextField.setText("");
-					else _myTextField.setText(_myHandle.value().toString());
-				}catch(Exception e){
+		theHandle.events().add(theValue -> {
+			try{
+				if(_myHandle.value() == null)_myTextField.setText("");
+				else _myTextField.setText(_myHandle.value().toString());
+			}catch(Exception e){
 					
-				}
 			}
+			
 		});
 		
 		theHandle.editEvents().add(new CCPropertyEditListener() {
@@ -59,21 +53,18 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
         CCUIStyler.styleTextField(_myTextField, 100);
         
         _myOpenButton = new JButton("edit");
-        _myOpenButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				Path myOldPath = _myHandle.value();
-				Path myPath;
-				if(myOldPath != null && myOldPath.getParent() != null){
-					myPath = CCNIOUtil.selectInput("", myOldPath, _myHandle.extensions());
-				}else{
-					myPath = CCNIOUtil.selectInput("", null, _myHandle.extensions());
-				}
-				if(myPath == null)return;
-				_myHandle.value(myPath, !_myIsInEdit);
-				_myTextField.setText(myPath.toString());
+        _myOpenButton.addActionListener(theE -> {
+        	Path myOldPath = _myHandle.value();
+        	Path myPath;
+        	if(myOldPath != null && myOldPath.getParent() != null){
+        		myPath = CCNIOUtil.selectInput("", myOldPath, _myHandle.extensions());
+			}else{
+				myPath = CCNIOUtil.selectInput("", null, _myHandle.extensions());
 			}
+        	if(myPath == null)return;
+        	_myHandle.value(myPath, !_myIsInEdit);
+        	_myTextField.setText(myPath.toString());
+			
 		});
         CCUIStyler.styleButton(_myOpenButton, 30, 15);
 	}
@@ -85,11 +76,7 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 1, 5));
 		thePanel.add(_myTextField, constraints(1, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
 		thePanel.add(_myOpenButton, constraints(2, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
-		
-		
 	}
-
-
 
 	@Override
 	public Path value() {

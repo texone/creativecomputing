@@ -8,7 +8,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 
 public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyHandle>{
@@ -22,15 +21,11 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 	public CCBooleanControl(CCBooleanPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(new CCPropertyListener<Boolean>() {
-			
-			@Override
-			public void onChange(Boolean theValue) {
-				_myIsSelected = theValue;
-				_myTriggerEvent = false;
-				_myButton.setSelected(_myHandle.value());
-				_myTriggerEvent = true;
-			}
+		theHandle.events().add(theValue ->{
+			_myIsSelected = (Boolean)theValue;
+			_myTriggerEvent = false;
+			_myButton.setSelected(_myHandle.value());
+			_myTriggerEvent = true;
 		});
  
         //Create the Button.
@@ -40,13 +35,9 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
         boolean _myValue = theHandle.value();
         _myButton = new JToggleButton(theHandle.name(), theHandle.value());
         CCUIStyler.styleButton(_myButton, 102, 13);
-        _myButton.addChangeListener(new ChangeListener() {
-			
-			@Override
-			public void stateChanged(ChangeEvent theE) {
-				if(!_myTriggerEvent)return;
-				_myHandle.value(_myButton.isSelected(), true);
-			}
+        _myButton.addChangeListener(theE -> {
+        	if(!_myTriggerEvent)return;
+        	_myHandle.value(_myButton.isSelected(), true);
 		});
         _myButton.setSelected(_myValue);
 	}
