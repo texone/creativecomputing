@@ -17,6 +17,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.io.net.CCNetException;
 import cc.creativecomputing.io.net.CCNetListener;
@@ -97,6 +98,10 @@ public class CCClient<MessageType> {
 		_myGroup = new NioEventLoopGroup();
 	}
 	
+	public void reconnectTime(int theReconnectTime){
+		_myReconnectTime = theReconnectTime;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public CCListenerManager<CCNetListener> events(){
 		return _myEvents;
@@ -130,15 +135,17 @@ public class CCClient<MessageType> {
 			if(_myReconnectTime > 0){
 				_myFuture.addListener((channelFuture) -> {
 					if (_myFuture.isSuccess())return;
-					
+
+					CCLog.info("SCHEDULE RECONNECT");
 					scheduleReconnect(_myFuture.channel().eventLoop());
 				});
 			}
 			
 			_myFuture.sync();
 			_myIsConnected = true;
-		} catch (InterruptedException e) {
-			throw new CCNetException(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+//			throw new CCNetException(e);
 		}
 	}
 
