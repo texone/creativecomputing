@@ -83,6 +83,12 @@ public class CCDataArray extends ArrayList<Object> {
 			add(CCDataUtil.wrap(Array.get(theArray, i)));
 		}
 	}
+	
+	public CCDataObject createObject(){
+		CCDataObject myResult = new CCDataObject();
+		add(myResult);
+		return myResult;
+	}
 
 	/**
 	 * Get the boolean value associated with an index. The string values "true"
