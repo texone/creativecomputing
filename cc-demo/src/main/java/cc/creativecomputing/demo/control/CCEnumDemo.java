@@ -56,7 +56,7 @@ public class CCEnumDemo extends CCGL2Adapter{
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1000, 500);
-		myAppManager.animator().framerate = 30;
+		myAppManager.animator().framerate = 10;
 		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
