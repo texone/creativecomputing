@@ -84,6 +84,8 @@ public class CCTextureForceFieldDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
+		_myParticles.animate(g);
+		
 		g.blend();
 		g.color(0);
 		g.rect(-g.width() / 2, -g.height() / 2, g.width(), g.height());

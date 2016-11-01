@@ -46,6 +46,8 @@ public class CCParticlesBasicEmitDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
+		_myParticles.animate(g); 
+		
 		g.noDepthTest();
 		g.clear();
 		

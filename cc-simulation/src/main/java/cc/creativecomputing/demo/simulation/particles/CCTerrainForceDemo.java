@@ -85,6 +85,8 @@ public class CCTerrainForceDemo extends CCGL2Adapter {
 	}
 
 	public void display(CCGraphics g) {
+		_myParticles.animate(g);
+		
 		height = g.height();
 		g.noDepthTest();
 		g.clear();

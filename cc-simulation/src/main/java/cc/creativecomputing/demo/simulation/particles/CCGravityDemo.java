@@ -49,6 +49,8 @@ public class CCGravityDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
+		_myParticles.animate(g);
+		
 		g.noDepthTest();
 		g.clear();
 		g.color(255);
