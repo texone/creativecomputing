@@ -38,13 +38,13 @@ public class CCPostProcess {
 		return _myGeometryBuffer.camera();
 	}
 
-	public void beginDraw() {
-		_myGeometryBuffer.beginDraw();
+	public void beginDraw(CCGraphics g) {
+		_myGeometryBuffer.beginDraw(g);
 		_myGraphics.noBlend();
 	}
 
-	public void endDraw() {
-		_myGeometryBuffer.endDraw();
+	public void endDraw(CCGraphics g) {
+		_myGeometryBuffer.endDraw(g);
 		
 		for(CCPostProcessEffect myEffect:_myEffects) {
 			myEffect.apply(_myGeometryBuffer, _myGraphics);

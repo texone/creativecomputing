@@ -415,7 +415,7 @@ public abstract class CCFrameBufferObject{
 		gl.glDrawBuffers(_myNumberOfAttachments, myBuffer, 0);
 	}
 	
-	public abstract void beginDraw();
+	public abstract void beginDraw(CCGraphics g);
 	
 	public void releaseFBO(){
 		final GL2 gl = CCGraphics.currentGL();
@@ -433,7 +433,7 @@ public abstract class CCFrameBufferObject{
 		updateMipmaps();
 	}
 
-	public abstract void endDraw();
+	public abstract void endDraw(CCGraphics g);
 
 	@Override
 	public void finalize() {

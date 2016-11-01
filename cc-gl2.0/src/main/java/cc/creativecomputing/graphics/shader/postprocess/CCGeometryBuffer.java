@@ -52,7 +52,7 @@ public class CCGeometryBuffer {
 		CCFrameBufferObjectAttributes myAttributes = new CCFrameBufferObjectAttributes(myTextureAttributes,3);
 		myAttributes.enableDepthBuffer(true);
 		
-		_myRenderTexture = new CCRenderBuffer(g, myAttributes, theWidth, theHeight);
+		_myRenderTexture = new CCRenderBuffer( myAttributes, theWidth, theHeight);
 		
 		_myShader = new CCGLProgram(
 			CCNIOUtil.classPath(this, "geometrybuffer_vertex.glsl"),
@@ -67,8 +67,8 @@ public class CCGeometryBuffer {
 		return _myRenderTexture.camera();
 	}
 	
-	public void beginDraw() {
-		_myRenderTexture.beginDraw();
+	public void beginDraw(CCGraphics g) {
+		_myRenderTexture.beginDraw(g);
 		_myShader.start();
 		_myShader.uniform1f( "near", _myGraphics.camera().near());
 		_myShader.uniform1f( "far", _myGraphics.camera().far() );
@@ -85,9 +85,9 @@ public class CCGeometryBuffer {
 		return _myRenderTexture.camera().viewMatrix().invert();
 	}
 	
-	public void endDraw() {
+	public void endDraw(CCGraphics g) {
 		_myShader.end();
-		_myRenderTexture.endDraw();
+		_myRenderTexture.endDraw(g);
 	}
 
 	public CCRenderBuffer data() {
