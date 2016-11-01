@@ -29,7 +29,7 @@ public class CCRenderBufferTest extends CCGL2Adapter {
 		CCFrameBufferObjectAttributes myAttributes = new CCFrameBufferObjectAttributes();
 //		myAttributes.samples(8);
 		
-		_myRenderBuffer = new CCRenderBuffer(g, CCTextureTarget.TEXTURE_RECT, myAttributes, 400, 400);
+		_myRenderBuffer = new CCRenderBuffer(CCTextureTarget.TEXTURE_RECT, myAttributes, 400, 400);
 		_myRenderBuffer.attachment(0).generateMipmaps();
 		_myRenderBuffer.attachment(0).textureMipmapFilter(CCTextureMipmapFilter.LINEAR);
 		_myRenderBuffer.attachment(0).textureFilter(CCTextureFilter.LINEAR);
@@ -43,7 +43,7 @@ public class CCRenderBufferTest extends CCGL2Adapter {
 
 		g.clearColor(0);
 		g.clear();
-		_myRenderBuffer.beginDraw();
+		_myRenderBuffer.beginDraw(g);
 
 		g.clearColor(255,0,0);
 		g.clear();
@@ -54,7 +54,7 @@ public class CCRenderBufferTest extends CCGL2Adapter {
 			g.ellipse(CCMath.random(-g.width()/2,g.width()/2),CCMath.random(-g.height()/2,g.height()/2),CCMath.random(200),20,20);
 		}
 		g.rect(-200,-200, 50,50);
-		_myRenderBuffer.endDraw();
+		_myRenderBuffer.endDraw(g);
 		
 		g.color(255);
 		g.image(_myRenderBuffer.attachment(0), 0,0,200,200);
