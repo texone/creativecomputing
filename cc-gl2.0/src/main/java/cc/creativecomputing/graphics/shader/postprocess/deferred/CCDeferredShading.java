@@ -78,7 +78,7 @@ public class CCDeferredShading extends CCPostProcessEffect{
 	
 	@Override
 	public void initialize(int theWidth, int theHeight) {
-		_myRenderBuffer = new CCRenderBuffer(_myGraphics, theWidth, theHeight);
+		_myRenderBuffer = new CCRenderBuffer(theWidth, theHeight);
 		_myWidth = theWidth;
 		_myHeight = theHeight;
 	}
@@ -214,7 +214,7 @@ public class CCDeferredShading extends CCPostProcessEffect{
 		g.noDepthTest();
 		
 		g.color(255);
-		_myRenderBuffer.beginDraw();
+		_myRenderBuffer.beginDraw(g);
 		g.clear();
 		
 		g.texture(0, theGeometryBuffer.positions());
@@ -245,7 +245,7 @@ public class CCDeferredShading extends CCPostProcessEffect{
 //			_myGraphics.endShape();
 //		}
 //		g.polygonMode(CCPolygonMode.FILL);
-		_myRenderBuffer.endDraw();
+		_myRenderBuffer.endDraw(g);
 		
 		g.popAttribute();
 		
