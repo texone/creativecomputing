@@ -16,16 +16,14 @@ import cc.creativecomputing.graphics.texture.CCTexture2D;
 public abstract class CCImageFilter {
 	
 	protected CCTexture2D _myInput;
-	protected CCGraphics _myGraphics;
 	
-	public CCImageFilter(CCGraphics theGraphics, CCTexture2D theInput){
-		_myGraphics = theGraphics;
+	public CCImageFilter(CCTexture2D theInput){
 		_myInput = theInput;
 	}
 	
 	public abstract CCTexture2D output();
 	
-	public abstract void update(float theDeltaTime);
+	public abstract void display(CCGraphics g);
 	
 	public void setInput (CCTexture2D theInput) {
 		_myInput = theInput;

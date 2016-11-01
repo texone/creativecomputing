@@ -19,22 +19,22 @@ void main() {
 	//if (coords.x>0 && coords.x <width-1 && coords.y > 0 && coords.y < height-1) {
 		
 	
-		outy     = 1*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(-1, -1)).r
-				 + 2*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(0, -1)).r
-		         + 1*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(1, -1)).r
+		outy     = 1 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2(-1, -1)).r
+				 + 2 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2( 0, -1)).r
+		         + 1 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2( 1, -1)).r
 		        
-				 -  1*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(-1, 1)).r
-				 -  2*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(0, 1)).r
-		         -  1*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(1, 1)).r;
+				 - 1 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2(-1,  1)).r
+				 - 2 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2( 0,  1)).r
+		         - 1 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2( 1,  1)).r;
 		         
 		         
-		outx     =  1*texture2DRect(IN0, gl_TexCoord[0].xy+vec2  (-1, -1)).r
-				 +  2*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(-1, 0)).r
-		         +  1*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(-1, 1)).r
+		outx     = 1 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2(-1, -1)).r
+				 + 2 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2(-1,  0)).r
+		         + 1 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2(-1,  1)).r
 		         
-				 -  1*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(1, -1)).r
-				 -  2*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(1, 0)).r
-		         -  1*texture2DRect(IN0, gl_TexCoord[0].xy+vec2(1, 1)).r;
+				 - 1 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2( 1, -1)).r
+				 - 2 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2( 1,  0)).r
+		         - 1 * texture2DRect(IN0, gl_TexCoord[0].xy + vec2( 1,  1)).r;
 
 
 		float brightness = sqrt(outx*outx+outy*outy);

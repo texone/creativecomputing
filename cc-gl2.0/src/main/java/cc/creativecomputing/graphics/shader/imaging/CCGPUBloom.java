@@ -63,7 +63,7 @@ public class CCGPUBloom {
 		_myHeight = theHeight;
 		CCFrameBufferObjectAttributes myAttributes = new CCFrameBufferObjectAttributes();
 		myAttributes.samples(8);
-		_myRenderTexture = new CCRenderBuffer(g, myAttributes, _myWidth, _myHeight);
+		_myRenderTexture = new CCRenderBuffer(myAttributes, _myWidth, _myHeight);
 		
 		_myBlur = new CCGPUSeperateGaussianBlur(5, _myWidth, _myHeight, 1);
 		
@@ -79,12 +79,12 @@ public class CCGPUBloom {
 	
 	public void start() {
 		if(!_cApplyBloom)return;
-		_myRenderTexture.beginDraw();
+		_myRenderTexture.beginDraw(g);
 	}
 	
 	public void endCapture(){
 		if(!_cApplyBloom)return;
-		_myRenderTexture.endDraw();
+		_myRenderTexture.endDraw(g);
 	}
 	
 	public void blur(){
@@ -139,11 +139,11 @@ public class CCGPUBloom {
 	}
 	
 	public void startBlur(CCGraphics g) {
-		_myRenderTexture.beginDraw();
+		_myRenderTexture.beginDraw(g);
 	}
 	
 	public void endBlur(CCGraphics g) {
-		_myRenderTexture.endDraw();
+		_myRenderTexture.endDraw(g);
 
 		_myBlur.radius(_cBlurRadius2);
 		g.color(255);

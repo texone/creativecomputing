@@ -26,13 +26,14 @@ public class CCVectorFieldFilter extends CCImageFilter{
 	@CCProperty(name = "downsample", min = 1, max = 16)
 	private int _cDownSample = 1;
 	
-	public CCVectorFieldFilter(CCGraphics theGraphics, CCTexture2D theInput, int initDownSample) {
-		super(theGraphics, theInput);
+	public CCVectorFieldFilter(CCTexture2D theInput, int initDownSample) {
+		super(theInput);
 		_myVectorField = new CCVectorField2D (theInput.width(), theInput.height(), initDownSample);
 		_myOutput = new CCShaderBuffer(theInput.width(), theInput.height());
 		_myOutput.clear();
 	}
 
+	
 	public int width() {
 		return _myVectorField.width(); 
 	}
@@ -46,23 +47,23 @@ public class CCVectorFieldFilter extends CCImageFilter{
 	}
 
 	@Override
-	public void update(float theDeltaTime) {
+	public void display(CCGraphics g) {
 		_myVectorField.setDownSample (_cDownSample);
 		_myVectorField.setLineLength (_cLineLength);
 		_myOutput.beginDraw ();
-		_myGraphics.clear ();
-		_myGraphics.color (1f);
-		_myVectorField.draw (_myGraphics, _myInput);
+		g.clear ();
+		g.color (1f);
+		_myVectorField.draw (g, _myInput);
 		_myOutput.endDraw ();
 	}
 	
-	public void draw() {
-		_myGraphics.pushAttribute();
-		//_myGraphics.translate(0*_myVectorField.width()/2 , 0*_myVectorField.height()/2);
+	public void draw(CCGraphics g) {
+		g.pushAttribute();
+		//g.translate(0*_myVectorField.width()/2 , 0*_myVectorField.height()/2);
 		_myVectorField.setDownSample (_cDownSample);
 		_myVectorField.setLineLength (_cLineLength);
-		_myVectorField.draw (_myGraphics, _myInput);
-		_myGraphics.popAttribute();
+		_myVectorField.draw (g, _myInput);
+		g.popAttribute();
 	}
 
 	public void lineLength(float theLength) {

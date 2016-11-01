@@ -31,8 +31,8 @@ public class CCMomentFilter extends CCImageFilter {
 	private CCShaderBuffer _myOutput;
 	private CCGLProgram   _myShader;
 	
-	public CCMomentFilter(CCGraphics theGraphics, CCTexture2D theInput) {
-		super(theGraphics, theInput);
+	public CCMomentFilter(CCTexture2D theInput) {
+		super(theInput);
 		_myOutput = new CCShaderBuffer(theInput.width(), theInput.height());
 		_myShader = new CCGLProgram (CCNIOUtil.classPath(this, "shader/imaging/filter/moment_vp.glsl"), CCNIOUtil.classPath(this, "shader/moment_fp.glsl"));
 	}
@@ -43,18 +43,18 @@ public class CCMomentFilter extends CCImageFilter {
 	}
 
 	@Override
-	public void update(float theDeltaTime) {
+	public void display(CCGraphics g) {
 		_myShader.start();
 		_myShader.uniform1f("threshold", _cThreshold);
 		_myShader.uniform1f("exp",       _cExp);
 		_myShader.uniform1f("ampllify",  _cAmplify);
 		
 		_myOutput.beginDraw();
-		_myGraphics.clear();
-		_myGraphics.image(_myInput, 0,0);
+		g.clear();
+		g.image(_myInput, 0,0);
 		_myShader.end();
 		_myOutput.endDraw();
-		_myGraphics.noTexture();
+		g.noTexture();
 	}
 
 }

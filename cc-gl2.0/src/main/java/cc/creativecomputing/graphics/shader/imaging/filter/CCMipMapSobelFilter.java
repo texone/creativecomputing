@@ -35,11 +35,11 @@ public class CCMipMapSobelFilter extends CCImageFilter {
 	private boolean _cShift = true;
 	
 	
-	public CCMipMapSobelFilter (CCGraphics theGraphics, CCTexture2D theInput) {
-		super(theGraphics, theInput);
+	public CCMipMapSobelFilter (CCTexture2D theInput) {
+		super(theInput);
 	
 		_myInput = theInput;
-		_myInputBuffer = new CCRenderBuffer (_myGraphics, theInput.width(), theInput.height());
+		_myInputBuffer = new CCRenderBuffer (theInput.width(), theInput.height());
 		_myInputBuffer.attachment(0).generateMipmaps(true);
 		_myInputBuffer.attachment(0).textureFilter(CCTextureFilter.NEAREST);
 		_myInputBuffer.attachment(0).textureMipmapFilter(CCTextureMipmapFilter.NEAREST);
@@ -65,21 +65,22 @@ public class CCMipMapSobelFilter extends CCImageFilter {
 	public CCTexture2D input() {
 		return _myInputBuffer.attachment(0);
 	}
-	private void swapTexture() {
-		_myInputBuffer.beginDraw();
-		_myGraphics.image(_myInput, -_myInput.width()/2, -_myInput.height()/2, _myInput.width(), _myInput.height());
-		_myInputBuffer.endDraw();
+	
+	private void swapTexture(CCGraphics g) {
+		_myInputBuffer.beginDraw(g);
+		g.image(_myInput, -_myInput.width()/2, -_myInput.height()/2, _myInput.width(), _myInput.height());
+		_myInputBuffer.endDraw(g);
 	}
 
 	@Override
-	public void update(float theDeltaTime) {
+	public void display(CCGraphics g) {
 		
-		swapTexture();
+		swapTexture(g);
 		
 		_myOutput.beginDraw();
-		_myGraphics.clear();
+		g.clear();
 		_myShader.start();
-		_myGraphics.texture(0, _myInputBuffer.attachment(0));
+		g.texture(0, _myInputBuffer.attachment(0));
 		
 		_myShader.uniform1i("texture", 0);
 		_myShader.uniform1i("lod", _cLod);
@@ -88,18 +89,18 @@ public class CCMipMapSobelFilter extends CCImageFilter {
 		_myShader.uniform1f("textureHeight", _myInput.height());
 		_myShader.uniform  ("shift",_cShift);
 		
-		_myGraphics.beginShape(CCDrawMode.QUADS);
-		_myGraphics.textureCoords2D(0, 0f,0f);
-		_myGraphics.vertex (0,0);
-		_myGraphics.textureCoords2D(0, 1f,0f);
-		_myGraphics.vertex (_myOutput.width(), 0);
-		_myGraphics.textureCoords2D(0, 1f,1f);
-		_myGraphics.vertex(_myOutput.width(), _myOutput.height());
-		_myGraphics.textureCoords2D(0, 0f,1f);
-		_myGraphics.vertex(0, _myOutput.height());
-		_myGraphics.endShape();
+		g.beginShape(CCDrawMode.QUADS);
+		g.textureCoords2D(0, 0f,0f);
+		g.vertex (0,0);
+		g.textureCoords2D(0, 1f,0f);
+		g.vertex (_myOutput.width(), 0);
+		g.textureCoords2D(0, 1f,1f);
+		g.vertex(_myOutput.width(), _myOutput.height());
+		g.textureCoords2D(0, 0f,1f);
+		g.vertex(0, _myOutput.height());
+		g.endShape();
 		
-		_myGraphics.noTexture();
+		g.noTexture();
 		
 		_myShader.end();
 		_myOutput.endDraw();

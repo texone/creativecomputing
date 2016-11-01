@@ -42,8 +42,8 @@ public class CCDistanceFieldFilter extends CCImageFilter {
 	private int _cNSteps = 1;
 	
 	
-	public CCDistanceFieldFilter(CCGraphics theGraphics, CCTexture2D theInput) {
-		super(theGraphics, theInput);
+	public CCDistanceFieldFilter(CCTexture2D theInput) {
+		super(theInput);
 		
 		//_myBlurFilter   = new CCBlurFilter (theGraphics, theInput, 10);
 
@@ -77,14 +77,14 @@ public class CCDistanceFieldFilter extends CCImageFilter {
 	}
 	
 	@Override
-	public void update(float theDeltaTime) {
+	public void display(CCGraphics g) {
 		
-		_myBlurFilter.update(theDeltaTime);
+		_myBlurFilter.display(g);
 		
 		// 1st stage init gradient
-		_myGraphics.clear();
+		g.clear();
 		_myShaderStage1.start();
-		_myGraphics.texture(0, _myBlurFilter.output());
+		g.texture(0, _myBlurFilter.output());
 		
 		_myShaderStage1.uniform1i ("width",  _myOutputStage1.width());
 		_myShaderStage1.uniform1i ("height", _myOutputStage1.height());
@@ -92,10 +92,10 @@ public class CCDistanceFieldFilter extends CCImageFilter {
 		_myOutputStage1.draw();
 		
 		_myShaderStage1.end();
-		_myGraphics.noTexture();
+		g.noTexture();
 		
 		
-		_myGraphics.clear();
+		g.clear();
 		
 		/*
 		_myShaderStage3.start();

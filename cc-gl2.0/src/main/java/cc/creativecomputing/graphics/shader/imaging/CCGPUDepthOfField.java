@@ -15,7 +15,6 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCRenderBuffer;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.texture.CCFrameBufferObjectAttributes;
-import cc.creativecomputing.io.CCNIOUtil;
 
 /**
  * @author christianriekoff
@@ -97,10 +96,10 @@ public class CCGPUDepthOfField {
 
 		CCFrameBufferObjectAttributes myFrameBufferAtts = new CCFrameBufferObjectAttributes(2);
 //		myFrameBufferAtts.samples(8);
-		_mySceneTexture = new CCRenderBuffer(g, myFrameBufferAtts, _myWidth, _myHeight);
-		_myFBO0 = new CCRenderBuffer(g, _myWidth / _myDevider, _myHeight / _myDevider);
-		_myFBO1 = new CCRenderBuffer(g, _myWidth / _myDevider, _myHeight / _myDevider);
-		_myFBO2 = new CCRenderBuffer(g, _myWidth / _myDevider, _myHeight / _myDevider);
+		_mySceneTexture = new CCRenderBuffer(myFrameBufferAtts, _myWidth, _myHeight);
+		_myFBO0 = new CCRenderBuffer( _myWidth / _myDevider, _myHeight / _myDevider);
+		_myFBO1 = new CCRenderBuffer(_myWidth / _myDevider, _myHeight / _myDevider);
+		_myFBO2 = new CCRenderBuffer( _myWidth / _myDevider, _myHeight / _myDevider);
 		
 		_myBlur = new CCGPUSeperateGaussianBlur(5, _myWidth , _myHeight);
 		_myBlur.texture(_myFBO0.attachment(0));
@@ -114,22 +113,22 @@ public class CCGPUDepthOfField {
 		_myFocalRange = theFocalRange;
 	}
 
-	public void begin() {
+	public void begin(CCGraphics g) {
 
 		/* First pass: scene rendering */
-		_mySceneTexture.beginDraw();
+		_mySceneTexture.beginDraw(g);
 		
 //		_mySceneShader.start();
 //		_mySceneShader.parameter(_myFocalDistanceParameter, _myFocalDistance);
 //		_mySceneShader.parameter(_myFocalRangeParameter, _myFocalRange);
 	}
 
-	public void end() {
+	public void end(CCGraphics g) {
 //		_mySceneShader.end();
-		_mySceneTexture.endDraw();
+		_mySceneTexture.endDraw(g);
 
 		/* Second pass: downsampling */
-		_myFBO0.beginDraw();
+		_myFBO0.beginDraw(g);
 		_myGraphics.clear();
 		_myGraphics.texture(_mySceneTexture.attachment(0));
 //		_myDownSampleShader.start();
@@ -137,10 +136,10 @@ public class CCGPUDepthOfField {
 		drawQuad(_myWidth / _myDevider, _myHeight / _myDevider);
 //		_myDownSampleShader.end();
 		_myGraphics.noTexture();
-		_myFBO0.endDraw();
+		_myFBO0.endDraw(g);
 
 		/* Third pass: Gaussian filtering along the X axis */
-		_myFBO1.beginDraw();
+		_myFBO1.beginDraw(g);
 		_myGraphics.clear();
 		_myGraphics.texture(_myFBO0.attachment(0));
 		_myThirdShader.start();
@@ -150,10 +149,10 @@ public class CCGPUDepthOfField {
 ////		_myBlur.end();
 ////		_myBlur.flipKernel();
 		_myGraphics.noTexture();
-		_myFBO1.endDraw();
+		_myFBO1.endDraw(g);
 
 		/* Fourth pass: Gaussian filtering along the Y axis */
-		_myFBO2.beginDraw();
+		_myFBO2.beginDraw(g);
 		_myGraphics.clear();
 		_myGraphics.texture(_myFBO1.attachment(0));
 		_myFourthShader.start();
@@ -163,7 +162,7 @@ public class CCGPUDepthOfField {
 //		_myBlur.end();
 //		_myBlur.flipKernel();
 		_myGraphics.noTexture();
-		_myFBO2.endDraw();
+		_myFBO2.endDraw(g);
 		
 
 		/* Fifth pass: final compositing */

@@ -20,8 +20,8 @@ public class CCUpscaleFilter extends CCImageFilter{
 	CCShaderBuffer _myOutBuffer;
 	int _myWidth, _myHeight;
 	
-	public CCUpscaleFilter(CCGraphics theGraphics, CCTexture2D theInput, int scale) {
-		super(theGraphics, theInput);
+	public CCUpscaleFilter(CCTexture2D theInput, int scale) {
+		super(theInput);
 		_myWidth = theInput.width()*scale;
 		_myHeight = theInput.height()*scale;
 		
@@ -32,14 +32,16 @@ public class CCUpscaleFilter extends CCImageFilter{
 		_myOutBuffer.clear();
 	}
 	
-	public void update (float theDeltaTime) {
+	@Override
+	public void display (CCGraphics g) {
 		_myOutBuffer.beginDraw();
-		_myGraphics.clear();
-		_myGraphics.color(1f);
-		_myGraphics.image (_myInput, 0, 0, _myWidth, _myHeight);
+		g.clear();
+		g.color(1f);
+		g.image (_myInput, 0, 0, _myWidth, _myHeight);
 		_myOutBuffer.endDraw();
 	}
 	
+	@Override
 	public CCTexture2D output() {
 		return _myOutBuffer.attachment(0);
 	}

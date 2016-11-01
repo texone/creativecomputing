@@ -123,11 +123,11 @@ public class CCGPUSeperateGaussianBlur extends CCGPUConvolutionShader{
 		if(_myTexture1 == null){
 			CCFrameBufferObjectAttributes myAtts = new CCFrameBufferObjectAttributes();
 			myAtts.samples(8);
- 			_myTexture1 = new CCRenderBuffer(g,myAtts, _myWidth, _myHeight);
-			_myTexture2 = new CCRenderBuffer(g,myAtts, _myWidth, _myHeight);
+ 			_myTexture1 = new CCRenderBuffer(myAtts, _myWidth, _myHeight);
+			_myTexture2 = new CCRenderBuffer(myAtts, _myWidth, _myHeight);
 			texture(_myTexture1.attachment(0));
 		}
-		_myTexture1.beginDraw();
+		_myTexture1.beginDraw(g);
 		g.clear();
 		g.pushMatrix();
 		g.scale(1f/_myRes);
@@ -140,16 +140,16 @@ public class CCGPUSeperateGaussianBlur extends CCGPUConvolutionShader{
 	 */
 	public void endFirstPass(CCGraphics g) {
 		g.popMatrix();
-		_myTexture1.endDraw();
+		_myTexture1.endDraw(g);
 		
-		_myTexture2.beginDraw();
+		_myTexture2.beginDraw(g);
 		g.clear();
 		start();
 		
 		g.image(_myTexture1.attachment(0), - _myWidth/2, -_myHeight/2);
 		end();
 		flipKernel();
-		_myTexture2.endDraw();
+		_myTexture2.endDraw(g);
 	}
 	
 	/**
@@ -158,13 +158,13 @@ public class CCGPUSeperateGaussianBlur extends CCGPUConvolutionShader{
 	 * @param g
 	 */
 	public void endSecondPass(CCGraphics g) {
-		_myTexture1.beginDraw();
+		_myTexture1.beginDraw(g);
 		g.clear();
 		start();
 		g.image(_myTexture2.attachment(0), - _myWidth/2, -_myHeight/2);
 		end();
 		flipKernel();
-		_myTexture1.endDraw();
+		_myTexture1.endDraw(g);
 	}
 	
 	/**

@@ -32,13 +32,13 @@ public class CCNormalizeFilter extends CCImageFilter {
 	private CCRenderBuffer _myOutput;   
 
 	
-	public CCNormalizeFilter (CCGraphics theGraphics, CCTexture2D theInput) {
-		super(theGraphics, theInput);
+	public CCNormalizeFilter (CCTexture2D theInput) {
+		super(theInput);
 		_myScalingShader = new CCGLProgram (CCNIOUtil.classPath(this, "shader/normalize_vertex.glsl"), CCNIOUtil.classPath(this, "shader/normalize_fragment.glsl"));
 		
-		_myInputRenderBuffer = new CCRenderBuffer (_myGraphics, _myInput.width(), _myInput.height());
-		_myOutput            = new CCRenderBuffer (_myGraphics, _myInput.width(), _myInput.height());	
-		_myOutputTmp         = new CCRenderBuffer (_myGraphics, theInput.width()/_myDownscale, theInput.height()/_myDownscale);
+		_myInputRenderBuffer = new CCRenderBuffer(_myInput.width(), _myInput.height());
+		_myOutput            = new CCRenderBuffer (_myInput.width(), _myInput.height());	
+		_myOutputTmp         = new CCRenderBuffer (theInput.width()/_myDownscale, theInput.height()/_myDownscale);
 		
 		
 		_myOutputTmp.attachment(0).textureFilter(CCTextureFilter.LINEAR);
@@ -55,26 +55,26 @@ public class CCNormalizeFilter extends CCImageFilter {
 	}
 	
 	@Override
-	public void update(float theDeltaTime) {
+	public void display(CCGraphics g) {
 		
 		// swap to input render buffer to have mipmaps
-		_myInputRenderBuffer.beginDraw();
-		_myGraphics.image(_myInput,-_myInput.width()/2, -_myInput.height()/2, _myInput.width(), _myInput.height());
-		_myInputRenderBuffer.endDraw();
+		_myInputRenderBuffer.beginDraw(g);
+		g.image(_myInput,-_myInput.width()/2, -_myInput.height()/2, _myInput.width(), _myInput.height());
+		_myInputRenderBuffer.endDraw(g);
 		
 		// draw scaled down to outbuffer
-		_myOutputTmp.beginDraw();
-		_myGraphics.pushAttribute();
-		_myGraphics.clearColor(1f);
-		_myGraphics.clear();
-		_myGraphics.popAttribute();
-		//_myGraphics.scale(_myDownscale);
-		_myGraphics.image(_myInputRenderBuffer.attachment(0),-_myInput.width()/_myDownscale/2, -_myInput.height()/_myDownscale/2, _myInput.width()/_myDownscale, _myInput.height()/_myDownscale);
-		_myOutputTmp.endDraw();
+		_myOutputTmp.beginDraw(g);
+		g.pushAttribute();
+		g.clearColor(1f);
+		g.clear();
+		g.popAttribute();
+		//g.scale(_myDownscale);
+		g.image(_myInputRenderBuffer.attachment(0), -_myInput.width()/_myDownscale/2, -_myInput.height()/_myDownscale/2, _myInput.width()/_myDownscale, _myInput.height()/_myDownscale);
+		_myOutputTmp.endDraw(g);
 		
-		_myOutput.beginDraw();
-		_myGraphics.clear();
-		_myGraphics.image(_myOutputTmp.attachment(0), -_myOutput.width()/2,- _myOutput.height()/2, _myOutput.width(), _myOutput.height());
-		_myOutput.endDraw();
+		_myOutput.beginDraw(g);
+		g.clear();
+		g.image(_myOutputTmp.attachment(0), -_myOutput.width()/2,- _myOutput.height()/2, _myOutput.width(), _myOutput.height());
+		_myOutput.endDraw(g);
 	}
 }

@@ -25,8 +25,8 @@ public class CCSobelFilter extends CCImageFilter {
 	@CCProperty(name = "shift_value")
 	private boolean _cShift = true;
 	
-	public CCSobelFilter(CCGraphics theGraphics, CCTexture2D theInput) {
-		super(theGraphics, theInput);
+	public CCSobelFilter(CCTexture2D theInput) {
+		super(theInput);
 		_myOutput = new CCShaderBuffer(32, 3, 2, theInput.width(), theInput.height());
 		_myOutput.clear();
 		
@@ -47,8 +47,8 @@ public class CCSobelFilter extends CCImageFilter {
 	}
 
 	@Override
-	public void update(float theDeltaTime) {
-		_myGraphics.texture(0, _myInput);	
+	public void display(CCGraphics g) {
+		g.texture(0, _myInput);	
 		_myShader.start();
 		_myShader.uniform1i ("IN0", 0);
 		
@@ -56,6 +56,6 @@ public class CCSobelFilter extends CCImageFilter {
 
 		_myOutput.draw();
 		_myShader.end();
-		_myGraphics.noTexture();
+		g.noTexture();
 	}
 }

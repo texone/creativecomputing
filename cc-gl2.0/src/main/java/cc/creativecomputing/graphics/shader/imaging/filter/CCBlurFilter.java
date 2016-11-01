@@ -27,19 +27,17 @@ public class CCBlurFilter extends CCImageFilter{
 	private int _myWidth;
 	private int _myHeight;
 
-	public CCBlurFilter(CCGraphics theGraphics, CCTexture2D theInput, float theMaximumRadius, int theScale) {
-		super(theGraphics, theInput);
+	public CCBlurFilter(CCTexture2D theInput, float theMaximumRadius, int theScale) {
+		super(theInput);
 		_myWidth = _myInput.width() * theScale;
 		_myHeight = _myInput.height() * theScale;
 		
 		_myOutput = new CCShaderBuffer (_myWidth, _myHeight);
 		_myBlur = new CCGPUSeperateGaussianBlur (20, _myWidth, _myHeight);
-		_myBlur.beginDraw(theGraphics);
-		_myBlur.endDraw(theGraphics);
 	}
 	
-	public CCBlurFilter(CCGraphics theGraphics, CCTexture2D theInput, float theMaximumRadius){
-		this(theGraphics, theInput, theMaximumRadius, 1);
+	public CCBlurFilter(CCTexture2D theInput, float theMaximumRadius){
+		this(theInput, theMaximumRadius, 1);
 	}
 
 	@Override
@@ -56,18 +54,18 @@ public class CCBlurFilter extends CCImageFilter{
 	
 
 	@Override
-	public void update(float theDeltaTime) {
+	public void display(CCGraphics g) {
 		
-		_myGraphics.pushAttribute();
+		g.pushAttribute();
 		_myBlur.radius(_cBlurRadius * _myBlur.maxRadius());
-		_myBlur.beginDraw(_myGraphics);
-		_myGraphics.image(_myInput, -_myInput.width()/2, -_myInput.height()/2, _myWidth, _myHeight);
-		_myBlur.endDraw (_myGraphics);
-		_myGraphics.popAttribute();
+		_myBlur.beginDraw(g);
+		g.image(_myInput, -_myInput.width()/2, -_myInput.height()/2, _myWidth, _myHeight);
+		_myBlur.endDraw (g);
+		g.popAttribute();
 		
 		_myOutput.beginDraw();
-		_myGraphics.clear();
-		_myGraphics.image(_myBlur.blurredTexture(), 0,0);
+		g.clear();
+		g.image(_myBlur.blurredTexture(), 0,0);
 		_myOutput.endDraw();
 	}
 }

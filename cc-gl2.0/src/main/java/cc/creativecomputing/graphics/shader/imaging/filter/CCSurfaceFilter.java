@@ -27,8 +27,8 @@ public class CCSurfaceFilter extends CCImageFilter{
 	private CCShaderBuffer _myOutput;
 	private CCTexture2D    _myInput2;
 	
-	public CCSurfaceFilter (CCGraphics theGraphics, CCTexture2D theInput, CCTexture2D theInput2) {
-		super (theGraphics, theInput);
+	public CCSurfaceFilter (CCTexture2D theInput, CCTexture2D theInput2) {
+		super (theInput);
 		_myShader = new CCGLProgram (CCNIOUtil.classPath(this, "shader/surface_vp.glsl"), CCNIOUtil.classPath(this, "shader/surface_fp.glsl"));
 		
 		// the refraction matrix specifies the output size
@@ -41,11 +41,12 @@ public class CCSurfaceFilter extends CCImageFilter{
 		System.out.println("refract: "+theInput2.width()+" "+theInput2.height()+", text: "+theInput.width()+" "+theInput.height());
 	}
 	
-	public void update (float theDeltaTime) {
+	@Override
+	public void display (CCGraphics g) {
 
 		_myShader.start();
-		_myGraphics.texture (0, _myInput);	
-		_myGraphics.texture (1, _myInput2);	
+		g.texture (0, _myInput);	
+		g.texture (1, _myInput2);	
 		
 		_myShader.uniform1i ("TEXTURE", 0);
 		_myShader.uniform1i ("REFRACT", 1);		
@@ -56,7 +57,7 @@ public class CCSurfaceFilter extends CCImageFilter{
 		_myOutput.draw();
 		
 		_myShader.end();
-		_myGraphics.noTexture();
+		g.noTexture();
 	}
 
 	@Override

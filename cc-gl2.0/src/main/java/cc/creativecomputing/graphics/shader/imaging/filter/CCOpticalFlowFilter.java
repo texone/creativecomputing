@@ -64,8 +64,8 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 	
 	private int nSteps = 4;
 	
-	public CCOpticalFlowFilter(CCGraphics theGraphics, CCTexture2D theInput) {
-		super(theGraphics, theInput);
+	public CCOpticalFlowFilter(CCTexture2D theInput) {
+		super(theInput);
 		
 		//_myBlurInputStage = new CCBlurFilter (theGraphics, theInput, 10);
 		//_myBlurInputStage.setRadius(2f);
@@ -113,16 +113,16 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 	
 
 	@Override
-	public void update(float theDeltaTime) {
+	public void display(CCGraphics g) {
 
 		// init step, calculate Ex, Ey, Et from current and last input frame
 		//_myBlurInputStage.update(theDeltaTime);
 		
-		_myGraphics.clear();
+		g.clear();
 		
 		_myShaderStage1.start();
-		_myGraphics.texture (0, _myInput);	
-		_myGraphics.texture (1, _myLastInput.attachment(0));	
+		g.texture (0, _myInput);	
+		g.texture (1, _myLastInput.attachment(0));	
 		_myShaderStage1.uniform1i ("IN0", 0);
 		_myShaderStage1.uniform1i ("IN1", 1);
 		_myShaderStage1.uniform1f ("gain", _cGain);
@@ -130,7 +130,7 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 		_myOutputStage1.draw();
 		
 		_myShaderStage1.end();
-		_myGraphics.noTexture();
+		g.noTexture();
 
 		// initalize output to zeros
 		outTmp.clear();
@@ -138,35 +138,35 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 		// iterate to find v, u
 		for (int i=0; i<nSteps; i++) {
 
-			_myGraphics.clear();
+			g.clear();
 			_myShaderStage2.start();
 			
-			_myGraphics.texture (0, outTmp.attachment(0));	
-			_myGraphics.texture (1, _myOutputStage1.attachment(0));	
+			g.texture (0, outTmp.attachment(0));	
+			g.texture (1, _myOutputStage1.attachment(0));	
 			_myShaderStage2.uniform1i ("UV", 0);
 			_myShaderStage2.uniform1i ("E_xyt", 1);
 			_myOutputStage2.draw();
 			
 			_myShaderStage2.end();
-			_myGraphics.noTexture();
+			g.noTexture();
 			
 			outTmp.beginDraw();
-			_myGraphics.image(_myOutputStage2.attachment(0), 0, 0);
+			g.image(_myOutputStage2.attachment(0), 0, 0);
 			outTmp.endDraw();
 		}
 		
 		_myShaderStage3.start();
-		_myGraphics.texture (0, _myOutputStage2.attachment(0));	
+		g.texture (0, _myOutputStage2.attachment(0));	
 		_myShaderStage3.uniform1i ("IN0", 0);
 		_myShaderStage3.uniform1f ("offset", 0.5f);
 		_myShaderStage3.uniform1f ("gain", 0.5f);
 		_myOutputStage3.draw();
 		_myShaderStage3.end();
-		_myGraphics.noTexture();
+		g.noTexture();
 		
 		// keep input for next update call
 		_myLastInput.beginDraw();
-		_myGraphics.image (_myInput, 0, 0);
+		g.image (_myInput, 0, 0);
 		_myLastInput.endDraw();
 	}
 }
