@@ -19,46 +19,45 @@ import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 public class CCRenderBuffer extends CCFrameBufferObject{
 	
 	private CCCamera _myCamera;
-	private CCGraphics _myGraphics;
 	
-	public CCRenderBuffer(final CCGraphics theGraphics, final CCTextureTarget theTarget, final CCFrameBufferObjectAttributes theAttributes, final int theWidth, final int theHeight){
+	public CCRenderBuffer(final CCTextureTarget theTarget, final CCFrameBufferObjectAttributes theAttributes, final int theWidth, final int theHeight){
 		super(theTarget, theAttributes, theWidth, theHeight);
-		
-		_myGraphics = theGraphics;
 		_myCamera = new CCCamera(theWidth,theHeight);
 	}
 	
-	public CCRenderBuffer(final CCGraphics theGraphics, final CCFrameBufferObjectAttributes theAttributes, final int theWidth, final int theHeight){
-		this(theGraphics, CCTextureTarget.TEXTURE_2D, theAttributes, theWidth, theHeight);
+	public CCRenderBuffer( final CCFrameBufferObjectAttributes theAttributes, final int theWidth, final int theHeight){
+		this(CCTextureTarget.TEXTURE_2D, theAttributes, theWidth, theHeight);
 	}
 	
-	public CCRenderBuffer(CCGraphics theGraphics, final CCTextureTarget theTarget, final int theWidth, final int theHeight){
-		this(theGraphics, theTarget,new CCFrameBufferObjectAttributes(),theWidth, theHeight);
+	public CCRenderBuffer(final CCTextureTarget theTarget, final int theWidth, final int theHeight){
+		this(theTarget,new CCFrameBufferObjectAttributes(),theWidth, theHeight);
 	}
 	
-	public CCRenderBuffer(CCGraphics theGraphics, final int theNumberOfAttachments, final int theWidth, final int theHeight){
-		this(theGraphics, CCTextureTarget.TEXTURE_2D, new CCFrameBufferObjectAttributes(theNumberOfAttachments), theWidth, theHeight);
+	public CCRenderBuffer(final int theNumberOfAttachments, final int theWidth, final int theHeight){
+		this(CCTextureTarget.TEXTURE_2D, new CCFrameBufferObjectAttributes(theNumberOfAttachments), theWidth, theHeight);
 	}
 	
-	public CCRenderBuffer(CCGraphics theGraphics, final int theWidth, final int theHeight){
-		this(theGraphics, CCTextureTarget.TEXTURE_2D, theWidth, theHeight);
+	public CCRenderBuffer(final int theWidth, final int theHeight){
+		this(CCTextureTarget.TEXTURE_2D, theWidth, theHeight);
 	}
 	
-	public void beginDraw() {
+	@Override
+	public void beginDraw(CCGraphics g) {
 		bindFBO();
-		_myGraphics.matrixMode(CCMatrixMode.PROJECTION);
-		_myGraphics.pushMatrix();
-		_myGraphics.matrixMode(CCMatrixMode.MODELVIEW);
-		_myGraphics.pushMatrix();
-		_myCamera.draw(_myGraphics);
+		g.matrixMode(CCMatrixMode.PROJECTION);
+		g.pushMatrix();
+		g.matrixMode(CCMatrixMode.MODELVIEW);
+		g.pushMatrix();
+		_myCamera.draw(g);
 	}
 
-	public void endDraw() {
-		_myGraphics.camera().draw(_myGraphics);
-		_myGraphics.matrixMode(CCMatrixMode.PROJECTION);
-		_myGraphics.popMatrix();
-		_myGraphics.matrixMode(CCMatrixMode.MODELVIEW);
-		_myGraphics.popMatrix();
+	@Override
+	public void endDraw(CCGraphics g) {
+		g.camera().draw(g);
+		g.matrixMode(CCMatrixMode.PROJECTION);
+		g.popMatrix();
+		g.matrixMode(CCMatrixMode.MODELVIEW);
+		g.popMatrix();
 		releaseFBO();
 	}
 	

@@ -273,6 +273,11 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 	 * @see cc.creativecomputing.graphics.texture.CCFrameBufferObject#beginDraw()
 	 */
 	@Override
+	public void beginDraw(CCGraphics g) {
+		bindFBO();
+		beginOrtho2D();
+	}
+	
 	public void beginDraw() {
 		bindFBO();
 		beginOrtho2D();
@@ -293,6 +298,13 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 
 		gl.glPopAttrib();
 	}
+	
+	public void endDraw(CCGraphics g){
+		endOrtho2D();
+		releaseFBO();
+	}
+	
+
 	
 	public void endDraw(){
 		endOrtho2D();
