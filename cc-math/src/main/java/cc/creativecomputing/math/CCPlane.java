@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import cc.creativecomputing.core.CCProperty;
+
 /**
  * A representation of a mathematical plane using a normal vector and a plane
  * constant (d) whose absolute value represents the distance from the origin to
@@ -46,7 +48,9 @@ public class CCPlane implements Cloneable, Externalizable {
 	public static final CCPlane XY = new CCPlane(CCVector3.UNIT_Z, 0);
 	public static final CCPlane YZ = new CCPlane(CCVector3.UNIT_X, 0);
 
+	@CCProperty(name = "normal")
 	protected final CCVector3 _myNormal = new CCVector3();
+	@CCProperty(name = "constant")
 	protected double _myConstant = 0;
 
 	/**
