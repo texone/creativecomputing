@@ -11,9 +11,8 @@
 package cc.creativecomputing.simulation.particles.constraints;
 
 import cc.creativecomputing.graphics.texture.CCTexture3D;
-import cc.creativecomputing.math.CCVector3f;
+import cc.creativecomputing.math.CCVector3;
 
-import com.jogamp.opengl.cg.CGparameter;
 
 /**
  * This force creates a texture based force field, every pixel of the
@@ -24,86 +23,87 @@ import com.jogamp.opengl.cg.CGparameter;
  * @author christian riekoff
  *
  */
-public class CCGPUTexture3DConstraint extends CCGPUConstraint{
+public class CCGPUTexture3DConstraint extends CCConstraint{
 	
 	protected CCTexture3D _myTexture;
-	private CCVector3f _myTextureScale;
-	private CCVector3f _myTextureOffset;
+	private CCVector3 _myTextureScale;
+	private CCVector3 _myTextureOffset;
 
-	private CCVector3f _myMinCut = new CCVector3f(0,0,0);
-	private CCVector3f _myMaxCut = new CCVector3f(1,1,1);
+	private CCVector3 _myMinCut = new CCVector3(0,0,0);
+	private CCVector3 _myMaxCut = new CCVector3(1,1,1);
 	
 	private float _myMinForce = 0;
 	
-	private CGparameter _myTextureParameter;
-	private CGparameter _myTextureScaleParameter;
-	private CGparameter _myTextureOffsetParameter;
+	private String _myTextureParameter;
+	private String _myTextureScaleParameter;
+	private String _myTextureOffsetParameter;
 	
-	private CGparameter _myMinCutParameter;
-	private CGparameter _myMaxCutParameter;
-	private CGparameter _myMinForceParameter;
+	private String _myMinCutParameter;
+	private String _myMaxCutParameter;
+	private String _myMinForceParameter;
 	
 	public CCGPUTexture3DConstraint(
 		final CCTexture3D theTexture,
-		final CCVector3f theTextureScale,
-		final CCVector3f theTextureOffset,
+		final CCVector3 theTextureScale,
+		final CCVector3 theTextureOffset,
 		final float theResilience, final float theFriction, final float theMinimalVelocity
 	){
 		super("Texture3DConstraint", theResilience, theFriction, theMinimalVelocity);
 		_myTexture = theTexture;
 		_myTextureScale = theTextureScale;
 		_myTextureOffset = theTextureOffset;
-	}
-	
-	@Override
-	public void setupParameter(int theWidth, int theHeight){
+
 		_myTextureParameter = parameter("texture");
 		_myTextureScaleParameter = parameter("textureScale");
 		_myTextureOffsetParameter = parameter("textureOffset");
 		_myMinCutParameter = parameter("minCut");
 		_myMaxCutParameter = parameter("maxCut");
 		_myMinForceParameter = parameter("minForce");
-		
-		texture(_myTexture);
-	}
-
-	@Override
-	public void update(final float theDeltaTime) {
-		super.update(theDeltaTime);
-		_myVelocityShader.texture(_myTextureParameter, _myTexture.id());
-		_myVelocityShader.parameter(_myTextureScaleParameter, _myTextureScale);
-		_myVelocityShader.parameter(_myTextureOffsetParameter, _myTextureOffset);
-		_myVelocityShader.parameter(_myMinCutParameter, _myMinCut);
-		_myVelocityShader.parameter(_myMaxCutParameter, _myMaxCut);
-		_myVelocityShader.parameter(_myMinForceParameter, _myMinForce);
-		
 	}
 	
-	public boolean addToForceArray(){
-		return true;
-	}
-	
-	public void texture(final CCTexture3D theTexture){
-		_myTexture = theTexture;
-	}
-	
-	public CCVector3f textureScale() {
-		return _myTextureScale;
-	}
-	
-	public CCVector3f textureOffset() {
-		return _myTextureOffset;
-	}
-	
-	public CCVector3f minCut(){
-		return _myMinCut;
-	}
-	
-	public CCVector3f maxCut(){
-		return _myMaxCut;
-	}
-	
-	public void minForce(float theMinForce){
-		_myMinForce = theMinForce;
-	}
+//	@Override
+//	public void setupParameter(int theWidth, int theHeight){
+//		
+//		texture(_myTexture);
+//	}
+//
+//	@Override
+//	public void update(final float theDeltaTime) {
+//		super.update(theDeltaTime);
+//		_myVelocityShader.texture(_myTextureParameter, _myTexture.id());
+//		_myVelocityShader.parameter(_myTextureScaleParameter, _myTextureScale);
+//		_myVelocityShader.parameter(_myTextureOffsetParameter, _myTextureOffset);
+//		_myVelocityShader.parameter(_myMinCutParameter, _myMinCut);
+//		_myVelocityShader.parameter(_myMaxCutParameter, _myMaxCut);
+//		_myVelocityShader.parameter(_myMinForceParameter, _myMinForce);
+//		
+//	}
+//	
+//	public boolean addToForceArray(){
+//		return true;
+//	}
+//	
+//	public void texture(final CCTexture3D theTexture){
+//		_myTexture = theTexture;
+//	}
+//	
+//	public CCVector3 textureScale() {
+//		return _myTextureScale;
+//	}
+//	
+//	public CCVector3 textureOffset() {
+//		return _myTextureOffset;
+//	}
+//	
+//	public CCVector3 minCut(){
+//		return _myMinCut;
+//	}
+//	
+//	public CCVector3 maxCut(){
+//		return _myMaxCut;
+//	}
+//	
+//	public void minForce(float theMinForce){
+//		_myMinForce = theMinForce;
+//	}
 }

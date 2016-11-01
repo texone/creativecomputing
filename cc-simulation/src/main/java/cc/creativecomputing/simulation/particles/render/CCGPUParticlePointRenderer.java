@@ -11,7 +11,6 @@
 package cc.creativecomputing.simulation.particles.render;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCVBOMesh;

@@ -57,29 +57,29 @@ public class CCGPUShapeConstraint extends CCConstraint{
 		_myScaleParameter = parameter("scale");
 		_myOffsetParameter = parameter("offset");
 			
-		texture(_myTexture);
-		textureScale(_myScale);
-		textureOffset(_myOffset);
+//		texture(_myTexture);
+//		textureScale(_myScale);
+//		textureOffset(_myOffset);
 	}
 
-	public void texture(final CCTexture2D theTexture) {
-		_myVelocityShader.texture(_myTextureParameter, theTexture.id());
-		_myVelocityShader.parameter(_myTextureSizeParameter, theTexture.width(), theTexture.height());
-	}
-	
-	public void textureScale(final CCVector3 theTextureScale) {
-		_myVelocityShader.parameter(_myScaleParameter, theTextureScale);
-	}
-	
-	public void textureScale(final float theXScale, final float theYScale, final float theZScale){
-		_myVelocityShader.parameter(_myScaleParameter, theXScale, theYScale, theZScale);
-	}
-	
-	public void textureOffset(final CCVector3 theTextureOffset) {
-		_myVelocityShader.parameter(_myOffsetParameter, theTextureOffset);
-	}
-	
-	public void textureOffset(final float theXOffset, final float theYOffset, final float theZOffset) {
-		_myVelocityShader.parameter(_myOffsetParameter, theXOffset, theYOffset, theZOffset);
-	}
+//	public void texture(final CCTexture2D theTexture) {
+//		_myVelocityShader.texture(_myTextureParameter, theTexture.id());
+//		_myVelocityShader.parameter(_myTextureSizeParameter, theTexture.width(), theTexture.height());
+//	}
+//	
+//	public void textureScale(final CCVector3 theTextureScale) {
+//		_myVelocityShader.parameter(_myScaleParameter, theTextureScale);
+//	}
+//	
+//	public void textureScale(final float theXScale, final float theYScale, final float theZScale){
+//		_myVelocityShader.parameter(_myScaleParameter, theXScale, theYScale, theZScale);
+//	}
+//	
+//	public void textureOffset(final CCVector3 theTextureOffset) {
+//		_myVelocityShader.parameter(_myOffsetParameter, theTextureOffset);
+//	}
+//	
+//	public void textureOffset(final float theXOffset, final float theYOffset, final float theZOffset) {
+//		_myVelocityShader.parameter(_myOffsetParameter, theXOffset, theYOffset, theZOffset);
+//	}
 }
