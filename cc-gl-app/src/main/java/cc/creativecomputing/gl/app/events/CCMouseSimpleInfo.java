@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.gl.app.events;
 
+import cc.creativecomputing.gl.app.events.CCMouseEvent.CCMouseButton;
 import cc.creativecomputing.math.CCVector2;
 
 /**
@@ -24,10 +25,13 @@ public class CCMouseSimpleInfo extends CCMouseAdapter{
 	
 	public boolean isPressed = false;
 	
+	public CCMouseButton button;
+	
 	private void updatePositions(CCMouseEvent theEvent){
 		lastPosition.set(position);
 		position.set(theEvent.x(), theEvent.y());
 		motion.set(position.subtract(lastPosition));
+		button = theEvent.button();
 	}
 
 	public void mouseClicked(CCMouseEvent theEvent) {

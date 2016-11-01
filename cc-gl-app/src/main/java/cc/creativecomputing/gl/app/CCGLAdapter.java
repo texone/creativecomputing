@@ -10,6 +10,7 @@ import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.gl.app.events.CCKeyListener;
 import cc.creativecomputing.gl.app.events.CCKeyPressedListener;
 import cc.creativecomputing.gl.app.events.CCKeyReleasedListener;
+import cc.creativecomputing.gl.app.events.CCKeySimpleInfo;
 import cc.creativecomputing.gl.app.events.CCKeyTypedListener;
 import cc.creativecomputing.gl.app.events.CCMouseClickedListener;
 import cc.creativecomputing.gl.app.events.CCMouseDraggedListener;
@@ -31,6 +32,8 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 
 	protected CCMouseSimpleInfo _myMouseInfo = new CCMouseSimpleInfo();
 	
+	protected CCKeySimpleInfo _myKeyInfo = new CCKeySimpleInfo();
+	
 	
 	public CCControlApp controlApp(){
 		return _myControlApp;
@@ -48,6 +51,7 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 		_myContext = theContext;
 		mouseListener().add(_myMouseInfo);
 		mouseMotionListener().add(_myMouseInfo);
+		keyListener().add(_myKeyInfo);
 	}
 	
 	public GLContextType glContext(){
@@ -56,6 +60,10 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 	
 	public CCMouseSimpleInfo mouse(){
 		return _myMouseInfo;
+	}
+	
+	public CCKeySimpleInfo key(){
+		return _myKeyInfo;
 	}
 	
 	@SuppressWarnings("rawtypes")
