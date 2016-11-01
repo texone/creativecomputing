@@ -1,6 +1,32 @@
 #version 120 
 
-@define noise
+uniform sampler2D randomTexture;
+
+float noise( in vec3 x ){
+    vec3 p = floor(x);
+    vec3 f = fract(x);
+	f = f * f * (3.0 - 2.0 * f);
+	
+	vec2 uv = (p.xy + vec2(37.0, 17.0) * p.z) + f.xy;
+	vec2 rg = texture2D( randomTexture, (uv+ 0.5) / 256.0 ).yx;//, -100.0
+	return mix( rg.x, rg.y, f.z );
+}
+
+float octavedNoise(in vec3 p, int octaves, float gain, float lacunarity){
+	float result = 0.0;
+	float myFallOff = gain;
+	float myAmp = 0.0;
+	
+	vec3 q = p;
+	for(int i = 0; i < octaves; i++){
+		myAmp += myFallOff;
+		result += myFallOff * noise( q ); 
+		q = q * lacunarity;
+		myFallOff *= gain;
+	}
+	
+	return result / myAmp;
+}
 
 uniform float deltaTime;
 
@@ -12,7 +38,13 @@ uniform sampler2DRect infoTexture;
 uniform float staticPositionBlend;
 
 // insert forces
-@define forces
+uniform vec3 gravity0_direction;
+uniform float gravity0_strength;
+
+vec3 gravity0_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+	return gravity0_direction * gravity0_strength; 
+}
+
 
 // insert constraints
 
@@ -45,7 +77,33 @@ vec3 bounceReflection(
 	return vTangent * theFriction - vNormal * theResilience;
 }
 
-@define constraints
+
+
+uniform vec3 sphereConstraint1_center;
+uniform float sphereConstraint1_radius;
+	
+uniform float sphereConstraint1_resilience;
+uniform float sphereConstraint1_friction;
+uniform float sphereConstraint1_minimalVelocity;
+
+uniform float sphereConstraint1_inside;
+	
+vec3 sphereConstraint1_function(vec3 theVelocity, vec3 thePosition, vec2 theTexID,float theDeltaTime){
+	vec3 delta = (thePosition + theVelocity * theDeltaTime) - sphereConstraint1_center;
+	float dist = length(delta);
+
+	if ((dist - sphereConstraint1_radius) * sphereConstraint1_inside < 0) return theVelocity;
+		
+	return bounceReflection(
+		theVelocity, 
+		delta / dist,
+		distance(thePosition, sphereConstraint1_center) - sphereConstraint1_radius,
+		sphereConstraint1_resilience, 
+		sphereConstraint1_friction, 
+		sphereConstraint1_minimalVelocity
+	);
+}
+
 
 void main (){
 	vec2 texID = gl_FragCoord.xy;
@@ -55,15 +113,14 @@ void main (){
 	vec3 acceleration = vec3(0,0,0);
 
 // apply forces
-@apply forces
+	acceleration = acceleration + gravity0_function(position,velocity,texID,deltaTime);
 
 	velocity = velocity + acceleration * (deltaTime * 60);
 
 // apply constraints
 
 
-@apply constraints
-	
+	velocity = sphereConstraint1_function(velocity, position,texID, deltaTime)	
 	
 	/*
 	for(int i = 0; i < constraints.length;i++){
@@ -95,4 +152,3 @@ void main (){
 	gl_FragData[2] = vec4(velocity, 1.0);
 	gl_FragData[3] = color;
 }
-	           

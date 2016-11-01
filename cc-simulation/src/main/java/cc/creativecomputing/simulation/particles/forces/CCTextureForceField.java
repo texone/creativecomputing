@@ -42,9 +42,9 @@ public class CCTextureForceField extends CCForce{
 	){
 		super("textureForceField");
 		_myTexture = theTexture;
+		
 		_myTextureScale = new CCVector2(theTextureScale);
 		_myTextureOffset = new CCVector2(theTextureOffset);
-
 
 		_myTextureParameter = parameter("forceFieldTexture");
 		_myTextureScaleParameter = parameter("textureScale");

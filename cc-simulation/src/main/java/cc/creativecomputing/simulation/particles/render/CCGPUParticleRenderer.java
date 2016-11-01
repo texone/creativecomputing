@@ -25,7 +25,9 @@ public abstract class CCGPUParticleRenderer {
 
 	public abstract void update(final CCAnimator theAnimator);
 	
-	public abstract void draw(CCGraphics g);
+	public abstract void updateData(CCGraphics g);
+	
+	public abstract void display(CCGraphics g);
 	
 	public abstract CCVBOMesh mesh();
 }

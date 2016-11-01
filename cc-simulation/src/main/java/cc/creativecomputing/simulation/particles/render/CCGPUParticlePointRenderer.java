@@ -11,6 +11,7 @@
 package cc.creativecomputing.simulation.particles.render;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCVBOMesh;
@@ -31,22 +32,29 @@ public class CCGPUParticlePointRenderer extends CCGPUParticleRenderer{
 		_myDisplayShader = new CCGPUDisplayShader();
 	}
 	
+	@Override
 	public void setup(CCParticles theParticles) {
 		_myParticles = theParticles;
 		
 		_myMesh = new CCVBOMesh(CCDrawMode.POINTS, _myParticles.size());
 	}
 	
+	@Override
 	public void update(final CCAnimator theDeltaTime) {
 //		_myMesh.colors(_myParticles.dataBuffer(),3);
 	}
+	
+	@Override
+	public void updateData(CCGraphics g) {
+		_myMesh.vertices(_myParticles.dataBuffer(),0);
+	}
 
-	public void draw(CCGraphics g){
+	@Override
+	public void display(CCGraphics g){
 //		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
 ////		_myParticles.dataBuffer().attachment(1).bind();
 //		_myDisplayShader.start();
 //		_myDisplayShader.tangHalfFov(CCMath.tan(g.camera().fov()) * g.height);
-		_myMesh.vertices(_myParticles.dataBuffer(),0);
 		_myMesh.draw(g);
 //		_myDisplayShader.end();
 //		g.gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE) ;

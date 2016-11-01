@@ -81,6 +81,8 @@ public class CCParticles{
 	
 	@CCProperty(name = "forces")
 	private Map<String, CCForce> _myForceMap = new LinkedHashMap<>();
+	@CCProperty(name = "contraints")
+	private Map<String, CCConstraint> _myContraintMap = new LinkedHashMap<>();
 	
 	private CCGPUParticleRenderer _myParticleRender;
 	
@@ -129,6 +131,11 @@ public class CCParticles{
 		for(CCForce myForce:theForces) {
 			myForce.setSize(g, theWidth, theHeight);
 			_myForceMap.put(myForce.parameter("force"), myForce);
+		}
+		
+		for(CCConstraint myContraint:theConstraints) {
+			myContraint.setSize(g, theWidth, theHeight);
+			_myContraintMap.put(myContraint.parameter("contraint"), myContraint);
 		}
 		
 		_myInitValueShader = new CCGLProgram(null,CCNIOUtil.classPath(this, "initvalue01.glsl"));
@@ -418,7 +425,7 @@ public class CCParticles{
 		_myUpdateShader.setTextureUniform("colorTexture", _mySwapTexture.attachment(3));
 	}
 	
-	public void display(CCGraphics g) {
+	public void animate(CCGraphics g){
 		g.pushAttribute();
 		g.noBlend();
 		beforeUpdate(g);
@@ -443,7 +450,11 @@ public class CCParticles{
 		afterUpdate(g);
 		g.popAttribute();
 		
-		_myParticleRender.draw(g);
+		_myParticleRender.updateData(g);
+	}
+	
+	public void display(CCGraphics g) {
+		_myParticleRender.display(g);
 	}
 	
 	public void staticPositionBlend(float theBlend){
