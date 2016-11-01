@@ -1,0 +1,462 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "animator": {
+        "name": "animator",
+        "value": {
+          "fixed update time": {
+            "min": 0,
+            "max": 1,
+            "name": "fixed update time",
+            "value": 1
+          },
+          "fix update time": {
+            "name": "fix update time",
+            "value": false
+          },
+          "framerate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "framerate",
+            "value": 30
+          },
+          "animationMode": {
+            "name": "animationMode",
+            "value": "FRAMERATE_PRECISE"
+          },
+          "show frame rate": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "show frame rate",
+            "value": 17.99522568667307
+          },
+          "exceptionHandling": {
+            "name": "exceptionHandling",
+            "value": "THROW"
+          }
+        }
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "show": {
+        "name": "show",
+        "value": "DENSITY"
+      },
+      "particles": {
+        "name": "particles",
+        "value": {
+          "contraints": {
+            "name": "contraints",
+            "value": {"boxConstraint4_contraint": {
+              "name": "boxConstraint4_contraint",
+              "value": {
+                "minimal velocity": {
+                  "min": 0,
+                  "max": 100,
+                  "name": "minimal velocity",
+                  "value": 1
+                },
+                "min": {
+                  "name": "min",
+                  "value": {
+                    "x": {
+                      "min": -1.7976931348623157E308,
+                      "max": 1.7976931348623157E308,
+                      "name": "x",
+                      "value": -600
+                    },
+                    "y": {
+                      "min": -1.7976931348623157E308,
+                      "max": 1.7976931348623157E308,
+                      "name": "y",
+                      "value": -300
+                    },
+                    "z": {
+                      "min": -1.7976931348623157E308,
+                      "max": 1.7976931348623157E308,
+                      "name": "z",
+                      "value": -200
+                    }
+                  }
+                },
+                "max": {
+                  "name": "max",
+                  "value": {
+                    "x": {
+                      "min": -1.7976931348623157E308,
+                      "max": 1.7976931348623157E308,
+                      "name": "x",
+                      "value": 600
+                    },
+                    "y": {
+                      "min": -1.7976931348623157E308,
+                      "max": 1.7976931348623157E308,
+                      "name": "y",
+                      "value": 300
+                    },
+                    "z": {
+                      "min": -1.7976931348623157E308,
+                      "max": 1.7976931348623157E308,
+                      "name": "z",
+                      "value": 200
+                    }
+                  }
+                },
+                "resilience": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "resilience",
+                  "value": 1
+                },
+                "friction": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "friction",
+                  "value": 1
+                }
+              }
+            }}
+          },
+          "forces": {
+            "name": "forces",
+            "value": {
+              "NoiseForceField1_force": {
+                "name": "NoiseForceField1_force",
+                "value": {
+                  "octaves": {
+                    "min": 0,
+                    "max": 5,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 4,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  }
+                }
+              },
+              "ViscousDrag0_force": {
+                "name": "ViscousDrag0_force",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "drag": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "drag",
+                    "value": 0.30000001192092896
+                  }
+                }
+              },
+              "gravity2_force": {
+                "name": "gravity2_force",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 2.75
+                  },
+                  "direction": {
+                    "name": "direction",
+                    "value": {
+                      "x": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "x",
+                        "value": 0
+                      },
+                      "y": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "y",
+                        "value": -1
+                      },
+                      "z": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "z",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "density3_force": {
+                "name": "density3_force",
+                "value": {
+                  "point size": {
+                    "min": 1,
+                    "max": 30,
+                    "name": "point size",
+                    "value": 11
+                  },
+                  "energy density": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "energy density",
+                    "value": 0.2240000069141388
+                  },
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1.0399999618530273
+                  },
+                  "sprite shape": {
+                    "name": "sprite shape",
+                    "value": "DISTANCE"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "camera": {
+        "name": "camera",
+        "value": {
+          "distance": {
+            "min": 1,
+            "max": 20000,
+            "name": "distance",
+            "value": 100
+          },
+          "center": {
+            "name": "center",
+            "value": {
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "name": "x",
+                "value": 0
+              },
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "name": "y",
+                "value": 0
+              },
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "rotation": {
+            "name": "rotation",
+            "value": {
+              "w": {
+                "min": -1,
+                "max": 1,
+                "name": "w",
+                "value": 1
+              },
+              "x": {
+                "min": -1,
+                "max": 1,
+                "name": "x",
+                "value": 0
+              },
+              "y": {
+                "min": -1,
+                "max": 1,
+                "name": "y",
+                "value": 0
+              },
+              "z": {
+                "min": -1,
+                "max": 1,
+                "name": "z",
+                "value": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {}
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 17.99522568667307
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}}
