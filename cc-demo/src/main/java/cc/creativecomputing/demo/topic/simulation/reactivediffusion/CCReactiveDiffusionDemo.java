@@ -1,8 +1,8 @@
 package cc.creativecomputing.demo.topic.simulation.reactivediffusion;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -13,6 +13,7 @@ import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCBezierSpline;
+import cc.creativecomputing.math.spline.CCBlendSpline;
 import cc.creativecomputing.math.spline.CCSpline;
 
 public class CCReactiveDiffusionDemo extends CCGL2Adapter {
@@ -20,19 +21,31 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 	private double	mReactionU = 0.25;
 	@CCProperty(name = "Reaction v", min=0.0, max=0.4, digits = 2)
 	private double	mReactionV = 0.04;
-	@CCProperty(name = "Reaction k", min=0.0, max=1.0, digits = 3)
-	private double	mReactionK = 0.047;
-	@CCProperty(name = "Reaction f", min=0.0, max=1.0, digits = 3)
-	private double	mReactionF = 0.1;
 	
 	@CCProperty(name = "spline 0")
 	private CCSpline _cSpline0 = new CCBezierSpline();
 	@CCProperty(name = "spline 1")
 	private CCSpline _cSpline1 = new CCBezierSpline();
 	
+	@CCProperty(name = "density", min = 0, max = 1)
+	private double _cDensity = 0;
+	@CCProperty(name = "viscosity", min = 0, max = 1)
+	private double _cViscosity = 0;
+	
+	@CCProperty(name = "density scale", min = 0, max = 0.1)
+	private double _cDensityScale = 0.1;
+	@CCProperty(name = "viscosity scale", min = 0, max = 0.1)
+	private double _cViscosityScale = 0.1;
+	
+
+	@CCProperty(name = "speed", min = 0, max = 50)
+	private double _cSpeed = 0.1;
+	
+	private CCBlendSpline _myBlendSpline;
+	
 	private CCGLSwapBuffer _mySwapBuffer;
 	
-	@CCProperty(name = "reaction diffusion shader")
+//	@CCProperty(name = "reaction diffusion shader")
 	private CCGLProgram _myReactiveDiffusionProgram;
 
 	@Override
@@ -41,6 +54,8 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 		_mySwapBuffer.clear();
 		
 		_myReactiveDiffusionProgram = new CCGLProgram(null, CCNIOUtil.classPath(this,"reactive_diffusion2.glsl"));
+		
+		_myBlendSpline = new CCBlendSpline(_cSpline0, _cSpline1);
 	}
 
 	@Override
@@ -61,6 +76,12 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 			_mySwapBuffer.clear();
 		}
 		
+		CCVector3 myDV = _myBlendSpline.interpolate(_cDensity, _cViscosity);
+		myDV.y = 1 - myDV.y;
+		myDV.multiplyLocal(0.1);
+		
+		CCLog.info(myDV);
+		
 		for(int i = 0; i < 25;i++){
 			g.texture(0, _mySwapBuffer.attachment(0));
 
@@ -68,8 +89,11 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 			_myReactiveDiffusionProgram.uniform1i( "tex", 0 );
 			_myReactiveDiffusionProgram.uniform1f( "ru", mReactionU );
 			_myReactiveDiffusionProgram.uniform1f( "rv", mReactionV );
-			_myReactiveDiffusionProgram.uniform1f( "k", mReactionK );
-			_myReactiveDiffusionProgram.uniform1f( "f", mReactionF );
+			_myReactiveDiffusionProgram.uniform1f( "uUScale", _cDensityScale );
+			_myReactiveDiffusionProgram.uniform1f( "uFScale", _cViscosityScale );
+			_myReactiveDiffusionProgram.uniform1f( "uUOffset", myDV.x );
+			_myReactiveDiffusionProgram.uniform1f( "uFOffset", myDV.y );
+			_myReactiveDiffusionProgram.uniform1f( "dt", animator().deltaTime() * _cSpeed);
 			
 			_myReactiveDiffusionProgram.uniform2f( "iResolution", g.width(), g.height());
 			_myReactiveDiffusionProgram.uniform1i( "reset", _myReset ? 1 : 0);

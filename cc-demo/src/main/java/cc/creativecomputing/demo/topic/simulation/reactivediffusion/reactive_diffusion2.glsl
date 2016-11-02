@@ -1,7 +1,7 @@
 const vec2 Diffusion = vec2(0.08,0.03);
 //const float F = 0.04;
 //const float k = 0.06;
-const float dt = 1.0;
+uniform float dt;
 
 uniform sampler2DRect tex;
 
@@ -29,6 +29,12 @@ vec2 laplacian(vec2 position) {
 	0.5 * texture2DRect( tex,  position + P.xy ).xy;	
 }
 
+uniform float uFScale; 
+uniform float uUScale;
+
+uniform float uUOffset;
+uniform float uFOffset;
+
 void main(){
     vec2 uv = gl_FragCoord.xy / iResolution.xy;
     
@@ -40,8 +46,10 @@ void main(){
         return;
     }
     
-    float F = uv.y * 0.1 + 0.000;
-    float k = uv.x * 0.1 + 0.000;
+    float F = uv.y * uFScale + uFOffset;
+ 
+    float k = uv.x * uUScale + uUOffset;
+    
     
     vec4 data = texture2DRect(tex, gl_FragCoord.xy);
     
@@ -53,3 +61,4 @@ void main(){
     float dv = Duv.y + u * v * v - (F + k) * v;
     gl_FragColor.xy = clamp(vec2(u + du * dt,v + dv * dt), 0., 1.);
 }
+
