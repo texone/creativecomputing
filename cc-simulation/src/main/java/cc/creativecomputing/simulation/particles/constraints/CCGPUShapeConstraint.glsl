@@ -19,18 +19,18 @@ vec3 function(vec3 theVelocity, vec3 thePosition, vec2 theTexID, float theDeltaT
 	vec2 shapePos   = thePosition.xy / scale.xy + offset.xy;
 	vec2 fshapePos  = fPosition.xy / scale.xy + offset.xy;
 		
-	vec3 pointNow  = texRECT (texture, shapePos);
-	vec3 pointNext = texRECT (texture, fshapePos);
-	vec3 newVelocity = theVelocity*texRECT (texture, vec2(0,0));
+	vec3 pointNow  = texture2DRect (texture, shapePos);
+	vec3 pointNext = texture2DRect (texture, fshapePos);
+	vec3 newVelocity = theVelocity*texture2DRect (texture, vec2(0,0));
 		
 	// Calculate normal vector for the next point
 	vec3 normal = vec3(0,0,0);
 	float weight = 1;
 		
-	normal.x = texRECT (texture, fshapePos+vec2(-1,-1)) + 2 *texRECT (texture, fshapePos+vec2(-1, 0)) + texRECT (texture, shapePos+vec2(-1, 1))
-	         - texRECT (texture, fshapePos+vec2( 1,-1)) - 2 *texRECT (texture, fshapePos+vec2( 1, 0)) - texRECT (texture, shapePos+vec2( 1, 1));
-	normal.y = texRECT (texture, fshapePos+vec2(-1,-1)) + 2 *texRECT (texture, fshapePos+vec2( 0,-1)) + texRECT (texture, shapePos+vec2( 1,-1))
-	         - texRECT (texture, fshapePos+vec2(-1, 1)) - 2 *texRECT (texture, fshapePos+vec2( 0, 1)) - texRECT (texture, shapePos+vec2( 1, 1));
+	normal.x = texture2DRect (texture, fshapePos+vec2(-1,-1)) + 2 *texture2DRect (texture, fshapePos+vec2(-1, 0)) + texture2DRect (texture, shapePos+vec2(-1, 1))
+	         - texture2DRect (texture, fshapePos+vec2( 1,-1)) - 2 *texture2DRect (texture, fshapePos+vec2( 1, 0)) - texture2DRect (texture, shapePos+vec2( 1, 1));
+	normal.y = texture2DRect (texture, fshapePos+vec2(-1,-1)) + 2 *texture2DRect (texture, fshapePos+vec2( 0,-1)) + texture2DRect (texture, shapePos+vec2( 1,-1))
+	         - texture2DRect (texture, fshapePos+vec2(-1, 1)) - 2 *texture2DRect (texture, fshapePos+vec2( 0, 1)) - texture2DRect (texture, shapePos+vec2( 1, 1));
 		
 	normal = normalize (normal);
 		
@@ -45,7 +45,7 @@ vec3 function(vec3 theVelocity, vec3 thePosition, vec2 theTexID, float theDeltaT
 	for (int i=1; i<=nSteps; i++) {
 		int div = pow (2.0, (float)i);
 		pos += sign*dir/div;
-		point = texRECT (texture, pos).xyz;
+		point = texture2DRect (texture, pos).xyz;
 		if (length(point) > 0) {
 			sign = -1;
 		}

@@ -40,7 +40,7 @@
             "min": -1.7976931348623157E308,
             "max": 1.7976931348623157E308,
             "name": "show frame rate",
-            "value": 29.629739369405073
+            "value": 29.762111147973137
           },
           "exceptionHandling": {
             "name": "exceptionHandling",
@@ -133,19 +133,19 @@
                   "min": 1,
                   "max": 30,
                   "name": "point size",
-                  "value": 4
+                  "value": 6
                 },
                 "energy density": {
                   "min": 0,
                   "max": 1,
                   "name": "energy density",
-                  "value": 0.06499999761581421
+                  "value": 0.0430000014603138
                 },
                 "strength": {
                   "min": 0,
                   "max": 10,
                   "name": "strength",
-                  "value": 1.309999942779541
+                  "value": 5
                 },
                 "sprite shape": {
                   "name": "sprite shape",
@@ -195,25 +195,25 @@
                 "min": -1,
                 "max": 1,
                 "name": "w",
-                "value": 1
+                "value": 0.9991126982892201
               },
               "x": {
                 "min": -1,
                 "max": 1,
                 "name": "x",
-                "value": 0
+                "value": 0.03092150885015891
               },
               "y": {
                 "min": -1,
                 "max": 1,
                 "name": "y",
-                "value": 0
+                "value": 0.028242682895689257
               },
               "z": {
                 "min": -1,
                 "max": 1,
                 "name": "z",
-                "value": 0
+                "value": 0.004475183852757315
               }
             }
           }
@@ -343,7 +343,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.629739369405073
+        "value": 29.762111147973137
       },
       "exceptionHandling": {
         "name": "exceptionHandling",
