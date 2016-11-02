@@ -111,7 +111,7 @@ public class CCNIOUtil {
 			throw new CCIOException("The given Resource is not available:" + theClass.getResource("") + thePath);
 		}
 		String myPath = myResult.getPath().replaceAll("%20", " ");
-//		if(myPath.startsWith("/"))myPath = myPath.substring(1);
+		if(myPath.startsWith("/"))myPath = myPath.substring(1);
 		return Paths.get(myPath);
 	}
 	
