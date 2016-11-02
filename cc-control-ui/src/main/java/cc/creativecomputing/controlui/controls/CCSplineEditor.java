@@ -167,7 +167,7 @@ public class CCSplineEditor extends JFrame {
 		});
 
 		getContentPane().add(myPanel);
-
+		setAlwaysOnTop(true);
 		setSize(200, 200);
 	}
 	
