@@ -61,10 +61,16 @@ public class CCBlendSpline extends CCSpline{
 	}
 	
 	public CCVector3 interpolate(double theBlendSpline, double theBlendPoint) {
+		CCVector3 myVector0 = _mySpline1.interpolate(theBlendPoint);
+		CCVector3 myVector1 = _mySpline2.interpolate(theBlendPoint);
+		if(myVector0 == null || myVector1 == null){
+			return null;
+		}
 		return CCVector3.lerp(
-			_mySpline1.interpolate(theBlendPoint), 
-			_mySpline2.interpolate(theBlendPoint),
+			myVector0, 
+			myVector1,
 			theBlendSpline
 		);
+		
 	}
 }

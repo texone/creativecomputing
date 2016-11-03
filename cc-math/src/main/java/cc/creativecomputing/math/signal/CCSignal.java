@@ -248,7 +248,7 @@ public abstract class CCSignal {
 		return signalImpl(theX,0);
 	}
 	
-	@CCProperty(name = "scale", min = 0, max = 1, defaultValue = 1)
+	@CCProperty(name = "scale", min = 0, max = 1, defaultValue = 1, digits = 4)
 	public void scale(final double theNoiseScale){
 		scaleImplementation(theNoiseScale);
 	}
