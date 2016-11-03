@@ -77,6 +77,7 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 		}
 		
 		CCVector3 myDV = _myBlendSpline.interpolate(_cDensity, _cViscosity);
+		if(myDV == null)myDV = new CCVector3();
 		myDV.y = 1 - myDV.y;
 		myDV.multiplyLocal(0.1);
 		
