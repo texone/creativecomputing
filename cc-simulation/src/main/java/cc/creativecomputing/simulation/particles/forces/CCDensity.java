@@ -94,6 +94,10 @@ public class CCDensity extends CCForce{
 		_myTextureSizeParameter = parameter("textureSize");
 	}
 	
+	public CCVector2 textureOffset(){
+		return _myTextureOffset;
+	}
+	
 	/**
 	 *	Calc point sprite envelope and sum for later normalization. 
 	 */
@@ -185,7 +189,7 @@ public class CCDensity extends CCForce{
 		
 		g.color(255);
 		g.image(_myPointSprite,0,0,100,100);
-		g.translate(_myWidth/2, _myHeight/2);
+		g.translate(_myTextureOffset);
 		
 		_myBrightness = 10 *_cEnergyDensity / (_myFactor  * _cPointSize * _cPointSize);
 		g.clear();

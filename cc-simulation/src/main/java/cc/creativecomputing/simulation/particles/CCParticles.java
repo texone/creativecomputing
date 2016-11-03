@@ -24,6 +24,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
+import cc.creativecomputing.graphics.shader.CCGLSetDataShader;
 import cc.creativecomputing.graphics.shader.CCGLProgram.CCGLTextureUniform;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCGLSwapBuffer;
@@ -70,7 +71,7 @@ public class CCParticles{
 	
 	protected CCParticlesUpdateShader _myUpdateShader;
 	
-	protected CCGLProgram _myInitValueShader;
+	protected CCGLSetDataShader _mySetDataShader;
 	
 	protected CCGLSwapBuffer _mySwapTexture;
 	
@@ -138,7 +139,7 @@ public class CCParticles{
 			_myContraintMap.put(myContraint.parameter("contraint"), myContraint);
 		}
 		
-		_myInitValueShader = new CCGLProgram(null,CCNIOUtil.classPath(this, "initvalue01.glsl"));
+		_mySetDataShader = new CCGLSetDataShader();
 		
 		_mySwapTexture = new CCGLSwapBuffer(32,4,4,_myWidth,_myHeight);
 		
@@ -182,7 +183,7 @@ public class CCParticles{
 	}
 	
 	public CCGLProgram initValueShader() {
-		return _myInitValueShader;
+		return _mySetDataShader;
 	}
 	
 	public double currentTime() {
@@ -198,7 +199,7 @@ public class CCParticles{
 		_mySwapTexture.clear();
 		
 		_mySwapTexture.beginDraw();
-		_myInitValueShader.start();
+		_mySetDataShader.start();
 		
 		g.beginShape(CCDrawMode.POINTS);
 		for (int i = 0; i < _myWidth * _myHeight; i++){
@@ -210,7 +211,7 @@ public class CCParticles{
 		}
 		g.endShape();
 		
-		_myInitValueShader.end();
+		_mySetDataShader.end();
 		_mySwapTexture.endDraw();
 		
 		for(CCForce myForce:_myForces) {
@@ -292,7 +293,7 @@ public class CCParticles{
 		
 		// Render manually changed positions into the texture.
 		_mySwapTexture.beginDraw(0);
-		_myInitValueShader.start();
+		_mySetDataShader.start();
 		
 		g.beginShape(CCDrawMode.POINTS);
 	
@@ -307,7 +308,7 @@ public class CCParticles{
 	    
 		g.endShape();
 		
-		_myInitValueShader.end();
+		_mySetDataShader.end();
 		_mySwapTexture.endDraw();
 		
 		_myPositionUpdates.clear();

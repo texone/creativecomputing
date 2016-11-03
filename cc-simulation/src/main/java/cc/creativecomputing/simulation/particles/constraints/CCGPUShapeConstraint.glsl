@@ -13,7 +13,7 @@ uniform float friction;
 uniform float minimalVelocity;
 	
 vec3 function(vec3 theVelocity, vec3 thePosition, vec2 theTexID, float theDeltaTime){
-			
+/*			
 	vec3 fPosition = thePosition + theVelocity * theDeltaTime;
 		
 	vec2 shapePos   = thePosition.xy / scale.xy + offset.xy;
@@ -59,6 +59,6 @@ vec3 function(vec3 theVelocity, vec3 thePosition, vec2 theTexID, float theDeltaT
 		//return bounceReflection (theVelocity, normal, dist, resilience*2, friction, minimalVelocity);
 		return theVelocity*friction;
 	}
-	
+	*/
 	return theVelocity;
 }

@@ -173,6 +173,9 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		for(CCForce myForce:_myForces){
 			myForce.preDisplay(g);
 		}
+		for(CCConstraint myConstraint:_myConstraints){
+			myConstraint.preDisplay(g);
+		}
 	}
 	
 	@Override
