@@ -223,7 +223,7 @@ public class CCGLProgram{
 		link();
 	}
 	
-	private CCGLShader attachShader(final String theSource, CCShaderObjectType theType){
+	protected CCGLShader attachShader(final String theSource, CCShaderObjectType theType){
 		if(theSource == null)return null;
 		
 		CCGLShader myShader = new CCGLShader(theType, theSource);
