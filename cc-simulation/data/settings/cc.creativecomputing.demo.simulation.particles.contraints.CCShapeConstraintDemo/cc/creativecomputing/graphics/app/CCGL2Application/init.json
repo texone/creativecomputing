@@ -40,7 +40,7 @@
             "min": -1.7976931348623157E308,
             "max": 1.7976931348623157E308,
             "name": "show frame rate",
-            "value": 16.070966043286216
+            "value": 28.69310702046874
           },
           "exceptionHandling": {
             "name": "exceptionHandling",
@@ -74,17 +74,82 @@
       "noise": {
         "name": "noise",
         "value": {
-          "octaves": {
-            "min": 1,
-            "max": 10,
-            "name": "octaves",
-            "value": 2
+          "square setup": {
+            "name": "square setup",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 2
+              },
+              "pulsewidth": {
+                "min": 0,
+                "max": 1,
+                "name": "pulsewidth",
+                "value": 0.5
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              }
+            }
+          },
+          "worley": {
+            "min": 0,
+            "max": 1,
+            "name": "worley",
+            "value": 0
+          },
+          "amp": {
+            "min": 0,
+            "max": 1,
+            "name": "amp",
+            "value": 1
+          },
+          "sloped tri": {
+            "min": 0,
+            "max": 1,
+            "name": "sloped tri",
+            "value": 0
+          },
+          "saw": {
+            "min": 0,
+            "max": 1,
+            "name": "saw",
+            "value": 0
+          },
+          "simplex": {
+            "min": 0,
+            "max": 1,
+            "name": "simplex",
+            "value": 0
           },
           "scale": {
             "min": 0,
             "max": 1,
             "name": "scale",
-            "value": 0.01
+            "value": 0.001
+          },
+          "tri": {
+            "min": 0,
+            "max": 1,
+            "name": "tri",
+            "value": 0
           },
           "lacunarity": {
             "min": 0,
@@ -97,6 +162,102 @@
             "max": 1,
             "name": "gain",
             "value": 0.5
+          },
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 2
+          },
+          "square": {
+            "min": 0,
+            "max": 1,
+            "name": "square",
+            "value": 0.6660000085830688
+          },
+          "sine": {
+            "min": 0,
+            "max": 1,
+            "name": "sine",
+            "value": 0
+          },
+          "worley setup": {
+            "name": "worley setup",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 2
+              },
+              "amp": {
+                "min": 0,
+                "max": 10,
+                "name": "amp",
+                "value": 1
+              },
+              "formular": {
+                "name": "formular",
+                "value": "DEFAULT"
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "distance type": {
+                "name": "distance type",
+                "value": "EUCLIDEAN"
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              }
+            }
+          },
+          "tri setup": {
+            "name": "tri setup",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 2
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "ratio": {
+                "min": 0,
+                "max": 1,
+                "name": "ratio",
+                "value": 0.5
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              }
+            }
           }
         }
       },
@@ -109,75 +270,100 @@
         "value": {
           "contraints": {
             "name": "contraints",
-            "value": {"boxConstraint4_contraint": {
-              "name": "boxConstraint4_contraint",
-              "value": {
-                "minimal velocity": {
-                  "min": 0,
-                  "max": 100,
-                  "name": "minimal velocity",
-                  "value": 1
-                },
-                "min": {
-                  "name": "min",
-                  "value": {
-                    "x": {
-                      "min": -1.7976931348623157E308,
-                      "max": 1.7976931348623157E308,
-                      "name": "x",
-                      "value": 0
-                    },
-                    "y": {
-                      "min": -1.7976931348623157E308,
-                      "max": 1.7976931348623157E308,
-                      "name": "y",
-                      "value": 0
-                    },
-                    "z": {
-                      "min": -1.7976931348623157E308,
-                      "max": 1.7976931348623157E308,
-                      "name": "z",
-                      "value": -200
+            "value": {
+              "boxConstraint4_contraint": {
+                "name": "boxConstraint4_contraint",
+                "value": {
+                  "minimal velocity": {
+                    "min": 0,
+                    "max": 100,
+                    "name": "minimal velocity",
+                    "value": 1
+                  },
+                  "min": {
+                    "name": "min",
+                    "value": {
+                      "x": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "x",
+                        "value": 0
+                      },
+                      "y": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "y",
+                        "value": 0
+                      },
+                      "z": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "z",
+                        "value": -200
+                      }
                     }
-                  }
-                },
-                "max": {
-                  "name": "max",
-                  "value": {
-                    "x": {
-                      "min": -1.7976931348623157E308,
-                      "max": 1.7976931348623157E308,
-                      "name": "x",
-                      "value": 1200
-                    },
-                    "y": {
-                      "min": -1.7976931348623157E308,
-                      "max": 1.7976931348623157E308,
-                      "name": "y",
-                      "value": 600
-                    },
-                    "z": {
-                      "min": -1.7976931348623157E308,
-                      "max": 1.7976931348623157E308,
-                      "name": "z",
-                      "value": 200
+                  },
+                  "max": {
+                    "name": "max",
+                    "value": {
+                      "x": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "x",
+                        "value": 1200
+                      },
+                      "y": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "y",
+                        "value": 600
+                      },
+                      "z": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "z",
+                        "value": 200
+                      }
                     }
+                  },
+                  "resilience": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "resilience",
+                    "value": 0
+                  },
+                  "friction": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "friction",
+                    "value": 0
                   }
-                },
-                "resilience": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "resilience",
-                  "value": 0
-                },
-                "friction": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "friction",
-                  "value": 0
+                }
+              },
+              "shapeConstraint5_contraint": {
+                "name": "shapeConstraint5_contraint",
+                "value": {
+                  "minimal velocity": {
+                    "min": 0,
+                    "max": 100,
+                    "name": "minimal velocity",
+                    "value": 1
+                  },
+                  "resilience": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "resilience",
+                    "value": 1
+                  },
+                  "friction": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "friction",
+                    "value": 1
+                  }
                 }
               }
-            }}
+            }
           },
           "forces": {
             "name": "forces",
@@ -423,7 +609,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 16.070966043286216
+        "value": 28.69310702046874
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

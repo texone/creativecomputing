@@ -46,9 +46,9 @@ void main(){
         return;
     }
     
-    float F = uv.y * uFScale + uFOffset;
+    float F = uv.y * 0.1 + 0.0;
  
-    float k = uv.x * uUScale + uUOffset;
+    float k = uv.x * 0.1 + 0.0;
     
     
     vec4 data = texture2DRect(tex, gl_FragCoord.xy);
