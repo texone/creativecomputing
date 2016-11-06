@@ -13,22 +13,20 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 
 public class CCRealtimeCodingDemo extends CCGL2Adapter{
 	
-	public static class CCRealtimeGraph implements CCCompileObject{
-		public void draw(CCGraphics g){
-			
-		}
+	public static interface CCRealtimeGraph extends CCCompileObject{
+		public void draw(CCGraphics g);
 
-		@Override
-		public void onRecompile() {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public Object[] parameters() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+//		@Override
+//		public void onRecompile() {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		@Override
+//		public Object[] parameters() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
 	}
 	
 	@CCProperty(name = "real time visual")
@@ -43,8 +41,6 @@ public class CCRealtimeCodingDemo extends CCGL2Adapter{
 	@Override
 	public void init(CCGraphics g) {
 
-		
-		
 	}
 	
 	@Override
