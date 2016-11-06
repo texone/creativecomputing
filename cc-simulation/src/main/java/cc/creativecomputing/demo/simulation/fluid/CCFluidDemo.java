@@ -9,24 +9,16 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.font.text.CCText;
-import cc.creativecomputing.graphics.texture.CCTexture2D;
-import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector2;
-import cc.creativecomputing.simulation.fluid.CCFluidDisplay;
 import cc.creativecomputing.simulation.fluid.CCFluidGrid;
 import cc.creativecomputing.simulation.fluid.CCFluidSolver;
-import cc.creativecomputing.simulation.fluid.CCFluidTime;
 
 public class CCFluidDemo extends CCGL2Adapter {
 	
 	
 	
 	private CCFluidGrid _myGrid = new CCFluidGrid();
-	
-	@CCProperty(name = "time")
-	private CCFluidTime _myTime = new CCFluidTime();
-	
 	
 	@CCProperty(name = "solver")
 	private CCFluidSolver _mySolver;
@@ -56,7 +48,7 @@ public class CCFluidDemo extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myGrid.size.set(g.width()/2, g.height()/2);
-		_mySolver = new CCFluidSolver(_myGrid, _myTime, new CCVector2(g.width(), g.height()));
+		_mySolver = new CCFluidSolver(_myGrid, new CCVector2(g.width(), g.height()));
 		
 		
 		mouseListener().add(_myMouse);
@@ -99,7 +91,7 @@ public class CCFluidDemo extends CCGL2Adapter {
 //			_mySolver.velocity.endDraw();
 			_mySolver.step(g);
 		}else{
-			_mySolver.density.beginDraw();
+			_mySolver._myDensityData.beginDraw();
 //			g.color(255,0,0);
 //			g.rect(100,100, 100, 100);
 //			g.color(0,255,0);
@@ -109,7 +101,7 @@ public class CCFluidDemo extends CCGL2Adapter {
 			g.clear();
 			g.color(1d);
 			_myText.draw(g);
-			_mySolver.density.endDraw();
+			_mySolver._myDensityData.endDraw();
 		}
 
 		 g.clear();

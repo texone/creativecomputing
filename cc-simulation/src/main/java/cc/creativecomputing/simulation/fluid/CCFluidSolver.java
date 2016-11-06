@@ -18,37 +18,38 @@ import cc.creativecomputing.math.CCVector3;
 
 public class CCFluidSolver {
 	
-	private CCFluidGrid grid;
-	private CCFluidTime time;
-	private CCVector2 windowSize;
+	private CCFluidGrid _myGrid;
+	private CCVector2 _myWindowSize;
 	
-	public CCGLSwapBuffer velocity;
-	public CCGLSwapBuffer density;
-	public CCGLSwapBuffer velocityDivergence;
-	private CCGLSwapBuffer velocityVorticity;
-	public CCGLSwapBuffer pressure;
+	public CCGLSwapBuffer _myVelocityData;
+	public CCGLSwapBuffer _myDensityData;
+	public CCGLSwapBuffer _myDivergenceData;
+	private CCGLSwapBuffer _myVorticityData;
+	public CCGLSwapBuffer _myPressureData;
 	
 	private CCVector3 source = new CCVector3(0.8, 0.0, 0.0);
 	public CCVector3 ink = new CCVector3(0.0, 0.06, 0.19);
 	
+	@CCProperty(name = "step", min = 0, max = 1)
+	public double _cStep = 1;
 	@CCProperty(name = "apply viscosity")
 	private boolean applyViscosity = false;
 	@CCProperty(name = "viscosity", min = 0, max = 1)
 	private double viscosity = 0.3;
 	
 	@CCProperty(name = "apply vorticity")
-	private boolean applyVorticity = false;
+	private boolean _myApplyVorticity = false;
 	@CCProperty(name = "curl", min = 0, max = 1)
-	private double curl = 0.3;
+	private double _cCurl = 0.3;
 	
-	private CCGLProgram advect;
-	private CCFluidJacobi diffuse;
-	private CCGLProgram divergence;
-	private CCFluidJacobi poissonPressureEq;
-	private CCGLProgram gradient;
-	private CCGLProgram splat;
+	private CCGLProgram _myAdvectProgram;
+	private CCFluidJacobi _myDiffuseProgram;
+	private CCGLProgram _myDivergenceProgram;
+	private CCFluidJacobi _myPoissonPressureEq;
+	private CCGLProgram _myGradientProgram;
+	private CCGLProgram _mySplatProgram;
 	
-	private CCGLProgram noiseField;
+	private CCGLProgram _myNoiseFieldProgram;
 	
 	private CCTexture2D _myRandomTexture;
 	
@@ -71,15 +72,15 @@ public class CCFluidSolver {
 	
 	private CCVector3 _myNoiseOffset = new CCVector3();
 	
-	private CCGLProgram boundary;
+	private CCGLProgram _myBoundaryProgram;
 
 	@CCProperty(name  = "color radius", min = 0, max = 1)
 	private double colorRadius = 0.01;
 	@CCProperty(name  = "velocity radius", min = 0, max = 1)
 	private double velocityRadius = 0.01;
 	
-	private CCGLProgram vorticity;
-	private CCGLProgram vorticityConfinement;
+	private CCGLProgram _myVorticityProgram;
+	private CCGLProgram _myVorticityConfinementProgram;
 	
 	//0.9 very fast 0.998 slow 1 none
 	@CCProperty(name = "dissipation", min = 0.9, max = 1, digits = 4)
@@ -95,118 +96,117 @@ public class CCFluidSolver {
 	@CCProperty(name = "fluid draw mode")
 	private CCFluidDrawMode _myFluidDrawMode = CCFluidDrawMode.DENSITY;
 	
-	private CCFluidDisplay displayScalar;
-	private CCFluidDisplay displayVector;
+	private CCFluidDisplay _myScalarDisplayProgram;
+	private CCFluidDisplay _myVectorDisplayProgram;
 
-	public CCFluidSolver(CCFluidGrid theGrid, CCFluidTime theTime, CCVector2 theWindowSize) {
-		this.grid = theGrid;
-		this.time = theTime;
-		this.windowSize = theWindowSize;
+	public CCFluidSolver(CCFluidGrid theGrid, CCVector2 theWindowSize) {
+		_myGrid = theGrid;
+		_myWindowSize = theWindowSize;
 
 		// slabs
-		int w = (int)grid.size.x;
-		int h = (int)grid.size.y;
+		int _myWidth = (int)_myGrid.size.x;
+		int _myHeight = (int)_myGrid.size.y;
 	        
-		this.velocity = new CCGLSwapBuffer(w, h, CCTextureTarget.TEXTURE_2D);
-		this.density = new CCGLSwapBuffer(w, h, CCTextureTarget.TEXTURE_2D);
-		this.velocityDivergence = new CCGLSwapBuffer(w, h, CCTextureTarget.TEXTURE_2D);
-		this.velocityVorticity = new CCGLSwapBuffer(w, h, CCTextureTarget.TEXTURE_2D);
-		this.pressure = new CCGLSwapBuffer(w, h, CCTextureTarget.TEXTURE_2D);
+		_myVelocityData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myDensityData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myDivergenceData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myVorticityData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myPressureData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
 
 		// slab operations
-		advect = new CCGLProgram(null, CCNIOUtil.classPath(this, "advect.fs"));
-		this.diffuse = new CCFluidJacobi(theGrid, CCNIOUtil.classPath(this, "jacobivector.fs"));
-		divergence = new CCGLProgram(null, CCNIOUtil.classPath(this, "divergence.fs"));
-		this.poissonPressureEq = new CCFluidJacobi(theGrid, CCNIOUtil.classPath(this, "jacobivector.fs"));
-		gradient = new CCGLProgram(null, CCNIOUtil.classPath(this, "gradient.fs"));
-		splat = new CCGLProgram(null, CCNIOUtil.classPath(this, "splat.fs"));
-		vorticity = new CCGLProgram(null, CCNIOUtil.classPath(this, "vorticity.fs"));
-		vorticityConfinement = new CCGLProgram(null, CCNIOUtil.classPath(this, "vorticityforce.fs"));
-		noiseField = new CCGLProgram(null, CCNIOUtil.classPath(this, "noisefield.fs"));
+		_myAdvectProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "advect.fs"));
+		_myDiffuseProgram = new CCFluidJacobi(theGrid, CCNIOUtil.classPath(this, "jacobivector.fs"));
+		_myDivergenceProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "divergence.fs"));
+		_myPoissonPressureEq = new CCFluidJacobi(theGrid, CCNIOUtil.classPath(this, "jacobivector.fs"));
+		_myGradientProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "gradient.fs"));
+		_mySplatProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "splat.fs"));
+		_myVorticityProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "vorticity.fs"));
+		_myVorticityConfinementProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "vorticityforce.fs"));
+		_myNoiseFieldProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "noisefield.fs"));
 		
 		_myRandomTexture = new CCTexture2D(CCGLShaderNoise.randomData);
 		_myRandomTexture.textureFilter(CCTextureFilter.LINEAR);
 		_myRandomTexture.wrap(CCTextureWrap.REPEAT);
 		
-		boundary = new CCGLProgram(null, CCNIOUtil.classPath(this, "boundary.fs"));
+		_myBoundaryProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "boundary.fs"));
 		
-		displayScalar = new CCFluidDisplay(CCNIOUtil.classPath(this, "displayscalar.fs"));
-		displayVector = new CCFluidDisplay(CCNIOUtil.classPath(this, "displayvector.fs"));
+		_myScalarDisplayProgram = new CCFluidDisplay(CCNIOUtil.classPath(this, "displayscalar.fs"));
+		_myVectorDisplayProgram = new CCFluidDisplay(CCNIOUtil.classPath(this, "displayvector.fs"));
 	}
 	
 	private void advect(CCGraphics g, CCGLSwapBuffer theTarget, double theDissipation){
-		g.texture(0,velocity.attachment(0));
+		g.texture(0,_myVelocityData.attachment(0));
         g.texture(1,theTarget.attachment(0));
-        advect.start();
-        advect.uniform1i("velocity", 0);
-        advect.uniform1i("advected", 1);
-        advect.uniform2f("gridSize", grid.size);
-        advect.uniform1f("gridScale", grid.scale);
-        advect.uniform1f("timestep", time.step);
-        advect.uniform1f("dissipation", theDissipation);
+        _myAdvectProgram.start();
+        _myAdvectProgram.uniform1i("velocity", 0);
+        _myAdvectProgram.uniform1i("advected", 1);
+        _myAdvectProgram.uniform2f("gridSize", _myGrid.size);
+        _myAdvectProgram.uniform1f("gridScale", _myGrid.scale);
+        _myAdvectProgram.uniform1f("timestep", _cStep);
+        _myAdvectProgram.uniform1f("dissipation", theDissipation);
         theTarget.draw();
-        advect.end();
+        _myAdvectProgram.end();
         g.noTexture();
         
         theTarget.swap();
 	}
 	
-	private double epsilon = 2.4414e-4;
+	private static double EPSILON = 2.4414e-4;
 	
 	private void vorticity(CCGraphics g){
-		if(!applyVorticity)return;
+		if(!_myApplyVorticity)return;
 		
-		g.texture(0,velocity.attachment(0));
-		vorticity.start();
-		vorticity.uniform1i("velocity", 0);
-		vorticity.uniform2f("gridSize", grid.size);
-		vorticity.uniform1f("gridScale", grid.scale);
-        velocityVorticity.draw();
-        vorticity.end();
+		g.texture(0,_myVelocityData.attachment(0));
+		_myVorticityProgram.start();
+		_myVorticityProgram.uniform1i("velocity", 0);
+		_myVorticityProgram.uniform2f("gridSize", _myGrid.size);
+		_myVorticityProgram.uniform1f("gridScale", _myGrid.scale);
+        _myVorticityData.draw();
+        _myVorticityProgram.end();
         g.noTexture();
-        velocityVorticity.swap();
+        _myVorticityData.swap();
         
-        g.texture(0,velocity.attachment(0));
-		g.texture(1,velocityVorticity.attachment(0));
-		vorticityConfinement.start();
-		vorticityConfinement.uniform1i("velocity", 0);
-		vorticityConfinement.uniform1i("vorticity", 1);
-		vorticityConfinement.uniform2f("gridSize", grid.size);
-		vorticityConfinement.uniform1f("gridScale", grid.scale);
-		vorticityConfinement.uniform1f("timestep", time.step);
-		vorticityConfinement.uniform1f("epsilon", epsilon);
-		vorticityConfinement.uniform2f("curl", curl * grid.scale, curl * grid.scale);
-		velocity.draw();
-        vorticityConfinement.end();
+        g.texture(0,_myVelocityData.attachment(0));
+		g.texture(1,_myVorticityData.attachment(0));
+		_myVorticityConfinementProgram.start();
+		_myVorticityConfinementProgram.uniform1i("velocity", 0);
+		_myVorticityConfinementProgram.uniform1i("vorticity", 1);
+		_myVorticityConfinementProgram.uniform2f("gridSize", _myGrid.size);
+		_myVorticityConfinementProgram.uniform1f("gridScale", _myGrid.scale);
+		_myVorticityConfinementProgram.uniform1f("timestep", _cStep);
+		_myVorticityConfinementProgram.uniform1f("epsilon", EPSILON);
+		_myVorticityConfinementProgram.uniform2f("curl", _cCurl * _myGrid.scale, _cCurl * _myGrid.scale);
+		_myVelocityData.draw();
+        _myVorticityConfinementProgram.end();
         g.noTexture();
-        velocity.swap();
+        _myVelocityData.swap();
 	}
 	
 	private void divergence(CCGraphics g){
-		g.texture(0, velocity.attachment(0));
-		divergence.start();
-		divergence.uniform1i("velocity", 0);
-		divergence.uniform2f("gridSize", grid.size);
-		divergence.uniform1f("gridScale", grid.scale);
-		velocityDivergence.draw();
-		divergence.end();
+		g.texture(0, _myVelocityData.attachment(0));
+		_myDivergenceProgram.start();
+		_myDivergenceProgram.uniform1i("velocity", 0);
+		_myDivergenceProgram.uniform2f("gridSize", _myGrid.size);
+		_myDivergenceProgram.uniform1f("gridScale", _myGrid.scale);
+		_myDivergenceData.draw();
+		_myDivergenceProgram.end();
 		g.noTexture();
 
-		velocityDivergence.swap();
+		_myDivergenceData.swap();
 	}
 	
 	private void gradient(CCGraphics g){
-		g.texture(0,pressure.attachment(0));
-        g.texture(1,velocity.attachment(0));
-        gradient.start();
-        gradient.uniform1i("p", 0);
-        gradient.uniform1i("w", 1);
-        gradient.uniform2f("gridSize", grid.size);
-        gradient.uniform1f("gridScale", grid.scale);
-        velocity.draw();
-        gradient.end();
+		g.texture(0,_myPressureData.attachment(0));
+        g.texture(1,_myVelocityData.attachment(0));
+        _myGradientProgram.start();
+        _myGradientProgram.uniform1i("p", 0);
+        _myGradientProgram.uniform1i("w", 1);
+        _myGradientProgram.uniform2f("gridSize", _myGrid.size);
+        _myGradientProgram.uniform1f("gridScale", _myGrid.scale);
+        _myVelocityData.draw();
+        _myGradientProgram.end();
         g.noTexture();
-        velocity.swap();
+        _myVelocityData.swap();
 	}
 	
 	// solve poisson equation and subtract pressure gradient
@@ -214,15 +214,15 @@ public class CCFluidSolver {
 		divergence(g);
 
 		// 0 is our initial guess for the poisson equation solver
-		pressure.clear();
+		_myPressureData.clear();
 
-		poissonPressureEq.alpha = -grid.scale * grid.scale;
-		poissonPressureEq.compute(
-				g,
-				this.pressure.attachment(0),
-				this.velocityDivergence.attachment(0),
-				this.pressure
-			);
+		_myPoissonPressureEq.alpha = -_myGrid.scale * _myGrid.scale;
+		_myPoissonPressureEq.compute(
+			g,
+			_myPressureData.attachment(0),
+			_myDivergenceData.attachment(0),
+			_myPressureData
+		);
 
 		gradient(g);
 	}
@@ -234,7 +234,7 @@ public class CCFluidSolver {
 		double theOffsetX, double theOffsetY
 	){
 		
-        boundary.uniform2f("gridOffset", theOffsetX, theOffsetY);
+        _myBoundaryProgram.uniform2f("gridOffset", theOffsetX, theOffsetY);
 		g.beginShape(CCDrawMode.LINES);
 		g.vertex(theX0, theY0);
 		g.vertex(theX1, theY1);
@@ -243,22 +243,22 @@ public class CCFluidSolver {
 	
 	private void boundary(CCGraphics g, double scale, CCGLSwapBuffer theBuffer){
 		g.texture(0, theBuffer.attachment(0));
-		boundary.start();
-		boundary.uniform1i("read", 0);
-		boundary.uniform2f("gridSize", grid.size);
-		boundary.uniform1f("scale", scale);
+		_myBoundaryProgram.start();
+		_myBoundaryProgram.uniform1i("read", 0);
+		_myBoundaryProgram.uniform2f("gridSize", _myGrid.size);
+		_myBoundaryProgram.uniform1f("scale", scale);
 
 		double x0 = 0.5;
-		double x1 = windowSize.x - 0.5;
+		double x1 = _myWindowSize.x - 0.5;
 		double y0 = 0.5;
-		double y1 = windowSize.y - 0.5;
+		double y1 = _myWindowSize.y - 0.5;
 		theBuffer.beginDraw();
         renderLine(g, x0, y0, x0, y1,  1,  0); // left
         renderLine(g, x1, y0, x1, y1, -1,  0); // right
         renderLine(g, x0, y1, x1, y1,  0,  1); // bottom
         renderLine(g, x0, y0, x1, y0,  0, -1); // top
         theBuffer.endDraw();
-        boundary.end();
+        _myBoundaryProgram.end();
         g.noTexture();
 	}
 	
@@ -268,34 +268,31 @@ public class CCFluidSolver {
 	
 	private void noise(CCGraphics g){
 
-        g.texture(0,velocity.attachment(0));
+        g.texture(0,_myVelocityData.attachment(0));
         g.texture(1, _myRandomTexture);
-        noiseField.start();
-        noiseField.uniform2f("gridSize", grid.size);
-		noiseField.uniform1i("velocity", 0);
-		noiseField.uniform1i("randomTexture", 1);
+        _myNoiseFieldProgram.start();
+        _myNoiseFieldProgram.uniform2f("gridSize", _myGrid.size);
+		_myNoiseFieldProgram.uniform1i("velocity", 0);
+		_myNoiseFieldProgram.uniform1i("randomTexture", 1);
 		
+		_myNoiseFieldProgram.uniform3f("offset", _myNoiseOffset);
+		_myNoiseFieldProgram.uniform1f("scale", _myNoiseScale);
+
+		_myNoiseFieldProgram.uniform1i("octaves", _cNoiseOctaves);
+		_myNoiseFieldProgram.uniform1f("gain", _cNoiseGain);
+		_myNoiseFieldProgram.uniform1f("lacunarity", _cNoiseLacunarity);
+
+		_myNoiseFieldProgram.uniform1f("noiseAmount", _cNoiseAmount);
 		
-		noiseField.uniform3f("offset", _myNoiseOffset);
-		noiseField.uniform1f("scale", _myNoiseScale);
+		_myNoiseFieldProgram.uniform1f("minX", _cNoiseBorder);
+		_myNoiseFieldProgram.uniform1f("maxX", _cNoiseBorder + _cNoiseFade);
 
-		noiseField.uniform1i("octaves", _cNoiseOctaves);
-		noiseField.uniform1f("gain", _cNoiseGain);
-		noiseField.uniform1f("lacunarity", _cNoiseLacunarity);
+		_myNoiseFieldProgram.uniform1f("dissipation", _cNoiseDissipation);
 
-		noiseField.uniform1f("noiseAmount", _cNoiseAmount);
-		
-		noiseField.uniform1f("minX", _cNoiseBorder);
-		noiseField.uniform1f("maxX", _cNoiseBorder + _cNoiseFade);
-
-		noiseField.uniform1f("dissipation", _cNoiseDissipation);
-
-        velocity.draw();
-        noiseField.end();
+        _myVelocityData.draw();
+        _myNoiseFieldProgram.end();
         g.noTexture();
-        velocity.swap();
-		
-		
+        _myVelocityData.swap();
 	}
 	
 	public void step(CCGraphics g) {
@@ -304,15 +301,15 @@ public class CCFluidSolver {
 
 		noise(g);
 		
-		advect(g, velocity, 1);
-		advect(g, density, _myDissipation);
+		advect(g, _myVelocityData, 1);
+		advect(g, _myDensityData, _myDissipation);
 		vorticity(g);
 
 		if (applyViscosity && viscosity > 0) {
-			double s = this.grid.scale;
-			this.diffuse.alpha = (s * s) / (this.viscosity * this.time.step);
-			this.diffuse.beta = 4 + this.diffuse.alpha;
-			this.diffuse.compute(g, this.velocity.attachment(0), this.velocity.attachment(0), this.velocity);
+			double s = _myGrid.scale;
+			_myDiffuseProgram.alpha = (s * s) / (viscosity * _cStep);
+			_myDiffuseProgram.beta = 4 + _myDiffuseProgram.alpha;
+			_myDiffuseProgram.compute(g, _myVelocityData.attachment(0), _myVelocityData.attachment(0), _myVelocityData);
 		}
 
 		project(g);
@@ -320,15 +317,15 @@ public class CCFluidSolver {
 	
 	private void splat(CCGraphics g, CCGLSwapBuffer theTarget, CCVector3 theInput, CCVector2 thePosition, double theRadius){
 		g.texture(0,theTarget.attachment(0));
-        splat.start();
-        splat.uniform1i("read", 0);
-        splat.uniform2f("gridSize", grid.size);
-        splat.uniform3f("color", theInput);
-        splat.uniform2f("point", thePosition);
-        splat.uniform1f("radius", theRadius);
+        _mySplatProgram.start();
+        _mySplatProgram.uniform1i("read", 0);
+        _mySplatProgram.uniform2f("gridSize", _myGrid.size);
+        _mySplatProgram.uniform3f("color", theInput);
+        _mySplatProgram.uniform2f("point", thePosition);
+        _mySplatProgram.uniform1f("radius", theRadius);
 //        theTarget.draw(thePosition.x - theRadius, thePosition.y - theRadius, thePosition.x + theRadius, thePosition.y + theRadius);
         theTarget.draw();
-        splat.end();
+        _mySplatProgram.end();
         g.noTexture();
         theTarget.swap();
 	}
@@ -336,12 +333,12 @@ public class CCFluidSolver {
 	public void addColor(CCGraphics g, CCVector2 thePosition, CCColor theColor, double theRadius){
 		CCVector2 point = new CCVector2();
 
-		point.set(thePosition.x, this.windowSize.y - thePosition.y);
+		point.set(thePosition.x, _myWindowSize.y - thePosition.y);
 		// normalize to [0, 1] and scale to grid size
-		point.x *= grid.size.x / windowSize.x;
-		point.y *= grid.size.y / windowSize.y;
+		point.x *= _myGrid.size.x / _myWindowSize.x;
+		point.y *= _myGrid.size.y / _myWindowSize.y;
 	     
-		splat(g, density, new CCVector3(theColor.r,theColor.g,theColor.b), point, theRadius);
+		splat(g, _myDensityData, new CCVector3(theColor.r,theColor.g,theColor.b), point, theRadius);
 	}
 	
 	public void addColor(CCGraphics g, CCVector2 thePosition, CCColor theColor){
@@ -351,12 +348,12 @@ public class CCFluidSolver {
 	public void addForce(CCGraphics g, CCVector2 thePosition, CCVector2 theForce, double theRadius){
 		CCVector2 point = new CCVector2();
 
-		point.set(thePosition.x, this.windowSize.y - thePosition.y);
+		point.set(thePosition.x, _myWindowSize.y - thePosition.y);
 		// normalize to [0, 1] and scale to grid size
-		point.x *= grid.size.x / windowSize.x;
-		point.y *= grid.size.y / windowSize.y;
+		point.x *= _myGrid.size.x / _myWindowSize.x;
+		point.y *= _myGrid.size.y / _myWindowSize.y;
 		
-		splat(g, velocity, new CCVector3(theForce.x, theForce.y, 0), point, theRadius);	
+		splat(g, _myVelocityData, new CCVector3(theForce.x, theForce.y, 0), point, theRadius);	
 	}
 	
 	public void addForce(CCGraphics g, CCVector2 thePosition, CCVector2 theForce){
@@ -369,15 +366,15 @@ public class CCFluidSolver {
 	     
 		CCVector2 motion = mouse.motion;
 
-		point.set(mouse.position.x, this.windowSize.y - mouse.position.y);
+		point.set(mouse.position.x, _myWindowSize.y - mouse.position.y);
 		// normalize to [0, 1] and scale to grid size
-		point.x *= grid.size.x / windowSize.x;
-		point.y *= grid.size.y / windowSize.y;
+		point.x *= _myGrid.size.x / _myWindowSize.x;
+		point.y *= _myGrid.size.y / _myWindowSize.y;
 
 		force.set(motion.x, -motion.y, 0);
 	     
-		splat(g, velocity, force, point, colorRadius);	
-		splat(g, density, source, point, velocityRadius);
+		splat(g, _myVelocityData, force, point, colorRadius);	
+		splat(g, _myDensityData, source, point, velocityRadius);
 	}
 
 	public void display(CCGraphics g, int theX, int theY, int theWidth, int theHeight) {
@@ -386,25 +383,25 @@ public class CCFluidSolver {
 			 
 		switch (_myFluidDrawMode) {
 		case VELOCITY:
-			display = displayVector;
+			display = _myVectorDisplayProgram;
 			display.scaleNegative();
-			read = velocity.attachment(0);
+			read = _myVelocityData.attachment(0);
 			break;
 		case DENSITY:
-			display = displayVector;
+			display = _myVectorDisplayProgram;
 			display.scale.set(1,1,1);
 			display.bias.set(0, 0, 0);
-			read = density.attachment(0);
+			read = _myDensityData.attachment(0);
 			break;
 		case DIVERGENCE:
-			display = displayScalar;
+			display = _myScalarDisplayProgram;
 			display.scaleNegative();
-			read = velocityDivergence.attachment(0);
+			read = _myDivergenceData.attachment(0);
 			break;
 		case PRESSURE:
-			display = displayScalar;
+			display = _myScalarDisplayProgram;
 			display.scaleNegative();
-			read = pressure.attachment(0);
+			read = _myPressureData.attachment(0);
 			break;
 		}
 		display.display(g, read, theX, theY, theWidth, theHeight);
