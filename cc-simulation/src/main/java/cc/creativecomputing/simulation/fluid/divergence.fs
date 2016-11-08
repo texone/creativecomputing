@@ -1,4 +1,5 @@
 uniform sampler2D velocity;
+uniform sampler2D bounds;
 
 uniform vec2 gridSize;
 uniform float gridScale;
@@ -14,6 +15,18 @@ void main()
     float vr = texture2D(velocity, uv + xOffset).x;
     float vb = texture2D(velocity, uv - yOffset).y;
     float vt = texture2D(velocity, uv + yOffset).y;
+    
+    // Find neighboring obstacles:
+    vec3 ol = texture2D(bounds, uv - xOffset).xyz;
+    vec3 or = texture2D(bounds, uv + xOffset).xyz;
+    vec3 ob = texture2D(bounds, uv - yOffset).xyz;
+    vec3 ot = texture2D(bounds, uv + yOffset).xyz;
+    
+    // Use obstacle velocities for solid cells:
+    if (ol.x > 0) vl = ol.yz;
+    if (or.x > 0) vr = or.yz;
+    if (ob.x > 0) vb = ob.yz;
+    if (ot.x > 0) vt = ot.yz;
 
     float scale = 0.5 / gridScale;
     float divergence = scale * (vr - vl + vt - vb);

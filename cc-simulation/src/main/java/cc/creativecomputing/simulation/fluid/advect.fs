@@ -1,5 +1,6 @@
 uniform sampler2D velocity;
 uniform sampler2D advected;
+uniform sampler2D bounds;
 
 uniform vec2 gridSize;
 uniform float gridScale;
@@ -27,6 +28,13 @@ vec3 bilerp(sampler2D d, vec2 p)
 void main()
 {
     vec2 uv = gl_FragCoord.xy / gridSize.xy;
+    
+    float bound = texture2D(bounds, uv).x;
+    if (bound > 0) {
+        gl_FragColor = vec4(0);
+        return;
+    }
+    
     float scale = 1.0 / gridScale;
 
     // trace point back in time

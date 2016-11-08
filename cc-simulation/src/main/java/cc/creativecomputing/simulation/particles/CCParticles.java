@@ -24,7 +24,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
-import cc.creativecomputing.graphics.shader.CCGLSetDataShader;
+import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCGLProgram.CCGLTextureUniform;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCGLSwapBuffer;
@@ -71,7 +71,7 @@ public class CCParticles{
 	
 	protected CCParticlesUpdateShader _myUpdateShader;
 	
-	protected CCGLSetDataShader _mySetDataShader;
+	protected CCGLWriteDataShader _mySetDataShader;
 	
 	protected CCGLSwapBuffer _mySwapTexture;
 	
@@ -139,7 +139,7 @@ public class CCParticles{
 			_myContraintMap.put(myContraint.parameter("contraint"), myContraint);
 		}
 		
-		_mySetDataShader = new CCGLSetDataShader();
+		_mySetDataShader = new CCGLWriteDataShader();
 		
 		_mySwapTexture = new CCGLSwapBuffer(32,4,4,_myWidth,_myHeight);
 		

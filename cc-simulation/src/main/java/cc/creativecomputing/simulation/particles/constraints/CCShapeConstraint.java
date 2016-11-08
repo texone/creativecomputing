@@ -13,14 +13,12 @@ package cc.creativecomputing.simulation.particles.constraints;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
-import cc.creativecomputing.graphics.shader.CCGLSetDataShader;
+import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
-import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 
@@ -36,7 +34,7 @@ public class CCShapeConstraint extends CCConstraint{
 	private CCShaderBuffer _myLookUpBuffer;
 	private CCShaderBuffer _myCurveBuffer;
 	
-	private CCGLSetDataShader _myDataShader;
+	private CCGLWriteDataShader _myDataShader;
 	
 	private CCVector3 _myScale;
 	private CCVector3 _myOffset;
@@ -57,7 +55,7 @@ public class CCShapeConstraint extends CCConstraint{
 		_myLookUpBuffer = new CCShaderBuffer(theWidth, theHeight);
 		_myCurveBuffer = new CCShaderBuffer(theWidth, 22);
 		
-		_myDataShader = new CCGLSetDataShader();
+		_myDataShader = new CCGLWriteDataShader();
 		
 		_myScale = new CCVector3(theScale);
 		_myOffset = new CCVector3(theOffset);

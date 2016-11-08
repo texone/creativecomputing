@@ -5,13 +5,13 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.graphics.CCDrawAttributes;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
-import cc.creativecomputing.graphics.shader.CCGLSetDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
@@ -86,6 +86,9 @@ public class CCShapeConstraintDemo extends CCGL2Adapter {
 		
 		_myParticles.update(theAnimator);
 	}
+	
+	@CCProperty(name = "partile attributes")
+	private CCDrawAttributes _cAttributes = new CCDrawAttributes();
 
 	@Override
 	public void display(CCGraphics g) {
@@ -123,6 +126,7 @@ public class CCShapeConstraintDemo extends CCGL2Adapter {
 		_myParticles.animate(g);
 		
 		g.ortho();
+		g.clearColor(0);
 		g.clear();
 		g.color(1d);
 		g.image(_myShapeConstraint.lookUpBuffer().attachment(0), 0, 0);
@@ -140,13 +144,13 @@ public class CCShapeConstraintDemo extends CCGL2Adapter {
 		
 		switch(_cDensityShow){
 		case PARTICLES:
-			g.noDepthTest();
+			
 			g.pushMatrix();
-			g.blend(CCBlendMode.ADD);
-			g.color(255);
+			_cAttributes.start(g);
 			g.scale(1,1,0);
 			g.pointSize(3);
 			_myParticles.display(g);
+			_cAttributes.end(g);
 			g.popMatrix();
 			break;
 		case DENSITY:

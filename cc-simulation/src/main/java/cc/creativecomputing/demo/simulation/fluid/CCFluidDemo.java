@@ -1,16 +1,23 @@
 package cc.creativecomputing.demo.simulation.fluid;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.events.CCMouseSimpleInfo;
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.font.text.CCText;
+import cc.creativecomputing.graphics.shader.CCGLProgram;
+import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
+import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.fluid.CCFluidGrid;
 import cc.creativecomputing.simulation.fluid.CCFluidSolver;
 
@@ -36,18 +43,50 @@ public class CCFluidDemo extends CCGL2Adapter {
 
 	@CCProperty(name = "mouse impulse", min = 0, max = 1)
 	private double _cMouseImpulse = 0;
+	@CCProperty(name = "mouse temperature", min = 0, max = 1)
+	private double _cMouseTemperature = 0;
 	
 	private CCMouseSimpleInfo _myMouse = new CCMouseSimpleInfo();
 	
+	private CCGLWriteDataShader _myWriteDataShader;
+	
+	@CCProperty(name = "lighting")
+	private CCGLProgram _myLightingShader;
+	
+	@CCProperty(name = "draw lighted")
+	private boolean _cDrawLighted = true;
+	
+	@CCProperty(name = "light x", min = -1, max = 1)
+	private double _cLightX = 0;
+	@CCProperty(name = "light y", min = -1, max = 1)
+	private double _cLightY = 0;
+	@CCProperty(name = "light z", min = -1, max = 1)
+	private double _cLightZ = 0;
+	
+	@CCProperty(name = "specular pow", min = 0, max = 10)
+	private double _cSpecularPow = 0;
+	@CCProperty(name = "specular bright pow", min = 0, max = 10)
+	private double _cSpecularBrightPow = 0;
+	
+	@CCProperty(name = "diffuse amp", min = 0, max = 1)
+	private double _cDiffuseAmp = 0;
+	@CCProperty(name = "specular amp", min = 0, max = 1)
+	private double _cSpecularAmp = 0;
+	@CCProperty(name = "specular bright amp", min = 0, max = 1)
+	private double _cSpecularBrightAmp = 0;
 
 	@CCProperty(name = "screen capture")
 	private CCScreenCaptureController _myScreenCapture;
+	@CCProperty(name = "gradient")
+	private CCGradient _myGradient = new CCGradient();
+	@CCProperty(name = "color speed", min = 0, max = 1)
+	private double _cColorSpeed = 0.1;
 	
 	private CCText _myText;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myGrid.size.set(g.width()/2, g.height()/2);
+		_myGrid.size.set(g.width(), g.height());
 		_mySolver = new CCFluidSolver(_myGrid, new CCVector2(g.width(), g.height()));
 		
 		
@@ -60,6 +99,11 @@ public class CCFluidDemo extends CCGL2Adapter {
 		_myText.position(20, 200);
 		
 		_myScreenCapture = new CCScreenCaptureController(this);
+		
+		_myWriteDataShader = new CCGLWriteDataShader();
+		
+
+		_myLightingShader = new CCGLProgram(null, CCNIOUtil.classPath(this,"lighting.glsl"));
 	}
 
 	@Override
@@ -69,12 +113,19 @@ public class CCFluidDemo extends CCGL2Adapter {
 		_mySolver.noiseOffset().z = theAnimator.time() * _cSpeedZ;
 	}
 	
+	
+	
 	public void addForces(CCGraphics g) {
-		_mySolver.addColor(g, _myMouse.position, CCColor.createFromHSB(animator().time(), 1d, 1d));
+		_mySolver.addColor(g, _myMouse.position, _myGradient.color((animator().time() * _cColorSpeed) % 1).invert());
 		_mySolver.addForce(g, _myMouse.position, new CCVector2( _myMouse.motion.x, - _myMouse.motion.y).multiplyLocal(_cMouseImpulse));
+		_mySolver.addTemperature(g, _myMouse.position, new CCVector2( _myMouse.motion.x, - _myMouse.motion.y).length() * (_cMouseTemperature));
 	}
 	
+	@CCProperty(name = "linespeed", min = 0, max = 1)
+	private double _cLineSpeed = 0.1;
 	
+	@CCProperty(name = "speed impulse scale")
+	private double _cSpeedImpulseScale = 1;
 
 	@Override
 	public void display(CCGraphics g) {
@@ -89,6 +140,21 @@ public class CCFluidDemo extends CCGL2Adapter {
 //			g.color(255,0,0);
 //			g.rect(animator().time() * 100 % _myGrid.size.x,100, 10, 10);
 //			_mySolver.velocity.endDraw();
+			_mySolver.clearBounds(g);
+			_mySolver.bounds().beginDraw();
+
+			_myWriteDataShader.start();
+			double _myY = (CCMath.sin(animator().time() * _cLineSpeed) + 1) / 2 * _myGrid.size.y;
+			double _myY2 = (CCMath.sin((animator().time() + animator().deltaTime()) * _cLineSpeed ) + 1) / 2 * _myGrid.size.y;
+			
+			double _myDir = (_myY2 - _myY) * _cSpeedImpulseScale;
+			g.textureCoords3D(0, 1, 0, _myDir);
+			g.rect(0.5, _myY, _myGrid.size.x, 20);
+			
+			g.ellipse(_myGrid.size.x / 2,_myY, 200);
+			_mySolver.bounds().endDraw();
+			_myWriteDataShader.end();
+			
 			_mySolver.step(g);
 		}else{
 			_mySolver._myDensityData.beginDraw();
@@ -106,9 +172,35 @@ public class CCFluidDemo extends CCGL2Adapter {
 
 		 g.clear();
 		 
-		 _mySolver.display(g);
 		 
-//		 g.image(_mySolver.density.attachment(0), -g.width()/2, -g.height()/2, g.width(), g.height());
+		 if(_cDrawLighted){
+			 g.texture(0, _mySolver._myDensityData.attachment(0));
+			 g.texture(1, _mySolver._myDensityData.attachment(0));
+			 _myLightingShader.start();
+			 _myLightingShader.uniform1i("colorTex", 0);
+			 _myLightingShader.uniform1i("brightTex", 1);
+			 
+			 _myLightingShader.uniform3f("lightDir", new CCVector3(_cLightX, _cLightY, _cLightZ).normalizeLocal());
+			 _myLightingShader.uniform1f("specularPow", _cSpecularPow);
+			 _myLightingShader.uniform1f("specularBrightPow", _cSpecularBrightPow);
+	
+			 _myLightingShader.uniform1f("diffuseAmp", _cDiffuseAmp);
+			 _myLightingShader.uniform1f("specularAmp", _cSpecularAmp);
+			 _myLightingShader.uniform1f("specularBrightAmp", _cSpecularBrightAmp);
+			 
+			 _myLightingShader.uniform2f("windowSize", g.width(), g.height());
+				
+			 g.beginShape(CCDrawMode.QUADS);
+			 g.vertex(-g.width()/2, -g.height()/2);
+			 g.vertex(g.width()/2, -g.height()/2);
+			 g.vertex(g.width()/2, g.height()/2);
+			 g.vertex(-g.width()/2, g.height()/2);
+			 g.endShape();
+			 _myLightingShader.end();
+			 g.noTexture();
+		 }else{
+			 _mySolver.display(g);
+		 }
 	}
 
 	public static void main(String[] args) {

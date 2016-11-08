@@ -1,4 +1,5 @@
 uniform sampler2D read;
+uniform sampler2D bounds;
 
 uniform vec2 gridSize;
 
