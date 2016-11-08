@@ -1,6 +1,7 @@
 package cc.creativecomputing.demo.topic.simulation.reactivediffusion;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -56,6 +57,12 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 		_myReactiveDiffusionProgram = new CCGLProgram(null, CCNIOUtil.classPath(this,"reactive_diffusion2.glsl"));
 		
 		_myBlendSpline = new CCBlendSpline(_cSpline0, _cSpline1);
+	}
+	
+	@Override
+	public void setupControls(CCControlApp theControlApp) {
+		// TODO Auto-generated method stub
+		super.setupControls(theControlApp);
 	}
 
 	@Override

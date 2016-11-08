@@ -324,8 +324,8 @@ public class SPH2 extends CCGL2Adapter {
 		// frameRate(24);
 		_mySPH.setBnd(0, g.height(), g.width(), 0, 10);
 
-		for (int i = 0; i < 70; i++) {
-			for (int j = 0; j < 70; j++) {
+		for (int i = 0; i < 90; i++) {
+			for (int j = 0; j < 90; j++) {
 				CCSPHParticle myParticle = new CCSPHParticle();
 				myParticle.position.x = i * 12 + 50;
 				myParticle.position.y = j * 12 + 50;
