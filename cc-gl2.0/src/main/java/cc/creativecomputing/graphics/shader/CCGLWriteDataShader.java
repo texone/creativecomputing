@@ -1,8 +1,8 @@
 package cc.creativecomputing.graphics.shader;
 
-public class CCGLSetDataShader extends CCGLProgram{
+public class CCGLWriteDataShader extends CCGLProgram{
 
-	public CCGLSetDataShader() {
+	public CCGLWriteDataShader() {
 		super();
 		
 		attachShader(
