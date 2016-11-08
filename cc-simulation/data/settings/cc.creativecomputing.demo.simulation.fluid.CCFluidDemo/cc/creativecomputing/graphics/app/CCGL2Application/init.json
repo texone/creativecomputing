@@ -1,0 +1,558 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "animator": {
+        "name": "animator",
+        "value": {
+          "fixed update time": {
+            "min": 0,
+            "max": 1,
+            "name": "fixed update time",
+            "value": 1
+          },
+          "fix update time": {
+            "name": "fix update time",
+            "value": false
+          },
+          "framerate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "framerate",
+            "value": 30
+          },
+          "animationMode": {
+            "name": "animationMode",
+            "value": "FRAMERATE_PRECISE"
+          },
+          "show frame rate": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "show frame rate",
+            "value": 29.40889560862548
+          },
+          "exceptionHandling": {
+            "name": "exceptionHandling",
+            "value": "THROW"
+          }
+        }
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "diffuse amp": {
+        "min": 0,
+        "max": 1,
+        "name": "diffuse amp",
+        "value": 0.41100001335144043
+      },
+      "specular bright amp": {
+        "min": 0,
+        "max": 1,
+        "name": "specular bright amp",
+        "value": 1
+      },
+      "light x": {
+        "min": -1,
+        "max": 1,
+        "name": "light x",
+        "value": 0.37800002098083496
+      },
+      "light y": {
+        "min": -1,
+        "max": 1,
+        "name": "light y",
+        "value": 0.019999980926513672
+      },
+      "gradient": {
+        "gradient": [
+          {
+            "a": 1,
+            "r": 0.2980392277240753,
+            "b": 1,
+            "g": 0.6000000238418579,
+            "position": 0
+          },
+          {
+            "a": 1,
+            "r": 0.95686274766922,
+            "b": 0.06666667014360428,
+            "g": 0.5803921818733215,
+            "position": 0.5174418687820435
+          },
+          {
+            "a": 1,
+            "r": 0.29019609093666077,
+            "b": 1,
+            "g": 0.5843137502670288,
+            "position": 1
+          }
+        ],
+        "name": "gradient",
+        "value": [
+          {},
+          {},
+          {}
+        ]
+      },
+      "specular pow": {
+        "min": 0,
+        "max": 10,
+        "name": "specular pow",
+        "value": 3.0999999046325684
+      },
+      "update": {
+        "name": "update",
+        "value": true
+      },
+      "speed y": {
+        "min": -1,
+        "max": 1,
+        "name": "speed y",
+        "value": 0
+      },
+      "speed z": {
+        "min": -1,
+        "max": 1,
+        "name": "speed z",
+        "value": 0.7039999961853027
+      },
+      "screen capture": {
+        "name": "screen capture",
+        "value": {
+          "full window": {},
+          "record key": {
+            "name": "record key",
+            "value": true
+          },
+          "format": {
+            "name": "format",
+            "value": "PNG"
+          },
+          "prepend": {
+            "name": "prepend",
+            "value": "frame_"
+          },
+          "draw bounds": {
+            "name": "draw bounds",
+            "value": false
+          },
+          "quality": {
+            "min": 0,
+            "max": 1,
+            "name": "quality",
+            "value": 1
+          },
+          "seconds": {
+            "min": 1,
+            "max": 1000,
+            "name": "seconds",
+            "value": 100
+          },
+          "record frame": {},
+          "alpha": {
+            "name": "alpha",
+            "value": false
+          },
+          "x": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "x",
+            "value": 0
+          },
+          "width": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "width",
+            "value": 0
+          },
+          "y": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "y",
+            "value": 0
+          },
+          "capture rate": {
+            "min": 1,
+            "max": 60,
+            "name": "capture rate",
+            "value": 1
+          },
+          "record sequence": {},
+          "height": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "height",
+            "value": 0
+          },
+          "record timeline loop": {}
+        }
+      },
+      "lighting": {
+        "name": "lighting",
+        "value": {"shader objects": {
+          "name": "shader objects",
+          "value": {"fragment": {
+            "name": "fragment",
+            "source": "#version 120 \n\nuniform sampler2D colorTex;\nuniform sampler2D brightTex;\n\nuniform float amp = 1;\nuniform float powVal = 1;\n\nvec3 rgb2hsv(vec3 c)\n{\n    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\n    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));\n    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));\n\n    float d = q.x - min(q.w, q.y);\n    float e = 1.0e-10;\n    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\n\nvec3 hsv2rgb(vec3 c)\n{\n    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n\nuniform vec3 lightDir = vec3(0.75,0,1);\nuniform float diffuseAmp;\nuniform float specularAmp;\nuniform float specularBrightAmp;\n\nuniform float specularPow = 5;\nuniform float specularBrightPow = 3;\n\nuniform vec2 windowSize;\n\nvoid main(){\n\n\tvec2 uv = gl_FragCoord.xy / windowSize;\n\tvec4 color = texture2D(colorTex, uv);\n\tvec4 bright = texture2D(brightTex, uv); \n\n\tvec2 xOffset = vec2(1.0 / windowSize.x, 0.0);\n     vec2 yOffset = vec2(0.0, 1.0 / windowSize.y);\n/*\n\tfloat scale = bright.r + bright.g;\n\tfloat blend = scale;\n\tscale *= amp; \n\t//scale = mod(scale, 0.9);\n\tscale = pow((cos(scale * 4) - 1) / 2,2);\n\tscale = min(scale, 1);\n\tscale = pow(scale,powVal); \n\n\tvec3 hsv = rgb2hsv(color.rgb); \n\thsv.r += bright.g * 1.5;  \n\thsv.r += blend * 0.03;\n\t//hsv.g -= blend * 0.06;\n\tcolor.rgb = hsv2rgb(hsv); \n\tcolor.rgb *= scale;\n\t*/\n\t//color = min(color, vec4(1.0,1.0,1.0,1.0)); \n\tfloat scale = length(color) /35; \n\t\n\t//normal\n    float s01 = texture2D(brightTex, uv - xOffset).x;\n    float s21 = texture2D(brightTex, uv + xOffset).x;\n    float s10 = texture2D(brightTex, uv - yOffset).x;\n    float s12 = texture2D(brightTex, uv + yOffset).x; \n    \n    vec3 va = normalize(vec3(0.001,0,(s21-s01)));\n    vec3 vb = normalize(vec3(0,0.001,s12-s10));\n    vec3 normal = cross(va,vb) *scale;\n\t\n\tfloat ppDiffuse\t\t\t= abs( dot( normal, normalize(lightDir) )); \n\tfloat ppSpecular\t\t= pow( ppDiffuse, specularPow );\n\tfloat ppSpecularBright\t= pow( ppDiffuse, specularBrightPow );\n\tcolor.rgb = vec3(1.0,1.0,1.0) - color.rgb;\n\tcolor.rgb = color.rgb * mix(1,ppDiffuse,diffuseAmp) + ppSpecular * specularAmp + ppSpecularBright * specularBrightAmp;\n\tcolor.rgb *= 1.6;\n\tgl_FragColor = color;//vec4(normal,1.0); // \n}\n\n",
+            "value": "cc.creativecomputing.control.code.CCShaderObject@37e78ef5"
+          }}
+        }}
+      },
+      "speed impulse scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "speed impulse scale",
+        "value": 1
+      },
+      "mouse impulse": {
+        "min": 0,
+        "max": 1,
+        "name": "mouse impulse",
+        "value": 0.30000001192092896
+      },
+      "specular amp": {
+        "min": 0,
+        "max": 1,
+        "name": "specular amp",
+        "value": 0.8880000114440918
+      },
+      "speed x": {
+        "min": -1,
+        "max": 1,
+        "name": "speed x",
+        "value": 0.2640000581741333
+      },
+      "draw lighted": {
+        "name": "draw lighted",
+        "value": true
+      },
+      "specular bright pow": {
+        "min": 0,
+        "max": 10,
+        "name": "specular bright pow",
+        "value": 1.1100000143051147
+      },
+      "mouse temperature": {
+        "min": 0,
+        "max": 1,
+        "name": "mouse temperature",
+        "value": 0.0430000014603138
+      },
+      "linespeed": {
+        "min": 0,
+        "max": 1,
+        "name": "linespeed",
+        "value": 0.12200000137090683
+      },
+      "light z": {
+        "min": -1,
+        "max": 1,
+        "name": "light z",
+        "value": 0
+      },
+      "color speed": {
+        "min": 0,
+        "max": 1,
+        "name": "color speed",
+        "value": 0.1
+      },
+      "solver": {
+        "name": "solver",
+        "value": {
+          "color dissipation": {
+            "min": 0.9,
+            "max": 1,
+            "name": "color dissipation",
+            "value": 0.9944000244140625
+          },
+          "curl": {
+            "min": 0,
+            "max": 1,
+            "name": "curl",
+            "value": 0.24400000274181366
+          },
+          "velocity dissipation": {
+            "min": 0.9,
+            "max": 1,
+            "name": "velocity dissipation",
+            "value": 0.998
+          },
+          "noise octaves": {
+            "min": 0,
+            "max": 5,
+            "name": "noise octaves",
+            "value": 1
+          },
+          "temperature radius": {
+            "min": 0,
+            "max": 1,
+            "name": "temperature radius",
+            "value": 0.20800000429153442
+          },
+          "temperature dissipation": {
+            "min": 0.9,
+            "max": 1,
+            "name": "temperature dissipation",
+            "value": 0.9779000282287598
+          },
+          "ambient temperature": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "ambient temperature",
+            "value": -2.983724378680108E-16
+          },
+          "noise gain": {
+            "min": 0,
+            "max": 1,
+            "name": "noise gain",
+            "value": 0.5
+          },
+          "noise amount": {
+            "min": 0,
+            "max": 1,
+            "name": "noise amount",
+            "value": 0.020999999716877937
+          },
+          "noise fade": {
+            "min": -1,
+            "max": 1,
+            "name": "noise fade",
+            "value": 0
+          },
+          "buoyancy": {
+            "min": 0,
+            "max": 1,
+            "name": "buoyancy",
+            "value": 0.3880000114440918
+          },
+          "noise scale": {
+            "min": 0,
+            "max": 100,
+            "name": "noise scale",
+            "value": 71
+          },
+          "fluid draw mode": {
+            "name": "fluid draw mode",
+            "value": "DENSITY"
+          },
+          "buoyancy weight": {
+            "min": 0,
+            "max": 1,
+            "name": "buoyancy weight",
+            "value": 0.05000000074505806
+          },
+          "color radius": {
+            "min": 0,
+            "max": 1,
+            "name": "color radius",
+            "value": 1
+          },
+          "viscosity": {
+            "min": 0,
+            "max": 1,
+            "name": "viscosity",
+            "value": 0.001
+          },
+          "velocity radius": {
+            "min": 0,
+            "max": 1,
+            "name": "velocity radius",
+            "value": 1
+          },
+          "apply buoyancy": {
+            "name": "apply buoyancy",
+            "value": true
+          },
+          "apply vorticity": {
+            "name": "apply vorticity",
+            "value": true
+          },
+          "noise border": {
+            "min": 0,
+            "max": 1,
+            "name": "noise border",
+            "value": 0
+          },
+          "noise dissipation": {
+            "min": 0,
+            "max": 1,
+            "name": "noise dissipation",
+            "value": 1
+          },
+          "noise lacunarity": {
+            "min": 0,
+            "max": 4,
+            "name": "noise lacunarity",
+            "value": 2
+          },
+          "step": {
+            "min": 0,
+            "max": 1,
+            "name": "step",
+            "value": 1
+          },
+          "apply viscosity": {
+            "name": "apply viscosity",
+            "value": false
+          }
+        }
+      }
+    }
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {}
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1280
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 720
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.40889560862548
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}}
