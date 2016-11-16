@@ -30,8 +30,8 @@ void main()
     vec2 uv = gl_FragCoord.xy / gridSize.xy;
     
     float bound = texture2D(bounds, uv).x;
-    if (bound > 0) {
-        gl_FragColor = vec4(0);
+    if (bound > 0.0) {
+        gl_FragColor = vec4(0.0);
         return;
     }
     

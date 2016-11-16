@@ -28,10 +28,10 @@ void main()
     float ot = texture2D(bounds, uv + yOffset).x;
 
     // Use center pressure for solid cells:
-    if (ol > 0) xl = xc;
-    if (or > 0) xr = xc;
-    if (ob > 0) xb = xc;
-    if (ot > 0) xt = xc;
+    if (ol > 0.0) xl = xc;
+    if (or > 0.0) xr = xc;
+    if (ob > 0.0) xb = xc;
+    if (ot > 0.0) xt = xc;
 
     vec2 bc = texture2D(b, uv).xy;
 

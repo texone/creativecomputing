@@ -49,12 +49,12 @@ public class CCFluidDemo extends CCGL2Adapter {
 	private CCMouseSimpleInfo _myMouse = new CCMouseSimpleInfo();
 	
 	private CCGLWriteDataShader _myWriteDataShader;
-	
-	@CCProperty(name = "lighting")
-	private CCGLProgram _myLightingShader;
+
 	
 	@CCProperty(name = "draw lighted")
 	private boolean _cDrawLighted = true;
+	@CCProperty(name = "lighting")
+	private CCGLProgram _myLightingShader;
 	
 	@CCProperty(name = "light x", min = -1, max = 1)
 	private double _cLightX = 0;
@@ -86,7 +86,7 @@ public class CCFluidDemo extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myGrid.size.set(g.width(), g.height());
+		_myGrid.size.set(g.width() / 2, g.height() / 2);
 		_mySolver = new CCFluidSolver(_myGrid, new CCVector2(g.width(), g.height()));
 		
 		

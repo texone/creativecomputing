@@ -23,10 +23,10 @@ void main()
     vec3 ot = texture2D(bounds, uv + yOffset).xyz;
     
     // Use obstacle velocities for solid cells:
-    if (ol.x > 0) vl = ol.yz;
-    if (or.x > 0) vr = or.yz;
-    if (ob.x > 0) vb = ob.yz;
-    if (ot.x > 0) vt = ot.yz;
+    if (ol.x > 0.0) vl = ol.x;
+    if (or.x > 0.0) vr = or.x;
+    if (ob.x > 0.0) vb = ob.x;
+    if (ot.x > 0.0) vt = ot.x;
 
     float scale = 0.5 / gridScale;
     float divergence = scale * (vr - vl + vt - vb);
