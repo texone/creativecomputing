@@ -1,57 +1,37 @@
 package cc.creativecomputing.protocol.serial;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.TooManyListenersException;
-
-import purejavacomm.SerialPort;
+import jssc.SerialPort;
+import jssc.SerialPortException;
 
 public class CCSerialOutput{
 	private SerialPort _myPort;
 
 
-	// read buffer and streams
-
-	private OutputStream _myOutput;
 	
-	CCSerialOutput(SerialPort thePort) throws TooManyListenersException, IOException{
+	CCSerialOutput(SerialPort thePort) {
 		_myPort = thePort;
-		_myOutput = _myPort.getOutputStream();
 	}
-	
-	void stop(){
-		try {
-			if (_myOutput != null)
-				_myOutput.close();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		_myOutput = null;
-	}
-	
 	/**
+	 * In case you write a String note that this doesn't account for Unicode
+	 * (two bytes per char), nor will it send UTF8 characters.. It assumes that
+	 * you mean to send a byte buffer (most often the case for networking and
+	 * serial i/o) and will only use the bottom 8 bits of each char in the
+	 * string. (Meaning that internally it uses String.getBytes) If you want to
+	 * move Unicode data, you can first convert the String to a byte stream in
+	 * the representation of your choice (i.e. UTF8 or two-byte Unicode data),
+	 * and send it as a byte array.
 	 * 
-	 */
-	public void setDTR(boolean state) {
-		_myPort.setDTR(state);
-	}
-
-	/**
-	 * In case you write a String note that this doesn't account for Unicode (two bytes per char), nor will it send UTF8
-	 * characters.. It assumes that you mean to send a byte buffer (most often the case for networking and serial i/o) and will
-	 * only use the bottom 8 bits of each char in the string. (Meaning that internally it uses String.getBytes)
-	 * If you want to move Unicode data, you can first convert the String to a byte stream in the representation of your choice
-	 * (i.e. UTF8 or two-byte Unicode data), and send it as a byte array.
+	 *  <h3>Advanced</h3> This will handle both ints, bytes and chars
+	 *            transparently.
+	 * 
 	 * @param theValue int or char to write
 	 */
-	public void write(int theValue) { // will also cover char
+	public void write(int theValue) {
 		try {
-			_myOutput.write(theValue & 0xff); // for good measure do the &
-			_myOutput.flush(); // hmm, not sure if a good idea
-
-		} catch (Exception e) { // null pointer or serial port dead
-			throw new RuntimeException(e);
+			_myPort.writeInt(theValue);
+		} catch (SerialPortException e) {
+			throw new RuntimeException("Error writing to serial port " + e.getPortName() + ": " + e.getExceptionType(), e);
 		}
 	}
 
@@ -61,20 +41,35 @@ public class CCSerialOutput{
 	 */
 	public void write(byte[] theBytes) {
 		try {
-			_myOutput.write(theBytes);
-			_myOutput.flush(); // hmm, not sure if a good idea
-
-		} catch (Exception e) { // null pointer or serial port dead
-			// errorMessage("write", e);
-//			e.printStackTrace();
+			// this might block if the serial device is not yet ready (esp. tty
+			// devices under OS X)
+			_myPort.writeBytes(theBytes);
+			// we used to call flush() here
+		} catch (SerialPortException e) {
+			throw new RuntimeException("Error writing to serial port " + e.getPortName() + ": " + e.getExceptionType(), e);
 		}
 	}
 
 	/**
-	 * 
-	 * @param theString string to write to output
+	 * <h3>Advanced</h3> Write a String to the output. Note that this doesn't
+	 * account for Unicode (two bytes per char), nor will it send UTF8
+	 * characters.. It assumes that you mean to send a byte buffer (most often
+	 * the case for networking and serial i/o) and will only use the bottom 8
+	 * bits of each char in the string. (Meaning that internally it uses
+	 * String.getBytes)
+	 *
+	 * If you want to move Unicode data, you can first convert the String to a
+	 * byte stream in the representation of your choice (i.e. UTF8 or two-byte
+	 * Unicode data), and send it as a byte array.
+	 *
+	 * @param src data to write
 	 */
-	public void write(String theString) {
-		write(theString.getBytes());
+	public void write(String src) {
+		try {
+			_myPort.writeString(src);
+		} catch (SerialPortException e) {
+			throw new RuntimeException("Error writing to serial port " + e.getPortName() + ": " + e.getExceptionType(),
+					e);
+		}
 	}
 }
