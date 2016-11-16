@@ -10,28 +10,48 @@
  */
 package cc.creativecomputing.graphics.shader.postprocess;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCCamera;
 import cc.creativecomputing.graphics.CCGraphics;
 
 public class CCPostProcess {
+	
+	private static enum CCPostProcessDebug{
+		POSITIONS,
+		NORMALS,
+		COLORS,
+		DEPTH
+	}
 
 	private CCGeometryBuffer _myGeometryBuffer;
 
 	private CCGraphics _myGraphics;
 	
-	private List<CCPostProcessEffect> _myEffects = new ArrayList<CCPostProcessEffect>();
+	@CCProperty(name = "effects")
+	private Map<String,CCPostProcessEffect> _myEffects = new LinkedHashMap<>();
+	
+	@CCProperty(name = "draw mode")
+	private CCPostProcessDebug _myDrawMode = CCPostProcessDebug.COLORS;
+	
+	private CCSSAO _mySSAO;
 
 	public CCPostProcess(CCGraphics g, int width, int height) {
 		_myGeometryBuffer = new CCGeometryBuffer(g, width, height);
 		_myGraphics = g;
+		
+//		addEffect(_mySSAO = new CCSSAO());
+	}
+	
+	public CCPostProcess(CCGraphics g){
+		this(g, g.width(), g.height());
 	}
 	
 	public void addEffect(CCPostProcessEffect theEffect) {
 		theEffect.initialize(_myGeometryBuffer.data().width(), _myGeometryBuffer.data().height());
-		_myEffects.add(theEffect);
+		_myEffects.put(theEffect.name(), theEffect);
 	}
 	
 	public CCCamera camera(){
@@ -46,12 +66,29 @@ public class CCPostProcess {
 	public void endDraw(CCGraphics g) {
 		_myGeometryBuffer.endDraw(g);
 		
-		for(CCPostProcessEffect myEffect:_myEffects) {
+		for(CCPostProcessEffect myEffect:_myEffects.values()) {
 			myEffect.apply(_myGeometryBuffer, _myGraphics);
 		}
 	}
 
 	public CCGeometryBuffer geometryBuffer() {
 		return _myGeometryBuffer;
+	}
+	
+	public void display(CCGraphics g){
+		switch(_myDrawMode){
+		case COLORS:
+			g.image(_myGeometryBuffer.colors(), 0,0);
+			break;
+		case POSITIONS:
+			g.image(_myGeometryBuffer.positions(), 0,0);
+			break;
+		case NORMALS:
+			g.image(_myGeometryBuffer.normals(), 0,0);
+			break;
+		case DEPTH:
+			g.image(_myGeometryBuffer.depth(), 0,0);
+			break;
+		}
 	}
 };

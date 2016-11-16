@@ -18,6 +18,16 @@ import cc.creativecomputing.graphics.CCGraphics;
  */
 public abstract class CCPostProcessEffect {
 	
+	private final String _myName;
+	
+	public CCPostProcessEffect(String theName){
+		_myName = theName;
+	}
+	
+	public String name(){
+		return _myName;
+	}
+	
 	public abstract void initialize(int theWidth, int theHeight);
 
 	public abstract void apply(CCGeometryBuffer theGeometryBuffer, CCGraphics g);

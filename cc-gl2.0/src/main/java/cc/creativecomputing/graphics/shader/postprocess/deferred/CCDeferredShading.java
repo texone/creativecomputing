@@ -47,6 +47,7 @@ public class CCDeferredShading extends CCPostProcessEffect{
 	private CCGraphics _myGraphics;
 	
 	public CCDeferredShading(CCGraphics g) {
+		super("deferred");
 		_myGraphics = g;
 		_myDirectionalLightShader = new CCGLProgram(
 			CCNIOUtil.classPath(this, "directionalLight_vert.glsl"),

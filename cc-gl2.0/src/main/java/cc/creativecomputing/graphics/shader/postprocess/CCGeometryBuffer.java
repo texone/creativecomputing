@@ -113,4 +113,8 @@ public class CCGeometryBuffer {
 	public CCTexture2D colors(){
 		return _myRenderTexture.attachment(2);
 	}
+	
+	public CCTexture2D depth(){
+		return _myRenderTexture.depthTexture();
+	}
 }
