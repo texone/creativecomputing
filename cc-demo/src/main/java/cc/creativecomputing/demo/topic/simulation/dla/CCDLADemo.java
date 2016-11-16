@@ -12,7 +12,6 @@ package cc.creativecomputing.demo.topic.simulation.dla;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -20,8 +19,6 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.font.text.CCText;
-import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.math.CCMath;
 
 public class CCDLADemo extends CCGL2Adapter {
 	
@@ -42,8 +39,7 @@ public class CCDLADemo extends CCGL2Adapter {
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myDLA = new CCDLA(g, 250, 250, g.width(), g.height());
 		_myText = new CCText(CCFontIO.createVectorFont("Helvetica-Bold", 80));
-		_myText.text(
-				"We can modify CHO cell lines\nto provide viral resistance to \nMVM. Learn more at booth\n608 at #BPSMT");
+		_myText.text("We can modify CHO cell lines\nto provide viral resistance to \nMVM. Learn more at booth\n608 at #BPSMT");
 		_myText.position(30, 500);
 		
 		_myScreenCapture = new CCScreenCaptureController(this);
