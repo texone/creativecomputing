@@ -32,7 +32,8 @@ public class CCOSCHookDemo extends CCGL2Adapter {
 
 	@Override
 	public void update(CCAnimator theAnimator) {
-		_myOSCOut.send(new CCOSCMessage("/animator/time", theAnimator.time()));
+		if(_myOSCOut.isConnected())
+			_myOSCOut.send(new CCOSCMessage("/animator/time", theAnimator.time()));
 	}
 
 	@Override

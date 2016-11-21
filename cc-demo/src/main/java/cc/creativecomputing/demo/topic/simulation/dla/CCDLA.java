@@ -160,7 +160,7 @@ public class CCDLA {
 	}
 	private void initializeParticles() {
 		// Render velocity.
-		_myParticleBuffer.beginDraw();
+		_myParticleBuffer.beginDrawCurrent();
 		_myInitValueShader.start();
 		g.clear();
 		g.beginShape(CCDrawMode.POINTS);
@@ -174,20 +174,20 @@ public class CCDLA {
 		g.endShape();
 
 		_myInitValueShader.end();
-		_myParticleBuffer.endDraw();
+		_myParticleBuffer.endDrawCurrent();
 	}
 
 	public void beginCrystal() {
-		_myCrystalSwapBuffer.beginDraw();
+		_myCrystalSwapBuffer.beginDrawCurrent();
 	}
 
 	public void endCrystal() {
-		_myCrystalSwapBuffer.endDraw();
+		_myCrystalSwapBuffer.endDrawCurrent();
 	}
 
 	private void initializeCrystal() {
 		// Render velocity.
-		_myCrystalSwapBuffer.beginDraw();
+		_myCrystalSwapBuffer.beginDrawCurrent();
 		// _myInitValueShader.start();
 
 		g.beginShape(CCDrawMode.POINTS);
@@ -199,7 +199,7 @@ public class CCDLA {
 		g.endShape();
 
 		// _myInitValueShader.end();
-		_myCrystalSwapBuffer.endDraw();
+		_myCrystalSwapBuffer.endDrawCurrent();
 	}
 
 	public void reset() {
