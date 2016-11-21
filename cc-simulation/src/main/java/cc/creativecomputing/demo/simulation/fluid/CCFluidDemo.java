@@ -157,7 +157,7 @@ public class CCFluidDemo extends CCGL2Adapter {
 			
 			_mySolver.step(g);
 		}else{
-			_mySolver._myDensityData.beginDraw();
+			_mySolver._myDensityData.beginDrawCurrent();
 //			g.color(255,0,0);
 //			g.rect(100,100, 100, 100);
 //			g.color(0,255,0);
@@ -167,7 +167,7 @@ public class CCFluidDemo extends CCGL2Adapter {
 			g.clear();
 			g.color(1d);
 			_myText.draw(g);
-			_mySolver._myDensityData.endDraw();
+			_mySolver._myDensityData.endDrawCurrent();
 		}
 
 		 g.clear();

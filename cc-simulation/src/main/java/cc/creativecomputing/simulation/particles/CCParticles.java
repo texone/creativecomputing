@@ -198,7 +198,7 @@ public class CCParticles{
 		
 		_mySwapTexture.clear();
 		
-		_mySwapTexture.beginDraw();
+		_mySwapTexture.beginDrawCurrent();
 		_mySetDataShader.start();
 		
 		g.beginShape(CCDrawMode.POINTS);
@@ -212,7 +212,7 @@ public class CCParticles{
 		g.endShape();
 		
 		_mySetDataShader.end();
-		_mySwapTexture.endDraw();
+		_mySwapTexture.endDrawCurrent();
 		
 		for(CCForce myForce:_myForces) {
 			myForce.reset();
@@ -292,7 +292,7 @@ public class CCParticles{
 		}
 		
 		// Render manually changed positions into the texture.
-		_mySwapTexture.beginDraw(0);
+		_mySwapTexture.beginDrawCurrent(0);
 		_mySetDataShader.start();
 		
 		g.beginShape(CCDrawMode.POINTS);
@@ -309,7 +309,7 @@ public class CCParticles{
 		g.endShape();
 		
 		_mySetDataShader.end();
-		_mySwapTexture.endDraw();
+		_mySwapTexture.endDrawCurrent();
 		
 		_myPositionUpdates.clear();
 	}
