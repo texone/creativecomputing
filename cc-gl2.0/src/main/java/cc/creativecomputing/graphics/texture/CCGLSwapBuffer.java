@@ -132,12 +132,20 @@ public class CCGLSwapBuffer {
 		_myCurrentDataTexture = myTemp;
 	}
 	
-	public void beginDraw(){
+	public void beginDrawCurrent(){
 		_myCurrentDataTexture.beginDraw();
 	}
 	
-	public void beginDraw(int theAttachment){
+	public void beginDrawCurrent(int theAttachment){
 		_myCurrentDataTexture.beginDraw(theAttachment);
+	}
+	
+	public void beginDrawDestination(){
+		_myDestinationDataTexture.beginDraw();
+	}
+	
+	public void beginDrawDestination(int theAttachment){
+		_myDestinationDataTexture.beginDraw(theAttachment);
 	}
 
 	public void draw() {
@@ -152,8 +160,12 @@ public class CCGLSwapBuffer {
 		_myDestinationDataTexture.draw(theRect);
 	}
 	
-	public void endDraw(){
+	public void endDrawCurrent(){
 		_myCurrentDataTexture.endDraw();
+	}
+	
+	public void endDrawDestination(){
+		_myDestinationDataTexture.endDraw();
 	}
 	
 	public CCShaderBuffer currentBuffer(){
