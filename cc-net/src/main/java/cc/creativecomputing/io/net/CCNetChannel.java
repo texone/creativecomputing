@@ -36,8 +36,12 @@ public abstract class CCNetChannel<ChannelType extends SelectableChannel, Messag
 	
 	@CCProperty(name = "connect")
 	public void connect(boolean theConnect){
-		if(theConnect)connect(_myLocalAddress.getAddress());
-		else disconnect();
+		try{
+			if(theConnect)connect(_myLocalAddress.getAddress());
+			else disconnect();
+		}catch(Exception e){
+			
+		}
 	}
 	
 	void local(CCNetLocalAddress theLocalAddress){
