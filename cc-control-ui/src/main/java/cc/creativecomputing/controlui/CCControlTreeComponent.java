@@ -48,7 +48,6 @@ import cc.creativecomputing.controlui.controls.CCSplineControl;
 import cc.creativecomputing.controlui.controls.CCStringControl;
 import cc.creativecomputing.controlui.controls.code.CCRealtimeCompileControl;
 import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 
 public class CCControlTreeComponent extends JPanel implements TreeSelectionListener{
@@ -143,7 +142,6 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 			}else  if(myClass == CCRealtimeCompile.class){
 				myControlPanel = new CCRealtimeCompileControl((CCRealtimeCompileHandle)myPropertyHandle, _myControlCompoent);
 			}else  if(myClass == CCShaderObject.class){
-				CCLog.info(myClass.getTypeName());
 				myControlPanel = new CCShaderCompileControl((CCShaderCompileHandle)myPropertyHandle, _myControlCompoent);
 			}else{
 				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;

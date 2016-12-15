@@ -15,7 +15,6 @@ import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCField;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMapEntry;
@@ -100,7 +99,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		creatorMap.put(CCShaderObject.class, new CCHandleCreator(){
 			@Override
 			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {
-				CCLog.info("SHADER");
 				return new CCShaderCompileHandle(theParent, theMember);}
 		});
 	}
