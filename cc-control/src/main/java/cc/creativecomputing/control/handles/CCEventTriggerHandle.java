@@ -44,6 +44,10 @@ public class CCEventTriggerHandle extends CCPropertyHandle<Object>{
 		_myDoTrigger = true;
 	}
 	
+	public void interrupt(){
+		
+	}
+	
 	@Override
 	public void update(double theDeltaTime) {
 		if(!_myDoTrigger)return;
