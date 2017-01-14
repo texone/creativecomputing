@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.math.CCMath;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 
 public class CCSwingDraggableValueBox extends JTextField implements MouseListener, MouseMotionListener{
@@ -52,7 +53,7 @@ public class CCSwingDraggableValueBox extends JTextField implements MouseListene
 			@Override
 			public void actionPerformed(ActionEvent theE) {
 				try{
-					value(Double.parseDouble(getText()));
+					value(new ExpressionBuilder(getText()).build().evaluate());
 				}catch(Exception e){
 					e.printStackTrace();
 				}
