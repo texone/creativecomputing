@@ -1,6 +1,7 @@
 package cc.creativecomputing.math.filter;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 public class CCMotionLimiter extends CCFilter{
@@ -45,31 +46,27 @@ public class CCMotionLimiter extends CCFilter{
 		private double _myVelocity;
 		private double _myAcceleration;
 		
-		private double _myLastTime = -1;
 		private double _myLastTarget = Double.NaN;
 		
-		private double process(double theData, double theTime){
-			if(CCMath.abs(theTime - _myLastTime) >= 1 || theTime <= _myLastTime || _myLastTarget == Double.NaN){
+		private double process(double theData, double theDeltaTime){
+			if(CCMath.abs(theDeltaTime) >= 1 || _myLastTarget == Double.NaN){
 				
 				_myLastTarget = theData;
 				_myTarget = theData;
 				
-				if(theTime == _myLastTime && _myPosition != Double.NaN)return _myPosition;
-				
-				_myLastTime = theTime;
+				if(theDeltaTime == 0 && _myPosition != Double.NaN)return _myPosition;
+		
 				_myPosition = theData;
 				_myVelocity = 0;
 				_myAcceleration = 0;
 				return _myPosition;
 			}
 			
-			double myDeltaTime = theTime - _myLastTime;
-			_myLastTime = theTime;
 			
 			_myLastTarget = _myTarget;
 			_myTarget = theData;
 			
-			double myTargetVelocity = (_myTarget - _myLastTarget) / myDeltaTime;
+			double myTargetVelocity = (_myTarget - _myLastTarget) / theDeltaTime;
 			myTargetVelocity *= _cLookAhead;
 			double myFutureTarget = _myTarget + myTargetVelocity;
 			
@@ -84,15 +81,15 @@ public class CCMotionLimiter extends CCFilter{
 			double myVelocity = myFutureTarget - _myPosition;
 			myVelocity = CCMath.constrain(myVelocity, -_cMaxVel, _cMaxVel);
 			
-			double myAcceleration = (myVelocity - _myVelocity) / myDeltaTime;
+			double myAcceleration = (myVelocity - _myVelocity) / theDeltaTime;
 			myAcceleration = CCMath.constrain(myAcceleration, -_cMaxAcc, _cMaxAcc);
 			
-			double myJerk = (myAcceleration - _myAcceleration) / myDeltaTime;
+			double myJerk = (myAcceleration - _myAcceleration) / theDeltaTime;
 			myJerk = CCMath.constrain(myJerk, -_cMaxJerk, _cMaxJerk);
 			
-			_myAcceleration += myJerk * myDeltaTime;
-			_myVelocity += _myAcceleration * myDeltaTime;
-			_myPosition += _myVelocity * myDeltaTime;
+			_myAcceleration += myJerk * theDeltaTime;
+			_myVelocity += _myAcceleration * theDeltaTime;
+			_myPosition += _myVelocity * theDeltaTime;
 			
 			return CCMath.blend(theData, _myPosition, _cApplyScale);
 		}
@@ -110,7 +107,7 @@ public class CCMotionLimiter extends CCFilter{
 	
 	
 	@Override
-	public double process(int theChannel, double theData, double theTime) {
+	public double process(int theChannel, double theData, double theDeltaTime) {
 		if(_myBypass)return theData;
 		
 		if(_myChannels != _myData.length){
@@ -119,12 +116,15 @@ public class CCMotionLimiter extends CCFilter{
 				_myData[i] = new CCMotionData();
 			}
 		}
+		if(_myData[theChannel] == null){
+			_myData[theChannel] = new CCMotionData();
+		}
 		
-		return _myData[theChannel].process(theData, theTime);
-	}
-	
-	@Override
-	public synchronized void process(int theChannel, double[] signal, double theTime) {
-			
+		try{
+			CCLog.info(_myData[theChannel]);
+			return _myData[theChannel].process(theData, theDeltaTime);
+		}catch(Exception e){
+			return theData;
+		}
 	}
 }

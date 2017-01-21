@@ -2,16 +2,21 @@ package cc.creativecomputing.math.filter;
 
 import cc.creativecomputing.core.CCProperty;
 
-public class CCFilter {
+public abstract class CCFilter {
 
-	protected double _mySampleRate;
-	
 	@CCProperty(name = "bypass")
-	protected boolean _myBypass = false;
+	protected boolean _myBypass = true;
+	
+	protected double _mySampleRate;
 	
 	@CCProperty(name = "sample rate", min = 0, max = 60, defaultValue = 0.1)
 	public void sampleRate(double theSampleRate){
 		_mySampleRate = theSampleRate;
+		prepareValues();
+	}
+	
+	public void prepareValues(){
+		
 	}
 	
 	protected int _myChannels = 0;
@@ -23,14 +28,6 @@ public class CCFilter {
 	public int channels(){
 		return _myChannels;
 	}
-
-	public void process(int theChannel, double[] theData, double theTime){
-		
-	}
 	
-	public double process(int theChannel, double theData, double theTime){
-		double[] myData = new double[]{theData};
-		process(theChannel, myData, theTime);
-		return myData[0];
-	}
+	public abstract double process(int theChannel, double theData, double theDeltaTime);
 }

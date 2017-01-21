@@ -15,8 +15,9 @@ public class CCLimiter extends CCFilter {
 	
 	private double waveLimiter = 0.0D;
 
-	public void process(double[] theData) {
-		if(_myBypass)return;
+	@Override
+	public double process(int theChannel, double theData, double theTime) {
+		if(_myBypass)return theData;
 		
 		double releaseSamples = limiterRelease * _mySampleRate;
 		
@@ -29,37 +30,37 @@ public class CCLimiter extends CCFilter {
 		if (releaseSamples == 0.0D)
 			releaseSamples = 1.0D;
 
-		for (int i = 0; i < theData.length; i++) {
-			theData[i] *= inputGain;
+		theData *= inputGain;
 
-			double waveActual = Math.abs(theData[i]);
-			double deltaWave = waveLimiter - waveActual;
+		double waveActual = Math.abs(theData);
+		double deltaWave = waveLimiter - waveActual;
 			
-			if (deltaWave > 0.0D) {
-				double deltaReleaseWave = Math.abs(deltaWave / releaseSamples);
-				waveLimiter -= deltaReleaseWave;
-				if (waveLimiter < 0.0D)
-					waveLimiter = 0.0D;
-			} else if (deltaWave < 0.0D) {
-				waveLimiter = waveActual;
-			} else {
-				waveLimiter = waveActual;
-			}
-
-			double at = waveLimiter - threshold;
-			if (at < 0.0D)
-				at = 0.0D;
-			double bt = waveLimiter - at;
-			
-			double CurrentAttenuation = 0.0D;
-			if (at > 0.0D)
-				CurrentAttenuation = bt / waveLimiter;
-			else if (at == 0.0D) {
-				CurrentAttenuation = 1.0D;
-			}
-
-			theData[i] *= CurrentAttenuation;
+		if (deltaWave > 0.0D) {
+			double deltaReleaseWave = Math.abs(deltaWave / releaseSamples);
+			waveLimiter -= deltaReleaseWave;
+			if (waveLimiter < 0.0D)
+				waveLimiter = 0.0D;
+		} else if (deltaWave < 0.0D) {
+			waveLimiter = waveActual;
+		} else {
+			waveLimiter = waveActual;
 		}
+
+		double at = waveLimiter - threshold;
+		if (at < 0.0D)
+			at = 0.0D;
+		double bt = waveLimiter - at;
+			
+		double CurrentAttenuation = 0.0D;
+		if (at > 0.0D)
+			CurrentAttenuation = bt / waveLimiter;
+		else if (at == 0.0D) {
+			CurrentAttenuation = 1.0D;
+		}
+
+		theData *= CurrentAttenuation;
+		
+		return theData;
 
 	}
 }

@@ -88,8 +88,8 @@ public abstract class CCIIRFilter extends CCFilter{
 	}
 
 	@Override
-	public synchronized void process(int theChannel, double[] signal, double theTime) {
-		if(_myBypass)return;
+	public synchronized double process(int theChannel, double signal, double theTime) {
+		
 		// make sure our coefficients are up-to-date
 		if (_myFrequency != _myPreviousFrequency) {
 			calcCoeff();
@@ -101,25 +101,26 @@ public abstract class CCIIRFilter extends CCFilter{
 			initArrays();
 		}
 		
-		for (int i = 0; i < signal.length; i++) {
-			// apply the filter to the sample value in each channel
-			System.arraycopy(in[theChannel], 0, in[theChannel], 1, in[theChannel].length - 1);
-			in[theChannel][0] = signal[i];
-			double y = 0;
-			for (int ci = 0; ci < a.length; ci++) {
-				y += a[ci] * in[theChannel][ci];
-			}
-			for (int ci = 0; ci < b.length; ci++) {
-				y += b[ci] * out[theChannel][ci];
-			}
-			System.arraycopy(out[theChannel], 0, out[theChannel], 1, out[theChannel].length - 1);
-			
-			if(Double.isNaN(y)){
-				y = 0;
-			}
-			out[theChannel][0] = y;
-			signal[i] = y;
+		// apply the filter to the sample value in each channel
+		System.arraycopy(in[theChannel], 0, in[theChannel], 1, in[theChannel].length - 1);
+		in[theChannel][0] = signal;
+		double y = 0;
+		for (int ci = 0; ci < a.length; ci++) {
+			y += a[ci] * in[theChannel][ci];
 		}
+		for (int ci = 0; ci < b.length; ci++) {
+			y += b[ci] * out[theChannel][ci];
+		}
+		System.arraycopy(out[theChannel], 0, out[theChannel], 1, out[theChannel].length - 1);
+			
+		if(Double.isNaN(y)){
+			y = 0;
+		}
+		out[theChannel][0] = y;
+		
+		if(_myBypass)return signal;
+		return y;
+		
 	}
 
 	/**

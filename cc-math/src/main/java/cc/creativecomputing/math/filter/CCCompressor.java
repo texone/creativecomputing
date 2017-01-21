@@ -10,28 +10,6 @@ public class CCCompressor extends CCFilter {
 	private class CCEnvelopeDetector {
 
 		protected double _myEnvelopeSample = 0;
-
-		public double[] envelope(double[] audioData) {
-			_myEnvelopeSample = 0;
-			double myAttackGain = CCMath.exp(-1 / (attackTime * _mySampleRate));
-			double myReleaseGain = CCMath.exp(-1 / (releaseTime * _mySampleRate));
-
-			double[] envelope = new double[audioData.length];
-
-			for (int i = 0; i < audioData.length; ++i) {
-				double envIn = audioData[i];
-
-				if (_myEnvelopeSample < envIn) {
-					_myEnvelopeSample = envIn + myAttackGain * (_myEnvelopeSample - envIn);
-				} else {
-					_myEnvelopeSample = envIn + myReleaseGain * (_myEnvelopeSample - envIn);
-				}
-
-				envelope[i] = _myEnvelopeSample;
-			}
-			return envelope;
-
-		}
 		
 		public double envelope(double theData){
 			double myAttackGain = CCMath.exp(-1 / (attackTime * _mySampleRate));
@@ -108,52 +86,6 @@ public class CCCompressor extends CCFilter {
 		for(CCEnvelopeDetector myDetector:_myEnvelopeDetectors){
 			myDetector._myEnvelopeSample = 0;
 		}
-	}
-
-	@Override
-	public void process(int theChannel, double[] theData, double theTime) {
-		if(_myBypass)return;
-
-		if (preGain != 0f) {
-			for (int k = 0; k < theData.length; ++k) {
-				theData[k] *= preGain;
-			}
-		}
-
-		double threshDB = amp2db(threshold);
-		double[] envelopeData = _myEnvelopeDetectors[theChannel].envelope(theData);
-		// Threshold is in dB and will always be either 0 or negative, so * by -1 to make positive.
-		double kneeWidth = threshDB * knee * -1f; 
-		double lowerKneeBound = threshDB - (kneeWidth / 2f);
-		double upperKneeBound = threshDB + (kneeWidth / 2f);
-
-		for (int i = 0; i < theData.length; i++) {
-			double envValue = amp2db(envelopeData[i]);
-			double mySlope = 1;
-			if (processType == ProcessType.Compressor) {
-				mySlope = 1 - (1 / ratio);
-			}
-			double myGain;
-
-			if (kneeWidth > 0f && envValue > lowerKneeBound && envValue < upperKneeBound) { // Soft
-																							// knee
-				// Lerp the compressor slope value.
-				// Slope is multiplied by 0.5 since the gain is calculated in
-				// relation to the lower knee bound for soft knee.
-				// Otherwise, the interpolation's peak will be reached at the
-				// threshold instead of at the upper knee bound.
-				mySlope *= (((envValue - lowerKneeBound) / kneeWidth) * 0.5f);
-				myGain = mySlope * (lowerKneeBound - envValue);
-			} else { // Hard knee
-				myGain = mySlope * (threshDB - envValue);
-				myGain = CCMath.min(0f, myGain);
-			}
-
-			myGain = db2amp(myGain);
-
-			theData[i] *= (myGain * postGain);
-		}
-
 	}
 	
 	@Override
