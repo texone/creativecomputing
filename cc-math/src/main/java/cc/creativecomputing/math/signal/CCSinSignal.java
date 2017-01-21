@@ -19,7 +19,7 @@ import cc.creativecomputing.math.CCMath;
 public class CCSinSignal extends CCSignal{
 	
 	private double sin(double theValue){
-		return (CCMath.sin(theValue * CCMath.TWO_PI) + 1) / 2;
+		return (CCMath.cos(theValue * CCMath.TWO_PI) + 1) / 2;
 	}
 
 	/* (non-Javadoc)
