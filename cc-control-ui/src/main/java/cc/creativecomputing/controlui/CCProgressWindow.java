@@ -24,7 +24,7 @@ public class CCProgressWindow extends JFrame{
 	    jl.setText("Count : 0");
 
 	    add(BorderLayout.NORTH, jl);
-	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 
 	    dpb = new JProgressBar(0, 500);
