@@ -20,8 +20,6 @@
 package cc.creativecomputing.controlui.timeline.controller;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.quantize.OffQuantizer;
-import cc.creativecomputing.controlui.timeline.controller.quantize.Quantizer;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 
 /**
@@ -38,8 +36,6 @@ public class TrackContext implements Zoomable{
 
 	protected ToolController _myToolController;
 	protected CurveToolController _myCurveToolController;
-    
-	protected Quantizer _myQuantizer;
 	
 	public TrackContext() {
 		_myZoomController = new CCZoomController();
@@ -47,8 +43,6 @@ public class TrackContext implements Zoomable{
 		_myCurveToolController = new CurveToolController(this);
 		
 		_myZoomController.addZoomable(this);
-		
-		_myQuantizer = new OffQuantizer();
 
         _myLowerBound = 0;
         _myUpperBound = 1;
@@ -61,22 +55,6 @@ public class TrackContext implements Zoomable{
 	public double defaultValue(TrackController theTrackController) {
 		return 0;
 	}
-
-	/**
-	 * Raster resolution to align the track data
-	 * @param theRaster Raster resolution to align the track data
-	 */
-	public void quantizer(final Quantizer theQuantizer){
-		_myQuantizer = theQuantizer;
-	}
-	
-	/**
-	 * Raster resolution to align the track data
-	 * @return Raster resolution to align the track data
-	 */
-	public Quantizer quantizer(){
-		return _myQuantizer;
-	}
 	
 	/**
 	 * Snaps the time of the given point to the raster of this context. This is called quantization.
@@ -84,13 +62,11 @@ public class TrackContext implements Zoomable{
 	 * @return
 	 */
 	public ControlPoint quantize(ControlPoint thePoint) {
-    	double myTime = quantize(thePoint.time());
-        thePoint.time(myTime);
         return thePoint;
 	}
 
 	public double quantize(double theTime) {
-		return _myQuantizer.quantize(theTime);
+		return theTime;
 	}
     
     public double lowerBound() {

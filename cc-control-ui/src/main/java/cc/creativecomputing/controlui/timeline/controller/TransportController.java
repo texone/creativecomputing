@@ -443,7 +443,6 @@ public class TransportController extends TrackDataController implements Zoomable
 		_myDefineLoop = e.getY() < _myRulerView.height() / 2;
 		
 		if(!_myDefineLoop) {
-			
 			if(!myPressedShift) {
 				moveTransport(e.getX());
 			}else {

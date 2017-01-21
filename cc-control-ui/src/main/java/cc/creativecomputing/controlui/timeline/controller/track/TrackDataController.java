@@ -317,7 +317,6 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
 		
 		ControlPoint myControlPoint = pickNearestPoint(myViewCoords);
 		ControlPoint myHandle = pickHandle(myViewCoords);
-		
 		if (myHandle != null) {
 			_myDraggedPoints = new ArrayList<ControlPoint>();
 			_myDraggedPoints.add(myHandle);
@@ -417,7 +416,7 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
 			myCurveMovement.value( myCurveMovement.value() - 1);
 		}
 		
-		if(theToolController.toolMode() == TimelineTool.CURVE && _myFloorBezier != null && _myCeilBezier != null){
+		if(theToolController != null && theToolController.toolMode() == TimelineTool.CURVE && _myFloorBezier != null && _myCeilBezier != null){
 			if(CCMath.abs(myMovX) > CCMath.abs(myMovY)){
 				float myXBlend = CCMath.saturate(CCMath.norm(CCMath.abs(myMovX), 0, MAX_DRAG_X));
 				if(myMovX < 0){

@@ -47,10 +47,12 @@ import cc.creativecomputing.control.timeline.GroupTrack;
 import cc.creativecomputing.control.timeline.TimeRange;
 import cc.creativecomputing.control.timeline.Track;
 import cc.creativecomputing.control.timeline.TrackData;
+import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.CCColorMap;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCPresetTrackObject;
+import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuatizeMode;
 import cc.creativecomputing.controlui.timeline.controller.track.BooleanTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.ColorTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.DoubleTrackController;
@@ -86,6 +88,8 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	private final CCPropertyMap _myPropertyMap;
 	
 	private final TimelineContainer _myTimelineContainer;
+
+	protected CCQuatizeMode _myQuantizeMode;
 	
 	public TimelineController(TimelineContainer theTimelineContainer, CCPropertyMap thePropertyMap) {
 		super();
@@ -97,6 +101,8 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		_myTrackController = new ArrayList<>();
 		
 		_myPropertyMap = thePropertyMap;
+
+		_myQuantizeMode = CCQuatizeMode.OFF;
 	}
 	
 	public void view(SwingTimelineView theView){
@@ -130,8 +136,41 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		return _myTrackController;
 	}
 	
+	/**
+	 * Raster resolution to align the track data
+	 * @param theRaster Raster resolution to align the track data
+	 */
+	public void quantizer(CCQuatizeMode theQuantizeMode){
+		_myQuantizeMode = theQuantizeMode;
+	}
+	
+	/**
+	 * Raster resolution to align the track data
+	 * @return Raster resolution to align the track data
+	 */
+	public CCQuatizeMode quantizer(){
+		return _myQuantizeMode;
+	}
+	
+	@Override
+	/**
+	 * Snaps the time of the given point to the raster of this context. This is called quantization.
+	 * @param thePoint
+	 * @return
+	 */
+	public ControlPoint quantize(ControlPoint thePoint) {
+    	double myTime = quantize(thePoint.time());
+        thePoint.time(myTime);
+        return thePoint;
+	}
+
+	@Override
+	public double quantize(double theTime) {
+		return _myQuantizeMode.quantizer().quantize(_myTransportController,theTime);
+	}
+	
 	public int drawRaster(){
-		return _myQuantizer.drawRaster();
+		return _myQuantizeMode.quantizer().drawRaster(_myTransportController);
 	}
 	
 	/**
