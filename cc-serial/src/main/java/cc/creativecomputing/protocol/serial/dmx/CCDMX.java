@@ -15,6 +15,7 @@ import java.util.List;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCBitUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.protocol.serial.CCSerialInput;
 import cc.creativecomputing.protocol.serial.CCSerialListener;
@@ -24,8 +25,6 @@ import cc.creativecomputing.protocol.serial.CCSerialModule;
  * Use this class to send and receive DMX data width an 
  * <a href="http://www.enttec.com/index.php?main_menu=Products&pn=70304&show=description&name=dmxusbpro">enttec DMX USB PRO</a>.
  * This way you can enable light control. And also visualize dmx data in your application.
- * 
- * @shortdesc This class encapsulates the handling of DMX messages through the Serial port using an enttex DMX USB PRO.
  */
 public class CCDMX implements CCSerialListener {
 
@@ -90,7 +89,6 @@ public class CCDMX implements CCSerialListener {
 	public CCDMX(int theUniverseSize) {
 		
 		_mySerial = new CCSerialModule("enttec dmx", 115200);
-		_mySerial.printPorts();
 		_mySerial.listener().add(this);
 		_myUniverseSize = theUniverseSize;
 		int myDataSize = _myUniverseSize + 1;
@@ -134,13 +132,24 @@ public class CCDMX implements CCSerialListener {
     }
     
     /**
-	 * Writes value to the channel.
+	 * Writes the given value in 8bit resolution to the given and the next channel.
 	 * 
-	 * @param theChannel
-	 * @param theValue
+	 * @param theChannel the dmx channel
+	 * @param theValue the value in the range from 0 to 1
 	 */
     public void setDMXChannel(final int theChannel, final double theValue){
     	setDMXChannel(theChannel, (int)(theValue * 255));
+    }
+    
+    /**
+     * Writes the given value in 16bit resolution to the given and the next channel.
+     * @param theChannel the dmx channel
+     * @param theValue the value in the range from 0 to 1
+     */
+    public void setDMXChannel16bit(final int theChannel, final double theValue){
+    	int my16BitValue = (int)(theValue * 65535);
+    	setDMXChannel(theChannel, CCBitUtil.bit(my16BitValue, 1));
+    	setDMXChannel(theChannel + 1, CCBitUtil.bit(my16BitValue, 0));
     }
     
     /**
