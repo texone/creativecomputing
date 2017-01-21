@@ -30,7 +30,7 @@ public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 		});
 		
 		_myCurveFrame = new CCSplineEditor(theHandle.name());
-		_myCurveFrame.setSize(300, 100);
+		_myCurveFrame.setSize(300, 300);
 		_myCurveFrame.addWindowListener(new WindowAdapter() {
 			
 			@Override
