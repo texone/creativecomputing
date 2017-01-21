@@ -25,12 +25,8 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
 
         _myButton = new JButton(theHandle.name());
         CCUIStyler.styleButton(_myButton, 103, 13);
-        _myButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myHandle.trigger();
-			}
+        _myButton.addActionListener(theE -> {
+			_myHandle.trigger();
 		});
         
         theHandle.progress().events().add(new CCTriggerProgressListener() {
@@ -47,6 +43,12 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
     		@Override
     		public void end() {
     			_myProgressWindow.setVisible(false);
+    		}
+    		
+    		@Override
+    		public void interrupt() {
+    			// TODO Auto-generated method stub
+    			
     		}
     	});
 	}

@@ -52,89 +52,55 @@ public class SwingTimelineMenu extends JMenu{
 		setMnemonic(KeyEvent.VK_T);
 		
 		JMenuItem myLoadItem = new JMenuItem("Replace");
-		myLoadItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				Path myPath = _myFileChooser.chosePath("open");
-				if (myPath != null) _myFileManager.replaceCurrentTimeline(myPath);
-			}
+		myLoadItem.addActionListener(theE -> {
+			Path myPath = _myFileChooser.chosePath("open");
+			if (myPath != null) _myFileManager.replaceCurrentTimeline(myPath);
 		});
 		myLoadItem.setToolTipText("Replaces the current active timeline.");
 		myLoadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.META_MASK));
 		add(myLoadItem);
 		
 		JMenuItem myLoadAddItem = new JMenuItem("Add");
-		myLoadAddItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				Path myPath = _myFileChooser.chosePath("open");
-				if (myPath != null) _myFileManager.addToCurrentTimeline(myPath);
-			}
+		myLoadAddItem.addActionListener(theE -> {
+			Path myPath = _myFileChooser.chosePath("open");
+			if (myPath != null) _myFileManager.addToCurrentTimeline(myPath);
 		});
 		myLoadAddItem.setToolTipText("Loads the tracks from the file and adds them to the current timeline.");
 		myLoadAddItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.META_MASK | ActionEvent.SHIFT_MASK));
 		add(myLoadItem);
 		
 		JMenuItem myNewItem = new JMenuItem("Clear");
-		myNewItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myFileChooser.resetPath();
-				_myFileManager.resetTimeline();
-			}
+		myNewItem.addActionListener(theE -> {
+			_myFileChooser.resetPath();
+			_myFileManager.resetTimeline();
 		});
 		myNewItem.setToolTipText("Clears the current active timeline");
 		myNewItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.META_MASK));
 		add(myNewItem);
 		
 		JMenuItem myInsertItem = new JMenuItem("Insert at Time");
-		myInsertItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				Path myPath = _myFileChooser.chosePath("open");
-				if (myPath != null) _myFileManager.insertAtTimeToCurrentTimeline(myPath);
-			}
+		myInsertItem.addActionListener(theE -> {
+			Path myPath = _myFileChooser.chosePath("open");
+			if (myPath != null) _myFileManager.insertAtTimeToCurrentTimeline(myPath);
 		});
 		myInsertItem.setToolTipText("Inserts the data for in the file and the timeline.");
 		myInsertItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.META_MASK | ActionEvent.SHIFT_MASK));
 		add(myInsertItem);
 		
 		JMenuItem mySaveItem = new JMenuItem("Export");
-		mySaveItem.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				Path myPath = _myFileChooser.chosePath("Export Timeline");
-				if(myPath != null)_myFileManager.exportCurrentTimeline(myPath);
-			}
+		mySaveItem.addActionListener(theE -> {
+			Path myPath = _myFileChooser.chosePath("Export Timeline");
+			if(myPath != null)_myFileManager.exportCurrentTimeline(myPath);
 		});
 		mySaveItem.setToolTipText("Saves the content of all tracks.");
 		mySaveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.META_MASK));
 		add(mySaveItem);
 		add(mySaveItem);
 		
-//		JMenuItem mySaveAsItem = new JMenuItem("Save As ...");
-//		mySaveAsItem.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent theE) {
-//				Path myPath = chosePath("save");
-//				if (myPath != null) {
-//					_myFileManager.exportCurrentTimeline(myPath);
-//				}
-//			}
-//		});
-//		mySaveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.META_MASK | ActionEvent.SHIFT_MASK));
-//		add(mySaveAsItem);
-//		
 		JMenuItem mySaveSelectionItem = new JMenuItem("Export Selection");
-		mySaveSelectionItem.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				Path myPath = _myFileChooser.chosePath("save selection");
-				if (myPath != null) _myFileManager.exportCurrentTimelineSelection(myPath);
-			}
+		mySaveSelectionItem.addActionListener(theE -> {
+			Path myPath = _myFileChooser.chosePath("save selection");
+			if (myPath != null) _myFileManager.exportCurrentTimelineSelection(myPath);
 		});
 		mySaveSelectionItem.setToolTipText("Saves the content of all tracks.");
 		add(mySaveSelectionItem);
@@ -143,24 +109,16 @@ public class SwingTimelineMenu extends JMenu{
 	private void addEditItems(){
 		if(SwingGuiConstants.CREATE_UNDO_ENTRIES) {
 			JMenuItem myUndoMenu = new JMenuItem("Undo");
-			myUndoMenu.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent theE) {
-					UndoHistory.instance().undo();
-				}
+			myUndoMenu.addActionListener(theE -> {
+				UndoHistory.instance().undo();
 			});
 			myUndoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.META_MASK));
 			myUndoMenu.setMnemonic(KeyEvent.VK_Z);
 			add(myUndoMenu);
 			
 			JMenuItem myRedoMenu = new JMenuItem("Redo");
-			myRedoMenu.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent theE) {
-					UndoHistory.instance().redo();
-				}
+			myRedoMenu.addActionListener(theE -> {
+				UndoHistory.instance().redo();
 			});
 			myRedoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.META_MASK | ActionEvent.SHIFT_MASK));
 			myRedoMenu.setMnemonic(KeyEvent.VK_R);
@@ -168,48 +126,32 @@ public class SwingTimelineMenu extends JMenu{
 		}
 
 		JMenuItem myCutMenu = new JMenuItem("Cut");
-		myCutMenu.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().toolController().selectionController().cut();
-			}
+		myCutMenu.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().toolController().selectionController().cut();
 		});
 		myCutMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.META_MASK));
 		myCutMenu.setMnemonic(KeyEvent.VK_T);
 		add(myCutMenu);
 
 		JMenuItem myCopyMenu = new JMenuItem("Copy");
-		myCopyMenu.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().toolController().selectionController().copy();
-			}
+		myCopyMenu.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().toolController().selectionController().copy();
 		});
 		myCopyMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.META_MASK));
 		myCopyMenu.setMnemonic(KeyEvent.VK_P);
 		add(myCopyMenu);
 
 		JMenuItem myPasteMenu = new JMenuItem("Paste");
-		myPasteMenu.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().toolController().selectionController().insert();
-			}
+		myPasteMenu.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().toolController().selectionController().insert();
 		});
 		myPasteMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.META_MASK));
 		myPasteMenu.setMnemonic(KeyEvent.VK_A);
 		add(myPasteMenu);
 
 		JMenuItem myReplaceMenu = new JMenuItem("Replace");
-		myReplaceMenu.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().toolController().selectionController().replace();
-			}
+		myReplaceMenu.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().toolController().selectionController().replace();
 		});
 		myReplaceMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.SHIFT_MASK | ActionEvent.META_MASK));
 		myReplaceMenu.setMnemonic(KeyEvent.VK_R);
@@ -229,80 +171,52 @@ public class SwingTimelineMenu extends JMenu{
 //		add(myWriteValuesMenue);
 		
 		JMenuItem myInsertTimeMenue = new JMenuItem("Insert Time");
-		myInsertTimeMenue.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().insertTime();
-			}
+		myInsertTimeMenue.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().insertTime();
 		});
 		myInsertTimeMenue.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.META_MASK));
 		myInsertTimeMenue.setMnemonic(KeyEvent.VK_I);
 		add(myInsertTimeMenue);
 		
 		JMenuItem myRemoveTimeMenue = new JMenuItem("Remove Time");
-		myRemoveTimeMenue.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().removeTime();
-			}
+		myRemoveTimeMenue.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().removeTime();
 		});
 		myRemoveTimeMenue.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.META_MASK));
 		myRemoveTimeMenue.setMnemonic(KeyEvent.VK_R);
 		add(myRemoveTimeMenue);
 		
 		JMenuItem myReverseTracksMenue = new JMenuItem("Reverse");
-		myReverseTracksMenue.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().reverseTracks();
-			}
+		myReverseTracksMenue.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().reverseTracks();
 		});
 		add(myReverseTracksMenue);
 		
 		JMenuItem myCreateClipTrackMenue = new JMenuItem("Create Clip Track");
-		myCreateClipTrackMenue.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().createClipTrack();
-			}
+		myCreateClipTrackMenue.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().createClipTrack();
 		});
 		add(myCreateClipTrackMenue);
 	}
 	
 	private void addViewItems(){
 		JMenuItem myResetZoomMenu = new JMenuItem("Reset Zoom");
-		myResetZoomMenu.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().zoomController().reset();
-			}
+		myResetZoomMenu.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().zoomController().reset();
 		});
 		myResetZoomMenu.setMnemonic(KeyEvent.VK_R);
 		add(myResetZoomMenu);
 
 		JMenuItem myZoomToMax = new JMenuItem("Zoom to Max");
-		myZoomToMax.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().zoomToMaximum();
-			}
+		myZoomToMax.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().zoomToMaximum();
 		});
 		myZoomToMax.setMnemonic(KeyEvent.VK_M);
 		add(myZoomToMax);
 
 		JMenuItem myZoomSelection = new JMenuItem("Zoom to Selection");
-		myZoomSelection.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent theE) {
-				_myTimelineContainer.activeTimeline().zoomToSelection();
-			}
+		myZoomSelection.addActionListener(theE -> {
+			_myTimelineContainer.activeTimeline().zoomToSelection();
 		});
 		myZoomSelection.setMnemonic(KeyEvent.VK_S);
 		add(myZoomSelection);
