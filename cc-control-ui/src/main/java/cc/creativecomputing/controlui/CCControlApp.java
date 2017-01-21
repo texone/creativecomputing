@@ -3,6 +3,7 @@ package cc.creativecomputing.controlui;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.prefs.Preferences;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -53,8 +54,9 @@ public class CCControlApp  {
 	@CCProperty(name = "animator")
 	private CCAnimator _myAnimator;
 	
-
-	public CCControlApp(Object theRootObject, CCAnimator theAnimator) {
+	public static Preferences preferences;
+	
+	private void init(CCAnimator theAnimator){
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Test");
         try {
@@ -73,40 +75,58 @@ public class CCControlApp  {
 			e.printStackTrace();
 		}
         
-		// try {
-		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		// } catch (Exception e) {
-		// System.err.println("Couldn't use system look and feel.");
-		// }
+        // try {
+        // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        // } catch (Exception e) {
+        // System.err.println("Couldn't use system look and feel.");
+        // }
 
-		// Create and set up the window.
+        // Create and set up the window.
         _myFrame = new JFrame("Creative Computing Controls");
         _myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		_myControlComponent = new CCControlComponent(_myFrame);
+        _myControlComponent = new CCControlComponent(_myFrame);
 
-		// Add content to the window.
-		_myFrame.add(_myControlComponent);
-		
-		_myAnimator = theAnimator;
-		_myAnimatorListener = new CCAnimatorAdapter() {
-			@Override
-			public void update(CCAnimator theAnimator) {
-				CCControlApp.this.update(theAnimator.deltaTime());
-			}
-		};
-		_myAnimator.listener().add(_myAnimatorListener);
-		
-		_myMenuBar = new JMenuBar();
-		_myMenuBar.add(_myControlComponent.view().fileMenu());
-		_myMenuBar.add(_myControlComponent.view().timelineMenu());
-		_myFrame.setJMenuBar(_myMenuBar);
+        // Add content to the window.
+        _myFrame.add(_myControlComponent);
+     		
+        _myAnimator = theAnimator;
+        _myAnimatorListener = new CCAnimatorAdapter() {
+        	@Override
+        	public void update(CCAnimator theAnimator) {
+        		CCControlApp.this.update(theAnimator.deltaTime());
+        	}
+        };
+        _myAnimator.listener().add(_myAnimatorListener);
+     		
+        _myMenuBar = new JMenuBar();
+        _myMenuBar.add(_myControlComponent.view().fileMenu());
+        _myMenuBar.add(_myControlComponent.view().timelineMenu());
+        _myFrame.setJMenuBar(_myMenuBar);
+        
+        // Display the window.
+        _myFrame.pack();
+        _myFrame.setVisible(true);
+	}
 
-		// Display the window.
-		_myFrame.pack();
-		_myFrame.setVisible(true);
+	public CCControlApp(Object theRootObject, CCAnimator theAnimator) {
+        preferences = Preferences.userNodeForPackage(theRootObject.getClass());
+        
+		init(theAnimator);
 		
 		ExceptionHandler.registerExceptionHandler();
+	}
+	
+	public CCControlApp(Object theRootObject, CCTimelineSynch theSynch) {
+        preferences = Preferences.userNodeForPackage(theRootObject.getClass());
+        
+		init(theSynch.animator());
+		theSynch.timeline(_myControlComponent.timeline());
+	}
+	
+	public CCControlApp(Object theRootObject) {
+		this(theRootObject, new CCAnimator());
+		_myAnimator.start();
 	}
 	
 	public void update(double theDeltaTime){
@@ -115,73 +135,12 @@ public class CCControlApp  {
 	}
 	
 	public void setData(Object theData, String thePresetPath){
+		preferences = Preferences.userNodeForPackage(theData.getClass());
 		_myControlComponent.setData(theData, thePresetPath);
 	}
 	
 	public TimelineContainer timeline(){
 		return _myControlComponent.timeline();
-	}
-	
-	public CCControlApp(CCTimelineSynch theSynch) {
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Test");
-        try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-		// try {
-		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		// } catch (Exception e) {
-		// System.err.println("Couldn't use system look and feel.");
-		// }
-
-		// Create and set up the window.
-        _myFrame = new JFrame("Creative Computing Controls");
-        _myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		_myControlComponent = new CCControlComponent(_myFrame);
-
-		// Add content to the window.
-		_myFrame.add(_myControlComponent);
-		
-		_myAnimator = theSynch.animator();
-		_myAnimatorListener = new CCAnimatorAdapter() {
-			@Override
-			public void update(CCAnimator theAnimator) {
-				if(_myControlComponent.propertyMap().rootHandle() == null){
-					return;
-				}
-				_myControlComponent.propertyMap().rootHandle().update(theAnimator.deltaTime());
-			}
-		};
-		_myAnimator.listener().add(_myAnimatorListener);
-		theSynch.timeline(_myControlComponent.timeline());
-		
-		_myMenuBar = new JMenuBar();
-		_myMenuBar.add(_myControlComponent.view().fileMenu());
-		_myMenuBar.add(_myControlComponent.view().timelineMenu());
-		_myFrame.setJMenuBar(_myMenuBar);
-
-		// Display the window.
-		_myFrame.pack();
-		_myFrame.setVisible(true);
-	}
-	
-	public CCControlApp(Object theRootObject) {
-		this(theRootObject, new CCAnimator());
-		_myAnimator.start();
 	}
 	
 	public CCAnimatorAdapter animatorListener(){
