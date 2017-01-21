@@ -162,7 +162,7 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 			_myInput = new CCSerialInput(_myListeners, _myPort);
 			_myOutput = new CCSerialOutput(_myPort);
 		} catch (SerialPortException e) {
-			throw new RuntimeException("Error opening serial port " + e.getPortName() + ": " + e.getExceptionType(), e);
+//			throw new RuntimeException("Error opening serial port " + e.getPortName() + ": " + e.getExceptionType(), e);
 		} 
 	}
 	
