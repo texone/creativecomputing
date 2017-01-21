@@ -12,6 +12,7 @@ package cc.creativecomputing.model.obj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import cc.creativecomputing.core.logging.CCLog;
@@ -22,10 +23,10 @@ import cc.creativecomputing.math.CCVector3;
 
 
 public class CCModel {
-	private final HashMap<String, CCObject> _myObjectMap = new HashMap<>();
-	private final HashMap<String, CCObjectGroup> _myObjectGroupMap = new HashMap<>();
+	private final HashMap<String, CCObject> _myObjectMap = new LinkedHashMap<>();
+	private final HashMap<String, CCObjectGroup> _myObjectGroupMap = new LinkedHashMap<>();
 	
-	private final HashMap<String, CCMaterial> _myMaterialMap = new HashMap<String, CCMaterial>();
+	private final HashMap<String, CCMaterial> _myMaterialMap = new LinkedHashMap<String, CCMaterial>();
 	
 	private final List<CCVector3> _myVertices = new ArrayList<CCVector3>();
 	private final List<CCVector3> _myNormals = new ArrayList<CCVector3>();
