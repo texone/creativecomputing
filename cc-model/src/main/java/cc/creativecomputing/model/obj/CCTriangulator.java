@@ -109,21 +109,21 @@ public class CCTriangulator{
 //	}
 	
 	public void addTriangleVertices(final CCVector3 the1, final CCVector3 the2, final CCVector3 the3){
-		_myVertices.add(the1);
-		_myVertices.add(the2);
-		_myVertices.add(the3);
+		_myVertices.add(the1.clone());
+		_myVertices.add(the2.clone());
+		_myVertices.add(the3.clone());
 	}
 	
 	public void addTriangleNormals(final CCVector3 the1, final CCVector3 the2, final CCVector3 the3){
-		_myNormals.add(the1);
-		_myNormals.add(the2);
-		_myNormals.add(the3);
+		_myNormals.add(the1.clone());
+		_myNormals.add(the2.clone());
+		_myNormals.add(the3.clone());
 	}
 	
 	public void addTriangleTextureCoords(final CCVector4 the1, final CCVector4 the2, final CCVector4 the3){
-		_myTextureCoords.add(the1);
-		_myTextureCoords.add(the2);
-		_myTextureCoords.add(the3);
+		_myTextureCoords.add(the1.clone());
+		_myTextureCoords.add(the2.clone());
+		_myTextureCoords.add(the3.clone());
 	}
 	
 	public void addTriangleTextureCoords(final CCVector2 the1, final CCVector2 the2, final CCVector2 the3){
@@ -133,9 +133,9 @@ public class CCTriangulator{
 	}
 	
 	public void addTriangleColors(final CCColor the1, final CCColor the2, final CCColor the3){
-		_myColors.add(the1);
-		_myColors.add(the2);
-		_myColors.add(the3);
+		_myColors.add(the1.clone());
+		_myColors.add(the2.clone());
+		_myColors.add(the3.clone());
 	}
 
 	public List<CCVector3> vertices(){
