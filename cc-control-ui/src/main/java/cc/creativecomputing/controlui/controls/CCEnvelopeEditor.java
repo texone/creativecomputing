@@ -19,7 +19,12 @@
  */
 package cc.creativecomputing.controlui.controls;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import cc.creativecomputing.control.timeline.Track;
 import cc.creativecomputing.controlui.timeline.view.SwingCurvePanel;
@@ -39,8 +44,22 @@ public class CCEnvelopeEditor extends JFrame{
 	public CCEnvelopeEditor(String theTitle) {
 		super(theTitle);
 		_myCurvePanel = new SwingCurvePanel(this);
+//		
+//		
+//		getContentPane().add(_myCurvePanel.view());
 		
-		getContentPane().add(_myCurvePanel.view());
+		JPanel containerPanel = new JPanel();
+		 containerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		 containerPanel.setLayout(new BorderLayout());
+		 //panel to test
+		 JPanel testPanel = new JPanel();
+		 testPanel.setBackground(Color.blue);        
+		 containerPanel.add(_myCurvePanel.view(),BorderLayout.CENTER);
+
+		 //assuming you are extending JFrame
+		 getContentPane().setLayout(new BorderLayout());
+		 getContentPane().add(containerPanel, BorderLayout.CENTER);
+		 
 		pack();
 	}
 	

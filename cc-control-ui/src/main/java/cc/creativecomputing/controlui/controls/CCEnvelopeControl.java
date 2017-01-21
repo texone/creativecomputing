@@ -1,8 +1,6 @@
 package cc.creativecomputing.controlui.controls;
 
 import java.awt.GridBagConstraints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -11,7 +9,6 @@ import javax.swing.JPanel;
 
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 
 public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHandle>{
@@ -28,7 +25,7 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 		});
 		
 		_myCurveFrame = new CCEnvelopeEditor(theHandle.name());
-		_myCurveFrame.setSize(300, 100);
+		_myCurveFrame.setSize(300, 300);
 		_myCurveFrame.addWindowListener(new WindowAdapter() {
 			
 			@Override
