@@ -190,13 +190,12 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 			public void mousePressed(MouseEvent e) {
 				if(_myTransportController == null)return;
 				
-				if (e.getButton() == MouseEvent.BUTTON3) {
+				if (e.getButton() == MouseEvent.BUTTON3 || e.isAltDown()) {
 					_myInsertTimeFrame.setLocation(e.getXOnScreen(), e.getYOnScreen());
 					_myInsertTimeFrame.setVisible(true);
     			} else if (e.getButton() == MouseEvent.BUTTON1) {
 					_myMarkerFrame.setLocation(e.getXOnScreen(), e.getYOnScreen());
     			}
-
 				_myTransportController.mousePressed(e);
 			}
 		});
@@ -261,7 +260,7 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		g.translate(2, 0);
+		g.translate(0, 0);
 		Graphics2D myG2 = (Graphics2D)g;
 		g.setColor(new Color(255,255,255));
 		g.fillRect(0, 0, getWidth(), getHeight() );

@@ -48,7 +48,7 @@ public class SwingTableLayout implements LayoutManager2 {
 	}
 	
 	public static final int SEPARATOR_WIDTH = 1;
-	public static final int SEPARATOR_MOUSE_WIDTH = 2;
+	public static final int SEPARATOR_MOUSE_WIDTH = 5;
 	public static final int DEFAULT_ROW_HEIGHT = 60;
 	public static final int DEFAULT_GROUP_HEIGHT = 15;
 	

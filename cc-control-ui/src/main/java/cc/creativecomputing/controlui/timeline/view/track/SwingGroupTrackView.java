@@ -122,8 +122,9 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 		_myMultiTrackPanel = theMultiTrackPanel;
 		_myGroupController = theGroupController;
 		_myTimelineController = theTimelineController;
-		
-		setLayout(new FlowLayout(FlowLayout.LEFT, 3,2));
+		FlowLayout myLayout = new FlowLayout(FlowLayout.LEFT, 3,2);
+		myLayout.setVgap(0);
+		setLayout(myLayout);
 		
 		setMinimumSize(new Dimension(100, 10));
 		setPreferredSize(new Dimension(100,10));
@@ -133,7 +134,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 //		_myOpenButton.setBackground(Color.WHITE);
 //		_myOpenButton.setForeground(Color.BLACK);
 //		_myOpenButton.setBorderPainted(false);
-//		_myOpenButton.setMargin(new Insets(0, 0, 0, 0));
+		
 		_myOpenButton.setForeground(Color.WHITE);
 		_myOpenButton.setFont(SwingGuiConstants.ARIAL_BOLD_10);
 		_myOpenButton.addMouseListener(new MouseAdapter() {
@@ -153,7 +154,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 		add(_myOpenButton);
 		
 		_myAddressField = new JLabel(theGroupController.track().path().getFileName().toString());
-		_myAddressField.setPreferredSize(new Dimension(100,15));
+		_myAddressField.setPreferredSize(new Dimension(100,10));
 		_myAddressField.setFont(SwingGuiConstants.ARIAL_BOLD_10);
 		_myAddressField.setForeground(Color.WHITE);
 		

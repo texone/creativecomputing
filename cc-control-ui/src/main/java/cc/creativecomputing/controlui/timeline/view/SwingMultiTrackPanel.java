@@ -1,5 +1,6 @@
 package cc.creativecomputing.controlui.timeline.view;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -103,6 +104,7 @@ public class SwingMultiTrackPanel extends JPanel implements Iterable<Component> 
     public SwingMultiTrackPanel(Component theParent) {
     	_myParent = theParent;
         _myLayout = new SwingTableLayout();
+        setBackground(Color.GRAY);
         setLayout(_myLayout);
     }
     

@@ -18,6 +18,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JViewport;
+import javax.swing.border.EmptyBorder;
 
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
@@ -96,6 +97,7 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
         _myViewport.setBounds(0, 0, 300, 300);
         
         _myScrollPane = new JScrollPane(_myMultiTrackPanel);
+        _myScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		_myScrollPane.getVerticalScrollBar().setUnitIncrement(20);
 		_myScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		

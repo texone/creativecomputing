@@ -100,7 +100,7 @@ public class SwingTrackDataView extends JPanel {
     	}
         
         setName("timeline" + (int) Math.floor(100 * Math.random()));
-        setBorder(BorderFactory.createLineBorder(Color.gray));
+//        setBorder(BorderFactory.createLineBorder(Color.gray));
         
         addMouseListener(new MouseAdapter() {
         	

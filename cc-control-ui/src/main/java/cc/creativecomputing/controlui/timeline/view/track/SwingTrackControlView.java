@@ -177,7 +177,7 @@ public class SwingTrackControlView extends JPanel{
 		
 		_myListeners = new ArrayList<ActionListener>();
 		
-		setBorder(BorderFactory.createLineBorder(Color.gray));
+//		setBorder(BorderFactory.createLineBorder(Color.gray));
 		
 		addMouseListener(new MouseAdapter()  {
 			
