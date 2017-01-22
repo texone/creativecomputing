@@ -1,5 +1,7 @@
 package cc.creativecomputing.graphics.app;
 
+import java.nio.file.Path;
+
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
@@ -7,8 +9,10 @@ import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCTimelineSynch;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLAdapter;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCGL2Application {
 	
@@ -72,7 +76,19 @@ public class CCGL2Application {
 					_myControlApp.update(0);
 					_myAdapter.setupControls(_myControlApp);
 				}else{
-					new CCPropertyMap().setData(CCGL2Application.this, presetPath);
+					CCPropertyMap myProps = new CCPropertyMap();
+					CCLog.info(presetPath);
+					myProps.setData(CCGL2Application.this, presetPath);
+					
+					Path myPresetsPath = myProps.rootHandle().presetPath();
+					CCNIOUtil.createDirectories(myPresetsPath);
+					for(Path myPath:CCNIOUtil.list(myPresetsPath, "json")){
+						CCLog.info(myPath.getFileName().toString());
+						myProps.rootHandle().bla();
+						myProps.rootHandle().preset(CCNIOUtil.fileName(myPath.getFileName().toString()));
+						break;
+					}
+					myProps.rootHandle().update(0);
 				}
 				_mySynch.animator().start();
 				
@@ -81,7 +97,7 @@ public class CCGL2Application {
 		};
 		
 		
-		if(_myUseUI)myGLAdapter.controlApp(new CCControlApp(_mySynch));
+		if(_myUseUI)myGLAdapter.controlApp(new CCControlApp(myGLAdapter, _mySynch));
 
 		_myGLContext.listener().add(myGLAdapter);
 		_myGLContext.listener().add(
