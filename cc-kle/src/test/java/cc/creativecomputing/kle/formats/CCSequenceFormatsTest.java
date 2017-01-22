@@ -31,7 +31,7 @@ import cc.creativecomputing.kle.elements.CCKleChannelType;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElementEffectManager;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
-import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionBounds;
+import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionCalculations;
 import cc.creativecomputing.math.CCMath;
 
 public class CCSequenceFormatsTest {
@@ -59,7 +59,7 @@ public class CCSequenceFormatsTest {
 	
 	@BeforeClass
 	static public void createTestElements(){
-		CC2Motor2ConnectionBounds myBounds = new CC2Motor2ConnectionBounds();
+		CC2Motor2ConnectionCalculations myBounds = new CC2Motor2ConnectionCalculations();
 		_mySequenceElements = new CCSequenceElements(
 			CCNIOUtil.dataPath("config"), 
 			myBounds,

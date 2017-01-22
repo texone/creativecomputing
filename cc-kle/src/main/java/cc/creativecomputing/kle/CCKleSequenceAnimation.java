@@ -4,18 +4,20 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffect;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.formats.CCSequenceFormats;
-import cc.creativecomputing.math.CCMatrix2;
+import cc.creativecomputing.math.interpolate.CCInterpolators;
 
 public class CCKleSequenceAnimation extends CCEffect {
 	
 	@CCProperty(name = "sequence")
 	private CCSequenceAsset _mySequenceAsset;
+
+	@CCProperty(name = "interpolator")
+	private CCInterpolators _myInterpolator = CCInterpolators.LINEAR;
 	
 
 	@CCProperty(name = "group id inverts")
@@ -31,11 +33,9 @@ public class CCKleSequenceAnimation extends CCEffect {
 		this(theMapping, 0, 1);
 	}
 	
-	private CCMatrix2 _myFrame;
 
 	@Override
 	public void update(final double theDeltaTime) {
-		_myFrame = _mySequenceAsset.frame();
 	}
 	
 	public void addGroupBlends(int theGroups){
@@ -51,13 +51,12 @@ public class CCKleSequenceAnimation extends CCEffect {
 	
 	private double value(CCEffectable theEffectable, double theBLend, int theID){
 		double myOffset = modulation("offset").modulation(theEffectable, -1, 1) * _mySequenceAsset.length();
-		double myValue = _mySequenceAsset.value(myOffset, theEffectable.id(), 0, theID) * 2 - 1;
+		double myValue = _mySequenceAsset.value(_myInterpolator, myOffset, theEffectable.id(), 0, theID) * 2 - 1;
 		return myValue * theBLend * modulation("amount").modulation(theEffectable, -1, 1);
 	}
 
 	public double[] applyTo(CCEffectable theEffectable) {
 		double[] myResult = new double[_myResultLength];
-		if(_myFrame == null)return myResult;
 	
 		double myBlend = elementBlend(theEffectable);
 		for(int i = 0; i < myResult.length; i++){

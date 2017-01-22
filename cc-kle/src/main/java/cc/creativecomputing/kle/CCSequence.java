@@ -6,6 +6,7 @@ import java.util.List;
 
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
+import cc.creativecomputing.math.interpolate.CCInterpolators;
 
 public class CCSequence extends ArrayList<CCMatrix2>{
 	
@@ -101,6 +102,23 @@ public class CCSequence extends ArrayList<CCMatrix2>{
 		CCMatrix2 myLower = frame((int)theFrame);
 		CCMatrix2 myUpper = frame(CCMath.min((int)theFrame + 1, size() - 1));
 		return CCMath.blend(myLower.data()[theColumn][theRow][theDepth], myUpper.data()[theColumn][theRow][theDepth], myBlend);
+	}
+	
+	public double value(CCInterpolators theInterpolator, double theFrame, int theColumn, int theRow, int theDepth){
+		double myBlend = theFrame - (int)theFrame;
+		CCMatrix2 myF0 = frame(CCMath.clamp((int)theFrame - 1, 0, size() - 1));
+		CCMatrix2 myF1 = frame(CCMath.clamp((int)theFrame + 0, 0, size() - 1));
+		CCMatrix2 myF2 = frame(CCMath.clamp((int)theFrame + 1, 0, size() - 1));
+		CCMatrix2 myF3 = frame(CCMath.clamp((int)theFrame + 2, 0, size() - 1));
+		
+		return theInterpolator.blend(
+			myF0.data()[theColumn][theRow][theDepth], 
+			myF1.data()[theColumn][theRow][theDepth], 
+			myF2.data()[theColumn][theRow][theDepth], 
+			myF3.data()[theColumn][theRow][theDepth], 
+			myBlend
+		);
+		
 	}
 	
 	public int length(){

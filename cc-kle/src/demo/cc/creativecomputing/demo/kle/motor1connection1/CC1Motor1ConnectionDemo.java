@@ -51,7 +51,7 @@ public class CC1Motor1ConnectionDemo extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		new CC1Motor1ConnectionConfigCreator(12, 14, 18, 18, 0, 380).saveXML();
+		new CC1Motor1ConnectionConfigCreator(12, 14, 18, 0, 380).saveXML();
 		
 		_myCameraController = new CCCameraController(this, g, 100);
 		

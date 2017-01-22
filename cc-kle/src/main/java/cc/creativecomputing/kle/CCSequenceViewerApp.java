@@ -6,7 +6,6 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.io.CCIOUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequenceViewer.CCSequenceDrawMode;
 import cc.creativecomputing.kle.CCSequenceViewer.CCSequenceDrawStyle;
@@ -39,7 +38,7 @@ public class CCSequenceViewerApp extends CCGL2Adapter{
 	@Override
 	public void init(CCGraphics g) {
 		_myViewer = new CCSequenceViewer(g, CCNIOUtil.dataPath("manila_setup_V2.xml"));
-		_myViewer.load(CCIOUtil.dataPath("dragon.bin"));
+		_myViewer.load(CCNIOUtil.dataPath("dragon.bin"));
 
 		
 //		addControls("app", "app", this);

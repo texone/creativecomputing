@@ -11,12 +11,12 @@ import java.util.Map;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.formats.CCSequenceIO;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
 import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.math.interpolate.CCInterpolators;
 
 public class CCSequenceAsset extends CCAsset<CCSequence>{
 	
@@ -34,8 +34,6 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	private final CCSequenceMapping<?> _myMapping;
 	
 	private String[] _myExtensions;
-	
-	private Path _myPath;
 	
 	public CCSequenceAsset(CCSequenceMapping<?> theMapping, String...theExtensions){
 		_myAsset = null;
@@ -55,12 +53,10 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 
 	@Override
 	public void onChangePath(Path thePath) {
-		CCLog.info((_myAsset == null ? "null" : _myPath) + " " + thePath) ;
 		if(thePath == null){
 			_myAsset = null;
 			return;
 		}
-		_myPath = thePath;
 		if(_mySequenceMap.containsKey(thePath)){
 			_myAsset = _mySequenceMap.get(thePath);
 			return;
@@ -84,10 +80,10 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 		_myFrame = _myAsset.frame(myFrame);
 	}
 	
-	public double value(double theOffset, int theColumn, int theRow, int theDepth){
+	public double value(CCInterpolators theInterpolator, double theOffset, int theColumn, int theRow, int theDepth){
 		if(_myAsset == null)return 0;
 		double myFrame = CCMath.floorMod(((_myTime + theOffset) * _cRate), _myAsset.length());
-		return _myAsset.value(myFrame, theColumn, theRow, theDepth);
+		return _myAsset.value(theInterpolator, myFrame, theColumn, theRow, theDepth);
 	}
 	
 	public double length(){
@@ -105,7 +101,6 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	
 	@Override
 	public void time(double theGlobalTime, double theEventTime, double theContentOffset) {
-		CCLog.info(theGlobalTime + ":" + this + ":" + (_myAsset == null ? "null" : _myPath)) ;
 		if(_myAsset == null)return;
 		
 		_myTime = (theEventTime - theContentOffset) * _cSpeed;

@@ -223,7 +223,7 @@ public class CCSequenceViewer {
 		
 	}
 	
-	public void load(String theFile){
+	public void load(Path theFile){
 		if(theFile == null)return;
 		
 		if(theFile.endsWith(".bin")){
