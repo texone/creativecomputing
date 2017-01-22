@@ -16,26 +16,23 @@ public class CCMotorSetup extends CCChannelSetup<CCMotorChannel>{
 	protected List<CCVector3> _myMotorAnimationBounds;
 	protected List<CCVector2> _myMotorAnimation2DBounds;
 	
-	protected CCVector3 _myAnimationCenter;
-	
 	protected CCVector3 _myElementOffset;
 	
-	protected CCVector2 _myElementOffset2D;
+	protected CCVector3 _myCentroid;
 	
 	protected CCVector3 _myRelativeOffset;
 	
 	protected double _myRotateY;
 	protected double _myRotateZ;
 	
-	public CCMotorSetup(List<CCMotorChannel> theChannels){
+	public CCMotorSetup(List<CCMotorChannel> theChannels, CCVector3 theCentroid){
 		super(theChannels);
+		_myCentroid = theCentroid;
 		_myMotorBounds = new ArrayList<CCVector3>();
 		_myMotorAnimationBounds = new ArrayList<CCVector3>();
 		_myMotorAnimation2DBounds = new ArrayList<CCVector2>();
 		_myElementOffset = new CCVector3();
-		_myElementOffset2D = new CCVector2();
 		_myRelativeOffset = new CCVector3();
-		_myAnimationCenter = new CCVector3();
 	}
 	
 	public CCVector3 relativeOffset(){
@@ -96,16 +93,8 @@ public class CCMotorSetup extends CCChannelSetup<CCMotorChannel>{
 		return _myElementOffset;
 	}
 	
-	public CCVector2 elementOffset2D(){
-		return _myElementOffset2D;
-	}
-	
-	public CCVector3 animationCenter(){
-		return _myAnimationCenter;
-	}
-	
 	public CCVector3 position(){
-		return _myElementOffset.add(_myAnimationCenter);
+		return _myElementOffset;
 	}
 	
 	public CCMotionData _myLastData = null;
@@ -143,6 +132,12 @@ public class CCMotorSetup extends CCChannelSetup<CCMotorChannel>{
 		CCXMLElement myBoundsXML = myMotorsXML.createChild("bounds");
 		for(CCVector3 myPoint:_myMotorBounds){
 			addPoint(myBoundsXML, myPoint);
+		}
+		if(_myCentroid != null){
+			CCXMLElement myCentroidXML = myMotorsXML.createChild("centroid");
+			myCentroidXML.addAttribute("x", _myCentroid.x);
+			myCentroidXML.addAttribute("y", _myCentroid.y);
+			myCentroidXML.addAttribute("z", _myCentroid.z);
 		}
 		return myMotorsXML;
 	}

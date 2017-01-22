@@ -1,13 +1,12 @@
 package cc.creativecomputing.kle.elements.motors;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
 
-public abstract class CCMotorBounds<SetupType extends CCMotorSetup> {
+public abstract class CCMotorCalculations<SetupType extends CCMotorSetup> {
 
-	protected double _myElementRadiusScale = 0;
+	protected double _myElementRadiusScale = 1;
 	protected double _myTopDistance = 300;
 	protected double _myBottomDistance = 1600;
 	
@@ -57,6 +56,7 @@ public abstract class CCMotorBounds<SetupType extends CCMotorSetup> {
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	public void updateBounds(){
 		if(_myElements == null)return;
 		
@@ -83,7 +83,6 @@ public abstract class CCMotorBounds<SetupType extends CCMotorSetup> {
 	@CCProperty(name = "bottom distance", min = 0, max = 2000, defaultValue = 2000)
 	public void bottomDistance(double theBottomDistance){
 		_myBottomDistance = theBottomDistance;
-		CCLog.info("bound:" + _myBottomDistance);
 		updateBounds();
 	}
 	

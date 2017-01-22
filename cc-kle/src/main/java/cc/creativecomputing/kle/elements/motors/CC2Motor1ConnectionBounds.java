@@ -4,7 +4,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 
-public class CC2Motor1ConnectionBounds extends CCMotorBounds<CC2Motor1ConnectionSetup>{
+public class CC2Motor1ConnectionBounds extends CCMotorCalculations<CC2Motor1ConnectionSetup>{
 
 	private double _myRopeAngle = 6;
 	

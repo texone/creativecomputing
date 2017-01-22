@@ -10,21 +10,20 @@ public class CCTwoAxisRotationSetup extends CCMotorSetup{
 	protected final CCMotorChannel motor0;
 	
 	public CCTwoAxisRotationSetup(List<CCMotorChannel> theChannels){
-		super(theChannels);
+		super(theChannels, null);
 
 		
 		motor0 = _myChannels.get(0);
 		
-		_myAnimationCenter = animationPosition(0.5f, 0.5f);
-		
 	}
 	
+	@SuppressWarnings("unused")
 	private CCVector3 animationPosition(double theX, double theY){
 		return CCVector3.lerp(
 			CCVector3.lerp(animationBounds().get(0), animationBounds().get(1), theX), 
 			CCVector3.lerp(animationBounds().get(3), animationBounds().get(2), theX), 
 			theY
-		).subtractLocal(_myAnimationCenter);
+		);
 	}
 	
 	@Override

@@ -9,42 +9,32 @@ public class CC1Motor1ConnectionSetup extends CCMotorSetup{
 
 	protected final CCMotorChannel motor;
 	
-	public CC1Motor1ConnectionSetup(List<CCMotorChannel> theChannels, CC1Motor1ConnectionBounds theBounds){
-		super(theChannels);
+	public CC1Motor1ConnectionSetup(List<CCMotorChannel> theChannels, CC1Motor1ConnectionBounds theBounds, CCVector3 theCentroid){
+		super(theChannels, theCentroid);
 		
 		motor = _myChannels.get(0);
 		
 		theBounds.updateBounds(this);
 		
-		_myAnimationCenter = animationPosition(0.5f);
-		
 	}
 	
 	private CCVector3 animationPosition(double theX){
-		return CCVector3.lerp(animationBounds().get(0), animationBounds().get(1), theX).subtractLocal(_myAnimationCenter);
+		return CCVector3.lerp(animationBounds().get(0), animationBounds().get(1), theX);
 	}
 	
 	@Override
 	public void setByRelativePosition(double... theValues) {
 		double myLength = theValues != null && theValues.length > 0 ? theValues[0] : 0.5f;
-		
-		
 		_myElementOffset.set(animationPosition(myLength));
-		double myAbsoluteLength = animationBounds().get(0).distance(animationBounds().get(1)) * myLength;
-		
-		_myElementOffset2D.set(0, myAbsoluteLength);
-		motor._myAnimatedConnectionPosition = _myElementOffset.add(_myAnimationCenter);
+		motor._myAnimatedConnectionPosition = _myElementOffset.clone();
 		
 	}
 	
 	@Override
 	public void setByRopeLength(double... theValues) {
 		double motionValue = theValues[0];
-		
 		_myElementOffset = motor.position().add(0,motionValue,0);
-		_myElementOffset2D.set(0,motionValue);
-		
-		motor._myAnimatedConnectionPosition = _myElementOffset.add(_myAnimationCenter);
+		motor._myAnimatedConnectionPosition = _myElementOffset.clone();
 	}
 	
 	@Override

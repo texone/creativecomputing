@@ -20,12 +20,14 @@ public class CC2Motor1ConnectionSetup extends CCMotorSetup{
 	protected final double _myMotorDistance;
 	
 	public CC2Motor1ConnectionSetup(List<CCMotorChannel> theChannels, CC2Motor1ConnectionBounds theBounds, double theElementRadius){
-		super(theChannels);
+		super(theChannels, null);
 
 		_myElementRadius = theElementRadius;
 		
 		motor0 = _myChannels.get(0);
 		motor1 = _myChannels.get(1);
+		
+		_myCentroid = motor0.connectionPosition().clone();
 		
 		_myMotorDistance = motor0.position().distance(motor1.position());
 		
@@ -33,9 +35,6 @@ public class CC2Motor1ConnectionSetup extends CCMotorSetup{
 		_myRotateY = new CCVector2(_myPlaneDirection.x, _myPlaneDirection.z).getPolarAngle() + CCMath.PI;
 		
 		theBounds.updateBounds(this);
-		
-		_myAnimationCenter = animationPosition(0.5f, 0.5f);
-		
 	}
 	
 	public double elementRadius(){
@@ -51,7 +50,7 @@ public class CC2Motor1ConnectionSetup extends CCMotorSetup{
 			CCVector3.lerp(animationBounds().get(0), animationBounds().get(1), theX), 
 			CCVector3.lerp(animationBounds().get(3), animationBounds().get(2), theX), 
 			theY
-		).subtractLocal(_myAnimationCenter);
+		);
 	}
 	
 	@Override
@@ -59,18 +58,10 @@ public class CC2Motor1ConnectionSetup extends CCMotorSetup{
 		double myX = theValues != null && theValues.length > 0 ? theValues[0] : 0.5f;
 		double myY = theValues != null && theValues.length > 1 ? theValues[1] : 0.5f;
 		
-		
 		_myElementOffset.set(animationPosition(myX, myY));
 		
-		double myDistance = new CCVector2(motor0._myPosition.x, motor0._myPosition.z).distance(_myElementOffset.x + _myAnimationCenter.x,_myElementOffset.z + _myAnimationCenter.z);
-		myDistance /= _myMotorDistance;
-		_myElementOffset2D.set(
-			CCMath.blend(-400, 400, myDistance),
-			 _myElementOffset.y + _myAnimationCenter.y - motor0.position().y
-		);
-		
-		motor0._myAnimatedConnectionPosition = _myElementOffset.add(_myAnimationCenter);
-		motor1._myAnimatedConnectionPosition = _myElementOffset.add(_myAnimationCenter);
+		motor0._myAnimatedConnectionPosition = _myElementOffset.clone();
+		motor1._myAnimatedConnectionPosition = _myElementOffset.clone();
 		
 	}
 	
@@ -90,16 +81,9 @@ public class CC2Motor1ConnectionSetup extends CCMotorSetup{
 		
 		_myElementOffset = CCVector3.lerp(motor0.position(), motor1.position(), x / c);
 		_myElementOffset.y += h;
-			
-		double myDistance = new CCVector2(motor0._myPosition.x, motor0._myPosition.z).distance(_myElementOffset.x + _myAnimationCenter.x,_myElementOffset.z + _myAnimationCenter.z);
-		myDistance /= _myMotorDistance;
-		_myElementOffset2D.set(
-			CCMath.blend(-400, 400, myDistance),
-			 _myElementOffset.y + _myAnimationCenter.y - motor0.position().y
-		);
 		
-		motor0._myAnimatedConnectionPosition = _myElementOffset.add(_myAnimationCenter);
-		motor1._myAnimatedConnectionPosition = _myElementOffset.add(_myAnimationCenter);
+		motor0._myAnimatedConnectionPosition = _myElementOffset.clone();
+		motor1._myAnimatedConnectionPosition = _myElementOffset.clone();
 	}
 	
 	@Override
@@ -114,9 +98,9 @@ public class CC2Motor1ConnectionSetup extends CCMotorSetup{
 		g.beginShape(CCDrawMode.LINE_LOOP);
 		for(int i = 0; i < 100;i++){
 			double angle = CCMath.blend(0, CCMath.TWO_PI, i / 100f);
-			double x = CCMath.sin(angle) * _myElementRadius * _myPlaneDirection.x + _myElementOffset.x + _myAnimationCenter.x;
-			double y = CCMath.cos(angle) * _myElementRadius + _myElementOffset.y + _myAnimationCenter.y;
-			double z = CCMath.sin(angle) * _myElementRadius * _myPlaneDirection.z + _myElementOffset.z + _myAnimationCenter.z;
+			double x = CCMath.sin(angle) * _myElementRadius * _myPlaneDirection.x + _myElementOffset.x;
+			double y = CCMath.cos(angle) * _myElementRadius + _myElementOffset.y;
+			double z = CCMath.sin(angle) * _myElementRadius * _myPlaneDirection.z + _myElementOffset.z;
 			g.vertex(x,y,z);
 		}
 		g.endShape();

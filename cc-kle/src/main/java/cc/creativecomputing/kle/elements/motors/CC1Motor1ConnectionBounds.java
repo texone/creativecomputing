@@ -2,7 +2,7 @@ package cc.creativecomputing.kle.elements.motors;
 
 import cc.creativecomputing.math.CCVector3;
 
-public class CC1Motor1ConnectionBounds extends CCMotorBounds<CC1Motor1ConnectionSetup>{
+public class CC1Motor1ConnectionBounds extends CCMotorCalculations<CC1Motor1ConnectionSetup>{
 
 	@Override
 	public void updateBounds(CC1Motor1ConnectionSetup mySetup){
