@@ -995,6 +995,10 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 		return this;
 	}
 	
+	public CCMatrix4x4 applyTranslationPost(final CCVector3 theVector) {
+		return applyTranslationPost(theVector.x, theVector.y, theVector.z);
+	}
+	
 	public CCMatrix4x4 translate(final double theX, final double theY, final double theZ) {
 		m30 += m00 * theX + m10 * theY + m20 * theZ + m30;
 		m31 += m01 * theX + m11 * theY + m21 * theZ + m31;
@@ -1018,6 +1022,10 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 		m32 = theZ;
 
 		return this;
+	}
+	
+	public CCMatrix4x4 applyTranslationPre(final CCVector3 theVector) {
+		return applyTranslationPre(theVector.x, theVector.y, theVector.z);
 	}
 
 	/**
