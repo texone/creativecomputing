@@ -18,7 +18,7 @@ import cc.creativecomputing.kle.analyze.CCFileMotionAnalyzer;
 import cc.creativecomputing.kle.elements.CCKleChannelType;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
 import cc.creativecomputing.kle.elements.motors.CC2Motor1ConnectionBounds;
-import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionBounds;
+import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionCalculations;
 
 /**
 * @author christian riekoff
