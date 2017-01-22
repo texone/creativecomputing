@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
+import cc.creativecomputing.core.util.CCBitUtil;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -60,27 +61,27 @@ public class CCColor implements Cloneable{
 
 	static public CCColor parseFromInteger(final int theColor) {
 		return new CCColor(
-			((theColor >> 16) & 0xff) / 255f,
-			((theColor >> 8) & 0xff) / 255f, 
-			(theColor & 0xff) / 255f
+			CCBitUtil.bit(theColor, 2) / 255f,
+			CCBitUtil.bit(theColor, 1) / 255f,
+			CCBitUtil.bit(theColor, 0) / 255f
 		);
 	}
 	
 	static public CCColor parseFromIntegerBGRA(final int theColor) {
 		return new CCColor(
-			((theColor >>  8) & 0xff) / 255f,
-			((theColor >> 16) & 0xff) / 255f,
-			((theColor >> 24) & 0xff) / 255f, 
-			(theColor & 0xff) / 255f
+			CCBitUtil.bit(theColor, 1) / 255f,
+			CCBitUtil.bit(theColor, 2) / 255f,
+			CCBitUtil.bit(theColor, 3) / 255f,
+			CCBitUtil.bit(theColor, 0) / 255f
 		);
 	}
 	
 	static public CCColor parseFromIntegerRGBA(final int theColor) {
 		return new CCColor(
-			((theColor >> 24) & 0xff) / 255f,
-			((theColor >> 16) & 0xff) / 255f,
-			((theColor >>  8) & 0xff) / 255f, 
-			(theColor & 0xff) / 255f
+			CCBitUtil.bit(theColor, 3) / 255f,
+			CCBitUtil.bit(theColor, 2) / 255f,
+			CCBitUtil.bit(theColor, 2) / 255f,
+			CCBitUtil.bit(theColor, 0) / 255f
 		);
 	}
 	
