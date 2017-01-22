@@ -241,6 +241,15 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
      * 
      * @param theSource
      */
+    public CCVector3(final CCVector2 theSource) {
+        this(theSource.x, theSource.y, 0);
+    }
+
+    /**
+     * Constructs a new vector set to the (x, y, z) values of the given source vector.
+     * 
+     * @param theSource
+     */
     public CCVector3(final CCVector3 theSource) {
         this(theSource.x, theSource.y, theSource.z);
     }
@@ -1295,5 +1304,9 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
 		ret.put("z", z);
 		
 		return ret;
+	}
+
+	public CCVector2 xy() {
+		return new CCVector2(x, y);
 	}    
 }
