@@ -11,6 +11,7 @@ public class CCAnalyzeSettings{
 	@CCProperty(name = "fade out") boolean _cFadeOut = false;
 	@CCProperty(name = "alpha", min = 0, max = 1) float _cAlpha = 1f;
 	@CCProperty(name = "draw violations")boolean _cDrawViolations = true;
+	@CCProperty(name = "draw values")boolean _cDrawValues = true;
 	@CCProperty(name = "violation point size", min = 1, max = 20)double _cViolationPointSize = 5;
 	@CCProperty(name = "draw points")boolean _cDrawPoints = false;
 	@CCProperty(name = "point size", min = 1, max = 20)double _cPointSize;
