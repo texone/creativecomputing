@@ -266,12 +266,18 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 		}
 	}
 	
+	public CCAnalyzeMode mode(){
+		return _cAnalyzeMode;
+	}
+	
 	public void draw3D(CCGraphics g){
 		if(_cAnalyzeMode != CCAnalyzeMode.ANALYZE_3D)return;
 		g.pushAttribute();
 		g.pointSize(5);
 		for(int i = _cElement; i < _myElementAnalyzers.size() && i < _cElement + _cNumberOfElements;i++){
 			CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(i);
+			g.pushMatrix();
+			g.applyMatrix(myAnalyzer._myElement.matrix());
 			if(_cAnalyzeChannels){
 				for(CCChannelAnalyzer myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 					myChannelAnalyzer.draw3D(g);
@@ -279,6 +285,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			}else{
 				myAnalyzer.draw3D(g);
 			}
+			g.popMatrix();
 		}
 		g.popAttribute();
 	}
