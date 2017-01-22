@@ -44,6 +44,11 @@ public class CCGradientEffect extends CCEffect{
 		_myGlobalPhase += theDeltaTime * _cSpeed;
 	}
 	
+	@CCProperty(name = "reset phase")
+	public void resetPhase(){
+		_myGlobalPhase = 0;
+	}
+	
 	public double[] applyTo(CCEffectable theEffectable){
 		double[] myResult = new double[_myResultLength];
 		CCColor myColor = _myGradient.color(
