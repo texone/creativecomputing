@@ -44,19 +44,18 @@ import cc.creativecomputing.math.CCVector3;
 public class CCCameraController {
 	
 	private static class InterpolationManager {
-		private AbstractInterp currentInterpolator = null;
+		private AbstractInterp _myCurrentInterpolator = null;
 
 		protected synchronized void startInterpolation(final AbstractInterp interpolation) {
 			cancelInterpolation();
-			currentInterpolator = interpolation;
-			currentInterpolator.start();
+			_myCurrentInterpolator = interpolation;
+			_myCurrentInterpolator.start();
 		}
 
 		protected synchronized void cancelInterpolation() {
-			if (currentInterpolator != null) {
-				currentInterpolator.cancel();
-				currentInterpolator = null;
-			}
+			if (_myCurrentInterpolator == null) return;
+			_myCurrentInterpolator.cancel();
+			_myCurrentInterpolator = null;
 		}
 
 	}
@@ -70,12 +69,12 @@ public class CCCameraController {
 		private final double _myDamping;
 
 		public CCDampedAction() {
-			this(0.16f);
+			this(0.16);
 		}
 
 		public CCDampedAction(final double theFriction) {
 			_myVelocity = 0;
-			_myDamping = 1.0f - theFriction;
+			_myDamping = 1.0 - theFriction;
 			_myApp.animator().listener().add(this);
 		}
 
@@ -128,9 +127,8 @@ public class CCCameraController {
 	private final double _myStartDistance;
 	private final CCVector3 _myStartCenter;
 
-	private boolean resetOnDoubleClick = true;
-	private double minimumDistance = 1;
-	private double maximumDistance = Float.MAX_VALUE;
+	private boolean _myResetOnDoubleClick = true;
+	private double _myMaximumDistance = Double.MAX_VALUE;
 
 	private final CCDampedAction _myRotateXAction;
 	private final CCDampedAction _myRotateYAction;
@@ -148,34 +146,34 @@ public class CCCameraController {
 	private CCQuaternion _myRotation;
 
 	private Constraint _myDragConstraint = null;
-	private Constraint permaConstraint = null;
+	private Constraint _myPermaConstraint = null;
 
-	private final InterpolationManager rotationInterps = new InterpolationManager();
-	private final InterpolationManager centerInterps = new InterpolationManager();
-	private final InterpolationManager distanceInterps = new InterpolationManager();
+	private final InterpolationManager _myRotationInterpolation = new InterpolationManager();
+	private final InterpolationManager _myCenterInterpolation = new InterpolationManager();
+	private final InterpolationManager _myDistanceInterps = new InterpolationManager();
 
-	private final CCCameraMouseDragHandler panHandler = new CCCameraMouseDragHandler() {
+	private final CCCameraMouseDragHandler _myPanHandler = new CCCameraMouseDragHandler() {
 		public void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY) {
 			_myDampedPanX.impulse(theMoveX / 8f);
 			_myDampedPanY.impulse(theMoveY / 8f);
 		}
 	};
 	
-	private CCCameraMouseDragHandler centerDragHandler = panHandler;
+	private CCCameraMouseDragHandler _myCenterDragHandler = _myPanHandler;
 
-	private final CCCameraMouseDragHandler rotateHandler = new CCCameraMouseDragHandler() {
+	private final CCCameraMouseDragHandler _myRotateHandler = new CCCameraMouseDragHandler() {
 		public void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY) {
 			mouseRotate(-theMoveX, theMoveY, theMouseX, theMouseY);
 		}
 	};
-	private CCCameraMouseDragHandler leftDragHandler = rotateHandler;
+	private CCCameraMouseDragHandler _myLeftDragHandler = _myRotateHandler;
 
-	private final CCCameraMouseDragHandler zoomHandler = new CCCameraMouseDragHandler() {
+	private final CCCameraMouseDragHandler _myZoomHandler = new CCCameraMouseDragHandler() {
 		public void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY) {
 			_myDampedZoom.impulse(theMoveY / 10f);
 		}
 	};
-	private CCCameraMouseDragHandler rightDraghandler = zoomHandler;
+	private CCCameraMouseDragHandler _myRightDraghandler = _myZoomHandler;
 
 	private final CCMouseWheelListener _myWheelHandler = new CCMouseWheelListener() {
 
@@ -214,6 +212,7 @@ public class CCCameraController {
 		_myApp.animator().listener().add(new CCAnimatorAdapter() {
 			@Override
 			public void update(CCAnimator theAnimator) {
+				if(!_myIsActive)return;
 				feed();
 			}
 		});
@@ -397,7 +396,7 @@ public class CCCameraController {
 		public void mouseClicked(CCMouseEvent theEvent) {
 			if(!_myIsActive)return;
 			
-			if (resetOnDoubleClick && 2 == (int)theEvent.clickCount()) {
+			if (_myResetOnDoubleClick && 2 == (int)theEvent.clickCount()) {
 				reset();
 			}
 		}
@@ -415,19 +414,19 @@ public class CCCameraController {
 				if (_myDragConstraint == null && Math.abs(theMoveX - theMoveY) > 1) {
 					_myDragConstraint = Math.abs(theMoveX) > Math.abs(theMoveY) ? Constraint.YAW : Constraint.PITCH;
 				}
-			} else if (permaConstraint != null) {
-				_myDragConstraint = permaConstraint;
+			} else if (_myPermaConstraint != null) {
+				_myDragConstraint = _myPermaConstraint;
 			} else {
 				_myDragConstraint = null;
 			}
 
 			final CCMouseButton b = theEvent.button();
-			if (centerDragHandler != null && (b == CCMouseButton.CENTER || (b == CCMouseButton.LEFT && theEvent.isMetaDown()))) {
-				centerDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
-			} else if (leftDragHandler != null && b == CCMouseButton.LEFT) {
-				leftDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
-			} else if (rightDraghandler != null && b == CCMouseButton.RIGHT) {
-				rightDraghandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
+			if (_myCenterDragHandler != null && (b == CCMouseButton.CENTER || (b == CCMouseButton.LEFT && theEvent.isMetaDown()))) {
+				_myCenterDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
+			} else if (_myLeftDragHandler != null && b == CCMouseButton.LEFT) {
+				_myLeftDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
+			} else if (_myRightDraghandler != null && b == CCMouseButton.RIGHT) {
+				_myRightDraghandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
 			}
 		}
 	}
@@ -441,11 +440,13 @@ public class CCCameraController {
 	}
 
 	private void mouseZoom(final double delta) {
-		safeSetDistance(_myDistance + delta * (double)Math.log1p(_myDistance));
+
+//		CCLog.info(_myDistance + ":" + delta + ":" + Math.log1p(CCMath.abs(_myDistance)) + ":" + CCMath.sign(_myDistance));
+		safeSetDistance(_myDistance + delta * Math.log1p(CCMath.abs(_myDistance)) * CCMath.sign(_myDistance));
 	}
 
 	private void mousePan(final double dxMouse, final double dyMouse) {
-		final double panScale = CCMath.sqrt(_myDistance * .005f);
+		final double panScale = CCMath.sqrt(CCMath.abs(_myDistance) * .005);
 		pan(
 			_myDragConstraint == Constraint.PITCH ? 0 : -dxMouse * panScale,
 			_myDragConstraint == Constraint.YAW ? 0 : dyMouse * panScale
@@ -496,7 +497,7 @@ public class CCCameraController {
 	}
 
 	public void distance(final double theNewDistance, final double theAnimationTime) {
-		distanceInterps.startInterpolation(new DistanceInterp(theNewDistance, theAnimationTime));
+		_myDistanceInterps.startInterpolation(new DistanceInterp(theNewDistance, theAnimationTime));
 	}
 
 	public double[] getLookAt() {
@@ -504,38 +505,31 @@ public class CCCameraController {
 	}
 
 	public void lookAt(final double x, final double y, final double z) {
-		centerInterps.startInterpolation(new CenterInterp(new CCVector3(x, y, z), 0.3f));
+		_myCenterInterpolation.startInterpolation(new CenterInterp(new CCVector3(x, y, z), 0.3f));
 	}
 
-	public void lookAt(final double x, final double y, final double z,
-			final double distance) {
+	public void lookAt(final double x, final double y, final double z, final double theDistance) {
 		lookAt(x, y, z);
-		distance(distance);
-	}
-
-	public void lookAt(final double x, final double y, final double z,
-			final long animationTimeMillis) {
-		lookAt(x, y, z, _myDistance, animationTimeMillis);
+		distance(theDistance);
 	}
 
 	public void lookAt(
 		final double x, final double y, final double z,
-		final double distance, final long animationTimeMillis
+		final double theDistance, final double theAnimationTime
 	) {
-		setState(new CCCameraState(_myRotation, new CCVector3(x, y, z), distance), animationTimeMillis);
+		setState(new CCCameraState(_myRotation, new CCVector3(x, y, z), theDistance), theAnimationTime);
 	}
 
-	private void safeSetDistance(final double distance) {
-		this._myDistance = Math.min(maximumDistance, Math.max(minimumDistance, distance));
-//		feed();
+	private void safeSetDistance(final double theDistance) {
+		_myDistance = CCMath.constrain(theDistance, 1, _myMaximumDistance);
 	}
 
 	public void feed() {
 		apply(_myCenter, _myRotation, _myDistance);
 	}
 
-	public void apply(final CCVector3 center, final CCQuaternion rotation, final double distance) {
-		final CCVector3 pos = rotation.apply(LOOK).multiply(distance).add(center);
+	public void apply(final CCVector3 center, final CCQuaternion rotation, final double theDistance) {
+		final CCVector3 pos = rotation.apply(LOOK).multiply(theDistance).add(center);
 		final CCVector3 rup = rotation.apply(UP);
 		
 		_myCamera.position(pos.x, pos.y, pos.z);
@@ -544,17 +538,16 @@ public class CCCameraController {
 	}
 
 	/**
-	 * Where is the PeasyCam in world space?
+	 * Where is the camera in world space?
 	 * 
-	 * @return double[]{x,y,z}
+	 * @return camera position
 	 */
-	public double[] getPosition() {
-		final CCVector3 pos = _myRotation.apply(LOOK).multiply(_myDistance).add(_myCenter);
-		return new double[] { pos.x, pos.y, pos.z };
+	public CCVector3 position() {
+		return _myRotation.apply(LOOK).multiply(_myDistance).add(_myCenter);
 	}
 
 	public void reset() {
-		reset(0.3f);
+		reset(0.3);
 	}
 
 	public void reset(final double theAnimationTime) {
@@ -586,49 +579,44 @@ public class CCCameraController {
 	 * Permit arbitrary rotation. (Default mode.)
 	 */
 	public void setFreeRotationMode() {
-		permaConstraint = null;
+		_myPermaConstraint = null;
 	}
 
 	/**
 	 * Only permit yaw.
 	 */
 	public void setYawRotationMode() {
-		permaConstraint = Constraint.YAW;
+		_myPermaConstraint = Constraint.YAW;
 	}
 
 	/**
 	 * Only permit pitch.
 	 */
 	public void setPitchRotationMode() {
-		permaConstraint = Constraint.PITCH;
+		_myPermaConstraint = Constraint.PITCH;
 	}
 
 	/**
 	 * Only permit roll.
 	 */
 	public void setRollRotationMode() {
-		permaConstraint = Constraint.ROLL;
+		_myPermaConstraint = Constraint.ROLL;
 	}
 
 	/**
 	 * Only suppress roll.
 	 */
 	public void setSuppressRollRotationMode() {
-		permaConstraint = Constraint.SUPPRESS_ROLL;
-	}
-
-	public void setMinimumDistance(final double minimumDistance) {
-		this.minimumDistance = minimumDistance;
-		safeSetDistance(_myDistance);
+		_myPermaConstraint = Constraint.SUPPRESS_ROLL;
 	}
 
 	public void setMaximumDistance(final double maximumDistance) {
-		this.maximumDistance = maximumDistance;
+		_myMaximumDistance = maximumDistance;
 		safeSetDistance(_myDistance);
 	}
 
 	public void setResetOnDoubleClick(final boolean resetOnDoubleClick) {
-		this.resetOnDoubleClick = resetOnDoubleClick;
+		_myResetOnDoubleClick = resetOnDoubleClick;
 	}
 
 	public void setState(final CCCameraState state) {
@@ -637,9 +625,9 @@ public class CCCameraController {
 
 	public void setState(final CCCameraState state, final double animationTimeMillis) {
 		if (animationTimeMillis > 0) {
-			rotationInterps.startInterpolation(new RotationInterp(state._myRotation, animationTimeMillis));
-			centerInterps.startInterpolation(new CenterInterp(state._myCenter, animationTimeMillis));
-			distanceInterps.startInterpolation(new DistanceInterp(state._myDistance, animationTimeMillis));
+			_myRotationInterpolation.startInterpolation(new RotationInterp(state._myRotation, animationTimeMillis));
+			_myCenterInterpolation.startInterpolation(new CenterInterp(state._myCenter, animationTimeMillis));
+			_myDistanceInterps.startInterpolation(new DistanceInterp(state._myDistance, animationTimeMillis));
 		} else {
 			_myRotation = state._myRotation;
 			_myCenter.set(state._myCenter);
@@ -705,7 +693,7 @@ public class CCCameraController {
 
 		public DistanceInterp(final double endDistance, final double theDuration) {
 			super(theDuration);
-			_myEndDistance = Math.min(maximumDistance, Math.max(minimumDistance, endDistance));
+			_myEndDistance = CCMath.constrain(endDistance, -_myMaximumDistance, _myMaximumDistance);
 		}
 
 		@Override
@@ -723,10 +711,10 @@ public class CCCameraController {
 		private final CCVector3 startCenter;
 		private final CCVector3 endCenter;
 
-		public CenterInterp(final CCVector3 endCenter, final double theDuration) {
+		public CenterInterp(final CCVector3 theEndCenter, final double theDuration) {
 			super(theDuration);
 			startCenter = new CCVector3(_myCenter);
-			this.endCenter = endCenter;
+			endCenter = theEndCenter;
 		}
 
 		@Override

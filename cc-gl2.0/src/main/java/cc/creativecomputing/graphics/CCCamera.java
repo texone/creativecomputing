@@ -935,11 +935,13 @@ public class CCCamera{
 	
 	public CCMatrix4x4 viewMatrix(){
 		CCMatrix4x4 myResult = new CCMatrix4x4();
-		double[] myViewMatrix = new double[_myViewMatrix.length];
-		for(int i = 0; i < _myViewMatrix.length;i++){
-			myViewMatrix[i] = (double)_myViewMatrix[i];
-		}
-		myResult.fromArray(myViewMatrix, true);
+		myResult.fromArray(_myViewMatrix, true);
+		return myResult;
+	}
+	
+	public CCMatrix4x4 projectionMatrix(){
+		CCMatrix4x4 myResult = new CCMatrix4x4();
+		myResult.fromArray(_myProjectionMatrix, true);
 		return myResult;
 	}
 	
