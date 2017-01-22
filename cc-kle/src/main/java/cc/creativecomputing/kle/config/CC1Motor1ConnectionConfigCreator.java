@@ -11,6 +11,7 @@ import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.motors.CC1Motor1ConnectionBounds;
 import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.model.obj.CCAABB;
 
@@ -23,7 +24,7 @@ public class CC1Motor1ConnectionConfigCreator {
 
 	protected List<CCSequenceElement> _myElements = new ArrayList<>();
 	
-	public CC1Motor1ConnectionConfigCreator(int xRes, int zRes, double XSpace, double zSpace, double theTop, double theBottom){
+	public CC1Motor1ConnectionConfigCreator(int xRes, int zRes, double XSpace, double zSpace, double height){
 		
 		_mySculptureXML = new CCXMLElement("sculpture");
 		CCXMLElement myElementsXML = _mySculptureXML.createChild("elements");
@@ -39,34 +40,39 @@ public class CC1Motor1ConnectionConfigCreator {
 		myMotorMappingXML.addAttribute("bits", 16);
 		
 		CC1Motor1ConnectionBounds myBounds = new CC1Motor1ConnectionBounds();
-		myBounds.topDistance(theTop);
-		myBounds.bottomDistance(theBottom);
+		myBounds.topDistance(0);
+		myBounds.bottomDistance(height);
 		
 		int id = 0;
-		
-		double lastX = xRes - 1;
-		double lastZ = zRes - 1;
 		
 		for(int x = 0; x < xRes; x++){
 			for(int z = 0; z < zRes; z++){
 				
 				int myID = id++;
 				List<CCMotorChannel> myMotorChannels = new ArrayList<>();
-				double myX = CCMath.map(x, 0, lastX, -lastX / 2 * XSpace, lastX / 2 * XSpace);
-				double myZ = CCMath.map(z, 0, lastZ, -lastZ / 2 * zSpace, lastZ / 2 * zSpace);
-				CCMotorChannel myMotor = new CCMotorChannel(myID, new CCVector3(myX, 0, myZ), new CCVector3(myX, (theTop + theBottom) / 2 / 2, myZ));
+				double myX = CCMath.map(x, 0, xRes - 1, -xRes / 2 * XSpace, xRes / 2 * XSpace);
+				double myZ = CCMath.map(z, 0, zRes - 1, -zRes / 2 * zSpace, zRes / 2 * zSpace);
+				
+				CCVector3 myPulleyPosition = new CCVector3(0, 0, 0);
+				CCVector3 myConnectionPosition = new CCVector3(0, height / 2, 0);
+				CCMotorChannel myMotor = new CCMotorChannel(myID, myPulleyPosition, myConnectionPosition);
 				myMotorChannels.add(myMotor);
+				
+				CCMatrix4x4 myTransform = new CCMatrix4x4();
+				myTransform.applyTranslationPost(new CCVector3(myX, 0, myZ));
 				
 				CCSequenceElement myElement = new CCSequenceElement(
 					myID, 
 					myMotorChannels, 
 					null,
 					myBounds,
+					myConnectionPosition,
+					myTransform,
 					1
 				);
 
-				double min = theTop;
-				double max = theBottom;
+				double min = 0;
+				double max = height;
 				
 				myElementsXML.addChild(myElement.toXML());
 				
@@ -108,7 +114,7 @@ public class CC1Motor1ConnectionConfigCreator {
 	}
 	
 	public static void main(String[] args) {
-		CC1Motor1ConnectionConfigCreator myConfigCreator = new CC1Motor1ConnectionConfigCreator(12, 14, 18, 18, 0, 380);
+		CC1Motor1ConnectionConfigCreator myConfigCreator = new CC1Motor1ConnectionConfigCreator(12, 14, 18, 18, 380);
 		myConfigCreator.saveXML();
 	}
 }
