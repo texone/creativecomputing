@@ -22,6 +22,8 @@ public class CCEffectModulation {
 		public double mod = 1;
 		@CCProperty(name = "mod amount", min = -1, max = 1)
 		public double modAmount = 0;
+		@CCProperty(name = "mod flip")
+		public boolean modFlip = false;
 		
 		@CCProperty(name = "div", min = 2, max = 8)
 		public double div = 1;
@@ -90,7 +92,11 @@ public class CCEffectModulation {
 		
 		@Override
 		public double valueFormular(CCEffectable theElement, CCIdSource theSource, double theMin, double theMax, int theStep, double theOffset) {
-			return scaleValue(theMin, theMax, (theElement.idSource(theSource._mySourceName) % CCMath.max(1, theStep)) / (double)(theStep - 1), theOffset);
+			int flipDiv = (theElement.idSource(theSource._mySourceName) / CCMath.max(1, theStep));
+			boolean flip = flipDiv % 2 == 1 && theSource.modFlip;
+			double modBlend = (theElement.idSource(theSource._mySourceName) % CCMath.max(1, theStep)) / (double)(theStep - 1);
+			if(flip)modBlend = 1 - modBlend;
+			return scaleValue(theMin, theMax, modBlend, theOffset);
 		}
 	};
 	
