@@ -16,6 +16,8 @@ public abstract class CCHistoryGraph<Type extends CCHistoryData>{
 	protected boolean _cShow = false;
 	@CCProperty(name = "color") 
 	protected CCColor _cColor = new CCColor();
+	@CCProperty(name = "abs")
+	protected boolean _cAbs = false;
 	
 	protected CCAnalyzeSettings _mySettings;
 	
@@ -39,7 +41,7 @@ public abstract class CCHistoryGraph<Type extends CCHistoryData>{
 		g.pointSize(_mySettings._cPointSize);
 		g.beginShape(_mySettings._cDrawPoints ? CCDrawMode.POINTS : CCDrawMode.LINE_STRIP);
 		for(Type myData:new ArrayList<>(theData)){
-			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),CCMath.saturate(CCMath.abs(value(myData))/_cMax) * theHeight);
+			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),CCMath.constrain((_cAbs ? CCMath.abs(value(myData)) : value(myData)) /_cMax, -1, 1) * theHeight);
 			myStep += _mySettings._cTimeBased ? myData.timeStep : 1;
 		}
 		g.endShape();
@@ -50,7 +52,7 @@ public abstract class CCHistoryGraph<Type extends CCHistoryData>{
 		g.beginShape(CCDrawMode.POINTS);
 		for(Type myData:new ArrayList<>(theData)){
 			if(CCMath.abs(value(myData))>_cMax)
-				g.vertex(CCMath.map(myStep, 0, myEnd, -g.width() / 2, g.width() / 2),CCMath.saturate(CCMath.abs(value(myData))/_cMax) * theHeight);
+				g.vertex(CCMath.map(myStep, 0, myEnd, -g.width() / 2, g.width() / 2),CCMath.constrain((_cAbs ? CCMath.abs(value(myData)) : value(myData)) /_cMax, -1, 1) * theHeight);
 			myStep += _mySettings._cTimeBased ? myData.timeStep : 1;
 		}
 		g.endShape();
