@@ -1,10 +1,6 @@
 package cc.creativecomputing.effects;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.signal.CCMixSignal;
 
 public class CCSignalEffect extends CCEffect{
