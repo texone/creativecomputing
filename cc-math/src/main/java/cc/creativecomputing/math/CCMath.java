@@ -773,7 +773,7 @@ public class CCMath {
     	double theV2, double theV3,
     	double theBlend
     ){
-    	double mu2 = theBlend*theBlend;
+    	double mu2 = theBlend * theBlend;
     	double a0 = theV3 - theV2 - theV0 + theV1;
     	double a1 = theV0 - theV1 - a0;
     	double a2 = theV2 - theV0;
