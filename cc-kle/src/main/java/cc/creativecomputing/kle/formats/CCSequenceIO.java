@@ -20,6 +20,17 @@ public class CCSequenceIO {
 				return new CCSequenceBinFormat().load(thePath, theMapping);
 			case "cca":
 				return new CCSequenceCCAFormat().load(thePath, theMapping);
+			case "kle":
+				try{
+					CCSequenceKLE2Container myContainer = new CCSequenceKLE2Container();
+					Map<CCKleChannelType,CCSequenceMapping<?>> myMappings = new HashMap<CCKleChannelType, CCSequenceMapping<?>>();
+					myMappings.put(theMapping.type(), theMapping);
+					Map<CCKleChannelType, CCSequence> mySequenceMap = myContainer.load(thePath, myMappings);
+					CCSequence mySequence = mySequenceMap.get(theMapping.type());
+					if(mySequence != null)return mySequence;
+				}catch(Exception e){
+					
+				}
 			}
 		}
 		
@@ -45,16 +56,17 @@ public class CCSequenceIO {
 //				e.printStackTrace();
 			}
 		}
-		try{
-			CCSequenceKLE1Container myContainer = new CCSequenceKLE1Container();
-			Map<CCKleChannelType,CCSequenceMapping<?>> myMappings = new HashMap<CCKleChannelType, CCSequenceMapping<?>>();
-			myMappings.put(theMapping.type(), theMapping);
-			Map<CCKleChannelType, CCSequence> mySequenceMap = myContainer.load(thePath, myMappings);
-			CCSequence mySequence = mySequenceMap.get(theMapping.type());
-			if(mySequence != null)return mySequence;
-		}catch(Exception e){
-			
-		}
+//		try{
+//			CCSequenceKLE1Container myContainer = new CCSequenceKLE1Container();
+//			Map<CCKleChannelType,CCSequenceMapping<?>> myMappings = new HashMap<CCKleChannelType, CCSequenceMapping<?>>();
+//			myMappings.put(theMapping.type(), theMapping);
+//			Map<CCKleChannelType, CCSequence> mySequenceMap = myContainer.load(thePath, myMappings);
+//			CCSequence mySequence = mySequenceMap.get(theMapping.type());
+//			if(mySequence != null)return mySequence;
+//		}catch(Exception e){
+//			
+//		}
+		
 		return null;
 	}
 }

@@ -6,8 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import cc.creativecomputing.core.util.CCFormatUtil;
+import cc.creativecomputing.io.CCFileOutputChannel;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
+import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceElementRecording;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.math.CCMatrix2;
 
@@ -28,10 +30,10 @@ public class CCSequenceCSVFormat implements CCSequenceFormat{
 					for (int d = 0; d < theSequence.depth(); d++) {
 					
 						BufferedWriter myWriter = Files.newBufferedWriter(myExportPath.resolve(
-								"c" + CCFormatUtil.nf(c, 3) + 
-								"_r" + CCFormatUtil.nf(r, 3) + 
-								"_d" + CCFormatUtil.nf(d, 3) + ".csv"
-							));
+							"c" + CCFormatUtil.nf(c, 3) + 
+							"_r" + CCFormatUtil.nf(r, 3) + 
+							"_d" + CCFormatUtil.nf(d, 3) + ".csv"
+						));
 						
 						
 						int i = 0;
@@ -44,6 +46,36 @@ public class CCSequenceCSVFormat implements CCSequenceFormat{
 						myWriter.close();
 					}
 				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void savePosition(Path thePath, CCSequenceElementRecording theRecording, boolean[] theSave) {
+		Path myExportPath = thePath.resolve("positions");
+		
+		CCNIOUtil.createDirectories(myExportPath);
+		try{
+			for (int c = 0; c < theRecording.columns(); c++) {
+				BufferedWriter myWriter = Files.newBufferedWriter(myExportPath.resolve(
+					"element" + CCFormatUtil.nf(c, 3) + ".csv"
+				));
+				
+				int id = 0;
+				
+				for (CCMatrix2 frame : theRecording) {
+					myWriter.write(id++ + "");
+					for(int i = 0; i < theSave.length;i++){
+						if(theSave[i]){
+							myWriter.write("," + frame.data()[c][0][i]);
+						}
+					}
+					myWriter.write("\n");
+				}
+
+				myWriter.close();
 			}
 		}catch(Exception e){
 			e.printStackTrace();

@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
+import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceElementRecording;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.math.CCMatrix2;
 
@@ -40,6 +41,12 @@ public class CCSequenceTXTFormat implements CCSequenceFormat{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void savePosition(Path theFile, CCSequenceElementRecording theRecording, boolean[] theSave) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

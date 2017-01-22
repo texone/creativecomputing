@@ -3,6 +3,7 @@ package cc.creativecomputing.kle.formats;
 import java.nio.file.Path;
 
 import cc.creativecomputing.kle.CCSequence;
+import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceElementRecording;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 @SuppressWarnings("rawtypes")
 public enum CCSequenceFormats {
@@ -20,6 +21,9 @@ public enum CCSequenceFormats {
 		public String extension() {
 			return null;
 		}
+
+		@Override
+		public void savePosition(Path theFile, CCSequenceElementRecording theRecording, boolean[] theSave) {}
 		
 	}, false),
 	ANIM(new CCSequenceAnimFormat(), true),

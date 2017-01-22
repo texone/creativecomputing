@@ -5,6 +5,7 @@ import java.nio.file.Path;
 
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
+import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceElementRecording;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 
 public class CCSequenceAnimFormat implements CCSequenceFormat{
@@ -71,6 +72,12 @@ public class CCSequenceAnimFormat implements CCSequenceFormat{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
+	}
+	
+	@Override
+	public void savePosition(Path theFile, CCSequenceElementRecording theRecording, boolean[] theSave) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

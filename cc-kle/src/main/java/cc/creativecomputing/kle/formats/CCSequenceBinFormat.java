@@ -2,11 +2,11 @@ package cc.creativecomputing.kle.formats;
 
 import java.nio.file.Path;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCFileInputChannel;
 import cc.creativecomputing.io.CCFileOutputChannel;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
+import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceElementRecording;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.math.CCMatrix2;
 
@@ -23,9 +23,23 @@ public class CCSequenceBinFormat implements CCSequenceFormat {
 			for (int c = 0; c < frame.columns(); c++) {
 				for (int r = 0; r < frame.rows(); r++) {
 					for (int d = 0; d < frame.depth(); d++) {
-						if(c == 0 && d == 0)CCLog.info(frame.data()[c][r][d]);
 						fileChannel.write(frame.data()[c][r][d]);
 					}
+				}
+			}
+		}
+		
+		fileChannel.close();
+	}
+	
+	@Override
+	public void savePosition(Path thePath, CCSequenceElementRecording theRecording, boolean[] theSave) {
+		CCFileOutputChannel fileChannel = new CCFileOutputChannel(thePath);
+
+		for (CCMatrix2 frame : theRecording) {
+			for (int c = 0; c < theRecording.columns(); c++) {
+				for(int i = 0; i < theSave.length;i++){
+					if(theSave[i])fileChannel.write(frame.data()[c][0][i]);
 				}
 			}
 		}
@@ -65,8 +79,6 @@ public class CCSequenceBinFormat implements CCSequenceFormat {
 	}
 
 	public static void main(String[] args) {
-		
-		CCLog.info(CCNIOUtil.dataPath("lights7.bin").toAbsolutePath());
 		CCFileInputChannel fileChannel = new CCFileInputChannel(CCNIOUtil.dataPath("lights7.bin"));
 		CCFileInputChannel fileChannel2 = new CCFileInputChannel(CCNIOUtil.dataPath("lights7.bin"));
 		

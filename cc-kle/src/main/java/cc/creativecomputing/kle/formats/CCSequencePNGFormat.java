@@ -2,11 +2,11 @@ package cc.creativecomputing.kle.formats;
 
 import java.nio.file.Path;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.image.format.CCPNGImage;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
+import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceElementRecording;
 import cc.creativecomputing.kle.elements.CCSequenceChannel;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.math.CCMath;
@@ -38,7 +38,6 @@ public class CCSequencePNGFormat implements CCSequenceFormat{
 		Path myExportPath = _myUseMappingFolder ? thePath.resolve(theMapping.type().id()) : thePath;
 		
 		CCNIOUtil.createDirectories(myExportPath);
-		CCLog.info(myExportPath.toAbsolutePath());
 				
 		for (CCMatrix2 frame : theSequence) {
 			CCPNGImage myPNGImage = new CCPNGImage (frame.columns(), frame.rows(), theMapping.bitDepth(), frame.depth() <= 2, frame.depth() == 2 || frame.depth() == 4);
@@ -64,11 +63,15 @@ public class CCSequencePNGFormat implements CCSequenceFormat{
 				}
 			}
 			Path myImagePath = CCNIOUtil.addExtension(myExportPath.resolve("frame_" + CCFormatUtil.nf(frameCount, digits)), "png");
-			CCLog.info(myImagePath);
 			myPNGImage.write(myImagePath);
 //			CCImageIO.write(myImage, CCNIOUtil.addExtension(myExportPath, "png"));
 			frameCount += 1;
 		}
+	}
+	
+	@Override
+	public void savePosition(Path theFile, CCSequenceElementRecording theRecording, boolean[] theSave) {
+		
 	}
 
 	@Override
