@@ -47,6 +47,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 		_myEffectables = theEffectables;
 		_myAnimationBlender = new CCEffectBlender(theEffectables);
 		_myValueNames = theValueNames;
+		_cScales.put("global", 1.0);
 		for(String myValueName:_myValueNames){
 			_cScales.put(myValueName + " scale", 1.0);
 		}
@@ -132,12 +133,13 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 			
 			double[] myValues = _myAnimationBlender.blend(myEffectable, myValueA, myValueB);
 //			myElement.motorSetup().rotateZ(CCMath.sign(myTranslation.x) * CCMath.pow(CCMath.abs(myTranslation.x), _cRotationPow) * _cRotationAngle);
+			double myGlobalScale = _cScales.get("global");
 			for(int i = 0; i < myValues.length;i++){
 				String myValueName = _myValueNames[i];
 				
-				myValues[i] = myValues[i] * _cScales.get(myValueName + " scale") * myAmountValue * _scale + _add;
+				myValues[i] = myValues[i] * _cScales.get(myValueName + " scale") * myAmountValue * _scale * myGlobalScale + _add;
 				for(CCFilter myFilter:_cFilters.values()){
-					myValues[i] = myFilter.process(index, myValues[i], 0);
+					myValues[i] = myFilter.process(index, myValues[i], theAnimator.deltaTime());
 				}
 				index++;
 			}
