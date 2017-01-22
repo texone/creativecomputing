@@ -14,7 +14,7 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
-import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionBounds;
+import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionCalculations;
 import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionSetup;
 import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
@@ -23,7 +23,7 @@ import cc.creativecomputing.math.CCVector3;
 public class CC2Motor2ConnectionDemo extends CCGL2Adapter{
 	
 	@CCProperty(name = "bounds")
-	private CC2Motor2ConnectionBounds _cBounds = new CC2Motor2ConnectionBounds();
+	private CC2Motor2ConnectionCalculations _cBounds = new CC2Motor2ConnectionCalculations();
 	
 	private CCSequenceElements _mySequenceElements;
 	

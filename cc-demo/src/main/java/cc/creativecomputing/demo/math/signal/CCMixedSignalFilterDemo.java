@@ -1,5 +1,9 @@
 package cc.creativecomputing.demo.math.signal;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.code.CCCompileObject;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
@@ -10,9 +14,18 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.filter.CCChebFilter;
 import cc.creativecomputing.math.filter.CCCompressor;
+import cc.creativecomputing.math.filter.CCDoubleExponentialSmoothingFilter;
+import cc.creativecomputing.math.filter.CCDoubleMovingAverageFilter;
+import cc.creativecomputing.math.filter.CCExponentialSmoothingFilter;
+import cc.creativecomputing.math.filter.CCFIRFilter;
+import cc.creativecomputing.math.filter.CCFilter;
+import cc.creativecomputing.math.filter.CCMedianFilter;
 import cc.creativecomputing.math.filter.CCMotionLimiter;
+import cc.creativecomputing.math.filter.CCOneEuroFilter;
+import cc.creativecomputing.math.filter.CCSimpleAverageFilter;
 import cc.creativecomputing.math.signal.CCMixSignal;
 
 public class CCMixedSignalFilterDemo extends CCGL2Adapter{
@@ -28,14 +41,11 @@ public class CCMixedSignalFilterDemo extends CCGL2Adapter{
 	@CCProperty(name = "height jerk", min = 0, max = 500)
 	private double _cHeightJerk = 100;
 	
+	@CCProperty(name = "random", min = 0, max = 1)
+	private double _cRandom = 0;
+	
 	@CCProperty(name = "filter")
-	private CCChebFilter _myLowPassFilter = new CCChebFilter(2);
-	
-	@CCProperty(name = "limiter")
-	private CCCompressor _myLimiter = new CCCompressor(2);
-	
-	@CCProperty(name = "motion limiter")
-	private CCMotionLimiter _myMotionLimiter = new CCMotionLimiter();
+	private Map<String, CCFilter> _myFilterMap = new LinkedHashMap<>();
 	
 	public static class CCRealtimeFilter implements CCCompileObject{
 		public void process(double[] data){
@@ -59,6 +69,17 @@ public class CCMixedSignalFilterDemo extends CCGL2Adapter{
 	public void start(CCAnimator theAnimator) {
 		_myFilter = new CCRealtimeCompile<CCRealtimeFilter>(CCRealtimeFilter.class);
 		_myFilter.createObject();
+		
+		_myFilterMap.put("cheb", new CCChebFilter(2));
+		_myFilterMap.put("compressor", new CCCompressor(2));
+		_myFilterMap.put("motion limiter", new CCMotionLimiter());
+		_myFilterMap.put("double exponential", new CCDoubleExponentialSmoothingFilter());
+		_myFilterMap.put("double moving average", new CCDoubleMovingAverageFilter());
+		_myFilterMap.put("exponential", new CCExponentialSmoothingFilter());
+		_myFilterMap.put("median", new CCMedianFilter());
+		_myFilterMap.put("one euro", new CCOneEuroFilter());
+		_myFilterMap.put("moving average", new CCSimpleAverageFilter());
+		_myFilterMap.put("fir", new CCFIRFilter());
 	}
 	
 	private int _myIndex = 0;
@@ -91,22 +112,21 @@ public class CCMixedSignalFilterDemo extends CCGL2Adapter{
 	
 	@Override
 	public void update(CCAnimator theAnimator) {
-		double mySignalValue = _mySignal.value(theAnimator.frames());
-		int myIndex = _myIndex % _myData.length;
-		_myData[myIndex] = mySignalValue;
-		
-		mySignalValue = _myLowPassFilter.process(0, mySignalValue, 0);
-		mySignalValue = _myLimiter.process(0,mySignalValue, 0);
-//		
-//		_myLimiter.process(1,CCMath.random(), 0);
-//		_myLowPassFilter.process(1, CCMath.random(), 0);
-		
-		mySignalValue = _myMotionLimiter.process(0, mySignalValue, theAnimator.frames() * 0.2);
-		
+		CCMath.randomSeed(0);
+		for(int i = 0; i < _myData.length;i++){
+			
+			double mySignalValue = _mySignal.value(i) + CCMath.random() * _cRandom;
+			_myData[i] = mySignalValue;
+			
+			for(CCFilter myFilter:_myFilterMap.values()){
+				mySignalValue = myFilter.process(0, mySignalValue, 0.2);
+			}
+			
+	
+			_myFilteredData[i] = mySignalValue;
+	//		if(_myFilter.instance() != null)_myFilter.instance().process(_myFilteredData);
 
-		_myFilteredData[myIndex] = mySignalValue;
-//		if(_myFilter.instance() != null)_myFilter.instance().process(_myFilteredData);
-
+		}
 		for(int i = 0; i < _myFilteredVelocity.length;i++){
 			int index0 = (i + _myIndex) % _myData.length;
 			int index1 = ((i  - 1) + _myIndex  + _myData.length) % _myData.length;
@@ -137,7 +157,7 @@ public class CCMixedSignalFilterDemo extends CCGL2Adapter{
 		g.color(255);
 
 		g.color(255);
-		drawGraph(g, _myData, 0.5,_cHeight);
+		drawGraph(g, _myData, 0,_cHeight);
 
 		g.color(255,255,0);drawGraph(g, _myFilteredData, 0, _cHeight);
 		g.color(255,0,0);

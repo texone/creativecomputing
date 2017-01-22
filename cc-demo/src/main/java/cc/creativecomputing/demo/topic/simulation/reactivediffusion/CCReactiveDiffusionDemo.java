@@ -99,10 +99,10 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 	private CCShaderBuffer _myInterpolationMap;
 	private CCGLWriteDataShader _myWriteDataShader;
 	
-//	@CCProperty(name = "lighting")
+	@CCProperty(name = "lighting")
 	private CCGLProgram _myLightingShader;
 	
-//	@CCProperty(name = "recfraction", min = 0, max = 1000)
+	@CCProperty(name = "recfraction", min = 0, max = 1000)
 	private double _cRefraction = 500;
 	
 	private CCTexture2D _myTexture;

@@ -85,7 +85,7 @@ vec4 voronoi( in vec2 x )
         vec2 o = hash2( n + g );
 
 		// animate
-        o = 0.5 + 0.5*sin( time * 0.1 + 6.2831*o );    
+        o = 0.5 + 0.5*sin( time * 0. + 6.2831*o );    
  
 		vec2 r = g - f + o;
 
@@ -158,38 +158,38 @@ uniform sampler2D tex0;
 uniform sampler2D tex1; 
 uniform float randomOffset;
 
-uniform float blend;
+uniform float blendARefraction;
+uniform float blendBRefraction;
+uniform float blendAB;
 uniform float blendRandom;
 
 uniform vec4 fBlends;
 
 void main(){
-    vec2 uv = gl_FragCoord.xy / iResolution.xx;
-    vec2 texUV = gl_FragCoord.xy / iResolution.xy;
-    texUV = vec2(texUV.x, 1.0 - texUV.y); 
+	vec2 uv = gl_FragCoord.xy / iResolution.xx;
+	vec2 texUV = gl_FragCoord.xy / iResolution.xy;
+	texUV = vec2(texUV.x, 1.0 - texUV.y); 
     
-    vec4 fxyzw = octavedNoise( 24.0*uv); 
+	vec4 fxyzw = octavedNoise( 24.0*uv); 
     
-    float f =  fxyzw.x * fBlends.x;
-    f +=  fxyzw.y * fBlends.y;
-    f +=  fxyzw.z * fBlends.z;
-    f +=  fxyzw.w * fBlends.w;
-    
-    f /= (fBlends.x + fBlends.y + fBlends.z + fBlends.w);
-    
-    vec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2))) / iResolution * randomOffset * 20.0;
-	texUV += dir;
-	vec4 color0 = texture2D(tex0,texUV); 
-	vec4 color1 = texture2D(tex1,texUV);
+	float f =  fxyzw.x * fBlends.x;
+	f +=  fxyzw.y * fBlends.y;
+	f +=  fxyzw.z * fBlends.z;
+	f +=  fxyzw.w * fBlends.w;
+	f /= (fBlends.x + fBlends.y + fBlends.z + fBlends.w);
 
-	float noiseBlend = smoothstep(blend - 0.005,blend,f);   
+	vec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2))) / iResolution * randomOffset * 20.0;
+	//texUV += dir;
+
+	float noiseBlendARefraction = smoothstep(f,f + blendRandom,blendARefraction * (1.0 + blendRandom)); 
+	float noiseBlendBRefraction = smoothstep(f,f + blendRandom,blendBRefraction * (1.0 + blendRandom)); 
+	float noiseBlendAB = smoothstep(f,f + blendRandom,blendAB * (1.0 + blendRandom)); 
 	
-	vec4 color = mix(color0, color1, noiseBlend); 
+
+	vec4 color0 = texture2D(tex0,texUV + dir * noiseBlendARefraction); 
+	vec4 color1 = texture2D(tex1,texUV + dir * noiseBlendBRefraction);
+	
+	vec4 color = mix(color0, color1, noiseBlendAB);   
     
     gl_FragColor = color;//vec4(f);//vec4(texUV,0.0,1.0);vec4(f.xyz,1);//vec4( dir, 0.0, 1.0 );
 }
-
-
-
-
-

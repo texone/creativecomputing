@@ -20,11 +20,15 @@ public class CCDMXDemo extends CCGL2Adapter{
 	@CCProperty(name = "dmx")
 	private CCDMX _myDMX;
 	
-	@CCProperty(name = "channel map")
+	@CCProperty(name = "channel map", min = 0, max = 1)
 	private Map<String, Double> _myChannelMap = new LinkedHashMap<>();
 	
+	
+	@CCProperty(name = "send 16 bit")
+	private boolean _cSend16Bit = false;
+	
 	@Override
-	public void start(CCAnimator theAnimator) {
+	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myDMX = new CCDMX();
 		for(int i = 0; i < 512;i++){
 			_myChannelMap.put("channel " + i, 0d);
@@ -50,8 +54,14 @@ public class CCDMXDemo extends CCGL2Adapter{
 	
 	@Override
 	public void update(CCAnimator theAnimator) {
-		for(int i = 0; i < 512;i++){
-			_myDMX.setDMXChannel(i, _myChannelMap.get("channel " + i));
+		if(_cSend16Bit){
+			for(int i = 0; i < 512;i+=2){
+				_myDMX.setDMXChannel16bit(i, _myChannelMap.get("channel " + i / 2));
+			}
+		}else{
+			for(int i = 0; i < 512;i++){
+				_myDMX.setDMXChannel(i, _myChannelMap.get("channel " + i));
+			}
 		}
 		_myDMX.send();
 	}

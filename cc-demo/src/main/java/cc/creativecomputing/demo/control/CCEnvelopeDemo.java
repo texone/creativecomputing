@@ -15,6 +15,8 @@ import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.texture.CCTexture2DAsset;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.spline.CCCatmulRomSpline;
+import cc.creativecomputing.math.spline.CCSpline;
 
 public class CCEnvelopeDemo extends CCGL2Adapter{
 	
@@ -24,6 +26,9 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 	
 	@CCProperty(name = "envelope")
 	private CCEnvelope _myEnvelope = new CCEnvelope();
+	
+	@CCProperty(name = "catmulrom spline")
+	private CCSpline _myCatmulromSpline = new CCCatmulRomSpline(1.0, false);
 	
 	@CCProperty(name = "clear color")
 	private CCColor _myClearColor = new CCColor();
