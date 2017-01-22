@@ -91,7 +91,8 @@ public class CCImageIO {
 		JPEG("jpg"),
 		PNG("png"),
 		TGA("tga"),
-		TIFF("tiff");
+		TIFF("tiff"),
+		EXR("exr");
 		
 		public final String fileExtension;
 		

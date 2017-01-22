@@ -94,7 +94,7 @@ public class CCPNGImage {
 		pixelImp(theX, theY, theR, theG, theB, theA);
 	}
 	
-	public void pixel(int theX, int theY, double theR, double theG, double theB) throws Exception{
+	public void pixel(int theX, int theY, double theR, double theG, double theB){
 		pixelImp(theX, theY, theR, theG, theB);
 	}
 	

@@ -36,6 +36,7 @@ public class CCPNGFormat implements CCImageFormat{
 
 	@Override
 	public boolean write(Path theFile, CCImage theData, final double theQuality) throws CCImageException {
+		CCPNGImage myImage = new CCPNGImage(theData.width(), theData.height(), theData.pixelFormat(), theData.pixelType());
 		return false;
 		
 	}
