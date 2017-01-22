@@ -59,6 +59,7 @@ public class GLWindowContainer extends GLContainer{
 		_myWindow.setAlwaysOnTop(_myContext.alwaysOnTop);
 		float[] myScale = new float[2];
 		_myWindow.getCurrentSurfaceScale(myScale);
+		_myWindow.setSize(_myContext.width, _myContext.height);
 		_myWindow.setVisible(true);
 		
 		_myWindow.setSurfaceScale(new float[]{_myContext.pixelScale.id(), _myContext.pixelScale.id()});

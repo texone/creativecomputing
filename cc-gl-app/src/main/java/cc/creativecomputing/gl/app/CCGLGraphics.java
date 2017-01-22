@@ -2,6 +2,8 @@ package cc.creativecomputing.gl.app;
 
 import com.jogamp.opengl.GL;
 
+import cc.creativecomputing.core.logging.CCLog;
+
 
 public abstract class CCGLGraphics <GLType extends GL>{
 	/**

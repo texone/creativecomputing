@@ -25,6 +25,7 @@ import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.container.GLContainer;
 import cc.creativecomputing.gl.app.container.GLContainerType;
 import cc.creativecomputing.gl.app.container.GLJavaComponentContainer;
@@ -127,9 +128,9 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	}
 	
 	@CCProperty(desc = "window width")
-	public int width = 400;
+	public int width = 800;
 	@CCProperty(desc = "window height")
-	public int height = 400;
+	public int height = 800;
 	
 	@CCProperty(desc = "x position of the window")
 	public int windowX = -1;
@@ -252,6 +253,10 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	
 	public boolean updateDisplay(){
 		return _myContainer.updateDisplay();
+	}
+	
+	public void cursor(CCCursor theCursor){
+		_myContainer.cursor(theCursor);
 	}
 	
 	private Map<String, CCPropertyListener<?>> _myListenerMap = new HashMap<>();
@@ -379,7 +384,7 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 //					windowX = theX;
 //					windowY = theY;
 //					drawable.getSurfaceWidth()
-					
+					CCLog.info(theWidth + ":" + theHeight);
 					_myGraphics.reshape(theX, theY, theWidth, theHeight);
 					_myListeners.proxy().reshape(_myGraphics);
 				}
