@@ -84,7 +84,6 @@ public class CCGL2Application {
 					CCNIOUtil.createDirectories(myPresetsPath);
 					for(Path myPath:CCNIOUtil.list(myPresetsPath, "json")){
 						CCLog.info(myPath.getFileName().toString());
-						myProps.rootHandle().bla();
 						myProps.rootHandle().preset(CCNIOUtil.fileName(myPath.getFileName().toString()));
 						break;
 					}
