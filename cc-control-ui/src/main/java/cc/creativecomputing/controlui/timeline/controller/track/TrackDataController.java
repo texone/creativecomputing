@@ -44,6 +44,7 @@ import cc.creativecomputing.controlui.timeline.view.TimedContentView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 
@@ -120,6 +121,8 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
     
     @Override
     public void setRange(double theLowerBound, double theUpperBound) {
+
+		CCLog.info(theLowerBound + " : " + theUpperBound + " " + _myTrackView);
         if(_myTrackView != null)_myTrackView.render();
     }
     

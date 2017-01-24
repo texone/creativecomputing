@@ -9,6 +9,7 @@ import java.util.List;
 import cc.creativecomputing.control.timeline.AbstractTrack;
 import cc.creativecomputing.control.timeline.GroupTrack;
 import cc.creativecomputing.control.timeline.TrackData;
+import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuatizeMode;
 import cc.creativecomputing.controlui.timeline.controller.track.GroupTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.controlui.util.UndoHistory;
@@ -43,6 +44,8 @@ public class FileManager {
 		
 		private static final String LOWER_BOUND_ATTRIBUTE = "lower_bound";
 		private static final String UPPER_BOUND_ATTRIBUTE = "upper_bound";
+
+		private static final String QUANTIZE_ATTRIBUTE = "quantize";
 		
 		public DataSerializer() {
 		}
@@ -141,6 +144,10 @@ public class FileManager {
 			
 			if (myTimelineData.containsKey(UPPER_BOUND_ATTRIBUTE)) {
 				theTimelineController.zoomController().setUpperBound(myTimelineData.getDouble(UPPER_BOUND_ATTRIBUTE));
+			}
+			
+			if(myTimelineData.containsKey(QUANTIZE_ATTRIBUTE)){
+				theTimelineController.quantizer(CCQuatizeMode.valueOf(myTimelineData.getString(QUANTIZE_ATTRIBUTE)));
 			}
 			theTimelineController.resetClipTracks();
 			if(myTimelineData.containsKey(TIMELINE_ELEMENT)){
@@ -254,6 +261,7 @@ public class FileManager {
 			CCDataObject myTimelineData = new CCDataObject();
 			myTimelineData.put(LOWER_BOUND_ATTRIBUTE, theTimelineController.zoomController().lowerBound());
 			myTimelineData.put(UPPER_BOUND_ATTRIBUTE, theTimelineController.zoomController().upperBound());
+			myTimelineData.put(QUANTIZE_ATTRIBUTE, theTimelineController.quantizer().name());
 			
 			double myStart = 0;
 			double myEnd = theTimelineController.maximumTime();

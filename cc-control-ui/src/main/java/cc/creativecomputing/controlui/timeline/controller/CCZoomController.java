@@ -5,6 +5,7 @@ import java.awt.geom.Point2D;
 import cc.creativecomputing.control.timeline.TimeRange;
 import cc.creativecomputing.controlui.timeline.view.SwingConstants;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 
@@ -130,7 +131,7 @@ public class CCZoomController  {
 		updateZoomables();
 	}
 	
-	private void updateZoomables() {
+	public void updateZoomables() {
 		if (_myLowerBound < _myUpperBound) {
 			_myZoomables.proxy().setRange(_myLowerBound, _myUpperBound);
 		}		

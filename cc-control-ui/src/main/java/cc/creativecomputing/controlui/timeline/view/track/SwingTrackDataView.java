@@ -17,7 +17,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
@@ -52,7 +51,6 @@ public class SwingTrackDataView extends JPanel {
 	public static interface SwingTrackDataViewListener{
 		public void onRender(Graphics2D theG2D);
 	}
-
 
     private BufferedImage _myRenderBuffer;
 
