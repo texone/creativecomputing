@@ -130,8 +130,12 @@ public class CCControlApp  {
 	}
 	
 	public void update(double theDeltaTime){
-		_myControlComponent.timeline().update(theDeltaTime);
-		_myControlComponent.propertyMap().rootHandle().update(theDeltaTime);
+		try{
+			_myControlComponent.timeline().update(theDeltaTime);
+			_myControlComponent.propertyMap().rootHandle().update(theDeltaTime);
+		}catch(Exception e){
+			
+		}
 	}
 	
 	public void setData(Object theData, String thePresetPath){
