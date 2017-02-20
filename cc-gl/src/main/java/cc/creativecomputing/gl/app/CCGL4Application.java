@@ -36,7 +36,7 @@ public class CCGL4Application {
 			@Override
 			public void init(GLGraphics theG) {
 				_myAdapter.init(theG, _myAnimator);
-				_myControlApp = new CCControlApp(CCGL4Application.this);
+				_myControlApp = new CCControlApp(CCGL4Application.this, theGLAdapter.getClass());
 			}
 		});
 		_myGLContext.listener().add(

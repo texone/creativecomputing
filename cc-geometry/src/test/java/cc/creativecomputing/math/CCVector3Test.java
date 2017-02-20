@@ -269,23 +269,23 @@ public class CCVector3Test {
     public void testLerp() {
         final CCVector3 vec1 = new CCVector3(8, 3, -2);
         final CCVector3 vec2 = new CCVector3(2, 1, 0);
-        assertEquals(new CCVector3(5, 2, -1), vec1.lerp(vec2, 0.5f));
-        assertEquals(new CCVector3(5, 2, -1), CCVector3.lerp(vec1, vec2, 0.5f));
+        assertEquals(new CCVector3(5, 2, -1), vec1.blend(vec2, 0.5f));
+        assertEquals(new CCVector3(5, 2, -1), CCVector3.blend(vec1, vec2, 0.5f));
 
         vec1.set(14, 5, 4);
-        vec1.lerpLocal(vec2, 0.25f);
+        vec1.blendLocal(vec2, 0.25f);
         assertEquals(new CCVector3(11, 4, 3), vec1);
 
         vec1.set(15, 7, 6);
         final CCVector3 vec3 = new CCVector3(-1, -1, -1);
-        vec3.lerpLocal(vec1, vec2, 0.5f);
+        vec3.blendLocal(vec1, vec2, 0.5f);
         assertEquals(new CCVector3(8.5f, 4.0f, 3.0f), vec3);
 
         // coverage
-        assertEquals(vec1.lerp(vec1, .25f), vec1);
-        assertEquals(vec2.lerpLocal(vec2, .25f), vec2);
-        assertEquals(vec2.lerpLocal(vec2, vec2, .25f), vec2);
-        assertEquals(CCVector3.lerp(vec1, vec1, .25f), vec1);
+        assertEquals(vec1.blend(vec1, .25f), vec1);
+        assertEquals(vec2.blendLocal(vec2, .25f), vec2);
+        assertEquals(vec2.blendLocal(vec2, vec2, .25f), vec2);
+        assertEquals(CCVector3.blend(vec1, vec1, .25f), vec1);
     }
 
     @Test

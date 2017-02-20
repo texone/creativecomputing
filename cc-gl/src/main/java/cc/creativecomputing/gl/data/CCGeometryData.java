@@ -843,7 +843,7 @@ public class CCGeometryData extends CCCombinedBufferData{
                 final CCVector3 work = new CCVector3();
                 CCBufferUtils.populateFromBuffer(result, vertexBuffer(), pntA);
                 CCBufferUtils.populateFromBuffer(work, vertexBuffer(), pntB);
-                CCVector3.lerp(result, work, CCMath.RANDOM.nextFloat(), result);
+                CCVector3.blend(result, work, CCMath.RANDOM.nextFloat(), result);
                 break;
             }
 		default:
