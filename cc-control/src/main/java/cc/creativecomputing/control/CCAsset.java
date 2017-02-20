@@ -3,6 +3,8 @@ package cc.creativecomputing.control;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
@@ -19,6 +21,8 @@ public abstract class CCAsset <AssetType>{
 	
 	protected Path _myAssetPath;
 	
+	protected Map<Path, AssetType> _myAssetMap = new HashMap<>();
+	
 	protected CCListenerManager<CCAssetListener> _myEvents = CCListenerManager.create(CCAssetListener.class);
 	
 	public CCAsset(){
@@ -29,7 +33,21 @@ public abstract class CCAsset <AssetType>{
 		return _myAsset;
 	}
 	
-	public abstract void onChangePath(Path thePath);
+	public abstract AssetType loadAsset(Path thePath);
+	
+	public void onChangePath(Path thePath){
+		if(thePath == null){
+			_myAsset = null;
+			return;
+		}
+		if(_myAssetMap.containsKey(thePath)){
+			_myAsset = _myAssetMap.get(thePath);
+			return;
+		}else{
+			_myAsset = loadAsset(thePath);
+			_myAssetMap.put(thePath, _myAsset);
+		}
+	}
 	
 	@CCProperty(name = "path")
 	public final void path(Path thePath){

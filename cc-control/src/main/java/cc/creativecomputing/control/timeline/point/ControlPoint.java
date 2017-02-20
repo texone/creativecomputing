@@ -2,6 +2,7 @@ package cc.creativecomputing.control.timeline.point;
 
 
 import cc.creativecomputing.control.timeline.TrackData;
+import cc.creativecomputing.core.CCBlendable;
 import cc.creativecomputing.io.data.CCDataObject;
 
 public class ControlPoint {
@@ -32,6 +33,8 @@ public class ControlPoint {
 	
 	protected ControlPoint _myPrevious;
 	protected ControlPoint _myNext;
+	
+	protected CCBlendable<?> _myBlendable = null;
 	
 	protected double _myTime;
 	protected double _myValue;
@@ -67,6 +70,14 @@ public class ControlPoint {
 	 */
 	public ControlPointType getType() {
 		return _myType;
+	}
+	
+	public CCBlendable<?> blendable(){
+		return _myBlendable;
+	}
+	
+	public void blendable(CCBlendable<?> theBlendable){
+		_myBlendable = theBlendable;
 	}
 
 	/**
@@ -232,5 +243,19 @@ public class ControlPoint {
 	public void data(CCDataObject theData) {
 		_myTime = theData.getDouble(TIME_ATTRIBUTE);
 		_myValue = theData.getDouble(VALUE_ATTRIBUTE);
+	}
+	
+	private boolean _myIsSelected = false;
+
+	public void setSelected(boolean theIsSelected) {
+		_myIsSelected = theIsSelected;
+	}
+	
+	public boolean isSelected(){
+		return _myIsSelected;
+	}
+
+	public void toggleSelection() {
+		_myIsSelected = !_myIsSelected;
 	}
 }
