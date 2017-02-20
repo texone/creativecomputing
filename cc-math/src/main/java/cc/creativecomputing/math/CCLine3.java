@@ -87,7 +87,7 @@ public class CCLine3 {
 	 
 	    double myBlend = closestPointBlend(theX, theY, theZ);
 	    
-	    return CCVector3.lerp(_myStart, _myEnd, myBlend);
+	    return CCVector3.blend(_myStart, _myEnd, myBlend);
 	 
 //	    if( _myU < 0.0f) {
 //	    	return _myStart.clone();

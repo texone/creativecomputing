@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
+import cc.creativecomputing.core.CCBlendable;
 import cc.creativecomputing.core.util.CCBitUtil;
 import cc.creativecomputing.math.CCMath;
 
@@ -30,7 +31,7 @@ import cc.creativecomputing.math.CCMath;
  * @author tex
  *
  */
-public class CCColor implements Cloneable{
+public class CCColor implements Cloneable, CCBlendable<CCColor>{
 
 
 	/**
@@ -837,14 +838,14 @@ public class CCColor implements Cloneable{
 		return 0.3f * r + 0.59f * g + 0.11f * b;
 	}
 	
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.animation.CCBlendable#blend(double, java.lang.Object)
-	 */
-	public void blend(double theBlend, CCColor theStart, CCColor theTarget) {
-		r = CCMath.blend(theStart.r, theTarget.r, theBlend);
-		g = CCMath.blend(theStart.g, theTarget.g, theBlend);
-		b = CCMath.blend(theStart.b, theTarget.b, theBlend);
-		a = CCMath.blend(theStart.a, theTarget.a, theBlend);
+	@Override
+	public CCColor blend(CCColor theTarget, double theBlend) {
+		return new CCColor(
+			CCMath.blend(r, theTarget.r, theBlend),
+			CCMath.blend(g, theTarget.g, theBlend),
+			CCMath.blend(b, theTarget.b, theBlend),
+			CCMath.blend(a, theTarget.a, theBlend)
+		);
 	}
 
 	/**

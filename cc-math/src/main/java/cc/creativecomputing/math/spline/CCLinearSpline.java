@@ -49,7 +49,7 @@ public class CCLinearSpline extends CCSpline{
 	@Override
 	public CCVector3 interpolate(double value, int currentControlPoint) {
 		endEditSpline();
-		return CCVector3.lerp( 
+		return CCVector3.blend( 
 			_myPoints.get(currentControlPoint), 
 			_myPoints.get(currentControlPoint + 1),
 			value

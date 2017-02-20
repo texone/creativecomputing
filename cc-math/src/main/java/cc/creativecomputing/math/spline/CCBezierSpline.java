@@ -94,8 +94,8 @@ public class CCBezierSpline extends CCSpline {
 		}
 
 		CCVector3 myLastPoint = _myPoints.get(_myPoints.size() - 1);
-		_myPoints.add(myLastPoint.lerp(theControlPoint, 0.25));
-		_myPoints.add(myLastPoint.lerp(theControlPoint, 0.75));
+		_myPoints.add(myLastPoint.blend(theControlPoint, 0.25));
+		_myPoints.add(myLastPoint.blend(theControlPoint, 0.75));
 		_myPoints.add(theControlPoint);
 	}
 	

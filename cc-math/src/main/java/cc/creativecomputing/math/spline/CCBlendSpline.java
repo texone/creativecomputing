@@ -53,7 +53,7 @@ public class CCBlendSpline extends CCSpline{
 	
 	@Override
 	public CCVector3 interpolate(double theBlend) {
-		return CCVector3.lerp(
+		return CCVector3.blend(
 			_mySpline1.interpolate(theBlend), 
 			_mySpline2.interpolate(theBlend),
 			_myBlend
@@ -66,7 +66,7 @@ public class CCBlendSpline extends CCSpline{
 		if(myVector0 == null || myVector1 == null){
 			return null;
 		}
-		return CCVector3.lerp(
+		return CCVector3.blend(
 			myVector0, 
 			myVector1,
 			theBlendSpline

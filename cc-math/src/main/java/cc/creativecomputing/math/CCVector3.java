@@ -17,6 +17,7 @@ import java.io.ObjectOutput;
 import java.util.HashMap;
 import java.util.Map;
 
+import cc.creativecomputing.core.CCBlendable;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.io.format.CCDataHolder;
 import cc.creativecomputing.core.io.format.CCDataSerializable;
@@ -26,7 +27,7 @@ import cc.creativecomputing.core.io.format.CCDataSerializable;
  * Vector3 represents a point or vector in a three dimensional system. This implementation stores its data in
  * double-precision.
  */
-public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable {
+public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable, CCBlendable<CCVector3> {
 
     private static final long serialVersionUID = 1L;
     public static final double ALLOWED_DEVIANCE = 0.000001f;
@@ -854,12 +855,12 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
      * @throws NullPointerException
      *             if endVec is null.
      */
-   public CCVector3 lerp(final CCVector3 theEndVector, final double theScalar, CCVector3 theStore) {
-	   return lerp(this, theEndVector, theScalar, theStore);
+   public CCVector3 blend(final CCVector3 theEndVector, final double theScalar, CCVector3 theStore) {
+	   return blend(this, theEndVector, theScalar, theStore);
     }
    
-   	public CCVector3 lerp(final CCVector3 theEndVector, final double theScalar){
-   		return lerp(theEndVector, theScalar, null);
+   	public CCVector3 blend(final CCVector3 theEndVector, final double theScalar){
+   		return blend(theEndVector, theScalar, null);
    	}
 
     /**
@@ -873,8 +874,8 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
      * @throws NullPointerException
      *             if endVec is null.
      */
-    public CCVector3 lerpLocal(final CCVector3 theEndVector, final double theScalar) {
-    	return lerp(theEndVector, theScalar, this);
+    public CCVector3 blendLocal(final CCVector3 theEndVector, final double theScalar) {
+    	return blend(theEndVector, theScalar, this);
     }
 
     /**
@@ -890,7 +891,7 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
      * @throws NullPointerException
      *             if beginVec or endVec are null.
      */
-    public static CCVector3 lerp(final CCVector3 theBeginVector, final CCVector3 theEndVector, final double theScalar, CCVector3 theStore) {
+    public static CCVector3 blend(final CCVector3 theBeginVector, final CCVector3 theEndVector, final double theScalar, CCVector3 theStore) {
     	if(theStore == null) theStore = new CCVector3();
     	
     	if(theBeginVector.equals(theEndVector))return theStore.set(theBeginVector);
@@ -902,8 +903,8 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
         );
     }
     
-    public static CCVector3 lerp(final CCVector3 theBeginVector, final CCVector3 theEndVector, final double theScalar){
-    	return lerp(theBeginVector, theEndVector, theScalar, null);
+    public static CCVector3 blend(final CCVector3 theBeginVector, final CCVector3 theEndVector, final double theScalar){
+    	return blend(theBeginVector, theEndVector, theScalar, null);
     }
 
     /**
@@ -918,8 +919,8 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable 
      * @throws NullPointerException
      *             if beginVec or endVec are null.
      */
-    public CCVector3 lerpLocal(final CCVector3 theBeginVector, final CCVector3 theEndVector, final double theScalar) {
-        return lerp(theBeginVector, theEndVector, theScalar, this);
+    public CCVector3 blendLocal(final CCVector3 theBeginVector, final CCVector3 theEndVector, final double theScalar) {
+        return blend(theBeginVector, theEndVector, theScalar, this);
     }
     
     /**

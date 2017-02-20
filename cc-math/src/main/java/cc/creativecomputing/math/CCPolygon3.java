@@ -47,7 +47,7 @@ public class CCPolygon3 implements Iterable<CCVector3>{
 		    (theY - theStart.y) * ( theEnd.y - theStart.y) +
 		    (theZ - theStart.z) * ( theEnd.z - theStart.z)
 		) / theStart.distanceSquared(theEnd));
-		return CCVector3.lerp(theStart, theEnd, myBlend);
+		return CCVector3.blend(theStart, theEnd, myBlend);
 	}
 	
 	public CCVector3 closestPoint(final double theX, final double theY, final double theZ){
