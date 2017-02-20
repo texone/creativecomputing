@@ -31,7 +31,8 @@ public enum CCSequenceFormats {
 	CSV(new CCSequenceCSVFormat(), false),
 	PNG(new CCSequencePNGFormat(), false),
 	TXT(new CCSequenceTXTFormat(), true),
-	CCA(new CCSequenceCCAFormat(), true);
+	CCA(new CCSequenceCCAFormat(), true),
+	XML(new CCSequenceXMLFormat(), false);
 	
 	private final CCSequenceFormat _myFormat;
 	private final boolean _mySavePosition;

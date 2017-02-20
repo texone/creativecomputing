@@ -18,9 +18,9 @@ public class CC1MotorRotationSetup extends CCMotorSetup{
 	
 	@SuppressWarnings("unused")
 	private CCVector3 animationPosition(double theX, double theY){
-		return CCVector3.lerp(
-			CCVector3.lerp(animationBounds().get(0), animationBounds().get(1), theX), 
-			CCVector3.lerp(animationBounds().get(3), animationBounds().get(2), theX), 
+		return CCVector3.blend(
+			CCVector3.blend(animationBounds().get(0), animationBounds().get(1), theX), 
+			CCVector3.blend(animationBounds().get(3), animationBounds().get(2), theX), 
 			theY
 		);
 	}

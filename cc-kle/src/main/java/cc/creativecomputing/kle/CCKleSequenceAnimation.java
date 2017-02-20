@@ -26,7 +26,7 @@ public class CCKleSequenceAnimation extends CCEffect {
 	private int _myResultLength = 0;
 	
 	public CCKleSequenceAnimation(CCSequenceMapping<?> theMapping, final int...theChannels){
-		_mySequenceAsset = new CCSequenceAsset(theMapping, CCSequenceFormats.CCA.extension());
+		_mySequenceAsset = new CCSequenceAsset(theMapping, CCSequenceFormats.CCA.extension(), CCSequenceFormats.XML.extension());
 	}
 	
 	public CCKleSequenceAnimation(CCSequenceMapping<?> theMapping){
@@ -51,7 +51,7 @@ public class CCKleSequenceAnimation extends CCEffect {
 	
 	private double value(CCEffectable theEffectable, double theBLend, int theID){
 		double myOffset = modulation("offset").modulation(theEffectable, -1, 1) * _mySequenceAsset.length();
-		double myValue = _mySequenceAsset.value(_myInterpolator, myOffset, theEffectable.id(), 0, theID) * 2 - 1;
+		double myValue = _mySequenceAsset.value(_myInterpolator, myOffset, theEffectable, theID) * 2 - 1;
 		return myValue * theBLend * modulation("amount").modulation(theEffectable, -1, 1);
 	}
 

@@ -5,12 +5,12 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.effects.CCEffectable;
+import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.formats.CCSequenceIO;
 import cc.creativecomputing.math.CCMath;
@@ -20,14 +20,14 @@ import cc.creativecomputing.math.interpolate.CCInterpolators;
 
 public class CCSequenceAsset extends CCAsset<CCSequence>{
 	
-	
-	private Map<Path, CCSequence> _mySequenceMap = new HashMap<>();
-	
 	@CCProperty(name = "rate", min = 1, max = 120)
 	private float _cRate = 5;
 	
 	@CCProperty(name = "speed", min = 0, max = 2)
 	private float _cSpeed = 1;
+	
+	@CCProperty(name = "fix column row order")
+	private boolean _cFixColumnRowOrder = false;
 	
 	private CCMatrix2 _myFrame;
 	
@@ -42,28 +42,33 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 		_myExtensions = theExtensions;
 	}
 	
-	private CCSequence loadAsset(Path thePath){
-		return CCSequenceIO.load(thePath, _myMapping);
+	private boolean _myIsCCA = false;
+	
+	@Override
+	public CCSequence loadAsset(Path thePath){
+		CCSequence mySequence = CCSequenceIO.load(thePath, _myMapping);
+		String myExtension = CCNIOUtil.fileExtension(thePath);
+		if(!myExtension.equalsIgnoreCase("cca")){
+			for(CCMatrix2 myFrame:mySequence){
+				for(int c = 0; c < myFrame.columns();c++){
+					for(int r = 0; r < myFrame.rows();r++){
+						for(int d = 0; d < myFrame.depth();d++){
+							
+							myFrame.data()[c][r][d] = CCMath.norm(myFrame.data()[c][r][d], _myMapping.min(c, r, d), _myMapping.max(c, r, d));
+						}
+					}
+				}
+			}
+			_myIsCCA = false;
+		}else{
+			_myIsCCA = true;
+		}
+		return mySequence;
 	}
 	
 	@Override
 	public String[] extensions() {
 		return _myExtensions;
-	}
-
-	@Override
-	public void onChangePath(Path thePath) {
-		if(thePath == null){
-			_myAsset = null;
-			return;
-		}
-		if(_mySequenceMap.containsKey(thePath)){
-			_myAsset = _mySequenceMap.get(thePath);
-			return;
-		}else{
-			_myAsset = loadAsset(thePath);
-			_mySequenceMap.put(thePath, _myAsset);
-		}
 	}
 	
 	public float rate(){
@@ -80,10 +85,21 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 		_myFrame = _myAsset.frame(myFrame);
 	}
 	
-	public double value(CCInterpolators theInterpolator, double theOffset, int theColumn, int theRow, int theDepth){
+	public double value(CCInterpolators theInterpolator, double theOffset, CCEffectable theEffectable, int theID){
 		if(_myAsset == null)return 0;
 		double myFrame = CCMath.floorMod(((_myTime + theOffset) * _cRate), _myAsset.length());
-		return _myAsset.value(theInterpolator, myFrame, theColumn, theRow, theDepth);
+		if(_myIsCCA) return _myAsset.value(theInterpolator, myFrame, theEffectable.id(), 0, theID);
+		
+		int myColumn = theEffectable.column();
+		int myRow = theEffectable.row();
+		
+		if(_cFixColumnRowOrder){
+			int id = myRow * _myAsset.columns() + myColumn;
+			myColumn = id / _myAsset.rows();
+			myRow = id % _myAsset.rows();
+		}
+		
+		return _myAsset.value(theInterpolator, myFrame, myColumn, myRow, 0);
 	}
 	
 	public double length(){
@@ -116,18 +132,20 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 		
 		CCSequence myData = null;
 		Path myFilePath = Paths.get(theEvent.content().value().toString());
-		if(_mySequenceMap.containsKey(myFilePath)){
-			myData = _mySequenceMap.get(myFilePath);
+		if(_myAssetMap.containsKey(myFilePath)){
+			myData = _myAssetMap.get(myFilePath);
 		}else{
 			try{
 				
 				myData = loadAsset(myFilePath);
-				_mySequenceMap.put(myFilePath, myData);
+				_myAssetMap.put(myFilePath, myData);
 			}catch(Exception e){
-				
+				e.printStackTrace();
 			}
 		}
-		if(myData == null)return;
+		if(myData == null){
+			return;
+		}
 		
 		
 		double myWidth = theUpper.getX() - theLower.getX();
@@ -149,7 +167,7 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 			for(int j = mySample1;j <= mySample2;j++){
 				if(j >= myData.length() || j < 0)continue;
 				CCMatrix2 myFrame = myData.get(j);
-				CCVector2 myMinMax = myFrame.minMax(x % 2);
+				CCVector2 myMinMax = myFrame.minMax(x % (_myIsCCA ? 2 : 1));
 				 value0 = CCMath.min(myMinMax.x, value0);
 				 value1 = CCMath.max(myMinMax.y, value1);
 			}

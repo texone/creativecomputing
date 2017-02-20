@@ -20,6 +20,8 @@ public class CCSequenceIO {
 				return new CCSequenceBinFormat().load(thePath, theMapping);
 			case "cca":
 				return new CCSequenceCCAFormat().load(thePath, theMapping);
+			case "xml":
+				return new CCSequenceXMLFormat().load(thePath, theMapping);
 			case "kle":
 				try{
 					CCSequenceKLE2Container myContainer = new CCSequenceKLE2Container();

@@ -13,18 +13,15 @@ import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.model.obj.CCAABB;
 
 public class CC1Motor1ConnectionConfigCreator {
-	
-	protected CCAABB _myAABB;
 	
 	private CCXMLElement _mySculptureXML;
 	private CCXMLElement _myMappingsXML;
 
 	protected List<CCSequenceElement> _myElements = new ArrayList<>();
 	
-	public CC1Motor1ConnectionConfigCreator(int xRes, int zRes, double XSpace, double zSpace, double height){
+	public CC1Motor1ConnectionConfigCreator(int xRes, int zRes, double XSpace, double zSpace, double top, double bottom){
 		
 		_mySculptureXML = new CCXMLElement("sculpture");
 		CCXMLElement myElementsXML = _mySculptureXML.createChild("elements");
@@ -40,10 +37,12 @@ public class CC1Motor1ConnectionConfigCreator {
 		myMotorMappingXML.addAttribute("bits", 16);
 		
 		CC1Motor1ConnectionBounds myBounds = new CC1Motor1ConnectionBounds();
-		myBounds.topDistance(0);
-		myBounds.bottomDistance(height);
+		myBounds.topDistance(top);
+		myBounds.bottomDistance(bottom);
 		
 		int id = 0;
+		
+		double height = bottom - top;
 		
 		for(int x = 0; x < xRes; x++){
 			for(int z = 0; z < zRes; z++){
@@ -59,7 +58,7 @@ public class CC1Motor1ConnectionConfigCreator {
 				myMotorChannels.add(myMotor);
 				
 				CCMatrix4x4 myTransform = new CCMatrix4x4();
-				myTransform.applyTranslationPost(new CCVector3(myX, 0, myZ));
+				myTransform.applyTranslationPost(new CCVector3(myX, top, myZ));
 				
 				CCSequenceElement myElement = new CCSequenceElement(
 					myID, 
@@ -71,8 +70,8 @@ public class CC1Motor1ConnectionConfigCreator {
 					1
 				);
 
-				double min = 0;
-				double max = height;
+				double min = top;
+				double max = bottom;
 				
 				myElementsXML.addChild(myElement.toXML());
 				
@@ -90,27 +89,17 @@ public class CC1Motor1ConnectionConfigCreator {
 		
 	}
 	
+	public CC1Motor1ConnectionConfigCreator(int xRes, int zRes, double XSpace, double zSpace, double height){
+		this(xRes, zRes, XSpace, zSpace, 0, height);
+	}
 	
 	public void saveXML(){
-		CCXMLIO.saveXMLElement(_mySculptureXML, CCNIOUtil.dataPath("config/sculpture.xml"));
-		CCXMLIO.saveXMLElement(_myMappingsXML, CCNIOUtil.dataPath("config/mapping.xml"));
+		saveXML("config");
 	}
 	
-	protected CCVector3 lineToVector(String theVector) {
-		String[] myCoords = theVector.split("\t");
-		return new CCVector3 (Float.parseFloat(myCoords[1]), Float.parseFloat(myCoords[2]), -Float.parseFloat(myCoords[3]));
-	}
-	
-	protected List<CCVector3> loadVectorList(Path theDocument) {
-		List<CCVector3> myVectors = new ArrayList<>();
-		for (String myLine : CCNIOUtil.loadString(theDocument).split("\\n")) {
-			try {
-				myVectors.add(lineToVector(myLine));
-			} catch (Exception e) {
-//				e.printStackTrace();
-			}
-		}
-		return myVectors;
+	public void saveXML(String folder){
+		CCXMLIO.saveXMLElement(_mySculptureXML, CCNIOUtil.dataPath(folder + "/sculpture.xml"));
+		CCXMLIO.saveXMLElement(_myMappingsXML, CCNIOUtil.dataPath(folder + "/mapping.xml"));
 	}
 	
 	public static void main(String[] args) {

@@ -19,7 +19,7 @@ public class CC1Motor1ConnectionSetup extends CCMotorSetup{
 	}
 	
 	private CCVector3 animationPosition(double theX){
-		return CCVector3.lerp(animationBounds().get(0), animationBounds().get(1), theX);
+		return CCVector3.blend(animationBounds().get(0), animationBounds().get(1), theX);
 	}
 	
 	@Override
@@ -40,7 +40,6 @@ public class CC1Motor1ConnectionSetup extends CCMotorSetup{
 	@Override
 	public void drawRopes(CCGraphics g){
 		g.line(motor._myPosition, motor._myAnimatedConnectionPosition); 
-	
 	}
 	
 	@Override

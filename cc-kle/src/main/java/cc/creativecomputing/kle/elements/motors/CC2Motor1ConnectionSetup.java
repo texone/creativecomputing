@@ -46,9 +46,9 @@ public class CC2Motor1ConnectionSetup extends CCMotorSetup{
 	}
 	
 	private CCVector3 animationPosition(double theX, double theY){
-		return CCVector3.lerp(
-			CCVector3.lerp(animationBounds().get(0), animationBounds().get(1), theX), 
-			CCVector3.lerp(animationBounds().get(3), animationBounds().get(2), theX), 
+		return CCVector3.blend(
+			CCVector3.blend(animationBounds().get(0), animationBounds().get(1), theX), 
+			CCVector3.blend(animationBounds().get(3), animationBounds().get(2), theX), 
 			theY
 		);
 	}
@@ -79,7 +79,7 @@ public class CC2Motor1ConnectionSetup extends CCMotorSetup{
 		double x = a * CCMath.cos(beta);
 		double h = a * CCMath.sin(beta);
 		
-		_myElementOffset = CCVector3.lerp(motor0.position(), motor1.position(), x / c);
+		_myElementOffset = CCVector3.blend(motor0.position(), motor1.position(), x / c);
 		_myElementOffset.y += h;
 		
 		motor0._myAnimatedConnectionPosition = _myElementOffset.clone();

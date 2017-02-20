@@ -59,6 +59,11 @@ public class CCSequence extends ArrayList<CCMatrix2>{
 		_myDepth = theDepth;
 	}
 	
+	public CCSequence(int theColumns, int theRows, int theDepth, int frames){
+		this(theColumns, theRows, theDepth);
+		addFrames(frames);
+	}
+	
 	public int columns(){
 		return _myColumns;
 	}
@@ -69,6 +74,12 @@ public class CCSequence extends ArrayList<CCMatrix2>{
 	
 	public int depth(){
 		return _myDepth;
+	}
+	
+	public void addFrames(int theFrames){
+		for(int i = 0; i < theFrames;i++){
+			addEmptyFrame();
+		}
 	}
 	
 	public void addEmptyFrame(){

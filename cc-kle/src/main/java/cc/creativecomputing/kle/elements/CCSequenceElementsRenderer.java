@@ -37,13 +37,9 @@ public class CCSequenceElementsRenderer {
 			}
 
 			g.pushAttribute();
-			g.pushMatrix();
-			g.translate(myElement.motorSetup().elementOffset());
-			g.rotateZ(CCMath.degrees(myElement.motorSetup().rotateZ()));
 			
 			drawElement(g, myElement);
 			
-			g.popMatrix();
 			g.popAttribute();
 			
 			g.popMatrix();
