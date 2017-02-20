@@ -176,7 +176,7 @@ public class CCPolylinePathway extends CCPathway {
 				} else {
 					double ratio = remainingDistance / segmentLength;
 					myResult.set(_myPoints[i]);
-					myResult.lerpLocal(_myPoints[index], ratio);
+					myResult.blendLocal(_myPoints[index], ratio);
 					return myResult;
 				}
 			}
@@ -188,7 +188,7 @@ public class CCPolylinePathway extends CCPathway {
 				} else {
 					double ratio = remainingDistance / segmentLength;
 					myResult.set(_myPoints[i - 1]);
-					myResult.lerpLocal(_myPoints[i], ratio);
+					myResult.blendLocal(_myPoints[i], ratio);
 					return myResult;
 				}
 			}

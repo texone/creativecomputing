@@ -95,7 +95,7 @@ public class CCParticle extends CCLocalSpace{
 		if (_myMass != 1.0F){
 			newAccel.multiplyLocal(1.0F / _myMass);
 		}
-		_myAcceleration.lerpLocal(newAccel, accelDamping);
+		_myAcceleration.blendLocal(newAccel, accelDamping);
 
 		allForces.set(0,0,0);
 		
