@@ -25,7 +25,6 @@ import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.container.GLContainer;
 import cc.creativecomputing.gl.app.container.GLContainerType;
 import cc.creativecomputing.gl.app.container.GLJavaComponentContainer;
@@ -384,7 +383,6 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 //					windowX = theX;
 //					windowY = theY;
 //					drawable.getSurfaceWidth()
-					CCLog.info(theWidth + ":" + theHeight);
 					_myGraphics.reshape(theX, theY, theWidth, theHeight);
 					_myListeners.proxy().reshape(_myGraphics);
 				}
@@ -629,12 +627,15 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 		switch (theEvent.type()){
 			case PRESSED:
 				_myKeyListener.proxy().keyPressed(theEvent);
+				_myKeyPressedListener.proxy().keyPressed(theEvent);
 				break;
 			case RELEASED:
 				_myKeyListener.proxy().keyReleased(theEvent);
+				_myKeyReleasedListener.proxy().keyReleased(theEvent);
 				break;
 			case TYPED:
 				_myKeyListener.proxy().keyTyped(theEvent);
+				_myKeyTypedListener.proxy().keyTyped(theEvent);
 				break;
 		}
 	}

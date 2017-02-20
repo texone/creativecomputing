@@ -34,7 +34,7 @@ public interface CCKeyReleasedListener {
 	 * The key that was released will is passed as key event.
 	 * @param theKeyEvent
 	 * @see CCKeyEvent
-	 * @see CCGLAdapter#keyReleasedListener()
+	 * @see CCGLAdapter#keyReleased()
 	 * 
 	 */
 	public void keyReleased(final CCKeyEvent theKeyEvent);

@@ -75,15 +75,15 @@ public class CCGLAdapter<GLGraphicsType extends CCGLGraphics<?>, GLContextType e
 		return _myContext.keyListener();
 	}
 	
-	public CCListenerManager<CCKeyPressedListener> keyPressedListener(){
+	public CCListenerManager<CCKeyPressedListener> keyPressed(){
 		return _myContext.keyPressedListener();
 	}
 	
-	public CCListenerManager<CCKeyReleasedListener> keyReleasedListener(){
+	public CCListenerManager<CCKeyReleasedListener> keyReleased(){
 		return _myContext.keyReleasedListener();
 	}
 	
-	public CCListenerManager<CCKeyTypedListener> keyTypedListener(){
+	public CCListenerManager<CCKeyTypedListener> keyTyped(){
 		return _myContext.keyTypedListener();
 	}
 	

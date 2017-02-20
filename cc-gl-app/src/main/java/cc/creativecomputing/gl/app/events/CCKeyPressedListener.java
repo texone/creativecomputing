@@ -41,7 +41,7 @@ public interface CCKeyPressedListener {
 	 * 
 	 * @param theKeyEvent
 	 * @see CCKeyEvent
-	 * @see CCGLAdapter#keyPressedListener()
+	 * @see CCGLAdapter#keyPressed()
 	 */
 	public void keyPressed(final CCKeyEvent theKeyEvent);
 

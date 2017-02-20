@@ -40,7 +40,7 @@ public interface CCKeyTypedListener {
 	 * 
 	 * @param theKeyEvent
 	 * @see CCKeyEvent
-	 * @see CCGLAdapter#keyTypedListener()
+	 * @see CCGLAdapter#keyTyped()
 	 */
 	public void keyTyped(final CCKeyEvent theKeyEvent);
 }
