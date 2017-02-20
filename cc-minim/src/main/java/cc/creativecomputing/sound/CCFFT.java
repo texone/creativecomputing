@@ -55,7 +55,6 @@ public class CCFFT {
 	@CCProperty(name = "max reduction", min = 0, max = 1)
 	private double _cMaxReduction = 0;
 	
-
 	private double[] _mySpectrum;
 	private double[] _mySpectrumMax;
 	

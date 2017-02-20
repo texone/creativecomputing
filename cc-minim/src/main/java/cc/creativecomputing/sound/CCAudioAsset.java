@@ -5,20 +5,135 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
 
 public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 	
-	private Map<Path, CCAudioAssetData> _myPlayerMap = new HashMap<>();
+	private class CCAssetFFT{
+
+		@CCProperty(name = "fft")
+		private CCFFT _myFFT = new CCFFT();
+		
+		@CCProperty(name = "fft amp", min = 0, max = 10)
+		private double _cAmp = 1;
+		
+		@CCProperty(name = "fft pow", min = 0, max = 10)
+		private double _cPow = 1;
+		
+		@CCProperty(name = "normalize")
+		private boolean _cNormalize = false;
+		
+		@CCProperty(name = "fft max reduction", min = 0, max = 1)
+		private double _cMaxReduction = 1;
+		@CCProperty(name = "min max", min = 0, max = 1)
+		private double _cMinMax = 1;
+		
+		@CCProperty(name = "use fft")
+		private boolean _cUseFFT = false;
+		
+		@CCProperty(name = "spec min", min = 0, max = 1)
+		private double _cSpecMin = 0;
+		@CCProperty(name = "spec max", min = 0, max = 1)
+		private double _cSpecMax = 1;
+		
+		private void updateSpectrum(CCTriggerProgress theProcess, long theChunks, long theTotalChunks, CCAudioAssetData theData){
+			_myFFT.setup(fftSize, theData.sampleRate());
+			int totalSamples = theData.samples();
+			int totalChunks = (totalSamples / fftSize);
+			
+			CCMatrix2 mySpectrum = null;
+			
+			double[] mySpectraMax = null;
+
+			for (int chunkIdx = 0; chunkIdx < totalChunks; ++chunkIdx) {
+				// now analyze the left channel
+				_myFFT.forward(theData.data(chunkIdx * fftSize, fftSize));
+				
+				if(mySpectrum == null){
+					if(_myFFT.averages() != null){
+						mySpectrum = new CCMatrix2(totalChunks, _myFFT.averagesSize());
+						mySpectraMax = new double[_myFFT.averagesSize()];
+					}else{
+						mySpectrum = new CCMatrix2(totalChunks,fftSize / 2);
+						mySpectraMax = new double[fftSize / 2];
+					}
+				}
+				
+				// and copy the resulting spectrum into our spectra array
+				if(_myFFT.averages() != null){
+					for (int i = 0; i < _myFFT.averagesSize(); ++i) {
+						mySpectrum.set(chunkIdx,i,_myFFT.averages()[i]);
+						if(!_cNormalize)continue;
+						mySpectraMax[i] = CCMath.max(mySpectraMax[i] - _cMaxReduction, _cMinMax, _myFFT.averages()[i]);
+						mySpectrum.data()[chunkIdx][i][0] /= mySpectraMax[i];
+					}
+				}else{
+					for (int i = 0; i < 256; ++i) {
+						mySpectrum.set(chunkIdx,i,_myFFT.spectrum()[i]);
+						if(!_cNormalize)continue;
+						mySpectraMax[i] = CCMath.max(mySpectraMax[i] - _cMaxReduction, _cMinMax, _myFFT.spectrum()[i]);
+						mySpectrum.data()[chunkIdx][i][0] /= mySpectraMax[i];
+					}
+				}
+				if(theProcess != null)theProcess.progress(CCMath.map(chunkIdx + theChunks, 0, theTotalChunks, 0, 1));
+			}
+			
+			theData.spectrum(mySpectrum);
+			
+		}
+		
+		@CCProperty(name = "update spectrum")
+		public void updateSpectrum(CCTriggerProgress theProcess){
+			if(!_cUseFFT)return;
+			
+			int totalChunks = 0;
+			for(CCAudioAssetData myData:_myAssetMap.values()){
+				totalChunks += (myData.samples() / fftSize) + 1;
+			}
+			int chunks = 0;
+			theProcess.start();
+			for(CCAudioAssetData myData:_myAssetMap.values()){
+				updateSpectrum(theProcess, chunks, totalChunks, myData);
+				chunks += (myData.samples() / fftSize) + 1;
+			}
+			theProcess.end();
+		}
+		
+		public double spectrum(double theOffset){
+			if(!_cUseFFT)return 0;
+			if(_myAsset == null)return 0;
+			return CCMath.pow(_myAsset.spectrum(CCMath.blend(_cSpecMin, _cSpecMax, theOffset), _myPlayTimeMillis), _cPow) * _cAmp;
+		}
+
+		public CCAudioAssetData checkSpectrumData(TimedEventPoint theEvent) {
+			CCAudioAssetData myAudioData = null;
+			Path myFilePath = Paths.get(theEvent.content().value().toString());
+			
+			if(_myAssetMap.containsKey(myFilePath)){
+				myAudioData = _myAssetMap.get(myFilePath);
+				if(_cUseFFT && !myAudioData.hasSpectrum())updateSpectrum(null,0,0,myAudioData);
+			}else{
+				try{
+					myAudioData = new CCAudioAssetData(CCSoundIO.loadFile(myFilePath, 2048), CCSoundIO.loadSample(myFilePath).getChannel(0)) ;
+					if(_cUseFFT)updateSpectrum(null,0,0,myAudioData);
+					_myAssetMap.put(myFilePath, myAudioData);
+				}catch(Exception e){
+					
+				}
+			}
+			
+			return myAudioData;
+		}
+	}
+	
+	@CCProperty(name = "fft options")
+	private CCAssetFFT _myAssetFFT = new CCAssetFFT();
 	
 	@CCProperty(name = "min time offset", min = 0.01, max = 1)
 	private float _cMaxTimeOffset = 0.05f;
@@ -29,125 +144,24 @@ public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 	@CCProperty(name = "pan", min = -1, max = 1)
 	private float _cPan = 0;
 	
-	@CCProperty(name = "fft")
-	private CCFFT _myFFT = new CCFFT();
-	
-	@CCProperty(name = "fft amp", min = 0, max = 10)
-	private double _cAmp = 1;
-	
-	@CCProperty(name = "fft pow", min = 0, max = 10)
-	private double _cPow = 1;
-	
-	@CCProperty(name = "normalize")
-	private boolean _cNormalize = false;
-	
-	@CCProperty(name = "fft max reduction", min = 0, max = 1)
-	private double _cMaxReduction = 1;
-	@CCProperty(name = "min max", min = 0, max = 1)
-	private double _cMinMax = 1;
-	
-	@CCProperty(name = "use fft")
-	private boolean _cUseFFT = false;
-	
-	@CCProperty(name = "spec min", min = 0, max = 1)
-	private double _cSpecMin = 0;
-	@CCProperty(name = "spec max", min = 0, max = 1)
-	private double _cSpecMax = 1;
-	
 	public CCAudioAsset(){
 		_myAsset = null;
 	}
-
+	
 	@Override
-	public void onChangePath(Path thePath) {
-		if(_myAsset != null)_myAsset.player.pause();
-		if(thePath == null){
-			_myAsset = null;
-			return;
-		}
-		if(_myPlayerMap.containsKey(thePath)){
-			_myAsset = _myPlayerMap.get(thePath);
-			return;
-		}else{
-			try{
-				_myAsset = new CCAudioAssetData(
-					CCSoundIO.loadFile(thePath, 2048), 
-					CCSoundIO.loadSample(thePath).getChannel(0)
-				) ;
-				_myPlayerMap.put(thePath, _myAsset);
-			}catch(Exception e){
-				_myAsset = null;
-			}
-		}
+	public CCAudioAssetData loadAsset(Path thePath) {
+		return new CCAudioAssetData(
+			CCSoundIO.loadFile(thePath, 2048), 
+			CCSoundIO.loadSample(thePath).getChannel(0)
+		) ;
 	}
 	
 
 	private static final int fftSize = 512;
 	
-	private void updateSpectrum(CCTriggerProgress theProcess, long theChunks, long theTotalChunks, CCAudioAssetData theData){
-		
-		
-		_myFFT.setup(fftSize, theData.sampleRate());
-		int totalSamples = theData.samples();
-		int totalChunks = (totalSamples / fftSize);
-		
-		CCMatrix2 mySpectrum = null;
-		
-		double[] mySpectraMax = null;
-
-		for (int chunkIdx = 0; chunkIdx < totalChunks; ++chunkIdx) {
-			// now analyze the left channel
-			_myFFT.forward(theData.data(chunkIdx * fftSize, fftSize));
-			
-			if(mySpectrum == null){
-				if(_myFFT.averages() != null){
-					mySpectrum = new CCMatrix2(totalChunks, _myFFT.averagesSize());
-					mySpectraMax = new double[_myFFT.averagesSize()];
-				}else{
-					mySpectrum = new CCMatrix2(totalChunks,fftSize / 2);
-					mySpectraMax = new double[fftSize / 2];
-				}
-			}
-			
-			// and copy the resulting spectrum into our spectra array
-			if(_myFFT.averages() != null){
-				for (int i = 0; i < _myFFT.averagesSize(); ++i) {
-					mySpectrum.set(chunkIdx,i,_myFFT.averages()[i]);
-					if(!_cNormalize)continue;
-					mySpectraMax[i] = CCMath.max(mySpectraMax[i] - _cMaxReduction, _cMinMax, _myFFT.averages()[i]);
-					mySpectrum.data()[chunkIdx][i][0] /= mySpectraMax[i];
-				}
-			}else{
-				for (int i = 0; i < 256; ++i) {
-					mySpectrum.set(chunkIdx,i,_myFFT.spectrum()[i]);
-					if(!_cNormalize)continue;
-					mySpectraMax[i] = CCMath.max(mySpectraMax[i] - _cMaxReduction, _cMinMax, _myFFT.spectrum()[i]);
-					mySpectrum.data()[chunkIdx][i][0] /= mySpectraMax[i];
-				}
-			}
-			if(theProcess != null)theProcess.progress(CCMath.map(chunkIdx + theChunks, 0, theTotalChunks, 0, 1));
-		}
-		
-		theData.spectrum(mySpectrum);
-		
-	}
 	
-	@CCProperty(name = "update spectrum")
-	public void updateSpectrum(CCTriggerProgress theProcess){
-		if(!_cUseFFT)return;
-		
-		int totalChunks = 0;
-		for(CCAudioAssetData myData:_myPlayerMap.values()){
-			totalChunks += (myData.samples() / fftSize) + 1;
-		}
-		int chunks = 0;
-		theProcess.start();
-		for(CCAudioAssetData myData:_myPlayerMap.values()){
-			updateSpectrum(theProcess, chunks, totalChunks, myData);
-			chunks += (myData.samples() / fftSize) + 1;
-		}
-		theProcess.end();
-	}
+	
+	
 	
 	private boolean _myIsPlaying = false;
 	
@@ -184,9 +198,7 @@ public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 	}
 	
 	public double spectrum(double theOffset){
-		if(!_cUseFFT)return 0;
-		if(_myAsset == null)return 0;
-		return CCMath.pow(_myAsset.spectrum(CCMath.blend(_cSpecMin, _cSpecMax, theOffset), _myPlayTimeMillis), _cPow) * _cAmp;
+		return _myAssetFFT.spectrum(theOffset);
 	}
 	
 	
@@ -194,20 +206,8 @@ public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 	public void renderTimedEvent(TimedEventPoint theEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
 		if(theEvent.content() == null || theEvent.content().value() == null)return;
 		
-		CCAudioAssetData myAudioData = null;
-		Path myFilePath = Paths.get(theEvent.content().value().toString());
-		if(_myPlayerMap.containsKey(myFilePath)){
-			myAudioData = _myPlayerMap.get(myFilePath);
-			if(_cUseFFT && !myAudioData.hasSpectrum())updateSpectrum(null,0,0,myAudioData);
-		}else{
-			try{
-				myAudioData = new CCAudioAssetData(CCSoundIO.loadFile(myFilePath, 2048), CCSoundIO.loadSample(myFilePath).getChannel(0)) ;
-				if(_cUseFFT)updateSpectrum(null,0,0,myAudioData);
-				_myPlayerMap.put(myFilePath, myAudioData);
-			}catch(Exception e){
-				
-			}
-		}
+		CCAudioAssetData myAudioData = _myAssetFFT.checkSpectrumData(theEvent);
+		
 		if(myAudioData == null)return;
 		if(myAudioData.data == null)return;
 		
@@ -215,7 +215,7 @@ public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 		double myWidth = theUpper.getX() - theLower.getX();
 		double myHeight = theUpper.getY() - theLower.getY();
 		
-		if(!_cUseFFT || myAudioData.image() == null){
+		if(!_myAssetFFT._cUseFFT || myAudioData.image() == null){
 			GeneralPath myPath = new GeneralPath();
 			myPath.moveTo(theLower.getX(), theLower.getY());
 			for (int x = 0; x < myWidth - 1; x++) {
@@ -249,9 +249,9 @@ public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 				(int)(theLower.getX() + myWidth), 
 				(int)myHeight, 
 				sx1, 
-				(int)(myAudioData.image().getHeight() * _cSpecMin), 
+				(int)(myAudioData.image().getHeight() * _myAssetFFT._cSpecMin), 
 				sx2, 
-				(int)(myAudioData.image().getHeight() * _cSpecMax), 
+				(int)(myAudioData.image().getHeight() * _myAssetFFT._cSpecMax), 
 				null
 			);
 		}
