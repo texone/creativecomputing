@@ -13,8 +13,6 @@ public class CCColorControl extends CCGL2Adapter{
 	@CCProperty(name = "color")
 	private CCColor _myColor = new CCColor();
 	
-	
-	
 	@Override
 	public void start(CCAnimator theAnimator) {
 	}
@@ -22,8 +20,7 @@ public class CCColorControl extends CCGL2Adapter{
 	@Override
 	public void init(CCGraphics g) {
 	}
-	
-	
+
 	@Override
 	public void update(CCAnimator theAnimator) {
 	}
@@ -31,18 +28,11 @@ public class CCColorControl extends CCGL2Adapter{
 	@Override
 	public void display(CCGraphics g) {
 		g.clearColor(_myColor);
-		g.clear();
-		
-		
-		
-	
+		g.clear();	
 	}
 	
 	public static void main(String[] args) {
-		
-		
 		CCColorControl demo = new CCColorControl();
-		
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1000, 500);

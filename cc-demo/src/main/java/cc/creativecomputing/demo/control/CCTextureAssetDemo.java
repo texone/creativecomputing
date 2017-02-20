@@ -14,9 +14,11 @@ public class CCTextureAssetDemo extends CCGL2Adapter{
 	@CCProperty(name = "texture asset")
 	private CCTexture2DAsset _myAsset;
 	
+	@CCProperty(name = "value")
+	private double _myValue;
+	
 	@Override
-	public void init(CCGraphics g) {
-		
+	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myAsset = new CCTexture2DAsset(glContext());
 		
 		g.textFont(CCFontIO.createTextureMapFont("arial", 12));
@@ -35,10 +37,7 @@ public class CCTextureAssetDemo extends CCGL2Adapter{
 	}
 	
 	public static void main(String[] args) {
-		
-		
 		CCTextureAssetDemo demo = new CCTextureAssetDemo();
-		
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1000, 500);

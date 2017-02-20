@@ -8,55 +8,42 @@
  * Contributors:
  *     christianr - initial API and implementation
  */
-package cc.creativecomputing.demo.gl2.texture;
+package cc.creativecomputing.demo.gl2.texture.video;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
-import cc.creativecomputing.graphics.texture.CCTextureAttributes;
 import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.video.CCImageSequence;
+import cc.creativecomputing.video.CCGStreamerMovie;
 
-public class CCImageSequenceTest extends CCGL2Adapter {
+public class CCMovieLoopDemo extends CCGL2Adapter {
 	
-	private CCImageSequence _myData;
-	private CCVideoTexture _myVideoTexture;
-	
-	@CCProperty(name = "position", min = 0, max = 1)
-	private double _cPosition = 0;
+	private CCGStreamerMovie _myMovie;
+	private CCVideoTexture _myTexture;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		CCTextureAttributes myAttributes = new CCTextureAttributes();
-		myAttributes.generateMipmaps(true);
+//		_myData = new CCGStreamerMovie(this, CCIOUtil.dataPath("videos/120116_spline2_fine2_1356x136_jpg.mov"));
+		_myMovie = new CCGStreamerMovie(theAnimator, CCNIOUtil.dataPath("videos/station.mov"));
+		_myMovie.loop();
+		_myMovie.time(20);
 		
-		_myData = new CCImageSequence(theAnimator, CCNIOUtil.dataPath("videos/crash01"));
-//		_myData.start(true);
-		_myVideoTexture = new CCVideoTexture(this,_myData, CCTextureTarget.TEXTURE_2D, myAttributes);
-	}
-
-	@Override
-	public void update(CCAnimator theAnimator) {
-		_myData.time(_cPosition * _myData.duration());
+		_myTexture = new CCVideoTexture(_myMovie);
+		g.clearColor(1f);
+		g.clear();
 	}
 
 	@Override
 	public void display(CCGraphics g) {
-		g.clear();
-		g.image(_myVideoTexture,-g.width()/2, -g.height()/2);
-		CCLog.info(_myData.time());
+		g.color(255,30);
+		g.image(_myTexture, - g.width() / 2, g.height() / 2);
 	}
 
 	public static void main(String[] args) {
-
-		CCImageSequenceTest demo = new CCImageSequenceTest();
-		
+		CCMovieLoopDemo demo = new CCMovieLoopDemo();
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1000, 500);

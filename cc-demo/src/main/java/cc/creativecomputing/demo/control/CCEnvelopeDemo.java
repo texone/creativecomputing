@@ -53,6 +53,8 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 	
 	@CCProperty(name = "rect width", min = 100, max = 200)
 	private float _cRectWidth = 0;
+	@CCProperty(name = "rect height", min = 100, max = 200)
+	private float _cRectHeight = 0;
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
@@ -100,7 +102,6 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 		g.color(1d);
 		g.beginShape(_myDrawMode);
 		for(int i = 0; i < 1000;i++){
-			System.out.println(_myEnvelope.value(i / 1000f));
 			g.vertex(i,CCMath.random(200,400));// _myEnvelope.value(i / 1000f) * 200
 		}
 		g.endShape();

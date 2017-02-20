@@ -49,7 +49,7 @@ public class CCTextDemo extends CCGL2Adapter {
 		_myTexts.add(createText("VECTOR",CCFontIO.createVectorFont(myFont, mySize, CCCharSet.EXTENDED_CHARSET)));
 		_myTexts.add(createText("TEXTURE MAP",CCFontIO.createTextureMapFont(myFont, mySize, true, CCCharSet.EXTENDED_CHARSET)));
 		
-		keyPressedListener().add(theEvent -> {
+		keyPressed().add(theEvent -> {
 			switch (theEvent.keyCode()) {
 			case VK_UP:
 				_myTextID++;

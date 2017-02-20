@@ -8,64 +8,54 @@
  * Contributors:
  *     christianr - initial API and implementation
  */
-package cc.creativecomputing.demo.gl2.texture;
+package cc.creativecomputing.demo.gl2.texture.video;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.graphics.texture.CCSequenceTexture;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
-import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.graphics.texture.CCTextureAttributes;
-import cc.creativecomputing.image.CCImageIO;
+import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.video.CCImageSequence;
 
-public class CCSequenceTextureTest extends CCGL2Adapter {
+public class CCImageSequenceTest extends CCGL2Adapter {
 	
-	private CCSequenceTexture _mySequenceTexture;
+	private CCImageSequence _myData;
+	private CCVideoTexture _myVideoTexture;
 	
-	@CCProperty(name = "rate", min = -2, max = 2)
-	private static float _cRate = 1;
-	
-	private String _myFolder = "videos/crash/";
+	@CCProperty(name = "position", min = 0, max = 1)
+	private double _cPosition = 0;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		CCTextureAttributes myAttributes = new CCTextureAttributes();
-		myAttributes.generateMipmaps(false);
+		myAttributes.generateMipmaps(true);
 		
-		_mySequenceTexture = new CCSequenceTexture(CCTextureTarget.TEXTURE_2D, myAttributes, CCImageIO.newImages(CCNIOUtil.dataPath(_myFolder)));
-		_mySequenceTexture.loop();
-		_mySequenceTexture.wrap(CCTextureWrap.MIRRORED_REPEAT);
+		_myData = new CCImageSequence(theAnimator, CCNIOUtil.dataPath("videos/crash01"));
+//		_myData.start(true);
+		_myVideoTexture = new CCVideoTexture(this,_myData, CCTextureTarget.TEXTURE_2D, myAttributes);
 	}
 
 	@Override
 	public void update(CCAnimator theAnimator) {
-		_mySequenceTexture.rate(_cRate);
+		_myData.time(_cPosition * _myData.duration());
 	}
 
 	@Override
 	public void display(CCGraphics g) {
-		g.clearColor(0f,1f,0f);
 		g.clear();
-		g.texture(_mySequenceTexture);
-		_mySequenceTexture.wrap(CCTextureWrap.MIRRORED_REPEAT);
-		g.beginShape(CCDrawMode.QUADS);
-		g.vertex(-200, -100, -0.5f, -0.5f);
-		g.vertex( 0, -100, 1.5f, -0.5f);
-		g.vertex( 0,  100, 1.5f, 1.5f);
-		g.vertex(-200,  100, -0.5f, 1.5f);
-		g.endShape();
-		g.noTexture();
-
+		g.image(_myVideoTexture,-g.width()/2, -g.height()/2);
+		CCLog.info(_myData.time());
 	}
 
 	public static void main(String[] args) {
-		CCScreenCaptureDataTest demo = new CCScreenCaptureDataTest();
+
+		CCImageSequenceTest demo = new CCImageSequenceTest();
 		
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);

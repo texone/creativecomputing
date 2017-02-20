@@ -43,7 +43,7 @@ public class CCMultiFontTextDemo extends CCGL2Adapter {
 		_myText.position(-300, 200);
 		_myText.dimension(300, 400);
 
-		keyPressedListener().add(theEvent -> {
+		keyPressed().add(theEvent -> {
 			switch(theEvent.keyCode()){
 			case VK_C:
 				createText();
