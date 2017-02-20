@@ -83,7 +83,7 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		_myRuler = new SwingRulerView(_myMainFrame, null);
 		Path myRulerPath = Paths.get("ruler");
 		_myRulerPanel = new SwingMultiTrackPanel(_myPane);
-		_myRulerPanel.insertTrackView(new JPanel(), myRulerPath, 0, 30, true);
+		_myRulerPanel.insertTrackView(new JPanel(), myRulerPath, 0, 30 * SwingGuiConstants.SCALE, true);
 		_myRulerPanel.insertTrackDataView(_myRuler, myRulerPath, 0);
 		 
 		_myMultiTrackPanel = new SwingMultiTrackPanel(_myPane);
@@ -93,7 +93,7 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		
 		_myViewport = new JViewport();
         _myViewport.add(_myMultiTrackPanel);
-        _myViewport.setBounds(0, 0, 300, 300);
+        _myViewport.setBounds(0, 0, 300 * SwingGuiConstants.SCALE, 300 * SwingGuiConstants.SCALE);
         
         _myScrollPane = new JScrollPane(_myMultiTrackPanel);
         _myScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -123,7 +123,7 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		_myPane.addComponentListener(this);
 		
 		CCUIStyler.styleSplitPane(this);
-		setDividerLocation(30);
+		setDividerLocation(30 * SwingGuiConstants.SCALE);
 		setEnabled(false);
 		
 		setTopComponent(_myRulerPanel);

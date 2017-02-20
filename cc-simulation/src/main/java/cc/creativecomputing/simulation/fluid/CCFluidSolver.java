@@ -1,6 +1,7 @@
 package cc.creativecomputing.simulation.fluid;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.events.CCMouseSimpleInfo;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -482,4 +483,7 @@ public class CCFluidSolver {
 		display(g,  -g.width()/2, -g.height()/2, g.width(), g.height());
 	}
 
+	public static void main(String[] args) {
+		CCLog.info(CCNIOUtil.classPath(CCFluidSolver.class, "divergence.fs"));
+	}
 }

@@ -236,15 +236,15 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 	}
 	
 	public Dimension getMinimumSize() {
-		return new Dimension(0, 20);
+		return new Dimension(0, 20 * SwingGuiConstants.SCALE);
 	}
 	
 	public Dimension getPreferredSize() {
-		return new Dimension(0, 20);
+		return new Dimension(0, 20 * SwingGuiConstants.SCALE);
 	}
 	
 	public Dimension getMaximumSize() {
-		return new Dimension(5000, 20);
+		return new Dimension(5000, 20 * SwingGuiConstants.SCALE);
 	}
 	
 	public void setViewWidth(int theViewWidth) {
@@ -301,7 +301,7 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 			
 			g.setFont(SwingGuiConstants.ARIAL_BOLD_10);
 	        g.setColor(TEXT_COLOR);
-			g.drawString(myTimeString, myTimeX + 5, 11);
+			g.drawString(myTimeString, myTimeX + 5, 11 * SwingGuiConstants.SCALE);
 		}
 		ControlPoint myCurrentPoint = _myTransportController.trackData().ceiling(new ControlPoint(_myTransportController.lowerBound(),0));
 //		if(myCurrentPoint == null) {

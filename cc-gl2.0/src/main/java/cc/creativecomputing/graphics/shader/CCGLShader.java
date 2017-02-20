@@ -452,7 +452,6 @@ public class CCGLShader extends CCShaderObjectInterface{
 		
 		source(theSource);
 		compile();
-		
 		if(!compileStatus()){
 			StringBuffer myReplyBuffer = new StringBuffer();
 			if(theErrorPrepend != null)myReplyBuffer.append(theErrorPrepend);

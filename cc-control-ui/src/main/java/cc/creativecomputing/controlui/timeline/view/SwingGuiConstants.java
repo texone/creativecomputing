@@ -29,11 +29,13 @@ import cc.creativecomputing.controlui.timeline.controller.TimelineTool;
  */
 public class SwingGuiConstants {
 
-	public static Font ARIAL_9 = new Font("Arial", 1, 9);//LucidaGrande
-	public static Font ARIAL_BOLD_10 = new Font("Arial", Font.BOLD, 10);
-	public static Font ARIAL_11 = new Font("Arial", 1, 11);
+	public static int SCALE = 2;
+
+	public static Font ARIAL_9 = new Font("Arial", 1, 9 * SCALE);//LucidaGrande
+	public static Font ARIAL_BOLD_10 = new Font("Arial", Font.BOLD, 10 * SCALE);
+	public static Font ARIAL_11 = new Font("Arial", 1, 11 * SCALE);
 	
-	public static float DEFAULT_TRACK_CONTROL_WEIGHT = 0.25f;
+	public static float DEFAULT_TRACK_CONTROL_WEIGHT = 0.25f * SCALE;
 	
 	public static boolean CREATE_MUTE_BUTTON = true;
 	public static boolean CREATE_SPEED_CONTROL = true;

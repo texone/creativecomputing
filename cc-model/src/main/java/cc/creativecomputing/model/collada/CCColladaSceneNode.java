@@ -163,7 +163,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 					_myDrawMode = CCDrawMode.TRIANGLES;
 					break;
 				}
-				CCMesh myGeometryMesh = new CCVBOMesh(_myDrawMode);
+				CCMesh myGeometryMesh = new CCMesh(_myDrawMode);
 				
 				myGeometryMesh.vertices(myGeometryData.positions());
 				if(myGeometryData.hasNormals()){

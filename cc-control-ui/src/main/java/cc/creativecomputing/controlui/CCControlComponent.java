@@ -17,6 +17,7 @@ import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.TimelineChangeListener;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineContainerView;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.core.CCProperty;
@@ -77,7 +78,7 @@ public class CCControlComponent extends JSplitPane{
         
         JSplitPane myControlsPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
         CCUIStyler.styleSplitPane(myControlsPane);
-        myControlsPane.setDividerLocation(30);
+        myControlsPane.setDividerLocation(30 * SwingGuiConstants.SCALE);
         myControlsPane.setTopComponent(_myPresetComponent);
         myControlsPane.setBottomComponent(_myScrollPane);
         
@@ -85,7 +86,7 @@ public class CCControlComponent extends JSplitPane{
         _myControlsTimelinePane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
         CCUIStyler.styleSplitPane(_myControlsTimelinePane);
         _myControlsTimelinePane.setLeftComponent(myControlsPane);
-        _myControlsTimelinePane.setDividerLocation(330);
+        _myControlsTimelinePane.setDividerLocation(330 * SwingGuiConstants.SCALE);
         _myControlsTimelinePane.setRightComponent((SwingTimelineView)_myTimelineContainer.activeTimeline().view());
         
         _myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
@@ -108,16 +109,16 @@ public class CCControlComponent extends JSplitPane{
         myTreeControlsTimelinePane.setLeftComponent(_myTreeComponent);
         
         myTreeControlsTimelinePane.setRightComponent(_myControlsTimelinePane);
-        myTreeControlsTimelinePane.setDividerLocation(200); 
+        myTreeControlsTimelinePane.setDividerLocation(200 * SwingGuiConstants.SCALE); 
         
         setTopComponent(_myTimelineView.transportView());
         setBottomComponent(myTreeControlsTimelinePane);
-		setDividerLocation(30);
+		setDividerLocation(30 * SwingGuiConstants.SCALE);
         
-        Dimension minimumSize = new Dimension(200, 50);
+        Dimension minimumSize = new Dimension(200 * SwingGuiConstants.SCALE, 50 * SwingGuiConstants.SCALE);
         _myTreeComponent.setMinimumSize(minimumSize);
         _myInfoPanel.setMinimumSize(minimumSize);
-        setPreferredSize(new Dimension(1800, 300));
+        setPreferredSize(new Dimension(1800 * SwingGuiConstants.SCALE, 300 * SwingGuiConstants.SCALE));
 	}
 
 	

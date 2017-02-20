@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
+import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.core.util.CCFormatUtil;
 
 class TimeField extends JTextField implements FocusListener, ActionListener, MouseListener{
@@ -28,7 +29,7 @@ class TimeField extends JTextField implements FocusListener, ActionListener, Mou
 	public TimeField(TimelineContainer theTimelineContainer) {
 		_myTimelineContainer = theTimelineContainer;
 		CCUIStyler.styleTransportComponent(this, 64, 20);
-		setPreferredSize(new Dimension(80,20));
+		setPreferredSize(new Dimension(80 * SwingGuiConstants.SCALE,20 * SwingGuiConstants.SCALE));
 		
 		addFocusListener(this);
 		addActionListener(this);

@@ -118,12 +118,12 @@ public class CCObjectControl extends JPanel implements CCControl{
 		myConstraints.anchor = GridBagConstraints.LINE_START;
 		myConstraints.fill = GridBagConstraints.HORIZONTAL;
 		myConstraints.weightx = 1f;
-		myConstraints.insets = new Insets(0, 5  + 10 * (_myDepth - 1), 0, 5);
+		myConstraints.insets = new Insets(0, (5  + 10 * (_myDepth - 1)) * SwingGuiConstants.SCALE, 0, 5 * SwingGuiConstants.SCALE);
 		JLabel myLabel = new JLabel("[+] " + _myName, SwingConstants.LEFT);
 		myLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		myLabel.setForeground(Color.WHITE);
 		myLabel.setFont(SwingGuiConstants.ARIAL_BOLD_10);
-		myLabel.setPreferredSize(new Dimension(100,15));
+		myLabel.setPreferredSize(new Dimension(100 * SwingGuiConstants.SCALE,15 * SwingGuiConstants.SCALE));
 		
 		myLabel.addMouseListener(new MouseAdapter() {
 			@Override
