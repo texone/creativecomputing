@@ -109,23 +109,24 @@ public class CCControlApp  {
         _myFrame.setVisible(true);
 	}
 
-	public CCControlApp(Object theRootObject, CCAnimator theAnimator) {
-        preferences = Preferences.userNodeForPackage(theRootObject.getClass());
+	public CCControlApp(Object theRootObject, CCAnimator theAnimator, Class<?> thePrefClass) {
+        preferences = Preferences.userNodeForPackage(thePrefClass);
         
 		init(theAnimator);
 		
 		ExceptionHandler.registerExceptionHandler();
 	}
 	
-	public CCControlApp(Object theRootObject, CCTimelineSynch theSynch) {
-        preferences = Preferences.userNodeForPackage(theRootObject.getClass());
+	public CCControlApp(Object theRootObject, CCTimelineSynch theSynch, Class<?> thePrefClass) {
+		CCLog.info(thePrefClass.getName());
+        preferences = Preferences.userNodeForPackage(thePrefClass);
         
 		init(theSynch.animator());
 		theSynch.timeline(_myControlComponent.timeline());
 	}
 	
-	public CCControlApp(Object theRootObject) {
-		this(theRootObject, new CCAnimator());
+	public CCControlApp(Object theRootObject, Class<?> thePrefClass) {
+		this(theRootObject, new CCAnimator(), thePrefClass);
 		_myAnimator.start();
 	}
 	

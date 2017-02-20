@@ -121,8 +121,6 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
     
     @Override
     public void setRange(double theLowerBound, double theUpperBound) {
-
-		CCLog.info(theLowerBound + " : " + theUpperBound + " " + _myTrackView);
         if(_myTrackView != null)_myTrackView.render();
     }
     
@@ -267,6 +265,15 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
     
     public abstract void dragPointImp(ControlPoint theDraggedPoint, ControlPoint myTargetPosition, ControlPoint theMovement, boolean theIsPressedShift);
 
+    protected List<ControlPoint> _mySelectedPoints = new ArrayList<>();
+    
+    public void deactivate(){
+    	for(ControlPoint myPoint:_mySelectedPoints){
+    		myPoint.setSelected(false);
+    	}
+    	_mySelectedPoints.clear();
+        _myTrackView.render();
+    }
 
     public void endDrag() {
         if(_myHasAdd) {
@@ -275,6 +282,16 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
         }else {
             if(_myDraggedPoints != null) {
             	UndoHistory.instance().apply(new MoveControlPointAction(this, _myDraggedPoints, _myStartPoints,  _myDraggedPoints));
+            	
+            	if(!_myWasDragged && _myDraggedPoints.size() > 0){
+            		_myTrackContext.activeTrack(this);
+            		ControlPoint myPoint = _myDraggedPoints.get(0);
+            		_myDraggedPoints.get(0).toggleSelection();
+            		if(myPoint.isSelected())_mySelectedPoints.add(_myDraggedPoints.get(0));
+            		else _mySelectedPoints.remove(_myDraggedPoints.get(0));
+                    _myTrackView.render();
+            		
+            	}
             }
         }
         _myDraggedPoints = null;
@@ -307,6 +324,8 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
     private BezierControlPoint _myCeilBezier;
     
     public void mousePressed(MouseEvent e, ToolController theToolController) {
+		_myTrackContext.activeTrack(this);
+		
 		_myMouseStartX = e.getX();
 		_myMouseStartY = e.getY();
 		_mySnap = true;
@@ -317,6 +336,8 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
 			_myTrackContext.zoomController().startDrag(myViewCoords);
 			return;
 		}
+		
+		_myWasDragged = false;
 		
 		ControlPoint myControlPoint = pickNearestPoint(myViewCoords);
 		ControlPoint myHandle = pickHandle(myViewCoords);
@@ -383,18 +404,21 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
 		} else {
 			endDrag();
 		}
-
+		_myWasDragged = false;
 		_myAddedNewPoint = false;
 	}
 	
 	private static float MAX_DRAG_X = 100;
 
+	private boolean _myWasDragged = false;
+	
 	public void mouseDragged(MouseEvent e, ToolController theToolController) {
-		
 		if(e.isAltDown()) {
 			_myTrackContext.zoomController().performDrag(new Point2D.Double(e.getX(), e.getY()), _myTrackView.width());
 			return;
 		}
+		
+		_myWasDragged = true;
 		
 //		int targetX = e.getX();
 //		int targetY = e.getY();

@@ -28,6 +28,7 @@ import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType
 import cc.creativecomputing.control.timeline.point.HandleControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.CurveToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -50,7 +51,19 @@ public abstract class CurveTrackController extends TrackController{
 	) {
 		super(theTrackContext, theCurveTool, theTrack, theParent);
 		_myCurveTool = theCurveTool;
+		
+		if(theTrack.property() == null)return;
+		
+		theTrack.property().events().add(theValue -> {
+			for(ControlPoint myPoint:_mySelectedPoints){
+				applyValue(myPoint, null);
+			}
+			_myTrackView.render();
+			}
+		);
 	}
+	
+	public abstract void applyValue(ControlPoint thePoint, Object theValue);
 
 	/* (non-Javadoc)
      * @see de.artcom.timeline.controller.TrackDataController#createPoint(de.artcom.timeline.model.points.ControlPoint)

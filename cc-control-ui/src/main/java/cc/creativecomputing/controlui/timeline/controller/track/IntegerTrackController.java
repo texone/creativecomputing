@@ -12,6 +12,11 @@ public class IntegerTrackController extends CurveTrackController{
 	public IntegerTrackController(TrackContext theTrackContext, CurveToolController theCurveTool, Track theTrack, GroupTrackController theParent) {
 		super(theTrackContext, theCurveTool, theTrack, theParent);
 	}
+	
+	@Override
+	public void applyValue(ControlPoint thePoint, Object theValue) {
+		thePoint.value(_myProperty.normalizedValue());
+	}
 
 	@Override
 	public ControlPoint createPointImpl(ControlPoint theCurveCoords) {

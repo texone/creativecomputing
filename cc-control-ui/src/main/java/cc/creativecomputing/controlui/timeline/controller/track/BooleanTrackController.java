@@ -15,6 +15,11 @@ public class BooleanTrackController extends CurveTrackController{
 		super(theTrackContext, theCurveTool, theTrack, theParent);
 		_myBooleanHandle = (CCBooleanPropertyHandle)theTrack.property();
 	}
+	
+	@Override
+	public void applyValue(ControlPoint thePoint, Object theValue) {
+		thePoint.value(_myProperty.normalizedValue());
+	}
 
 	@Override
 	public ControlPoint createPointImpl(ControlPoint theCurveCoords) {

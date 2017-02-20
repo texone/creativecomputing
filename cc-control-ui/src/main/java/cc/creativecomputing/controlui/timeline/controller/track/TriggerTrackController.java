@@ -36,4 +36,9 @@ public class TriggerTrackController extends CurveTrackController{
 		if(myEventPoint != null)_myTriggerHandle.trigger();
 		_myLastControlPoint = myEventPoint;
 	}
+
+	@Override
+	public void applyValue(ControlPoint thePoint, Object theValue) {
+		
+	}
 }

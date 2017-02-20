@@ -21,6 +21,7 @@ package cc.creativecomputing.controlui.timeline.controller;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.TrackDataController;
 
 /**
  * The TrackContext is used to share informations between a number of tracks
@@ -46,6 +47,17 @@ public class TrackContext implements Zoomable{
 
         _myLowerBound = 0;
         _myUpperBound = 1;
+	}
+	
+	private TrackDataController _myActiveTrack;
+	
+	public void activeTrack(TrackDataController theActiveTrack){
+		if(_myActiveTrack != null && theActiveTrack != _myActiveTrack)_myActiveTrack.deactivate();
+		_myActiveTrack = theActiveTrack;
+	}
+	
+	public TrackDataController activeTrack(){
+		return _myActiveTrack;
 	}
 	
 	public CurveToolController curveTool() {
