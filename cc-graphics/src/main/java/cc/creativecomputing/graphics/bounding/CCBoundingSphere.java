@@ -307,7 +307,7 @@ public class CCBoundingSphere extends CCBoundingVolume {
 		setRadius(CCMath.sqrt(((A.x - O.x) * (A.x - O.x) + (A.y - O.y) * (A.y - O.y) + (A.z - O
 				.z) * (A.z - O.z)) / 4f)
 				+ radiusEpsilon - 1);
-		CCVector3.lerp(O, A, .5f, _myCenter);
+		CCVector3.blend(O, A, .5f, _myCenter);
 	}
 
 	/**
