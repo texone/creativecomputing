@@ -13,7 +13,6 @@ package cc.creativecomputing.graphics.texture;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCBufferObject;
 import cc.creativecomputing.graphics.CCBufferObject.CCBufferTarget;
 import cc.creativecomputing.graphics.CCBufferObject.CCUsageFrequency;
@@ -166,12 +165,12 @@ public class CCTexture2D extends CCTexture{
 					theImage.buffer()
 				);
 			}catch(Exception e) {
-				CCLog.info(_myTarget);
-				CCLog.info(theImage.internalFormat());
-				CCLog.info(theImage.pixelFormat());
-				CCLog.info(theImage.pixelType());
-				CCLog.info(theImage.width());
-				CCLog.info(theImage.height());
+//				CCLog.info(_myTarget);
+//				CCLog.info(theImage.internalFormat());
+//				CCLog.info(theImage.pixelFormat());
+//				CCLog.info(theImage.pixelType());
+//				CCLog.info(theImage.width());
+//				CCLog.info(theImage.height());
 			}
 		}
 	}
@@ -277,7 +276,7 @@ public class CCTexture2D extends CCTexture{
 		
 		int mySize = _myPixelType.bytesPerChannel * _myFormat.numberOfChannels * _myWidth * _myHeight;
 		
-		CCPixelFormat myFormat = pixelFormat(theImage);
+//		CCPixelFormat myFormat = pixelFormat(theImage);
 		CCPixelType myType = pixelType(theImage);
 		
 		if(_myUsePBO) {

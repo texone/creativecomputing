@@ -36,6 +36,11 @@ public class CCVideoTexture extends CCTexture2D implements CCVideoTextureDataLis
 		theAdapter.glListener().add(this);
 	}
 	
+	public CCVideoTexture(CCGL2Adapter theAdapter,CCVideo theData){
+		this(theData);
+		theAdapter.glListener().add(this);
+	}
+	
 	public CCVideoTexture(CCVideo theData){
 		super(theData);
 		video(theData);
@@ -85,7 +90,6 @@ public class CCVideoTexture extends CCTexture2D implements CCVideoTextureDataLis
 			_myInitVideo = null;
 		}
 		if(_myUpdateVideo != null){
-			System.out.println(_myUpdateVideo.internalFormat());
 			data(_myUpdateVideo);
 			_myUpdateVideo = null;
 		}

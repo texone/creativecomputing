@@ -96,7 +96,7 @@ public class CCGL2Application {
 		};
 		
 		
-		if(_myUseUI)myGLAdapter.controlApp(new CCControlApp(myGLAdapter, _mySynch));
+		if(_myUseUI)myGLAdapter.controlApp(new CCControlApp(myGLAdapter, _mySynch, theGLAdapter.getClass()));
 
 		_myGLContext.listener().add(myGLAdapter);
 		_myGLContext.listener().add(

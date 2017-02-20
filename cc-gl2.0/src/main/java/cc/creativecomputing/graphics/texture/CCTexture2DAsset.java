@@ -1,8 +1,6 @@
 package cc.creativecomputing.graphics.texture;
 
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.core.CCProperty;
@@ -17,9 +15,6 @@ import cc.creativecomputing.image.CCImageIO;
 
 public class CCTexture2DAsset extends CCAsset<CCTexture2D>{
 	
-	private Map<Path, CCTexture2D> _myTextureMap = new HashMap<>();
-	
-	private Path _myPath;
 	private CCImage _myImage;
 	
 	@CCProperty(name = "wrap")
@@ -38,7 +33,7 @@ public class CCTexture2DAsset extends CCAsset<CCTexture2D>{
 			public void display(CCGraphics theG) {
 				if(_myImage != null){
 					_myAsset = new CCTexture2D(_myImage);
-					_myTextureMap.put(_myPath, _myAsset);
+					_myAssetMap.put(_myAssetPath, _myAsset);
 					_myImage = null;
 				}
 				if(_myAsset != null){
@@ -50,16 +45,22 @@ public class CCTexture2DAsset extends CCAsset<CCTexture2D>{
 			}
 		});
 	}
+	
+	@Override
+	public CCTexture2D loadAsset(Path thePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public void onChangePath(Path thePath) {
 		if(thePath == null){
-			_myPath = thePath;
+			_myAssetPath = thePath;
 			_myAsset = null;
 			return;
 		}
-		if(_myTextureMap.containsKey(thePath)){
-			_myAsset = _myTextureMap.get(thePath);
+		if(_myAssetMap.containsKey(thePath)){
+			_myAsset = _myAssetMap.get(thePath);
 			return;
 		}
 		try{
