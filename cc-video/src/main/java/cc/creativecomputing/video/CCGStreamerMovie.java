@@ -12,8 +12,8 @@ package cc.creativecomputing.video;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.net.URI;
 import java.nio.IntBuffer;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.gstreamer.Bus;
@@ -34,7 +34,6 @@ import cc.creativecomputing.image.CCImageException;
 import cc.creativecomputing.image.CCPixelFormat;
 import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCPixelType;
-import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -80,7 +79,7 @@ public class CCGStreamerMovie extends CCMovieData {
 	 * 
 	 * @param thePath
 	 */
-	public CCGStreamerMovie(final CCAnimator theAnimator, final String thePath) {
+	public CCGStreamerMovie(final CCAnimator theAnimator, final Path thePath) {
 		super(theAnimator);
 
 		setMovie(thePath);
@@ -97,12 +96,12 @@ public class CCGStreamerMovie extends CCMovieData {
 	}
 
 	@SuppressWarnings("unused")
-	private float nanoSecToSecFrac(double theNanoSeconds) {
+	private double nanoSecToSecFrac(double theNanoSeconds) {
 		theNanoSeconds /= 1E9;
-		return (float) theNanoSeconds;
+		return (double) theNanoSeconds;
 	}
 
-	private long secToNanoLong(float theSeconds) {
+	private long secToNanoLong(double theSeconds) {
 		Float f = new Float(theSeconds * 1E9);
 		return f.longValue();
 	}
@@ -129,7 +128,7 @@ public class CCGStreamerMovie extends CCMovieData {
 	 * 
 	 * @param thePath
 	 */
-	public void setMovie(final String thePath) {
+	public void setMovie(final Path thePath) {
 		delete();
 		gplayer = null;
 
@@ -157,14 +156,11 @@ public class CCGStreamerMovie extends CCMovieData {
 			// first try a local file using the dataPath. usually this will
 			// work ok, but sometimes the dataPath is inside a jar file,
 			// which is less fun, so this will crap out.
-			File file = CCNIOUtil.dataPath(thePath).toFile();
+			File file = thePath.toFile();
 
 			// read from a file just hanging out in the local folder.
 			// this might happen when the video library is used with some
 			// other application, or the person enters a full path name
-			if (!file.exists()) {
-				file = new File(thePath);
-			}
 			if (file.exists()) {
 				gplayer = new PlayBin2("Movie Player");
 				gplayer.setInputFile(file);
@@ -179,7 +175,7 @@ public class CCGStreamerMovie extends CCMovieData {
 				try {
 					CCLog.info("network read");
 					gplayer = new PlayBin2("Movie Player");
-					gplayer.setURI(URI.create(thePath));
+					gplayer.setURI(thePath.toUri());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -264,8 +260,8 @@ public class CCGStreamerMovie extends CCMovieData {
 		// _myRaw.copyToArray(0, _myPixels, 0, _myPixels.length);
 	}
 
-	private float _myUpdateDelta = 0;
-	private float _myUpdateRate = 30;
+	private double _myUpdateDelta = 0;
+	private double _myUpdateRate = 30;
 
 	@Override
 	public void update(CCAnimator theAnimator) {
@@ -284,7 +280,7 @@ public class CCGStreamerMovie extends CCMovieData {
 		}
 	}
 
-	public float updateRate() {
+	public double updateRate() {
 		return _myUpdateRate;
 	}
 
@@ -296,7 +292,7 @@ public class CCGStreamerMovie extends CCMovieData {
 		delete();
 	}
 
-	public float duration() {
+	public double duration() {
 		return gplayer.queryDuration().toMillis() / 1000f;
 	}
 
@@ -305,21 +301,21 @@ public class CCGStreamerMovie extends CCMovieData {
 	}
 
 	@Override
-	public float volume() {
-		return (float) gplayer.getVolume();
+	public double volume() {
+		return (double) gplayer.getVolume();
 	}
 
 	@Override
-	public void volume(final float theVolume) {
+	public void volume(final double theVolume) {
 		if (_myIsRunning) {
 			gplayer.setVolume(theVolume);
 		}
 	}
 
-	public void rate(float theSpeed) {
+	public void rate(double theSpeed) {
 	}
 
-	public float rate() {
+	public double rate() {
 		return 1.0f;
 	}
 
@@ -327,10 +323,10 @@ public class CCGStreamerMovie extends CCMovieData {
 	 * Get the original framerate of the source video. Note: calling this method
 	 * repeatedly can slow down playback performance.
 	 * 
-	 * @return float
+	 * @return double
 	 */
-	public float frameRate() {
-		return (float) gplayer.getVideoSinkFrameRate();
+	public double frameRate() {
+		return (double) gplayer.getVideoSinkFrameRate();
 	}
 
 	public int frame() {
@@ -344,16 +340,16 @@ public class CCGStreamerMovie extends CCMovieData {
 		System.out.println(gplayer.queryPosition().toMillis() + "/"
 				+ gplayer.queryDuration().toMillis());
 
-		float srcFramerate = frameRate();
+		double srcFramerate = frameRate();
 
 		// The duration of a single frame:
-		float frameDuration = 1.0f / srcFramerate;
+		double frameDuration = 1.0f / srcFramerate;
 
 		// We move to the middle of the frame by adding 0.5:
-		float where = (theFrame + 0.5f) * frameDuration;
+		double where = (theFrame + 0.5f) * frameDuration;
 
 		// Taking into account border effects:
-		float diff = duration() - where;
+		double diff = duration() - where;
 		if (diff < 0) {
 			where += diff - 0.25 * frameDuration;
 		}
@@ -421,12 +417,12 @@ public class CCGStreamerMovie extends CCMovieData {
 	}
 
 	@Override
-	public float time() {
+	public double time() {
 		return gplayer.queryPosition().toMillis() / 1000f;
 	}
 
 	@Override
-	public void time(float theTime) {
+	public void time(double theTime) {
 
 		boolean res;
 		long pos = secToNanoLong(theTime);

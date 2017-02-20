@@ -3,20 +3,14 @@ package cc.creativecomputing.video;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
 
 public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
-	
-	
-	private Map<Path, CCImageSequence> _mySequenceMap = new HashMap<>();
 	
 	@CCProperty(name = "rate", min = 1, max = 120)
 	private float _cRate = 5;
@@ -45,35 +39,14 @@ public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 		_myListener = theListener;
 	}
 	
-	private CCImageSequence loadAsset(Path thePath){
+	@Override
+	public CCImageSequence loadAsset(Path thePath){
 		return new CCImageSequence(_myAnimator, thePath);
 	}
 	
 	@Override
 	public String[] extensions() {
 		return _myExtensions;
-	}
-
-	@Override
-	public void onChangePath(Path thePath) {
-		CCLog.info(thePath);
-		if(thePath == null){
-			_myAsset = null;
-			return;
-		}
-		if(_mySequenceMap.containsKey(thePath)){
-			_myAsset = _mySequenceMap.get(thePath);
-			return;
-		}else{
-			try{
-				_myAsset = loadAsset(thePath);
-				_mySequenceMap.put(thePath, _myAsset);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		}
-		
-	
 	}
 	
 	public float rate(){

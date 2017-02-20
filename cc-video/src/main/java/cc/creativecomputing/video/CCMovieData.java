@@ -79,7 +79,7 @@ public abstract class CCMovieData extends CCVideo implements CCMovie{
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.texture_new.video.CCMovie#progress()
 	 */
-	public float progress() {
+	public double progress() {
 		return time() / duration();
 	}
 
@@ -114,14 +114,14 @@ public abstract class CCMovieData extends CCVideo implements CCMovie{
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.texture_new.video.CCMovie#volume()
 	 */
-	public float volume() {
+	public double volume() {
 		return 0;
 	}
 
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.texture_new.video.CCMovie#volume(float)
 	 */
-	public void volume(float theVolume) {
+	public void volume(double theVolume) {
 		
 	}
 	
@@ -129,14 +129,15 @@ public abstract class CCMovieData extends CCVideo implements CCMovie{
 	 * Set the time of the movie in seconds
 	 * @param theTime
 	 */
-	public void time(float theTime) {
+	@Override
+	public void time(double theTime) {
 		
 	}
 	
 	/**
 	 * 
 	 */
-	public float time() {
+	public double time() {
 		return 0;
 	}
 }

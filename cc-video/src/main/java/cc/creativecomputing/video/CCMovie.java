@@ -19,7 +19,7 @@ public interface CCMovie{
 	 * -2 starts the movie playing backward at double speed, and so on. A value of 0 stops the movie.
 	 * @param speed
 	 */
-	public void rate(float speed);
+	public void rate(double speed);
 
 	/**
 	 * Positive values indicate forward rates and negative values indicate reverse rates. 
@@ -27,31 +27,31 @@ public interface CCMovie{
 	 * movie is playing backward at double speed, and so on. A value of 0 means the movie is paused or stopped.
 	 * @return a movie's play back rate.
 	 */
-	public float rate();
+	public double rate();
 	
 	/**
 	 * Use this method to get the frame rate of the movie.
 	 * @return the frame rate of the movie
 	 */
-	public float frameRate();
+	public double frameRate();
 
 	/**
 	 * Returns the current time of the movie as a relative value between 0 and 1.
 	 * @return progress of movie play back
 	 */
-	public float progress();
+	public double progress();
 
 	/**
 	 * Returns the current time of the movie in seconds
 	 * @return the time in milliseconds
 	 */
-	public float time();
+	public double time();
 
 	/**
 	 * Sets the time for movie play back
 	 * @param theNewTime new time for movie play back
 	 */
-	public void time(float theNewTime);
+	public void time(double theNewTime);
 	
 	public void goToBeginning();
 	
@@ -59,21 +59,21 @@ public interface CCMovie{
 	 * Returns the length of the movie in seconds
 	 * @return length of the movie in seconds
 	 */
-	public float duration();
+	public double duration();
 
 	/**
 	 * Volume values range from -1.0 to 1.0. Negative values play no sound 
 	 * but preserve the absolute value of the volume setting.
 	 * @return
 	 */
-	public float volume();
+	public double volume();
 
 	/**
 	 * Volume values range from -1.0 to 1.0. Negative values play no sound 
 	 * but preserve the absolute value of the volume setting.
 	 * @param volume
 	 */
-	public void volume(float volume);
+	public void volume(double volume);
 
 	/**
 	 * Starts the movie in loop modus
