@@ -44,6 +44,7 @@ public class CCEnvelopeEditor extends JFrame{
 	public CCEnvelopeEditor(String theTitle) {
 		super(theTitle);
 		_myCurvePanel = new SwingCurvePanel(this);
+		_myCurvePanel.dataView().drawGrid(true);
 //		
 //		
 //		getContentPane().add(_myCurvePanel.view());
