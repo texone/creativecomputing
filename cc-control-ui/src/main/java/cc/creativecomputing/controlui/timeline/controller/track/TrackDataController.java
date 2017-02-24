@@ -27,7 +27,6 @@ import java.util.List;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.timeline.TrackData;
 import cc.creativecomputing.control.timeline.point.BezierControlPoint;
-import cc.creativecomputing.control.timeline.point.ColorPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
 import cc.creativecomputing.control.timeline.point.ControlPoint.HandleType;
@@ -44,7 +43,6 @@ import cc.creativecomputing.controlui.timeline.view.TimedContentView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 
@@ -236,13 +234,6 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
 	                return myTimedEnd;
 	            }
 	        	break;
-	        case COLOR:
-	        	HandleControlPoint myColorHandle = ((ColorPoint)myPreviousPoint).endPoint();
-	        	
-	        	if (Math.abs(curveToViewSpace(myColorHandle).getX() - theViewCoords.getX()) < SwingTrackView.PICK_RADIUS) {
-	                return myColorHandle;
-	            }
-	        	break;
 			default:
 				break;
 	        }
@@ -298,7 +289,7 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
     }
     
     public double distance(ControlPoint theNearest, Point2D theViewCoords) {
-    	if(this instanceof EventTrackController || this instanceof ColorTrackController)
+    	if(this instanceof EventTrackController || this instanceof CCBlendableTrackController)
     		return Math.abs(curveToViewSpace(theNearest).getX() - theViewCoords.getX());
     	else 
     		return curveToViewSpace(theNearest).distance(theViewCoords);
