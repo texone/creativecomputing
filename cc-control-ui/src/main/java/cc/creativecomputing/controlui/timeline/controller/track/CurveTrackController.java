@@ -28,7 +28,6 @@ import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType
 import cc.creativecomputing.control.timeline.point.HandleControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.CurveToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 /**
