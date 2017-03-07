@@ -20,6 +20,10 @@ public class CCEnvelope {
 	
 	public double value(double theTime){
 		if(_myCurrentCurve == null)return 0;
-		return _myCurrentCurve.value(theTime);
+		try{
+			return _myCurrentCurve.value(theTime);
+		}catch(Exception e){
+			return 0;
+		}
 	}
 }
