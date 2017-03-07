@@ -610,6 +610,32 @@ public class CCVector2 implements Cloneable, Externalizable {
     }
     
     /**
+	 * Sets a position randomly distributed inside a sphere of unit radius
+	 * centered at the origin.  Orientation will be random and length will range
+	 * between 0 and 1
+	 */
+	public CCVector2 randomize(){
+		do{
+			x = CCMath.random() * 2.0F - 1.0F;
+			y = CCMath.random() * 2.0F - 1.0F;
+		}while (lengthSquared() > 1.0F);
+		return this;
+	}
+
+	/**
+	 * Sets a position randomly distributed inside a sphere of unit radius
+	 * centered at the origin.  Orientation will be random and length will range
+	 * between 0 and 1
+	 */
+	public CCVector2 randomize(double radius){
+		do{
+			x = radius * (CCMath.random() * 2.0F - 1.0F);
+			y = radius * (CCMath.random() * 2.0F - 1.0F);
+		}while (lengthSquared() > radius * radius);
+		return this;
+	}
+    
+    /**
 	 * clamps the length of a given vector to maxLength.  If the vector is 
 	 * shorter its value is returned unaltered, if the vector is longer
 	 * the value returned has length of maxLength and is parallel to the
@@ -997,4 +1023,27 @@ public class CCVector2 implements Cloneable, Externalizable {
         out.writeDouble(y);
     }
 
+	public CCVector2 rotate(double r, CCVector2 theStorage){
+		if(theStorage == null){
+			theStorage = new CCVector2();
+		}
+		double xprev = x;
+		double yprev = y;
+		
+		final double sinR = CCMath.sin(r);
+		final double cosR = CCMath.cos(r);
+
+		theStorage.x = cosR * xprev + sinR * yprev;
+		theStorage.y = -sinR * xprev + cosR * yprev;
+		
+		return theStorage;
+	}
+	
+	public CCVector2 rotate(double r){
+		return rotate(r, new CCVector2());
+	}
+
+	public CCVector2 rotateLocal(double r){
+		return rotate(r, this);
+	}
 }
