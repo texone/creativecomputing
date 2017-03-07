@@ -30,6 +30,11 @@ public class CC2Motor2ConnectionCalculations extends CCMotorCalculations<CC2Moto
 	@CCProperty(name = "calc back")
 	protected boolean _cCalcBack = false;
 	
+	@CCProperty(name = "top width", readBack = true)
+	protected double _cTopWidth = 0;
+	@CCProperty(name = "bottom width", readBack = true)
+	protected double _cBottomWidth = 0;
+	
 	private static enum CC2MotorFormular{
 		HERMITE,
 		POW,
@@ -95,6 +100,9 @@ public class CC2Motor2ConnectionCalculations extends CCMotorCalculations<CC2Moto
 		mySetup.bounds().add(boundPoint(mySetup, 1, 0, _myTopDistance));
 		mySetup.bounds().add(boundPoint(mySetup, 1, 0, _myBottomDistance));
 		mySetup.bounds().add(boundPoint(mySetup, 0, 1, _myBottomDistance));
+		
+		_cTopWidth = mySetup.bounds().get(0).distance(mySetup.bounds().get(1));
+		_cBottomWidth = mySetup.bounds().get(2).distance(mySetup.bounds().get(3));
 		
 		CCVector3 animBound0  = mySetup.bounds().get(0).clone();
 		animBound0.x += mySetup.elementRadius() * _myElementRadiusScale;
