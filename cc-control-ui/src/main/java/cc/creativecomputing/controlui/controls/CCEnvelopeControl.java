@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
+import cc.creativecomputing.core.logging.CCLog;
 
 public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHandle>{
 
@@ -22,15 +23,22 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 		
 		theHandle.events().add(theValue -> {
 			_myHandle.value((CCEnvelope)theValue, false);
+        	_myCurveFrame.track().trackData(value().curve());
+			_myCurveFrame.render();
+			_myCurveFrame.repaint();
 		});
 		
-		_myCurveFrame = new CCEnvelopeEditor(theHandle.name());
+		_myCurveFrame = new CCEnvelopeEditor(theHandle.path().toString());
 		_myCurveFrame.setSize(300, 300);
 		_myCurveFrame.addWindowListener(new WindowAdapter() {
 			
 			@Override
 			public void windowClosing(WindowEvent theE) {
-//				value().currentCurve(_myEnvelopeCurve);
+			}
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				_myCurveFrame.render();
 			}
 		});
         
@@ -51,7 +59,6 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 
 	@Override
 	public CCEnvelope value() {
-		// TODO Auto-generated method stub
 		return _myHandle.value();
 	}
 }

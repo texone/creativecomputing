@@ -454,7 +454,7 @@ public class TransportController extends TrackDataController implements Zoomable
 			_myLoopEnd = _myTimeRangeController._myLoopEnd;
 		}
 		_myRulerView.render();
-		_myTimelineController.render();
+		_myTimelineController.renderInfo();
 	}
 	
 	public void mouseDragged(MouseEvent e) {
@@ -463,11 +463,11 @@ public class TransportController extends TrackDataController implements Zoomable
 		if(!_myDefineLoop) {
 			if(!myPressedShift) {
 				moveTransport(e.getX());
-				_myTimelineController.render();
+				_myTimelineController.renderInfo();
 			}else {
 				super.mouseDragged(e, null);
 			}
-			_myTimelineController.render();
+			_myTimelineController.renderInfo();
 		}else {
 			_myTimeRangeController.mouseDragged(e);
 			doLoop(true);

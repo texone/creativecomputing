@@ -164,6 +164,7 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)_myTree.getLastSelectedPathComponent();
  
         if (node == null) return;
+        if(!(node.getUserObject() instanceof CCTreeNodeUserObject))return;
  
         CCTreeNodeUserObject nodeInfo = (CCTreeNodeUserObject)node.getUserObject();
         _myControlCompoent.showContent(nodeInfo.controlComponent());

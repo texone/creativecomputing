@@ -19,49 +19,18 @@
  */
 package cc.creativecomputing.controlui.timeline.view;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.timeline.controller.TrackContext;
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
+import cc.creativecomputing.math.CCMath;
 
 
 public  class SwingEventPopup extends JPopupMenu {
-	
-	private class DeleteAction implements ActionListener{
-		
-		@Override
-		public void actionPerformed(ActionEvent theArg0) {
-			if(_myEvent != null) {
-				_myEventTrackController.delete(_myEvent);
-				_myEventTrackController.view().render();
-			}
-		}
-	}
-	
-	private class DeleteAllAction implements ActionListener{
-		
-		@Override
-		public void actionPerformed(ActionEvent theArg0) {
-			if(_myEvent != null) {
-				_myEventTrackController.trackData().clear();
-				_myEventTrackController.view().render();
-			}
-		}
-	}
-	
-	private class PropertyAction implements ActionListener{
-		
-		@Override
-		public void actionPerformed(ActionEvent theArg0) {
-			if(_myEvent != null) {
-				_myEventTrackController.properties(_myEvent);
-			}
-		}
-	}
 	
 	/**
 	 * 
@@ -80,17 +49,76 @@ public  class SwingEventPopup extends JPopupMenu {
 		
 		JMenuItem myDeleteItem = new JMenuItem("Delete");
 		myDeleteItem.setFont(SwingGuiConstants.ARIAL_11);
-		myDeleteItem.addActionListener(new DeleteAction());
+		myDeleteItem.addActionListener(e -> {
+			if(_myEvent == null) return;
+			
+			_myEventTrackController.delete(_myEvent);
+			_myEventTrackController.view().render();
+		});
 		add(myDeleteItem);
 		
 		JMenuItem myDeleteAllItem = new JMenuItem("Delete All");
 		myDeleteAllItem.setFont(SwingGuiConstants.ARIAL_11);
-		myDeleteAllItem.addActionListener(new DeleteAllAction());
+		myDeleteAllItem.addActionListener(e -> {
+			if(_myEvent == null) return;
+			
+			_myEventTrackController.trackData().clear();
+			_myEventTrackController.view().render();
+		});
 		add(myDeleteAllItem);
+		
+		JMenuItem myResetItem = new JMenuItem("Reset");
+		myResetItem.setFont(SwingGuiConstants.ARIAL_11);
+		myResetItem.addActionListener(e -> {
+			if(_myEvent == null) return;
+			if(_myEventTrackController.property() instanceof CCPathHandle){
+				((CCPathHandle)_myEventTrackController.property()).reset(_myEvent);
+			}
+			_myEventTrackController.view().render();
+		});
+		add(myResetItem);
+		
+		JMenuItem myLoopItem = new JMenuItem("Apply to Loop");
+		myLoopItem.setFont(SwingGuiConstants.ARIAL_11);
+		myLoopItem.addActionListener(e -> {
+			if(_myEvent == null) return;
+			
+			TrackContext myContext = _myEventTrackController.context();
+			if(!( myContext instanceof TimelineController)){
+				return;
+			}
+			
+			TimelineController myTimelineController = (TimelineController)myContext;
+			myTimelineController.transportController().loop(_myEvent.time(), _myEvent.endTime());
+			myTimelineController.transportController().doLoop(true);
+			myTimelineController.transportController().view().render();
+		});
+		add(myLoopItem);
+		
+		JMenuItem myZoomItem = new JMenuItem("Zoom In");
+		myZoomItem.setFont(SwingGuiConstants.ARIAL_11);
+		myZoomItem.addActionListener(e -> {
+			if(_myEvent == null) return;
+			
+			TrackContext myContext = _myEventTrackController.context();
+			if(!( myContext instanceof TimelineController)){
+				return;
+			}
+			
+			TimelineController myTimelineController = (TimelineController)myContext;
+			double myOffset = (_myEvent.endTime() - _myEvent.time()) / 10;
+			myTimelineController.zoomController().setRange(CCMath.max(0,_myEvent.time() - myOffset), _myEvent.endTime() + myOffset);
+			myTimelineController.transportController().view().render();
+		});
+		add(myZoomItem);
 		
 		JMenuItem myPropertyItem = new JMenuItem("Properties");
 		myPropertyItem.setFont(SwingGuiConstants.ARIAL_11);
-		myPropertyItem.addActionListener(new PropertyAction());
+		myPropertyItem.addActionListener(e -> {
+			if(_myEvent == null) return;
+			
+			_myEventTrackController.properties(_myEvent);
+		});
 		add(myPropertyItem);
 	}
 	

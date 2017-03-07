@@ -115,4 +115,10 @@ public class TrackContext implements Zoomable{
 	public void render(){
 		
 	}
+	
+
+	
+	public void renderInfo(){
+		
+	}
 }

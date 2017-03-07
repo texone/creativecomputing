@@ -3,6 +3,7 @@ package cc.creativecomputing.controlui.timeline.view.track;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -32,6 +33,7 @@ import cc.creativecomputing.controlui.timeline.controller.TransportController.Ru
 import cc.creativecomputing.controlui.timeline.controller.track.ColorTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CurveTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController.EventAction;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingConstants;
 import cc.creativecomputing.controlui.timeline.view.SwingEventCreatePopup;
@@ -81,6 +83,8 @@ public class SwingTrackDataView extends JPanel {
     
     private boolean _myIsMousePressed = false;
     
+    private MouseEvent _myMouseEvent = null;
+    
     public SwingTrackDataView(
     	SwingToolChooserPopup theToolChooserPopup, 
     	SwingTrackDataRenderer theDataRenderer,
@@ -108,11 +112,11 @@ public class SwingTrackDataView extends JPanel {
         	
         	@Override
         	public void mousePressed(MouseEvent e) {
+        		_myMouseEvent = e;
     			boolean myIsRightClick = e.getButton() == MouseEvent.BUTTON3 || (e.isControlDown() && e.getButton() == MouseEvent.BUTTON1);
     			
         		if(_myController instanceof EventTrackController) {
         			TimedEventPoint myEvent = ((EventTrackController)_myController).clickedPoint(e);
-        			
         			
         			if (myIsRightClick) {
         				if(myEvent != null) {
@@ -127,8 +131,8 @@ public class SwingTrackDataView extends JPanel {
                 		_myIsMousePressed = true;
         				_myController.mousePressed(e);
         			}
-        		}else if(_myController instanceof ColorTrackController){
-        			_myController.mousePressed(e);
+//        		}else if(_myController instanceof ColorTrackController){
+//        			_myController.mousePressed(e);
         		}else{
         			if (myIsRightClick) {
         				_myToolChooserPopup.trackController(_myController);
@@ -142,7 +146,7 @@ public class SwingTrackDataView extends JPanel {
         	
         	@Override
         	public void mouseReleased(MouseEvent e) {
-        		
+        		_myMouseEvent = e;
         		if (e.getButton() == MouseEvent.BUTTON1) {
             		_myIsMousePressed = false;
             		repaint();
@@ -151,17 +155,29 @@ public class SwingTrackDataView extends JPanel {
 
         		requestFocusInWindow();
         	}
+        	@Override
+        	public void mouseExited(MouseEvent e) {
+        		_myMouseEvent = null;
+        		renderInfo();
+        	}
         });
         
         addMouseMotionListener(new MouseAdapter() {
         	@Override
         	public void mouseDragged(MouseEvent e) {
+        		_myMouseEvent = e;
+        		if(e.isAltDown() && !_myIsEnvelope) {
+        			_myTrackContext.zoomController().performDrag(new Point2D.Double(e.getX(), e.getY()), width());
+        			return;
+        		}
         		_myController.mouseDragged(e);
         	}
         	
         	@Override
         	public void mouseMoved(MouseEvent e) {
+        		_myMouseEvent = e;
         		_myController.mouseMoved(e);
+        		renderInfo();
         	}
         });
         
@@ -274,11 +290,11 @@ public class SwingTrackDataView extends JPanel {
         ControlPoint myCurrentPoint = _myController.trackData().ceiling(new ControlPoint(_myTrackContext.lowerBound(), 0));
         ControlPoint myLastPoint = myMinPoint;
         while (myCurrentPoint != null && myCurrentPoint != myMaxPoint) {
-        	drawCurvePiece(myLastPoint, myCurrentPoint, myPath);
+        	drawCurvePiece(myLastPoint, myCurrentPoint, myPath, false);
         	myLastPoint = myCurrentPoint;
         	myCurrentPoint = myCurrentPoint.getNext();
 		}
-        drawCurvePiece(myLastPoint, myMaxPoint, myPath);
+        drawCurvePiece(myLastPoint, myMaxPoint, myPath, false);
         
         myPath.lineTo(this.getWidth(), this.getHeight());
         myPath.lineTo(0, this.getHeight());
@@ -297,7 +313,7 @@ public class SwingTrackDataView extends JPanel {
         g2d.draw(myPath);
     }
 
-    private void drawCurvePiece(ControlPoint myFirstPoint, ControlPoint mySecondPoint, GeneralPath thePath) {
+    private void drawCurvePiece(ControlPoint myFirstPoint, ControlPoint mySecondPoint, GeneralPath thePath, boolean theToFirst) {
         if (myFirstPoint.equals(mySecondPoint)) {
             return;
         }
@@ -315,6 +331,10 @@ public class SwingTrackDataView extends JPanel {
         double myA2Y = p2.getY();
         double myX = p2.getX();
         double myY = p2.getY();
+        
+        if(theToFirst){
+        	thePath.lineTo(myA1X, myA1Y);
+        }
         
         if(mySecondPoint.getType() == ControlPointType.STEP){
         	thePath.lineTo(myA2X, myA1Y);
@@ -388,7 +408,6 @@ public class SwingTrackDataView extends JPanel {
 	        // so only visible time-line panels are rendered i.e. when zooming
 	        Rectangle myVisibleRect = new Rectangle();
 	        computeVisibleRect(myVisibleRect);
-	
 	        if (!myVisibleRect.isEmpty()) {
 	        	renderImplementation();
 	        	_myRedraw = false;
@@ -400,6 +419,12 @@ public class SwingTrackDataView extends JPanel {
     	}catch(NullPointerException e){
     		
     	}
+    	update();
+    }
+    
+    public void renderInfo(){
+    	_myRedraw = false;
+    	update();
     }
     
     private Graphics2D g2d = null;
@@ -428,6 +453,12 @@ public class SwingTrackDataView extends JPanel {
     
     private int _myLastWidth = 0;
     private int _myLastHeight = 0;
+    
+    private boolean _myIsEnvelope = false;
+    
+    public void isEnvelope(boolean theDrawGrid){
+    	_myIsEnvelope = theDrawGrid;
+    }
     
     private void point(Point2D thePoint){
     	g2d.fillOval(
@@ -559,9 +590,9 @@ public class SwingTrackDataView extends JPanel {
         
         for(double x = p1.getX(); x <= p2.getX();x++){
         	double myTime = _myController.viewXToTime((int)x, true);
-        	CCColor myColor = myColorTrackController.color(myTime);
-        	g2d.setColor(new Color((float)myColor.r, (float)myColor.g, (float)myColor.b, (float)myColor.a));
-        	g2d.drawLine((int)x, 0, (int)x, getHeight());
+        	CCColor myColor = myColorTrackController.blend(myTime);
+        	g2d.setColor(myColor.toAWTColor());
+        	g2d.drawLine((int)x, 0, (int)x, height() / 2);
         }
         
 //       
@@ -589,12 +620,126 @@ public class SwingTrackDataView extends JPanel {
 //        thePath.lineTo(p2.getX(), p2.getY());     
     }
     
+    private void drawBlendedCurve(Graphics g) {
+        if (_myController.trackData().size() == 0) {
+        	GeneralPath myPath = new GeneralPath();
+        	Point2D p1 = _myController.curveToViewSpace(new ControlPoint(0,_myController.value(0)));
+            myPath.moveTo(0, p1.getY() / 2);
+            myPath.lineTo(getWidth(), p1.getY() / 2);
+            
+            g2d.setColor(_myFillColor);
+            g2d.draw(myPath);
+            return;
+        }
+        
+        ControlPoint myMinPoint = _myController.trackData().floor(new ControlPoint(_myTrackContext.lowerBound(), 0));
+		if(myMinPoint == null){
+			myMinPoint = new ControlPoint(
+				_myTrackContext.lowerBound(), 
+				_myController.trackData().value(_myTrackContext.lowerBound()) / 2
+			);
+		}
+        Point2D p1 = _myController.curveToViewSpace(myMinPoint);
+		
+        GeneralPath myPath = new GeneralPath();
+        myPath.moveTo(p1.getX(), p1.getY());
+        
+        ControlPoint myMaxPoint = _myController.trackData().ceiling(new ControlPoint(_myTrackContext.upperBound(), 0));
+		
+		if(myMaxPoint == null){
+			myMaxPoint = new ControlPoint(
+				_myTrackContext.upperBound(), 
+				_myController.trackData().value(_myTrackContext.upperBound()) / 2
+			);
+		}
+		myMaxPoint = _myController.trackData().getLastOnSamePosition(myMaxPoint);
+        
+        ControlPoint myCurrentPoint = _myController.trackData().ceiling(new ControlPoint(_myTrackContext.lowerBound(), 0));
+        ControlPoint myLastPoint = myMinPoint;
+        while (myCurrentPoint != null && myCurrentPoint != myMaxPoint) {
+        	ControlPoint c0 = myLastPoint.clone();
+        	c0.value(0.0);
+        	ControlPoint c1 = myCurrentPoint.clone();
+        	c1.value(0.5);
+        	drawCurvePiece(c0, c1, myPath, true);
+        	myLastPoint = myCurrentPoint;
+        	myCurrentPoint = myCurrentPoint.getNext();
+		}
+        ControlPoint c0 = myLastPoint.clone();
+    	c0.value(0.0);
+    	ControlPoint c1 = myMaxPoint.clone();
+    	c1.value(0.0);
+        drawCurvePiece(c0, c1, myPath, true);
+        
+        myPath.lineTo(this.getWidth(), this.getHeight());
+        myPath.lineTo(0, this.getHeight());
+        myPath.closePath();
+
+	   
+        if(!_myController.track().mute()){
+	        g2d.setPaint(new GradientPaint(0, 0, _myFillColor, 0, getHeight(), _myLineColor));
+        }else{
+	        g2d.setPaint(new GradientPaint(0, 0, _myFillColor.brighter(), 0, getHeight(), _myLineColor.brighter()));
+        }
+        g2d.fill(myPath);
+    	
+        
+        g2d.setColor(_myLineColor);
+        g2d.draw(myPath);
+    }
+    
     private void renderColor() {
+		renderGradients();
+    	drawBlendedCurve(g2d);
+
+		// paint curve points
+		BasicStroke myThinStroke = new BasicStroke(0.5f);
+		g2d.setStroke(myThinStroke);
+		g2d.setColor(_myDotColor);
+		ControlPoint myCurrentPoint = _myController.trackData().getFirstPointAt(_myTrackContext.lowerBound());
+
+		while (myCurrentPoint != null) {
+			if (myCurrentPoint.time() > _myTrackContext.upperBound()) {
+				break;
+			}
+			
+			CCColor myColor = (CCColor)myCurrentPoint.blendable();
+			if(myColor != null){
+				g2d.setColor(myColor.toAWTColor());
+			}
+			
+			Point2D myUserPoint = _myController.curveToViewSpace(myCurrentPoint);
+			if(myCurrentPoint.isSelected()){
+				g2d.setColor(Color.red);
+			}
+			
+			point(myUserPoint);
+			line(new Point2D.Double(myUserPoint.getX(), height() / 2), new Point2D.Double(myUserPoint.getX(), 0));
+			g2d.setColor(_myDotColor);
+			
+			//g2d.drawString(myCurrentPoint.value() +"", (int)myUserPoint.getX(), (int)myUserPoint.getY());
+
+			if (myCurrentPoint.getType() == ControlPointType.BEZIER) {
+				BezierControlPoint myBezierPoint = (BezierControlPoint) myCurrentPoint;
+				
+				Point2D myUserHandle = _myController.curveToViewSpace(myBezierPoint.inHandle());
+				line(myUserPoint, myUserHandle);
+				point(myUserHandle);
+
+				myUserHandle = _myController.curveToViewSpace(myBezierPoint.outHandle());
+				line(myUserPoint, myUserHandle);
+				point(myUserHandle);
+			}
+			myCurrentPoint = myCurrentPoint.getNext();
+		}
+		
+    }
+    
+    private void renderGradients() {
     	if (_myController.trackData().size() == 0) {
     		return;
     	}
     	
-    	CCLog.info("draw color");
          
     	ControlPoint myMinPoint = _myController.trackData().floor(new ControlPoint(_myTrackContext.lowerBound(), 0));
  		if(myMinPoint == null){
@@ -622,46 +767,6 @@ public class SwingTrackDataView extends JPanel {
          	myCurrentPoint = myCurrentPoint.getNext();
  		}
  		drawGradient(myLastPoint, myMaxPoint);
-
- 	// paint curve points
- 		BasicStroke myThinStroke = new BasicStroke(1.0f);
- 		BasicStroke myThickStroke = new BasicStroke(3.0f);
- 		myCurrentPoint = _myController.trackData().getFirstPointAt(_myTrackContext.lowerBound());
-
- 		while (myCurrentPoint != null) {
- 			if (myCurrentPoint.time() > _myTrackContext.upperBound()) {
- 				break;
- 			}
-
-        	CCColor myColor = ((CCColor)myCurrentPoint.blendable()).invert();
-        	Color myAWTColor = new Color((float)myColor.r, (float)myColor.g, (float)myColor.b);
- 			int myX = _myController.timeToViewX(myCurrentPoint.time());
- 	 		g2d.setColor(myAWTColor);
- 	 		if(myCurrentPoint.isSelected())
- 	 			g2d.setStroke(myThickStroke);
- 	 		else
- 	 			g2d.setStroke(myThinStroke);
- 			g2d.drawLine(myX, 0, myX, getHeight());
- 			
-// 			myX = _myController.timeToViewX(myCurrentPoint.endTime());
-// 			g2d.drawLine(myX, getHeight()/ 2 - 5, myX, getHeight()/ 2 + 5);
-// 			g2d.drawLine(myX - 5, getHeight() / 2, myX + 5, getHeight() / 2);
- 	 		
- 				//g2d.drawString(myCurrentPoint.value() +"", (int)myUserPoint.getX(), (int)myUserPoint.getY());
- 			
-// 			if (myCurrentPoint.getType() == ControlPointType.BEZIER) {
-// 					BezierControlPoint myBezierPoint = (BezierControlPoint) myCurrentPoint;
-// 					
-// 					Point2D myUserHandle = _myController.curveToViewSpace(myBezierPoint.inHandle());
-// 					line(myUserPoint, myUserHandle);
-// 					point(myUserHandle);
-//
-// 					myUserHandle = _myController.curveToViewSpace(myBezierPoint.outHandle());
-// 					line(myUserPoint, myUserHandle);
-// 					point(myUserHandle);
-// 				}
- 			myCurrentPoint = myCurrentPoint.getNext();
- 		}
     }
     
     public Graphics2D g2d() {
@@ -670,7 +775,8 @@ public class SwingTrackDataView extends JPanel {
 
     // does a full rendering of the function. we only need to do that if we're visible and we edit points or
     // zoom in and out...
-	public void renderImplementation() {
+	private void renderImplementation() {
+		
 		if (getWidth() <= 0 || getHeight() <= 0)
 			return;
 		
@@ -683,7 +789,7 @@ public class SwingTrackDataView extends JPanel {
 		}
 		
 		if(g2d == null)return;
-
+		
 		// paint background
 		g2d.setComposite(AlphaComposite.Clear); 
 		g2d.setColor(new Color(255, 255, 255, 0));
@@ -701,8 +807,6 @@ public class SwingTrackDataView extends JPanel {
 		}else {
 			renderTimedEvent();
 		}
-
-		updateUI();
 	}
 	
 	private void drawTimelineBack(Graphics g){
@@ -746,6 +850,78 @@ public class SwingTrackDataView extends JPanel {
 		
 			 myCurrentPoint = myCurrentPoint.getNext();
 		 }
+	}
+	
+	private void drawArrow(Graphics g, int theStart, int theEnd, boolean flip){
+		int myOffset = (getHeight() / 16); 
+		if(theStart > theEnd) myOffset = -myOffset;
+		theStart =  theEnd - 3 * myOffset;
+		int myArrowOffset = theEnd - myOffset;
+		
+//		g.drawLine(theStart, getHeight() / 2, theEnd, getHeight() / 2);
+		if(flip){
+			int tmp = theEnd;
+			theEnd = myArrowOffset;
+			myArrowOffset = tmp;
+		}
+		g.drawLine(myArrowOffset, getHeight() / 2 - myOffset, theEnd, getHeight() / 2);
+		g.drawLine(myArrowOffset, getHeight() / 2 + myOffset, theEnd, getHeight() / 2);
+	}
+	
+	private void drawEventTrackInfos(Graphics g){
+		EventAction myDragAction = ((EventTrackController)_myController).dragAction();
+		
+		if(myDragAction == null)return;
+	
+		ControlPoint myDraggedPoint = _myController.draggedPoint();
+		
+		if(myDraggedPoint == null)return;
+		
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(2));
+		
+		Point2D myPoint = _myController.curveToViewSpace(myDraggedPoint);
+		
+		if(_myMouseEvent == null){
+			return;
+		}
+		
+		switch(myDragAction){
+			case DRAG_END_OFFSET:
+			case DRAG_START:
+				g.fillRect((int)myPoint.getX() - 6 , getHeight() / 2 - getHeight() / 8, 12, getHeight() / 4);
+				break;
+				
+			case DRAG_START_OFFSET:
+			case DRAG_END:
+				g.drawLine((int)myPoint.getX(), 0, (int)myPoint.getX(), getHeight());
+				break;
+				
+			case DRAG_BLOCK:
+				drawArrow(g, _myMouseEvent.getX() - 50, _myMouseEvent.getX() - 10, true);
+				drawArrow(g, _myMouseEvent.getX() + 50, _myMouseEvent.getX() + 10, true);
+				g.fillRect(_myMouseEvent.getX() - 6 , getHeight() / 2 - getHeight() / 8, 12, getHeight() / 4);
+				break;
+
+			case DRAG_CONTENT:
+				drawArrow(g, _myMouseEvent.getX() - 50, _myMouseEvent.getX() - 10, true);
+				drawArrow(g, _myMouseEvent.getX() + 50, _myMouseEvent.getX() + 10, true);
+				g.drawLine(_myMouseEvent.getX(), 0, _myMouseEvent.getX(), getHeight());
+				break;
+		}
+		
+		switch(myDragAction){
+		case DRAG_START:
+		case DRAG_END:
+		case DRAG_END_OFFSET:
+		case DRAG_START_OFFSET:
+			drawArrow(g, (int)myPoint.getX() - 50, (int)myPoint.getX() - 10, false);
+			drawArrow(g, (int)myPoint.getX() + 50, (int)myPoint.getX() + 10, false);
+			break;
+		}
+		
+		
+		
 	}
 	
 	private void drawTimelineInfos(Graphics g) {
@@ -797,13 +973,20 @@ public class SwingTrackDataView extends JPanel {
 			}
 		}
 		
+		if(_myController instanceof EventTrackController){
+			drawEventTrackInfos(g);
+		}
+		
 		if(_myIsMousePressed){
-
-			ControlPoint myDraggedPoint = _myController.draggedPoint();
-			if(myDraggedPoint != null){
-				Point2D myPoint = _myController.curveToViewSpace(myDraggedPoint);
-				g.drawLine(0, (int)myPoint.getY(), getWidth(), (int)myPoint.getY());
-				g.drawLine((int)myPoint.getX(), 0, (int)myPoint.getX(), getHeight());
+			if(_myController instanceof EventTrackController){
+				
+			}else{
+				ControlPoint myDraggedPoint = _myController.draggedPoint();
+				if(myDraggedPoint != null){
+					Point2D myPoint = _myController.curveToViewSpace(myDraggedPoint);
+					g.drawLine(0, (int)myPoint.getY(), getWidth(), (int)myPoint.getY());
+					g.drawLine((int)myPoint.getX(), 0, (int)myPoint.getX(), getHeight());
+				}
 			}
 		}
 	}
@@ -812,6 +995,23 @@ public class SwingTrackDataView extends JPanel {
         super.paintComponent(g);
         
         drawTimelineBack(g);
+        
+        if(_myIsEnvelope){
+        	Graphics2D myG2 = (Graphics2D)g;
+    		
+    		for (int i = 0; i <= 8;i++) {
+    	        int myX = (int)CCMath.map(i, 0, 8, 0, width());
+    	        int myY = (int)CCMath.map(i, 0, 8, 0, height());
+    			
+    			
+    			if(i % 2 == 0)g.setColor(Color.gray);
+    			else g.setColor(SwingRulerView.STEP_COLOR);
+    				
+    			myG2.setStroke(SwingRulerView.THIN_STROKE);
+    			g.drawLine(myX, 0, myX, getHeight());
+    			g.drawLine(0, myY, getWidth(), myY);
+    		}
+        }
         
         if (_myRedraw) {
             renderImplementation();

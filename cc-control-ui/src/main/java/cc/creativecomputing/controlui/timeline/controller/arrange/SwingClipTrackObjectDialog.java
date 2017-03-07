@@ -20,7 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedEventPointContent;
+import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedData;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.TimelineChangeListener;
@@ -116,7 +116,7 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 				if(_myEventPoint == null)return;
 				switch(theE.getStateChange()){
 				case ItemEvent.SELECTED:
-					_myEventPoint.content(new TimedEventPointContent(_myTimelines.getSelectedItem().toString()));
+					_myEventPoint.content(new TimedData(_myTimelines.getSelectedItem().toString()));
 					_myController.view().render();
 					break;
 				}

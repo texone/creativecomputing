@@ -567,6 +567,16 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 			if(myController.view() != null)myController.view().render();
 		}
 	}
+
+	@Override
+	public void renderInfo() {
+		for (TrackController myController : _myTrackControllerMap.values()) {
+			if(myController.view() != null)myController.view().renderInfo();
+		}
+		for (TrackController myController : _myGrouptrackControllerMap.values()) {
+			if(myController.view() != null)myController.view().renderInfo();
+		}
+	}
 	
 	@SuppressWarnings("unused")
 	private void insertDataTrack(Track theTrack, double theRange) {
@@ -704,6 +714,7 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 //			}
 		}
 		if(_myRootController != null)_myRootController.time(theTime);
+		renderInfo();
 	}
 
 	/* (non-Javadoc)

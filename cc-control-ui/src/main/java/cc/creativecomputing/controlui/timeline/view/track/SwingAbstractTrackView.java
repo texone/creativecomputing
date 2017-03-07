@@ -63,6 +63,10 @@ public abstract class SwingAbstractTrackView extends JPanel implements CCTrackVi
 	public void render() {
 		_myDataView.render();
 	}
+
+	public void renderInfo() {
+		_myDataView.renderInfo();
+	}
 	
 	public int height() {
         return _myDataView.height();

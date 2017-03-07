@@ -54,11 +54,12 @@ public abstract class CurveTrackController extends TrackController{
 		if(theTrack.property() == null)return;
 		
 		theTrack.property().events().add(theValue -> {
+			if(_mySelectedPoints == null || _mySelectedPoints.size() == 0)return;
 			for(ControlPoint myPoint:_mySelectedPoints){
 				applyValue(myPoint, null);
 			}
 			_myTrackView.render();
-			}
+		}
 		);
 	}
 	

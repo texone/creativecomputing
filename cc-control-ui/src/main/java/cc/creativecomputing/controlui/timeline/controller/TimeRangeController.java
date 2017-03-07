@@ -120,7 +120,7 @@ public class TimeRangeController {
 
 		_myTimeRange.range(_myNewLoopStart, _myNewLoopEnd);
 		
-		_myTrackContext.render();
+		_myTrackContext.renderInfo();
 	}
 	
 	public void mouseReleased(MouseEvent e) {

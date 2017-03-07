@@ -33,8 +33,8 @@ import cc.creativecomputing.controlui.timeline.view.SwingCurvePanel;
  * @author christianriekoff
  *
  */
-public class CCEnvelopeEditor extends JFrame{
-	
+public class CCEnvelopeEditor extends JFrame {
+
 	/**
 	 * 
 	 */
@@ -44,38 +44,41 @@ public class CCEnvelopeEditor extends JFrame{
 	public CCEnvelopeEditor(String theTitle) {
 		super(theTitle);
 		_myCurvePanel = new SwingCurvePanel(this);
-		_myCurvePanel.dataView().drawGrid(true);
-//		
-//		
-//		getContentPane().add(_myCurvePanel.view());
-		
+	
 		JPanel containerPanel = new JPanel();
-		 containerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		 containerPanel.setLayout(new BorderLayout());
-		 //panel to test
-		 JPanel testPanel = new JPanel();
-		 testPanel.setBackground(Color.blue);        
-		 containerPanel.add(_myCurvePanel.view(),BorderLayout.CENTER);
+		containerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		containerPanel.setLayout(new BorderLayout());
+		// panel to test
+		JPanel testPanel = new JPanel();
+		testPanel.setBackground(Color.blue);
+		containerPanel.add(_myCurvePanel.view(), BorderLayout.CENTER);
 
-		 //assuming you are extending JFrame
-		 getContentPane().setLayout(new BorderLayout());
-		 getContentPane().add(containerPanel, BorderLayout.CENTER);
-		 
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(containerPanel, BorderLayout.CENTER);
+
 		pack();
 	}
 	
-	public Track track(){
-		return _myCurvePanel.track();
+	public void render(){
+		_myCurvePanel.render();
 	}
 	
+	public void update(){
+		_myCurvePanel.update();
+	}
+
+	public Track track() {
+		return _myCurvePanel.track();
+	}
+
 	public double value(double theIn) {
 		return _myCurvePanel.value(theIn);
 	}
-	
-	public SwingCurvePanel panel(){
+
+	public SwingCurvePanel panel() {
 		return _myCurvePanel;
 	}
-	
+
 	public static void main(String[] args) {
 		CCEnvelopeEditor myFrame = new CCEnvelopeEditor("check it");
 		myFrame.setVisible(true);

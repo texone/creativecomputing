@@ -31,7 +31,7 @@ import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.HandleType;
 import cc.creativecomputing.control.timeline.point.HandleControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedEventPointContent;
+import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedData;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.ToolController;
 import cc.creativecomputing.controlui.timeline.controller.actions.AddControlPointAction;
@@ -49,7 +49,7 @@ public class EventTrackController extends TrackController {
 	
 	public final static float MIN_EVENT_TIME = 0.0001f;
 	
-	private static enum EventAction{
+	public static enum EventAction{
 		DRAG_START, 
 		DRAG_START_OFFSET,
 		DRAG_END, 
@@ -86,7 +86,7 @@ public class EventTrackController extends TrackController {
 				if(_myEditedEvent == null)return;
 				if(!_myEditedEvent.isSelected())return;
 				
-				_myEditedEvent.content(new TimedEventPointContent(theValue));
+				_myEditedEvent.content(new TimedData(theValue));
 				_myTrackView.render();
 			}
 		});
@@ -94,6 +94,10 @@ public class EventTrackController extends TrackController {
 	
 	public void splitDrag(boolean theSplitDrag){
 		_mySplitDrag = theSplitDrag;
+	}
+	
+	public EventAction dragAction(){
+		return _myDragAction;
 	}
 	
 	public CCListenerManager<EventTrackListener> events(){
@@ -199,7 +203,7 @@ public class EventTrackController extends TrackController {
 			1.0
 		);
 		myEventPoint.endPoint(myEndPoint);
-		myEventPoint.content(new TimedEventPointContent(_myProperty.value()));
+		myEventPoint.content(new TimedData(_myProperty.value()));
 		
         
         _myHasAdd = true;
@@ -341,6 +345,59 @@ public class EventTrackController extends TrackController {
 	private double _myLastOffset = 0;
 	
 	@Override
+	public void mouseMoved(MouseEvent e) {
+		_myDragAction = null;
+		_myMouseStartX = e.getX();
+		_myMouseStartY = e.getY();
+				
+		Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
+		_myCurveCoords = viewToCurveSpace(myViewCoords, true);
+		
+		boolean mySwitchAction = _mySplitDrag && _myCurveCoords.value() > 0.5;
+		
+		ControlPoint myControlPoint = pickNearestPoint(myViewCoords);
+		HandleControlPoint myHandle = pickHandle(myViewCoords);
+		
+		
+		if (myHandle != null) {
+			_myDraggedPoints = new ArrayList<ControlPoint>();
+			_myDraggedPoints.add(myHandle);
+			if(!(_mySplitDrag && _myCurveCoords.value() < 0.5)){
+				_myDragAction = EventAction.DRAG_END;
+			}else{
+				_myDragAction = EventAction.DRAG_END_OFFSET;
+			}
+		} else if (myControlPoint != null  && distance(myControlPoint, myViewCoords) < SwingTrackView.PICK_RADIUS){
+			_myDraggedPoints = new ArrayList<ControlPoint>();
+			_myDraggedPoints.add(myControlPoint);
+			if(!mySwitchAction){
+				_myDragAction = EventAction.DRAG_START;
+			}else{
+				_myDragAction = EventAction.DRAG_START_OFFSET;
+			}
+		} else {
+			
+			TimedEventPoint myLower = (TimedEventPoint)trackData().lower(_myCurveCoords);
+
+			if(myLower != null) {
+				ControlPoint myUpper = myLower.endPoint();
+				ControlPoint myCoords = viewToCurveSpace(myViewCoords, true);
+				if(myCoords.time() > myLower.time() && myCoords.time() < myUpper.time()) {
+					_myDraggedPoints = new ArrayList<ControlPoint>();
+					_myDraggedPoints.add(myLower);
+					if(!mySwitchAction){
+						_myDragAction = EventAction.DRAG_BLOCK;
+					}else{
+						_myDragAction = EventAction.DRAG_CONTENT;
+					}
+					
+				}
+			}
+			
+		}
+	}
+	
+	@Override
 	public void mousePressed(MouseEvent e) {
 		_myMouseStartX = e.getX();
 		_myMouseStartY = e.getY();
@@ -413,8 +470,7 @@ public class EventTrackController extends TrackController {
 			 for(ControlPoint myDraggedPoint:_myDraggedPoints){
 				 _myStartPoints.add(myDraggedPoint.clone());
 			 }
-       }
-		
+		}
 	}
 	
 	public TimedEventPoint editedEvent(){
@@ -422,6 +478,7 @@ public class EventTrackController extends TrackController {
 	}
 	
 	public void mouseReleased(MouseEvent e) {
+		_myDragAction = null;
 		if(_myEditedEvent != null) {
 			_myEventTrackListener.proxy().onChange(this, _myEditedEvent);
 			

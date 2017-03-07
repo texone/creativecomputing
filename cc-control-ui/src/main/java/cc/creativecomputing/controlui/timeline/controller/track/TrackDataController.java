@@ -404,10 +404,6 @@ public abstract class TrackDataController implements Zoomable, TimedContentView{
 	private boolean _myWasDragged = false;
 	
 	public void mouseDragged(MouseEvent e, ToolController theToolController) {
-		if(e.isAltDown()) {
-			_myTrackContext.zoomController().performDrag(new Point2D.Double(e.getX(), e.getY()), _myTrackView.width());
-			return;
-		}
 		
 		_myWasDragged = true;
 		

@@ -39,6 +39,10 @@ import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
  */
 public class SwingCurvePanel extends SwingAbstractTrackView implements ComponentListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1507288020816738412L;
 	private TrackContext _myTrackContext;
 	private TrackController _myTrackController;
 	private Track _myTrack;
@@ -50,6 +54,7 @@ public class SwingCurvePanel extends SwingAbstractTrackView implements Component
 		CurveToolController myCurveToolController = new CurveToolController(_myTrackContext);
 		_myTrackController = new DoubleTrackController(_myTrackContext, myCurveToolController,_myTrack, null);
 		_myDataView = new SwingTrackDataView(new SwingToolChooserPopup(myCurveToolController), null, null, _myTrackController);
+		_myDataView.isEnvelope(true);
 		_myTrackController.view(this);
 //		((TrackDataController)_myTrackController).trackDataView(_myTrackDataView);
 		

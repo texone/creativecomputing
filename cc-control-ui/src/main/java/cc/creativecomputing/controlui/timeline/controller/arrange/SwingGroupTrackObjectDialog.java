@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedEventPointContent;
+import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedData;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
@@ -104,7 +104,7 @@ public class SwingGroupTrackObjectDialog extends JDialog implements ActionListen
 				if(_myEventPoint == null)return;
 				switch(theE.getStateChange()){
 				case ItemEvent.SELECTED:
-					_myEventPoint.content(new TimedEventPointContent(_myPresetList.getSelectedItem().toString()));
+					_myEventPoint.content(new TimedData(_myPresetList.getSelectedItem().toString()));
 					_myController.view().render();
 					break;
 				}
