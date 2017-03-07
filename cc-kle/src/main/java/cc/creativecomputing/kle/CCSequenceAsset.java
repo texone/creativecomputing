@@ -125,24 +125,28 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	}
 	
 	@Override
+	public void reset(TimedEventPoint theTimedEvent){
+		theTimedEvent.contentOffset(0);
+		
+		Path myFilePath = Paths.get(theTimedEvent.content().value().toString());
+		CCSequence myData = checkLoadAsset(myFilePath);
+		
+		if(myData == null){
+			return;
+		}
+		
+		theTimedEvent.endTime(myData.length() / _cRate);
+	}
+	
+	@Override
 	public void renderTimedEvent(TimedEventPoint theEvent,Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
 		super.renderTimedEvent(theEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
 		
 		if(theEvent.content() == null || theEvent.content().value() == null)return;
 		
-		CCSequence myData = null;
 		Path myFilePath = Paths.get(theEvent.content().value().toString());
-		if(_myAssetMap.containsKey(myFilePath)){
-			myData = _myAssetMap.get(myFilePath);
-		}else{
-			try{
-				
-				myData = loadAsset(myFilePath);
-				_myAssetMap.put(myFilePath, myData);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		}
+		CCSequence myData = checkLoadAsset(myFilePath);
+		
 		if(myData == null){
 			return;
 		}
