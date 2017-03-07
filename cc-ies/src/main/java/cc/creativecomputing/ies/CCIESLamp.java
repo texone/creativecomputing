@@ -1,41 +1,68 @@
 package cc.creativecomputing.ies;
 
-public class CCIELamp {
+public class CCIESLamp {
+	private final int _myNumberOfLamps;
+	
+	private final float _myLumensPerLamp;
+
+	private final float _myMultiplier;
+
+	private final CCIETiltData _myTilt;
+
+	CCIESLamp(int theNumberOfLamps, float theLumensPerLamp, float theMultiplier, CCIETiltData theTiltData) {
+		super();
+		_myNumberOfLamps = theNumberOfLamps;
+		_myLumensPerLamp = theLumensPerLamp;
+		_myMultiplier = theMultiplier;
+		_myTilt = theTiltData;
+	}
+
 	/**
-	 * number of lamps in the luminaire
+	 * Returns the number of lamps in the luminaire
+	 * 
+	 * @return number of lamps in the luminaire
 	 */
-	int num_lamps;
+	public int numberOfLamps() {
+		return _myNumberOfLamps;
+	}
+
 	/**
-	 * Lumens Per Lamp
+	 * Returns the rated lumens per lamp on which the photometric test was
+	 * based. (This value is obtained from the lamp manufacturer's published
+	 * technical data for the lamp, and does not represent the actual lumens
+	 * emitted by the test lamp.)
 	 * <p>
-	 * This floating point value indicates the rated lumens per lamp on
-	 * which the photometric test was based. (This value is obtained from
-	 * the lamp manufacturer's published technical data for the lamp, and
-	 * does not represent the actual lumens emitted by the test lamp.)
-	 * <p>
-	 * If the luminaire has two or more lamps with different rated lumens
-	 * per lamp, this value represents the average lumens per lamp for the
+	 * If the luminaire has two or more lamps with different rated lumens per
+	 * lamp, this value represents the average lumens per lamp for the
 	 * luminaire.
 	 * <p>
 	 * In the (very rare) cases of absolute photometry, this value is -1.
+	 * 
+	 * @return lumens per lamp
 	 */
-	float lumens_lamp;
-	/**
-	 * Candela Multiplier
-	 * <p>
-	 * This floating point value indicates a multiplying factor that is to
-	 * be applied to all candela values in the photometric data file
-	 * (identifier lines 14 through 17).
-	 */
-	float multiplier;
-
-	/** TILT file name pointer (optional) */
-	String tilt_fname;
+	public float lumensPerLamp() {
+		return _myLumensPerLamp;
+	}
 
 	/**
-	 * If tilt is null the lamp output (presumably) does not vary as a
-	 * function of the luminaire tilt angle otherwise the lamp output varies
-	 * as a function of the luminaire tilt angle.
+	 * Returns a multiplying factor that is to be applied to all candela values
+	 * in the photometric data file.
+	 * 
+	 * @return candela multiplier
 	 */
-	CCIETiltData tilt;
+	public float multiplier() {
+		return _myMultiplier;
+	}
+
+	/**
+	 * If tilt is null the lamp output (presumably) does not vary as a function
+	 * of the luminaire tilt angle otherwise the lamp output varies as a
+	 * function of the luminaire tilt angle.
+	 * 
+	 * @return tilt data of the lamp
+	 */
+	public CCIETiltData tilt() {
+		return _myTilt;
+	}
+
 }

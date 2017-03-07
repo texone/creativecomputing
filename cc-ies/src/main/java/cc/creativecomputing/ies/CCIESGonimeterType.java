@@ -30,21 +30,21 @@ package cc.creativecomputing.ies;
  * @author christianr
  *
  */
-public enum CCIEGonimeterType {
+public enum CCIESGonimeterType {
 	/**
 	 * Type A photometry is normally used for automotive headlights and
 	 * signal lights. The polar axis of the luminaire coincides with the
 	 * major axis (length) of the luminaire, and the 0-180 degree
 	 * photometric plane coinicides with the luminaire's vertical axis.
 	 */
-	Type_A(3),
+	TYPE_A(3),
 	/**
 	 * Type B photometry is normally used for adjustable outdoor area and
 	 * sports lighting luminaires. The polar axis of the luminaire coincides
 	 * with the minor axis (width) of the luminaire, and the 0-180 degree
 	 * photometric plane coinicides with the luminaire's vertical axis.
 	 */
-	Type_B(2),
+	TYPE_B(2),
 	/**
 	 * Type C photometry is normally used for architectural and roadway
 	 * luminaires. The polar axis of the photometric web coincides with the
@@ -55,19 +55,19 @@ public enum CCIEGonimeterType {
 
 	int id;
 
-	private CCIEGonimeterType(int theID) {
+	private CCIESGonimeterType(int theID) {
 		id = theID;
 	}
 	
-	public static CCIEGonimeterType fromID(int id){
+	public static CCIESGonimeterType fromID(int id){
 		switch(id){
 		case 1:
-			return CCIEGonimeterType.TYPE_C;
+			return CCIESGonimeterType.TYPE_C;
 		case 2:
-			return CCIEGonimeterType.Type_B;
+			return CCIESGonimeterType.TYPE_B;
 		case 3:
-			return CCIEGonimeterType.Type_A;
+			return CCIESGonimeterType.TYPE_A;
 		}
-		return CCIEGonimeterType.TYPE_C;
+		return CCIESGonimeterType.TYPE_C;
 	}
 }

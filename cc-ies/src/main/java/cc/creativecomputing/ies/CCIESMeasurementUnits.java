@@ -7,24 +7,24 @@ package cc.creativecomputing.ies;
  * @author christianr
  *
  */
-public enum CCIEMeasurementUnits {
+public enum CCIESMeasurementUnits {
 	/** Imperial */
 	FEET(1),
 	/** Standard Internationale */
 	METERS(2);
 	int id;
 
-	private CCIEMeasurementUnits(int theID) {
+	private CCIESMeasurementUnits(int theID) {
 		id = theID;
 	}
 	
-	public static CCIEMeasurementUnits fromID(int id){
+	public static CCIESMeasurementUnits fromID(int id){
 		switch(id){
 		case 1:
-			return CCIEMeasurementUnits.FEET;
+			return CCIESMeasurementUnits.FEET;
 		case 2:
-			return CCIEMeasurementUnits.METERS;
+			return CCIESMeasurementUnits.METERS;
 		}
-		return CCIEMeasurementUnits.METERS;
+		return CCIESMeasurementUnits.METERS;
 	}
 }

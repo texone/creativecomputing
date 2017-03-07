@@ -1,37 +1,71 @@
 package cc.creativecomputing.ies;
 
-public class CCIEData {
+public class CCIESData {
 
-	String name;
+	private final CCIESDataFormat _myFormat;
+	private final CCIESMeasurementUnits _myUnits;
 
-	CCIEDataFormat format;
+	private final CCIESDimensions _myDimensions;
+	
+	private final CCIESElectricalData _myElectricalData;
 
-	/** lamp data */
-	CCIELamp lamp;
+	private final CCIESPhotometricData _myPhotometricData;
+
+	private final CCIESLamp _myLamp;
+
+	
+
+	/** Luminous cavity dimensions */
+
+
+	/** Photometric data */
+
+	CCIESData(
+		CCIESDataFormat theFormat,
+		CCIESMeasurementUnits theUnits,
+		CCIESDimensions theDimensions,
+		CCIESElectricalData theElectricalData,
+		CCIESPhotometricData thePhotometricData,
+		CCIESLamp theLamp
+	) {
+		_myFormat = theFormat;
+		_myUnits = theUnits;
+		_myDimensions = theDimensions;
+		_myElectricalData = theElectricalData;
+		_myPhotometricData = thePhotometricData;
+		_myLamp = theLamp;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public CCIESDataFormat format(){
+		return _myFormat;
+	}
 
 	/**
 	 * the units used for the dimensions of the luminous opening in the
 	 * luminaire
+	 * @return
 	 */
-	CCIEMeasurementUnits units;
-
-	/** Luminous cavity dimensions */
-	CCIEDimensions dim;
-
-	/** Electrical data */
-	CCIEElectricalData elec;
-
-	/** Photometric data */
-	CCIEPhotometricData photo;
-
-	public CCIEData() {
-		/* Initialize the photometric data structure */
-		// plline = null;
-		lamp.tilt_fname = null;
-		lamp.tilt.angles = null;
-		lamp.tilt.mult_factors = null;
-		photo.vert_angles = null;
-		photo.horz_angles = null;
-		photo.pcandela = null;
+	public CCIESMeasurementUnits units(){
+		return _myUnits;
+	}
+	
+	public CCIESDimensions dimensions(){
+		return _myDimensions;
+	}
+	
+	public CCIESElectricalData electricalData(){
+		return _myElectricalData;
+	}
+	
+	public CCIESPhotometricData photometricalData(){
+		return _myPhotometricData;
+	}
+	
+	public CCIESLamp lamp(){
+		return _myLamp;
 	}
 }

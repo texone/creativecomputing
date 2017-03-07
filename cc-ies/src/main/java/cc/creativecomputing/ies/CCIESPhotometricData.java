@@ -1,38 +1,35 @@
 package cc.creativecomputing.ies;
 
-public class CCIEPhotometricData {
+public class CCIESPhotometricData {
+	
+	private final double[] _myVerticalAngles;
+	private final double[] _myHorizontalAngles;
+	
+	private final double[][] _myCandelaValues;
+	
+	private final CCIESGonimeterType _myGonimeterType;
+	
+	CCIESPhotometricData(double[] theVerticalAngles, double[] theHorizontalAngles, double[][] theCandelaValues, CCIESGonimeterType theGonimeterType){
+		_myVerticalAngles = theVerticalAngles;
+		_myHorizontalAngles = theHorizontalAngles;
+		_myCandelaValues = theCandelaValues;
+		_myGonimeterType = theGonimeterType;
+	}
+	
 	/**
-	 * Number of Vertical Angles
-	 * <p>
-	 * This integer value indicates the total number of vertical angles in
-	 * the photometric data
-	 */
-	int num_vert_angles;
-	/**
-	 * Number of Horizontal Angles
-	 * 
-	 * This integer value indicates the total number of horizontal angles in
-	 * the photometric data
-	 */
-	int num_horz_angles;
-	/**
-	 * Vertical Angles
-	 * <p>
-	 * This line enumerates the (floating point) vertical angles.
-	 * <p>
 	 * For Type C photometry, the first vertical angle will be either 0 or
 	 * 90 degrees, and the last vertical angle will be either 90 or 180
 	 * degrees.
 	 * <p>
 	 * For Type A or B photometry, the first vertical angle will be either
 	 * -90 or 0 degrees, and the last vertical angle will be 90 degrees.
+	 * @return vertical angles
 	 */
-	float[] vert_angles;
+	public double[] verticalAngles(){
+		return _myVerticalAngles;
+	}
+	
 	/**
-	 * Horizontal Angles (Identifier Line 13)
-	 * <p>
-	 * This line enumerates the (floating point) horizontal angles.
-	 * <p>
 	 * For Type C photometry, the first value is (almost) always 0 degrees,
 	 * and the last value is one of the following:
 	 * <p>
@@ -61,18 +58,27 @@ public class CCIEPhotometricData {
 	 * symmetric about a vertical reference plane, the first horizontal
 	 * angle will be -90 degrees, and the last horizontal angle will be 90
 	 * degrees.
+	 * @return horizontal angles
 	 */
-	float[] horz_angles;
+	public double[] horizontalAngles(){
+		return _myHorizontalAngles;
+	}
+	
 	/**
-	 * Candela Values (Identifier Lines 14 Through 17)
-	 * <p>
 	 * These lines enumerate the (floating point) candela values. There is
 	 * one line for each corresponding horizontal angle, and one candela
 	 * value for each corresponding vertical angle.
+	 * @return candela values
 	 */
-	float[][] pcandela;
+	public double[][] candelaValues(){
+		return _myCandelaValues;
+	}
+	
 	/**
-	 * the type of photometric web used for the photometric measurements
+	 * Returns the type of photometric web used for the photometric measurements
+	 * @return type of photometric web used for the photometric measurements
 	 */
-	CCIEGonimeterType gonio_type;
+	public CCIESGonimeterType gonimeterType(){
+		return _myGonimeterType;
+	}
 }

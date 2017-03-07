@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCIES {
@@ -12,42 +13,22 @@ public class CCIES {
 	/** Maximum non-label line width */
 	public static int IE_MaxLine = 130;
 
-	/*
-	 * Calculated photometric data
-	 */
+	public static double PI = 3.141592654;
 
-	/** Invalid candela array index */
-	public static int IE_INDEX_NONE = -1;
-	/** Number of horizontal angles (0-180) */
-	public static int IE_HORZ = 9;
-	/** 90-degree horizontal angle */
-	public static int IE_HORZ_90 = IE_HORZ / 2;
-	/** Number of vertical angles (candela) */
-	public static int IE_VERT_CAND = 37;
-	/** 90-degree vertical angle */
-	public static int IE_VERT_90 = IE_VERT_CAND / 2;
-	/** 180-degree vertical angle */
-	public static int IE_VERT_180 = IE_VERT_CAND - 1;
-	/** Number of vertical angles (flux) */
-	public static int IE_VERT_FLUX = 18;
-	/** Vertical angle increment */
-	public static double IE_V_ANGLE = 5.0;
-	/** Horizontal angle increment */
-	public static double IE_H_ANGLE = 22.5;
-	/** Number of zones */
-	public static int IE_ZONES = 9;
+	/** Cosine lookup table (five degree increments from 0 to 180 degrees) */
+	private static double IE_Cosine[] = { 1.000000, 0.996195, 0.984808, 0.965926, 0.939693, 0.906308, 0.866025,
+			0.819152, 0.766044, 0.707107, 0.642788, 0.573576, 0.500000, 0.422618, 0.342020, 0.258819, 0.173648,
+			0.087156, 0.000000, -0.087156, -0.173648, -0.258819, -0.342020, -0.422618, -0.500000, -0.573576, -0.642788,
+			-0.707107, -0.766044, -0.819152, -0.866025, -0.906308, -0.939693, -0.965926, -0.984808, -0.996195,
+			-1.000000 };
 
-	/* Coefficients of utilization array dimensions */
-	/** Room cavity ratios */
-	public static int IE_CU_ROWS = 11;
-	/** Ceiling/wall reflectances */
-	public static int IE_CU_COLS = 18;
+	
 
-	private static float[] readFloats(String theLine) {
+	private static double[] readFloats(String theLine) {
 		String[] myValueStrings = theLine.split(" ");
-		float[] myValues = new float[myValueStrings.length];
+		double[] myValues = new double[myValueStrings.length];
 		for (int i = 0; i < myValues.length; i++) {
-			myValues[i] = Float.parseFloat(myValueStrings[i]);
+			myValues[i] = Double.parseDouble(myValueStrings[i]);
 		}
 		return myValues;
 	}
@@ -81,41 +62,36 @@ public class CCIES {
 	/**
 	 * Read IESNA-Format Photometric Data File
 	 * 
-	 * @param fname
-	 * @return
+	 * @param thePath
+	 * @return CCIESDataObject
 	 */
-	public static CCIEData read(Path fname) {
-
-		CCIEData pdata = new CCIEData();
-		/* Save file name */
-		if ((pdata.name = CCNIOUtil.fileName(fname)) == null) {
-			throw new RuntimeException("Report memory allocation error");
-		}
+	public static CCIESData read(Path thePath) {
+		String myName = CCNIOUtil.fileName(thePath);
 
 		/* Open the IESNA data file */
-		List<String> _myLines = CCNIOUtil.loadStrings(fname);
+		List<String> _myLines = CCNIOUtil.loadStrings(thePath);
 		if (_myLines == null) {
-			throw new RuntimeException("ERROR: could not open file " + fname);
+			throw new RuntimeException("ERROR: could not open file " + thePath);
 		}
 
 		int myLineCounter = 0;
 
 		// Read the first line
-		String myFormat = _myLines.get(myLineCounter++);
+		CCIESDataFormat myFormat;
 
 		// Determine file format
-		switch (myFormat) {
+		switch (_myLines.get(myLineCounter++)) {
 		case "IESNA:LM-63-1995":
 			// File is LM-63-1995 format
-			pdata.format = CCIEDataFormat.IESNA_95;
+			myFormat = CCIESDataFormat.IESNA_95;
 			break;
 		case "IESNA91":
 			/* File is LM-63-1991 format */
-			pdata.format = CCIEDataFormat.IESNA_91;
+			myFormat = CCIESDataFormat.IESNA_91;
 			break;
 		default:
 			/* File is presumably LM-63-1986 format */
-			pdata.format = CCIEDataFormat.IESNA_86;
+			myFormat = CCIESDataFormat.IESNA_86;
 		}
 
 		// Read label lines
@@ -132,55 +108,75 @@ public class CCIES {
 		}
 
 		// Save the TILT data file name
-		pdata.lamp.tilt_fname = _myLines.get(myLineCounter++).substring(5);
+		String myTileFileName = _myLines.get(myLineCounter++).substring(5);
+
+		CCLog.info(myTileFileName);
+
+		CCIETiltData myTiltData = null;
 
 		// Check for TILT data
-		switch (pdata.lamp.tilt_fname) {
+		switch (myTileFileName) {
 		case "NONE":
 			break;
 		case "INCLUDE":
 			// Read the TILT data from the IESNA data file
-			pdata.lamp.tilt = readTilt(_myLines.subList(myLineCounter, myLineCounter + 4));
+			myTiltData = readTilt(_myLines.subList(myLineCounter, myLineCounter + 4));
+			myLineCounter += 4;
 			break;
 		default:
 			// Read the TILT data from the TILT data file
-			pdata.lamp.tilt = readTilt(CCNIOUtil.loadStrings(CCNIOUtil.dataPath(pdata.lamp.tilt_fname)));
+			myTiltData = readTilt(CCNIOUtil.loadStrings(CCNIOUtil.dataPath(myTileFileName)));
 		}
 
-		String[] myValueStrings = _myLines.get(myLineCounter + 5).split(" ");
+		String[] myValueStrings = _myLines.get(myLineCounter).split(" ");
+
 		// Read in next two lines
-		pdata.lamp.num_lamps = Integer.parseInt(myValueStrings[0]);
-		pdata.lamp.lumens_lamp = Float.parseFloat(myValueStrings[1]);
-		pdata.lamp.multiplier = Float.parseFloat(myValueStrings[2]);
+		CCIESLamp myLamp = new CCIESLamp(Integer.parseInt(myValueStrings[0]), Float.parseFloat(myValueStrings[1]),
+				Float.parseFloat(myValueStrings[2]), myTiltData);
 
-		pdata.photo.num_vert_angles = Integer.parseInt(myValueStrings[3]);
-		pdata.photo.num_horz_angles = Integer.parseInt(myValueStrings[4]);
-		pdata.photo.gonio_type = CCIEGonimeterType.fromID(Integer.parseInt(myValueStrings[5]));
-		pdata.units = CCIEMeasurementUnits.fromID(Integer.parseInt(myValueStrings[6]));
-		pdata.dim.width = Float.parseFloat(myValueStrings[7]);
-		pdata.dim.length = Float.parseFloat(myValueStrings[8]);
-		pdata.dim.height = Float.parseFloat(myValueStrings[9]);
+		int myNumberOfVerticalAngles = Integer.parseInt(myValueStrings[3]);
+		int myNumberOfHorizontalAngles = Integer.parseInt(myValueStrings[4]);
+		CCIESGonimeterType myGonimeterType = CCIESGonimeterType.fromID(Integer.parseInt(myValueStrings[5]));
 
-		myValueStrings = _myLines.get(myLineCounter + 6).split(" ");
-		pdata.elec.ball_factor = Float.parseFloat(myValueStrings[0]);
-		pdata.elec.blp_factor = Float.parseFloat(myValueStrings[1]);
-		pdata.elec.input_watts = Float.parseFloat(myValueStrings[2]);
+		CCIESMeasurementUnits myUnits = CCIESMeasurementUnits.fromID(Integer.parseInt(myValueStrings[6]));
+
+		CCIESDimensions myDimensions = new CCIESDimensions(
+			Float.parseFloat(myValueStrings[7]), // width
+			Float.parseFloat(myValueStrings[8]), // length
+			Float.parseFloat(myValueStrings[9]) // height
+		);
+
+		myValueStrings = _myLines.get(myLineCounter + 1).split(" ");
+
+		CCIESElectricalData myElectricalData = new CCIESElectricalData(
+			Float.parseFloat(myValueStrings[0]), // ball_factor
+			Float.parseFloat(myValueStrings[1]), // blp_factor
+			Float.parseFloat(myValueStrings[2]) // input_watts
+		);
 
 		// Read in vertical angles array
-		pdata.photo.vert_angles = readFloats(_myLines.get(12));
+		double[] myVerticalAngles = readFloats(_myLines.get(myLineCounter + 2));
 		// Read in horizontal angles array
-		pdata.photo.horz_angles = readFloats(_myLines.get(13));
+		double[] myHorizontalAngles = readFloats(_myLines.get(myLineCounter + 3));
 
 		// Allocate space for the candela values array pointers
-		pdata.photo.pcandela = new float[pdata.photo.num_horz_angles][pdata.photo.num_vert_angles];
+		double[][] myCandelaValues = new double[myNumberOfHorizontalAngles][myNumberOfVerticalAngles];
 
 		// Read in candela values arrays
-		for (int i = 0; i < pdata.photo.num_horz_angles; i++) {
+		for (int i = 0; i < myNumberOfHorizontalAngles; i++) {
 
 			// Read in candela values
-			pdata.photo.pcandela[i] = readFloats(_myLines.get(13 + i));
+			myCandelaValues[i] = readFloats(_myLines.get(myLineCounter + 4 + i));
 		}
 
-		return pdata;
+		CCIESPhotometricData myPhotometricData = new CCIESPhotometricData(
+			myVerticalAngles, 
+			myHorizontalAngles,
+			myCandelaValues, 
+			myGonimeterType
+		);
+
+		return new CCIESData(myFormat, myUnits, myDimensions, myElectricalData, myPhotometricData, myLamp);
 	}
+	
 }

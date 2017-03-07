@@ -11,7 +11,7 @@ package cc.creativecomputing.ies;
  * @author christianr
  *
  */
-public enum CCIEDataFormat {
+public enum CCIESDataFormat {
 	/** LM-63-1986 */
 	IESNA_86,
 	/** LM-63-1991 */

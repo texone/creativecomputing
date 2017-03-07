@@ -21,9 +21,9 @@ public class CCIETiltData {
 	/**
 	 * lamp tilt angles
 	 */
-	float[] angles;
+	double[] angles;
 	/**
 	 * candela multiplying factors for the corresponding lamp tilt angles
 	 */
-	float[] mult_factors;
+	double[] mult_factors;
 }

@@ -4,15 +4,15 @@ package cc.creativecomputing.ies;
  * Luminous Opening Dimensions
  * <p>
  * While the term "luminous opening" is somewhat ambiguous for many
- * architectural luminaires and other light sources, it is useful in
- * calculating average luminaire luminances and modeling the luminaires as
- * homogeneous area light sources.
+ * architectural luminaires and other light sources, it is useful in calculating
+ * average luminaire luminances and modeling the luminaires as homogeneous area
+ * light sources.
  * <p>
  * Nonrectangular Luminous Openings
  * <p>
- * The luminous opening is normally considered to be rectangular. However,
- * other predefined shapes can be modeled by specifying one or more of the
- * above dimensions as zero or negative floating point numbers as follows:
+ * The luminous opening is normally considered to be rectangular. However, other
+ * predefined shapes can be modeled by specifying one or more of the above
+ * dimensions as zero or negative floating point numbers as follows:
  * <p>
  * 
  * <pre>
@@ -39,29 +39,45 @@ package cc.creativecomputing.ies;
  * @author christianr
  *
  */
-public class CCIEDimensions {
+public class CCIESDimensions {
+
+	private final float _myWidth;
+	private final float _myLength;
+	private final float _myHeight;
+
+	CCIESDimensions(float theWidth, float theLength, float theHeight) {
+		_myWidth = theWidth;
+		_myLength = theLength;
+		_myHeight = theHeight;
+	}
+
 	/**
-	 * Luminaire Opening Width
-	 * <p>
-	 * This floating point value indicates the distance across the luminous
-	 * opening of the luminaire as measured along the 90-270 degree
-	 * photometric plane.
+	 * Returns the distance across the luminous opening of the luminaire as
+	 * measured along the 90-270 degree photometric plane.
+	 * 
+	 * @return Luminaire Opening Width
 	 */
-	float width;
+	public float width() {
+		return _myWidth;
+	}
+
 	/**
-	 * Luminaire Opening Length
-	 * <p>
-	 * This floating point value indicates the distance across the luminous
-	 * opening of the luminaire as measured along the 0-180 degree
-	 * photometric plane.
+	 * Returns the distance across the luminous opening of the luminaire as
+	 * measured along the 0-180 degree photometric plane.
+	 * 
+	 * @return Luminaire Opening Length
 	 */
-	float length;
+	public float length() {
+		return _myLength;
+	}
+
 	/**
-	 * Luminaire Height
-	 * <p>
-	 * This floating point value indicates the average height of the
-	 * luminous opening of the luminaire as measured along the vertical
-	 * axis.
+	 * Returns the average height of the luminous opening of the luminaire as
+	 * measured along the vertical axis.
+	 * 
+	 * @return Luminaire Height
 	 */
-	float height;
+	public float height() {
+		return _myHeight;
+	}
 }
