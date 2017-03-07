@@ -127,7 +127,7 @@ public class CCTexture2D extends CCTexture{
 		allocateData(theWidth, theHeight);
 	}
 	
-	private void allocateData(final int theWidth, final int theHeight) {
+	public void allocateData(final int theWidth, final int theHeight) {
 		_myWidth = theWidth;
 		_myHeight = theHeight;
 		
@@ -135,7 +135,7 @@ public class CCTexture2D extends CCTexture{
 		
 		bind(i);
 		unpackStorage(_myStorageModes);
-		GL gl = CCGraphics.currentGL();
+		GL2 gl = CCGraphics.currentGL();
 		gl.glTexImage2D(
 			_myTarget.glID, 0, 
 			_myInternalFormat.glID, 
