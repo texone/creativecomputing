@@ -54,7 +54,7 @@ public class CCListenerManager<ListenerType> implements Iterable<ListenerType>{
 	 * The proxy representing the collection of listeners. Calls to this proxy object will sent to all registered
 	 * listeners.
 	 */
-	private final ListenerType _myProxy;
+	private ListenerType _myProxy;
 
 	/**
 	 * Creates an EventListenerSupport object which supports the specified listener type.
@@ -79,21 +79,7 @@ public class CCListenerManager<ListenerType> implements Iterable<ListenerType>{
 	 * @throws IllegalArgumentException if <code>listenerInterface</code> is not an interface.
 	 */
 	public CCListenerManager(Class<ListenerType> listenerInterface) {
-		this(listenerInterface, Thread.currentThread().getContextClassLoader());
-	}
-
-	/**
-	 * Creates an EventListenerSupport object which supports the provided listener interface using the specified class
-	 * loader to create the JDK dynamic proxy.
-	 * 
-	 * @param listenerInterface the listener interface.
-	 * @param classLoader the class loader.
-	 * 
-	 * @throws NullPointerException if <code>listenerInterface</code> or <code>classLoader</code> is <code>null</code>.
-	 * @throws IllegalArgumentException if <code>listenerInterface</code> is not an interface.
-	 */
-	public CCListenerManager(Class<ListenerType> listenerInterface, ClassLoader classLoader) {
-		_myProxy = listenerInterface.cast(Proxy.newProxyInstance(classLoader, new Class[] { listenerInterface }, new ProxyInvocationHandler()));
+		_myProxy = listenerInterface.cast(Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { listenerInterface }, new ProxyInvocationHandler()));
 	}
 
 	/**
