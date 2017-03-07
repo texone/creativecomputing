@@ -11,6 +11,13 @@ uniform sampler2DRect velocityTexture;
 uniform sampler2DRect infoTexture;
 uniform float staticPositionBlend;
 
+uniform sampler2DRect lifeTimeBlends;
+
+float lifeTimeBlend(vec2 texID, float forceIndex){
+	vec4 infos = texture2DRect (infoTexture, texID);
+	return texture2DRect (lifeTimeBlends, vec2(infos.x / infos.y * 100.0, forceIndex)).x;
+}
+
 // insert forces
 @define forces
 

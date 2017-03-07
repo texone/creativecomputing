@@ -1,5 +1,7 @@
 
 uniform float strength;
+uniform float index;
+
 uniform float prediction;
 	
 uniform float radius;
@@ -30,5 +32,5 @@ vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaT
 		result = result * (1 - blend) + (myCurvePoint-futurePosition) / curveDistance * blend;
 	}
 	
-	return result * strength;
+	return result * lifeTimeBlend(theTexID, index) * strength;
 }

@@ -1,10 +1,11 @@
+uniform float strength;
+uniform float index;
+
 uniform sampler2DRect forceTexture;
 
 uniform vec2 textureSize;
 uniform vec2 textureScale;
 uniform vec2 textureOffset;
-
-uniform float strength;
 
 vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
 	vec2 texturePos = thePosition.xy / textureScale.xy + textureOffset.xy;
@@ -13,5 +14,5 @@ vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaT
 	force -= 1;
 	force.z = 0;
 		
-	return force * strength;
+	return force * lifeTimeBlend(theTexID, index) * strength;
 }

@@ -16,7 +16,7 @@ import cc.creativecomputing.math.CCVector3;
 
 public class CCParticle implements Comparable<CCParticle>{
 	private double _myTimeOfDeath;
-	private float _myLifeTime;
+	private double _myLifeTime;
 	private boolean _myIsAllocated;
 	private boolean _myIsPermanent;
 	
@@ -31,7 +31,7 @@ public class CCParticle implements Comparable<CCParticle>{
 	
 	private CCParticles _myParticles;
 	
-	private float _myAge;
+	private double _myAge;
 	
 	public CCParticle(CCParticles theParticles, int theIndex) {
 		_myParticles = theParticles;
@@ -59,11 +59,11 @@ public class CCParticle implements Comparable<CCParticle>{
 		return _myStep;
 	}
 	
-	public void age(float theAge) {
+	public void age(double theAge) {
 		_myAge = theAge;
 	}
 	
-	public float age() {
+	public double age() {
 		return _myAge;
 	}
 	
@@ -96,11 +96,11 @@ public class CCParticle implements Comparable<CCParticle>{
 		return _myTimeOfDeath < _myParticles.currentTime();
 	}
 	
-	public float lifeTime() {
+	public double lifeTime() {
 		return _myLifeTime;
 	}
 	
-	public void lifeTime(final float theLifeTime) {
+	public void lifeTime(final double theLifeTime) {
 		_myLifeTime = theLifeTime;
 	}
 	

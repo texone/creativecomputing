@@ -1,6 +1,7 @@
 
 uniform float scale;
 uniform float strength;
+uniform float index;
 uniform vec3 offset;
 
 uniform int octaves;
@@ -14,5 +15,5 @@ vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaT
 	vec3 noisePosition = (fPosition) * scale + offset;
 		
 	float displacement =  fPosition.y - (octavedNoise(vec3(noisePosition.xz,0), octaves, gain, lacunarity) * 2 - 1) * height +  + theVelocity.y;
-	return vec3(0,clamp(-displacement,-1,1),0) * strength;
+	return vec3(0,clamp(-displacement,-1,1),0) * lifeTimeBlend(theTexID, index) * strength;
 }

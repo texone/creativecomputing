@@ -2,6 +2,7 @@
 uniform float scale;
 uniform float strength;
 uniform vec3 offset;
+uniform float index;
 
 uniform int octaves;
 uniform float gain;
@@ -23,5 +24,5 @@ vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaT
 	);
 	*/
 		//result *= 50 * theDeltaTime;
-	return result * strength;
+	return result * lifeTimeBlend(theTexID, index) * strength;
 }

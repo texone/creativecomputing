@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.simulation.particles.forces;
 
+import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCVector3;
 
@@ -23,6 +24,9 @@ public class CCForceField extends CCForce{
 	private double _cGain = 0.5;
 	@CCProperty(name = "lacunarity", min = 0, max = 4)
 	private double _cLacunarity = 2;
+	
+	@CCProperty(name = "speed", min = 0, max = 3)
+	private double _cSpeed = 0;
 	
 	private CCVector3 _myOffset = new CCVector3();
 	
@@ -64,12 +68,19 @@ public class CCForceField extends CCForce{
 		return _myOffset;
 	}
 	
-	public void scale(final float theNoiseScale){
+	public void scale(final double theNoiseScale){
 		_myScale = theNoiseScale;
 	}
 	
 	public double scale(){
 		return _myScale;
+	}
+	
+	@Override
+	public void update(CCAnimator theAnimator) {
+		if(_cSpeed == 0)return;
+		
+		_myOffset.z += theAnimator.deltaTime() * _cSpeed;
 	}
 	
 }

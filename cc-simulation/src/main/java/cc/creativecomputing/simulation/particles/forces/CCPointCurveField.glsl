@@ -8,6 +8,7 @@ uniform float minX;
 uniform float rangeX;
 
 uniform float strength;
+uniform float index;
 
 vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
 	vec3 futurePosition = thePosition + theVelocity * prediction;
@@ -27,5 +28,5 @@ vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaT
 		result = result * (1 - blend) + (myCurvePoint-futurePosition) / curveDistance * blend;
 	}
 		
-	return result * strength;
+	return result * lifeTimeBlend(theTexID, index) * strength;
 }

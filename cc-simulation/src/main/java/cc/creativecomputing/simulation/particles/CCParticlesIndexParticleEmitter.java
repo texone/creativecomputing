@@ -250,7 +250,7 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 		final CCColor theColor,
 		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
-		final float theLifeTime, 
+		final double theLifeTime, 
 		final boolean theIsPermanent
 	){
 		if(_myFreeIndices.isEmpty())return null;
@@ -286,7 +286,7 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 		final CCColor theColor,
 		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
-		final float theLifeTime, 
+		final double theLifeTime, 
 		final boolean theIsPermanent
 	){
 //		_myAvailableIndices.remove(theIndex);
@@ -322,7 +322,7 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 		final CCColor theColor,
 		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
-		final float theLifeTime
+		final double theLifeTime
 	) {
 		return emit(theColor, thePosition, theVelocity, theLifeTime, false);
 	}
@@ -330,7 +330,7 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 	public CCParticle emit(
 		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
-		final float theLifeTime
+		final double theLifeTime
 	) {
 		return emit(CCColor.WHITE, thePosition, theVelocity, theLifeTime);
 	}
@@ -384,8 +384,8 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 	public void fillInfoData(FloatBuffer theBuffer, List<CCParticle> theParticles){
 		int i = 0;
 		for (CCParticle myParticle:theParticles){
-			_myFillArray[i * 4 + 0] = myParticle.age();
-			_myFillArray[i * 4 + 1] = myParticle.lifeTime();
+			_myFillArray[i * 4 + 0] = (float)myParticle.age();
+			_myFillArray[i * 4 + 1] = (float)myParticle.lifeTime();
 			_myFillArray[i * 4 + 2] = myParticle.isPermanent() ? 1 : 0;//, myParticle.step();
 			_myFillArray[i * 4 + 3] = myParticle.step();
 			i++;

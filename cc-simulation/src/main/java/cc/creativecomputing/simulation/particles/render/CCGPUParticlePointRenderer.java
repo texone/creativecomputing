@@ -40,11 +40,11 @@ public class CCGPUParticlePointRenderer extends CCGPUParticleRenderer{
 	
 	@Override
 	public void update(final CCAnimator theDeltaTime) {
-//		_myMesh.colors(_myParticles.dataBuffer(),3);
 	}
 	
 	@Override
 	public void updateData(CCGraphics g) {
+		_myMesh.colors(_myParticles.dataBuffer(),3);
 		_myMesh.vertices(_myParticles.dataBuffer(),0);
 	}
 

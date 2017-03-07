@@ -247,6 +247,10 @@ public class CCParticles{
 		return _mySwapTexture.currentBuffer();
 	}
 	
+	public CCTexture2D envelopeTexture(){
+		return _myUpdateShader.envelopeTexture();
+	}
+	
 	/**
 	 * Returns the position of the particle. This is useful as particle data is stored on the gpu
 	 * and there for not accessible on the cpu side. Be aware that is time consuming and should only
