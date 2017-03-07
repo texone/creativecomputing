@@ -13,7 +13,7 @@ public class CCImageSequence extends CCVideo {
 	
 	private boolean _myIsRunning = false;
 
-	private final List<Path> _myTextures;
+	private final List<Path> _myImagePaths;
 	private double _myFrameRate = 30;
 
 	private double _myPlayTime = 0;
@@ -30,10 +30,10 @@ public class CCImageSequence extends CCVideo {
 		super(theAnimator);
 //		super(theParent, thePath);
 
-		_myTextures = CCImageIO.listImages(thePath);
+		_myImagePaths = CCImageIO.listImages(thePath);
 
 		_myLoopStartFrame = 0;
-		_myLoopEndFrame = _myTextures.size();
+		_myLoopEndFrame = _myImagePaths.size();
 		
 		sendTexture();
 	}
@@ -44,7 +44,7 @@ public class CCImageSequence extends CCVideo {
 	}
 		
 	public Path currentImagePath() {
-		return _myTextures.get(_myCurrentFrame % _myTextures.size());
+		return _myImagePaths.get(_myCurrentFrame % _myImagePaths.size());
 	}
 	
 	public CCImage currentImage(){
@@ -52,7 +52,7 @@ public class CCImageSequence extends CCVideo {
 	}
 
 	public double duration() {
-		return CCMath.floor(_myTextures.size() / _myFrameRate);
+		return _myImagePaths.size() / _myFrameRate;
 	}
 
 	public void start(boolean theRestart) {

@@ -1,14 +1,19 @@
 package cc.creativecomputing.video;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
+import cc.creativecomputing.math.CCMath;
 
 public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 	
@@ -70,7 +75,7 @@ public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 	public void time(double theGlobalTime, double theEventTime, double theContentOffset) {
 		_myTime = (theEventTime - theContentOffset) * _cSpeed;
 		if(_myAsset == null)return;
-		
+
 		_myAsset.frameRate(_cRate);
 		_myAsset.time(_myTime);
 		_myFrame = _myAsset.currentImage();
@@ -92,66 +97,41 @@ public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 		
 		if(theEvent.content() == null || theEvent.content().value() == null)return;
 		
-//		CCSequence myData = null;
-//		Path myFilePath = Paths.get(theEvent.content().value().toString());
-//		if(_mySequenceMap.containsKey(myFilePath)){
-//			myData = _mySequenceMap.get(myFilePath);
-//		}else{
-//			try{
-//				
-//				myData = loadAsset(myFilePath);
-//				_mySequenceMap.put(myFilePath, myData);
-//			}catch(Exception e){
-//				
-//			}
-//		}
-//		if(myData == null)return;
+		CCImageSequence myData = null;
+		Path myFilePath = Paths.get(theEvent.content().value().toString());
+		if(_myAssetMap.containsKey(myFilePath)){
+			myData = _myAssetMap.get(myFilePath);
+		}else{
+			try{
+				myData = loadAsset(myFilePath);
+				_myAssetMap.put(myFilePath, myData);
+			}catch(Exception e){
+				
+			}
+		}
+		if(myData == null)return;
+	
+		double myWidth = theUpper.getX() - theLower.getX();
+		double myHeight = theUpper.getY() - theLower.getY();
 //		
-//		
-//		double myWidth = theUpper.getX() - theLower.getX();
-//		double myHeight = theUpper.getY() - theLower.getY();
-//		GeneralPath myPath = new GeneralPath();
-//		myPath.moveTo(theLower.getX(), theLower.getY());
-//		
-//		double mySequenceLength = myData.length() / _cRate;
-//		
-//		for (int x = 0; x < myWidth - 1; x++) {
-//			double myTime1 = CCMath.floorMod(CCMath.map(x, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset(), mySequenceLength);
-//			int mySample1 = (int)CCMath.map(myTime1, 0, mySequenceLength, 0 ,myData.length());
-//			double myTime2 = CCMath.floorMod(CCMath.map(x + 1, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset(), mySequenceLength);
-//			int mySample2 = (int)CCMath.map(myTime2, 0, mySequenceLength, 0 ,myData.length());
-//			
-//			double value0 = Double.MAX_VALUE;
-//			double value1 = -Double.MAX_VALUE;
-//			
-//			for(int j = mySample1;j <= mySample2;j++){
-//				if(j >= myData.length() || j < 0)continue;
-//				CCMatrix2 myFrame = myData.get(j);
-//				CCVector2 myMinMax = myFrame.minMax(x % 2);
-//				 value0 = CCMath.min(myMinMax.x, value0);
-//				 value1 = CCMath.max(myMinMax.y, value1);
-//			}
-//			if(myTime2 < myTime1)theG2d.drawLine(x, 0, x, (int)(myHeight));
-//			
-//			myPath.moveTo(x + theLower.getX(),myHeight / 2 +  value0 * myHeight / 2);
-//			myPath.lineTo(x + theLower.getX(),myHeight / 2 +  value1 * myHeight / 2);
-//		}
-//
-//        theG2d.draw(myPath);
-        
-       
+		double mySequenceLength = myData.duration();
 		
+		double mySequenceWidth = CCMath.map(mySequenceLength, 0, UpperTime - lowerTime, 0, myWidth);
 		
-//		CCLog.info(lowerTime +  ":" + UpperTime +  ":" + theEvent.time() +  ":" + theEvent.endTime() + ":" + myData.player.length() / 1000d + ":" + myWidth );
-//		double myLowerBound = CCMath.max(theEvent.time(), theView.context().lowerBound());
-//    	double myUpperBound = CCMath.min(theEvent.endTime(), theView.context().upperBound());
-    	
-//    	Point2D p1 = theView.controller().curveToViewSpace(new ControlPoint(myLowerBound,_myController.value(0)));
-//    	Point2D p2 = theView.controller().curveToViewSpace(new ControlPoint(myUpperBound,_myController.value(0)));
-//        myPath.moveTo(theLower.getX(), theLower.getY());
-//        myPath.lineTo(theUpper.getX(), theUpper.getY());
-        
-//        g.setColor(theView.fillColor());
+		double myFrameWidth = CCMath.map(1 / _cRate, 0, UpperTime - lowerTime, 0, myWidth);
+		
+		CCLog.info(mySequenceWidth + " : " + myWidth + ":" + theLower.getX()+":"+mySequenceLength);
+		Stroke myStroke = theG2d.getStroke();
+		theG2d.setStroke(new BasicStroke(2));
+		for (double x = 0; x < myWidth; x+=mySequenceWidth) {
+			theG2d.drawLine((int)(theLower.getX() + x), 0,  (int)(theLower.getX() + x), (int)(myHeight));
+		}
+		theG2d.setStroke(myStroke);
+		
+		if(myFrameWidth < 2)return;
+		for (double x = 0; x < myWidth; x+=myFrameWidth) {
+			theG2d.drawLine((int)(theLower.getX() + x), 0,  (int)(theLower.getX() + x), (int)(myHeight));
+		}
 	}
 	
 	@Override
