@@ -35,6 +35,23 @@ public abstract class CCAsset <AssetType>{
 	
 	public abstract AssetType loadAsset(Path thePath);
 	
+	public AssetType checkLoadAsset(Path theFilePath){
+		if(_myAssetMap.containsKey(theFilePath)){
+			return _myAssetMap.get(theFilePath);
+		}else{
+			try{
+				
+				AssetType myData = loadAsset(theFilePath);
+				_myAssetMap.put(theFilePath, myData);
+				
+				return myData;
+			}catch(Exception e){
+				e.printStackTrace();
+				return null;
+			}
+		}
+	}
+	
 	public void onChangePath(Path thePath){
 		if(thePath == null){
 			_myAsset = null;
@@ -94,6 +111,10 @@ public abstract class CCAsset <AssetType>{
 //			myIndex--;
 //		}
 //		theG2d.drawString(myText.toString(), (int) myPos.getX() + 5, (int) myPos.getY() + 15);
+	}
+	
+	public void reset(TimedEventPoint theTimedEvent){
+		theTimedEvent.contentOffset(0);
 	}
 	
 	public void out(){}

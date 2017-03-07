@@ -73,6 +73,10 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 		_myAsset.renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
 	}
 	
+	public void reset(TimedEventPoint theTimedEvent){
+		_myAsset.reset(theTimedEvent);
+	}
+	
 	public CCAsset<?> asset(){
 		return _myAsset;
 	}
