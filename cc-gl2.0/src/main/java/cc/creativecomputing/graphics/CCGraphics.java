@@ -35,6 +35,7 @@ import cc.creativecomputing.math.CCQuaternion;
 import cc.creativecomputing.math.CCTransform;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.math.CCVector4;
 
 import com.jogamp.opengl.DebugGL2;
 import com.jogamp.opengl.GL;
@@ -3648,6 +3649,10 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		gl.glMultiTexCoord3d(theUnit, theX, theY, theZ);
 	}
 	
+	public void textureCoords4D(final int theUnit, CCVector4 theVector){
+		gl.glMultiTexCoord4d(theUnit, theVector.x, theVector.y, theVector.z, theVector.w);
+	}
+	
 	public void textureCoords4D(final int theUnit, final double theX, final double theY, final double theZ, final double theW){
 		gl.glMultiTexCoord4d(theUnit, theX, theY, theZ, theW);
 	}
@@ -4271,6 +4276,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	}
 	
 	public CCTextAlign textAlign(){
+		if(_myText == null)_myText = new CCText(CCFontIO.createGlutFont(CCGlutFontType.BITMAP_HELVETICA_10));
 		return _myText.textAlign();
 	}
 
@@ -4285,6 +4291,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	}
 
 	public double textDescent(){
+		if(_myText == null)_myText = new CCText(CCFontIO.createGlutFont(CCGlutFontType.BITMAP_HELVETICA_10));
 		return _myText.descent();
 	}
 	
