@@ -46,7 +46,7 @@ public class ColorPoint extends ControlPoint {
 	private double _myContentOffset = 0;
 
 	public ColorPoint() {
-		super(ControlPointType.COLOR);
+		super();
 	}
 	
 	public double contentOffset(){
@@ -58,7 +58,7 @@ public class ColorPoint extends ControlPoint {
 	}
 
 	public ColorPoint(double theTime, double theValue) {
-		super(theTime, theValue, ControlPointType.COLOR);
+		super(theTime, theValue);
 		_myID = System.currentTimeMillis();
 	}
 	

@@ -29,11 +29,14 @@ import cc.creativecomputing.io.data.CCDataObject;
  */
 public class TimedEventPoint extends ControlPoint {
 	
-	public static class TimedEventPointContent{
+	
+	public static class TimedData{
 		
 		private Object _myValue;
 		
-		public TimedEventPointContent(Object theContent){
+		private double _myLength;
+		
+		public TimedData(Object theContent){
 			_myValue = theContent;
 		}
 		
@@ -66,7 +69,7 @@ public class TimedEventPoint extends ControlPoint {
 	
 	private String _myEventType;
 	
-	private TimedEventPointContent _myContent;
+	private TimedData _myContent;
 	
 	private boolean _myIsSelected;
 	
@@ -105,11 +108,11 @@ public class TimedEventPoint extends ControlPoint {
 		return _myIsSelected;
 	}
 	
-	public void content(TimedEventPointContent theContent) {
+	public void content(TimedData theContent) {
 		_myContent = theContent;
 	}
 	
-	public TimedEventPointContent content() {
+	public TimedData content() {
 		return _myContent;
 	}
 	
@@ -185,7 +188,7 @@ public class TimedEventPoint extends ControlPoint {
 			myEndHandleData.getDouble(TIME_ATTRIBUTE), 
 			myEndHandleData.getDouble(VALUE_ATTRIBUTE)
 		);
-		_myContent = new TimedEventPointContent(null);
+		_myContent = new TimedData(null);
 		_myContent.data(theData.getObject("content"));
 		_myContentOffset = theData.getDouble("offset", 0);
 	}

@@ -13,7 +13,6 @@ public class ControlPoint {
 		BEZIER, 
 		HANDLE, 
 		MARKER, 
-		COLOR,
 		TIMED_EVENT, 
 		TIMED_DATA_START,
 		TIMED_DATA_END
@@ -33,8 +32,6 @@ public class ControlPoint {
 	
 	protected ControlPoint _myPrevious;
 	protected ControlPoint _myNext;
-	
-	protected CCBlendable<?> _myBlendable = null;
 	
 	protected double _myTime;
 	protected double _myValue;
@@ -61,6 +58,16 @@ public class ControlPoint {
 		_myNext = null;
 	}
 	
+	protected CCBlendable<?> _myBlendable = null;
+	
+	public CCBlendable<?> blendable(){
+		return _myBlendable;
+	}
+	
+	public void blendable(CCBlendable<?> theBlendable){
+		_myBlendable = theBlendable;
+	}
+	
 	public boolean hasHandles() {
 		return false;
 	}
@@ -70,14 +77,6 @@ public class ControlPoint {
 	 */
 	public ControlPointType getType() {
 		return _myType;
-	}
-	
-	public CCBlendable<?> blendable(){
-		return _myBlendable;
-	}
-	
-	public void blendable(CCBlendable<?> theBlendable){
-		_myBlendable = theBlendable;
 	}
 
 	/**
