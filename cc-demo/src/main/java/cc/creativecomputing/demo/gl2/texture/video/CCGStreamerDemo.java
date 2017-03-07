@@ -17,7 +17,6 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.video.CCGStreamerMovie;
 
 public class CCGStreamerDemo extends CCGL2Adapter {

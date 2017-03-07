@@ -7,7 +7,6 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.math.CCMath;
 
 public class CCEnvelopeDemo2 extends CCGL2Adapter {
 
@@ -25,13 +24,29 @@ public class CCEnvelopeDemo2 extends CCGL2Adapter {
 	@Override
 	public void display(CCGraphics g) {
 		g.clear();
-		g.ortho();
 		
-		g.beginShape(CCDrawMode.POINTS);
-		for(int x = 0; x < g.width();x++){
-			g.vertex(x, _myEnvelope.value(x/(double)g.width()) * 200 + 200);
+		g.pushMatrix();
+		g.translate(-250,-250);
+		g.color(255,0,0);
+		g.beginShape(CCDrawMode.TRIANGLE_STRIP);
+		for(int x = 0; x <= 500;x+= 2){
+			double myVal = _myEnvelope.value(x/500d);
+//			CCLog.info(x/(double)g.width() + ":" + myVal);
+			g.vertex(x, myVal * 500);
+			g.vertex(x, 0);
 		}
 		g.endShape();
+		g.color(0,0,255);
+		g.beginShape(CCDrawMode.TRIANGLE_STRIP);
+		for(int x = 0; x <= 500;x+= 2){
+			double myVal = _myEnvelope.value(x/500d);
+//			CCLog.info(x/(double)g.width() + ":" + myVal);
+			g.vertex(x, myVal * 500);
+			g.vertex(x, 500);
+		}
+		g.endShape();
+		
+		g.popMatrix();
 	}
 
 	public static void main(String[] args) {

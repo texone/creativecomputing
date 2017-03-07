@@ -19,7 +19,7 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.graphics.texture.CCVideoTexture;
-import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.signal.CCSimplexNoise;
 import cc.creativecomputing.video.CCGStreamerCapture;
 import cc.creativecomputing.video.CCGStreamerCapture.CCGStreamerCaptureResolution;
 
@@ -27,6 +27,8 @@ public class CCGStreamerCaptureDataTest extends CCGL2Adapter {
 	
 	private CCGStreamerCapture _myData;
 	private CCVideoTexture _myTexture;
+	
+	private CCSimplexNoise _mySimplex = new CCSimplexNoise();
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
@@ -34,7 +36,7 @@ public class CCGStreamerCaptureDataTest extends CCGL2Adapter {
 			CCLog.info(myDevice);
 		}
 		
-		_myData = new CCGStreamerCapture(this, 640, 480, 30);
+		_myData = new CCGStreamerCapture(theAnimator, 640, 480, 30);
 		_myData.start();
 		
 		for(CCGStreamerCaptureResolution myResolution:_myData.resolutions()) {
@@ -43,30 +45,30 @@ public class CCGStreamerCaptureDataTest extends CCGL2Adapter {
 			CCLog.info(myResolution.fps);
 		}
 		
-		_myTexture = new CCVideoTexture<CCGStreamerCapture>(_myData);
+		_myTexture = new CCVideoTexture(_myData);
 	}
 	
-	float _myTime = 0;
-	float _myNoise = 0;
+	double _myTime = 0;
+	double _myNoise = 0;
 
 	@Override
-	public void update(final float theDeltaTime) {
-		_myTime += theDeltaTime; 
-		_myNoise = CCMath.noise(_myTime * 0.1f);
+	public void update(final CCAnimator theAnimator) {
+		_myTime += theAnimator.deltaTime(); 
+		_myNoise = _mySimplex.value(_myTime * 0.1f);
 	}
 
 	@Override
-	public void draw() {
+	public void display(CCGraphics g) {
 		g.clearColor(1f);
 		g.clear();
 //		g.blend(CCBlendMode.ADD);
 		g.texture(_myTexture);
 		_myTexture.wrap(CCTextureWrap.MIRRORED_REPEAT);
 		g.beginShape(CCDrawMode.QUADS);
-		g.vertex(-width/2, -height/2, -0.5f * _myNoise, -0.5f *_myNoise);
-		g.vertex( width/2, -height/2, 1.5f * _myNoise, -0.5f *_myNoise);
-		g.vertex( width/2,  height/2, 1.5f * _myNoise, 1.5f *_myNoise);
-		g.vertex(-width/2,  height/2, -0.5f * _myNoise, 1.5f *_myNoise);
+		g.vertex(-g.width() / 2, -g.height() / 2, -0.5f * _myNoise, -0.5f *_myNoise);
+		g.vertex( g.width() / 2, -g.height() / 2,  1.5f * _myNoise, -0.5f *_myNoise);
+		g.vertex( g.width() / 2,  g.height() / 2,  1.5f * _myNoise,  1.5f *_myNoise);
+		g.vertex(-g.width() / 2,  g.height() / 2, -0.5f * _myNoise,  1.5f *_myNoise);
 		g.endShape();
 		g.noTexture();
 		

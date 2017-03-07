@@ -52,7 +52,7 @@ public class CCRealtimeCodingDemo extends CCGL2Adapter{
 		g.clear();
 		
 		for(CCRealtimeGraph myGraph:_myRealTimeGraph.instances()){
-			CCLog.info(myGraph);
+//			CCLog.info(myGraph);
 			if(myGraph == null)continue;
 			myGraph.draw(g);
 		}
@@ -67,9 +67,7 @@ public class CCRealtimeCodingDemo extends CCGL2Adapter{
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1000, 500);
-		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
 		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
 }

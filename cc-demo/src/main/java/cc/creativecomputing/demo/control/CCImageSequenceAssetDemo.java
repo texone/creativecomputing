@@ -2,6 +2,7 @@ package cc.creativecomputing.demo.control;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
@@ -44,8 +45,7 @@ public class CCImageSequenceAssetDemo extends CCGL2Adapter{
 	public void display(CCGraphics g) {
 		g.clearColor(1d,0,0);
 		g.clear();
-		g.image(_myVideoTexture,0,0);
-		g.rect(0,0,100,100);
+		g.image(_myVideoTexture, -_myVideoTexture.width() / 2, -_myVideoTexture.height() / 2);
 	}
 	
 	public static void main(String[] args) {

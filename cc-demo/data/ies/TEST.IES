@@ -1,0 +1,31 @@
+IESNA:LM-63-1995
+[TEST] ABC1234 ABC Laboratories
+[MANUFAC] Aardvark Lighting Inc.
+[LUMCAT] SKYVIEW 123-XYZ-abs-400
+[LUMINAIRE] Wide beam flood to be used without tilt
+[LAMPCAT] MH-400-CLEAR
+[LAMP] Metal Halide 400 watt
+[BALLASTCAT] Global 16G6031-17R
+[BALLAST] 400W 277V MH
+[MAINTCAT] 4
+[OTHER] This luminaire is useful as an indirect flood
+[MORE] and to reduce light pollution in down light
+[MORE] applications.
+[SEARCH] POLLUTION SPORTS INDIRECT
+[BLOCK]
+[LUMCAT] TENNISVIEW 123-XYZ-abc-400
+[LUMINAIRE] Wide beam flood for indirect applications.
+[ENDBLOCK]
+TILT=INCLUDE
+1
+13
+0 15 30 45 60 75 90 105 120 135 150 165 180
+1.0 .95 .94 .90 .88 .87 .98 .87 .88 .90 .94 .95 1.0
+1 50000 1 5 3 1 1 .5 .6 0
+1.0 1.0 495
+0 22.5 45 67.5 90
+0 45 90
+10000 50000 25000 10000 5000
+10000 35000 16000 8000 3000
+10000 20000 10000 5000 1000
+

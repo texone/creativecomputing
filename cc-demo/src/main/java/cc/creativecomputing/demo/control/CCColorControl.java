@@ -13,6 +13,10 @@ public class CCColorControl extends CCGL2Adapter{
 	@CCProperty(name = "color")
 	private CCColor _myColor = new CCColor();
 	
+
+	@CCProperty(name = "value", min = 1, max = 10)
+	private double _myValue = 0;
+	
 	@Override
 	public void start(CCAnimator theAnimator) {
 	}

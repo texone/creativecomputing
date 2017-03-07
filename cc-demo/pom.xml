@@ -18,7 +18,12 @@
   <dependencies>
     <dependency>
       <groupId>cc.creativecomputing</groupId>
-      <artifactId>cc-gl2.0</artifactId>
+      <artifactId>cc-app</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-artnet</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -38,7 +43,17 @@
     </dependency>
     <dependency>
       <groupId>cc.creativecomputing</groupId>
-      <artifactId>cc-app</artifactId>
+      <artifactId>cc-flightxml</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-gl2.0</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-ies</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -53,32 +68,17 @@
     </dependency>
     <dependency>
       <groupId>cc.creativecomputing</groupId>
-      <artifactId>cc-serial</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>cc.creativecomputing</groupId>
-      <artifactId>cc-gl2.0</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-minim</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>cc.creativecomputing</groupId>
-      <artifactId>cc-flightxml</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>cc.creativecomputing</groupId>
-      <artifactId>cc-artnet</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-net</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-serial</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

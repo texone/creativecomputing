@@ -10,7 +10,6 @@
  */
 package cc.creativecomputing.demo.gl2.texture.video;
 
-import cc.creativecomputing.CCApplicationManager;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;
@@ -41,16 +40,18 @@ public class CCMovieFramesDemo extends CCGL2Adapter {
 	}
 
 	@Override
-	public void update(final float theDeltaTime) {}
+	public void update(final CCAnimator theAnimator) {
+		
+	}
 
 	@Override
-	public void draw() {
+	public void display(CCGraphics g) {
 		g.clear();
 		g.color(255);
-		g.image(_myTexture, -width/2, -height/2, width, height);
+		g.image(_myTexture, -g.width() / 2, -g.height() / 2, g.width(), g.height());
 		
 		g.color(240, 20, 30);
-		_myText.position(-width/2 + 10, -height/2 + 30);
+		_myText.position(-g.width() / 2 + 10, -g.height() / 2 + 30);
 		_myText.text(_myData.frame() + " / " + (_myData.numberOfFrames() - 1) + " / " + _myNewFrame);
 		_myText.draw(g);
 	}
