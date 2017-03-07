@@ -192,6 +192,7 @@ public abstract class CCPropertyHandle<Type>{
 	public void data(CCDataObject theData){
 		try{
 			value((Type)theData.get("value"), true);
+			onChange();
 		}catch(Exception e){
 			
 		}
