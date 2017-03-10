@@ -72,9 +72,9 @@ import cc.creativecomputing.math.CCMath;
  * @author christianriekoff
  * 
  */
-public class TimelineController extends TrackContext implements TransportTimeListener{
+public class TimelineController extends TrackContext implements CCTransportable{
 	
-	private TransportController _myTransportController;
+	private CCTransportController _myTransportController;
 	
 	private GroupTrackController _myRootController;
 	private GroupTrackController _myClipController;
@@ -94,8 +94,8 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 	public TimelineController(TimelineContainer theTimelineContainer, CCPropertyMap thePropertyMap) {
 		super();
 		_myTimelineContainer = theTimelineContainer;
-		_myTransportController = new TransportController(this);
-		_myTransportController.addTimeListener(this);
+		_myTransportController = new CCTransportController(this);
+		_myTransportController.transportEvents().add(this);
 		
 		_myTrackControllerMap = new HashMap<>();
 		_myTrackController = new ArrayList<>();
@@ -124,7 +124,7 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		return _myZoomController;
 	}
 	
-	public TransportController transportController() {
+	public CCTransportController transportController() {
 		return _myTransportController;
 	}
 	
@@ -692,11 +692,6 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 			myTrackController.mute(theIsMuted);
 		}
 	}
-	
-	@Override
-	public void update(double theDeltaTime) {
-		
-	}
 
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.timeline.controller.TransportTimeListener#time(double)
@@ -715,12 +710,5 @@ public class TimelineController extends TrackContext implements TransportTimeLis
 		}
 		if(_myRootController != null)_myRootController.time(theTime);
 		renderInfo();
-	}
-
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.timeline.controller.TransportTimeListener#onChangeLoop(cc.creativecomputing.timeline.model.TimeRange, boolean)
-	 */
-	@Override
-	public void onChangeLoop(TimeRange theRange, boolean theLoopIsActive) {
 	}
 }

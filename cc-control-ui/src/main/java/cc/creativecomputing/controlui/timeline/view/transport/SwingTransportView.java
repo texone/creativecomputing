@@ -22,30 +22,16 @@ import javax.swing.event.ChangeListener;
 
 import cc.creativecomputing.controlui.CCSwingDraggableValueBox;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
-import cc.creativecomputing.controlui.timeline.controller.CCZoomController;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportable;
+import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.TimelineChangeListener;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.controller.Zoomable;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.math.CCMath;
 
 @SuppressWarnings("serial")
-public class SwingTransportView extends JPanel implements Zoomable{
-	
-	private class PlayButtonAction implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent theArg0) {
-			if (_myTimelineContainer.activeTimeline().transportController().isPlaying()) {
-				_myPlayButton.setText("play");
-				_myTimelineContainer.activeTimeline().transportController().stop();
-			} else {
-				_myPlayButton.setText("stop");
-				_myTimelineContainer.activeTimeline().transportController().play();
-			}
-		}
-	}
+public class SwingTransportView extends JPanel implements CCZoomable, CCTransportable{
 	
 	private static final int MAX_SLIDER_VALUE = 1000;
 	
@@ -54,7 +40,7 @@ public class SwingTransportView extends JPanel implements Zoomable{
 	private static final float CURVE_POW = 4;
 
 	private TimelineContainer _myTimelineContainer;
-	private CCZoomController _myZoomController;
+	private TimelineController _myTimelineController;
 	
 	private JButton _myPlayButton;
 	private JButton _myLoopButton;
@@ -79,9 +65,13 @@ public class SwingTransportView extends JPanel implements Zoomable{
 			
 			@Override
 			public void changeTimeline(TimelineController theController) {
-				_myZoomController.removeZoomable(SwingTransportView.this);
-				_myZoomController = theController.zoomController();
-				_myZoomController.addZoomable(SwingTransportView.this);
+				_myTimelineController.zoomController().removeZoomable(SwingTransportView.this);
+				_myTimelineController.transportController().transportEvents().remove(SwingTransportView.this);
+				
+				_myTimelineController = theController;
+				
+				_myTimelineController.zoomController().addZoomable(SwingTransportView.this);
+				_myTimelineController.transportController().transportEvents().add(SwingTransportView.this);
 				zoomFromSlider();
 			}
 			
@@ -96,7 +86,7 @@ public class SwingTransportView extends JPanel implements Zoomable{
 				_myTimelines.setSelectedItem(_myTimelineContainer.defaultTimelineKey());
 			}
 		});
-		_myZoomController = _myTimelineContainer.activeTimeline().zoomController();
+		_myTimelineController = _myTimelineContainer.activeTimeline();
 		
 		addMouseListener(new MouseAdapter() {
 			
@@ -130,31 +120,36 @@ public class SwingTransportView extends JPanel implements Zoomable{
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		_myPlayButton = createButton("play");
-		_myPlayButton.addActionListener(new PlayButtonAction());
+		_myPlayButton.addActionListener(e->{
+			if (_myTimelineContainer.activeTimeline().transportController().isPlaying()) {
+				_myPlayButton.setText("play");
+				_myTimelineContainer.activeTimeline().transportController().stop();
+			} else {
+				_myPlayButton.setText("stop");
+				_myTimelineContainer.activeTimeline().transportController().play();
+			}
+		});
 		
 		_myLoopButton = createButton("loop");
-		_myLoopButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_myTimelineContainer.activeTimeline().transportController().loop();
-			}
+		_myLoopButton.addActionListener(e->{
+			_myTimelineContainer.activeTimeline().transportController().loop();
 		});
 		
 		createTimeField();
 		
 		_myShowBPMButton = createToggle("bpm");
-		_myShowBPMButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_myTimelineContainer.activeTimeline().transportController().useBeats(_myShowBPMButton.isSelected());
-			}
+		_myShowBPMButton.addActionListener(e ->{
+			_myTimelineContainer.activeTimeline().transportController().useBeats(_myShowBPMButton.isSelected());
 		});
 		
 		createZoomSlider();
 		createTimelineCombo();
         
-		_myZoomController.addZoomable(this);
+		_myTimelineController.zoomController().addZoomable(this);
+		_myTimelineController.transportController().transportEvents().add(SwingTransportView.this);
 		zoomFromSlider();
+		
+		time(0);
 	}
 	
 	public JComboBox<String> timelineCombox(){
@@ -218,7 +213,10 @@ public class SwingTransportView extends JPanel implements Zoomable{
 	
 	private void zoomFromSlider(){
 		float myBlend = CCMath.pow(_mySlider.getValue() / (float)MAX_SLIDER_VALUE, CURVE_POW);
-		_myZoomController.setRange(_myZoomController.lowerBound(), _myZoomController.lowerBound() + myBlend * MAX_RANGE);
+		_myTimelineController.zoomController().setRange(
+			_myTimelineController.zoomController().lowerBound(), 
+			_myTimelineController.zoomController().lowerBound() + myBlend * MAX_RANGE
+		);
 	}
 	
 	private void createTimelineCombo(){
@@ -290,14 +288,9 @@ public class SwingTransportView extends JPanel implements Zoomable{
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.timeline.view.TransportRulerView#time(double)
 	 */
+	@Override
 	public void time(double theTime) {
 		_myTimeField.time(theTime);
-		
-		if (_myTimelineContainer.activeTimeline().transportController().isPlaying() && theTime % 1 > 0.5) {
-			_myPlayButton.setSelected(true);
-		} else {
-			_myPlayButton.setSelected(false);
-		}
 	}
 	
 	public Dimension getMinimumSize() {
@@ -320,6 +313,4 @@ public class SwingTransportView extends JPanel implements Zoomable{
 		_mySlider.setValue((int)myValue);
 		_myTriggerEvent = true;
 	}
-
-	
 }

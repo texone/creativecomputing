@@ -39,7 +39,7 @@ import cc.creativecomputing.math.CCMath;
  * @author christianriekoff
  *
  */
-public class MarkerController extends TrackDataController implements Zoomable{
+public class MarkerController extends TrackDataController implements CCZoomable{
 	
 	public static class RulerInterval{
 		private double _myMin;
@@ -93,7 +93,7 @@ public class MarkerController extends TrackDataController implements Zoomable{
 	private double _myCurrentTime;
 	private double _mySpeedFactor;
 	
-	private CCListenerManager<TransportTimeListener> _myTimeListener = CCListenerManager.create(TransportTimeListener.class);
+	private CCListenerManager<CCTransportable> _myTimeListener = CCListenerManager.create(CCTransportable.class);
 	private CCListenerManager<TransportStateListener> _myStateListener = CCListenerManager.create(TransportStateListener.class);
 	
 	private CCListenerManager<MarkerListener> _myMarkerListener = CCListenerManager.create(MarkerListener.class);
@@ -334,12 +334,10 @@ public class MarkerController extends TrackDataController implements Zoomable{
 	
 	public void loop(final double theLoopStart, final double theLoopEnd) {
 		_myLoop.range(theLoopStart, theLoopEnd);
-		onChangeLoop();
 	}
 	
 	public void doLoop(final boolean theIsInLoop) {
 		_myIsInLoop = theIsInLoop;
-		onChangeLoop();
 	}
 	
 	public boolean doLoop() {
@@ -361,10 +359,6 @@ public class MarkerController extends TrackDataController implements Zoomable{
 
 	public double upperBound() {
 		return _myUpperBound;
-	}
-	
-	private void onChangeLoop() {
-		_myTimeListener.proxy().onChangeLoop(_myLoop, _myIsInLoop);
 	}
 	
 	private void moveTransport(final int theMouseX) {
@@ -558,7 +552,6 @@ public class MarkerController extends TrackDataController implements Zoomable{
 			if(_myIsInLoop && _myCurrentTime > _myLoop.end()) {
 				_myCurrentTime = _myLoop.start() + _myCurrentTime - _myLoop.end();
 			}
-			_myTimeListener.proxy().update(theDeltaT);
 			_myTimeListener.proxy().time(_myCurrentTime);
 			
 			MarkerPoint myCurrentMarker = (MarkerPoint)_myMarkerList.getFirstPointAt(_myCurrentTime);
@@ -594,11 +587,11 @@ public class MarkerController extends TrackDataController implements Zoomable{
 //		_myLastMarker = myCurrentMarker;
 	}
 	
-	public void addTimeListener(TransportTimeListener theTransportable) {
+	public void addTimeListener(CCTransportable theTransportable) {
 		_myTimeListener.add(theTransportable);
 	}
 	
-	public void removeTimeListener(TransportTimeListener theTransportable) {
+	public void removeTimeListener(CCTransportable theTransportable) {
 		_myTimeListener.remove(theTransportable);
 	}
 	

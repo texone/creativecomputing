@@ -34,8 +34,6 @@ public class TimedEventPoint extends ControlPoint {
 		
 		private Object _myValue;
 		
-		private double _myLength;
-		
 		public TimedData(Object theContent){
 			_myValue = theContent;
 		}

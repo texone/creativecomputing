@@ -26,6 +26,7 @@ import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
+import cc.creativecomputing.control.timeline.TimeRange;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.controls.CCClipTrackDataRenderer;
@@ -61,8 +62,6 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 	private SwingRulerView _myRuler;
 
 	private SwingToolChooserPopup _myToolChooserPopup;
-	
-	private SwingTimelineScrollbar _myScrollbar;
 	
 	private List<Object> _myTracks = new ArrayList<Object>();
 	
@@ -104,6 +103,16 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		_myJScrollbar = new JScrollBar(JScrollBar.HORIZONTAL);
 		_myJScrollbar.setMinimum(0);
 		_myJScrollbar.setMaximum(1000);
+		_myJScrollbar.addAdjustmentListener(e ->{
+			double myValue = e.getValue() / 1000.0;
+			double myLower = _myTimelineController.zoomController().lowerBound();
+			double myUpper = _myTimelineController.zoomController().upperBound();
+			double myMax = Math.max(myUpper, _myTimelineController.maximumTime());
+			myValue *= myMax;
+			double myRange = myUpper - myLower;
+			_myTimelineController.zoomController().setRange(new TimeRange(myValue, myValue + myRange));
+		});
+		
 		 _myPane.add(_myJScrollbar, BorderLayout.PAGE_END);
 		
 		_myClipTrackObjectDialog = new SwingClipTrackObjectDialog(theTimelineContainer);
@@ -123,15 +132,15 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 	
 	public void controller(TimelineController theController){
 		_myTimelineController = theController;
-
+		_myTimelineController.zoomController().addZoomable((theLower, theUpper) ->{
+				double myMax = Math.max(theUpper, _myTimelineController.maximumTime());
+				
+				int myValue = (int)((theLower) / myMax * 1000);
+				int myExtent = (int)((theUpper - theLower) / myMax * 1000);
+				_myJScrollbar.setValues(myValue, myExtent, 0, 1000);
+		});
 		_myRuler.timelineController(_myTimelineController);
-		 
-		if(_myScrollbar != null)_myJScrollbar.removeAdjustmentListener(_myScrollbar);
-		_myScrollbar = new SwingTimelineScrollbar(_myJScrollbar, _myTimelineController);
-		_myJScrollbar.addAdjustmentListener(_myScrollbar);
-		
 		_myToolChooserPopup = new SwingToolChooserPopup(_myTimelineController.curveTool());
-		 
 	}
 	
 	public Container container(){

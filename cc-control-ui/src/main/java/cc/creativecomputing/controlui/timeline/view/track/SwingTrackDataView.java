@@ -3,7 +3,6 @@ package cc.creativecomputing.controlui.timeline.view.track;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -28,8 +27,8 @@ import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
-import cc.creativecomputing.controlui.timeline.controller.TransportController;
-import cc.creativecomputing.controlui.timeline.controller.TransportController.RulerInterval;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController.RulerInterval;
 import cc.creativecomputing.controlui.timeline.controller.track.ColorTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CurveTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
@@ -41,7 +40,6 @@ import cc.creativecomputing.controlui.timeline.view.SwingEventPopup;
 import cc.creativecomputing.controlui.timeline.view.SwingRulerView;
 import cc.creativecomputing.controlui.timeline.view.SwingToolChooserPopup;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
@@ -814,7 +812,7 @@ public class SwingTrackDataView extends JPanel {
 			return;
 		}
 		Graphics2D myG2 = (Graphics2D)g;
-		TransportController myTransportController = _myTimelineController.transportController();
+		CCTransportController myTransportController = _myTimelineController.transportController();
 		RulerInterval ri = myTransportController.rulerInterval();
 		
 		double myStart = ri.interval() * (Math.floor(myTransportController.lowerBound() / ri.interval()) ) ;

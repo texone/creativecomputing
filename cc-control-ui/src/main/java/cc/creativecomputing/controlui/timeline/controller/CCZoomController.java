@@ -5,7 +5,6 @@ import java.awt.geom.Point2D;
 import cc.creativecomputing.control.timeline.TimeRange;
 import cc.creativecomputing.controlui.timeline.view.SwingConstants;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 
@@ -17,7 +16,7 @@ public class CCZoomController  {
 	private double _myLastV;
 	private double _myLastH;
 	
-	private CCListenerManager<Zoomable> _myZoomables = CCListenerManager.create(Zoomable.class);
+	private CCListenerManager<CCZoomable> _myZoomables = CCListenerManager.create(CCZoomable.class);
 	
 	private double _myMinRange = 0;
 	private double _myMaxRange = Double.MAX_VALUE;
@@ -27,12 +26,12 @@ public class CCZoomController  {
 		_myUpperBound = SwingConstants.DEFAULT_RANGE;
 	}
 	
-	public void addZoomable(Zoomable theZoomable) {
+	public void addZoomable(CCZoomable theZoomable) {
 		_myZoomables.add(theZoomable);
 		theZoomable.setRange(_myLowerBound, _myUpperBound);
 	}
 	
-	public void removeZoomable(Zoomable theZoomable) {
+	public void removeZoomable(CCZoomable theZoomable) {
 		_myZoomables.remove(theZoomable);
 	}
 	

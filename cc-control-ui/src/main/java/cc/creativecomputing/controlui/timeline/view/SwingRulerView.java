@@ -32,8 +32,8 @@ import cc.creativecomputing.control.timeline.point.MarkerPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.CCSwingDraggableValueBox.CCChangeValueBoxListener;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.controller.TransportController;
-import cc.creativecomputing.controlui.timeline.controller.TransportController.RulerInterval;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController.RulerInterval;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 
 @SuppressWarnings("serial")
@@ -159,7 +159,7 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 	public static final double MIN_RULER_INTERVAL = 0.25;
 	
 	private TimelineController _myTimelineController;
-	private TransportController _myTransportController;
+	private CCTransportController _myTransportController;
 	
 	private SwingRulerMarkerDialog _myMarkerFrame;
 	private InsertTimeDialog _myInsertTimeFrame;
@@ -279,9 +279,11 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 			
 	        int myX = _myTransportController.timeToViewX(step);
 	        if(myX < 0)continue;
-			
-			g.setColor(STEP_COLOR);
+
 			myG2.setStroke(THICK_STROKE);
+			g.setColor(SUB_STEP_COLOR);
+			g.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
+			g.setColor(STEP_COLOR);
 			g.drawLine(myX, 0, myX, getHeight());
 			
 			int myTimeX = myX;
@@ -291,8 +293,9 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 			
 			for(int i = 1; i < _myTimelineController.drawRaster();i++) {
 				myX = _myTransportController.timeToViewX(step + ri.interval() * i / _myTimelineController.drawRaster());
-				g.drawLine(myX, 0, myX, getHeight() / 2);
+				g.drawLine(myX, getHeight(), myX, getHeight() / 4 * 3);
 			}
+			
 			
 			String myTimeString = _myTransportController.timeToString(step);
 			
@@ -349,6 +352,15 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
         }
 		
 		int myTransportX = Math.max(0, _myTransportController.timeToViewX(_myTransportController.time()));
+		Polygon myPolygon = new Polygon();
+		myPolygon.addPoint(myTransportX - 5, getHeight()/2);
+		myPolygon.addPoint(myTransportX - 5, getHeight() - 5);
+		myPolygon.addPoint(myTransportX, getHeight());
+		myPolygon.addPoint(myTransportX + 5, getHeight() - 5);
+		myPolygon.addPoint(myTransportX + 5, getHeight()/2);
+		g.setColor(new Color(0.6f, 0.6f, 0.6f));
+		g.fillPolygon(myPolygon);
+		
 		g.setColor(new Color(0.8f, 0.8f, 0.8f));
 		g.drawLine(myTransportX, getHeight()/2, myTransportX, getHeight());
 		

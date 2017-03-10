@@ -55,7 +55,7 @@ public class FileManager {
 		// LOADING
 		//
 		////////////////////////////////////
-		private void loadTransport(final CCDataObject theTransportData, final TransportController theTransportController) {
+		private void loadTransport(final CCDataObject theTransportData, final CCTransportController theTransportController) {
 			
 			if (theTransportData.containsKey(PLAYBACK_SPEED_ATTRIBUTE)) {
 				theTransportController.speed(
@@ -245,7 +245,7 @@ public class FileManager {
 		//
 		////////////////////////////////////
 		
-		private CCDataObject createTransportData(TransportController theTransportController, double theStart, double theEnd) {
+		private CCDataObject createTransportData(CCTransportController theTransportController, double theStart, double theEnd) {
 			CCDataObject myTransportData = new CCDataObject();
 			myTransportData.put(PLAYBACK_SPEED_ATTRIBUTE, theTransportController.speed());
 			myTransportData.put(LOOP_START_ATTRIBUTE, theTransportController.loopStart());

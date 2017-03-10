@@ -35,7 +35,7 @@ import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.TimelineTool;
 import cc.creativecomputing.controlui.timeline.controller.ToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
-import cc.creativecomputing.controlui.timeline.controller.Zoomable;
+import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
 import cc.creativecomputing.controlui.timeline.controller.actions.AddControlPointAction;
 import cc.creativecomputing.controlui.timeline.controller.actions.MoveControlPointAction;
 import cc.creativecomputing.controlui.timeline.controller.actions.RemoveControlPointAction;
@@ -50,7 +50,7 @@ import cc.creativecomputing.math.CCMath;
  * @author christianriekoff
  *
  */
-public abstract class TrackDataController implements Zoomable, TimedContentView{
+public abstract class TrackDataController implements CCZoomable, TimedContentView{
 	
     protected int _myMouseStartX;
     protected int _myMouseStartY;

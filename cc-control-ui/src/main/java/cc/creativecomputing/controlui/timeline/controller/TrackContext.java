@@ -28,7 +28,7 @@ import cc.creativecomputing.controlui.timeline.controller.track.TrackDataControl
  * @author christianriekoff
  *
  */
-public class TrackContext implements Zoomable{
+public class TrackContext implements CCZoomable{
     
     protected double _myLowerBound;
     protected double _myUpperBound;

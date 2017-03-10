@@ -1,16 +1,16 @@
 package cc.creativecomputing.controlui.timeline.controller.quantize;
 
-import cc.creativecomputing.controlui.timeline.controller.TransportController;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 
 public class CCOffQuantizer implements CCQuantizer{
 
 	@Override
-	public double quantize(TransportController theTransport, double theTime) {
+	public double quantize(CCTransportController theTransport, double theTime) {
 		return theTime;
 	}
 
 	@Override
-	public int drawRaster(TransportController theTransport) {
+	public int drawRaster(CCTransportController theTransport) {
 		return 0;
 	}
 	
