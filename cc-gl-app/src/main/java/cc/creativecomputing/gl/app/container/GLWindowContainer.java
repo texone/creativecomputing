@@ -53,6 +53,7 @@ public class GLWindowContainer extends GLContainer{
 	public GLWindowContainer(final CCAbstractGLContext<?> theExtension) {
 		_myContext = theExtension;
 		_myWindow = GLWindow.create(_myContext.glCapabilities());
+		
 		_myWindow.setTitle(_myContext.title);
 //		_myWindow.setResizable(_myExtension.isResizable());
 		_myWindow.setUndecorated(_myContext.undecorated);
@@ -61,6 +62,7 @@ public class GLWindowContainer extends GLContainer{
 		_myWindow.getCurrentSurfaceScale(myScale);
 		_myWindow.setSize(_myContext.width, _myContext.height);
 		_myWindow.setVisible(true);
+		
 		
 		_myWindow.setSurfaceScale(new float[]{_myContext.pixelScale.id(), _myContext.pixelScale.id()});
 		
@@ -146,8 +148,10 @@ public class GLWindowContainer extends GLContainer{
 			@Override
 			public void keyPressed(KeyEvent theEvent) {
 				if(theEvent.getKeyCode() == KeyEvent.VK_ESCAPE){
+					CCLog.info(_myContext.fullscreen);
 					if(_myContext.fullscreen){
 						_myContext.fullscreen = false;
+						fullScreen(false);
 						return;
 					}
 					switch(_myContext.closeOperation) {

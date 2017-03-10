@@ -4,33 +4,45 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import cc.creativecomputing.control.CCSelection;
+import cc.creativecomputing.control.CCSelection.CCSelectionListener;
+import cc.creativecomputing.core.CCProperty;
 
 public class CCGraphicDeviceSetup {
 	private final Map<String, GraphicsDevice> _myGraphicsDeviceMap = new HashMap<String, GraphicsDevice>();
-	private final String[] _myGraphicDeviceNames;
+	
+	@CCProperty(name = "devices")
+	private final CCSelection _myGraphicDeviceNames = new CCSelection();
 	private final GraphicsDevice[] _myGraphicDevices;
 	
 	private final Map<String, GraphicsConfiguration> _myGraphicsConfigurationMap = new HashMap<String, GraphicsConfiguration>();
-	private String[] _myGraphicConfigurationNames;
+	
+	@CCProperty(name = "configurations")
+	private CCSelection _myGraphicConfigurationNames = new CCSelection();
 	private GraphicsConfiguration[] _myGraphicConfigurations;
 	
 	private GraphicsDevice _myGraphicsDevice;
 	private GraphicsConfiguration _myGraphicsConfiguration;
+	
 	
 	/**
 	 * Update the available graphic configurations based on the current graphics device
 	 */
 	private void updateConfigurations() {
 		_myGraphicsConfigurationMap.clear();
+		if(_myGraphicsDevice == null)return;
 		_myGraphicsConfiguration = _myGraphicsDevice.getDefaultConfiguration();
 		_myGraphicConfigurations = _myGraphicsDevice.getConfigurations();
-		_myGraphicConfigurationNames = new String[_myGraphicConfigurations.length];
+		
+		_myGraphicConfigurationNames.values().clear();
 		
 		for (int i = 0; i < _myGraphicConfigurations.length;i++) {
 			GraphicsConfiguration myConfig = _myGraphicConfigurations[i];
 			String myID = myConfig.getBounds().width + " x " + myConfig.getBounds().height;
-			_myGraphicConfigurationNames[i] = myID;
+			_myGraphicConfigurationNames.add(myID);
 			_myGraphicsConfigurationMap.put(myID, myConfig);
 		}
 	}
@@ -40,11 +52,24 @@ public class CCGraphicDeviceSetup {
 		_myGraphicsDevice = ge.getDefaultScreenDevice();
 		
 		_myGraphicDevices = ge.getScreenDevices();
-		_myGraphicDeviceNames = new String[_myGraphicDevices.length];
 		
 		for (int i = 0; i < _myGraphicDevices.length;i++) {
 			GraphicsDevice myDevice = _myGraphicDevices[i];
-			_myGraphicDeviceNames[i] = myDevice.getIDstring();
+		
+			_myGraphicDeviceNames.add(myDevice.getIDstring());
+			_myGraphicDeviceNames.events().add(new CCSelectionListener() {
+				
+				@Override
+				public void onChangeValues(CCSelection theSelection) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onChange(String theValue) {
+					display(theValue);
+				}
+			});
 			_myGraphicsDeviceMap.put(myDevice.getIDstring(), myDevice);
 		}
 		updateConfigurations();
@@ -54,8 +79,8 @@ public class CCGraphicDeviceSetup {
 	 * Returns an array with the available Graphic devices.
 	 * @return array with the available Graphic devices
 	 */
-	public String[] deviceNames() {
-		return _myGraphicDeviceNames;
+	public List<String> deviceNames() {
+		return _myGraphicDeviceNames.values();
 	}
 
 	/**
@@ -95,8 +120,8 @@ public class CCGraphicDeviceSetup {
 	 * So to get the right configurations set the display first.
 	 * @return array with the available configurations
 	 */
-	public String[] configurationNames() {
-		return _myGraphicConfigurationNames;
+	public List<String> configurationNames() {
+		return _myGraphicConfigurationNames.values();
 	}
 	
 	/**

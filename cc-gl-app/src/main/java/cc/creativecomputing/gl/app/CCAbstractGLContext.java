@@ -142,8 +142,6 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	@CCProperty(desc = "number of samples used for antialiasing of the application")
 	public int antialiasing = 8;
 	
-	
-	
 	@CCProperty(desc = "initial background of the window on creation independent from gl clear color")
 	public CCColor background = new CCColor();
 	
