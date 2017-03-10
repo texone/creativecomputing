@@ -7,7 +7,7 @@ import javax.swing.SwingUtilities;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
-import cc.creativecomputing.controlui.timeline.controller.TransportController;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
@@ -155,7 +155,7 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 	private boolean _myFixUpdateTime = false;
 	private double _myFixedUpdateTime = 0;
 	
-	private TransportController _myTransportController;
+	private CCTransportController _myTransportController;
 	private double _myTimelineTime = 0;
 	
 	public void startRecord(){

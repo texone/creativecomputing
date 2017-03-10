@@ -14,7 +14,7 @@ import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.timeline.controller.TransportController;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
@@ -336,7 +336,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	private boolean _myFixUpdateTime = false;
 	private double _myFixedUpdateTime = 0;
 	
-	private TransportController _myTransportController;
+	private CCTransportController _myTransportController;
 	private double _myTimelineTime = 0;
 	
 

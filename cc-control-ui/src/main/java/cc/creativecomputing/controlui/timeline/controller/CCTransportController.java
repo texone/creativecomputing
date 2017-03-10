@@ -39,7 +39,7 @@ import cc.creativecomputing.math.CCMath;
  * @author christianriekoff
  *
  */
-public class TransportController extends TrackDataController implements Zoomable{
+public class CCTransportController extends TrackDataController implements CCZoomable{
 	
 	public static class RulerInterval{
 		private double _myMin;
@@ -72,7 +72,7 @@ public class TransportController extends TrackDataController implements Zoomable
 		}
 	}
 	
-	private List<RulerInterval> _myIntervals = new ArrayList<TransportController.RulerInterval>();
+	private List<RulerInterval> _myIntervals = new ArrayList<CCTransportController.RulerInterval>();
 	
 	public static enum TransportAction{
 		PLAY, STOP, LOOP
@@ -93,7 +93,7 @@ public class TransportController extends TrackDataController implements Zoomable
 	private double _myCurrentTime;
 	private double _mySpeedFactor;
 	
-	private CCListenerManager<TransportTimeListener> _myTimeListener = CCListenerManager.create(TransportTimeListener.class);
+	private CCListenerManager<CCTransportable> _myTransportEvents = CCListenerManager.create(CCTransportable.class);
 	private CCListenerManager<TransportStateListener> _myStateListener = CCListenerManager.create(TransportStateListener.class);
 	
 	private CCListenerManager<MarkerListener> _myMarkerListener = CCListenerManager.create(MarkerListener.class);
@@ -116,7 +116,7 @@ public class TransportController extends TrackDataController implements Zoomable
 	
 	private double _myBPM = 120;
 	
-	public TransportController(TimelineController theTimelineController) {
+	public CCTransportController(TimelineController theTimelineController) {
 		super(theTimelineController, null);
 		_myTimelineController = theTimelineController;
 		_myMarkerList = new TrackData(null);
@@ -334,12 +334,10 @@ public class TransportController extends TrackDataController implements Zoomable
 	
 	public void loop(final double theLoopStart, final double theLoopEnd) {
 		_myLoop.range(theLoopStart, theLoopEnd);
-		onChangeLoop();
 	}
 	
 	public void doLoop(final boolean theIsInLoop) {
 		_myIsInLoop = theIsInLoop;
-		onChangeLoop();
 	}
 	
 	public boolean doLoop() {
@@ -363,13 +361,10 @@ public class TransportController extends TrackDataController implements Zoomable
 		return _myUpperBound;
 	}
 	
-	private void onChangeLoop() {
-		_myTimeListener.proxy().onChangeLoop(_myLoop, _myIsInLoop);
-	}
-	
 	private void moveTransport(final int theMouseX) {
 		if(_myRulerView == null)return;
 		double myClickedTime = viewXToTime(theMouseX, true);
+		myClickedTime = _myTimelineController.quantize(myClickedTime);
 		time(myClickedTime);
 	}
 	
@@ -525,7 +520,7 @@ public class TransportController extends TrackDataController implements Zoomable
 	
 	public void rewind() {
 		_myCurrentTime = _myLoopStart;
-		_myTimeListener.proxy().time(_myCurrentTime);
+		_myTransportEvents.proxy().time(_myCurrentTime);
 	}
 	
 	public void loop() {
@@ -557,8 +552,7 @@ public class TransportController extends TrackDataController implements Zoomable
 			if(_myIsInLoop && _myCurrentTime > _myLoop.end()) {
 				_myCurrentTime = _myLoop.start() + _myCurrentTime - _myLoop.end();
 			}
-			_myTimeListener.proxy().update(theDeltaT);
-			_myTimeListener.proxy().time(_myCurrentTime);
+			_myTransportEvents.proxy().time(_myCurrentTime);
 			
 			MarkerPoint myCurrentMarker = (MarkerPoint)_myMarkerList.getFirstPointAt(_myCurrentTime);
 			if(myCurrentMarker != _myLastMarker && _myLastMarker != null){
@@ -575,7 +569,7 @@ public class TransportController extends TrackDataController implements Zoomable
 	public void time(double theTime) {
 		theTime = CCMath.max(0,theTime);
 		_myCurrentTime = theTime;
-		_myTimeListener.proxy().time(_myCurrentTime);
+		_myTransportEvents.proxy().time(_myCurrentTime);
 //		if(theTime < _myLastTime || theTime - _myLastTime > 0.1){
 //			_myLastTime = theTime;
 //			_myLastMarker = null;
@@ -593,12 +587,8 @@ public class TransportController extends TrackDataController implements Zoomable
 //		_myLastMarker = myCurrentMarker;
 	}
 	
-	public void addTimeListener(TransportTimeListener theTransportable) {
-		_myTimeListener.add(theTransportable);
-	}
-	
-	public void removeTimeListener(TransportTimeListener theTransportable) {
-		_myTimeListener.remove(theTransportable);
+	public CCListenerManager<CCTransportable> transportEvents(){
+		return _myTransportEvents;
 	}
 	
 	public void addStateListener(TransportStateListener theTransportable) {
