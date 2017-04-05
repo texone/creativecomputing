@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.texture.CCTexture;
@@ -147,13 +146,12 @@ public class CCGLProgram{
 	}
 	
 	protected int _myProgram;
-	
+	@CCProperty(name = "vertex")
 	protected CCGLShader _myVertexShader;
+	@CCProperty(name = "fragment")
 	protected CCGLShader _myFragmentShader;
+	@CCProperty(name = "geometry")
 	protected CCGLShader _myGeometryShader;
-	
-	@CCProperty(name = "shader objects")
-	private Map<String, CCShaderObject> _myShaders;
 	
 	private List<CCGLShader> _myShaderList = new ArrayList<>();
 
@@ -186,7 +184,6 @@ public class CCGLProgram{
 	protected CCGLProgram(){
 		GL2 gl = CCGraphics.currentGL();
 		_myProgram = (int)gl.glCreateProgram();
-		_myShaders = new HashMap<>();
 	}
 	
 	public CCGLProgram(
@@ -207,7 +204,6 @@ public class CCGLProgram{
 		if(theShaderPaths == null || theShaderPaths[0] == null)return null;
 		
 		CCGLShader myShader = new CCGLShader(theType, theShaderPaths);
-		_myShaders.put(theType.typeString, new CCShaderObject(myShader));
 		_myShaderList.add(myShader);
 		attach(myShader);
 		
@@ -227,7 +223,6 @@ public class CCGLProgram{
 		if(theSource == null)return null;
 		
 		CCGLShader myShader = new CCGLShader(theType, theSource);
-		_myShaders.put(theType.typeString, new CCShaderObject(myShader));
 		_myShaderList.add(myShader);
 		attach(myShader);
 		
@@ -391,6 +386,10 @@ public class CCGLProgram{
 		return get(GL2.GL_DELETE_STATUS) == GL2.GL_TRUE;
 	}
 	
+	public int activeUniforms(){
+		return get(GL2.GL_ACTIVE_UNIFORMS);
+	}
+	
 	private int _myTexIndex = 0;
 
 	public void start() {
@@ -409,6 +408,9 @@ public class CCGLProgram{
 		if(myRelink)link();
 		
 		gl.glUseProgram(_myProgram);
+		for(CCGLShader myShader:_myShaderList){
+			myShader.applyUniforms(this);
+		}
 		_myIsShaderInUse = true;
 		_myTexIndex = 0;
 	}

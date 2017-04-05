@@ -3,15 +3,25 @@ package cc.creativecomputing.graphics.shader;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
+import com.jogamp.opengl.GL2;
+
+import cc.creativecomputing.control.CCPropertyMap;
+import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.control.code.CCShaderObject.CCShaderObjectInterface;
+import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
+import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.CCPropertyObject;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram.CCShaderObjectType;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
-
-import com.jogamp.opengl.GL2;
 
 public class CCGLShader extends CCShaderObjectInterface{
 	
@@ -24,7 +34,6 @@ public class CCGLShader extends CCShaderObjectInterface{
 	 */
 	public static String buildSource(final Path...thePaths) {
 		StringBuffer myBuffer = new StringBuffer();
-		
 		for(Path myPath:thePaths) {
 			myBuffer.append(CCNIOUtil.loadString(myPath));
 			myBuffer.append("\n");
@@ -54,13 +63,18 @@ public class CCGLShader extends CCShaderObjectInterface{
 	
 	private boolean _myReloadSource = false;
 	
+	@CCProperty(name = "code")
+	private CCShaderObject _myCode;
+	@CCProperty(name = "uniforms")
+	private CCObjectPropertyHandle _myUniformHandles = new CCObjectPropertyHandle(new CCDirectMember( new CCPropertyObject("uniforms", 0, 0)));
+	
 	CCGLShader(CCShaderObjectType theType, Path...theFiles){
 		_myType = theType;
 		_myFiles = theFiles;
 		
 		GL2 gl = CCGraphics.currentGL();
 		_myShaderID = (int)gl.glCreateShader(_myType.glID);
-		
+		_myCode = new CCShaderObject(this);
 		loadShader(_myFiles);
 	}
 	
@@ -76,8 +90,6 @@ public class CCGLShader extends CCShaderObjectInterface{
 	public String errorLog() {
 		return _myInfoLog;
 	}
-	
-	
 	
 	/**
 	 * returns the value of a parameter.
@@ -220,12 +232,224 @@ public class CCGLShader extends CCShaderObjectInterface{
 	}
 	
 	
-	
 	private String _myInfoLog;
 	
-	int _myShaderID = -1;;
+	int _myShaderID = -1;
+	
+	private CCNumberPropertyHandle<Double> createHandle(String theName, double theMin, double theMax){
+		CCNumberPropertyHandle<Double> myResult = new CCNumberPropertyHandle<Double>(
+			_myUniformHandles, 
+			new CCDirectMember<CCProperty>(new Double(0), new CCPropertyObject(theName, theMin, theMax)),
+			CCPropertyMap.doubleConverter
+		);
+		_myUniformHandles.children().put(theName, myResult);
+		return myResult;
+	}
+	
+	public class CCShaderUniform{
+		String _myUniformName;
+		CCNumberPropertyHandle<Double>[] _myProperties;
+		
+		private CCShaderUniform(String theUniformName, CCNumberPropertyHandle<Double>...theProperties){
+			_myUniformName = theUniformName;
+			_myProperties = theProperties;
+		}
+		
+		public void apply(CCGLProgram theProgram){
+			switch(_myProperties.length){
+			case 1:
+				theProgram.uniform1f(
+					_myUniformName, 
+					_myProperties[0].value().doubleValue()
+				);
+				break;
+			case 2:
+				theProgram.uniform2f(
+					_myUniformName, 
+					_myProperties[0].value().doubleValue(), 
+					_myProperties[1].value().doubleValue()
+				);
+				break;
+			case 3:
+				theProgram.uniform3f(
+					_myUniformName, 
+					_myProperties[0].value().doubleValue(), 
+					_myProperties[1].value().doubleValue(), 
+					_myProperties[2].value().doubleValue()
+				);
+				break;
+			case 4:
+				theProgram.uniform4f(
+					_myUniformName, 
+					_myProperties[0].value().doubleValue(), 
+					_myProperties[1].value().doubleValue(), 
+					_myProperties[2].value().doubleValue(), 
+					_myProperties[3].value().doubleValue()
+				);
+				break;
+			}
+		}
+	}
+	
+	private Map<String,CCShaderUniform> _myUniforms = new HashMap<>();
+	
+	void applyUniforms(CCGLProgram theProgram){
+		for(CCShaderUniform myUniform:_myUniforms.values()){
+			myUniform.apply(theProgram);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void readProperty(String thePropertyLine, String theUniformLine, Map<String,CCShaderUniform> theUniforms){
+		CCLog.info(_myUniforms.size());
+		
+		for(String myKey:_myUniforms.keySet()){
+			CCLog.info(myKey);
+		}
+		try{
+			String myName = null;
+			double myMin = -1;
+			double myMax = -1;
+			int myStartIndex = thePropertyLine.indexOf("(");
+			int myEndIndex =  thePropertyLine.indexOf(")");
+			if(myStartIndex == -1 || myEndIndex == -1)return;
+			String[] myParameters = thePropertyLine.substring(myStartIndex + 1, myEndIndex).split(",");
+			for(String myParameter:myParameters){
+				if(!myParameter.contains("="))continue;
+				String[] myParamPair = myParameter.split("=");
+				if(myParamPair.length < 2)continue;
+				String myKey = myParamPair[0].trim();
+				String myValue = myParamPair[1].trim();
+				
+				switch(myKey){
+				case "name":
+					myName = myValue.replace("\"", "");
+					break;
+				case "min":
+					try{
+						myMin = Double.parseDouble(myValue);
+						break;
+					}catch(Exception e){
+						
+					}
+				case "max":
+					try{
+						myMax = Double.parseDouble(myValue);
+						break;
+					}catch(Exception e){
+						
+					}
+					break;
+				}
+			}
+			
+			if(myName == null || myName.equals(""))return;
+			
+			String[] myUniformParts = theUniformLine.split(Pattern.quote(" "));
+	
+			if(myUniformParts.length < 3)return;
+			
+			String myType = myUniformParts[1];
+			String myUniformName = myUniformParts[2].replace(";", "");
+			String myKey = myType + ":" + myUniformName + ":" + myName;
+			CCLog.info("checks:" + myKey);
+			if(_myUniforms.containsKey(myKey)){
+				CCLog.info("contains:" + myKey);
+				theUniforms.put(myKey, _myUniforms.get(myKey));
+				for(CCNumberPropertyHandle<Double> myUniform:_myUniforms.get(myKey)._myProperties){
+					_myUniformHandles.children().put(myUniform.name(), myUniform);
+				}
+				return;
+			}
+			switch(myType){
+			case "float":
+				theUniforms.put(
+					myKey,
+					new CCShaderUniform(
+						myUniformName, 
+						createHandle(myName, myMin, myMax)
+					)
+				);
+				break;
+			case "vec2":
+				theUniforms.put(
+					myKey,
+					new CCShaderUniform(
+						myUniformName, 
+						createHandle(myName + ".x", myMin, myMax), 
+						createHandle(myName + ".y", myMin, myMax)
+					)
+				);
+				break;
+			case "vec3":
+				theUniforms.put(
+					myKey,
+					new CCShaderUniform(
+						myUniformName, 
+						createHandle(myName + ".x", myMin, myMax), 
+						createHandle(myName + ".y", myMin, myMax), 
+						createHandle(myName + ".z", myMin, myMax)
+					)
+				);
+				break;
+			case "vec4":
+				theUniforms.put(
+					myKey,
+					new CCShaderUniform(
+						myUniformName, 
+						createHandle(myName + ".x", myMin, myMax), 
+						createHandle(myName + ".y", myMin, myMax), 
+						createHandle(myName + ".z", myMin, myMax), 
+						createHandle(myName + ".w", myMin, myMax)
+					)
+				);
+				break;
+			}
+			CCLog.info("puts:" + myKey);
+		}catch(NumberFormatException nf){
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+	}
 	
 	private boolean loadShader(String theSource, boolean theThrowException, final String theErrorPrepend){
+		Map<String,CCShaderUniform> myUniforms = new HashMap<>();
+		_myUniformHandles.children().clear();
+		
+		String[] myLines = theSource.split(Pattern.quote("\n"));
+		String myPropertyLine = null;
+		
+		StringBuffer mySource = new StringBuffer();
+		
+		for(int i = 0; i < myLines.length; i++){
+			String myLine = myLines[i];
+			myLine = myLine.trim();
+			if(myLine.length() == 0){
+				mySource.append("\n");
+				continue;
+			}else if(myLine.startsWith("@CCProperty")){
+				mySource.append("\n");
+				myPropertyLine = myLine;
+			}else if(myLine.startsWith("@")){
+				mySource.append("\n");
+				continue;
+			}else if(myLine.startsWith("uniform")){
+				mySource.append(myLine + "\n");
+				if(myPropertyLine != null)readProperty(myPropertyLine, myLine,myUniforms);
+				myPropertyLine = null;
+			}else{
+				myPropertyLine = null;
+				mySource.append(myLine + "\n");
+			}
+		}
+		
+		_myUniforms = myUniforms;
+		_myUniformHandles.forceChange();
+		
+		theSource = mySource.toString();
+		
 		source(theSource);
 		compile();
 		
@@ -234,7 +458,6 @@ public class CCGLShader extends CCShaderObjectInterface{
 			if(theErrorPrepend != null)myReplyBuffer.append(theErrorPrepend);
 			myReplyBuffer.append(getInfoLog());
 			_myInfoLog = myReplyBuffer.toString();
-			System.out.println(_myInfoLog);
 			if(theThrowException)throw new CCShaderException(_myInfoLog);
 			return false;
 		}else{
