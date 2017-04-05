@@ -5,8 +5,6 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.io.netty.CCTCPClient;
-import cc.creativecomputing.io.netty.CCTCPServer;
 import cc.creativecomputing.io.netty.CCUDPClient;
 import cc.creativecomputing.io.netty.CCUDPServer;
 import cc.creativecomputing.io.netty.codec.CCNetStringCodec;
@@ -19,13 +17,13 @@ public class CCUDPDemo extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		myServer = new CCUDPServer<String>(new CCNetStringCodec(), 12345);
+		myServer = new CCUDPServer<String>(new CCNetStringCodec());
 		myServer.events().add( message -> {
 			CCLog.info(message.message.getClass() + ":" + message.message);
 		});
 		myServer.connect();
 		
-		myClient = new CCUDPClient<String>(new CCNetStringCodec(), 12345);
+		myClient = new CCUDPClient<String>(new CCNetStringCodec());
 		myClient.connect();
 		myClient.write("texone");
 		myClient.write("textwo");

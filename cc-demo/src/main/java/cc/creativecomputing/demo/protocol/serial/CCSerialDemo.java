@@ -14,10 +14,20 @@ public class CCSerialDemo extends CCGL2Adapter{
 	@CCProperty(name = "serial")
     private CCSerialModule _mySerial;
 	
+	private StringBuffer _myReadBuffer = new StringBuffer();
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_mySerial = new CCSerialModule("serial", 115200);
+		_mySerial = new CCSerialModule("serial", 9600);
+		_mySerial.listener().add(input -> {
+			String myInput = input.readString();
+			if(myInput.equals("\n")){
+				CCLog.info(_myReadBuffer);
+				_myReadBuffer = new StringBuffer();
+			}else{
+				_myReadBuffer.append(myInput);
+			}
+		});
 	}
 	
 	@Override

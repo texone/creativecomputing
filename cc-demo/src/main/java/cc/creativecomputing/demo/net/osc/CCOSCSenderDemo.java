@@ -1,32 +1,20 @@
-package cc.creativecomputing.demo.net;
+package cc.creativecomputing.demo.net.osc;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.io.netty.CCTCPClient;
-import cc.creativecomputing.io.netty.CCTCPServer;
-import cc.creativecomputing.io.netty.codec.CCNetStringCodec;
+import cc.creativecomputing.io.netty.codec.osc.CCOSCSender;
 
-public class CCTCPDemo extends CCGL2Adapter {
+public class CCOSCSenderDemo extends CCGL2Adapter {
 	
-	CCTCPServer<String> myServer;
-	
-	CCTCPClient<String> myClient;
+	@CCProperty(name = "osc sender")
+	private CCOSCSender _myOSCSender;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		myServer = new CCTCPServer<String>(new CCNetStringCodec());
-		myServer.events().add( message -> {
-			CCLog.info(message.message);
-		});
-		myServer.connect();
-		
-		myClient = new CCTCPClient<String>(new CCNetStringCodec());
-		myClient.connect();
-		myClient.write("texone");
-		myClient.write("textwo");
+		_myOSCSender = new CCOSCSender();
 	}
 
 	@Override
@@ -35,12 +23,11 @@ public class CCTCPDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
-		g.clear();
 	}
 
 	public static void main(String[] args) {
 
-		CCTCPDemo demo = new CCTCPDemo();
+		CCOSCSenderDemo demo = new CCOSCSenderDemo();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1200, 600);
@@ -49,3 +36,4 @@ public class CCTCPDemo extends CCGL2Adapter {
 		myAppManager.start();
 	}
 }
+

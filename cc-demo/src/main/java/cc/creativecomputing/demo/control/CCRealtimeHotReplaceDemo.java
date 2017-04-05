@@ -11,7 +11,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 
-public class CCRealtimeCodingDemo extends CCGL2Adapter{
+public class CCRealtimeHotReplaceDemo extends CCGL2Adapter{
 	
 	public static interface CCRealtimeGraph extends CCCompileObject{
 		public void draw(CCGraphics g);
@@ -29,16 +29,12 @@ public class CCRealtimeCodingDemo extends CCGL2Adapter{
 //		}
 	}
 	
-	@CCProperty(name = "real time visual")
-	private CCRealtimeCompile<CCRealtimeGraph> _myRealTimeGraph;
 	
-	private class Container{
-		@CCProperty(name = "real time object", readBack = true)
-		private CCRealtimeGraph _myObject;
-	}
+	private CCRealtimeCompile<CCRealtimeHotReplaceClass> _myRealTimeCompile;
 	
-	@CCProperty(name = "yo", readBack = true)
-	private Container yo = new Container();
+	private CCRealtimeHotReplaceClass _myRealtimeObject;
+	
+	
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
@@ -46,9 +42,11 @@ public class CCRealtimeCodingDemo extends CCGL2Adapter{
 	
 	@Override
 	public void init(CCGraphics g,CCAnimator theAnimator) {
-		_myRealTimeGraph = new CCRealtimeCompile<CCRealtimeGraph>(CCRealtimeGraph.class);
-		yo._myObject = _myRealTimeGraph.createObject();
-		CCLog.info(yo._myObject);
+		_myRealTimeCompile = new CCRealtimeCompile<>(CCRealtimeHotReplaceClass.class.getName(),CCRealtimeHotReplaceClass.class);
+		_myRealTimeCompile.recompile();
+		_myRealtimeObject = _myRealTimeCompile.createObject();
+		_myRealtimeObject = _myRealTimeCompile.instance();
+		CCLog.info(_myRealtimeObject);
 	}
 	
 	@Override
@@ -58,20 +56,27 @@ public class CCRealtimeCodingDemo extends CCGL2Adapter{
 	@Override
 	public void display(CCGraphics g) {
 		g.clear();
-		yo._myObject = _myRealTimeGraph.instance();
-
-		CCLog.info(yo._myObject);
-//			CCLog.info(myGraph);
-			if(_myRealTimeGraph.instance() == null)return;
-			_myRealTimeGraph.instance().draw(g);
+		if(_myRealTimeCompile.hasCodeUpdate()){
+			CCLog.info("has update");
+			_myRealTimeCompile.recompile();
+			_myRealtimeObject = null;
+			
+			System.gc();
+			
+			_myRealtimeObject = _myRealTimeCompile.createObject();
+			_myRealtimeObject.doSomthing();
+			CCLog.info(_myRealtimeObject);
+		}
 		
+//			CCLog.info(myGraph);
+			if(_myRealtimeObject == null)return;
 		
 	}
 	
 	public static void main(String[] args) {
 		
 		
-		CCRealtimeCodingDemo demo = new CCRealtimeCodingDemo();
+		CCRealtimeHotReplaceDemo demo = new CCRealtimeHotReplaceDemo();
 		
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);

@@ -1,46 +1,40 @@
-package cc.creativecomputing.demo.net;
+package cc.creativecomputing.demo.control;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.io.netty.CCTCPClient;
-import cc.creativecomputing.io.netty.CCTCPServer;
-import cc.creativecomputing.io.netty.codec.CCNetStringCodec;
 
-public class CCTCPDemo extends CCGL2Adapter {
+public class CCHotCodeReplaceDemo extends CCGL2Adapter {
 	
-	CCTCPServer<String> myServer;
-	
-	CCTCPClient<String> myClient;
+	@CCProperty(name = "realtime compile")
+	private CCRealtimeHotReplaceInterface _myObject = new CCRealtimeHotReplaceClass();
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		myServer = new CCTCPServer<String>(new CCNetStringCodec());
-		myServer.events().add( message -> {
-			CCLog.info(message.message);
-		});
-		myServer.connect();
-		
-		myClient = new CCTCPClient<String>(new CCNetStringCodec());
-		myClient.connect();
-		myClient.write("texone");
-		myClient.write("textwo");
 	}
+	
+	private CCRealtimeHotReplaceInterface _myLastObject;
 
 	@Override
 	public void update(CCAnimator theAnimator) {
+		_myObject.doSomthing();
+		
+		if(_myObject != _myLastObject){
+			_myLastObject = _myObject;
+			CCLog.info(_myObject);
+		}
 	}
 
 	@Override
 	public void display(CCGraphics g) {
-		g.clear();
 	}
 
 	public static void main(String[] args) {
 
-		CCTCPDemo demo = new CCTCPDemo();
+		CCHotCodeReplaceDemo demo = new CCHotCodeReplaceDemo();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1200, 600);

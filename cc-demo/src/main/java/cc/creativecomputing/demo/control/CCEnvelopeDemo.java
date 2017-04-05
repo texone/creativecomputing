@@ -15,6 +15,7 @@ import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.texture.CCTexture2DAsset;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCCatmulRomSpline;
 import cc.creativecomputing.math.spline.CCSpline;
 
@@ -32,6 +33,9 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 	
 	@CCProperty(name = "clear color")
 	private CCColor _myClearColor = new CCColor();
+	
+	@CCProperty(name = "vector")
+	private CCVector3 _cVector = new CCVector3();
 	
 	@CCProperty(name = "stringr")
 	private String _myString = "texone";
