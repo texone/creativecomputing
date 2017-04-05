@@ -234,6 +234,36 @@ public class CCNIOUtil {
 	}
 	
 	/**
+    * Returns a file's last modified time.
+    *
+    * <p> The {@code options} array may be used to indicate how symbolic links
+    * are handled for the case that the file is a symbolic link. By default,
+    * symbolic links are followed and the file attribute of the final target
+    * of the link is read. If the option {@link LinkOption#NOFOLLOW_LINKS
+    * NOFOLLOW_LINKS} is present then symbolic links are not followed.
+    *
+    * @param   thePath
+    *          the path to the file
+    * @param   theOptions
+    *          options indicating how symbolic links are handled
+    *
+    * @return  the millis representing the time the file was last
+    *          modified, or an implementation specific default when a time
+    *          stamp to indicate the time of last modification is not supported
+    *          by the file system
+    *
+    * @see BasicFileAttributes#lastModifiedTime
+    */
+
+	public static long lastModified(Path thePath, LinkOption...theOptions){
+		try {
+			return Files.getLastModifiedTime(thePath, theOptions).toMillis();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
 	 * Gets the extension of the given file.
 	 * @param thePath path of the file to check the extension
 	 * @return the extension of the file

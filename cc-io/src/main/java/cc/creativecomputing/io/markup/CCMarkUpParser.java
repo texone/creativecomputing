@@ -8,7 +8,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Stack;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.markup.CCMarkUpListElement.CCMarkupListStyle;
 
 class CCMarkUpParser {
@@ -147,7 +146,6 @@ class CCMarkUpParser {
 					if (!newParagraph) {
 						_myParent.add(new CCMarkUpTextElement(" "));
 					}
-					CCLog.info(line);
 					_myParent = parseString(_myParent, line);
 					newParagraph = false;
 				}
