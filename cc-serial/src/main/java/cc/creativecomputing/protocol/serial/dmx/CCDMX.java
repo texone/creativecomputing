@@ -306,18 +306,6 @@ public class CCDMX implements CCSerialListener {
 		_mySerial.output().write(DMX_PRO_MESSAGE_END);
 	}
 
-	@Override
-	public void start(CCSerialInput theSerialPort) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void stop(CCSerialInput theSerialPort) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public int universeSize() {
 		return _myUniverseSize;
 	}

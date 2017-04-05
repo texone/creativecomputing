@@ -29,6 +29,10 @@ public class CCSerialInput implements SerialPortEventListener{
 		}
 	}
 	
+	public CCListenerManager<CCSerialListener> inputEvents(){
+		return _myListeners;
+	}
+	
 	void stop(){
 		inBuffer = 0;
 	    readOffset = 0;

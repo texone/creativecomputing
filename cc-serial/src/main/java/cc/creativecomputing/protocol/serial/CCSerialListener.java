@@ -33,16 +33,5 @@ public interface CCSerialListener {
 	 */
 	public void onSerialEvent(final CCSerialInput theSerialPort);
 	
-	/**
-	 * Called when a serial port object is correctly initialized
-	 * @param theSerialPort the serial port that received data
-	 */
-	public void start(final CCSerialInput theSerialPort);
-	
-	/**
-	 * Called before a serial port object is closed
-	 * @param theSerialPort the serial port that received data
-	 */
-	public void stop(final CCSerialInput theSerialPort);
 
 }

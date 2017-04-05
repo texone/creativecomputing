@@ -44,18 +44,6 @@ public class CCSerialTest implements CCSerialListener, CCBasicAppListener{
 		}
 		_myMessageBuffer.append(myChar);
 	}
-
-	@Override
-	public void start(CCSerialInput theSerialPort) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void stop(CCSerialInput theSerialPort) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public static void main(String[] args) {
 		CCApplication myApplicationManager = new CCApplication(CCSerialTest.class);
