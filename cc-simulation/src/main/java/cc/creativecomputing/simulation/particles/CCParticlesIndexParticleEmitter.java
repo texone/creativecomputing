@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
@@ -123,6 +124,12 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 	
 	private CCParticleWaitingList _myParticleWaitingList;
 	protected final CCParticle[] _myActiveParticlesArray;
+	
+	@CCProperty(name = "track free particles")
+	private boolean _cTrackFreeParticles = true;
+	
+	@CCProperty(name = "free particles", readBack = true)
+	private int _myFreeParticles = 0;
 	
 	protected CCMesh _myEmitMesh;
 	private FloatBuffer _myVertexBuffer;
@@ -233,6 +240,8 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 		if(theIndex >= _myActiveParticlesArray.length)return;
 		changeParticle(_myActiveParticlesArray[theIndex]);
 	}
+	
+	private int _myLastIndex = 0;
 
 	/**
 	 * Allocates a new particle with the given position, velocity and data.
@@ -253,10 +262,16 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 		final double theLifeTime, 
 		final boolean theIsPermanent
 	){
-		if(_myFreeIndices.isEmpty())return null;
-
-		int myFreeIndex = _myFreeIndices.remove(_myFreeIndices.size() - 1);
-//		
+		int myFreeIndex = _myLastIndex + _myStart;
+		
+		if(_cTrackFreeParticles){
+			if(_myFreeIndices.isEmpty())return null;
+			myFreeIndex = _myFreeIndices.remove(_myFreeIndices.size() - 1);
+		}else{
+			_myLastIndex++;
+			_myLastIndex %= _myNumberOfParticles;
+		}
+		
 		return emit(myFreeIndex, theColor, thePosition, theVelocity, theLifeTime, theIsPermanent);
 	}
 	
@@ -302,7 +317,7 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 
 		synchronized(_myAllocatedParticles){
 			_myAllocatedParticles.add(myActiveParticle);
-			_myParticleWaitingList.add(myActiveParticle);
+			if(_cTrackFreeParticles)_myParticleWaitingList.add(myActiveParticle);
 		}
 		
 		return myActiveParticle;
@@ -336,7 +351,12 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 	}
 	
 	public void update(final CCAnimator theAnimator) {
-		_myParticleWaitingList.update(theAnimator);
+		if(_cTrackFreeParticles){
+			_myParticleWaitingList.update(theAnimator);
+			_myFreeParticles = freeParticles();
+		}else{
+			_myFreeParticles = _myLastIndex;
+		}
 	}
 	
 	@Override
