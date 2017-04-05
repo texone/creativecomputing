@@ -5,6 +5,7 @@ import java.util.List;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.filter.CCExponentialSmoothingFilter;
 
 
 public class CCDoubleHistoryGraph extends CCHistoryGraph<CCDoubleHistoryData>{
