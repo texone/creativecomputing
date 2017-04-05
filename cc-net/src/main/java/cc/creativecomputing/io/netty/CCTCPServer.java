@@ -1,62 +1,67 @@
+/*
+ * Copyright (c) 2017 christianr.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.html
+ * 
+ * Contributors:
+ *     christianr - initial API and implementation
+ */
 package cc.creativecomputing.io.netty;
 
 import java.net.InetSocketAddress;
 
-import cc.creativecomputing.io.net.CCNetException;
 import cc.creativecomputing.io.netty.codec.CCNetCodec;
 import cc.creativecomputing.io.netty.codec.CCNetStringCodec;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class CCTCPServer<MessageType> extends CCServer<MessageType>{
-
-	protected final String _myIP;
 	
 	public CCTCPServer(CCNetCodec<MessageType> theCodec, String theIP, int port) {
-		super(theCodec, port);
-		_myIP = theIP;
+		super(theCodec, theIP, port);
 	}
 	
-	public CCTCPServer(CCNetCodec<MessageType> theCodec, int port) {
-		this(theCodec, null, port);
+	public CCTCPServer(CCNetCodec<MessageType> theCodec) {
+		super(theCodec);
 	}
 	
 	@Override
-	public void bootstrap() throws Exception{
+	public void createBootstrap() throws Exception{
 		final CCServerHandler myServerHandler = new CCServerHandler();
-		EventLoopGroup myLoopGroup = new NioEventLoopGroup();
-		try {
-			ServerBootstrap myBootStrap = new ServerBootstrap();
-			myBootStrap.group(myLoopGroup);
-			myBootStrap.channel(NioServerSocketChannel.class);
-			if(_myIP != null){
-				myBootStrap.localAddress(new InetSocketAddress(_myIP, _myPort));
-			}else{
-				myBootStrap.localAddress(new InetSocketAddress(_myPort));
-			}
-			myBootStrap.childHandler(new ChannelInitializer<SocketChannel>() {
-				@Override
-				public void initChannel(SocketChannel ch) throws Exception {
-					ch.pipeline().addLast(_myCodec.decoder());
-					ch.pipeline().addLast(_myCodec.encoder());
-					ch.pipeline().addLast(myServerHandler);
-				}
-			});
-			ChannelFuture myFuture = myBootStrap.bind().sync();
-			myFuture.channel().closeFuture().sync();
-		} finally {
-			myLoopGroup.shutdownGracefully().sync();
+		_myGroup = new NioEventLoopGroup();
+		
+		ServerBootstrap myBootStrap = new ServerBootstrap();
+		myBootStrap.group(_myGroup);
+		myBootStrap.channel(NioServerSocketChannel.class);
+		if(_myIP != null){
+			myBootStrap.localAddress(new InetSocketAddress(_myIP, _myPort));
+		}else{
+			myBootStrap.localAddress(new InetSocketAddress(_myPort));
 		}
+		myBootStrap.childHandler(new ChannelInitializer<SocketChannel>() {
+			@Override
+			public void initChannel(SocketChannel ch) throws Exception {
+				ch.pipeline().addLast(_myCodec.decoder());
+				ch.pipeline().addLast(_myCodec.encoder());
+				ch.pipeline().addLast(myServerHandler);
+			}
+		});
+		_myFuture = myBootStrap.bind();
+		_myFuture.sync();
+		
+		_myIsConnected = true;
+			
+		_myFuture.channel().closeFuture().await();
 	}
 
 	public static void main(String[] args) throws Exception {
 		
-		CCTCPServer<String> myServer = new CCTCPServer<String>(new CCNetStringCodec(), 12345);
+		CCTCPServer<String> myServer = new CCTCPServer<String>(new CCNetStringCodec());
 		myServer.connect();
 	}
 

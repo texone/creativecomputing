@@ -6,6 +6,6 @@ package cc.creativecomputing.io.netty.codec.osc;
  * OSC Server.
  * 
  */
-public interface OSCPacket {
+public interface CCOSCPacket {
 	public void reset();
 }

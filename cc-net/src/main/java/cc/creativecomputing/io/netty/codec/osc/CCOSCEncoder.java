@@ -2,6 +2,10 @@ package cc.creativecomputing.io.netty.codec.osc;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -10,7 +14,12 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 @Sharable
-public class CCOSCEncoder extends MessageToByteEncoder<OSCPacket> {
+public class CCOSCEncoder extends MessageToByteEncoder<CCOSCPacket> {
+	
+	
+	private CharsetEncoder _myStringEncoder = Charset.forName("US-ASCII").newEncoder();
+	
+	public static final String MESSAGE_BUNDLE_START = "#bundle";
 
 	private static final BigDecimal MILLISECONDS_FROM_1900_TO_1970 = new BigDecimal("2208988800000");
 
@@ -42,6 +51,13 @@ public class CCOSCEncoder extends MessageToByteEncoder<OSCPacket> {
 			}
 		}
 	}
+	
+	private void writeString(String theAddress, ByteBuf theBuf){
+		try {
+			theBuf.writeBytes(_myStringEncoder.encode(CharBuffer.wrap(theAddress)).array());
+		} catch (CharacterCodingException e) {
+		}
+	}
 
 	/**
 	 * Write address.
@@ -50,8 +66,9 @@ public class CCOSCEncoder extends MessageToByteEncoder<OSCPacket> {
 	 * @param buffer
 	 */
 	private void writeAddress(String theAddress, ByteBuf theBuf) {
+		
 		// Note: We cache ALL address strings.
-		theBuf.writeBytes(OSCString.$().get(theAddress));
+		writeString(theAddress, theBuf);
 		theBuf.writeByte(ZERO);
 		pad(theBuf, PAD_BYTES);
 	}
@@ -62,26 +79,28 @@ public class CCOSCEncoder extends MessageToByteEncoder<OSCPacket> {
 	 * @param theArgument
 	 * @param theBuf
 	 */
-	public void writeType(Object theArgument, ByteBuf theBuf) {
+	private void writeType(Object theArgument, ByteBuf theBuf) {
 		if (theArgument instanceof String) {
-			theBuf.writeByte((byte) OSCDefinition.TYPE_STRING);
+			theBuf.writeByte((byte) CCOSCTypeTag.STRING.typeChar);
 		} else if (theArgument instanceof Float) {
-			theBuf.writeByte((byte) OSCDefinition.TYPE_FLOAT);
+			theBuf.writeByte((byte) CCOSCTypeTag.FLOAT.typeChar);
+		} else if (theArgument instanceof Double) {
+			theBuf.writeByte((byte) CCOSCTypeTag.DOUBLE.typeChar);
 		} else if (theArgument instanceof Integer) {
-			theBuf.writeByte((byte) OSCDefinition.TYPE_INT);
-		} else if (theArgument instanceof BigInteger) {
-			theBuf.writeByte((byte) OSCDefinition.TYPE_LONG);
+			theBuf.writeByte((byte) CCOSCTypeTag.INT.typeChar);
+		} else if (theArgument instanceof Long) {
+			theBuf.writeByte((byte) CCOSCTypeTag.LONG.typeChar);
 		} else if (theArgument instanceof byte[]) {
-			theBuf.writeByte((byte) OSCDefinition.TYPE_BLOB);
+			theBuf.writeByte((byte) CCOSCTypeTag.BLOB.typeChar);
 		} else if (theArgument instanceof Boolean) {
-			theBuf.writeByte((byte) (((Boolean) theArgument) ? OSCDefinition.TYPE_TRUE : OSCDefinition.TYPE_FALSE));
+			theBuf.writeByte((byte) (((Boolean) theArgument) ? CCOSCTypeTag.TRUE.typeChar : CCOSCTypeTag.FALSE.typeChar));
 		} else if (theArgument instanceof Object[]) {
 			Object[] arrayArguments = (Object[]) theArgument;
-			theBuf.writeByte((byte) OSCDefinition.TYPE_ARRAY_START);
+			theBuf.writeByte((byte) CCOSCTypeTag.ARRAY_START.typeChar);
 			for (Object arrayArgument : arrayArguments) {
 				writeType(arrayArgument, theBuf);
 			}
-			theBuf.writeByte((byte) OSCDefinition.TYPE_ARRAY_END);
+			theBuf.writeByte((byte) CCOSCTypeTag.ARRAY_END.typeChar);
 		}
 	}
 
@@ -119,8 +138,12 @@ public class CCOSCEncoder extends MessageToByteEncoder<OSCPacket> {
 				pad(theBuf, PAD_BYTES);
 			} else if (argument instanceof Float) {
 				theBuf.writeFloat((Float) argument);
+			} else if (argument instanceof Double) {
+				theBuf.writeDouble((Double) argument);
 			} else if (argument instanceof Integer) {
 				theBuf.writeInt((Integer) argument);
+			} else if (argument instanceof Long) {
+				theBuf.writeLong((Long) argument);
 			} else if (argument instanceof BigInteger) {
 				theBuf.writeLong(((BigInteger) argument).longValue());
 			} else if (argument instanceof byte[]) {
@@ -145,15 +168,18 @@ public class CCOSCEncoder extends MessageToByteEncoder<OSCPacket> {
 	 * @param theMessage
 	 * @param theBuf
 	 */
-	public void encode(OSCMessage theMessage, ByteBuf theBuf) {
+	public void encode(CCOSCMessage theMessage, ByteBuf theBuf) {
 		// Write address
-		writeAddress(theMessage.getAddress(), theBuf);
+		writeAddress(theMessage.address(), theBuf);
 
 		// Types
-		writeTypes(theMessage.getArguments(), theBuf);
+		writeTypes(theMessage.arguments(), theBuf);
 
 		// Arguments
-		writeArguments(theMessage.getArguments(), theBuf);
+		writeArguments(theMessage.arguments(), theBuf);
+		
+		byte[] bytes = new byte[theBuf.capacity()];
+		theBuf.getBytes(0, bytes);
 	}
 
 	/**
@@ -162,19 +188,19 @@ public class CCOSCEncoder extends MessageToByteEncoder<OSCPacket> {
 	 * @param theBundle
 	 * @param theBuf
 	 */
-	public void encode(OSCBundle theBundle, ByteBuf theBuf) {
-		theBuf.writeBytes(OSCString.$().get(OSCDefinition.MESSAGE_BUNDLE_START));
+	public void encode(CCOSCBundle theBundle, ByteBuf theBuf) {
+		writeString(MESSAGE_BUNDLE_START, theBuf);
 
 		theBuf.writeByte(ZERO);
 
 		// Time-stamp, note : java time runs from 1970 onwards.
-		long millisecs = theBundle.getTimeTag() + MILLISECONDS_FROM_1900_TO_1970.longValue();
+		long millisecs = theBundle.timeTag() + MILLISECONDS_FROM_1900_TO_1970.longValue();
 		theBuf.writeLong(millisecs);
 
 		// ---------------------------------------------------------------
 		// For each packet stuff bytes into theBuf.
 		// ---------------------------------------------------------------
-		for (OSCPacket message : theBundle.getMessages()) {
+		for (CCOSCPacket message : theBundle.messages()) {
 			// ---------------------------------------------------------------
 			// Make a note of position to write size
 			// ---------------------------------------------------------------
@@ -215,16 +241,16 @@ public class CCOSCEncoder extends MessageToByteEncoder<OSCPacket> {
 	 * @param thePacket
 	 * @param theBuf
 	 */
-	private void encode(OSCPacket thePacket, ByteBuf theBuf) {
-		if (thePacket instanceof OSCBundle) {
-			encode((OSCBundle) thePacket, theBuf);
+	private void encode(CCOSCPacket thePacket, ByteBuf theBuf) {
+		if (thePacket instanceof CCOSCBundle) {
+			encode((CCOSCBundle) thePacket, theBuf);
 		} else {
-			encode((OSCMessage) thePacket, theBuf);
+			encode((CCOSCMessage) thePacket, theBuf);
 		}
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext theCTX, OSCPacket thePacket, ByteBuf theBuf) throws Exception {
+	protected void encode(ChannelHandlerContext theCTX, CCOSCPacket thePacket, ByteBuf theBuf) throws Exception {
 		encode(thePacket, theBuf);
 	}
 }

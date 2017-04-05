@@ -1,23 +1,17 @@
 package cc.creativecomputing.io.netty.codec;
 
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
-import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.util.CharsetUtil;
-
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.util.List;
-
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.io.data.CCDataIO;
-import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 
 public class CCNetStringCodec implements CCNetCodec<String>{
 	
@@ -35,20 +29,6 @@ public class CCNetStringCodec implements CCNetCodec<String>{
 	 */
 	public CCNetStringCodec(){
 		this(CharsetUtil.UTF_8, 10000);
-	}
-	
-	private static class CCJsonDecoder extends ByteToMessageDecoder{
-		@Override
-		protected void decode(ChannelHandlerContext theContext, ByteBuf theBuf, List<Object> theObjects) throws Exception {
-			String myJsonString = theBuf.toString(CharsetUtil.UTF_8);
-			theBuf.readBytes(theBuf.readableBytes()).release();
-			try{
-				theObjects.add(CCDataIO.parseToObject(myJsonString, CCDataFormats.JSON));
-			}catch(Exception e){
-				e.printStackTrace();
-//				throw new RuntimeException(e);
-			}
-		}
 	}
 
 	@Override

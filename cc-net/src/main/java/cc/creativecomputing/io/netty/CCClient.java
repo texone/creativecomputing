@@ -1,23 +1,24 @@
+/*
+ * Copyright (c) 2017 christianr.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.html
+ * 
+ * Contributors:
+ *     christianr - initial API and implementation
+ */
 package cc.creativecomputing.io.netty;
 
-import java.util.concurrent.TimeUnit;
-
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.io.data.CCDataObject;
-import cc.creativecomputing.io.net.CCNetException;
-import cc.creativecomputing.io.net.CCNetListener;
 import cc.creativecomputing.io.net.CCNetMessage;
 import cc.creativecomputing.io.netty.codec.CCNetCodec;
 import cc.creativecomputing.io.netty.codec.CCNetDataObjectCodec;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
-import io.netty.channel.EventLoop;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
 
-public abstract class CCClient<MessageType> {
+public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 	
 	@Sharable
 	public class CCClientHandler implements ChannelInboundHandler {
@@ -35,8 +36,12 @@ public abstract class CCClient<MessageType> {
 
 		@Override
 		public void exceptionCaught(ChannelHandlerContext theCtx, Throwable cause) {
-			cause.printStackTrace();
-			theCtx.close();
+			
+//			theCtx.close();
+
+//			scheduleReconnect(theCtx.channel().eventLoop()); 
+//			throw new RuntimeException(cause);
+			
 		}
 
 		@Override
@@ -67,66 +72,30 @@ public abstract class CCClient<MessageType> {
 		@Override
 		public void userEventTriggered(ChannelHandlerContext theCtx, Object arg1) throws Exception {}
 	}
-	
-	@SuppressWarnings("rawtypes")
-	private final CCListenerManager<CCNetListener> _myEvents = CCListenerManager.create(CCNetListener.class);
-	
-	protected CCNetCodec<MessageType> _myCodec;
-	protected final int _myPort;
-	
-	protected int _myReconnectTime = 0;
-	
-	protected EventLoopGroup _myGroup;
 
-	public CCClient(CCNetCodec<MessageType> theCodec, int thePort) {
-		_myCodec = theCodec;
-		_myPort = thePort;
+	public CCClient(CCNetCodec<MessageType> theCodec, String theIP, int thePort) {
+		super(theCodec, theIP, thePort);
+	}
+	
+	public CCClient(CCNetCodec<MessageType> theCodec){
+		super(theCodec);
+	}
 
-		_myGroup = new NioEventLoopGroup();
-	}
-	
-	public void reconnectTime(int theReconnectTime){
-		_myReconnectTime = theReconnectTime;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public CCListenerManager<CCNetListener> events(){
-		return _myEvents;
-	}
-	
-	protected ChannelFuture _myFuture;
-	protected boolean _myIsConnected;
-	
-	public void scheduleReconnect(EventLoop theLoop){
-		theLoop.schedule(() -> {
-			createBootstrap();
-		}, _myReconnectTime, TimeUnit.SECONDS);
-	}
-	
-	public abstract void createBootstrap();
-
+	@Override
 	public void connect(){
-		createBootstrap();
+		try {
+			createBootstrap();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
+	@Override
 	public void write(MessageType theMessage){
+		if(!_myIsConnected)return;
 		_myFuture.channel().writeAndFlush(theMessage);
 	}
 	
-	public boolean isConnected() {
-		return _myIsConnected;
-	}
-	
-	public void close(){
-		try {
-			_myFuture.channel().closeFuture().sync();
-			_myGroup.shutdownGracefully().sync();
-			_myIsConnected = false;
-		} catch (InterruptedException e) {
-			throw new CCNetException(e);
-		}
-	}
-
 	public static void main(String[] args) throws Exception {
 		CCTCPClient<CCDataObject> myClient = new CCTCPClient<CCDataObject>(new CCNetDataObjectCodec(),"127.0.0.1", 12345);
 		myClient.connect();

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.io.net.codec.CCNetPacketCodec;
+import cc.creativecomputing.io.netty.codec.osc.CCOSCException;
 
 
 /**
@@ -411,6 +412,7 @@ public class CCOSCPacketCodec implements CCNetPacketCodec<CCOSCPacket>{
 
 		if (b.get() != 0x2C)
 			throw new CCOSCException("Illegal OSC Message Format");
+		
 		b2 = b.slice(); // faster to slice than to reposition all the time!
 		pos1 = b.position();
 		// b2.position( pos1 );

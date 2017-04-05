@@ -9,16 +9,20 @@ import java.util.List;
  * 64-bit fixed point time tag.
  * 
  */
-public class OSCBundle implements OSCPacket {
-
+public class CCOSCBundle implements CCOSCPacket {
+	/**
+	 * This is the initial string of an OSC bundle datagram
+	 */
+	public static final String TAG = "#bundle";
+	
 	private long _myTimeTag;
-	private List<OSCPacket> _myMessages;
+	private List<CCOSCPacket> _myMessages;
 
 	/**
 	 * Construct bundle.
 	 * 
 	 */
-	public OSCBundle() {
+	public CCOSCBundle() {
 		_myTimeTag = 0;
 		_myMessages = new ArrayList<>();
 	}
@@ -28,26 +32,26 @@ public class OSCBundle implements OSCPacket {
 	 * 
 	 * @return milliseconds in normal java time.
 	 */
-	public long getTimeTag() {
+	public long timeTag() {
 		return _myTimeTag;
 	}
 
 	/**
 	 * Set time tag as milliseconds in normal java time.
 	 * 
-	 * @param timeTag
+	 * @param theTimeTag
 	 */
-	public void setTimeTag(long timeTag) {
-		this._myTimeTag = timeTag;
+	public void timeTag(long theTimeTag) {
+		_myTimeTag = theTimeTag;
 	}
 
 	/**
 	 * Add message to bundle.
 	 * 
-	 * @param message
+	 * @param theMessage
 	 */
-	public void addMessage(OSCMessage message) {
-		_myMessages.add(message);
+	public void addMessage(CCOSCPacket theMessage) {
+		_myMessages.add(theMessage);
 	}
 
 	/**
@@ -55,7 +59,7 @@ public class OSCBundle implements OSCPacket {
 	 * 
 	 * @return
 	 */
-	public List<OSCPacket> getMessages() {
+	public List<CCOSCPacket> messages() {
 		return _myMessages;
 	}
 
@@ -66,7 +70,7 @@ public class OSCBundle implements OSCPacket {
 	public void reset() {
 		_myTimeTag = 0;
 
-		for (OSCPacket message : _myMessages) {
+		for (CCOSCPacket message : _myMessages) {
 			message.reset();
 		}
 

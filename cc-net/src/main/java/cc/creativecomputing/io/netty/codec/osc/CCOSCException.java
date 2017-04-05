@@ -8,7 +8,7 @@
  * Contributors:
  *     christianr - initial API and implementation
  */
-package cc.creativecomputing.io.net.codec.osc;
+package cc.creativecomputing.io.netty.codec.osc;
 
 
 /**

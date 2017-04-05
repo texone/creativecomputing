@@ -13,6 +13,8 @@ package cc.creativecomputing.io.net.codec.osc;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
+import cc.creativecomputing.io.netty.codec.osc.CCOSCException;
+
 class CCOSCStringAtom extends CCOSCAtom<String> {
 
 	private String _myCharSet;
