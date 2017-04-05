@@ -15,7 +15,7 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	
 	private boolean _myIsNumberBox = false;
 
-	protected CCNumberPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember, CCDoubleConverter<Type> theToType) {
+	public CCNumberPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember, CCDoubleConverter<Type> theToType) {
 		super(theParent, theMember);
 		_myToType = theToType;
 		_myMin = theMember.annotation() == null ? _myToType.toType(-1) : _myToType.toType(theMember.annotation().min());

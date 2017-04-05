@@ -57,6 +57,10 @@ public class CCReflectionUtil {
 			_myMember = theMember;
 		}
 		
+		protected CCMember(){
+			
+		}
+		
 		public Type annotation(){
 			return _myAnnotation;
 		}
@@ -75,6 +79,42 @@ public class CCReflectionUtil {
 		public abstract void value(Object theObject);
 		
 		public abstract Class<?> type();
+	}
+	
+	public static class CCDirectMember<Type extends Annotation> extends CCMember<Type> {
+		
+		public CCDirectMember(Type theAnnotation) {
+			_myAnnotation = theAnnotation;
+		}
+		
+		public CCDirectMember(Object theValue, Type theAnnotation) {
+			_myValue = theValue;
+			_myAnnotation = theAnnotation;
+		}
+
+		private Object _myValue;
+		
+		@Override
+		public Type annotation(){
+			return _myAnnotation;
+		}
+
+		@Override
+		public Object value() {
+			return _myValue;
+		}
+
+		@Override
+		public void value(Object theObject) {
+			_myValue = theObject;
+		}
+
+		@Override
+		public Class<?> type() {
+			if(_myValue == null) return null;
+			return _myValue.getClass();
+		}
+		
 	}
 	
 	public static class CCField<Type extends Annotation> extends CCMember<Type> {
@@ -473,6 +513,13 @@ public class CCReflectionUtil {
 			theTestClass = theTestClass.getSuperclass();
 		}
 		
+		return false;
+	}
+	
+	public static boolean implementsInterface(Class<?> theTestClass, Class<?> theInterface){
+		for(Class<?> myInterface : theTestClass.getInterfaces()){
+			if(myInterface == theInterface)return true;
+		}
 		return false;
 	}
 }

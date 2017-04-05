@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
@@ -23,16 +22,18 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 
 /**
- * 
+ * check http://stackoverflow.com/questions/12173294/compile-code-fully-in-memory-with-javax-tools-javacompiler
  * @author maxg, christian riekoff
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class CCRealtimeCompile<CompileType extends CCCompileObject> {
+public class CCRealtimeCompile<CompileType> {
 
 	private static class CCJavaFileObject extends SimpleJavaFileObject {
 
@@ -45,6 +46,7 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 			super(theTarget.toUri(), kind);
 			
 			_mySource = CCNIOUtil.loadString(theTarget);
+			CCLog.info(_mySource);
 			_myOutputStream = new ByteArrayOutputStream();
 		}
 
@@ -77,8 +79,9 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 		}
 	}
 
-	private List<CompileType> _myInstances = new ArrayList<>();
-	private List<CCCompileParameters> _myParameters = new ArrayList<>();
+	@CCProperty(name = "instance")
+	private CompileType _myInstance;// = new ArrayList<>();
+	private CCCompileParameters _myParameters;
 
 	private String _mySource = null;
 
@@ -104,8 +107,8 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 		_myClassName = theClassPath.substring(theClassPath.lastIndexOf(".") + 1);
 		_myBaseClass = theBaseClass;
 		
-		_mySourcePath = Paths.get("realtimeCode", _myPackage.split("\\.")).resolve(_myClassName + ".java");
-		_myTargetPath = _mySourcePath.getParent();
+		_mySourcePath = Paths.get("src/main/java", _myPackage.split("\\.")).resolve(_myClassName + ".java");
+		_myTargetPath = Paths.get("compile");
 		CCNIOUtil.createDirectories(_myTargetPath);
 		
 		try {
@@ -137,97 +140,15 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 		return _myClassName;
 	}
 	
-	private void appendImport(StringBuffer theBuffer, Class<?> theClass){
-		if(theClass == null)return;
-		if(theClass.isPrimitive())return;
-		
-		if(theClass.isArray()){
-			theBuffer.append("import " + theClass.getComponentType().getName().replaceAll("\\$", ".") + ";\n");
-		}else{
-			theBuffer.append("import " + theClass.getName().replaceAll("\\$", ".") + ";\n");
-		}
-	}
 	
-	private void appendReturn(StringBuffer theBuffer, Class<?> theClass){
-		if(theClass != null){
-			if(!theClass.isPrimitive()){
-				theBuffer.append("\t\treturn null;\n");
-			}else if(theClass == Float.TYPE){
-				theBuffer.append("\t\treturn 0f;\n");
-			}else if(theClass == Double.TYPE){
-				theBuffer.append("\t\treturn 0.0;\n");
-			}else if(theClass == Integer.TYPE){
-				theBuffer.append("\t\treturn 0;\n");
-			}else if(theClass == Long.TYPE){
-				theBuffer.append("\t\treturn 0;\n");
-			}else if(theClass == Short.TYPE){
-				theBuffer.append("\t\treturn 0;\n");
-			}else if(theClass == Boolean.TYPE){
-				theBuffer.append("\t\treturn false;\n");
-			}
-		}else{
-			theBuffer.append("\t\t\n");
-		}
-	}
 	
-	public String codeTemplate(){
-		StringBuffer myTemplateBuffer = new StringBuffer();
-		myTemplateBuffer.append("package " + _myPackage + ";\n");
-		myTemplateBuffer.append("\n");
-		
-		StringBuffer myImportBuffer = new StringBuffer();
-		myImportBuffer.append("import " + _myBaseClass.getName().replaceAll("\\$", ".") + ";\n");
-		
-		StringBuffer myCodeBuffer = new StringBuffer();
-		if(_myBaseClass.isInterface()){
-			myCodeBuffer.append("public class " + _myClassName + " implements " + _myBaseClass.getSimpleName() +"{");
-			myCodeBuffer.append("\n");
-			myCodeBuffer.append("\n");
-			
-			for(Method myMethod:_myBaseClass.getMethods()){
-				
-				myCodeBuffer.append("\tpublic ");
-				if(myMethod.getReturnType() != null){
-					myCodeBuffer.append(myMethod.getReturnType().getSimpleName());
-				}else{
-					myCodeBuffer.append("void");
-				}
-				myCodeBuffer.append(" " + myMethod.getName()+"(");
-				for(Class<?> theClass:myMethod.getParameterTypes()){
-					myCodeBuffer.append(theClass.getSimpleName() + " the" + theClass.getSimpleName()+", ");
-					appendImport(myImportBuffer, theClass);
-				}
-				appendImport(myImportBuffer, myMethod.getReturnType());
-				
-				if(myMethod.getParameterTypes().length > 0)myCodeBuffer.delete(myCodeBuffer.length() - 2, myCodeBuffer.length());
-				myCodeBuffer.append("){\n");
-				
-				appendReturn(myCodeBuffer, myMethod.getReturnType());
-				
-				myCodeBuffer.append("\t}\n");
-				myCodeBuffer.append("\n");
-			}
-			myCodeBuffer.append("\n");
-		}else{
-			myCodeBuffer.append("public class " + _myClassName + " extends " + _myBaseClass.getSimpleName() +"{");
-		}
-		myCodeBuffer.append("");
-		myCodeBuffer.append("}");
-		
-		myTemplateBuffer.append(myImportBuffer);
-
-		myTemplateBuffer.append("\n");
-		
-		myTemplateBuffer.append(myCodeBuffer);
-		
-		return myTemplateBuffer.toString();
-	}
+	
 
 	// check file change in seperate thread, recompile in main thread
 	public boolean hasCodeUpdate() {
 		try{
 			String mySource = CCNIOUtil.loadString(_mySourcePath);
-	
+			
 			boolean myResult = !mySource.equals(_mySource) || _mySource == null;
 			
 			_mySource = mySource;
@@ -239,20 +160,16 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 		}
 	}
 	
-	public List<CompileType> instances(){
-		return _myInstances;
-	}
+	
 	
 	public CompileType instance(){
-		if(_myInstances.size() <= 0)return null;
-		return _myInstances.get(0);
+		return _myInstance;
 	}
 	
 	public CompileType createObject(Object...theParameters){
-		CompileType myResult = createObjectOnCompiledClass(theParameters);
-		_myInstances.add(myResult);
-		_myParameters.add(new CCCompileParameters(myResult, theParameters));
-		return myResult;
+		_myInstance = createObjectOnCompiledClass(theParameters);
+		_myParameters = new CCCompileParameters(_myInstance, theParameters);
+		return _myInstance;
 	}
 	
 	private CompileType createObjectOnCompiledClass(Object...theParameters){
@@ -263,16 +180,16 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 		for(Constructor<?> myConstructor : _myCompiledClass.getConstructors()){
 			try{
 				CompileType myResult = (CompileType)myConstructor.newInstance(theParameters);
-				myResult.onRecompile();
 				return myResult;
 			}catch(Exception e){
+				e.printStackTrace();
 			}
 		}
 		try{
 			CompileType myInstance = (CompileType)_myCompiledClass.newInstance();
-			myInstance.onRecompile();
 			return myInstance;
 		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -283,12 +200,8 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 		}
 		return createObjectOnCompiledClass(theParameters._myParameters);
 	}
-	
-	public void removeObject(Object theObject){
-		_myInstances.remove(theObject);
-	}
 
-	private Class<?> recompile() {
+	public Class<?> recompile() {
 		try {
 			// prepare compiler
 
@@ -307,9 +220,11 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 			_myDiagnostics.addAll(diagnostics.getDiagnostics());
 			
 			_myEvents.proxy().onRecompile(this);
-
+			CCLog.info(_myTargetPath);
 			URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { _myTargetPath.toUri().toURL() });
-			return Class.forName(_myClassPath, false, classLoader);
+			_myCompiledClass = classLoader.loadClass(_myClassPath);
+			CCLog.info(_myCompiledClass.getResource(""));
+			return _myCompiledClass;
 		}catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -328,12 +243,10 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 		_mySource = theSource;
 		CCNIOUtil.saveString(_mySourcePath, _mySource);
 		_myCompiledClass = recompile();
-		List<CompileType> myNewInstances = new ArrayList<>();
-		for (CCCompileParameters myOldInstance : _myParameters) {
-			myOldInstance._myType = createObjectOnCompiledClass(myOldInstance);
-			myNewInstances.add(myOldInstance._myType);
-		}
-		_myInstances = myNewInstances;
+			_myParameters._myType = createObjectOnCompiledClass(_myParameters);
+			_myInstance = _myParameters._myType;
+		
+//		_myInstances = myNewInstances;
 		recompile();
 		
 	}
@@ -346,7 +259,10 @@ public class CCRealtimeCompile<CompileType extends CCCompileObject> {
 	
 	public static void main(String[] args) {
 		CCRealtimeCompile<CCTest> myCompile = new CCRealtimeCompile<CCRealtimeCompile.CCTest>("de.test.TestImp", CCTest.class);
-		
-		System.out.println(myCompile.codeTemplate());
+	}
+
+	public String codeTemplate() {
+		// TODO Auto-generated method stub
+		return new CCTemplateGenerator().codeTemplate(_myBaseClass, _myClassPath);
 	}
 }

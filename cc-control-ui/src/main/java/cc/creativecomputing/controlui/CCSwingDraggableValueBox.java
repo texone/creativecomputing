@@ -1,5 +1,7 @@
 package cc.creativecomputing.controlui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -8,8 +10,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import cc.creativecomputing.controlui.timeline.view.SwingCurvePanel;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.math.CCMath;
@@ -41,6 +47,7 @@ public class CCSwingDraggableValueBox extends JTextField implements MouseListene
 	public CCSwingDraggableValueBox(double theValue, double theMin, double theMax, double theStepSize){
 		_myMin = theMin;
 		_myMax = theMax;
+		value(theValue);
 		_myStepSize = theStepSize;
 		setEditable(true);
 		setHorizontalAlignment(JTextField.RIGHT);
@@ -138,4 +145,15 @@ public class CCSwingDraggableValueBox extends JTextField implements MouseListene
 
 	@Override
 	public void mouseExited(MouseEvent e) {}
+	
+	public static void main(String[] args) {
+		JFrame myFrame = new JFrame("test value box");
+
+		myFrame.getContentPane().setLayout(new BorderLayout());
+		myFrame.getContentPane().add(new CCSwingDraggableValueBox(0.5, 0.0, 1.0, 0.1), BorderLayout.CENTER);
+
+		myFrame.pack();
+
+		myFrame.setVisible(true);
+	}
 }

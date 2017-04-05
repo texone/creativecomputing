@@ -53,6 +53,8 @@ public class CCControlApp  {
 	
 	@CCProperty(name = "animator")
 	private CCAnimator _myAnimator;
+	@CCProperty(name = "update timeline")
+	private boolean _cUpdate = true;
 	
 	public static Preferences preferences;
 	
@@ -131,9 +133,19 @@ public class CCControlApp  {
 	}
 	
 	public void update(double theDeltaTime){
+		if(!_cUpdate)return;
 		try{
 			_myControlComponent.timeline().update(theDeltaTime);
 			_myControlComponent.propertyMap().rootHandle().update(theDeltaTime);
+		}catch(Exception e){
+			
+		}
+	}
+	
+	public void time(double theTime){
+		try{
+			_myControlComponent.timeline().time(theTime);
+			_myControlComponent.propertyMap().rootHandle().update(0);
 		}catch(Exception e){
 			
 		}

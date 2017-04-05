@@ -37,6 +37,8 @@ public class CCShaderObject {
 	public CCShaderObject(CCShaderObjectInterface theInterface){
 		_myInterface = theInterface;
 	}
+
+	
 	
 	public void sourceCode(String theSource){
 		_myInterface.sourceCode(theSource);

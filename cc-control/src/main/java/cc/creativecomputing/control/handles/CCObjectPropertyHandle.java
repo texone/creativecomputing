@@ -13,9 +13,13 @@ import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
+import cc.creativecomputing.control.code.CCRuntimeCompilable;
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.CCPropertyObject;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
+import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCField;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMapEntry;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
@@ -107,19 +111,20 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	
 	private Object _myRootObject = null;
 	
-	private final Path _myPresetPath;
+	private Path _myPresetPath;
 	
 	private String _myPreset = null;
 	
-	private final String _mySettingsPath;
+	private String _mySettingsPath = "";
 
 	protected CCObjectPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember, String theSettingsPath) {
 		super(theParent, theMember);
 		_mySettingsPath = theSettingsPath;
 		if(theMember instanceof CCMethod){
 			_myChildHandles = linkMethod((CCMethod)theMember);
+		}else if (theMember instanceof CCDirectMember){
 		}else{
-			_myChildHandles = link(theMember.value());
+			_myChildHandles = link(_myMember.value());
 		}
 		_myPresetPath = createPresetPath();
 	}
@@ -132,12 +137,16 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		_myPresetPath = createPresetPath();
 	}
 	
+	public CCObjectPropertyHandle(CCMember<CCProperty> theMember){
+		super(null, theMember);
+		theMember.value(this);
+	}
+	
 	public CCPropertyHandle<?> property(Path thePath, int theStart){
 		Path myName = thePath.getName(theStart);
 		
 		CCPropertyHandle<?> myProperty = _myChildHandles.get(myName.toString());
 		if(thePath.getNameCount() == theStart + 1){
-			
 			return myProperty;
 		}
 		
@@ -147,6 +156,31 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		
 		CCObjectPropertyHandle myChild = (CCObjectPropertyHandle)myProperty;
 		return myChild.property(thePath, theStart + 1);
+	}
+	
+	public CCPropertyHandle<?> createProperty(Path thePath, Class<?> theClass, CCPropertyObject thePropertyObject){
+		CCObjectPropertyHandle myPropertyParent = this;
+		for(int i = 0; i < thePath.getNameCount() - 1;i++){
+			String myName = thePath.getName(i).toString();
+			if(myPropertyParent._myChildHandles.containsKey(myName)){
+				CCLog.info("CONTAINS:" + myName);
+				CCPropertyHandle<?> myProperty =  myPropertyParent._myChildHandles.get(myName);
+				if(myProperty instanceof CCObjectPropertyHandle){
+					myPropertyParent = (CCObjectPropertyHandle)myProperty;
+					continue;
+				}else{
+					throw new RuntimeException(thePath + " can not be created " + myName + " is not an object property");
+				}
+			}else{
+				CCLog.info("CONTAINS NOT:" + myName);
+				CCObjectPropertyHandle myProperty = new CCObjectPropertyHandle(myPropertyParent, new CCDirectMember(new Object(), new CCPropertyObject(myName)), _mySettingsPath);
+				myPropertyParent._myChildHandles.put(myName, myProperty);
+				myPropertyParent = myProperty;
+			}
+		}
+		CCPropertyHandle<?>myProperty = creatorMap.get(theClass).create(myPropertyParent, new CCDirectMember(new Double(0), thePropertyObject));
+		myPropertyParent._myChildHandles.put(thePath.getFileName().toString(), myProperty);
+		return myProperty;
 	}
 	
 	public CCPropertyHandle<?> property(String theID){
@@ -166,13 +200,16 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		if(_myMember instanceof CCMethod){
 			return Object.class;
 		}
+		if(_myMember == null){
+			return Object.class;
+		}
 		return super.type();
 	}
 	
 	private Path createPresetPath(){
 		Path myPresetPath = CCNIOUtil.dataPath(_mySettingsPath);
 			
-		String[] myTypeParts = type().getName().split("\\.");
+		String[] myTypeParts = type() == null ? new String[]{name()} : type().getName().split("\\.");
 		for(String myPart:myTypeParts){
 			myPresetPath = myPresetPath.resolve(Paths.get(myPart));
 		}
@@ -211,16 +248,26 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(CCField<CCProperty> myField:myFields){
 			Class<?> myClass = myField.type();
 			CCPropertyHandle myProperty = null;
+			
 			if(creatorMap.containsKey(myClass)){
 				myProperty = creatorMap.get(myClass).create(this, myField);
 			}else  if(myClass.isEnum()){
 				myProperty = new CCEnumPropertyHandle(this, myField);
+			}else if(myField.value() instanceof CCObjectPropertyHandle){
+				CCObjectPropertyHandle myObjectPropertyHandle = (CCObjectPropertyHandle)myField.value();
+				myObjectPropertyHandle._mySettingsPath = _mySettingsPath;
+				myObjectPropertyHandle._myParent = this;
+				myProperty = myObjectPropertyHandle;
+				
 			}else{
-				if(myField.value() == null)continue;
-				if(myField.value() instanceof Map && ((Map)myField.value()).size() <= 0){
+				if(CCReflectionUtil.implementsInterface(myClass, CCRuntimeCompilable.class)){
+					myProperty = new CCRuntimeCompileHandle(this, myField);
+					
+				}else if(myField.value() == null){
 					continue;
-				}
-				if(myField.annotation().hide()){
+				}else if(myField.value() instanceof Map && ((Map)myField.value()).size() <= 0){
+					continue;
+				}else if(myField.annotation().hide()){
 					Map<String,CCPropertyHandle> myHandles = link(myField.value());
 					for(String myKey:myHandles.keySet()){
 						myResult.put(myKey, myHandles.get(myKey));
@@ -384,7 +431,18 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	}
 	
 	@Override
+	public void onChange() {
+		_myChildHandles = link(_myMember.value());
+		super.onChange();
+	}
+	
+	public void forceChange() {
+		super.onChange();
+	}
+	
+	@Override
 	public void update(double theDeltaTime) {
+		super.update(theDeltaTime);
 		for(CCPropertyHandle<?> myHandle:_myChildHandles.values()){
 			myHandle.update(theDeltaTime);
 		}
