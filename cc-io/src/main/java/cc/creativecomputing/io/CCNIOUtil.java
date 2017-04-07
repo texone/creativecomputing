@@ -13,10 +13,13 @@ package cc.creativecomputing.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -25,11 +28,18 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.swing.JFileChooser;
+
+import com.sun.nio.zipfs.ZipFileSystemProvider;
 
 import cc.creativecomputing.core.CCSystem;
 import cc.creativecomputing.core.CCSystem.CCOS;
@@ -97,7 +107,7 @@ public class CCNIOUtil {
 
 		return Paths.get(thePath);
 	}
-
+	
 	/**
 	 * Returns the path to a resource based on the given class, this looks for files in the package
 	 * of the given class and allows to place files that are needed to work with the code for example
@@ -108,13 +118,33 @@ public class CCNIOUtil {
 	 * @return path based on the given class
 	 */
 	static public Path classPath(Class<?> theClass, String thePath) {
+		
 		URL myResult = theClass.getResource(thePath);
 		if(myResult == null) {
 			throw new CCIOException("The given Resource is not available:" + theClass.getResource("") + thePath);
 		}
-		String myPath = myResult.getPath().replaceAll("%20", " ");
+		String myPath = myResult.getPath();
+		myPath = myPath.replaceAll("file:", "");
 		if(CCSystem.os == CCOS.WINDOWS)if(myPath.startsWith("/"))myPath = myPath.substring(1);
+		
+		if(myPath.contains(".jar!")){
+			Path myJarPath = Paths.get(myPath.substring(0, myPath.indexOf(".jar!")+4));
+			String myFilePart = myPath.substring(myPath.indexOf(".jar!")+5);
+			
+			try {
+				Path path = File.createTempFile(myFilePart, "tmp").toPath();
+				Files.copy(theClass.getResourceAsStream(thePath), path, StandardCopyOption.REPLACE_EXISTING);
+				return path;
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+
+		myPath = myPath.replaceAll("%20", " ");
 		return Paths.get(myPath);
+
 	}
 	
 	/**
