@@ -7,7 +7,7 @@
     
     <name>creativecomputing</name>
     <description>A free, open source 3D graphics engine written in Java</description>
-    <url>https://code.google.com/p/creativecomputing/</url>
+    <url>https://github.com/texone/creativecomputing/</url>
     <inceptionYear>2008</inceptionYear>
 	
     <licenses>
@@ -20,9 +20,9 @@
 	
     <developers>
         <developer>
-            <id></id>
-            <name></name>
-            <email></email>
+            <id>texone</id>
+            <name>christian riekoff</name>
+            <email>christian@riekoff.com</email>
         </developer>
     </developers>
     
@@ -50,6 +50,7 @@
         <module>cc-demo</module>
         <module>cc-modbus</module>
         <module>cc-simulation</module>
+        <module>cc-ies</module>
 <!--
 
         <module>cc-kinect</module>
@@ -192,41 +193,10 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>14.0.1</version>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.12</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.easymock</groupId>
-                <artifactId>easymockclassextension</artifactId>
-                <version>2.4</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jdom</groupId>
-                <artifactId>jdom2</artifactId>
-                <version>2.0.4</version>
-            </dependency>
-            <dependency>
-                <groupId>jaxen</groupId>
-                <artifactId>jaxen</artifactId>
-                <version>1.1.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.swt</groupId>
-                <artifactId>swt</artifactId>
-                <version>${swt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.osgi.core</artifactId>
-                <version>1.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -291,7 +261,6 @@
                 <NATIVE_LIB_CLASSIFIER>windows-amd64</NATIVE_LIB_CLASSIFIER>
             </properties>
         </profile>
-        
         <!-- override profile if -Dbuild.platform is set -->
         <profile>
             <id>linux32</id>
@@ -353,35 +322,6 @@
                 <NATIVE_LIB_CLASSIFIER>windows-amd64</NATIVE_LIB_CLASSIFIER>
             </properties>
         </profile>
-        
-        <!-- This profile activated by specifying -Phudson on command line -->
-        <profile>
-            <id>hudson</id>
-		    <distributionManagement>
-		        <repository>
-		            <id>Ardor3D-releases</id>
-		            <name>Ardor3D releases</name>
-		            <url>http://ardor3d.com:8081/nexus/content/repositories/releases</url>
-		        </repository>
-		        <snapshotRepository>
-		            <id>Ardor3D-snapshots</id>
-		            <name>Ardor3D snapshots</name>
-		            <url>http://ardor3d.com:8081/nexus/content/repositories/snapshots</url>
-		        </snapshotRepository>
-		    </distributionManagement>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <showDeprecation>true</showDeprecation>
-                            <showWarnings>true</showWarnings>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
     
     <!-- this section specifies dependencies that are inherited by all sub-modules -->
@@ -390,29 +330,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymockclassextension</artifactId>
-        </dependency>
     </dependencies>
 
     <repositories>
       <repository>
         <id>jogamp</id>
         <url>http://jogamp.org/deployment/maven</url>
-      </repository>
-      <repository>
-        <id>purejavacomm</id>
-        <url>http://www.sparetimelabs.com/maven2/</url>
-      </repository>
-      <repository>
-        <id>creativecomputing-builds.googlecode.com</id>
-        <url>http://creativecomputing-builds.googlecode.com/svn/m2/releases</url>
-      </repository>
-      <repository>
-        <id>dep.creativecomputing-builds.googlecode.com</id>
-        <url>http://creativecomputing-builds.googlecode.com/svn/m2/dependencies</url>
       </repository>
     </repositories>  
     
