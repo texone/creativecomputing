@@ -517,9 +517,12 @@ public class CCReflectionUtil {
 	}
 	
 	public static boolean implementsInterface(Class<?> theTestClass, Class<?> theInterface){
+		if(theTestClass == Object.class)return false;
+		if(theTestClass == null)return false;
+		
 		for(Class<?> myInterface : theTestClass.getInterfaces()){
 			if(myInterface == theInterface)return true;
 		}
-		return false;
+		return implementsInterface(theTestClass.getSuperclass(), theInterface);
 	}
 }
