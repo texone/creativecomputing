@@ -11,6 +11,7 @@
 package cc.creativecomputing.math.filter;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -23,7 +24,7 @@ public class CCExponentialSmoothingFilter extends CCFilter{
 	protected double _cWeight;
 		
 	@CCProperty(name = "skip range", min = 0, max = 50)
-	protected double _cSkipRange = Double.MAX_VALUE;
+	protected double _cSkipRange = 0;
 	
 	public CCExponentialSmoothingFilter(int theChannels) {
 		_myChannels = theChannels;
@@ -39,8 +40,8 @@ public class CCExponentialSmoothingFilter extends CCFilter{
 	
 	@Override
 	public double process(int theChannel, double theData, double theTime) {
-		if(theChannel >= _myChannels){
-			_myChannels = theChannel;
+		if(theChannel >= _myChannels || _myValues.length < _myChannels){
+			_myChannels = theChannel + 1;
 			_myValues = new double[_myChannels];
 		}
 		if(_myValues[theChannel] == 0) {
