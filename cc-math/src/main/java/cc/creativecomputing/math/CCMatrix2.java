@@ -37,6 +37,18 @@ public class CCMatrix2 {
 		_myData[theColumn][theRow][theDepth] = theValue;
 	}
 	
+	public CCMatrix2 clone(){
+		CCMatrix2 myResult = new CCMatrix2(_myColumns, _myRows, _myDepth);
+		for (int c = 0; c < _myColumns; c++) {
+			for (int r = 0; r < _myRows; r++) {
+				for (int d = 0; d < _myDepth; d++) {
+					myResult._myData[c][r][d] = _myData[c][r][d];
+				}
+			}
+		}
+		return myResult;
+	}
+	
 	public double[][][] data(){
 		return _myData;
 	}
@@ -53,17 +65,37 @@ public class CCMatrix2 {
 		return _myDepth;
 	}
 	
-	public CCVector2 minMax(){
-		CCVector2 myMinMax = new CCVector2(Double.MAX_VALUE,-Double.MAX_VALUE);
+	public CCVector2 minMax(CCVector2 theStore){
+		if(theStore == null)theStore = new CCVector2(Double.MAX_VALUE,-Double.MAX_VALUE);
+		
 		for (int c = 0; c < _myColumns; c++) {
 			for (int r = 0; r < _myRows; r++) {
 				for (int d = 0; d < _myDepth; d++) {
-					myMinMax.x = CCMath.min(myMinMax.x, _myData[c][r][d]);
-					myMinMax.y = CCMath.max(myMinMax.y, _myData[c][r][d]);
+					theStore.x = CCMath.min(theStore.x, _myData[c][r][d]);
+					theStore.y = CCMath.max(theStore.y, _myData[c][r][d]);
 				}
 			}
 		}
-		return myMinMax;
+		return theStore;
+	}
+	
+	public CCVector2 minMax(){
+		return minMax(null);
+	}
+	
+	public void normalize(CCVector2 theMinMax){
+		if(theMinMax == null)theMinMax = minMax();
+		for (int c = 0; c < _myColumns; c++) {
+			for (int r = 0; r < _myRows; r++) {
+				for (int d = 0; d < _myDepth; d++) {
+					 _myData[c][r][d] = CCMath.norm( _myData[c][r][d], theMinMax.x, theMinMax.y);
+				}
+			}
+		}
+	}
+	
+	public void normalize(){
+		normalize(null);
 	}
 	
 	public CCVector2 minMax(int d){
