@@ -93,11 +93,17 @@ public class BezierControlPoint extends ControlPoint {
 		return myResult[i];
 	}
 	
-	private double bezierValue(double theValue1, double theValue2, double theValue3, double theValue4, double theBlend) {
+	private double bezierValue(double theValue0, double theValue1, double theValue2, double theValue3, double theBlend) {
+		double a = -theValue0 + 3 * theValue1 - 3 * theValue2 + theValue3;
+		double b = 3 * theValue0 - 6 * theValue1 + 3 * theValue2;
+		double c = -3 * theValue0 + 3 * theValue1;
+		double d = theValue0;
+		
 		return 
-		(-theValue1 + 3 * theValue2 - 3 * theValue3 + theValue4) * theBlend * theBlend * theBlend + 
-		(3 * theValue1 - 6 * theValue2 + 3 * theValue3) * theBlend * theBlend	+ 
-		(-3 * theValue1 + 3 * theValue2) * theBlend + theValue1;
+		a * theBlend * theBlend * theBlend + 
+		b * theBlend * theBlend	+ 
+		c * theBlend + 
+		d;
 	}
 
 	public double sampleBezierSegment(ControlPoint p0, ControlPoint p1, ControlPoint p2, ControlPoint p3, double theTime) {

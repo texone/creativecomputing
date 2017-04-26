@@ -8,57 +8,58 @@ import javax.swing.JProgressBar;
 
 import cc.creativecomputing.core.util.CCFormatUtil;
 
-public class CCProgressWindow extends JFrame{
-	
+public class CCProgressWindow extends JFrame {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4436530082291804538L;
-	private JLabel jl;
-	private JProgressBar dpb ;
+	private JLabel _myLabel;
+	private JProgressBar _myProgressBar;
 
-	public CCProgressWindow(){
+	public CCProgressWindow() {
 		super();
-	    setSize(500, 150);
-	    jl = new JLabel();
-	    jl.setText("Count : 0");
+		setSize(500, 150);
+		_myLabel = new JLabel();
+		_myLabel.setText("Count : 0");
 
-	    add(BorderLayout.NORTH, jl);
-	    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		add(BorderLayout.NORTH, _myLabel);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-
-	    dpb = new JProgressBar(0, 500);
-	    add(BorderLayout.SOUTH, dpb);
-	    add(BorderLayout.CENTER, new JLabel("Progress..."));
+		_myProgressBar = new JProgressBar(0, 500);
+		add(BorderLayout.SOUTH, _myProgressBar);
+		add(BorderLayout.CENTER, new JLabel("Progress..."));
 	}
-	
-	public void progress(double theProgress){
-	   if(!isVisible()) setVisible(true);
-		jl.setText("Progress : " + CCFormatUtil.ndc(theProgress * 100, 2) + " %");
-		dpb.setValue((int)(theProgress * 500));
-		 if(dpb.getValue() == 500){
-//		        System.exit(0);
-		        
-		      }
+
+	public void progress(double theProgress) {
+		if (!isVisible())
+			setVisible(true);
+		
+		try {
+			_myLabel.setText("Progress : " + CCFormatUtil.ndc(theProgress * 100, 2) + " %");
+			_myProgressBar.setValue((int) (theProgress * 500));
+		} catch (Exception e) {
+
+		}
 	}
-	
+
 	public static void main(String[] args) {
 		CCProgressWindow myWindow = new CCProgressWindow();
-		
+
 		Thread t = new Thread(new Runnable() {
-		      public void run() {
-		    	  myWindow.setVisible(true);
-		      }
-		    });
-		    t.start();
-		    for (int i = 0; i <= 500; i++) {
-		    	myWindow.progress(i / 500f);
-		      
-		      try {
-		        Thread.sleep(25);
-		      } catch (InterruptedException e) {
-		        e.printStackTrace();
-		      }
-		    }
+			public void run() {
+				myWindow.setVisible(true);
+			}
+		});
+		t.start();
+		for (int i = 0; i <= 500; i++) {
+			myWindow.progress(i / 500f);
+
+			try {
+				Thread.sleep(25);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -139,6 +139,7 @@ public class CCRuntimeCompiler implements Closeable {
 			return new SimpleJavaFileObject(URI.create(theClassName), theKind) {
 
 				public OutputStream openOutputStream() {
+					CCLog.info(theClassName);
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					_myBuffers.put(theClassName, baos);
 					return baos;
@@ -286,8 +287,12 @@ public class CCRuntimeCompiler implements Closeable {
 				String myClassName = myEntry.getKey();
 				
 				byte[] myBytes = myEntry.getValue();
-
-				defineClass(myClassLoader, myBytes);
+				CCLog.info(myClassName);
+				if(!myClassName.equals(_myClassName)){
+					
+				}else{
+					defineClass(myClassLoader, myBytes);
+				}
 				
 			}
 			try{
