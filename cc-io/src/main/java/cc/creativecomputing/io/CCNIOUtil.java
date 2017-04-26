@@ -11,6 +11,7 @@
 package cc.creativecomputing.io;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -168,6 +169,15 @@ public class CCNIOUtil {
 		try {
 			Files.createDirectories(thePath, theAttributes);
 		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static BufferedWriter createWriter(Path thePath, FileAttribute<?>...theAttributes){
+		try{
+			createDirectories(thePath, theAttributes);
+			return Files.newBufferedWriter(thePath);
+		}catch (IOException e){
 			throw new RuntimeException(e);
 		}
 	}
