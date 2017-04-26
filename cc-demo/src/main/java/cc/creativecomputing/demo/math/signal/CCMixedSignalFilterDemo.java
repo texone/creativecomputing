@@ -62,13 +62,13 @@ public class CCMixedSignalFilterDemo extends CCGL2Adapter{
 		}
 	}
 	
-	@CCProperty(name = "real time filter")
-	private CCRealtimeCompile<CCRealtimeFilter> _myFilter;
+//	@CCProperty(name = "real time filter")
+//	private CCRealtimeCompile<CCRealtimeFilter> _myFilter;
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
-		_myFilter = new CCRealtimeCompile<CCRealtimeFilter>(CCRealtimeFilter.class);
-		_myFilter.createObject();
+//		_myFilter = new CCRealtimeCompile<CCRealtimeFilter>(CCRealtimeFilter.class);
+//		_myFilter.createObject();
 		
 		_myFilterMap.put("cheb", new CCChebFilter(2));
 		_myFilterMap.put("compressor", new CCCompressor(2));
