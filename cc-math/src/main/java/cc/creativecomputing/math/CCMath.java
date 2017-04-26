@@ -519,9 +519,9 @@ public class CCMath {
 		return (unsignedByteToInt(a) < unsignedByteToInt(b)) ? a : b;
 	}
 
-	static public final double min(int...theValues) {
-		double result = Integer.MAX_VALUE;
-		for(double myValue:theValues) {
+	static public final int min(int...theValues) {
+		int result = Integer.MAX_VALUE;
+		for(int myValue:theValues) {
 			result = min(result,myValue);
 		}
 		return result;
@@ -738,7 +738,11 @@ public class CCMath {
 	 */
 	static public double bezierPoint(double a, double b, double c, double d, double t) {
 		double t1 = 1.0f - t;
-		return a * t1 * t1 * t1 + 3 * b * t * t1 * t1 + 3 * c * t * t * t1 + d * t * t * t;
+		return 
+			a * t1 * t1 * t1 + 
+			3 * b * t * t1 * t1 + 
+			3 * c * t * t * t1 + 
+			d * t * t * t;
 	}
 	
 	/**
@@ -778,6 +782,25 @@ public class CCMath {
     	double a1 = theV0 - theV1 - a0;
     	double a2 = theV2 - theV0;
     	double a3 = theV1;
+    	
+    	return(
+    		a0 * theBlend * mu2 + 
+    		a1 * mu2 + 
+    		a2 * theBlend + 
+    		a3
+    	);
+    }
+    
+    public static double smoothCubicBlend(
+    	double theV0, double theV1,
+    	double theV2, double theV3,
+    	double theBlend
+    ){
+		double mu2 = theBlend * theBlend;
+		double a0 = -0.5 * theV0 + 1.5 * theV1 - 1.5 * theV2 + 0.5 * theV3;
+		double a1 = theV0 - 2.5 * theV1 + 2 * theV2 - 0.5 * theV3;
+		double a2 = -0.5 * theV0 + 0.5 * theV2;
+		double a3 = theV1;
     	
     	return(
     		a0 * theBlend * mu2 + 
