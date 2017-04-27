@@ -36,7 +36,7 @@ public abstract class CCHistoryGraph<Type extends CCHistoryData>{
 		double myStart = _mySettings._cTimeBased ? _mySettings._cTimeOffset : 0;
 		double myEnd = _mySettings._cTimeBased ? _mySettings._cTimeScale + _mySettings._cTimeOffset : CCMath.max(_mySettings._cHistorySize, theData.size());
 		
-		float myStep = 0;
+		double myStep = 0;
 		g.color(_cColor.r,_cColor.g,_cColor.b, _mySettings._cAlpha);
 		g.pointSize(_mySettings._cPointSize);
 		g.beginShape(_mySettings._cDrawPoints ? CCDrawMode.POINTS : CCDrawMode.LINE_STRIP);
@@ -46,16 +46,38 @@ public abstract class CCHistoryGraph<Type extends CCHistoryData>{
 		}
 		g.endShape();
 		
-		if(!_mySettings._cDrawViolations)return;
-		g.pointSize(_mySettings._cViolationPointSize);
-		myStep = 0;
-		g.beginShape(CCDrawMode.POINTS);
-		for(Type myData:new ArrayList<>(theData)){
-			if(CCMath.abs(value(myData))>_cMax)
-				g.vertex(CCMath.map(myStep, 0, myEnd, -g.width() / 2, g.width() / 2),CCMath.constrain((_cAbs ? CCMath.abs(value(myData)) : value(myData)) /_cMax, -1, 1) * theHeight);
-			myStep += _mySettings._cTimeBased ? myData.timeStep : 1;
+		if(_mySettings._cDrawViolations){
+			g.pointSize(_mySettings._cViolationPointSize);
+			myStep = 0;
+			g.beginShape(CCDrawMode.POINTS);
+			for(Type myData:new ArrayList<>(theData)){
+				if(CCMath.abs(value(myData)) > _cMax){
+					g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),CCMath.constrain((_cAbs ? CCMath.abs(value(myData)) : value(myData)) /_cMax, -1, 1) * theHeight);
+				}
+				myStep += _mySettings._cTimeBased ? myData.timeStep : 1;
+			}
+			g.endShape();
 		}
-		g.endShape();
+		if(_mySettings._cDrawTurns){
+			g.pointSize(_mySettings._cViolationPointSize);
+			myStep = 0;
+			g.beginShape(CCDrawMode.POINTS);
+			for(int i = 1; i < theData.size() - 1;i++){
+				double myData0 = value(theData.get(i - 1));
+				double myData1 = value(theData.get(i));
+				double myData2 = value(theData.get(i + 1));
+				
+				double myDif0 = myData1 - myData0;
+				double myDif1 = myData2 - myData1;
+				
+				myStep = i * (_mySettings._cTimeBased ? theData.get(i).timeStep : 1);
+				
+				if(CCMath.sign(myDif0) != CCMath.sign(myDif1)){
+					g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),CCMath.constrain((_cAbs ? CCMath.abs(myData1) : myData1) /_cMax, -1, 1) * theHeight);
+				}
+			}
+			g.endShape();
+		}
 	}
 	
 	public void drawSpectogram(CCGraphics g, List<Type> theData, double theOffset, double theHeight){
