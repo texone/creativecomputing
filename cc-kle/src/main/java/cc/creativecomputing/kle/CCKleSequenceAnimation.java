@@ -20,6 +20,10 @@ public class CCKleSequenceAnimation extends CCEffect {
 	private CCInterpolators _myInterpolator = CCInterpolators.LINEAR;
 	
 
+	@CCProperty(name = "curve tension", min = -1, max = 2)
+	private double _curveTension = 0;
+	
+
 	@CCProperty(name = "group id inverts")
 	private Map<String, Boolean> _cGroupIdInverts = new LinkedHashMap<>();
 	
