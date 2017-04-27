@@ -6,6 +6,7 @@ import java.util.List;
 
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
+import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.interpolate.CCInterpolators;
 
 public class CCSequence extends ArrayList<CCMatrix2>{
@@ -62,6 +63,14 @@ public class CCSequence extends ArrayList<CCMatrix2>{
 	public CCSequence(int theColumns, int theRows, int theDepth, int frames){
 		this(theColumns, theRows, theDepth);
 		addFrames(frames);
+	}
+	
+	public CCSequence clone(){
+		CCSequence myResult = new CCSequence(_myColumns, _myRows,_myDepth);
+		for(CCMatrix2 myFrame:this){
+			myResult.add(myFrame.clone());
+		}
+		return myResult;
 	}
 	
 	public int columns(){
@@ -130,6 +139,29 @@ public class CCSequence extends ArrayList<CCMatrix2>{
 			myBlend
 		);
 		
+	}
+	
+	public CCVector2 minMax(CCVector2 theStore){
+		if(theStore == null)theStore = new CCVector2(Double.MAX_VALUE,-Double.MAX_VALUE);
+		for(CCMatrix2 myFrame:this){
+			myFrame.minMax(theStore);
+		}
+		return theStore;
+	}
+	
+	public CCVector2 minMax(){
+		return minMax(null);
+	}
+	
+	public void normalize(CCVector2 theMinMax){
+		if(theMinMax == null)theMinMax = minMax();
+		for(CCMatrix2 myFrame:this){
+			myFrame.normalize(theMinMax);
+		}
+	}
+	
+	public void normalize(){
+		normalize(null);
 	}
 	
 	public int length(){
