@@ -26,6 +26,9 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	@CCProperty(name = "speed", min = 0, max = 2)
 	private float _cSpeed = 1;
 	
+	@CCProperty(name = "norm")
+	private boolean _cNorm = true;
+	
 	@CCProperty(name = "fix column row order")
 	private boolean _cFixColumnRowOrder = false;
 	
@@ -44,17 +47,22 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	
 	private boolean _myIsCCA = false;
 	
+	public void normalize(boolean theNormalize){
+		_cNorm = theNormalize;
+	}
+	
 	@Override
 	public CCSequence loadAsset(Path thePath){
 		CCSequence mySequence = CCSequenceIO.load(thePath, _myMapping);
 		String myExtension = CCNIOUtil.fileExtension(thePath);
 		if(!myExtension.equalsIgnoreCase("cca")){
-			for(CCMatrix2 myFrame:mySequence){
-				for(int c = 0; c < myFrame.columns();c++){
-					for(int r = 0; r < myFrame.rows();r++){
-						for(int d = 0; d < myFrame.depth();d++){
-							
-							myFrame.data()[c][r][d] = CCMath.norm(myFrame.data()[c][r][d], _myMapping.min(c, r, d), _myMapping.max(c, r, d));
+			if(_cNorm){
+				for(CCMatrix2 myFrame:mySequence){
+					for(int c = 0; c < myFrame.columns();c++){
+						for(int r = 0; r < myFrame.rows();r++){
+							for(int d = 0; d < myFrame.depth();d++){
+								myFrame.data()[c][r][d] = CCMath.norm(myFrame.data()[c][r][d], 0, _myMapping.max(c, r, d) - _myMapping.min(c, r, d));
+							}
 						}
 					}
 				}
