@@ -10,7 +10,6 @@ import cc.creativecomputing.kle.elements.CCKleChannelType;
 import cc.creativecomputing.kle.elements.CCSequenceChannel;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
-import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.elements.lights.CCLightChannel;
 import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
@@ -18,7 +17,7 @@ import cc.creativecomputing.math.CCVector3;
 
 public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 	
-	private  class CCMotionDataAnalyzer{
+	public class CCMotionDataAnalyzer{
 		protected final List<CCMotionData> data;
 		protected final CCSequenceElement _myElement;
 		
@@ -183,7 +182,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			data.add(myNewData);
 			
 			
-			for(CCChannelAnalyzer myChannelAnalyzer:_myChannelAnalyzers){
+			for(CCChannelAnalyzer<?> myChannelAnalyzer:_myChannelAnalyzers){
 				myChannelAnalyzer.update(theDeltaTime);
 			}
 		}
@@ -198,7 +197,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 	}
 
 	protected CCSequenceElements _myElements;
-	private CCSequenceMapping _myMapping;
+	
 	@CCProperty(name = "mode")
 	protected CCAnalyzeMode _cAnalyzeMode = CCAnalyzeMode.ANALYZE_3D;
 	@CCProperty(name = "analyze channels")
@@ -242,8 +241,6 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 		public double value(CCMotionData theData) {return (double)theData.jerk;}
 	};
 	
-	private int _myNumberOfChannels = 0;
-	
 	protected final List<CCElementAnalyzer> _myElementAnalyzers = new ArrayList<CCSequenceAnalyzer.CCElementAnalyzer>();
 	
 	private CCKleChannelType _myChannelType;
@@ -251,12 +248,10 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 	public CCSequenceAnalyzer(CCSequenceElements theElements, CCKleChannelType theType){
 		_myElements = theElements;
 		_myChannelType = theType;
-		_myMapping = _myElements.mappings().get(theType);
 		
 		for(CCSequenceElement myElement:_myElements){
 			CCElementAnalyzer myAnalyzer = new CCElementAnalyzer(myElement, _myChannelType);
 			_myElementAnalyzers.add(myAnalyzer);
-			_myNumberOfChannels += myAnalyzer._myChannelAnalyzers.size();
 		}
 	}
 	
@@ -279,7 +274,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			g.pushMatrix();
 			g.applyMatrix(myAnalyzer._myElement.matrix());
 			if(_cAnalyzeChannels){
-				for(CCChannelAnalyzer myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
+				for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 					myChannelAnalyzer.draw3D(g);
 				}
 			}else{
@@ -318,7 +313,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
 					if(_cAnalyzeChannels){
-						for(CCChannelAnalyzer myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
+						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 							int myNumberOfChannels = myNumberOfElements * myAnalyzer._myChannelAnalyzers.size();
 							double myHeight = g.height() / (double)myNumberOfChannels / _myTypes.size();;
 							g.pushMatrix();
@@ -372,7 +367,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
 					if(_cAnalyzeChannels){
-						for(CCChannelAnalyzer myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
+						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 							int myNumberOfChannels = myNumberOfElements * myAnalyzer._myChannelAnalyzers.size();
 							double myHeight = g.height() / (double)myNumberOfChannels / _myTypes.size();
 							g.pushMatrix();
