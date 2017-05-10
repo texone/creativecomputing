@@ -1,27 +1,27 @@
 package cc.creativecomputing.kle.config;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
-import cc.creativecomputing.kle.elements.motors.CC1Motor1ConnectionBounds;
+import cc.creativecomputing.kle.elements.motors.CC2MotorRotationAxisBounds;
 import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
 
-public class CC1Motor1ConnectionConfigCreator {
+public class CC2MotorRotationAxisConfigCreator {
 	
 	private CCXMLElement _mySculptureXML;
 	private CCXMLElement _myMappingsXML;
 
 	protected List<CCSequenceElement> _myElements = new ArrayList<>();
 	
-	public CC1Motor1ConnectionConfigCreator(int xRes, int zRes, double XSpace, double zSpace, double top, double bottom, int frameRate){
+	public CC2MotorRotationAxisConfigCreator(int xRes, int yRes, double XSpace, double ySpace, double center, double amplitude, double radius, int frameRate){
 		
 		_mySculptureXML = new CCXMLElement("sculpture");
 		CCXMLElement myElementsXML = _mySculptureXML.createChild("elements");
@@ -31,34 +31,35 @@ public class CC1Motor1ConnectionConfigCreator {
 		CCXMLElement myMotorMappingXML = _myMappingsXML.createChild("mapping");
 		myMotorMappingXML.addAttribute("name", "motors");
 		myMotorMappingXML.addAttribute("columns", xRes);
-		myMotorMappingXML.addAttribute("rows", zRes);
-		myMotorMappingXML.addAttribute("depth", "1");
+		myMotorMappingXML.addAttribute("rows", yRes);
+		myMotorMappingXML.addAttribute("depth", "2");
 		myMotorMappingXML.addAttribute("frameRate", frameRate);
 		myMotorMappingXML.addAttribute("bits", 16);
 		
-		CC1Motor1ConnectionBounds myBounds = new CC1Motor1ConnectionBounds();
-		myBounds.topDistance(top);
-		myBounds.bottomDistance(bottom);
+		CC2MotorRotationAxisBounds myBounds = new CC2MotorRotationAxisBounds();
+		myBounds.radius(radius);
+		myBounds.center(center);
+		myBounds.amplitude(amplitude);
 		
 		int id = 0;
 		
-		double height = bottom - top;
-		
 		for(int x = 0; x < xRes; x++){
-			for(int z = 0; z < zRes; z++){
+			for(int y = 0; y < yRes; y++){
 				
 				int myID = id++;
 				List<CCMotorChannel> myMotorChannels = new ArrayList<>();
 				double myX = CCMath.map(x, 0, xRes - 1, -xRes / 2 * XSpace, xRes / 2 * XSpace);
-				double myZ = CCMath.map(z, 0, zRes - 1, -zRes / 2 * zSpace, zRes / 2 * zSpace);
+				double myY = CCMath.map(y, 0, yRes - 1, -yRes / 2 * ySpace, yRes / 2 * ySpace);
 				
 				CCVector3 myPulleyPosition = new CCVector3(0, 0, 0);
-				CCVector3 myConnectionPosition = new CCVector3(0, top + height / 2, 0);
-				CCMotorChannel myMotor = new CCMotorChannel(myID, myPulleyPosition, myConnectionPosition);
-				myMotorChannels.add(myMotor);
+				CCVector3 myConnectionPosition = new CCVector3(0, 0, 0);
+				CCMotorChannel myMotor0 = new CCMotorChannel(myID, myPulleyPosition, myConnectionPosition);
+				myMotorChannels.add(myMotor0);
+				CCMotorChannel myMotor1 = new CCMotorChannel(myID, myPulleyPosition, myConnectionPosition);
+				myMotorChannels.add(myMotor1);
 				
 				CCMatrix4x4 myTransform = new CCMatrix4x4();
-				myTransform.applyTranslationPost(new CCVector3(myX, 0, myZ));
+				myTransform.applyTranslationPost(new CCVector3(myX, myY, 0));
 				
 				CCSequenceElement myElement = new CCSequenceElement(
 					myID, 
@@ -69,19 +70,24 @@ public class CC1Motor1ConnectionConfigCreator {
 					myTransform,
 					1
 				);
-
-				double min = top;
-				double max = bottom;
 				
 				myElementsXML.addChild(myElement.toXML());
 				
 				CCXMLElement myChannel0XML = myMotorMappingXML.createChild("channel");
-				myChannel0XML.addAttribute("id", myMotor.id());
+				myChannel0XML.addAttribute("id", myMotor0.id());
 				myChannel0XML.addAttribute("column", x);
-				myChannel0XML.addAttribute("row", z);
+				myChannel0XML.addAttribute("row", y);
 				myChannel0XML.addAttribute("depth", 0);
-				myChannel0XML.addAttribute("min", min);
-				myChannel0XML.addAttribute("max", max);
+				myChannel0XML.addAttribute("min", -amplitude);
+				myChannel0XML.addAttribute("max", amplitude);
+				
+				CCXMLElement myChannel1XML = myMotorMappingXML.createChild("channel");
+				myChannel1XML.addAttribute("id", myMotor1.id());
+				myChannel1XML.addAttribute("column", x);
+				myChannel1XML.addAttribute("row", y);
+				myChannel1XML.addAttribute("depth", 1);
+				myChannel1XML.addAttribute("min", 0);
+				myChannel1XML.addAttribute("max", radius);
 						
 				_myElements.add(myElement);
 			}
@@ -89,21 +95,19 @@ public class CC1Motor1ConnectionConfigCreator {
 		
 	}
 	
-	public CC1Motor1ConnectionConfigCreator(int xRes, int zRes, double XSpace, double zSpace, double height){
-		this(xRes, zRes, XSpace, zSpace, 0, height, 5);
-	}
-	
 	public void saveXML(){
 		saveXML("config");
 	}
 	
 	public void saveXML(String folder){
+		CCLog.info(CCNIOUtil.dataPath(folder + "/sculpture.xml"));
+		CCLog.info(CCNIOUtil.dataPath(folder + "/mapping.xml"));
 		CCXMLIO.saveXMLElement(_mySculptureXML, CCNIOUtil.dataPath(folder + "/sculpture.xml"));
 		CCXMLIO.saveXMLElement(_myMappingsXML, CCNIOUtil.dataPath(folder + "/mapping.xml"));
 	}
 	
 	public static void main(String[] args) {
-		CC1Motor1ConnectionConfigCreator myConfigCreator = new CC1Motor1ConnectionConfigCreator(12, 14, 18, 18, 380);
+		CC2MotorRotationAxisConfigCreator myConfigCreator = new CC2MotorRotationAxisConfigCreator(5, 5, 100, 100, 0, 180, 40, 5);
 		myConfigCreator.saveXML();
 	}
 }
