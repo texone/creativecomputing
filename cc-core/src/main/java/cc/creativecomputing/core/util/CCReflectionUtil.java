@@ -202,6 +202,46 @@ public class CCReflectionUtil {
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public static class CCListEntry extends CCMember{
+
+		private List<Object> _myList;
+		private int _myID;
+		
+		@SuppressWarnings("unchecked")
+		public CCListEntry(List<Object> theMap, int theID) {
+			super(null, null, null);
+			_myList = theMap;
+			_myID = theID;
+		}
+		
+		@Override
+		public String name() {
+			return _myID + "";
+		}
+		
+		@Override
+		public String memberName() {
+			return _myID + "";
+		}
+
+		@Override
+		public Object value() {
+			return _myList.get(_myID);
+		}
+
+		@Override
+		public void value(Object theObject) {
+			_myList.set(_myID, theObject);
+		}
+
+		@Override
+		public Class type() {
+			return _myList.get(_myID).getClass();
+		}
+		
+	}
+	
 	public static Field getField(final Class<?> theClass, final String theFieldName) {
 		try{
 			return theClass.getDeclaredField(theFieldName);
