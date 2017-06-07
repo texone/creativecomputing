@@ -160,7 +160,7 @@ public class CCFormatUtil {
 	 * @param theRightDigits number of digits to the right of the decimal point
 	 * @return String presentation of the number
 	 */
-	static public String nf(final float theNumber, final int theLeftDigits, final int theRightDigits) {
+	static public String nf(final double theNumber, final int theLeftDigits, final int theRightDigits) {
 		_myFloatFormat.setGroupingUsed(false);
 
 		if (theLeftDigits != 0)
