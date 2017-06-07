@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCSwingDraggableValueBox;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.math.CCMath;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -70,7 +70,7 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 	        _mySlider.setPaintLabels(false);
 	        _mySlider.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 	        _mySlider.putClientProperty( "JComponent.sizeVariant", "mini" );
-	        _mySlider.setPreferredSize(new Dimension(100 * SwingGuiConstants.SCALE,14 * SwingGuiConstants.SCALE));
+	        _mySlider.setPreferredSize(new Dimension(100,14));
         }
         
         _myValueField = new CCSwingDraggableValueBox(_myValue, _myMin, _myMax, CCMath.pow(0.1, theHandle.digits()));
@@ -111,7 +111,7 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 1, 5));
 		if(_mySlider != null){
 			thePanel.add(_mySlider, constraints(1, theY, GridBagConstraints.PAGE_END,5, 0, 1, 5));
-			_myValueField.setPreferredSize(new Dimension(68 * SwingGuiConstants.SCALE, 13 * SwingGuiConstants.SCALE));
+			_myValueField.setPreferredSize(new Dimension(68, 13));
 			thePanel.add(_myValueField, constraints(2, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
 		}else{
 			thePanel.add(_myValueField, constraints(1, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));

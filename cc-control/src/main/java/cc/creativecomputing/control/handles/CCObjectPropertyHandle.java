@@ -17,10 +17,13 @@ import cc.creativecomputing.control.code.CCRuntimeCompilable;
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
+import cc.creativecomputing.core.CCSelectable;
+import cc.creativecomputing.core.CCSelectionListener;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCField;
+import cc.creativecomputing.core.util.CCReflectionUtil.CCListEntry;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMapEntry;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMethod;
@@ -127,7 +130,11 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			_myChildHandles = link(_myMember.value());
 		}
 		_myPresetPath = createPresetPath();
+
+		_myIsSelectable = CCReflectionUtil.implementsInterface(theMember.type(), CCSelectable.class);
 	}
+	
+	private boolean _myIsSelectable = true;
 
 	public CCObjectPropertyHandle(Object theObject, String theSettingsPath){
 		super(null, null);
@@ -135,6 +142,22 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		_myRootObject = theObject;
 		_myChildHandles = link(theObject);
 		_myPresetPath = createPresetPath();
+		
+		_myIsSelectable = CCReflectionUtil.implementsInterface(theObject.getClass(), CCSelectable.class);
+	}
+	
+	public boolean isSelectable(){
+		return _myIsSelectable;
+	}
+	
+	public boolean isSelected(){
+		return _myMember != null &&  _myMember.value() != null && _myMember.value() instanceof CCSelectable && ((CCSelectable)_myMember.value()).isSelected();
+	}
+	
+	public void addSelectionListener(CCSelectionListener theListener){
+		if( _myMember != null &&  _myMember.value() != null && _myMember.value() instanceof CCSelectable){
+			((CCSelectable)_myMember.value()).addListener(theListener);
+		}
 	}
 	
 	public CCObjectPropertyHandle(CCMember<CCProperty> theMember){
@@ -312,6 +335,24 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 				}else  if(myClass.isEnum()){
 					myProperty = new CCEnumPropertyHandle(this, myEntry);
 				}else{
+					if(CCReflectionUtil.getFields(myEntry.value(), CCProperty.class).size() <= 0)continue;
+					myProperty = new CCObjectPropertyHandle(this, myEntry, _mySettingsPath);
+				}
+				myResult.put(myProperty.name(), myProperty);
+			}
+		}
+		
+		if((theObject instanceof List)){
+			List<Object> myList = (List<Object>)theObject;
+			for(int i = 0; i < myList.size();i++){
+				CCListEntry myEntry = new CCListEntry(myList, i);
+				Class<?> myClass = myEntry.type();
+				CCPropertyHandle myProperty;
+				if(creatorMap.containsKey(myClass)){
+					myProperty = creatorMap.get(myClass).create(this, myEntry);
+				}else  if(myClass.isEnum()){
+					myProperty = new CCEnumPropertyHandle(this, myEntry);
+				}else{
 					myProperty = new CCObjectPropertyHandle(this, myEntry, _mySettingsPath);
 				}
 				myResult.put(myProperty.name(), myProperty);
@@ -471,5 +512,23 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 //		_myValue = theValue;
 //		_myMember.value(theValue);
 //		onChange();
+	}
+	
+	public void valueSiblings(Object theValue, String theName){
+		
+		if(!CCReflectionUtil.implementsInterface(parent().type(), List.class))return;
+		
+		for(CCPropertyHandle myChild:parent().children().values()){
+
+			if(!(myChild instanceof CCObjectPropertyHandle))continue;
+			
+			
+			CCObjectPropertyHandle myChildObject =  (CCObjectPropertyHandle)myChild;
+			if(myChildObject.isSelected()){
+				CCLog.info(myChild.name());
+				myChildObject.children().get(theName).directValue(theValue);
+			}
+			
+		}
 	}
 }

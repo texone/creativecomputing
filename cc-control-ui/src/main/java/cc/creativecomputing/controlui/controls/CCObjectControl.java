@@ -14,9 +14,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.nio.file.Path;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import cc.creativecomputing.control.CCEnvelope;
@@ -159,6 +161,13 @@ public class CCObjectControl extends JPanel implements CCControl{
 			}
 		});
 		add(myLabel, myConstraints);
+		thePropertyHandle.addSelectionListener(isSelected -> {
+			if(isSelected){
+				setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Color.red));
+			}else{
+				setBorder(BorderFactory.createEmptyBorder());
+			}
+		});
 	}
 	
 	private int _myGridY = 0;

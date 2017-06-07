@@ -88,10 +88,20 @@ public abstract class CCPropertyHandle<Type>{
 			_myPresetValue = theValue;
 		}
 		
+		if(_myParent.isSelectable() && _myParent.isSelected()){
+			_myParent.valueSiblings(theValue, name());
+		}
+		
 		if(_myValue == theValue)return;
 		_myValue = theValue;
 		_myUpdateMember = true;
 //		_myMember.value(theValue);
+	}
+	
+	protected void directValue(Type theValue){
+		if(_myValue == theValue)return;
+		_myValue = theValue;
+		_myUpdateMember = true;
 	}
 	
 	private boolean readBack(){
@@ -114,7 +124,6 @@ public abstract class CCPropertyHandle<Type>{
 		if(_myUpdateMember){
 			_myMember.value(_myValue);
 			_myUpdateMember = false;
-
 			onChange();
 		}else{
 			if(!_myReadBack)return;
