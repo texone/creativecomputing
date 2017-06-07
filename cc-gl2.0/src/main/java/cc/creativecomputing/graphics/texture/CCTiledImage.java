@@ -34,6 +34,7 @@ public class CCTiledImage {
 	private int _myXImages;
 	private int _myYImages;
 
+	@SuppressWarnings("unchecked")
 	public CCTiledImage(int theXImages, int theYImages, int theMaxWidth, int theMaxHeight){
 		_myTextureGrid = new List[theXImages][theYImages];
 		_myMaxTexWidth = theMaxWidth;

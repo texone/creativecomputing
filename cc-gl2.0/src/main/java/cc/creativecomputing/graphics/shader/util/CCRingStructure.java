@@ -39,7 +39,6 @@ public class CCRingStructure {
 		for (int i=0; i<nTimeSteps; i++) {
 			CCShaderBuffer tmp = new CCShaderBuffer (32, 3, 2, w, h);
 			tmp.attachment(0).textureFilter(CCTextureFilter.LINEAR);
-			tmp.clear ();
 			data.add (0, tmp);
 			statistics.add (0, new CCStatistics());
 		}
@@ -59,19 +58,19 @@ public class CCRingStructure {
 
 	public void pushInput (CCGraphics g, CCTexture2D input) {
 		rShift(); 
-		getData(0).beginDraw();
+		getData(0).beginDraw(g);
 		g.clear();
 		g.image (input, 0, 0, _myWidth, _myHeight);
-		getData(0).endDraw();
+		getData(0).endDraw(g);
 		g.noTexture();
 	}
 	
 	public void pushInput (CCGraphics g, CCTexture2D input, CCStatistics theStatistics) {
 		rShift();
-		getData(0).beginDraw();
+		getData(0).beginDraw(g);
 		g.clear();
 		g.image (input, 0, 0, _myWidth, _myHeight);
-		getData(0).endDraw();
+		getData(0).endDraw(g);
 		getStatistics(0).max  (theStatistics.max ());
 		getStatistics(0).mean (theStatistics.mean());
 		getStatistics(0).sum  (theStatistics.sum ());

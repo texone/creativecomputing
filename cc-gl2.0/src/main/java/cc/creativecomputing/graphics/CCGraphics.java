@@ -4422,7 +4422,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 
 	private CCShapeMode _myImageMode = CCShapeMode.CORNER;
 	private CCShapeMode _myRectMode = CCShapeMode.CORNER;
-	private CCShapeMode _myEllipseMode = CCShapeMode.CENTER;
+	private CCShapeMode _myEllipseMode = CCShapeMode.RADIUS;
 
 	//////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////

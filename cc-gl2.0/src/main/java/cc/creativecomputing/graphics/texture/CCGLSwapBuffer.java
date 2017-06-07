@@ -16,6 +16,7 @@ public class CCGLSwapBuffer {
 	protected CCShaderBuffer _myDestinationDataTexture;
 	
 	public CCGLSwapBuffer(
+		final CCGraphics g,
 		final CCPixelType theType,
 		final int theNumberOfBits, 
 		final int theNumberOfChannels, 
@@ -24,12 +25,13 @@ public class CCGLSwapBuffer {
 		final int theHeight, final CCTextureTarget theTarget
 	){
 		_myCurrentDataTexture = new CCShaderBuffer(theType, theNumberOfBits, theNumberOfChannels, theNumberOfAttachments, theWidth, theHeight, theTarget);
-		_myCurrentDataTexture.clear();
+		_myCurrentDataTexture.clear(g);
 		_myDestinationDataTexture = new CCShaderBuffer(theType, theNumberOfBits, theNumberOfChannels, theNumberOfAttachments, theWidth, theHeight, theTarget);
-		_myDestinationDataTexture.clear();
+		_myDestinationDataTexture.clear(g);
 	}
 	
 	public CCGLSwapBuffer(
+		final CCGraphics g,
 		final int theNumberOfBits, 
 		final int theNumberOfChannels, 
 		final int theNumberOfAttachments, 
@@ -38,6 +40,7 @@ public class CCGLSwapBuffer {
 		final CCTextureTarget theTarget
 	){
 		this(
+			g,
 			CCPixelType.FLOAT,
 			theNumberOfBits,
 			theNumberOfChannels,
@@ -49,6 +52,7 @@ public class CCGLSwapBuffer {
 	}
 			
 	public CCGLSwapBuffer(
+		final CCGraphics g,
 		final int theNumberOfBits, 
 		final int theNumberOfChannels, 
 		final int theNumberOfAttachments, 
@@ -56,6 +60,7 @@ public class CCGLSwapBuffer {
 		final int theHeight
 	){
 		this(
+			g,
 			theNumberOfBits,
 			theNumberOfChannels,
 			theNumberOfAttachments,
@@ -66,6 +71,7 @@ public class CCGLSwapBuffer {
 	}
 		
 	public CCGLSwapBuffer(
+		final CCGraphics g,
 		final int theNumberOfBits, 
 		final int theNumberOfChannels, 
 		final int theWidth, 
@@ -73,6 +79,7 @@ public class CCGLSwapBuffer {
 		final CCTextureTarget theTarget
 	){
 		this(
+			g,
 			theNumberOfBits,
 			theNumberOfChannels,
 			1,
@@ -83,32 +90,34 @@ public class CCGLSwapBuffer {
 	}
 		
 	public CCGLSwapBuffer(
+		final CCGraphics g,
 		final int theWidth, 
 		final int theHeight, 
 		final CCTextureTarget theTarget
 	){
-		this(32,3,theWidth,theHeight,theTarget);
+		this(g,32,3,theWidth,theHeight,theTarget);
 	}
 		
 	public CCGLSwapBuffer(
+		final CCGraphics g,
 		final int theNumberOfBits, 
 		final int theNumberOfChannels, 
 		final int theWidth, final int theHeight
 	){
-		this(theNumberOfBits,theNumberOfChannels,1,theWidth,theHeight,CCTextureTarget.TEXTURE_RECT);
+		this(g, theNumberOfBits,theNumberOfChannels,1,theWidth,theHeight,CCTextureTarget.TEXTURE_RECT);
 	}
 		
-	public CCGLSwapBuffer(final int theWidth, final int theHeight){
-		this(32,3,theWidth,theHeight,CCTextureTarget.TEXTURE_RECT);
+	public CCGLSwapBuffer(final CCGraphics g,final int theWidth, final int theHeight){
+		this(g, 32,3,theWidth,theHeight,CCTextureTarget.TEXTURE_RECT);
 	}
 	
 	public void clear(CCGraphics g, CCColor theClearColor, int...theAttachments){
 		g.pushAttribute();
 		g.clearColor(theClearColor);
 		for(int myAttachment:theAttachments){
-			_myCurrentDataTexture.beginDraw(myAttachment);
+			_myCurrentDataTexture.beginDraw(g,myAttachment);
 			g.clear();
-			_myCurrentDataTexture.endDraw();
+			_myCurrentDataTexture.endDraw(g);
 		}
 		g.popAttribute();
 	}
@@ -122,8 +131,8 @@ public class CCGLSwapBuffer {
 		return _myCurrentDataTexture.attachment(theID);
 	}
 	
-	public void clear(){
-		_myCurrentDataTexture.clear();
+	public void clear(CCGraphics g){
+		_myCurrentDataTexture.clear(g);
 	}
 	
 	public void swap(){
@@ -132,40 +141,40 @@ public class CCGLSwapBuffer {
 		_myCurrentDataTexture = myTemp;
 	}
 	
-	public void beginDrawCurrent(){
-		_myCurrentDataTexture.beginDraw();
+	public void beginDrawCurrent(CCGraphics g){
+		_myCurrentDataTexture.beginDraw(g);
 	}
 	
-	public void beginDrawCurrent(int theAttachment){
-		_myCurrentDataTexture.beginDraw(theAttachment);
+	public void beginDrawCurrent(CCGraphics g, int theAttachment){
+		_myCurrentDataTexture.beginDraw(g, theAttachment);
 	}
 	
-	public void beginDrawDestination(){
-		_myDestinationDataTexture.beginDraw();
+	public void beginDrawDestination(CCGraphics g){
+		_myDestinationDataTexture.beginDraw(g);
 	}
 	
-	public void beginDrawDestination(int theAttachment){
-		_myDestinationDataTexture.beginDraw(theAttachment);
+	public void beginDrawDestination(CCGraphics g, int theAttachment){
+		_myDestinationDataTexture.beginDraw(g, theAttachment);
 	}
 
-	public void draw() {
-		_myDestinationDataTexture.draw();
+	public void draw(CCGraphics g) {
+		_myDestinationDataTexture.draw(g);
 	}
 	
-	public void draw(double theX0, double theY0, double theX1, double theY1) {
-		_myDestinationDataTexture.draw(theX0, theY0, theX1, theY1);
+	public void draw(CCGraphics g, double theX0, double theY0, double theX1, double theY1) {
+		_myDestinationDataTexture.draw(g, theX0, theY0, theX1, theY1);
 	}
 	
-	public void draw(CCAABoundingRectangle theRect) {
-		_myDestinationDataTexture.draw(theRect);
+	public void draw(CCGraphics g, CCAABoundingRectangle theRect) {
+		_myDestinationDataTexture.draw(g, theRect);
 	}
 	
-	public void endDrawCurrent(){
-		_myCurrentDataTexture.endDraw();
+	public void endDrawCurrent(CCGraphics g){
+		_myCurrentDataTexture.endDraw(g);
 	}
 	
-	public void endDrawDestination(){
-		_myDestinationDataTexture.endDraw();
+	public void endDrawDestination(CCGraphics g){
+		_myDestinationDataTexture.endDraw(g);
 	}
 	
 	public CCShaderBuffer currentBuffer(){

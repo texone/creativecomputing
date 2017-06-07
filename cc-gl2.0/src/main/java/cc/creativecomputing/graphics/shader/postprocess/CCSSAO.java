@@ -93,7 +93,7 @@ public class CCSSAO extends CCPostProcessEffect {
 		_mySSAOShader.uniform2f("invScreenSize", 1.0f / _myShaderBuffer.width(), 1.0f / _myShaderBuffer.height());
 
 		g.color(255);
-		_myShaderBuffer.draw();
+		_myShaderBuffer.draw(g);
 
 		_mySSAOShader.end();
 

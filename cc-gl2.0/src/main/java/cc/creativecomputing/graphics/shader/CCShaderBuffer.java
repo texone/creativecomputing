@@ -278,12 +278,12 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 		beginOrtho2D();
 	}
 	
-	public void beginDraw() {
-		bindFBO();
-		beginOrtho2D();
-	}
+//	public void beginDraw() {
+//		bindFBO();
+//		beginOrtho2D();
+//	}
 	
-	public void beginDraw(int theAttachment) {
+	public void beginDraw(CCGraphics g, int theAttachment) {
 		bindFBO(theAttachment);
 		beginOrtho2D();
 	}
@@ -306,10 +306,10 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 	
 
 	
-	public void endDraw(){
-		endOrtho2D();
-		releaseFBO();
-	}
+//	public void endDraw(){
+//		endOrtho2D();
+//		releaseFBO();
+//	}
 	
 	public void drawQuad(double theX0, double theY0, double theX1, double theY1) {
 
@@ -339,58 +339,58 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 		gl.glEnd();
 	}
 	
-	public void drawQuad() {
+	public void drawQuad(CCGraphics g) {
 		drawQuad(0,0,_myWidth, _myHeight);
 	}
 	
-	public void draw(CCAABoundingRectangle theRectangle) {
-		beginDraw();
+	public void draw(CCGraphics g,CCAABoundingRectangle theRectangle) {
+		beginDraw(g);
 		drawQuad(theRectangle.min().x, theRectangle.min().y, theRectangle.max().x, theRectangle.max().y);
-		endDraw();
+		endDraw(g);
 	}
 	
-	public void draw(double theX0, double theY0, double theX1, double theY1){
-		beginDraw();
+	public void draw(CCGraphics g, double theX0, double theY0, double theX1, double theY1){
+		beginDraw(g);
 	
 		GL2 gl = CCGraphics.currentGL();
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
 		drawQuad(theX0, theY0, theX1, theY1);
 		
-		endDraw();
+		endDraw(g);
 	}
 	
-	public void draw(){
-		draw(0, 0, _myWidth, _myHeight);
+	public void draw(CCGraphics g){
+		draw(g, 0, 0, _myWidth, _myHeight);
 	}
 	
-	public void draw(int theAttachmentID, double theX0, double theY0, double theX1, double theY1){
-		beginDraw(theAttachmentID);
+	public void draw(CCGraphics g,int theAttachmentID, double theX0, double theY0, double theX1, double theY1){
+		beginDraw(g,theAttachmentID);
 	
 		GL2 gl = CCGraphics.currentGL();
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
 		drawQuad(theX0, theY0, theX1, theY1);
 		
-		endDraw();
+		endDraw(g);
 	}
 	
-	public void draw(int theAttachmentID){
-		draw(theAttachmentID, 0, 0, _myWidth, _myHeight);
+	public void draw(CCGraphics g, int theAttachmentID){
+		draw(g, theAttachmentID, 0, 0, _myWidth, _myHeight);
 	}
 	
-	public void clear() {
-		beginDraw();
+	public void clear(CCGraphics g) {
+		beginDraw(g);
 		GL gl = CCGraphics.currentGL();
 		gl.glClearStencil(0);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
-		endDraw();
+		endDraw(g);
 	}
 	
-	public void clear(int theAttachment){
-		beginDraw(theAttachment);
+	public void clear(CCGraphics g,int theAttachment){
+		beginDraw(g,theAttachment);
 		GL gl = CCGraphics.currentGL();
 		gl.glClearStencil(0);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT | GL.GL_STENCIL_BUFFER_BIT);
-		endDraw();
+		endDraw(g);
 	}
 	
 	public FloatBuffer getData(){
