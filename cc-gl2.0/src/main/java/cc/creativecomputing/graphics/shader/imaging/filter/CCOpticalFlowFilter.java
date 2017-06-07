@@ -64,7 +64,7 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 	
 	private int nSteps = 4;
 	
-	public CCOpticalFlowFilter(CCTexture2D theInput) {
+	public CCOpticalFlowFilter(CCGraphics g, CCTexture2D theInput) {
 		super(theInput);
 		
 		//_myBlurInputStage = new CCBlurFilter (theGraphics, theInput, 10);
@@ -72,13 +72,13 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 		
 		//_myInput = _myBlurInputStage.output();
 		_myOutputStage1 = new CCShaderBuffer(theInput.width(), theInput.height());
-		_myOutputStage1.clear();
+		_myOutputStage1.clear(g);
 		
 		_myOutputStage2 = new CCShaderBuffer(theInput.width(), theInput.height());
-		_myOutputStage2.clear();
+		_myOutputStage2.clear(g);
 		
 		_myOutputStage3 = new CCShaderBuffer(theInput.width(), theInput.height());
-		_myOutputStage3.clear();
+		_myOutputStage3.clear(g);
 		
 		_myShaderStage1 = new CCGLProgram (CCNIOUtil.classPath(this, "shader/partialDerivatives_vp.glsl"), CCNIOUtil.classPath(this, "shader/partialDerivatives_fp.glsl"));
 		_myShaderStage2 = new CCGLProgram (CCNIOUtil.classPath(this, "shader/hornSchunck_vp.glsl"), CCNIOUtil.classPath(this, "shader/hornSchunck_fp.glsl"));
@@ -87,10 +87,10 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 		outTmp = new CCShaderBuffer(_myOutputStage1.width(), _myOutputStage1.height());
 		bufTmp = new CCShaderBuffer(_myOutputStage1.width(), _myOutputStage1.height());
 		_myLastInput = new CCShaderBuffer(_myInput.width(), _myInput.height());
-		_myLastInput.clear();
+		_myLastInput.clear(g);
 		
-		outTmp.clear();
-		bufTmp.clear();
+		outTmp.clear(g);
+		bufTmp.clear(g);
 	}
 
 	@Override
@@ -127,13 +127,13 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 		_myShaderStage1.uniform1i ("IN1", 1);
 		_myShaderStage1.uniform1f ("gain", _cGain);
 		
-		_myOutputStage1.draw();
+		_myOutputStage1.draw(g);
 		
 		_myShaderStage1.end();
 		g.noTexture();
 
 		// initalize output to zeros
-		outTmp.clear();
+		outTmp.clear(g);
 		
 		// iterate to find v, u
 		for (int i=0; i<nSteps; i++) {
@@ -145,14 +145,14 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 			g.texture (1, _myOutputStage1.attachment(0));	
 			_myShaderStage2.uniform1i ("UV", 0);
 			_myShaderStage2.uniform1i ("E_xyt", 1);
-			_myOutputStage2.draw();
+			_myOutputStage2.draw(g);
 			
 			_myShaderStage2.end();
 			g.noTexture();
 			
-			outTmp.beginDraw();
+			outTmp.beginDraw(g);
 			g.image(_myOutputStage2.attachment(0), 0, 0);
-			outTmp.endDraw();
+			outTmp.endDraw(g);
 		}
 		
 		_myShaderStage3.start();
@@ -160,13 +160,13 @@ public class CCOpticalFlowFilter extends CCImageFilter{
 		_myShaderStage3.uniform1i ("IN0", 0);
 		_myShaderStage3.uniform1f ("offset", 0.5f);
 		_myShaderStage3.uniform1f ("gain", 0.5f);
-		_myOutputStage3.draw();
+		_myOutputStage3.draw(g);
 		_myShaderStage3.end();
 		g.noTexture();
 		
 		// keep input for next update call
-		_myLastInput.beginDraw();
+		_myLastInput.beginDraw(g);
 		g.image (_myInput, 0, 0);
-		_myLastInput.endDraw();
+		_myLastInput.endDraw(g);
 	}
 }

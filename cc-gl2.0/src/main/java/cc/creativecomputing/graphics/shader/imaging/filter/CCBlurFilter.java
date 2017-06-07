@@ -63,9 +63,9 @@ public class CCBlurFilter extends CCImageFilter{
 		_myBlur.endDraw (g);
 		g.popAttribute();
 		
-		_myOutput.beginDraw();
+		_myOutput.beginDraw(g);
 		g.clear();
 		g.image(_myBlur.blurredTexture(), 0,0);
-		_myOutput.endDraw();
+		_myOutput.endDraw(g);
 	}
 }

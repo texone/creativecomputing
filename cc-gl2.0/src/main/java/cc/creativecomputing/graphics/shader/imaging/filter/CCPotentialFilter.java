@@ -40,19 +40,20 @@ public class CCPotentialFilter extends CCImageFilterFIR{
 	
 	
 	
-	public CCPotentialFilter (CCGraphics theGraphics, CCTexture2D theInput) {
-		super (theGraphics, theInput, 3);
+	public CCPotentialFilter (CCTexture2D theInput) {
+		super (theInput, 3);
 		_myShader = new CCGLProgram (CCNIOUtil.classPath(this, "shader/potfield_vp.glsl"),CCNIOUtil.classPath(this, "shader/potfield_fp.glsl"));
 	}
 	
-	public void update (float theDeltaTime) {
+	@Override
+	public void display (CCGraphics g) {
 		
-		_myInput.pushInput (_myGraphics, _myLatestInput);
+		_myInput.pushInput (g, _myLatestInput);
 		_myShader.start();
-		_myGraphics.texture (0, _myInput.getData(0).attachment(0));	
-		_myGraphics.texture (1, _myInput.getData(1).attachment(0));	
-		_myGraphics.texture (2, _myOutput.getData(0).attachment(0));	
-		_myGraphics.texture (3, _myOutput.getData(1).attachment(0));	
+		g.texture (0, _myInput.getData(0).attachment(0));	
+		g.texture (1, _myInput.getData(1).attachment(0));	
+		g.texture (2, _myOutput.getData(0).attachment(0));	
+		g.texture (3, _myOutput.getData(1).attachment(0));	
 		
 		
 		_myShader.uniform1i ("IN0", 0);
@@ -67,12 +68,10 @@ public class CCPotentialFilter extends CCImageFilterFIR{
 		_myShader.uniform1f ("gain", _cGain);
 		_myShader.uniform1f ("thresh", _cThreshold);
 		
-		
-		
 		_myOutput.rShift();
-		_myOutput.getData(0).draw();
+		_myOutput.getData(0).draw(g);
 		
 		_myShader.end();
-		_myGraphics.noTexture();
+		g.noTexture();
 	}
 }

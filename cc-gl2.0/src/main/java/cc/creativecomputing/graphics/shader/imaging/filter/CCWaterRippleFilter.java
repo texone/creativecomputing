@@ -26,24 +26,24 @@ public class CCWaterRippleFilter extends CCImageFilterFIR {
 	
 	private CCGLProgram _myShader0;
 	
-	public CCWaterRippleFilter (CCGraphics theGraphics, CCTexture2D theInput) {
-		super (theGraphics, theInput, 3);
+	public CCWaterRippleFilter (CCTexture2D theInput) {
+		super (theInput, 3);
 		_myShader0 = new CCGLProgram(
 			CCNIOUtil.classPath(this, "shader/water_propagate_vp.glsl"), 
 			CCNIOUtil.classPath(this, "shader/water_propagate_fp.glsl")
 		);
 	}
 	
-	public void update(float theDeltaTime) {
-		_myInput.pushInput (_myGraphics, _myLatestInput);
+	public void display(CCGraphics g) {
+		_myInput.pushInput (g, _myLatestInput);
 	
 		_myShader0.start();
 		
-		_myGraphics.clear();
+		g.clear();
 		
-		_myGraphics.texture (0, _myInput.getData(0).attachment(0));	
-		_myGraphics.texture (1, _myOutput.getData(0).attachment(0));	
-		_myGraphics.texture (2, _myOutput.getData(1).attachment(0));	
+		g.texture (0, _myInput.getData(0).attachment(0));	
+		g.texture (1, _myOutput.getData(0).attachment(0));	
+		g.texture (2, _myOutput.getData(1).attachment(0));	
 		
 		_myShader0.uniform1i ("IN0", 0);
 		_myShader0.uniform1i ("OUT1", 1);
@@ -53,9 +53,9 @@ public class CCWaterRippleFilter extends CCImageFilterFIR {
 		_myShader0.uniform1f ("speed", _cSpeed);
 			
 		_myOutput.rShift();
-		_myOutput.getData(0).draw();
+		_myOutput.getData(0).draw(g);
 		
 		_myShader0.end();
-		_myGraphics.noTexture();
+		g.noTexture();
 	}
 }

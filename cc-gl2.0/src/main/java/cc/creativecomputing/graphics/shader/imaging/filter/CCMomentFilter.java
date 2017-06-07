@@ -49,11 +49,11 @@ public class CCMomentFilter extends CCImageFilter {
 		_myShader.uniform1f("exp",       _cExp);
 		_myShader.uniform1f("ampllify",  _cAmplify);
 		
-		_myOutput.beginDraw();
+		_myOutput.beginDraw(g);
 		g.clear();
 		g.image(_myInput, 0,0);
 		_myShader.end();
-		_myOutput.endDraw();
+		_myOutput.endDraw(g);
 		g.noTexture();
 	}
 

@@ -54,7 +54,7 @@ public class CCSurfaceFilter extends CCImageFilter{
 		_myShader.uniform1f ("scaleX", (float)_myInput.width()  / _myInput2.width());
 		_myShader.uniform1f ("scaleY", (float)_myInput.height() / _myInput2.height());
 		
-		_myOutput.draw();
+		_myOutput.draw(g);
 		
 		_myShader.end();
 		g.noTexture();

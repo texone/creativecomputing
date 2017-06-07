@@ -10,30 +10,25 @@
  */
 package cc.creativecomputing.graphics.shader.imaging.filter;
 
-import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.util.CCRingStructure;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 
-public abstract class CCImageFilterFIR {
+public abstract class CCImageFilterFIR extends CCImageFilter{
 	
 	protected CCTexture2D _myLatestInput;
 	public CCRingStructure _myInput;
 	protected CCRingStructure _myOutput;
-	
-	protected CCGraphics _myGraphics;
 	protected int _myTimesteps;
 	
-	public CCImageFilterFIR (CCGraphics theGraphics, CCTexture2D theInput, int n){
+	public CCImageFilterFIR (CCTexture2D theInput, int n){
+		super(theInput);
 		_myTimesteps = n;
-		_myGraphics = theGraphics;
 		_myLatestInput = theInput;
 		_myInput  = new CCRingStructure (theInput.width(), theInput.height(), _myTimesteps);
 		_myOutput = new CCRingStructure (theInput.width(), theInput.height(), _myTimesteps);
 	}
-	
-	
-	public abstract void update(float theDeltaTime);
 
+	@Override
 	public CCTexture2D output () {
 		return output(0);
 	}

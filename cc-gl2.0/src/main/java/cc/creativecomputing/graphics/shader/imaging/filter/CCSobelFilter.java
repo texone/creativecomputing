@@ -28,7 +28,6 @@ public class CCSobelFilter extends CCImageFilter {
 	public CCSobelFilter(CCTexture2D theInput) {
 		super(theInput);
 		_myOutput = new CCShaderBuffer(32, 3, 2, theInput.width(), theInput.height());
-		_myOutput.clear();
 		
 		_myShader = new CCGLProgram (CCNIOUtil.classPath(this, "shader/sobel_vp.glsl"), CCNIOUtil.classPath(this, "shader/sobel_fp.glsl"));
 	}
@@ -54,7 +53,7 @@ public class CCSobelFilter extends CCImageFilter {
 		
 		_myShader.uniform ("offset", _cShift);
 
-		_myOutput.draw();
+		_myOutput.draw(g);
 		_myShader.end();
 		g.noTexture();
 	}

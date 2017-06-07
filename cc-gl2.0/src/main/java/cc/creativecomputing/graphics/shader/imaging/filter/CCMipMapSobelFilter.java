@@ -35,7 +35,7 @@ public class CCMipMapSobelFilter extends CCImageFilter {
 	private boolean _cShift = true;
 	
 	
-	public CCMipMapSobelFilter (CCTexture2D theInput) {
+	public CCMipMapSobelFilter (CCGraphics g, CCTexture2D theInput) {
 		super(theInput);
 	
 		_myInput = theInput;
@@ -47,7 +47,7 @@ public class CCMipMapSobelFilter extends CCImageFilter {
 		//_myInputBuffer.attachment(0).textureBorderColor(CCColor.BLACK);
 	
 		_myOutput = new CCShaderBuffer(32,3,2,_myInput.width(), _myInput.height());
-		_myOutput.clear();
+		_myOutput.clear(g);
 		
 		_myShader = new CCGLProgram(CCNIOUtil.classPath(this, "shader/sobel_mipmap_vp.glsl"), CCNIOUtil.classPath(this, "shader/sobel_mipmap_fp.glsl"));
 	}
@@ -77,7 +77,7 @@ public class CCMipMapSobelFilter extends CCImageFilter {
 		
 		swapTexture(g);
 		
-		_myOutput.beginDraw();
+		_myOutput.beginDraw(g);
 		g.clear();
 		_myShader.start();
 		g.texture(0, _myInputBuffer.attachment(0));
@@ -103,6 +103,6 @@ public class CCMipMapSobelFilter extends CCImageFilter {
 		g.noTexture();
 		
 		_myShader.end();
-		_myOutput.endDraw();
+		_myOutput.endDraw(g);
 	}
 }

@@ -89,7 +89,7 @@ public class CCDistanceFieldFilter extends CCImageFilter {
 		_myShaderStage1.uniform1i ("width",  _myOutputStage1.width());
 		_myShaderStage1.uniform1i ("height", _myOutputStage1.height());
 		
-		_myOutputStage1.draw();
+		_myOutputStage1.draw(g);
 		
 		_myShaderStage1.end();
 		g.noTexture();

@@ -28,17 +28,15 @@ public class CCUpscaleFilter extends CCImageFilter{
 
 		_myOutBuffer = new CCShaderBuffer (_myWidth,_myHeight);
 		_myOutBuffer.attachment(0).textureFilter(CCTextureFilter.LINEAR);
-		//_myOutBuffer.attachment(0).generateMipmaps(true);
-		_myOutBuffer.clear();
 	}
 	
 	@Override
 	public void display (CCGraphics g) {
-		_myOutBuffer.beginDraw();
+		_myOutBuffer.beginDraw(g);
 		g.clear();
 		g.color(1f);
 		g.image (_myInput, 0, 0, _myWidth, _myHeight);
-		_myOutBuffer.endDraw();
+		_myOutBuffer.endDraw(g);
 	}
 	
 	@Override

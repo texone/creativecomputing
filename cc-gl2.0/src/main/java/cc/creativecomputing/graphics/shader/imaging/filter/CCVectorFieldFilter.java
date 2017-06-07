@@ -30,7 +30,6 @@ public class CCVectorFieldFilter extends CCImageFilter{
 		super(theInput);
 		_myVectorField = new CCVectorField2D (theInput.width(), theInput.height(), initDownSample);
 		_myOutput = new CCShaderBuffer(theInput.width(), theInput.height());
-		_myOutput.clear();
 	}
 
 	
@@ -50,11 +49,11 @@ public class CCVectorFieldFilter extends CCImageFilter{
 	public void display(CCGraphics g) {
 		_myVectorField.setDownSample (_cDownSample);
 		_myVectorField.setLineLength (_cLineLength);
-		_myOutput.beginDraw ();
+		_myOutput.beginDraw (g);
 		g.clear ();
 		g.color (1f);
 		_myVectorField.draw (g, _myInput);
-		_myOutput.endDraw ();
+		_myOutput.endDraw (g);
 	}
 	
 	public void draw(CCGraphics g) {
