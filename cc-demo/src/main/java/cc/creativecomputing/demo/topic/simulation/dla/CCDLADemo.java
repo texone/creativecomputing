@@ -45,9 +45,9 @@ public class CCDLADemo extends CCGL2Adapter {
 		_myScreenCapture = new CCScreenCaptureController(this);
 		
 
-		_myDLA.beginCrystal();
+		_myDLA.beginCrystal(g);
 		_myText.draw(g);
-		_myDLA.endCrystal();
+		_myDLA.endCrystal(g);
 	}
 	
 	private boolean _myReset = false;
@@ -65,8 +65,8 @@ public class CCDLADemo extends CCGL2Adapter {
 	public void display(CCGraphics g) {
 		if (_myReset) {
 			_myReset = false;
-			_myDLA.reset();
-			_myDLA.beginCrystal();
+			_myDLA.reset(g);
+			_myDLA.beginCrystal(g);
 			
 //			g.color(255);
 //			_myText.draw(g);
@@ -78,15 +78,15 @@ public class CCDLADemo extends CCGL2Adapter {
 			g.color(255);
 
 			_myText.draw(g);
-			_myDLA.endCrystal();
+			_myDLA.endCrystal(g);
 		}
 
-		_myDLA.beginCrystal();
+		_myDLA.beginCrystal(g);
 		g.color(0);
 		
 		g.rect(0, 0, _cSwapWidth * g.width(), _cSwapHeight * g.height());
 		g.color(255);
-		_myDLA.endCrystal();
+		_myDLA.endCrystal(g);
 		_myDLA.update(g, animator());
 		
 		g.clear();

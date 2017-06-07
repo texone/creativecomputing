@@ -1,10 +1,12 @@
 package cc.creativecomputing.demo.kle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
-import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.effects.CCOffsetEffect;
 import cc.creativecomputing.effects.CCSignalEffect;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -97,12 +99,7 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 		}
 	}
 	
-	
-	
-	
-	
-	
-	private CCEffectables<CCCubeEffectable> _myCubes = new CCEffectables<>();
+	private List<CCCubeEffectable> _myCubes = new ArrayList<>();
 	
 	@CCProperty(name = "alpha pow", min = 0, max = 1)
 	private double _cAlphaPow = 1;
@@ -128,10 +125,9 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 				i++;
 			}
 		}
-		_myCubes.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		
 		_myEffectManager = new CCEffectManager<CCCubeEffectable>(_myCubes, "x", "y", "z");
-		
+		_myEffectManager.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		_myEffectManager.put("offset", new CCOffsetEffect());
 		_myEffectManager.put("offset2", new CCOffsetEffect());
 		_myEffectManager.put("signal", new CCSignalEffect());

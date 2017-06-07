@@ -89,7 +89,7 @@ public class CCVornoise2 extends CCGL2Adapter {
 	@Override
 	public void display(CCGraphics g) {
 		g.clear();
-		_myShaderBuffer.beginDraw();
+		_myShaderBuffer.beginDraw(g);
 		g.clear();
 		if(_myTexture.value() != null)g.texture(0,_myTexture.value());
 		if(_myTexture2.value() != null)g.texture(1,_myTexture2.value());
@@ -117,7 +117,7 @@ public class CCVornoise2 extends CCGL2Adapter {
 		g.endShape();
 		_myProgram.end();
 		g.noTexture();
-		_myShaderBuffer.endDraw();
+		_myShaderBuffer.endDraw(g);
 		
 		CCPNGImage myImage = new CCPNGImage(g.width(), g.height(), 16, false, false);
 		FloatBuffer myBuf = _myShaderBuffer.getData();

@@ -27,7 +27,7 @@ public class CCDLADemo extends CCGL2Adapter {
 			CCNIOUtil.classPath(this, "dla_buffer_fragment.glsl")
 		);
 		
-		_mySwapBuffer = new CCGLSwapBuffer(g.width(), g.height(), CCTextureTarget.TEXTURE_2D);
+		_mySwapBuffer = new CCGLSwapBuffer(g, g.width(), g.height(), CCTextureTarget.TEXTURE_2D);
 		
 //		_myImageProgram = new CCGLProgram(
 //			null,
@@ -48,7 +48,7 @@ public class CCDLADemo extends CCGL2Adapter {
 		_myBufferProgram.uniform2f("iChannelResolution", _mySwapBuffer.width(), _mySwapBuffer.height());
 		_myBufferProgram.uniform1i("iFrame", 0);//animator().frames());
 		_myBufferProgram.uniform1f("iGlobalTime", animator().time());
-		_mySwapBuffer.draw();
+		_mySwapBuffer.draw(g);
 		_myBufferProgram.end();
 		_mySwapBuffer.swap();
 		

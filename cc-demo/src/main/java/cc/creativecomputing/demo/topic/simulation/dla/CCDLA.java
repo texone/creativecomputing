@@ -130,23 +130,23 @@ public class CCDLA {
 		_myRandomTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.classPath(this,"random.png")), CCTextureTarget.TEXTURE_2D);
 		_myRandomTexture.wrap(CCTextureWrap.REPEAT);
 
-		_myParticleBuffer = new CCGLSwapBuffer(32, 3, _myParticlesSizeX, _myParticlesSizeY);
+		_myParticleBuffer = new CCGLSwapBuffer(g, 32, 3, _myParticlesSizeX, _myParticlesSizeY);
 
 		_myParticlesMesh = new CCVBOMesh(CCDrawMode.POINTS, _myParticlesSizeX * _myParticlesSizeY);
 
-		initializeParticles();
+		initializeParticles(g);
 
 		_myCrystalShader = new CCGLProgram(null, CCNIOUtil.classPath(this,"crystal.glsl"));
 		
 		_myCrystalDrawShader = new CCGLProgram(null, CCNIOUtil.classPath(this,"crystal_draw_fragment.glsl"));
 
 		_myParticlesBuffer = new CCShaderBuffer(32, 3, _myWidth, _myHeight);
-		_myParticlesBuffer.clear();
-		_myCrystalSwapBuffer = new CCGLSwapBuffer(32, 4, 2, _myWidth, _myHeight);
-		_myCrystalSwapBuffer.clear();
+		_myParticlesBuffer.clear(theGraphics);
+		_myCrystalSwapBuffer = new CCGLSwapBuffer(g, 32, 4, 2, _myWidth, _myHeight);
+		_myCrystalSwapBuffer.clear(g);
 		_myCrystalBuffer = new CCShaderBuffer(32, 3, 2, _myWidth, _myHeight);
-		_myCrystalBuffer.clear();
-		 initializeCrystal();
+		_myCrystalBuffer.clear(theGraphics);
+		 initializeCrystal(g);
 
 		 _myConvolutionFilter = new CCGPUGaussianBlur(true,g,3);
 		 _myConvolutionFilter.dimension(_myWidth, _myHeight);
@@ -158,9 +158,9 @@ public class CCDLA {
 	private void createParticles() {
 		_cCreateParticles = true;
 	}
-	private void initializeParticles() {
+	private void initializeParticles(CCGraphics g) {
 		// Render velocity.
-		_myParticleBuffer.beginDrawCurrent();
+		_myParticleBuffer.beginDrawCurrent(g);
 		_myInitValueShader.start();
 		g.clear();
 		g.beginShape(CCDrawMode.POINTS);
@@ -174,20 +174,20 @@ public class CCDLA {
 		g.endShape();
 
 		_myInitValueShader.end();
-		_myParticleBuffer.endDrawCurrent();
+		_myParticleBuffer.endDrawCurrent(g);
 	}
 
-	public void beginCrystal() {
-		_myCrystalSwapBuffer.beginDrawCurrent();
+	public void beginCrystal(CCGraphics g) {
+		_myCrystalSwapBuffer.beginDrawCurrent(g);
 	}
 
-	public void endCrystal() {
-		_myCrystalSwapBuffer.endDrawCurrent();
+	public void endCrystal(CCGraphics g) {
+		_myCrystalSwapBuffer.endDrawCurrent(g);
 	}
 
-	private void initializeCrystal() {
+	private void initializeCrystal(CCGraphics g) {
 		// Render velocity.
-		_myCrystalSwapBuffer.beginDrawCurrent();
+		_myCrystalSwapBuffer.beginDrawCurrent(g);
 		// _myInitValueShader.start();
 
 		g.beginShape(CCDrawMode.POINTS);
@@ -199,17 +199,17 @@ public class CCDLA {
 		g.endShape();
 
 		// _myInitValueShader.end();
-		_myCrystalSwapBuffer.endDrawCurrent();
+		_myCrystalSwapBuffer.endDrawCurrent(g);
 	}
 
-	public void reset() {
-		_myCrystalSwapBuffer.clear();
+	public void reset(CCGraphics g) {
+		_myCrystalSwapBuffer.clear(g);
 	}
 
 	public void update(CCGraphics g, final CCAnimator theAnimator) {
 		if(_cCreateParticles){
 			_cCreateParticles = false;
-			initializeParticles();
+			initializeParticles(g);
 		}
 		/* UPDATE PARTICLES */
 		g.texture(0, _myRandomTexture);
@@ -228,7 +228,7 @@ public class CCDLA {
 		_myParticleShader.uniform1f("replacement", _cParticleReplacement * theAnimator.deltaTime());
 		_myParticleShader.uniform2f("boundary", new CCVector2(_myWidth, _myHeight));
 
-		_myParticleBuffer.draw();
+		_myParticleBuffer.draw(g);
 		_myParticleShader.end();
 		g.noTexture();
 
@@ -237,13 +237,13 @@ public class CCDLA {
 		_myParticleBuffer.swap();
 
 		/* UPDATE CRYSTAL */
-		_myParticlesBuffer.beginDraw();
+		_myParticlesBuffer.beginDraw(g);
 		g.clear();
 		_myParticleOutputShader.start();
 		_myParticleOutputShader.uniform1f("amount", _cParticleAmount);
 		_myParticlesMesh.draw(g);
 		_myParticleOutputShader.end();
-		_myParticlesBuffer.endDraw();
+		_myParticlesBuffer.endDraw(g);
 
 		g.texture(0, _myParticlesBuffer.attachment(0));
 		g.texture(1, _myCrystalSwapBuffer.attachment(0));
@@ -257,7 +257,7 @@ public class CCDLA {
 		
 		
 		g.blend(CCBlendMode.BLEND);
-		_myCrystalSwapBuffer.draw();
+		_myCrystalSwapBuffer.draw(g);
 
 		_myCrystalShader.end();
 		g.noTexture();
@@ -277,7 +277,7 @@ public class CCDLA {
 		_myCrystalDrawShader.uniform1f("specularAmp", _cSpecularAmp);
 		_myCrystalDrawShader.uniform1f("specularBrightAmp", _cSpecularBrightAmp);
 		
-		_myCrystalBuffer.draw();
+		_myCrystalBuffer.draw(g);
 		_myCrystalDrawShader.end();
 		g.noTexture();
 		

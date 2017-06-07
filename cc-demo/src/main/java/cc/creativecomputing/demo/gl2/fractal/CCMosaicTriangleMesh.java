@@ -129,7 +129,7 @@ public class CCMosaicTriangleMesh{
 		_myMesh.prepareTextureCoordData(3, 4);
 		_myMesh.indices(myIndices);
 
-		allocate(_mySubdevisions);
+		allocate(g, _mySubdevisions);
 		
 		_myTriangleFractalShader = new CCGLProgram(
 			CCNIOUtil.classPath(this, "triangles_vertex.glsl"),
@@ -234,8 +234,8 @@ public class CCMosaicTriangleMesh{
 		subdevide(x23, y23, x3,  y3,  x31, y31, level - 1, theTexCoords);
 	}
 	
-	public void allocate(int theSubdivision) {
-		_myTargetsBuffer.beginDraw();
+	public void allocate(CCGraphics g, int theSubdivision) {
+		_myTargetsBuffer.beginDraw(g);
 		_myGraphics.clearColor(0);
 		_myGraphics.clear();
 		_myInitValueShader.start();
@@ -253,7 +253,7 @@ public class CCMosaicTriangleMesh{
 
 		_myGraphics.endShape();
 		_myInitValueShader.end();
-		_myTargetsBuffer.endDraw();
+		_myTargetsBuffer.endDraw(g);
 	}
 	
 	private CCVector2 _myTextureSize = new CCVector2();

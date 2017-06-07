@@ -110,15 +110,15 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_mySwapBuffer = new CCGLSwapBuffer(g.width(), g.height(), CCTextureTarget.TEXTURE_RECT);
-		_mySwapBuffer.clear();
+		_mySwapBuffer = new CCGLSwapBuffer(g, g.width(), g.height(), CCTextureTarget.TEXTURE_RECT);
+		_mySwapBuffer.clear(g);
 		
 		_myReactiveDiffusionProgram = new CCGLProgram(null, CCNIOUtil.classPath(this,"reactive_diffusion.glsl"));
 		
 		_myBlendSpline = new CCBlendSpline(_cSpline0, _cSpline1);
 		
 		_myInterpolationMap = new CCShaderBuffer(100, 100, CCTextureTarget.TEXTURE_2D);
-		_myInterpolationMap.clear();
+		_myInterpolationMap.clear(g);
 		_myInterpolationMap.attachment(0).textureFilter(CCTextureFilter.LINEAR);
 		_myInterpolationMap.attachment(0).wrap(CCTextureWrap.MIRRORED_REPEAT);
 		
@@ -154,7 +154,7 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 	@Override
 	public void display(CCGraphics g) {
 		
-		_myInterpolationMap.beginDraw();
+		_myInterpolationMap.beginDraw(g);
 		_myWriteDataShader.start();
 		g.clear();
 		g.beginShape(CCDrawMode.POINTS);
@@ -169,10 +169,10 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 		}
 		g.endShape();
 		_myWriteDataShader.end();
-		_myInterpolationMap.endDraw();
+		_myInterpolationMap.endDraw(g);
 		
 		if(_myReset){
-			_mySwapBuffer.clear();
+			_mySwapBuffer.clear(g);
 		}
 		
 		CCVector3 myDV = _myBlendSpline.interpolate(_cDensity, _cViscosity);
@@ -197,7 +197,7 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 			_myReactiveDiffusionProgram.uniform1i( "reset", _myReset ? 1 : 0);
 			_myReactiveDiffusionProgram.uniform1f( "drawParameterSpace", _cDrawParameterSpace ? 1 : 0);
 			
-			_mySwapBuffer.draw();
+			_mySwapBuffer.draw(g);
 			_myReactiveDiffusionProgram.end();
 			
 			g.noTexture();
@@ -208,7 +208,7 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 		}
 		g.color(255);
 
-		_mySwapBuffer.beginDrawCurrent();
+		_mySwapBuffer.beginDrawCurrent(g);
 		g.pushAttribute();
 		if(_cDrawMask){
 			g.color(0,0,_cMaskVal);
@@ -219,7 +219,7 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 			if(mouse().isPressed)g.line(mouse().position.x, g.height() - mouse().position.y, mouse().lastPosition.x, g.height() - mouse().lastPosition.y);
 		}
 		g.popAttribute();
-		_mySwapBuffer.endDrawCurrent();
+		_mySwapBuffer.endDrawCurrent(g);
 		
 		if(_cDrawLighted){
 

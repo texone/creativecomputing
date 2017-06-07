@@ -9,36 +9,41 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.math.signal.CCMixSignal;
 
-public class CCMixedSignalDemo extends CCGL2Adapter{
+public class CCPlots02 extends CCGL2Adapter{
 	
 	@CCProperty(name = "signal")
 	private CCMixSignal _mySignal = new CCMixSignal();
-	@CCProperty(name = "height", min = 0, max = 500)
+	@CCProperty(name = "height", min = 0, max = 5000)
 	private double _cHeight = 100;
-
-	private void drawGraph(CCGraphics g, double theScale){
-		g.beginShape(CCDrawMode.POINTS);
-		for(int x = 0; x < g.width(); x++){
-			double y = (_mySignal.value(x - g.width()/2)) * theScale;
-			g.vertex(x - g.width()/2, y);
-		}
-		g.endShape();
-	}
+	@CCProperty(name = "alpha", min = 0, max = 1)
+	private double _cAlpha = 1;
+	@CCProperty(name = "drawmode")
+	private CCDrawMode _cDrawMode = CCDrawMode.LINE_STRIP;
+	@CCProperty(name = "offset", min = 0, max = 1)
+	private double _cSignalOffset = 0;
 	
 	@Override
 	public void display(CCGraphics g) {
 		g.clear();
 		g.color(255);
 
-		g.color(255);
-		drawGraph(g,_cHeight);
-
+		g.color(1d, _cAlpha);
+		g.beginShape(_cDrawMode);
+		for(int a = 0; a < 20000; a++){
+			double x = (_mySignal.value(a / 10000d)) * _cHeight;
+			double y = (_mySignal.value(a / 10000d + 0.25)) * _cHeight;
+			g.vertex(x,y);
+			x = (_mySignal.value(a / 10000d + _cSignalOffset)) * _cHeight;
+			y = (_mySignal.value(a / 10000d + 0.25 + _cSignalOffset)) * _cHeight;
+			g.vertex(x,y);
+		}
+		g.endShape();
 	}
 	
 	public static void main(String[] args) {
 		
 		
-		CCMixedSignalDemo demo = new CCMixedSignalDemo();
+		CCPlots02 demo = new CCPlots02();
 		
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);

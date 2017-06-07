@@ -1,10 +1,12 @@
 package cc.creativecomputing.demo.kle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
-import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.effects.CCOffsetEffect;
 import cc.creativecomputing.effects.CCSignalEffect;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -71,7 +73,7 @@ public class CCNoiseBandDemo extends CCGL2Adapter{
 	
 	
 	
-	private CCEffectables<CCStickEffectable> _myCubes = new CCEffectables<>();
+	private List<CCStickEffectable> _myCubes = new ArrayList<>();
 	
 	@CCProperty(name = "rotate x amp", min = 0, max = 2)
 	private double _cRotateXAmp = 1;

@@ -9,7 +9,6 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
-import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.effects.CCOffsetEffect;
 import cc.creativecomputing.effects.CCSignalEffect;
 import cc.creativecomputing.graphics.CCDrawAttributes;
@@ -254,7 +253,7 @@ public class CCEffectQuadDemo extends CCGL2Adapter {
 	@CCProperty(name = "easeDistance", min = 0, max = 100)
 	private double _cEaseDistance = 0;
 	
-	private CCEffectables<CCScreenEffectable> _myScreens = new CCEffectables<>();
+	private List<CCScreenEffectable> _myScreens = new ArrayList<>();
 	
 	private List<CCScreenColumn> _myScreenColumns = new ArrayList<>();
 
@@ -311,9 +310,9 @@ public class CCEffectQuadDemo extends CCGL2Adapter {
 			_myScreenColumns.add(myScreenColumn);
 		}
 		
-		_myScreens.addRelativeSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		
 		_myEffectManager = new CCEffectManager<CCScreenEffectable>(_myScreens, "y", "o0", "o1");
+		_myEffectManager.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		_myEffectManager.put("offset", new CCOffsetEffect());
 		_myEffectManager.put("signal", new CCSignalEffect());
 		

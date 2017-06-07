@@ -35,7 +35,7 @@ public class CCShaderTextureTest extends CCGL2Adapter {
 
 		g.clearColor(0);
 		g.clear();
-		_myShaderTexture.beginDraw();
+		_myShaderTexture.beginDraw(g);
 
 		g.clearColor(255,0,0);
 		g.clear();
@@ -46,7 +46,7 @@ public class CCShaderTextureTest extends CCGL2Adapter {
 			g.ellipse(CCMath.random(400),CCMath.random(400),0,20,20);
 		}
 		g.rect(-200,-200, 50,50);
-		_myShaderTexture.endDraw();
+		_myShaderTexture.endDraw(g);
 		
 		FloatBuffer outputData0 = _myShaderTexture.getData(0);
 		System.err.printf("toutput0\toutput1\toutput2\toutput3\n");

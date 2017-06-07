@@ -113,8 +113,8 @@ public class CCVoronoiseLighted extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
-		_myNoiseMap.clear();
-		_myNoiseMap.beginDraw();
+		_myNoiseMap.clear(g);
+		_myNoiseMap.beginDraw(g);
 		g.clear();
 		_myProgram.start();
 		_myProgram.uniform2f("iResolution", g.width(), g.height());
@@ -133,7 +133,7 @@ public class CCVoronoiseLighted extends CCGL2Adapter {
 		g.vertex(g.width(), 0);
 		g.endShape();
 		_myProgram.end();
-		_myNoiseMap.endDraw();
+		_myNoiseMap.endDraw(g);
 		
 		g.clear();
 		

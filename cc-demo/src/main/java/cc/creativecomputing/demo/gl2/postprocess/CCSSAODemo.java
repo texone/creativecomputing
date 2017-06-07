@@ -12,11 +12,10 @@ import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.shader.postprocess.CCPostProcess;
-import cc.creativecomputing.graphics.shader.postprocess.CCSSAO;
-import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
+import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
@@ -133,8 +132,8 @@ public class CCSSAODemo extends CCGL2Adapter {
 //		_mySSAOShader.uniform2f("invScreenSize", 1.0f / _myShaderBuffer.width(), 1.0f / _myShaderBuffer.height());
 
 		g.color(255);
-		_myShaderBuffer.clear();
-		_myShaderBuffer.draw();
+		_myShaderBuffer.clear(g);
+		_myShaderBuffer.draw(g);
 
 		_mySSAOShader.end();
 //

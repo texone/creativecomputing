@@ -87,18 +87,18 @@ public class CCGPUWaterRipple{
 
 		_myBackgroundTexture = theBackgroundTexture;
 		_myWaveInnerEdgeTexture = new CCShaderBuffer(theWidth, theHeight);
-		_myWaveInnerEdgeTexture.clear();
+		_myWaveInnerEdgeTexture.clear(g);
 		
 		_mySineShader = new CCGLProgram(null, CCNIOUtil.classPath(CCGPUWaterRipple.class, "sine.glsl"));
 		_mySimShader = new CCGLProgram(null, CCNIOUtil.classPath(CCGPUWaterRipple.class, "water_simulation.glsl"));
 		_myDrawShader = new CCGLProgram(null,  CCNIOUtil.classPath(CCGPUWaterRipple.class, "water_draw.glsl"));
 	
 		_myCurrentCellLocationsTexture = new CCShaderBuffer(32, 4, 2, _myWidth, _myHeight);
-		_myCurrentCellLocationsTexture.clear();
+		_myCurrentCellLocationsTexture.clear(g);
 		_myPreviousCellLocationsTexture = new CCShaderBuffer(32, 4, 2, _myWidth, _myHeight);
-		_myPreviousCellLocationsTexture.clear();
+		_myPreviousCellLocationsTexture.clear(g);
 		_myTargetCellLocationsTexture = new CCShaderBuffer(32, 4, 2, _myWidth, _myHeight);
-		_myTargetCellLocationsTexture.clear();
+		_myTargetCellLocationsTexture.clear(g);
 		
 		_mySplashes = new ArrayList<CCGPUWaterSplash>();
 	}
@@ -108,7 +108,7 @@ public class CCGPUWaterRipple{
 	}
 	
 	private void applySplashes(CCGraphics g) {
-		_myCurrentCellLocationsTexture.beginDraw();
+		_myCurrentCellLocationsTexture.beginDraw(g);
 //		g.colorMask(true, false, false, false);
 		g.clear();
 
@@ -132,27 +132,27 @@ public class CCGPUWaterRipple{
 		_mySineShader.end();
 
 //		g.noColorMask();
-		_myCurrentCellLocationsTexture.endDraw();
+		_myCurrentCellLocationsTexture.endDraw(g);
 
 		_mySplashes.clear();
 	}
 	
 	public void beginDrawMask() {
-		_myCurrentCellLocationsTexture.beginDraw();
+		_myCurrentCellLocationsTexture.beginDraw(_myGraphics);
 	}
 	
 	public void endDrawMask() {
-		_myCurrentCellLocationsTexture.endDraw();
+		_myCurrentCellLocationsTexture.endDraw(_myGraphics);
 	}
 	
 	public void beginDrawActiveArea() {
-		_myCurrentCellLocationsTexture.beginDraw();
+		_myCurrentCellLocationsTexture.beginDraw(_myGraphics);
 		_myGraphics.colorMask(true, false, false, false);
 	}
 	
 	public void endDrawActiveArea() {
 		_myGraphics.noColorMask();
-		_myCurrentCellLocationsTexture.endDraw();
+		_myCurrentCellLocationsTexture.endDraw(_myGraphics);
 	}
 	
 	double _myAngle = 0;
@@ -171,8 +171,8 @@ public class CCGPUWaterRipple{
 	    _mySimShader.uniform1f("normalHeightScale", _myNormalHeightScale);
 	    _mySimShader.uniform1f("waveInnerEdgesStrength", _myWaveInnerEdgesStrength);
 	    
-	    _myTargetCellLocationsTexture.clear();
-	    _myTargetCellLocationsTexture.draw();
+	    _myTargetCellLocationsTexture.clear(g);
+	    _myTargetCellLocationsTexture.draw(g);
         
 	    _mySimShader.end();
 	    

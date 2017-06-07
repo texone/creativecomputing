@@ -7,7 +7,6 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
-import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.effects.CCOffsetEffect;
 import cc.creativecomputing.effects.CCSignalEffect;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -102,8 +101,8 @@ public class CCTriangleEffectableDemo extends CCGL2Adapter{
 	@CCProperty(name = "color effects")
 	private CCEffectManager<CCTriangleFront> _myColorManager;
 	
-	private CCEffectables<CCTriangleElement> _myTriangleElements = new CCEffectables<>();
-	private CCEffectables<CCTriangleFront> _myTriangleFronts = new CCEffectables<>();
+	private List<CCTriangleElement> _myTriangleElements = new ArrayList<>();
+	private List<CCTriangleFront> _myTriangleFronts = new ArrayList<>();
 	
 	@CCProperty(name = "camera")
 	private CCCameraController _myCameraController;
@@ -114,16 +113,16 @@ public class CCTriangleEffectableDemo extends CCGL2Adapter{
 			double tx = CCMath.map(x, 0, 30 - 1, -800, 800);
 			_myTriangleElements.add(new CCTriangleElement(x, new CCVector3(tx, 0, 0), x));
 		}
-		_myTriangleElements.updateInfos();
 		
 		_myRotationManager = new CCEffectManager<CCTriangleElement>(_myTriangleElements, "r");
-		
+
+		_myRotationManager.updateInfos();
 		_myRotationManager.put("offset", new CCOffsetEffect());
 		_myRotationManager.put("offset2", new CCOffsetEffect());
 		_myRotationManager.put("signal", new CCSignalEffect());
-		_myTriangleFronts.updateInfos();
 		_myColorManager = new CCEffectManager<CCTriangleFront>(_myTriangleFronts, "h", "s", "b");
 		_myColorManager.put("offset", new CCOffsetEffect());
+		_myColorManager.updateInfos();
 		
 		_myCameraController = new CCCameraController(this, g, 100);
 		
