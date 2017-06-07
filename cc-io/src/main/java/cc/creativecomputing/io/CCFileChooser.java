@@ -70,7 +70,7 @@ public class CCFileChooser extends JFileChooser{
 				if(getFileFilter() instanceof CCFileFilter){
 					myExtension = getFileFilter().getDescription();
 				}
-				if(myExtension != null && getDialogType() != OPEN_DIALOG  && getFileSelectionMode() != DIRECTORIES_ONLY){
+				if(myExtension != null && getDialogType() != OPEN_DIALOG  && getFileSelectionMode() != DIRECTORIES_ONLY && !CCNIOUtil.exists(myChoosenPath)){
 				
 					String myEnteredExtension = CCNIOUtil.fileExtension(myChoosenPath);
 					if(myEnteredExtension == null){
