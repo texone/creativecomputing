@@ -131,7 +131,7 @@ public class CCSequenceViewer {
 	}
 	
 	private void drawImage(CCGraphics g){
-		_myOutputBuffer.beginDraw();
+		_myOutputBuffer.beginDraw(g);
 		g.clear();
 		g.texture(0,_myMotionData.attachment(0));
 		_myDrawValueShader.start();
@@ -152,7 +152,7 @@ public class CCSequenceViewer {
 		g.endShape();
 		_myDrawValueShader.end();
 		g.noTexture();
-		_myOutputBuffer.endDraw();
+		_myOutputBuffer.endDraw(g);
 	}
 	
 	private void drawLines(CCGraphics g, int theStartLine, int theLines){
@@ -234,7 +234,7 @@ public class CCSequenceViewer {
 		}
 
 		_myMotionData = new CCShaderBuffer(_mySequence.length(), _myColumns * _myRows);
-		_myMotionData.beginDraw();
+		_myMotionData.beginDraw(g);
 		g.clearColor(255);
 		g.clear();
 		_myInitValueShader.start();
@@ -253,7 +253,7 @@ public class CCSequenceViewer {
 		}
 		g.endShape();
 		_myInitValueShader.end();
-		_myMotionData.endDraw();
+		_myMotionData.endDraw(g);
 		_myOutputBuffer = new CCShaderBuffer(_mySequence.length(), _myColumns * _myRows);
 	}
 }

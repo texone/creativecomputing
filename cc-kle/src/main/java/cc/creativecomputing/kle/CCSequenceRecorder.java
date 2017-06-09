@@ -35,6 +35,7 @@ import cc.creativecomputing.kle.formats.CCSequenceKLE1Container;
 import cc.creativecomputing.kle.formats.CCSequenceKLE2Container;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
+import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.easing.CCEasing.CCEaseFormular;
 import cc.creativecomputing.math.easing.CCEasing.CCEaseMode;
@@ -84,7 +85,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 			
 			CCMatrix2 myFrame = new CCMatrix2(_myMapping.columns(), _myMapping.rows(), _myMapping.depth());
 			for(CCSequenceChannel myChannel:_myMapping){
-				myFrame.data()[myChannel.column()][myChannel.row()][myChannel.depth()] = myChannel.value() * _cOutputScale;
+				myFrame.data()[myChannel.column()][myChannel.row()][myChannel.depth()] = _cNormalizeValues ? myChannel.normalizedValue() * _cOutputScale : myChannel.value() * _cOutputScale;
 			}
 			add(myFrame);
 		}
@@ -99,6 +100,8 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		public void save(Path thePath, CCSequenceFormats theFormat){
 			if(!export)return;
 			CCNIOUtil.createDirectories(thePath);
+//			if(_cNormalizeValues)normalize();
+			
 			theFormat.save(thePath, _myMapping, this);
 		}
 	}
@@ -143,6 +146,8 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		private boolean _cRecordRopeLength0 = false;
 		@CCProperty(name = "record ropelength 1")
 		private boolean _cRecordRopeLength1 = false;
+		@CCProperty(name = "normalized rope length")
+		private boolean _cNormalizedRopeLength = false;
 		
 		private final CCSequenceElements _myElements;
 		
@@ -172,10 +177,10 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 				
 				List<CCMotorChannel> myChannels = myElement.motorSetup().channels();
 				if(myChannels.size() > 0){
-					myFrame.data()[myElement.id()][0][8] = myChannels.get(0).value();
+					myFrame.data()[myElement.id()][0][8] = _cNormalizedRopeLength ? myChannels.get(0).normalizedValue() : myChannels.get(0).value();
 				}
 				if(myChannels.size() > 1){
-					myFrame.data()[myElement.id()][0][9] = myChannels.get(1).value();
+					myFrame.data()[myElement.id()][0][9] = _cNormalizedRopeLength ? myChannels.get(1).normalizedValue() : myChannels.get(1).value();
 				}
 			}
 			add(myFrame);
@@ -243,6 +248,8 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	@CCProperty(name = "position recording")
 	private CCSequenceElementRecording _myPositionRecording;
+	@CCProperty(name = "normalize values")
+	private boolean _cNormalizeValues = false;
 	
 	private final CCAnimator _myAnimator;
 	
@@ -250,7 +257,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	private final CCSequenceElements _myElements;
 	
-	private CCFileChooser _myFileChooser = new CCFileChooser();
+	private CCSequenceExporter _myExporter;
 	
 	public CCSequenceRecorder(CCGLAdapter<?, ?> theGLAdapter, CCSequenceElements theElements, CCAnimator theAnimator){
 		_myGLAdapter = theGLAdapter;
@@ -266,14 +273,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		
 		_myPositionRecording = new CCSequenceElementRecording(_myElements);
 		
-		_myFileChooser = new CCFileChooser();
-		_myFileChooser.setAcceptAllFileFilterUsed(false);
-		_myFileChooser.addChoosableFileFilter(new CCFileFilter("KLE_1", "kle"));
-		_myFileChooser.addChoosableFileFilter(new CCFileFilter("KLE_2", "kle"));
-		for(CCSequenceFormats myFormat:CCSequenceFormats.values()){
-			if(myFormat == CCSequenceFormats.NONE)continue;
-			_myFileChooser.addChoosableFileFilter(new CCFileFilter(myFormat.name()));
-		}
+		_myExporter = new CCSequenceExporter(_myElements);
 	}
 	
 	private int _myStep = 0;
@@ -506,86 +506,26 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		if(_myProgress != null)_myProgress.end();
 		_myIsRecording = false;
 		
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				int myRetVal = _myFileChooser.show("");
-				if (myRetVal == JFileChooser.APPROVE_OPTION) {
-					try {
-						Path myChoosenPath = _myFileChooser.path();
-						String myExtension = _myFileChooser.extension();
-						
-						switch(myExtension){
-						case "KLE_1":
-							myChoosenPath = CCNIOUtil.addExtension(myChoosenPath, "kle");
-							Path myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-							
-							if(myPath == null)return;
-				
-							CCSequenceKLE1Container myKLE1Container = new CCSequenceKLE1Container();
-							CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get("motors");
-							if(myRecording != null){
-								myKLE1Container.useStartEndChannels(myRecording._cUseStartEndChannel);
-								myKLE1Container.startChannel(myRecording._cStartChannel);
-								myKLE1Container.endChannel(myRecording._cEndChannel);
-							}
-							myKLE1Container.save(myPath, _myElements, _myRecordings);
-							break;
-						case "KLE_2":
-							myChoosenPath = CCNIOUtil.addExtension(myChoosenPath, "kle");
-							myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-							if(myPath == null)return;
-				
-							CCSequenceKLE2Container myKLEContainer = new CCSequenceKLE2Container();
-							myKLEContainer.save(myPath, _myElements, _myRecordings, getSegments());
-							break;
-						default:
-							CCSequenceFormats myFormat = CCSequenceFormats.valueOf(myExtension);
-							if(!myFormat.isFolder()){
-								myChoosenPath = CCNIOUtil.addExtension(myChoosenPath, myFormat.extension());
-							}
-							if(myFormat == CCSequenceFormats.NONE)return;
-							if(!myFormat.savePosition()){
-								if(_cRecordPositions){
-									if(myFormat.isFolder()){
-										myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-									}else{
-										myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-									}
-									if(myPath == null)return;
-
-									_myPositionRecording.savePositions(myPath, myFormat);
-								}else{
-									for(CCKleChannelType myKey:_myRecordings.keySet()){
-										myRecording = (CCSequenceChannelRecording)_myRecordings.get(myKey);
-										if(!myRecording.export)continue;
-										if(myFormat.isFolder()){
-											myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-										}else{
-											myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-										}
-										
-										myRecording.save(myPath, myFormat);
-									}
+		
+		
+		if(_cRecordPositions)_myExporter.savePositions(theRecordPath, _myPositionRecording);
+		else{
+			if(_cNormalizeValues){
+				for(CCSequence mySequence:_myRecordings.values()){
+					CCVector2 myMinMax = mySequence.minMax();
+					for(CCMatrix2 myFrame:mySequence){
+						for (int c = 0; c < mySequence.columns(); c++) {
+							for (int r = 0; r < mySequence.rows(); r++) {
+								for (int d = 0; d < mySequence.depth(); d++) {
+									myFrame.data()[c][r][d] = CCMath.norm(myFrame.data()[c][r][d], myMinMax.x, myMinMax.y);
 								}
-							}else{
-								if(myFormat.isFolder()){
-									myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-								}else{
-									myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-								}
-								if(myPath == null)return;
-								_myPositionRecording.save(myPath, myFormat);
 							}
 						}
-					} catch (RuntimeException ex) {
-						ex.printStackTrace();
 					}
 				}
-			};
-		});
+			}
+			_myExporter.save(theRecordPath, _myRecordings, getSegments());
+		}
 	}
 	
 	private boolean _myRecordTimeline = false;

@@ -55,7 +55,7 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	public CCSequence loadAsset(Path thePath){
 		CCSequence mySequence = CCSequenceIO.load(thePath, _myMapping);
 		String myExtension = CCNIOUtil.fileExtension(thePath);
-		if(!myExtension.equalsIgnoreCase("cca")){
+		if(myExtension != null && !myExtension.equalsIgnoreCase("cca")){
 			if(_cNorm){
 				for(CCMatrix2 myFrame:mySequence){
 					for(int c = 0; c < myFrame.columns();c++){

@@ -5,10 +5,11 @@ import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCEffect;
+import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
-import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.formats.CCSequenceFormats;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.interpolate.CCInterpolators;
 
 public class CCKleSequenceAnimation extends CCEffect {
@@ -22,6 +23,10 @@ public class CCKleSequenceAnimation extends CCEffect {
 
 	@CCProperty(name = "curve tension", min = -1, max = 2)
 	private double _curveTension = 0;
+	@CCProperty(name = "range min", min = 0, max = 1)
+	private double _cRangeMin = 0;
+	@CCProperty(name = "range max", min = 0, max = 1)
+	private double _cRangeMax = 1;
 	
 
 	@CCProperty(name = "group id inverts")
@@ -37,7 +42,6 @@ public class CCKleSequenceAnimation extends CCEffect {
 		this(theMapping, 0, 1);
 	}
 	
-
 	@Override
 	public void update(final double theDeltaTime) {
 	}
@@ -55,7 +59,7 @@ public class CCKleSequenceAnimation extends CCEffect {
 	
 	private double value(CCEffectable theEffectable, double theBLend, int theID){
 		double myOffset = modulation("offset").modulation(theEffectable, -1, 1) * _mySequenceAsset.length();
-		double myValue = _mySequenceAsset.value(_myInterpolator, myOffset, theEffectable, theID) * 2 - 1;
+		double myValue = CCMath.blend(_cRangeMin, _cRangeMax, _mySequenceAsset.value(_myInterpolator, myOffset, theEffectable, theID)) * 2 - 1;
 		return myValue * theBLend * modulation("amount").modulation(theEffectable, -1, 1);
 	}
 
@@ -71,7 +75,7 @@ public class CCKleSequenceAnimation extends CCEffect {
 	}
 	
 	@Override
-	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
+	public void valueNames(CCEffectManager<?> theEffectables, String... theValueNames) {
 		_myResultLength = theValueNames.length;
 		super.valueNames(theEffectables, "offset", "amount");
 	}
