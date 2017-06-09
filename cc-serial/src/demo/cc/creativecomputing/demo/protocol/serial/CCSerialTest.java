@@ -46,18 +46,18 @@ public class CCSerialTest implements CCSerialListener, CCBasicAppListener{
 	}
 	
 	public static void main(String[] args) {
-		CCApplication myApplicationManager = new CCApplication(CCSerialTest.class);
-		
-		CCSerialModule mySerialModule = new CCSerialModule();
-		myApplicationManager.addModule(mySerialModule);
-//		mySerialModule. = "COM1";
-		mySerialModule.rate = 57600;
+//		CCApplication myApplicationManager = new CCApplication(CCSerialTest.class);
+//		
+//		CCSerialModule mySerialModule = new CCSerialModule();
+//		myApplicationManager.addModule(mySerialModule);
+////		mySerialModule. = "COM1";
+//		mySerialModule.rate = 57600;
 		
 		for(String myPort:CCSerialModule.list()){
 			CCLog.info(myPort);
 		}
 		
 		
-		myApplicationManager.start();
+//		myApplicationManager.start();
 	}
 }

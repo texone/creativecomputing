@@ -96,7 +96,7 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 	 * Return true if this port is still active and hasn't run into any trouble.
 	 */
 	public boolean active() {
-		return _myPort.isOpened();
+		return _myPort != null && _myPort.isOpened();
 	}
 	
 	/**
