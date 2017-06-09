@@ -78,6 +78,10 @@ public class CCVector2 implements Cloneable, Externalizable {
 	public static double angle(final CCVector2 theV1, CCVector2 theV2) {
 		return angle(theV1.y, theV1.x, theV2.y, theV2.x);
 	}
+	
+	public static double angle(CCVector2 theVec){
+		return CCMath.atan2(-theVec.y, theVec.x);
+	}
 
     public double x = 0;
     public double y = 0;

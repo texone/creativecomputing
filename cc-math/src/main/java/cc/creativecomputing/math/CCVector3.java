@@ -384,6 +384,13 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
         z = theSource.z;
         return this;
     }
+    
+    public CCVector3 set(final CCVector2 theSource) {
+        x = theSource.x;
+        y = theSource.y;
+        z = 0;
+        return this;
+    }
 
     /**
      * Sets the value of this vector to (0, 0, 0)
@@ -1309,5 +1316,13 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
 
 	public CCVector2 xy() {
 		return new CCVector2(x, y);
+	}   
+
+	public CCVector2 xz() {
+		return new CCVector2(x, z);
 	}    
+
+	public CCVector2 yz() {
+		return new CCVector2(y, z);
+	}     
 }
