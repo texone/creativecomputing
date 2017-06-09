@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.effects.CCEffectable;
-import cc.creativecomputing.effects.CCEffectables;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.elements.lights.CCLightChannel;
@@ -17,7 +15,7 @@ import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
 
-public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
+public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 	/**
 	 * 
 	 */
@@ -45,7 +43,6 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 	
 	public static CCSequenceElements createLightMatrix(int theColumns, int theRows){
 		CCSequenceElements myResult = new CCSequenceElements();
-		myResult.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		int i = 0;
 		for(int c = 0; c < theColumns; c++){
 			for(int r = 0; r < theRows; r++){
@@ -75,23 +72,6 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 		super();
 	}
 	
-	public List<CCSequenceElement> addMatrix(int theColumns, int theRows, int theGroup){
-		addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
-		List<CCSequenceElement> myResult = new ArrayList<>();
-		for(int c = 0; c < theColumns; c++){
-			for(int r = 0; r < theRows; r++){
-				int i = size() + myResult.size();
-				CCSequenceElement myElement = new CCSequenceElement(i, new CCLightRGBSetup(i * 3, i * 3 + 1, i * 3 + 2));
-				myElement.column(c);
-				myElement.row(r);
-				myElement.group(theGroup);
-				myResult.add(myElement);
-			}
-		}
-		addAll(myResult);
-		return myResult;
-	}
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CCSequenceElements(CCXMLElement theMappingsXML, CCXMLElement mySculptureXML, CCMotorCalculations theMotorBounds, float theElementRadius){
 		super();
@@ -104,15 +84,17 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 			int myID = myElementXML.intAttribute("id");
 			
 			
-			List<CCMotorChannel> myMotorChannels = new ArrayList<>();
-			List<CCLightChannel> myLightChannels = new ArrayList<>();
+			List<CCMotorChannel> myMotorChannels = null;
+			List<CCLightChannel> myLightChannels = null;
 			
 			CCVector3 myCentroid = null;
+			CCVector3 myLightPosition = null;
 			
 			for(CCKleChannelType myKey:_myMappings.keySet()){
 				CCSequenceMapping myMapping = _myMappings.get(myKey);
 				switch(myKey){
 				case MOTORS:
+					myMotorChannels = new ArrayList<>();
 					CCXMLElement myMotorsXML = myElementXML.child("motors");
 					for(CCXMLElement myMotorXML:myMotorsXML.children("motor")){
 						CCMotorChannel myMotorChannel = new CCMotorChannel(myMotorXML);
@@ -130,12 +112,23 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 					}
 					break;
 				case LIGHTS:
+					myLightChannels = new ArrayList<>();
 					CCXMLElement myLightsXML = myElementXML.child("lights");
 					for(CCXMLElement myLightXML:myLightsXML.children("light")){
 						CCLightChannel myLightChannel = new CCLightChannel(myLightXML);
 						
 						myLightChannels.add(myLightChannel);
 						myMapping.add(myLightChannel);
+						
+						
+						CCXMLElement myLightPositionXML = myLightXML.child("position");
+						if(myLightPositionXML != null){
+							myLightPosition = new CCVector3(
+								myLightPositionXML.doubleAttribute("x"),
+								myLightPositionXML.doubleAttribute("y"),
+								myLightPositionXML.doubleAttribute("z")
+							);
+						}
 					}
 					break;
 				}
@@ -173,12 +166,11 @@ public class CCSequenceElements extends CCEffectables<CCSequenceElement>{
 				myMatrix,
 				theElementRadius
 			);
-			
+			if(myLightPosition != null)myElement.lightSetup().position().set(myLightPosition);
 			add(myElement);
 			
-			theMotorBounds.setElements(this);
+			if(theMotorBounds != null)theMotorBounds.setElements(this);
 		}
-		updateInfos();
 	}
 
 	public Map<CCKleChannelType, CCSequenceMapping<?>> mappings() {

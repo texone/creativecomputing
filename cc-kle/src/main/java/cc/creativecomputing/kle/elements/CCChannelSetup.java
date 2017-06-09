@@ -3,6 +3,7 @@ package cc.creativecomputing.kle.elements;
 import java.util.List;
 
 import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.math.CCVector3;
 
 public abstract class CCChannelSetup <ChannelType extends CCSequenceChannel>{
 	
@@ -17,6 +18,8 @@ public abstract class CCChannelSetup <ChannelType extends CCSequenceChannel>{
 	}
 	
 	public abstract void setByRelativePosition(double...theValues);
+	
+	public abstract CCVector3 position();
 	
 	
 	public abstract CCXMLElement toXML();

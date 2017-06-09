@@ -1,6 +1,8 @@
 package cc.creativecomputing.kle.elements;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.math.CCMath;
 
 public abstract class CCSequenceChannel {
 
@@ -64,6 +66,11 @@ public abstract class CCSequenceChannel {
 	
 	public void value(double theValue){
 		_myValue = theValue;
+	}
+	
+	public double normalizedValue(){
+		CCLog.info(value() + " : " + _myMinimum + " : " + _myMaximum);
+		return CCMath.norm(value(), _myMinimum, _myMaximum);
 	}
 	
 	public double value(){

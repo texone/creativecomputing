@@ -1,7 +1,9 @@
 package cc.creativecomputing.kle.elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.io.xml.CCXMLElement;
@@ -21,6 +23,8 @@ import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionCalculations;
 import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionSetup;
+import cc.creativecomputing.kle.elements.motors.CC2MotorRotationAxisBounds;
+import cc.creativecomputing.kle.elements.motors.CC2MotorRotationAxisSetup;
 
 public class CCSequenceElement extends CCEffectable{
 	
@@ -29,7 +33,7 @@ public class CCSequenceElement extends CCEffectable{
 	private final CCMotorSetup _myMotorSetup;
 	private final CCLightSetup _myLightSetup;
 	
-	private CCMatrix4x4 _myMatrix;
+	private Map<String, String> _myAttributes = new HashMap<>();
 	
 	public CCSequenceElement(
 		int theID, 
@@ -73,31 +77,31 @@ public class CCSequenceElement extends CCEffectable{
 		_myLightSetup = null;
 	}
 	
-	public CCMatrix4x4 matrix(){
-		return _myMatrix;
+	public void addAttribute(String theKey, String theAttribute){
+		_myAttributes.put(theKey, theAttribute);
 	}
 	
 	private CCMotorSetup setMotors(List<CCMotorChannel> theMotors, CCMotorCalculations<?> theBounds, CCVector3 theCentroid, double theElementRadius){
-		if(theMotors == null)return new CCMotorSetup(theMotors, theCentroid);
+		if(theMotors == null)return null;
 		
 		_myChannels.addAll(theMotors);
 		
-		switch(theMotors.size()){
-		case 2:
-			if(theMotors.get(0).connectionPosition().equals(theMotors.get(1).connectionPosition())){
-				return new CC2Motor1ConnectionSetup(theMotors, (CC2Motor1ConnectionBounds)theBounds, theElementRadius);
-			}else{
-				return new CC2Motor2ConnectionSetup(this, theMotors, (CC2Motor2ConnectionCalculations)theBounds, theCentroid,  theElementRadius);
-			}
-		case 1:
+		switch(theBounds.type()){
+		case SETUP_2_MOTOR_1_CONNECTION:
+			return new CC2Motor1ConnectionSetup(theMotors, (CC2Motor1ConnectionBounds)theBounds, theElementRadius);
+		case SETUP_2_MOTOR_2_CONNECTION:
+			return new CC2Motor2ConnectionSetup(this, theMotors, (CC2Motor2ConnectionCalculations)theBounds, theCentroid,  theElementRadius);
+		case SETUP_1_MOTOR_1_CONNECTION:
 			return new CC1Motor1ConnectionSetup(theMotors, (CC1Motor1ConnectionBounds)theBounds, theCentroid);
-		default:;
+		case SETUP_2_MOTOR_ROTATION_AXIS:
+			return new CC2MotorRotationAxisSetup(theMotors, (CC2MotorRotationAxisBounds)theBounds, theElementRadius);
+		default:
 			return new CCMotorSetup(theMotors, theCentroid);
 		}
 	}
 	
 	private CCLightSetup setLights(List<CCLightChannel> theLights){
-		if(theLights == null)return new CCLightSetup(theLights);
+		if(theLights == null)return null;
 			
 		_myChannels.addAll(theLights);
 		
@@ -109,7 +113,7 @@ public class CCSequenceElement extends CCEffectable{
 		case 4:
 			return new CCLightRGBWSetup(theLights);
 		default:
-			return new CCLightSetup(theLights);
+			return null;
 		}
 	}
 	
@@ -142,8 +146,10 @@ public class CCSequenceElement extends CCEffectable{
 	public CCXMLElement toXML(){
 		CCXMLElement myResult = new CCXMLElement("element");
 		myResult.addAttribute("id", _myID);
-		myResult.addChild(_myMotorSetup.toXML());
-		myResult.addChild(_myLightSetup.toXML());
+		
+		if(_myMotorSetup != null)myResult.addChild(_myMotorSetup.toXML());
+		if(_myLightSetup != null)myResult.addChild(_myLightSetup.toXML());
+		
 		CCXMLElement myMatrixXML = myResult.createChild("matrix");
 		myMatrixXML.addAttribute("m00", _myMatrix.m00);
 		myMatrixXML.addAttribute("m01", _myMatrix.m01);
@@ -164,6 +170,10 @@ public class CCSequenceElement extends CCEffectable{
 		myMatrixXML.addAttribute("m31", _myMatrix.m31);
 		myMatrixXML.addAttribute("m32", _myMatrix.m32);
 		myMatrixXML.addAttribute("m33", _myMatrix.m33);
+		
+		for(String myKey:_myAttributes.keySet()){
+			myResult.addAttribute(myKey, _myAttributes.get(myKey));
+		}
 		
 		return myResult;
 	}

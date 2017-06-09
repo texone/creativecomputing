@@ -2,8 +2,8 @@ package cc.creativecomputing.kle.elements;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.kle.elements.motors.CCMotorSetup;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.math.CCMath;
 
 public class CCSequenceElementsRenderer {
 	
@@ -22,24 +22,30 @@ public class CCSequenceElementsRenderer {
 		
 	}
 	
+	public void drawMotorSetup(CCGraphics g, CCMotorSetup theSetup){
+		if(theSetup == null)return;
+		
+		g.color(_cRopeColor);
+		theSetup.drawRopes(g);
+
+		if(_cBoundColor.a > 0){
+			g.color(_cBoundColor);
+			theSetup.drawRangeBounds(g);
+			theSetup.drawElementBounds(g);
+		}
+	}
+	
 	public void draw(CCGraphics g){
 		for(CCSequenceElement myElement:_myElements){
 			g.pushMatrix();
 			g.applyMatrix(myElement.matrix());
-			
-			g.color(_cRopeColor);
-			myElement.motorSetup().drawRopes(g);
-
-			if(_cBoundColor.a > 0){
-				g.color(_cBoundColor);
-				myElement.motorSetup().drawRangeBounds(g);
-				myElement.motorSetup().drawElementBounds(g);
-			}
 
 			g.pushAttribute();
-			
+			drawMotorSetup(g, myElement.motorSetup());
+			g.popAttribute();
+
+			g.pushAttribute();
 			drawElement(g, myElement);
-			
 			g.popAttribute();
 			
 			g.popMatrix();
