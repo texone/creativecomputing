@@ -64,9 +64,9 @@ public class CC1Motor1ConnectionDemo extends CCGL2Adapter {
 			myElement.column(myElement.motorSetup().channels().get(0).column());
 			myElement.row(myElement.motorSetup().channels().get(0).row());
 		}
-		_mySequenceElements.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		
 		_myEffectManager = new CCSequenceElementEffectManager(_mySequenceElements, CCKleChannelType.MOTORS, "length");
+		_myEffectManager.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
 		_myEffectManager.put("offset", new CCOffsetEffect());
 		_myEffectManager.put("signal", new CCSignalEffect());
 
