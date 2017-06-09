@@ -1,10 +1,10 @@
 package cc.creativecomputing.kle.analyze;
 
-public class CCHistoryData {
+public class CCHistoryDataPoint {
 
 	final double timeStep;
 	
-	public CCHistoryData(double theTimeStep){
+	public CCHistoryDataPoint(double theTimeStep){
 
 		timeStep = theTimeStep;
 	}

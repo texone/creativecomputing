@@ -14,15 +14,16 @@ import cc.creativecomputing.kle.elements.lights.CCLightChannel;
 import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.math.util.CCHistogram;
 
-public class CCSequenceAnalyzer extends CCAnalyzeSettings{
+public class CCSequenceAnalyzer extends CCMotionHistoryRenderer{
 	
 	public class CCMotionDataAnalyzer{
-		protected final List<CCMotionData> data;
+		protected final List<CCMotionHistoryDataPoint> data;
 		protected final CCSequenceElement _myElement;
 		
 		protected CCMotionDataAnalyzer(CCSequenceElement theElement){
-			data = new ArrayList<CCMotionData>();
+			data = new ArrayList<CCMotionHistoryDataPoint>();
 			_myElement = theElement;
 		}
 		
@@ -36,40 +37,20 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 		
 		public void addData(CCVector3 thePosition, double theLength, double theDeltaTime){
 			if(data.size() == 0){
-				data.add(new CCMotionData(thePosition, theLength, 0, 0, 0, theDeltaTime));
+				data.add(new CCMotionHistoryDataPoint(thePosition, theLength, 0, 0, 0, theDeltaTime));
 				return;
 			}
 			
-			CCMotionData myLastData = data.get(data.size() - 1);
+			CCMotionHistoryDataPoint myLastData = data.get(data.size() - 1);
 			double myVelocity = (theLength - myLastData.length) / theDeltaTime;
 			double myAcceleration = (myVelocity - myLastData.velocity) / theDeltaTime;
 			double myJerk = (myAcceleration - myLastData.acceleration) / theDeltaTime;
-			CCMotionData myNewData = new CCMotionData(thePosition, theLength, myVelocity, myAcceleration, myJerk, theDeltaTime);
+			CCMotionHistoryDataPoint myNewData = new CCMotionHistoryDataPoint(thePosition, theLength, myVelocity, myAcceleration, myJerk, theDeltaTime);
 			
 			while(_myUseHistorySize && data.size() >= _cHistorySize){
 				data.remove(0);
 			}
 			data.add(myNewData);
-		}
-		
-		public void draw3D(CCGraphics g){
-			_cVelocity.draw3D(g, data);
-			_cAcceleration.draw3D(g, data);
-			_cJerk.draw3D(g, data);
-		}
-		
-		public void drawCurves(CCGraphics g, double theHeight){
-			_cValue.drawCurves(g, data, theHeight);
-			_cVelocity.drawCurves(g, data, theHeight);
-			_cAcceleration.drawCurves(g, data, theHeight);
-			_cJerk.drawCurves(g, data, theHeight);
-		}
-		
-		public void drawSpectogram(CCGraphics g, double theOffset, double theHeight){
-			_cValue.drawSpectogram(g, data, theOffset, theHeight);
-			_cVelocity.drawSpectogram(g, data,theOffset, theHeight);
-			_cAcceleration.drawSpectogram(g, data,theOffset, theHeight);
-			_cJerk.drawSpectogram(g, data, theOffset, theHeight);
 		}
 	}
 	
@@ -92,17 +73,11 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			g.color(0f, _cAlpha);
 			double mySize = CCMath.max(_cHistorySize, data.size());
 			g.beginShape(CCDrawMode.LINE_STRIP);
-			for(CCMotionData myData:data){
+			for(CCMotionHistoryDataPoint myData:data){
 				g.vertex(CCMath.map(i, 0, mySize, -g.width() / 2, g.width() / 2),CCMath.map(myData.length,_myChannel.min(),_myChannel.max(),0,theHeight));
 				i++;
 			}
 			g.endShape();
-		}
-		
-		@Override
-		public void drawCurves(CCGraphics g , double theHeight){
-			super.drawCurves(g, theHeight);
-			drawLength(g, theHeight);
 		}
 	}
 	
@@ -162,20 +137,20 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			if(data.size() == 0){
 				switch(_myChannelType){
 				case MOTORS:
-					data.add(new CCMotionData(_myElement.motorSetup().position(), 0, 0, 0, 0, theDeltaTime));
+					data.add(new CCMotionHistoryDataPoint(_myElement.motorSetup().position(), 0, 0, 0, 0, theDeltaTime));
 					break;
 				case LIGHTS:
-					data.add(new CCMotionData(new CCVector3(), 0, 0, 0, 0, theDeltaTime));
+					data.add(new CCMotionHistoryDataPoint(new CCVector3(), 0, 0, 0, 0, theDeltaTime));
 					break;
 				}
 				return;
 			}
-			CCMotionData myLastData = data.get(data.size() - 1);
+			CCMotionHistoryDataPoint myLastData = data.get(data.size() - 1);
 			
 			double myVelocity = (_myElement.motorSetup().position().distance(myLastData.position)) / theDeltaTime;
 			double myAcceleration = (myVelocity - myLastData.velocity) / theDeltaTime;
 			double myJerk = (myAcceleration - myLastData.acceleration) / theDeltaTime;
-			CCMotionData myNewData = new CCMotionData(_myElement.motorSetup().position(), 0, myVelocity, myAcceleration, myJerk, theDeltaTime);
+			CCMotionHistoryDataPoint myNewData = new CCMotionHistoryDataPoint(_myElement.motorSetup().position(), 0, myVelocity, myAcceleration, myJerk, theDeltaTime);
 			while(_myUseHistorySize && data.size() >= _cHistorySize){
 				data.remove(0);
 			}
@@ -193,7 +168,7 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 	}
 	
 	public static enum CCAnalyzeMode{
-		ANALYZE_3D, ANALYZE_CURVES, ANALYZE_SPECTROGRAM, OFF;
+		ANALYZE_3D, ANALYZE_CURVES, ANALYZE_SPECTROGRAM, ANALYZE_HISTOGRAM, OFF;
 	}
 
 	protected CCSequenceElements _myElements;
@@ -220,26 +195,6 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 	
 	@CCProperty(name = "show length")
 	private boolean _cShowLength = false;
-	@CCProperty(name = "value")
-	private CCMotionHistoryGraph _cValue = new CCMotionHistoryGraph(this) {
-		@Override
-		public double value(CCMotionData theData) {return (double)theData.length;}
-	};
-	@CCProperty(name = "velocity")
-	private CCMotionHistoryGraph _cVelocity = new CCMotionHistoryGraph(this) {
-		@Override
-		public double value(CCMotionData theData) {return (double)theData.velocity;}
-	};
-	@CCProperty(name = "acceleration")
-	private CCMotionHistoryGraph _cAcceleration = new CCMotionHistoryGraph(this) {
-		@Override
-		public double value(CCMotionData theData) {return (double)theData.acceleration;}
-	};
-	@CCProperty(name = "jerk")
-	private CCMotionHistoryGraph _cJerk = new CCMotionHistoryGraph(this) {
-		@Override
-		public double value(CCMotionData theData) {return (double)theData.jerk;}
-	};
 	
 	protected final List<CCElementAnalyzer> _myElementAnalyzers = new ArrayList<CCSequenceAnalyzer.CCElementAnalyzer>();
 	
@@ -253,6 +208,11 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			CCElementAnalyzer myAnalyzer = new CCElementAnalyzer(myElement, _myChannelType);
 			_myElementAnalyzers.add(myAnalyzer);
 		}
+		
+		addGraph("value", theData -> {return theData.length;});
+		addGraph("velocity", theData -> {return theData.velocity;});
+		addGraph("acceleration", theData -> {return theData.acceleration;});
+		addGraph("jerk", theData -> {return theData.jerk;});
 	}
 	
 	public void reset(){
@@ -264,6 +224,10 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 	public CCAnalyzeMode mode(){
 		return _cAnalyzeMode;
 	}
+	@CCProperty(name = "histogram", hide = true)
+	private CCHistogram _cHistogram = new CCHistogram();
+	@CCProperty(name = "histogram frame")
+	private boolean _cHistogramFrame = false;
 	
 	public void draw3D(CCGraphics g){
 		if(_cAnalyzeMode != CCAnalyzeMode.ANALYZE_3D)return;
@@ -275,10 +239,10 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 			g.applyMatrix(myAnalyzer._myElement.matrix());
 			if(_cAnalyzeChannels){
 				for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
-					myChannelAnalyzer.draw3D(g);
+					draw3D(g, myChannelAnalyzer.data);
 				}
 			}else{
-				myAnalyzer.draw3D(g);
+				draw3D(g, myAnalyzer.data);
 			}
 			g.popMatrix();
 		}
@@ -297,38 +261,30 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 				g.rect(-g.width()/2,  -g.height()/2, g.width(), g.height());
 			}
 			
-			double i = 0;
 			g.color(0f, _cAlpha);
 			
-			List<CCMotionHistoryGraph> _myTypes = new ArrayList<CCMotionHistoryGraph>();
-			if(_cValue._cShow)_myTypes.add(_cValue);
-			if(_cVelocity._cShow)_myTypes.add(_cVelocity);
-			if(_cAcceleration._cShow)_myTypes.add(_cAcceleration);
-			if(_cJerk._cShow)_myTypes.add(_cJerk);
-
 			int myNumberOfElements = CCMath.min(_cNumberOfElements, CCMath.max(_myElementAnalyzers.size() - _cElement,0));
-			for(int m = 0; m < _myTypes.size();m++){
-				i = 0;
-				CCMotionHistoryGraph myType = _myTypes.get(m);
+			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+				int i = 0;
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
 					if(_cAnalyzeChannels){
 						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 							int myNumberOfChannels = myNumberOfElements * myAnalyzer._myChannelAnalyzers.size();
-							double myHeight = g.height() / (double)myNumberOfChannels / _myTypes.size();;
+							double myHeight = g.height() / (double)myNumberOfChannels;
 							g.pushMatrix();
-							g.translate(0, -g.height()/2 + m * myHeight + _myTypes.size() * myHeight * i);
+							g.translate(0, -g.height()/2 + i * myHeight);
 							i++;
-							myType.drawCurves(g, myChannelAnalyzer.data, myHeight * _cCurveScale);
+							drawCurves(g, myChannelAnalyzer.data, mySettings, myHeight * _cCurveScale);
 							g.popMatrix();
 						}
 					}else{
-						double myHeight = g.height() / (double)myNumberOfElements / _myTypes.size();;
+						double myHeight = g.height() / (double)myNumberOfElements;
 						g.pushMatrix();
 	
-						g.translate(0, -g.height()/2 + m * myHeight + _myTypes.size() * myHeight * i);
+						g.translate(0, -g.height()/2 + i * myHeight);
 						i++;
-						myType.drawCurves(g,myAnalyzer.data, myHeight* _cCurveScale);
+						drawCurves(g,myAnalyzer.data, mySettings, myHeight* _cCurveScale);
 						g.popMatrix();
 					}
 				}
@@ -356,41 +312,88 @@ public class CCSequenceAnalyzer extends CCAnalyzeSettings{
 
 			myNumberOfElements = CCMath.min(_cNumberOfElements, CCMath.max(_myElementAnalyzers.size() - _cElement,0));
 			
-			_myTypes = new ArrayList<CCMotionHistoryGraph>();
-			if(_cVelocity._cShow)_myTypes.add(_cVelocity);
-			if(_cAcceleration._cShow)_myTypes.add(_cAcceleration);
-			if(_cJerk._cShow)_myTypes.add(_cJerk);
-			
-			for(int m = 0; m < _myTypes.size();m++){
-				i = 0;
-				CCMotionHistoryGraph myType = _myTypes.get(m);
+			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+				int i = 0;
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
 					if(_cAnalyzeChannels){
 						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 							int myNumberOfChannels = myNumberOfElements * myAnalyzer._myChannelAnalyzers.size();
-							double myHeight = g.height() / (double)myNumberOfChannels / _myTypes.size();
+							double myHeight = g.height() / (double)myNumberOfChannels;
 							g.pushMatrix();
-							g.translate(0, -g.height()/2 + m * myHeight + _myTypes.size() * myHeight * i);
+							g.translate(0, -g.height()/2 + i * myHeight);
 //							g.translate(0, CCMath.map(i, 0, myNumberOfChannels, g.height/2  - g.height/ (myNumberOfChannels), -g.height/2));
 							i++;
-							myType.drawSpectogram(g,myChannelAnalyzer.data,0, myHeight);
+							drawSpectogram(g,myChannelAnalyzer.data, mySettings, 0, myHeight);
 							g.popMatrix();
 						}
 					}else{
-						double myHeight = g.height() / (double)myNumberOfElements  / _myTypes.size();
+						double myHeight = g.height() / (double)myNumberOfElements;
 						g.pushMatrix();
-						g.translate(0, -g.height()/2 + m * myHeight + _myTypes.size() * myHeight * i);
+						g.translate(0, -g.height()/2 + i * myHeight);
 						i++;
 						
-						myType.drawSpectogram(g, myAnalyzer.data, 0,myHeight);
+						drawSpectogram(g, myAnalyzer.data, mySettings, 0,myHeight);
 						g.popMatrix();
 					}
 				}
 			}
 			g.popAttribute();
 			break;
+		case ANALYZE_HISTOGRAM:
+			g.pushAttribute();
+			g.pointSize(5);
+			if(_cBackgroundAlpha > 0){
+				g.color(1f, _cBackgroundAlpha);
+				g.rect(-g.width()/2,  -g.height()/2, g.width(), g.height());
+			}
+			
+			g.color(0f, _cAlpha);
+
+			myNumberOfElements = CCMath.min(_cNumberOfElements, CCMath.max(_myElementAnalyzers.size() - _cElement,0));
+
+			double myHeight = g.height() / _cValueSettings.size();
+			double myWidth = g.width() / _cHistogram.bands();
+			int i = 0;
+			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+				_cHistogram.reset();
+				
+				
+				for(int e = 0; e < myNumberOfElements;e++){
+					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
+					if(_cAnalyzeChannels){
+						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
+							if(_cHistogramFrame){
+								_cHistogram.add(CCMath.abs(mySettings.normedValue(myChannelAnalyzer.data.get(myChannelAnalyzer.data.size() - 1))));
+							}else{
+								for(CCMotionHistoryDataPoint myData:myChannelAnalyzer.data){
+									_cHistogram.add(CCMath.abs(mySettings.normedValue(myData)));
+								}
+							}
+						}
+					}else{
+						if(_cHistogramFrame){
+							_cHistogram.add(CCMath.abs(mySettings.normedValue(myAnalyzer.data.get(myAnalyzer.data.size() - 1))));
+						}else{
+							for(CCMotionHistoryDataPoint myData:myAnalyzer.data){
+								_cHistogram.add(CCMath.abs(mySettings.normedValue(myData)));
+							}
+						}
+					}
+				}
+				g.color(mySettings._cColor.r,mySettings._cColor.g,mySettings._cColor.b, _cAlpha);
+				g.pushMatrix();
+				g.translate(0, -g.height()/2 + i * myHeight);
+				for(int j = 0; j < _cHistogram.bands();j++){
+					g.rect(CCMath.map(j, 0, _cHistogram.bands(), -g.width() / 2, g.width() / 2), 0, myWidth - 1, CCMath.map(_cHistogram.count(j), 0, _cHistogram.max(), 0, myHeight));
+				}
+				g.popMatrix();
+				i++;
+			}
+			g.popAttribute();
+			break;
 		}
+		
 		
 	}
 }

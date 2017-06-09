@@ -2,7 +2,7 @@ package cc.creativecomputing.kle.analyze;
 
 import cc.creativecomputing.math.CCVector3;
 
-public class CCMotionData extends CCHistoryData{
+public class CCMotionHistoryDataPoint extends CCHistoryDataPoint{
 	public final double length;
 	public final double velocity;
 	public final double acceleration;
@@ -10,7 +10,7 @@ public class CCMotionData extends CCHistoryData{
 	
 	public final CCVector3 position;
 	
-	public CCMotionData(CCVector3 thePosition, double theLength, double theVelocitiy, double theAcceleration, double theJerk, double theTimeStep){
+	public CCMotionHistoryDataPoint(CCVector3 thePosition, double theLength, double theVelocitiy, double theAcceleration, double theJerk, double theTimeStep){
 		super(theTimeStep);
 		position = new CCVector3(thePosition);
 		length = theLength;
