@@ -141,7 +141,7 @@ public class CCParticles{
 		
 		_mySetDataShader = new CCGLWriteDataShader();
 		
-		_mySwapTexture = new CCGLSwapBuffer(32,4,4,_myWidth,_myHeight);
+		_mySwapTexture = new CCGLSwapBuffer(g, 32,4,4,_myWidth,_myHeight);
 		
 		_myParticleRender = theRender;
 		_myParticleRender.setup(this);
@@ -196,9 +196,9 @@ public class CCParticles{
 			myEmitter.reset();
 		}
 		
-		_mySwapTexture.clear();
+		_mySwapTexture.clear(g);
 		
-		_mySwapTexture.beginDrawCurrent();
+		_mySwapTexture.beginDrawCurrent(g);
 		_mySetDataShader.start();
 		
 		g.beginShape(CCDrawMode.POINTS);
@@ -212,7 +212,7 @@ public class CCParticles{
 		g.endShape();
 		
 		_mySetDataShader.end();
-		_mySwapTexture.endDrawCurrent();
+		_mySwapTexture.endDrawCurrent(g);
 		
 		for(CCForce myForce:_myForces) {
 			myForce.reset();
@@ -296,7 +296,7 @@ public class CCParticles{
 		}
 		
 		// Render manually changed positions into the texture.
-		_mySwapTexture.beginDrawCurrent(0);
+		_mySwapTexture.beginDrawCurrent(g,0);
 		_mySetDataShader.start();
 		
 		g.beginShape(CCDrawMode.POINTS);
@@ -313,7 +313,7 @@ public class CCParticles{
 		g.endShape();
 		
 		_mySetDataShader.end();
-		_mySwapTexture.endDrawCurrent();
+		_mySwapTexture.endDrawCurrent(g);
 		
 		_myPositionUpdates.clear();
 	}
@@ -446,7 +446,7 @@ public class CCParticles{
 //			CCLog.info(myTextureUnit + " : " + myTextureUniform.parameter  + " : " + myTextureUniform.texture);
 			myTextureUnit++;
 		}
-		_mySwapTexture.draw();
+		_mySwapTexture.draw(g);
 		_myUpdateShader.end();
 		g.noTexture();
 		

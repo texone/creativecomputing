@@ -79,7 +79,7 @@ public class CCDensity extends CCForce{
 		_myHeight = theHeight;
 		
 		_myDensityBuffer = new CCShaderBuffer (theWidth, theHeight);
-		_myDensityBuffer.clear();
+//		_myDensityBuffer.clear();
 		
 		_mySobelFilter = new CCSobelFilter(_myDensityBuffer.attachment(0));
 		
@@ -180,7 +180,7 @@ public class CCDensity extends CCForce{
 		
 		updatePointSprite();
 		
-		_myDensityBuffer.beginDraw();
+		_myDensityBuffer.beginDraw(g);
 
 		g.pushAttribute();
 		g.pushMatrix();
@@ -204,7 +204,7 @@ public class CCDensity extends CCForce{
 		g.noPointSprite();
 		g.popMatrix();
 		g.popAttribute();
-		_myDensityBuffer.endDraw();
+		_myDensityBuffer.endDraw(g);
 	
 		_mySobelFilter.display(g);
 	}

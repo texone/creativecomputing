@@ -147,7 +147,7 @@ public class CCPathFollow extends CCTextureForceField{
 	
 	@Override
 	public void preDisplay(CCGraphics g) {
-		_myPathForceFieldTexture.beginDraw();
+		_myPathForceFieldTexture.beginDraw(g);
 		g.clearColor(0);
 		g.clear();
 		_myContourShader.start();
@@ -181,6 +181,6 @@ public class CCPathFollow extends CCTextureForceField{
 		}
 		
 		_myContourShader.end();
-		_myPathForceFieldTexture.endDraw();
+		_myPathForceFieldTexture.endDraw(g);
 	}
 }

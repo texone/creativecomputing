@@ -195,7 +195,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		for(CCConstraint myConstraint:_myConstraints){
 			myConstraint.preDisplay(g);
 		}
-		_myEvelopeData.beginDraw();
+		_myEvelopeData.beginDraw(g);
 		g.clear();
 		g.pushAttribute();
 		g.noBlend();
@@ -212,7 +212,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		g.endShape();
 		_myWriteDataShader.end();
 		g.popAttribute();
-		_myEvelopeData.endDraw();
+		_myEvelopeData.endDraw(g);
 	}
 	
 	@Override

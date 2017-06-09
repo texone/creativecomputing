@@ -127,7 +127,7 @@ public class CCPointCurveField extends CCForce{
 	
 	@Override
 	public void preDisplay(CCGraphics g) {
-		_myCurveData.beginDraw();
+		_myCurveData.beginDraw(g);
 		g.clear();
 		_myInitValueShader.start();
 		g.beginShape(CCDrawMode.POINTS);
@@ -138,6 +138,6 @@ public class CCPointCurveField extends CCForce{
 		}
 		g.endShape();
 		_myInitValueShader.end();
-		_myCurveData.endDraw();
+		_myCurveData.endDraw(g);
 	}
 }

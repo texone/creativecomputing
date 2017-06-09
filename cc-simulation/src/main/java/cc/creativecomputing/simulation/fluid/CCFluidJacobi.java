@@ -29,7 +29,7 @@ public class CCFluidJacobi extends CCFluidOperation{
         uniform2f("gridSize", _myGrid.size);
         uniform1f("alpha", alpha);
         uniform1f("beta", beta);
-        theOutput.draw();
+        theOutput.draw(g);
         end();
         g.noTexture();
         theOutput.swap();

@@ -103,7 +103,7 @@ public class CCShapeConstraint extends CCConstraint{
 	
 	@Override
 	public void preDisplay(CCGraphics g) {
-		_myLookUpBuffer.beginDraw();
+		_myLookUpBuffer.beginDraw(g);
 		_myDataShader.start();
 		g.clear();
 		g.noBlend();
@@ -120,9 +120,9 @@ public class CCShapeConstraint extends CCConstraint{
 			g.endShape();
 		}
 		_myDataShader.end();
-		_myLookUpBuffer.endDraw();
+		_myLookUpBuffer.endDraw(g);
 		
-		_myCurveBuffer.beginDraw();
+		_myCurveBuffer.beginDraw(g);
 		_myDataShader.start();
 		g.clear();
 		g.noBlend();
@@ -136,7 +136,7 @@ public class CCShapeConstraint extends CCConstraint{
 			g.endShape();
 		}
 		_myDataShader.end();
-		_myCurveBuffer.endDraw();
+		_myCurveBuffer.endDraw(g);
 	}
 	
 	public static void main(String[] args) {

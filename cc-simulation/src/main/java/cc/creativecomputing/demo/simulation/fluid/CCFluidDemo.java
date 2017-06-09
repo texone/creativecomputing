@@ -87,7 +87,7 @@ public class CCFluidDemo extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myGrid.size.set(g.width() / 2, g.height() / 2);
-		_mySolver = new CCFluidSolver(_myGrid, new CCVector2(g.width(), g.height()));
+		_mySolver = new CCFluidSolver(g, _myGrid, new CCVector2(g.width(), g.height()));
 		
 		
 		mouseListener().add(_myMouse);
@@ -141,7 +141,7 @@ public class CCFluidDemo extends CCGL2Adapter {
 //			g.rect(animator().time() * 100 % _myGrid.size.x,100, 10, 10);
 //			_mySolver.velocity.endDraw();
 			_mySolver.clearBounds(g);
-			_mySolver.bounds().beginDraw();
+			_mySolver.bounds().beginDraw(g);
 
 			_myWriteDataShader.start();
 			double _myY = (CCMath.sin(animator().time() * _cLineSpeed) + 1) / 2 * _myGrid.size.y;
@@ -152,12 +152,12 @@ public class CCFluidDemo extends CCGL2Adapter {
 			g.rect(0.5, _myY, _myGrid.size.x, 20);
 			
 			g.ellipse(_myGrid.size.x / 2,_myY, 200);
-			_mySolver.bounds().endDraw();
+			_mySolver.bounds().endDraw(g);
 			_myWriteDataShader.end();
 			
 			_mySolver.step(g);
 		}else{
-			_mySolver._myDensityData.beginDrawCurrent();
+			_mySolver._myDensityData.beginDrawCurrent(g);
 //			g.color(255,0,0);
 //			g.rect(100,100, 100, 100);
 //			g.color(0,255,0);
@@ -167,7 +167,7 @@ public class CCFluidDemo extends CCGL2Adapter {
 			g.clear();
 			g.color(1d);
 			_myText.draw(g);
-			_mySolver._myDensityData.endDrawCurrent();
+			_mySolver._myDensityData.endDrawCurrent(g);
 		}
 
 		 g.clear();

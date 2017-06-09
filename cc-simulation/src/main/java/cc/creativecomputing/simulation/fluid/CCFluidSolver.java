@@ -3,7 +3,6 @@ package cc.creativecomputing.simulation.fluid;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.events.CCMouseSimpleInfo;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLShaderNoise;
@@ -121,7 +120,7 @@ public class CCFluidSolver {
 	private CCFluidDisplay _myScalarDisplayProgram;
 	private CCFluidDisplay _myVectorDisplayProgram;
 
-	public CCFluidSolver(CCFluidGrid theGrid, CCVector2 theWindowSize) {
+	public CCFluidSolver(CCGraphics g, CCFluidGrid theGrid, CCVector2 theWindowSize) {
 		_myGrid = theGrid;
 		_myWindowSize = theWindowSize;
 
@@ -129,15 +128,15 @@ public class CCFluidSolver {
 		int _myWidth = (int)_myGrid.size.x;
 		int _myHeight = (int)_myGrid.size.y;
 	        
-		_myVelocityData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
-		_myDensityData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
-		_myTemperatureData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
-		_myDivergenceData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
-		_myVorticityData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
-		_myPressureData = new CCGLSwapBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myVelocityData = new CCGLSwapBuffer(g, _myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myDensityData = new CCGLSwapBuffer(g,_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myTemperatureData = new CCGLSwapBuffer(g,_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myDivergenceData = new CCGLSwapBuffer(g,_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myVorticityData = new CCGLSwapBuffer(g,_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
+		_myPressureData = new CCGLSwapBuffer(g,_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
 		
 		_myBoundBuffer = new CCShaderBuffer(_myWidth, _myHeight, CCTextureTarget.TEXTURE_2D);
-		_myBoundBuffer.clear();
+		_myBoundBuffer.clear(g);
 		
 
 		// slab operations
@@ -176,7 +175,7 @@ public class CCFluidSolver {
         _myAdvectProgram.uniform1f("gridScale", _myGrid.scale);
         _myAdvectProgram.uniform1f("timestep", _cStep);
         _myAdvectProgram.uniform1f("dissipation", theDissipation);
-        theTarget.draw();
+        theTarget.draw(g);
         _myAdvectProgram.end();
         g.noTexture();
         
@@ -200,7 +199,7 @@ public class CCFluidSolver {
 		_myBuoyancyProgram.uniform1f("ambientTemperature", _cAmbientTemperature);
 		_myBuoyancyProgram.uniform1f("sigma", _cBuoyancy);
 		_myBuoyancyProgram.uniform1f("kappa", _cBuoyancyWeight);
-		_myVelocityData.draw();
+		_myVelocityData.draw(g);
 		_myBuoyancyProgram.end();
 		g.noTexture();
 		
@@ -217,7 +216,7 @@ public class CCFluidSolver {
 		_myVorticityProgram.uniform1i("velocity", 0);
 		_myVorticityProgram.uniform2f("gridSize", _myGrid.size);
 		_myVorticityProgram.uniform1f("gridScale", _myGrid.scale);
-        _myVorticityData.draw();
+        _myVorticityData.draw(g);
         _myVorticityProgram.end();
         g.noTexture();
         _myVorticityData.swap();
@@ -232,7 +231,7 @@ public class CCFluidSolver {
 		_myVorticityConfinementProgram.uniform1f("timestep", _cStep);
 		_myVorticityConfinementProgram.uniform1f("epsilon", EPSILON);
 		_myVorticityConfinementProgram.uniform2f("curl", _cCurl * _myGrid.scale, _cCurl * _myGrid.scale);
-		_myVelocityData.draw();
+		_myVelocityData.draw(g);
         _myVorticityConfinementProgram.end();
         g.noTexture();
         _myVelocityData.swap();
@@ -246,7 +245,7 @@ public class CCFluidSolver {
         _myGradientProgram.uniform1i("bounds", 1);
 		_myDivergenceProgram.uniform2f("gridSize", _myGrid.size);
 		_myDivergenceProgram.uniform1f("gridScale", _myGrid.scale);
-		_myDivergenceData.draw();
+		_myDivergenceData.draw(g);
 		_myDivergenceProgram.end();
 		g.noTexture();
 
@@ -263,7 +262,7 @@ public class CCFluidSolver {
         _myGradientProgram.uniform1i("bounds", 2);
         _myGradientProgram.uniform2f("gridSize", _myGrid.size);
         _myGradientProgram.uniform1f("gridScale", _myGrid.scale);
-        _myVelocityData.draw();
+        _myVelocityData.draw(g);
         _myGradientProgram.end();
         g.noTexture();
         _myVelocityData.swap();
@@ -274,7 +273,7 @@ public class CCFluidSolver {
 		divergence(g);
 
 		// 0 is our initial guess for the poisson equation solver
-		_myPressureData.clear();
+		_myPressureData.clear(g);
 
 		_myPoissonPressureEq.alpha = -_myGrid.scale * _myGrid.scale;
 		_myPoissonPressureEq.compute(
@@ -314,30 +313,26 @@ public class CCFluidSolver {
 
 		_myNoiseFieldProgram.uniform1f("dissipation", _cNoiseDissipation);
 
-        _myVelocityData.draw();
+        _myVelocityData.draw(g);
         _myNoiseFieldProgram.end();
         g.noTexture();
         _myVelocityData.swap();
 	}
 	
 	public void clearBounds(CCGraphics g){
-		_myBoundBuffer.beginDraw();
+		_myBoundBuffer.beginDraw(g);
 		g.clear();
 		g.color(255,0,0);
 		g.line(_myGrid.size.x - 0.5, 0.5, _myGrid.size.x - 0.5, _myGrid.size.y - 0.5);
 		g.line(0.5, 0.5, _myGrid.size.x - 0.5, 0.5);
 		g.line(0.5,	_myGrid.size.y - 0.5, _myGrid.size.x - 0.5,_myGrid.size.y - 0.5);
 		g.line(0.5, 0.5, 0.5, _myGrid.size.y - 0.5);
-		_myBoundBuffer.endDraw();
+		_myBoundBuffer.endDraw(g);
 	}
 	
 	public void step(CCGraphics g) {
 		// we only want the quantity carried by the velocity field to be
 		// affected by the dissipation
-		
-
-		
-
 		noise(g);
 		
 		advect(g, _myVelocityData, _myVelocityDissipation);
@@ -366,7 +361,7 @@ public class CCFluidSolver {
         _mySplatProgram.uniform2f("point", thePosition);
         _mySplatProgram.uniform1f("radius", theRadius);
 //        theTarget.draw(thePosition.x - theRadius, thePosition.y - theRadius, thePosition.x + theRadius, thePosition.y + theRadius);
-        theTarget.draw();
+        theTarget.draw(g);
         _mySplatProgram.end();
         g.noTexture();
         theTarget.swap();

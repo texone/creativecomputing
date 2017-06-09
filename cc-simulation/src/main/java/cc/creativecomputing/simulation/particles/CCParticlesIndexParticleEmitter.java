@@ -448,13 +448,13 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 	}
 	
 	public void transferEmitData(CCGraphics g){
-		_myParticles.dataBuffer().beginDraw();
+		_myParticles.dataBuffer().beginDraw(g);
 		_myParticles.initValueShader().start();
 		
 		_myEmitMesh.draw(g);
 		
 		_myParticles.initValueShader().end();
-		_myParticles.dataBuffer().endDraw();
+		_myParticles.dataBuffer().endDraw(g);
 	}
 	
 	private void transferEmits(CCGraphics theGraphics){
@@ -493,23 +493,23 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 	}
 	
 	public void transferInfoData(CCGraphics g){
-		_myParticles.dataBuffer().beginDraw(1);
+		_myParticles.dataBuffer().beginDraw(g,1);
 		_myParticles.initValueShader().start();
 		
 		_myEmitMesh.draw(g);
 
 		_myParticles.initValueShader().end();
-		_myParticles.dataBuffer().endDraw();
+		_myParticles.dataBuffer().endDraw(g);
 	}
 	
 	private void transferColorData(CCGraphics g){
-		_myParticles.dataBuffer().beginDraw(3);
+		_myParticles.dataBuffer().beginDraw(g,3);
 		_myParticles.initValueShader().start();
 		
 		_myEmitMesh.draw(g);
 
 		_myParticles.initValueShader().end();
-		_myParticles.dataBuffer().endDraw();
+		_myParticles.dataBuffer().endDraw(g);
 	}
 	
 	private void transferChanges(CCGraphics theGraphics){

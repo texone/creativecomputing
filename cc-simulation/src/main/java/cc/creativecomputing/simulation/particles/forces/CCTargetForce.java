@@ -32,7 +32,6 @@ public class CCTargetForce extends CCForce {
 	private String _myNearDistanceParameter;
 	private String _myNearMaxForceParameter;
 
-	private CCGraphics _myGraphics;
 	private int _myWidth;
 	private int _myHeight;
 	
@@ -67,16 +66,15 @@ public class CCTargetForce extends CCForce {
 	
 	@Override
 	public void setSize(CCGraphics g, int theWidth, int theHeight){
-		_myGraphics = g;
 		_myWidth = theWidth;
 		_myHeight = theHeight;
 
 		_myInitValueShader = new CCGLWriteDataShader();
 		
 		_myTargetBuffer = new CCShaderBuffer(16,4,_myWidth, _myHeight);
-		_myTargetBuffer.beginDraw();
+		_myTargetBuffer.beginDraw(g);
 		g.clear();
-		_myTargetBuffer.endDraw();
+		_myTargetBuffer.endDraw(g);
 	}
 	
 	@Override
@@ -138,7 +136,7 @@ public class CCTargetForce extends CCForce {
 		g.noBlend();
 		g.pointSize(1);
 		_myInitValueShader.start();
-		_myTargetBuffer.beginDraw();
+		_myTargetBuffer.beginDraw(g);
 		g.beginShape(CCDrawMode.POINTS);
 	}
 	
@@ -149,7 +147,7 @@ public class CCTargetForce extends CCForce {
 	
 	public void endSetTargets(CCGraphics g){
 		g.endShape();
-		_myTargetBuffer.endDraw();
+		_myTargetBuffer.endDraw(g);
 		_myInitValueShader.end();
 		g.popAttribute();
 	}
