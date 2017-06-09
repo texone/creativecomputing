@@ -210,6 +210,11 @@ public class CCWorleyNoise extends CCSignal{
 	}
 	
 	public CCWorleyNoise() {
+		super();
+	}
+	
+	public CCWorleyNoise(CCSignalSettings theSettings){
+		super(theSettings);
 	}
 	
 	private int maxOrder(){
@@ -370,8 +375,14 @@ public class CCWorleyNoise extends CCSignal{
 			cd.delta[i][1] *= DENSITY_ADJUSTMENT_INV_3D;
 			cd.delta[i][2] *= DENSITY_ADJUSTMENT_INV_3D;
 		}
-
-		return _myFormular._myFormular.value(cd.F, _myAmp);
+		
+		double[] myResult = _myFormular._myFormular.value(cd.F, _myAmp);
+		if(!_mySettings.isNormed()){
+			for(int i = 0; i < myResult.length;i++){
+				myResult[i] = myResult[i] * 2 - 1;
+			}
+		}
+		return myResult;
 	}
 
 	/**
@@ -502,6 +513,13 @@ public class CCWorleyNoise extends CCSignal{
 			cd.delta[i][0] *= DENSITY_ADJUSTMENT_INV_2D ;
 			cd.delta[i][1] *= DENSITY_ADJUSTMENT_INV_2D ;
 		}
-		return _myFormular._myFormular.value(cd.F, _myAmp);
+		
+		double[] myResult = _myFormular._myFormular.value(cd.F, _myAmp);
+		if(!_mySettings.isNormed()){
+			for(int i = 0; i < myResult.length;i++){
+				myResult[i] = myResult[i] * 2 - 1;
+			}
+		}
+		return myResult;
 	}
 }

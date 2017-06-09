@@ -10,7 +10,6 @@
  */
 package cc.creativecomputing.math.signal;
 
-import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
@@ -22,16 +21,25 @@ import cc.creativecomputing.math.CCVector3;
  * @author christianriekoff
  *
  */
-public abstract class CCSignal {
-	protected double _myScale = 1;
+public abstract class CCSignal extends CCSignalSettings{
 	
 	protected double _myOffsetX = 0;
 	protected double _myOffsetY = 0;
 	protected double _myOffsetZ = 0;
 	
-	protected double _myOctaves = 1;
-	protected double _myGain = 0.5f;
-	protected double _myLacunarity = 2;
+	protected CCSignalSettings _mySettings;
+	
+	public CCSignal(CCSignalSettings theSettings){
+		_mySettings = theSettings == null ? this : theSettings;
+	}
+	
+	public CCSignal(){
+		this(null);
+	}
+	
+	protected void settings(CCSignalSettings theSettings){
+		_mySettings = theSettings;
+	}
 	
 	/**
 	 * Override this method to define how the 3d is calculated
@@ -57,10 +65,10 @@ public abstract class CCSignal {
 	 * @return multiple values
 	 */
 	public final double[] values(final double theX){
-		double myScale = _myScale;
-		double myFallOff = _myGain;
+		double myScale = _mySettings.scale();
+		double myFallOff = _mySettings.gain();
 		
-		int myOctaves = CCMath.floor(_myOctaves);
+		int myOctaves = CCMath.floor(_mySettings.octaves());
 		double[] myResult = null;
 		double myAmp = 0;
 		
@@ -71,10 +79,10 @@ public abstract class CCSignal {
 				myResult[j] += myValues[j] * myFallOff;
 			}
 			myAmp += myFallOff;
-			myFallOff *= _myGain;
-			myScale *= _myLacunarity;
+			myFallOff *= _mySettings.gain();
+			myScale *= _mySettings.lacunarity();
 		}
-		double myBlend = _myOctaves - myOctaves;
+		double myBlend = _mySettings.octaves() - myOctaves;
 		if(myBlend > 0) {
 			double[] myValues = signalImpl(theX * myScale);
 			if(myResult == null)myResult = new double[myValues.length];
@@ -108,10 +116,10 @@ public abstract class CCSignal {
 	 * @return multiple values
 	 */
 	public final double[] values(final double theX, final double theY){
-		double myScale = _myScale;
-		double myFallOff = _myGain;
+		double myScale = _mySettings.scale();
+		double myFallOff = _mySettings.gain();
 		
-		int myOctaves = CCMath.floor(_myOctaves);
+		int myOctaves = CCMath.floor(_mySettings.octaves());
 		double[] myResult = null;
 		double myAmp = 0;
 		
@@ -122,10 +130,10 @@ public abstract class CCSignal {
 				myResult[j] += myValues[j] * myFallOff;
 			}
 			myAmp += myFallOff;
-			myFallOff *= _myGain;
-			myScale *= _myLacunarity;
+			myFallOff *= _mySettings.gain();
+			myScale *= _mySettings.lacunarity();
 		}
-		double myBlend = _myOctaves - myOctaves;
+		double myBlend = _mySettings.octaves() - myOctaves;
 		if(myBlend > 0) {
 			double[] myValues = signalImpl(theX * myScale, theY * myScale);
 			if(myResult == null)myResult = new double[myValues.length];
@@ -180,10 +188,10 @@ public abstract class CCSignal {
 	 * @return multiple values
 	 */
 	public final double[] values(final double theX, final double theY, final double theZ) {
-		double myScale = _myScale;
-		double myFallOff = _myGain;
+		double myScale = _mySettings.scale();
+		double myFallOff = _mySettings.gain();
 		
-		int myOctaves = CCMath.floor(_myOctaves);
+		int myOctaves = CCMath.floor(_mySettings.octaves());
 		double[] myResult = null;
 		double myAmp = 0;
 		
@@ -194,10 +202,10 @@ public abstract class CCSignal {
 				myResult[j] += myValues[j] * myFallOff;
 			}
 			myAmp += myFallOff;
-			myFallOff *= _myGain;
-			myScale *= _myLacunarity;
+			myFallOff *= _mySettings.gain();
+			myScale *= _mySettings.lacunarity();
 		}
-		double myBlend = _myOctaves - myOctaves;
+		double myBlend = _mySettings.octaves() - myOctaves;
 		if(myBlend > 0) {
 			double[] myValues = signalImpl(theX * myScale, theY * myScale, theZ * myScale);
 			if(myResult == null)myResult = new double[myValues.length];
@@ -248,85 +256,10 @@ public abstract class CCSignal {
 		return signalImpl(theX,0);
 	}
 	
-	@CCProperty(name = "scale", min = 0, max = 1, defaultValue = 1, digits = 4)
-	public void scale(final double theNoiseScale){
-		scaleImplementation(theNoiseScale);
-	}
-	
-	protected void scaleImplementation(final double theNoiseScale){
-		_myScale = theNoiseScale;
-	}
 	
 	public void offset(final double theX, final double theY, final double theZ){
 		_myOffsetX = theX;
 		_myOffsetY = theY;
 		_myOffsetZ = theZ;
-	}
-	
-	public double scale(){
-		return _myScale;
-	}
-	
-	/**
-	 * The minimum value is one. You can also set floating numbers to blend
-	 * between the result of 2 or three bands.
-	 * @param theBands
-	 */
-	@CCProperty(name = "octaves", min = 1, max = 10, defaultValue = 2)
-	public void octaves(final double theBands) {
-		octavesImplementation(theBands);
-	}
-	
-	protected void octavesImplementation(final double theBands){
-		_myOctaves = CCMath.max(1.0f,theBands);
-	}
-	
-	public double octaves() {
-		return _myOctaves;
-	}
-	
-	/**
-	 * Controls amplitude change between each band. The default gain
-	 * is 0.5 meaning that the influence of every higher band is half as
-	 * high as the one from the previous.
-	 * @param theGain amplitude change between each band
-	 */
-	@CCProperty(name = "gain", min = 0, max = 1, defaultValue = 0.5)
-	public void gain(final double theGain) {
-		gainImplementation(theGain);
-	}
-	
-	protected void gainImplementation(final double theGain) {
-		_myGain = theGain;
-	}
-	
-	/**
-	 * Returns the amplitude change between each band
-	 * @return the amplitude change between each band
-	 */
-	public double gain() {
-		return _myGain;
-	}
-	
-	/**
-	 * Lacunarity controls frequency change between each band. The default value
-	 * is 2.0 meaning the frequency of every band is twice as high as the previous
-	 * @param theLacunarity frequency change between each band
-	 */
-	@CCProperty(name = "lacunarity", min = 0, max = 10, defaultValue = 2)
-	public void lacunarity(final double theLacunarity) {
-		lacunarityImplementation(theLacunarity);
-	}
-	
-	protected void lacunarityImplementation(final double theLacunarity) {
-		_myLacunarity = theLacunarity;
-	}
-	
-	/**
-	 * Returns the frequency change between each band
-	 * @return the frequency change between each band
-	 */
-	public double lacunarity() {
-		return _myLacunarity;
 	}
 }

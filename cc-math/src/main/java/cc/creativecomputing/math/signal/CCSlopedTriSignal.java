@@ -18,15 +18,37 @@ import cc.creativecomputing.math.CCMath;
  */
 public class CCSlopedTriSignal extends CCSignal{
 	
+	
+	
+	public CCSlopedTriSignal() {
+		super();
+	}
+
+	public CCSlopedTriSignal(CCSignalSettings theSettings) {
+		super(theSettings);
+	}
+
 	private double triValue(double theInput){
+		theInput += 0.5;
 		if(theInput < 0){
 			theInput = -theInput + 0.25f;
 		}
 		theInput = (theInput * 4) % 4;
-		if(theInput < 1)return 0;
-		if(theInput < 2)return (theInput - 1);
-		if(theInput < 3)return 1;
-		return 1 - (theInput - 3);
+		double myResult = 0;
+		if(theInput < 1){
+			myResult = 0;
+		}else if(theInput < 2){
+			myResult = (theInput - 1);
+		}else if(theInput < 3){
+			myResult = 1;
+		}else{
+			myResult = 1 - (theInput - 3);
+		}
+		
+		if(!_mySettings.isNormed()){
+			myResult = myResult * 2 - 1;
+		}
+		return myResult;
 	}
 
 	@Override

@@ -18,8 +18,20 @@ import cc.creativecomputing.math.CCMath;
  */
 public class CCSinSignal extends CCSignal{
 	
+	public CCSinSignal() {
+		super();
+	}
+
+	public CCSinSignal(CCSignalSettings theSettings) {
+		super(theSettings);
+	}
+
 	private double sin(double theValue){
-		return (CCMath.cos(theValue * CCMath.TWO_PI) + 1) / 2;
+		double myResult = CCMath.cos(theValue * CCMath.TWO_PI);
+		if(_mySettings.isNormed()){
+			myResult = (myResult + 1) / 2;
+		}
+		return myResult;
 	}
 
 	/* (non-Javadoc)

@@ -1,8 +1,6 @@
 package cc.creativecomputing.math.signal;
 
 public enum CCSignalType {
-	FARBRAUSCH(new CCFarbrauschNoise()), 
-	PERLIN(new CCPerlinNoise()), 
 	SIMPLEX(new CCSimplexNoise()), 
 	LINEAR_RANDOM(new CCLinearRandom()),
 	WORLEY(new CCWorleyNoise()), 

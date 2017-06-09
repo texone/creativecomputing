@@ -1,8 +1,5 @@
 package cc.creativecomputing.math.signal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cc.creativecomputing.core.CCProperty;
 
 public class CCMixSignal extends CCSignal{
@@ -36,48 +33,14 @@ public class CCMixSignal extends CCSignal{
 	private CCTriSignal _myTri;
 	private CCSlopedTriSignal _mySlopedTri;
 	
-	private List<CCSignal> _mySignals = new ArrayList<>();
-	
 	public CCMixSignal(){
-		_mySignals.add(_mySaw = new CCSawSignal());
-		_mySignals.add(_mySimplex = new CCSimplexNoise());
-		_mySignals.add(_myWorley = new CCWorleyNoise());
-		_mySignals.add(_mySine = new CCSinSignal());
-		_mySignals.add(_mySquare = new CCSquareSignal());
-		_mySignals.add(_myTri = new CCTriSignal());
-		_mySignals.add(_mySlopedTri = new CCSlopedTriSignal());
-	}
-	
-	@Override
-	protected void scaleImplementation(double theNoiseScale) {
-		super.scaleImplementation(theNoiseScale);
-		for(CCSignal mySignal:_mySignals){
-			mySignal.scale(theNoiseScale);
-		}
-	}
-	
-	@Override
-	protected void octavesImplementation(double theBands) {
-		super.octavesImplementation(theBands);
-		for(CCSignal mySignal:_mySignals){
-			mySignal.octaves(theBands);
-		}
-	}
-	
-	@Override
-	protected void gainImplementation(double theGain) {
-		super.gainImplementation(theGain);
-		for(CCSignal mySignal:_mySignals){
-			mySignal.gain(theGain);
-		}
-	}
-	
-	@Override
-	protected void lacunarityImplementation(double theLacunarity) {
-		super.lacunarityImplementation(theLacunarity);
-		for(CCSignal mySignal:_mySignals){
-			mySignal.lacunarity(theLacunarity);
-		}
+		_mySaw = new CCSawSignal(this);
+		_mySimplex = new CCSimplexNoise(this);
+		_myWorley = new CCWorleyNoise(this);
+		_mySine = new CCSinSignal(this);
+		_mySquare = new CCSquareSignal(this);
+		_myTri = new CCTriSignal(this);
+		_mySlopedTri = new CCSlopedTriSignal(this);
 	}
 	
 	private double mixSignal(

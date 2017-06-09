@@ -21,12 +21,20 @@ public class CCSquareSignal extends CCSignal{
 	@CCProperty(name = "pulsewidth", min = 0, max = 1)
 	private double _cPulseWidth = 0.5;
 	
+	public CCSquareSignal() {
+		super();
+	}
+
+	public CCSquareSignal(CCSignalSettings theSettings) {
+		super(theSettings);
+	}
+
 	private double square(double theValue){
 		if(theValue < 0) theValue = -theValue + 0.5f;
 		if(theValue % 1 < _cPulseWidth){
 			return 1;
 		}else{
-			return 0;
+			return _mySettings.isNormed() ? 0 : -1;
 		}
 	}
 

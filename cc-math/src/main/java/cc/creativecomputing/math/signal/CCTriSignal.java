@@ -21,16 +21,32 @@ public class CCTriSignal extends CCSignal{
 	@CCProperty(name = "ratio", min = 0, max = 1)
 	private double _cRatio = 0.5;
 	
+	public CCTriSignal() {
+		super();
+	}
+
+	public CCTriSignal(CCSignalSettings theSettings) {
+		super(theSettings);
+	}
+
 	private double triValue(double theInput){
+		theInput += 0.5;
 		theInput %= 1;
 		if(theInput < 0){
-			theInput = 1+theInput;
+			theInput = 1 + theInput;
 		}
 		
+		double myResult = theInput / _cRatio;
 		if(theInput <= _cRatio){
-			return theInput / _cRatio;
+			myResult = theInput / _cRatio;
+		}else{
+			myResult = 1 - (theInput - _cRatio) / (1 - _cRatio);
 		}
-		return 1 - (theInput - _cRatio) / (1 - _cRatio);
+		
+		if(!_mySettings.isNormed()){
+			myResult = myResult * 2 - 1;
+		}
+		return myResult;
 	}
 
 	@Override

@@ -73,12 +73,22 @@ public class CCSimplexNoise extends CCSignal{
 	};
 
 	// Helper function to compute gradients.
-	private double grad1(int theHash) {
+	private static double grad1(int theHash) {
 		int h = theHash & 15;
 		double gx = 1 + (h & 7); // Gradient value is one of 1.0, 2.0, ..., 8.0
 		if ((h & 8) == 1)
 			gx = -gx; // Make half of the gradients negative
 		return gx;
+	}
+	
+	
+
+	public CCSimplexNoise() {
+		super();
+	}
+
+	public CCSimplexNoise(CCSignalSettings theSettings) {
+		super(theSettings);
 	}
 
 	// 1D simplex noise with derivative.
@@ -113,9 +123,11 @@ public class CCSimplexNoise extends CCSignal{
 		dx += t40 * gx0 + t41 * gx1;
 		dx *= 0.407461; // Scale derivative to match the noise scaling:
 
+		double myNoise = CCMath.constrain(Noise * 0.407461 + 0.030914, -1.0, 1.0);
+		
 		return new double[] { 
-			(CCMath.constrain(Noise * 0.407461 + 0.030914, -1.0, 1.0) + 1) / 2, // The maximum value of this noise is 8*pow(3/4,4)=2.53125
-			dx 
+			_mySettings.isNormed() ? (myNoise + 1) / 2 : myNoise, // The maximum value of this noise is 8*pow(3/4,4)=2.53125
+			_mySettings.isNormed() ? (dx + 1) / 2 : dx, 
 		};
 	}
 	
@@ -124,7 +136,7 @@ public class CCSimplexNoise extends CCSignal{
 	 */
 	@Override
 	public double[] signalImpl(double theX) {
-		double[] myValues = noiseImpl(theX * 1.0);
+		double[] myValues = noiseImpl(theX);
 		double[] myResult = new double[myValues.length];
 		for(int i = 0; i < myResult.length;i++) {
 			myResult[i] = (double)myValues[i];
@@ -697,12 +709,14 @@ public class CCSimplexNoise extends CCSignal{
 		dz *= 27.2568;
 		dw *= 27.2568;
 
+		double myNoise = CCMath.constrain(Noise * 27.2568 + 0.000252695, -1.0, 1.0);
+		
 		return new double[] { 
-			(CCMath.constrain(Noise * 27.2568 + 0.000252695, -1.0, 1.0) + 1) / 2, 
-			(dx + 1) / 2, 
-			(dy + 1) / 2, 
-			(dz + 1) / 2, 
-			(dw + 1) / 2 
+			_mySettings.isNormed() ? (myNoise + 1) / 2 : myNoise,
+			_mySettings.isNormed() ? (dx + 1) / 2 : dx, 
+			_mySettings.isNormed() ? (dy + 1) / 2 : dy, 
+			_mySettings.isNormed() ? (dz + 1) / 2 : dz, 
+			_mySettings.isNormed() ? (dw + 1) / 2 : dw, 
 		};
 	}
 }

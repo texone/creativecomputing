@@ -18,9 +18,27 @@ import cc.creativecomputing.math.CCMath;
  */
 public class CCSawSignal extends CCSignal{
 	
+	
+	
+	public CCSawSignal() {
+		super();
+	}
+
+	public CCSawSignal(CCSignalSettings theSettings) {
+		super(theSettings);
+	}
+
 	private double saw(double theValue){
-		if(theValue < 0)return  -theValue % 1;
-		return 1- theValue % 1;
+		double myResult = 0;
+		if(theValue < 0){
+			myResult = -theValue % 1;
+		}else{
+			myResult = 1- theValue % 1;
+		}
+		if(!_mySettings.isNormed()){
+			myResult = myResult * 2 - 1;
+		}
+		return myResult;
 	}
 
 	@Override
