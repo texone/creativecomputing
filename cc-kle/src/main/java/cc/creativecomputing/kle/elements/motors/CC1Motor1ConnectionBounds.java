@@ -23,4 +23,9 @@ public class CC1Motor1ConnectionBounds extends CCMotorCalculations<CC1Motor1Conn
 		return myResult;
 	}
 
+	@Override
+	public CCMotorSetupTypes type() {
+		return CCMotorSetupTypes.SETUP_1_MOTOR_1_CONNECTION;
+	}
+
 }

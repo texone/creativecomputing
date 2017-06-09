@@ -34,6 +34,10 @@ public class CC2Motor2ConnectionCalculations extends CCMotorCalculations<CC2Moto
 	protected double _cTopWidth = 0;
 	@CCProperty(name = "bottom width", readBack = true)
 	protected double _cBottomWidth = 0;
+	@CCProperty(name = "offset", min = 0, max = 1)
+	protected double _cOffset = 0;
+	@CCProperty(name = "angle", min = -CCMath.PI, max = CCMath.PI)
+	protected double _cAngle = 0;
 	
 	private static enum CC2MotorFormular{
 		HERMITE,
@@ -160,6 +164,11 @@ public class CC2Motor2ConnectionCalculations extends CCMotorCalculations<CC2Moto
 	public void minRopeAngle(double theAngle){
 		_myRopeAngle = theAngle;
 		updateBounds();
+	}
+
+	@Override
+	public CCMotorSetupTypes type() {
+		return CCMotorSetupTypes.SETUP_2_MOTOR_2_CONNECTION;
 	}
 	
 }

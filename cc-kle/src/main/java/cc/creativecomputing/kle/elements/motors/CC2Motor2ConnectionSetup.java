@@ -26,8 +26,6 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 	
 	protected final double _myPulleyDistance;
 	protected final double _myConnectionPointDistance;
-	protected final double _myLeftConnectionCentroidDistance;
-	protected final double _myRightConnectionCentroidDistance;
 	
 //	protected CCTwoPointMatrices _myTwoPointMatrices;
 	
@@ -35,8 +33,12 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 	
 	protected CCSequenceElement _myElement;
 	
-	protected final CCVector3 _myCentroidConnection0;
-	protected final CCVector3 _myCentroidConnection1;
+	protected CCVector3 _myCentroidOrigin;
+	protected CCVector3 _myCentroidConnection0Origin;
+	protected CCVector3 _myCentroidConnection1Origin;
+	
+	protected double _myOrigin0Distance;
+	protected double _myOrigin1Distance;
 	
 	public CC2Motor2ConnectionSetup(CCSequenceElement theElement, List<CCMotorChannel> theChannels, CC2Motor2ConnectionCalculations theBounds, CCVector3 theCentroid, double theElementRadius){
 		super(theChannels, theCentroid);
@@ -50,13 +52,34 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 		_myPulleyDistance = motor0.position().distance(motor1.position());
 		_myConnectionPointDistance = motor0.connectionPosition().distance(motor1.connectionPosition());
 		
-		_myCentroidConnection0 = motor0.connectionPosition().subtract(_myCentroid);
-		_myCentroidConnection1 = motor1.connectionPosition().subtract(_myCentroid);
-		 
-		_myLeftConnectionCentroidDistance = _myCentroidConnection0.length();
-		_myRightConnectionCentroidDistance = _myCentroidConnection1.length();
+		_myCentroidOrigin = _myCentroid.clone();
+		_myCentroidConnection0Origin = motor0.connectionPosition().clone();
+		_myCentroidConnection1Origin = motor1.connectionPosition().clone();
+		
+		_myOrigin0Distance = _myCentroidConnection0Origin.distance(_myCentroidOrigin);
+		_myOrigin1Distance = _myCentroidConnection1Origin.distance(_myCentroidOrigin);
 		
 		theBounds.updateBounds(this);
+	}
+	
+	public CCVector3 centroidOffset(){
+		return new CCVector3(
+			CCFastMath.cos(_myCalculations._cAngle) * _myCalculations._cOffset * _myElementRadius,
+			CCFastMath.sin(_myCalculations._cAngle) * _myCalculations._cOffset * _myElementRadius,
+			0
+		);
+	}
+	
+	public CCVector3 animatedCentroid(){
+		return centroidOffset().addLocal(_myCentroidOrigin);
+	}
+	
+	private CCVector3 centroidConnection0(){
+		return _myCentroidConnection0Origin.subtract(animatedCentroid());
+	}
+	
+	private CCVector3 centroidConnection1(){
+		return _myCentroidConnection1Origin.subtract(animatedCentroid());
 	}
 	
 	public int id(){
@@ -71,30 +94,38 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 		return _myConnectionPointDistance;
 	}
 	
+	public double centroidConnection0OriginDistance(){
+		return _myOrigin0Distance;
+	}
+	
+	public double centroidConnection1OriginDistance(){
+		return _myOrigin1Distance;
+	}
+	
 	public double centroidConnection0Distance(){
-		return _myLeftConnectionCentroidDistance;
+		return centroidConnection0().length();
 	}
 	
 	public double centroidConnection1Distance(){
-		return _myRightConnectionCentroidDistance;
+		return centroidConnection1().length();
 	}
 	
 	private CCSetupInfo calculateRopeConnectPositions(CCVector3 position, double arcAtSBetweenXAxisAndF) {
 		CCSetupInfo result = new CCSetupInfo();
 		CCVector3 l = new CCVector3(
-			position.x - _myLeftConnectionCentroidDistance * CCMath.cos(arcAtSBetweenXAxisAndF),
-			position.y + _myLeftConnectionCentroidDistance * CCMath.sin(arcAtSBetweenXAxisAndF)
+			position.x - centroidConnection0Distance() * CCMath.cos(arcAtSBetweenXAxisAndF),
+			position.y + centroidConnection0Distance() * CCMath.sin(arcAtSBetweenXAxisAndF)
 		);
 		result.myConnection0 = l;
-		double asin = _myConnectionPointDistance / 2 / _myLeftConnectionCentroidDistance;
+		double asin = _myConnectionPointDistance / 2 / centroidConnection0Distance();
 		if (asin < -1 || asin > 1)
 			return null;
 			
 		// TODO:check if this holds for all elements
-		double arcAtSBetweenFAndG = 2 * CCMath.asin(_myConnectionPointDistance / 2 / _myLeftConnectionCentroidDistance);
+		double arcAtSBetweenFAndG = 2 * CCMath.asin(_myConnectionPointDistance / 2 / centroidConnection0Distance());
 		CCVector3 r = new CCVector3(
-			position.x - _myLeftConnectionCentroidDistance * CCMath.cos(arcAtSBetweenXAxisAndF + arcAtSBetweenFAndG),
-			position.y + _myLeftConnectionCentroidDistance * CCMath.sin(arcAtSBetweenXAxisAndF + arcAtSBetweenFAndG)
+			position.x - centroidConnection0Distance() * CCMath.cos(arcAtSBetweenXAxisAndF + arcAtSBetweenFAndG),
+			position.y + centroidConnection0Distance() * CCMath.sin(arcAtSBetweenXAxisAndF + arcAtSBetweenFAndG)
 		);
 		result.myConnection1 = r;
 		return result;
@@ -155,7 +186,7 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 			CCVector3.blend(animationBounds().get(0), animationBounds().get(1), theX), 
 			CCVector3.blend(animationBounds().get(3), animationBounds().get(2), theX), 
 			theY
-		);
+		).add(centroidOffset().negateLocal());
 	}
 	
 	
@@ -169,8 +200,8 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 		
 		_myRotateZ = CCMath.radians(_myCalculations.rotation(this));
 		
-		motor0._myAnimatedConnectionPosition = _myCentroidConnection0.rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
-		motor1._myAnimatedConnectionPosition = _myCentroidConnection1.rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
+		motor0._myAnimatedConnectionPosition = centroidConnection0().rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
+		motor1._myAnimatedConnectionPosition = centroidConnection1().rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
 		
 		if(_myCalculations._cCalcBack){
 			CCVector2 myCalcPos = _myCalculations.position(this);
@@ -182,8 +213,8 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 			_myElementOffset.set(myCalcPos.x, myCalcPos.y, 0);
 			
 	
-			motor0._myAnimatedConnectionPosition = _myCentroidConnection0.rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
-			motor1._myAnimatedConnectionPosition = _myCentroidConnection1.rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
+			motor0._myAnimatedConnectionPosition = centroidConnection0().rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
+			motor1._myAnimatedConnectionPosition = centroidConnection1().rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
 		}
 	}
 	
@@ -199,8 +230,8 @@ public class CC2Motor2ConnectionSetup extends CCMotorSetup{
 		_myElementOffset.set(myCalcPos.x, myCalcPos.y, 0);
 		
 
-		motor0._myAnimatedConnectionPosition = _myCentroidConnection0.rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
-		motor1._myAnimatedConnectionPosition = _myCentroidConnection1.rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
+		motor0._myAnimatedConnectionPosition = centroidConnection0().rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
+		motor1._myAnimatedConnectionPosition = centroidConnection1().rotate(0, 0, 1, _myRotateZ).add(_myElementOffset);
 	}
 	
 	public CCVector2 ropeLengthRelative(double theLength0, double theLength1){

@@ -52,4 +52,9 @@ public class CC2Motor1ConnectionBounds extends CCMotorCalculations<CC2Motor1Conn
 		_myRopeAngle = theAngle;
 		updateBounds();
 	}
+
+	@Override
+	public CCMotorSetupTypes type() {
+		return CCMotorSetupTypes.SETUP_2_MOTOR_1_CONNECTION;
+	}
 }

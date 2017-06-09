@@ -54,7 +54,7 @@ public abstract class CCMotorCalculations<SetupType extends CCMotorSetup> {
 	
 	public abstract void updateBounds(SetupType mySetup);
 	
-	
+	public abstract CCMotorSetupTypes type();
 	
 	@SuppressWarnings("unchecked")
 	public void updateBounds(){
@@ -89,4 +89,6 @@ public abstract class CCMotorCalculations<SetupType extends CCMotorSetup> {
 	public double bottomDistance(){
 		return _myBottomDistance;
 	}
+	
+	
 }

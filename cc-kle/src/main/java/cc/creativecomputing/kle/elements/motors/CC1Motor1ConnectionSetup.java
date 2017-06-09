@@ -2,6 +2,7 @@ package cc.creativecomputing.kle.elements.motors;
 
 import java.util.List;
 
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCVector3;
 
@@ -58,12 +59,12 @@ public class CC1Motor1ConnectionSetup extends CCMotorSetup{
 	@Override
 	public void drawRangeBounds(CCGraphics g){
 
-//		g.beginShape(CCDrawMode.LINE_LOOP);
-//		for(CCVector3 myBound:_myMotorBounds){
-//			g.vertex(myBound);
-//		}
-//		g.endShape();
-//		
+		g.beginShape(CCDrawMode.POINTS);
+		for(CCVector3 myBound:_myMotorBounds){
+			g.vertex(myBound);
+		}
+		g.endShape();
+		
 //		g.beginShape(CCDrawMode.LINE_LOOP);
 //		for(CCVector3 myBound:_myMotorAnimationBounds){
 //			g.vertex(myBound);

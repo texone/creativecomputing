@@ -58,7 +58,7 @@ public class CC2Motor2ConnectionPositionNumericSolver1Formular extends CC2Motor2
 			
 			res = CCMath.abs(v - tanAlphaBeta);
 			
-			c = _mySetup.centroidConnection0Distance();// _myCenterConnectionDistance; //Abstand Schwerpunkt vom Aufhängepunkt
+			c = _mySetup.centroidConnection0OriginDistance();// _myCenterConnectionDistance; //Abstand Schwerpunkt vom Aufhängepunkt
 			e = _mySetup.connectionDistance();
 			epsilon = 2 * CCMath.asin((e / 2) / c);
 		}
@@ -113,7 +113,7 @@ public class CC2Motor2ConnectionPositionNumericSolver1Formular extends CC2Motor2
 		}
 	}
 
-	private double iteration(Values theValues, double theStart, double theEnd, double theStep, int theDepth) {
+	private double iterateRotation(Values theValues, double theStart, double theEnd, double theStep, int theDepth) {
 		Values values = theValues.clone();
 		Values prevValues = theValues.clone();
 
@@ -139,7 +139,7 @@ public class CC2Motor2ConnectionPositionNumericSolver1Formular extends CC2Motor2
 				if (theDepth == 0)
 					return sigmaDegrees;
 
-				return iteration(theValues, sigmaDegrees - theStep, sigmaDegrees, theStep / 10, theDepth - 1);
+				return iterateRotation(theValues, sigmaDegrees - theStep, sigmaDegrees, theStep / 10, theDepth - 1);
 			}
 		}
 		return theEnd;
@@ -161,7 +161,7 @@ public class CC2Motor2ConnectionPositionNumericSolver1Formular extends CC2Motor2
 		Values values = new Values(theSetup, new CCVector2(myX, myY));
 
 		// ITERATE (ZEILWERTSUCHE)
-		double rotation = iteration(values, -60, 60, 1, _cDepthRotation);
+		double rotation = iterateRotation(values, -60, 60, 1, _cDepthRotation);
 		// = ARCTAN(B20) * 180 / PI()
 		double tanAlphaDegrees = CCMath.atan(values.tanAlpha) * 180 / CCMath.PI; 
 		double tanBetaDegrees = CCMath.atan(values.tanBeta) * 180 / CCMath.PI; 
@@ -192,301 +192,69 @@ public class CC2Motor2ConnectionPositionNumericSolver1Formular extends CC2Motor2
 		// return targetElement.getRopeLengths();
 	}
 	
-//	public static CCVector2 ComputePosition(
-//		CC2Motor2ConnectionSetup theSetup, 
-//		double theLeftRope, 
-//		double theRightRope,
-//		double arcAtABetweenLeftRopeAndXAxis
-//	) {
-//			
-//		double f = theSetup.centroidConnection0Distance();
-//		double g = theSetup.centroidConnection1Distance();
-//
-//		double al_sq = theLeftRope * theLeftRope;
-//		double ab_sq = theSetup.pulleyDistance() * theSetup.pulleyDistance();
-//		double c = Math.sqrt(ab_sq + al_sq - (2 * theSetup.pulleyDistance() * theLeftRope * Math.cos(arcAtABetweenLeftRopeAndXAxis)));
-//		double c_sq = (c * c);
-//		double cos_arc_c_ab = (al_sq - ab_sq - c_sq) / (-2 * theSetup.pulleyDistance() * c);
-//			
-//		if (cos_arc_c_ab < -1 || cos_arc_c_ab > 1) {
-//			return null;
-//		}
-//		double e_sq = theSetup.connectionDistance() * theSetup.connectionDistance();
-//		double br_sq = theRightRope * theRightRope;
-//
-//		double cos_arc_c_br = (e_sq - br_sq - c_sq) / (-2 * c * theRightRope);
-//		if (cos_arc_c_br < -1 || cos_arc_c_br > 1) {
-//			return null;
-//		}
-//		double arc_c_ab = Math.acos(cos_arc_c_ab);
-//		double arc_c_br = Math.acos(cos_arc_c_br);
-//		double arc_e_f = Math.acos((g * g - f * f - e_sq) / (-2 * theSetup.connectionDistance() * f));
-//		double arc_e_br = Math.acos((c_sq - br_sq - e_sq) / (-2 * theSetup.connectionDistance() * theRightRope));
-//		double arc_f_x = Math.PI - arc_c_ab - arc_c_br - arc_e_br + arc_e_f;
-//
-//		return new CCVector2(
-//			-theSetup.pulleyDistance() / 2 + theLeftRope * Math.cos(arcAtABetweenLeftRopeAndXAxis) + f * Math.cos(arc_f_x),
-//			0 - theLeftRope * Math.sin(arcAtABetweenLeftRopeAndXAxis) - f * Math.sin(arc_f_x)
-//		);
-//	}
-//
-//	private CCVector2 minimizePosition(
-//		CC2Motor2ConnectionSetup theSetup, 
-//		double theLeftRope, 
-//		double theRightRope, 
-//		double precision
-//	) {
-//		double divider = 50;
-//		double arcA = Math.PI;
-//		double arcPrevA = 0;
-//		double arcPrevPrevA = 0;
-//			
-//		CCVector2 currentPos = new CCVector2(0, 0);
-//		CCVector2 prevPos2d = new CCVector2(0, 0);
-//		CCVector2 prevPrevPos2d = new CCVector2(0, 0);
-//		CCVector2 minPosition2d = new CCVector2(0, 1);
-//			
-//		while (CCMath.abs(currentPos.y - minPosition2d.y) > precision) {
-//
-//			// divider = divider*10;
-//			double currentMaxArcA = arcA;
-//			arcA = arcPrevPrevA;
-//			arcPrevA = arcPrevPrevA;
-//			double delta = (currentMaxArcA - arcA) / divider;
-//			currentPos = prevPrevPos2d;
-//			prevPos2d = prevPrevPos2d;
-//			while (arcA <= currentMaxArcA && currentPos.y <= prevPos2d.y) {
-//				prevPrevPos2d = prevPos2d;
-//				prevPos2d = currentPos;
-//				arcPrevPrevA = arcPrevA;
-//				arcPrevA = arcA;
-//				arcA = arcA + delta;
-//					
-//				currentPos = ComputePosition(
-//					theSetup,
-//					theLeftRope, 
-//					theRightRope, 
-//					arcA
-//				);
-//				if (currentPos == null || currentPos.y > 0) {
-//					currentPos = prevPos2d;
-//				}
-//			}
-//			divider = 5;
-//			if (currentPos.y > prevPos2d.y) {
-//				minPosition2d = prevPos2d;
-//			} else {
-//				minPosition2d = currentPos;
-//			}
-//		}
-//		if (minPosition2d.y == 1)
-//			return null;
-//		
-//		return minPosition2d;
-//	}
-
-//	@Override
-//	public CCVector2 position(CC2Motor2ConnectionSetup theSetup, double theLeftRope, double theRightRope) {
-//		return minimizePosition(theSetup, theLeftRope, theRightRope, 0.00000001);
-//	}
+	private double ll;
+	private double lr;
+	private double r;
+	private double e;
+	private double f;
+	private double rho;
 	
-//	private static class CCRopeValues{
-//		
-//		private final CC2Motor2ConnectionSetup _mySetup;
-//		private final double ll;
-//		private final double lr;
-//		
-//		private final double r;
-//		private final double e;
-//		private final double f;
-//		
-//		private final double alpha;
-//		private final double lambda;
-//		private final double epsilon;
-//		private final double rho;
-//		private final double y;
-//		
-//		private CCRopeValues(CC2Motor2ConnectionSetup theSetup, double theLeftRope, double theRightRope, double theAlpha){
-//			_mySetup = theSetup;
-//			ll = theLeftRope;
-//			lr = theRightRope;
-//			alpha = theAlpha;
-//			r = _mySetup.pulleyDistance();
-//			e = _mySetup.connectionDistance();
-//			f = _mySetup.centroidConnection0Distance();
-//			
-//			double r = _mySetup.pulleyDistance();
-//			double c = Math.sqrt((r * r) + (ll * ll) - 2 * r * ll * Math.cos(alpha));
-//	        lambda = Math.acos(((ll * ll) - (r * r) - (c * c)) / (-2 * r * c)); 
-//	        epsilon = Math.acos(((e * e) - (lr * lr) - (c * c)) / (-2 * c * lr)); 
-//	        double eta = Math.acos(((f * f) - (f * f) - (e * e)) / (-2 * e * f)); 
-//	        double gamma = Math.acos(((c * c) - (lr * lr) - (e * e)) / (-2 * lr * e));
-//	        double delta = 2 * Math.PI - alpha - lambda - epsilon - gamma; 
-//	        rho = theAlpha - (Math.PI - delta - eta); 
-//	        
-//	        y = (-ll * Math.sin(alpha)) - f * Math.sin(rho);
-//		}
-//		
-//		public CCVector2 connection0(){
-//			return new CCVector2(
-//				(-r / 2) + ll * Math.cos(alpha), 
-//				-ll * Math.sin(alpha)
-//			);
-//        }
-//		
-//		public CCVector2 connection1(){
-//			return new CCVector2(
-//				r / 2 - Math.cos(lambda + epsilon) * lr, 
-//				-Math.sin(lambda + epsilon) * lr
-//			);
-//        }
-//
-//        public CCVector2 centroid(){
-//            return new CCVector2(
-//            	((-r / 2) + ll * CCMath.cos(alpha)) + f * CCMath.cos(rho),
-//            	(-ll * CCMath.sin(alpha)) - f * CCMath.sin(rho)
-//            );
-//        }
-//
-//        public double rotation(){
-//        	return rho;
-//        }
-//	}
-//	
-//	private CCRopeValues iteration(CC2Motor2ConnectionSetup theSetup, double theStart, double theEnd, double theStep, double theLength0, double theLength1, int theDepth){
-//        
-//        double minY = 0;
-//        
-//        CCRopeValues myResult = null;
-//
-//        for(double alpha = theStart; alpha < theEnd; alpha += theStep){
-//        	CCRopeValues myValues = new CCRopeValues(theSetup, theLength0, theLength1, alpha);
-//        	if(Double.isNaN(myValues.y)){
-//        		continue;
-//        	}
-//        	if(myValues.y > 0){
-//        		continue;
-//        	}
-//        	
-//            if (myValues.y <= minY){
-//            	minY = myValues.y;
-//            	if(theSetup.id() == 0)CCLog.info(minY + ":" + theDepth);
-//                //following values could all be nan so we remember the lowest alpha
-//            	myResult = myValues; 
-//            }
-//        }
-//        if (theDepth == 0)
-//			return myResult;
-//        
-//        if(myResult != null){
-//			return iteration(theSetup, myResult.alpha - theStep, myResult.alpha + theStep, theStep / 10, theLength0, theLength1, theDepth - 1);
-//        }
-//        return myResult;
-//    }
-//
-//	@Override
-//	public CCVector2 position(CC2Motor2ConnectionSetup theSetup, double theLength0, double theLength1) {
-//		CCRopeValues myResult = iteration(theSetup, 0, Math.PI, Math.PI / 50, theLength0, theLength1, _cDepth);
-//		if(myResult == null)return new CCVector2(); 
-//		return myResult.centroid();
-//	}
+	private double calculateY(double alpha){
+        //double alpha = i * Math.PI / 180.0; //degree to rad                                            
+        double c = CCMath.sqrt((r * r) + (ll * ll) - 2 * r * ll * CCMath.cos(alpha));
+        double lambda = CCMath.acos(((ll * ll) - (r * r) - (c * c)) / (-2 * r * c)); 
+        double epsilon = CCMath.acos(((e * e) - (lr * lr) - (c * c)) / (-2 * c * lr)); 
+        double eta = CCMath.acos(((f * f) - (f * f) - (e * e)) / (-2 * e * f)); 
+        double gamma = CCMath.acos(((c * c) - (lr * lr) - (e * e)) / (-2 * lr * e));
+        double delta = 2 * CCMath.PI - alpha - lambda - epsilon - gamma; 
+        rho = alpha - (CCMath.PI - delta - eta); 
+        
+        return (-ll * CCMath.sin(alpha)) - f * CCMath.sin(rho);
+    }
 	
-	
-	
-	
-	
-	public double Iterate(double from, double to, double stepsize, int depth){
+	private double iterateMinimum(double theFrom, double theTo, int theSteps, int theDepth){
         double myMinY = 0;
         double myMinAlpha = Double.NaN;
+        double myStepsize = (theTo - theFrom) / theSteps;
 
-        for (double alpha = from; alpha < to; alpha += stepsize){
-            double y = Calculate(alpha);
-            if (Double.isNaN(y))continue;
-            if (y > 0)continue;
-            if (y > myMinY){
-            	if(depth == 0)return myMinAlpha;
-            	return Iterate(myMinAlpha - stepsize, myMinAlpha + stepsize, stepsize / 10, depth-1);
+        for (double myAlpha = theFrom; myAlpha < theTo; myAlpha += myStepsize){
+            double myY = calculateY(myAlpha);
+            if (Double.isNaN(myY))continue;
+            if (myY > 0)continue;
+            if (myY > myMinY){
+            	if(theDepth == 0) return myMinAlpha;
+            	return iterateMinimum(myMinAlpha - myStepsize, myMinAlpha + myStepsize, 10, theDepth-1);
             }
             
-            myMinY = y;
-            myMinAlpha = alpha; 
+            myMinY = myY;
+            myMinAlpha = myAlpha; 
         }
         
         return myMinAlpha;
     }
 	
-	public double SearchMinimum(){
+	private double searchMinimum(){
         //First we check roughly the range with a few values
         //this is the initial guess (180 degrees)
-        double from = 0;
-        double to = Math.PI;
-        double stepsize = (to - from) / 60;
-        double min = this.Iterate(from, to, stepsize, _cDepthPosition);
+        double min = this.iterateMinimum(0, CCMath.PI, 60, _cDepthPosition);
         //check if we have any result
         if (Double.isNaN(min))
             return Double.NaN; //no solution
-
-//        //now we iterate on the found minimum with offset (+-~11 degrees)
-//        from = min - stepsize;
-//        to = min + stepsize;
-//        stepsize = (to - from) / 120;
-//        min = this.Iterate(from, to, stepsize);
-//
-//        if (Double.isNaN(min)) //this should not happen at this point since we already checked before
-//            return Double.NaN; //no solution
-//
-//        //lets move in close
-//        from = min - stepsize;
-//        to = min + stepsize;
-//        stepsize = (to - from) / 150;
-//        min = this.Iterate(from, to, stepsize);
-//
-//        if (Double.isNaN(min)) //this should not happen at this point since we already checked before
-//            return Double.NaN; //no solution
-//
-//        //one last time
-//        from = min - stepsize;
-//        to = min + stepsize;
-//        stepsize = (to - from) / 120;
-//        min = this.Iterate(from, to, stepsize);
-//
-//        if (Double.isNaN(min)) //this should not happen at this point since we already checked before
-//            return Double.NaN; //no solution
 
 
         return min;
     }
 	
-	public CCVector2 GetCenterPosition(double alpha)
-    {
-        double notnan = this.Calculate(alpha);
-        if (Double.isNaN(notnan))
-            return new CCVector2(0,0);
-        else
-            return new CCVector2(((-r / 2) + ll * Math.cos(alpha)) + f * Math.cos(rho),
-                (-ll * Math.sin(alpha)) - f * Math.sin(rho));
-    }
-	
-	private double Calculate(double alpha)
-    {
-        //double alpha = i * Math.PI / 180.0; //degree to rad                                            
-        double c = Math.sqrt((r * r) + (ll * ll) - 2 * r * ll * Math.cos(alpha));
-        double lambda = Math.acos(((ll * ll) - (r * r) - (c * c)) / (-2 * r * c)); 
-        double epsilon = Math.acos(((e * e) - (lr * lr) - (c * c)) / (-2 * c * lr)); 
-        double eta = Math.acos(((f * f) - (f * f) - (e * e)) / (-2 * e * f)); 
-        double gamma = Math.acos(((c * c) - (lr * lr) - (e * e)) / (-2 * lr * e));
-        double delta = 2 * Math.PI - alpha - lambda - epsilon - gamma; 
-        rho = alpha - (Math.PI - delta - eta); 
-        
-        return (-ll * Math.sin(alpha)) - f * Math.sin(rho);
-    }
-	
-	double ll;
-	double lr;
-	double r;
-	double e;
-	double f;
-	double rho;
+	public CCVector2 centerPosition(double theAlpha) {
+		double myResult = calculateY(theAlpha);
+		if (Double.isNaN(myResult))
+			return new CCVector2(0, 0);
+		else
+			return new CCVector2(
+				((-r / 2) + ll * CCMath.cos(theAlpha)) + f * CCMath.cos(rho),
+				(-ll * CCMath.sin(theAlpha)) - f * CCMath.sin(rho)
+			);
+	}
 
 	@Override
 	public CCVector2 position(CC2Motor2ConnectionSetup theSetup) {
@@ -495,9 +263,9 @@ public class CC2Motor2ConnectionPositionNumericSolver1Formular extends CC2Motor2
 		r = theSetup.pulleyDistance();
 		e = theSetup.connectionDistance();
 		f = theSetup.centroidConnection0Distance();
-		double alpha = SearchMinimum();
+		double alpha = searchMinimum();
 //		CCRopeValues myResult = iteration(theSetup, 0, Math.PI, Math.PI / 50, theLength0, theLength1, _cDepth);
-		return GetCenterPosition(alpha);
+		return centerPosition(alpha);
 	}
 	
 	public CCVector2 position(CC2Motor2ConnectionSetup theSetup, double l1, double l2) {
@@ -506,12 +274,8 @@ public class CC2Motor2ConnectionPositionNumericSolver1Formular extends CC2Motor2
 		r = theSetup.pulleyDistance();
 		e = theSetup.connectionDistance();
 		f = theSetup.centroidConnection0Distance();
-		double alpha = SearchMinimum();
+		double alpha = searchMinimum();
 //		CCRopeValues myResult = iteration(theSetup, 0, Math.PI, Math.PI / 50, theLength0, theLength1, _cDepth);
-		return GetCenterPosition(alpha);
-	}
-	
-	public static void main(String[] args) {
-		
+		return centerPosition(alpha);
 	}
 }

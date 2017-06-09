@@ -5,7 +5,7 @@ import java.util.List;
 
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.io.xml.CCXMLElement;
-import cc.creativecomputing.kle.analyze.CCMotionData;
+import cc.creativecomputing.kle.analyze.CCMotionHistoryDataPoint;
 import cc.creativecomputing.kle.elements.CCChannelSetup;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
@@ -93,26 +93,27 @@ public class CCMotorSetup extends CCChannelSetup<CCMotorChannel>{
 		return _myElementOffset;
 	}
 	
+	@Override
 	public CCVector3 position(){
 		return _myElementOffset;
 	}
 	
-	public CCMotionData _myLastData = null;
+	public CCMotionHistoryDataPoint _myLastData = null;
 	
 	public void update(double theDeltaTime){
 		if(_myLastData == null){
-			_myLastData = new CCMotionData(position(), 0, 0, 0, 0, theDeltaTime);
+			_myLastData = new CCMotionHistoryDataPoint(position(), 0, 0, 0, 0, theDeltaTime);
 		}
 		
 		double myVelocity = (position().distance(_myLastData.position)) / theDeltaTime;
 		double myAcceleration = (myVelocity - _myLastData.velocity) / theDeltaTime;
 		double myJerk = (myAcceleration - _myLastData.acceleration) / theDeltaTime;
-		_myLastData = new CCMotionData(position(), 0, myVelocity, myAcceleration, myJerk, theDeltaTime);
+		_myLastData = new CCMotionHistoryDataPoint(position(), 0, myVelocity, myAcceleration, myJerk, theDeltaTime);
 	}
 	
-	public CCMotionData motionData(){
+	public CCMotionHistoryDataPoint motionData(){
 		if(_myLastData == null){
-			_myLastData = new CCMotionData(position(), 0, 0, 0, 0, 0);
+			_myLastData = new CCMotionHistoryDataPoint(position(), 0, 0, 0, 0, 0);
 		}
 		return _myLastData;
 	}
