@@ -5,22 +5,26 @@ import java.util.List;
 import cc.creativecomputing.io.xml.CCXMLElement;
 import cc.creativecomputing.kle.elements.CCChannelSetup;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCVector3;
 
-public class CCLightSetup extends CCChannelSetup<CCLightChannel>{
+public abstract class CCLightSetup extends CCChannelSetup<CCLightChannel>{
 	
 	protected CCColor _myColor;
+	
+	protected CCVector3 _myPosition = new CCVector3();
 	
 	public CCLightSetup(List<CCLightChannel> theChannels){
 		super(theChannels);
 		_myColor = new CCColor();
 	}
 	
-	public void setByRelativePosition(double...theValues){
-		
-	}
-	
 	public CCColor color(){
 		return _myColor;
+	}
+	
+	@Override
+	public CCVector3 position() {
+		return _myPosition;
 	}
 	
 	public CCXMLElement toXML(){
