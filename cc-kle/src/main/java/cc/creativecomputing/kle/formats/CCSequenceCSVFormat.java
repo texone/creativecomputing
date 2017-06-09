@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import cc.creativecomputing.core.util.CCFormatUtil;
-import cc.creativecomputing.io.CCFileOutputChannel;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceElementRecording;
@@ -93,7 +92,7 @@ public class CCSequenceCSVFormat implements CCSequenceFormat{
 			int myColumn = Integer.parseInt(myFileName.substring(1, 4));
 			int myRow = Integer.parseInt(myFileName.substring(6, 9));
 			int myDepth = Integer.parseInt(myFileName.substring(11, 14));
-			String[] arr = CCNIOUtil.loadString(myImportPath.resolve(myPath)).split("\\n");
+			String[] arr = CCNIOUtil.loadString(myPath).split("\\n");
 					    
 			for (int i = 0; i < arr.length;i++) {
 				if(i >= result.size()){

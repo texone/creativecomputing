@@ -55,7 +55,7 @@ public class CCSequenceIO {
 					return mySequence;
 				}
 			}catch(Exception e){
-//				e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 //		try{
