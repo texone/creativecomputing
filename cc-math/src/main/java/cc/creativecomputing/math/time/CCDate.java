@@ -175,6 +175,11 @@ public class CCDate {
 		_myCalendar.set(Calendar.YEAR, theYear);
 	}
 	
+	public CCDate addYears(int theYear){
+		year(theYear + year());
+		return this;
+	}
+	
 	public int year(){
 		return _myCalendar.get(Calendar.YEAR);
 	}
@@ -191,6 +196,12 @@ public class CCDate {
 	public int month(){
 		return _myCalendar.get(Calendar.MONTH);
 	}
+
+	
+	public CCDate addMonths(int theMonth){
+		month(theMonth + month());
+		return this;
+	}
 	
 	/**
 	 * The first day of the month has value 1.
@@ -202,6 +213,11 @@ public class CCDate {
 	
 	public int day(){
 		return _myCalendar.get(Calendar.DAY_OF_MONTH);
+	}
+	
+	public CCDate addDays(int theDay){
+		day(theDay + day());
+		return this;
 	}
 	
 	public void dayOfYear(int theDay){
@@ -364,5 +380,9 @@ public class CCDate {
 	@Override
 	public String toString() {
 		return OUTPUT_FORMAT.format(_myCalendar.getTime());
+	}
+	
+	public String toString(String theFormat){
+		return new SimpleDateFormat(theFormat).format(_myCalendar.getTime());
 	}
 }
