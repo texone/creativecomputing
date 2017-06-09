@@ -36,11 +36,11 @@ public class CCAABoundingRectangle{
 	 * @param theY2
 	 */
 	public CCAABoundingRectangle(final double theX1, final double theY1, final double theX2, final double theY2){
-		double myMinX = CCMath.min(theX1, theX2);
-		double myMinY = CCMath.min(theY1, theY2);
+		double myMinX = theX1;
+		double myMinY = theY1;
 
-		double myMaxX = CCMath.max(theX1, theX2);
-		double myMaxY = CCMath.max(theY1, theY2);
+		double myMaxX = theX2;
+		double myMaxY = theY2;
 		
 		_myMinCorner = new CCVector2(myMinX, myMinY);
 		_myMaxCorner = new CCVector2(myMaxX, myMaxY);
@@ -146,6 +146,10 @@ public class CCAABoundingRectangle{
 	 */
 	public void position(final CCVector2 thePosition) {
 		position(thePosition.x, thePosition.y);
+	}
+	
+	public CCVector2 randomPosition(){
+		return new CCVector2(CCMath.random(_myMinCorner.x, _myMaxCorner.x), CCMath.random(_myMinCorner.y, _myMaxCorner.y));
 	}
 	
 	/**
