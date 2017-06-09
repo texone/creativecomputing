@@ -51,8 +51,8 @@ public class CCCircleEffect extends CCEffect {
 	}
 
 	@Override
-	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
+	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
 		_myResultLength = theValueNames.length;
-		super.valueNames(theEffectables, "angle", "amount");
+		super.valueNames(theEffectManager, "angle", "amount");
 	}
 }

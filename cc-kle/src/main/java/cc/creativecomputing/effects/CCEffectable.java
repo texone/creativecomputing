@@ -3,10 +3,17 @@ package cc.creativecomputing.effects;
 import java.util.HashMap;
 import java.util.Map;
 
+import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.CCSelectable;
+import cc.creativecomputing.core.CCSelectionListener;
+import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCMatrix4x4;
+import cc.creativecomputing.math.CCVector3;
 
 
-public abstract class CCEffectable {
+public abstract class CCEffectable implements CCSelectable{
 	
 	public static final String CONSTANT_SOURCE = "constant";
 	public static final String RANDOM_SOURCE = "random";
@@ -18,16 +25,54 @@ public abstract class CCEffectable {
 	public static final String GROUP_ID_SOURCE = "group id";
 
 	protected final int _myID;
-	
+	@CCProperty(name = "relative sources", hide = true)
 	public Map<String, Double> _myRelativeSources = new HashMap<String, Double>();
+	@CCProperty(name = "id sources", hide = true)
 	public Map<String, Integer> _myIdBasedSources = new HashMap<String, Integer>();
+	
+	private boolean _cIsSelected = false;
+	
+	protected CCMatrix4x4 _myMatrix;
 	
 	public CCEffectable(int theId){
 		_myID = theId;
-		addRelativeSource(CONSTANT_SOURCE, 1);
-		addRelativeSource(RANDOM_SOURCE, CCMath.random());
 
 		addIdBasedSource(ID_SOURCE, _myID);
+		
+		_myMatrix = new CCMatrix4x4();
+	}
+	
+	private CCVector3 _myPosition = null;
+	
+	public CCVector3 position(){
+		if(_myPosition == null){
+			_myPosition = _myMatrix.applyPostPoint(new CCVector3());
+		}
+		return _myPosition;
+	}
+	
+	public CCMatrix4x4 matrix(){
+		return _myMatrix;
+	}
+	
+	@Override
+	public boolean isSelected(){
+		return _cIsSelected;
+	}
+	
+	private CCListenerManager<CCSelectionListener> _myListenerManager;
+	
+	@Override
+	public void addListener(CCSelectionListener theListener) {
+		if(_myListenerManager == null)_myListenerManager = CCListenerManager.create(CCSelectionListener.class);
+		_myListenerManager.add(theListener);
+	}
+	
+	@Override
+	@CCProperty(name = "selected")
+	public void select(boolean theIsSelected){
+		_cIsSelected = theIsSelected;
+		if(_myListenerManager != null)_myListenerManager.proxy().isSelected(theIsSelected);
 	}
 	
 	public void addRelativeSource(String theKey, double theValue){
@@ -100,7 +145,7 @@ public abstract class CCEffectable {
 		return idSource(GROUP_ID_SOURCE);
 	}
 	
-	public void update(double theDeltaTime){
+	public void update(CCAnimator theAnimator){
 		
 	}
 	

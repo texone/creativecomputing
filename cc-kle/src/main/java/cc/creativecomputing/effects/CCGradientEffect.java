@@ -83,8 +83,8 @@ public class CCGradientEffect extends CCEffect{
 	}
 	
 	@Override
-	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
+	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
 		_myResultLength = theValueNames.length;
-		super.valueNames(theEffectables, "offset1", "offset2");
+		super.valueNames(theEffectManager, "offset1", "offset2");
 	}
 }

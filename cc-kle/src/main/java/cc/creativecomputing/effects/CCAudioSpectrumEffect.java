@@ -32,8 +32,8 @@ public class CCAudioSpectrumEffect extends CCEffect{
 	}
 	
 	@Override
-	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
-		super.valueNames(theEffectables, theValueNames);
+	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
+		super.valueNames(theEffectManager, theValueNames);
 		
 		for(String myValueName:_myValueNames){
 			_cApplies.put(myValueName, 0d);

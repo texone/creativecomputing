@@ -59,8 +59,8 @@ public class CCImageEffect extends CCEffect{
 	}
 
 	@Override
-	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
+	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
 		_myResultLength = theValueNames.length;
-		super.valueNames(theEffectables, "x", "y");
+		super.valueNames(theEffectManager, "x", "y");
 	}
 }

@@ -3,6 +3,7 @@ package cc.creativecomputing.effects;
 import cc.creativecomputing.control.code.CCCompileObject;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.effects.modulation.CCEffectModulation;
 
 public class CCRealtimeCodeEffect extends CCEffect {
 	

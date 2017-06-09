@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.effects.modulation.CCEffectModulation;
 
 public abstract class CCEffect {
 	
@@ -34,12 +34,12 @@ public abstract class CCEffect {
 		this("modulation");
 	}
 	
-	public void valueNames(CCEffectables<?> theEffectables, String... theValueNames) {
+	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
 		_cModulations = new LinkedHashMap<>();
 		_myValueNames = theValueNames;
 		for(String myModulation:_myModulations){
 			for(int i = 0; i < _myValueNames.length;i++){
-				createModulation(_myValueNames[i] + " " + myModulation, theEffectables);
+				createModulation(_myValueNames[i] + " " + myModulation, theEffectManager);
 			}
 		}
 	}
@@ -54,8 +54,8 @@ public abstract class CCEffect {
 		return _cModulations.get(theValue + " modulation");
 	}
 	
-	protected void createModulation(String theKey,CCEffectables<?> theEffectables){
-		_cModulations.put(theKey, new CCEffectModulation(theEffectables));
+	protected void createModulation(String theKey,CCEffectManager<?> theEffectManager){
+		_cModulations.put(theKey, new CCEffectModulation(theEffectManager));
 	}
 	
 	public void update(final double theDeltaTime){

@@ -1,6 +1,7 @@
 package cc.creativecomputing.effects;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.effects.modulation.CCEffectModulation;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.easing.CCEasing.CCEaseFormular;
 
@@ -19,8 +20,12 @@ public class CCEffectBlender {
 	@CCProperty(name = "reverse")
 	private boolean _cReverse = true;
 	
-	public CCEffectBlender(CCEffectables<?> theEffectables){
-		_cModulation = new CCEffectModulation(theEffectables);
+	public CCEffectBlender(CCEffectManager<?> theEffectManager){
+		_cModulation = new CCEffectModulation(theEffectManager);
+	}
+	
+	public CCEffectModulation modulation(){
+		return _cModulation;
 	}
 	
 	protected double blend(CCEffectable theEffectable){
