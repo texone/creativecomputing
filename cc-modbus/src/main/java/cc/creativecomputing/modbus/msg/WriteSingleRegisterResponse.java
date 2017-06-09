@@ -37,114 +37,108 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
-
 /**
- * Class implementing a <tt>WriteSingleRegisterResponse</tt>.
- * The implementation directly correlates with the class 0
- * function <i>write single register (FC 6)</i>. It
- * encapsulates the corresponding response message.
+ * Class implementing a <tt>WriteSingleRegisterResponse</tt>. The implementation
+ * directly correlates with the class 0 function <i>write single register (FC
+ * 6)</i>. It encapsulates the corresponding response message.
  *
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public final class WriteSingleRegisterResponse
-    extends ModbusResponse {
+public final class WriteSingleRegisterResponse extends CCAbstractModbusResponse {
 
-  //instance attributes
-  private int m_Reference;
-  private int m_RegisterValue;
+	// instance attributes
+	private int m_Reference;
+	private int m_RegisterValue;
 
-  /**
-   * Constructs a new <tt>WriteSingleRegisterResponse</tt>
-   * instance.
-   */
-  public WriteSingleRegisterResponse() {
-    super();
-    setDataLength(4);
-    setFunctionCode(Modbus.WRITE_SINGLE_REGISTER);
-  }//constructor
+	/**
+	 * Constructs a new <tt>WriteSingleRegisterResponse</tt> instance.
+	 */
+	public WriteSingleRegisterResponse() {
+		super();
+		dataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_SINGLE_REGISTER);
+	}// constructor
 
-  /**
-   * Constructs a new <tt>WriteSingleRegisterResponse</tt>
-   * instance.
-   *
-   * @param reference the offset of the register written.
-   * @param value the value of the register.
-   */
-  public WriteSingleRegisterResponse(int reference, int value) {
-    super();
-    setReference(reference);
-    setRegisterValue(value);
-    setDataLength(4);
-    setFunctionCode(Modbus.WRITE_SINGLE_REGISTER);
-  }//constructor
+	/**
+	 * Constructs a new <tt>WriteSingleRegisterResponse</tt> instance.
+	 *
+	 * @param reference the offset of the register written.
+	 * @param value the value of the register.
+	 */
+	public WriteSingleRegisterResponse(int reference, int value) {
+		super();
+		setReference(reference);
+		setRegisterValue(value);
+		dataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_SINGLE_REGISTER);
+	}// constructor
 
+	/**
+	 * Returns the value that has been returned in this
+	 * <tt>WriteSingleRegisterResponse</tt>.
+	 * <p>
+	 * 
+	 * @return the value of the register.
+	 */
+	public int getRegisterValue() {
+		return m_RegisterValue;
+	}// getValue
 
-  /**
-   * Returns the value that has been returned in
-   * this <tt>WriteSingleRegisterResponse</tt>.
-   * <p>
-   * @return the value of the register.
-   */
-  public int getRegisterValue() {
-    return m_RegisterValue;
-  }//getValue
+	/**
+	 * Sets the value that has been returned in the response message.
+	 * <p>
+	 * 
+	 * @param value the returned register value.
+	 */
+	private void setRegisterValue(int value) {
+		m_RegisterValue = value;
+	}// setRegisterValue
 
-  /**
-   * Sets the value that has been returned in the
-   * response message.
-   * <p>
-   * @param value the returned register value.
-   */
-  private void setRegisterValue(int value) {
-    m_RegisterValue = value;
-  }//setRegisterValue
+	/**
+	 * Returns the reference of the register that has been written to.
+	 * <p>
+	 * 
+	 * @return the reference of the written register.
+	 */
+	public int getReference() {
+		return m_Reference;
+	}// getReference
 
-  /**
-   * Returns the reference of the register
-   * that has been written to.
-   * <p>
-   * @return the reference of the written register.
-   */
-  public int getReference() {
-    return m_Reference;
-  }//getReference
+	/**
+	 * Sets the reference of the register that has been written to.
+	 * <p>
+	 * 
+	 * @param ref the reference of the written register.
+	 */
+	private void setReference(int ref) {
+		m_Reference = ref;
+		// setChanged(true);
+	}// setReference
 
-  /**
-   * Sets the reference of the register that has
-   * been written to.
-   * <p>
-   * @param ref the reference of the written register.
-   */
-  private void setReference(int ref) {
-    m_Reference = ref;
-    //setChanged(true);
-  }//setReference
+	public void writeData(DataOutput dout) throws IOException {
+		dout.write(message());
+	}// writeData
 
-  public void writeData(DataOutput dout)
-      throws IOException {
-    dout.write(getMessage());
-  }//writeData
+	public void readData(DataInput din) throws IOException {
+		setReference(din.readUnsignedShort());
+		setRegisterValue(din.readUnsignedShort());
+		// update data length
+		dataLength(4);
+	}// readData
 
-  public void readData(DataInput din)
-      throws IOException {
-    setReference(din.readUnsignedShort());
-    setRegisterValue(din.readUnsignedShort());
-    //update data length
-    setDataLength(4);
-  }//readData
-  
-  public byte[] getMessage() {
-	  byte result[] = new byte[4];
-	  
-	  result[0] = (byte) ((m_Reference >> 8) & 0xff);
-	  result[1] = (byte) (m_Reference & 0xff);
-	  result[2] = (byte) ((m_RegisterValue >> 8) & 0xff);
-	  result[3] = (byte) (m_RegisterValue & 0xff);
-	  
-	  return result;
-  }
+	public byte[] message() {
+		byte result[] = new byte[4];
 
-}//class WriteSingleRegisterResponse
+		result[0] = (byte) ((m_Reference >> 8) & 0xff);
+		result[1] = (byte) (m_Reference & 0xff);
+		result[2] = (byte) ((m_RegisterValue >> 8) & 0xff);
+		result[3] = (byte) (m_RegisterValue & 0xff);
+
+		return result;
+	}
+
+}// class WriteSingleRegisterResponse

@@ -37,6 +37,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
 /**
@@ -47,7 +48,7 @@ import cc.creativecomputing.modbus.Modbus;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public final class WriteCoilResponse extends ModbusResponse {
+public final class WriteCoilResponse extends CCAbstractModbusResponse {
 	private boolean m_Coil = false;
 	private int m_Reference;
 
@@ -57,8 +58,8 @@ public final class WriteCoilResponse extends ModbusResponse {
 	public WriteCoilResponse() {
 		super();
 		
-		setFunctionCode(Modbus.WRITE_COIL);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_COIL);
+		dataLength(4);
 	}
 
 	/**
@@ -72,8 +73,8 @@ public final class WriteCoilResponse extends ModbusResponse {
 	public WriteCoilResponse(int reference, boolean b) {
 		super();
 		
-		setFunctionCode(Modbus.WRITE_COIL);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_COIL);
+		dataLength(4);
 		
 		setReference(reference);
 		setCoil(b);
@@ -122,7 +123,7 @@ public final class WriteCoilResponse extends ModbusResponse {
 	}
 
 	public void writeData(DataOutput dout) throws IOException {
-		byte data[] = getMessage();
+		byte data[] = message();
 		if (data == null)
 			return;
 
@@ -136,10 +137,10 @@ public final class WriteCoilResponse extends ModbusResponse {
 		setReference(((data[0] << 8) | (data[1] & 0xff)));
 		setCoil(data[2] == Modbus.COIL_ON);
 
-		setDataLength(4);
+		dataLength(4);
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 
 		result[0] = (byte) ((m_Reference >> 8) & 0xff);

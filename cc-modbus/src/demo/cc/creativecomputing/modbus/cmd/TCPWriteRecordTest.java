@@ -38,13 +38,13 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 
 import cc.creativecomputing.modbus.Modbus;
-import cc.creativecomputing.modbus.ModbusException;
+import cc.creativecomputing.modbus.CCModbusException;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.ModbusSlaveException;
+import cc.creativecomputing.modbus.CCModbusSlaveException;
 import cc.creativecomputing.modbus.io.ModbusTCPTransaction;
 import cc.creativecomputing.modbus.io.ModbusTransaction;
-import cc.creativecomputing.modbus.msg.ExceptionResponse;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCExceptionResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.msg.ReadFileRecordRequest;
 import cc.creativecomputing.modbus.msg.ReadFileRecordResponse;
 import cc.creativecomputing.modbus.msg.WriteFileRecordRequest;
@@ -155,14 +155,14 @@ public class TCPWriteRecordTest {
 				 * will be incremented for each loop.
 				 */
 				rdRequest = new ReadFileRecordRequest();
-				rdRequest.setUnitID(unit);
+				rdRequest.unitID(unit);
 				
 				RecordRequest recordRequest =
 						rdRequest.new RecordRequest(file, record + i, registers);
 				rdRequest.addRequest(recordRequest);
 				
 				if (Modbus.debug)
-					System.out.println("Request: " + rdRequest.getHexMessage());
+					System.out.println("Request: " + rdRequest.hexMessage());
 
 				/*
 				 * Setup the transaction.
@@ -175,7 +175,7 @@ public class TCPWriteRecordTest {
 				 */
 				try {
 					trans.execute();
-				} catch (ModbusSlaveException x) {
+				} catch (CCModbusSlaveException x) {
 					System.err.println("Slave Exception: " +
 							x.getLocalizedMessage());
 					continue;
@@ -183,7 +183,7 @@ public class TCPWriteRecordTest {
 					System.err.println("I/O Exception: " +
 							x.getLocalizedMessage());
 					continue;					
-				} catch (ModbusException x) {
+				} catch (CCModbusException x) {
 					System.err.println("Modbus Exception: " +
 							x.getLocalizedMessage());
 					continue;					
@@ -192,15 +192,15 @@ public class TCPWriteRecordTest {
 				short values[];
 				
 				wrRequest = new WriteFileRecordRequest();
-				wrRequest.setUnitID(unit);
+				wrRequest.unitID(unit);
 
-				ModbusResponse dummy = trans.getResponse();
+				CCAbstractModbusResponse dummy = trans.getResponse();
 				if (dummy == null) {
 					System.err.println("No response for transaction " + i);
 					continue;
 				}
-				if (dummy instanceof ExceptionResponse) {
-					ExceptionResponse exception = (ExceptionResponse) dummy;
+				if (dummy instanceof CCExceptionResponse) {
+					CCExceptionResponse exception = (CCExceptionResponse) dummy;
 
 					System.err.println(exception);
 
@@ -210,7 +210,7 @@ public class TCPWriteRecordTest {
 
 					if (Modbus.debug)
 						System.out.println("Response: "
-								+ rdResponse.getHexMessage());
+								+ rdResponse.hexMessage());
 
 					int count = rdResponse.getRecordCount();
 					for (int j = 0;j < count;j++) {
@@ -231,7 +231,7 @@ public class TCPWriteRecordTest {
 					 * Unknown message.
 					 */
 					System.out.println(
-							"Unknown Response: " + dummy.getHexMessage());
+							"Unknown Response: " + dummy.hexMessage());
 				}
 				
 				/*
@@ -245,7 +245,7 @@ public class TCPWriteRecordTest {
 				 */
 				try {
 					trans.execute();
-				} catch (ModbusSlaveException x) {
+				} catch (CCModbusSlaveException x) {
 					System.err.println("Slave Exception: " +
 							x.getLocalizedMessage());
 					continue;
@@ -253,7 +253,7 @@ public class TCPWriteRecordTest {
 					System.err.println("I/O Exception: " +
 							x.getLocalizedMessage());
 					continue;					
-				} catch (ModbusException x) {
+				} catch (CCModbusException x) {
 					System.err.println("Modbus Exception: " +
 							x.getLocalizedMessage());
 					continue;					
@@ -264,8 +264,8 @@ public class TCPWriteRecordTest {
 					System.err.println("No response for transaction " + i);
 					continue;
 				}
-				if (dummy instanceof ExceptionResponse) {
-					ExceptionResponse exception = (ExceptionResponse) dummy;
+				if (dummy instanceof CCExceptionResponse) {
+					CCExceptionResponse exception = (CCExceptionResponse) dummy;
 
 					System.err.println(exception);
 
@@ -275,7 +275,7 @@ public class TCPWriteRecordTest {
 
 					if (Modbus.debug)
 						System.out.println("Response: "
-								+ wrResponse.getHexMessage());
+								+ wrResponse.hexMessage());
 
 					int count = wrResponse.getRequestCount();
 					for (int j = 0;j < count;j++) {
@@ -293,7 +293,7 @@ public class TCPWriteRecordTest {
 					 * Unknown message.
 					 */
 					System.out.println(
-							"Unknown Response: " + dummy.getHexMessage());
+							"Unknown Response: " + dummy.hexMessage());
 				}
 			}
 			

@@ -37,7 +37,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.procimg.DigitalOut;
 import cc.creativecomputing.modbus.procimg.IllegalAddressException;
@@ -59,27 +60,27 @@ import cc.creativecomputing.modbus.util.BitVector;
  * 
  *          20140426 - Refactor and exploit the new response methods.<br>
  */
-public final class WriteMultipleCoilsRequest extends ModbusRequest {
+public final class WriteMultipleCoilsRequest extends CCAbstractModbusRequest {
 
 	// instance attributes
 	private int m_Reference;
 	private BitVector m_Coils;
 
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		WriteMultipleCoilsResponse response = new WriteMultipleCoilsResponse();
 
 		response.setHeadless(isHeadless());
 		if (!isHeadless()) {
-			response.setProtocolID(getProtocolID());
-			response.setTransactionID(getTransactionID());
+			response.protocolID(protocolID());
+			response.transactionID(transactionID());
 		}
-		response.setFunctionCode(getFunctionCode());
-		response.setUnitID(getUnitID());
+		response.functionCode(functionCode());
+		response.unitID(unitID());
 
 		return response;
 	}
 
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		WriteMultipleCoilsResponse response = null;
 		DigitalOut douts[] = null;
 
@@ -93,9 +94,9 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
 				douts[i].set(m_Coils.getBit(i));
 			}
 		} catch (IllegalAddressException iaex) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
-		response = (WriteMultipleCoilsResponse) getResponse();
+		response = (WriteMultipleCoilsResponse) response();
 
 		response.setBitCount(m_Coils.size());
 		response.setReference(m_Reference);
@@ -108,8 +109,7 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
 	 * this <tt>WriteMultipleCoilsRequest</tt>.
 	 * <p/>
 	 * 
-	 * @param ref
-	 *            the reference of the coil to start writing to.
+	 * @param ref the reference of the coil to start writing to.
 	 */
 	public void setReference(int ref) {
 		m_Reference = ref;
@@ -150,11 +150,9 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
 	/**
 	 * getCoilStatus - Returns the status of the specified coil.
 	 * 
-	 * @param index
-	 *            the index of the coil to be tested.
+	 * @param index the index of the coil to be tested.
 	 * @return true if set, false otherwise.
-	 * @throws IndexOutOfBoundsException
-	 *             if the given index is out of bounds.
+	 * @throws IndexOutOfBoundsException if the given index is out of bounds.
 	 */
 	public boolean getCoilStatus(int index) throws IndexOutOfBoundsException {
 		return m_Coils.getBit(index);
@@ -163,15 +161,11 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
 	/**
 	 * setCoilStatus - Sets the status of the specified coil.
 	 * 
-	 * @param index
-	 *            the index of the coil to be set/reset.
-	 * @param b
-	 *            true if to be set, false for reset.
-	 * @throws IndexOutOfBoundsException
-	 *             if the given index is out of bounds.
+	 * @param index the index of the coil to be set/reset.
+	 * @param b true if to be set, false for reset.
+	 * @throws IndexOutOfBoundsException if the given index is out of bounds.
 	 */
-	public void setCoilStatus(int index, boolean b)
-			throws IndexOutOfBoundsException {
+	public void setCoilStatus(int index, boolean b) throws IndexOutOfBoundsException {
 		m_Coils.setBit(index, b);
 	}
 
@@ -189,8 +183,7 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
 	 * setCoils - Sets the <tt>BitVector</tt> instance holding coil status
 	 * information.
 	 * 
-	 * @param bv
-	 *            a <tt>BitVector</tt> instance holding coil status info.
+	 * @param bv a <tt>BitVector</tt> instance holding coil status info.
 	 */
 	public void setCoils(BitVector bv) {
 		m_Coils = bv;
@@ -217,10 +210,10 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
 		m_Coils = BitVector.createBitVector(data, bitcount);
 
 		// update data length
-		setDataLength(coilBytes + 5);
+		dataLength(coilBytes + 5);
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		int len = m_Coils.byteSize() + 5;
 		byte result[] = new byte[len];
 
@@ -241,16 +234,14 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
 	 * Constructs a new <tt>WriteMultipleCoilsRequest</tt> instance with the
 	 * given reference and coil values.
 	 * 
-	 * @param ref
-	 *            the index of the first coil to be written.
-	 * @param bv
-	 *            the coil values to be written.
+	 * @param ref the index of the first coil to be written.
+	 * @param bv the coil values to be written.
 	 */
 	public WriteMultipleCoilsRequest(int ref, BitVector bv) {
 		super();
 
-		setFunctionCode(Modbus.WRITE_MULTIPLE_COILS);
-		setDataLength(bv.byteSize() + 5);
+		functionCode(CCModbusFunctionCode.WRITE_MULTIPLE_COILS);
+		dataLength(bv.byteSize() + 5);
 
 		setReference(ref);
 		m_Coils = bv;
@@ -261,16 +252,14 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
 	 * reference and count of coils to be written, followed by the actual byte
 	 * count, and then <i>count<i> number of bytes.
 	 * 
-	 * @param ref
-	 *            the index of the first coil to be written.
-	 * @param count
-	 *            the number of coils to be written.
+	 * @param ref the index of the first coil to be written.
+	 * @param count the number of coils to be written.
 	 */
 	public WriteMultipleCoilsRequest(int ref, int count) {
 		super();
 
-		setFunctionCode(Modbus.WRITE_MULTIPLE_COILS);
-		setDataLength((count + 7) / 8 + 5);
+		functionCode(CCModbusFunctionCode.WRITE_MULTIPLE_COILS);
+		dataLength((count + 7) / 8 + 5);
 
 		setReference(ref);
 		m_Coils = new BitVector(count);
@@ -287,8 +276,8 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
 	public WriteMultipleCoilsRequest() {
 		super();
 
-		setFunctionCode(Modbus.WRITE_MULTIPLE_COILS);
-		setDataLength(5);
+		functionCode(CCModbusFunctionCode.WRITE_MULTIPLE_COILS);
+		dataLength(5);
 
 		m_Coils = new BitVector(1);
 	}

@@ -66,12 +66,13 @@
  ***/
 package cc.creativecomputing.modbus.net;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.ModbusIOException;
 import cc.creativecomputing.modbus.io.ModbusTransport;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.util.SerialParameters;
 
 /**
@@ -111,11 +112,11 @@ public class ModbusSerialListener implements ModbusListener {
 						 * instance has been assigned a unit number, it must be
 						 * enforced.
 						 */
-						ModbusRequest request = transport.readRequest();
+						CCAbstractModbusRequest request = transport.readRequest();
 						if (request == null)
 							continue;
-						
-						if (m_Unit != 0 && m_Unit != request.getUnitID())
+
+						if (m_Unit != 0 && m_Unit != request.unitID())
 							continue;
 
 						/*
@@ -123,10 +124,9 @@ public class ModbusSerialListener implements ModbusListener {
 						 * ILLEGAL FUNCTION exception will be thrown if there is
 						 * no ProcessImage.
 						 */
-						ModbusResponse response = null;
+						CCAbstractModbusResponse response = null;
 						if (ModbusCoupler.getReference().getProcessImage() == null) {
-							response = request
-									.createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
+							response = request.createExceptionResponse(CCModbusExceptionCode.ILLEGAL_FUNCTION_EXCEPTION);
 						} else {
 							response = request.createResponse();
 						}
@@ -136,11 +136,11 @@ public class ModbusSerialListener implements ModbusListener {
 						 */
 						try {
 							if (Modbus.debug) {
-								System.out.println("Request (" + request.getClass().getName() + "): "
-										+ request.getHexMessage());
+								System.out.println(
+										"Request (" + request.getClass().getName() + "): " + request.hexMessage());
 
-								System.out.println("Response (" + response.getClass().getName() + "): "
-										+ response.getHexMessage());
+								System.out.println(
+										"Response (" + response.getClass().getName() + "): " + response.hexMessage());
 							}
 						} catch (RuntimeException x) {
 							// Ignore.
@@ -182,8 +182,7 @@ public class ModbusSerialListener implements ModbusListener {
 	/**
 	 * Sets the Modbus unit number for this <tt>ModbusSerialListener</tt>
 	 * 
-	 * @param unit
-	 *            Modbus unit number
+	 * @param unit Modbus unit number
 	 */
 	public void setUnit(int unit) {
 		m_Unit = unit;
@@ -201,8 +200,7 @@ public class ModbusSerialListener implements ModbusListener {
 	/**
 	 * Sets the listening flag of this <tt>ModbusTCPListener</tt>.
 	 * 
-	 * @param b
-	 *            true if listening (and accepting incoming connections), false
+	 * @param b true if listening (and accepting incoming connections), false
 	 *            otherwise.
 	 */
 	public void setListening(boolean b) {
@@ -227,7 +225,7 @@ public class ModbusSerialListener implements ModbusListener {
 		m_Listening = false;
 		m_Running = false;
 	}
-	
+
 	/**
 	 * Start the listener thread for this serial interface.
 	 */
@@ -235,15 +233,14 @@ public class ModbusSerialListener implements ModbusListener {
 		m_Listening = true;
 		Thread result = new Thread(this);
 		result.start();
-		
+
 		return result;
 	}
 
 	/**
 	 * Constructs a new <tt>ModbusSerialListener</tt> instance.
 	 * 
-	 * @param params
-	 *            a <tt>SerialParameters</tt> instance.
+	 * @param params a <tt>SerialParameters</tt> instance.
 	 */
 	public ModbusSerialListener(SerialParameters params) {
 		m_SerialCon = new SerialConnection(params);

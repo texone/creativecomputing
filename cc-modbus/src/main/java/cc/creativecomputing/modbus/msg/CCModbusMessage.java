@@ -33,10 +33,12 @@
  ***/
 package cc.creativecomputing.modbus.msg;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
+
 //import java.io.EOFException;
 //import java.io.IOException;
 
-import cc.creativecomputing.modbus.io.Transportable;
+import cc.creativecomputing.modbus.io.CCTransportable;
 
 /**
  * Interface defining a ModbusMessage.
@@ -44,7 +46,7 @@ import cc.creativecomputing.modbus.io.Transportable;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public interface ModbusMessage extends Transportable {
+public interface CCModbusMessage extends CCTransportable {
 
 	/**
 	 * Check the flag which indicates that this <tt>ModbusMessage</tt> is for a
@@ -68,7 +70,7 @@ public interface ModbusMessage extends Transportable {
 	 * 
 	 * @return the transaction identifier as <tt>int</tt>.
 	 */
-	public int getTransactionID();
+	public int transactionID();
 
 	/**
 	 * Returns the protocol identifier of this <tt>ModbusMessage</tt> as
@@ -80,7 +82,7 @@ public interface ModbusMessage extends Transportable {
 	 * 
 	 * @return the protocol identifier as <tt>int</tt>.
 	 */
-	public int getProtocolID();
+	public int protocolID();
 
 	/**
 	 * Returns the length of the data appended after the protocol header.
@@ -88,7 +90,7 @@ public interface ModbusMessage extends Transportable {
 	 * 
 	 * @return the data length as <tt>int</tt>.
 	 */
-	public int getDataLength();
+	public int dataLength();
 
 	/**
 	 * Returns the unit identifier of this <tt>ModbusMessage</tt> as
@@ -100,10 +102,11 @@ public interface ModbusMessage extends Transportable {
 	 * 
 	 * @return the unit identifier as <tt>int</tt>.
 	 */
-	public int getUnitID();
+	public int unitID();
 
 	/**
-	 * Returns the function code of this <tt>ModbusMessage</tt> as <tt>int</tt>.<br>
+	 * Returns the function code of this <tt>ModbusMessage</tt> as
+	 * <tt>int</tt>.<br>
 	 * The function code is a 1-byte non negative integer value valid in the
 	 * range of 0-127.
 	 * 
@@ -113,9 +116,9 @@ public interface ModbusMessage extends Transportable {
 	 * 
 	 * @return the function code as <tt>int</tt>.
 	 * 
-	 * @see cc.creativecomputing.modbus.Modbus
+	 * @see cc.creativecomputing.modbus.CCModbusFunctionCode
 	 */
-	public int getFunctionCode();
+	public CCModbusFunctionCode functionCode();
 
 	/**
 	 * Returns the <i>raw</i> message as an array of bytes.
@@ -124,7 +127,7 @@ public interface ModbusMessage extends Transportable {
 	 * @return the <i>raw</i> message as <tt>byte[]</tt>.
 	 * 
 	 */
-	public byte[] getMessage();
+	public byte[] message();
 
 	/**
 	 * Returns the <i>raw</i> message as <tt>String</tt> containing a
@@ -138,5 +141,5 @@ public interface ModbusMessage extends Transportable {
 	 *         hexadecimal series of bytes.
 	 * 
 	 */
-	public String getHexMessage();
+	public String hexMessage();
 }

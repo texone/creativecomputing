@@ -37,6 +37,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.procimg.IllegalAddressException;
@@ -52,7 +54,7 @@ import cc.creativecomputing.modbus.procimg.SimpleRegister;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public final class WriteSingleRegisterRequest extends ModbusRequest {
+public final class WriteSingleRegisterRequest extends CCAbstractModbusRequest {
 
 	// instance attributes
 	private int m_Reference;
@@ -64,8 +66,8 @@ public final class WriteSingleRegisterRequest extends ModbusRequest {
 	public WriteSingleRegisterRequest() {
 		super();
 
-		setFunctionCode(Modbus.WRITE_SINGLE_REGISTER);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_SINGLE_REGISTER);
+		dataLength(4);
 	}
 
 	/**
@@ -80,28 +82,28 @@ public final class WriteSingleRegisterRequest extends ModbusRequest {
 	public WriteSingleRegisterRequest(int ref, Register reg) {
 		super();
 
-		setFunctionCode(Modbus.WRITE_SINGLE_REGISTER);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_SINGLE_REGISTER);
+		dataLength(4);
 
 		m_Reference = ref;
 		m_Register = reg;
 	}
 
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		WriteSingleRegisterResponse response = new WriteSingleRegisterResponse();
 
 		response.setHeadless(isHeadless());
 		if (!isHeadless()) {
-			response.setProtocolID(getProtocolID());
-			response.setTransactionID(getTransactionID());
+			response.protocolID(protocolID());
+			response.transactionID(transactionID());
 		}
-		response.setFunctionCode(getFunctionCode());
-		response.setUnitID(getUnitID());
+		response.functionCode(functionCode());
+		response.unitID(unitID());
 
 		return response;
 	}
 
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		WriteSingleRegisterResponse response = null;
 		Register reg = null;
 
@@ -113,9 +115,9 @@ public final class WriteSingleRegisterRequest extends ModbusRequest {
 			// 3. set Register
 			reg.setValue(m_Register.toBytes());
 		} catch (IllegalAddressException iaex) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
-		response = (WriteSingleRegisterResponse) getResponse();
+		response = (WriteSingleRegisterResponse) response();
 
 		return response;
 	}
@@ -172,7 +174,7 @@ public final class WriteSingleRegisterRequest extends ModbusRequest {
 		m_Register = new SimpleRegister(din.readByte(), din.readByte());
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 
 		result[0] = (byte) ((m_Reference >> 8) & 0xff);

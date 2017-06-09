@@ -37,6 +37,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.procimg.DigitalOut;
@@ -51,7 +53,7 @@ import cc.creativecomputing.modbus.procimg.ProcessImage;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public final class WriteCoilRequest extends ModbusRequest {
+public final class WriteCoilRequest extends CCAbstractModbusRequest {
 
 	// instance attributes
 	private int m_Reference;
@@ -63,8 +65,8 @@ public final class WriteCoilRequest extends ModbusRequest {
 	public WriteCoilRequest() {
 		super();
 		
-		setFunctionCode(Modbus.WRITE_COIL);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_COIL);
+		dataLength(4);
 	}
 
 	/**
@@ -79,28 +81,28 @@ public final class WriteCoilRequest extends ModbusRequest {
 	public WriteCoilRequest(int ref, boolean b) {
 		super();
 
-		setFunctionCode(Modbus.WRITE_COIL);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_COIL);
+		dataLength(4);
 
 		setReference(ref);
 		setCoil(b);
 	}
 
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		WriteCoilResponse response = new WriteCoilResponse();
 		
 		response.setHeadless(isHeadless());
 		if (! isHeadless()) {
-			response.setProtocolID(getProtocolID());
-			response.setTransactionID(getTransactionID());
+			response.protocolID(protocolID());
+			response.transactionID(transactionID());
 		}
-		response.setFunctionCode(getFunctionCode());
-		response.setUnitID(getUnitID());
+		response.functionCode(functionCode());
+		response.unitID(unitID());
 		
 		return response;
 	}
 
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		WriteCoilResponse response = null;
 		DigitalOut dout = null;
 
@@ -112,9 +114,9 @@ public final class WriteCoilRequest extends ModbusRequest {
 			// 3. set coil
 			dout.set(getCoil());
 		} catch (IllegalAddressException iaex) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
-		response = (WriteCoilResponse) getResponse();
+		response = (WriteCoilResponse) response();
 		response.setReference(getReference());
 		response.setCoil(getCoil());
 		
@@ -186,7 +188,7 @@ public final class WriteCoilRequest extends ModbusRequest {
 		din.readByte();
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 
 		result[0] = (byte) ((m_Reference >> 8) & 0xff);

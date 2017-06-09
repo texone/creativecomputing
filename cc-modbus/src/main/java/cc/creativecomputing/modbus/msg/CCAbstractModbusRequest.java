@@ -66,7 +66,8 @@
  ***/
 package cc.creativecomputing.modbus.msg;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 
 /**
  * Abstract class implementing a <tt>ModbusRequest</tt>. This class provides
@@ -80,10 +81,9 @@ import cc.creativecomputing.modbus.Modbus;
  * 
  * @version 1.2rc1-ghpc (02/14/2011) Added REPORT_SLAVE_ID stuff.
  * 
- * @version 1.0-jamod (7/7/2012)
- * 	Added new messages.
+ * @version 1.0-jamod (7/7/2012) Added new messages.
  */
-public abstract class ModbusRequest extends ModbusMessageImpl {
+public abstract class CCAbstractModbusRequest extends CCAbstractModbusMessage {
 
 	/**
 	 * Returns the <tt>ModbusResponse</tt> that correlates with this
@@ -100,7 +100,7 @@ public abstract class ModbusRequest extends ModbusMessageImpl {
 	 * 
 	 * @return the corresponding <tt>ModbusResponse</tt>.
 	 */
-	public abstract ModbusResponse getResponse();
+	public abstract CCAbstractModbusResponse response();
 
 	/**
 	 * Returns the <tt>ModbusResponse</tt> that represents the answer to this
@@ -117,26 +117,24 @@ public abstract class ModbusRequest extends ModbusMessageImpl {
 	 * 
 	 * @return the corresponding <tt>ModbusResponse</tt>.
 	 */
-	public abstract ModbusResponse createResponse();
+	public abstract CCAbstractModbusResponse createResponse();
 
 	/**
 	 * Factory method for creating exception responses with the given exception
 	 * code.
 	 * 
-	 * @param code
-	 *            the code of the exception.
+	 * @param theExceptionCode the code of the exception.
 	 * @return a ModbusResponse instance representing the exception response.
 	 */
-	public ModbusResponse createExceptionResponse(int code) {
-		ExceptionResponse response = new ExceptionResponse(getFunctionCode(),
-				code);
+	public CCAbstractModbusResponse createExceptionResponse(CCModbusExceptionCode theExceptionCode) {
+		CCExceptionResponse response = new CCExceptionResponse(functionCode(), theExceptionCode);
 		if (!isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		} else {
 			response.setHeadless();
 		}
-		response.setUnitID(getUnitID());
+		response.unitID(unitID());
 		return response;
 	}
 
@@ -144,73 +142,72 @@ public abstract class ModbusRequest extends ModbusMessageImpl {
 	 * Factory method creating the required specialized <tt>ModbusRequest</tt>
 	 * instance.
 	 * 
-	 * @param functionCode
-	 *            the function code of the request as <tt>int</tt>.
+	 * @param theFunctionCode the function code of the request as <tt>int</tt>.
 	 * @return a ModbusRequest instance specific for the given function type.
 	 */
-	public static ModbusRequest createModbusRequest(int functionCode) {
-		ModbusRequest request = null;
+	public static CCAbstractModbusRequest createModbusRequest(CCModbusFunctionCode theFunctionCode) {
+		CCAbstractModbusRequest request = null;
 
-		switch (functionCode) {
-		case Modbus.READ_COILS:
+		switch (theFunctionCode) {
+		case READ_COILS:
 			request = new ReadCoilsRequest();
 			break;
-		case Modbus.READ_INPUT_DISCRETES:
+		case READ_INPUT_DISCRETES:
 			request = new ReadInputDiscretesRequest();
 			break;
-		case Modbus.READ_MULTIPLE_REGISTERS:
+		case READ_MULTIPLE_REGISTERS:
 			request = new ReadMultipleRegistersRequest();
 			break;
-		case Modbus.READ_INPUT_REGISTERS:
+		case READ_INPUT_REGISTERS:
 			request = new ReadInputRegistersRequest();
 			break;
-		case Modbus.WRITE_COIL:
+		case WRITE_COIL:
 			request = new WriteCoilRequest();
 			break;
-		case Modbus.WRITE_SINGLE_REGISTER:
+		case WRITE_SINGLE_REGISTER:
 			request = new WriteSingleRegisterRequest();
 			break;
-		case Modbus.WRITE_MULTIPLE_COILS:
+		case WRITE_MULTIPLE_COILS:
 			request = new WriteMultipleCoilsRequest();
 			break;
-		case Modbus.WRITE_MULTIPLE_REGISTERS:
+		case WRITE_MULTIPLE_REGISTERS:
 			request = new WriteMultipleRegistersRequest();
 			break;
-		case Modbus.READ_EXCEPTION_STATUS:
+		case READ_EXCEPTION_STATUS:
 			request = new ReadExceptionStatusRequest();
 			break;
-		case Modbus.READ_SERIAL_DIAGNOSTICS:
+		case READ_SERIAL_DIAGNOSTICS:
 			request = new ReadSerialDiagnosticsRequest();
 			break;
-		case Modbus.READ_COMM_EVENT_COUNTER:
+		case READ_COMM_EVENT_COUNTER:
 			request = new ReadCommEventCounterRequest();
 			break;
-		case Modbus.READ_COMM_EVENT_LOG:
+		case READ_COMM_EVENT_LOG:
 			request = new ReadCommEventLogRequest();
 			break;
-		case Modbus.REPORT_SLAVE_ID:
+		case REPORT_SLAVE_ID:
 			request = new ReportSlaveIDRequest();
 			break;
-		case Modbus.READ_FILE_RECORD:
+		case READ_FILE_RECORD:
 			request = new ReadFileRecordRequest();
 			break;
-		case Modbus.WRITE_FILE_RECORD:
+		case WRITE_FILE_RECORD:
 			request = new WriteFileRecordRequest();
 			break;
-		case Modbus.MASK_WRITE_REGISTER:
-			request = new MaskWriteRegisterRequest();
+		case MASK_WRITE_REGISTER:
+			request = new CCMaskWriteRegisterRequest();
 			break;
-		case Modbus.READ_WRITE_MULTIPLE:
+		case READ_WRITE_MULTIPLE:
 			request = new ReadWriteMultipleRequest();
 			break;
-		case Modbus.READ_FIFO_QUEUE:
+		case READ_FIFO_QUEUE:
 			request = new ReadFIFOQueueRequest();
 			break;
-		case Modbus.READ_MEI:
+		case READ_MEI:
 			request = new ReadMEIRequest();
 			break;
 		default:
-			request = new IllegalFunctionRequest(functionCode);
+			request = new CCIllegalFunctionRequest(theFunctionCode);
 			break;
 		}
 		return request;

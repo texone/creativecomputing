@@ -37,7 +37,7 @@ import java.net.InetAddress;
 
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.io.ModbusTCPTransaction;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
 import cc.creativecomputing.modbus.msg.ReadInputDiscretesRequest;
 import cc.creativecomputing.modbus.msg.ReadInputDiscretesResponse;
 import cc.creativecomputing.modbus.msg.WriteCoilRequest;
@@ -67,7 +67,7 @@ public class DIDOTest {
 
 		InetAddress addr = null;
 		TCPMasterConnection con = null;
-		ModbusRequest di_req = null;
+		CCAbstractModbusRequest di_req = null;
 		WriteCoilRequest do_req = null;
 
 		ModbusTCPTransaction di_trans = null;
@@ -115,8 +115,8 @@ public class DIDOTest {
 			do_req = new WriteCoilRequest();
 			do_req.setReference(do_ref);
 
-			di_req.setUnitID(0);
-			do_req.setUnitID(0);
+			di_req.unitID(0);
+			do_req.unitID(0);
 
 			// 4. Prepare the transactions
 			di_trans = new ModbusTCPTransaction(con);

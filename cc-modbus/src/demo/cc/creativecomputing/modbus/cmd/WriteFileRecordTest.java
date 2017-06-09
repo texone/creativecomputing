@@ -37,14 +37,14 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import cc.creativecomputing.modbus.Modbus;
-import cc.creativecomputing.modbus.ModbusException;
+import cc.creativecomputing.modbus.CCModbusException;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.ModbusSlaveException;
+import cc.creativecomputing.modbus.CCModbusSlaveException;
 import cc.creativecomputing.modbus.io.ModbusSerialTransport;
 import cc.creativecomputing.modbus.io.ModbusTransaction;
 import cc.creativecomputing.modbus.io.ModbusTransport;
-import cc.creativecomputing.modbus.msg.ExceptionResponse;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCExceptionResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.msg.WriteFileRecordRequest;
 import cc.creativecomputing.modbus.msg.WriteFileRecordResponse;
 import cc.creativecomputing.modbus.msg.WriteFileRecordRequest.RecordRequest;
@@ -123,7 +123,7 @@ public class WriteFileRecordTest {
 			 * Setup the WRITE FILE RECORD request.
 			 */
 			request = new WriteFileRecordRequest();
-			request.setUnitID(unit);
+			request.unitID(unit);
 			if (isSerial)
 				request.setHeadless(true);
 
@@ -132,7 +132,7 @@ public class WriteFileRecordTest {
 			request.addRequest(recordRequest);
 
 			if (Modbus.debug)
-				System.out.println("Request: " + request.getHexMessage());
+				System.out.println("Request: " + request.hexMessage());
 
 			/*
 			 * Setup the transaction.
@@ -145,33 +145,33 @@ public class WriteFileRecordTest {
 			 */
 			try {
 				trans.execute();
-			} catch (ModbusSlaveException x) {
+			} catch (CCModbusSlaveException x) {
 				System.err.println("Slave Exception: "
 						+ x.getLocalizedMessage());
 				System.exit(1);
 			} catch (ModbusIOException x) {
 				System.err.println("I/O Exception: " + x.getLocalizedMessage());
 				System.exit(1);
-			} catch (ModbusException x) {
+			} catch (CCModbusException x) {
 				System.err.println("Modbus Exception: "
 						+ x.getLocalizedMessage());
 				System.exit(1);
 			}
 
-			ModbusResponse dummy = trans.getResponse();
+			CCAbstractModbusResponse dummy = trans.getResponse();
 			if (dummy == null) {
 				System.err.println("No response for transaction ");
 				System.exit(1);
 			}
-			if (dummy instanceof ExceptionResponse) {
-				ExceptionResponse exception = (ExceptionResponse) dummy;
+			if (dummy instanceof CCExceptionResponse) {
+				CCExceptionResponse exception = (CCExceptionResponse) dummy;
 
 				System.err.println(exception);
 			} else if (dummy instanceof WriteFileRecordResponse) {
 				response = (WriteFileRecordResponse) dummy;
 
 				if (Modbus.debug)
-					System.out.println("Response: " + response.getHexMessage());
+					System.out.println("Response: " + response.hexMessage());
 
 				int count = response.getRequestCount();
 				for (int j = 0; j < count; j++) {

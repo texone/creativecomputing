@@ -42,7 +42,7 @@ import cc.creativecomputing.modbus.io.ModbusSerialTransport;
 import cc.creativecomputing.modbus.io.ModbusTCPTransport;
 import cc.creativecomputing.modbus.io.ModbusTransaction;
 import cc.creativecomputing.modbus.io.ModbusTransport;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
 import cc.creativecomputing.modbus.msg.WriteSingleRegisterRequest;
 import cc.creativecomputing.modbus.net.ModbusMasterFactory;
 import cc.creativecomputing.modbus.procimg.SimpleRegister;
@@ -81,7 +81,7 @@ public class WriteHoldingRegisterTest {
 
 	public static void main(String[] args) {
 
-		ModbusRequest req = null;
+		CCAbstractModbusRequest req = null;
 		ModbusTransaction trans = null;
 		ModbusTransport transport = null;
 		int ref = 0;
@@ -141,7 +141,7 @@ public class WriteHoldingRegisterTest {
 			req = new WriteSingleRegisterRequest(ref,
 					new SimpleRegister(value));
 
-			req.setUnitID(unit);
+			req.unitID(unit);
 
 			// 3. Prepare the transaction
 			trans = transport.createTransaction();
@@ -149,7 +149,7 @@ public class WriteHoldingRegisterTest {
 			req.setHeadless(trans instanceof ModbusSerialTransaction);
 
 			if (Modbus.debug)
-				System.out.println("Request: " + req.getHexMessage());
+				System.out.println("Request: " + req.hexMessage());
 
 			// 4. Execute the transaction repeat times
 
@@ -158,7 +158,7 @@ public class WriteHoldingRegisterTest {
 
 				if (Modbus.debug)
 					System.out.println("Response: "
-							+ trans.getResponse().getHexMessage());
+							+ trans.getResponse().hexMessage());
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -33,9 +33,9 @@
  ***/
 package cc.creativecomputing.modbus.io;
 
-import cc.creativecomputing.modbus.ModbusException;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.CCModbusException;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 
 /**
  * Interface defining a ModbusTransaction.
@@ -57,7 +57,7 @@ public interface ModbusTransaction {
    * <p>
    * @param req a <tt>ModbusRequest</tt>.
    */
-  public void setRequest(ModbusRequest req);
+  public void setRequest(CCAbstractModbusRequest req);
 
   /**
    * Returns the <tt>ModbusRequest</tt> instance
@@ -65,7 +65,7 @@ public interface ModbusTransaction {
    * <p>
    * @return the associated <tt>ModbusRequest</tt> instance.
    */
-  public ModbusRequest getRequest();
+  public CCAbstractModbusRequest getRequest();
 
   /**
    * Returns the <tt>ModbusResponse</tt> instance
@@ -73,7 +73,7 @@ public interface ModbusTransaction {
    * <p>
    * @return the associated <tt>ModbusRequest</tt> instance.
    */
-  public ModbusResponse getResponse();
+  public CCAbstractModbusResponse getResponse();
 
   /**
    * Returns the actual transaction identifier of
@@ -127,9 +127,9 @@ public interface ModbusTransaction {
    * If reconnecting is activated the connection will
    * be opened for the transaction and closed afterwards.
    * <p>
-   * @throws ModbusException if an I/O error occurs,
+   * @throws CCModbusException if an I/O error occurs,
    *         or the response is a modbus protocol exception.
    */
-  public void execute() throws ModbusException;
+  public void execute() throws CCModbusException;
 
 }//interface ModbusTransaction

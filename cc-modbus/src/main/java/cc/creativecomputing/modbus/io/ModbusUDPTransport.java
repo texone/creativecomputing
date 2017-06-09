@@ -38,11 +38,12 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.Arrays;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.msg.ModbusMessage;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCModbusMessage;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.net.UDPTerminal;
 
 
@@ -77,11 +78,11 @@ public class ModbusUDPTransport
 	  return trans;
   }
 
-  public void writeMessage(ModbusMessage msg)
+  public void writeMessage(CCModbusMessage msg)
       throws ModbusIOException {
     try {
       synchronized (m_ByteOut) {
-    	  int len = msg.getOutputLength();
+    	  int len = msg.outputLength();
     	  m_ByteOut.reset();
     	  msg.writeTo((DataOutput) m_ByteOut);
     	  byte data[] = m_ByteOut.getBuffer();
@@ -93,16 +94,16 @@ public class ModbusUDPTransport
     }
   }//write
 
-  public ModbusRequest readRequest()
+  public CCAbstractModbusRequest readRequest()
       throws ModbusIOException {
     try {
-      ModbusRequest req = null;
+      CCAbstractModbusRequest req = null;
       synchronized (m_ByteIn) {
         m_ByteIn.reset(m_Terminal.receiveMessage());
         m_ByteIn.skip(7);
         int functionCode = m_ByteIn.readUnsignedByte();
         m_ByteIn.reset();
-        req = ModbusRequest.createModbusRequest(functionCode);
+        req = CCAbstractModbusRequest.createModbusRequest(CCModbusFunctionCode.byID(functionCode));
         req.readFrom(m_ByteIn);
       }
       return req;
@@ -111,17 +112,17 @@ public class ModbusUDPTransport
     }
   }//readRequest
 
-  public ModbusResponse readResponse()
+  public CCAbstractModbusResponse readResponse()
       throws ModbusIOException {
 
     try {
-      ModbusResponse res = null;
+      CCAbstractModbusResponse res = null;
       synchronized (m_ByteIn) {
         m_ByteIn.reset(m_Terminal.receiveMessage());
         m_ByteIn.skip(7);
         int functionCode = m_ByteIn.readUnsignedByte();
         m_ByteIn.reset();
-        res = ModbusResponse.createModbusResponse(functionCode);
+        res = CCAbstractModbusResponse.createModbusResponse(CCModbusFunctionCode.byID(functionCode));
         res.readFrom(m_ByteIn);
       }
       return res;

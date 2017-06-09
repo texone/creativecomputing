@@ -37,6 +37,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.util.ModbusUtil;
 
@@ -47,16 +48,16 @@ import cc.creativecomputing.modbus.util.ModbusUtil;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public abstract class ModbusMessageImpl implements ModbusMessage {
+public abstract class CCAbstractModbusMessage implements CCModbusMessage {
 
 	// instance attributes
-	private int m_TransactionID = Modbus.DEFAULT_TRANSACTION_ID;
-	private int m_ProtocolID = Modbus.DEFAULT_PROTOCOL_ID;
-	private int m_DataLength;
-	private int m_UnitID = Modbus.DEFAULT_UNIT_ID;
-	private int m_FunctionCode;
-	private boolean m_Headless = false; // flag for headerless (serial)
-										// transport
+	private int _myTransactionID = Modbus.DEFAULT_TRANSACTION_ID;
+	private int _myProtocolID = Modbus.DEFAULT_PROTOCOL_ID;
+	private int _myDataLength;
+	private int _myUnitID = Modbus.DEFAULT_UNIT_ID;
+	private CCModbusFunctionCode _myFunctionCode;
+	private boolean _myHeadless = false; // flag for headerless (serial)
+											// transport
 
 	/*** Header ******************************************/
 
@@ -65,26 +66,28 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 	 * 
 	 * @return true if headless, false otherwise.
 	 */
+	@Override
 	public boolean isHeadless() {
-		return m_Headless;
+		return _myHeadless;
 	}
 
+	@Override
 	public void setHeadless() {
-		m_Headless = true;
+		_myHeadless = true;
 	}
 
 	/**
 	 * Sets the headless flag of this message.
 	 * 
-	 * @param b
-	 *            true if headless, false otherwise.
+	 * @param theHeadless true if headless, false otherwise.
 	 */
-	public void setHeadless(boolean b) {
-		m_Headless = b;
+	public void setHeadless(boolean theHeadless) {
+		_myHeadless = theHeadless;
 	}
 
-	public int getTransactionID() {
-		return m_TransactionID & 0x0000FFFF;
+	@Override
+	public int transactionID() {
+		return _myTransactionID & 0x0000FFFF;
 	}
 
 	/**
@@ -94,15 +97,15 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 	 * The identifier must be a 2-byte (short) non negative integer value valid
 	 * in the range of 0-65535.<br>
 	 * 
-	 * @param tid
-	 *            the transaction identifier as <tt>int</tt>.
+	 * @param theTransactionID the transaction identifier as <tt>int</tt>.
 	 */
-	public void setTransactionID(int tid) {
-		m_TransactionID = tid & 0x0000FFFF;
+	public void transactionID(int theTransactionID) {
+		_myTransactionID = theTransactionID & 0x0000FFFF;
 	}
 
-	public int getProtocolID() {
-		return m_ProtocolID;
+	@Override
+	public int protocolID() {
+		return _myProtocolID;
 	}
 
 	/**
@@ -112,15 +115,15 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 	 * valid in the range of 0-65535.<br>
 	 * <p>
 	 * 
-	 * @param pid
-	 *            the protocol identifier as <tt>int</tt>.
+	 * @param theProtocolID the protocol identifier as <tt>int</tt>.
 	 */
-	public void setProtocolID(int pid) {
-		m_ProtocolID = pid;
+	public void protocolID(int theProtocolID) {
+		_myProtocolID = theProtocolID;
 	}
 
-	public int getDataLength() {
-		return m_DataLength;
+	@Override
+	public int dataLength() {
+		return _myDataLength;
 	}
 
 	/**
@@ -136,18 +139,18 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 	 * This method does not include the length of a final CRC/LRC for those
 	 * protocols which requirement.
 	 * 
-	 * @param length
-	 *            the data length as <tt>int</tt>.
+	 * @param theLength the data length as <tt>int</tt>.
 	 */
-	public void setDataLength(int length) {
-		if (length < 0 || length + 2 > 255)
-			throw new IllegalArgumentException("Invalid length: " + length);
+	public void dataLength(int theLength) {
+		if (theLength < 0 || theLength + 2 > 255)
+			throw new IllegalArgumentException("Invalid length: " + theLength);
 
-		m_DataLength = length + 2;
+		_myDataLength = theLength + 2;
 	}
 
-	public int getUnitID() {
-		return m_UnitID;
+	@Override
+	public int unitID() {
+		return _myUnitID;
 	}
 
 	/**
@@ -155,15 +158,15 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 	 * The identifier should be a 1-byte non negative integer value valid in the
 	 * range of 0-255.
 	 * 
-	 * @param num
-	 *            the unit identifier number to be set.
+	 * @param theID the unit identifier number to be set.
 	 */
-	public void setUnitID(int num) {
-		m_UnitID = num;
+	public void unitID(int theID) {
+		_myUnitID = theID;
 	}
 
-	public int getFunctionCode() {
-		return m_FunctionCode;
+	@Override
+	public CCModbusFunctionCode functionCode() {
+		return _myFunctionCode;
 	}
 
 	/**
@@ -173,12 +176,11 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 	 * Function codes are ordered in conformance classes their values are
 	 * specified in <tt>com.ghgande.j2mod.modbus.Modbus</tt>.
 	 * 
-	 * @param code
-	 *            the code of the function to be set.
-	 * @see cc.creativecomputing.modbus.Modbus
+	 * @param theCode the code of the function to be set.
+	 * @see cc.creativecomputing.modbus.CCModbusFunctionCode
 	 */
-	protected void setFunctionCode(int code) {
-		m_FunctionCode = code;
+	protected void functionCode(CCModbusFunctionCode theCode) {
+		_myFunctionCode = theCode;
 	}
 
 	/**
@@ -188,68 +190,65 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 	 * This method must be overridden for any message type which doesn't follow
 	 * this simple structure.
 	 * 
-	 * @param dout
-	 *            a <tt>DataOutput</tt> instance.
-	 * @throws IOException
-	 *             if an I/O related error occurs.
+	 * @param theDataOut a <tt>DataOutput</tt> instance.
+	 * @throws IOException if an I/O related error occurs.
 	 */
-	public void writeTo(DataOutput dout) throws IOException {
+	@Override
+	public void writeTo(DataOutput theDataOut) throws IOException {
 
 		if (!isHeadless()) {
-			dout.writeShort(getTransactionID());
-			dout.writeShort(getProtocolID());
-			dout.writeShort(getDataLength());
+			theDataOut.writeShort(transactionID());
+			theDataOut.writeShort(protocolID());
+			theDataOut.writeShort(dataLength());
 		}
-		dout.writeByte(getUnitID());
-		dout.writeByte(getFunctionCode());
+		theDataOut.writeByte(unitID());
+		theDataOut.writeByte(functionCode().id);
 
-		writeData(dout);
+		writeData(theDataOut);
 	}
 
 	/**
 	 * Writes the subclass specific data to the given DataOutput.
 	 * 
-	 * @param dout
-	 *            the DataOutput to be written to.
-	 * @throws IOException
-	 *             if an I/O related error occurs.
+	 * @param theDataOut the DataOutput to be written to.
+	 * @throws IOException if an I/O related error occurs.
 	 */
-	public abstract void writeData(DataOutput dout) throws IOException;
+	public abstract void writeData(DataOutput theDataOut) throws IOException;
 
 	/**
-	 * readFrom -- Read the headers and data for a message.  The sub-classes
-	 * 	readData() method will then read in the rest of the message.
+	 * readFrom -- Read the headers and data for a message. The sub-classes
+	 * readData() method will then read in the rest of the message.
 	 * 
-	 * @param din -- Input source
+	 * @param theDataIn -- Input source
 	 */
-	public void readFrom(DataInput din) throws IOException {
-		if (! isHeadless()) {
-			setTransactionID(din.readUnsignedShort());
-			setProtocolID(din.readUnsignedShort());
-			m_DataLength = din.readUnsignedShort();
+	@Override
+	public void readFrom(DataInput theDataIn) throws IOException {
+		if (!isHeadless()) {
+			transactionID(theDataIn.readUnsignedShort());
+			protocolID(theDataIn.readUnsignedShort());
+			_myDataLength = theDataIn.readUnsignedShort();
 		}
-		setUnitID(din.readUnsignedByte());
-		setFunctionCode(din.readUnsignedByte());
-		readData(din);
+		unitID(theDataIn.readUnsignedByte());
+		functionCode(CCModbusFunctionCode.byID(theDataIn.readUnsignedByte()));
+		readData(theDataIn);
 	}
 
 	/**
 	 * Reads the subclass specific data from the given DataInput instance.
 	 * 
-	 * @param din
-	 *            the DataInput to read from.
-	 * @throws IOException
-	 *             if an I/O related error occurs.
+	 * @param theDataIn the DataInput to read from.
+	 * @throws IOException if an I/O related error occurs.
 	 */
-	public abstract void readData(DataInput din) throws IOException;
+	public abstract void readData(DataInput theDataIn) throws IOException;
 
 	/**
 	 * getOutputLength -- Return the actual packet size in bytes
 	 * 
 	 * The actual packet size, plus any CRC or header, will be returned.
 	 */
-	public int getOutputLength() {
-		int l = 2 + getDataLength();
+	@Override
+	public int outputLength() {
+		int l = 2 + dataLength();
 		if (!isHeadless()) {
 			l = l + 4;
 		}
@@ -263,8 +262,9 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 	 * 
 	 * @return the message as hex encoded string.
 	 */
-	public String getHexMessage() {
+	@Override
+	public String hexMessage() {
 		return ModbusUtil.toHex(this);
-	}// getHexMessage
+	}
 
-}// class ModbusMessageImpl
+}

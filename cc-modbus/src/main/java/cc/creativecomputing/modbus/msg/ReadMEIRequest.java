@@ -71,6 +71,8 @@ import java.io.DataOutput;
 import java.io.EOFException;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
 /**
@@ -81,7 +83,7 @@ import cc.creativecomputing.modbus.Modbus;
  * 
  * @version @version@ (@date@)
  */
-public final class ReadMEIRequest extends ModbusRequest {
+public final class ReadMEIRequest extends CCAbstractModbusRequest {
 
 	// instance attributes
 	private int m_SubCode;
@@ -94,11 +96,11 @@ public final class ReadMEIRequest extends ModbusRequest {
 	public ReadMEIRequest() {
 		super();
 
-		setFunctionCode(Modbus.READ_MEI);
+		functionCode(CCModbusFunctionCode.READ_MEI);
 		m_SubCode = 0x0E;
 
 		// 3 bytes (unit id and function code is excluded)
-		setDataLength(3);
+		dataLength(3);
 	}
 
 	/**
@@ -106,50 +108,47 @@ public final class ReadMEIRequest extends ModbusRequest {
 	 * reference and count of coils (i.e. bits) to be read.
 	 * <p>
 	 * 
-	 * @param ref
-	 *            the reference number of the register to read from.
-	 * @param count
-	 *            the number of bits to be read.
+	 * @param ref the reference number of the register to read from.
+	 * @param count the number of bits to be read.
 	 */
 	public ReadMEIRequest(int level, int id) {
 		super();
 
-		setFunctionCode(Modbus.READ_MEI);
+		functionCode(CCModbusFunctionCode.READ_MEI);
 		m_SubCode = 0x0E;
-		
+
 		// 3 bytes (unit id and function code is excluded)
-		setDataLength(3);
+		dataLength(3);
 		setLevel(level);
 		setFieldId(id);
 	}
 
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		ReadMEIResponse response = null;
-		
+
 		/*
 		 * Any other sub-function is an error.
 		 */
 		if (getSubCode() != 0x0E) {
-			IllegalFunctionExceptionResponse error =
-					new IllegalFunctionExceptionResponse();
-			
-			error.setUnitID(getUnitID());
-			error.setFunctionCode(getFunctionCode());
-			
+			CCIllegalFunctionExceptionResponse error = new CCIllegalFunctionExceptionResponse();
+
+			error.unitID(unitID());
+			error.functionCode(functionCode());
+
 			return error;
 		}
 
 		response = new ReadMEIResponse();
 
 		// transfer header data
-		if (! isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+		if (!isHeadless()) {
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		} else {
 			response.setHeadless();
 		}
-		response.setUnitID(getUnitID());
-		response.setFunctionCode(Modbus.READ_MEI);
+		response.unitID(unitID());
+		response.functionCode(CCModbusFunctionCode.READ_MEI);
 
 		return response;
 	}
@@ -158,8 +157,8 @@ public final class ReadMEIRequest extends ModbusRequest {
 	 * The ModbusCoupler interface doesn't have a method for defining MEI for a
 	 * device.
 	 */
-	public ModbusResponse createResponse() {
-		return createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
+	public CCAbstractModbusResponse createResponse() {
+		return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_FUNCTION_EXCEPTION);
 	}
 
 	/**
@@ -174,8 +173,7 @@ public final class ReadMEIRequest extends ModbusRequest {
 	 * <tt>ReadCoilsRequest</tt>.
 	 * <p>
 	 * 
-	 * @param ref
-	 *            the reference of the register to start reading from.
+	 * @param ref the reference of the register to start reading from.
 	 */
 	public void setLevel(int level) {
 		m_FieldLevel = level;
@@ -198,8 +196,7 @@ public final class ReadMEIRequest extends ModbusRequest {
 	 * <tt>ReadCoilsRequest</tt>.
 	 * <p>
 	 * 
-	 * @param count
-	 *            the number of bits to be read.
+	 * @param count the number of bits to be read.
 	 */
 	public void setFieldId(int id) {
 		m_FieldId = id;
@@ -242,7 +239,7 @@ public final class ReadMEIRequest extends ModbusRequest {
 		m_FieldId = din.readUnsignedByte();
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte results[] = new byte[3];
 
 		results[0] = (byte) m_SubCode;

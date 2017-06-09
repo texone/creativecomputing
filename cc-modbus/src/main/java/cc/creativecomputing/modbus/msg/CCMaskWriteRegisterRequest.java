@@ -70,12 +70,12 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.procimg.IllegalAddressException;
 import cc.creativecomputing.modbus.procimg.ProcessImage;
 import cc.creativecomputing.modbus.procimg.Register;
-
 
 /**
  * Class implementing a <tt>Mask Write Register</tt> request.
@@ -86,116 +86,147 @@ import cc.creativecomputing.modbus.procimg.Register;
  * @author jfhaugh (jfh@ghgande.com)
  * @version @version@ (@date@)
  */
-public final class MaskWriteRegisterRequest extends ModbusRequest {
-	private int m_Reference;
-	private int m_AndMask;
-	private int m_OrMask;
+public final class CCMaskWriteRegisterRequest extends CCAbstractModbusRequest {
+	private int _myReference;
+	private int _myAndMask;
+	private int _myOrMask;
+
+	/**
+	 * Constructs a new <tt>Mask Write Register</tt> request.
+	 * 
+	 * @param theReference
+	 * @param theAndMask
+	 * @param theOrMask
+	 */
+	public CCMaskWriteRegisterRequest(int theReference, int theAndMask, int theOrMask) {
+		super();
+
+		functionCode(CCModbusFunctionCode.MASK_WRITE_REGISTER);
+		reference(theReference);
+		andMask(theAndMask);
+		orMask(theOrMask);
+
+		dataLength(6);
+	}
+
+	/**
+	 * Constructs a new <tt>Mask Write Register</tt> request. instance.
+	 */
+	public CCMaskWriteRegisterRequest() {
+		super();
+
+		functionCode(CCModbusFunctionCode.MASK_WRITE_REGISTER);
+		dataLength(6);
+	}
 
 	/**
 	 * getReference -- return the reference field.
 	 */
-	public int getReference() {
-		return m_Reference;
+	public int reference() {
+		return _myReference;
 	}
-	
+
 	/**
 	 * setReference -- set the reference field.
 	 */
-	public void setReference(int ref) {
-		m_Reference = ref;
+	public void reference(int theReference) {
+		_myReference = theReference;
 	}
-	
+
 	/**
 	 * getAndMask -- return the AND mask value;
+	 * 
 	 * @return
 	 */
-	public int getAndMask() {
-		return m_AndMask;
+	public int andMask() {
+		return _myAndMask;
 	}
-	
+
 	/**
 	 * setAndMask -- set AND mask
 	 */
-	public void setAndMask(int mask) {
-		m_AndMask = mask;
+	public void andMask(int mask) {
+		_myAndMask = mask;
 	}
-	
+
 	/**
 	 * getOrMask -- return the OR mask value;
+	 * 
 	 * @return
 	 */
-	public int getOrMask() {
-		return m_OrMask;
+	public int orMask() {
+		return _myOrMask;
 	}
-	
+
 	/**
 	 * setOrMask -- set OR mask
 	 */
-	public void setOrMask(int mask) {
-		m_OrMask = mask;
+	public void orMask(int mask) {
+		_myOrMask = mask;
 	}
-	
+
 	/**
 	 * getResponse -- create an empty response for this request.
 	 */
-	public ModbusResponse getResponse() {
-		MaskWriteRegisterResponse response = null;
+	@Override
+	public CCAbstractModbusResponse response() {
+		CCMaskWriteRegisterResponse response = null;
 
-		response = new MaskWriteRegisterResponse();
+		response = new CCMaskWriteRegisterResponse();
 
 		/*
 		 * Copy any header data from the request.
 		 */
 		response.setHeadless(isHeadless());
-		if (! isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+		if (!isHeadless()) {
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		}
-		
+
 		/*
 		 * Copy the unit ID and function code.
 		 */
-		response.setUnitID(getUnitID());
-		response.setFunctionCode(getFunctionCode());
+		response.unitID(unitID());
+		response.functionCode(functionCode());
 
 		return response;
 	}
-	
+
 	/**
-	 * The ModbusCoupler doesn't have a means of reporting the slave
-	 * state or ID information.
+	 * The ModbusCoupler doesn't have a means of reporting the slave state or ID
+	 * information.
 	 */
-	public ModbusResponse createResponse() {
-		MaskWriteRegisterResponse response = null;
+	@Override
+	public CCAbstractModbusResponse createResponse() {
+		CCMaskWriteRegisterResponse response = null;
 
 		/*
 		 * Get the process image.
 		 */
 		ProcessImage procimg = ModbusCoupler.getReference().getProcessImage();
 		try {
-			Register register = procimg.getRegister(m_Reference);
-			
+			Register register = procimg.getRegister(_myReference);
+
 			/*
-			 * Get the original value.  The AND mask will first be
-			 * applied to clear any bits, then the OR mask will be
-			 * applied to set them.
+			 * Get the original value. The AND mask will first be applied to
+			 * clear any bits, then the OR mask will be applied to set them.
 			 */
 			int value = register.getValue();
-			
-			value = (value & m_AndMask) | (m_OrMask & ~m_AndMask);
-			
+
+			value = (value & _myAndMask) | (_myOrMask & ~_myAndMask);
+
 			/*
 			 * Store the modified value back where it came from.
 			 */
 			register.setValue(value);
 		} catch (IllegalAddressException iaex) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
-		response = (MaskWriteRegisterResponse) getResponse();
-		
-		response.setReference(m_Reference);
-		response.setAndMask(m_AndMask);
-		response.setOrMask(m_OrMask);
+		response = (CCMaskWriteRegisterResponse) response();
+
+		response.reference(_myReference);
+		response.andMask(_myAndMask);
+		response.orMask(_myOrMask);
 
 		return response;
 	}
@@ -203,62 +234,35 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 	/**
 	 * writeData -- output this Modbus message to dout.
 	 */
-	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+	@Override
+	public void writeData(DataOutput theDataOut) throws IOException {
+		theDataOut.write(message());
 	}
 
 	/**
-	 * readData -- dummy function.  There is no data with the request.
+	 * readData -- dummy function. There is no data with the request.
 	 */
-	public void readData(DataInput din) throws IOException {
-		m_Reference = din.readShort();
-		m_AndMask = din.readShort();
-		m_OrMask = din.readShort();
+	@Override
+	public void readData(DataInput theDataIn) throws IOException {
+		_myReference = theDataIn.readShort();
+		_myAndMask = theDataIn.readShort();
+		_myOrMask = theDataIn.readShort();
 	}
 
 	/**
-	 * getMessage -- return an empty array as there is no data for
-	 * 		this request.
+	 * getMessage -- return an empty array as there is no data for this request.
 	 */
-	public byte[] getMessage() {
-		byte	results[] = new byte[6];
-		
-		results[0] = (byte) (m_Reference >> 8);
-		results[1] = (byte) (m_Reference & 0xFF);
-		results[2] = (byte) (m_AndMask >> 8);
-		results[3] = (byte) (m_AndMask & 0xFF);
-		results[4] = (byte) (m_OrMask >> 8);
-		results[5] = (byte) (m_OrMask & 0xFF);
+	@Override
+	public byte[] message() {
+		byte results[] = new byte[6];
+
+		results[0] = (byte) (_myReference >> 8);
+		results[1] = (byte) (_myReference & 0xFF);
+		results[2] = (byte) (_myAndMask >> 8);
+		results[3] = (byte) (_myAndMask & 0xFF);
+		results[4] = (byte) (_myOrMask >> 8);
+		results[5] = (byte) (_myOrMask & 0xFF);
 
 		return results;
-	}
-	
-	/**
-	 * Constructs a new <tt>Mask Write Register</tt> request.
-	 * 
-	 * @param ref
-	 * @param andMask
-	 * @param orMask
-	 */
-	public MaskWriteRegisterRequest(int ref, int andMask, int orMask) {
-		super();
-		
-		setFunctionCode(Modbus.MASK_WRITE_REGISTER);
-		setReference(ref);
-		setAndMask(andMask);
-		setOrMask(orMask);
-		
-		setDataLength(6);
-	}
-
-	/**
-	 * Constructs a new <tt>Mask Write Register</tt> request.
-	 * instance.
-	 */
-	public MaskWriteRegisterRequest() {
-		super();
-		
-		setFunctionCode(Modbus.MASK_WRITE_REGISTER);
-		setDataLength(6);
 	}
 }

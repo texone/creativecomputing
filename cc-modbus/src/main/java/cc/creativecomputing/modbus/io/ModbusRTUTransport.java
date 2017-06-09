@@ -39,12 +39,13 @@ import java.io.OutputStream;
 
 import purejavacomm.UnsupportedCommOperationException;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.msg.ModbusMessage;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCModbusMessage;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.util.ModbusUtil;
 
 /**
@@ -80,7 +81,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 		return transaction;
 	}
 
-	public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+	public void writeMessage(CCModbusMessage msg) throws ModbusIOException {
 		try {
 			int len;
 			synchronized (m_ByteOut) {
@@ -212,38 +213,39 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 	
 		try {
 			if ((function & 0x80) == 0) {
-				switch (function) {
-				case Modbus.READ_EXCEPTION_STATUS:
-				case Modbus.READ_COMM_EVENT_COUNTER:
-				case Modbus.READ_COMM_EVENT_LOG:
-				case Modbus.REPORT_SLAVE_ID:
+				CCModbusFunctionCode myCode = CCModbusFunctionCode.byID(function);
+				switch (myCode) {
+				case READ_EXCEPTION_STATUS:
+				case READ_COMM_EVENT_COUNTER:
+				case READ_COMM_EVENT_LOG:
+				case REPORT_SLAVE_ID:
 					readRequestData(0, inpBuf, out);
 					break;
-				case Modbus.READ_FIFO_QUEUE:
+				case READ_FIFO_QUEUE:
 					readRequestData(2, inpBuf, out);
 					break;
-				case Modbus.READ_MEI:
+				case READ_MEI:
 					readRequestData(3, inpBuf, out);
 					break;
-				case Modbus.READ_COILS:
-				case Modbus.READ_INPUT_DISCRETES:
-				case Modbus.READ_MULTIPLE_REGISTERS:
-				case Modbus.READ_INPUT_REGISTERS:
-				case Modbus.WRITE_COIL:
-				case Modbus.WRITE_SINGLE_REGISTER:
+				case READ_COILS:
+				case READ_INPUT_DISCRETES:
+				case READ_MULTIPLE_REGISTERS:
+				case READ_INPUT_REGISTERS:
+				case WRITE_COIL:
+				case WRITE_SINGLE_REGISTER:
 					readRequestData(4, inpBuf, out);
 					break;
-				case Modbus.MASK_WRITE_REGISTER:
+				case MASK_WRITE_REGISTER:
 					readRequestData(6, inpBuf, out);
 					break;
-				case Modbus.READ_FILE_RECORD:
-				case Modbus.WRITE_FILE_RECORD:
+				case READ_FILE_RECORD:
+				case WRITE_FILE_RECORD:
 					byteCount = m_InputStream.read();
 					out.write(byteCount);
 					readRequestData(byteCount, inpBuf, out);
 					break;
-				case Modbus.WRITE_MULTIPLE_COILS:
-				case Modbus.WRITE_MULTIPLE_REGISTERS:
+				case WRITE_MULTIPLE_COILS:
+				case WRITE_MULTIPLE_REGISTERS:
 					byteCount = m_InputStream.read(inpBuf, 0, 4);
 					if (byteCount > 0)
 						out.write(inpBuf, 0, byteCount);
@@ -252,7 +254,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 					out.write(byteCount);
 					readRequestData(byteCount, inpBuf, out);
 					break;
-				case Modbus.READ_WRITE_MULTIPLE:
+				case READ_WRITE_MULTIPLE:
 					readRequestData(8, inpBuf, out);
 					byteCount = m_InputStream.read();
 					out.write(byteCount);
@@ -273,14 +275,14 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 	 * 
 	 *  @return a <tt>ModbusRequest</tt> to be processed by the slave simulator
 	 */
-	public ModbusRequest readRequest() throws ModbusIOException {
+	public CCAbstractModbusRequest readRequest() throws ModbusIOException {
 		ModbusCoupler coupler = ModbusCoupler.getReference();
 
 		if (coupler == null || coupler.isMaster())
 			throw new RuntimeException("Operation not supported.");
 
 		boolean done = false;
-		ModbusRequest request = null;
+		CCAbstractModbusRequest request = null;
 		int dlength = 0;
 
 		try {
@@ -296,7 +298,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 						m_ByteInOut.writeByte(fc);
 
 						// create response to acquire length of message
-						request = ModbusRequest.createModbusRequest(fc);
+						request = CCAbstractModbusRequest.createModbusRequest(CCModbusFunctionCode.byID(fc));
 						request.setHeadless();
 
 						/*
@@ -385,8 +387,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 	 * @param out
 	 * @throws IOException
 	 */
-	private void getResponse(int function, BytesOutputStream out)
-			throws IOException {
+	private void getResponse(int function, BytesOutputStream out) throws IOException {
 		int byteCount = -1;
 		int readCount = 0;
 		byte inpBuf[] = new byte[256];
@@ -412,16 +413,18 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 
 		try {
 			if ((function & 0x80) == 0) {
-				switch (function) {
-				case Modbus.READ_COILS:
-				case Modbus.READ_INPUT_DISCRETES:
-				case Modbus.READ_MULTIPLE_REGISTERS:
-				case Modbus.READ_INPUT_REGISTERS:
-				case Modbus.READ_COMM_EVENT_LOG:
-				case Modbus.REPORT_SLAVE_ID:
-				case Modbus.READ_FILE_RECORD:
-				case Modbus.WRITE_FILE_RECORD:
-				case Modbus.READ_WRITE_MULTIPLE:
+				
+				CCModbusFunctionCode myCode = CCModbusFunctionCode.byID(function);
+				switch (myCode) {
+				case READ_COILS:
+				case READ_INPUT_DISCRETES:
+				case READ_MULTIPLE_REGISTERS:
+				case READ_INPUT_REGISTERS:
+				case READ_COMM_EVENT_LOG:
+				case REPORT_SLAVE_ID:
+				case READ_FILE_RECORD:
+				case WRITE_FILE_RECORD:
+				case READ_WRITE_MULTIPLE:
 					/*
 					 * Read the data payload byte count. There will be two
 					 * additional CRC bytes afterwards.
@@ -459,12 +462,12 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 					}
 					m_CommPort.disableReceiveThreshold();
 					break;
-				case Modbus.WRITE_COIL:
-				case Modbus.WRITE_SINGLE_REGISTER:
-				case Modbus.READ_COMM_EVENT_COUNTER:
-				case Modbus.WRITE_MULTIPLE_COILS:
-				case Modbus.WRITE_MULTIPLE_REGISTERS:
-				case Modbus.READ_SERIAL_DIAGNOSTICS:
+				case WRITE_COIL:
+				case WRITE_SINGLE_REGISTER:
+				case READ_COMM_EVENT_COUNTER:
+				case WRITE_MULTIPLE_COILS:
+				case WRITE_MULTIPLE_REGISTERS:
+				case READ_SERIAL_DIAGNOSTICS:
 					/*
 					 * read status: only the CRC remains after the two data
 					 * words.
@@ -474,7 +477,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 					out.write(inpBuf, 0, readCount);
 					m_CommPort.disableReceiveThreshold();
 					break;
-				case Modbus.READ_EXCEPTION_STATUS:
+				case READ_EXCEPTION_STATUS:
 					/*
 					 * read status: only the CRC remains after exception status
 					 * byte.
@@ -484,14 +487,14 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 					out.write(inpBuf, 0, readCount);
 					m_CommPort.disableReceiveThreshold();
 					break;
-				case Modbus.MASK_WRITE_REGISTER:
+				case MASK_WRITE_REGISTER:
 					// eight bytes in addition to the address and function codes
 					setReceiveThreshold(8);
 					readCount = m_InputStream.read(inpBuf, 0, 8);
 					out.write(inpBuf, 0, readCount);
 					m_CommPort.disableReceiveThreshold();
 					break;
-				case Modbus.READ_FIFO_QUEUE:
+				case READ_FIFO_QUEUE:
 					int b1,
 					b2;
 					b1 = (byte) (m_InputStream.read() & 0xFF);
@@ -509,7 +512,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 					out.write(inpBuf, 0, readCount);
 					m_CommPort.disableReceiveThreshold();
 					break;
-				case Modbus.READ_MEI:
+				case READ_MEI:
 					// read the subcode. We only support 0x0e.
 					int sc = m_InputStream.read();
 					if (sc != 0x0e)
@@ -567,9 +570,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 	 * 
 	 * @return a <tt>ModbusRespose</tt>
 	 */
-	public ModbusResponse readResponse() throws ModbusIOException {
+	public CCAbstractModbusResponse readResponse() throws ModbusIOException {
 		boolean done = false;
-		ModbusResponse response = null;
+		CCAbstractModbusResponse response = null;
 		int dlength = 0;
 
 		try {
@@ -585,7 +588,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 						m_ByteInOut.writeByte(fc);
 
 						// create response to acquire length of message
-						response = ModbusResponse.createModbusResponse(fc);
+						response = CCAbstractModbusResponse.createModbusResponse(CCModbusFunctionCode.byID(fc));
 						response.setHeadless();
 
 						/*

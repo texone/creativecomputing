@@ -37,7 +37,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.msg.WriteFileRecordResponse.RecordResponse;
 import cc.creativecomputing.modbus.procimg.File;
@@ -54,7 +55,7 @@ import cc.creativecomputing.modbus.procimg.SimpleRegister;
  * @author Julie Haugh (jfh@ghgande.com)
  * @version @version@ (@date@)
  */
-public final class WriteFileRecordRequest extends ModbusRequest {
+public final class WriteFileRecordRequest extends CCAbstractModbusRequest {
 	private int m_ByteCount;
 	private RecordRequest[] m_Records;
 	
@@ -182,13 +183,13 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 		}
 		m_Records[m_Records.length - 1] = request;
 		
-		setDataLength(getRequestSize());
+		dataLength(getRequestSize());
 	}
 
 	/**
 	 * createResponse -- create an empty response for this request.
 	 */
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		WriteFileRecordResponse response = null;
 
 		response = new WriteFileRecordResponse();
@@ -198,15 +199,15 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 		 */
 		response.setHeadless(isHeadless());
 		if (! isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		}
 		
 		/*
 		 * Copy the unit ID and function code.
 		 */
-		response.setUnitID(getUnitID());
-		response.setFunctionCode(getFunctionCode());
+		response.unitID(unitID());
+		response.functionCode(functionCode());
 
 		return response;
 	}
@@ -214,9 +215,9 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 	/**
 	 * The ModbusCoupler doesn't have a means of writing file records.
 	 */
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		WriteFileRecordResponse response = null;
-		response = (WriteFileRecordResponse) getResponse();
+		response = (WriteFileRecordResponse) response();
 
 		/*
 		 * Get the process image.
@@ -231,24 +232,24 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 				RecordRequest recordRequest = getRecord(i);
 				if (recordRequest.getFileNumber() < 0 ||
 						recordRequest.getFileNumber() >= procimg.getFileCount())
-					return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+					return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 					
 				File file = procimg.getFileByNumber(recordRequest.getFileNumber());
 				
 				if (recordRequest.getRecordNumber() < 0 ||
 						recordRequest.getRecordNumber() >= file.getRecordCount())
-					return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+					return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 				
 				Record record = file.getRecord(recordRequest.getRecordNumber());
 				int registers = recordRequest.getWordCount();
 				if (record == null && registers != 0)
-					return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+					return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 									
 				short data[] = new short[registers];
 				for (int j = 0;j < registers;j++) {
 					Register register = record.getRegister(j);
 					if (register == null)
-						return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);						
+						return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);						
 						
 					register.setValue(recordRequest.getRegister(j).getValue());
 					data[j] = recordRequest.getRegister(j).toShort();
@@ -258,7 +259,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 				response.addResponse(recordResponse);
 			}
 		} catch (IllegalAddressException e) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
 		return response;
 	}
@@ -267,7 +268,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 	 * writeData -- output this Modbus message to dout.
 	 */
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -313,7 +314,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 	/**
 	 * getMessage -- return the raw binary message.
 	 */
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte	results[] = new byte[getRequestSize()];
 
 		results[0] = (byte) (getRequestSize() - 1);
@@ -333,11 +334,11 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 	public WriteFileRecordRequest() {
 		super();
 		
-		setFunctionCode(Modbus.WRITE_FILE_RECORD);
+		functionCode(CCModbusFunctionCode.WRITE_FILE_RECORD);
 		
 		/*
 		 * Set up space for the initial header.
 		 */
-		setDataLength(1);
+		dataLength(1);
 	}
 }

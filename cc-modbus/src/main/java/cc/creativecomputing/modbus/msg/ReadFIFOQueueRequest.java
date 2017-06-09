@@ -70,7 +70,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.procimg.IllegalAddressException;
 import cc.creativecomputing.modbus.procimg.InputRegister;
@@ -86,7 +87,7 @@ import cc.creativecomputing.modbus.procimg.Register;
  * @author jfhaugh (jfh@ghgande.com)
  * @version @version@ (@date@)
  */
-public final class ReadFIFOQueueRequest extends ModbusRequest {
+public final class ReadFIFOQueueRequest extends CCAbstractModbusRequest {
 
 	private int m_Reference;
 
@@ -111,7 +112,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 	/**
 	 * getResponse -- create an empty response for this request.
 	 */
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		ReadFIFOQueueResponse response = null;
 
 		response = new ReadFIFOQueueResponse();
@@ -121,15 +122,15 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 		 */
 		response.setHeadless(isHeadless());
 		if (!isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		}
 
 		/*
 		 * Copy the unit ID and function code.
 		 */
-		response.setUnitID(getUnitID());
-		response.setFunctionCode(getFunctionCode());
+		response.unitID(unitID());
+		response.functionCode(functionCode());
 
 		return response;
 	}
@@ -137,7 +138,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 	/**
 	 * Create a response using the named register as the queue length count.
 	 */
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		ReadFIFOQueueResponse response = null;
 		InputRegister[] registers = null;
 
@@ -154,13 +155,13 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 			Register queue = procimg.getRegister(m_Reference);
 			int count = queue.getValue();
 			if (count < 0 || count > 31)
-				return createExceptionResponse(Modbus.ILLEGAL_VALUE_EXCEPTION);
+				return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_VALUE_EXCEPTION);
 
 			registers = procimg.getRegisterRange(m_Reference + 1, count);
 		} catch (IllegalAddressException e) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
-		response = (ReadFIFOQueueResponse) getResponse();
+		response = (ReadFIFOQueueResponse) response();
 		response.setRegisters(registers);
 
 		return response;
@@ -170,7 +171,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 	 * writeData -- output this Modbus message to dout.
 	 */
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -183,7 +184,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 	/**
 	 * getMessage -- return an empty array as there is no data for this request.
 	 */
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte results[] = new byte[2];
 
 		results[0] = (byte) (m_Reference >> 8);
@@ -198,7 +199,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 	public ReadFIFOQueueRequest() {
 		super();
 
-		setFunctionCode(Modbus.READ_FIFO_QUEUE);
-		setDataLength(2);
+		functionCode(CCModbusFunctionCode.READ_FIFO_QUEUE);
+		dataLength(2);
 	}
 }

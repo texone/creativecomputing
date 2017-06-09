@@ -122,9 +122,9 @@ public class WriteCoilTest {
 
 			// 3. Prepare the request
 			req = new WriteCoilRequest(ref, value);
-			req.setUnitID(unit);
+			req.unitID(unit);
 			if (Modbus.debug)
-				System.out.println("Request: " + req.getHexMessage());
+				System.out.println("Request: " + req.hexMessage());
 
 			// 4. Prepare the transaction
 			trans = transport.createTransaction();
@@ -136,7 +136,7 @@ public class WriteCoilTest {
 
 				if (Modbus.debug)
 					System.out.println("Response: "
-							+ trans.getResponse().getHexMessage());
+							+ trans.getResponse().hexMessage());
 				
 				WriteCoilResponse data = (WriteCoilResponse) trans.getResponse();
 				if (data != null)

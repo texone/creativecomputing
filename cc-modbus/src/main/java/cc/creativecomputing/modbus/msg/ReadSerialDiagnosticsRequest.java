@@ -70,6 +70,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
 /**
@@ -79,7 +81,7 @@ import cc.creativecomputing.modbus.Modbus;
  * 
  * @version @version@ (@date@)
  */
-public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
+public final class ReadSerialDiagnosticsRequest extends CCAbstractModbusRequest {
 
 	/*
 	 * Message fields.
@@ -159,7 +161,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 	/**
 	 * createResponse -- create an empty response for this request.
 	 */
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		ReadSerialDiagnosticsResponse response = null;
 
 		response = new ReadSerialDiagnosticsResponse();
@@ -169,15 +171,15 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 		 */
 		response.setHeadless(isHeadless());
 		if (! isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		}
 		
 		/*
 		 * Copy the unit ID and function code.
 		 */
-		response.setUnitID(getUnitID());
-		response.setFunctionCode(getFunctionCode());
+		response.unitID(unitID());
+		response.functionCode(functionCode());
 		
 		/*
 		 * Copy the sub-function code.
@@ -191,15 +193,15 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 	 * The ModbusCoupler doesn't have a means of reporting the slave
 	 * state or ID information.
 	 */
-	public ModbusResponse createResponse() {
-		return createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
+	public CCAbstractModbusResponse createResponse() {
+		return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_FUNCTION_EXCEPTION);
 	}
 
 	/**
 	 * writeData -- output the completed Modbus message to dout
 	 */
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -213,7 +215,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 	/**
 	 * getMessage -- Create the DIAGNOSTICS message paylaod.
 	 */
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 
 		result[0] = (byte) (m_Function >> 8);
@@ -231,7 +233,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 	public ReadSerialDiagnosticsRequest() {
 		super();
 
-		setFunctionCode(Modbus.READ_SERIAL_DIAGNOSTICS);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.READ_SERIAL_DIAGNOSTICS);
+		dataLength(4);
 	}
 }

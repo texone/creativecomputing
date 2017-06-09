@@ -37,6 +37,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.util.BitVector;
 
@@ -61,7 +62,7 @@ import cc.creativecomputing.modbus.util.BitVector;
  * data.
  * Cleaned up the constructors.
  */
-public final class ReadCoilsResponse extends ModbusResponse {
+public final class ReadCoilsResponse extends CCAbstractModbusResponse {
 	private BitVector coils;
 
 	/**
@@ -131,7 +132,7 @@ public final class ReadCoilsResponse extends ModbusResponse {
 	}
 
 	public void writeData(DataOutput output) throws IOException {
-		byte result[] = getMessage();
+		byte result[] = message();
 
 		output.write(result);
 	}
@@ -142,10 +143,10 @@ public final class ReadCoilsResponse extends ModbusResponse {
 
 		input.readFully(data, 0, count);
 		coils = BitVector.createBitVector(data);
-		setDataLength(count + 1);
+		dataLength(count + 1);
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		int len = 1 + coils.byteSize();
 		byte result[] = new byte[len];
 
@@ -161,8 +162,8 @@ public final class ReadCoilsResponse extends ModbusResponse {
 	 * filled in later.
 	 */
 	public ReadCoilsResponse() {
-		setFunctionCode(Modbus.READ_COILS);
-		setDataLength(1);
+		functionCode(CCModbusFunctionCode.READ_COILS);
+		dataLength(1);
 		coils = null;
 	}
 
@@ -173,8 +174,8 @@ public final class ReadCoilsResponse extends ModbusResponse {
 	 * @param count the number of bits to be read.
 	 */
 	public ReadCoilsResponse(int count) {
-		setFunctionCode(Modbus.READ_COILS);
+		functionCode(CCModbusFunctionCode.READ_COILS);
 		coils = new BitVector(count);
-		setDataLength(coils.byteSize() + 1);
+		dataLength(coils.byteSize() + 1);
 	}
 }

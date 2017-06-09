@@ -36,14 +36,14 @@ package cc.creativecomputing.modbus.cmd;
 import java.util.Arrays;
 
 import cc.creativecomputing.modbus.Modbus;
-import cc.creativecomputing.modbus.ModbusException;
+import cc.creativecomputing.modbus.CCModbusException;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.ModbusSlaveException;
+import cc.creativecomputing.modbus.CCModbusSlaveException;
 import cc.creativecomputing.modbus.io.ModbusSerialTransport;
 import cc.creativecomputing.modbus.io.ModbusTransaction;
 import cc.creativecomputing.modbus.io.ModbusTransport;
-import cc.creativecomputing.modbus.msg.ExceptionResponse;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCExceptionResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.msg.ReadCommEventCounterRequest;
 import cc.creativecomputing.modbus.msg.ReadCommEventCounterResponse;
 import cc.creativecomputing.modbus.msg.ReadFileRecordRequest;
@@ -122,14 +122,14 @@ public class ReadFileRecordTest {
 				 * will be incremented for each loop.
 				 */
 				request = new ReadFileRecordRequest();
-				request.setUnitID(unit);
+				request.unitID(unit);
 				
 				RecordRequest recordRequest =
 						request.new RecordRequest(file, record + i, registers);
 				request.addRequest(recordRequest);
 				
 				if (Modbus.debug)
-					System.out.println("Request: " + request.getHexMessage());
+					System.out.println("Request: " + request.hexMessage());
 
 				/*
 				 * Setup the transaction.
@@ -142,7 +142,7 @@ public class ReadFileRecordTest {
 				 */
 				try {
 					trans.execute();
-				} catch (ModbusSlaveException x) {
+				} catch (CCModbusSlaveException x) {
 					System.err.println("Slave Exception: " +
 							x.getLocalizedMessage());
 					continue;
@@ -150,19 +150,19 @@ public class ReadFileRecordTest {
 					System.err.println("I/O Exception: " +
 							x.getLocalizedMessage());
 					continue;					
-				} catch (ModbusException x) {
+				} catch (CCModbusException x) {
 					System.err.println("Modbus Exception: " +
 							x.getLocalizedMessage());
 					continue;					
 				}
 
-				ModbusResponse dummy = trans.getResponse();
+				CCAbstractModbusResponse dummy = trans.getResponse();
 				if (dummy == null) {
 					System.err.println("No response for transaction " + i);
 					continue;
 				}
-				if (dummy instanceof ExceptionResponse) {
-					ExceptionResponse exception = (ExceptionResponse) dummy;
+				if (dummy instanceof CCExceptionResponse) {
+					CCExceptionResponse exception = (CCExceptionResponse) dummy;
 
 					System.err.println(exception);
 
@@ -172,7 +172,7 @@ public class ReadFileRecordTest {
 
 					if (Modbus.debug)
 						System.out.println("Response: "
-								+ response.getHexMessage());
+								+ response.hexMessage());
 
 					int count = response.getRecordCount();
 					for (int j = 0;j < count;j++) {
@@ -191,7 +191,7 @@ public class ReadFileRecordTest {
 				 * Unknown message.
 				 */
 				System.out.println(
-						"Unknown Response: " + dummy.getHexMessage());
+						"Unknown Response: " + dummy.hexMessage());
 			}
 			
 			/*
@@ -199,7 +199,7 @@ public class ReadFileRecordTest {
 			 * tell us something useful.
 			 */
 			ReadCommEventCounterRequest eventRequest = new ReadCommEventCounterRequest();
-			eventRequest.setUnitID(unit);
+			eventRequest.unitID(unit);
 			
 			/*
 			 * Setup the transaction.
@@ -212,13 +212,13 @@ public class ReadFileRecordTest {
 			 */
 			try {
 				trans.execute();
-				ModbusResponse dummy = trans.getResponse();
+				CCAbstractModbusResponse dummy = trans.getResponse();
 				
 				if (dummy instanceof ReadCommEventCounterResponse) {
 					ReadCommEventCounterResponse eventResponse = (ReadCommEventCounterResponse) dummy;
 					System.out.println("  Events: " + eventResponse.getEventCount());
 				}
-			} catch (ModbusException x) {
+			} catch (CCModbusException x) {
 				// Do nothing -- this isn't required.					
 			}
 

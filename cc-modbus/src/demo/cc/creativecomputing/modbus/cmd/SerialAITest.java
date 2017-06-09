@@ -108,9 +108,9 @@ public class SerialAITest {
 
       //5. Prepare a request
       req = new ReadInputRegistersRequest(ref, count);
-      req.setUnitID(unitid);
+      req.unitID(unitid);
       req.setHeadless();
-      if (Modbus.debug) System.out.println("Request: " + req.getHexMessage());
+      if (Modbus.debug) System.out.println("Request: " + req.hexMessage());
 
       //6. Prepare the transaction
       trans = new ModbusSerialTransaction(con);
@@ -123,7 +123,7 @@ public class SerialAITest {
 
         res = (ReadInputRegistersResponse) trans.getResponse();
         if (Modbus.debug)
-          System.out.println("Response: " + res.getHexMessage());
+          System.out.println("Response: " + res.hexMessage());
         for (int n = 0; n < res.getWordCount(); n++) {
           System.out.println("Word " + n + "=" + res.getRegisterValue(n));
         }

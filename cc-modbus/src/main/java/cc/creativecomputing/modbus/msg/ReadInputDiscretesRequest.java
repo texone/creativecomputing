@@ -37,7 +37,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.procimg.DigitalIn;
 import cc.creativecomputing.modbus.procimg.IllegalAddressException;
@@ -57,7 +58,7 @@ import cc.creativecomputing.modbus.procimg.ProcessImage;
  * @author jfhaugh
  * @version @version@ (@date@)
  */
-public final class ReadInputDiscretesRequest extends ModbusRequest {
+public final class ReadInputDiscretesRequest extends CCAbstractModbusRequest {
 
 	// instance attributes
 	private int m_Reference;
@@ -69,12 +70,12 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
 	public ReadInputDiscretesRequest() {
 		super();
 		
-		setFunctionCode(Modbus.READ_INPUT_DISCRETES);
+		functionCode(CCModbusFunctionCode.READ_INPUT_DISCRETES);
 		
 		/*
 		 * Two bytes for count, two bytes for offset.
 		 */
-		setDataLength(4);
+		dataLength(4);
 	}
 
 	/**
@@ -90,9 +91,9 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
 	public ReadInputDiscretesRequest(int ref, int count) {
 		super();
 		
-		setFunctionCode(Modbus.READ_INPUT_DISCRETES);
+		functionCode(CCModbusFunctionCode.READ_INPUT_DISCRETES);
 		// 4 bytes (unit id and function code is excluded)
-		setDataLength(4);
+		dataLength(4);
 		setReference(ref);
 		setBitCount(count);
 	}// constructor
@@ -105,22 +106,22 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
 	 * 
 	 * @return
 	 */
-	public ReadInputDiscretesResponse getResponse() {
+	public ReadInputDiscretesResponse response() {
 		ReadInputDiscretesResponse response =
 				new ReadInputDiscretesResponse(getBitCount());
 		
-		response.setUnitID(getUnitID());
-		response.setFunctionCode(getFunctionCode());
+		response.unitID(unitID());
+		response.functionCode(functionCode());
 		
 		response.setHeadless(isHeadless());
 		if (! isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		}
 		return response;
 	}
 
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		ReadInputDiscretesResponse response = null;
 		DigitalIn[] dins = null;
 
@@ -131,9 +132,9 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
 			dins = procimg.getDigitalInRange(getReference(),
 					getBitCount());
 		} catch (IllegalAddressException e) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
-		response = getResponse();
+		response = response();
 		
 		/*
 		 * Populate the discrete values from the process image.
@@ -205,7 +206,7 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
 		m_BitCount = din.readUnsignedShort();
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 
 		result[0] = (byte) ((m_Reference >> 8) & 0xff);

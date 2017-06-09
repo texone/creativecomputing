@@ -70,7 +70,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 
 /**
  * Abstract class implementing a <tt>ModbusResponse</tt>. This class provides
@@ -85,20 +85,19 @@ import cc.creativecomputing.modbus.Modbus;
  * @version 1.2rc1-ghpc (04/26/2011) Added proper support for Modbus exception
  *          messages.
  */
-public abstract class ModbusResponse extends ModbusMessageImpl {
+public abstract class CCAbstractModbusResponse extends CCAbstractModbusMessage {
 
 	/**
 	 * Utility method to set the raw data of the message. Should not be used
 	 * except under rare circumstances.
 	 * <p>
 	 * 
-	 * @param msg
-	 *            the <tt>byte[]</tt> resembling the raw modbus response
+	 * @param theMessage the <tt>byte[]</tt> resembling the raw modbus response
 	 *            message.
 	 */
-	protected void setMessage(byte[] msg) {
+	protected void message(byte[] theMessage) {
 		try {
-			readData(new DataInputStream(new ByteArrayInputStream(msg)));
+			readData(new DataInputStream(new ByteArrayInputStream(theMessage)));
 		} catch (IOException ex) {
 
 		}
@@ -108,76 +107,75 @@ public abstract class ModbusResponse extends ModbusMessageImpl {
 	 * Factory method creating the required specialized <tt>ModbusResponse</tt>
 	 * instance.
 	 * 
-	 * @param functionCode
-	 *            the function code of the response as <tt>int</tt>.
+	 * @param theFunctionCode the function code of the response as <tt>int</tt>.
 	 * @return a ModbusResponse instance specific for the given function code.
 	 */
-	public static ModbusResponse createModbusResponse(int functionCode) {
-		ModbusResponse response = null;
+	public static CCAbstractModbusResponse createModbusResponse(CCModbusFunctionCode theFunctionCode) {
+		CCAbstractModbusResponse response = null;
 
-		switch (functionCode) {
-		case Modbus.READ_COILS:
+		switch (theFunctionCode) {
+		case READ_COILS:
 			response = new ReadCoilsResponse();
 			break;
-		case Modbus.READ_INPUT_DISCRETES:
+		case READ_INPUT_DISCRETES:
 			response = new ReadInputDiscretesResponse();
 			break;
-		case Modbus.READ_MULTIPLE_REGISTERS:
+		case READ_MULTIPLE_REGISTERS:
 			response = new ReadMultipleRegistersResponse();
 			break;
-		case Modbus.READ_INPUT_REGISTERS:
+		case READ_INPUT_REGISTERS:
 			response = new ReadInputRegistersResponse();
 			break;
-		case Modbus.WRITE_COIL:
+		case WRITE_COIL:
 			response = new WriteCoilResponse();
 			break;
-		case Modbus.WRITE_SINGLE_REGISTER:
+		case WRITE_SINGLE_REGISTER:
 			response = new WriteSingleRegisterResponse();
 			break;
-		case Modbus.WRITE_MULTIPLE_COILS:
+		case WRITE_MULTIPLE_COILS:
 			response = new WriteMultipleCoilsResponse();
 			break;
-		case Modbus.WRITE_MULTIPLE_REGISTERS:
+		case WRITE_MULTIPLE_REGISTERS:
 			response = new WriteMultipleRegistersResponse();
 			break;
-		case Modbus.READ_EXCEPTION_STATUS:
+		case READ_EXCEPTION_STATUS:
 			response = new ReadExceptionStatusResponse();
 			break;
-		case Modbus.READ_SERIAL_DIAGNOSTICS:
+		case READ_SERIAL_DIAGNOSTICS:
 			response = new ReadSerialDiagnosticsResponse();
 			break;
-		case Modbus.READ_COMM_EVENT_COUNTER:
+		case READ_COMM_EVENT_COUNTER:
 			response = new ReadCommEventCounterResponse();
 			break;
-		case Modbus.READ_COMM_EVENT_LOG:
+		case READ_COMM_EVENT_LOG:
 			response = new ReadCommEventLogResponse();
 			break;
-		case Modbus.REPORT_SLAVE_ID:
+		case REPORT_SLAVE_ID:
 			response = new ReportSlaveIDResponse();
 			break;
-		case Modbus.READ_FILE_RECORD:
+		case READ_FILE_RECORD:
 			response = new ReadFileRecordResponse();
 			break;
-		case Modbus.WRITE_FILE_RECORD:
+		case WRITE_FILE_RECORD:
 			response = new WriteFileRecordResponse();
 			break;
-		case Modbus.MASK_WRITE_REGISTER:
-			response = new MaskWriteRegisterResponse();
+		case MASK_WRITE_REGISTER:
+			response = new CCMaskWriteRegisterResponse();
 			break;
-		case Modbus.READ_WRITE_MULTIPLE:
+		case READ_WRITE_MULTIPLE:
 			response = new ReadWriteMultipleResponse();
 			break;
-		case Modbus.READ_FIFO_QUEUE:
+		case READ_FIFO_QUEUE:
 			response = new ReadFIFOQueueResponse();
 			break;
-		case Modbus.READ_MEI:
+		case READ_MEI:
 			response = new ReadMEIResponse();
 			break;
 		default:
-			if ((functionCode & 0x80) != 0) {
-				response = new ExceptionResponse(functionCode);
+			if ((theFunctionCode.id & 0x80) != 0) {
+				response = new CCExceptionResponse(theFunctionCode);
 			} else {
-				response = new ExceptionResponse();
+				response = new CCExceptionResponse();
 			}
 			break;
 		}

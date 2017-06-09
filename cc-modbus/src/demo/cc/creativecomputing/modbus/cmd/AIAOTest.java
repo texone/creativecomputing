@@ -38,7 +38,7 @@ import java.net.InetAddress;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.io.ModbusTCPTransaction;
 import cc.creativecomputing.modbus.io.ModbusTransaction;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
 import cc.creativecomputing.modbus.msg.ReadInputRegistersRequest;
 import cc.creativecomputing.modbus.msg.ReadInputRegistersResponse;
 import cc.creativecomputing.modbus.msg.WriteSingleRegisterRequest;
@@ -79,7 +79,7 @@ public class AIAOTest {
 
 		InetAddress addr = null;
 		TCPMasterConnection con = null;
-		ModbusRequest ai_req = null;
+		CCAbstractModbusRequest ai_req = null;
 		WriteSingleRegisterRequest ao_req = null;
 
 		ModbusTransaction ai_trans = null;
@@ -134,8 +134,8 @@ public class AIAOTest {
 			ao_req = new WriteSingleRegisterRequest();
 			ao_req.setReference(ao_ref);
 
-			ai_req.setUnitID(unit_in);
-			ao_req.setUnitID(unit_out);
+			ai_req.unitID(unit_in);
+			ao_req.unitID(unit_out);
 
 			// 4. Prepare the transactions
 			ai_trans = new ModbusTCPTransaction(con);

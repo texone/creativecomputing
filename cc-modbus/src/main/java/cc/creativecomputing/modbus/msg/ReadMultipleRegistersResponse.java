@@ -37,6 +37,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.procimg.Register;
 import cc.creativecomputing.modbus.procimg.SimpleRegister;
@@ -52,7 +53,7 @@ import cc.creativecomputing.modbus.procimg.SimpleRegister;
  * @author Julie (jfh@ghgande.com)
  * @version 2012-03-07 Added setFunctionCode() to constructors.
  */
-public final class ReadMultipleRegistersResponse extends ModbusResponse {
+public final class ReadMultipleRegistersResponse extends CCAbstractModbusResponse {
 
 	// instance attributes
 	private int m_ByteCount;
@@ -63,7 +64,7 @@ public final class ReadMultipleRegistersResponse extends ModbusResponse {
 	 */
 	public ReadMultipleRegistersResponse() {
 		super();
-		setFunctionCode(Modbus.READ_MULTIPLE_REGISTERS);
+		functionCode(CCModbusFunctionCode.READ_MULTIPLE_REGISTERS);
 	}// constructor
 
 	/**
@@ -75,8 +76,8 @@ public final class ReadMultipleRegistersResponse extends ModbusResponse {
 	public ReadMultipleRegistersResponse(Register[] registers) {
 		super();
 		
-		setFunctionCode(Modbus.READ_MULTIPLE_REGISTERS);
-		setDataLength(registers.length * 2 + 1);
+		functionCode(CCModbusFunctionCode.READ_MULTIPLE_REGISTERS);
+		dataLength(registers.length * 2 + 1);
 		
 		m_Registers = registers;
 		m_ByteCount = registers.length * 2;
@@ -158,7 +159,7 @@ public final class ReadMultipleRegistersResponse extends ModbusResponse {
 	 */
 	public void setRegisters(Register[] registers) {
 		m_ByteCount = registers.length * 2;
-		setDataLength(m_ByteCount + 1);
+		dataLength(m_ByteCount + 1);
 
 		m_Registers = registers;
 	}
@@ -178,10 +179,10 @@ public final class ReadMultipleRegistersResponse extends ModbusResponse {
 		for (int k = 0; k < getWordCount(); k++)
 			m_Registers[k] = new SimpleRegister(din.readByte(), din.readByte());
 
-		setDataLength(m_ByteCount + 1);
+		dataLength(m_ByteCount + 1);
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = null;
 
 		result = new byte[getWordCount() * 2 + 1];

@@ -37,6 +37,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
 /**
@@ -47,7 +48,7 @@ import cc.creativecomputing.modbus.Modbus;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public final class WriteMultipleRegistersResponse extends ModbusResponse {
+public final class WriteMultipleRegistersResponse extends CCAbstractModbusResponse {
 	// instance attributes
 	private int m_WordCount;
 	private int m_Reference;
@@ -58,8 +59,8 @@ public final class WriteMultipleRegistersResponse extends ModbusResponse {
 	public WriteMultipleRegistersResponse() {
 		super();
 		
-		setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_MULTIPLE_REGISTERS);
+		dataLength(4);
 	}
 
 	/**
@@ -73,8 +74,8 @@ public final class WriteMultipleRegistersResponse extends ModbusResponse {
 	public WriteMultipleRegistersResponse(int reference, int wordcount) {
 		super();
 		
-		setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.WRITE_MULTIPLE_REGISTERS);
+		dataLength(4);
 		
 		m_Reference = reference;
 		m_WordCount = wordcount;
@@ -136,17 +137,17 @@ public final class WriteMultipleRegistersResponse extends ModbusResponse {
 	}
 
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	public void readData(DataInput din) throws IOException {
 		setReference(din.readUnsignedShort());
 		setWordCount(din.readUnsignedShort());
 		
-		setDataLength(4);
+		dataLength(4);
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 
 		result[0] = (byte) ((m_Reference >> 8) & 0xff);

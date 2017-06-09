@@ -37,6 +37,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.procimg.InputRegister;
 import cc.creativecomputing.modbus.procimg.Register;
@@ -49,7 +50,7 @@ import cc.creativecomputing.modbus.procimg.SimpleRegister;
  * 
  * @version @version@ (@date@)
  */
-public final class ReadWriteMultipleResponse extends ModbusResponse {
+public final class ReadWriteMultipleResponse extends CCAbstractModbusResponse {
 
 	private int				m_ByteCount;
 	private InputRegister[] m_Registers;
@@ -130,7 +131,7 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
 	 */
 	public void setRegisters(InputRegister[] registers) {
 		m_ByteCount = registers.length * 2 + 1;
-		setDataLength(m_ByteCount);
+		dataLength(m_ByteCount);
 
 		m_Registers = registers;
 	}
@@ -150,10 +151,10 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
 		for (int k = 0; k < getWordCount(); k++)
 			m_Registers[k] = new SimpleRegister(din.readByte(), din.readByte());
 
-		setDataLength(m_ByteCount + 1);
+		dataLength(m_ByteCount + 1);
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = null;
 
 		result = new byte[getWordCount() * 2 + 1];
@@ -179,8 +180,8 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
 	public ReadWriteMultipleResponse(InputRegister[] registers) {
 		super();
 		
-		setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
-		setDataLength(registers.length * 2 + 1);
+		functionCode(CCModbusFunctionCode.READ_WRITE_MULTIPLE);
+		dataLength(registers.length * 2 + 1);
 		
 		m_Registers = registers;
 		m_ByteCount = registers.length * 2 + 1;
@@ -195,8 +196,8 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
 	public ReadWriteMultipleResponse(int count) {
 		super();
 		
-		setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
-		setDataLength(count * 2 + 1);
+		functionCode(CCModbusFunctionCode.READ_WRITE_MULTIPLE);
+		dataLength(count * 2 + 1);
 		
 		m_Registers = new InputRegister[count];
 		m_ByteCount = count * 2 + 1;
@@ -208,6 +209,6 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
 	public ReadWriteMultipleResponse() {
 		super();
 		
-		setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+		functionCode(CCModbusFunctionCode.READ_WRITE_MULTIPLE);
 	}
 }

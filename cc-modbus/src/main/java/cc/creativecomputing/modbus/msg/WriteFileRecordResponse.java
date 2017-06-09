@@ -69,7 +69,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.procimg.SimpleRegister;
 
 /**
@@ -78,36 +78,45 @@ import cc.creativecomputing.modbus.procimg.SimpleRegister;
  * @author Julie
  * @version 0.96
  */
-public final class WriteFileRecordResponse extends ModbusResponse {
-	private int m_ByteCount;
-	private RecordResponse[] m_Records;
-	
+public final class WriteFileRecordResponse extends CCAbstractModbusResponse {
+	private int _myByteCount;
+	private RecordResponse[] _myRecords;
+
+	/**
+	 * Constructs a new <tt>WriteFileRecordResponse</tt> instance.
+	 */
+	public WriteFileRecordResponse() {
+		super();
+
+		functionCode(CCModbusFunctionCode.WRITE_FILE_RECORD);
+		dataLength(7);
+	}
+
 	public class RecordResponse {
-		private int m_FileNumber;
-		private int m_RecordNumber;
-		private int m_WordCount;
-		private	byte	m_Data[];
+		private int _myFileNumber;
+		private int _myRecordNumber;
+		private int _myWordCount;
+		private byte _myData[];
 
 		public int getFileNumber() {
-			return m_FileNumber;
+			return _myFileNumber;
 		}
 
 		public int getRecordNumber() {
-			return m_RecordNumber;
+			return _myRecordNumber;
 		}
 
 		public int getWordCount() {
-			return m_WordCount;
+			return _myWordCount;
 		}
 
 		public SimpleRegister getRegister(int register) {
-			if (register < 0 || register >= m_WordCount) {
-				throw new IndexOutOfBoundsException("0 <= " +
-						register + " < " + m_WordCount);
+			if (register < 0 || register >= _myWordCount) {
+				throw new IndexOutOfBoundsException("0 <= " + register + " < " + _myWordCount);
 			}
-			byte b1 = m_Data[register * 2];
-			byte b2 = m_Data[register * 2 + 1];
-			
+			byte b1 = _myData[register * 2];
+			byte b2 = _myData[register * 2 + 1];
+
 			SimpleRegister result = new SimpleRegister(b1, b2);
 			return result;
 		}
@@ -116,23 +125,23 @@ public final class WriteFileRecordResponse extends ModbusResponse {
 		 * getResponseSize -- return the size of the response in bytes.
 		 */
 		public int getResponseSize() {
-			return 7 + m_WordCount * 2;
+			return 7 + _myWordCount * 2;
 		}
 
 		public void getResponse(byte[] response, int offset) {
 			response[offset++] = 6;
-			response[offset++] = (byte) (m_FileNumber >> 8);
-			response[offset++] = (byte) (m_FileNumber & 0xFF);
-			response[offset++] = (byte) (m_RecordNumber >> 8);
-			response[offset++] = (byte) (m_RecordNumber & 0xFF);
-			response[offset++] = (byte) (m_WordCount >> 8);
-			response[offset++] = (byte) (m_WordCount & 0xFF);
-			
-			System.arraycopy(m_Data, 0, response, offset, m_Data.length);
+			response[offset++] = (byte) (_myFileNumber >> 8);
+			response[offset++] = (byte) (_myFileNumber & 0xFF);
+			response[offset++] = (byte) (_myRecordNumber >> 8);
+			response[offset++] = (byte) (_myRecordNumber & 0xFF);
+			response[offset++] = (byte) (_myWordCount >> 8);
+			response[offset++] = (byte) (_myWordCount & 0xFF);
+
+			System.arraycopy(_myData, 0, response, offset, _myData.length);
 		}
 
 		public byte[] getResponse() {
-			byte[] response = new byte[7 + 2 * m_WordCount];
+			byte[] response = new byte[7 + 2 * _myWordCount];
 
 			getResponse(response, 0);
 
@@ -140,94 +149,95 @@ public final class WriteFileRecordResponse extends ModbusResponse {
 		}
 
 		public RecordResponse(int file, int record, short[] values) {
-			m_FileNumber = file;
-			m_RecordNumber = record;
-			m_WordCount = values.length;
-			m_Data = new byte[m_WordCount * 2];
+			_myFileNumber = file;
+			_myRecordNumber = record;
+			_myWordCount = values.length;
+			_myData = new byte[_myWordCount * 2];
 
 			int offset = 0;
-			for (int i = 0; i < m_WordCount; i++) {
-				m_Data[offset++] = (byte) (values[i] >> 8);
-				m_Data[offset++] = (byte) (values[i] & 0xFF);
+			for (int i = 0; i < _myWordCount; i++) {
+				_myData[offset++] = (byte) (values[i] >> 8);
+				_myData[offset++] = (byte) (values[i] & 0xFF);
 			}
 		}
 	}
 
 	/**
-	 * getRequestSize -- return the total request size.  This is useful
-	 * for determining if a new record can be added.
+	 * getRequestSize -- return the total request size. This is useful for
+	 * determining if a new record can be added.
 	 * 
 	 * @returns size in bytes of response.
 	 */
 	public int getResponseSize() {
-		if (m_Records == null)
+		if (_myRecords == null)
 			return 1;
-		
+
 		int size = 1;
-		for (int i = 0;i < m_Records.length;i++)
-			size += m_Records[i].getResponseSize();
-		
+		for (int i = 0; i < _myRecords.length; i++)
+			size += _myRecords[i].getResponseSize();
+
 		return size;
 	}
-	
+
 	/**
-	 * getRequestCount -- return the number of record requests in this
-	 * message.
+	 * getRequestCount -- return the number of record requests in this message.
 	 */
 	public int getRequestCount() {
-		if (m_Records == null)
+		if (_myRecords == null)
 			return 0;
-		
-		return m_Records.length;
+
+		return _myRecords.length;
 	}
-	
+
 	/**
 	 * getRecord -- return the record request indicated by the reference
 	 */
 	public RecordResponse getRecord(int index) {
-		return m_Records[index];
+		return _myRecords[index];
 	}
-	
+
 	/**
 	 * addResponse -- add a new record response.
 	 */
 	public void addResponse(RecordResponse response) {
 		if (response.getResponseSize() + getResponseSize() > 248)
 			throw new IllegalArgumentException();
-		
-		if (m_Records == null)
-			m_Records = new RecordResponse[1];
+
+		if (_myRecords == null)
+			_myRecords = new RecordResponse[1];
 		else {
-			RecordResponse old[] = m_Records;
-			m_Records = new RecordResponse[old.length + 1];
-			
-			System.arraycopy(old, 0, m_Records, 0, old.length);
+			RecordResponse old[] = _myRecords;
+			_myRecords = new RecordResponse[old.length + 1];
+
+			System.arraycopy(old, 0, _myRecords, 0, old.length);
 		}
-		m_Records[m_Records.length - 1] = response;
-		
-		setDataLength(getResponseSize());
+		_myRecords[_myRecords.length - 1] = response;
+
+		dataLength(getResponseSize());
 	}
 
+	@Override
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
+	@Override
 	public void readData(DataInput din) throws IOException {
-		m_ByteCount = din.readUnsignedByte();
+		_myByteCount = din.readUnsignedByte();
 
-		m_Records = new RecordResponse[0];
+		_myRecords = new RecordResponse[0];
 
-		for (int offset = 1; offset + 7 < m_ByteCount;) {
+		for (int offset = 1; offset + 7 < _myByteCount;) {
 			int function = din.readUnsignedByte();
 			int file = din.readUnsignedShort();
 			int record = din.readUnsignedShort();
 			int count = din.readUnsignedShort();
-			
+
 			offset += 7;
-			
+
 			if (function != 6)
 				throw new IOException();
-				
+
 			if (record < 0 || record >= 10000)
 				throw new IOException();
 
@@ -235,40 +245,30 @@ public final class WriteFileRecordResponse extends ModbusResponse {
 				throw new IOException();
 
 			short registers[] = new short[count];
-			for (int j = 0;j < count;j++) {
+			for (int j = 0; j < count; j++) {
 				registers[j] = din.readShort();
 				offset += 2;
 			}
-			RecordResponse dummy[] = new RecordResponse[m_Records.length + 1];
-			if (m_Records.length > 0)
-				System.arraycopy(m_Records, 0, dummy, 0, m_Records.length);
-			
-			m_Records = dummy;
-			m_Records[m_Records.length - 1] =
-					new RecordResponse(file, record, registers);
+			RecordResponse dummy[] = new RecordResponse[_myRecords.length + 1];
+			if (_myRecords.length > 0)
+				System.arraycopy(_myRecords, 0, dummy, 0, _myRecords.length);
+
+			_myRecords = dummy;
+			_myRecords[_myRecords.length - 1] = new RecordResponse(file, record, registers);
 		}
 	}
 
-	public byte[] getMessage() {
-		byte	results[] = new byte[getResponseSize()];
+	@Override
+	public byte[] message() {
+		byte results[] = new byte[getResponseSize()];
 
 		results[0] = (byte) (getResponseSize() - 1);
-		
+
 		int offset = 1;
-		for (int i = 0;i < m_Records.length;i++) {
-			m_Records[i].getResponse(results, offset);
-			offset += m_Records[i].getResponseSize();
+		for (int i = 0; i < _myRecords.length; i++) {
+			_myRecords[i].getResponse(results, offset);
+			offset += _myRecords[i].getResponseSize();
 		}
 		return results;
-	}
-
-	/**
-	 * Constructs a new <tt>WriteFileRecordResponse</tt> instance.
-	 */
-	public WriteFileRecordResponse() {
-		super();
-		
-		setFunctionCode(Modbus.WRITE_FILE_RECORD);
-		setDataLength(7);
 	}
 }

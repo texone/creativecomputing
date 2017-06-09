@@ -53,7 +53,7 @@ import java.io.IOException;
  *          20140426 - Refactor and verify the new methods.<br>
  */
 public final class WriteMultipleCoilsResponse
-    extends ModbusResponse {
+    extends CCAbstractModbusResponse {
 
 	// instance attributes
 	private int m_Reference;
@@ -120,7 +120,7 @@ public final class WriteMultipleCoilsResponse
 		m_BitCount = din.readUnsignedShort();
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte results[] = new byte[4];
 		
 		results[0] = (byte) ((m_Reference >> 8) & 0xff);
@@ -147,7 +147,7 @@ public final class WriteMultipleCoilsResponse
 		m_Reference = ref;
 		m_BitCount = count;
 
-		setDataLength(4);
+		dataLength(4);
 	}
 
 	/**
@@ -156,6 +156,6 @@ public final class WriteMultipleCoilsResponse
 	public WriteMultipleCoilsResponse() {
 		super();
 
-		setDataLength(4);
+		dataLength(4);
 	}
 }

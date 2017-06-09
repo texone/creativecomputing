@@ -70,6 +70,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
 
@@ -82,7 +83,7 @@ import cc.creativecomputing.modbus.Modbus;
  * @version 1.2rc1-ghpc (09/27/2010)
  */
 public final class ReadMEIResponse
-    extends ModbusResponse {
+    extends CCAbstractModbusResponse {
 
   //instance attributes
 	private	int		m_FieldLevel = 0;
@@ -99,7 +100,7 @@ public final class ReadMEIResponse
    */
   public ReadMEIResponse() {
     super();
-    setFunctionCode(Modbus.READ_MEI);
+    functionCode(CCModbusFunctionCode.READ_MEI);
   }//constructor(int)
 
 
@@ -171,7 +172,7 @@ public final class ReadMEIResponse
 
   public void writeData(DataOutput dout)
       throws IOException {
-	  dout.write(getMessage());
+	  dout.write(message());
   }//writeData
 
   public void readData(DataInput din)
@@ -205,15 +206,15 @@ public final class ReadMEIResponse
 			  
 			  byteCount += 2 + len;
 		  }
-		  setDataLength(byteCount);
+		  dataLength(byteCount);
 		  return;
 	  } else {
-		  setDataLength(byteCount);
+		  dataLength(byteCount);
 		  return;
 	  }
   }//readData
   
-  public byte[] getMessage() {
+  public byte[] message() {
 	  int	size = 6;
 	  
 	  for (int i = 0;i < m_FieldCount;i++) {

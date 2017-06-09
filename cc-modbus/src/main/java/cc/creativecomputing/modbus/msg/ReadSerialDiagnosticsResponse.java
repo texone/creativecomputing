@@ -70,6 +70,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
 /**
@@ -79,7 +80,7 @@ import cc.creativecomputing.modbus.Modbus;
  * 
  * @version @version@ (@date@)
  */
-public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
+public final class ReadSerialDiagnosticsResponse extends CCAbstractModbusResponse {
 
 	/*
 	 * Message fields.
@@ -160,7 +161,7 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
 	 * writeData -- output the completed Modbus message to dout
 	 */
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -174,7 +175,7 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
 	/**
 	 * getMessage -- Create the DIAGNOSTICS message paylaod.
 	 */
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 
 		result[0] = (byte) (m_Function >> 8);
@@ -192,7 +193,7 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
 	public ReadSerialDiagnosticsResponse() {
 		super();
 
-		setFunctionCode(Modbus.READ_SERIAL_DIAGNOSTICS);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.READ_SERIAL_DIAGNOSTICS);
+		dataLength(4);
 	}
 }

@@ -70,6 +70,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.io.NonWordDataHandler;
@@ -89,7 +91,7 @@ import cc.creativecomputing.modbus.procimg.SimpleRegister;
  * @author Julie Haugh
  * @version 1.05
  */
-public final class ReadWriteMultipleRequest extends ModbusRequest {
+public final class ReadWriteMultipleRequest extends CCAbstractModbusRequest {
 	private NonWordDataHandler m_NonWordDataHandler;
 	private int m_ReadReference;
 	private int m_ReadCount;
@@ -100,7 +102,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 	/**
 	 * createResponse -- create an empty response for this request.
 	 */
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		ReadWriteMultipleResponse response = null;
 
 		response = new ReadWriteMultipleResponse();
@@ -110,20 +112,20 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 		 */
 		response.setHeadless(isHeadless());
 		if (!isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		}
 
 		/*
 		 * Copy the unit ID and function code.
 		 */
-		response.setUnitID(getUnitID());
-		response.setFunctionCode(getFunctionCode());
+		response.unitID(unitID());
+		response.functionCode(functionCode());
 
 		return response;
 	}
 
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		ReadWriteMultipleResponse response = null;
 		InputRegister[] readRegs = null;
 		Register[] writeRegs = null;
@@ -147,9 +149,9 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 			for (int i = 0; i < writeRegs.length; i++)
 				writeRegs[i].setValue(getRegister(i).getValue());
 		} catch (IllegalAddressException e) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
-		response = (ReadWriteMultipleResponse) getResponse();
+		response = (ReadWriteMultipleResponse) response();
 		response.setRegisters(readRegs);
 
 		return response;
@@ -341,7 +343,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 	 * writeData -- output this Modbus message to dout.
 	 */
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -376,7 +378,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 	/**
 	 * getMessage -- return a prepared message.
 	 */
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte results[] = new byte[9 + 2 * getWriteWordCount()];
 
 		results[0] = (byte) (m_ReadReference >> 8);
@@ -407,13 +409,13 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 			int writeRef, int writeCount) {
 		super();
 
-		setUnitID(unit);
-		setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+		unitID(unit);
+		functionCode(CCModbusFunctionCode.READ_WRITE_MULTIPLE);
 
 		/*
 		 * There is no additional data in this request.
 		 */
-		setDataLength(9 + writeCount * 2);
+		dataLength(9 + writeCount * 2);
 
 		m_ReadReference = readRef;
 		m_ReadCount = readCount;
@@ -430,13 +432,13 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 	public ReadWriteMultipleRequest(int unit) {
 		super();
 
-		setUnitID(unit);
-		setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+		unitID(unit);
+		functionCode(CCModbusFunctionCode.READ_WRITE_MULTIPLE);
 
 		/*
 		 * There is no additional data in this request.
 		 */
-		setDataLength(9);
+		dataLength(9);
 	}
 
 	/**
@@ -445,11 +447,11 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 	public ReadWriteMultipleRequest() {
 		super();
 
-		setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+		functionCode(CCModbusFunctionCode.READ_WRITE_MULTIPLE);
 
 		/*
 		 * There is no additional data in this request.
 		 */
-		setDataLength(9);
+		dataLength(9);
 	}
 }

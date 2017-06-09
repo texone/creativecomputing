@@ -69,13 +69,14 @@ package cc.creativecomputing.modbus.net;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.ModbusIOException;
 import cc.creativecomputing.modbus.io.ModbusTransport;
 import cc.creativecomputing.modbus.io.ModbusUDPTransport;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 
 /**
  * Class that implements a ModbusUDPListener.<br>
@@ -162,23 +163,22 @@ public class ModbusUDPListener implements ModbusListener {
 				 * Get the request from the transport. It will be processed
 				 * using an associated process image.
 				 */
-				ModbusRequest request = m_Transport.readRequest();
-				ModbusResponse response = null;
+				CCAbstractModbusRequest request = m_Transport.readRequest();
+				CCAbstractModbusResponse response = null;
 
 				/*
 				 * Make sure there is a process image to handle the request.
 				 */
 				if (ModbusCoupler.getReference().getProcessImage() == null) {
-					response = request
-							.createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
+					response = request.createExceptionResponse(CCModbusExceptionCode.ILLEGAL_FUNCTION_EXCEPTION);
 				} else {
 					response = request.createResponse();
 				}
 				/* DEBUG */
 				if (Modbus.debug) {
-					System.err.println("Request:" + request.getHexMessage());
+					System.err.println("Request:" + request.hexMessage());
 
-					System.err.println("Response:" + response.getHexMessage());
+					System.err.println("Response:" + response.hexMessage());
 				}
 				m_Transport.writeMessage(response);
 			}

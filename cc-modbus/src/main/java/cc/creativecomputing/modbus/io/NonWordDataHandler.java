@@ -67,6 +67,9 @@ package cc.creativecomputing.modbus.io;
 
 import java.io.EOFException;
 import java.io.IOException;
+
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+
 import java.io.DataInput;
 
 /**
@@ -130,7 +133,7 @@ public interface NonWordDataHandler {
 	 * @return -1 if the commit was successful, a Modbus exception code valid
 	 *         for the read/write multiple registers commands otherwise.
 	 */
-	public int commitUpdate();
+	public CCModbusExceptionCode commitUpdate();
 
 	/**
 	 * Prepares the raw data, putting it together from a backing data store.

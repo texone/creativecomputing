@@ -34,14 +34,14 @@
 package cc.creativecomputing.modbus.cmd;
 
 import cc.creativecomputing.modbus.Modbus;
-import cc.creativecomputing.modbus.ModbusException;
+import cc.creativecomputing.modbus.CCModbusException;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.ModbusSlaveException;
+import cc.creativecomputing.modbus.CCModbusSlaveException;
 import cc.creativecomputing.modbus.io.ModbusSerialTransport;
 import cc.creativecomputing.modbus.io.ModbusTransaction;
 import cc.creativecomputing.modbus.io.ModbusTransport;
-import cc.creativecomputing.modbus.msg.ExceptionResponse;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCExceptionResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.msg.ReadFIFOQueueRequest;
 import cc.creativecomputing.modbus.msg.ReadFIFOQueueResponse;
 import cc.creativecomputing.modbus.net.ModbusMasterFactory;
@@ -112,11 +112,11 @@ public class ReadFIFOTest {
 				 * will be incremented for each loop.
 				 */
 				request = new ReadFIFOQueueRequest();
-				request.setUnitID(unit);
+				request.unitID(unit);
 				request.setReference(fifo);
 				
 				if (Modbus.debug)
-					System.out.println("Request: " + request.getHexMessage());
+					System.out.println("Request: " + request.hexMessage());
 
 				/*
 				 * Setup the transaction.
@@ -129,7 +129,7 @@ public class ReadFIFOTest {
 				 */
 				try {
 					trans.execute();
-				} catch (ModbusSlaveException x) {
+				} catch (CCModbusSlaveException x) {
 					System.err.println("Slave Exception: " +
 							x.getLocalizedMessage());
 					continue;
@@ -137,19 +137,19 @@ public class ReadFIFOTest {
 					System.err.println("I/O Exception: " +
 							x.getLocalizedMessage());
 					continue;					
-				} catch (ModbusException x) {
+				} catch (CCModbusException x) {
 					System.err.println("Modbus Exception: " +
 							x.getLocalizedMessage());
 					continue;					
 				}
 
-				ModbusResponse dummy = trans.getResponse();
+				CCAbstractModbusResponse dummy = trans.getResponse();
 				if (dummy == null) {
 					System.err.println("No response for transaction " + i);
 					continue;
 				}
-				if (dummy instanceof ExceptionResponse) {
-					ExceptionResponse exception = (ExceptionResponse) dummy;
+				if (dummy instanceof CCExceptionResponse) {
+					CCExceptionResponse exception = (CCExceptionResponse) dummy;
 
 					System.err.println(exception);
 
@@ -159,7 +159,7 @@ public class ReadFIFOTest {
 
 					if (Modbus.debug)
 						System.out.println("Response: "
-								+ response.getHexMessage());
+								+ response.hexMessage());
 
 					int count = response.getWordCount();
 					System.out.println(count + " values");
@@ -176,7 +176,7 @@ public class ReadFIFOTest {
 				 * Unknown message.
 				 */
 				System.out.println(
-						"Unknown Response: " + dummy.getHexMessage());
+						"Unknown Response: " + dummy.hexMessage());
 			}
 			
 			/*

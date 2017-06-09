@@ -71,6 +71,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.procimg.InputRegister;
 import cc.creativecomputing.modbus.procimg.SimpleInputRegister;
@@ -83,7 +84,7 @@ import cc.creativecomputing.modbus.procimg.SimpleRegister;
  * 
  * @version @version@ (@date@)
  */
-public final class ReadFIFOQueueResponse extends ModbusResponse {
+public final class ReadFIFOQueueResponse extends CCAbstractModbusResponse {
 
 	/*
 	 * Message fields.
@@ -157,7 +158,7 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
 	 * writeData -- output the completed Modbus message to dout
 	 */
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -188,7 +189,7 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
 	/**
 	 * getMessage -- format the message into a byte array.
 	 */
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[m_Count * 2 + 4];
 
 		int len = m_Count * 2 + 2;
@@ -211,11 +212,11 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
 	public ReadFIFOQueueResponse() {
 		super();
 
-		setFunctionCode(Modbus.READ_FIFO_QUEUE);
+		functionCode(CCModbusFunctionCode.READ_FIFO_QUEUE);
 		
 		m_Count = 0;
 		m_Registers = new InputRegister[0];
 		
-		setDataLength(7);
+		dataLength(7);
 	}
 }

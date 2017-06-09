@@ -37,6 +37,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.procimg.InputRegister;
 import cc.creativecomputing.modbus.procimg.SimpleInputRegister;
@@ -49,7 +50,7 @@ import cc.creativecomputing.modbus.procimg.SimpleInputRegister;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public final class ReadInputRegistersResponse extends ModbusResponse {
+public final class ReadInputRegistersResponse extends CCAbstractModbusResponse {
 
 	// instance attributes
 	private int m_ByteCount;
@@ -61,7 +62,7 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
 	public ReadInputRegistersResponse() {
 		super();
 
-		setFunctionCode(Modbus.READ_INPUT_REGISTERS);
+		functionCode(CCModbusFunctionCode.READ_INPUT_REGISTERS);
 	}
 
 	/**
@@ -73,8 +74,8 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
 	public ReadInputRegistersResponse(InputRegister[] registers) {
 		super();
 
-		setFunctionCode(Modbus.READ_INPUT_REGISTERS);
-		setDataLength(registers.length * 2 + 1);
+		functionCode(CCModbusFunctionCode.READ_INPUT_REGISTERS);
+		dataLength(registers.length * 2 + 1);
 
 		m_ByteCount = registers.length * 2 + 1;
 		m_Registers = registers;
@@ -167,7 +168,7 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
 	 * Sets the entire block of registers for this response
 	 */
 	public void setRegisters(InputRegister[] registers) {
-		setDataLength(registers.length * 2 + 1);
+		dataLength(registers.length * 2 + 1);
 
 		m_ByteCount = registers.length * 2 + 1;
 		m_Registers = registers;
@@ -191,10 +192,10 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
 		}
 		m_Registers = registers;
 
-		setDataLength(m_ByteCount + 1);
+		dataLength(m_ByteCount + 1);
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[m_Registers.length * 2 + 1];
 		result[0] = (byte) (m_Registers.length * 2);
 

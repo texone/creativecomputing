@@ -69,7 +69,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.io.NonWordDataHandler;
 import cc.creativecomputing.modbus.procimg.*;
@@ -88,21 +89,21 @@ import cc.creativecomputing.modbus.procimg.*;
  * 
  *          20140426 - Refactor and minor bug fix.
  */
-public final class WriteMultipleRegistersRequest extends ModbusRequest {
+public final class WriteMultipleRegistersRequest extends CCAbstractModbusRequest {
 	private int m_Reference;
 	private Register[] m_Registers;
 	private NonWordDataHandler m_NonWordDataHandler = null;
 
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		WriteMultipleRegistersResponse response = new WriteMultipleRegistersResponse();
 
 		response.setHeadless(isHeadless());
 		if (!isHeadless()) {
-			response.setProtocolID(getProtocolID());
-			response.setTransactionID(getTransactionID());
+			response.protocolID(protocolID());
+			response.transactionID(transactionID());
 		}
-		response.setFunctionCode(getFunctionCode());
-		response.setUnitID(getUnitID());
+		response.functionCode(functionCode());
+		response.unitID(unitID());
 
 		return response;
 	}
@@ -126,7 +127,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 	 *          where the slave device has data which are not actually
 	 *          <tt>short</tt> values in the range of registers being processed.
 	 */
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		WriteMultipleRegistersResponse response = null;
 
 		if (m_NonWordDataHandler == null) {
@@ -140,18 +141,18 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 				for (int i = 0; i < regs.length; i++)
 					regs[i].setValue(this.getRegister(i).getValue());
 			} catch (IllegalAddressException iaex) {
-				return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+				return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 			}
-			response = (WriteMultipleRegistersResponse) getResponse();
+			response = (WriteMultipleRegistersResponse) response();
 
 			response.setReference(getReference());
 			response.setWordCount(getWordCount());
 		} else {
-			int result = m_NonWordDataHandler.commitUpdate();
-			if (result > 0)
+			CCModbusExceptionCode result = m_NonWordDataHandler.commitUpdate();
+			if (result != CCModbusExceptionCode.UNDEFINED)
 				return createExceptionResponse(result);
 
-			response = (WriteMultipleRegistersResponse) getResponse();
+			response = (WriteMultipleRegistersResponse) response();
 
 			response.setReference(getReference());
 			response.setWordCount(m_NonWordDataHandler.getWordCount());
@@ -165,8 +166,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 	 * <tt>WriteMultipleRegistersRequest</tt>.
 	 * <p>
 	 * 
-	 * @param ref
-	 *            the reference of the register to start writing to as an
+	 * @param ref the reference of the register to start writing to as an
 	 *            <tt>int</tt>.
 	 */
 	public void setReference(int ref) {
@@ -190,8 +190,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 	 * <tt>WriteMultipleRegistersRequest</tt>.
 	 * <p>
 	 * 
-	 * @param registers
-	 *            the registers to be written as <tt>Register[]</tt>.
+	 * @param registers the registers to be written as <tt>Register[]</tt>.
 	 */
 	public void setRegisters(Register[] registers) {
 		m_Registers = registers;
@@ -211,13 +210,11 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 	/**
 	 * getRegister - Returns the <tt>Register</tt> at the given position.
 	 * 
-	 * @param index
-	 *            the relative index of the <tt>Register</tt>.
+	 * @param index the relative index of the <tt>Register</tt>.
 	 * 
 	 * @return the register as <tt>Register</tt>.
 	 * 
-	 * @throws IndexOutOfBoundsException
-	 *             if the index is out of bounds.
+	 * @throws IndexOutOfBoundsException if the index is out of bounds.
 	 */
 	public Register getRegister(int index) throws IndexOutOfBoundsException {
 		if (index < 0)
@@ -233,13 +230,11 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 	 * getRegisterValue - Returns the value of the specified register.
 	 * <p>
 	 * 
-	 * @param index
-	 *            the index of the desired register.
+	 * @param index the index of the desired register.
 	 * 
 	 * @return the value as an <tt>int</tt>.
 	 * 
-	 * @throws IndexOutOfBoundsException
-	 *             if the index is out of bounds.
+	 * @throws IndexOutOfBoundsException if the index is out of bounds.
 	 */
 	public int getRegisterValue(int index) throws IndexOutOfBoundsException {
 		return getRegister(index).toUnsignedShort();
@@ -273,8 +268,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 	 * is responsible for converting words from a Modbus packet into the
 	 * non-word values associated with the actual device's registers.
 	 * 
-	 * @param dhandler
-	 *            a <tt>NonWordDataHandler</tt> instance.
+	 * @param dhandler a <tt>NonWordDataHandler</tt> instance.
 	 */
 	public void setNonWordDataHandler(NonWordDataHandler dhandler) {
 		m_NonWordDataHandler = dhandler;
@@ -290,7 +284,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 	}
 
 	public void writeData(DataOutput output) throws IOException {
-		byte data[] = getMessage();
+		byte data[] = message();
 		if (data == null)
 			return;
 
@@ -310,8 +304,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 			m_Registers = new Register[registerCount];
 
 			for (int register = 0; register < registerCount; register++) {
-				m_Registers[register] = new SimpleRegister(buffer[offset],
-						buffer[offset + 1]);
+				m_Registers[register] = new SimpleRegister(buffer[offset], buffer[offset + 1]);
 				offset += 2;
 			}
 		} else {
@@ -319,7 +312,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 		}
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		int len = 5;
 
 		if (m_Registers != null)
@@ -361,13 +354,11 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 	 * given starting reference and values to be written.
 	 * <p>
 	 * 
-	 * @param first
-	 *            -- the address of the first register to write to.
-	 * @param registers
-	 *            -- the registers to be written.
+	 * @param first -- the address of the first register to write to.
+	 * @param registers -- the registers to be written.
 	 */
 	public WriteMultipleRegistersRequest(int first, Register[] registers) {
-		setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
+		functionCode(CCModbusFunctionCode.WRITE_MULTIPLE_REGISTERS);
 
 		setReference(first);
 		setRegisters(registers);
@@ -377,6 +368,6 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
 	 * Constructs a new <tt>WriteMultipleRegistersRequest</tt> instance.
 	 */
 	public WriteMultipleRegistersRequest() {
-		setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
+		functionCode(CCModbusFunctionCode.WRITE_MULTIPLE_REGISTERS);
 	}
 }

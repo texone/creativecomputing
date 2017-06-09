@@ -35,12 +35,12 @@ package cc.creativecomputing.modbus.io;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.modbus.Modbus;
-import cc.creativecomputing.modbus.ModbusException;
+import cc.creativecomputing.modbus.CCModbusException;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.ModbusSlaveException;
-import cc.creativecomputing.modbus.msg.ExceptionResponse;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.CCModbusSlaveException;
+import cc.creativecomputing.modbus.msg.CCExceptionResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.net.TCPMasterConnection;
 
 /**
@@ -60,8 +60,8 @@ public class ModbusTCPTransaction implements ModbusTransaction {
 	// instance attributes and associations
 	private TCPMasterConnection m_Connection;
 	private ModbusTransport m_IO;
-	private ModbusRequest m_Request;
-	private ModbusResponse m_Response;
+	private CCAbstractModbusRequest m_Request;
+	private CCAbstractModbusResponse m_Response;
 	private boolean m_ValidityCheck = Modbus.DEFAULT_VALIDITYCHECK;
 	private boolean m_Reconnecting = Modbus.DEFAULT_RECONNECTING;
 	private int m_Retries = Modbus.DEFAULT_RETRIES;
@@ -80,7 +80,7 @@ public class ModbusTCPTransaction implements ModbusTransaction {
 	 * @param request
 	 *            a <tt>ModbusRequest</tt> instance.
 	 */
-	public ModbusTCPTransaction(ModbusRequest request) {
+	public ModbusTCPTransaction(CCAbstractModbusRequest request) {
 		setRequest(request);
 	}
 
@@ -113,15 +113,15 @@ public class ModbusTCPTransaction implements ModbusTransaction {
 		m_IO = con.getModbusTransport();
 	}
 
-	public void setRequest(ModbusRequest req) {
+	public void setRequest(CCAbstractModbusRequest req) {
 		m_Request = req;
 	}
 
-	public ModbusRequest getRequest() {
+	public CCAbstractModbusRequest getRequest() {
 		return m_Request;
 	}
 
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse getResponse() {
 		return m_Response;
 	}
 
@@ -186,11 +186,11 @@ public class ModbusTCPTransaction implements ModbusTransaction {
 		m_Retries = num;
 	}
 
-	public void execute() throws ModbusIOException, ModbusSlaveException,
-			ModbusException {
+	public void execute() throws ModbusIOException, CCModbusSlaveException,
+			CCModbusException {
 
 		if (m_Request == null || m_Connection == null)
-			throw new ModbusException("Invalid request or connection");
+			throw new CCModbusException("Invalid request or connection");
 
 		/*
 		 * Automatically re-connect if disconnected.
@@ -214,25 +214,25 @@ public class ModbusTCPTransaction implements ModbusTransaction {
 			try {
 				synchronized (m_IO) {
 					if (Modbus.debug)
-						CCLog.error("request transaction ID = " + m_Request.getTransactionID());
+						CCLog.error("request transaction ID = " + m_Request.transactionID());
 					
 					m_IO.writeMessage(m_Request);
 					m_Response = null;
 					do {
 						m_Response = m_IO.readResponse();
 						if (Modbus.debug) {
-							CCLog.error("response transaction ID = " + m_Response.getTransactionID());
+							CCLog.error("response transaction ID = " + m_Response.transactionID());
 						
-							if (m_Response.getTransactionID() != m_Request.getTransactionID()) {
-								CCLog.error("expected " + m_Request.getTransactionID() +
-										", got " + m_Response.getTransactionID());
+							if (m_Response.transactionID() != m_Request.transactionID()) {
+								CCLog.error("expected " + m_Request.transactionID() +
+										", got " + m_Response.transactionID());
 							}
 						}
 					} while (m_Response != null
 							&& (! isCheckingValidity() ||
-									(m_Request.getTransactionID() != 0 &&
-								m_Request.getTransactionID() !=
-									m_Response.getTransactionID()))
+									(m_Request.transactionID() != 0 &&
+								m_Request.transactionID() !=
+									m_Response.transactionID()))
 							&& ++retryCounter < retryLimit);
 
 					if (retryCounter >= retryLimit) {
@@ -272,9 +272,9 @@ public class ModbusTCPTransaction implements ModbusTransaction {
 		/*
 		 * The slave may have returned an exception -- check for that.
 		 */
-		if (m_Response instanceof ExceptionResponse)
-			throw new ModbusSlaveException(
-					((ExceptionResponse) m_Response).getExceptionCode());
+		if (m_Response instanceof CCExceptionResponse)
+			throw new CCModbusSlaveException(
+					((CCExceptionResponse) m_Response).exceptionCode());
 
 		/*
 		 * Close the connection if it isn't supposed to stick around.
@@ -294,16 +294,16 @@ public class ModbusTCPTransaction implements ModbusTransaction {
 	/**
 	 * checkValidity -- Verify the transaction IDs match or are zero.
 	 * 
-	 * @throws ModbusException
+	 * @throws CCModbusException
 	 *             if the transaction was not valid.
 	 */
-	private void checkValidity() throws ModbusException {
-		if (m_Request.getTransactionID() == 0
-				|| m_Response.getTransactionID() == 0)
+	private void checkValidity() throws CCModbusException {
+		if (m_Request.transactionID() == 0
+				|| m_Response.transactionID() == 0)
 			return;
 
-		if (m_Request.getTransactionID() != m_Response.getTransactionID())
-			throw new ModbusException("Transaction ID mismatch");
+		if (m_Request.transactionID() != m_Response.transactionID())
+			throw new CCModbusException("Transaction ID mismatch");
 	}
 
 	/**
@@ -322,6 +322,6 @@ public class ModbusTCPTransaction implements ModbusTransaction {
 				c_TransactionID++;
 			}
 		}
-		m_Request.setTransactionID(getTransactionID());
+		m_Request.transactionID(getTransactionID());
 	}
 }

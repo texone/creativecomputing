@@ -37,6 +37,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.procimg.IllegalAddressException;
@@ -51,7 +53,7 @@ import cc.creativecomputing.modbus.procimg.ProcessImage;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public final class ReadInputRegistersRequest extends ModbusRequest {
+public final class ReadInputRegistersRequest extends CCAbstractModbusRequest {
 
 	// instance attributes
 	private int m_Reference;
@@ -62,10 +64,10 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
 	 */
 	public ReadInputRegistersRequest() {
 		super();
-		
-		setFunctionCode(Modbus.READ_INPUT_REGISTERS);
+
+		functionCode(CCModbusFunctionCode.READ_INPUT_REGISTERS);
 		// 4 bytes (unit id and function code is excluded)
-		setDataLength(4);
+		dataLength(4);
 	}
 
 	/**
@@ -73,38 +75,35 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
 	 * reference and count of words to be read.
 	 * <p>
 	 * 
-	 * @param ref
-	 *            the reference number of the register to read from.
-	 * @param count
-	 *            the number of words to be read.
+	 * @param ref the reference number of the register to read from.
+	 * @param count the number of words to be read.
 	 */
 	public ReadInputRegistersRequest(int ref, int count) {
 		super();
-		
-		setFunctionCode(Modbus.READ_INPUT_REGISTERS);
+
+		functionCode(CCModbusFunctionCode.READ_INPUT_REGISTERS);
 		// 4 bytes (unit id and function code is excluded)
-		setDataLength(4);
-		
+		dataLength(4);
+
 		setReference(ref);
 		setWordCount(count);
 	}
-	
-	public ReadInputRegistersResponse getResponse() {
-		ReadInputRegistersResponse response =
-				new ReadInputRegistersResponse();
-		
-		response.setUnitID(getUnitID());
+
+	public ReadInputRegistersResponse response() {
+		ReadInputRegistersResponse response = new ReadInputRegistersResponse();
+
+		response.unitID(unitID());
 		response.setHeadless(isHeadless());
 		response.setWordCount(getWordCount());
-		
-		if (! isHeadless()) {
-			response.setProtocolID(getProtocolID());
-			response.setTransactionID(getTransactionID());
+
+		if (!isHeadless()) {
+			response.protocolID(protocolID());
+			response.transactionID(transactionID());
 		}
 		return response;
 	}
 
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		ReadInputRegistersResponse response = null;
 		InputRegister[] inpregs = null;
 
@@ -112,14 +111,13 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
 		ProcessImage procimg = ModbusCoupler.getReference().getProcessImage();
 		// 2. get input registers range
 		try {
-			inpregs = procimg.getInputRegisterRange(getReference(),
-					getWordCount());
+			inpregs = procimg.getInputRegisterRange(getReference(), getWordCount());
 		} catch (IllegalAddressException iaex) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
-		response = getResponse();
+		response = response();
 		response.setRegisters(inpregs);
-		
+
 		return response;
 	}
 
@@ -128,8 +126,7 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
 	 * <tt>ReadInputRegistersRequest</tt>.
 	 * <p>
 	 * 
-	 * @param ref
-	 *            the reference of the register to start reading from.
+	 * @param ref the reference of the register to start reading from.
 	 */
 	public void setReference(int ref) {
 		m_Reference = ref;
@@ -152,8 +149,7 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
 	 * <tt>ReadInputRegistersRequest</tt>.
 	 * <p>
 	 * 
-	 * @param count
-	 *            the number of words to be read.
+	 * @param count the number of words to be read.
 	 */
 	public void setWordCount(int count) {
 		m_WordCount = count;
@@ -180,7 +176,7 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
 		m_WordCount = din.readUnsignedShort();
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 		result[0] = (byte) ((m_Reference >> 8) & 0xff);
 		result[1] = (byte) (m_Reference & 0xff);

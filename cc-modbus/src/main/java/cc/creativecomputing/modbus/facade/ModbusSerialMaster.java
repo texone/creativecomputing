@@ -34,7 +34,7 @@
 package cc.creativecomputing.modbus.facade;
 
 import cc.creativecomputing.modbus.ModbusCoupler;
-import cc.creativecomputing.modbus.ModbusException;
+import cc.creativecomputing.modbus.CCModbusException;
 import cc.creativecomputing.modbus.io.ModbusSerialTransaction;
 import cc.creativecomputing.modbus.msg.*;
 import cc.creativecomputing.modbus.net.SerialConnection;
@@ -141,12 +141,12 @@ public class ModbusSerialMaster {
    * @param count  the number of coil states to be read.
    * @return a <tt>BitVector</tt> instance holding the
    *         received coil states.
-   * @throws ModbusException if an I/O error, a slave exception or
+   * @throws CCModbusException if an I/O error, a slave exception or
    *                         a transaction error occurs.
    */
   public synchronized BitVector readCoils(int unitid, int ref, int count)
-      throws ModbusException {
-    m_ReadCoilsRequest.setUnitID(unitid);
+      throws CCModbusException {
+    m_ReadCoilsRequest.unitID(unitid);
     m_ReadCoilsRequest.setReference(ref);
     m_ReadCoilsRequest.setBitCount(count);
     m_Transaction.setRequest(m_ReadCoilsRequest);
@@ -163,12 +163,12 @@ public class ModbusSerialMaster {
    * @param ref    the offset of the coil to be written.
    * @param state  the coil state to be written.
    * @return the state of the coil as returned from the slave.
-   * @throws ModbusException if an I/O error, a slave exception or
+   * @throws CCModbusException if an I/O error, a slave exception or
    *                         a transaction error occurs.
    */
   public synchronized boolean writeCoil(int unitid, int ref, boolean state)
-      throws ModbusException {
-    m_WriteCoilRequest.setUnitID(unitid);
+      throws CCModbusException {
+    m_WriteCoilRequest.unitID(unitid);
     m_WriteCoilRequest.setReference(ref);
     m_WriteCoilRequest.setCoil(state);
     m_Transaction.setRequest(m_WriteCoilRequest);
@@ -185,12 +185,12 @@ public class ModbusSerialMaster {
    * @param unitid the slave unit id.
    * @param ref    the offset of the coil to start writing to.
    * @param coils  a <tt>BitVector</tt> which holds the coil states to be written.
-   * @throws ModbusException if an I/O error, a slave exception or
+   * @throws CCModbusException if an I/O error, a slave exception or
    *                         a transaction error occurs.
    */
   public synchronized void writeMultipleCoils(int unitid, int ref, BitVector coils)
-      throws ModbusException {
-    m_WriteMultipleCoilsRequest.setUnitID(unitid);
+      throws CCModbusException {
+    m_WriteMultipleCoilsRequest.unitID(unitid);
     m_WriteMultipleCoilsRequest.setReference(ref);
     m_WriteMultipleCoilsRequest.setCoils(coils);
     m_Transaction.setRequest(m_WriteMultipleCoilsRequest);
@@ -208,12 +208,12 @@ public class ModbusSerialMaster {
    * @param count  the number of input discrete states to be read.
    * @return a <tt>BitVector</tt> instance holding the received input discrete
    *         states.
-   * @throws ModbusException if an I/O error, a slave exception or
+   * @throws CCModbusException if an I/O error, a slave exception or
    *                         a transaction error occurs.
    */
   public synchronized BitVector readInputDiscretes(int unitid, int ref, int count)
-      throws ModbusException {
-    m_ReadInputDiscretesRequest.setUnitID(unitid);
+      throws CCModbusException {
+    m_ReadInputDiscretesRequest.unitID(unitid);
     m_ReadInputDiscretesRequest.setReference(ref);
     m_ReadInputDiscretesRequest.setBitCount(count);
     m_Transaction.setRequest(m_ReadInputDiscretesRequest);
@@ -234,12 +234,12 @@ public class ModbusSerialMaster {
    * @param ref    the offset of the input register to start reading from.
    * @param count  the number of input registers to be read.
    * @return a <tt>InputRegister[]</tt> with the received input registers.
-   * @throws ModbusException if an I/O error, a slave exception or
+   * @throws CCModbusException if an I/O error, a slave exception or
    *                         a transaction error occurs.
    */
   public synchronized InputRegister[] readInputRegisters(int unitid, int ref, int count)
-      throws ModbusException {
-    m_ReadInputRegistersRequest.setUnitID(unitid);
+      throws CCModbusException {
+    m_ReadInputRegistersRequest.unitID(unitid);
     m_ReadInputRegistersRequest.setReference(ref);
     m_ReadInputRegistersRequest.setWordCount(count);
     m_Transaction.setRequest(m_ReadInputRegistersRequest);
@@ -257,12 +257,12 @@ public class ModbusSerialMaster {
    * @param ref    the offset of the register to start reading from.
    * @param count  the number of registers to be read.
    * @return a <tt>Register[]</tt> holding the received registers.
-   * @throws ModbusException if an I/O error, a slave exception or
+   * @throws CCModbusException if an I/O error, a slave exception or
    *                         a transaction error occurs.
    */
   public synchronized Register[] readMultipleRegisters(int unitid, int ref, int count)
-      throws ModbusException {
-    m_ReadMultipleRegistersRequest.setUnitID(unitid);
+      throws CCModbusException {
+    m_ReadMultipleRegistersRequest.unitID(unitid);
     m_ReadMultipleRegistersRequest.setReference(ref);
     m_ReadMultipleRegistersRequest.setWordCount(count);
     m_Transaction.setRequest(m_ReadMultipleRegistersRequest);
@@ -277,12 +277,12 @@ public class ModbusSerialMaster {
    * @param ref      the offset of the register to be written.
    * @param register a <tt>Register</tt> holding the value of the register
    *                 to be written.
-   * @throws ModbusException if an I/O error, a slave exception or
+   * @throws CCModbusException if an I/O error, a slave exception or
    *                         a transaction error occurs.
    */
   public synchronized void writeSingleRegister(int unitid, int ref, Register register)
-      throws ModbusException {
-    m_WriteSingleRegisterRequest.setUnitID(unitid);
+      throws CCModbusException {
+    m_WriteSingleRegisterRequest.unitID(unitid);
     m_WriteSingleRegisterRequest.setReference(ref);
     m_WriteSingleRegisterRequest.setRegister(register);
     m_Transaction.setRequest(m_WriteSingleRegisterRequest);
@@ -296,12 +296,12 @@ public class ModbusSerialMaster {
    * @param ref       the offset of the register to start writing to.
    * @param registers a <tt>Register[]</tt> holding the values of
    *                  the registers to be written.
-   * @throws ModbusException if an I/O error, a slave exception or
+   * @throws CCModbusException if an I/O error, a slave exception or
    *                         a transaction error occurs.
    */
   public synchronized void writeMultipleRegisters(int unitid, int ref, Register[] registers)
-      throws ModbusException {
-    m_WriteMultipleRegistersRequest.setUnitID(unitid);
+      throws CCModbusException {
+    m_WriteMultipleRegistersRequest.unitID(unitid);
     m_WriteMultipleRegistersRequest.setReference(ref);
     m_WriteMultipleRegistersRequest.setRegisters(registers);
     m_Transaction.setRequest(m_WriteMultipleRegistersRequest);

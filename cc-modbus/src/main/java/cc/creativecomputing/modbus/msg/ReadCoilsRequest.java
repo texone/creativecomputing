@@ -37,6 +37,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.procimg.DigitalOut;
@@ -57,7 +58,7 @@ import cc.creativecomputing.modbus.procimg.ProcessImage;
  * @author jfhaugh
  * @version @version@ (@date@)
  */
-public final class ReadCoilsRequest extends ModbusRequest {
+public final class ReadCoilsRequest extends CCAbstractModbusRequest {
 
 	// instance attributes
 	private int m_Reference;
@@ -69,8 +70,8 @@ public final class ReadCoilsRequest extends ModbusRequest {
 	public ReadCoilsRequest() {
 		super();
 		
-		setFunctionCode(Modbus.READ_COILS);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.READ_COILS);
+		dataLength(4);
 	}
 
 	/**
@@ -86,31 +87,31 @@ public final class ReadCoilsRequest extends ModbusRequest {
 	public ReadCoilsRequest(int ref, int count) {
 		super();
 		
-		setFunctionCode(Modbus.READ_COILS);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.READ_COILS);
+		dataLength(4);
 		
 		setReference(ref);
 		setBitCount(count);
 	}
 
-	public ReadCoilsResponse getResponse() {
+	public ReadCoilsResponse response() {
 		ReadCoilsResponse response = null;
 		response = new ReadCoilsResponse(m_BitCount);
 
 		// transfer header data
 		if (!isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		} else {
 			response.setHeadless();
 		}
-		response.setUnitID(getUnitID());
+		response.unitID(unitID());
 
 		return response;
 	}
 	
-	public ModbusResponse createResponse() {
-		ModbusResponse response = null;
+	public CCAbstractModbusResponse createResponse() {
+		CCAbstractModbusResponse response = null;
 		DigitalOut[] douts = null;
 
 		// 1. get process image
@@ -120,13 +121,13 @@ public final class ReadCoilsRequest extends ModbusRequest {
 			douts = procimg.getDigitalOutRange(getReference(),
 					getBitCount());
 		} catch (IllegalAddressException e) {
-			response = new IllegalAddressExceptionResponse();
-			response.setUnitID(getUnitID());
-			response.setFunctionCode(getFunctionCode());
+			response = new CCIllegalAddressExceptionResponse();
+			response.unitID(unitID());
+			response.functionCode(functionCode());
 			
 			return response;
 		}
-		response = getResponse();
+		response = response();
 		
 		/*
 		 * Populate the discrete values from the process image.
@@ -189,7 +190,7 @@ public final class ReadCoilsRequest extends ModbusRequest {
 	}
 
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	public void readData(DataInput din) throws IOException {
@@ -197,7 +198,7 @@ public final class ReadCoilsRequest extends ModbusRequest {
 		m_BitCount = din.readUnsignedShort();
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 
 		result[0] = (byte) ((m_Reference >> 8) & 0xff);

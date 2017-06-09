@@ -39,7 +39,7 @@ package cc.creativecomputing.modbus;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public class ModbusException extends Exception {
+public class CCModbusException extends Exception {
 
 	/**
 	 * 
@@ -49,7 +49,7 @@ public class ModbusException extends Exception {
 	/**
 	 * Constructs a new <tt>ModbusException</tt> instance.
 	 */
-	public ModbusException() {
+	public CCModbusException() {
 		super();
 	}
 
@@ -58,10 +58,9 @@ public class ModbusException extends Exception {
 	 * message.
 	 * <p>
 	 * 
-	 * @param message
-	 *            the message describing this <tt>ModbusException</tt>.
+	 * @param theMessage the message describing this <tt>ModbusException</tt>.
 	 */
-	public ModbusException(String message) {
-		super(message);
+	public CCModbusException(String theMessage) {
+		super(theMessage);
 	}
 }

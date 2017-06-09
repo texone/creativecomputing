@@ -36,9 +36,9 @@ package cc.creativecomputing.modbus.io;
 import java.io.IOException;
 
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.msg.ModbusMessage;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCModbusMessage;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 
 
 /**
@@ -75,7 +75,7 @@ public interface ModbusTransport {
    *         written properly to the raw output stream of
    *         this <tt>ModbusTransport</tt>.
    */
-  public void writeMessage(ModbusMessage msg) throws ModbusIOException;
+  public void writeMessage(CCModbusMessage msg) throws ModbusIOException;
 
   /**
    * Reads a <tt>ModbusRequest</tt> from the
@@ -86,7 +86,7 @@ public interface ModbusTransport {
    *         read properly from the raw input stream of
    *         this <tt>ModbusTransport</tt>.
    */
-  public ModbusRequest readRequest() throws ModbusIOException;
+  public CCAbstractModbusRequest readRequest() throws ModbusIOException;
 
   /**
    * Reads a <tt>ModbusResponse</tt> from the
@@ -97,6 +97,6 @@ public interface ModbusTransport {
    *         read properly from the raw input stream of
    *         this <tt>ModbusTransport</tt>.
    */
-  public ModbusResponse readResponse() throws ModbusIOException;
+  public CCAbstractModbusResponse readResponse() throws ModbusIOException;
 
 }//class ModbusTransport

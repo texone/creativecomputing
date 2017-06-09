@@ -44,11 +44,12 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.msg.ModbusMessage;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCModbusMessage;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.net.TCPMasterConnection;
 import cc.creativecomputing.modbus.util.ModbusUtil;
 
@@ -126,18 +127,18 @@ public class ModbusTCPTransport implements ModbusTransport {
 		  return trans;
 	  }
 
-	public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+	public void writeMessage(CCModbusMessage msg) throws ModbusIOException {
 		try {
-			byte message[] = msg.getMessage();
+			byte message[] = msg.message();
 
 			m_ByteOut.reset();
 			if (!headless) {
-				m_ByteOut.writeShort(msg.getTransactionID());
-				m_ByteOut.writeShort(msg.getProtocolID());
+				m_ByteOut.writeShort(msg.transactionID());
+				m_ByteOut.writeShort(msg.protocolID());
 				m_ByteOut.writeShort((message != null ? message.length : 0) + 2);
 			}
-			m_ByteOut.writeByte(msg.getUnitID());
-			m_ByteOut.writeByte(msg.getFunctionCode());
+			m_ByteOut.writeByte(msg.unitID());
+			m_ByteOut.writeByte(msg.functionCode().id);
 			if (message != null && message.length > 0)
 				m_ByteOut.write(message);
 
@@ -167,10 +168,10 @@ public class ModbusTCPTransport implements ModbusTransport {
 	 * @returns Modbus response for message
 	 * @throws ModbusIOException
 	 */
-	public ModbusRequest readRequest() throws ModbusIOException {
+	public CCAbstractModbusRequest readRequest() throws ModbusIOException {
 
 	try {
-			ModbusRequest req = null;
+			CCAbstractModbusRequest req = null;
 			m_ByteIn.reset();
 
 			synchronized (m_ByteIn) {
@@ -204,13 +205,13 @@ public class ModbusTCPTransport implements ModbusTransport {
 					int functionCode = m_ByteIn.readUnsignedByte();
 
 					m_ByteIn.reset();
-					req = ModbusRequest.createModbusRequest(functionCode);
-					req.setUnitID(unit);
+					req = CCAbstractModbusRequest.createModbusRequest(CCModbusFunctionCode.byID(functionCode));
+					req.unitID(unit);
 					req.setHeadless(false);
 
-					req.setTransactionID(transaction);
-					req.setProtocolID(protocol);
-					req.setDataLength(count);
+					req.transactionID(transaction);
+					req.protocolID(protocol);
+					req.dataLength(count);
 
 					req.readFrom(m_ByteIn);
 				} else {
@@ -221,8 +222,8 @@ public class ModbusTCPTransport implements ModbusTransport {
 					int unit = m_Input.readByte();
 					int function = m_Input.readByte();
 
-					req = ModbusRequest.createModbusRequest(function);
-					req.setUnitID(unit);
+					req = CCAbstractModbusRequest.createModbusRequest(CCModbusFunctionCode.byID(function));
+					req.unitID(unit);
 					req.setHeadless(true);
 
 					req.readData(m_Input);
@@ -233,7 +234,7 @@ public class ModbusTCPTransport implements ModbusTransport {
 					 */
 					m_Input.readShort();
 					if (Modbus.debug)
-						System.err.println("Read: "	+ req.getHexMessage());
+						System.err.println("Read: "	+ req.hexMessage());
 				}
 			}
 			return req;
@@ -248,11 +249,11 @@ public class ModbusTCPTransport implements ModbusTransport {
 		}
 	}
 
-	public ModbusResponse readResponse() throws ModbusIOException {
+	public CCAbstractModbusResponse readResponse() throws ModbusIOException {
 
 		try {
 
-			ModbusResponse response = null;
+			CCAbstractModbusResponse response = null;
 
 			synchronized (m_ByteIn) {
 				// use same buffer
@@ -294,7 +295,7 @@ public class ModbusTCPTransport implements ModbusTransport {
 					m_ByteIn.reset();
 					m_ByteIn.skip(7);
 					int function = m_ByteIn.readUnsignedByte();
-					response = ModbusResponse.createModbusResponse(function);
+					response = CCAbstractModbusResponse.createModbusResponse(CCModbusFunctionCode.byID(function));
 
 					/*
 					 * Rewind the input buffer, then read the data into the
@@ -303,8 +304,8 @@ public class ModbusTCPTransport implements ModbusTransport {
 					m_ByteIn.reset();
 					response.readFrom(m_ByteIn);
 
-					response.setTransactionID(transaction);
-					response.setProtocolID(protocol);
+					response.transactionID(transaction);
+					response.protocolID(protocol);
 				} else {
 					/*
 					 * This is a headless response. It has the same format as a
@@ -313,8 +314,8 @@ public class ModbusTCPTransport implements ModbusTransport {
 					int unit = m_Input.readByte();
 					int function = m_Input.readByte();
 
-					response = ModbusResponse.createModbusResponse(function);
-					response.setUnitID(unit);
+					response = CCAbstractModbusResponse.createModbusResponse(CCModbusFunctionCode.byID(function));
+					response.unitID(unit);
 					response.setHeadless();
 					response.readData(m_Input);
 

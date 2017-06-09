@@ -70,7 +70,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 
 /**
  * Class implementing a <tt>ReadCommEventCounterResponse</tt>.
@@ -79,7 +79,7 @@ import cc.creativecomputing.modbus.Modbus;
  * 
  * @version @version@ (@date@)
  */
-public final class ReadCommEventLogResponse extends ModbusResponse {
+public final class ReadCommEventLogResponse extends CCAbstractModbusResponse {
 
 	/*
 	 * Message fields.
@@ -188,7 +188,7 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
 	 * writeData -- output the completed Modbus message to dout
 	 */
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -210,7 +210,8 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
 	/**
 	 * getMessage -- format the message into a byte array.
 	 */
-	public byte[] getMessage() {
+	@Override
+	public byte[] message() {
 		byte result[] = new byte[m_Events.length + 7];
 
 		result[0] = (byte) (m_ByteCount = m_Events.length + 6);
@@ -233,7 +234,7 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
 	public ReadCommEventLogResponse() {
 		super();
 
-		setFunctionCode(Modbus.READ_COMM_EVENT_LOG);
-		setDataLength(7);
+		functionCode(CCModbusFunctionCode.READ_COMM_EVENT_LOG);
+		dataLength(7);
 	}
 }

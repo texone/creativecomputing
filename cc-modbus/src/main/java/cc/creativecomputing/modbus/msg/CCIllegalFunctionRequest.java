@@ -37,7 +37,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import cc.creativecomputing.modbus.Modbus;
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 
 /**
  * <p>
@@ -51,70 +52,73 @@ import cc.creativecomputing.modbus.Modbus;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public class IllegalFunctionRequest extends ModbusRequest {
+public class CCIllegalFunctionRequest extends CCAbstractModbusRequest {
 
 	/**
 	 * Constructs a new <tt>IllegalFunctionRequest</tt> instance for a given
 	 * function code.
 	 * 
-	 * <p>Used to implement slave devices when an illegal function code
-	 * has been requested.
+	 * <p>
+	 * Used to implement slave devices when an illegal function code has been
+	 * requested.
 	 * 
-	 * @param function
-	 *            the function code as <tt>int</tt>.
+	 * @param function the function code as <tt>int</tt>.
 	 */
-	public IllegalFunctionRequest(int function) {
-		setFunctionCode(function);
+	public CCIllegalFunctionRequest(CCModbusFunctionCode theFunctionCode) {
+		functionCode(theFunctionCode);
 	}
-	
+
 	/**
 	 * Constructs a new <tt>IllegalFunctionRequest</tt> instance for a given
 	 * function code.
 	 * 
-	 * <p>Used to implement slave devices when an illegal function code
-	 * has been requested.
+	 * <p>
+	 * Used to implement slave devices when an illegal function code has been
+	 * requested.
 	 * 
-	 * @param function
-	 *            the function code as <tt>int</tt>.
+	 * @param theFunctionCode the function code as <tt>int</tt>.
 	 */
-	public IllegalFunctionRequest(int unit, int function) {
-		setUnitID(unit);
-		setFunctionCode(function);
+	public CCIllegalFunctionRequest(int theUnit, CCModbusFunctionCode theFunctionCode) {
+		unitID(theUnit);
+		functionCode(theFunctionCode);
 	}
-	
+
 	/**
 	 * There is no unit number associated with this exception.
 	 */
-	public ModbusResponse getResponse() {
-		IllegalFunctionExceptionResponse response =
-				new IllegalFunctionExceptionResponse(getFunctionCode());
-		
-		response.setUnitID(getUnitID());
+	@Override
+	public CCAbstractModbusResponse response() {
+		CCIllegalFunctionExceptionResponse response = new CCIllegalFunctionExceptionResponse(functionCode());
+
+		response.unitID(unitID());
 		return response;
 	}
 
-	public ModbusResponse createResponse() {
-		return createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
+	@Override
+	public CCAbstractModbusResponse createResponse() {
+		return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_FUNCTION_EXCEPTION);
 	}
 
-	public void writeData(DataOutput dout) throws IOException {
+	@Override
+	public void writeData(DataOutput theDataOut) throws IOException {
 		throw new RuntimeException();
 	}
 
 	/**
-	 * Read all of the data that can be read.  This is an unsupported
-	 * function, so it may not be possible to know exactly how much data
-	 * needs to be read.
+	 * Read all of the data that can be read. This is an unsupported function,
+	 * so it may not be possible to know exactly how much data needs to be read.
 	 */
-	public void readData(DataInput din) throws IOException {
+	@Override
+	public void readData(DataInput theDataIn) throws IOException {
 		// skip all following bytes
-		int length = getDataLength();
+		int length = dataLength();
 		for (int i = 0; i < length; i++) {
-			din.readByte();
+			theDataIn.readByte();
 		}
 	}
 
-	public byte[] getMessage() {
+	@Override
+	public byte[] message() {
 		return null;
 	}
 }

@@ -34,12 +34,12 @@
 package cc.creativecomputing.modbus.io;
 
 import cc.creativecomputing.modbus.Modbus;
-import cc.creativecomputing.modbus.ModbusException;
+import cc.creativecomputing.modbus.CCModbusException;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.ModbusSlaveException;
-import cc.creativecomputing.modbus.msg.ExceptionResponse;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.CCModbusSlaveException;
+import cc.creativecomputing.modbus.msg.CCExceptionResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.net.UDPMasterConnection;
 import cc.creativecomputing.modbus.net.UDPTerminal;
 
@@ -60,8 +60,8 @@ public class ModbusUDPTransaction
   //instance attributes and associations
   private UDPTerminal m_Terminal;
   private ModbusTransport m_IO;
-  private ModbusRequest m_Request;
-  private ModbusResponse m_Response;
+  private CCAbstractModbusRequest m_Request;
+  private CCAbstractModbusResponse m_Response;
   private boolean m_ValidityCheck =
       Modbus.DEFAULT_VALIDITYCHECK;
   private int m_Retries = Modbus.DEFAULT_RETRIES;
@@ -81,7 +81,7 @@ public class ModbusUDPTransaction
    * <p>
    * @param request a <tt>ModbusRequest</tt> instance.
    */
-  public ModbusUDPTransaction(ModbusRequest request) {
+  public ModbusUDPTransaction(CCAbstractModbusRequest request) {
     setRequest(request);
   }//constructor
 
@@ -120,16 +120,16 @@ public class ModbusUDPTransaction
     }
   }//setConnection
 
-  public void setRequest(ModbusRequest req) {
+  public void setRequest(CCAbstractModbusRequest req) {
     m_Request = req;
     //m_Response = req.getResponse();
   }//setRequest
 
-  public ModbusRequest getRequest() {
+  public CCAbstractModbusRequest getRequest() {
     return m_Request;
   }//getRequest
 
-  public ModbusResponse getResponse() {
+  public CCAbstractModbusResponse getResponse() {
     return m_Response;
   }//getResponse
 
@@ -155,8 +155,8 @@ public class ModbusUDPTransaction
   }//setRetries
 
   public void execute() throws ModbusIOException,
-      ModbusSlaveException,
-      ModbusException {
+      CCModbusSlaveException,
+      CCModbusException {
 
     //1. assert executeability
     assertExecutable();
@@ -193,9 +193,9 @@ ex.printStackTrace();
     }
 
     //4. deal with "application level" exceptions
-    if (m_Response instanceof ExceptionResponse) {
-      throw new ModbusSlaveException(
-          ((ExceptionResponse) m_Response).getExceptionCode()
+    if (m_Response instanceof CCExceptionResponse) {
+      throw new CCModbusSlaveException(
+          ((CCExceptionResponse) m_Response).exceptionCode()
       );
     }
 
@@ -211,14 +211,14 @@ ex.printStackTrace();
    * Asserts if this <tt>ModbusTCPTransaction</tt> is
    * executable.
    *
-   * @throws ModbusException if this transaction cannot be
+   * @throws CCModbusException if this transaction cannot be
    * asserted as executable.
    */
   private void assertExecutable()
-      throws ModbusException {
+      throws CCModbusException {
     if (m_Request == null ||
         m_Terminal == null) {
-      throw new ModbusException(
+      throw new CCModbusException(
           "Assertion failed, transaction not executable"
       );
     }
@@ -229,9 +229,9 @@ ex.printStackTrace();
    * checking if the values of the response correspond
    * to the values of the request.
    *
-   * @throws ModbusException if this transaction has not been valid.
+   * @throws CCModbusException if this transaction has not been valid.
    */
-  private void checkValidity() throws ModbusException {
+  private void checkValidity() throws CCModbusException {
     //1.check transaction number
     //if(m_Request.getTransactionID()!=m_Response.getTransactionID()) {
 
@@ -254,6 +254,6 @@ ex.printStackTrace();
 				c_TransactionID++;
 			}
 		}
-		m_Request.setTransactionID(getTransactionID());
+		m_Request.transactionID(getTransactionID());
 	}
 }//class ModbusUDPTransaction

@@ -70,6 +70,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
 /**
@@ -79,7 +80,7 @@ import cc.creativecomputing.modbus.Modbus;
  * 
  * @version @version@ (@date@)
  */
-public final class ReadExceptionStatusResponse extends ModbusResponse {
+public final class ReadExceptionStatusResponse extends CCAbstractModbusResponse {
 
 	/*
 	 * Message fields.
@@ -92,8 +93,8 @@ public final class ReadExceptionStatusResponse extends ModbusResponse {
 	public ReadExceptionStatusResponse() {
 		super();
 
-		setFunctionCode(Modbus.READ_EXCEPTION_STATUS);
-		setDataLength(1);
+		functionCode(CCModbusFunctionCode.READ_EXCEPTION_STATUS);
+		dataLength(1);
 	}
 
 	/**
@@ -118,7 +119,7 @@ public final class ReadExceptionStatusResponse extends ModbusResponse {
 	 * writeData -- output the completed Modbus message to dout
 	 */
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -132,7 +133,7 @@ public final class ReadExceptionStatusResponse extends ModbusResponse {
 	/**
 	 * getMessage -- format the message into a byte array.
 	 */
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[1];
 
 		result[0] = (byte) (m_Status & 0xFF);

@@ -70,6 +70,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
 
@@ -82,7 +83,7 @@ import cc.creativecomputing.modbus.Modbus;
  * @version 1.2rc1-ghpc (09/27/2010)
  */
 public final class ReportSlaveIDResponse
-    extends ModbusResponse {
+    extends CCAbstractModbusResponse {
 
 	/*
 	 * Message fields.
@@ -99,7 +100,7 @@ public final class ReportSlaveIDResponse
 	 */
 	public ReportSlaveIDResponse() {
 		super();
-		setFunctionCode(Modbus.REPORT_SLAVE_ID);
+		functionCode(CCModbusFunctionCode.REPORT_SLAVE_ID);
 	}
 
 
@@ -179,7 +180,7 @@ public final class ReportSlaveIDResponse
 	 */
 	public void writeData(DataOutput dout)
 	throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -215,7 +216,7 @@ public final class ReportSlaveIDResponse
 	/**
 	 * getMessage -- format the message into a byte array.
 	 */
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[3 + m_length];
 		int offset = 0;
 

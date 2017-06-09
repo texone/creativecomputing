@@ -44,9 +44,9 @@ import purejavacomm.UnsupportedCommOperationException;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.msg.ModbusMessage;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCModbusMessage;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.util.ModbusUtil;
 
 /**
@@ -81,7 +81,7 @@ abstract public class ModbusSerialTransport
    * @return a <code>ModbusResponse</code> value
    * @exception ModbusIOException if an error occurs
    */
-  abstract public ModbusResponse readResponse()
+  abstract public CCAbstractModbusResponse readResponse()
       throws ModbusIOException;
   
   /**
@@ -92,7 +92,7 @@ abstract public class ModbusSerialTransport
    * @return a <code>ModbusRequest</code> value
    * @exception ModbusIOException if an error occurs
    */
-  abstract public ModbusRequest readRequest()
+  abstract public CCAbstractModbusRequest readRequest()
     throws ModbusIOException;
   
   /**
@@ -102,7 +102,7 @@ abstract public class ModbusSerialTransport
    * @param msg a <code>ModbusMessage</code> value
    * @exception ModbusIOException if an error occurs
    */
-  abstract public void writeMessage(ModbusMessage msg)
+  abstract public void writeMessage(CCModbusMessage msg)
     throws ModbusIOException;
 
 

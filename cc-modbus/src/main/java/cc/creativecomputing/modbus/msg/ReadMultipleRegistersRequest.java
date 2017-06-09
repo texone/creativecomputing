@@ -37,6 +37,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.procimg.IllegalAddressException;
@@ -51,7 +53,7 @@ import cc.creativecomputing.modbus.procimg.Register;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public final class ReadMultipleRegistersRequest extends ModbusRequest {
+public final class ReadMultipleRegistersRequest extends CCAbstractModbusRequest {
 
 	// instance attributes
 	private int m_Reference;
@@ -63,8 +65,8 @@ public final class ReadMultipleRegistersRequest extends ModbusRequest {
 	public ReadMultipleRegistersRequest() {
 		super();
 
-		setFunctionCode(Modbus.READ_MULTIPLE_REGISTERS);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.READ_MULTIPLE_REGISTERS);
+		dataLength(4);
 	}
 
 	/**
@@ -82,28 +84,28 @@ public final class ReadMultipleRegistersRequest extends ModbusRequest {
 	public ReadMultipleRegistersRequest(int ref, int count) {
 		super();
 
-		setFunctionCode(Modbus.READ_MULTIPLE_REGISTERS);
-		setDataLength(4);
+		functionCode(CCModbusFunctionCode.READ_MULTIPLE_REGISTERS);
+		dataLength(4);
 
 		setReference(ref);
 		setWordCount(count);
 	}
 	
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		ReadMultipleRegistersResponse response = null;
 
 		response = new ReadMultipleRegistersResponse();
 		
-		response.setUnitID(getUnitID());
+		response.unitID(unitID());
 		response.setHeadless(isHeadless());
 		if (! isHeadless()) {
-			response.setProtocolID(getProtocolID());
-			response.setTransactionID(getTransactionID());
+			response.protocolID(protocolID());
+			response.transactionID(transactionID());
 		}
 		return response;
 	}
 
-	public ModbusResponse createResponse() {
+	public CCAbstractModbusResponse createResponse() {
 		ReadMultipleRegistersResponse response = null;
 		Register[] regs = null;
 
@@ -113,9 +115,9 @@ public final class ReadMultipleRegistersRequest extends ModbusRequest {
 		try {
 			regs = procimg.getRegisterRange(getReference(), getWordCount());
 		} catch (IllegalAddressException e) {
-			return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+			return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_ADDRESS_EXCEPTION);
 		}
-		response = (ReadMultipleRegistersResponse) getResponse();
+		response = (ReadMultipleRegistersResponse) response();
 		response.setRegisters(regs);
 		
 		return response;
@@ -178,7 +180,7 @@ public final class ReadMultipleRegistersRequest extends ModbusRequest {
 		m_WordCount = din.readUnsignedShort();
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = new byte[4];
 
 		result[0] = (byte) ((m_Reference >> 8) & 0xff);

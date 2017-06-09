@@ -40,12 +40,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.ModbusIOException;
-import cc.creativecomputing.modbus.msg.ModbusMessage;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCModbusMessage;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.util.ModbusUtil;
 
 /**
@@ -82,7 +83,7 @@ public class ModbusASCIITransport
 	  return new ModbusSerialTransaction();
   }
 
-  public void writeMessage(ModbusMessage msg)
+  public void writeMessage(CCModbusMessage msg)
       throws ModbusIOException {
 
     try {
@@ -113,11 +114,11 @@ public class ModbusASCIITransport
     }
   }//writeMessage
 
-  public ModbusRequest readRequest()
+  public CCAbstractModbusRequest readRequest()
       throws ModbusIOException {
 
     boolean done = false;
-    ModbusRequest request = null;
+    CCAbstractModbusRequest request = null;
 
     int in = -1;
 
@@ -148,7 +149,7 @@ public class ModbusASCIITransport
           }
           in = m_ByteIn.readUnsignedByte();
           //create request
-          request = ModbusRequest.createModbusRequest(in);
+          request = CCAbstractModbusRequest.createModbusRequest(CCModbusFunctionCode.byID(in));
           request.setHeadless();
           //read message
           m_ByteIn.reset(m_InBuffer, m_ByteInOut.size());
@@ -164,11 +165,11 @@ public class ModbusASCIITransport
 
   }//readRequest
 
-  public ModbusResponse readResponse()
+  public CCAbstractModbusResponse readResponse()
       throws ModbusIOException {
 
     boolean done = false;
-    ModbusResponse response = null;
+    CCAbstractModbusResponse response = null;
     int in = -1;
 
     try {
@@ -208,7 +209,7 @@ public class ModbusASCIITransport
 //           }
           in = m_ByteIn.readUnsignedByte();
           //create request
-          response = ModbusResponse.createModbusResponse(in);
+          response = CCAbstractModbusResponse.createModbusResponse(CCModbusFunctionCode.byID(in));
           response.setHeadless();
           //read message
           m_ByteIn.reset(m_InBuffer, m_ByteInOut.size());

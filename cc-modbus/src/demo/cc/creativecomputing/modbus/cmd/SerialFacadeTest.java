@@ -56,7 +56,7 @@
 package cc.creativecomputing.modbus.cmd;
 
 import cc.creativecomputing.modbus.Modbus;
-import cc.creativecomputing.modbus.ModbusException;
+import cc.creativecomputing.modbus.CCModbusException;
 import cc.creativecomputing.modbus.facade.ModbusSerialMaster;
 import cc.creativecomputing.modbus.procimg.InputRegister;
 import cc.creativecomputing.modbus.procimg.Register;
@@ -141,7 +141,7 @@ public class SerialFacadeTest {
 
 					try {
 						msm.writeMultipleCoils(slaveId, 0, coils);
-					} catch (ModbusException ex) {
+					} catch (CCModbusException ex) {
 						System.out.println("Error writing coils: " + result);
 					}
 				} else {

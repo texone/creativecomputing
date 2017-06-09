@@ -136,9 +136,9 @@ public class ReadCoilsTest {
 			}
 
 			req = new ReadCoilsRequest(ref, count);
-			req.setUnitID(unit);
+			req.unitID(unit);
 			if (Modbus.debug)
-				System.out.println("Request: " + req.getHexMessage());
+				System.out.println("Request: " + req.hexMessage());
 
 			// 4. Prepare the transaction
 			trans = transport.createTransaction();
@@ -155,7 +155,7 @@ public class ReadCoilsTest {
 				res = (ReadCoilsResponse) trans.getResponse();
 
 				if (Modbus.debug)
-					System.out.println("Response: " + res.getHexMessage());
+					System.out.println("Response: " + res.hexMessage());
 
 				System.out.println("Digital Inputs Status="
 						+ res.getCoils().toString());

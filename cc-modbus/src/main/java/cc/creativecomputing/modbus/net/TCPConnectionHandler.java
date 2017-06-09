@@ -37,8 +37,8 @@ import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.ModbusCoupler;
 import cc.creativecomputing.modbus.ModbusIOException;
 import cc.creativecomputing.modbus.io.ModbusTransport;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.procimg.ProcessImage;
 
 /**
@@ -82,8 +82,8 @@ public class TCPConnectionHandler implements Runnable {
 		try {
 			do {
 				// 1. read the request
-				ModbusRequest request = m_Transport.readRequest();
-				ModbusResponse response = null;
+				CCAbstractModbusRequest request = m_Transport.readRequest();
+				CCAbstractModbusResponse response = null;
 
 				/*
 				 * test if Process image exists.
@@ -98,7 +98,7 @@ public class TCPConnectionHandler implements Runnable {
 					continue;
 				}
 				if (image.getUnitID() != 0
-						&& request.getUnitID() != image.getUnitID()) {
+						&& request.unitID() != image.getUnitID()) {
 					/*
 					 * Do nothing -- non-existent units do not respond to
 					 * message.
@@ -110,8 +110,8 @@ public class TCPConnectionHandler implements Runnable {
 				response = request.createResponse();
 
 				if (Modbus.debug) {
-					System.out.println("Request:" + request.getHexMessage());
-					System.out.println("Response:" + response.getHexMessage());
+					System.out.println("Request:" + request.hexMessage());
+					System.out.println("Response:" + response.hexMessage());
 				}
 
 				// 3. write the response message.

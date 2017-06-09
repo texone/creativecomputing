@@ -40,7 +40,7 @@ package cc.creativecomputing.modbus;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public class ModbusIOException extends ModbusException {
+public class ModbusIOException extends CCModbusException {
 
 	/**
 	 * 

@@ -38,8 +38,8 @@ import java.io.IOException;
 import cc.creativecomputing.modbus.Modbus;
 import cc.creativecomputing.modbus.io.ModbusTransaction;
 import cc.creativecomputing.modbus.io.ModbusTransport;
-import cc.creativecomputing.modbus.msg.MaskWriteRegisterRequest;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
+import cc.creativecomputing.modbus.msg.CCMaskWriteRegisterRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
 import cc.creativecomputing.modbus.net.ModbusMasterFactory;
 
 /**
@@ -77,7 +77,7 @@ public class MaskWriteRegisterTest {
 	public static void main(String[] args) {
 
 		ModbusTransport transport = null;
-		ModbusRequest req = null;
+		CCAbstractModbusRequest req = null;
 		ModbusTransaction trans = null;
 		int ref = 0;
 		int andMask = 0xFFFF;
@@ -111,11 +111,11 @@ public class MaskWriteRegisterTest {
 			if (Modbus.debug)
 				System.out.println("Connected to " + transport);
 
-			req = new MaskWriteRegisterRequest(ref, andMask, orMask);
+			req = new CCMaskWriteRegisterRequest(ref, andMask, orMask);
 
-			req.setUnitID(unit);
+			req.unitID(unit);
 			if (Modbus.debug)
-				System.out.println("Request: " + req.getHexMessage());
+				System.out.println("Request: " + req.hexMessage());
 
 			// 3. Prepare the transaction
 			trans = transport.createTransaction();
@@ -129,7 +129,7 @@ public class MaskWriteRegisterTest {
 				if (Modbus.debug) {
 					if (trans.getResponse() != null)
 						System.out.println("Response: "
-							+ trans.getResponse().getHexMessage());
+							+ trans.getResponse().hexMessage());
 					else
 						System.out.println("No response.");
 				}

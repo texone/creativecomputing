@@ -70,14 +70,14 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import cc.creativecomputing.modbus.Modbus;
-import cc.creativecomputing.modbus.ModbusException;
+import cc.creativecomputing.modbus.CCModbusException;
 import cc.creativecomputing.modbus.io.ModbusSerialTransaction;
 import cc.creativecomputing.modbus.io.ModbusSerialTransport;
 import cc.creativecomputing.modbus.io.ModbusTransaction;
 import cc.creativecomputing.modbus.io.ModbusTransport;
-import cc.creativecomputing.modbus.msg.ExceptionResponse;
-import cc.creativecomputing.modbus.msg.ModbusRequest;
-import cc.creativecomputing.modbus.msg.ModbusResponse;
+import cc.creativecomputing.modbus.msg.CCExceptionResponse;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusRequest;
+import cc.creativecomputing.modbus.msg.CCAbstractModbusResponse;
 import cc.creativecomputing.modbus.msg.ReadCommEventLogRequest;
 import cc.creativecomputing.modbus.msg.ReadCommEventLogResponse;
 import cc.creativecomputing.modbus.net.ModbusMasterFactory;
@@ -114,7 +114,7 @@ public class ReadCommEventLogTest {
 
 	public static void main(String[] args) {
 		ModbusTransport transport = null;
-		ModbusRequest req = null;
+		CCAbstractModbusRequest req = null;
 		ModbusTransaction trans = null;
 		int repeat = 1;
 		int unit = 0;
@@ -166,11 +166,11 @@ public class ReadCommEventLogTest {
 System.err.println("try " + k);
 			// 3. Create the command.
 				req = new ReadCommEventLogRequest();
-				req.setUnitID(unit);
+				req.unitID(unit);
 				req.setHeadless(trans instanceof ModbusSerialTransaction);
 				
 				if (Modbus.debug)
-					System.out.println("Request: " + req.getHexMessage());
+					System.out.println("Request: " + req.hexMessage());
 
 				// 4. Prepare the transaction
 				trans = transport.createTransaction();
@@ -186,20 +186,20 @@ System.err.println("try " + k);
 
 				try {
 					trans.execute();
-				} catch (ModbusException x) {
+				} catch (CCModbusException x) {
 					System.err.println(x.getMessage());
 					continue;
 				}
-				ModbusResponse res = trans.getResponse();
+				CCAbstractModbusResponse res = trans.getResponse();
 
 				if (Modbus.debug) {
 					if (res != null)
-						System.out.println("Response: " + res.getHexMessage());
+						System.out.println("Response: " + res.hexMessage());
 					else
 						System.err.println("No response to GET COMM EVENT LOG request.");
 				}
-				if (res instanceof ExceptionResponse) {
-					ExceptionResponse exception = (ExceptionResponse) res;
+				if (res instanceof CCExceptionResponse) {
+					CCExceptionResponse exception = (CCExceptionResponse) res;
 					System.out.println(exception);
 					continue;
 				}

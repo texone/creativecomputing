@@ -79,7 +79,7 @@ import cc.creativecomputing.modbus.procimg.SimpleRegister;
  * @author Julie (jfh@ghgande.com)
  * @version @version@ (@date@)
  */
-public final class ReadFileRecordResponse extends ModbusResponse {
+public final class ReadFileRecordResponse extends CCAbstractModbusResponse {
 
 	public class RecordResponse {
 		private int m_WordCount;
@@ -236,10 +236,10 @@ public final class ReadFileRecordResponse extends ModbusResponse {
 			RecordResponse response = new RecordResponse(data);
 			addResponse(response);
 		}
-		setDataLength(m_ByteCount + 1);
+		dataLength(m_ByteCount + 1);
 	}
 
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte result[] = null;
 
 		result = new byte[getByteCount()];
@@ -252,14 +252,5 @@ public final class ReadFileRecordResponse extends ModbusResponse {
 			offset += m_Records[i].getWordCount() * 2;
 		}
 		return result;
-	}
-
-	/**
-	 * Constructs a new <tt>ReadFileRecordResponse</tt> instance.
-	 */
-	public ReadFileRecordResponse() {
-		super();
-
-		setFunctionCode(Modbus.READ_FILE_RECORD);
 	}
 }

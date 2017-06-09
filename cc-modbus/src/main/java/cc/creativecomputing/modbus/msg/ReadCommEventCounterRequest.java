@@ -70,6 +70,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import cc.creativecomputing.modbus.CCModbusExceptionCode;
+import cc.creativecomputing.modbus.CCModbusFunctionCode;
 import cc.creativecomputing.modbus.Modbus;
 
 /**
@@ -81,12 +83,12 @@ import cc.creativecomputing.modbus.Modbus;
  * @author jfhaugh (jfh@ghgande.com)
  * @version @version@ (@date@)
  */
-public final class ReadCommEventCounterRequest extends ModbusRequest {
+public final class ReadCommEventCounterRequest extends CCAbstractModbusRequest {
 
 	/**
 	 * createResponse -- create an empty response for this request.
 	 */
-	public ModbusResponse getResponse() {
+	public CCAbstractModbusResponse response() {
 		ReadCommEventCounterResponse response = null;
 
 		response = new ReadCommEventCounterResponse();
@@ -96,15 +98,15 @@ public final class ReadCommEventCounterRequest extends ModbusRequest {
 		 */
 		response.setHeadless(isHeadless());
 		if (!isHeadless()) {
-			response.setTransactionID(getTransactionID());
-			response.setProtocolID(getProtocolID());
+			response.transactionID(transactionID());
+			response.protocolID(protocolID());
 		}
 
 		/*
 		 * Copy the unit ID and function code.
 		 */
-		response.setUnitID(getUnitID());
-		response.setFunctionCode(getFunctionCode());
+		response.unitID(unitID());
+		response.functionCode(functionCode());
 
 		return response;
 	}
@@ -112,15 +114,15 @@ public final class ReadCommEventCounterRequest extends ModbusRequest {
 	/**
 	 * The ModbusCoupler doesn't have a means of reporting the event counters.
 	 */
-	public ModbusResponse createResponse() {
-		return createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
+	public CCAbstractModbusResponse createResponse() {
+		return createExceptionResponse(CCModbusExceptionCode.ILLEGAL_FUNCTION_EXCEPTION);
 	}
 
 	/**
 	 * writeData -- output this Modbus message to dout.
 	 */
 	public void writeData(DataOutput dout) throws IOException {
-		dout.write(getMessage());
+		dout.write(message());
 	}
 
 	/**
@@ -133,7 +135,7 @@ public final class ReadCommEventCounterRequest extends ModbusRequest {
 	/**
 	 * getMessage -- return an empty array as there is no data for this request.
 	 */
-	public byte[] getMessage() {
+	public byte[] message() {
 		byte results[] = new byte[0];
 
 		return results;
@@ -145,11 +147,11 @@ public final class ReadCommEventCounterRequest extends ModbusRequest {
 	public ReadCommEventCounterRequest() {
 		super();
 
-		setFunctionCode(Modbus.READ_COMM_EVENT_COUNTER);
+		functionCode(CCModbusFunctionCode.READ_COMM_EVENT_COUNTER);
 
 		/*
 		 * There is no additional data in this request.
 		 */
-		setDataLength(0);
+		dataLength(0);
 	}
 }

@@ -113,9 +113,9 @@ public class ReadCoilsTestTCP {
 			con.connect();
 
 			req = new ReadCoilsRequest(0,16);
-			req.setUnitID(1);
+			req.unitID(1);
 			if (Modbus.debug)
-				CCLog.info("Request: " + req.getHexMessage());
+				CCLog.info("Request: " + req.hexMessage());
 
 			// 4. Prepare the transaction
 			trans = new ModbusTCPTransaction(con);
@@ -135,7 +135,7 @@ public class ReadCoilsTestTCP {
 				res = (ReadCoilsResponse) trans.getResponse();
 
 				if (Modbus.debug)
-					CCLog.info("Response: " + res.getHexMessage());
+					CCLog.info("Response: " + res.hexMessage());
 
 				System.out.println("Digital Inputs Status="
 						+ res.getCoils().toString());

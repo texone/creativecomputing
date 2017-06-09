@@ -40,7 +40,7 @@ package cc.creativecomputing.modbus;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public class ModbusSlaveException extends ModbusException {
+public class CCModbusSlaveException extends CCModbusException {
 
 	/**
 	 * 
@@ -50,7 +50,7 @@ public class ModbusSlaveException extends ModbusException {
 	/**
 	 * Instance type attribute
 	 */
-	private int m_Type = -1;
+	private CCModbusExceptionCode _myType = CCModbusExceptionCode.UNDEFINED;
 
 	/**
 	 * <p>
@@ -61,15 +61,15 @@ public class ModbusSlaveException extends ModbusException {
 	 * Types are defined according to the protocol specification in
 	 * <tt>net.wimpi.modbus.Modbus</tt>.
 	 * 
-	 * @param TYPE
+	 * @param theCode
 	 *            the type of exception that occured.
 	 * 
 	 * @see net.wimpi.modbus.Modbus
 	 */
-	public ModbusSlaveException(int TYPE) {
+	public CCModbusSlaveException(CCModbusExceptionCode theCode) {
 		super();
 
-		m_Type = TYPE;
+		_myType = theCode;
 	}
 
 	/**
@@ -82,8 +82,8 @@ public class ModbusSlaveException extends ModbusException {
 	 * 
 	 * @see net.wimpi.modbus.Modbus
 	 */
-	public int getType() {
-		return m_Type;
+	public CCModbusExceptionCode type() {
+		return _myType;
 	}
 
 	/**
@@ -103,8 +103,8 @@ public class ModbusSlaveException extends ModbusException {
 	 * 
 	 * @see net.wimpi.modbus.Modbus
 	 */
-	public boolean isType(int TYPE) {
-		return (TYPE == m_Type);
+	public boolean isType(CCModbusExceptionCode TYPE) {
+		return (TYPE == _myType);
 	}
 
 	/**
@@ -113,34 +113,34 @@ public class ModbusSlaveException extends ModbusException {
 	 * @returns a String indicating the type of slave exception.
 	 */
 	public String getMessage() {
-		return getMessage(m_Type);
+		return getMessage(_myType);
 	}
 
 	/**
 	 * Get the exception type message associated with the given exception
 	 * number.
 	 * 
-	 * @param type
+	 * @param theCode
 	 *            Numerical value of the Modbus exception.
 	 * @return a String indicating the type of slave exception.
 	 */
-	public static String getMessage(int type) {
-		switch (type) {
-		case 1:
+	public static String getMessage(CCModbusExceptionCode theCode) {
+		switch (theCode) {
+		case ILLEGAL_FUNCTION_EXCEPTION:
 			return "Illegal Function";
-		case 2:
+		case ILLEGAL_ADDRESS_EXCEPTION:
 			return "Illegal Data Address";
-		case 3:
+		case ILLEGAL_VALUE_EXCEPTION:
 			return "Illegal Data Value";
-		case 4:
+		case SLAVE_DEVICE_FAILURE:
 			return "Slave Device Failure";
-		case 5:
+		case ACKNOWLEDGE:
 			return "Acknowledge";
-		case 6:
+		case SLAVE_BUSY_EXCEPTION:
 			return "Slave Device Busy";
-		case 8:
+		case MEMORY_PARITY_ERROR:
 			return "Memory Parity Error";
 		}
-		return "Error Code = " + type;
+		return "Error Code = " + theCode;
 	}
 }
