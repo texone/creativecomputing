@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.model.collada;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * <p>
@@ -35,7 +35,7 @@ class CCColladaImage {
 	private String _myFileName;
 	private String _myID;
 
-	CCColladaImage(CCXMLElement theImageXML) {
+	CCColladaImage(CCDataElement theImageXML) {
 		_myID = theImageXML.attribute("id");
 		_myFileName = theImageXML.child("init_from").content();
 

@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.model.collada;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * <p>
@@ -34,14 +34,14 @@ class CCColladaNewParam extends CCColladaSubTag {
 	private String _myNextSource;
 	private String _myID;
 
-	CCColladaNewParam(CCXMLElement theNewParamXML) {
+	CCColladaNewParam(CCDataElement theNewParamXML) {
 		_myID = theNewParamXML.attribute("sid");
 
-		CCXMLElement initfrom = theNewParamXML.child("surface/init_from");
+		CCDataElement initfrom = theNewParamXML.child("surface/init_from");
 		if (initfrom != null)
 			_myNextSource = initfrom.content();
 
-		CCXMLElement src = theNewParamXML.child("sampler2D/source");
+		CCDataElement src = theNewParamXML.child("sampler2D/source");
 		if (src != null)
 			_myNextSource = src.content();
 

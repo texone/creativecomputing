@@ -17,7 +17,7 @@ import java.util.Map;
 
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * Embodies the entire set of information that can be visualized from the contents of a COLLADA resource.
@@ -38,10 +38,10 @@ public class CCColladaScene extends CCColladaElement{
 	/**
 	 * @param theXML
 	 */
-	CCColladaScene(CCColladaLoader theLoader, CCXMLElement theSceneXML) {
+	CCColladaScene(CCColladaLoader theLoader, CCDataElement theSceneXML) {
 		super(theSceneXML);
 		
-		for(CCXMLElement myNodeXML:theSceneXML.children("node")) {
+		for(CCDataElement myNodeXML:theSceneXML.children("node")) {
 			CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, myNodeXML);
 			_myNodeMap.put(myNode.id(), myNode);
 			_myNodes.add(myNode);

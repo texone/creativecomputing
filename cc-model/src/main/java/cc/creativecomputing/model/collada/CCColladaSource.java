@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.model.collada;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * <p>
@@ -37,9 +37,9 @@ class CCColladaSource extends CCColladaSubTag {
 	private String[] _myStringValues;
 	private int _myStride;
 
-	CCColladaSource(CCXMLElement theSourceXML) {
+	CCColladaSource(CCDataElement theSourceXML) {
 		_myID = theSourceXML.attribute("id");
-		CCXMLElement myAccessorXML = theSourceXML.child("technique_common/accessor");
+		CCDataElement myAccessorXML = theSourceXML.child("technique_common/accessor");
 		String myType = myAccessorXML.child("param").attribute("type");
 		
 		if(myType.contains("float")) {

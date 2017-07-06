@@ -3,7 +3,7 @@ package cc.creativecomputing.model.svg;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 class CCSVGRadialGradient extends CCSVGGradient {
 	double cx, cy, r;
@@ -15,7 +15,7 @@ class CCSVGRadialGradient extends CCSVGGradient {
 	}
 	
 	@Override
-	public void read(CCXMLElement theSVG) {
+	public void read(CCDataElement theSVG) {
 		super.read(theSVG);
 		this.cx = CCSVGIO.getDoubleWithUnit(theSVG, "cx");
 		this.cy = CCSVGIO.getDoubleWithUnit(theSVG, "cy");

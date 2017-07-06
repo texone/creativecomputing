@@ -12,7 +12,7 @@ package cc.creativecomputing.model.collada;
 
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * Provides a library in which to place <controller> elements.
@@ -21,8 +21,8 @@ import cc.creativecomputing.io.xml.CCXMLElement;
  */
 public class CCColladaControllers extends CCColladaLibrary<CCColladaController>{
 
-	CCColladaControllers(List<CCXMLElement> theControllersXML, CCColladaGeometries theGeometries) {
-		for (CCXMLElement myControllerXML : theControllersXML) {
+	CCColladaControllers(List<CCDataElement> theControllersXML, CCColladaGeometries theGeometries) {
+		for (CCDataElement myControllerXML : theControllersXML) {
 			CCColladaController myController = new CCColladaController(myControllerXML, theGeometries);
 			_myElementMap.put(myController.id(), myController);
 			_myElementList.add(myController);

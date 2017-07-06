@@ -13,7 +13,7 @@ package cc.creativecomputing.model.collada;
 import java.util.HashMap;
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 
 /**
@@ -40,12 +40,12 @@ class CCColladaEffect extends CCColladaElement{
 	private boolean _myHasTexture = false;
 
 	// add support for your chosen effect here
-	CCColladaEffect(CCXMLElement theEffectXML, CCColladaImages theImages) {
+	CCColladaEffect(CCDataElement theEffectXML, CCColladaImages theImages) {
 		super(theEffectXML);
-		CCXMLElement myDiffuse = null;
+		CCDataElement myDiffuse = null;
 
 		// Get the effect type. Common examples are lambert and Phong
-		CCXMLElement myTechniqueXML = theEffectXML.child("profile_COMMON/technique");
+		CCDataElement myTechniqueXML = theEffectXML.child("profile_COMMON/technique");
 		String myEffectType = myTechniqueXML.child(0).name().toString();
 
 		if (myEffectType.equals("lambert")) {
@@ -80,8 +80,8 @@ class CCColladaEffect extends CCColladaElement{
 			_myHasTexture = true;
 			// read Paramtags
 			HashMap<String, CCColladaNewParam> myParameterMap = new HashMap<String, CCColladaNewParam>();
-			List<CCXMLElement> myNewParams = theEffectXML.children("profile_COMMON/newparam");
-			for (CCXMLElement myParam : myNewParams) {
+			List<CCDataElement> myNewParams = theEffectXML.children("profile_COMMON/newparam");
+			for (CCDataElement myParam : myNewParams) {
 				CCColladaNewParam p = new CCColladaNewParam(myParam);
 				myParameterMap.put(p.id(), p);
 			}

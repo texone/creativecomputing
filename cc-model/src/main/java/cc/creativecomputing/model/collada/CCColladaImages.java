@@ -13,7 +13,7 @@ package cc.creativecomputing.model.collada;
 import java.util.HashMap;
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 
 /**
@@ -38,8 +38,8 @@ class CCColladaImages {
 
 	private HashMap<String, CCColladaImage> _myImageMap = new HashMap<String, CCColladaImage>();
 
-	CCColladaImages(List<CCXMLElement> images) {
-		for (CCXMLElement img : images) {
+	CCColladaImages(List<CCDataElement> images) {
+		for (CCDataElement img : images) {
 			CCColladaImage i = new CCColladaImage(img);
 			_myImageMap.put(i.id(), i);
 		}

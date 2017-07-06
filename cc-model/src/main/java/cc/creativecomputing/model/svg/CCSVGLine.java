@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
@@ -56,8 +56,8 @@ public class CCSVGLine extends CCSVGElement{
 	}
 	
 	@Override
-	public CCXMLElement write() {
-		CCXMLElement myResult = super.write();
+	public CCDataElement write() {
+		CCDataElement myResult = super.write();
 		myResult.addAttribute("x1", _myA.x);
 		myResult.addAttribute("y1", _myA.x);
 		myResult.addAttribute("x2", _myB.y);
@@ -66,7 +66,7 @@ public class CCSVGLine extends CCSVGElement{
 	}
 	
 	@Override
-	public void read(CCXMLElement theSVG) {
+	public void read(CCDataElement theSVG) {
 		super.read(theSVG);
 		
 		_myA.set(

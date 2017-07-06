@@ -22,7 +22,7 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.CCVBOMesh;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCTransform;
@@ -68,7 +68,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	private List<CCMesh> _myGeometries = new ArrayList<>();
 	private CCCamera _myCamera;
 
-	public CCColladaSceneNode(CCColladaLoader theLoader, CCXMLElement theNodeXML) {
+	public CCColladaSceneNode(CCColladaLoader theLoader, CCDataElement theNodeXML) {
 		super(theNodeXML);
 		
 		_myType = CCColladaSceneNodeType.valueOf(theNodeXML.attribute("type", "NODE"));
@@ -76,7 +76,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 		_myMatrix = new CCMatrix4x4();
 		_myTransform = new CCTransform();
 		
-		for(CCXMLElement myChild:theNodeXML){
+		for(CCDataElement myChild:theNodeXML){
 			switch(myChild.name()){
 			case "matrix":
 				String[] myFloatStrings = myChild.content().split("\\s");

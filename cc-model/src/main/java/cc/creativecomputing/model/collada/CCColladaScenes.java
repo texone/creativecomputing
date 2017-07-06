@@ -12,7 +12,7 @@ package cc.creativecomputing.model.collada;
 
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * Provides a library in which to place <visual_scene> elements.
@@ -21,9 +21,9 @@ import cc.creativecomputing.io.xml.CCXMLElement;
  */
 public class CCColladaScenes extends CCColladaLibrary<CCColladaScene>{
 
-	CCColladaScenes(CCColladaLoader theLoader, List<CCXMLElement> theScenesXML) {
+	CCColladaScenes(CCColladaLoader theLoader, List<CCDataElement> theScenesXML) {
 		
-		for (CCXMLElement mySceneXML : theScenesXML) {
+		for (CCDataElement mySceneXML : theScenesXML) {
 			CCColladaScene myScene = new CCColladaScene(theLoader, mySceneXML);
 			_myElementMap.put(myScene.id(), myScene);
 			_myElementList.add(myScene);

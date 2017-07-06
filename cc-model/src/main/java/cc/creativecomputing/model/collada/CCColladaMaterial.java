@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.model.collada;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * <p>
@@ -34,10 +34,10 @@ class CCColladaMaterial extends CCColladaElement{
 
 	private CCColladaEffect _myEffect;
 
-	CCColladaMaterial(CCXMLElement theMaterialXML, CCColladaEffects theEffectsLib) {
+	CCColladaMaterial(CCDataElement theMaterialXML, CCColladaEffects theEffectsLib) {
 		super(theMaterialXML);
 
-		CCXMLElement _myInstanceEffectXML = theMaterialXML.child("instance_effect");
+		CCDataElement _myInstanceEffectXML = theMaterialXML.child("instance_effect");
 		String myEffectID = _myInstanceEffectXML.attribute("url").substring(1);
 		_myEffect = theEffectsLib.element(myEffectID);
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 import cc.creativecomputing.core.util.CCArrayUtil;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 
 abstract class CCSVGGradient extends CCSVGElement {
@@ -34,14 +34,14 @@ abstract class CCSVGGradient extends CCSVGElement {
 	}
 	
 	@Override
-	public void read(CCXMLElement theSVG) {
+	public void read(CCDataElement theSVG) {
 		offset = new double[theSVG.countChildren()];
 		color = new int[theSVG.countChildren()];
 		
 		count = 0;
 		
 		// <stop offset="0" style="stop-color:#967348"/>
-		for (CCXMLElement elem:theSVG) {
+		for (CCDataElement elem:theSVG) {
 			String name = elem.name();
 			if (name.equals("stop")) {
 				String offsetAttr = elem.attribute("offset");

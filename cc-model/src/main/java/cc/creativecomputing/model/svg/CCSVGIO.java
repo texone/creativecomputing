@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 import cc.creativecomputing.core.util.CCStringUtil;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
@@ -64,7 +64,7 @@ public class CCSVGIO {
 	 *            name of the attribute to get
 	 * @return unit-parsed version of the data
 	 */
-	static protected double getDoubleWithUnit(CCXMLElement element, String attribute) {
+	static protected double getDoubleWithUnit(CCDataElement element, String attribute) {
 		String val = element.attribute(attribute);
 		return (val == null) ? 0 : parseUnitSize(val);
 	}
@@ -176,7 +176,7 @@ public class CCSVGIO {
 	
 	private CCSVGDocument _myDocument;
 
-	private CCSVGDocument readSVG(CCXMLElement theSVG){
+	private CCSVGDocument readSVG(CCDataElement theSVG){
 		if (!theSVG.name().equals("svg")) {
 			throw new RuntimeException("root is not <svg>, it's <" + theSVG.name() + ">");
 		}

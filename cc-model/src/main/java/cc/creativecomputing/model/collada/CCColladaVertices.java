@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * <p>
@@ -43,10 +43,10 @@ class CCColladaVertices extends CCColladaSubTag {
 	private Map<String, String> _mySourceMap = new HashMap<String, String>();
 	private List<String> _mySementics = new ArrayList<>();
 
-	CCColladaVertices(CCXMLElement theVerticesXML) {
+	CCColladaVertices(CCDataElement theVerticesXML) {
 		_myID = theVerticesXML.attribute("id");
 		// analyze the vertices-Tag, search for semantic POSITION (only that is interesting)
-		for (CCXMLElement myInputXML : theVerticesXML.children("input")) {
+		for (CCDataElement myInputXML : theVerticesXML.children("input")) {
 			_mySementics.add(myInputXML.attribute("semantic"));
 			_mySourceMap.put(myInputXML.attribute("semantic"), myInputXML.attribute("source").substring(1));
 		}

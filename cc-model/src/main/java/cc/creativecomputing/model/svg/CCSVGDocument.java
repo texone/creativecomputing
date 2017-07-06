@@ -12,7 +12,7 @@ package cc.creativecomputing.model.svg;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCStringUtil;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 
 public class CCSVGDocument extends CCSVGGroup{
@@ -31,15 +31,15 @@ public class CCSVGDocument extends CCSVGGroup{
 	}
 	
 	@Override
-	public CCXMLElement write() {
-		CCXMLElement myResult = super.write();
+	public CCDataElement write() {
+		CCDataElement myResult = super.write();
 		myResult.addAttribute("width", width);
 		myResult.addAttribute("height", height);
 		return myResult;
 	}
 	
 	@Override
-	public void read(CCXMLElement theSVG) {
+	public void read(CCDataElement theSVG) {
 		// not proper parsing of the viewBox, but will cover us for cases where
 		// the width and height of the object is not specified
 		String viewBoxStr = theSVG.attribute("viewBox");

@@ -15,7 +15,7 @@ import java.util.List;
 
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCShapeMode;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
@@ -67,7 +67,7 @@ public class CCSVGEllipse extends CCSVGElement{
 	}
 	
 	@Override
-	public void read(CCXMLElement theSVG) {
+	public void read(CCDataElement theSVG) {
 		super.read(theSVG);
 		
 		center().set(

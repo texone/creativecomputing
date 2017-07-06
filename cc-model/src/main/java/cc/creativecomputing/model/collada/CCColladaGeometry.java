@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * Describes the visual shape and appearance of an object in a scene.
@@ -48,26 +48,26 @@ public class CCColladaGeometry extends CCColladaElement{
 	private List<CCColladaGeometryData> _myDatas = new ArrayList<>();
 	private HashSet<CCColladaLines> _myLinesSet;
 
-	CCColladaGeometry(CCXMLElement theGeometryXML) {
+	CCColladaGeometry(CCDataElement theGeometryXML) {
 		super(theGeometryXML);
 
-		CCXMLElement myMeshXML = theGeometryXML.child("mesh");
+		CCDataElement myMeshXML = theGeometryXML.child("mesh");
 
 		// dump the source-Tags
 		HashMap<String, CCColladaSource> mySourceMap = new HashMap<String, CCColladaSource>();
-		for (CCXMLElement mySourceXML : myMeshXML.children("source")) {
+		for (CCDataElement mySourceXML : myMeshXML.children("source")) {
 			CCColladaSource mySource = new CCColladaSource(mySourceXML);
 			mySourceMap.put(mySource.id(), mySource);
 		}
 		// dump the vertice-tag to the sources
 		CCColladaVertices myVertices = new CCColladaVertices(myMeshXML.child("vertices"));
 
-		List<CCXMLElement> myShapes;
+		List<CCDataElement> myShapes;
 
 		// dump triangles
 		if ((myShapes = myMeshXML.children("triangles")).size() != 0) {
 			_myTriangles = new ArrayList<CCColladaTriangles>();
-			for (CCXMLElement myTrianglesXML : myShapes) {
+			for (CCDataElement myTrianglesXML : myShapes) {
 				CCColladaTriangles myTriangles = new CCColladaTriangles(myTrianglesXML, mySourceMap, myVertices);
 				_myTriangles.add(myTriangles);
 				_myDatas.add(myTriangles);
@@ -75,7 +75,7 @@ public class CCColladaGeometry extends CCColladaElement{
 		}
 		if ((myShapes = myMeshXML.children("polylist")).size() != 0) {
 			_myPolyList = new ArrayList<>();
-			for (CCXMLElement myTrianglesXML : myShapes) {
+			for (CCDataElement myTrianglesXML : myShapes) {
 				CCColladaPolyList myTriangles = new CCColladaPolyList(myTrianglesXML, mySourceMap, myVertices);
 				_myPolyList.add(myTriangles);
 				_myDatas.add(myTriangles);
@@ -84,7 +84,7 @@ public class CCColladaGeometry extends CCColladaElement{
 		// dump lines
 		if ((myShapes = myMeshXML.children("lines")).size() != 0) {
 			_myLinesSet = new HashSet<CCColladaLines>();
-			for (CCXMLElement myLineXML : myShapes) {
+			for (CCDataElement myLineXML : myShapes) {
 				CCColladaLines myLines = new CCColladaLines(myLineXML, mySourceMap, myVertices);
 				_myLinesSet.add(myLines);
 				_myDatas.add(myLines);

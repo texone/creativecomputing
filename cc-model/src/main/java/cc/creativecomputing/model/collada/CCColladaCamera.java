@@ -11,7 +11,7 @@
 package cc.creativecomputing.model.collada;
 
 import cc.creativecomputing.graphics.CCCamera;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCMath;
 
 public class CCColladaCamera extends CCColladaElement{
@@ -24,10 +24,10 @@ public class CCColladaCamera extends CCColladaElement{
 	private float _myZnear;
 	private float _myZfar;
 	
-	CCColladaCamera(CCXMLElement theCameraXML) {
+	CCColladaCamera(CCDataElement theCameraXML) {
 		super(theCameraXML);
 		
-		for(CCXMLElement myChildXML:theCameraXML){
+		for(CCDataElement myChildXML:theCameraXML){
 			switch(myChildXML.name()){
 			case "optics":
 				readOptics(myChildXML);
@@ -38,17 +38,17 @@ public class CCColladaCamera extends CCColladaElement{
 		_myCamera = new CCCamera(_myFov * CCMath.DEG_TO_RAD, 1f / _myAspect, _myZnear, _myZfar * 100);
 	}
 	
-	private void readOptics(CCXMLElement theOpticsXML){
-		CCXMLElement myTechniquesXML = theOpticsXML.child("technique_common");
-		for(CCXMLElement myChildXML:myTechniquesXML){
+	private void readOptics(CCDataElement theOpticsXML){
+		CCDataElement myTechniquesXML = theOpticsXML.child("technique_common");
+		for(CCDataElement myChildXML:myTechniquesXML){
 			switch(myChildXML.name()){
 			case "perspective":
 				float myXfov = 0;
 				float myYfov = 0;
 				float myAspect = 0;
-				CCXMLElement myXfovXML = myChildXML.child("xfov");
-				CCXMLElement myYfovXML = myChildXML.child("yfov");
-				CCXMLElement myAspectXML = myChildXML.child("aspect_ratio");
+				CCDataElement myXfovXML = myChildXML.child("xfov");
+				CCDataElement myYfovXML = myChildXML.child("yfov");
+				CCDataElement myAspectXML = myChildXML.child("aspect_ratio");
 				
 				if(myXfovXML != null && myYfovXML != null){
 					myXfov = myXfovXML.floatContent();
@@ -69,8 +69,8 @@ public class CCColladaCamera extends CCColladaElement{
 				_myFov = myXfov;
 				_myAspect = myAspect;
 				
-				CCXMLElement myZnearXML = myChildXML.child("znear");
-				CCXMLElement myZFarXML = myChildXML.child("zfar");
+				CCDataElement myZnearXML = myChildXML.child("znear");
+				CCDataElement myZFarXML = myChildXML.child("zfar");
 				
 				_myZnear = myZnearXML.floatContent();
 				_myZfar = myZFarXML.floatContent();

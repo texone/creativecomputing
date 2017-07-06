@@ -12,7 +12,7 @@ package cc.creativecomputing.model.collada;
 
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * <p>
@@ -34,8 +34,8 @@ import cc.creativecomputing.io.xml.CCXMLElement;
  */
 class CCColladaMaterials extends CCColladaLibrary<CCColladaMaterial>{
 
-	CCColladaMaterials(List<CCXMLElement> theMaterials, CCColladaEffects theEffectLib) {
-		for (CCXMLElement myMaterialXML : theMaterials) {
+	CCColladaMaterials(List<CCDataElement> theMaterials, CCColladaEffects theEffectLib) {
+		for (CCDataElement myMaterialXML : theMaterials) {
 			CCColladaMaterial m = new CCColladaMaterial(myMaterialXML, theEffectLib);
 			_myElementMap.put(m.id(), m);
 		}

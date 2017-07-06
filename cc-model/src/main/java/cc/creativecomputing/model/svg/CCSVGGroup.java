@@ -17,7 +17,7 @@ import java.util.List;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 import cc.creativecomputing.model.svg.CCSVGElement.CCShapeKind;
 
@@ -159,12 +159,12 @@ public class CCSVGGroup extends CCSVGElement implements Iterable<CCSVGElement>{
 	}
 	
 	@Override
-	public void read(CCXMLElement theSVG) {
+	public void read(CCDataElement theSVG) {
 		if(_myKind == CCShapeKind.GROUP)super.read(theSVG);
 		
 		_myChildren = new ArrayList<>();
 
-		for (CCXMLElement mySVG : theSVG) {
+		for (CCDataElement mySVG : theSVG) {
 			String myName = mySVG.name();
 			if(myName == null)continue;
 			switch(myName){

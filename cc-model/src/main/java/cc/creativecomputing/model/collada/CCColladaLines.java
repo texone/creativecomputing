@@ -12,7 +12,7 @@ package cc.creativecomputing.model.collada;
 
 import java.util.HashMap;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * <p>
@@ -33,7 +33,7 @@ import cc.creativecomputing.io.xml.CCXMLElement;
  */
 class CCColladaLines extends CCColladaGeometryData {
 
-	CCColladaLines(CCXMLElement theLinesXML, HashMap<String, CCColladaSource> theSourcesMap, CCColladaVertices theVertices) {
+	CCColladaLines(CCDataElement theLinesXML, HashMap<String, CCColladaSource> theSourcesMap, CCColladaVertices theVertices) {
 		super(theLinesXML, theSourcesMap, theVertices, 2);
 	}
 

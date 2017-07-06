@@ -12,7 +12,7 @@ package cc.creativecomputing.model.collada;
 
 import java.util.HashMap;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * Provides the information needed to for a mesh to bind vertex attributes together and then organize 
@@ -31,7 +31,7 @@ import cc.creativecomputing.io.xml.CCXMLElement;
 public class CCColladaTriangles extends CCColladaGeometryData {
 	
 
-	CCColladaTriangles(CCXMLElement triangles, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices) {
+	CCColladaTriangles(CCDataElement triangles, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices) {
 		super(triangles, theSources, theVertices, 3);
 	}
 

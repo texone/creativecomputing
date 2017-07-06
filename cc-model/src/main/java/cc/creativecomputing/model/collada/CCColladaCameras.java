@@ -12,12 +12,12 @@ package cc.creativecomputing.model.collada;
 
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 public class CCColladaCameras extends CCColladaLibrary<CCColladaCamera>{
 	
-	CCColladaCameras(List<CCXMLElement> theCamerasXML) {
-		for (CCXMLElement myCameraXML : theCamerasXML) {
+	CCColladaCameras(List<CCDataElement> theCamerasXML) {
+		for (CCDataElement myCameraXML : theCamerasXML) {
 			CCColladaCamera myCamera = new CCColladaCamera(myCameraXML);
 			_myElementMap.put(myCamera.id(), myCamera);
 			_myElementList.add(myCamera);

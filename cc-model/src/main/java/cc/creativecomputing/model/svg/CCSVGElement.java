@@ -26,7 +26,7 @@ import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.util.CCTriangulator;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
@@ -218,7 +218,7 @@ public abstract class CCSVGElement {
 	
 	public abstract List<CCLinearSpline> contours();
 	
-	private void readName(CCXMLElement theSVG){
+	private void readName(CCDataElement theSVG){
 		String myName = theSVG.attribute("id");
 		// @#$(* adobe illustrator mangles names of objects when re-saving
 		if (myName != null) {
@@ -233,50 +233,50 @@ public abstract class CCSVGElement {
 		_myName = myName;
 	}
 	
-	private void writeName(CCXMLElement theSVG){
+	private void writeName(CCDataElement theSVG){
 		theSVG.addAttribute("id", _myName);
 	}
 	
-	private void readOpacity(CCXMLElement theSVG) {
+	private void readOpacity(CCDataElement theSVG) {
 		if (!theSVG.hasAttribute("opacity")) return;
 		
 		opacity(Double.parseDouble(theSVG.attribute("opacity")));
 	}
 	
-	private void writeOpacity(CCXMLElement theSVG){
+	private void writeOpacity(CCDataElement theSVG){
 		theSVG.addAttribute("opacity", CCMath.max(opacity, strokeColor.a, fillColor.a));
 	}
 	
-	private void readStroke(CCXMLElement theSVG) {
+	private void readStroke(CCDataElement theSVG) {
 		if (!theSVG.hasAttribute("stroke")) return;
 		
 		readColor(theSVG.attribute("stroke"), false);
 	}
 	
-	private void writeStroke(CCXMLElement theSVG){
+	private void writeStroke(CCDataElement theSVG){
 		if(!stroke|| strokeColor == null)theSVG.addAttribute("stroke", "none");
 		theSVG.addAttribute("stroke", "#" + strokeColor.rgbString());
 	}
 	
-	private void readStrokeOpacity(CCXMLElement theSVG) {
+	private void readStrokeOpacity(CCDataElement theSVG) {
 		if (!theSVG.hasAttribute("stroke-opacity")) return;
 		
 		strokeOpacity = theSVG.doubleAttribute("stroke-opacity");
 		strokeColor.a = strokeOpacity;
 	}
 	
-	private void writeStrokeOpacity(CCXMLElement theSVG){
+	private void writeStrokeOpacity(CCDataElement theSVG){
 		if(strokeColor != null && strokeColor.a != 1){
 			theSVG.addAttribute("stroke-opacity", strokeColor.a);
 		}
 	}
 	
-	private void readStrokeWeight(CCXMLElement theSVG){
+	private void readStrokeWeight(CCDataElement theSVG){
 		if (!theSVG.hasAttribute("stroke-width")) return;
 		strokeWeight = CCSVGIO.parseUnitSize(theSVG.attribute("stroke-width"));
 	}
 	
-	private void writeStrokeWeight(CCXMLElement theSVG){
+	private void writeStrokeWeight(CCDataElement theSVG){
 		theSVG.addAttribute("stroke-width", strokeWeight);
 	}
 	
@@ -296,7 +296,7 @@ public abstract class CCSVGElement {
 		}
 	}
 	
-	private void readStrokeJoin(CCXMLElement theSVG){
+	private void readStrokeJoin(CCDataElement theSVG){
 		if (!theSVG.hasAttribute("stroke-linejoin")) return;
 		
 		setStrokeJoin(theSVG.attribute("stroke-linejoin"));
@@ -318,32 +318,32 @@ public abstract class CCSVGElement {
 		}
 	}
 	
-	private void readStrokeCap(CCXMLElement theSVG){
+	private void readStrokeCap(CCDataElement theSVG){
 		if (!theSVG.hasAttribute("stroke-linecap")) return;
 		
 		setStrokeCap(theSVG.attribute("stroke-linecap"));
 	}
 	
 
-	private void readFill(CCXMLElement theSVG) {
+	private void readFill(CCDataElement theSVG) {
 		if (!theSVG.hasAttribute("fill")) return;
 		
 		String myFillText = theSVG.attribute("fill");
 		readColor(myFillText, true);
 	}
 	
-	private void writeFill(CCXMLElement theSVG){
+	private void writeFill(CCDataElement theSVG){
 		if(!fill|| fillColor == null)theSVG.addAttribute("fill", "none");
 		theSVG.addAttribute("fill", "#" + fillColor.rgbString());
 	}
 	
-	private void readFillOpacity(CCXMLElement theSVG) {
+	private void readFillOpacity(CCDataElement theSVG) {
 		if (!theSVG.hasAttribute("fill-opacity")) return;
 		
 		fillOpacity(theSVG.doubleAttribute("fill-opacity"));
 	}
 	
-	private void writeFillOpacity(CCXMLElement theSVG){
+	private void writeFillOpacity(CCDataElement theSVG){
 		if(fillColor != null && fillColor.a != 1){
 			theSVG.addAttribute("fill-opacity", fillColor.a);
 		}
@@ -642,7 +642,7 @@ public abstract class CCSVGElement {
 		}
 	}
 	
-	private void writeColors(CCXMLElement theSVG) {
+	private void writeColors(CCDataElement theSVG) {
 		writeOpacity(theSVG);
 		writeStroke(theSVG);
 		writeStrokeOpacity(theSVG);
@@ -653,7 +653,7 @@ public abstract class CCSVGElement {
 		writeFillOpacity(theSVG);
 	}
 	
-	private void readColors(CCXMLElement theSVG) {
+	private void readColors(CCDataElement theSVG) {
 		readOpacity(theSVG);
 		readStroke(theSVG);
 		readStrokeOpacity(theSVG);
@@ -700,35 +700,35 @@ public abstract class CCSVGElement {
 	
 	public abstract String svgTag();
 	
-	private void readVisible(CCXMLElement theSVG){
+	private void readVisible(CCDataElement theSVG){
 		String displayStr = theSVG.attribute("display", "inline");
 		visible = !displayStr.equals("none");
 	}
 	
-	private void writeVisible(CCXMLElement theSVG){
+	private void writeVisible(CCDataElement theSVG){
 		theSVG.addAttribute("display", visible ? "inline" : "none");
 	}
 	
-	private void readTransform(CCXMLElement theSVG){
+	private void readTransform(CCDataElement theSVG){
 		String transformStr = theSVG.attribute("transform");
 		if (transformStr != null) {
 			matrix = CCSVGIO.parseTransform(transformStr);
 		}
 	}
 	
-	private void writeTransform(CCXMLElement theSVG){
+	private void writeTransform(CCDataElement theSVG){
 		if(matrix != null)theSVG.addAttribute("transform", CCSVGIO.writeMatrix(matrix));
 	}
 	
-	public void read(CCXMLElement theSVG){
+	public void read(CCDataElement theSVG){
 		readName(theSVG);
 		readColors(theSVG);
 		readVisible(theSVG);
 		readTransform(theSVG);
 	}
 	
-	public CCXMLElement write(){
-		CCXMLElement myResult = new CCXMLElement(svgTag());
+	public CCDataElement write(){
+		CCDataElement myResult = new CCDataElement(svgTag());
 		writeName(myResult);
 		writeColors(myResult);
 		writeVisible(myResult);

@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
@@ -774,7 +774,7 @@ public class CCSVGPath extends CCSVGElement{
 	}
 	
 	@Override
-	public void read(CCXMLElement theSVG) {
+	public void read(CCDataElement theSVG) {
 		super.read(theSVG);
 
 		String pathData = theSVG.attribute("d").replaceAll("\\n", "");

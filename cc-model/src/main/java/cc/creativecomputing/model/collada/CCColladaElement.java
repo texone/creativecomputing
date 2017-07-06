@@ -13,7 +13,7 @@ package cc.creativecomputing.model.collada;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * @author christianriekoff
@@ -27,13 +27,13 @@ public class CCColladaElement {
 	
 	protected Map<String, CCColladaSource> _mySourceMap;
 	
-	CCColladaElement(CCXMLElement theXML){
+	CCColladaElement(CCDataElement theXML){
 		_myID = theXML.attribute("id", "");
 		_myName = theXML.attribute("name", "");
 		
 		_mySourceMap = new HashMap<String, CCColladaSource>();
 		
-		for(CCXMLElement mySourceXML:theXML.children("source")) {
+		for(CCDataElement mySourceXML:theXML.children("source")) {
 			CCColladaSource mySource = new CCColladaSource(mySourceXML);
 			_mySourceMap.put(mySource.id(), mySource);
 		}
@@ -51,8 +51,8 @@ public class CCColladaElement {
 		return _myName;
 	}
 	
-	protected CCColladaSource source(CCXMLElement theElement, String theSematic) {
-		for (CCXMLElement myInputXML : theElement.children("input")) {
+	protected CCColladaSource source(CCDataElement theElement, String theSematic) {
+		for (CCDataElement myInputXML : theElement.children("input")) {
 			if (myInputXML.attribute("semantic").equals(theSematic)) {
 				return _mySourceMap.get(myInputXML.attribute("source").substring(1));
 			}

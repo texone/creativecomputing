@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * @author christianriekoff
@@ -58,7 +58,7 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 		}
 	}
 
-	protected CCXMLElement _myDataXML;
+	protected CCDataElement _myDataXML;
 	protected String _myMaterialSymbol;
 	protected CCColladaMaterial _myMaterial;
 	protected CCColladaSource _myVertexSource; // pointmatrice
@@ -71,12 +71,12 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 	
 	protected Map<String, CCColladaGeometryInput> _myInputMap = new HashMap<>();
 
-	CCColladaGeometryData(CCXMLElement theDataXML, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices, int thePrimitivSize){
+	CCColladaGeometryData(CCDataElement theDataXML, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices, int thePrimitivSize){
 		_myDataXML = theDataXML;
 		_myMaterialSymbol = _myDataXML.attribute("material");
 		
 		// extract p-Tag to matrix
-		List<CCXMLElement> myInputsXML = theDataXML.children("input");
+		List<CCDataElement> myInputsXML = theDataXML.children("input");
 		_myStride = myInputsXML.size();
 		int myCount = Integer.parseInt(theDataXML.attribute("count"));
 		_myNumberOfVertices = myCount * thePrimitivSize;
@@ -87,7 +87,7 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 		readInputs(theDataXML, myInputs);
 	}
 	
-	public void readInputs(CCXMLElement theDataXML, List<CCColladaGeometryInput> theInputs){
+	public void readInputs(CCDataElement theDataXML, List<CCColladaGeometryInput> theInputs){
 		String[] myPArray = theDataXML.child("p").content().split(" ");
 		
 		_myPointIndices = new int[myPArray.length];
@@ -141,9 +141,9 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 		return _myInputMap.containsKey("TEXCOORD");
 	}
 	
-	List<CCColladaGeometryInput> handleInputs(List<CCXMLElement> theInputsXML, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices) {
+	List<CCColladaGeometryInput> handleInputs(List<CCDataElement> theInputsXML, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices) {
 		List<CCColladaGeometryInput> myInputs = new ArrayList<>();
-		for (CCXMLElement myTriangleInputXML : theInputsXML) {
+		for (CCDataElement myTriangleInputXML : theInputsXML) {
 			String mySementic = myTriangleInputXML.attribute("semantic");
 			switch(mySementic){
 			case "VERTEX":

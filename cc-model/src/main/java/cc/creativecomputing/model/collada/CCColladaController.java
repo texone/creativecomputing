@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.model.collada;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /*
  * 
@@ -19,10 +19,10 @@ public class CCColladaController extends CCColladaElement{
 	
 //	private CCColladaSkinController _mySkinController;
 
-	CCColladaController(CCXMLElement theControllerXML, CCColladaGeometries theGeometries){
+	CCColladaController(CCDataElement theControllerXML, CCColladaGeometries theGeometries){
 		super(theControllerXML);
 		
-		CCXMLElement mySkinXML = theControllerXML.child("skin");
+		CCDataElement mySkinXML = theControllerXML.child("skin");
 		if(mySkinXML != null) {
 //			_mySkinController = new CCColladaSkinController(mySkinXML, theGeometries, theControllerXML.attribute("id"));
 		}

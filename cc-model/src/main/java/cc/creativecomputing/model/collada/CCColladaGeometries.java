@@ -13,7 +13,7 @@ package cc.creativecomputing.model.collada;
 import java.util.Collection;
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 
 /**
@@ -24,8 +24,8 @@ import cc.creativecomputing.io.xml.CCXMLElement;
  */
 public class CCColladaGeometries extends CCColladaLibrary<CCColladaGeometry>{
 
-	CCColladaGeometries(List<CCXMLElement> theGeometriesXML) {
-		for (CCXMLElement myGeometryXML : theGeometriesXML) {
+	CCColladaGeometries(List<CCDataElement> theGeometriesXML) {
+		for (CCDataElement myGeometryXML : theGeometriesXML) {
 			CCColladaGeometry myGeometry = new CCColladaGeometry(myGeometryXML);
 			_myElementMap.put(myGeometry.id(), myGeometry);
 			_myElementList.add(myGeometry);

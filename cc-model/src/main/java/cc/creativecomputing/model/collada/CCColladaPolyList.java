@@ -14,7 +14,7 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
  * Provides the information needed to for a mesh to bind vertex attributes together and then organize 
@@ -33,12 +33,12 @@ import cc.creativecomputing.io.xml.CCXMLElement;
 public class CCColladaPolyList extends CCColladaGeometryData {
 	
 
-	CCColladaPolyList(CCXMLElement triangles, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices) {
+	CCColladaPolyList(CCDataElement triangles, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices) {
 		super(triangles, theSources, theVertices, 3);
 	}
 
 	@Override
-	public void readInputs(CCXMLElement theDataXML, List<CCColladaGeometryInput> theInputs){
+	public void readInputs(CCDataElement theDataXML, List<CCColladaGeometryInput> theInputs){
 		String[] myPArray = theDataXML.child("p").content().split(" ");
 		
 		_myPointIndices = new int[myPArray.length];

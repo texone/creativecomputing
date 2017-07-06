@@ -13,7 +13,7 @@ package cc.creativecomputing.model.collada;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCMatrix4x4;
 
 /*
@@ -44,17 +44,17 @@ public class CCColladaAnimation extends CCColladaElement{
 	
 	private String _myTarget;
 
-	CCColladaAnimation(CCXMLElement theAnimationXML){
+	CCColladaAnimation(CCDataElement theAnimationXML){
 		super(theAnimationXML);
 		
-		for(CCXMLElement myAnimChild:theAnimationXML) {
+		for(CCDataElement myAnimChild:theAnimationXML) {
 			if(myAnimChild.name().equals("animation")) {
 				_myAnimations.add(new CCColladaAnimation(myAnimChild));
 				continue;
 			}
 		}
 		
-		CCXMLElement mySamplerXML = theAnimationXML.child("sampler");
+		CCDataElement mySamplerXML = theAnimationXML.child("sampler");
 		if(mySamplerXML == null)return;
 		
 		CCColladaSource myTimesSource = source(mySamplerXML, "INPUT");
@@ -74,7 +74,7 @@ public class CCColladaAnimation extends CCColladaElement{
 			_myKeyFrames.add(myKeyFrame);
 		}
 		
-		CCXMLElement myChannelXML = theAnimationXML.child("channel");
+		CCDataElement myChannelXML = theAnimationXML.child("channel");
 		_myTarget = myChannelXML.attribute("target");
 	}
 	

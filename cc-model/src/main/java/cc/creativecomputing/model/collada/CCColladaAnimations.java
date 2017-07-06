@@ -13,7 +13,7 @@ package cc.creativecomputing.model.collada;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 
 /*
  * 
@@ -22,8 +22,8 @@ public class CCColladaAnimations extends CCColladaLibrary<CCColladaAnimation>{
 	
 	private List<CCColladaAnimation> _myAnimations = new ArrayList<CCColladaAnimation>();
 
-	CCColladaAnimations(List<CCXMLElement> theAnimationsXML) {
-		for (CCXMLElement myAnimationXML : theAnimationsXML) {
+	CCColladaAnimations(List<CCDataElement> theAnimationsXML) {
+		for (CCDataElement myAnimationXML : theAnimationsXML) {
 			CCColladaAnimation myAnimation = new CCColladaAnimation(myAnimationXML);
 			_myElementMap.put(myAnimation.id(), myAnimation);
 			_myElementList.add(myAnimation);
