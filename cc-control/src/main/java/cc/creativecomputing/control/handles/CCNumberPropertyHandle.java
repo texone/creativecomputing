@@ -2,6 +2,7 @@ package cc.creativecomputing.control.handles;
 
 import cc.creativecomputing.control.CCPropertyMap.CCDoubleConverter;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCMath;
@@ -98,7 +99,14 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 
 	@Override
 	public String valueString() {
-		return _myToType.toString(_myValue);
+		if(numberType() == Integer.class){
+			return (int)_myValue + "";
+		}
+		if(numberType() == Float.class){
+			return CCFormatUtil.nd((float)_myValue, digits());
+		}
+		return CCFormatUtil.nd((double)_myValue, digits());
+			
 	}
 	
 	public Class<?> numberType(){

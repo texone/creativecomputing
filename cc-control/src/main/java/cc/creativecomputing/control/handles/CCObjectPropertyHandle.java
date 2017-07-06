@@ -416,6 +416,14 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		data(_myLastData);
 	}
 	
+	@Override
+	public boolean isChanged() {
+		for(CCPropertyHandle<?> myHandle:_myChildHandles.values()){
+			if(myHandle.isChanged())return true;
+		}
+		return false;
+	}
+	
 	private CCDataObject _myLastData;
 	
 	@Override
