@@ -1,15 +1,17 @@
 package cc.creativecomputing.kle.formats;
 
+import java.io.File;
 import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceChannelRecording;
@@ -42,10 +44,10 @@ public class CCSequenceKLE2Container extends CCSequencesContainer{
 	private void saveSegments(List<CCSequenceSegment> theSegments, Path thePath){
 		if(theSegments == null || theSegments.size() <= 0)return;
 		
-		CCXMLElement mySegmentsXML = new CCXMLElement("segments");
+		CCDataElement mySegmentsXML = new CCDataElement("segments");
 		int id = 0;
 		for(CCSequenceSegment mySegment:theSegments){
-			CCXMLElement mySegmentXML = mySegmentsXML.createChild("segment");
+			CCDataElement mySegmentXML = mySegmentsXML.createChild("segment");
 			mySegmentXML.addAttribute("id", id);
 			mySegmentXML.addAttribute("desc", mySegment.name);
 			mySegmentXML.addAttribute("start", (int)(mySegment.startTime * 1000));
@@ -55,11 +57,17 @@ public class CCSequenceKLE2Container extends CCSequencesContainer{
 		CCXMLIO.saveXMLElement(mySegmentsXML, thePath);
 	}
 	
+	public static void main(String[] args) {
+		Path myPath = Paths.get("/Users/christianr/Dropbox/mkt tests/circles_new.kle");
+		System.out.println(myPath.toUri());
+		System.out.println(myPath.toUri().getPath());
+	}
+	
 	public void save(Path thePath, CCSequenceElements theElements, Map<CCKleChannelType, CCSequence> theSequences, List<CCSequenceSegment> theSegments) {
 		Map<String, String> attributes = new HashMap<>();
 	    attributes.put("create", "true");
         
-        final URI zipFile = URI.create("jar:file:" + thePath.toUri().getPath());
+        final URI zipFile = URI.create("jar:" + thePath.toUri());
 
         try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes);) {
         	Path myFramesFolder = fs.getPath("frames");

@@ -12,7 +12,7 @@ import java.util.Map;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.elements.CCKleChannelType;
@@ -62,7 +62,7 @@ public class CCSequenceKLE1Container extends CCSequencesContainer{
 	        
 	        Path myMetaInfFolder = fs.getPath("META-INF");
 			CCNIOUtil.createDirectories(myMetaInfFolder);
-			CCXMLElement myMappingXML = new CCXMLElement("mapping");
+			CCDataElement myMappingXML = new CCDataElement("mapping");
 			for(CCKleChannelType myKey:theElements.mappings().keySet()){
 				if(myKey != CCKleChannelType.MOTORS)continue;
 				CCSequenceMapping<?> myMapping = theElements.mappings().get(myKey);
@@ -75,22 +75,22 @@ public class CCSequenceKLE1Container extends CCSequencesContainer{
 			
 			CCXMLIO.saveXMLElement(myMappingXML, myMetaInfFolder.resolve("setup.xml"));
 			
-			CCXMLElement mySculptureXML = new CCXMLElement("sculpture");
-			CCXMLElement myElementsXML = mySculptureXML.createChild("elements");
+			CCDataElement mySculptureXML = new CCDataElement("sculpture");
+			CCDataElement myElementsXML = mySculptureXML.createChild("elements");
 			
 			for(CCSequenceElement myElement:theElements){
-				CCXMLElement myElementXML = myElementsXML.createChild("element");
+				CCDataElement myElementXML = myElementsXML.createChild("element");
 				myElementXML.addAttribute("id", myElement.id());
-				CCXMLElement myMotorsXML = myElementXML.createChild("motors");
+				CCDataElement myMotorsXML = myElementXML.createChild("motors");
 				for(CCMotorChannel myChannel:myElement.motorSetup().channels()){
 					if(_myUseStartEndChannel && (myChannel.id() < _myStartChannel || myChannel.id() > _myEndChannel))continue;
-					CCXMLElement myMotorXML = myMotorsXML.createChild("motor");
+					CCDataElement myMotorXML = myMotorsXML.createChild("motor");
 					myMotorXML.addAttribute("id", myChannel.id());
 					myMotorXML.addAttribute("x", myChannel.position().x);
 					myMotorXML.addAttribute("y", myChannel.position().y);
 					myMotorXML.addAttribute("z", myChannel.position().z);
 				}
-				CCXMLElement myBoundsXML = myElementXML.createChild("bounds");
+				CCDataElement myBoundsXML = myElementXML.createChild("bounds");
 				for(CCVector3 myPoint:myElement.motorSetup().bounds()){
 					addPoint(myBoundsXML, myPoint);
 				}
@@ -118,8 +118,8 @@ public class CCSequenceKLE1Container extends CCSequencesContainer{
         }
 	}
 	
-	private void addPoint(CCXMLElement theParentXML, CCVector3 thePoint){
-		CCXMLElement myPointXML = theParentXML.createChild("point");
+	private void addPoint(CCDataElement theParentXML, CCVector3 thePoint){
+		CCDataElement myPointXML = theParentXML.createChild("point");
 		myPointXML.addAttribute("x", thePoint.x);
 		myPointXML.addAttribute("y", thePoint.y);
 		myPointXML.addAttribute("z", thePoint.z);

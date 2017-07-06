@@ -2,7 +2,7 @@ package cc.creativecomputing.kle.formats;
 
 import java.nio.file.Path;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.CCSequence;
 import cc.creativecomputing.kle.CCSequenceRecorder.CCSequenceElementRecording;
@@ -47,26 +47,26 @@ public class CCSequenceXMLFormat implements CCSequenceFormat {
 
 	@Override
 	public void save(Path thePath, CCSequenceMapping<?> theMapping, CCSequence theSequence) {
-		CCXMLElement myKineticXML = new CCXMLElement("ac_kinetic_animation");
+		CCDataElement myKineticXML = new CCDataElement("ac_kinetic_animation");
 		myKineticXML.addAttribute("version", 2);
 
-		CCXMLElement myProjectXML = myKineticXML.createChild("project");
+		CCDataElement myProjectXML = myKineticXML.createChild("project");
 
-		CCXMLElement myBaseUnitXML = myProjectXML.createChild("baseunit");
+		CCDataElement myBaseUnitXML = myProjectXML.createChild("baseunit");
 		myBaseUnitXML.addContent("cm");
 
-		CCXMLElement myResolutionXML = myProjectXML.createChild("resolution");
+		CCDataElement myResolutionXML = myProjectXML.createChild("resolution");
 		myResolutionXML.createChild("u", theSequence.columns());
 		myResolutionXML.createChild("v", theSequence.rows());
 
-		CCXMLElement myAnimationXML = myProjectXML.createChild("animation");
+		CCDataElement myAnimationXML = myProjectXML.createChild("animation");
 		myAnimationXML.createChild("framecount", theSequence.length());
 
-		CCXMLElement myGridXML = myAnimationXML.createChild("grid");
+		CCDataElement myGridXML = myAnimationXML.createChild("grid");
 
 		for (int c = 0; c < theSequence.columns(); c++) {
 			for (int r = 0; r < theSequence.rows(); r++) {
-				CCXMLElement myMotionXML = myGridXML.createChild("motion");
+				CCDataElement myMotionXML = myGridXML.createChild("motion");
 				myMotionXML.addAttribute("u", c);
 				myMotionXML.addAttribute("v", r);
 				for (int f = 0; f < theSequence.length(); f++) {
@@ -85,10 +85,10 @@ public class CCSequenceXMLFormat implements CCSequenceFormat {
 	@Override
 	public CCSequence load(Path thePath, CCSequenceMapping<?> theMapping) {
 
-		CCXMLElement myKineticXML = CCXMLIO.createXMLElement(thePath);
+		CCDataElement myKineticXML = CCXMLIO.createXMLElement(thePath);
 		if (myKineticXML == null)
 			return null;
-		CCXMLElement myProjectXML = myKineticXML.child("project");
+		CCDataElement myProjectXML = myKineticXML.child("project");
 		if (myProjectXML == null)
 			return null;
 
@@ -97,7 +97,7 @@ public class CCSequenceXMLFormat implements CCSequenceFormat {
 			throw new RuntimeException("base unit needs to be cm");
 		}
 
-		CCXMLElement myResolutionXML = myProjectXML.child("resolution");
+		CCDataElement myResolutionXML = myProjectXML.child("resolution");
 		if (myResolutionXML == null) {
 			throw new RuntimeException("resolution element is missing");
 		}
@@ -109,7 +109,7 @@ public class CCSequenceXMLFormat implements CCSequenceFormat {
 			throw new RuntimeException("grid resolution of the current data does not match project resolution");
 		}
 
-		CCXMLElement myAnimationXML = myProjectXML.child("animation");
+		CCDataElement myAnimationXML = myProjectXML.child("animation");
 		if (myAnimationXML == null) {
 			throw new RuntimeException("animation element is missing");
 		}
@@ -117,12 +117,12 @@ public class CCSequenceXMLFormat implements CCSequenceFormat {
 
 		CCSequence result = new CCSequence(theMapping.columns(), theMapping.rows(), theMapping.depth(), myFrameCount);
 
-		CCXMLElement myGridXML = myAnimationXML.child("grid");
-		for (CCXMLElement myMotionXML : myGridXML) {
+		CCDataElement myGridXML = myAnimationXML.child("grid");
+		for (CCDataElement myMotionXML : myGridXML) {
 			int myColumn = myMotionXML.intAttribute("u");
 			int myRow = myMotionXML.intAttribute("v");
 			int i = 0;
-			for (CCXMLElement myHeightXML : myMotionXML) {
+			for (CCDataElement myHeightXML : myMotionXML) {
 				result.frame(i).data()[myColumn][myRow][0] = myHeightXML.doubleContent();
 				i++;
 			}
