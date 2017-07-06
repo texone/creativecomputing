@@ -125,37 +125,37 @@ public class SwingTimelineMenu extends JMenu{
 			add(myRedoMenu);
 		}
 
-		JMenuItem myCutMenu = new JMenuItem("Cut");
-		myCutMenu.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().toolController().selectionController().cut();
-		});
-		myCutMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.META_MASK));
-		myCutMenu.setMnemonic(KeyEvent.VK_T);
-		add(myCutMenu);
-
-		JMenuItem myCopyMenu = new JMenuItem("Copy");
-		myCopyMenu.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().toolController().selectionController().copy();
-		});
-		myCopyMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.META_MASK));
-		myCopyMenu.setMnemonic(KeyEvent.VK_P);
-		add(myCopyMenu);
-
-		JMenuItem myPasteMenu = new JMenuItem("Paste");
-		myPasteMenu.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().toolController().selectionController().insert();
-		});
-		myPasteMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.META_MASK));
-		myPasteMenu.setMnemonic(KeyEvent.VK_A);
-		add(myPasteMenu);
-
-		JMenuItem myReplaceMenu = new JMenuItem("Replace");
-		myReplaceMenu.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().toolController().selectionController().replace();
-		});
-		myReplaceMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.SHIFT_MASK | ActionEvent.META_MASK));
-		myReplaceMenu.setMnemonic(KeyEvent.VK_R);
-		add(myReplaceMenu);
+//		JMenuItem myCutMenu = new JMenuItem("Cut");
+//		myCutMenu.addActionListener(theE -> {
+//			_myTimelineContainer.activeTimeline().toolController().selectionController().cut();
+//		});
+//		myCutMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.META_MASK));
+//		myCutMenu.setMnemonic(KeyEvent.VK_T);
+//		add(myCutMenu);
+//
+//		JMenuItem myCopyMenu = new JMenuItem("Copy");
+//		myCopyMenu.addActionListener(theE -> {
+//			_myTimelineContainer.activeTimeline().toolController().selectionController().copy();
+//		});
+//		myCopyMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.META_MASK));
+//		myCopyMenu.setMnemonic(KeyEvent.VK_P);
+//		add(myCopyMenu);
+//
+//		JMenuItem myPasteMenu = new JMenuItem("Paste");
+//		myPasteMenu.addActionListener(theE -> {
+//			_myTimelineContainer.activeTimeline().toolController().selectionController().insert();
+//		});
+//		myPasteMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.META_MASK));
+//		myPasteMenu.setMnemonic(KeyEvent.VK_A);
+//		add(myPasteMenu);
+//
+//		JMenuItem myReplaceMenu = new JMenuItem("Replace");
+//		myReplaceMenu.addActionListener(theE -> {
+//			_myTimelineContainer.activeTimeline().toolController().selectionController().replace();
+//		});
+//		myReplaceMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.SHIFT_MASK | ActionEvent.META_MASK));
+//		myReplaceMenu.setMnemonic(KeyEvent.VK_R);
+//		add(myReplaceMenu);
 
 		// TODO fix write values
 //		JMenuItem myWriteValuesMenue = new JMenuItem("Write Values");
@@ -214,9 +214,9 @@ public class SwingTimelineMenu extends JMenu{
 		myZoomToMax.setMnemonic(KeyEvent.VK_M);
 		add(myZoomToMax);
 
-		JMenuItem myZoomSelection = new JMenuItem("Zoom to Selection");
+		JMenuItem myZoomSelection = new JMenuItem("Zoom to Loop");
 		myZoomSelection.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().zoomToSelection();
+			_myTimelineContainer.activeTimeline().zoomToLoop();
 		});
 		myZoomSelection.setMnemonic(KeyEvent.VK_S);
 		add(myZoomSelection);
