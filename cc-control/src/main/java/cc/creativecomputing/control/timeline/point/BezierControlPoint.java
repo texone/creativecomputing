@@ -42,6 +42,10 @@ public class BezierControlPoint extends ControlPoint {
 	public BezierControlPoint(double theTime, double theValue) {
 		super(theTime, theValue, ControlPointType.BEZIER);
 	}
+	
+	public BezierControlPoint(ControlPoint theControlPoint) {
+		this(theControlPoint.time(), theControlPoint.value());
+	}
 
 	public boolean hasHandles() {
 		return true;

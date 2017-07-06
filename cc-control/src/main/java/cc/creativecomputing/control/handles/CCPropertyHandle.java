@@ -172,6 +172,11 @@ public abstract class CCPropertyHandle<Type>{
 		value(_myDefaultValue, true);
 	}
 	
+	public boolean isChanged(){
+		if(_myDefaultValue == null || _myValue == null)return false;
+		return !_myDefaultValue.equals(_myValue);
+	}
+	
 	public void onChange(){
 		try{
 			_myEvents.proxy().onChange(value());

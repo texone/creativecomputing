@@ -36,6 +36,10 @@ public class LinearControlPoint extends ControlPoint{
 		super(theTime, theValue, ControlPointType.LINEAR);
 	}
 	
+	public LinearControlPoint(ControlPoint theControlPoint) {
+		this(theControlPoint.time(), theControlPoint.value());
+	}
+	
 	/* (non-Javadoc)
 	 * @see de.artcom.timeline.model.ControlPoint#interpolateValue()
 	 */

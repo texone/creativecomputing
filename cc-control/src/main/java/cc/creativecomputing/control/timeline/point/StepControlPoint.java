@@ -12,6 +12,10 @@ public class StepControlPoint extends ControlPoint{
 		super(theTime, theValue, ControlPointType.STEP);
 	}
 	
+	public StepControlPoint(ControlPoint theControlPoint) {
+		this(theControlPoint.time(), theControlPoint.value());
+	}
+	
 	public double interpolateValue(double theTime, TrackData theData) {
 		ControlPoint myPrevious = getPrevious();
 		
