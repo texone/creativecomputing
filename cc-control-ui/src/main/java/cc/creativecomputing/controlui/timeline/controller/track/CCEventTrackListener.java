@@ -24,20 +24,20 @@ import java.awt.geom.Point2D;
 
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 
-public interface EventTrackListener{
-	public void onCreate(EventTrackController theController, TimedEventPoint thePoint);
+public interface CCEventTrackListener{
+	public void onCreate(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onChange(EventTrackController theController, TimedEventPoint thePoint);
+	public void onChange(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onDelete(EventTrackController theController, TimedEventPoint thePoint);
+	public void onDelete(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onProperties(EventTrackController theController, TimedEventPoint thePoint);
+	public void onProperties(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onClick(EventTrackController theController, TimedEventPoint thePoint);
+	public void onClick(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint);
+	public void onTime(double theTime, CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onTimeChange(double theTime, double theOffset, EventTrackController theController, TimedEventPoint thePoint);
+	public void onTimeChange(double theTime, double theOffset, CCEventTrackController theController, TimedEventPoint thePoint);
 	
 	public void onOut();
 	

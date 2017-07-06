@@ -1,5 +1,6 @@
 package cc.creativecomputing.controlui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -45,12 +46,13 @@ public class CCControlComponent extends JSplitPane{
 		super(JSplitPane.VERTICAL_SPLIT, true);
 		CCUIStyler.styleSplitPane(this);
 		_myInfoPanel = new JPanel();
-		_myInfoPanel.setBackground(Color.RED);
+		_myInfoPanel.setLayout(new BorderLayout());
+		_myInfoPanel.setBackground(Color.GRAY);
+        
 		_myScrollPane = new JScrollPane(_myInfoPanel);
 		_myScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-		_myInfoPanel.setBackground(Color.GRAY);
-        ((FlowLayout)_myInfoPanel.getLayout()).setVgap(0);
-        ((FlowLayout)_myInfoPanel.getLayout()).setHgap(0);
+//		_myScrollPane.setPreferredSize(new Dimension(800,800));
+		_myScrollPane.setBackground(Color.GREEN);
 		_myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		_myTreeComponent = new CCControlTreeComponent("app", this);
@@ -132,20 +134,16 @@ public class CCControlComponent extends JSplitPane{
 	}
 	
 	public void showContent(JPanel theControlPanel){
-        if(_myInfoPanel != null && theControlPanel != null){
-        	_myInfoPanel.removeAll();
-        	_myInfoPanel.invalidate(); 
-        	_myInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
-        	_myInfoPanel.repaint();
-        	_myInfoPanel.add(theControlPanel);
-        	_myInfoPanel.invalidate(); 
-        	_myInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
-        	_myInfoPanel.repaint();
-        	
-        	_myScrollPane.invalidate(); 
-        	_myScrollPane.validate(); // or ((JComponent) getContentPane()).revalidate();
-        	_myScrollPane.repaint();
-        }
+        if(_myInfoPanel == null) return;
+        if(theControlPanel == null)return;
+       
+        _myInfoPanel.removeAll();
+        _myInfoPanel.add(theControlPanel, BorderLayout.NORTH);
+        _myInfoPanel.invalidate(); 
+        _myInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
+        _myInfoPanel.repaint();
+        
+      
 	}
 	
 	public void setPresets(CCObjectPropertyHandle theObjectHandle){

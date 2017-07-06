@@ -4,12 +4,12 @@ import java.nio.file.Paths;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackAdapter;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackAdapter;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
 
-public class CCPresetTrackObject extends EventTrackAdapter{
+public class CCPresetTrackObject extends CCEventTrackAdapter{
 	
 	private CCObjectPropertyHandle _myPropertyHandle;
 	
@@ -21,7 +21,7 @@ public class CCPresetTrackObject extends EventTrackAdapter{
 	private CCDataObject _myPresetObject = null;
 	
 	@Override
-	public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint) {
+	public void onTime(double theTime, CCEventTrackController theController, TimedEventPoint thePoint) {
 		_myRestore = true;
 		String myPreset = thePoint.content().value() == null ? null : (String)thePoint.content().value();
 		

@@ -19,14 +19,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.controller.track.GroupTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.controlui.timeline.view.SwingMultiTrackPanel;
 import cc.creativecomputing.controlui.timeline.view.SwingTableLayout;
-import cc.creativecomputing.controlui.timeline.view.SwingToolChooserPopup;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
 
 
 @SuppressWarnings("serial")
@@ -98,7 +95,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
     	VALUE_FORMAT.applyPattern("#0.00");
     }
 	
-	private GroupTrackController _myGroupController;
+	private CCGroupTrackController _myGroupController;
 	private TimelineController _myTimelineController;
 	private JLabel _myOpenButton;
 	private JLabel _myAddressField;
@@ -112,13 +109,12 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	
 	public SwingGroupTrackView(
 		JFrame theMainFrame,
-		SwingToolChooserPopup theToolChooserPopUp, 
-	    SwingTrackDataRenderer theDataRenderer,
+	    SwingAbstractTrackDataView<?> theDataView,
 		SwingMultiTrackPanel theMultiTrackPanel, 
 		TimelineController theTimelineController, 
-		GroupTrackController theGroupController
+		CCGroupTrackController theGroupController
 	) {
-		super(theMainFrame, theToolChooserPopUp, theDataRenderer, theTimelineController, theGroupController);
+		super(theMainFrame, theDataView);
 		_myMultiTrackPanel = theMultiTrackPanel;
 		_myGroupController = theGroupController;
 		_myTimelineController = theTimelineController;
@@ -173,16 +169,12 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 		
 	}
 	
-	public SwingTrackDataView trackDataView() {
-		return _myDataView;
-	}
-	
-	public GroupTrackController controller(){
+	public CCGroupTrackController controller(){
 		return _myGroupController;
 	}
 	
 	public boolean containsData(){
-		for(TrackController myTrackController:_myGroupController.trackController()) {
+		for(CCTrackController myTrackController:_myGroupController.trackController()) {
 			if(myTrackController.trackData().size() > 0)return true;
 			
 		}
@@ -199,7 +191,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	public void openGroup() {
 		_myOpenButton.setText("[-]");
 		int myIndex = _myMultiTrackPanel.index(this) + 1;
-		for(TrackController myTrackController:_myGroupController.trackController()) {
+		for(CCTrackController myTrackController:_myGroupController.trackController()) {
 			if(!_myShowUnusedItems){
 				if(myTrackController.trackData().size() <= 1)continue;
 			}
@@ -231,7 +223,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	 */
 	public void closeGroup() {
 		_myOpenButton.setText("[+]");
-		for(TrackController myTrackDataController:_myGroupController.trackController()) {
+		for(CCTrackController myTrackDataController:_myGroupController.trackController()) {
 //			CCLog.info(myTrackDataController+":"+myTrackDataController.track().address());
 			_myMultiTrackPanel.removeTrackView(myTrackDataController.track().path());
 		}

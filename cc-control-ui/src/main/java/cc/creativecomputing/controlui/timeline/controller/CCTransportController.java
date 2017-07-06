@@ -29,7 +29,7 @@ import cc.creativecomputing.control.timeline.TrackData;
 import cc.creativecomputing.control.timeline.TrackType;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.MarkerPoint;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackDataController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
 import cc.creativecomputing.controlui.timeline.view.SwingRulerView;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.math.CCMath;
@@ -39,7 +39,7 @@ import cc.creativecomputing.math.CCMath;
  * @author christianriekoff
  *
  */
-public class CCTransportController extends TrackDataController implements CCZoomable{
+public class CCTransportController extends CCTrackDataController implements CCZoomable{
 	
 	public static class RulerInterval{
 		private double _myMin;
@@ -74,10 +74,6 @@ public class CCTransportController extends TrackDataController implements CCZoom
 	
 	private List<RulerInterval> _myIntervals = new ArrayList<CCTransportController.RulerInterval>();
 	
-	public static enum TransportAction{
-		PLAY, STOP, LOOP
-	}
-	
 	private TrackData _myMarkerList;
 	
 	public SwingRulerView _myRulerView;
@@ -98,11 +94,7 @@ public class CCTransportController extends TrackDataController implements CCZoom
 	
 	private CCListenerManager<MarkerListener> _myMarkerListener = CCListenerManager.create(MarkerListener.class);
 	
-	public static enum PlayMode {
-		PLAYING, STOPPED
-	}
-	
-	private PlayMode _myPlayMode;
+	private boolean _myIsPlaying;
 	
 	private boolean _myIsInLoop = false;
 	
@@ -121,7 +113,7 @@ public class CCTransportController extends TrackDataController implements CCZoom
 		_myTimelineController = theTimelineController;
 		_myMarkerList = new TrackData(null);
 		
-		_myPlayMode = PlayMode.STOPPED;
+		_myIsPlaying = false;
 		_myCurrentTime = 0;
 		_mySpeedFactor = 1;
 		
@@ -410,19 +402,18 @@ public class CCTransportController extends TrackDataController implements CCZoom
 	/* (non-Javadoc)
 	 * @see de.artcom.timeline.controller.TrackDataController#createPoint(de.artcom.timeline.model.points.ControlPoint)
 	 */
-	@Override
-	public ControlPoint createPointImpl(ControlPoint theCurveCoords) {
-		MarkerPoint myMarkerPoint = new MarkerPoint(theCurveCoords.time(), "");
-		
-		if(_myRulerView != null)_myRulerView.showMarkerDialog(myMarkerPoint);
-		
-		return myMarkerPoint;
-	}
+//	@Override
+//	public ControlPoint createPointImpl(ControlPoint theCurveCoords) {
+//		MarkerPoint myMarkerPoint = new MarkerPoint(theCurveCoords.time(), "");
+//		
+//		if(_myRulerView != null)_myRulerView.showMarkerDialog(myMarkerPoint);
+//		
+//		return myMarkerPoint;
+//	}
 	
 	/* (non-Javadoc)
      * @see de.artcom.timeline.controller.TrackDataController#dragPointImp(java.awt.geom.Point2D, boolean)
      */
-    @Override
     public void dragPointImp(ControlPoint theDraggedPoint, ControlPoint myTargetPosition, ControlPoint theMovement, boolean theIsPressedShift) {
     	ControlPoint myPoint = _myTrackContext.quantize(myTargetPosition);
     	trackData().move(theDraggedPoint, myPoint);
@@ -441,7 +432,7 @@ public class CCTransportController extends TrackDataController implements CCZoom
 			if(!myPressedShift) {
 				moveTransport(e.getX());
 			}else {
-				super.mousePressed(e, null);
+//				super.mousePressed(e, null);
 			}
 		}else {
 			_myTimeRangeController.mousePressed(e);
@@ -460,7 +451,7 @@ public class CCTransportController extends TrackDataController implements CCZoom
 				moveTransport(e.getX());
 				_myTimelineController.renderInfo();
 			}else {
-				super.mouseDragged(e, null);
+//				super.mouseDragged(e, null);
 			}
 			_myTimelineController.renderInfo();
 		}else {
@@ -488,20 +479,20 @@ public class CCTransportController extends TrackDataController implements CCZoom
 			if(!myPressedShift) {
 //				moveTransport(e.getX());
 			}else {
-				super.mouseReleased(e, null);
+//				super.mouseReleased(e, null);
 			}
 		}
 	}
 	
 	public boolean isPlaying() {
-		return _myPlayMode == PlayMode.PLAYING;
+		return _myIsPlaying;
 	}
 	
 	public void play() {
 		if (isPlaying()) {
 			rewind();
 		} else {
-			_myPlayMode = PlayMode.PLAYING;
+			_myIsPlaying = true;
 		}
 		for(TransportStateListener myStateListener:_myStateListener){
 			myStateListener.play(_myCurrentTime);
@@ -512,7 +503,7 @@ public class CCTransportController extends TrackDataController implements CCZoom
 		if (!isPlaying()) {
 			rewind();
 		}
-		_myPlayMode = PlayMode.STOPPED;
+		_myIsPlaying = false;
 		for(TransportStateListener myStateListener:_myStateListener){
 			myStateListener.stop(_myCurrentTime);
 		}
@@ -527,41 +518,24 @@ public class CCTransportController extends TrackDataController implements CCZoom
 		doLoop(!doLoop());
 	}
 	
-	public void onTransportAction(final TransportAction theAction) {
-		switch (theAction) {
-		case PLAY:
-			play();
-			break;
-		case STOP:
-			stop();
-			break;
-		case LOOP:
-			loop();
-			break;
-
-		default:
-			break;
-		}
-	}
-	
 	public void update(double theDeltaT) {
 		if(_myRulerView != null)_myRulerView.render();
-		if (_myPlayMode == PlayMode.PLAYING) {
-			_myCurrentTime += theDeltaT * _mySpeedFactor;
+		if (!_myIsPlaying) return;
+		
+		_myCurrentTime += theDeltaT * _mySpeedFactor;
 			
-			if(_myIsInLoop && _myCurrentTime > _myLoop.end()) {
-				_myCurrentTime = _myLoop.start() + _myCurrentTime - _myLoop.end();
-			}
-			_myTransportEvents.proxy().time(_myCurrentTime);
-			
-			MarkerPoint myCurrentMarker = (MarkerPoint)_myMarkerList.getFirstPointAt(_myCurrentTime);
-			if(myCurrentMarker != _myLastMarker && _myLastMarker != null){
-				for(MarkerListener myListener:_myMarkerListener){
-					myListener.onMarker(_myLastMarker);
-				}
-			}
-			_myLastMarker = myCurrentMarker;
+		if(_myIsInLoop && _myCurrentTime > _myLoop.end()) {
+			_myCurrentTime = _myLoop.start() + _myCurrentTime - _myLoop.end();
 		}
+		_myTransportEvents.proxy().time(_myCurrentTime);
+			
+		MarkerPoint myCurrentMarker = (MarkerPoint)_myMarkerList.getFirstPointAt(_myCurrentTime);
+		if(myCurrentMarker != _myLastMarker && _myLastMarker != null){
+			for(MarkerListener myListener:_myMarkerListener){
+				myListener.onMarker(_myLastMarker);
+			}
+		}
+		_myLastMarker = myCurrentMarker;
 	}
 	
 	double _myLastTime = -1;

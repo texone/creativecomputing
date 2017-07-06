@@ -18,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import cc.creativecomputing.control.CCEnvelope;
@@ -51,7 +50,6 @@ import cc.creativecomputing.controlui.controls.code.CCRealtimeCompileControl;
 import cc.creativecomputing.controlui.controls.code.CCRuntimeCompileControl;
 import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.math.CCColor;
 
@@ -76,18 +74,22 @@ public class CCObjectControl extends JPanel implements CCControl{
 
 	public CCObjectControl(CCObjectPropertyHandle thePropertyHandle, CCControlComponent theInfoPanel, int theDepth){
 		_myProperty = thePropertyHandle;
-		
+
+		_myControlComponent = new JPanel(new GridBagLayout());
+		_myControlComponent.setBackground(CCColorMap.getColor(_myProperty.path()).brighter());
+		_myControlComponent.setBorder(BorderFactory.createEmptyBorder());
 		_myProperty.events().add(theValue ->{
 			try{
 				if(_myIsSelected){
 					remove(_myControlComponent);
 				}
-				createUI();
+				createUI(false);
 				if(_myIsSelected){
 					GridBagConstraints myConstraints = new GridBagConstraints();
 					myConstraints.gridx = 0;
 					myConstraints.gridy = 1;
 					myConstraints.gridwidth = 3;
+					myConstraints.weightx = 1.0;
 					myConstraints.anchor = GridBagConstraints.LINE_START;
 					myConstraints.fill = GridBagConstraints.HORIZONTAL;
 					add(_myControlComponent, myConstraints);
@@ -103,6 +105,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		});
 		
 		setBackground(CCColorMap.getColor(_myProperty.path()));
+		setBorder(BorderFactory.createEmptyBorder());
 		
 		_myDepth = theDepth;
 		
@@ -111,7 +114,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		
 		_myName = _myProperty.name();
 		
-		_myPopUp = new CCPropertyPopUp(_myProperty, theInfoPanel);
+		_myPopUp = new CCPropertyPopUp(this, _myProperty, theInfoPanel);
 		
 		GridBagConstraints myConstraints = new GridBagConstraints();
 		myConstraints.gridx = 0;
@@ -121,6 +124,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		myConstraints.fill = GridBagConstraints.HORIZONTAL;
 		myConstraints.weightx = 1f;
 		myConstraints.insets = new Insets(0, (5  + 10 * (_myDepth - 1)) * SwingGuiConstants.SCALE, 0, 5 * SwingGuiConstants.SCALE);
+	
 		JLabel myLabel = new JLabel("[+] " + _myName, SwingConstants.LEFT);
 		myLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		myLabel.setForeground(Color.WHITE);
@@ -144,6 +148,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 						myConstraints.gridx = 0;
 						myConstraints.gridy = 1;
 						myConstraints.gridwidth = 3;
+						myConstraints.weightx = 1f;
 						myConstraints.anchor = GridBagConstraints.LINE_START;
 						myConstraints.fill = GridBagConstraints.HORIZONTAL;
 						add(_myControlComponent, myConstraints);
@@ -179,12 +184,14 @@ public class CCObjectControl extends JPanel implements CCControl{
 	private DefaultMutableTreeNode _myParentNode;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void createUI(){
+	private void createUI(boolean theHideUnchanged){
 		
-		_myControlComponent = new JPanel(new GridBagLayout());
-		_myControlComponent.setBackground(CCColorMap.getColor(_myProperty.path()).brighter());
+		
+		_myControlComponent.removeAll();
 		
 		for(CCPropertyHandle<?> myPropertyHandle:_myProperty.children().values()){
+			if(theHideUnchanged && !myPropertyHandle.isChanged())continue;
+			
 			Class<?> myClass = myPropertyHandle.type();
 			
 			CCControl myControlPanel;
@@ -239,7 +246,21 @@ public class CCObjectControl extends JPanel implements CCControl{
 	
 	public void createUI(DefaultMutableTreeNode theParentNode){
 		_myParentNode = theParentNode;
-		createUI();
+		createUI(false);
+	}
+	
+	public void hideUnchanged(){
+		createUI(true);
+		_myInfoPanel.invalidate(); 
+		_myInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
+		_myInfoPanel.repaint();
+	}
+	
+	public void showUnchanged(){
+		createUI(false);
+		_myInfoPanel.invalidate(); 
+		_myInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
+		_myInfoPanel.repaint();
 	}
 	
 	public CCObjectPropertyHandle propertyHandle(){
@@ -257,6 +278,8 @@ public class CCObjectControl extends JPanel implements CCControl{
 		myConstraints.gridx = 0;
 		myConstraints.gridwidth = 3;
 		myConstraints.gridy = theY;
+		myConstraints.weightx = 1d;
+		myConstraints.anchor = GridBagConstraints.LINE_START;
 		myConstraints.fill = GridBagConstraints.HORIZONTAL;
 		thePanel.add(this, myConstraints);
 	}

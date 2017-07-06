@@ -12,10 +12,10 @@ import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
-import cc.creativecomputing.controlui.timeline.controller.track.CurveTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
+import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
 import cc.creativecomputing.math.CCMath;
 
 public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
@@ -26,7 +26,7 @@ public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
 		_myClipTrack = theClipTrack;
 	}
 	
-	private void drawCurvePiece(CurveTrackController theController, SwingTrackDataView theView, ControlPoint myFirstPoint, ControlPoint mySecondPoint, GeneralPath thePath, double theStartTime, double theEndTime) {
+	private void drawCurvePiece(CCCurveTrackController theController, SwingAbstractTrackDataView<?> theView, ControlPoint myFirstPoint, ControlPoint mySecondPoint, GeneralPath thePath, double theStartTime, double theEndTime) {
         if (myFirstPoint.equals(mySecondPoint)) {
             return;
         }
@@ -97,7 +97,7 @@ public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
         thePath.lineTo(p2.getX(), p2.getY());     
     }
 	
-	private void drawCurve(CurveTrackController _myController, SwingTrackDataView theView, Graphics2D g, TimedEventPoint theEvent) {
+	private void drawCurve(CCCurveTrackController _myController, SwingAbstractTrackDataView<?> theView, Graphics2D g, TimedEventPoint theEvent) {
     	
         if (_myController.trackData().size() == 0) {
         	double myLowerBound = CCMath.max(theEvent.time(), theView.context().lowerBound());
@@ -153,7 +153,7 @@ public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
     }
 	
 	@Override
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, SwingTrackDataView theView, Graphics2D theG2d) {
+	public void renderTimedEvent(TimedEventPoint theTimedEvent, SwingAbstractTrackDataView<?> theView, Graphics2D theG2d) {
 		if(theTimedEvent.content() == null || theTimedEvent.content().value() == null) {
 			return;
 		}
@@ -161,9 +161,9 @@ public class CCClipTrackDataRenderer extends SwingTrackDataRenderer{
 		TimelineController myTimelineController =_myClipTrack.timelineController(theTimedEvent.content().value().toString());
 		myTimelineController.view();
 		if(myTimelineController != null){
-			for(TrackController myTrackController:myTimelineController.trackController()){
-				if(myTrackController instanceof CurveTrackController){
-					drawCurve((CurveTrackController)myTrackController, theView, theG2d, theTimedEvent);
+			for(CCTrackController myTrackController:myTimelineController.trackController()){
+				if(myTrackController instanceof CCCurveTrackController){
+					drawCurve((CCCurveTrackController)myTrackController, theView, theG2d, theTimedEvent);
 				}
 			}
 		}

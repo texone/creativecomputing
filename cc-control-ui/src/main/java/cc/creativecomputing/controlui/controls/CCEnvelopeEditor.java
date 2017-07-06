@@ -51,7 +51,7 @@ public class CCEnvelopeEditor extends JFrame {
 		// panel to test
 		JPanel testPanel = new JPanel();
 		testPanel.setBackground(Color.blue);
-		containerPanel.add(_myCurvePanel.view(), BorderLayout.CENTER);
+		containerPanel.add(_myCurvePanel.dataView(), BorderLayout.CENTER);
 
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(containerPanel, BorderLayout.CENTER);

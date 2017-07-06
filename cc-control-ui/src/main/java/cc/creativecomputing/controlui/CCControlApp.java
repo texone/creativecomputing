@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
+import javax.swing.InputMap;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -109,6 +111,10 @@ public class CCControlApp  {
         // Display the window.
         _myFrame.pack();
         _myFrame.setVisible(true);
+        
+        InputMap im = (InputMap)UIManager.get("Button.focusInputMap");
+        im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
+        im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
 	}
 
 	public CCControlApp(Object theRootObject, CCAnimator theAnimator, Class<?> thePrefClass) {

@@ -13,8 +13,6 @@ import javax.swing.JTextField;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCSwingDraggableValueBox;
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.math.CCMath;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
@@ -39,13 +37,8 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 			_myTriggerEvent = false;
 			_myValue = ((Number)theValue).doubleValue();
 			updateSlider(_myValue);
-			if(_myHandle.numberType() == Integer.class){
-				_myValueField.setText((int)_myValue + "");
-			}else{
-				_myValueField.setText(CCFormatUtil.nd((float)_myValue, theHandle.digits()) + "");
-			}
+			_myValueField.setText(theHandle.valueString());
 			_myTriggerEvent = true;
-			
 		});
  
         //Create the slider.

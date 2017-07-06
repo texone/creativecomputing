@@ -38,14 +38,17 @@ import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.arrange.SwingClipTrackObjectDialog;
 import cc.creativecomputing.controlui.timeline.controller.arrange.SwingGroupTrackObjectDialog;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.GroupTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingMultiTrackPanel.MultiTrackMouseAdapter;
+import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackDataView;
+import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
+import cc.creativecomputing.controlui.timeline.view.track.SwingEventTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingEventTrackDialog;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 
 
@@ -60,8 +63,6 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 	private SwingMultiTrackPanel _myRulerPanel;
 	private SwingMultiTrackPanel _myMultiTrackPanel;
 	private SwingRulerView _myRuler;
-
-	private SwingToolChooserPopup _myToolChooserPopup;
 	
 	private List<Object> _myTracks = new ArrayList<Object>();
 	
@@ -140,7 +141,6 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 				_myJScrollbar.setValues(myValue, myExtent, 0, 1000);
 		});
 		_myRuler.timelineController(_myTimelineController);
-		_myToolChooserPopup = new SwingToolChooserPopup(_myTimelineController.curveTool());
 	}
 	
 	public Container container(){
@@ -151,20 +151,15 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		return _myRuler;
 	}
 	
-	public void openTimelinePopup(int theX, int theY) {
-		_myToolChooserPopup.show(_myMultiTrackPanel, theX, theY);
-	}
-	
 	/* (non-Javadoc)
 	 * @see de.artcom.timeline.view.TimelineView#addGroupTrack(int, de.artcom.timeline.controller.GroupTrackController, java.lang.String)
 	 */
-	public SwingGroupTrackView addGroupTrack(int theIndex, GroupTrackController theController) {
+	public SwingGroupTrackView addGroupTrack(int theIndex, CCGroupTrackController theController) {
 		assert (theIndex >= 0);
 
 		SwingGroupTrackView myTrackView = new SwingGroupTrackView(
 			_myMainFrame,
-			_myToolChooserPopup, 
-			_myStringDataRenderer,
+			new SwingEventTrackDataView(null, _myTimelineController, theController),
 			_myMultiTrackPanel,
 			_myTimelineController, 
 			theController
@@ -182,48 +177,44 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		_myPane.updateUI();
 	}
 	
-	private SwingTrackDataRenderer _myTrackDataRenderer = new SwingTrackDataRenderer();
 	private CCStringTrackDataRenderer _myStringDataRenderer = new CCStringTrackDataRenderer();
-
-	public void trackDataRenderer(SwingTrackDataRenderer theTrackDataRenderer) {
-		_myTrackDataRenderer = theTrackDataRenderer;
-	}
 	
 	/**
 	 * Gets the Track Model and creates all needed Views and adds them to the needed listeners
 	 * @param theIndex
 	 * @param theTrack
 	 */
-	public SwingTrackView addTrack(int theIndex, TrackController theTrackDataController, CCClipTrackObject theObject) {
+	public SwingTrackView addTrack(int theIndex, CCTrackController theTrackDataController, CCClipTrackObject theObject) {
 		assert (theIndex >= 0);
+
+		SwingAbstractTrackDataView<?> myDataView = null;
 		
-		SwingTrackDataRenderer myTrackDataRenderer = _myTrackDataRenderer;
-		
-		if(
-			theTrackDataController.track().property() instanceof CCStringPropertyHandle || 
-			theTrackDataController.track().property() instanceof CCEnumPropertyHandle || 
-			theTrackDataController.track().property() instanceof CCObjectPropertyHandle || 
-			theTrackDataController.track().property() instanceof CCSelectionPropertyHandle
-		){
-			if(theObject == null){
-				myTrackDataRenderer = _myStringDataRenderer;
-			}else{
-				myTrackDataRenderer = new CCClipTrackDataRenderer(theObject);
+		if(theTrackDataController instanceof CCEventTrackController){
+			SwingTrackDataRenderer myTrackDataRenderer = null;
+			if(
+				theTrackDataController.track().property() instanceof CCStringPropertyHandle || 
+				theTrackDataController.track().property() instanceof CCEnumPropertyHandle || 
+				theTrackDataController.track().property() instanceof CCObjectPropertyHandle || 
+				theTrackDataController.track().property() instanceof CCSelectionPropertyHandle
+			){
+				if(theObject == null){
+					myTrackDataRenderer = _myStringDataRenderer;
+				}else{
+					myTrackDataRenderer = new CCClipTrackDataRenderer(theObject);
+				}
 			}
-		}
-		
-		if(theTrackDataController.track().property() instanceof CCPathHandle){
-			myTrackDataRenderer = new CCPathTrackDataRenderer();
-		}
-		
-		if(theTrackDataController.track().property() instanceof CCColorPropertyHandle){
-			myTrackDataRenderer = new CCPathTrackDataRenderer();
+				
+			if(theTrackDataController.track().property() instanceof CCPathHandle){
+				myTrackDataRenderer = new CCPathTrackDataRenderer();
+			}
+			myDataView = new SwingEventTrackDataView(myTrackDataRenderer, _myTimelineController, (CCEventTrackController)theTrackDataController);
+		}else if(theTrackDataController instanceof CCCurveTrackController){
+			myDataView = new SwingCurveTrackDataView(_myTimelineController, (CCCurveTrackController)theTrackDataController);
 		}
 		
 		SwingTrackView myTrackView = new SwingTrackView(
 			_myMainFrame,
-			_myToolChooserPopup, 
-			myTrackDataRenderer,
+			myDataView,
 			_myTimelineController,
 			theTrackDataController
 		);
@@ -293,9 +284,9 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		if (e.getSource().getClass().equals(SwingTrackDataView.class)) {
-			((SwingTrackDataView) e.getSource()).render();
-		}
+//		if (e.getSource().getClass().equals(SwingTrackDataView.class)) {
+//			((SwingTrackDataView) e.getSource()).render();
+//		}
 	}
 
 	@Override
@@ -309,11 +300,11 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		_myEventTrackDialog.setVisible(true);
 	}
 
-	public void openClipTrackDialog(EventTrackController theController, TimedEventPoint thePoint) {
+	public void openClipTrackDialog(CCEventTrackController theController, TimedEventPoint thePoint) {
 		_myClipTrackObjectDialog.edit(theController, thePoint);
 	}
 
-	public void openGroupPresetDialog(CCObjectPropertyHandle theHandle, EventTrackController theController, TimedEventPoint thePoint) {
+	public void openGroupPresetDialog(CCObjectPropertyHandle theHandle, CCEventTrackController theController, TimedEventPoint thePoint) {
 		_myGroupTrackObjectDialog.edit(theHandle, theController, thePoint);
 	}
 

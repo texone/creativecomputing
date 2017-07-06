@@ -21,8 +21,8 @@ package cc.creativecomputing.controlui.timeline.controller.actions;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackDataController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
 import cc.creativecomputing.controlui.util.Action;
 
 /**
@@ -31,7 +31,7 @@ import cc.creativecomputing.controlui.util.Action;
  */
 public class MoveEventAction implements Action{
 	
-	private TrackDataController _myEventTrackController;
+	private CCTrackDataController _myEventTrackController;
 	private TimedEventPoint _myEventPoint;
 	private ControlPoint _myEndControlPoint;
 	private ControlPoint _myStartControlPoint;
@@ -39,7 +39,7 @@ public class MoveEventAction implements Action{
 	private double _myEventEndEnd;
 	
 	public MoveEventAction(
-		EventTrackController theEventTrackController, 
+		CCEventTrackController theEventTrackController, 
 		TimedEventPoint theEventPoint, 
 		ControlPoint theStartControlPoint, 
 		ControlPoint theEndControlPoint,

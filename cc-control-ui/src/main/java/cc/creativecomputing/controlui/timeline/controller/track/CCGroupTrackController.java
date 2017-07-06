@@ -25,7 +25,6 @@ import java.util.List;
 
 import cc.creativecomputing.control.timeline.GroupTrack;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.controller.ToolController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
 
 
@@ -33,19 +32,18 @@ import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
  * @author christianriekoff
  *
  */
-public class GroupTrackController extends EventTrackController{
+public class CCGroupTrackController extends CCEventTrackController{
 
 	private GroupTrack _myGroupTrack;
 	private SwingGroupTrackView _myGroupTrackView;
 	
-	private List<TrackController> _myTracks = new ArrayList<>();
+	private List<CCTrackController> _myTracks = new ArrayList<>();
 	
-	public GroupTrackController(
+	public CCGroupTrackController(
 		TimelineController theTimelineController,
-		ToolController theToolController,
 		GroupTrack theGroupTrack
 	) {
-		super(theTimelineController, theToolController, theGroupTrack, null);
+		super(theTimelineController, theGroupTrack, null);
 		_myParent = this;
 		_myGroupTrack = theGroupTrack;
 	}
@@ -55,7 +53,7 @@ public class GroupTrackController extends EventTrackController{
 		_myGroupTrackView = theView;
 	}
 	
-	public void addTrack(TrackController theTrackController) {
+	public void addTrack(CCTrackController theTrackController) {
 
 		synchronized(_myTracks){
 			if(!_myTracks.contains(theTrackController))_myTracks.add(theTrackController);
@@ -63,7 +61,7 @@ public class GroupTrackController extends EventTrackController{
 		_myGroupTrack.addTrack(theTrackController.track());
 	}
 	
-	public void removeTrack(TrackController theTrackController){
+	public void removeTrack(CCTrackController theTrackController){
 		_myGroupTrack.tracks().remove(theTrackController.track());
 		synchronized(_myTracks){
 			if(_myTracks.contains(theTrackController))_myTracks.remove(theTrackController);
@@ -88,7 +86,7 @@ public class GroupTrackController extends EventTrackController{
 	}
 	
 	public void mute(boolean theIsMuted) {
-		for(TrackController myTrackController:trackController()) {
+		for(CCTrackController myTrackController:trackController()) {
 			myTrackController.mute(theIsMuted);
 		}
 	}
@@ -97,7 +95,7 @@ public class GroupTrackController extends EventTrackController{
 		return _myGroupTrack.isOpen();
 	}
 	
-	public List<TrackController> trackController(){
+	public List<CCTrackController> trackController(){
 		return _myTracks;
 	}
 	
@@ -106,9 +104,9 @@ public class GroupTrackController extends EventTrackController{
 		
 		if(theCloseRecursive){
 			synchronized(_myTracks){
-				for(TrackController myTrack:_myTracks){
-					if(myTrack instanceof GroupTrackController){
-						((GroupTrackController)myTrack).closeGroup(theCloseRecursive);
+				for(CCTrackController myTrack:_myTracks){
+					if(myTrack instanceof CCGroupTrackController){
+						((CCGroupTrackController)myTrack).closeGroup(theCloseRecursive);
 					}
 				}
 			}
@@ -125,9 +123,9 @@ public class GroupTrackController extends EventTrackController{
 		if(!theOpenRecursive)return;
 		
 		synchronized(_myTracks){
-			for(TrackController myTrack:_myTracks){
-				if(myTrack instanceof GroupTrackController){
-					((GroupTrackController)myTrack).openGroup(theOpenRecursive);
+			for(CCTrackController myTrack:_myTracks){
+				if(myTrack instanceof CCGroupTrackController){
+					((CCGroupTrackController)myTrack).openGroup(theOpenRecursive);
 				}
 			}
 		}
@@ -140,7 +138,7 @@ public class GroupTrackController extends EventTrackController{
 		_myGroupTrack.color(theNewColor);
 		if(_myGroupTrackView!=null)_myGroupTrackView.color(theNewColor);
 		synchronized(_myTracks){
-			for(TrackController myController:_myTracks) {
+			for(CCTrackController myController:_myTracks) {
 				myController.color(theNewColor);
 			}
 		}
@@ -157,7 +155,7 @@ public class GroupTrackController extends EventTrackController{
 	public void time(double theTime) {
 		super.time(theTime);
 		synchronized(_myTracks){
-			for(TrackController myTrack:_myTracks){
+			for(CCTrackController myTrack:_myTracks){
 				myTrack.time(theTime);
 			}
 		}

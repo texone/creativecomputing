@@ -26,7 +26,7 @@ import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.math.CCMath;
 
 
@@ -36,10 +36,10 @@ public  class SwingEventPopup extends JPopupMenu {
 	 * 
 	 */
 	private static final long serialVersionUID = -7869280073371142253L;
-	private EventTrackController _myEventTrackController;
+	private CCEventTrackController _myEventTrackController;
 	private TimedEventPoint _myEvent;
 
-	public SwingEventPopup(EventTrackController theEventTrackController) {
+	public SwingEventPopup(CCEventTrackController theEventTrackController) {
 		_myEventTrackController = theEventTrackController;
 
 		JMenuItem entryHead = new JMenuItem("Timed Event");

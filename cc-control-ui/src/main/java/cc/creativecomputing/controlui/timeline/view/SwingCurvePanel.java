@@ -26,12 +26,11 @@ import java.awt.event.ComponentListener;
 import javax.swing.JFrame;
 
 import cc.creativecomputing.control.timeline.Track;
-import cc.creativecomputing.controlui.timeline.controller.CurveToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
-import cc.creativecomputing.controlui.timeline.controller.track.DoubleTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCDoubleTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
+import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
+import cc.creativecomputing.core.logging.CCLog;
 
 /**
  * @author christianriekoff
@@ -44,26 +43,21 @@ public class SwingCurvePanel extends SwingAbstractTrackView implements Component
 	 */
 	private static final long serialVersionUID = 1507288020816738412L;
 	private TrackContext _myTrackContext;
-	private TrackController _myTrackController;
+	private CCDoubleTrackController _myTrackController;
 	private Track _myTrack;
 	
 	public SwingCurvePanel(JFrame theFrame) {
 		_myMainFrame = theFrame;
 		_myTrackContext = new TrackContext();
 		_myTrack = new Track(null);
-		CurveToolController myCurveToolController = new CurveToolController(_myTrackContext);
-		_myTrackController = new DoubleTrackController(_myTrackContext, myCurveToolController,_myTrack, null);
-		_myDataView = new SwingTrackDataView(new SwingToolChooserPopup(myCurveToolController), null, null, _myTrackController);
+		_myTrackController = new CCDoubleTrackController(_myTrackContext,_myTrack, null);
+		_myDataView = new SwingCurveTrackDataView(null, _myTrackController);
 		_myDataView.isEnvelope(true);
 		_myTrackController.view(this);
 //		((TrackDataController)_myTrackController).trackDataView(_myTrackDataView);
 		
 		_myDataView.addComponentListener(this);
 		_myTrackContext.zoomController().addZoomable(_myTrackController);
-	}
-	
-	public SwingTrackDataView view() {
-		return _myDataView;
 	}
 	
 	public Track track(){
@@ -76,19 +70,23 @@ public class SwingCurvePanel extends SwingAbstractTrackView implements Component
 
 	@Override
 	public void componentHidden(ComponentEvent theArg0) {
+		CCLog.info("Component HIDDEN");
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent theArg0) {
+		CCLog.info("Component Moved");
 	}
 
 	@Override
 	public void componentResized(ComponentEvent theArg0) {
 		_myDataView.render();
+		CCLog.info("Component Resized");
 	}
 
 	@Override
 	public void componentShown(ComponentEvent theArg0) {
+		CCLog.info("Component SHOWN");
 	}
 	
 	public void updateView(){

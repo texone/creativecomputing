@@ -3,31 +3,34 @@ package cc.creativecomputing.controlui.timeline.controller.track;
 import cc.creativecomputing.control.handles.CCEventTriggerHandle;
 import cc.creativecomputing.control.timeline.Track;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.StepControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.CurveToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 
-public class TriggerTrackController extends CurveTrackController{
+public class CCTriggerTrackController extends CCCurveTrackController{
 
 	private CCEventTriggerHandle _myTriggerHandle;
 	
-	public TriggerTrackController(TrackContext theTrackContext, CurveToolController theCurveTool, Track theTrack, GroupTrackController theParent) {
-		super(theTrackContext, theCurveTool, theTrack, theParent);
+	public CCTriggerTrackController(TrackContext theTrackContext, Track theTrack, CCGroupTrackController theParent) {
+		super(theTrackContext, theTrack, theParent);
 		_myTriggerHandle = (CCEventTriggerHandle)theTrack.property();
-	}
-
-	@Override
-	public ControlPoint createPointImpl(ControlPoint theCurveCoords) {
-		return new StepControlPoint(theCurveCoords.time(), 0.5);
+		
+		_myCreateTool.setTool(CCTimelineTools.CREATE_TRIGGER_POINT);
+		_myActiveTool = _myCreateTool;
 	}
 	
-	public ControlPoint pointAt(double theTime) {
+	@Override
+	public CCTimelineTools[] tools() {
+		return new CCTimelineTools[]{CCTimelineTools.CREATE_TRIGGER_POINT};
+	}
+	
+	
+	private ControlPoint _myLastControlPoint = null;
+
+	private ControlPoint pointAt(double theTime) {
 		ControlPoint myCurveCoords = new ControlPoint(theTime, 0);
 		return trackData().lower(myCurveCoords);
 	}
 	
-	private ControlPoint _myLastControlPoint = null;
-
 	@Override
 	public void timeImplementation(double theTime, double theValue) {
 		ControlPoint myEventPoint = pointAt(theTime);

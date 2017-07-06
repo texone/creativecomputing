@@ -10,8 +10,8 @@ import cc.creativecomputing.control.timeline.AbstractTrack;
 import cc.creativecomputing.control.timeline.GroupTrack;
 import cc.creativecomputing.control.timeline.TrackData;
 import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuatizeMode;
-import cc.creativecomputing.controlui.timeline.controller.track.GroupTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
@@ -85,7 +85,7 @@ public class FileManager {
 		private void loadGroupTrack(CCDataObject theData, TimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
-			GroupTrackController myController;
+			CCGroupTrackController myController;
 			try{
 				myController = theTimeline.createGroupController(myPath);
 			}catch(Exception e){
@@ -112,7 +112,7 @@ public class FileManager {
 		private void loadDataTrack(CCDataObject theData, TimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
-			TrackController myController;
+			CCTrackController myController;
 			try{
 				myController = theTimeline.createController(myPath);
 			}catch(Exception e){
@@ -185,7 +185,7 @@ public class FileManager {
 		private void insertGroupTrack(CCDataObject theData, TimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
-			GroupTrackController myController = theTimeline.createGroupController(myPath);
+			CCGroupTrackController myController = theTimeline.createGroupController(myPath);
 			myController.groupTrack().insertData(theData, theTimeline.transportController().time());
 			
 			Object myData = theData.get(GroupTrack.GROUP_TRACKS);
@@ -202,11 +202,12 @@ public class FileManager {
 		private void insertDataTrack(CCDataObject theData, TimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
-			TrackController myController = theTimeline.createController(myPath);
+			CCTrackController myController = theTimeline.createController(myPath);
 			myController.track().insertData(theData, theTimeline.transportController().time());
 		}
 		
 		private void insertTrack(CCDataObject theData, TimelineController theTimeline){
+			CCLog.info(theData);
 			if(theData.containsKey("tracks")){
 				insertGroupTrack(theData, theTimeline);
 			}else{
@@ -222,9 +223,25 @@ public class FileManager {
 			
 			try {
 				CCDataObject myTimelineData = CCDataIO.createDataObject(thePath);
-				
-				CCDataObject myTransportData = myTimelineData.getObject(TRANSPORT_ELEMENT);
-				loadTransport(myTransportData, theTimelineController.transportController());
+				if(myTimelineData.containsKey(TIMELINES_ELEMENT)){
+					myTimelineData = myTimelineData.getObject(TIMELINES_ELEMENT);
+					myTimelineData = myTimelineData.getObject(new ArrayList<>(myTimelineData.keySet()).get(0));
+				}
+//				CCDataObject myTransportData = myTimelineData.getObject(TRANSPORT_ELEMENT);
+				CCLog.info(myTimelineData);
+				if(myTimelineData.containsKey(TIMELINE_ELEMENT)){
+					Object myTimelineObj = myTimelineData.get(TIMELINE_ELEMENT);
+					if(myTimelineObj instanceof CCDataObject){
+						insertTracks((CCDataObject)myTimelineObj, theTimelineController);
+					}else{
+						CCDataArray myDataArray = (CCDataArray)myTimelineObj;
+						for(int i = 0; i < myDataArray.size();i++){
+							insertTracks(myDataArray.getObject(i), theTimelineController);
+						}
+					}
+				}
+				CCLog.info(myTimelineData);
+//				loadTransport(myTransportData, theTimelineController.transportController());
 				
 //				CCDataObject myMarkerDataData = myTransportData.getObject(TrackData.TRACKDATA_ELEMENT);
 //				TrackData myMarkerData = new TrackData(null);
@@ -232,7 +249,8 @@ public class FileManager {
 //					myMarkerData.data(myMarkerDataData);
 //				}
 				
-				insertTracks(myTimelineData, theTimelineController);
+//				insertTracks(myTimelineData, theTimelineController);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -274,11 +292,11 @@ public class FileManager {
 			myTimelineData.put(TRANSPORT_ELEMENT, createTransportData(theTimelineController.transportController(), myStart, myEnd));
 
 			CCDataArray myTracksData= new CCDataArray();
-			GroupTrackController myRootController = theTimelineController.rootController();
+			CCGroupTrackController myRootController = theTimelineController.rootController();
 			if(myRootController != null){
 				myTracksData.add(myRootController.groupTrack().data(myStart, myEnd));
 			}
-			GroupTrackController myClipController = theTimelineController.clipController();
+			CCGroupTrackController myClipController = theTimelineController.clipController();
 			if(myClipController != null){
 				myTracksData.add(myClipController.groupTrack().data(myStart, myEnd));
 			}
@@ -357,6 +375,7 @@ public class FileManager {
 	
 	public void insertAtTimeToCurrentTimeline(Path thePath) {
 		_mySerializer.insertTracks(thePath, _myTimelineContainer.activeTimeline());
+		_myTimelineContainer.activeTimeline().render();
 		UndoHistory.instance().clear();
 	}
 	

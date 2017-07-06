@@ -28,9 +28,9 @@ import cc.creativecomputing.control.timeline.Track;
 import cc.creativecomputing.control.timeline.TrackData;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.timeline.controller.TimelineTool;
-import cc.creativecomputing.controlui.timeline.controller.ToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTool;
+import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
 import cc.creativecomputing.controlui.timeline.view.TimedContentView;
 import cc.creativecomputing.io.data.CCDataObject;
@@ -41,26 +41,33 @@ import cc.creativecomputing.math.CCMath;
  * @author christianriekoff
  *
  */
-public abstract class TrackController extends TrackDataController implements CCZoomable, TimedContentView{
+public abstract class CCTrackController extends CCTrackDataController implements CCZoomable, TimedContentView{
 	
 	protected Track _myTrack;
 	
 	private Selection _mySelection;
 	
-	protected ToolController _myToolController;
-	protected GroupTrackController _myParent;
+	protected CCGroupTrackController _myParent;
 	
-	public TrackController(
+	protected CCTimelineTool<?> _myActiveTool = null;
+	
+	protected boolean _myChangedValue = false;
+	
+	public CCTrackController(
 		TrackContext theTrackContext, 
-		ToolController theToolController, 
 		Track theTrack, 
-		GroupTrackController theParent
+		CCGroupTrackController theParent
 	) {
 		super(theTrackContext, theTrack.property());
 		_myTrack = theTrack;
-        _myToolController = theToolController;
 		_myParent = theParent;
 	}
+	
+	public abstract CCTimelineTools[] tools();
+	
+	public abstract void setTool(CCTimelineTools theTool);
+	
+	public ControlPoint draggedPoint(){return null;}
 	
 	public boolean isParentOpen(){
 		return _myParent == null || _myParent.isOpen();
@@ -68,10 +75,6 @@ public abstract class TrackController extends TrackDataController implements CCZ
 	
 	public Track track() {
 		return _myTrack;
-	}
-	
-	public ToolController tool() {
-		return _myToolController;
 	}
 	
 	private void updateView(){
@@ -115,16 +118,8 @@ public abstract class TrackController extends TrackDataController implements CCZ
 		if(_myTrackView != null)_myTrackView.value(theValue);
 	}
 	
-	public void writeValue(double theTime){
-		ControlPoint myControlPoint = new ControlPoint(theTime, _myProperty.normalizedValue());
-        myControlPoint = createPointImpl(myControlPoint);
-        	
-        trackData().add(myControlPoint);
-        _myHasAdd = true;
-        _myTrackView.render();
-	}
+	public abstract void writeValue(double theTime);
 	
-
 	public void color(Color theColor) {
 		// TODO fix color track
 //		_myTimelineController.colorTrack(theColor, _myTrack.address());
@@ -139,6 +134,7 @@ public abstract class TrackController extends TrackDataController implements CCZ
 		double myValue = 0;
 		
 		if(_myTrack.property() != null){
+			_myChangedValue = true;
 			if(!track().mute()){
 				_myTrack.property().fromNormalizedValue(value(theTime), false);
 			}
@@ -189,11 +185,6 @@ public abstract class TrackController extends TrackDataController implements CCZ
 //    public double scaledValue() {
 //    	return CCMath.blend(_myTrack.minValue(), _myTrack.maxValue(), value(theTime));
 //    }
-    
-    public void reset() {
-    	trackData().clear();
-    	if(_myTrackView != null)_myTrackView.render();
-    }
 
     public Point2D curveToViewSpace(ControlPoint thePoint) {
         Point2D myResult = new Point2D.Double();
@@ -222,11 +213,6 @@ public abstract class TrackController extends TrackDataController implements CCZ
         return myResult;
     }
     
-    public void clearSelection() {
-        _mySelection = null;
-        if(_myTrackView != null) _myTrackView.render();
-    }
-    
     public void selection(Selection theSelection) {
     	_mySelection = theSelection;
     	if(_myTrackView != null)_myTrackView.render();
@@ -237,44 +223,51 @@ public abstract class TrackController extends TrackDataController implements CCZ
     }
     
     public void mousePressed(MouseEvent e) {
+    	Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
 			
-		if (_myToolController.toolMode() == TimelineTool.MOVE) {
-			_myToolController.selectionController().assignTrackData(this);
-			_myToolController.selectionController().mousePressed(e);
-		   	return;
-		} else {
-			super.mousePressed(e, _myToolController);
-		}
+    	if (e.isAltDown()) {
+    		_myTrackContext.zoomController().startDrag(myViewCoords);
+    		return;
+    	}
+			
+    	_myTrackContext.activeTrack(this);
+    	_myActiveTool.mousePressed(e);
 	}
 
 
 	public void mouseReleased(MouseEvent e) {
-		if (_myToolController.toolMode() == TimelineTool.MOVE) {
-			_myToolController.selectionController().mouseReleased(e);
+		if (e.isAltDown()) {
+			_myTrackContext.zoomController().endDrag();
 			return;
-		} else {
-			super.mouseReleased(e, _myToolController);
 		}
+		
+		_myActiveTool.mouseReleased(e);
+
+        _myTrackView.render();
 	}
 	
 	public void mouseMoved(MouseEvent e){
-		if (_myToolController.toolMode() == TimelineTool.MOVE) {
-			_myToolController.selectionController().assignTrackData(this);
-			_myToolController.selectionController().mouseMoved(e);
-			return;
-		}else{
-			super.mouseMoved(e, _myToolController);
-		}
+		_myActiveTool.mouseMoved(e);
+//		Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
+//
+//		ControlPoint myNearest = pickNearestPoint(myViewCoords);
+//        ControlPoint myTensionHandle = pickHandle(myViewCoords);
+//
+//		if (myNearest != null && distance(myNearest,myViewCoords) < SwingTrackView.PICK_RADIUS || myTensionHandle != null) {
+//			if(this instanceof EventTrackController){
+//				_myTrackView.moveRangeCursor();
+//			}else{
+//				_myTrackView.selectCursor();
+//			}
+//				
+//		} else {
+//			_myTrackView.defaultCursor();
+//		}
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		if (_myToolController.toolMode() == TimelineTool.MOVE) {
-			_myToolController.selectionController().assignTrackData(this);
-			_myToolController.selectionController().mouseDragged(e);
-			return;
-		}else {
-			super.mouseDragged(e, _myToolController);
-		}
+		_myActiveTool.mouseDragged(e);
+		_myTrackView.render();
 	}
 
 }

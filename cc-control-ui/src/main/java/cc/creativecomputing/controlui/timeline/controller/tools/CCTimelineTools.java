@@ -17,36 +17,16 @@
  * This file incorporates work covered by the following copyright and  
  * permission notice:  
  */
-package cc.creativecomputing.controlui.timeline.controller;
+package cc.creativecomputing.controlui.timeline.controller.tools;
 
-
-/**
- * @author christianriekoff
- *
- */
-public class ToolController {
-	
-
-	protected SelectionController _mySelectionController;
-	protected TimelineTool _myToolMode = TimelineTool.NONE;
-
-	public ToolController(TrackContext theTrackContext) {
-		_mySelectionController = new SelectionController(theTrackContext);
-	}
-	
-	public SelectionController selectionController() {
-		return _mySelectionController;
-	}
-	
-	public TimelineTool toolMode() {
-		return _myToolMode;
-	}
-	
-	public void toolMode(TimelineTool theMode) {
-		_myToolMode = theMode;
-	}
-	
-	public TimelineTool[] tools() {
-		return new TimelineTool[] {TimelineTool.MOVE};
-	}
+public enum CCTimelineTools {
+	NONE, 
+	CREATE_TRIGGER_POINT,
+	CREATE_EVENT,
+	CREATE_STEP_POINT, 
+	CREATE_LINEAR_POINT, 
+	CREATE_BEZIER_POINT,
+	CURVE,  
+	SELECT, 
+	MOVE_SEGMENT
 }

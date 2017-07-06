@@ -2,18 +2,17 @@ package cc.creativecomputing.controlui.timeline.controller.track;
 
 import cc.creativecomputing.control.timeline.Track;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.CurveToolController;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
 import cc.creativecomputing.core.CCBlendable;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 @SuppressWarnings({"unchecked"})
-public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>> extends DoubleTrackController{
+public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>> extends CCDoubleTrackController{
 	
 
-	public CCBlendableTrackController(TrackContext theTrackContext, CurveToolController theCurveTool, Track theTrack, GroupTrackController theParent) {
-		super(theTrackContext, theCurveTool, theTrack, theParent);
+	public CCBlendableTrackController(TrackContext theTrackContext, Track theTrack, CCGroupTrackController theParent) {
+		super(theTrackContext, theTrack, theParent);
 	}
 	
 	@Override
@@ -21,12 +20,12 @@ public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>>
 		thePoint.blendable((Type)_myProperty.value());
 	}
 
-	@Override
-	public ControlPoint createPointImpl(ControlPoint theCurveCoords) {
-		ControlPoint myResult = super.createPointImpl(theCurveCoords);
-		myResult.blendable((Type)_myProperty.value());
-		return myResult;
-	}
+//	@Override
+//	public ControlPoint createPointImpl(ControlPoint theCurveCoords) {
+//		ControlPoint myResult = super.createPointImpl(theCurveCoords);
+//		myResult.blendable((Type)_myProperty.value());
+//		return myResult;
+//	}
 	
 	public abstract Type createDefault();
 	

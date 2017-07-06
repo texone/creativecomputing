@@ -7,14 +7,13 @@ import java.awt.geom.Point2D;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataView;
 
 public class CCStringTrackDataRenderer extends SwingTrackDataRenderer{
-
 	
 	@Override
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, SwingTrackDataView theView, Graphics2D theG2d) {
+	public void renderTimedEvent(TimedEventPoint theTimedEvent, SwingAbstractTrackDataView<?> theView, Graphics2D theG2d) {
 		if(theTimedEvent.content() == null || theTimedEvent.content().value() == null) {
 			return;
 		}

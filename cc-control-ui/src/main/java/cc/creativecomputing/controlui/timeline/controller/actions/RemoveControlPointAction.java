@@ -20,7 +20,7 @@
 package cc.creativecomputing.controlui.timeline.controller.actions;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackDataController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
 import cc.creativecomputing.controlui.util.Action;
 
 /**
@@ -29,10 +29,10 @@ import cc.creativecomputing.controlui.util.Action;
  */
 public class RemoveControlPointAction implements Action{
 	
-	private TrackDataController _myTrackDataController;
+	private CCTrackDataController _myTrackDataController;
 	private ControlPoint _myControlPoint;
 	
-	public RemoveControlPointAction(TrackDataController theTrackDataController, ControlPoint theControlPoint) {
+	public RemoveControlPointAction(CCTrackDataController theTrackDataController, ControlPoint theControlPoint) {
 		_myTrackDataController = theTrackDataController;
 		_myControlPoint = theControlPoint;
 	}

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackDataController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
 import cc.creativecomputing.controlui.util.Action;
 
 /**
@@ -32,13 +32,13 @@ import cc.creativecomputing.controlui.util.Action;
  */
 public class MoveControlPointAction implements Action{
 	
-	private TrackDataController _myTrackDataController;
+	private CCTrackDataController _myTrackDataController;
 	private List<ControlPoint> _myControlPoints;
 	private List<ControlPoint> _myEndControlPoints;
 	private List<ControlPoint> _myStartControlPoints;
 	
 	public MoveControlPointAction(
-		TrackDataController theTrackDataController, 
+		CCTrackDataController theTrackDataController, 
 		List<ControlPoint> theControlPoints, 
 		List<ControlPoint> theStartControlPoints, 
 		List<ControlPoint> theEndControlPoints

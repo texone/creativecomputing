@@ -20,8 +20,8 @@
 package cc.creativecomputing.controlui.timeline.controller;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackDataController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
 
 /**
  * The TrackContext is used to share informations between a number of tracks
@@ -35,13 +35,9 @@ public class TrackContext implements CCZoomable{
 
 	protected CCZoomController _myZoomController;
 
-	protected ToolController _myToolController;
-	protected CurveToolController _myCurveToolController;
 	
 	public TrackContext() {
 		_myZoomController = new CCZoomController();
-		_myToolController = new ToolController(this);
-		_myCurveToolController = new CurveToolController(this);
 		
 		_myZoomController.addZoomable(this);
 
@@ -49,22 +45,18 @@ public class TrackContext implements CCZoomable{
         _myUpperBound = 1;
 	}
 	
-	private TrackDataController _myActiveTrack;
+	private CCTrackDataController _myActiveTrack;
 	
-	public void activeTrack(TrackDataController theActiveTrack){
+	public void activeTrack(CCTrackDataController theActiveTrack){
 		if(_myActiveTrack != null && theActiveTrack != _myActiveTrack)_myActiveTrack.deactivate();
 		_myActiveTrack = theActiveTrack;
 	}
 	
-	public TrackDataController activeTrack(){
+	public CCTrackDataController activeTrack(){
 		return _myActiveTrack;
 	}
 	
-	public CurveToolController curveTool() {
-		return _myCurveToolController;
-	}
-	
-	public double defaultValue(TrackController theTrackController) {
+	public double defaultValue(CCTrackController theTrackController) {
 		return 0;
 	}
 	
@@ -111,11 +103,6 @@ public class TrackContext implements CCZoomable{
         _myLowerBound = theLowerBound;
         _myUpperBound = theUpperBound;
 	}
-	
-	public void render(){
-		
-	}
-	
 
 	
 	public void renderInfo(){

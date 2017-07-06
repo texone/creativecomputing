@@ -24,10 +24,8 @@ import java.awt.Color;
 import javax.swing.JFrame;
 
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
-import cc.creativecomputing.controlui.timeline.view.SwingToolChooserPopup;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackControlView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
 
 
 /**
@@ -48,12 +46,11 @@ public class SwingTrackView extends SwingAbstractTrackView{
 	
 	public SwingTrackView(
 		JFrame theMainFrame,
-		SwingToolChooserPopup theToolChooserPopUp, 
-    	SwingTrackDataRenderer theDataRenderer,
+    	SwingAbstractTrackDataView<?> theDataView,
 		TimelineController theTimelineController,
-		TrackController theController
+		CCTrackController theController
 	) {
-		super(theMainFrame, theToolChooserPopUp, theDataRenderer, theTimelineController, theController);
+		super(theMainFrame, theDataView);
 		_myControlView = new SwingTrackControlView(theTimelineController, theController);
 		_myControlView.address(theController.property().path().getFileName().toString());
 	}

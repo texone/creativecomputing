@@ -21,7 +21,7 @@ package cc.creativecomputing.controlui.timeline.view;
 
 import java.awt.Font;
 
-import cc.creativecomputing.controlui.timeline.controller.TimelineTool;
+import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 
 /**
  * @author christianriekoff
@@ -29,7 +29,7 @@ import cc.creativecomputing.controlui.timeline.controller.TimelineTool;
  */
 public class SwingGuiConstants {
 
-	public static int SCALE = 2;
+	public static int SCALE = 1;
 
 	public static Font ARIAL_9 = new Font("Arial", 1, 9 * SCALE);//LucidaGrande
 	public static Font ARIAL_BOLD_10 = new Font("Arial", Font.BOLD, 10 * SCALE);
@@ -46,11 +46,11 @@ public class SwingGuiConstants {
 	
 	public static boolean SHOW_CURVE_TOOL_OPTIONS = true;
 	
-	public static TimelineTool[] CURVE_TOOLS = new TimelineTool[] {
-		TimelineTool.CURVE,
-		TimelineTool.BEZIER,
-		TimelineTool.LINEAR,
-		TimelineTool.STEP,
-		TimelineTool.MOVE
+	public static CCTimelineTools[] CURVE_TOOLS = new CCTimelineTools[] {
+		CCTimelineTools.CURVE,
+		CCTimelineTools.CREATE_BEZIER_POINT,
+		CCTimelineTools.CREATE_LINEAR_POINT,
+		CCTimelineTools.CREATE_STEP_POINT,
+		CCTimelineTools.SELECT
 	};
 }

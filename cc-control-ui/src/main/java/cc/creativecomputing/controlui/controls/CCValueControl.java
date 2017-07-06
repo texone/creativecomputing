@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
@@ -68,4 +69,5 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 	}
 	
 	public abstract Type value();
+	
 }

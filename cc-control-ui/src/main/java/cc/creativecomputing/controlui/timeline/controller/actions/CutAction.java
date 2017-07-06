@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import cc.creativecomputing.control.timeline.TimeRange;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.util.Action;
 
 
@@ -33,11 +33,11 @@ import cc.creativecomputing.controlui.util.Action;
  */
 public class CutAction implements Action{
 	
-	private TrackController _myTrackDataController;
+	private CCTrackController _myTrackDataController;
 	private ArrayList<ControlPoint> _myControlPoints;
 	private TimeRange _myTimeRange;
 	
-	public CutAction(TrackController theTrackDataController, ArrayList<ControlPoint> theControlPoints, TimeRange theTimeRange) {
+	public CutAction(CCTrackController theTrackDataController, ArrayList<ControlPoint> theControlPoints, TimeRange theTimeRange) {
 		_myTrackDataController = theTrackDataController;
 		_myControlPoints = theControlPoints;
 		_myTimeRange = theTimeRange;

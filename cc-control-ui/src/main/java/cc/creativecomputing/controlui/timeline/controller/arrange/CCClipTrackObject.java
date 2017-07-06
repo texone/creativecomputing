@@ -3,11 +3,11 @@ package cc.creativecomputing.controlui.timeline.controller.arrange;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackAdapter;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackAdapter;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.core.CCProperty;
 
-public class CCClipTrackObject extends EventTrackAdapter{
+public class CCClipTrackObject extends CCEventTrackAdapter{
 	
 	private final TimelineContainer _myTimelineContainer;
 	
@@ -37,7 +37,7 @@ public class CCClipTrackObject extends EventTrackAdapter{
 	}
 	
 	@Override
-	public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint) {
+	public void onTime(double theTime, CCEventTrackController theController, TimedEventPoint thePoint) {
 		if(_myTimelineController == null)return;
 		_myTimelineController.time(theTime - thePoint.time() - thePoint.contentOffset());
 	}

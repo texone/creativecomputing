@@ -29,7 +29,7 @@ import cc.creativecomputing.control.timeline.point.TimedEventPoint;
  */
 public class SwingTrackDataRenderer {
 
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, SwingTrackDataView theView, Graphics2D g2d) {
+	public void renderTimedEvent(TimedEventPoint theTimedEvent, SwingAbstractTrackDataView<?> theView, Graphics2D g2d) {
 		
 	}
 }

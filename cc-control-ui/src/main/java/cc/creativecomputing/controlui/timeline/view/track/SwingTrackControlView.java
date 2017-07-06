@@ -25,9 +25,9 @@ import javax.swing.JToggleButton;
 
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.controller.track.BooleanTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.CurveTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCBooleanTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
@@ -84,7 +84,7 @@ public class SwingTrackControlView extends JPanel{
 	}
 	
 	private TimelineController _myTimelineController;
-	private TrackController _myTrackController;
+	private CCTrackController _myTrackController;
 	private JToggleButton _myMuteButton;
 	private JTextField _myMinField;
 	private JTextField _myMaxField;
@@ -96,7 +96,7 @@ public class SwingTrackControlView extends JPanel{
 	
 	public SwingTrackControlView(
 		TimelineController theTimelineController,
-		TrackController theTrackController
+		CCTrackController theTrackController
 	) {
 		_myTimelineController = theTimelineController;
 		_myTrackController = theTrackController;
@@ -139,8 +139,8 @@ public class SwingTrackControlView extends JPanel{
 		}
 		
 		if(
-			theTrackController instanceof CurveTrackController && 
-			!(theTrackController instanceof BooleanTrackController)
+			theTrackController instanceof CCCurveTrackController && 
+			!(theTrackController instanceof CCBooleanTrackController)
 		) {
 			_myMinField = createTextField();
 			_myMinField.addActionListener(theE -> {

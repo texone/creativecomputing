@@ -38,7 +38,7 @@ public class CCGradientEditor extends JPanel {
 		
 		private JColorChooser _myColorChooser;
 	    private JDialog _myDialog;
-	    private Color _myLastColor = new Color(0,0,0);
+	    private Color _myLastColor = new Color(0,0,0,0);
 
 	    ShowColorChooserAction(Component theFrame, JColorChooser theColorChooser) {
 	        _myColorChooser = theColorChooser;

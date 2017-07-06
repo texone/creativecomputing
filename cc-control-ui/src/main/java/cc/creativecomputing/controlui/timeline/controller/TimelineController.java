@@ -53,15 +53,15 @@ import cc.creativecomputing.controlui.CCColorMap;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCPresetTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuatizeMode;
-import cc.creativecomputing.controlui.timeline.controller.track.BooleanTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.ColorTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.DoubleTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackAdapter;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.GroupTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.IntegerTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.TriggerTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCBooleanTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCColorTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCDoubleTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackAdapter;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCIntegerTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTriggerTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
@@ -76,14 +76,14 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	
 	private CCTransportController _myTransportController;
 	
-	private GroupTrackController _myRootController;
-	private GroupTrackController _myClipController;
-	private Map<Path, GroupTrackController> _myGrouptrackControllerMap = new HashMap<>();
+	private CCGroupTrackController _myRootController;
+	private CCGroupTrackController _myClipController;
+	private Map<Path, CCGroupTrackController> _myGrouptrackControllerMap = new HashMap<>();
 	private List<Path> _myGroupOrder = new ArrayList<>();
 	private SwingTimelineView _myView;
 	
-	private Map<Path, TrackController> _myTrackControllerMap;
-	private List<TrackController> _myTrackController;
+	private Map<Path, CCTrackController> _myTrackControllerMap;
+	private List<CCTrackController> _myTrackController;
 	
 	private final CCPropertyMap _myPropertyMap;
 	
@@ -128,11 +128,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		return _myTransportController;
 	}
 	
-	public ToolController toolController() {
-		return _myToolController;
-	}
-	
-	public List<TrackController> trackController(){
+	public List<CCTrackController> trackController(){
 		return _myTrackController;
 	}
 	
@@ -176,9 +172,9 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	/**
 	 * Sets the zoom range based on the selected range
 	 */
-	public void zoomToSelection() {
+	public void zoomToLoop() {
 		// TODO check zoom to selection
-		_myZoomController.setRange(_myToolController.selectionController().range());
+		_myZoomController.setRange(_myTransportController.loopRange());
 	}
 	
 	/**
@@ -187,10 +183,10 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	 */
 	public double maximumTime() {
 		double myMaxValue = 0;
-		for (TrackController myTrackController : _myTrackControllerMap.values()) {
+		for (CCTrackController myTrackController : _myTrackControllerMap.values()) {
 			myMaxValue = CCMath.max(myTrackController.maxTime(), myMaxValue);
 		}
-		for (TrackController myTrackController : _myGrouptrackControllerMap.values()) {
+		for (CCTrackController myTrackController : _myGrouptrackControllerMap.values()) {
 			myMaxValue = CCMath.max(myTrackController.maxTime(), myMaxValue);
 		}
 		return myMaxValue;
@@ -204,11 +200,11 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		_myZoomController.setRange(new TimeRange(0, maximumTime()));
 	}
 	
-	public GroupTrackController rootController(){
+	public CCGroupTrackController rootController(){
 		return _myRootController;
 	}
 	
-	public GroupTrackController clipController(){
+	public CCGroupTrackController clipController(){
 		return _myClipController;
 	}
 	
@@ -217,14 +213,14 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		double myUpperBound = _myTransportController.loopEnd();
 		double myRange = myUpperBound - myLowerBound;
 		_myTransportController.trackData().insertTime(myLowerBound, myRange);
-		for (TrackController myController : _myTrackControllerMap.values()) {
+		for (CCTrackController myController : _myTrackControllerMap.values()) {
 			myController.trackData().insertTime(myLowerBound, myRange);
 			myController.view().render();
 		}
 	}
 	
 	public void insertTime(double theInsertTime, double theTime){
-		for (TrackController myController : _myTrackControllerMap.values()) {
+		for (CCTrackController myController : _myTrackControllerMap.values()) {
 			myController.trackData().insertTime(theInsertTime, theTime);
 			myController.view().render();
 		}
@@ -236,14 +232,14 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		double myRange = myUpperBound - myLowerBound;
 
 		_myTransportController.trackData().cutRangeAndTime(myLowerBound, myRange);
-		for (TrackController myController : _myTrackControllerMap.values()) {
+		for (CCTrackController myController : _myTrackControllerMap.values()) {
 			myController.trackData().cutRangeAndTime(myLowerBound, myRange);
 			myController.view().render();
 		}
 	}
 	
 	public void colorTrack(final Color theColor, final Path thePath) {
-		TrackController myTrackController = _myTrackControllerMap.get(thePath);
+		CCTrackController myTrackController = _myTrackControllerMap.get(thePath);
 		if(myTrackController != null) {
 			myTrackController.track().color(theColor);
 			myTrackController.view().color(theColor);
@@ -258,33 +254,33 @@ public class TimelineController extends TrackContext implements CCTransportable{
 //		}
 	}
 	
-	public GroupTrackController group(Path theGroupPath) {
+	public CCGroupTrackController group(Path theGroupPath) {
 		return _myGrouptrackControllerMap.get(theGroupPath);
 	}
 	
-	public TrackController track(Path thePath) {
+	public CCTrackController track(Path thePath) {
 		return _myTrackControllerMap.get(thePath);
 	}
 	
-	public GroupTrackController createGroupController(CCObjectPropertyHandle theProperty) {
+	public CCGroupTrackController createGroupController(CCObjectPropertyHandle theProperty) {
 		if(theProperty.parent() != null){
 			createGroupController(theProperty.parent());
 		}
-		GroupTrackController myResult = group(theProperty.path());
+		CCGroupTrackController myResult = group(theProperty.path());
 		
 		if(myResult != null) return myResult;
 		
 		GroupTrack myGroupTrack = new GroupTrack(theProperty);
 		Map<String, String> myExtraMap = new HashMap<>();
-		myExtraMap.put(EventTrackController.EVENT_TYPES,"new");
+		myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 		myGroupTrack.extras(myExtraMap);
 		myGroupTrack.color(CCColorMap.getColor(theProperty.path()));
 		myGroupTrack.isOpen(true);
 		
-		myResult = new GroupTrackController(this, _myToolController, myGroupTrack);
-		myResult.events().add(new EventTrackAdapter() {
+		myResult = new CCGroupTrackController(this, myGroupTrack);
+		myResult.events().add(new CCEventTrackAdapter() {
 			@Override
-			public void onProperties(EventTrackController theController, TimedEventPoint thePoint) {
+			public void onProperties(CCEventTrackController theController, TimedEventPoint thePoint) {
 				_myView.openGroupPresetDialog(theProperty, theController, thePoint);
 			}
 		});
@@ -303,7 +299,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		}
 		
 		if(myGroupTrack.property().parent() != null){
-			GroupTrackController myGroupTrackController = _myGrouptrackControllerMap.get(theProperty.parent().path());
+			CCGroupTrackController myGroupTrackController = _myGrouptrackControllerMap.get(theProperty.parent().path());
 			myGroupTrackController.addTrack(myResult);
 		}
 		
@@ -318,15 +314,15 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		return myResult;
 	}
 	
-	public GroupTrackController createGroupController(Path thePath){
+	public CCGroupTrackController createGroupController(Path thePath){
 		return createGroupController((CCObjectPropertyHandle)_myPropertyMap.property(thePath));
 	}
 	
 	private static class TrackRenderAction implements CCPropertyListener<Object>{
 		
-		private TrackController _myTrackController;
+		private CCTrackController _myTrackController;
 		
-		public TrackRenderAction(TrackController theCurveTrackController){
+		public TrackRenderAction(CCTrackController theCurveTrackController){
 			_myTrackController = theCurveTrackController;
 		}
 
@@ -341,15 +337,15 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	
 	private List<CCPropertyHandle<?>> _myClipTrackHandles = new ArrayList<CCPropertyHandle<?>>();
 	
-	public GroupTrackController createClipGroup(Path thePath){
+	public CCGroupTrackController createClipGroup(Path thePath){
 		GroupTrack myGroupTrack = new GroupTrack(thePath);
 		Map<String, String> myExtraMap = new HashMap<>();
-		myExtraMap.put(EventTrackController.EVENT_TYPES,"new");
+		myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 		myGroupTrack.extras(myExtraMap);
 //		myGroupTrack.color(CCColorMap.getColor(theProperty.path()));
 		myGroupTrack.isOpen(true);
 		
-		GroupTrackController myResult = new GroupTrackController(this, _myToolController, myGroupTrack);
+		CCGroupTrackController myResult = new CCGroupTrackController(this, myGroupTrack);
 		_myGrouptrackControllerMap.put(thePath, myResult);
 		_myGroupOrder.add(thePath);
 		_myTrackController.add(myResult);
@@ -369,7 +365,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		return myResult;
 	}
 	
-	public TrackController createClipTrack(Path thePath){
+	public CCTrackController createClipTrack(Path thePath){
 		if(_myClipController == null)_myClipController = createClipGroup(Paths.get("clip arrange"));
 		
 		CCClipTrackObject myClipTrackObject = new CCClipTrackObject(_myTimelineContainer);
@@ -379,17 +375,17 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		CCPropertyHandle<?> myProperty = myParent.property("trackID");
 		_myClipTrackHandles.add(myProperty);
 		myProperty.path(thePath);
-		EventTrackController myEventController = (EventTrackController)createController(myProperty, myClipTrackObject);
+		CCEventTrackController myEventController = (CCEventTrackController)createController(myProperty, myClipTrackObject);
 		myEventController.splitDrag(true);
 		myEventController.events().add(myClipTrackObject);
-		myEventController.events().add(new EventTrackAdapter() {
+		myEventController.events().add(new CCEventTrackAdapter() {
 			@Override
-			public void onProperties(EventTrackController theController, TimedEventPoint thePoint) {
+			public void onProperties(CCEventTrackController theController, TimedEventPoint thePoint) {
 				_myView.openClipTrackDialog(theController, thePoint);
 			}
 			
 			@Override
-			public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint) {
+			public void onTime(double theTime, CCEventTrackController theController, TimedEventPoint thePoint) {
 				// TODO Auto-generated method stub
 				super.onTime(theTime, theController, thePoint);
 			}
@@ -404,7 +400,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		}
 	}
 	
-	public TrackController createClipTrack(){
+	public CCTrackController createClipTrack(){
 		Path myPath = Paths.get("clip arrange","track " + _myArrangeCounter++);
 		while(_myTrackControllerMap.containsKey(myPath)){
 			myPath = Paths.get("clip arrange","track " + _myArrangeCounter++);
@@ -412,52 +408,52 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		return createClipTrack(myPath);
 	}
 	
-	public TrackController createController(CCPropertyHandle<?> theProperty, CCClipTrackObject theObject){
+	public CCTrackController createController(CCPropertyHandle<?> theProperty, CCClipTrackObject theObject){
 
 		Path myPath = theProperty.path();
 		if(_myTrackControllerMap.containsKey(myPath))return _myTrackControllerMap.get(myPath);
 		
-		GroupTrackController myGroup = _myGrouptrackControllerMap.get(theProperty.parent().path());
+		CCGroupTrackController myGroup = _myGrouptrackControllerMap.get(theProperty.parent().path());
 		Track myTrack = new Track(theProperty);
 		myTrack.color(CCColorMap.getColor(theProperty.path()));
 		
-		TrackController myTrackController = null;
+		CCTrackController myTrackController = null;
 		if(theProperty instanceof CCBooleanPropertyHandle){
-			myTrackController = new BooleanTrackController(this, _myCurveToolController, myTrack, myGroup);
+			myTrackController = new CCBooleanTrackController(this, myTrack, myGroup);
 		}else if(theProperty instanceof CCEventTriggerHandle){
-			myTrackController = new TriggerTrackController(this, _myCurveToolController, myTrack, myGroup);
+			myTrackController = new CCTriggerTrackController(this, myTrack, myGroup);
 		}else if(theProperty instanceof CCNumberPropertyHandle<?>){
 			CCNumberPropertyHandle<?> myNumberProperty = (CCNumberPropertyHandle<?>)theProperty;
 			if(myNumberProperty.max() instanceof Integer){
-				myTrackController = new IntegerTrackController(this, _myCurveToolController, myTrack, myGroup);
+				myTrackController = new CCIntegerTrackController(this, myTrack, myGroup);
 			}else if(myNumberProperty.max() instanceof Float){
-				myTrackController = new DoubleTrackController(this, _myCurveToolController, myTrack, myGroup);
+				myTrackController = new CCDoubleTrackController(this, myTrack, myGroup);
 			}else if(myNumberProperty.max() instanceof Double){
-				myTrackController = new DoubleTrackController(this, _myCurveToolController, myTrack, myGroup);
+				myTrackController = new CCDoubleTrackController(this, myTrack, myGroup);
 			}
 		}else if(theProperty instanceof CCColorPropertyHandle){
-			myTrackController = new ColorTrackController(this, _myCurveToolController, myTrack, myGroup);
+			myTrackController = new CCColorTrackController(this, myTrack, myGroup);
 		}else if(theProperty instanceof CCStringPropertyHandle){
-			myTrackController = new EventTrackController(this, _myToolController, myTrack, myGroup);
+			myTrackController = new CCEventTrackController(this, myTrack, myGroup);
 			Map<String, String> myExtraMap = new HashMap<>();
-			myExtraMap.put(EventTrackController.EVENT_TYPES,"new");
+			myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 			myTrack.extras(myExtraMap);
 		}else if(theProperty instanceof CCEnumPropertyHandle){
-			myTrackController = new EventTrackController(this, _myToolController, myTrack, myGroup);
+			myTrackController = new CCEventTrackController(this, myTrack, myGroup);
 			Map<String, String> myExtraMap = new HashMap<>();
-			myExtraMap.put(EventTrackController.EVENT_TYPES,"new");
+			myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 			myTrack.extras(myExtraMap);
 		}else if(theProperty instanceof CCSelectionPropertyHandle){
-			myTrackController = new EventTrackController(this, _myToolController, myTrack, myGroup);
+			myTrackController = new CCEventTrackController(this, myTrack, myGroup);
 			Map<String, String> myExtraMap = new HashMap<>();
-			myExtraMap.put(EventTrackController.EVENT_TYPES,"new");
+			myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 			myTrack.extras(myExtraMap);
 		}else if(theProperty instanceof CCPathHandle){
-			EventTrackController myEventController = new EventTrackController(this, _myToolController, myTrack, myGroup);
-			myEventController.events().add(new EventTrackAdapter() {
+			CCEventTrackController myEventController = new CCEventTrackController(this, myTrack, myGroup);
+			myEventController.events().add(new CCEventTrackAdapter() {
 				
 				@Override
-				public void onTime(double theTime, EventTrackController theController, TimedEventPoint thePoint) {
+				public void onTime(double theTime, CCEventTrackController theController, TimedEventPoint thePoint) {
 					((CCPathHandle)theProperty).time(theTime, theTime - thePoint.time(), thePoint.contentOffset());
 				}
 				
@@ -486,7 +482,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 			});
 			myTrackController = myEventController;
 			Map<String, String> myExtraMap = new HashMap<>();
-			myExtraMap.put(EventTrackController.EVENT_TYPES,"new");
+			myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 			myTrack.extras(myExtraMap);
 		}
 		if(myTrackController == null)return null;
@@ -515,7 +511,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		return myTrackController;
 	}
 	
-	public TrackController createController(Path thePath){
+	public CCTrackController createController(Path thePath){
 		if(thePath.startsWith("clip arrange")){
 			return createClipTrack();
 		}
@@ -523,19 +519,19 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	}
 	
 	public void removeTrack(Path thePath){
-		TrackController myRemoveController = null;
+		CCTrackController myRemoveController = null;
 		if(_myGrouptrackControllerMap.containsKey(thePath)){
-			GroupTrackController myController = _myGrouptrackControllerMap.remove(thePath);
+			CCGroupTrackController myController = _myGrouptrackControllerMap.remove(thePath);
 			myRemoveController = myController;
 			if(myController == _myRootController)_myRootController = null;
 			_myGroupOrder.remove(thePath);
 			_myTrackController.remove(myController);
 			_myTrackCount--;
-			for(TrackController myTrackController:new ArrayList<>(myController.trackController())) {
+			for(CCTrackController myTrackController:new ArrayList<>(myController.trackController())) {
 				removeTrack(myTrackController.property().path());
 			}
 		}else if(_myTrackControllerMap.containsKey(thePath)){
-			TrackController myController = _myTrackControllerMap.remove(thePath);
+			CCTrackController myController = _myTrackControllerMap.remove(thePath);
 			myRemoveController = myController;
 			_myZoomController.removeZoomable(myController);
 			_myTrackController.remove(myController);
@@ -543,7 +539,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 			_myTrackCount--;
 		}
 		try{
-			GroupTrackController myParentController = _myGrouptrackControllerMap.get(thePath.getParent());
+			CCGroupTrackController myParentController = _myGrouptrackControllerMap.get(thePath.getParent());
 			myParentController.removeTrack(myRemoveController);
 		}catch(Exception e){
 			
@@ -558,29 +554,28 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		removeTrack(_myRootController.property().path());
 	}
 	
-	@Override
 	public void render(){
-		for (TrackController myController : _myTrackControllerMap.values()) {
+		for (CCTrackController myController : _myTrackControllerMap.values()) {
 			if(myController.view() != null)myController.view().render();
 		}
-		for (TrackController myController : _myGrouptrackControllerMap.values()) {
+		for (CCTrackController myController : _myGrouptrackControllerMap.values()) {
 			if(myController.view() != null)myController.view().render();
 		}
 	}
 
 	@Override
 	public void renderInfo() {
-		for (TrackController myController : _myTrackControllerMap.values()) {
+		for (CCTrackController myController : _myTrackControllerMap.values()) {
 			if(myController.view() != null)myController.view().renderInfo();
 		}
-		for (TrackController myController : _myGrouptrackControllerMap.values()) {
+		for (CCTrackController myController : _myGrouptrackControllerMap.values()) {
 			if(myController.view() != null)myController.view().renderInfo();
 		}
 	}
 	
 	@SuppressWarnings("unused")
 	private void insertDataTrack(Track theTrack, double theRange) {
-		TrackController myTrackController = _myTrackControllerMap.get(theTrack.property().path());
+		CCTrackController myTrackController = _myTrackControllerMap.get(theTrack.property().path());
 		if(myTrackController != null) {
 			myTrackController.trackData().insertAll(_myTransportController.time(), theRange, theTrack.trackData().rangeList(0, theRange));
 		}
@@ -599,7 +594,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	}
 	
 	private void insertTrackData(double theInsertTime, double theMaxTime, Track theTrack){
-		TrackController myController = _myTrackControllerMap.get(theTrack.property().path());
+		CCTrackController myController = _myTrackControllerMap.get(theTrack.property().path());
 		if(myController == null){
 			return;
 		}
@@ -639,27 +634,27 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	}
 	
 	public void resetTracks() {
-		for(TrackController myTrackController:_myTrackControllerMap.values()) {
+		for(CCTrackController myTrackController:_myTrackControllerMap.values()) {
 			myTrackController.reset();
 		}
 	}
 	
 	public void closeGroups(){
 		for(Path myPath:_myGroupOrder){
-			GroupTrackController myGroupTrackController = _myGrouptrackControllerMap.get(myPath);
+			CCGroupTrackController myGroupTrackController = _myGrouptrackControllerMap.get(myPath);
 			myGroupTrackController.closeGroup(false);
 		}
 	}
 	
 	public void openGroups(){
-		for(GroupTrackController myGroupTrackController:_myGrouptrackControllerMap.values()){
+		for(CCGroupTrackController myGroupTrackController:_myGrouptrackControllerMap.values()){
 			myGroupTrackController.openGroup(false);
 		}
 	}
 	
 	public void reverseTracks(){
 		double myMaximumTime = maximumTime();
-		for(TrackController myTrackController:_myTrackControllerMap.values()){
+		for(CCTrackController myTrackController:_myTrackControllerMap.values()){
 			myTrackController.track().trackData().reverse(0, myMaximumTime);
 		}
 		render();
@@ -688,7 +683,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	 * @param theIsMuted
 	 */
 	public void muteAll(boolean theIsMuted) {
-		for(TrackController myTrackController:_myTrackControllerMap.values()) {
+		for(CCTrackController myTrackController:_myTrackControllerMap.values()) {
 			myTrackController.mute(theIsMuted);
 		}
 	}

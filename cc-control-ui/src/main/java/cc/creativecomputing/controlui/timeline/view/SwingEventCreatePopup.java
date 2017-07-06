@@ -26,7 +26,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 
 
 public  class SwingEventCreatePopup extends JPopupMenu {
@@ -51,10 +51,10 @@ public  class SwingEventCreatePopup extends JPopupMenu {
 	 * 
 	 */
 	private static final long serialVersionUID = -7869280073371142253L;
-	private EventTrackController _myEventTrackController;
+	private CCEventTrackController _myEventTrackController;
 	private MouseEvent _myEvent;
 
-	public SwingEventCreatePopup(EventTrackController theEventTrackController) {
+	public SwingEventCreatePopup(CCEventTrackController theEventTrackController) {
 		_myEventTrackController = theEventTrackController;
 
 		JMenuItem entryHead = new JMenuItem("Create Event");

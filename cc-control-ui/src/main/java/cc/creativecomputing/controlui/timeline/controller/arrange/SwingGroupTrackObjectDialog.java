@@ -22,7 +22,7 @@ import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedData;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
-import cc.creativecomputing.controlui.timeline.controller.track.EventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.io.CCNIOUtil;
 
@@ -71,9 +71,9 @@ public class SwingGroupTrackObjectDialog extends JDialog implements ActionListen
 	}
 	
 	private TimedEventPoint _myEventPoint;
-	private EventTrackController _myController;
+	private CCEventTrackController _myController;
 	
-	public void edit(CCObjectPropertyHandle theObject, EventTrackController theController, TimedEventPoint theEventPoint){
+	public void edit(CCObjectPropertyHandle theObject, CCEventTrackController theController, TimedEventPoint theEventPoint){
 		setPresets(theObject);
 		_myEventPoint = theEventPoint;
 		_myController = theController;

@@ -2,10 +2,13 @@ package cc.creativecomputing.controlui.timeline.view.transport;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -150,6 +153,22 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 		zoomFromSlider();
 		
 		time(0);
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e-> {
+			if(e.getID() != KeyEvent.KEY_PRESSED)return false;
+			System.out.println(e.getID() == KeyEvent.KEY_PRESSED);
+			switch(e.getKeyCode()){
+			case KeyEvent.VK_SPACE:
+				if (_myTimelineContainer.activeTimeline().transportController().isPlaying()) {
+					_myPlayButton.setText("play");
+					_myTimelineContainer.activeTimeline().transportController().stop();
+				} else {
+					_myPlayButton.setText("stop");
+					_myTimelineContainer.activeTimeline().transportController().play();
+				}
+				break;
+			}
+			return false;  
+		});
 	}
 	
 	public JComboBox<String> timelineCombox(){
