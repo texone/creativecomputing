@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
@@ -15,7 +14,7 @@ import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
-import cc.creativecomputing.controlui.timeline.controller.track.TrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
@@ -26,16 +25,14 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.elements.CCKleChannelType;
 import cc.creativecomputing.kle.elements.CCSequenceChannel;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
+import cc.creativecomputing.kle.elements.CCSequenceElementEffectManager;
 import cc.creativecomputing.kle.elements.CCSequenceElements;
 import cc.creativecomputing.kle.elements.CCSequenceMapping;
 import cc.creativecomputing.kle.elements.CCSequenceSegment;
 import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
 import cc.creativecomputing.kle.formats.CCSequenceFormats;
-import cc.creativecomputing.kle.formats.CCSequenceKLE1Container;
-import cc.creativecomputing.kle.formats.CCSequenceKLE2Container;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
-import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.easing.CCEasing.CCEaseFormular;
 import cc.creativecomputing.math.easing.CCEasing.CCEaseMode;
@@ -70,19 +67,13 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		@CCProperty(name = "use start end channel")
 		private boolean _cUseStartEndChannel = false;
 		
-		private int _myRateBrake;
-		
 		public CCSequenceChannelRecording(CCSequenceMapping<?> theMapping){
 			super(theMapping.columns(), theMapping.rows(), theMapping.depth());
 			_myMapping = theMapping;
-			_myRateBrake = _myBaseRate / (theMapping.frameRate() * updateSteps);
 			_cEndChannel = theMapping.size();
 		}
 		
 		public void recordFrame(){
-			if(!export)return;
-			if(_myStep % _myRateBrake != 0)return;
-			
 			CCMatrix2 myFrame = new CCMatrix2(_myMapping.columns(), _myMapping.rows(), _myMapping.depth());
 			for(CCSequenceChannel myChannel:_myMapping){
 				myFrame.data()[myChannel.column()][myChannel.row()][myChannel.depth()] = _cNormalizeValues ? myChannel.normalizedValue() * _cOutputScale : myChannel.value() * _cOutputScale;
@@ -92,13 +83,10 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		
 		
 		public void start(){
-			_myRateBrake = _myBaseRate / (_myMapping.frameRate());
-			if(!export)return;
 			clear();
 		}
 		
 		public void save(Path thePath, CCSequenceFormats theFormat){
-			if(!export)return;
 			CCNIOUtil.createDirectories(thePath);
 //			if(_cNormalizeValues)normalize();
 			
@@ -222,11 +210,13 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	private CCListenerManager<CCSequenceRecorderListener> _myRecordListeners = CCListenerManager.create(CCSequenceRecorderListener.class);
 
-	@CCProperty(name = "seconds", min = 1, max = 1000, defaultValue = 100)
+	@CCProperty(name = "seconds", min = 1, max = 1000)
 	private int _mySeconds = 100;
 
-	@CCProperty(name = "fade seconds", min = 0, max = 100, defaultValue = 10)
-	private int _myFadeSeconds = 100;
+	@CCProperty(name = "fade seconds", min = 0, max = 100)
+	private int _myFadeSeconds = 10;
+	@CCProperty(name = "still frames", min = 0, max = 100)
+	private int _cStillFrames = 10;
 	
 	@CCProperty(name = "fade ease formular")
 	private CCEaseFormular _myEaseFormular = CCEaseFormular.SINE;
@@ -239,12 +229,13 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	@CCProperty(name = "record positions")
 	private boolean _cRecordPositions = false;
 	
-	private int _myBaseRate;
-	
-	@CCProperty(name = "recording channels")
-	private Map<CCKleChannelType, CCSequence> _myRecordings = new HashMap<>();
 	@CCProperty(name = "segment name")
 	private String _mySegmentName = "";
+	
+	@CCProperty(name = "recording channels", hide = true)
+	private Map<CCKleChannelType, CCSequence> _myRecordings = new HashMap<>();
+	
+	private Map<CCKleChannelType, CCSequenceElementEffectManager> _myEffectManagers = new HashMap<>();
 	
 	@CCProperty(name = "position recording")
 	private CCSequenceElementRecording _myPositionRecording;
@@ -259,23 +250,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	private CCSequenceExporter _myExporter;
 	
-	public CCSequenceRecorder(CCGLAdapter<?, ?> theGLAdapter, CCSequenceElements theElements, CCAnimator theAnimator){
-		_myGLAdapter = theGLAdapter;
-		_myElements = theElements;
-		_myBaseRate = 1;
-		for(CCKleChannelType myKey:theElements.mappings().keySet()){
-			CCSequenceMapping<?> myMapping = theElements.mappings().get(myKey);
-			_myBaseRate = CCMath.leastCommonMultiple(_myBaseRate, myMapping.frameRate());
-			_myRecordings.put(myKey, new CCSequenceChannelRecording(myMapping));
-		}
-		_myAnimator = theAnimator;
-		_myAnimator.listener().add(this);
-		
-		_myPositionRecording = new CCSequenceElementRecording(_myElements);
-		
-		_myExporter = new CCSequenceExporter(_myElements);
-	}
-	
+
 	private int _myStep = 0;
 	private int _mySequenceSteps = 0;
 	private int _myFadeSteps = 0;
@@ -283,41 +258,109 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	private CCTriggerProgress _myProgress;
 	
+	private CCKleChannelType _myCurrentType;
+	private CCSequenceChannelRecording _myCurrentRecording;
+	private CCSequenceElementEffectManager _myCurrentEffectManager;
+	
+	private List<CCKleChannelType> _myChannelsToRecord = new ArrayList<>();
+	
+	private static enum CCRecordMode{
+		SEQUENCE, TIMELINE, FRAME
+	}
+	
+	private CCRecordMode _myRecordMode = CCRecordMode.SEQUENCE;
+	
+	public CCSequenceRecorder(CCGLAdapter<?, ?> theGLAdapter, CCSequenceElements theElements, CCAnimator theAnimator){
+		_myGLAdapter = theGLAdapter;
+		_myElements = theElements;
+		for(CCKleChannelType myKey:theElements.mappings().keySet()){
+			CCSequenceMapping<?> myMapping = theElements.mappings().get(myKey);
+			_myRecordings.put(myKey, new CCSequenceChannelRecording(myMapping));
+		}
+		_myAnimator = theAnimator;
+		
+		_myPositionRecording = new CCSequenceElementRecording(_myElements);
+		
+		_myExporter = new CCSequenceExporter(_myElements);
+	}
+	
+	public void addEffectManager(CCSequenceElementEffectManager theEffectManager, CCKleChannelType theType){
+		_myEffectManagers.put(theType, theEffectManager);
+	}
+	
 	@Override
 	public void update(CCAnimator theAnimator) {
 		if(!_myIsRecording)return;
 		
-		_myStep++;
-		if(_myRecordTimeline){
-			_myAnimator.fixedUpdateTime = 1f / (_myBaseRate) * _myTransportController.speed();
-			_myTimelineTime += _myAnimator.deltaTime() * _myTransportController.speed();
-			_myTransportController.time(_myTimelineTime);
-			recordFrame();
-		}else{
+		if(_myCurrentType == null){
+			for(CCKleChannelType myChannelType:_myRecordings.keySet()){
+				CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get(myChannelType);
+				_myCurrentEffectManager = _myEffectManagers.get(myChannelType);
+				_myCurrentEffectManager.isInRecord = true;
+				if(_myCurrentEffectManager == null)continue;
+				if(myRecording.export)_myChannelsToRecord.add(myChannelType);
+			}
+			if(_myChannelsToRecord.size() <= 0)_myIsRecording = false;
+			_myCurrentType = _myChannelsToRecord.remove(0);
+			_myCurrentRecording = (CCSequenceChannelRecording)_myRecordings.get(_myCurrentType);
+			_myCurrentEffectManager = _myEffectManagers.get(_myCurrentType);
+			startRecord(_myCurrentType);
+		}
+		
+		for(int i = 0; i < _myCurrentRecording.updateSteps;i++){
+			double myUpdateTime = (1d / _myCurrentRecording._myMapping.frameRate());
+			if(_myRecordMode == CCRecordMode.TIMELINE)myUpdateTime *= _myTransportController.speed();
+			double myFade = 1.0;
 			if(_myFadeSteps > 0){
 				if(_myStep < _myFadeSteps){
-					_myAnimator.fixedUpdateTime = 1f / (_myBaseRate) * _myEaseFormular.easing().ease(_myEaseMode, _myStep / (double)_myFadeSteps);
+					myFade = _myEaseFormular.easing().ease(_myEaseMode, _myStep / (double)_myFadeSteps);
 				}else if(_myStep > _mySequenceSteps - _myFadeSteps){
-					double myFade = (_mySequenceSteps - _myStep) / (double)_myFadeSteps;
-					_myAnimator.fixedUpdateTime = 1f / (_myBaseRate) * _myEaseFormular.easing().ease(_myEaseMode, myFade);
-				}else{
-					_myAnimator.fixedUpdateTime = 1f / (_myBaseRate);
+					myFade = (_mySequenceSteps - _myStep) /  (double)_myFadeSteps;
+					myFade = _myEaseFormular.easing().ease(_myEaseMode, myFade);
 				}
+				myUpdateTime =  myFade == 0 ? 0 : (1d / _myCurrentRecording._myMapping.frameRate()) * myFade * _myTransportController.speed();
+				_myAnimator.fixedUpdateTime = myUpdateTime;
 			}
-			recordFrame();
-		}
-		CCLog.info(_myStep + ":" + _mySequenceSteps);
-		double myProgress = (double)_myStep / (double)_mySequenceSteps;
-		if(_myProgress != null)_myProgress.progress(myProgress);
-		if(myProgress >= 1)save(_myRecordPath);
-	}
+			
+			_myStep++;
+			if(_myRecordMode == CCRecordMode.TIMELINE){
+	//			_myAnimator.fixedUpdateTime = 1f / (_myCurrentRecording._myMapping.frameRate() * _myTransportController.speed());
+				_myTimelineTime += myUpdateTime;
+				_myTransportController.time(_myTimelineTime);
+			}
 	
-	public void recordFrame(){
-		_myPositionRecording.recordFrame();
-		for(CCKleChannelType myKey:_myRecordings.keySet()){
-			CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get(myKey);
-			myRecording.recordFrame();
+			if(_myRecordMode != CCRecordMode.FRAME)_myCurrentEffectManager.updateRecord(_myAnimator);
+			if(_myCurrentType == CCKleChannelType.MOTORS)_myPositionRecording.recordFrame();
+			_myCurrentRecording.recordFrame();
+	
+			CCLog.info(
+				_myCurrentType + 
+					" : step " + _myStep + 
+					" : sequencestep " + _mySequenceSteps + 
+					" : fade step " + _myFadeSteps + 
+					" : fade seconds " + _myFadeSeconds + 
+					" : fade " + myFade + 
+					" : update time " + myUpdateTime + 
+					" : timelinetime " + _myTimelineTime);
+	//			CCLog.info(_myCurrentType + ":" + _myStep + ":" + _mySequenceSteps + " : " + _myTransportController.time() + " : ");
+			double myProgress = (double)_myStep / (double)_mySequenceSteps;
+			if(_myProgress != null)_myProgress.progress(myProgress);
+			if(myProgress >= 1){
+				if(_myChannelsToRecord.size() <= 0){
+					for(CCKleChannelType myChannelType:_myRecordings.keySet()){
+						_myCurrentEffectManager = _myEffectManagers.get(myChannelType);
+						_myCurrentEffectManager.isInRecord = false;
+					}
+					save(_myRecordPath);
+					return;
+				}
+				_myCurrentType = _myChannelsToRecord.remove(0);
+				_myCurrentRecording = (CCSequenceChannelRecording)_myRecordings.get(_myCurrentType);
+				_myCurrentEffectManager = _myEffectManagers.get(_myCurrentType);
+				startRecord(_myCurrentType);
+			}
 		}
+		_myAnimator.fixedUpdateTime = 1d / _myCurrentRecording._myMapping.frameRate();
 	}
 	
 	public CCSequence sequence(CCKleChannelType theKey){
@@ -341,21 +384,13 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 
 	
-	public void startRecord(){
-		_myBaseRate = 1;
+	public void startRecord(CCKleChannelType theKey){
 		getSegments();
-		for(CCKleChannelType myKey:_myRecordings.keySet()){
-				
-			CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get(myKey);
-			if(!myRecording.export)continue;
-	
-			CCSequenceMapping<?> myMapping = myRecording._myMapping;
-			_myBaseRate = CCMath.leastCommonMultiple(_myBaseRate, myMapping.frameRate() * myRecording.updateSteps);
-		}
-		for(CCSequence mySequence:_myRecordings.values()){
-			CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)mySequence;
-			myRecording.start();
-		}
+		
+		CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get(theKey);
+		myRecording.start();
+		CCSequenceMapping<?> myMapping = myRecording._myMapping;
+		
 		_myPositionRecording.start();
 
 		_myAnimationMode = _myAnimator.animationMode;
@@ -363,30 +398,39 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		_myFixUpdateTime = _myAnimator.fixUpdateTime;
 		
 		_myStep = 0;
-		if(_myRecordTimeline){
-			
+		switch(_myRecordMode){
+		case TIMELINE:
 			_myTransportController = _myGLAdapter.timeline().activeTimeline().transportController();
 			_myTransportController.stop();
 			_myTimelineTime = _myTransportController.loopStart();
 			_myTransportController.time(_myTransportController.loopStart());
+			_myTransportController.doLoop(false);
 			_myTransportController.play();
 			
-			_mySequenceSteps = CCMath.ceil(_myTransportController.loopRange().length())  * _myBaseRate;
-			int mySteps2 = CCMath.ceil(_myTransportController.loopRange().length())  * _myBaseRate;
-			CCLog.info(_mySequenceSteps + ":" + mySteps2);
-			_myFadeSteps = _myFadeSeconds * _myBaseRate;
+			_mySequenceSteps = CCMath.ceil(_myTransportController.loopRange().length() / _myTransportController.speed())  * myMapping.frameRate();
+			_myFadeSteps = _myFadeSeconds * myMapping.frameRate();
 			_myAnimator.animationMode = CCAnimator.CCAnimationMode.AS_FAST_AS_POSSIBLE;
-			_myAnimator.fixedUpdateTime = 1f / (_myBaseRate) * _myTransportController.speed();
+			_myAnimator.fixedUpdateTime = (1f / (myMapping.frameRate())) * _myTransportController.speed();
 			_myAnimator.fixUpdateTime = true;
 			if(_myFadeSteps > 0)_myAnimator.fixedUpdateTime = 0;
-		}else{
-			_mySequenceSteps = (_mySeconds + 2 * _myFadeSeconds)  * _myBaseRate;
-			_myFadeSteps = _myFadeSeconds * _myBaseRate;
+			break;
+		case SEQUENCE:
+			_mySequenceSteps = (_mySeconds + 2 * _myFadeSeconds)  * myMapping.frameRate();
+			_myFadeSteps = _myFadeSeconds * myMapping.frameRate();
 			_myAnimator.animationMode = CCAnimator.CCAnimationMode.AS_FAST_AS_POSSIBLE;
-			_myAnimator.fixedUpdateTime = 1f / (_myBaseRate);
+			_myAnimator.fixedUpdateTime = 1f / (myMapping.frameRate());
 			_myAnimator.fixUpdateTime = true;
 			if(_myFadeSteps > 0)_myAnimator.fixedUpdateTime = 0;
+			break;
+		case FRAME:
+			_mySequenceSteps = _cStillFrames;
+			_myFadeSteps = 0;
+			_myAnimator.animationMode = CCAnimator.CCAnimationMode.AS_FAST_AS_POSSIBLE;
+			_myAnimator.fixedUpdateTime = 0;
+			_myAnimator.fixUpdateTime = true;
+			break;
 		}
+		
 		
 		_myIsRecording = true;
 		_myRecordListeners.proxy().start();
@@ -476,7 +520,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	private List<CCSequenceSegment> getSegments(){
 		
-		for(TrackController myTrack:_myGLAdapter.timeline().activeTimeline().trackController()){
+		for(CCTrackController myTrack:_myGLAdapter.timeline().activeTimeline().trackController()){
 			if(myTrack.property().path().toString().endsWith("/record/segment name")){
 
 				CCLog.info(myTrack.property().path().toString());
@@ -505,52 +549,60 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		
 		if(_myProgress != null)_myProgress.end();
 		_myIsRecording = false;
+		_myCurrentType = null;
 		
 		
 		
 		if(_cRecordPositions)_myExporter.savePositions(theRecordPath, _myPositionRecording);
 		else{
-			if(_cNormalizeValues){
-				for(CCSequence mySequence:_myRecordings.values()){
-					CCVector2 myMinMax = mySequence.minMax();
-					for(CCMatrix2 myFrame:mySequence){
-						for (int c = 0; c < mySequence.columns(); c++) {
-							for (int r = 0; r < mySequence.rows(); r++) {
-								for (int d = 0; d < mySequence.depth(); d++) {
-									myFrame.data()[c][r][d] = CCMath.norm(myFrame.data()[c][r][d], myMinMax.x, myMinMax.y);
-								}
-							}
-						}
-					}
-				}
-			}
+//			if(_cNormalizeValues){
+//				for(CCSequence mySequence:_myRecordings.values()){
+//					CCVector2 myMinMax = mySequence.minMax();
+//					for(CCMatrix2 myFrame:mySequence){
+//						for (int c = 0; c < mySequence.columns(); c++) {
+//							for (int r = 0; r < mySequence.rows(); r++) {
+//								for (int d = 0; d < mySequence.depth(); d++) {
+//									myFrame.data()[c][r][d] = CCMath.norm(myFrame.data()[c][r][d], myMinMax.x, myMinMax.y);
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
 			_myExporter.save(theRecordPath, _myRecordings, getSegments());
 		}
 	}
 	
-	private boolean _myRecordTimeline = false;
-	
 	@CCProperty(name = "record sequence")
 	public void recordAndSaveSequence(CCTriggerProgress theProgress){
-		_myRecordTimeline = false;
+		_myRecordMode = CCRecordMode.SEQUENCE;
 		_myRecordPath = null;
 		_myProgress = theProgress;
 		_myProgress.start();
-		startRecord();
+		_myIsRecording = true;
 	}
 	
 	@CCProperty(name = "record timeline loop")
 	public void recordFromTimeline(CCTriggerProgress theProgress){
-		_myRecordTimeline = true;
+		_myRecordMode = CCRecordMode.TIMELINE;
 		_myRecordPath = null;
 		_myProgress = theProgress;
 		_myProgress.start();
-		startRecord();
+		_myIsRecording = true;
+	}
+	
+	@CCProperty(name = "record frame")
+	public void recordFrame(CCTriggerProgress theProgress){
+		_myRecordMode = CCRecordMode.FRAME;
+		_myRecordPath = null;
+		_myProgress = theProgress;
+		_myProgress.start();
+		_myIsRecording = true;
 	}
 	
 	public void recordAndSaveSequence(Path thePath){
 		_myRecordPath = thePath;
-		startRecord();
+		_myIsRecording = true;
 	}
 	
 	public void seconds(int theSeconds){
