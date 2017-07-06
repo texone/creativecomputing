@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.kle.analyze.CCMotionHistoryDataPoint;
 import cc.creativecomputing.kle.elements.CCChannelSetup;
 import cc.creativecomputing.math.CCVector2;
@@ -118,24 +118,24 @@ public class CCMotorSetup extends CCChannelSetup<CCMotorChannel>{
 		return _myLastData;
 	}
 	
-	private void addPoint(CCXMLElement theParentXML, CCVector3 thePoint){
-		CCXMLElement myPointXML = theParentXML.createChild("point");
+	private void addPoint(CCDataElement theParentXML, CCVector3 thePoint){
+		CCDataElement myPointXML = theParentXML.createChild("point");
 		myPointXML.addAttribute("x", thePoint.x);
 		myPointXML.addAttribute("y", thePoint.y);
 		myPointXML.addAttribute("z", thePoint.z);
 	}
 	
-	public CCXMLElement toXML(){
-		CCXMLElement myMotorsXML = new CCXMLElement("motors");
+	public CCDataElement toXML(){
+		CCDataElement myMotorsXML = new CCDataElement("motors");
 		for(CCMotorChannel myChannel:_myChannels){
 			myMotorsXML.addChild(myChannel.toXML());
 		}
-		CCXMLElement myBoundsXML = myMotorsXML.createChild("bounds");
+		CCDataElement myBoundsXML = myMotorsXML.createChild("bounds");
 		for(CCVector3 myPoint:_myMotorBounds){
 			addPoint(myBoundsXML, myPoint);
 		}
 		if(_myCentroid != null){
-			CCXMLElement myCentroidXML = myMotorsXML.createChild("centroid");
+			CCDataElement myCentroidXML = myMotorsXML.createChild("centroid");
 			myCentroidXML.addAttribute("x", _myCentroid.x);
 			myCentroidXML.addAttribute("y", _myCentroid.y);
 			myCentroidXML.addAttribute("z", _myCentroid.z);

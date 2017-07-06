@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.effects.CCEffectable;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.kle.elements.lights.CCLightBrightnessSetup;
 import cc.creativecomputing.kle.elements.lights.CCLightChannel;
 import cc.creativecomputing.kle.elements.lights.CCLightRGBSetup;
@@ -143,14 +143,14 @@ public class CCSequenceElement extends CCEffectable{
 		return _myChannels;
 	}
 	
-	public CCXMLElement toXML(){
-		CCXMLElement myResult = new CCXMLElement("element");
+	public CCDataElement toXML(){
+		CCDataElement myResult = new CCDataElement("element");
 		myResult.addAttribute("id", _myID);
 		
 		if(_myMotorSetup != null)myResult.addChild(_myMotorSetup.toXML());
 		if(_myLightSetup != null)myResult.addChild(_myLightSetup.toXML());
 		
-		CCXMLElement myMatrixXML = myResult.createChild("matrix");
+		CCDataElement myMatrixXML = myResult.createChild("matrix");
 		myMatrixXML.addAttribute("m00", _myMatrix.m00);
 		myMatrixXML.addAttribute("m01", _myMatrix.m01);
 		myMatrixXML.addAttribute("m02", _myMatrix.m02);
@@ -173,6 +173,12 @@ public class CCSequenceElement extends CCEffectable{
 		
 		for(String myKey:_myAttributes.keySet()){
 			myResult.addAttribute(myKey, _myAttributes.get(myKey));
+		}
+		
+		CCDataElement myIDSources = myResult.createChild("id_sources");
+		for(String myKey:_myIdBasedSources.keySet()){
+			if(myKey.equals("id"))continue;
+			myIDSources.addAttribute(myKey, _myIdBasedSources.get(myKey));
 		}
 		
 		return myResult;

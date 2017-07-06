@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.elements.lights.CCLightChannel;
 import cc.creativecomputing.kle.elements.lights.CCLightRGBSetup;
@@ -21,8 +21,8 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 	 */
 	private static final long serialVersionUID = -1200033076720174639L;
 
-	public static CCXMLElement mapping(CCSequenceElements theElements){
-		CCXMLElement myMappingsXML = new CCXMLElement("mappings");
+	public static CCDataElement mapping(CCSequenceElements theElements){
+		CCDataElement myMappingsXML = new CCDataElement("mappings");
 		for(CCKleChannelType myKey:theElements.mappings().keySet()){
 			CCSequenceMapping<?> myMapping = theElements.mappings().get(myKey);
 			myMappingsXML.addChild(myMapping.toXML());
@@ -30,9 +30,9 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 		return myMappingsXML;
 	}
 	
-	public static CCXMLElement sculpture(CCSequenceElements theElements){
-		CCXMLElement myResult = new CCXMLElement("sculpture");
-		CCXMLElement myElementsXML = myResult.createChild("elements");
+	public static CCDataElement sculpture(CCSequenceElements theElements){
+		CCDataElement myResult = new CCDataElement("sculpture");
+		CCDataElement myElementsXML = myResult.createChild("elements");
 		
 		for(CCSequenceElement myElement:theElements){
 			myElementsXML.addChild(myElement.toXML());
@@ -73,16 +73,15 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public CCSequenceElements(CCXMLElement theMappingsXML, CCXMLElement mySculptureXML, CCMotorCalculations theMotorBounds, float theElementRadius){
+	public CCSequenceElements(CCDataElement theMappingsXML, CCDataElement mySculptureXML, CCMotorCalculations theMotorBounds, float theElementRadius){
 		super();
-		for(CCXMLElement myMappingXML:theMappingsXML){
+		for(CCDataElement myMappingXML:theMappingsXML){
 			_myMappings.put(CCKleChannelType.valueOf(myMappingXML.attribute("name").toUpperCase()), new CCSequenceMapping(myMappingXML));
 		}
 		
-		CCXMLElement myElementsXML = mySculptureXML.child("elements");
-		for(CCXMLElement myElementXML:myElementsXML){
+		CCDataElement myElementsXML = mySculptureXML.child("elements");
+		for(CCDataElement myElementXML:myElementsXML){
 			int myID = myElementXML.intAttribute("id");
-			
 			
 			List<CCMotorChannel> myMotorChannels = null;
 			List<CCLightChannel> myLightChannels = null;
@@ -95,14 +94,14 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 				switch(myKey){
 				case MOTORS:
 					myMotorChannels = new ArrayList<>();
-					CCXMLElement myMotorsXML = myElementXML.child("motors");
-					for(CCXMLElement myMotorXML:myMotorsXML.children("motor")){
+					CCDataElement myMotorsXML = myElementXML.child("motors");
+					for(CCDataElement myMotorXML:myMotorsXML.children("motor")){
 						CCMotorChannel myMotorChannel = new CCMotorChannel(myMotorXML);
 						
 						myMotorChannels.add(myMotorChannel);
 						myMapping.add(myMotorChannel);
 					}
-					CCXMLElement myCentroidXML = myMotorsXML.child("centroid");
+					CCDataElement myCentroidXML = myMotorsXML.child("centroid");
 					if(myCentroidXML != null){
 						myCentroid = new CCVector3(
 							myCentroidXML.doubleAttribute("x"),
@@ -113,15 +112,15 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 					break;
 				case LIGHTS:
 					myLightChannels = new ArrayList<>();
-					CCXMLElement myLightsXML = myElementXML.child("lights");
-					for(CCXMLElement myLightXML:myLightsXML.children("light")){
+					CCDataElement myLightsXML = myElementXML.child("lights");
+					for(CCDataElement myLightXML:myLightsXML.children("light")){
 						CCLightChannel myLightChannel = new CCLightChannel(myLightXML);
 						
 						myLightChannels.add(myLightChannel);
 						myMapping.add(myLightChannel);
 						
 						
-						CCXMLElement myLightPositionXML = myLightXML.child("position");
+						CCDataElement myLightPositionXML = myLightXML.child("position");
 						if(myLightPositionXML != null){
 							myLightPosition = new CCVector3(
 								myLightPositionXML.doubleAttribute("x"),
@@ -134,7 +133,7 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 				}
 			}
 			
-			CCXMLElement myMatrixXML = myElementXML.child("matrix");
+			CCDataElement myMatrixXML = myElementXML.child("matrix");
 			
 			CCMatrix4x4 myMatrix = new CCMatrix4x4();
 			myMatrix.m00 = myMatrixXML.doubleAttribute("m00");
@@ -166,6 +165,15 @@ public class CCSequenceElements extends ArrayList<CCSequenceElement>{
 				myMatrix,
 				theElementRadius
 			);
+			for(String myKey:myElementXML.attributes()){
+				myElement.addAttribute(myKey, myElementXML.attribute(myKey));
+			}
+			CCDataElement myIdSourceData = myElementXML.child("id_sources");
+			if(myIdSourceData != null){
+				for(String myKey:myIdSourceData.attributes()){
+					myElement.addIdBasedSource(myKey, myIdSourceData.intAttribute(myKey));
+				}
+			}
 			if(myLightPosition != null)myElement.lightSetup().position().set(myLightPosition);
 			add(myElement);
 			

@@ -1,6 +1,6 @@
 package cc.creativecomputing.kle.elements.motors;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.kle.elements.CCSequenceChannel;
 import cc.creativecomputing.math.CCVector3;
 
@@ -10,17 +10,17 @@ public class CCMotorChannel extends CCSequenceChannel{
 	CCVector3 _myConnectionPosition;
 	protected CCVector3 _myAnimatedConnectionPosition;
 	
-	public CCMotorChannel(CCXMLElement theMotorXML){
+	public CCMotorChannel(CCDataElement theMotorXML){
 		super( theMotorXML.intAttribute("id"));
 		
-		CCXMLElement myMotorPositionXML = theMotorXML.child("position");
+		CCDataElement myMotorPositionXML = theMotorXML.child("position");
 		_myPosition = new CCVector3(
 			myMotorPositionXML.doubleAttribute("x"),
 			myMotorPositionXML.doubleAttribute("y"),
 			myMotorPositionXML.doubleAttribute("z")
 		);
 		
-		CCXMLElement myElementConnectionXML = theMotorXML.child("connectionPosition");
+		CCDataElement myElementConnectionXML = theMotorXML.child("connectionPosition");
 		_myConnectionPosition = new CCVector3(
 			myElementConnectionXML.doubleAttribute("x"),
 			myElementConnectionXML.doubleAttribute("y"),
@@ -50,14 +50,14 @@ public class CCMotorChannel extends CCSequenceChannel{
 	}
 	
 	@Override
-	public CCXMLElement toXML(){
-		CCXMLElement myMotorXML = new CCXMLElement("motor");
+	public CCDataElement toXML(){
+		CCDataElement myMotorXML = new CCDataElement("motor");
 		myMotorXML.addAttribute("id", id());
-		CCXMLElement myMotorPositionXML = myMotorXML.createChild("position");
+		CCDataElement myMotorPositionXML = myMotorXML.createChild("position");
 		myMotorPositionXML.addAttribute("x", _myPosition.x);
 		myMotorPositionXML.addAttribute("y", _myPosition.y);
 		myMotorPositionXML.addAttribute("z", _myPosition.z);
-		CCXMLElement myElementConnectionXML = myMotorXML.createChild("connectionPosition");
+		CCDataElement myElementConnectionXML = myMotorXML.createChild("connectionPosition");
 		myElementConnectionXML.addAttribute("x", _myConnectionPosition.x);
 		myElementConnectionXML.addAttribute("y", _myConnectionPosition.y);
 		myElementConnectionXML.addAttribute("z", _myConnectionPosition.z);

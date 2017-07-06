@@ -1,6 +1,8 @@
 package cc.creativecomputing.kle.elements;
 
+import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCArrayUtil;
 import cc.creativecomputing.effects.CCEffectManager;
 
@@ -25,6 +27,18 @@ public class CCSequenceElementEffectManager extends CCEffectManager<CCSequenceEl
 		}
 	}
 	
+	public boolean isInRecord = false;
+	
+	@Override
+	public void update(CCAnimator theAnimator) {
+		if(isInRecord)return;
+		super.update(theAnimator);
+	}
+	
+	public void updateRecord(CCAnimator theAnimator) {
+		super.update(theAnimator);
+	}
+	
 	private CCSequenceElementSetupValues[] _mySetups;
 	
 	public CCSequenceElementEffectManager(CCSequenceElements theElements, CCKleChannelType theChannelType, String...theValueNames){
@@ -40,7 +54,12 @@ public class CCSequenceElementEffectManager extends CCEffectManager<CCSequenceEl
 	@Override
 	public void apply(CCSequenceElement theEffectable, double[] theValues) {
 		for(CCSequenceElementSetupValues mySetup:_mySetups){
-			theEffectable.setup(mySetup._myChannelType).setByRelativePosition(CCArrayUtil.subset(theValues, mySetup._myStart, mySetup._myValues));
+			if(theEffectable._cActive){
+				theEffectable.setup(mySetup._myChannelType).setByRelativePosition(CCArrayUtil.subset(theValues, mySetup._myStart, mySetup._myValues));
+			}else{
+				theEffectable.setup(mySetup._myChannelType).setByRelativePosition(CCArrayUtil.subset(_myDefaultValues, mySetup._myStart, mySetup._myValues));
+//				CCLog.info(_myDefaultValues[0] + " : " + _myDefaultValues[1] + " : " + theEffectable.setup(mySetup._myChannelType).position());
+			}
 		}
 	}
 

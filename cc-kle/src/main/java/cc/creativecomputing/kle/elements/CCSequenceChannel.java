@@ -1,7 +1,7 @@
 package cc.creativecomputing.kle.elements;
 
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCMath;
 
 public abstract class CCSequenceChannel {
@@ -16,8 +16,36 @@ public abstract class CCSequenceChannel {
 	protected int _myRow;
 	protected int _myDepth;
 	
+	protected String _myInterface;
+	protected int _myUniverse;
+	protected int _myChannel;
+	
 	public CCSequenceChannel(int theChannelID){
 		_myID = theChannelID;
+	}
+	
+	public String interfaceName(){
+		return _myInterface;
+	}
+	
+	public void interfaceName(String theInterfaceName){
+		_myInterface = theInterfaceName;
+	}
+	
+	public int universe(){
+		return _myUniverse;
+	}
+	
+	public void universe(int theUniverse){
+		_myUniverse = theUniverse;
+	}
+	
+	public int channel(){
+		return _myChannel;
+	}
+	
+	public void channel(int theChannel){
+		_myChannel = theChannel;
 	}
 	
 	public int id(){
@@ -77,10 +105,10 @@ public abstract class CCSequenceChannel {
 		return _myValue;
 	}
 	
-	public abstract CCXMLElement toXML();
+	public abstract CCDataElement toXML();
 	
-	public CCXMLElement mappingXML(){
-		CCXMLElement myElement = new CCXMLElement("channel");
+	public CCDataElement mappingXML(){
+		CCDataElement myElement = new CCDataElement("channel");
 		myElement.addAttribute("id", _myID);
 
 		myElement.addAttribute("min", _myMinimum);

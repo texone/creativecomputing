@@ -2,8 +2,6 @@ package cc.creativecomputing.kle.elements.lights;
 
 import java.util.List;
 
-import cc.creativecomputing.math.CCColor;
-
 public class CCLightRGBWSetup extends CCLightRGBSetup{
 
 	protected final CCLightChannel _myLightW;

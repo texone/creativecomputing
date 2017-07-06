@@ -2,7 +2,7 @@ package cc.creativecomputing.kle.elements.lights;
 
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.kle.elements.CCChannelSetup;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector3;
@@ -27,8 +27,8 @@ public abstract class CCLightSetup extends CCChannelSetup<CCLightChannel>{
 		return _myPosition;
 	}
 	
-	public CCXMLElement toXML(){
-		CCXMLElement myLightsXML = new CCXMLElement("lights");
+	public CCDataElement toXML(){
+		CCDataElement myLightsXML = new CCDataElement("lights");
 		if(_myChannels == null)return myLightsXML;
 		for(CCLightChannel myChannel:_myChannels){
 			if(myChannel == null)continue;
