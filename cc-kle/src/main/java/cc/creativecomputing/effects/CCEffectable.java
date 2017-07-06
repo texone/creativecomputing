@@ -8,7 +8,6 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCSelectable;
 import cc.creativecomputing.core.CCSelectionListener;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
 
@@ -25,6 +24,10 @@ public abstract class CCEffectable implements CCSelectable{
 	public static final String GROUP_ID_SOURCE = "group id";
 
 	protected final int _myID;
+	@CCProperty(name = "effect scale", min = 0, max = 1)
+	public double _cEffectScale = 1d;
+	@CCProperty(name = "active")
+	public boolean _cActive = true;
 	@CCProperty(name = "relative sources", hide = true)
 	public Map<String, Double> _myRelativeSources = new HashMap<String, Double>();
 	@CCProperty(name = "id sources", hide = true)

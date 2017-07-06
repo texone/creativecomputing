@@ -13,6 +13,7 @@ public class CCXYEuclidianDistanceSource extends CCModulationSource {
 	@CCProperty(name = "radius")
 	private double _cRadius;
 
+	@CCProperty(name = "positions")
 	private List<CCVector2> _myPositions = new ArrayList<>();
 
 	public CCXYEuclidianDistanceSource(String theName, double theRadius, CCVector2...thePositions) {
@@ -34,6 +35,11 @@ public class CCXYEuclidianDistanceSource extends CCModulationSource {
 	public void positions(List<CCVector2> thePositions){
 		_myPositions = thePositions;
 		_myIsUpdated = true;
+	}
+	
+	@Override
+	public boolean isUpdated() {
+		return true;
 	}
 
 }

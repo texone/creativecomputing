@@ -53,20 +53,20 @@ public class CCGradientEffect extends CCEffect{
 		double[] myResult = new double[_myResultLength];
 		CCColor myColor = _myGradient.color(
 			_myOffset1Signal.value(_myGlobalPhase + modulation("offset1").modulation(theEffectable)) * _cOffset1Amp + 
-			_myOffset2Signal.value(_myGlobalPhase + modulation("offset2").modulation(theEffectable)) * _cOffset2Amp +
-			_cOffset1Add
+			_myOffset2Signal.value(_myGlobalPhase + modulation("offset2").modulation(theEffectable)) * _cOffset2Amp + _cOffset1Add
 			
 		);
 		double[] hsb = myColor.hsb();
 		myColor.setHSB(
 			(hsb[0] + _cHShift) % 1, 
 			CCMath.saturate(hsb[1] + _cSShift),
-			CCMath.saturate(hsb[2] + _cBShift)
+			CCMath.saturate(hsb[2] + _cBShift),
+			myColor.a
 		);
 		
 		double myBlend = elementBlend(theEffectable);
 		for(int i = 0; i < _myResultLength;i++){
-			switch(i % 3){
+			switch(i % 4){
 			case 0:
 				myResult[i] = CCMath.saturate(myColor.r * myBlend * _cAmp);
 				break;
@@ -75,6 +75,9 @@ public class CCGradientEffect extends CCEffect{
 				break;
 			case 2:
 				myResult[i] = CCMath.saturate(myColor.b * myBlend * _cAmp);
+				break;
+			case 3:
+				myResult[i] = CCMath.saturate(myColor.a * myBlend * _cAmp);
 				break;
 			}
 		}

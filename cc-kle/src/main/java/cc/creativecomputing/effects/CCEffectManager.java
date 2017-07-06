@@ -10,6 +10,7 @@ import java.util.Set;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.modulation.CCConstantSource;
 import cc.creativecomputing.effects.modulation.CCIDSource;
 import cc.creativecomputing.effects.modulation.CCModulationSource;
@@ -24,28 +25,11 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	 */
 	private static final long serialVersionUID = -785875230663549514L;
 	
-	@CCProperty(name = "animation blender")
-	protected final CCEffectBlender _myEffectBlender;
 	
 	protected final List<Type> _myEffectables;
 	
 	private final String[] _myValueNames;
-	
-	@CCProperty(name = "scales", min = 0, max = 3, defaultValue = 1)
-	private final Map<String, Double> _cScales = new LinkedHashMap<>();
-	
-	@CCProperty(name = "filters")
-	private final Map<String, CCFilter> _cFilters = new LinkedHashMap<>();
-	
-	@CCProperty(name = "amount animations")
-	private final Map<String, CCEffect> _cAmountEffects = new LinkedHashMap<>();
-	
-	@CCProperty(name = "modulation sources")
-	private Map<String, CCModulationSource> _myRelativeSources = new LinkedHashMap<>();
-	private Set<String> _myIdSources = new HashSet<>();
-	
-	private Map<String, Integer> _myMaxIds = new HashMap<>();
-	
+
 	@CCProperty(name = "normalize")
 	private boolean _cNormalize = false;
 	@CCProperty(name = "bypass amount")
@@ -55,17 +39,46 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	@CCProperty(name = "end add")
 	private double _add = 0;
 	
+	@CCProperty(name = "scales", min = 0, max = 3, defaultValue = 1, hide = true)
+	private final Map<String, Double> _cScales = new LinkedHashMap<>();
+	@CCProperty(name = "defaults", hide = true)
+	private final Map<String, Double> _cDefaults = new LinkedHashMap<>();
+	
+	protected double[] _myDefaultValues;
+	
+	@CCProperty(name = "filters")
+	private final Map<String, CCFilter> _cFilters = new LinkedHashMap<>();
+	@CCProperty(name = "modulation sources")
+	private Map<String, CCModulationSource> _myRelativeSources = new LinkedHashMap<>();
+	private Set<String> _myIdSources = new HashSet<>();
+
+	@CCProperty(name = "animation blender")
+	protected final CCEffectBlender _myEffectBlender;
+	
+	@CCProperty(name = "amount animations")
+	private final Map<String, CCEffect> _cAmountEffects = new LinkedHashMap<>();
+	
+	
+	private Map<String, Integer> _myMaxIds = new HashMap<>();
+	
+	
 	public CCEffectManager(List<Type> theEffectables, String...theValueNames){
 		_myEffectables = theEffectables;
 		_myEffectBlender = new CCEffectBlender(this);
 		_myValueNames = theValueNames;
-		_cScales.put("global", 1.0);
+		_cScales.put("global scale", 1.0);
 		for(String myValueName:_myValueNames){
 			_cScales.put(myValueName + " scale", 1.0);
+			_cDefaults.put(myValueName + " default", 1.0);
 		}
+		_myDefaultValues = new double[theValueNames.length];
 		
 		addRelativeSources(new CCConstantSource(), new CCRandomSource());
-		addIdSources(CCEffectable.ID_SOURCE);
+		if(theEffectables.size() < 0)return;
+		Type myFirstEffectable = theEffectables.get(0);
+		for(String myIDSource:myFirstEffectable._myIdBasedSources.keySet()){
+			addIdSources(myIDSource);
+		}
 	}
 	
 	public List<Type> effectables(){
@@ -91,7 +104,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 		return super.put(theKey, theEffect);
 	}
 	
-	public CCEffect amountAnimation(String theKey, CCEffect theEffect) {
+	public CCEffect putAmountEffect(String theKey, CCEffect theEffect) {
 		theEffect.addGroupBlends(groups());
 		theEffect.valueNames(this, "amount");
 		return _cAmountEffects.put(theKey, theEffect);
@@ -164,6 +177,10 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 
 	@Override
 	public void update(CCAnimator theAnimator){
+		
+		for(int i = 0; i < _myValueNames.length;i++){
+			_myDefaultValues[i] = _cDefaults.get(_myValueNames[i] + " default");
+		}
 		for(CCModulationSource mySource:_myRelativeSources.values()){
 			mySource.update(theAnimator, this);
 			if(!mySource.isUpdated())continue;
@@ -189,6 +206,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 			double[] myValueA = new double[_myValueNames.length];
 			double[] myValueB = new double[_myValueNames.length];
 			for(CCEffect myEffect:values()){
+				if(myEffect._cBlend == 0)continue;
 				double[] myValues = myEffect.applyTo(myEffectable);
 				
 				for(int i = 0; i < myValues.length;i++){
@@ -220,7 +238,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 			
 			double[] myValues = _myEffectBlender.blend(myEffectable, myValueA, myValueB);
 //			myElement.motorSetup().rotateZ(CCMath.sign(myTranslation.x) * CCMath.pow(CCMath.abs(myTranslation.x), _cRotationPow) * _cRotationAngle);
-			double myGlobalScale = _cScales.get("global");
+			double myGlobalScale = _cScales.get("global scale");
 			for(int i = 0; i < myValues.length;i++){
 				String myValueName = _myValueNames[i];
 				
