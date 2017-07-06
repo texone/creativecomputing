@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
@@ -15,7 +15,7 @@ public class Sculpture {
 	public List<Element> elements;
 	public List<CCVector2> bounds;
 	public int nElements;
-	public CCXMLElement sculptureXML;
+	public CCDataElement sculptureXML;
 	
 	public Sculpture (Path theSculptureXMLFile) {
 
@@ -27,7 +27,7 @@ public class Sculpture {
 		
 		for (int i=0; i<nElements; i++) {
 			
-			CCXMLElement xmlElement = sculptureXML.child("elements").child(i);
+			CCDataElement xmlElement = sculptureXML.child("elements").child(i);
 			float x0 = xmlElement.child("motors").child(0).floatAttribute("x")/10f;
 			float x1 = xmlElement.child("motors").child(1).floatAttribute("x")/10f;
 			z = xmlElement.child("motors").child(0).floatAttribute("z")/10f;

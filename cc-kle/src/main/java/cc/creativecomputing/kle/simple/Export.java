@@ -11,7 +11,7 @@ import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.image.format.CCPNGImage;
 import cc.creativecomputing.io.CCFileOutputChannel;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -112,10 +112,10 @@ public class Export {
 	
 	public void saveMeta (Path file, List<Element> elements) {
 		CCNIOUtil.createDirectories(file);
-		CCXMLElement e = new CCXMLElement("mapping");
+		CCDataElement e = new CCDataElement("mapping");
 		for (int i=0; i<nElements; i++) {
 			for (int r=0; r<2; r++) {
-				CCXMLElement c = new CCXMLElement("channel");
+				CCDataElement c = new CCDataElement("channel");
 				c.addAttribute("id", i*2+r);
 				c.addAttribute("column", i);
 				c.addAttribute("row", r);
@@ -128,22 +128,22 @@ public class Export {
 		CCXMLIO.saveXMLElement(e, file.resolve("setup.xml"));
 		
 
-		CCXMLElement sculpture = new CCXMLElement("sculpture");
-		CCXMLElement elementsXML = new CCXMLElement("elements");
+		CCDataElement sculpture = new CCDataElement("sculpture");
+		CCDataElement elementsXML = new CCDataElement("elements");
 		
 		for (int i=0; i<nElements; i++) {
-			CCXMLElement elem = new CCXMLElement("element");
+			CCDataElement elem = new CCDataElement("element");
 			elem.addAttribute("id", i);
-			CCXMLElement motors = new CCXMLElement("motors");
+			CCDataElement motors = new CCDataElement("motors");
 			
-			CCXMLElement m = new CCXMLElement("motor");
+			CCDataElement m = new CCDataElement("motor");
 			m.addAttribute("id", i*2);
 			m.addAttribute("x", elements.get(i).ceil0.x*10);
 			m.addAttribute("y", elements.get(i).ceil0.y*10);
 			m.addAttribute("z", elements.get(i).ceil0.z*10);
 			motors.addChild(m);
 			
-			m = new CCXMLElement("motor");
+			m = new CCDataElement("motor");
 			m.addAttribute("id", i*2+1);
 			m.addAttribute("x", elements.get(i).ceil1.x*10);
 			m.addAttribute("y", elements.get(i).ceil1.y*10);
@@ -152,10 +152,10 @@ public class Export {
 			
 			
 			
-			CCXMLElement bounds = new CCXMLElement("bounds");
+			CCDataElement bounds = new CCDataElement("bounds");
 			
 			for (CCVector2 point: elements.get(i).bounds) {
-				CCXMLElement p = new CCXMLElement("point");
+				CCDataElement p = new CCDataElement("point");
 				p.addAttribute("x", point.x*10);
 				p.addAttribute("y", point.y*(-10));
 				bounds.addChild(p);
