@@ -5,7 +5,7 @@ import java.util.List;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.motors.CC2MotorRotationAxisBounds;
@@ -16,19 +16,19 @@ import cc.creativecomputing.math.CCVector3;
 
 public class CC2MotorRotationAxisConfigCreator {
 	
-	private CCXMLElement _mySculptureXML;
-	private CCXMLElement _myMappingsXML;
+	private CCDataElement _mySculptureXML;
+	private CCDataElement _myMappingsXML;
 
 	protected List<CCSequenceElement> _myElements = new ArrayList<>();
 	
 	public CC2MotorRotationAxisConfigCreator(int xRes, int yRes, double XSpace, double ySpace, double center, double amplitude, double radius, int frameRate){
 		
-		_mySculptureXML = new CCXMLElement("sculpture");
-		CCXMLElement myElementsXML = _mySculptureXML.createChild("elements");
+		_mySculptureXML = new CCDataElement("sculpture");
+		CCDataElement myElementsXML = _mySculptureXML.createChild("elements");
 		
-		_myMappingsXML = new CCXMLElement("mappings");
+		_myMappingsXML = new CCDataElement("mappings");
 		
-		CCXMLElement myMotorMappingXML = _myMappingsXML.createChild("mapping");
+		CCDataElement myMotorMappingXML = _myMappingsXML.createChild("mapping");
 		myMotorMappingXML.addAttribute("name", "motors");
 		myMotorMappingXML.addAttribute("columns", xRes);
 		myMotorMappingXML.addAttribute("rows", yRes);
@@ -73,7 +73,7 @@ public class CC2MotorRotationAxisConfigCreator {
 				
 				myElementsXML.addChild(myElement.toXML());
 				
-				CCXMLElement myChannel0XML = myMotorMappingXML.createChild("channel");
+				CCDataElement myChannel0XML = myMotorMappingXML.createChild("channel");
 				myChannel0XML.addAttribute("id", myMotor0.id());
 				myChannel0XML.addAttribute("column", x);
 				myChannel0XML.addAttribute("row", y);
@@ -81,7 +81,7 @@ public class CC2MotorRotationAxisConfigCreator {
 				myChannel0XML.addAttribute("min", -amplitude);
 				myChannel0XML.addAttribute("max", amplitude);
 				
-				CCXMLElement myChannel1XML = myMotorMappingXML.createChild("channel");
+				CCDataElement myChannel1XML = myMotorMappingXML.createChild("channel");
 				myChannel1XML.addAttribute("id", myMotor1.id());
 				myChannel1XML.addAttribute("column", x);
 				myChannel1XML.addAttribute("row", y);

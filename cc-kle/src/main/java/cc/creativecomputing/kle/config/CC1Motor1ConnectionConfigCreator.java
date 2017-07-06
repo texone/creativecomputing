@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.elements.CCSequenceElement;
 import cc.creativecomputing.kle.elements.motors.CC1Motor1ConnectionBounds;
@@ -16,19 +16,19 @@ import cc.creativecomputing.math.CCVector3;
 
 public class CC1Motor1ConnectionConfigCreator {
 	
-	private CCXMLElement _mySculptureXML;
-	private CCXMLElement _myMappingsXML;
+	private CCDataElement _mySculptureXML;
+	private CCDataElement _myMappingsXML;
 
 	protected List<CCSequenceElement> _myElements = new ArrayList<>();
 	
 	public CC1Motor1ConnectionConfigCreator(int xRes, int zRes, double XSpace, double zSpace, double top, double bottom, int frameRate){
 		
-		_mySculptureXML = new CCXMLElement("sculpture");
-		CCXMLElement myElementsXML = _mySculptureXML.createChild("elements");
+		_mySculptureXML = new CCDataElement("sculpture");
+		CCDataElement myElementsXML = _mySculptureXML.createChild("elements");
 		
-		_myMappingsXML = new CCXMLElement("mappings");
+		_myMappingsXML = new CCDataElement("mappings");
 		
-		CCXMLElement myMotorMappingXML = _myMappingsXML.createChild("mapping");
+		CCDataElement myMotorMappingXML = _myMappingsXML.createChild("mapping");
 		myMotorMappingXML.addAttribute("name", "motors");
 		myMotorMappingXML.addAttribute("columns", xRes);
 		myMotorMappingXML.addAttribute("rows", zRes);
@@ -75,7 +75,7 @@ public class CC1Motor1ConnectionConfigCreator {
 				
 				myElementsXML.addChild(myElement.toXML());
 				
-				CCXMLElement myChannel0XML = myMotorMappingXML.createChild("channel");
+				CCDataElement myChannel0XML = myMotorMappingXML.createChild("channel");
 				myChannel0XML.addAttribute("id", myMotor.id());
 				myChannel0XML.addAttribute("column", x);
 				myChannel0XML.addAttribute("row", z);
