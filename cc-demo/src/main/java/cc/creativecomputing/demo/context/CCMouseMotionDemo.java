@@ -1,7 +1,6 @@
 package cc.creativecomputing.demo.context;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.gl.app.events.CCMouseAdapter;

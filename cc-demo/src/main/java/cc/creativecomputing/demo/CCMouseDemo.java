@@ -1,7 +1,6 @@
 package cc.creativecomputing.demo;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.gl.app.events.CCMouseAdapter;
 import cc.creativecomputing.gl.app.events.CCMouseEvent;
 import cc.creativecomputing.graphics.CCGraphics;

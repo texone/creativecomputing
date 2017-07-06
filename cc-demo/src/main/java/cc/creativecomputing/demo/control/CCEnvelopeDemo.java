@@ -14,7 +14,6 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.texture.CCTexture2DAsset;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCCatmulRomSpline;
 import cc.creativecomputing.math.spline.CCSpline;
@@ -55,10 +54,19 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 	@CCProperty(name = "texture asset")
 	private CCTexture2DAsset _myAsset;
 	
-	@CCProperty(name = "rect width", min = 100, max = 200)
-	private float _cRectWidth = 0;
-	@CCProperty(name = "rect height", min = 100, max = 200)
-	private float _cRectHeight = 0;
+	@CCProperty(name = "diagram x", min = 0, max = 1000)
+	private double _cDiagramX = 0;
+
+	@CCProperty(name = "diagram y", min = 0, max = 500)
+	private double _cDiagramY = 0;
+	
+	@CCProperty(name = "diagram width", min = 0, max = 200)
+	private double _cDiagramWitdh = 0;
+
+	@CCProperty(name = "diagram height", min = 0, max = 200)
+	private double _cDiagramHeight = 0;
+	
+	
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
@@ -95,20 +103,22 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 		g.clearColor(_myClearColor);
 		g.clear();
 		
+		g.rect(_cDiagramX, _cDiagramY, _cDiagramWitdh, _cDiagramHeight);
+		
 //		for(CCRealtimeGraph myGraph:_myRealTimeGraph.instances()){
 ////			CCLog.info(myGraph);
 //			if(myGraph == null)continue;
 //			myGraph.draw(g);
 //		}
-		g.color(255);
-		
-		g.ortho();
-		g.color(1d);
-		g.beginShape(_myDrawMode);
-		for(int i = 0; i < 1000;i++){
-			g.vertex(i,CCMath.random(200,400));// _myEnvelope.value(i / 1000f) * 200
-		}
-		g.endShape();
+//		g.color(255);
+//		
+//		g.ortho();
+//		g.color(1d);
+//		g.beginShape(_myDrawMode);
+//		for(int i = 0; i < 1000;i++){
+//			g.vertex(i,CCMath.random(200,400));// _myEnvelope.value(i / 1000f) * 200
+//		}
+//		g.endShape();
 		
 //		if(_cDrawText)g.text(_myString,_cTextX,0);
 //		

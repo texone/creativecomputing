@@ -9,7 +9,7 @@ import cc.creativecomputing.io.netty.CCUDPClient;
 import cc.creativecomputing.io.netty.CCUDPServer;
 import cc.creativecomputing.io.netty.codec.CCNetStringCodec;
 
-public class CCUDPDemo extends CCGL2Adapter {
+public class CCUDPStringMessageDemo extends CCGL2Adapter {
 	
 	CCUDPServer<String> myServer;
 	
@@ -40,7 +40,7 @@ public class CCUDPDemo extends CCGL2Adapter {
 
 	public static void main(String[] args) {
 
-		CCUDPDemo demo = new CCUDPDemo();
+		CCUDPStringMessageDemo demo = new CCUDPStringMessageDemo();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1200, 600);

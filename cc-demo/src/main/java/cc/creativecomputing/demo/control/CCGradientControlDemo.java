@@ -59,7 +59,7 @@ public class CCGradientControlDemo extends CCGL2Adapter{
 	
 	@Override
 	public void display(CCGraphics g) {
-		g.clearColor(255);
+		g.clearColor(255,0,0);
 		g.clear();
 		
 //		g.beginShape(CCDrawMode.LINES);
