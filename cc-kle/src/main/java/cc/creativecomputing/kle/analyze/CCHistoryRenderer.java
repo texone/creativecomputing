@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
@@ -21,6 +22,7 @@ public class CCHistoryRenderer<Type extends CCHistoryDataPoint>{
 	@CCProperty(name = "alpha", min = 0, max = 1) float _cAlpha = 1f;
 	@CCProperty(name = "draw violations")boolean _cDrawViolations = true;
 	@CCProperty(name = "draw turns")boolean _cDrawTurns = true;
+	@CCProperty(name = "draw text")boolean _cDrawText = true;
 	@CCProperty(name = "draw values")boolean _cDrawValues = true;
 	@CCProperty(name = "violation point size", min = 1, max = 20)double _cViolationPointSize = 5;
 	@CCProperty(name = "draw points")boolean _cDrawPoints = false;
@@ -93,19 +95,18 @@ public class CCHistoryRenderer<Type extends CCHistoryDataPoint>{
 		_cValueSettings.put(theName, new CCHistoryValueSettings<Type>(theValue));
 	}
 	
-	private void drawCurveGraph(CCGraphics g, List<Type> theData, CCHistoryValueSettings<Type> theSettings, double theHeight, double myStart, double myEnd){
+	private void drawCurveGraph(CCGraphics g, List<Type> theData, CCHistoryValueSettings<Type> theSettings, double theHeight, double myStart, double myEnd, double theValueEnd){
 		double myStep = 0;
-		g.color(theSettings._cColor.r, theSettings._cColor.g, theSettings._cColor.b, _cAlpha);
 		g.pointSize(_cPointSize);
 		g.beginShape(_cDrawPoints ? CCDrawMode.POINTS : CCDrawMode.LINE_STRIP);
 		for(Type myData:new ArrayList<>(theData)){
-			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2), theSettings.normedValue(myData) * theHeight);
+			g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2 - theValueEnd), theSettings.normedValue(myData) * theHeight);
 			myStep += _cTimeBased ? myData.timeStep : 1;
 		}
 		g.endShape();
 	}
 	
-	private void drawCurveViolations(CCGraphics g, List<Type> theData, CCHistoryValueSettings<Type> theSettings, double theHeight, double myStart, double myEnd){
+	private void drawCurveViolations(CCGraphics g, List<Type> theData, CCHistoryValueSettings<Type> theSettings, double theHeight, double myStart, double myEnd, double theValueEnd){
 		if(!_cDrawViolations)return;
 		
 		g.pointSize(_cViolationPointSize);
@@ -113,7 +114,7 @@ public class CCHistoryRenderer<Type extends CCHistoryDataPoint>{
 		g.beginShape(CCDrawMode.POINTS);
 		for(Type myData:new ArrayList<>(theData)){
 			if(theSettings.isOverMax(myData)){
-				g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),theSettings.normedValue(myData) * theHeight);
+				g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2 - theValueEnd),theSettings.normedValue(myData) * theHeight);
 			}
 			myStep += _cTimeBased ? myData.timeStep : 1;
 		}
@@ -125,7 +126,7 @@ public class CCHistoryRenderer<Type extends CCHistoryDataPoint>{
 		
 	}
 	
-	private void drawCurveTurns(CCGraphics g, List<Type> theData, CCHistoryValueSettings<Type> theSettings, double theHeight, double myStart, double myEnd){
+	private void drawCurveTurns(CCGraphics g, List<Type> theData, CCHistoryValueSettings<Type> theSettings, double theHeight, double myStart, double myEnd, double theValueEnd){
 		if(!_cDrawTurns)return;
 		
 		g.pointSize(_cViolationPointSize);
@@ -142,26 +143,40 @@ public class CCHistoryRenderer<Type extends CCHistoryDataPoint>{
 			myStep = i * (_cTimeBased ? theData.get(i).timeStep : 1);
 				
 			if(CCMath.sign(myDif0) != CCMath.sign(myDif1)){
-				g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2),theSettings.normedValue(myData1) * theHeight);
+				g.vertex(CCMath.map(myStep, myStart, myEnd, -g.width() / 2, g.width() / 2 - theValueEnd),theSettings.normedValue(myData1) * theHeight);
 			}
 		}
 		g.endShape();
 	}
 	
-	public void drawCurves(CCGraphics g, List<Type> theData, CCHistoryValueSettings<Type> theSettings, double theHeight){
+	private void drawText(CCGraphics g, Type theData, CCHistoryValueSettings<Type> theSettings, double theX){
+		String myText = CCFormatUtil.nd(theSettings.value(theData),4);
+		if(theSettings.isOverMax(theData)){
+			myText = "### " + myText + " ###"; 
+		}
+		g.text(myText, theX, 0);
+	}
+	
+	public void drawCurves(CCGraphics g, List<Type> theData, CCHistoryValueSettings<Type> theSettings, double theHeight, double theTextOffset, double theValueEnd){
 		if(!theSettings._cShow)return;
+		if(theData.size() <= 0)return;
 
 		double myStart = start();
 		double myEnd = _cTimeBased ? _cTimeScale + _cTimeOffset : CCMath.max(_cHistorySize, theData.size());
+
+		g.color(theSettings._cColor.r, theSettings._cColor.g, theSettings._cColor.b, _cAlpha);
 		
-		drawCurveGraph(g, theData, theSettings, theHeight, myStart, myEnd);
-		drawCurveViolations(g, theData, theSettings, theHeight, myStart, myEnd);
-		drawCurveTurns(g, theData, theSettings, theHeight, myStart, myEnd);
+		drawText(g, theData.get(theData.size() - 1), theSettings, myEnd - theTextOffset);
+		drawCurveGraph(g, theData, theSettings, theHeight, myStart, myEnd, theValueEnd);
+		drawCurveViolations(g, theData, theSettings, theHeight, myStart, myEnd, theValueEnd);
+		drawCurveTurns(g, theData, theSettings, theHeight, myStart, myEnd, theValueEnd);
 	}
 	
 	public void drawCurves(CCGraphics g, List<Type> theData,  double theHeight){
+		int i = 0;
 		for(CCHistoryValueSettings<Type> mySettings:_cValueSettings.values()){
-			drawCurves(g, theData, mySettings, theHeight);
+			drawCurves(g, theData, mySettings, theHeight, i * 60, _cValueSettings.size() * 60);
+			i++;
 		}
 	}
 	

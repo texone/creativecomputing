@@ -264,18 +264,20 @@ public class CCSequenceAnalyzer extends CCMotionHistoryRenderer{
 			g.color(0f, _cAlpha);
 			
 			int myNumberOfElements = CCMath.min(_cNumberOfElements, CCMath.max(_myElementAnalyzers.size() - _cElement,0));
+			int textIndex = -1;
 			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
 				int i = 0;
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
 					if(_cAnalyzeChannels){
+				
 						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 							int myNumberOfChannels = myNumberOfElements * myAnalyzer._myChannelAnalyzers.size();
 							double myHeight = g.height() / (double)myNumberOfChannels;
 							g.pushMatrix();
 							g.translate(0, -g.height()/2 + i * myHeight);
 							i++;
-							drawCurves(g, myChannelAnalyzer.data, mySettings, myHeight * _cCurveScale);
+							drawCurves(g, myChannelAnalyzer.data, mySettings, myHeight * _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
 							g.popMatrix();
 						}
 					}else{
@@ -284,10 +286,11 @@ public class CCSequenceAnalyzer extends CCMotionHistoryRenderer{
 	
 						g.translate(0, -g.height()/2 + i * myHeight);
 						i++;
-						drawCurves(g,myAnalyzer.data, mySettings, myHeight* _cCurveScale);
+						drawCurves(g,myAnalyzer.data, mySettings, myHeight* _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
 						g.popMatrix();
 					}
 				}
+				textIndex++;
 			}
 			if(_cTimeBased){
 				for(int j = 0; j < 10;j++){
