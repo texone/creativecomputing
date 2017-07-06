@@ -32,9 +32,9 @@ public class ArtDmxPacket extends ArtNetPacket {
 	public ArtDmxPacket() {
 		super(PacketType.ART_OUTPUT);
 		setData(new byte[530]);
-		setHeader();
-		setProtocol();
-		data.setInt8(0x02, 13);
+		header();
+		protocol();
+		_myData.setInt8(0x02, 13);
 	}
 
 	public byte[] getDmxData() {
@@ -83,12 +83,12 @@ public class ArtDmxPacket extends ArtNetPacket {
 	@Override
 	public boolean parse(byte[] raw) {
 		setData(raw);
-		sequenceID = data.getInt8(12);
-		int subnetUniverse = data.getInt8(14);
+		sequenceID = _myData.getInt8(12);
+		int subnetUniverse = _myData.getInt8(14);
 		subnetID = subnetUniverse >> 4;
 		universeID = subnetUniverse & 0x0f;
-		numChannels = data.getInt16(16);
-		dmxData = data.getByteChunk(dmxData, 18, numChannels);
+		numChannels = _myData.getInt16(16);
+		dmxData = _myData.getByteChunk(dmxData, 18, numChannels);
 		return true;
 	}
 
@@ -96,8 +96,8 @@ public class ArtDmxPacket extends ArtNetPacket {
 		logger.finer("setting DMX data for: " + numChannels + " channels");
 		this.dmxData = Arrays.copyOf(dmxData, numChannels);
 		this.numChannels = numChannels;
-		data.setByteChunk(dmxData, 18, numChannels);
-		data.setInt16((1 == numChannels % 2 ? numChannels + 1 : numChannels),
+		_myData.setByteChunk(dmxData, 18, numChannels);
+		_myData.setInt16((1 == numChannels % 2 ? numChannels + 1 : numChannels),
 				16);
 	}
 
@@ -111,7 +111,7 @@ public class ArtDmxPacket extends ArtNetPacket {
 
 	public void setSequenceID(int id) {
 		sequenceID = id % 0xff;
-		data.setInt8(id, 12);
+		_myData.setInt8(id, 12);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class ArtDmxPacket extends ArtNetPacket {
 	public void setUniverse(int subnetID, int universeID) {
 		this.subnetID = subnetID & 0x0f;
 		this.universeID = universeID & 0x0f;
-		data.setInt16LE(subnetID << 4 | universeID, 14);
+		_myData.setInt16LE(subnetID << 4 | universeID, 14);
 		logger.finer("universe ID set to: subnet: "
 				+ ByteUtils.hex(subnetID, 2) + "/"
 				+ ByteUtils.hex(universeID, 2));

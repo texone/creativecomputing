@@ -30,18 +30,18 @@ public abstract class ArtNetPacket {
     public static final Logger logger =
             Logger.getLogger(ArtNetPacket.class.getClass().getName());
 
-    protected ByteUtils data;
-    protected final PacketType type;
+    protected ByteUtils _myData;
+    protected final PacketType _myType;
 
     public ArtNetPacket(PacketType type) {
-        this.type = type;
+        _myType = type;
     }
 
     /**
      * @return the data
      */
     public byte[] getData() {
-        return data.getBytes();
+        return _myData.getBytes();
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class ArtNetPacket {
      * @return
      */
     public int getLength() {
-        return data.length;
+        return _myData.length;
     }
 
     /**
@@ -59,7 +59,7 @@ public abstract class ArtNetPacket {
      * @return the type
      */
     public PacketType getType() {
-        return type;
+        return _myType;
     }
 
     /**
@@ -78,7 +78,7 @@ public abstract class ArtNetPacket {
      *            the data to set
      */
     public void setData(byte[] data) {
-        this.data = new ByteUtils(data);
+        _myData = new ByteUtils(data);
     }
 
     public void setData(byte[] raw, int maxLength) {
@@ -94,17 +94,17 @@ public abstract class ArtNetPacket {
      * Sets the header bytes of the packet consisting of {@link #HEADER} and the
      * type's OpCode.
      */
-    protected void setHeader() {
-        data.setByteChunk(HEADER, 0, 8);
-        data.setInt16LE(type.getOpCode(), 8);
+    protected void header() {
+        _myData.setByteChunk(HEADER, 0, 8);
+        _myData.setInt16LE(_myType.getOpCode(), 8);
     }
 
-    protected void setProtocol() {
-        data.setInt16(PROTOCOL_VERSION, 10);
+    protected void protocol() {
+        _myData.setInt16(PROTOCOL_VERSION, 10);
     }
 
     @Override
     public String toString() {
-        return data.toHex(getLength());
+        return _myData.toHex(getLength());
     }
 }

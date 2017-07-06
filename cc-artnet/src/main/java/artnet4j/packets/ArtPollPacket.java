@@ -33,20 +33,20 @@ public class ArtPollPacket extends ArtNetPacket {
     public ArtPollPacket(boolean replyOnce, boolean replyDirect) {
         super(PacketType.ART_POLL);
         setData(new byte[ARTPOLL_LENGTH]);
-        setHeader();
-        setProtocol();
+        header();
+        protocol();
         setTalkToMe(replyOnce, replyDirect);
     }
 
     @Override
     public int getLength() {
-        return data.getLength();
+        return _myData.getLength();
     }
 
     @Override
     public boolean parse(byte[] raw) {
         setData(raw, ARTPOLL_LENGTH);
-        int talk = data.getInt8(12);
+        int talk = _myData.getInt8(12);
         replyOnce = 0 == (talk & 0x02);
         replyDirect = 1 == (talk & 0x01);
         return true;
@@ -55,11 +55,11 @@ public class ArtPollPacket extends ArtNetPacket {
     private void setTalkToMe(boolean replyOnce, boolean replyDirect) {
         this.replyOnce = replyOnce;
         this.replyDirect = replyDirect;
-        data.setInt8((replyOnce ? 0 : 2) | (replyDirect ? 1 : 0), 12);
+        _myData.setInt8((replyOnce ? 0 : 2) | (replyDirect ? 1 : 0), 12);
     }
 
     @Override
     public String toString() {
-        return type + ": reply once:" + replyOnce + " direct: " + replyDirect;
+        return _myType + ": reply once:" + replyOnce + " direct: " + replyDirect;
     }
 }

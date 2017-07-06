@@ -22,7 +22,6 @@ package cc.creativecomputing.artnet;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.net.UnknownHostException;
 
 import cc.creativecomputing.artnet.packets.ArtNetPacket;
 import cc.creativecomputing.artnet.packets.ArtPollPacket;

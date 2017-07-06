@@ -121,25 +121,25 @@ public class ArtPollReplyPacket extends ArtNetPacket {
     public boolean parse(byte[] raw) {
         setData(raw);
         // System.out.println(data.toHex(256));
-        setIPAddress(data.getByteChunk(null, 10, 4));
-        subSwitch = data.getInt16(18);
-        oemCode = data.getInt16(20);
-        nodeStatus = data.getInt8(23);
-        shortName = new String(data.getByteChunk(null, 26, 17)).replaceAll("\\s", "");
-        longName = new String(data.getByteChunk(null, 44, 64)).replaceAll("\\s", "");
-        reportCode = NodeReportCode.getForID(new String(data.getByteChunk(null, 108, 5)));
-        numPorts = data.getInt16(172);
+        setIPAddress(_myData.getByteChunk(null, 10, 4));
+        subSwitch = _myData.getInt16(18);
+        oemCode = _myData.getInt16(20);
+        nodeStatus = _myData.getInt8(23);
+        shortName = new String(_myData.getByteChunk(null, 26, 17)).replaceAll("\\s", "");
+        longName = new String(_myData.getByteChunk(null, 44, 64)).replaceAll("\\s", "");
+        reportCode = NodeReportCode.getForID(new String(_myData.getByteChunk(null, 108, 5)));
+        numPorts = _myData.getInt16(172);
         ports = new PortDescriptor[numPorts];
         for (int i = 0; i < numPorts; i++) {
-            ports[i] = new PortDescriptor(data.getInt8(174 + i));
+            ports[i] = new PortDescriptor(_myData.getInt8(174 + i));
         }
-        dmxIns = data.getByteChunk(null, 186, 4);
-        dmxOuts = data.getByteChunk(null, 190, 4);
+        dmxIns = _myData.getByteChunk(null, 186, 4);
+        dmxOuts = _myData.getByteChunk(null, 190, 4);
         for (int i = 0; i < 4; i++) {
             dmxIns[i] &= 0x0f;
             dmxOuts[i] &= 0x0f;
         }
-        int styleID = data.getInt8(200);
+        int styleID = _myData.getInt8(200);
         for (NodeStyle s : NodeStyle.values()) {
             if (styleID == s.getStyleID()) {
                 nodeStyle = s;

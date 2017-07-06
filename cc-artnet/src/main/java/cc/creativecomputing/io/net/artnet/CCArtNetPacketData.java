@@ -41,7 +41,7 @@ public class CCArtNetPacketData {
     }
     
     /**
-     * @param data
+     * @param _myData
      *            the data to set
      */
     public void setData(byte[] theData) {

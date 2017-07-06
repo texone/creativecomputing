@@ -39,7 +39,7 @@ public class ArtNetServer extends ArtNetNode implements Runnable {
 
 	public static final int DEFAULT_PORT = 0x1936;
 
-	public static final String DEFAULT_BROADCAST_IP = "10.255.255.255";
+	public static final String DEFAULT_BROADCAST_IP = "10.0.0.255";
 
 	protected final int port;
 	protected final int sendPort;
@@ -146,8 +146,14 @@ public class ArtNetServer extends ArtNetNode implements Runnable {
 			setBroadcastAddress(DEFAULT_BROADCAST_IP);
 		}
 		if (socket == null) {
-			socket = new DatagramSocket(port);
-			logger.info("Art-Net server started at port: " + port);
+			try {
+				socket = new DatagramSocket(port);
+				System.out.println(InetAddress.getLocalHost());
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			logger.info("Art-Net server started at port: " + port + ":" + socket.getLocalAddress());
 			for (ArtNetServerListener l : listeners) {
 				l.artNetServerStarted(this);
 			}
