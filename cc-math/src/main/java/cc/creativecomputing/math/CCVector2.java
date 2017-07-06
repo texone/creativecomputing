@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import cc.creativecomputing.core.CCProperty;
+
 /**
  * Vector2 represents a point or vector in a two dimensional system. This implementation stores its data in
  * double-precision.
@@ -83,8 +85,10 @@ public class CCVector2 implements Cloneable, Externalizable {
 		return CCMath.atan2(-theVec.y, theVec.x);
 	}
 
+	@CCProperty(name = "x")
     public double x = 0;
-    public double y = 0;
+	@CCProperty(name = "y")
+	public double y = 0;
     
     /**
      * Constructs a new vector set to (x, y).

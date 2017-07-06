@@ -4,7 +4,7 @@ import cc.creativecomputing.core.CCProperty;
 
 public class CCSignalSettings{
 
-	@CCProperty(name = "scale", min = 0, max = 1, defaultValue = 1, digits = 4)
+	@CCProperty(name = "scale", min = 0, max = 10, defaultValue = 1, digits = 4)
 	private double _myScale = 1;
 	@CCProperty(name = "octaves", min = 1, max = 10, defaultValue = 2)
 	private double _myOctaves = 1;
