@@ -34,12 +34,12 @@ public class CCXMLTree extends CCAbstractXMLTool{
      * @example HtmlTree_pagetree
      * @related HtmlTree
      */
-    private CCXMLElement _myRootElement;
+    private CCDataElement _myRootElement;
 
     /**
      * field to keep the parent element to put the children elements in
      */
-    protected CCXMLElement _myActualElement;
+    protected CCDataElement _myActualElement;
     
     private boolean _myIsfirstTag = false;
     private boolean _myIsRootNode = false;
@@ -64,7 +64,7 @@ public class CCXMLTree extends CCAbstractXMLTool{
     
     private void setAsRoot(final String theTagName, final Map<String, String> theAttributes){
     	_myIsRootNode = false;
-		_myRootElement = new CCXMLElement(theTagName, theAttributes);
+		_myRootElement = new CCDataElement(theTagName, theAttributes);
 		_myActualElement = _myRootElement;
 		_myActualElement.line(_myParser.line);
     }
@@ -92,7 +92,7 @@ public class CCXMLTree extends CCAbstractXMLTool{
 			return;
 		}
 		
-		CCXMLElement keep = new CCXMLElement(theTagName, theAttributes);
+		CCDataElement keep = new CCDataElement(theTagName, theAttributes);
 		keep.line(_myParser.line);
 		_myActualElement.addChild(keep);
 		if (!theIsStandAlone)
@@ -100,7 +100,7 @@ public class CCXMLTree extends CCAbstractXMLTool{
     }
     
     public void handleCDATASection(final String theCDATASection){
-		final CCXMLElement myCDATASection = new CCXMLElement(theCDATASection);
+		final CCDataElement myCDATASection = new CCDataElement(theCDATASection);
 		myCDATASection.cdata = true;
 		myCDATASection._myIsPCData = true;
 		_myActualElement.addChild(myCDATASection);
@@ -132,14 +132,14 @@ public class CCXMLTree extends CCAbstractXMLTool{
 		 */
 
     public void handleText(final String theText) {
-		_myActualElement.addChild(new CCXMLElement(theText, true));
+		_myActualElement.addChild(new CCDataElement(theText, true));
     }
 
 /**
  * Returns the root of the XML tree
  * @return the root element
  */
-	public CCXMLElement rootElement(){
+	public CCDataElement rootElement(){
 		return _myRootElement;
 	}
 

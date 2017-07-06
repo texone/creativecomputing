@@ -34,7 +34,7 @@ import cc.creativecomputing.io.CCNIOUtil;
  * have to create an instance of CCXMLIO and use its loadElement method.
  * </p>
  * 
- * @see CCXMLElement
+ * @see CCDataElement
  */
 public class CCXMLIO{
 
@@ -470,7 +470,7 @@ public class CCXMLIO{
 			//if(oChar != '/')actualElement = keep;
 			return toParse;
 		}
-		CCXMLElement xmlElement;
+		CCDataElement xmlElement;
 		
 		@SuppressWarnings("unchecked")
 		public void run(){
@@ -516,7 +516,7 @@ public class CCXMLIO{
 	 * @param theFeedbackHandler the handler for the parsed result
 	 * @param theIgnoreLineFeed tell the parser to ignore new line feeds
 	 * @see #loadElementNow(String, CCAbstractXMLTool)
-	 * @see #saveXMLElement(CCXMLElement, String)
+	 * @see #saveXMLElement(CCDataElement, String)
 	 */
 	public <XMLTool extends CCAbstractXMLTool> void parseXML(
 		final String thePath, 
@@ -698,7 +698,7 @@ public class CCXMLIO{
 	 * @param thePath
 	 * @return xml element for the given url
 	 */
-	public static CCXMLElement createXMLElement(final Path thePath, final boolean theIgnoreLineFeed){
+	public static CCDataElement createXMLElement(final Path thePath, final boolean theIgnoreLineFeed){
 		if(_myInstance == null){
 			_myInstance = new CCXMLIO();
 		}
@@ -709,11 +709,11 @@ public class CCXMLIO{
 		return null;
 	}
 	
-	public static CCXMLElement createXMLElement(final Path thePath){
+	public static CCDataElement createXMLElement(final Path thePath){
 		return createXMLElement(thePath, true);
 	}
 	
-	public static CCXMLElement parse(String theXML, boolean theIgnoreLineFeed){
+	public static CCDataElement parse(String theXML, boolean theIgnoreLineFeed){
 		if(_myInstance == null){
 			_myInstance = new CCXMLIO();
 		}
@@ -726,7 +726,7 @@ public class CCXMLIO{
 		return null;
 	}
 	
-	public static CCXMLElement parse(String theXML){
+	public static CCDataElement parse(String theXML){
 		return parse(theXML, true);
 	}
 	
@@ -742,7 +742,7 @@ public class CCXMLIO{
 	 * @param thePath path to save the XMLElement as XML File 
 	 * @param theEncoding used for the XML File 
 	 */
-	public static void saveXMLElement(final CCXMLElement theXMLElement, Path thePath, String theEncoding){
+	public static void saveXMLElement(final CCDataElement theXMLElement, Path thePath, String theEncoding){
 		try{
 			CCNIOUtil.createDirectories(thePath);
 			PrintStream myWriter = new PrintStream(Files.newOutputStream(thePath), true, theEncoding);
@@ -762,7 +762,7 @@ public class CCXMLIO{
 	 * @param theXMLElement the element to be saved
 	 * @param thePath path to save the XMLElement as XML File 
 	 */
-	public static void saveXMLElement(final CCXMLElement theXMLElement, Path thePath){
+	public static void saveXMLElement(final CCDataElement theXMLElement, Path thePath){
 		saveXMLElement(theXMLElement, thePath, "ISO-8859-1");
 	}
 

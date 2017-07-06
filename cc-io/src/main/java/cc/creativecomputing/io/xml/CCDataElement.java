@@ -31,7 +31,7 @@ import cc.creativecomputing.core.util.CCStringUtil;
  * @see CCXMLIO
  */
 
-public class CCXMLElement implements Iterable<CCXMLElement>{
+public class CCDataElement implements Iterable<CCDataElement>{
 	
 
 	/**
@@ -42,7 +42,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	/**
 	 * Vector keeping the children of this Element
 	 */
-	private List<CCXMLElement> _myChildren;
+	private List<CCDataElement> _myChildren;
 
 	/**
 	 * true if this element is empty 
@@ -59,7 +59,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	/**
 	 * Holds the parent of this Element
 	 */
-	private CCXMLElement _myParent;
+	private CCDataElement _myParent;
 
 	/**
 	 * String holding the kind of the Element (the tag name)
@@ -75,10 +75,10 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theChildren List, the children of the element
 	 * @param theIsPCData boolean, true if the element is a PCDATA section
 	 */
-	private CCXMLElement(
+	private CCDataElement(
 		final String theName, 
 		final Map<String,String> theAttributes, 
-		final List<CCXMLElement> theChildren, 
+		final List<CCDataElement> theChildren, 
 		final boolean theIsPCData
 	){
 		_myName = theName;
@@ -105,11 +105,11 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theName String, name of the element
 	 * @param theIsPCData boolean, true if the element is a PCDATA section
 	 */
-	public CCXMLElement(
+	public CCDataElement(
 		final String theName, 
 		final boolean theIsPCData
 	){
-		this(theName, new LinkedHashMap<String,String>(), new ArrayList<CCXMLElement>(), theIsPCData);
+		this(theName, new LinkedHashMap<String,String>(), new ArrayList<CCDataElement>(), theIsPCData);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theAttributes Map, attributes for the element, with names and values
 	 * @param theChildren List, the children of the element
 	 */
-	public CCXMLElement(final String theName, final Map<String,String> theAttributes, final List<CCXMLElement> theChildren){
+	public CCDataElement(final String theName, final Map<String,String> theAttributes, final List<CCDataElement> theChildren){
 		this(theName, theAttributes, theChildren, false);
 	}
 
@@ -127,8 +127,8 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theName String, name of the element
 	 */
 
-	public CCXMLElement(final String theName){
-		this(theName, new LinkedHashMap<String,String>(), new ArrayList<CCXMLElement>());
+	public CCDataElement(final String theName){
+		this(theName, new LinkedHashMap<String,String>(), new ArrayList<CCDataElement>());
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theChildren Vector, children of the element
 	 */
 
-	public CCXMLElement(final String theName, final List<CCXMLElement> theChildren){
+	public CCDataElement(final String theName, final List<CCDataElement> theChildren){
 		this(theName, new LinkedHashMap<String,String>(), theChildren);
 	}
 
@@ -147,8 +147,8 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theAttributes Map, attributes of the element, with names and values
 	 */
 
-	public CCXMLElement(final String theName, final Map<String,String> theAttributes){
-		this(theName, theAttributes, new ArrayList<CCXMLElement>());
+	public CCDataElement(final String theName, final Map<String,String> theAttributes){
+		this(theName, theAttributes, new ArrayList<CCDataElement>());
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param toCheck Vector
 	 * @return boolean
 	 */
-	private boolean has(List<CCXMLElement> toCheck){
+	private boolean has(List<CCDataElement> toCheck){
 		if (toCheck.isEmpty() || toCheck == null){
 			return false;
 		}else{
@@ -402,11 +402,11 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	public int intAttribute(String key){
 		String attributeValue =  _myAttributes.get(key);
 		if (attributeValue == null)
-			throw new CCXMLInvalidAttributeException(this._myName, key);
+			throw new CCXMLInvalidAttributeException(_myName, key);
 		try{
 			return Integer.parseInt( _myAttributes.get(key));
 		}catch (NumberFormatException e){
-			throw new CCXMLInvalidAttributeException(this._myName, key, "int");
+			throw new CCXMLInvalidAttributeException(_myName, key, "int");
 		}
 	}
 	
@@ -479,7 +479,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 		try{
 			return Boolean.parseBoolean( _myAttributes.get(key));
 		}catch (NumberFormatException e){
-			throw new CCXMLInvalidAttributeException(this._myName, key, "boolean");
+			throw new CCXMLInvalidAttributeException(_myName, key, "boolean");
 		}
 	}
 	
@@ -509,24 +509,25 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @see #countAttributes()
 	 * @see #addAttribute(String, String)
 	 */
-	public float floatAttribute(String key){
-		String attributeValue = _myAttributes.get(key);
+	public float floatAttribute(String theKey){
+		String attributeValue = _myAttributes.get(theKey);
 		if (attributeValue == null)
-			throw new CCXMLInvalidAttributeException(this._myName, key);
+			throw new CCXMLInvalidAttributeException(_myName, theKey);
 		try{
-			return Float.parseFloat(_myAttributes.get(key));
+			return Float.parseFloat(_myAttributes.get(theKey));
 		}catch (NumberFormatException e){
-			throw new CCXMLInvalidAttributeException(this._myName, key, "float",e);
+			try{
+				return Float.parseFloat(_myAttributes.get(theKey).replace(",", "."));
+			}catch (NumberFormatException e1){
+				throw new CCXMLInvalidAttributeException(_myName, theKey, "double",e);
+			}
 		}
 	}
 	
 	public float floatAttribute(String key, final float theDefaultValue){
-		String attributeValue =  _myAttributes.get(key);
-		if (attributeValue == null)
-			return theDefaultValue;
 		try{
-			return Float.parseFloat( _myAttributes.get(key));
-		}catch (NumberFormatException e){
+			return floatAttribute(key);
+		}catch (Exception e){
 			return theDefaultValue;
 		}
 	}
@@ -548,21 +549,22 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	public double doubleAttribute(String theKey){
 		String attributeValue = _myAttributes.get(theKey);
 		if (attributeValue == null)
-			throw new CCXMLInvalidAttributeException(this._myName, theKey);
+			throw new CCXMLInvalidAttributeException(_myName, theKey);
 		try{
 			return Double.parseDouble(_myAttributes.get(theKey));
 		}catch (NumberFormatException e){
-			throw new CCXMLInvalidAttributeException(this._myName, theKey, "float",e);
+			try{
+				return Double.parseDouble(_myAttributes.get(theKey).replace(",", "."));
+			}catch (NumberFormatException e1){
+				throw new CCXMLInvalidAttributeException(_myName, theKey, "double",e);
+			}
 		}
 	}
 	
 	public double doubleAttribute(String key, final double theDefaultValue){
-		String attributeValue =  _myAttributes.get(key);
-		if (attributeValue == null)
-			return theDefaultValue;
 		try{
-			return Double.parseDouble( _myAttributes.get(key));
-		}catch (NumberFormatException e){
+			return doubleAttribute(key);
+		}catch (Exception e){
 			return theDefaultValue;
 		}
 	}
@@ -659,13 +661,13 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @return CCXMLElement, the parent of the CCXMLElement or null 
 	 * if the CCXMLElement is the root element
 	 * @shortdesc With getParent() you can get the parent of a CCXMLElement.
-	 * @see #addChild(CCXMLElement)
+	 * @see #addChild(CCDataElement)
 	 * @see #countChildren()
 	 * @see #child(String)
 	 * @see #children()
 	 * @see #hasChildren()
 	 */
-	public CCXMLElement parent(){
+	public CCDataElement parent(){
 		return _myParent;
 	}
 
@@ -675,13 +677,13 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * a child element.
 	 * @return a list of elements
 	 * @shortdesc Returns an Array with all the children of an element.
-	 * @see #addChild(CCXMLElement)
+	 * @see #addChild(CCDataElement)
 	 * @see #countChildren()
 	 * @see #child(int)
 	 * @see #parent()
 	 * @see #hasChildren()
 	 */
-	public List<CCXMLElement> children(){
+	public List<CCDataElement> children(){
 		return _myChildren;
 	}
 
@@ -692,7 +694,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @return CCXMLElement, the first child element
 	 * @shortdesc Returns the first child of the element.
 	 */
-	public CCXMLElement firstChild(){
+	public CCDataElement firstChild(){
 		if (hasChildren())
 			return child(0);
 		else
@@ -705,7 +707,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @return CCXMLElement, the last child of the element
 	 * @shortdesc Returns the last child of the element.
 	 */
-	public CCXMLElement lastChild(){
+	public CCDataElement lastChild(){
 		if (hasChildren())
 			return child(countChildren() - 1);
 		else
@@ -718,7 +720,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @return CCXMLElement, the next sibling of the element
 	 * @shortdesc Returns the next sibling of the element.
 	 */
-	public CCXMLElement nextSibling(){
+	public CCDataElement nextSibling(){
 		if (_myParent == null)
 			return null;
 
@@ -737,7 +739,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @return CCXMLElement, the previous sibling of the element.
 	 * @shortdesc Returns the previous sibling of the element.
 	 */
-	public CCXMLElement previousSibling(){
+	public CCDataElement previousSibling(){
 		if (_myParent == null)
 			return null;
 
@@ -756,20 +758,20 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theIndex int, number of the child
 	 * @return CCXMLElement, the child
 	 * @shortdesc Use getChild() to get a certain child element of a CCXMLElement.
-	 * @see #addChild(CCXMLElement)
+	 * @see #addChild(CCDataElement)
 	 * @see #countChildren()
 	 * @see #children()
 	 * @see #parent()
 	 * @see #hasChildren()
 	 */
-	public CCXMLElement child(final int theIndex){
+	public CCDataElement child(final int theIndex){
 		return _myChildren.get(theIndex);
 	}
 
 	/**
 	 * Specifies whether or not the XML object has child nodes.
 	 * @return boolean, true if the specified CCXMLElement has one or more child nodes; otherwise false.
-	 * @see #addChild(CCXMLElement)
+	 * @see #addChild(CCDataElement)
 	 * @see #countChildren()
 	 * @see #child(String)
 	 * @see #children()
@@ -782,7 +784,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	/**
 	 * With countChildren() you get the number of children of a CCXMLElement.
 	 * @return int, the number of children
-	 * @see #addChild(CCXMLElement)
+	 * @see #addChild(CCDataElement)
 	 * @see #child(String)
 	 * @see #children()
 	 * @see #parent()
@@ -804,13 +806,13 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * 
 	 * @param element CCXMLElement, element you want to add as child
 	 * @shortdesc Adds the specified node to the XML element's child list.
-	 * @see #addChild(CCXMLElement)
+	 * @see #addChild(CCDataElement)
 	 * @see #countChildren()
 	 * @see #children()
 	 * @see #parent()
 	 * @see #hasChildren()
 	 */
-	public void addChild(CCXMLElement element){
+	public void addChild(CCDataElement element){
 		_myIsEmpty = false;
 		element._myParent = this;
 		_myChildren.add(element);
@@ -820,7 +822,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param element CCXMLElement, element you want to add as child
 	 * @param position int, position where you want to insert the element
 	 */
-	public void addChild(CCXMLElement element, int position){
+	public void addChild(CCDataElement element, int position){
 		_myIsEmpty = false;
 		element._myParent = this;
 		_myChildren.add(position, element);
@@ -832,9 +834,9 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theElementName name of the element to create
 	 * @return the create element
 	 */
-	public CCXMLElement createChild(String theElementName){
+	public CCDataElement createChild(String theElementName){
 		_myIsEmpty = false;
-		CCXMLElement myElement = new CCXMLElement(theElementName);
+		CCDataElement myElement = new CCDataElement(theElementName);
 		addChild(myElement);
 		return myElement;
 	}
@@ -846,27 +848,27 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theContent content to put into the element
 	 * @return the create element
 	 */
-	public CCXMLElement createChild(String theElementName, String theContent){
+	public CCDataElement createChild(String theElementName, String theContent){
 		_myIsEmpty = false;
-		CCXMLElement myElement = new CCXMLElement(theElementName);
+		CCDataElement myElement = new CCDataElement(theElementName);
 		myElement.addContent(theContent);
 		addChild(myElement);
 		return myElement;
 	}
 	
-	public CCXMLElement createChild(String theElementName, int theContent){
+	public CCDataElement createChild(String theElementName, int theContent){
 		return createChild(theElementName, "" + theContent);
 	}
 	
-	public CCXMLElement createChild(String theElementName, float theContent){
+	public CCDataElement createChild(String theElementName, float theContent){
 		return createChild(theElementName, "" + theContent);
 	}
 	
-	public CCXMLElement createChild(String theElementName, double theContent){
+	public CCDataElement createChild(String theElementName, double theContent){
 		return createChild(theElementName, "" + theContent);
 	}
 	
-	public CCXMLElement createChild(String theElementName, boolean theContent){
+	public CCDataElement createChild(String theElementName, boolean theContent){
 		return createChild(theElementName, "" + theContent);
 	}
 	
@@ -875,7 +877,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theText
 	 */
 	@Deprecated() public void addText(final String theText){
-		addChild(new CCXMLElement (theText,true));
+		addChild(new CCDataElement (theText,true));
 	}
 	
 	/**
@@ -883,7 +885,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theText the text to add
 	 */
 	public void addContent(final String theText){
-		addChild(new CCXMLElement (theText,true));
+		addChild(new CCDataElement (theText,true));
 	}
 	
 	/**
@@ -891,7 +893,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theValue the float to add
 	 */
 	public void addContent(final float theValue){
-		addChild(new CCXMLElement (theValue+"",true));
+		addChild(new CCDataElement (theValue+"",true));
 	}
 	
 	/**
@@ -899,14 +901,14 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theValue the int to add
 	 */
 	public void addContent(final int theValue){
-		addChild(new CCXMLElement (theValue +"",true));
+		addChild(new CCDataElement (theValue +"",true));
 	}
 
 	/**
 	 * Removes the specified XML element from its parent. Also deletes all descendants of the element.
 	 * @param childNumber int, the number of the child to remove
 	 * @shortdesc Removes the specified XML element from its parent.
-	 * @see #addChild(CCXMLElement)
+	 * @see #addChild(CCDataElement)
 	 * @see #countChildren()
 	 */
 	public void removeChild(int childNumber){
@@ -923,7 +925,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 */
 	public int getDepth(){
 		int result = 0;
-		for (CCXMLElement myChild:_myChildren){
+		for (CCDataElement myChild:_myChildren){
 			result = Math.max(result, myChild.getDepth());
 		}
 		return 1 + result;
@@ -934,13 +936,13 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theNodeName String
 	 * @return list of child elements that have the supplied node name
 	 */
-	public List<CCXMLElement> children(final String theNodeName){
+	public List<CCDataElement> children(final String theNodeName){
 		if (theNodeName.indexOf('/') != -1) {
 			return childrenRecursive(CCStringUtil.split(theNodeName, '/'), 0);
 		}
 
-		List<CCXMLElement> result = new ArrayList<CCXMLElement>();
-		for (final CCXMLElement myChild : _myChildren) {
+		List<CCDataElement> result = new ArrayList<CCDataElement>();
+		for (final CCDataElement myChild : _myChildren) {
 			if (myChild._myName.equals(theNodeName)) {
 				result.add(myChild);
 			}
@@ -955,14 +957,14 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theOffset where in the items[] array we're currently looking
 	 * @return matching element or null if no match
 	 */
-	protected List<CCXMLElement> childrenRecursive(String[] theItems, int theOffset) {
+	protected List<CCDataElement> childrenRecursive(String[] theItems, int theOffset) {
 		if (theOffset == theItems.length - 1) {
 			return children(theItems[theOffset]);
 		}
-		List<CCXMLElement> myMatches = children(theItems[theOffset]);
-		List<CCXMLElement> myResult = new ArrayList<CCXMLElement>();
-		for (CCXMLElement myMatch : myMatches) {
-			List<CCXMLElement> myMatchingChildren = myMatch.childrenRecursive(theItems, theOffset + 1);
+		List<CCDataElement> myMatches = children(theItems[theOffset]);
+		List<CCDataElement> myResult = new ArrayList<CCDataElement>();
+		for (CCDataElement myMatch : myMatches) {
+			List<CCDataElement> myMatchingChildren = myMatch.childrenRecursive(theItems, theOffset + 1);
 			myResult.addAll(myMatchingChildren);
 		}
 		return myResult;
@@ -974,11 +976,11 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theNodeName String
 	 * @return CCXMLElement
 	 */
-	public CCXMLElement child(final String theNodeName){
+	public CCDataElement child(final String theNodeName){
 		if (theNodeName.indexOf('/') != -1) {
 	      return childRecursive(CCStringUtil.split(theNodeName, '/'), 0);
 	    }
-		for (CCXMLElement myChild:_myChildren){
+		for (CCDataElement myChild:_myChildren){
 			if (myChild._myName.equals(theNodeName)){
 				return myChild;
 			}
@@ -993,10 +995,10 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	 * @param theOffset where in the items[] array we're currently looking
 	 * @return matching element or null if no match
 	 */
-	protected CCXMLElement childRecursive(String[] theItems, int theOffset) {
+	protected CCDataElement childRecursive(String[] theItems, int theOffset) {
 		// if it's a number, do an index instead
 		if (Character.isDigit(theItems[theOffset].charAt(0))) {
-			CCXMLElement myResult = child(Integer.parseInt(theItems[theOffset]));
+			CCDataElement myResult = child(Integer.parseInt(theItems[theOffset]));
 			if (theOffset == theItems.length - 1) {
 				return myResult;
 			} else {
@@ -1004,7 +1006,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 			}
 		}
 		
-		CCXMLElement myResult = child(theItems[theOffset]);
+		CCDataElement myResult = child(theItems[theOffset]);
 
 		if (theOffset == theItems.length - 1 || myResult == null) {
 			return myResult;
@@ -1013,8 +1015,8 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 		}
 	}
 
-	public CCXMLElement child(final String theNodeName, final String theAttribute, final String theValue){
-		for (CCXMLElement myChild:_myChildren){
+	public CCDataElement child(final String theNodeName, final String theAttribute, final String theValue){
+		for (CCDataElement myChild:_myChildren){
 			if (myChild._myName.equals(theNodeName) && myChild.hasAttribute(theAttribute) && myChild.attribute(theAttribute).equals(theValue)){
 				return myChild;
 			}
@@ -1025,7 +1027,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	private void toString(String theSpace, StringBuffer result, boolean inText){
 		
 		if (isTextElement()){
-			if (this.cdata){
+			if (cdata){
 				result.append("<![CDATA[");
 				result.append(name());
 				result.append("]]>");
@@ -1060,7 +1062,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 		boolean myBreakClose = false;
 
 		boolean myIsInText = inText;
-		for(CCXMLElement myChild:children()){
+		for(CCDataElement myChild:children()){
 			if(!myChild.isTextElement()){
 				if(!myIsInText)result.append("\n");
 				myBreakClose = true;
@@ -1115,7 +1117,7 @@ public class CCXMLElement implements Iterable<CCXMLElement>{
 	/* (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()
 	 */
-	public Iterator<CCXMLElement> iterator() {
+	public Iterator<CCDataElement> iterator() {
 		return _myChildren.iterator();
 	}
 
