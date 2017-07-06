@@ -18,7 +18,7 @@ import java.util.Scanner;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.io.xml.CCXMLElement;
+import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 
 /**
@@ -89,28 +89,28 @@ public class CCWatchDog extends Thread{
 	}
 	
 	private void loadSettings(final String theFile) {
-		CCXMLElement myProcessXML = CCXMLIO.createXMLElement(CCNIOUtil.dataPath(theFile));
+		CCDataElement myProcessXML = CCXMLIO.createXMLElement(CCNIOUtil.dataPath(theFile));
 		System.out.println(CCNIOUtil.dataPath(theFile));
-		CCXMLElement myStartTimeXML = myProcessXML.child("starttime");
+		CCDataElement myStartTimeXML = myProcessXML.child("starttime");
 		if(myStartTimeXML != null)_myStartTime = myStartTimeXML.intContent(0);
 
-		CCXMLElement myRestartTimeXML = myProcessXML.child("restarttime");
+		CCDataElement myRestartTimeXML = myProcessXML.child("restarttime");
 		if(myRestartTimeXML != null)_myRestartTime = myRestartTimeXML.intContent(0);
 		
-		CCXMLElement myClassNameXML = myProcessXML.child("class");
+		CCDataElement myClassNameXML = myProcessXML.child("class");
 		if(myClassNameXML == null)throw new RuntimeException("You have to define a class to start inside the process.xml!");
 		_myClassName = myClassNameXML.content();
 		
-		CCXMLElement myClassPathXML = myProcessXML.child("classpath");
+		CCDataElement myClassPathXML = myProcessXML.child("classpath");
 		if(myClassPathXML == null)throw new RuntimeException("You have to define a classpath inside the process.xml!");
 		
-		for(CCXMLElement myLibXML:myClassPathXML) {
+		for(CCDataElement myLibXML:myClassPathXML) {
 			_myLibraries.add(myLibXML.content());
 		}
 		
-		CCXMLElement myVMParametersXML = myProcessXML.child("vm_options");
+		CCDataElement myVMParametersXML = myProcessXML.child("vm_options");
 		if(myVMParametersXML != null) {
-			for(CCXMLElement myVMParameterXML:myVMParametersXML) {
+			for(CCDataElement myVMParameterXML:myVMParametersXML) {
 				_myVirtualMachineOptions.add(myVMParameterXML.content());
 			}
 		}
@@ -119,14 +119,14 @@ public class CCWatchDog extends Thread{
 		
 	}
 	
-	private void loadRestartOptions(CCXMLElement theRestartOptionsXML){
+	private void loadRestartOptions(CCDataElement theRestartOptionsXML){
 		if(theRestartOptionsXML == null) return;
 		
-		CCXMLElement myMinFrameRateXML = theRestartOptionsXML.child("minFrameRate");
+		CCDataElement myMinFrameRateXML = theRestartOptionsXML.child("minFrameRate");
 		if(myMinFrameRateXML != null) {
 			addCommandHandler("-frameRate", new CCWatchDogFrameRateRestart(myMinFrameRateXML.floatContent()));
 		}
-		CCXMLElement myMaxOffTimeXML = theRestartOptionsXML.child("maxOffTime");
+		CCDataElement myMaxOffTimeXML = theRestartOptionsXML.child("maxOffTime");
 		if(myMaxOffTimeXML != null) {
 			_myMaxOffTime = myMaxOffTimeXML.intContent();
 		}
