@@ -30,7 +30,6 @@ import cc.creativecomputing.controlui.timeline.controller.TrackContext;
 import cc.creativecomputing.controlui.timeline.controller.track.CCDoubleTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
-import cc.creativecomputing.core.logging.CCLog;
 
 /**
  * @author christianriekoff
@@ -70,23 +69,19 @@ public class SwingCurvePanel extends SwingAbstractTrackView implements Component
 
 	@Override
 	public void componentHidden(ComponentEvent theArg0) {
-		CCLog.info("Component HIDDEN");
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent theArg0) {
-		CCLog.info("Component Moved");
 	}
 
 	@Override
 	public void componentResized(ComponentEvent theArg0) {
 		_myDataView.render();
-		CCLog.info("Component Resized");
 	}
 
 	@Override
 	public void componentShown(ComponentEvent theArg0) {
-		CCLog.info("Component SHOWN");
 	}
 	
 	public void updateView(){

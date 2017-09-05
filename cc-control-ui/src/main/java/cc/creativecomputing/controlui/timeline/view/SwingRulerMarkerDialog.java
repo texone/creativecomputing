@@ -21,7 +21,7 @@ class SwingRulerMarkerDialog extends JDialog implements ActionListener, Property
 	 * 
 	 */
 	private static final long serialVersionUID = 139787124989150690L;
-		private String typedText = null;
+	private String typedText = null;
 		private JTextField _myTextField;
 
 		private JOptionPane optionPane;

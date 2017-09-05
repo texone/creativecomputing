@@ -50,15 +50,13 @@ public abstract class CCCurveTrackController extends CCTrackController{
 	) {
 		super(theTrackContext, theTrack, theParent);
 		
-		if(theTrack.property() == null)return;
 		
 		_myCreateTool = new CCCreateTool(this);
 		_myCurveTool = new CCCurveTool(this);
 		
-		CCLog.info(this+":"+_myCreateTool);
-		
 		_myCreateTool.setTool(CCTimelineTools.CREATE_LINEAR_POINT);
 		_myActiveTool = _myCreateTool;
+		if(theTrack.property() == null)return;
 		
 		theTrack.property().events().add(theValue -> {
 			if(_mySelectedPoints == null || _mySelectedPoints.size() == 0)return;
