@@ -14,7 +14,7 @@ import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
 
-public class CCControlTreeComponent extends JPanel implements TreeSelectionListener{
+public class CCControlTreeComponent extends JPanel{
 	
 	/**
 	 * 
@@ -24,6 +24,7 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 	private JTree _myTree;
 	
 	private DefaultMutableTreeNode _myRootNode;
+	private CCObjectPropertyHandle _myRootHandle;
 	
 	private CCControlComponent _myControlCompoent;
 	
@@ -41,7 +42,17 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
         _myTree = new JTree(_myRootNode);
         _myTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         //Listen for when the selection changes.
-        _myTree.addTreeSelectionListener(this);
+        _myTree.addTreeSelectionListener(e -> {
+        		DefaultMutableTreeNode node = (DefaultMutableTreeNode)_myTree.getLastSelectedPathComponent();
+        	 
+            if (node == null) return;
+            if(!(node.getUserObject() instanceof CCObjectControl))return;
+     
+            CCObjectControl nodeInfo = (CCObjectControl)node.getUserObject();
+            nodeInfo.open();
+            _myControlCompoent.showContent(nodeInfo);
+            _myControlCompoent.setPresets(nodeInfo.propertyHandle());
+        });
  
         //Listen for when the selection changes.
 //        _myTree.addTreeSelectionListener(this);
@@ -51,13 +62,18 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
         _myPropertyMap = new CCPropertyMap();
 	}
 	
+	public CCObjectPropertyHandle rootProperty() {
+		return _myRootHandle;
+	}
+	
 	public void setData(Object theObject, String thePresetPath){
 		_myPropertyMap.setData(theObject, thePresetPath);
 
-		CCObjectPropertyHandle myRootHandle = _myPropertyMap.rootHandle();
-		CCObjectControl myObjectControl = new CCObjectControl(myRootHandle, _myControlCompoent, 0);
+		_myRootHandle = _myPropertyMap.rootHandle();
+		CCObjectControl myObjectControl = new CCObjectControl(_myRootHandle, _myControlCompoent, 0);
 		_myRootNode.setUserObject(myObjectControl);
 		myObjectControl.createUI(_myRootNode);
+        _myControlCompoent.showContent(myObjectControl);
 	}
 	
 	public CCObjectPropertyHandle rootHandle(){
@@ -67,22 +83,5 @@ public class CCControlTreeComponent extends JPanel implements TreeSelectionListe
 	public CCPropertyMap propertyMap(){
 		return _myPropertyMap;
 	}
-	
-	
-
-    /** Required by TreeSelectionListener interface. */
-    @Override
-    public void valueChanged(TreeSelectionEvent e) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)_myTree.getLastSelectedPathComponent();
- 
-        if (node == null) return;
-        if(!(node.getUserObject() instanceof CCObjectControl))return;
- 
-        CCObjectControl nodeInfo = (CCObjectControl)node.getUserObject();
-        _myControlCompoent.showContent(nodeInfo.controlComponent());
-        _myControlCompoent.setPresets(nodeInfo.propertyHandle());
-        _myControlCompoent.infoPanel();
-    }
-	
 	
 }

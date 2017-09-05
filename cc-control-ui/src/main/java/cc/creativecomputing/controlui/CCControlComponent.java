@@ -32,12 +32,11 @@ public class CCControlComponent extends JSplitPane{
 
 	private CCControlTreeComponent _myTreeComponent;
 	
-	private final JScrollPane _myScrollPane;
 	private final JSplitPane _myControlsTimelinePane;
 	
 	private JPanel _myInfoPanel;
 	
-	private CCPresetComponent _myPresetComponent;
+//	private CCPresetComponent _myPresetComponent;
 	
 	private TimelineContainer _myTimelineContainer;
 	private SwingTimelineContainerView _myTimelineView;
@@ -49,11 +48,11 @@ public class CCControlComponent extends JSplitPane{
 		_myInfoPanel.setLayout(new BorderLayout());
 		_myInfoPanel.setBackground(Color.GRAY);
         
-		_myScrollPane = new JScrollPane(_myInfoPanel);
-		_myScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+		JScrollPane myScrollPane = new JScrollPane(_myInfoPanel);
+		myScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 //		_myScrollPane.setPreferredSize(new Dimension(800,800));
-		_myScrollPane.setBackground(Color.GREEN);
-		_myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		myScrollPane.setBackground(Color.GREEN);
+		myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		_myTreeComponent = new CCControlTreeComponent("app", this);
 		_myTimelineView = new SwingTimelineContainerView(theMainFrame);
@@ -76,18 +75,18 @@ public class CCControlComponent extends JSplitPane{
 		_myTimelineContainer.view(_myTimelineView);
 //		_myTimelineView.setSize(1900, 500);
 		
-        _myPresetComponent = new CCPresetComponent();
+//        _myPresetComponent = new CCPresetComponent();
         
-        JSplitPane myControlsPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
-        CCUIStyler.styleSplitPane(myControlsPane);
-        myControlsPane.setDividerLocation(30 * SwingGuiConstants.SCALE);
-        myControlsPane.setTopComponent(_myPresetComponent);
-        myControlsPane.setBottomComponent(_myScrollPane);
+//        JSplitPane myControlsPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
+//        CCUIStyler.styleSplitPane(myControlsPane);
+//        myControlsPane.setDividerLocation(30 * SwingGuiConstants.SCALE);
+//        myControlsPane.setTopComponent(_myPresetComponent);
+//        myControlsPane.setBottomComponent(myScrollPane);
         
 
         _myControlsTimelinePane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
         CCUIStyler.styleSplitPane(_myControlsTimelinePane);
-        _myControlsTimelinePane.setLeftComponent(myControlsPane);
+        _myControlsTimelinePane.setLeftComponent(myScrollPane);
         _myControlsTimelinePane.setDividerLocation(330 * SwingGuiConstants.SCALE);
         _myControlsTimelinePane.setRightComponent((SwingTimelineView)_myTimelineContainer.activeTimeline().view());
         
@@ -147,21 +146,15 @@ public class CCControlComponent extends JSplitPane{
 	}
 	
 	public void setPresets(CCObjectPropertyHandle theObjectHandle){
-		_myPresetComponent.setPresets(theObjectHandle);
-	}
-	
-	public JScrollPane scrollPane(){
-		return _myScrollPane;
-	}
-	
-	public JPanel infoPanel(){
-		return _myInfoPanel;
+//		_myPresetComponent.setPresets(theObjectHandle);
 	}
 	
 	public void setData(Object theData, String thePresetPath){
 		_myTreeComponent.setData(theData, thePresetPath);
-        _myPresetComponent.setPresets(_myTreeComponent.rootHandle());
-        _myPresetComponent.loadFirstPreset();
+		_myTreeComponent.rootHandle().preset(0);
+//        _myPresetComponent.setPresets(_myTreeComponent.rootHandle());
+//        _myPresetComponent.loadFirstPreset();
+		
 	}
 	
 	public CCPropertyMap propertyMap(){

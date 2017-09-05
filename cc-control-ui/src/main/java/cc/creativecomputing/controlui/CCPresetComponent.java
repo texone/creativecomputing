@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCPresetHandling;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
@@ -161,7 +162,7 @@ public class CCPresetComponent extends JPanel{
 		if(_myPropertyHandle == null)return;
 		
 		Path myPresetPath = _myPresetsPath.resolve(thePreset + ".json");
-		CCDataIO.saveDataObject(_myPropertyHandle.presetData(), myPresetPath, CCDataFormats.JSON);
+		CCDataIO.saveDataObject(_myPropertyHandle.presetData(CCPresetHandling.SELFCONTAINED), myPresetPath, CCDataFormats.JSON);
 		_myPropertyHandle.preset(thePreset);
 	}
 	

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.Path;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -12,6 +13,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCPresetHandling;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
@@ -26,45 +28,9 @@ public class CCPropertyPopUp extends JPopupMenu {
 	
 
 	
-	private class PresetAction implements ActionListener{
-		
-		private String _myPreset;
-		
-		public PresetAction(String thePreset){
-			_myPreset = thePreset;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent theArg0) {
-			((CCObjectPropertyHandle)_myProperty).preset(_myPreset);
-		}
-	}
 	
-	private class AddPresetAction implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String myPreset = (String)JOptionPane.showInputDialog(
-				CCPropertyPopUp.this,
-                "enter the preset name",
-                "add preset",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                null,
-                null
-			);
-
-			//If a string was returned, say so.
-			if (myPreset != null && myPreset.length() > 0) {
-				CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
-				Path myPresetPath = myHandle.presetPath().resolve(myPreset + ".json");
-				CCDataIO.saveDataObject(myHandle.presetData(), myPresetPath, CCDataFormats.JSON);
-				myHandle.preset(myPreset);
-			    return;
-			}
-		}
-		
-	}
+	
+	
 	
 	/**
 	 * 
@@ -137,7 +103,82 @@ public class CCPropertyPopUp extends JPopupMenu {
 			}
 		});
 		add(_myPresetMenue);
-		addItem("add preset", new AddPresetAction());
+		addItem("add preset", action -> {
+			String myPreset = (String)JOptionPane.showInputDialog(
+				CCPropertyPopUp.this,
+				"enter the preset name",
+				"add preset",
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				null,
+				null
+			);
+
+			savePreset(myPreset);
+		});
+		
+		addItem("remove current preset", action -> {
+			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
+			for(int i = 0; i < _myPresetMenue.getItemCount();i++) {
+				JMenuItem myItem = _myPresetMenue.getItem(i);
+				if(myItem.isSelected()) {
+					myHandle.deletePreset(myItem.getText());
+					myHandle.preset(null);
+					setPresets(myHandle);
+				}
+			}
+		});
+		
+		addItem("update current preset", action -> {
+			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
+			for(int i = 0; i < _myPresetMenue.getItemCount();i++) {
+				JMenuItem myItem = _myPresetMenue.getItem(i);
+				if(myItem.isSelected()) {
+					savePreset(myItem.getText());
+				}
+			}
+		});
+	}
+	
+	private void savePreset(String thePreset) {
+		if(thePreset == null)return;
+		if(thePreset.length() <= 0)return;
+		
+		CCPresetHandling myHandling = CCPresetHandling.SELFCONTAINED;
+		
+		if(_myProperty.hasSubPreset()) {
+			Object[] possibilities = {
+				CCPresetHandling.SELFCONTAINED.desc, 
+				CCPresetHandling.UPDATED.desc, 
+				CCPresetHandling.RESTORED
+			};
+            String myChosenOption = (String)JOptionPane.showInputDialog(
+            		CCPropertyPopUp.this,
+            		"There exist subpresets:\n" + 
+            		"Define how to handle them",
+            		"Handle Sub Presets",
+                 JOptionPane.PLAIN_MESSAGE,
+                 null,
+                 possibilities,
+            		"save selfcontained"
+            	);
+
+            //If a string was returned, say so.
+            if ((myChosenOption != null) && (myChosenOption.length() > 0)) {
+                if (myChosenOption.equals(CCPresetHandling.SELFCONTAINED.desc)){
+                		myHandling = CCPresetHandling.SELFCONTAINED;
+                }else if (myChosenOption.equals(CCPresetHandling.UPDATED.desc)){
+                		myHandling = CCPresetHandling.UPDATED;
+                }else if (myChosenOption.equals(CCPresetHandling.RESTORED.desc)){
+                		myHandling = CCPresetHandling.RESTORED;
+                }
+            }
+
+            //If you're here, the return value was null/empty.
+            setLabel("Come on, finish the sentence!");
+		}
+		CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
+		myHandle.savePreset(thePreset, myHandling);
 	}
 	
 	private void addItem(String theName, ActionListener theListener){
@@ -147,13 +188,24 @@ public class CCPropertyPopUp extends JPopupMenu {
 		add(myItem);
 	}
 	
+	private void addCheckBoxItem(String theName, ActionListener theListener){
+		JCheckBoxMenuItem myItem = new JCheckBoxMenuItem(theName, false);
+		myItem.setFont(SwingGuiConstants.ARIAL_11);
+		myItem.addActionListener(theListener);
+		add(myItem);
+	}
+	
 	public void setPresets(CCObjectPropertyHandle theObjectHandle){
-		CCNIOUtil.createDirectories(theObjectHandle.presetPath());
-		for(Path myPath:CCNIOUtil.list(theObjectHandle.presetPath(), "json")){
-			String myPresetString = CCNIOUtil.fileName(myPath.getFileName().toString());
-			JMenuItem myPresetItem = new JMenuItem(myPresetString);
+		for(String myPreset:theObjectHandle.presets()){
+			JMenuItem myPresetItem = new JCheckBoxMenuItem(myPreset, myPreset.equals(theObjectHandle.preset()));
 			myPresetItem.setFont(SwingGuiConstants.ARIAL_11);
-			myPresetItem.addActionListener(new PresetAction(myPresetString));
+			myPresetItem.addActionListener(theArg -> {
+				for(int i = 0; i < _myPresetMenue.getItemCount();i++) {
+					_myPresetMenue.getItem(i).setSelected(false);
+				}
+				myPresetItem.setSelected(true);
+				((CCObjectPropertyHandle)_myProperty).preset(myPreset);
+			});
 			_myPresetMenue.add(myPresetItem);
 		}
 	}
