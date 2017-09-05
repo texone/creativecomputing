@@ -212,4 +212,8 @@ public abstract class CCPropertyHandle<Type>{
 			
 		}
 	}
+
+	public boolean hasSubPreset() {
+		return false;
+	}
 }
