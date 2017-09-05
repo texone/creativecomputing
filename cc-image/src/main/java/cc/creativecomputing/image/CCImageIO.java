@@ -28,6 +28,7 @@ import cc.creativecomputing.image.format.CCDDSFormat;
 import cc.creativecomputing.image.format.CCImageFormat;
 import cc.creativecomputing.image.format.CCImageIOFormat;
 import cc.creativecomputing.image.format.CCKTXFormat;
+import cc.creativecomputing.image.format.CCPNGFormat;
 import cc.creativecomputing.image.format.CCSGIFormat;
 import cc.creativecomputing.image.format.CCTGAFormat;
 import cc.creativecomputing.io.CCIOUtil;
@@ -486,16 +487,17 @@ public class CCImageIO {
 	public static CCImageFormat SGI_FORMAT = new CCSGIFormat();
 	public static CCImageFormat TGA_FORMAT = new CCTGAFormat();
 	public static CCImageFormat KTX_FORMAT = new CCKTXFormat();
+	public static CCImageFormat PNG_FORMAT = new CCPNGFormat();
 
 	static {
 		
 		// ImageIO provider, the fall-back, must be the first one added
-		addImageFormat("png", IMAGE_IO_FORMAT);
 		addImageFormat("jpg", IMAGE_IO_FORMAT);
 		addImageFormat("jpeg", IMAGE_IO_FORMAT);
 		addImageFormat("gif", IMAGE_IO_FORMAT);
 
 		// Other special-case providers
+		addImageFormat("png", PNG_FORMAT);
 		addImageFormat("dds", DDS_FORMAT);
 		addImageFormat("sgi", SGI_FORMAT);
 		addImageFormat("tga", TGA_FORMAT);

@@ -611,6 +611,9 @@ public class CCImage {
 		if( _myBuffer == null){
 			return new CCColor();
 		}
+		if( _myBuffer[0] == null){
+			return new CCColor();
+		}
 		
 		theX %= _myWidth;
 		theY %= _myHeight;
