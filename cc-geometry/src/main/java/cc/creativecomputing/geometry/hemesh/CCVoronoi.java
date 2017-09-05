@@ -467,7 +467,7 @@ public class CCVoronoi {
 		siteidx = 0;
 		_myVoronoiFaces = null;
 
-		_myGraphEdges = null;
+		_myGraphEdges = new LinkedList<CCVoronoiEdge>();
 		
 		sort(thePoints);
 
@@ -495,6 +495,7 @@ public class CCVoronoi {
 	public List<CCLine3> edges(){
 		if(_myEdges != null)return _myEdges;
 		_myEdges = new ArrayList<>();
+		if(_myGraphEdges == null)return _myEdges;
 		for(CCVoronoiEdge myEdge:_myGraphEdges){
 			_myEdges.add(new CCLine3(myEdge.start().clone(), myEdge.end().clone()));
 		}
