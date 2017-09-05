@@ -1,6 +1,7 @@
 package cc.creativecomputing.control;
 
 import cc.creativecomputing.control.timeline.TrackData;
+import cc.creativecomputing.control.timeline.point.LinearControlPoint;
 
 public class CCEnvelope {
 	
@@ -8,6 +9,8 @@ public class CCEnvelope {
 	
 	public CCEnvelope(){
 		_myCurrentCurve = new TrackData(null);
+		_myCurrentCurve.add(new LinearControlPoint(0, 0));
+		_myCurrentCurve.add(new LinearControlPoint(1, 1));
 	}
 	
 	
