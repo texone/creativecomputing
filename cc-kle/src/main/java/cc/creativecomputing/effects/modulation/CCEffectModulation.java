@@ -16,6 +16,9 @@ public class CCEffectModulation {
 	@CCProperty(name = "id amounts")
 	private Map<String, CCIdSource> _myIdAmounts = new HashMap<>();
 	
+	@CCProperty(name = "combiner")
+	private CCModulationCombiner _myCombiner = CCModulationCombiner.ADD;
+	
 	private static class CCIdSource{
 		
 		private String _mySourceName;
@@ -49,6 +52,14 @@ public class CCEffectModulation {
 		for(String myIdSource:theEffectManager.idSources()){
 			_myIdAmounts.put(myIdSource, new CCIdSource(myIdSource));
 		}
+	}
+	
+	public void addRelativeSource(String theSource) {
+		_myRelativeAmounts.put(theSource, 0d);
+	}
+	
+	public void addIdSource(String theSource) {
+		_myIdAmounts.put(theSource, new CCIdSource(theSource));
 	}
 	
 	public double modulation(CCEffectable theElement) {
@@ -113,10 +124,25 @@ public class CCEffectModulation {
 	
 	public double modulation(CCEffectable theElement, double theMin, double theMax) {
 		double myResultPhase = 0;
+		switch(_myCombiner) {
+		case ADD:
+			myResultPhase = 0;
+			break;
+		case MAX:
+			myResultPhase = -1;
+			break;
+		}
 		for(String myRelativeSource:_myEffectManager.relativeSources()){
 			double scaleValue = scaleValue(theMin, theMax, theElement.relativeSource(myRelativeSource), _myRelativeAmounts.get(myRelativeSource));
 			if(Double.isNaN(scaleValue))continue;
-			myResultPhase += scaleValue;
+			switch(_myCombiner) {
+			case ADD:
+				myResultPhase += scaleValue;
+				break;
+			case MAX:
+				myResultPhase = CCMath.max(myResultPhase, scaleValue);
+				break;
+			}
 		}
 		
 		
@@ -127,8 +153,19 @@ public class CCEffectModulation {
 			
 			if(Double.isNaN(myModPhase) || Double.isNaN(myDivPhase))continue;
 			
-			myResultPhase += _myModBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.mod, myIdSource2.modAmount); 
-			myResultPhase += _myDivBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.div, myIdSource2.divAmount);
+			double modBlend = _myModBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.mod, myIdSource2.modAmount); 
+			double divBlend = _myDivBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.div, myIdSource2.divAmount);
+			
+			switch(_myCombiner) {
+			case ADD:
+				myResultPhase += modBlend;
+				myResultPhase += divBlend;
+				break;
+			case MAX:
+				myResultPhase = CCMath.max(myResultPhase, modBlend);
+				myResultPhase = CCMath.max(myResultPhase, divBlend);
+				break;
+			}
 		}
 		
 		return myResultPhase;
