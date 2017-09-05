@@ -2,6 +2,7 @@ package cc.creativecomputing.control.handles;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,8 +20,8 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
 import cc.creativecomputing.core.CCSelectable;
 import cc.creativecomputing.core.CCSelectionListener;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
+import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCField;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCListEntry;
@@ -31,6 +32,7 @@ import cc.creativecomputing.core.util.CCReflectionUtil.CCMethodParameter;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.spline.CCSpline;
 
@@ -186,7 +188,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(int i = 0; i < thePath.getNameCount() - 1;i++){
 			String myName = thePath.getName(i).toString();
 			if(myPropertyParent._myChildHandles.containsKey(myName)){
-				CCLog.info("CONTAINS:" + myName);
 				CCPropertyHandle<?> myProperty =  myPropertyParent._myChildHandles.get(myName);
 				if(myProperty instanceof CCObjectPropertyHandle){
 					myPropertyParent = (CCObjectPropertyHandle)myProperty;
@@ -195,7 +196,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 					throw new RuntimeException(thePath + " can not be created " + myName + " is not an object property");
 				}
 			}else{
-				CCLog.info("CONTAINS NOT:" + myName);
 				CCObjectPropertyHandle myProperty = new CCObjectPropertyHandle(myPropertyParent, new CCDirectMember(new Object(), new CCPropertyObject(myName)), _mySettingsPath);
 				myPropertyParent._myChildHandles.put(myName, myProperty);
 				myPropertyParent = myProperty;
@@ -206,8 +206,38 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		return myProperty;
 	}
 	
-	public CCPropertyHandle<?> property(String theID){
+	
+	/**
+	 * Returns the first child node with the given node name. If there
+	 * is no such child node the method returns null.
+	 * @param theID String
+	 * @return the resulting property
+	 */
+	public CCPropertyHandle<?> property(final String theID){
+		if (theID.indexOf('/') != -1) {
+	      return propertyRecursive(CCStringUtil.split(theID, '/'), 0);
+	    }
 		return _myChildHandles.get(theID);
+	}
+
+	/**
+	 * Internal helper function for {@linkplain #child(String)}
+	 * 
+	 * @param theItems result of splitting the query on slashes
+	 * @param theOffset where in the items[] array we're currently looking
+	 * @return matching element or null if no match
+	 */
+	protected CCPropertyHandle<?> propertyRecursive(String[] theItems, int theOffset) {
+		// if it's a number, do an index instead
+		
+		
+		CCPropertyHandle<?> myResult = property(theItems[theOffset]);
+
+		if (theOffset == theItems.length - 1 || myResult == null) {
+			return myResult;
+		} else {
+			return ((CCObjectPropertyHandle)myResult).propertyRecursive(theItems, theOffset + 1);
+		}
 	}
 	
 	
@@ -379,11 +409,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	
 	@Override
 	public CCDataObject dataObject(){
-		if(_myPreset != null){
-			CCDataObject myResult = new CCDataObject();
-			myResult.put("preset", _myPreset);
-			return myResult;
-		}
 		CCDataObject myData = new CCDataObject();
 		for(String myKey:_myChildHandles.keySet()){
 			CCPropertyHandle myHandle = _myChildHandles.get(myKey);
@@ -392,17 +417,44 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		return myData;
 	}
 	
-	public CCDataObject presetData(){
-		CCDataObject myData = new CCDataObject();
-		for(String myKey:_myChildHandles.keySet()){
-			CCPropertyHandle myHandle = _myChildHandles.get(myKey);
-			myData.put(myHandle.name(), myHandle.data());
+	public CCDataObject presetData(CCPresetHandling theHandling){
+		
+		switch(theHandling) {
+		case SELFCONTAINED:
+			return dataObject();
+		case UPDATED:
+		case RESTORED:
+			if(_myPreset != null){
+				CCDataObject myResult = new CCDataObject();
+				myResult.put("preset", _myPreset);
+				if(theHandling == CCPresetHandling.UPDATED)savePreset(_myPreset, theHandling);
+				if(theHandling == CCPresetHandling.RESTORED)preset(_myPreset);
+				return myResult;
+			}
+			CCDataObject myData = new CCDataObject();
+			for(String myKey:_myChildHandles.keySet()){
+				CCPropertyHandle myHandle = _myChildHandles.get(myKey);
+				if(myHandle instanceof CCObjectPropertyHandle) {
+					myData.put(myHandle.name(), ((CCObjectPropertyHandle)myHandle).presetData(theHandling));
+				}else {
+					myData.put(myHandle.name(), myHandle.data());
+				}
+			}
+			return myData;
 		}
-		
+		return null;
+	}
+	
+	public void savePreset(String thePreset, CCPresetHandling theHandling) {
+		Path myPresetPath = presetPath().resolve(thePreset + ".json");
 		CCDataObject myResult = new CCDataObject();
-		myResult.put("value", myData);
-		
-		return myResult;
+		myResult.put("value", myResult);
+		CCDataIO.saveDataObject(presetData(theHandling), myPresetPath, CCDataFormats.JSON);
+	}
+	
+	public void deletePreset(String thePreset) {
+		Path myPresetPath = presetPath().resolve(thePreset + ".json");
+		CCNIOUtil.delete(myPresetPath);
 	}
 	
 	@Override
@@ -436,8 +488,8 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		if(!theData.containsKey("timeline")){
 			_myLastData = theData;
 		}
-		
-		if(_myRootObject == null || theData.containsKey("value")){
+
+		if(theData.containsKey("value")){
 			theData = theData.getObject("value");
 		}
 
@@ -465,6 +517,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	}
 	
 	public void preset(String thePreset){
+		if(thePreset == null) {
+			_myPreset = null;
+			return;
+		}
 		try{
 			Path myPresetPath = _myPresetPath.resolve(Paths.get(thePreset + ".json"));
 			if(!CCNIOUtil.exists(myPresetPath))return;
@@ -475,8 +531,34 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		}
 	}
 	
+	public void preset(int thePreset) {
+		if(thePreset < presets().size())
+			preset(presets().get(thePreset));
+	}
+	
 	public String preset(){
 		return _myPreset;
+	}
+	
+	public boolean hasSubPreset() {
+		if(_myPreset != null) {
+			Path myPresetPath = _myPresetPath.resolve(Paths.get(_myPreset + ".json"));
+			if(CCNIOUtil.exists(myPresetPath))return true;
+		}
+		for(CCPropertyHandle<?> myHandle:_myChildHandles.values()){
+			if(myHandle.hasSubPreset())return true;
+		}
+		return false;
+	}
+	
+	public List<String> presets(){
+		List<String> myResult = new ArrayList<>();
+		CCNIOUtil.createDirectories(presetPath());
+		for(Path myPath:CCNIOUtil.list(presetPath(), "json")){
+			String myPresetString = CCNIOUtil.fileName(myPath.getFileName().toString());
+			myResult.add(myPresetString);
+		}
+		return myResult;
 	}
 	
 	@Override
@@ -533,7 +615,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			
 			CCObjectPropertyHandle myChildObject =  (CCObjectPropertyHandle)myChild;
 			if(myChildObject.isSelected()){
-				CCLog.info(myChild.name());
 				myChildObject.children().get(theName).directValue(theValue);
 			}
 			
