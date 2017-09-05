@@ -71,6 +71,8 @@ public class CCObjectControl extends JPanel implements CCControl{
 	protected CCPropertyPopUp _myPopUp;
 	
 	protected CCObjectPropertyHandle _myProperty;
+	
+	private JLabel _myLabel;
 
 	public CCObjectControl(CCObjectPropertyHandle thePropertyHandle, CCControlComponent theInfoPanel, int theDepth){
 		_myProperty = thePropertyHandle;
@@ -125,47 +127,28 @@ public class CCObjectControl extends JPanel implements CCControl{
 		myConstraints.weightx = 1f;
 		myConstraints.insets = new Insets(0, (5  + 10 * (_myDepth - 1)) * SwingGuiConstants.SCALE, 0, 5 * SwingGuiConstants.SCALE);
 	
-		JLabel myLabel = new JLabel("[+] " + _myName, SwingConstants.LEFT);
-		myLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		myLabel.setForeground(Color.WHITE);
-		myLabel.setFont(SwingGuiConstants.ARIAL_BOLD_10);
-		myLabel.setPreferredSize(new Dimension(100 * SwingGuiConstants.SCALE,15 * SwingGuiConstants.SCALE));
+		_myLabel = new JLabel("[+] " + _myName, SwingConstants.LEFT);
+		_myLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		_myLabel.setForeground(Color.WHITE);
+		_myLabel.setFont(SwingGuiConstants.ARIAL_BOLD_10);
+		_myLabel.setPreferredSize(new Dimension(100 * SwingGuiConstants.SCALE,15 * SwingGuiConstants.SCALE));
 		
-		myLabel.addMouseListener(new MouseAdapter() {
+		_myLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent theE) {
-				JLabel myLabel = (JLabel)theE.getSource();
 				if(theE.getButton() == MouseEvent.BUTTON1){
 					if(_myIsSelected){
-						remove(_myControlComponent);
-						invalidate(); 
-						validate(); // or ((JComponent) getContentPane()).revalidate();
-						repaint();
-						_myIsSelected = false;	
-						myLabel.setText("[+] " + _myName);
+						close();
 					}else{
-						GridBagConstraints myConstraints = new GridBagConstraints();
-						myConstraints.gridx = 0;
-						myConstraints.gridy = 1;
-						myConstraints.gridwidth = 3;
-						myConstraints.weightx = 1f;
-						myConstraints.anchor = GridBagConstraints.LINE_START;
-						myConstraints.fill = GridBagConstraints.HORIZONTAL;
-						add(_myControlComponent, myConstraints);
-						
-						invalidate(); 
-						validate(); // or ((JComponent) getContentPane()).revalidate();
-						repaint();
-						_myIsSelected = true;
-						myLabel.setText("[-] " + _myName);
+						open();
 					}
 				}
 				if(theE.getButton() == MouseEvent.BUTTON3){
-					_myPopUp.show(myLabel, theE.getX(), theE.getY());
+					_myPopUp.show(_myLabel, theE.getX(), theE.getY());
 				}
 			}
 		});
-		add(myLabel, myConstraints);
+		add(_myLabel, myConstraints);
 		thePropertyHandle.addSelectionListener(isSelected -> {
 			if(isSelected){
 				setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Color.red));
@@ -176,6 +159,32 @@ public class CCObjectControl extends JPanel implements CCControl{
 	}
 	
 	private int _myGridY = 0;
+	
+	public void open() {
+		GridBagConstraints myConstraints = new GridBagConstraints();
+		myConstraints.gridx = 0;
+		myConstraints.gridy = 1;
+		myConstraints.gridwidth = 3;
+		myConstraints.weightx = 1f;
+		myConstraints.anchor = GridBagConstraints.LINE_START;
+		myConstraints.fill = GridBagConstraints.HORIZONTAL;
+		add(_myControlComponent, myConstraints);
+		
+		invalidate(); 
+		validate(); // or ((JComponent) getContentPane()).revalidate();
+		repaint();
+		_myIsSelected = true;
+		_myLabel.setText("[-] " + _myName);
+	}
+	
+	public void close() {
+		remove(_myControlComponent);
+		invalidate(); 
+		validate(); // or ((JComponent) getContentPane()).revalidate();
+		repaint();
+		_myIsSelected = false;	
+		_myLabel.setText("[+] " + _myName);
+	}
 	
 	public JPanel controlComponent(){
 		return _myControlComponent;
