@@ -23,6 +23,9 @@ public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 	@CCProperty(name = "speed", min = 0, max = 2)
 	private float _cSpeed = 1;
 	
+	@CCProperty(name = "play")
+	private boolean _cPlay = false;
+	
 	private CCImage _myFrame;
 	
 	private String[] _myExtensions;
@@ -80,7 +83,25 @@ public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 		_myAsset.time(_myTime);
 		_myFrame = _myAsset.currentImage();
 		
+		if(_myListener == null)return;
 		
+		if(_myIsFirstFrame){
+			_myListener.onInit(_myFrame);
+			_myIsFirstFrame = false;
+		}else{
+			_myListener.onUpdate(_myFrame);
+		}
+	}
+	
+	public void update(CCAnimator theAnimator) {
+		if(!_cPlay)return;
+		
+		if(_myAsset == null)return;
+
+		_myTime = theAnimator.time() % _myAsset.duration() * _cSpeed;
+		_myAsset.frameRate(_cRate);
+		_myAsset.time(_myTime);
+		_myFrame = _myAsset.currentImage();
 		if(_myListener == null)return;
 		
 		if(_myIsFirstFrame){
