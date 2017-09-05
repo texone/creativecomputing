@@ -168,7 +168,13 @@ public class CCSequenceAnalyzer extends CCMotionHistoryRenderer{
 	}
 	
 	public static enum CCAnalyzeMode{
-		ANALYZE_3D, ANALYZE_CURVES, ANALYZE_SPECTROGRAM, ANALYZE_HISTOGRAM, OFF;
+		ANALYZE_3D, 
+		ANALYZE_CURVES, 
+		ANALYZE_CURVES_ON_TOP, 
+		ANALYZE_MIN_MAX, 
+		ANALYZE_SPECTROGRAM, 
+		ANALYZE_HISTOGRAM, 
+		OFF;
 	}
 
 	protected CCSequenceElements _myElements;
@@ -292,6 +298,84 @@ public class CCSequenceAnalyzer extends CCMotionHistoryRenderer{
 				}
 				textIndex++;
 			}
+			if(_cTimeBased){
+				for(int j = 0; j < 10;j++){
+					float myX = CCMath.map(j, 0, 9, -g.width()/2, g.width()/2);
+					double mySecs = CCMath.map(j, 0, 10, 0, _cTimeScale) + _cTimeOffset;
+					g.line(myX,  -g.height()/2, myX, g.height());
+					g.text(mySecs, myX, 0);
+				}
+			}
+			g.popAttribute();
+			break;
+		case ANALYZE_CURVES_ON_TOP:
+			g.pushAttribute();
+			g.pointSize(5);
+			if(_cBackgroundAlpha > 0){
+				g.color(1f, _cBackgroundAlpha);
+				g.rect(-g.width()/2,  -g.height()/2, g.width(), g.height());
+			}
+			
+			g.color(0f, _cAlpha);
+			
+			myNumberOfElements = CCMath.min(_cNumberOfElements, CCMath.max(_myElementAnalyzers.size() - _cElement,0));
+			textIndex = -1;
+			g.pushMatrix();
+			g.translate(0, -g.height()/2);
+			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+				for(int e = 0; e < myNumberOfElements;e++){
+					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
+					if(_cAnalyzeChannels){
+				
+						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
+							drawCurves(g, myChannelAnalyzer.data, mySettings, g.height() * _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
+						}
+					}else{
+						drawCurves(g,myAnalyzer.data, mySettings, g.height() * _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
+					}
+				}
+				textIndex++;
+			}
+			g.popMatrix();
+			if(_cTimeBased){
+				for(int j = 0; j < 10;j++){
+					float myX = CCMath.map(j, 0, 9, -g.width()/2, g.width()/2);
+					double mySecs = CCMath.map(j, 0, 10, 0, _cTimeScale) + _cTimeOffset;
+					g.line(myX,  -g.height()/2, myX, g.height());
+					g.text(mySecs, myX, 0);
+				}
+			}
+			g.popAttribute();
+			break;
+		case ANALYZE_MIN_MAX:
+			g.pushAttribute();
+			g.pointSize(5);
+			if(_cBackgroundAlpha > 0){
+				g.color(1f, _cBackgroundAlpha);
+				g.rect(-g.width()/2,  -g.height()/2, g.width(), g.height());
+			}
+			
+			g.color(0f, _cAlpha);
+			
+			myNumberOfElements = CCMath.min(_cNumberOfElements, CCMath.max(_myElementAnalyzers.size() - _cElement,0));
+			textIndex = -1;
+			g.pushMatrix();
+			g.translate(0, -g.height()/2);
+			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+				for(int e = 0; e < myNumberOfElements;e++){
+					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
+					if(_cAnalyzeChannels){
+				
+						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
+							drawCurves(g, myChannelAnalyzer.data, mySettings, g.height() * _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
+						}
+					}else{
+						drawCurves(g,myAnalyzer.data, mySettings, g.height() * _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
+					}
+				}
+				textIndex++;
+			}
+			g.popMatrix();
 			if(_cTimeBased){
 				for(int j = 0; j < 10;j++){
 					float myX = CCMath.map(j, 0, 9, -g.width()/2, g.width()/2);

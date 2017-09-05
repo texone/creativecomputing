@@ -3,12 +3,12 @@ package cc.creativecomputing.kle.analyze;
 import cc.creativecomputing.math.CCVector3;
 
 public class CCMotionHistoryDataPoint extends CCHistoryDataPoint{
-	public final double length;
-	public final double velocity;
-	public final double acceleration;
-	public final double jerk;
+	public  double length;
+	public  double velocity;
+	public  double acceleration;
+	public  double jerk;
 	
-	public final CCVector3 position;
+	public  CCVector3 position;
 	
 	public CCMotionHistoryDataPoint(CCVector3 thePosition, double theLength, double theVelocitiy, double theAcceleration, double theJerk, double theTimeStep){
 		super(theTimeStep);
