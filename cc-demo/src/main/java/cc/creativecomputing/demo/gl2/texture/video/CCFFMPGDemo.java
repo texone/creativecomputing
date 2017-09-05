@@ -31,7 +31,8 @@ public class CCFFMPGDemo extends CCGL2Adapter {
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		
 //		_myData = new CCFFMPGMovie(theAnimator, CCNIOUtil.dataPath("videos/kaki.mov"));
-		_myData = new CCFFMPGMovie(theAnimator, Paths.get("/Users/christianr/dev/artcom/unity/media-wall/media-wall/AssetCache/170214_SAO_PAULO-FullRes.mp4"));
+//		_myData = new CCFFMPGMovie(theAnimator, Paths.get("/Users/christianr/dev/artcom/unity/media-wall/media-wall/AssetCache/170214_SAO_PAULO-FullRes.mp4"));
+		_myData = new CCFFMPGMovie(theAnimator, CCNIOUtil.dataPath("videos/sagan.mp4"));
 //		_myData.loop();
 		_myData.printInfo();
 		_myTexture = new CCVideoTexture(this,_myData);
