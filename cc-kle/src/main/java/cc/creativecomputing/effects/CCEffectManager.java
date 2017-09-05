@@ -10,7 +10,6 @@ import java.util.Set;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.modulation.CCConstantSource;
 import cc.creativecomputing.effects.modulation.CCIDSource;
 import cc.creativecomputing.effects.modulation.CCModulationSource;
@@ -54,6 +53,8 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 
 	@CCProperty(name = "animation blender")
 	protected final CCEffectBlender _myEffectBlender;
+	@CCProperty(name = "combine")
+	protected CCEffectCombiner _myCombiner = new CCEffectBlendCombiner();
 	
 	@CCProperty(name = "amount animations")
 	private final Map<String, CCEffect> _cAmountEffects = new LinkedHashMap<>();
@@ -64,7 +65,6 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	
 	public CCEffectManager(List<Type> theEffectables, String...theValueNames){
 		_myEffectables = theEffectables;
-		_myEffectBlender = new CCEffectBlender(this);
 		_myValueNames = theValueNames;
 		_cScales.put("global scale", 1.0);
 		for(String myValueName:_myValueNames){
@@ -72,13 +72,24 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 			_cDefaults.put(myValueName + " default", 1.0);
 		}
 		_myDefaultValues = new double[theValueNames.length];
-		
+
+		_myEffectBlender = new CCEffectBlender(this);
 		addRelativeSources(new CCConstantSource(), new CCRandomSource());
-		if(theEffectables.size() < 0)return;
+		if(theEffectables.size() < 0) {
+			return;
+		}
 		Type myFirstEffectable = theEffectables.get(0);
 		for(String myIDSource:myFirstEffectable._myIdBasedSources.keySet()){
 			addIdSources(myIDSource);
 		}
+	}
+	
+	public void combiner(CCEffectCombiner theCombiner) {
+		_myCombiner = theCombiner;
+	}
+	
+	public CCEffectBlender blender() {
+		return _myEffectBlender;
 	}
 	
 	public List<Type> effectables(){
@@ -118,12 +129,14 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	public void addRelativeSources(CCModulationSource...theRelativeSources){
 		for(CCModulationSource mySource:theRelativeSources){
 			_myRelativeSources.put(mySource.name(), mySource);
+			_myEffectBlender.modulation().addRelativeSource(mySource.name());
 		}
 	}
 	
 	public void addIdSources(String...theIdSources){
 		for(String mySource:theIdSources){
 			_myIdSources.add(mySource);
+			_myEffectBlender.modulation().addIdSource(mySource);
 			addRelativeSources(new CCIDSource(mySource));
 		}
 		updateMaxIds();
@@ -200,11 +213,14 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 		}
 //		double myCenter = 0;
 		int index = 0;
+		
+		double[] myBlends = new double[_myEffectables.size()];
+		double[][] myValuesA = new double[_myEffectables.size()][_myValueNames.length];
+		double[][] myValuesB = new double[_myEffectables.size()][_myValueNames.length];
+		
 		for(Type myEffectable:_myEffectables){
 			myEffectable.update(theAnimator);
 			myEffectable.parameters(_myValueNames);
-			double[] myValueA = new double[_myValueNames.length];
-			double[] myValueB = new double[_myValueNames.length];
 			for(CCEffect myEffect:values()){
 				if(myEffect._cBlend == 0)continue;
 				double[] myValues = myEffect.applyTo(myEffectable);
@@ -213,43 +229,52 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 					double myValue = myValues[i];
 					if(Double.isNaN(myValue))continue;
 					
-					myValueA[i] += myValue * (1 - myEffect.channelBlend());
-					myValueB[i] += myValue * (myEffect.channelBlend());
+					myValuesA[myEffectable.id()][i] += myValue * (1 - myEffect.channelBlend());
+					myValuesB[myEffectable.id()][i] += myValue * (myEffect.channelBlend());
 				}
 			}
 			
 			if(_cNormalize){
-				for(int i = 0; i < myValueA.length;i++){
-					myValueA[i] = myBlendSumA == 0 ? 1 : myValueA[i] / myBlendSumA;
-					myValueB[i] = myBlendSumB == 0 ? 1 : myValueB[i] / myBlendSumB;
+				for(int i = 0; i < _myValueNames.length;i++){
+					myValuesA[myEffectable.id()][i] = myBlendSumA == 0 ? 1 : myValuesA[myEffectable.id()][i] / myBlendSumA;
+					myValuesB[myEffectable.id()][i] = myBlendSumB == 0 ? 1 : myValuesB[myEffectable.id()][i] / myBlendSumB;
 				}
 			}
+			
+			myBlends[myEffectable.id()] = _myEffectBlender.blend(myEffectable);
+		}
+		
+		double[][] myValues = _myCombiner.combine(myBlends, myValuesA, myValuesB);
+		
+		for(Type myEffectable:_myEffectables){
 			double myAmountValue = _cAmountEffects.size() == 0 || _cBypassAmount ? 1 : 0;
 			if(!_cBypassAmount){
 				for(CCEffect myAnimation:_cAmountEffects.values()){
-					double[] myValues = myAnimation.applyTo(myEffectable);
+					double[] myAmountValues = myAnimation.applyTo(myEffectable);
 					
-					double myValue = myValues[0];
+					double myValue = myAmountValues[0];
 					if(Double.isNaN(myValue))continue;
 						
 					myAmountValue+= myValue;
 				}
 			}
 			
-			double[] myValues = _myEffectBlender.blend(myEffectable, myValueA, myValueB);
 //			myElement.motorSetup().rotateZ(CCMath.sign(myTranslation.x) * CCMath.pow(CCMath.abs(myTranslation.x), _cRotationPow) * _cRotationAngle);
 			double myGlobalScale = _cScales.get("global scale");
-			for(int i = 0; i < myValues.length;i++){
+			
+			double[] myEffectableValues = myValues[myEffectable.id()];
+			
+			for(int i = 0; i < _myValueNames.length;i++){
 				String myValueName = _myValueNames[i];
 				
-				myValues[i] = myValues[i] * _cScales.get(myValueName + " scale") * myAmountValue * _scale * myGlobalScale + _add;
+				myEffectableValues[i] = myEffectableValues[i] * _cScales.get(myValueName + " scale") * myAmountValue * _scale * myGlobalScale + _add;
 				for(CCFilter myFilter:_cFilters.values()){
-					myValues[i] = myFilter.process(index, myValues[i], theAnimator.deltaTime());
+					myEffectableValues[i] = myFilter.process(index, myEffectableValues[i], theAnimator.deltaTime());
 				}
 				index++;
 			}
 			
-			apply(myEffectable, myValues);
+			apply(myEffectable, myEffectableValues);
 		}
 	}
 	
