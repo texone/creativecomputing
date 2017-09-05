@@ -97,7 +97,6 @@ public abstract class CCSequenceChannel {
 	}
 	
 	public double normalizedValue(){
-		CCLog.info(value() + " : " + _myMinimum + " : " + _myMaximum);
 		return CCMath.norm(value(), _myMinimum, _myMaximum);
 	}
 	

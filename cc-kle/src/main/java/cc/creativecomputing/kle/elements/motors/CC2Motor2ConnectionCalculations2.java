@@ -53,7 +53,7 @@ public class CC2Motor2ConnectionCalculations2{
 	    double epsilon; //Winkel zwischen den beiden Verbindungen Schwerpunkt - Anlenkpunkt - //=2*ARCSIN((e_/2)/c_)
 	    
 	    public CC2Motor2ConnectionCalculations2(int theID, double theMotorDistance){
-	    	c = centerDistance(theID);//_myCenterConnectionDistance; //Abstand Schwerpunkt vom Aufhängepunkt
+	    		c = centerDistance(theID);//_myCenterConnectionDistance; //Abstand Schwerpunkt vom Aufhängepunkt
 	        e = connectionDistance(theID);
 	        t = theMotorDistance;
 	        
@@ -66,73 +66,58 @@ public class CC2Motor2ConnectionCalculations2{
 	    double Fay_n; //DITO PUNKT A //= (t_ / 2 - xs) / t_
 	    double v;  //this is the target we want to be close to
 	    
-	    @SuppressWarnings("unused")
-		private class Values{
-	    	CCVector2 L; //Position L (Aufhängepunkt Links)
-	    	CCVector2 R; //Position R (Aufhängepunkt Rechts)
-	    	double tanAlpha; //Winkel zwischen Senkrechter und linkem Seil
+	    private class Values{
+	    		CCVector2 L; //Position L (Aufhängepunkt Links)
+	    		CCVector2 R; //Position R (Aufhängepunkt Rechts)
+	    		double tanAlpha; //Winkel zwischen Senkrechter und linkem Seil
 	        double tanBeta; //Winkel zwischen Senkrechter und rechtem Seil
 	        double tanAlphaBeta;
 	        double res;
 	        
 	        Values(){
-	        	L = new CCVector2(); 
-	        	R = new CCVector2(); 
-	        	tanAlpha = 0;
-	        	tanBeta = 0;
-	        	tanAlphaBeta = 0;
-	        	res = CCMath.abs(v - tanAlphaBeta);
+		        	L = new CCVector2(); 
+		        	R = new CCVector2(); 
+		        	tanAlpha = 0;
+		        	tanBeta = 0;
+		        	tanAlphaBeta = 0;
+		        	res = CCMath.abs(v - tanAlphaBeta);
 	        }
 	    	
 	        public Values clone(){
-	        	Values myResult = new Values();
-	        	myResult.L = L.clone();
-	        	myResult.R = R.clone();
-	        	myResult.tanAlpha = tanAlpha;
-	        	myResult.tanBeta = tanBeta;
-	        	myResult.tanAlphaBeta = tanAlphaBeta;
-	        	myResult.res = res;
-	        	return myResult;
+		        	Values myResult = new Values();
+		        	myResult.L = L.clone();
+		        	myResult.R = R.clone();
+		        	myResult.tanAlpha = tanAlpha;
+		        	myResult.tanBeta = tanBeta;
+		        	myResult.tanAlphaBeta = tanAlphaBeta;
+		        	myResult.res = res;
+		        	return myResult;
 	        }
 	        
 	        public void set(Values theValues){
-	        	L = theValues.L;
-	        	R = theValues.R;
-	        	tanAlpha = theValues.tanAlpha;
-	        	tanBeta = theValues.tanBeta;
-	        	tanAlphaBeta = theValues.tanAlphaBeta;
-	        	res = theValues.res;
+		        	L = theValues.L;
+		        	R = theValues.R;
+		        	tanAlpha = theValues.tanAlpha;
+		        	tanBeta = theValues.tanBeta;
+		        	tanAlphaBeta = theValues.tanAlphaBeta;
+		        	res = theValues.res;
 	        }
 	        
 	        public void update(CCVector2 pos, double sigma){
-	        	L = new CCVector2(pos.x - c * CCMath.cos(sigma), pos.y + c * CCMath.sin(sigma)); //=xs-c_*COS(sigma), =ys+c_*SIN(sigma)
+	        		L = new CCVector2(pos.x - c * CCMath.cos(sigma), pos.y + c * CCMath.sin(sigma)); //=xs-c_*COS(sigma), =ys+c_*SIN(sigma)
 	            R = new CCVector2(pos.x - c * CCMath.cos(sigma + epsilon), pos.y + c * CCMath.sin(sigma + epsilon));  //=xs-c_*COS(sigma+epsilon), =ys+c_*SIN(sigma+epsilon)
 	            tanAlpha = CCMath.abs((L.x + t / 2) / L.y);   
 	            tanBeta = CCMath.abs((R.x - t / 2) / R.y);
 	            //this is the calculated value (must be near v)
 	            tanAlphaBeta = tanAlpha / tanBeta;
-	        	res = CCMath.abs(v - tanAlphaBeta);
+	        		res = CCMath.abs(v - tanAlphaBeta);
 	        }
 	        
-	        public double ropeLengthLeft(){
-	        	return CCMath.sqrt(L.x * L.x + L.y * L.y);//=WURZEL((B39-B38)^2+(C39-C38)^2)
-	        }
 	        
-	        public double ropeLengthRight(){
-	        	return CCMath.sqrt(R.x * R.x + R.y * R.y);//=WURZEL((B41-B44)^2+(C41-C44)^2)
-	        }
-	        
-	        public double ropeForceLeft(){
-	        	return Fay_n / CCMath.cos(tanAlpha) / 2 * 100; //=B18/COS(B20)/2*100
-	        }
-	        
-	        public double ropeForceRight(){
-	        	return Fby_n / CCMath.cos(tanBeta) / 2 * 100;
-	        }
 	    }
 	    
 	    private double iteration(Values theValues, CCVector2 pos, double theStart, double theEnd, double theStep, int theDepth){
-	    	Values values = new Values();
+	    		Values values = new Values();
 	        Values prevValues = values.clone();         
 	        
 	        for(double sigmaDegrees = theStart; sigmaDegrees <= theEnd;sigmaDegrees+=theStep){

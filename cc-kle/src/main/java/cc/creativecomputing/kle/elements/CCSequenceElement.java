@@ -143,6 +143,12 @@ public class CCSequenceElement extends CCEffectable{
 		return _myChannels;
 	}
 	
+//	@Override
+//	public CCVector3 position() {
+//		if(_myMotorSetup == null)return _myLightSetup.position();
+//		return _myMotorSetup.position();
+//	}
+	
 	public CCDataElement toXML(){
 		CCDataElement myResult = new CCDataElement("element");
 		myResult.addAttribute("id", _myID);
