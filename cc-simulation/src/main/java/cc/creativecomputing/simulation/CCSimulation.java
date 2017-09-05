@@ -16,6 +16,7 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.simulation.force.CCForce;
 import cc.creativecomputing.simulation.steering.CCAgent;
 
@@ -30,6 +31,9 @@ public class CCSimulation{
 	private List<CCAnimatorListener> _myPreListeners = new ArrayList<CCAnimatorListener>();
 	private CCParticleGroup<CCParticle> _myDefaultParticleGroup;
 	private CCParticleGroup<CCAgent> _myDefaultAgentGroup;
+	
+	@CCProperty(name = "speed")
+	private double _cSpeed = 1;
 
 	public CCSimulation(){
 		_myDefaultParticleGroup = new CCParticleGroup<CCParticle>();
@@ -78,7 +82,7 @@ public class CCSimulation{
 			myPreListener.update(theAnimator);
 		}
 		for(CCParticleGroup<?> myParticleGroup:_myParticleGroups){
-			myParticleGroup.update(theAnimator.deltaTime());
+			myParticleGroup.update(theAnimator.deltaTime() * _cSpeed);
 		}
 	}
 
