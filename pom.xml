@@ -35,23 +35,24 @@
         <module>cc-geometry</module>
         <module>cc-gl-app</module>
         <module>cc-gl</module>
-        <module>cc-kle</module>
-        <module>cc-midi</module>
-        <module>cc-serial</module>
         <module>cc-gl2.0</module>
         <module>cc-graphics</module>
         <module>cc-image</module>
-        <module>cc-video</module>
-        <module>cc-io</module>
-        <module>cc-math</module>
-        <module>cc-net</module>
-        <module>cc-flightxml</module>
-        <module>cc-model</module>
-        <module>cc-minim</module>
-        <module>cc-demo</module>
-        <module>cc-modbus</module>
-        <module>cc-simulation</module>
         <module>cc-ies</module>
+        <module>cc-io</module>
+        <module>cc-kle</module>
+        <module>cc-math</module>
+        <module>cc-midi</module>
+        <module>cc-minim</module>
+        <module>cc-modbus</module>
+        <module>cc-model</module>
+        <module>cc-net</module>
+        <module>cc-p5</module>
+        <module>cc-serial</module>
+        <module>cc-simulation</module>
+        <module>cc-video</module>
+        <module>cc-flightxml</module>
+        <module>cc-demo</module>
 <!--
 
         <module>cc-kinect</module>
@@ -114,7 +115,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>2.5.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
