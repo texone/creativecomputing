@@ -57,7 +57,7 @@ public class CCSequenceExporter {
 							if(myPath == null)return;
 				
 							CCSequenceKLE1Container myKLE1Container = new CCSequenceKLE1Container();
-							CCSequence myRecording = _myRecordings.get("motors");
+							CCSequence myRecording = _myRecordings.get(CCKleChannelType.MOTORS);
 		
 							myKLE1Container.save(myPath, _myElements, _myRecordings);
 							break;

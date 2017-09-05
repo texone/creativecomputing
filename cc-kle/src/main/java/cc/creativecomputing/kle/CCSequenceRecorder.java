@@ -85,13 +85,6 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		public void start(){
 			clear();
 		}
-		
-		public void save(Path thePath, CCSequenceFormats theFormat){
-			CCNIOUtil.createDirectories(thePath);
-//			if(_cNormalizeValues)normalize();
-			
-			theFormat.save(thePath, _myMapping, this);
-		}
 	}
 	
 	public static class CCSequenceElementRecording extends CCSequence{
@@ -304,6 +297,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 			_myCurrentType = _myChannelsToRecord.remove(0);
 			_myCurrentRecording = (CCSequenceChannelRecording)_myRecordings.get(_myCurrentType);
 			_myCurrentEffectManager = _myEffectManagers.get(_myCurrentType);
+			CCLog.info(_myCurrentType + ":" + _myRecordMode);
 			startRecord(_myCurrentType);
 		}
 		
@@ -329,7 +323,9 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 				_myTransportController.time(_myTimelineTime);
 			}
 	
-			if(_myRecordMode != CCRecordMode.FRAME)_myCurrentEffectManager.updateRecord(_myAnimator);
+			for(CCSequenceElementEffectManager myManager:_myEffectManagers.values()){
+				if(_myRecordMode != CCRecordMode.FRAME)myManager.updateRecord(_myAnimator);
+			}
 			if(_myCurrentType == CCKleChannelType.MOTORS)_myPositionRecording.recordFrame();
 			_myCurrentRecording.recordFrame();
 	
@@ -550,7 +546,6 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		if(_myProgress != null)_myProgress.end();
 		_myIsRecording = false;
 		_myCurrentType = null;
-		
 		
 		
 		if(_cRecordPositions)_myExporter.savePositions(theRecordPath, _myPositionRecording);

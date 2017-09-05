@@ -15,7 +15,6 @@ public class CCSequenceStatistics {
 		CCSequence mySequence = new CCSequenceBinFormat().load(CCNIOUtil.dataPath("FINALMASTER/out01complete/raw.bin"), myElements.mappings().get("motors"));
 		
 		CCLog.info(mySequence.columns() + ":" +mySequence.rows()+":" + mySequence.depth() + ":" +mySequence.size() / 5 / 60);
-		int ID = 0;
 		
 		double myLength = mySequence.size() / 5;
 		double[][][] myMovements = new double[mySequence.columns()][mySequence.rows()][mySequence.depth()];

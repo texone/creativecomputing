@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
 import cc.creativecomputing.math.CCVector2;
@@ -155,6 +156,7 @@ public class CCSequence extends ArrayList<CCMatrix2>{
 	
 	public void normalize(CCVector2 theMinMax){
 		if(theMinMax == null)theMinMax = minMax();
+		CCLog.info(theMinMax);
 		for(CCMatrix2 myFrame:this){
 			myFrame.normalize(theMinMax);
 		}
