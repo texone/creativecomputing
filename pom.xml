@@ -32,6 +32,7 @@
         <module>cc-control</module>
         <module>cc-control-ui</module>
         <module>cc-core</module>
+        <module>cc-geometry</module>
         <module>cc-gl-app</module>
         <module>cc-gl</module>
         <module>cc-kle</module>
