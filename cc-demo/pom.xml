@@ -48,6 +48,11 @@
     </dependency>
     <dependency>
       <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-geometry</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
       <artifactId>cc-gl2.0</artifactId>
       <version>${project.version}</version>
     </dependency>
