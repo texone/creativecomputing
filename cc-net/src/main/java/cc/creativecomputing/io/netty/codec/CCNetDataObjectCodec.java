@@ -11,8 +11,8 @@ import io.netty.util.CharsetUtil;
 import java.util.List;
 
 import cc.creativecomputing.io.data.CCDataIO;
-import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 
 public class CCNetDataObjectCodec implements CCNetCodec<CCDataObject>{
 	

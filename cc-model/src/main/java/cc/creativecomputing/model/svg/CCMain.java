@@ -3,8 +3,8 @@ package cc.creativecomputing.model.svg;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
-import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 
 public class CCMain {
 	public static void main(String[] args) {
