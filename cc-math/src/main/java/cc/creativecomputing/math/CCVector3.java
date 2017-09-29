@@ -19,7 +19,6 @@ import java.util.Map;
 
 import cc.creativecomputing.core.CCBlendable;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.io.format.CCDataHolder;
 import cc.creativecomputing.core.io.format.CCDataSerializable;
 
 
@@ -1304,14 +1303,21 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
         theOutput.writeDouble(z);
     }
 
+    @Override
+	public Map<String, Object> data() {
+		Map<String, Object> myResult = new HashMap<>();
+		myResult.put(CCBlendable.BLENDABLE_TYPE_ATTRIBUTE, getClass().getName());
+		myResult.put("x", x);
+		myResult.put("y", y);
+		myResult.put("z", z);
+		return myResult;
+	}
+	
 	@Override
-	public Map<String, Object> toDataObject(CCDataHolder<?, ?> theHolder) {
-		Map<String, Object> ret = new HashMap<String, Object>();
-		ret.put("x", x);
-		ret.put("y", y);
-		ret.put("z", z);
-		
-		return ret;
+	public void data(Map<String, Object> theData) {
+		x = ((Number)theData.get("x")).doubleValue();
+		y = ((Number)theData.get("y")).doubleValue();
+		z = ((Number)theData.get("z")).doubleValue();
 	}
 
 	public CCVector2 xy() {

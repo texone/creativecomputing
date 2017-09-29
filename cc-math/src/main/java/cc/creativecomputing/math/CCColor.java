@@ -81,7 +81,7 @@ public class CCColor implements Cloneable, CCBlendable<CCColor>{
 		return new CCColor(
 			CCBitUtil.bit(theColor, 3) / 255f,
 			CCBitUtil.bit(theColor, 2) / 255f,
-			CCBitUtil.bit(theColor, 2) / 255f,
+			CCBitUtil.bit(theColor, 1) / 255f,
 			CCBitUtil.bit(theColor, 0) / 255f
 		);
 	}
@@ -1026,6 +1026,15 @@ public class CCColor implements Cloneable, CCBlendable<CCColor>{
 		return new Color((float)r,(float)g,(float)b,(float)a);
 	}
 	
+	public int toInt() {
+		return CCBitUtil.combine(
+			(int)(b * 255), 
+			(int)(g * 255), 
+			(int)(r * 255), 
+			(int)(a * 255)
+		);
+	}
+	
 	public void set(Color theColor){
 		set(
 			theColor.getRed(),
@@ -1082,6 +1091,25 @@ public class CCColor implements Cloneable, CCBlendable<CCColor>{
 		String sg = ((Integer.toHexString(g)).length() == 1) ? "0" + Integer.toHexString(g) : Integer.toHexString(g);
 		String sb = ((Integer.toHexString(b)).length() == 1) ? "0" + Integer.toHexString(b) : Integer.toHexString(b);
 		return sr + sg + sb;
+	}
+	
+	@Override
+	public Map<String, Object> data() {
+		Map<String, Object> myResult = new HashMap<>();
+		myResult.put(CCBlendable.BLENDABLE_TYPE_ATTRIBUTE, getClass().getName());
+		myResult.put("r", r);
+		myResult.put("g", g);
+		myResult.put("b", b);
+		myResult.put("a", a);
+		return myResult;
+	}
+	
+	@Override
+	public void data(Map<String, Object> theData) {
+		r = ((Number)theData.get("r")).doubleValue();
+		g = ((Number)theData.get("g")).doubleValue();
+		b = ((Number)theData.get("b")).doubleValue();
+		a = ((Number)theData.get("a")).doubleValue();
 	}
 	
 }
