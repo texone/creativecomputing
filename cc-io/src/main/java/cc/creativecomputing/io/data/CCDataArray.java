@@ -7,7 +7,6 @@ import java.util.Iterator;
 
 import cc.creativecomputing.core.io.format.CCDataSerializable;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.io.data.format.CCDataConstructs;
 
 
 public class CCDataArray extends ArrayList<Object> {
@@ -60,7 +59,9 @@ public class CCDataArray extends ArrayList<Object> {
 
 		for (Object myObject : theCollection) {
 			if (myObject instanceof CCDataSerializable) {
-				add (((CCDataSerializable) myObject).toDataObject(new CCDataConstructs()));
+				CCDataObject myObjectData = new CCDataObject();
+				((CCDataSerializable) myObject).data(myObjectData);
+				add (myObject);
 			}
 			else {
 				add(CCDataUtil.wrap(myObject));

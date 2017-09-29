@@ -11,11 +11,11 @@ import cc.creativecomputing.io.data.CCDataObject;
 
 public interface CCDataFormat<InputType> extends CCIOFormat<InputType, Map<String, Object>> {
 	
-	public CCDataObject loadAsDataObject(Path theDocumentPath, boolean theIgnoreLineFeed, OpenOption...theOptions);
+	public CCDataObject load(Path theDocumentPath, boolean theIgnoreLineFeed, OpenOption...theOptions);
 	
-	public CCDataObject loadAsDataObject(URL theDocumentPath, boolean theIgnoreLineFeed, String theUser, String theKey);
+	public CCDataObject load(URL theDocumentPath, boolean theIgnoreLineFeed, String theUser, String theKey);
 	
-	public CCDataObject parseAsDataObject(InputType theDocument);
+	public CCDataObject parse(InputType theDocument);
 	
 	public CCDataFormat<InputType> create();
 }

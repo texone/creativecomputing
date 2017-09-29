@@ -3,7 +3,6 @@ package cc.creativecomputing.io.data.format;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.core.io.format.CCDataHolder;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataException;
 import cc.creativecomputing.io.data.CCDataObject;
@@ -391,15 +390,15 @@ public class CCXMLFormat extends CCJsonFormat {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void accumulate(Map<String,Object> context, String theKey, Object theValue, CCDataHolder<?, ?> theDataHolder) throws CCDataException {
+	public void accumulate(Map<String,Object> context, String theKey, Object theValue) throws CCDataException {
 		CCDataUtil.testValidity(theValue);
 		Object object = context.get(theKey);
 		if (object == null) {
-			context.put(theKey, theValue instanceof List ? theDataHolder.createList().add(theValue) : theValue);
+			context.put(theKey, theValue instanceof List ? new CCDataArray().add(theValue) : theValue);
 		} else if (object instanceof List) {
 			((List<Object>) object).add(theValue);
 		} else {
-			List<Object> myArray = theDataHolder.createList();
+			List<Object> myArray = new CCDataArray();
 			myArray.add(object);
 			myArray.add(theValue);
 			context.put(theKey, myArray);
@@ -415,7 +414,7 @@ public class CCXMLFormat extends CCJsonFormat {
 	 * @return true if the close tag is processed.
 	 * @throws CCDataException
 	 */
-	private boolean parse(Map<String,Object> context, String name, CCDataHolder<?, ?> theDataHolder) throws CCDataException {
+	private boolean parse(Map<String,Object> context, String name) throws CCDataException {
 		char c;
 		int i;
 		CCDataObject myObject = null;
@@ -450,7 +449,7 @@ public class CCXMLFormat extends CCJsonFormat {
 					if (next() == '[') {
 						myString = nextCDATA();
 						if (myString.length() > 0) {
-							accumulate(context, "content", myString, theDataHolder);
+							accumulate(context, "content", myString);
 						}
 						return false;
 					}
@@ -528,9 +527,9 @@ public class CCXMLFormat extends CCJsonFormat {
 						throw syntaxError("Misshaped tag");
 					}
 					if (myObject.size() > 0) {
-						accumulate(context,myTagName, myObject, theDataHolder);
+						accumulate(context,myTagName, myObject);
 					} else {
-						accumulate(context,myTagName, "", theDataHolder);
+						accumulate(context,myTagName, "");
 					}
 					return false;
 
@@ -553,13 +552,13 @@ public class CCXMLFormat extends CCJsonFormat {
 							// Nested element
 
 						} else if (myToken == LT) {
-							if (parse(myObject, myTagName, theDataHolder)) {
+							if (parse(myObject, myTagName)) {
 								if (myObject.size() == 0) {
-									accumulate(context,myTagName, "", theDataHolder);
+									accumulate(context,myTagName, "");
 								} else if (myObject.size() == 1 && myObject.get("content") != null) {
-									accumulate(context,myTagName, myObject.get("content"), theDataHolder);
+									accumulate(context,myTagName, myObject.get("content"));
 								} else {
-									accumulate(context,myTagName, myObject, theDataHolder);
+									accumulate(context,myTagName, myObject);
 								}
 								return false;
 							}
@@ -737,10 +736,11 @@ public class CCXMLFormat extends CCJsonFormat {
 	}
 
 	@Override
-	protected void read(Map<String,Object> theParent, CCDataHolder<?, ?> theDataHolder) {
+	protected CCDataObject read(CCDataObject theParent) {
 		while (more() && skipPast("<")) {
-			parse(theParent, null, theDataHolder);
+			parse(theParent, null);
 		}
+		return theParent;
 	}
 
 	@Override

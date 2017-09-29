@@ -58,7 +58,7 @@ public class CCDataIO{
 	 */
 	public static CCDataObject createDataObject(final Path theDocumentPath, final boolean theIgnoreLineFeed, final CCDataFormats theFormat, OpenOption...theOptions){
 		CCDataFormat<?> myFormat = formatMap.get(theFormat);
-		return myFormat.create().loadAsDataObject(theDocumentPath, theIgnoreLineFeed, theOptions);
+		return myFormat.create().load(theDocumentPath, theIgnoreLineFeed, theOptions);
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class CCDataIO{
 	 */
 	public static CCDataObject createDataObject(final URL theDocumentURL, final boolean theIgnoreLineFeed, final CCDataFormats theFormat, String theUser, String theKey){
 		CCDataFormat<?> myFormat = formatMap.get(theFormat);
-		return myFormat.create().loadAsDataObject(theDocumentURL, theIgnoreLineFeed, theUser, theKey);
+		return myFormat.create().load(theDocumentURL, theIgnoreLineFeed, theUser, theKey);
 	}
 	
 	/**
@@ -101,13 +101,13 @@ public class CCDataIO{
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static CCDataObject parseToObject(Object theDocument, final CCDataFormats theFormat){
 		CCDataFormat myFormat = formatMap.get(theFormat);
-		return myFormat.create().parseAsDataObject(theDocument);
+		return myFormat.create().parse(theDocument);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Map<String, Object> parseToMap(Object theDocument, final CCDataFormats theFormat){
 		CCDataFormat myFormat = formatMap.get(theFormat);
-		return myFormat.create().parseAsDataObject(theDocument);
+		return myFormat.create().parse(theDocument);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked"})
