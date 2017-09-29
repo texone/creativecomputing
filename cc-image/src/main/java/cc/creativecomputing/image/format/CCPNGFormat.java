@@ -1,20 +1,8 @@
 package cc.creativecomputing.image.format;
 
-import java.awt.color.ColorSpace;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
-import java.awt.image.DataBufferDouble;
-import java.awt.image.DataBufferFloat;
-import java.awt.image.DataBufferInt;
-import java.awt.image.DataBufferShort;
-import java.awt.image.DataBufferUShort;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import ar.com.hjg.pngj.IImageLine;
@@ -22,17 +10,13 @@ import ar.com.hjg.pngj.IImageLineSet;
 import ar.com.hjg.pngj.ImageInfo;
 import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.PngReader;
-import ar.com.hjg.pngj.PngWriter;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageException;
-import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.image.CCPixelFormat;
 import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCPixelType;
 import cc.creativecomputing.io.CCBufferUtil;
-import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.math.CCMath;
 
 public class CCPNGFormat extends CCStreamBasedTextureFormat{
 	
@@ -49,15 +33,19 @@ public class CCPNGFormat extends CCStreamBasedTextureFormat{
 		switch(myInfo.channels) {
 		case 1:
 			myImage.pixelFormat(CCPixelFormat.LUMINANCE);
+			myImage.internalFormat(CCPixelInternalFormat.LUMINANCE);
 			break;
 		case 2:
 			myImage.pixelFormat(CCPixelFormat.LUMINANCE_ALPHA);
+			myImage.internalFormat(CCPixelInternalFormat.LUMINANCE_ALPHA);
 			break;
 		case 3:
 			myImage.pixelFormat(CCPixelFormat.RGB);
+			myImage.internalFormat(CCPixelInternalFormat.RGB);
 			break;
 		case 4:
 			myImage.pixelFormat(CCPixelFormat.RGBA);
+			myImage.internalFormat(CCPixelInternalFormat.RGBA);
 			break;
 		}
 		

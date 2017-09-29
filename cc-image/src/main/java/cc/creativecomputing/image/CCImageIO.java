@@ -29,6 +29,7 @@ import cc.creativecomputing.image.format.CCImageFormat;
 import cc.creativecomputing.image.format.CCImageIOFormat;
 import cc.creativecomputing.image.format.CCKTXFormat;
 import cc.creativecomputing.image.format.CCPNGFormat;
+import cc.creativecomputing.image.format.CCPNGFormat;
 import cc.creativecomputing.image.format.CCSGIFormat;
 import cc.creativecomputing.image.format.CCTGAFormat;
 import cc.creativecomputing.io.CCIOUtil;
