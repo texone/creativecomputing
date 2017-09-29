@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>cc.creativecomputing</groupId>
+    <artifactId>cc-main</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>2.0</version>
+  </parent>
+
+  <artifactId>cc-p5</artifactId>
+  <name>creative computing net</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-app</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-math</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-control</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-control-ui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.processing</groupId>
+      <artifactId>core</artifactId>
+      <version>3.3.5</version>
+    </dependency>
+  </dependencies>
+  
+  <repositories>
+    <repository>
+      <id>processing-deps</id>
+      <name>processing dependencies</name>
+      <url>file://${project.basedir}/dependencies</url>
+    </repository>
+  </repositories>  
+</project>
