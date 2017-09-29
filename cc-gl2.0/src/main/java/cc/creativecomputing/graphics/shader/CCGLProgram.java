@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.shader.CCGLProgram.CCShaderObjectType;
 import cc.creativecomputing.graphics.texture.CCTexture;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -72,6 +74,19 @@ public class CCGLProgram{
 	 */
 	public static CCGLProgram createFromResource(Object theObject) {
 		return createFromResource(theObject.getClass());
+	}
+	
+	public static CCGLProgram createEmptyFrament() {
+		CCGLProgram myResult = new CCGLProgram();
+		myResult._myFragmentShader = myResult.attachShader(
+			"void main(){\n" + 
+			"	gl_FragColor = vec4(1.0,1.0,0.0,1.0);\n" + 
+			"}", 
+			CCShaderObjectType.FRAGMENT
+		);
+		CCLog.info(myResult._myFragmentShader);
+		myResult.link();
+		return myResult;
 	}
 	
 	public static enum CCShaderObjectType{
@@ -400,6 +415,7 @@ public class CCGLProgram{
 		
 		
 //		reload();
+		
 		GL2 gl = CCGraphics.currentGL();
 		boolean myRelink = false;
 		for(CCGLShader myShader:_myShaderList){
