@@ -39,7 +39,7 @@ public class CCMotionSource extends CCModulationSource {
 			
 			CCMotionHistoryDataPoint myLastData = _myMap.get(effectable);
 			return CCMath.saturate(
-				myLastData.velocity / _cMaxVelocity * _cVelocity + 
+				CCMath.abs(myLastData.velocity) / _cMaxVelocity * _cVelocity + 
 				CCMath.abs(myLastData.acceleration) / _cMaxAcceleration * _cAcceleration + 
 				CCMath.abs(myLastData.jerk) / _cMaxJerk * _cJerk
 			);
@@ -54,14 +54,16 @@ public class CCMotionSource extends CCModulationSource {
 				continue;
 			}
 			CCMotionHistoryDataPoint myLastData = _myMap.get(myEffectable);
+			
 			double myVelocity = myLastData.position.distance(myEffectable.position()) / theAnimator.deltaTime();
 			double myAcceleration = (myVelocity - myLastData.velocity) / theAnimator.deltaTime();
 			double myJerk = (myAcceleration - myLastData.acceleration) / theAnimator.deltaTime();
-			
+
 			myLastData.position.set(myEffectable.position());
 			myLastData.velocity = myVelocity;
 			myLastData.acceleration = myAcceleration;
 			myLastData.jerk = myJerk;
+			
 		}
 	}
 	

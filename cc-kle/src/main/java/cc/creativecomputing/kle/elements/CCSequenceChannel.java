@@ -1,6 +1,5 @@
 package cc.creativecomputing.kle.elements;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCMath;
 

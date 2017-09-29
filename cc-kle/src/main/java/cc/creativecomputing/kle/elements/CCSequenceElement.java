@@ -189,4 +189,10 @@ public class CCSequenceElement extends CCEffectable{
 		
 		return myResult;
 	}
+	
+	@Override
+	public CCVector3 position() {
+		if(_myMotorSetup == null)return super.position();
+		return super.position().add(_myMotorSetup.elementOffset());
+	}
 }

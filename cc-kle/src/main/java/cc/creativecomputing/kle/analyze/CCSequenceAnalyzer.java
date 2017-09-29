@@ -2,6 +2,7 @@ package cc.creativecomputing.kle.analyze;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -321,17 +322,17 @@ public class CCSequenceAnalyzer extends CCMotionHistoryRenderer{
 			myNumberOfElements = CCMath.min(_cNumberOfElements, CCMath.max(_myElementAnalyzers.size() - _cElement,0));
 			textIndex = -1;
 			g.pushMatrix();
-			g.translate(0, -g.height()/2);
+			g.translate(0, 0);
 			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
 					if(_cAnalyzeChannels){
 				
 						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
-							drawCurves(g, myChannelAnalyzer.data, mySettings, g.height() * _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
+							drawCurves(g, myChannelAnalyzer.data, mySettings, g.height() / 2 * _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
 						}
 					}else{
-						drawCurves(g,myAnalyzer.data, mySettings, g.height() * _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
+						drawCurves(g,myAnalyzer.data, mySettings, g.height() / 2 * _cCurveScale, textIndex * 80, _cValueSettings.size() * 80);
 					}
 				}
 				textIndex++;
@@ -446,8 +447,7 @@ public class CCSequenceAnalyzer extends CCMotionHistoryRenderer{
 				_cHistogram.reset();
 				
 				
-				for(int e = 0; e < myNumberOfElements;e++){
-					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
+				for(CCElementAnalyzer myAnalyzer:_myElementAnalyzers.subList(0, myNumberOfElements)){
 					if(_cAnalyzeChannels){
 						for(CCChannelAnalyzer<?> myChannelAnalyzer:myAnalyzer._myChannelAnalyzers){
 							if(_cHistogramFrame){

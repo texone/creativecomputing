@@ -2,7 +2,6 @@ package cc.creativecomputing.kle.elements;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCArrayUtil;
 import cc.creativecomputing.effects.CCEffectManager;
 
@@ -12,8 +11,6 @@ public class CCSequenceElementEffectManager extends CCEffectManager<CCSequenceEl
 	 * 
 	 */
 	private static final long serialVersionUID = -785875230663549514L;
-	
-	
 	
 	public static class CCSequenceElementSetupValues{
 		protected final CCKleChannelType _myChannelType;
