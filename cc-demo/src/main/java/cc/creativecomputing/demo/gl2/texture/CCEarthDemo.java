@@ -91,7 +91,7 @@ public class CCEarthDemo extends CCGL2Adapter{
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("3d/01.png")));
+		_myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/gradient.png")));
 		_myTexture.wrap(CCTextureWrap.REPEAT);
 		_myTexture.textureFilter(CCTextureFilter.LINEAR);
 		

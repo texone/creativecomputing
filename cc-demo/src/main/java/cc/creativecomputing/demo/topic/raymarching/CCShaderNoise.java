@@ -1,4 +1,4 @@
-package cc.creativecomputing.demo.gl2.shader.imaging;
+package cc.creativecomputing.demo.topic.raymarching;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
@@ -7,6 +7,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
+import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCShaderNoise extends CCGL2Adapter {
 
@@ -15,8 +16,7 @@ public class CCShaderNoise extends CCGL2Adapter {
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myProgram = CCGLProgram.createEmptyFrament();
-		g.debug();
+		_myProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "shadernoise.fs"));
 	}
 
 	@Override
