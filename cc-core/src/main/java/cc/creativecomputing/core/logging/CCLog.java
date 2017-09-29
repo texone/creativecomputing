@@ -321,6 +321,32 @@ public class CCLog {
 	}
 
 	/**
+	 * Log a message with INFO level.
+	 * @param theMessage the message to be logged
+	 */
+	public static void info(Object theMessage) {
+		if (theMessage == null) {
+			log(Level.INFO, "null");
+			return;
+		} 
+		log(Level.INFO, theMessage.toString());
+	}
+	
+	/**
+	 * Log a message with INFO level all objects are concatenated with " : " String
+	 * @param theObjects the Objects to log
+	 */
+	public static void info(Object...theObjects) {
+		StringBuffer myMessage = new StringBuffer();
+		for(Object myObject:theObjects) {
+			myMessage.append(myObject);
+			myMessage.append(" : ");
+		}
+		myMessage.delete(myMessage.length()-3, myMessage.length());
+		log(Level.INFO, myMessage.toString());
+	}
+
+	/**
 	 * Log an exception with INFO level.
 	 * @param theMessage the message to be logged
 	 */
@@ -380,17 +406,5 @@ public class CCLog {
 		} 
 		log(Level.SEVERE, theMessage.toString());
 		
-	}
-
-	/**
-	 * Log a message with INFO level.
-	 * @param theMessage the message to be logged
-	 */
-	public static void info(Object theMessage) {
-		if (theMessage == null) {
-			log(Level.INFO, "null");
-			return;
-		} 
-		log(Level.INFO, theMessage.toString());
 	}
 }
