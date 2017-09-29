@@ -11,8 +11,8 @@ import cc.creativecomputing.geo.CCGeoTrack;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataIO;
-import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 import cc.creativecomputing.math.CCMath;
 
 public class CCFlightXML {
