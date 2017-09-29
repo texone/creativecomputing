@@ -16,7 +16,7 @@ public class CCBooleanTrackController extends CCCurveTrackController{
 	
 	@Override
 	public CCTimelineTools[] tools() {
-		return new CCTimelineTools[]{CCTimelineTools.CREATE_STEP_POINT};
+		return new CCTimelineTools[]{CCTimelineTools.STEP_POINT};
 	}
 
 	@Override

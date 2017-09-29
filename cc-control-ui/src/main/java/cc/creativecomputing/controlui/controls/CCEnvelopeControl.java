@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.core.logging.CCLog;
 
 public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHandle>{
 

@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import cc.creativecomputing.control.CCControlMatrix;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCPropertyFeedbackObject;
@@ -88,6 +89,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		creatorMap.put(CCEnvelope.class, new CCHandleCreator(){
 			@Override
 			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCEnvelopeHandle(theParent, theMember);}
+		});
+		creatorMap.put(CCControlMatrix.class, new CCHandleCreator(){
+			@Override
+			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCControlMatrixHandle(theParent, theMember);}
 		});
 		creatorMap.put(CCSpline.class, new CCHandleCreator(){
 			@Override
@@ -259,8 +264,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		return super.type();
 	}
 	
+	public static Path dataPath = CCNIOUtil.dataPath("");
+	
 	private Path createPresetPath(){
-		Path myPresetPath = CCNIOUtil.dataPath(_mySettingsPath);
+		Path myPresetPath = dataPath.resolve(_mySettingsPath);
 			
 		String[] myTypeParts = type() == null ? new String[]{name()} : type().getName().split("\\.");
 		for(String myPart:myTypeParts){
@@ -577,11 +584,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(CCPropertyHandle<?> myHandle:_myChildHandles.values()){
 			myHandle.update(theDeltaTime);
 		}
-	}
-
-	@Override
-	public Object convertNormalizedValue(double theValue) {
-		return null;
 	}
 	
 	@Override

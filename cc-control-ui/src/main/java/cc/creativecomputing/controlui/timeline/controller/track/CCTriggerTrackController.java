@@ -14,13 +14,13 @@ public class CCTriggerTrackController extends CCCurveTrackController{
 		super(theTrackContext, theTrack, theParent);
 		_myTriggerHandle = (CCEventTriggerHandle)theTrack.property();
 		
-		_myCreateTool.setTool(CCTimelineTools.CREATE_TRIGGER_POINT);
+		_myCreateTool.setTool(CCTimelineTools.TRIGGER_POINT);
 		_myActiveTool = _myCreateTool;
 	}
 	
 	@Override
 	public CCTimelineTools[] tools() {
-		return new CCTimelineTools[]{CCTimelineTools.CREATE_TRIGGER_POINT};
+		return new CCTimelineTools[]{CCTimelineTools.TRIGGER_POINT};
 	}
 	
 	

@@ -170,22 +170,6 @@ public class SwingTimelineMenu extends JMenu{
 //		myWriteValuesMenue.setMnemonic(KeyEvent.VK_W);
 //		add(myWriteValuesMenue);
 		
-		JMenuItem myInsertTimeMenue = new JMenuItem("Insert Time");
-		myInsertTimeMenue.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().insertTime();
-		});
-		myInsertTimeMenue.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.META_MASK));
-		myInsertTimeMenue.setMnemonic(KeyEvent.VK_I);
-		add(myInsertTimeMenue);
-		
-		JMenuItem myRemoveTimeMenue = new JMenuItem("Remove Time");
-		myRemoveTimeMenue.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().removeTime();
-		});
-		myRemoveTimeMenue.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.META_MASK));
-		myRemoveTimeMenue.setMnemonic(KeyEvent.VK_R);
-		add(myRemoveTimeMenue);
-		
 		JMenuItem myReverseTracksMenue = new JMenuItem("Reverse");
 		myReverseTracksMenue.addActionListener(theE -> {
 			_myTimelineContainer.activeTimeline().reverseTracks();
@@ -200,26 +184,6 @@ public class SwingTimelineMenu extends JMenu{
 	}
 	
 	private void addViewItems(){
-		JMenuItem myResetZoomMenu = new JMenuItem("Reset Zoom");
-		myResetZoomMenu.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().zoomController().reset();
-		});
-		myResetZoomMenu.setMnemonic(KeyEvent.VK_R);
-		add(myResetZoomMenu);
-
-		JMenuItem myZoomToMax = new JMenuItem("Zoom to Max");
-		myZoomToMax.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().zoomToMaximum();
-		});
-		myZoomToMax.setMnemonic(KeyEvent.VK_M);
-		add(myZoomToMax);
-
-		JMenuItem myZoomSelection = new JMenuItem("Zoom to Loop");
-		myZoomSelection.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().zoomToLoop();
-		});
-		myZoomSelection.setMnemonic(KeyEvent.VK_S);
-		add(myZoomSelection);
 		
 		ActionListener myShowUnusedTracksListener = new ActionListener() {
 			public void actionPerformed(ActionEvent theE) {

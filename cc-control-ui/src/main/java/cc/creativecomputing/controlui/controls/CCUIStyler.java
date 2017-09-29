@@ -1,5 +1,7 @@
 package cc.creativecomputing.controlui.controls;
 
+import static cc.creativecomputing.controlui.timeline.view.SwingGuiConstants.SCALE;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -11,25 +13,19 @@ import java.awt.Insets;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.text.JTextComponent;
-
-import static cc.creativecomputing.controlui.timeline.view.SwingGuiConstants.*;
 
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 

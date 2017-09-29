@@ -1,4 +1,4 @@
-package cc.creativecomputing.controlui.timeline.view;
+package cc.creativecomputing.controlui.timeline.view.transport;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -19,11 +19,13 @@ import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
 import cc.creativecomputing.control.timeline.point.MarkerPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.CCSwingDraggableValueBox.CCChangeValueBoxListener;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.CCNumberBox.CCChangeValueBoxListener;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController.RulerInterval;
+import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
+import cc.creativecomputing.core.logging.CCLog;
 
 @SuppressWarnings("serial")
 public class SwingRulerView extends SwingAbstractTrackView implements CCChangeValueBoxListener{
@@ -34,25 +36,16 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 	private TimelineController _myTimelineController;
 	private CCTransportController _myTransportController;
 	
-	private SwingRulerMarkerDialog _myMarkerFrame;
-	private CCTextInputDialog _myInsertTimeFrame;
+	private SwingRulerPopUp _myRulerPopUp;
 	
 	public SwingRulerView(JFrame theMainFrame, TimelineController theTimelineController) {
 		super(theMainFrame);
 		if(theTimelineController != null){
 			_myTimelineController = theTimelineController;
 			_myTransportController = theTimelineController.transportController();
+		    _myRulerPopUp = new SwingRulerPopUp(this, theTimelineController);
 		}
-		
-		_myMarkerFrame = new SwingRulerMarkerDialog(this, "MARKER");
-	    _myMarkerFrame.setSize( 300, 200 ); 
 	    
-	    _myInsertTimeFrame = new CCTextInputDialog("Insert Time", "insert");
-	    _myInsertTimeFrame.events().add(text ->{
-	    	double myTime = Double.parseDouble(text);
-			_myTimelineController.insertTime(_myTransportController.time(),myTime);
-	    });
-	    _myInsertTimeFrame.setSize( 300, 200 ); 
 		
 		addMouseListener(new MouseAdapter() {
 			
@@ -67,22 +60,40 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 			public void mousePressed(MouseEvent e) {
 				if(_myTransportController == null)return;
 				
-				if (e.getButton() == MouseEvent.BUTTON3 || e.isAltDown()) {
-					_myInsertTimeFrame.setLocation(e.getXOnScreen(), e.getYOnScreen());
-					_myInsertTimeFrame.setVisible(true);
-    			} else if (e.getButton() == MouseEvent.BUTTON1) {
+				boolean myIsRightClick = e.getButton() == MouseEvent.BUTTON3 || (e.isControlDown() && e.getButton() == MouseEvent.BUTTON1);
+				
+				if (myIsRightClick) {
+//					new CCTextInputDialog(
+//						"Insert Time", 
+//						"Specify the time to insert in seconds.", 
+//						"insert",
+//						input ->{
+//							double myTime = 0;
+//							try {
+//								myTime = new ExpressionBuilder(input).build().evaluate();
+//							} catch (Exception ex) {
+//							}
+//							_myTimelineController.insertTime(_myTransportController.time(),myTime);
+//						}
+//					)
+//					.location(e.getXOnScreen(), e.getYOnScreen())
+//					.size(400,200)
+//					.open();
 					
-    			}
+					CCLog.info("show pop");
+					try {
+					_myRulerPopUp.show(SwingRulerView.this, e);
+					}catch(Exception ex) {
+						ex.printStackTrace();
+					}
+    				} else if (e.getButton() == MouseEvent.BUTTON1) {
+    					_myTransportController.mousePressed(e);
+    				}
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2){
-					_myMarkerFrame.setLocation(e.getXOnScreen(), e.getYOnScreen());
-					_myMarkerFrame.setVisible(true);
-				}else{
-					_myTransportController.mousePressed(e);
-				}
+				_myTransportController.mousePressed(e);
 			}
 		});
 		
@@ -95,7 +106,14 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 				
 				_myTransportController.mouseDragged(e);
 				updateUI();
-			}	
+			}
+			
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				if (_myTransportController == null)return;
+				
+				_myTransportController.mouseMoved(e);
+			}
 		});
 		
 		setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -104,17 +122,12 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 	public void timelineController(TimelineController theTimelineController){
 		_myTimelineController = theTimelineController;
 		_myTransportController = theTimelineController.transportController();
+	    _myRulerPopUp = new SwingRulerPopUp(this, theTimelineController);
 	}
 	
 	public void changeValue(double theValue) {
 		if (_myTransportController == null)return;
 		_myTransportController.speed(theValue);	
-	}
-	
-	public void showMarkerDialog(MarkerPoint theMarker) {
-		_myMarkerFrame.marker(theMarker);
-		_myMarkerFrame.setVisible(true);
-		
 	}
 	
 	public void render() {

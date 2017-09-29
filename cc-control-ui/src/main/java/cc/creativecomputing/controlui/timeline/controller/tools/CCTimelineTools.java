@@ -21,11 +21,11 @@ package cc.creativecomputing.controlui.timeline.controller.tools;
 
 public enum CCTimelineTools {
 	NONE, 
-	CREATE_TRIGGER_POINT,
+	TRIGGER_POINT,
 	CREATE_EVENT,
-	CREATE_STEP_POINT, 
-	CREATE_LINEAR_POINT, 
-	CREATE_BEZIER_POINT,
+	STEP_POINT, 
+	LINEAR_POINT, 
+	BEZIER_POINT,
 	CURVE,  
 	SELECT, 
 	MOVE_SEGMENT

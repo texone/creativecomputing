@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;

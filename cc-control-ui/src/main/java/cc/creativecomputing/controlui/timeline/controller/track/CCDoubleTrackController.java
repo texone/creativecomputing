@@ -13,7 +13,7 @@ public class CCDoubleTrackController extends CCCurveTrackController{
 
 	@Override
 	public CCTimelineTools[] tools() {
-		return new CCTimelineTools[]{CCTimelineTools.CREATE_STEP_POINT, CCTimelineTools.CREATE_LINEAR_POINT, CCTimelineTools.CREATE_BEZIER_POINT, CCTimelineTools.CURVE};
+		return new CCTimelineTools[]{CCTimelineTools.STEP_POINT, CCTimelineTools.LINEAR_POINT, CCTimelineTools.BEZIER_POINT, CCTimelineTools.CURVE};
 	}
 
 	@Override

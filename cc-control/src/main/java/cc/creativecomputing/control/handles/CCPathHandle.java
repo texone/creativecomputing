@@ -41,11 +41,6 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 		if(_myAsset == null)return null;
 		return _myAsset.extensions();
 	}
-
-	@Override
-	public Path convertNormalizedValue(double theValue) {
-		return null;
-	}
 	
 	@Override
 	public double normalizedValue() {

@@ -30,11 +30,6 @@ public class CCRuntimeCompileHandle extends CCPropertyHandle<CCRuntimeCompilable
 		CCRuntimeCompilable myRealtimeObject = value();
 		onChange();
 	}
-
-	@Override
-	public CCRuntimeCompilable convertNormalizedValue(double theValue) {
-		return null;
-	}
 	
 	@Override
 	public double normalizedValue() {

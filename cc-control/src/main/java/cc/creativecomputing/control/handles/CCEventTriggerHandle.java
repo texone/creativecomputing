@@ -26,11 +26,6 @@ public class CCEventTriggerHandle extends CCPropertyHandle<Object>{
 	}
 
 	@Override
-	public Object convertNormalizedValue(double theValue) {
-		return null;
-	}
-
-	@Override
 	public String valueString() {
 		return "";
 	}

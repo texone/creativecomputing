@@ -12,7 +12,7 @@ public class CCColorMap {
 
 	private static Map<Path, Color> _myColorMap = new HashMap<>();
 	
-	private static int HSB_DEPTH = 3;
+	public static int HSB_DEPTH = 3;
 	
 	private static float _myHue = 0;
 	
@@ -21,7 +21,7 @@ public class CCColorMap {
 	public static Color getColor(Path thePath) {
 		if(thePath.getNameCount() < HSB_DEPTH)return Color.GRAY;
 		
-		if(!_myColorMap.containsKey(thePath.getName(2))) {
+		if(!_myColorMap.containsKey(thePath.getName(HSB_DEPTH - 1))) {
 			_myColorMap.put(thePath.getName(HSB_DEPTH - 1), Color.getHSBColor(_myHue, 0.5f, 0.5f));
 			_myHue += 0.1f;
 		}

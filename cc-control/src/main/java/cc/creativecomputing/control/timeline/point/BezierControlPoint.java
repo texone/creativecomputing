@@ -47,6 +47,7 @@ public class BezierControlPoint extends ControlPoint {
 		this(theControlPoint.time(), theControlPoint.value());
 	}
 
+	@Override
 	public boolean hasHandles() {
 		return true;
 	}

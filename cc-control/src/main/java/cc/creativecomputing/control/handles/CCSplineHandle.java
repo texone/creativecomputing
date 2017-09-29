@@ -69,11 +69,6 @@ public class CCSplineHandle extends CCPropertyHandle<CCSpline>{
 		mySpline.endEditSpline();
 		CCLog.info("load:" + myPoints.size() + ":" + mySpline.points().size());
 	}
-
-	@Override
-	public CCSpline convertNormalizedValue(double theValue) {
-		return null;
-	}
 	
 	@Override
 	public double normalizedValue() {

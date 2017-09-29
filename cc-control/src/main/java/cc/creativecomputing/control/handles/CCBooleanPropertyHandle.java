@@ -12,13 +12,13 @@ public class CCBooleanPropertyHandle extends CCPropertyHandle<Boolean>{
 	}
 	
 	@Override
-	public double formatNormalizedValue(double theValue) {
+	public double formatDoubleValue(double theValue) {
 		return theValue >= 0.5 ? 1 : 0;
 	}
-
+	
 	@Override
-	public Boolean convertNormalizedValue(double theValue) {
-		return theValue >= 0.5;
+	public void fromDoubleValue(double theValue, boolean theOverWrite) {
+		value(theValue >= 0.5, theOverWrite);
 	}
 	
 	@Override

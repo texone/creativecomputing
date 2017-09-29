@@ -14,7 +14,6 @@ import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -23,13 +22,14 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import cc.creativecomputing.controlui.CCNumberBox;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCBooleanTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import net.objecthunter.exp4j.ExpressionBuilder;
+import cc.creativecomputing.core.logging.CCLog;
 
 
 @SuppressWarnings("serial")
@@ -86,8 +86,8 @@ public class SwingTrackControlView extends JPanel{
 	private TimelineController _myTimelineController;
 	private CCTrackController _myTrackController;
 	private JToggleButton _myMuteButton;
-	private JTextField _myMinField;
-	private JTextField _myMaxField;
+	private CCNumberBox _myMinField;
+	private CCNumberBox _myMaxField;
 	private JTextField _myValueField;
 	private JLabel _myAddressField;
 	private ArrayList<ActionListener> _myListeners;
@@ -142,29 +142,26 @@ public class SwingTrackControlView extends JPanel{
 			theTrackController instanceof CCCurveTrackController && 
 			!(theTrackController instanceof CCBooleanTrackController)
 		) {
-			_myMinField = createTextField();
-			_myMinField.addActionListener(theE -> {
-				try{
-					_myTrackController.min(new ExpressionBuilder(_myMinField.getText()).build().evaluate());
-				}catch(Exception e){
-					_myMinField.setText(_myTrackController.track().min() + "");
-				}
-					
+			_myMinField = new CCNumberBox(_myTrackController.track().min(), -Float.MAX_VALUE, Float.MAX_VALUE, 2);
+			style(_myMinField);
+			_myMinField.changeEvents().add(theValue -> {
+				_myTrackController.min(theValue);
 			});
-			_myMinField.setText(_myTrackController.track().min() + "");
+
 			add(_myMinField);
-			_myMaxField = createTextField();
-			_myMaxField.addActionListener(theE -> {
-				try{
-					_myTrackController.max(new ExpressionBuilder(_myMaxField.getText()).build().evaluate());
-				}catch(Exception e){
-					_myMaxField.setText(_myTrackController.track().max() + "");
-				}
-					
+			
+			_myMaxField = new CCNumberBox(_myTrackController.track().max(), -Float.MAX_VALUE, Float.MAX_VALUE, 2);
+			style(_myMaxField);
+			_myMaxField.changeEvents().add(theValue -> {
+				_myTrackController.max(theValue);
 			});
 			add(_myMaxField);
-			_myMaxField.setText(_myTrackController.track().max() + "");
-			_myValueField = createTextField();
+			
+			CCLog.info(_myTrackController.track().max(), _myMaxField.getText(), _myMaxField.value());
+			
+			_myValueField = new JTextField();
+			style(_myValueField);
+			_myValueField.setText(_myTrackController.property().valueString());
 			add(_myValueField);
 		}
 		
@@ -190,12 +187,9 @@ public class SwingTrackControlView extends JPanel{
 		
 	}
 	
-	private JTextField createTextField(){
-		JTextField myTextField = new JTextField();
-		CCUIStyler.styleTextField(myTextField, 45);
-		myTextField.setHorizontalAlignment(JTextField.RIGHT);
-		myTextField.setText("0.0");
-		return myTextField;
+	private void style(JTextField theTextField){
+		CCUIStyler.styleTextField(theTextField, 45);
+		theTextField.setHorizontalAlignment(JTextField.RIGHT);
 	}
 	
 	public void color(Color theColor) {

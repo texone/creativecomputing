@@ -24,6 +24,10 @@ import cc.creativecomputing.math.CCMath;
 
 public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventTrackController>{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7428010925887801272L;
 	private SwingEventPopup _myEventPopup;
     private SwingEventCreatePopup _myCreateEventPopup;
     protected SwingTrackDataRenderer _myTrackDataRenderer;
@@ -40,7 +44,12 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
         	
         	new AbstractAction() {
 					
-        		@Override
+        		/**
+        		 * 
+        		 */
+        		private static final long serialVersionUID = 6852365663996197271L;
+
+				@Override
         		public void actionPerformed(ActionEvent e) {
         			TimedEventPoint myEvent = _myController.editedEvent();
         			if(myEvent != null && myEvent.isSelected()){
@@ -185,6 +194,8 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 		case DRAG_START_OFFSET:
 			drawArrow(g, (int)myPoint.getX() - 50, (int)myPoint.getX() - 10, false);
 			drawArrow(g, (int)myPoint.getX() + 50, (int)myPoint.getX() + 10, false);
+			break;
+		default:
 			break;
 		}
 	}

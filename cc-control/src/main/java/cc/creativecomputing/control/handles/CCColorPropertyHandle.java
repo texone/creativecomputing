@@ -46,11 +46,6 @@ public class CCColorPropertyHandle extends CCPropertyHandle<CCColor>{
 		);
 		value(myColor, true);
 	}
-
-	@Override
-	public CCColor convertNormalizedValue(double theValue) {
-		return null;
-	}
 	
 	@Override
 	public double normalizedValue() {

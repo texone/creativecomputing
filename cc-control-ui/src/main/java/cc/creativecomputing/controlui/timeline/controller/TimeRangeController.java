@@ -87,6 +87,25 @@ public class TimeRangeController {
 		_myLoopEnd = _myTimeRange.end();
 	}
 	
+	public TimeRangeEditFunction action(MouseEvent e) {
+		double myCurveX = _myTransportView.viewXToTime(e.getX(), true);
+		int myLoopStart = _myTransportView.timeToViewX(_myTimeRange.start());
+		int myLoopEnd = _myTransportView.timeToViewX(_myTimeRange.end());
+		
+		if(CCMath.abs(myLoopStart - e.getX()) < 5) {
+			return TimeRangeEditFunction.MOVE_START;
+		}else if(CCMath.abs(myLoopEnd - e.getX()) < 5) {
+			return TimeRangeEditFunction.MOVE_END;
+		}else if(myCurveX > _myTimeRange.start() && myCurveX < _myTimeRange.end()){
+			return TimeRangeEditFunction.MOVE_BOTH;
+		}
+		return TimeRangeEditFunction.ON_OFF;
+	}
+	
+	public TimeRangeEditFunction loopAction() {
+		return _myLoopAction;
+	}
+	
 	public void mouseDragged(MouseEvent e) {
 		double myCurveX = _myTransportView.viewXToTime(e.getX(), true);
 //		myCurveX = _myTimelineController.snapToRaster(myCurveX);

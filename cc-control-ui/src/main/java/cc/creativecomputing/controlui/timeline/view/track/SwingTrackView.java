@@ -20,6 +20,7 @@
 package cc.creativecomputing.controlui.timeline.view.track;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 
@@ -46,7 +47,7 @@ public class SwingTrackView extends SwingAbstractTrackView{
 	
 	public SwingTrackView(
 		JFrame theMainFrame,
-    	SwingAbstractTrackDataView<?> theDataView,
+    		SwingAbstractTrackDataView<?> theDataView,
 		TimelineController theTimelineController,
 		CCTrackController theController
 	) {

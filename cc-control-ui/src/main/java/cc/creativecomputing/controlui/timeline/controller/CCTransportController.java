@@ -19,6 +19,7 @@
  */
 package cc.creativecomputing.controlui.timeline.controller;
 
+import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import cc.creativecomputing.control.timeline.TrackType;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.MarkerPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
-import cc.creativecomputing.controlui.timeline.view.SwingRulerView;
+import cc.creativecomputing.controlui.timeline.view.transport.SwingRulerView;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.math.CCMath;
 
@@ -353,10 +354,10 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		return _myUpperBound;
 	}
 	
-	private void moveTransport(final int theMouseX) {
+	private void moveTransport(final int theMouseX, boolean theQuantize) {
 		if(_myRulerView == null)return;
 		double myClickedTime = viewXToTime(theMouseX, true);
-		myClickedTime = _myTimelineController.quantize(myClickedTime);
+		if(theQuantize)myClickedTime = _myTimelineController.quantize(myClickedTime);
 		time(myClickedTime);
 	}
 	
@@ -429,13 +430,10 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		_myDefineLoop = e.getY() < _myRulerView.height() / 2;
 		
 		if(!_myDefineLoop) {
-			if(!myPressedShift) {
-				moveTransport(e.getX());
-			}else {
-//				super.mousePressed(e, null);
-			}
+			moveTransport(e.getX(), myPressedShift);
 		}else {
 			_myTimeRangeController.mousePressed(e);
+			
 			_myLoopStart = _myTimeRangeController._myLoopStart;
 			_myLoopEnd = _myTimeRangeController._myLoopEnd;
 		}
@@ -443,16 +441,34 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		_myTimelineController.renderInfo();
 	}
 	
+	public void mouseMoved(MouseEvent e) {
+		_myDefineLoop = e.getY() < _myRulerView.height() / 2;
+		try {
+		if(_myDefineLoop) {
+			switch(_myTimeRangeController.action(e)) {
+			case MOVE_BOTH:
+				_myRulerView.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+				_myRulerView.updateUI();
+				break;
+			case MOVE_END:
+			case MOVE_START:
+				_myRulerView.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
+				_myRulerView.updateUI();
+				break;
+			}
+		}
+		}catch(Exception x) {
+			x.printStackTrace();
+		}
+	}
+	
 	public void mouseDragged(MouseEvent e) {
 		boolean myPressedShift = (e.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) == MouseEvent.SHIFT_DOWN_MASK;
 		
 		if(!_myDefineLoop) {
-			if(!myPressedShift) {
-				moveTransport(e.getX());
-				_myTimelineController.renderInfo();
-			}else {
-//				super.mouseDragged(e, null);
-			}
+			moveTransport(e.getX(), myPressedShift);
+			_myTimelineController.renderInfo();
+			
 			_myTimelineController.renderInfo();
 		}else {
 			_myTimeRangeController.mouseDragged(e);

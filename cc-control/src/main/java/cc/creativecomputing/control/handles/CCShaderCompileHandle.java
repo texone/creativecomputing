@@ -29,11 +29,6 @@ public class CCShaderCompileHandle extends CCPropertyHandle<CCShaderObject>{
 		}
 		onChange();
 	}
-
-	@Override
-	public CCShaderObject convertNormalizedValue(double theValue) {
-		return null;
-	}
 	
 	@Override
 	public double normalizedValue() {

@@ -2,6 +2,7 @@ package cc.creativecomputing.control.timeline;
 
 import java.awt.Color;
 
+import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 
 public abstract class AbstractTrack {
@@ -20,6 +21,16 @@ public abstract class AbstractTrack {
 	public AbstractTrack(CCPropertyHandle<?> theProperty) {
 		_myMuteFlag = false;
 		_myProperty = theProperty;
+		if(_myProperty instanceof CCNumberPropertyHandle<?>) {
+			CCNumberPropertyHandle<?> myNumberHandle = (CCNumberPropertyHandle<?>)_myProperty;
+			if(!myNumberHandle.isNumberBox()) {
+				_myMin = myNumberHandle.min().doubleValue();
+				_myMax = myNumberHandle.max().doubleValue();
+			}else {
+				_myMin = myNumberHandle.value().doubleValue() - 10;
+				_myMax = myNumberHandle.value().doubleValue() + 10;
+			}
+		}
 		_myColor = Color.lightGray;
 	}
 	

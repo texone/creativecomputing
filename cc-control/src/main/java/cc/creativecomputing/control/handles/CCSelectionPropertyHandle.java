@@ -5,15 +5,11 @@ import cc.creativecomputing.control.CCSelection.CCSelectionListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
-import cc.creativecomputing.math.CCMath;
 
 public class CCSelectionPropertyHandle extends CCPropertyHandle<CCSelection>{
-	
-	private final int _myNumberOfConstants;
 
 	protected CCSelectionPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
-		_myNumberOfConstants = value().values().size();
 		value().events().add(new CCSelectionListener() {
 			
 			@Override
@@ -22,28 +18,12 @@ public class CCSelectionPropertyHandle extends CCPropertyHandle<CCSelection>{
 				
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onChange(String theValue) {
 				_myEvents.proxy().onChange(value());
 			}
 		});
-	}
-	
-	@Override
-	public double formatNormalizedValue(double theValue) {
-		theValue = CCMath.round(theValue * _myNumberOfConstants);
-		theValue /= _myNumberOfConstants;
-		return theValue;
-	}
-
-	@Override
-	public CCSelection convertNormalizedValue(double theValue) {
-		value().value(value().values().get((int)(theValue * _myNumberOfConstants)));
-		return value();
-	}
-	@Override
-	public void fromNormalizedValue(double theValue, boolean theOverWrite) {
-		return;
 	}
 	
 	@Override

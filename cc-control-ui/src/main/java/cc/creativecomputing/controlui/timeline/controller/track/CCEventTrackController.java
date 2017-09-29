@@ -83,6 +83,11 @@ public class CCEventTrackController extends CCTrackController {
 		
 	}
 	
+	@Override
+	public CCTimelineTools activeTool() {
+		return CCTimelineTools.CREATE_EVENT;
+	}
+	
 	public void splitDrag(boolean theSplitDrag){
 		_myEventTrackTool.splitDrag(theSplitDrag);
 	}
@@ -166,14 +171,14 @@ public class CCEventTrackController extends CCTrackController {
 	public void timeImplementation(double theTime, double theValue) {
 		TimedEventPoint myEventPoint = pointAt(theTime);
 		
-    	if(myEventPoint == null || myEventPoint.content() == null || myEventPoint.content().value() == null){
-    		_myTrack.property().restorePreset();
-    		_myEventTrackListener.proxy().onOut();
-    		return;
-    	}
-
-    	_myTrack.property().valueCasted(myEventPoint.content().value(), false);
-    	_myEventTrackListener.proxy().onTime(theTime, this, myEventPoint);
+	    	if(myEventPoint == null || myEventPoint.content() == null || myEventPoint.content().value() == null){
+	    		_myTrack.property().restorePreset();
+	    		_myEventTrackListener.proxy().onOut();
+	    		return;
+	    	}
+	
+	    	_myTrack.property().valueCasted(myEventPoint.content().value(), false);
+	    	_myEventTrackListener.proxy().onTime(theTime, this, myEventPoint);
 
 //    	for (TimelineListener myListener : _myTimelineListener) {
 //			TimedEvent myEvent = new TimedEvent(

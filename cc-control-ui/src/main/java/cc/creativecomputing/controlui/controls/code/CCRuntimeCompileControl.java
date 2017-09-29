@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.tools.Diagnostic;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -28,7 +27,6 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 
 import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.control.code.CCRuntimeCompilable;
-import cc.creativecomputing.control.code.CCRuntimeCompiler;
 import cc.creativecomputing.control.code.CCRuntimeCompiler.CCClassLoader;
 import cc.creativecomputing.control.handles.CCRuntimeCompileHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
@@ -85,6 +83,7 @@ public class CCRuntimeCompileControl extends CCValueControl<CCRuntimeCompilable,
 	
 	private boolean _myTriggerEvent = true;
 	
+	@SuppressWarnings("unused")
 	private CCClassLoader _myClassLoader;
 	
 

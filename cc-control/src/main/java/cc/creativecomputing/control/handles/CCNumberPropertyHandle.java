@@ -75,7 +75,7 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	}
 	
 	@Override
-	public double formatNormalizedValue(double theValue) {
+	public double formatDoubleValue(double theValue) {
 		if(!(_myMax instanceof Integer)){
 			return theValue;
 		}
@@ -86,11 +86,16 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 		
 		return theValue;
 	}
-
+	
 	@Override
-	public Number convertNormalizedValue(double theValue) {
-		return _myToType.toType(CCMath.blend(_myMin.doubleValue(), _myMax.doubleValue(), theValue));
+	public void fromDoubleValue(double theValue, boolean theOverWrite) {
+		value(theValue, theOverWrite);
 	}
+
+//	@Override
+//	public Number convertDoubleValue(double theValue) {
+//		return _myToType.toType(CCMath.blend(_myMin.doubleValue(), _myMax.doubleValue(), theValue));
+//	}
 	
 	@Override
 	public double normalizedValue() {

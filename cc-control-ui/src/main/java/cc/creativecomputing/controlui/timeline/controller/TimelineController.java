@@ -35,6 +35,7 @@ import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCEventTriggerHandle;
+import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
@@ -58,6 +59,7 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCColorTrackCont
 import cc.creativecomputing.controlui.timeline.controller.track.CCDoubleTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackAdapter;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCGradientTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCIntegerTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
@@ -433,6 +435,8 @@ public class TimelineController extends TrackContext implements CCTransportable{
 			}
 		}else if(theProperty instanceof CCColorPropertyHandle){
 			myTrackController = new CCColorTrackController(this, myTrack, myGroup);
+		}else if(theProperty instanceof CCGradientPropertyHandle){
+			myTrackController = new CCGradientTrackController(this, myTrack, myGroup);
 		}else if(theProperty instanceof CCStringPropertyHandle){
 			myTrackController = new CCEventTrackController(this, myTrack, myGroup);
 			Map<String, String> myExtraMap = new HashMap<>();

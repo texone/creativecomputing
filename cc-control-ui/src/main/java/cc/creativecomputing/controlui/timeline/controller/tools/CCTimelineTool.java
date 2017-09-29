@@ -1,11 +1,11 @@
 package cc.creativecomputing.controlui.timeline.controller.tools;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
-import cc.creativecomputing.math.CCMath;
 
 public class CCTimelineTool<ControllerType extends CCTrackController> {
 	
@@ -22,7 +22,6 @@ public class CCTimelineTool<ControllerType extends CCTrackController> {
     protected ControlPoint _myCurveCoords;
     protected ControlPoint _myCurveMovement;
 
-    private static int SNAP_RANGE = 10;
     protected boolean _mySnap = false;
     
     protected ControllerType _myController;
@@ -30,6 +29,16 @@ public class CCTimelineTool<ControllerType extends CCTrackController> {
 	public CCTimelineTool(boolean theSnap, ControllerType theController){
 		_mySnap = theSnap;
 		_myController = theController;
+	}
+	
+	protected int _myKeyCode;
+	
+	public void keyPressed(KeyEvent e) {
+		_myKeyCode = e.getKeyCode();
+	}
+	
+	public void keyReleased(KeyEvent e) {
+		_myKeyCode = -1;
 	}
 	
 	public void mousePressed(MouseEvent theEvent){
@@ -44,14 +53,11 @@ public class CCTimelineTool<ControllerType extends CCTrackController> {
 		_myMovX = _myPressX - theEvent.getX();
 		_myMovY = _myPressY - theEvent.getY();
 		
-		boolean mySnap = _mySnap && (CCMath.abs(_myMovX) < SNAP_RANGE || CCMath.abs(_myMovY) < SNAP_RANGE);
-		
-		if(mySnap){
-			if(CCMath.abs(_myMovX) > CCMath.abs(_myMovY)){
-				_myMovY = 0;
-			}else{
-				_myMovX = 0;
-			}
+		if(_myKeyCode == KeyEvent.VK_X) {
+			_myMovY = 0;
+		}
+		if(_myKeyCode == KeyEvent.VK_Y) {
+			_myMovX = 0;
 		}
 
 		_myViewCoords = new Point2D.Double(theEvent.getX(), theEvent.getY());

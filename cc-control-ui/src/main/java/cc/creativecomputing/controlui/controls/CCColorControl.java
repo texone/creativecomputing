@@ -58,7 +58,7 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	    public void actionPerformed(ActionEvent evt) {
 	    	try{
 		        CCColor myColor = (CCColor)_myHandle.member().value();
-		        _myColorChooser.setColor(_myColor.toAWTColor());
+		        _myColorChooser.setColor(myColor.toAWTColor());
 	        }catch(Exception e){
 	        	
 	        }
@@ -83,7 +83,6 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	
 	private JColorChooser _myColorChooser;
 	
-	private boolean _myTriggerEvent = true;
 	private boolean _myIsInEdit = false;
 
 	static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);

@@ -36,7 +36,9 @@ import cc.creativecomputing.core.logging.CCLog;
 public abstract class CCCurveTrackController extends CCTrackController{
 	
 	protected CCCreateTool _myCreateTool;
-	private CCCurveTool _myCurveTool;
+	protected CCCurveTool _myCurveTool;
+	
+	protected CCTimelineTools _myActiveToolEnum;
 	
 	/**
 	 * @param theTimelineController
@@ -54,7 +56,8 @@ public abstract class CCCurveTrackController extends CCTrackController{
 		_myCreateTool = new CCCreateTool(this);
 		_myCurveTool = new CCCurveTool(this);
 		
-		_myCreateTool.setTool(CCTimelineTools.CREATE_LINEAR_POINT);
+		_myCreateTool.setTool(CCTimelineTools.LINEAR_POINT);
+		_myActiveToolEnum = CCTimelineTools.LINEAR_POINT;
 		_myActiveTool = _myCreateTool;
 		if(theTrack.property() == null)return;
 		
@@ -66,7 +69,6 @@ public abstract class CCCurveTrackController extends CCTrackController{
 				_myChangedValue = false;
 				return;
 			}
-			
 			for(ControlPoint myPoint:_mySelectedPoints){
 				applyValue(myPoint, null);
 			}
@@ -76,10 +78,12 @@ public abstract class CCCurveTrackController extends CCTrackController{
 	
 	@Override
 	public void setTool(CCTimelineTools theTool) {
+		_myActiveToolEnum = theTool;
+		_myTrackView.render();
 		switch(theTool){
-		case CREATE_BEZIER_POINT:
-		case CREATE_LINEAR_POINT:
-		case CREATE_STEP_POINT:
+		case BEZIER_POINT:
+		case LINEAR_POINT:
+		case STEP_POINT:
 			CCLog.info(this+":"+_myCreateTool);
 			CCLog.info(_myCreateTool + " : " + theTool);
 			if(_myCreateTool == null)return;
@@ -90,7 +94,14 @@ public abstract class CCCurveTrackController extends CCTrackController{
 			clearSelection();
 			_myActiveTool = _myCurveTool;
 			break;
+		default:
+			break;
 		}
+	}
+	
+	@Override
+	public CCTimelineTools activeTool() {
+		return _myActiveToolEnum;
 	}
 	
 	@Override
@@ -109,6 +120,12 @@ public abstract class CCCurveTrackController extends CCTrackController{
 	@Override
 	public void writeValue(double theTime) {
 		_myCreateTool.createPoint(new ControlPoint(theTime, _myProperty.normalizedValue()));
+	}
+	
+	private boolean _myApplyValue = true;
+	
+	public void setApplyValue(boolean theApplyValue) {
+		_myApplyValue = theApplyValue;
 	}
 	
 	public void applyValue(ControlPoint thePoint, Object theValue) {

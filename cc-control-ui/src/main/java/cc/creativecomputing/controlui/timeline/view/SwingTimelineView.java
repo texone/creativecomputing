@@ -20,7 +20,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JViewport;
 import javax.swing.border.EmptyBorder;
 
-import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
@@ -38,18 +37,23 @@ import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.arrange.SwingClipTrackObjectDialog;
 import cc.creativecomputing.controlui.timeline.controller.arrange.SwingGroupTrackObjectDialog;
+import cc.creativecomputing.controlui.timeline.controller.track.CCColorTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCGradientTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingMultiTrackPanel.MultiTrackMouseAdapter;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackDataView;
+import cc.creativecomputing.controlui.timeline.view.track.SwingColorTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingEventTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingEventTrackDialog;
+import cc.creativecomputing.controlui.timeline.view.track.SwingGradientTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
+import cc.creativecomputing.controlui.timeline.view.transport.SwingRulerView;
 
 
 @SuppressWarnings("serial")
@@ -208,6 +212,10 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 				myTrackDataRenderer = new CCPathTrackDataRenderer();
 			}
 			myDataView = new SwingEventTrackDataView(myTrackDataRenderer, _myTimelineController, (CCEventTrackController)theTrackDataController);
+		}else if(theTrackDataController instanceof CCColorTrackController){
+			myDataView = new SwingColorTrackDataView(_myTimelineController, (CCColorTrackController)theTrackDataController);
+		}else if(theTrackDataController instanceof CCGradientTrackController){
+			myDataView = new SwingGradientTrackDataView(_myTimelineController, (CCGradientTrackController)theTrackDataController);
 		}else if(theTrackDataController instanceof CCCurveTrackController){
 			myDataView = new SwingCurveTrackDataView(_myTimelineController, (CCCurveTrackController)theTrackDataController);
 		}

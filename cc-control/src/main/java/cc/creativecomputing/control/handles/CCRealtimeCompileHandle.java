@@ -29,11 +29,6 @@ public class CCRealtimeCompileHandle extends CCPropertyHandle<CCRealtimeCompile<
 		}
 		onChange();
 	}
-
-	@Override
-	public CCRealtimeCompile<?> convertNormalizedValue(double theValue) {
-		return null;
-	}
 	
 	@Override
 	public double normalizedValue() {

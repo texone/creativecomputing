@@ -5,8 +5,6 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -18,8 +16,6 @@ import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCGradientPoint;
@@ -43,39 +39,25 @@ public class CCGradientEditor extends JPanel {
 	    ShowColorChooserAction(Component theFrame, JColorChooser theColorChooser) {
 	        _myColorChooser = theColorChooser;
 	        
-
-	        // Choose whether dialog is modal or modeless
-	        boolean modal = false;
-
-	        // Create the dialog that contains the chooser
 	        _myDialog = JColorChooser.createDialog(
 	        	theFrame, 
 	        	"", 
-	        	modal,
+	        	false,
 	            theColorChooser, 
 	            null, 
-	            new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent theE) {
-						setColor(_myLastColor);
-					}
-				}
+	            theE -> {setColor(_myLastColor);}
 	        );
 	    }
 
 	    public void open() {
-	    	try{
-		    	_myLastColor = _myGradient.get(_mySelectedPoint).color().toAWTColor();
-		        _myColorChooser.setColor(_myLastColor);
+	    		try{
+	    			_myLastColor = _myGradient.get(_mySelectedPoint).color().toAWTColor();
+	    			_myColorChooser.setColor(_myLastColor);
 	        }catch(Exception e){
 	        	
 	        }
-	        // Show dialog
 	        _myDialog.setVisible(true);
 
-	        // Disable the action; to enable the action when the dialog is closed, see
-	        // Listening for OK and Cancel Events in a JColorChooser Dialog
 	        setEnabled(false);
 	        CCGradientEditor.this.setEnabled(true);
 	    }
@@ -88,13 +70,13 @@ public class CCGradientEditor extends JPanel {
 	private Polygon poly = new Polygon();
 
 	/** The x position of the gradient bar */
-	private int x;
+	private int _myX;
 	/** The y position of the gradient bar */
-	private int y;
+	private int _myY;
 	/** The width of the gradient bar */
-	private int width;
+	private int _myWidth;
 	/** The height of the gradient bar */
-	private int barHeight;
+	private int _myHeight;
 	
 	public static interface GradientListener{
 		public void onChange(CCGradient theGradient);
@@ -111,20 +93,14 @@ public class CCGradientEditor extends JPanel {
 	 *
 	 */
 	public CCGradientEditor() {
-//		setLayout(null);
-
-		x = 5;
-		y = 5;
-		barHeight = 5;
+		_myX = 5;
+		_myY = 5;
+		_myHeight = 5;
 
 		_myColorChooser = CCUIStyler.createColorChooser(new Color(0,0,0));
-		_myColorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
-			
-			@Override
-			public void stateChanged(ChangeEvent theE) {
-				Color myColor = _myColorChooser.getColor();
-				setColor(myColor);
-			}
+		_myColorChooser.getSelectionModel().addChangeListener(theE ->{
+			Color myColor = _myColorChooser.getColor();
+			setColor(myColor);
 		});
 		
 		_myAction = new ShowColorChooserAction(this, _myColorChooser);
@@ -135,35 +111,32 @@ public class CCGradientEditor extends JPanel {
 
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				selectPoint(e.getX(), e.getY());
+				selectPoint(e);
 				repaint(0);
-				
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 1) {
-					if(_mySelectedPoint != -1){
-						if(e.isShiftDown())delPoint();
-						else editPoint();
-					}else{
-						System.out.println("ADD POINT");
-						double myPos = CCMath.norm(e.getX(), x, x + width);
-						addPoint(myPos);
-						movePoint(e.getX(), e.getY());
-					}
+				if (e.getClickCount() != 1) return;
+				
+				if(_mySelectedPoint != -1){
+					if(e.isShiftDown())delPoint();
+					else editPoint();
+				}else{
+					double myPos = CCMath.norm(e.getX(), _myX, _myX + _myWidth);
+					addPoint(myPos);
+					movePoint(e);
 				}
 			}
 		});
 
 		addMouseMotionListener(new MouseMotionListener() {
 			public void mouseDragged(MouseEvent e) {
-				movePoint(e.getX(), e.getY());
+				movePoint(e);
 				repaint(0);
 			}
 
-			public void mouseMoved(MouseEvent e) {
-			}
+			public void mouseMoved(MouseEvent e) {}
 		});
 	}
 	
@@ -184,12 +157,6 @@ public class CCGradientEditor extends JPanel {
 		}
 	}
 
-	/**
-	 * Add a _myGradientener that will be notified on change of this editor
-	 * 
-	 * @param _myGradientener The _myGradientener to be notified on change of
-	 *            this editor
-	 */
 	public CCListenerManager<GradientListener> events() {
 		return _myEvents;
 	}
@@ -201,9 +168,9 @@ public class CCGradientEditor extends JPanel {
 		_myEvents.proxy().onChange(_myGradient);
 	}
 
-	private boolean checkPoint(int mx, int my, CCGradientPoint pt) {
-		int dx = (int) Math.abs((x + (width * pt.position())) - mx);
-		int dy = Math.abs((y + barHeight + 7) - my);
+	private boolean checkPoint(MouseEvent theE, CCGradientPoint pt) {
+		int dx = (int) Math.abs((_myX + (_myWidth * pt.position())) - theE.getX());
+		int dy = Math.abs((_myY + _myHeight + 7) - theE.getY());
 
 		if ((dx < 5) && (dy < 7)) {
 			return true;
@@ -250,7 +217,7 @@ public class CCGradientEditor extends JPanel {
 	 * @param mx The mouse x coordinate
 	 * @param my The mouse y coordinate
 	 */
-	private void selectPoint(int mx, int my) {
+	private void selectPoint(MouseEvent theE) {
 		if (!isEnabled()) {
 			_mySelectedPoint = -1;
 			return;
@@ -261,16 +228,16 @@ public class CCGradientEditor extends JPanel {
 		}
 
 		for (int i = 1; i < _myGradient.size() - 1; i++) {
-			if (checkPoint(mx, my,  _myGradient.get(i))) {
+			if (checkPoint(theE,  _myGradient.get(i))) {
 				_mySelectedPoint =  i;
 				return;
 			}
 		}
-		if (checkPoint(mx, my,  _myGradient.get(0))) {
+		if (checkPoint(theE,  _myGradient.get(0))) {
 			_mySelectedPoint =  0;
 			return;
 		}
-		if (checkPoint(mx, my,  _myGradient.get(_myGradient.size() - 1))) {
+		if (checkPoint(theE,  _myGradient.get(_myGradient.size() - 1))) {
 			_mySelectedPoint =  _myGradient.size() - 1;
 			return;
 		}
@@ -281,6 +248,7 @@ public class CCGradientEditor extends JPanel {
 	/**
 	 * Delete the currently selected point
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	private void delPoint() {
 		if (!isEnabled()) {
 			return;
@@ -307,7 +275,7 @@ public class CCGradientEditor extends JPanel {
 	 * @param mx The x coordinate of the mouse
 	 * @param my The y coordinate of teh mouse
 	 */
-	private void movePoint(int mx, int my) {
+	private void movePoint(MouseEvent theE) {
 		if (!isEnabled()) {
 			return;
 		}
@@ -316,9 +284,8 @@ public class CCGradientEditor extends JPanel {
 			return;
 		}
 
-		float newPos = (mx - x) / (float) width;
-		newPos = Math.min(1, newPos);
-		newPos = Math.max(0, newPos);
+		float newPos = (theE.getX() - _myX) / (float) _myWidth;
+		newPos = CCMath.saturate(newPos);
 
 		_myGradient.get(_mySelectedPoint).position(newPos);
 		Collections.sort(_myGradient);
@@ -333,20 +300,20 @@ public class CCGradientEditor extends JPanel {
 		super.paintComponent(g1d);
 
 		Graphics2D g = (Graphics2D) g1d;
-		width = getWidth() - 30;
+		_myWidth = getWidth() - 25;
 
-		for(int i = 0; i <= width;i++){
-			double blend = (double)i / width;
+		for(int i = 0; i <= _myWidth;i++){
+			double blend = (double)i / _myWidth;
 			g.setColor(_myGradient.color(blend).toAWTColor());
-			g.drawLine(i + x, y, i + x, y + barHeight - 1);
+			g.drawLine(i + _myX, _myY, i + _myX, _myY + _myHeight - 1);
 		}
 
 		g.setColor(Color.black);
-		g.drawRect(x, y, width, barHeight - 1);
+		g.drawRect(_myX, _myY, _myWidth, _myHeight - 1);
 
 		for (int i = 0; i < _myGradient.size(); i++) {
 			CCGradientPoint pt =  _myGradient.get(i);
-			g.translate(x + (width * pt.position()), y + barHeight);
+			g.translate(_myX + (_myWidth * pt.position()), _myY + _myHeight);
 			g.setColor(pt.color().toAWTColor());
 			g.fillPolygon(poly);
 			g.setColor(Color.black);
@@ -355,7 +322,7 @@ public class CCGradientEditor extends JPanel {
 			if (i == _mySelectedPoint) {
 				g.drawLine(-4, 10, 4, 10);
 			}
-			g.translate(-x - (width * pt.position()), -y - barHeight);
+			g.translate(-_myX - (_myWidth * pt.position()), -_myY - _myHeight);
 		}
 	}
 

@@ -2,8 +2,6 @@ package cc.creativecomputing.controlui.controls;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -12,9 +10,8 @@ import javax.swing.JTextField;
 
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.CCSwingDraggableValueBox;
+import cc.creativecomputing.controlui.CCNumberBox;
 import cc.creativecomputing.math.CCMath;
-import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHandle<Number>>{
 	
@@ -24,7 +21,7 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 	private double _myMax;
 	private double _myValue;
 	
-	private CCSwingDraggableValueBox _myValueField;
+	private CCNumberBox _myValueField;
 	private JSlider _mySlider;
 	
 	private boolean _myTriggerEvent = true;
@@ -46,12 +43,12 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
         _myMax = _myHandle.max().doubleValue();
         _myValue = _myHandle.value().doubleValue();
         if(_myHandle.isNumberBox()){
-        	_mySlider = null;
+        		_mySlider = null;
         }else{
 	        _mySlider = new JSlider(JSlider.HORIZONTAL, 0, MAX_SLIDER_VALUE, 0);
 	        _mySlider.addChangeListener(theE -> {
-	        	if(!_myTriggerEvent)return;
-	        	value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
+	        		if(!_myTriggerEvent)return;
+	        		value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
 			});
 	 
 	        //Turn on labels at major tick marks.
@@ -66,35 +63,38 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 	        _mySlider.setPreferredSize(new Dimension(100,14));
         }
         
-        _myValueField = new CCSwingDraggableValueBox(_myValue, _myMin, _myMax, CCMath.pow(0.1, theHandle.digits()));
+        _myValueField = new CCNumberBox(_myValue, _myMin, _myMax, theHandle.digits());
+        _myValueField.changeEvents().add(theValue -> {
+        		value(theValue, true);
+        });
         CCUIStyler.styleTextField(_myValueField, 100);
         
-        _myValueField.changeEvents().add(theValue -> {
-        	value(theValue, true);
-        });
-        _myValueField.addActionListener(theE -> {
-        	try{
-        		value(new ExpressionBuilder(_myValueField.getText()).build().evaluate(), true);
-        	}catch(Exception e){
-        		value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
-        	}
-		});
-        _myValueField.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyReleased(KeyEvent e) {
-        		switch (e.getKeyCode()) {
-				case KeyEvent.VK_UP:
-					value(value().doubleValue() + 1, true);
-					break;
-				case KeyEvent.VK_DOWN:
-					value(value().doubleValue() - 1, true);
-					break;
-
-				default:
-					break;
-				}
-        	}
-		});
+//        _myValueField.changeEvents().add(theValue -> {
+//        		value(theValue, true);
+//        });
+//        _myValueField.addActionListener(theE -> {
+//	        	try{
+//	        		value(new ExpressionBuilder(_myValueField.getText()).build().evaluate(), true);
+//	        	}catch(Exception e){
+//	        		value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
+//	        	}
+//		});
+//        _myValueField.addKeyListener(new KeyAdapter() {
+//        	@Override
+//        	public void keyReleased(KeyEvent e) {
+//        		switch (e.getKeyCode()) {
+//				case KeyEvent.VK_UP:
+//					value(value().doubleValue() + 1, true);
+//					break;
+//				case KeyEvent.VK_DOWN:
+//					value(value().doubleValue() - 1, true);
+//					break;
+//
+//				default:
+//					break;
+//				}
+//        	}
+//		});
         _myValueField.setHorizontalAlignment(JTextField.LEFT);
         value(_myHandle.value().doubleValue(), true);
 	}

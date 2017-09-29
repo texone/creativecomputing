@@ -1,9 +1,11 @@
 package cc.creativecomputing.control.timeline.point;
 
 
+import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.timeline.TrackData;
 import cc.creativecomputing.core.CCBlendable;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.math.CCColor;
 
 public class ControlPoint {
 	
@@ -221,7 +223,7 @@ public class ControlPoint {
 	}
 	
 	public String toString() {
-		return "time: " + _myTime + " value:" + _myValue;
+		return "type: " + _myType + " time: " + _myTime + " value:" + _myValue;
 	}
 	
 	protected static final String CONTROLPOINT_ELEMENT = "ControlPoint";
@@ -230,18 +232,33 @@ public class ControlPoint {
 
 	protected static final String TIME_ATTRIBUTE = "time";
 	protected static final String VALUE_ATTRIBUTE = "value";
+	protected static final String BLENDABLE_ATTRIBUTE = "blendable";
 	
 	public CCDataObject data(double theStartTime, double theEndTime) {
 		CCDataObject myResult = new CCDataObject();
 		myResult.put(CONTROL_POINT_TYPE_ATTRIBUTE, _myType.toString());
 		myResult.put(TIME_ATTRIBUTE, _myTime - theStartTime);
 		myResult.put(VALUE_ATTRIBUTE, _myValue);
+		if(_myBlendable != null) {
+			myResult.put(BLENDABLE_ATTRIBUTE, _myBlendable.data());
+		}
 		return myResult;
 	}
+	
+	protected static final String  COLOR_TYPE = CCColor.class.getName();
 	
 	public void data(CCDataObject theData) {
 		_myTime = theData.getDouble(TIME_ATTRIBUTE);
 		_myValue = theData.getDouble(VALUE_ATTRIBUTE);
+		if(!theData.containsKey(BLENDABLE_ATTRIBUTE))return;
+		CCDataObject myBlendableData = theData.getObject(BLENDABLE_ATTRIBUTE);
+		if(myBlendableData.getString(CCBlendable.BLENDABLE_TYPE_ATTRIBUTE).equals(CCColor.class.getName())) {
+			_myBlendable = new CCColor();
+		}else if(myBlendableData.getString(CCBlendable.BLENDABLE_TYPE_ATTRIBUTE).equals(CCGradient.class.getName())) {
+			_myBlendable = new CCGradient();
+		}
+		_myBlendable.data(myBlendableData);
+		
 	}
 	
 	private boolean _myIsSelected = false;

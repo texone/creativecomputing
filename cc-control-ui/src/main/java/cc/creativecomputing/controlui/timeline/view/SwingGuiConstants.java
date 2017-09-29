@@ -48,9 +48,9 @@ public class SwingGuiConstants {
 	
 	public static CCTimelineTools[] CURVE_TOOLS = new CCTimelineTools[] {
 		CCTimelineTools.CURVE,
-		CCTimelineTools.CREATE_BEZIER_POINT,
-		CCTimelineTools.CREATE_LINEAR_POINT,
-		CCTimelineTools.CREATE_STEP_POINT,
+		CCTimelineTools.BEZIER_POINT,
+		CCTimelineTools.LINEAR_POINT,
+		CCTimelineTools.STEP_POINT,
 		CCTimelineTools.SELECT
 	};
 }

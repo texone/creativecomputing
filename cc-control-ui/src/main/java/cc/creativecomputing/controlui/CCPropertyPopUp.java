@@ -1,8 +1,6 @@
 package cc.creativecomputing.controlui;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.Path;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -20,7 +18,7 @@ import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
-import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
+import cc.creativecomputing.math.CCColor;
 
 public class CCPropertyPopUp extends JPopupMenu {
 	
@@ -130,7 +128,6 @@ public class CCPropertyPopUp extends JPopupMenu {
 		});
 		
 		addItem("update current preset", action -> {
-			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
 			for(int i = 0; i < _myPresetMenue.getItemCount();i++) {
 				JMenuItem myItem = _myPresetMenue.getItem(i);
 				if(myItem.isSelected()) {
@@ -150,7 +147,7 @@ public class CCPropertyPopUp extends JPopupMenu {
 			Object[] possibilities = {
 				CCPresetHandling.SELFCONTAINED.desc, 
 				CCPresetHandling.UPDATED.desc, 
-				CCPresetHandling.RESTORED
+				CCPresetHandling.RESTORED.desc
 			};
             String myChosenOption = (String)JOptionPane.showInputDialog(
             		CCPropertyPopUp.this,
@@ -183,13 +180,6 @@ public class CCPropertyPopUp extends JPopupMenu {
 	
 	private void addItem(String theName, ActionListener theListener){
 		JMenuItem myItem = new JMenuItem(theName);
-		myItem.setFont(SwingGuiConstants.ARIAL_11);
-		myItem.addActionListener(theListener);
-		add(myItem);
-	}
-	
-	private void addCheckBoxItem(String theName, ActionListener theListener){
-		JCheckBoxMenuItem myItem = new JCheckBoxMenuItem(theName, false);
 		myItem.setFont(SwingGuiConstants.ARIAL_11);
 		myItem.addActionListener(theListener);
 		add(myItem);

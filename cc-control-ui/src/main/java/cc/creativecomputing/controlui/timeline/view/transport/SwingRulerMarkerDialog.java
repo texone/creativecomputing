@@ -1,4 +1,4 @@
-package cc.creativecomputing.controlui.timeline.view;
+package cc.creativecomputing.controlui.timeline.view.transport;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

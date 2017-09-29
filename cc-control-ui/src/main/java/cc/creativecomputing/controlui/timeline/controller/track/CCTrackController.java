@@ -20,6 +20,7 @@
 package cc.creativecomputing.controlui.timeline.controller.track;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
@@ -66,6 +67,8 @@ public abstract class CCTrackController extends CCTrackDataController implements
 	public abstract CCTimelineTools[] tools();
 	
 	public abstract void setTool(CCTimelineTools theTool);
+	
+	public abstract CCTimelineTools activeTool();
 	
 	public ControlPoint draggedPoint(){return null;}
 	
@@ -136,17 +139,17 @@ public abstract class CCTrackController extends CCTrackDataController implements
 		if(_myTrack.property() != null){
 			_myChangedValue = true;
 			if(!track().mute()){
-				_myTrack.property().fromNormalizedValue(value(theTime), false);
+				_myTrack.property().fromDoubleValue(value(theTime), false);
 			}
-			myValue = _myTrack.property().formatNormalizedValue(value(theTime));
+			myValue = value(theTime);//_myTrack.property().formatNormalizedValue(value(theTime));
 			viewValue(_myTrack.property().valueString());
 		}
 		// @TODO check rendering
 //		if(trackData().size() == 0 && _myTrackView != null)_myTrackView.render();
 		if(track().mute()) return;
-    	if(trackData().size() == 0)return;
+		if(trackData().size() == 0)return;
     	
-    	timeImplementation(theTime, myValue);
+		timeImplementation(theTime, myValue);
 	}
 	
 	public abstract void timeImplementation(double theTime, double theValue);
@@ -173,7 +176,7 @@ public abstract class CCTrackController extends CCTrackDataController implements
 			if(_myTrack.property() == null)return 0;
 			return _myTrack.property().normalizedValue();
 		}
-    	return CCMath.blend(track().min(), track().max(), trackData().value(theTime)) ;
+		return CCMath.blend(track().min(), track().max(), trackData().value(theTime)) ;
     }
     
 //	/**
@@ -208,30 +211,30 @@ public abstract class CCTrackController extends CCTrackDataController implements
         
         myResult.time(viewXToTime((int) thePoint.getX(), theGetPos));
         double myValue = CCMath.constrain(1 - (thePoint.getY() - 2.5) / (_myTrackView.height() - 5),0,1);
-        myValue = _myTrack.property() != null ? _myTrack.property().formatNormalizedValue(myValue) : myValue;
+//        myValue = _myTrack.property() != null ? _myTrack.property().formatNormalizedValue(myValue) : myValue;
         myResult.value(myValue);
         return myResult;
     }
     
     public void selection(Selection theSelection) {
-    	_mySelection = theSelection;
-    	if(_myTrackView != null)_myTrackView.render();
+	    	_mySelection = theSelection;
+	    	if(_myTrackView != null)_myTrackView.render();
     }
     
     public Selection selection() {
-    	return _mySelection;
+    		return _mySelection;
     }
     
     public void mousePressed(MouseEvent e) {
-    	Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
-			
-    	if (e.isAltDown()) {
-    		_myTrackContext.zoomController().startDrag(myViewCoords);
-    		return;
-    	}
-			
-    	_myTrackContext.activeTrack(this);
-    	_myActiveTool.mousePressed(e);
+	    	Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
+				
+	    	if (e.isAltDown()) {
+	    		_myTrackContext.zoomController().startDrag(myViewCoords);
+	    		return;
+	    	}
+				
+	    	_myTrackContext.activeTrack(this);
+	    	_myActiveTool.mousePressed(e);
 	}
 
 
@@ -240,7 +243,7 @@ public abstract class CCTrackController extends CCTrackDataController implements
 			_myTrackContext.zoomController().endDrag();
 			return;
 		}
-		
+//		_myTimelineController.transportController().time(viewXToTime(e.getX(), true));
 		_myActiveTool.mouseReleased(e);
 
         _myTrackView.render();
@@ -263,6 +266,14 @@ public abstract class CCTrackController extends CCTrackDataController implements
 //		} else {
 //			_myTrackView.defaultCursor();
 //		}
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		_myActiveTool.keyPressed(e);
+	}
+	
+	public void keyReleased(KeyEvent e) {
+		_myActiveTool.keyReleased(e);
 	}
 
 	public void mouseDragged(MouseEvent e) {

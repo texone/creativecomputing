@@ -2,7 +2,6 @@ package cc.creativecomputing.controlui.timeline.view.transport;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +22,7 @@ import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import cc.creativecomputing.controlui.CCSwingDraggableValueBox;
+import cc.creativecomputing.controlui.CCNumberBox;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportable;
 import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
@@ -52,8 +51,8 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 	
 	private TimeField _myTimeField;
 	
-	private CCSwingDraggableValueBox _mySpeedValue;
-	private CCSwingDraggableValueBox _myBPMValue;
+	private CCNumberBox _mySpeedValue;
+	private CCNumberBox _myBPMValue;
 	
 	private JSlider _mySlider;
 	
@@ -180,7 +179,7 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 		add(_myTimeField);
 		
 		if(SwingGuiConstants.CREATE_SPEED_CONTROL) {
-			_mySpeedValue = new CCSwingDraggableValueBox(1,0.1f,10,0.1f);
+			_mySpeedValue = new CCNumberBox(1,0.1f,10, 2);
 			_mySpeedValue.changeEvents().add(theValue -> {
 				_myTimelineContainer.activeTimeline().transportController().speed(theValue);
 			});
@@ -192,7 +191,7 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 			add(mySpeedLabel);
 		}
 		if(SwingGuiConstants.CREATE_SPEED_CONTROL){
-			_myBPMValue = new CCSwingDraggableValueBox(120,1,360,0.1f);
+			_myBPMValue = new CCNumberBox(120,1,360, 2);
 			_myBPMValue.changeEvents().add(theValue -> {
 				_myTimelineContainer.activeTimeline().transportController().bpm(theValue);
 			});

@@ -28,6 +28,7 @@ import cc.creativecomputing.control.handles.CCShaderCompileHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.controls.CCValueControl;
+import cc.creativecomputing.core.logging.CCLog;
 
 public class CCShaderCompileControl extends CCValueControl<CCShaderObject, CCShaderCompileHandle>{
 	

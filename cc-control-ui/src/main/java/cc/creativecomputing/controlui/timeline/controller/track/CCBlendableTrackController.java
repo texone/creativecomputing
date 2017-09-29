@@ -3,9 +3,9 @@ package cc.creativecomputing.controlui.timeline.controller.track;
 import cc.creativecomputing.control.timeline.Track;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.controlui.timeline.controller.tools.CCBlendableCurveTool;
+import cc.creativecomputing.controlui.timeline.controller.tools.CCBlendableTool;
 import cc.creativecomputing.core.CCBlendable;
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.math.CCMath;
 
 @SuppressWarnings({"unchecked"})
 public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>> extends CCDoubleTrackController{
@@ -13,6 +13,9 @@ public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>>
 
 	public CCBlendableTrackController(TrackContext theTrackContext, Track theTrack, CCGroupTrackController theParent) {
 		super(theTrackContext, theTrack, theParent);
+		_myCreateTool = new CCBlendableTool<>(this);
+		_myCurveTool = new CCBlendableCurveTool(this);
+		_myActiveTool = _myCreateTool;
 	}
 	
 	@Override
@@ -29,6 +32,8 @@ public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>>
 	
 	public abstract Type createDefault();
 	
+	
+	
 	public Type blend(double theTime){
 		if (trackData().size() == 0) {
 			return createDefault();
@@ -44,7 +49,7 @@ public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>>
 		if (myLower == null && myCeiling == null) {
 			return createDefault();
 		}
-		
+
 		if (myLower == null && myCeiling != null) {
 			return ((Type)myCeiling.blendable()).clone();
 		}

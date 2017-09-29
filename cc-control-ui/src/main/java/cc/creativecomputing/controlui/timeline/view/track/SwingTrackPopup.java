@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +36,9 @@ import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
+import cc.creativecomputing.controlui.timeline.view.CCTextInputDialog;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.core.logging.CCLog;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 public abstract class SwingTrackPopup<ControllerType extends CCTrackController> extends JPopupMenu {
 	
@@ -51,6 +53,8 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 	private TimelineController _myTimelineController;
 	
 	private static List<ControlPoint> clipBoard = null;
+	
+	private static CCTrackController controller = null;
 
 	public SwingTrackPopup(ControllerType theTrackController, TimelineController theTimelineController) {
 		_myPopUps.add(this);
@@ -82,17 +86,22 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 				_myTrackController.deleteSelection();
 				break;
 			}
-			System.out.println(e.getID() == KeyEvent.KEY_PRESSED);
 			if(!(e.isControlDown() || e.isMetaDown()))return false;
 			switch(e.getKeyCode()){
 			case KeyEvent.VK_C:
+				if(_myTrackController.selectedPoints().size() <= 0) {
+					break;
+				}
+				controller = _myTrackController;
 				clipBoard = _myTrackController.copySelection();
 				break;
 			case KeyEvent.VK_X:
+				controller = _myTrackController;
 				clipBoard = _myTrackController.cutSelection();
 				break;
 			case KeyEvent.VK_V:
 				if(_myTimelineController == null)return false;
+				if(_myTrackController != controller)return false;
 				_myTrackController.paste(clipBoard, _myTimelineController.transportController().time());
 				break;
 			}
@@ -106,6 +115,13 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 	public void show(Component invoker, int x, int y) {
 		super.show(invoker, x, y);
 		_myClickedTime = _myTrackController.viewXToTime(x, true);
+	}
+	
+	private MouseEvent _myMouseEvent;
+	
+	public void show(Component invoker, MouseEvent e) {
+		_myMouseEvent = e;
+		show(invoker, e.getX(), e.getY());
 	}
 	
 	public void activevateTool(CCTimelineTools theTool){
@@ -125,9 +141,37 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 		add(myItem);
 	}
 	
-	
-	
 	public void addFunctions() {
+		addItem("Insert Time",theEvent -> {
+			
+			new CCTextInputDialog(
+				"Insert Time", 
+				"Specify the time to insert in seconds.", 
+				"insert",
+				input ->{
+					double myTime = 0;
+					try {
+						myTime = new ExpressionBuilder(input).build().evaluate();
+					} catch (Exception ex) {}
+					_myTrackController.trackData().insertTime(_myTrackController.viewXToTime(_myMouseEvent.getX(), true),myTime);
+					_myTrackController.view().render();
+				}
+			)
+			.location(_myMouseEvent.getXOnScreen(), _myMouseEvent.getYOnScreen())
+			.size(400,200)
+			.open();
+			
+		});
+		
+		addItem("Remove Time", theEvent -> {
+			double myLowerBound = _myTimelineController.transportController().loopStart();
+			double myUpperBound = _myTimelineController.transportController().loopEnd();
+			double myRange = myUpperBound - myLowerBound;
+
+			_myTrackController.trackData().cutRangeAndTime(myLowerBound, myRange);
+			_myTrackController.view().render();
+		});
+
 		addItem("Reset Track",theEvent -> {
 			if(_myTrackController == null)return;
 			_myTrackController.reset();
@@ -145,6 +189,10 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 		
 		addItem("Copy",theEvent -> {
 			if(_myTrackController == null)return;
+			if(_myTrackController.selectedPoints().size() <= 0) {
+				return;
+			}
+			controller = _myTrackController;
 			clipBoard = _myTrackController.copySelection();
 		});
 		
@@ -178,7 +226,7 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 			if(_myTrackController.tools().length == 1 && i == 0){
 				myStepItem.setSelected(true);
 			}else{
-				if(myTool == CCTimelineTools.CREATE_LINEAR_POINT)myStepItem.setSelected(true);
+				if(myTool == CCTimelineTools.LINEAR_POINT)myStepItem.setSelected(true);
 			}
 			myToolGroup.add(myStepItem);
 			i++;

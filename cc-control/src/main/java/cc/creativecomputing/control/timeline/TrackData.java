@@ -10,12 +10,12 @@ import java.util.TreeSet;
 import cc.creativecomputing.control.timeline.point.BezierControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
+import cc.creativecomputing.io.data.CCDataArray;
+import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.control.timeline.point.LinearControlPoint;
 import cc.creativecomputing.control.timeline.point.MarkerPoint;
 import cc.creativecomputing.control.timeline.point.StepControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.io.data.CCDataArray;
-import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCMath;
 
 public class TrackData extends TreeSet<ControlPoint>{

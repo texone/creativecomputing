@@ -20,18 +20,14 @@ public class CCEnumPropertyHandle extends CCPropertyHandle<Enum<?>>{
 	}
 	
 	@Override
-	public double formatNormalizedValue(double theValue) {
+	public double formatDoubleValue(double theValue) {
 		theValue = CCMath.round(theValue * _myNumberOfConstants);
 		theValue /= _myNumberOfConstants;
 		return theValue;
 	}
-
+	
 	@Override
-	public Enum<?> convertNormalizedValue(double theValue) {
-		return value().getDeclaringClass().getEnumConstants()[(int)(theValue * _myNumberOfConstants)];
-	}
-	@Override
-	public void fromNormalizedValue(double theValue, boolean theOverWrite) {
+	public void fromDoubleValue(double theValue, boolean theOverWrite) {
 		return;
 	}
 	

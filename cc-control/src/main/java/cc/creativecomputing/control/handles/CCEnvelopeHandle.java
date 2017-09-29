@@ -27,11 +27,6 @@ public class CCEnvelopeHandle extends CCPropertyHandle<CCEnvelope>{
 		myEnvelope.curve().data(theData.getObject("curve"));
 		value(myEnvelope, true);
 	}
-
-	@Override
-	public CCEnvelope convertNormalizedValue(double theValue) {
-		return null;
-	}
 	
 	@Override
 	public double normalizedValue() {

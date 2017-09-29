@@ -18,8 +18,6 @@ import javax.swing.border.EmptyBorder;
 
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.view.CCTextInputDialog;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.math.CCMath;
 
 public class CCPatchView {
@@ -29,9 +27,6 @@ public class CCPatchView {
     private final CCConnectionView _myConnectionView;
 
     private final List<CCNodeView> _myViews = new ArrayList<>();
-    
-    private CCTextInputDialog _myInsertNodeFrame;
-    
 
     private int _myX = 0;
     private int _myY = 0;
@@ -79,17 +74,7 @@ public class CCPatchView {
 	    frame.setResizable(false);
 	    frame.setVisible(true);
 	    
-
 	    _myCanvas.createBufferStrategy(3);
-	    
-	    
-	    _myInsertNodeFrame = new CCTextInputDialog("Insert Node", "insert");
-	    _myInsertNodeFrame.events().add(text ->{
-	    	CCNode myNode = new CCNode(text, new CCNodeOutput());
-	    	addNode(myNode, _myX, _myY);
-	    });
-	    _myInsertNodeFrame.setSize( 300, 200 ); 
-	    
 	    _myCanvas.addMouseListener(new MouseAdapter() {
 	    	@Override
 			public void mousePressed(MouseEvent e) {
@@ -97,9 +82,17 @@ public class CCPatchView {
 				if (e.getButton() == MouseEvent.BUTTON3 || e.isAltDown()) {
 					_myX = e.getX();
 					_myY = e.getY();
-					_myInsertNodeFrame.setLocation(e.getXOnScreen(), e.getYOnScreen());
-					_myInsertNodeFrame.setVisible(true);
-    			} 
+					new CCTextInputDialog(
+						"Insert Node", 
+						"Node Name","insert",text ->{
+				    			CCNode myNode = new CCNode(text, new CCNodeOutput());
+				    			addNode(myNode, _myX, _myY);
+						}
+					)
+					.location(e.getXOnScreen(), e.getYOnScreen())
+					.size(300,200)
+					.open();
+    				} 
 			}
 		});
 	}
@@ -141,13 +134,7 @@ public class CCPatchView {
 		    
 		    myPatchView.addNode(myNode, (int)CCMath.random(0,width), (int)CCMath.random(0,height));
 	    }
-	    
-	    
-	
-	
 	    boolean running = true;
-	
-	    
 	
 	    while (running) {
 	        myPatchView.draw();

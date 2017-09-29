@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import cc.creativecomputing.control.CCControlMatrix;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCSelection;
@@ -28,6 +29,7 @@ import cc.creativecomputing.control.code.CCRuntimeCompilable;
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
+import cc.creativecomputing.control.handles.CCControlMatrixHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
 import cc.creativecomputing.control.handles.CCEventTriggerHandle;
@@ -226,6 +228,8 @@ public class CCObjectControl extends JPanel implements CCControl{
 				myControlPanel = new CCGradientControl((CCGradientPropertyHandle)myPropertyHandle, _myInfoPanel);
 			}else  if(myClass == String.class){
 				myControlPanel = new CCStringControl((CCStringPropertyHandle)myPropertyHandle, _myInfoPanel);
+			}else  if(myClass == CCControlMatrix.class){
+				myControlPanel = new CCControlMatrixControl((CCControlMatrixHandle)myPropertyHandle, _myInfoPanel);
 			}else  if(myClass == CCEnvelope.class){
 				myControlPanel = new CCEnvelopeControl((CCEnvelopeHandle)myPropertyHandle, _myInfoPanel);
 			}else  if(myPropertyHandle.getClass() == CCSplineHandle.class){

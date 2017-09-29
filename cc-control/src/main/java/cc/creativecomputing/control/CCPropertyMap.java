@@ -4,6 +4,7 @@ import java.nio.file.Path;
 
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
+import cc.creativecomputing.control.handles.CCControlMatrixHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
 import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
@@ -15,8 +16,8 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.io.data.CCDataIO;
-import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
 import cc.creativecomputing.math.CCColor;
 
 public class CCPropertyMap {
@@ -41,6 +42,8 @@ public class CCPropertyMap {
 		
 		public void onEnvelope(CCEnvelopeHandle theHandle);
 		
+		public void onControlMatrix(CCControlMatrixHandle theHandle);
+		
 		public void onObject(CCObjectPropertyHandle theHandle);
 	}
 	
@@ -55,24 +58,26 @@ public class CCPropertyMap {
 	@SuppressWarnings("unchecked")
 	private void visit(CCPropertyMapVisitor theVisitor, CCObjectPropertyHandle theObjectHandle){
 		for(CCPropertyHandle<?> myPropertyHandle:theObjectHandle.children().values()){
-			Class<?> myFieldClass = myPropertyHandle.type();
+			Class<?> myClass = myPropertyHandle.type();
 			
-			if(myFieldClass == Float.class || myFieldClass == Float.TYPE){
+			if(myClass == Float.class || myClass == Float.TYPE){
 				theVisitor.onFloat((CCNumberPropertyHandle<Float>)myPropertyHandle);
-			}else  if(myFieldClass == Integer.class || myFieldClass == Integer.TYPE){
+			}else  if(myClass == Integer.class || myClass == Integer.TYPE){
 				theVisitor.onInt((CCNumberPropertyHandle<Integer>)myPropertyHandle);
-			}else  if(myFieldClass == Boolean.class || myFieldClass == Boolean.TYPE){
+			}else  if(myClass == Boolean.class || myClass == Boolean.TYPE){
 				theVisitor.onBoolean((CCBooleanPropertyHandle)myPropertyHandle);
-			}else  if(myFieldClass == String.class){
+			}else  if(myClass == String.class){
 				theVisitor.onString((CCStringPropertyHandle)myPropertyHandle);
-			}else  if(myFieldClass.isEnum()){
+			}else  if(myClass.isEnum()){
 				theVisitor.onEnum((CCEnumPropertyHandle)myPropertyHandle);
-			}else  if(myFieldClass == CCColor.class){
+			}else  if(myClass == CCColor.class){
 				theVisitor.onColor((CCColorPropertyHandle)myPropertyHandle);
-			}else  if(myFieldClass == CCGradient.class){
+			}else  if(myClass == CCGradient.class){
 				theVisitor.onGradient((CCGradientPropertyHandle)myPropertyHandle);
-			}else  if(myFieldClass == CCEnvelope.class){
+			}else  if(myClass == CCEnvelope.class){
 				theVisitor.onEnvelope((CCEnvelopeHandle)myPropertyHandle);
+			}else  if(myClass == CCControlMatrix.class){
+				theVisitor.onControlMatrix((CCControlMatrixHandle)myPropertyHandle);
 			}else{
 				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;
 				theVisitor.onObject(myObjectHandle);

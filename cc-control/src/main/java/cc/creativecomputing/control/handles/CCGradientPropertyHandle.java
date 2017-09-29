@@ -67,10 +67,6 @@ public class CCGradientPropertyHandle extends CCPropertyHandle<CCGradient>{
 		value(myGradient, true);
 	}
 
-	@Override
-	public CCGradient convertNormalizedValue(double theValue) {
-		return null;
-	}
 	
 	@Override
 	public double normalizedValue() {

@@ -18,7 +18,7 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
 	
 	private CCGradient _myGradient;
 	
-	private boolean _myTriggerEvent = true;
+	@SuppressWarnings("unused")
 	private boolean _myIsInEdit = false;
 
 	static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);

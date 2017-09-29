@@ -13,21 +13,27 @@ import cc.creativecomputing.control.timeline.point.BezierControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
 import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
+import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.math.CCMath;
 
 public class SwingCurveTrackDataView extends SwingAbstractTrackDataView<CCCurveTrackController>{
 	
-    private SwingCurveTrackPopup _myToolChooserPopup;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2769109052305237545L;
+	private SwingCurveTrackPopup _myToolChooserPopup;
 
 	public SwingCurveTrackDataView(TimelineController theTimelineController, CCCurveTrackController theTrackController) {
 		super(theTimelineController, theTrackController);
-    	_myToolChooserPopup = new SwingCurveTrackPopup(theTrackController, theTimelineController);
+		_myToolChooserPopup = new SwingCurveTrackPopup(theTrackController, theTimelineController);
 	}
 	
 	@Override
 	public void showPopUp(MouseEvent theEvent) {
-		_myToolChooserPopup.show(SwingCurveTrackDataView.this, theEvent.getX(), theEvent.getY());
+		_myToolChooserPopup.show(SwingCurveTrackDataView.this, theEvent);
 	}
 	
 	private void drawCurve(Graphics2D g2d) {
@@ -67,9 +73,9 @@ public class SwingCurveTrackDataView extends SwingAbstractTrackDataView<CCCurveT
         ControlPoint myCurrentPoint = _myController.trackData().ceiling(new ControlPoint(_myTrackContext.lowerBound(), 0));
         ControlPoint myLastPoint = myMinPoint;
         while (myCurrentPoint != null && myCurrentPoint != myMaxPoint) {
-        	drawCurvePiece(myLastPoint, myCurrentPoint, myPath, false);
-        	myLastPoint = myCurrentPoint;
-        	myCurrentPoint = myCurrentPoint.getNext();
+	        	drawCurvePiece(myLastPoint, myCurrentPoint, myPath, false);
+	        	myLastPoint = myCurrentPoint;
+	        	myCurrentPoint = myCurrentPoint.getNext();
 		}
         drawCurvePiece(myLastPoint, myMaxPoint, myPath, false);
         
@@ -87,7 +93,11 @@ public class SwingCurveTrackDataView extends SwingAbstractTrackDataView<CCCurveT
     	
         
         g2d.setColor(_myLineColor);
-        g2d.draw(myPath);
+        try {
+        		g2d.draw(myPath);
+        }catch(Exception e) {
+        	
+        }
     }
 	
 	@Override
@@ -114,7 +124,7 @@ public class SwingCurveTrackDataView extends SwingAbstractTrackDataView<CCCurveT
 					
 			//g2d.drawString(myCurrentPoint.value() +"", (int)myUserPoint.getX(), (int)myUserPoint.getY());
 
-			if (myCurrentPoint.getType() == ControlPointType.BEZIER) {
+			if (myCurrentPoint.getType() == ControlPointType.BEZIER && (_myController.activeTool() == CCTimelineTools.BEZIER_POINT || _myController.activeTool() == CCTimelineTools.CURVE)) {
 				BezierControlPoint myBezierPoint = (BezierControlPoint) myCurrentPoint;
 					
 				Point2D myUserHandle = _myController.curveToViewSpace(myBezierPoint.inHandle());
@@ -143,7 +153,7 @@ public class SwingCurveTrackDataView extends SwingAbstractTrackDataView<CCCurveT
 				double myValue = myDraggedPoint.value();
 				Point2D myPoint = _myController.curveToViewSpace(myDraggedPoint);
 				g.drawString(
-					_myController.property().valueString(),
+					CCFormatUtil.formatTime(	myDraggedPoint.time()) + " : " + _myController.property().valueString(),
 					(int)myPoint.getX() + 10, 
 					(int) _myController.curveToViewSpace(new ControlPoint(myTime, myValue * (1 - 12f/getHeight()))).getY()
 				);

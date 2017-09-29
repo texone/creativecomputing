@@ -5,7 +5,6 @@ import java.nio.file.Paths;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
 
@@ -138,8 +137,8 @@ public abstract class CCPropertyHandle<Type>{
 		
 	}
 	
-	public void fromNormalizedValue(double theValue, boolean theOverWrite){
-		value(convertNormalizedValue(theValue), theOverWrite);
+	public void fromDoubleValue(double theValue, boolean theOverWrite){
+//		value(convertDoubleValue(theValue), theOverWrite);
 	}
 	
 	public Object dataObject(){
@@ -154,13 +153,11 @@ public abstract class CCPropertyHandle<Type>{
 		return _myMember.type();
 	}
 	
-	public double formatNormalizedValue(double theValue){
+	public double formatDoubleValue(double theValue){
 		return theValue;
 	}
 	
 	public abstract double normalizedValue();
-	
-	public abstract Type convertNormalizedValue(double theValue);
 	
 	public abstract String valueString();
 	

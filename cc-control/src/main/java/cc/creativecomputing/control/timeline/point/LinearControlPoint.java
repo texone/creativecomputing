@@ -20,6 +20,7 @@
 package cc.creativecomputing.control.timeline.point;
 
 import cc.creativecomputing.control.timeline.TrackData;
+import cc.creativecomputing.core.CCBlendable;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -75,6 +76,8 @@ public class LinearControlPoint extends ControlPoint{
 
 	@Override
 	public LinearControlPoint clone() {
-		return new LinearControlPoint(_myTime, _myValue);
+		LinearControlPoint myResult = new LinearControlPoint(_myTime, _myValue);
+		if(_myBlendable != null)myResult._myBlendable = (CCBlendable<?>)_myBlendable.clone();
+		return myResult;
 	}
 }
