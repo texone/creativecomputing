@@ -82,8 +82,8 @@ public class CCSequenceKLE2Container extends CCSequencesContainer{
 	        		if(!((CCSequenceChannelRecording)mySequence).export)continue;
 	        	}
 		        
-				_myPNGFormat.save(myFramesFolder, myMapping, mySequence);
-				_myCSVFormat.save(myCsvFolder, myMapping, mySequence);
+//				_myPNGFormat.save(myFramesFolder, myMapping, mySequence);
+//				_myCSVFormat.save(myCsvFolder, myMapping, mySequence);
 				_myBINFormat.save(CCNIOUtil.addExtension(myFramesFolder.resolve(myMapping.type().id()), "bin"), myMapping, mySequence);
 	        }
 	
