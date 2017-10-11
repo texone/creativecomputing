@@ -82,7 +82,7 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 					
 					CCLog.info("show pop");
 					try {
-					_myRulerPopUp.show(SwingRulerView.this, e);
+						_myRulerPopUp.show(SwingRulerView.this, e);
 					}catch(Exception ex) {
 						ex.printStackTrace();
 					}

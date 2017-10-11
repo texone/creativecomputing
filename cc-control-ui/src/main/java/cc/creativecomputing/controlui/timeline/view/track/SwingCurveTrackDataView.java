@@ -158,7 +158,7 @@ public class SwingCurveTrackDataView extends SwingAbstractTrackDataView<CCCurveT
 					(int) _myController.curveToViewSpace(new ControlPoint(myTime, myValue * (1 - 12f/getHeight()))).getY()
 				);
 			}else{
-				double myValue = _myController.value(myTime);
+				double myValue = _myController.trackData().value(myTime);
 				g.drawString(
 					_myController.property().valueString(), 
 					myViewX + 10, 

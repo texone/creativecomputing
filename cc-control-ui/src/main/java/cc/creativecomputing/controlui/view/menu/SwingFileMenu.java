@@ -15,6 +15,7 @@ import javax.swing.filechooser.FileFilter;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.controller.FileManager;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCFileChooser;
 import cc.creativecomputing.io.CCFileFilter;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -35,28 +36,33 @@ public class SwingFileMenu extends JMenu{
 		private List<Path> _myRecentFiles = new ArrayList<>();
 		
 		public CCRecentFileHandler(){
+
+			CCLog.info(CCControlApp.preferences.absolutePath());
 			loaditemsFromPreferences();
 		}
 		
 		private void loaditemsFromPreferences() {
 			for (int i = 0; i < MAX_RECENT_FILES; i++) {
 				String value = CCControlApp.preferences.get(PREF_NAME + i, "");
-				if (value != null && !value.equals("")) {
-					Path myPath = Paths.get(value);
-					if(!CCNIOUtil.exists(myPath)){
-						CCControlApp.preferences.remove(PREF_NAME + i);
-						continue;
-					}
-					_myRecentFiles.add(myPath);
-					addRecentItem(myPath);
-					
+				CCLog.info(value);
+				if(value == null)continue;
+				if(value.equals(""))continue;
+				
+				Path myPath = Paths.get(value);
+				if(!CCNIOUtil.exists(myPath)){
+					CCControlApp.preferences.remove(PREF_NAME + i);
+					continue;
 				}
+				
+				_myRecentFiles.add(myPath);
+				addRecentItem(myPath);
 			}
 		}
 		
 		private void addRecentItem(Path thePath){
 			JMenuItem myFileItem = new JMenuItem(thePath.toString());
 			myFileItem.addActionListener(event ->{
+				_myFileChooser.setDirectory(thePath.getParent());
 				_myFileManager.loadProject(thePath);
 			});
 			myRecentItem.add(myFileItem);
@@ -77,6 +83,10 @@ public class SwingFileMenu extends JMenu{
 				addRecentItem(myPath);
 				CCControlApp.preferences.put(PREF_NAME + i, myPath + "");
 				i++;
+			}
+			
+			for (i = 0; i < MAX_RECENT_FILES; i++) {
+				String value = CCControlApp.preferences.get(PREF_NAME + i, "");
 			}
 		}
 	}
@@ -140,12 +150,6 @@ public class SwingFileMenu extends JMenu{
 		add(mySaveItem);
 		
 		myRecentItem = new JMenu("Recent");
-		
-		myRecentItem.addActionListener(e -> {
-			Path myPath = _myFileChooser.chosePath("Save Project");
-			if(myPath != null)_myFileManager.saveProject(myPath);
-			
-		});
 		myRecentItem.setToolTipText("Open a recent file.");
 		add(myRecentItem);
 		
