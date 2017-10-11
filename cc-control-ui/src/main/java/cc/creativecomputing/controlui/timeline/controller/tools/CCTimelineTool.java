@@ -82,6 +82,6 @@ public class CCTimelineTool<ControllerType extends CCTrackController> {
 	}
 	
 	public void mouseReleased(MouseEvent theEvent){
-		
+		_myKeyCode = -1;
 	}
 }

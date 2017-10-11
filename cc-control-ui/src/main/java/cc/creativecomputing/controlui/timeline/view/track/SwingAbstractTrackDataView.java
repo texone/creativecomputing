@@ -5,8 +5,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -28,6 +33,7 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCTrackControlle
 import cc.creativecomputing.controlui.timeline.view.SwingConstants;
 import cc.creativecomputing.controlui.timeline.view.transport.SwingRulerView;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 @SuppressWarnings("serial")
@@ -137,6 +143,22 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 				_myController.keyReleased(e);
 			}
 		});
+		
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				//_myController.context().zoomController().updateZoomables();
+				render();
+			}
+			
+			
+			
+			@Override
+			public void componentShown(ComponentEvent e) {
+				render();
+			}
+		});
+		
 	}
 
 	public void showPopUp(MouseEvent theEvent) {
@@ -331,7 +353,15 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 
 	private void createContext() {
 		try {
-			_myRenderBuffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+			// obtain the current system graphical settings
+		    GraphicsConfiguration gfx_config = GraphicsEnvironment.
+		        getLocalGraphicsEnvironment().getDefaultScreenDevice().
+		        getDefaultConfiguration();
+		    
+		    _myRenderBuffer = gfx_config.createCompatibleImage(getWidth(), getHeight(),Transparency.TRANSLUCENT);
+
+		    CCLog.info(_myRenderBuffer.getType(),BufferedImage.TYPE_INT_ARGB);
+//			_myRenderBuffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = _myRenderBuffer.getGraphics();
 
 			RenderingHints myRenderingHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -366,7 +396,7 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 
 		if (g2d == null)
 			return;
-
+		
 		// paint background
 		g2d.setComposite(AlphaComposite.Clear);
 		g2d.setColor(new Color(255, 255, 255, 0));
