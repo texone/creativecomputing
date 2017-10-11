@@ -195,4 +195,10 @@ public class CCSequenceElement extends CCEffectable{
 		if(_myMotorSetup == null)return super.position();
 		return super.position().add(_myMotorSetup.elementOffset());
 	}
+
+	@Override
+	public CCVector3 normedPosition() {
+		if(_myMotorSetup == null)return super.normedPosition();
+		return _myMotorSetup.relativeOffset();
+	}
 }
