@@ -308,9 +308,20 @@ public class CCGradientEditor extends JPanel {
 			g.drawLine(i + _myX, _myY, i + _myX, _myY + _myHeight - 1);
 		}
 
-		g.setColor(Color.black);
-		g.drawRect(_myX, _myY, _myWidth, _myHeight - 1);
+		g.setColor(Color.DARK_GRAY);
+		g.drawLine(_myX, _myY - 3, _myX, _myY);
+		g.drawLine(_myX + _myWidth/2, _myY - 3, _myX + _myWidth/2, _myY);
+		g.drawLine(_myX + _myWidth, _myY - 3, _myX + _myWidth, _myY);
+		
+		g.drawLine(_myX + _myWidth/4, _myY - 2, _myX + _myWidth/4, _myY);
+		g.drawLine(_myX + _myWidth/4 * 3, _myY - 2, _myX + _myWidth/4 * 3, _myY);
 
+		g.drawLine(_myX + _myWidth/8, _myY - 1, _myX + _myWidth/8, _myY);
+		g.drawLine(_myX + _myWidth/8 * 3, _myY - 1, _myX + _myWidth/8 * 3, _myY);
+		g.drawLine(_myX + _myWidth/8 * 5, _myY - 1, _myX + _myWidth/8 * 5, _myY);
+		g.drawLine(_myX + _myWidth/8 * 7, _myY - 1, _myX + _myWidth/8 * 7, _myY);
+
+		g.setColor(Color.DARK_GRAY);
 		for (int i = 0; i < _myGradient.size(); i++) {
 			CCGradientPoint pt =  _myGradient.get(i);
 			g.translate(_myX + (_myWidth * pt.position()), _myY + _myHeight);
