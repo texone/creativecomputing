@@ -54,6 +54,10 @@ public abstract class CCEffectable implements CCSelectable{
 		return _myPosition;
 	}
 	
+	public CCVector3 normedPosition() {
+		return new CCVector3();
+	}
+	
 	public CCMatrix4x4 matrix(){
 		return _myMatrix;
 	}

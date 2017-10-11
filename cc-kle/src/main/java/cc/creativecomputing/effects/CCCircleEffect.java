@@ -21,6 +21,11 @@ public class CCCircleEffect extends CCEffect {
 	private double _myPhase = 0;
 	
 	private int _myResultLength = 0;
+	
+	@Override
+	public String[] modulationSources(String[]theValueNames) {
+		return new String[] {"angle modulation", "amount modulation"};
+	}
 
 	public void update(final double theDeltaTime) {
 		_myPhase += theDeltaTime * _cSpeed;
@@ -28,8 +33,8 @@ public class CCCircleEffect extends CCEffect {
 
 	@Override
 	public double[] applyTo(CCEffectable theEffectable) {
-		double myAngle = (_myPhase + modulation("angle").modulation(theEffectable, -1f, 1f)) * CCMath.PI * _cAngleMax;
-		double myAmount = modulation("amount").modulation(theEffectable, -1, 1);
+		double myAngle = (_myPhase + modulation("angle modulation").modulation(theEffectable, -1f, 1f)) * CCMath.PI * _cAngleMax;
+		double myAmount = modulation("amount modulation").modulation(theEffectable, -1, 1);
 		double myBlend = elementBlend(theEffectable);
 		double myX = CCMath.cos(myAngle) * _cXAmount * myAmount * myBlend;
 		double myY = CCMath.sin(myAngle) * _cYAmount * myAmount * myBlend;
@@ -53,6 +58,5 @@ public class CCCircleEffect extends CCEffect {
 	@Override
 	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
 		_myResultLength = theValueNames.length;
-		super.valueNames(theEffectManager, "angle", "amount");
 	}
 }

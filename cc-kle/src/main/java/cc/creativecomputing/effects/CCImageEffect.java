@@ -22,13 +22,18 @@ public class CCImageEffect extends CCEffect{
 	private CCImageAsset _myImage = new CCImageAsset();
 	
 	private int _myResultLength = 0;
+	
+	@Override
+	public String[] modulationSources(String[]theValueNames) {
+		return new String[] {"x modulation", "y modulation"};
+	}
 
 	@Override
 	public double[] applyTo(CCEffectable theEffectable) {
 		if(_myImage.value() == null)return new double[0];
 		CCColor myResult = _myImage.value().getPixel(
-			modulation("x").modulation(theEffectable) * _myImage.value().width(), //+ _cXMotionModulation.modulation(theEffectable)
-			modulation("y").modulation(theEffectable) * _myImage.value().height()
+			modulation("x modulation").modulation(theEffectable) * _myImage.value().width(), //+ _cXMotionModulation.modulation(theEffectable)
+			modulation("y modulation").modulation(theEffectable) * _myImage.value().height()
 		);
 
 //		double myBlend = elementBlend(theElement);
@@ -61,6 +66,5 @@ public class CCImageEffect extends CCEffect{
 	@Override
 	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
 		_myResultLength = theValueNames.length;
-		super.valueNames(theEffectManager, "x", "y");
 	}
 }

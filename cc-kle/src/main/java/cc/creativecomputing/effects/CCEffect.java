@@ -3,8 +3,8 @@ package cc.creativecomputing.effects;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import cc.creativecomputing.control.CCControlMatrix;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.modulation.CCEffectModulation;
 
 public abstract class CCEffect {
@@ -20,57 +20,47 @@ public abstract class CCEffect {
 	
 	@CCProperty(name = "modulations", hide = true)
 	private Map<String, CCEffectModulation> _cModulations = null;
-	@CCProperty(name = "modulation")
-	private CCControlMatrix _cModulationMatrix;
+//	@CCProperty(name = "modulation")
+//	private CCControlMatrix _cModulationMatrix;
 	
 	protected String[] _myValueNames = new String[0];
 	
 	public abstract double[] applyTo(CCEffectable theEffectable);
 	
-	protected final String[] _myModulations;
-	
-	public CCEffect(String...theModulations){
-		_myModulations = theModulations;
-	}
-	
-	public CCEffect(){
-		this("modulation");
+	public String[] modulationSources(String[]theValueNames) {
+		String[] _myModulationSources = new String[theValueNames.length];
+		for(int i = 0; i < _myModulationSources.length; i++) {
+			_myModulationSources[i] = theValueNames + " modulation"; 
+		}
+		return _myModulationSources;
 	}
 	
 	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
 		_cModulations = new LinkedHashMap<>();
 		_myValueNames = theValueNames;
 		
-		String[] myOutputs = new String[_myModulations.length * theValueNames.length];
-		String[] myInputs = new String[theEffectManager.relativeSources().size()];
+//		String[] myOutputs = new String[_myModulations.length * theValueNames.length];
+//		String[] myInputs = new String[theEffectManager.relativeSources().size()];
+//		
+//		int s = 0;
+//		for(String mySource:theEffectManager.relativeSources()) {
+//			myInputs[s] = mySource;
+//			s++;
+//		}
 		
-		int s = 0;
-		for(String mySource:theEffectManager.relativeSources()) {
-			myInputs[s] = mySource;
-			s++;
+		for(String myModulation:modulationSources(theValueNames)){
+			createModulation(myModulation, theEffectManager);
 		}
 		
-		int j = 0;
-		for(String myModulation:_myModulations){
-			for(int i = 0; i < _myValueNames.length;i++){
-				String myModulationName = _myValueNames[i] + " " + myModulation;
-				createModulation(myModulationName, theEffectManager);
-				myOutputs[j * _myValueNames.length + i] = _myValueNames[i];
-			}
-			j++;
-		}
-		
-		_cModulationMatrix = new CCControlMatrix(myInputs, myOutputs);
+//		_cModulationMatrix = new CCControlMatrix(myInputs, myOutputs);
 	}
 	
-	public CCEffectModulation modulation(String theModulation, String theValue){
-		CCEffectModulation myResult = _cModulations.get(theValue + " " + theModulation);
-		if(myResult == null)throw new RuntimeException("No modulation " + theModulation + " " + theValue);
-		return myResult;
+	public String[] modulations() {
+		return _myValueNames;
 	}
 	
 	public CCEffectModulation modulation(String theValue){
-		return _cModulations.get(theValue + " modulation");
+		return _cModulations.get(theValue);
 	}
 	
 	protected void createModulation(String theKey,CCEffectManager<?> theEffectManager){

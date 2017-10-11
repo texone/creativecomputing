@@ -43,6 +43,12 @@ public class CCKleSequenceAnimation extends CCEffect {
 	}
 	
 	@Override
+	public String[] modulationSources(String[] theValueNames) {
+		// TODO Auto-generated method stub
+		return new String[] {"offset modulation", "amount modulation"};
+	}
+	
+	@Override
 	public void update(final double theDeltaTime) {
 	}
 	
@@ -58,9 +64,9 @@ public class CCKleSequenceAnimation extends CCEffect {
 	}
 	
 	private double value(CCEffectable theEffectable, double theBLend, int theID){
-		double myOffset = modulation("offset").modulation(theEffectable, -1, 1) * _mySequenceAsset.length();
+		double myOffset = modulation("offset modulation").modulation(theEffectable, -1, 1) * _mySequenceAsset.length();
 		double myValue = CCMath.blend(_cRangeMin, _cRangeMax, _mySequenceAsset.value(_myInterpolator, myOffset, theEffectable, theID)) * 2 - 1;
-		return myValue * theBLend * modulation("amount").modulation(theEffectable, -1, 1);
+		return myValue * theBLend * modulation("amount modulation").modulation(theEffectable, -1, 1);
 	}
 
 	public double[] applyTo(CCEffectable theEffectable) {
@@ -75,8 +81,8 @@ public class CCKleSequenceAnimation extends CCEffect {
 	}
 	
 	@Override
-	public void valueNames(CCEffectManager<?> theEffectables, String... theValueNames) {
+	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
 		_myResultLength = theValueNames.length;
-		super.valueNames(theEffectables, "offset", "amount");
+		super.valueNames(theEffectManager, theValueNames);
 	}
 }

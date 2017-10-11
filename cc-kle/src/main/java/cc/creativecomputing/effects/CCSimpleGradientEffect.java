@@ -4,30 +4,21 @@ import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.signal.CCMixSignal;
 
-public class CCGradientEffect extends CCEffect{
+public class CCSimpleGradientEffect extends CCEffect{
 	
-	@CCProperty(name = "offset 1")
-	private CCMixSignal _myOffset1Signal = new CCMixSignal();
-	@CCProperty(name = "ofset2")
-	private CCMixSignal _myOffset2Signal = new CCMixSignal();
-	
-	@CCProperty(name = "phase speed", min = 0, max = 10)
-	private double _cSpeed = 0;
 	
 	@CCProperty(name = "offset 1 amp", min = 0, max = 1)
 	private double _cOffset1Amp = 1;
 	@CCProperty(name = "offset 2 amp", min = 0, max = 1)
 	private double _cOffset2Amp = 1;
-	@CCProperty(name = "offset add", min = 0, max = 1)
-	private double _cOffset1Add = 1;
+	@CCProperty(name = "offset add", min = -1, max = 1)
+	private double _cOffset1Add = 0;
+	
 
 	@CCProperty(name = "gradient")
 	private CCGradient _myGradient = new CCGradient();
 	private int _myResultLength = 0;
-	
-	private double _myGlobalPhase = 0;
 	
 	@CCProperty(name = "amp", min = 0, max = 10)
 	private double _cAmp = 1;
@@ -44,23 +35,17 @@ public class CCGradientEffect extends CCEffect{
 		return new String[] {"offset1 modulation", "offset2 modulation"};
 	}
 	
-	public void update(final double theDeltaTime){
-		_myGlobalPhase += theDeltaTime * _cSpeed;
-	}
-	
-	@CCProperty(name = "reset phase")
-	public void resetPhase(){
-		_myGlobalPhase = 0;
-	}
-	
 	public double[] applyTo(CCEffectable theEffectable){
 		double[] myResult = new double[_myResultLength];
 		
-		CCColor myColor = _myGradient.color(
-			_myOffset1Signal.value(_myGlobalPhase + modulation("offset1 modulation").modulation(theEffectable)) * _cOffset1Amp + 
-			_myOffset2Signal.value(_myGlobalPhase + modulation("offset2 modulation").modulation(theEffectable)) * _cOffset2Amp + _cOffset1Add
-			
-		);
+		double myGradientBlend = modulation("offset1 modulation").modulation(theEffectable);
+//		myGradientBlend = CCMath.blend(myGradientBlend, 1 - myGradientBlend, modulation("offset2").modulation(theEffectable));
+		myGradientBlend += 1;
+		myGradientBlend += modulation("offset2 modulation").modulation(theEffectable);
+		myGradientBlend %= 1;
+//		CCLog.info(myGradientBlend);
+		CCColor myColor = _myGradient.color(myGradientBlend);
+		
 		double[] hsb = myColor.hsb();
 		myColor.setHSB(
 			(hsb[0] + _cHShift) % 1, 
@@ -93,6 +78,5 @@ public class CCGradientEffect extends CCEffect{
 	@Override
 	public void valueNames(CCEffectManager<?> theEffectManager, String... theValueNames) {
 		_myResultLength = theValueNames.length;
-		super.valueNames(theEffectManager, theValueNames);
 	}
 }
