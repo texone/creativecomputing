@@ -124,8 +124,9 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		_mySnap = true;
 		_myIsInDrag = false;
 
-		ControlPoint myControlPoint = _myTool != CCTimelineTools.BEZIER_POINT ? _myController.pickNearestPoint(_myPressViewCoords) : null;
+		ControlPoint myControlPoint = _myController.pickNearestPoint(_myPressViewCoords);
 		ControlPoint myHandle = _myTool == CCTimelineTools.BEZIER_POINT ? _myController.pickHandle(_myPressViewCoords) : null;
+		if(myHandle != null)myControlPoint = null;
 		
 		if (myHandle != null) {
 			_myDraggedPoints = new ArrayList<ControlPoint>();

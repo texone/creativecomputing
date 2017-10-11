@@ -1,11 +1,15 @@
 package cc.creativecomputing.controlui;
 
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import cc.creativecomputing.control.CCPropertyMap;
@@ -32,6 +36,7 @@ public class CCControlTreeComponent extends JPanel{
 		super(new GridLayout(1,0));
 		
 		_myControlCompoent = theControlComponent;
+		setBorder(new EmptyBorder(0, 0, 0, 0));
 		
 		//Create the nodes.
 		_myRootNode = new DefaultMutableTreeNode("app");
@@ -48,16 +53,42 @@ public class CCControlTreeComponent extends JPanel{
      
             CCObjectControl nodeInfo = (CCObjectControl)node.getUserObject();
             nodeInfo.open();
+            
             _myControlCompoent.showContent(nodeInfo);
             _myControlCompoent.setPresets(nodeInfo.propertyHandle());
         });
+        
  
         //Listen for when the selection changes.
 //        _myTree.addTreeSelectionListener(this);
         JScrollPane treeView = new JScrollPane(_myTree);
+        treeView.setBorder(new EmptyBorder(0, 0, 0, 0));
         add(treeView);
         
         _myPropertyMap = new CCPropertyMap();
+        
+     // add MouseListener to tree
+        MouseAdapter ma = new MouseAdapter() {
+            private void myPopupEvent(MouseEvent e) {
+                int x = e.getX();
+                int y = e.getY();
+                JTree tree = (JTree)e.getSource();
+                TreePath path = tree.getPathForLocation(x, y);
+                if (path == null)
+                    return;
+
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.getLastPathComponent();
+                
+                CCObjectControl nodeInfo = (CCObjectControl)node.getUserObject();
+                nodeInfo.popup().show(tree, x, y);
+      
+            }
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) myPopupEvent(e);
+            }
+        };
+
+        _myTree.addMouseListener(ma);
 	}
 	
 	public CCObjectPropertyHandle rootProperty() {
