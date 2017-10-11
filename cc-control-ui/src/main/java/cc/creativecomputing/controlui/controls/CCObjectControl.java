@@ -160,6 +160,10 @@ public class CCObjectControl extends JPanel implements CCControl{
 		});
 	}
 	
+	public CCPropertyPopUp popup() {
+		return _myPopUp;
+	}
+	
 	private int _myGridY = 0;
 	
 	public void open() {
