@@ -111,10 +111,6 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 		_myFileManager.replaceCurrentTimeline(Paths.get(thePath));
 	}
 	
-	public void addFileManagerListener(FileManagerListener theListener) {
-		_myFileManager.events().add(theListener);
-	}
-	
 	public void update(double theDeltaTime){
 		if(_myActiveController == null)return;
 		_myActiveController.transportController().update(theDeltaTime);
@@ -148,7 +144,6 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 	
 	@Override
 	public void onLoad(Path thePath) {
-		
 	}
 	
 	@Override
