@@ -4,7 +4,7 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
 
-public abstract class CCModulationSource {
+public  class CCModulationSource {
 	
 	public static interface CCModulationImplementation{
 		public double modulation(CCEffectManager<?> theEffectManager, CCEffectable theEffectable);
@@ -20,7 +20,8 @@ public abstract class CCModulationSource {
 		_myName = theName;
 		_myModulationImplementation = theImplementation;
 	}
-	
+
+
 	public String name(){
 		return _myName;
 	}
