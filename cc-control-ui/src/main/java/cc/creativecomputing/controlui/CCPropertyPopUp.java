@@ -54,11 +54,9 @@ public class CCPropertyPopUp extends JPopupMenu {
 		addItem("Add To Timeline", theEvent -> {_myControlComponent.timeline().addTrack(_myProperty);});
 		addItem("Write To Timeline", theEvent -> {_myControlComponent.timeline().writeValues(_myProperty);});
 		addItem("Restore Default", theEvent -> {
-			_myControlComponent.timeline().writeValues(_myProperty);
 			_myProperty.restoreDefault();
 		});
 		addItem("Restore Preset", theEvent -> {
-			_myControlComponent.timeline().writeValues(_myProperty);
 			_myProperty.restorePreset();
 		} );
 		
