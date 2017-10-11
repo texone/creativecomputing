@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
@@ -56,6 +57,7 @@ public class CCUIStyler {
 		theButton.setMargin(new Insets(2 * SCALE, 0, 0, 0));
 		theButton.setFont(SwingGuiConstants.ARIAL_9);
 		theButton.setPreferredSize(new Dimension(theWidth * SwingGuiConstants.SCALE, theHeight * SwingGuiConstants.SCALE));
+		theButton.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
 	}
 	
 	public static void styleButton(AbstractButton theButton){
@@ -66,6 +68,7 @@ public class CCUIStyler {
 		theCombo.setFont(SwingGuiConstants.ARIAL_9);
 		theCombo.setPreferredSize(new Dimension(113 * SCALE, 13 * SCALE));
 		theCombo.setBorder(BorderFactory.createEmptyBorder(0, 2 * SCALE, 0, 2 * SCALE));
+		theCombo.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
 		final JTextComponent tcA = (JTextComponent) theCombo.getEditor().getEditorComponent();
 		tcA.setMargin(new Insets(0, 0, 0, 0));
 		tcA.setBorder(BorderFactory.createEmptyBorder(2 * SCALE, 2 * SCALE, 0, 2 * SCALE));
