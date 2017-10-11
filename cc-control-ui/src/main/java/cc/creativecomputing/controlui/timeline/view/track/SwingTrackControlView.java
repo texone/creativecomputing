@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.KeyStroke;
 
 import cc.creativecomputing.controlui.CCNumberBox;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
@@ -29,7 +32,6 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCBooleanTrackCo
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.core.logging.CCLog;
 
 
 @SuppressWarnings("serial")
@@ -44,8 +46,8 @@ public class SwingTrackControlView extends JPanel{
 
     static final public DecimalFormat VALUE_FORMAT;
     static {
-    	VALUE_FORMAT = new DecimalFormat();
-    	VALUE_FORMAT.applyPattern("#0.000");
+    		VALUE_FORMAT = new DecimalFormat();
+    		VALUE_FORMAT.applyPattern("#0.000");
     }
 	
 	private class SingleTrackControlPopup extends JPopupMenu{
@@ -101,7 +103,10 @@ public class SwingTrackControlView extends JPanel{
 		_myTimelineController = theTimelineController;
 		_myTrackController = theTrackController;
 		
-		setLayout(new FlowLayout(FlowLayout.LEFT, 3,2));
+		setLayout(new GridBagLayout());
+		
+		GridBagConstraints myConstraints = new GridBagConstraints();
+		myConstraints.fill = GridBagConstraints.HORIZONTAL;
 		
 		setMinimumSize(new Dimension( 150, 50));
 		setPreferredSize(new Dimension(150,50));
@@ -115,7 +120,7 @@ public class SwingTrackControlView extends JPanel{
 	//		_myMuteButton.setBorderPainted(false);
 			_myMuteButton.setMargin(new Insets(0, 0, 0, 0));
 			_myMuteButton.setFont(SwingGuiConstants.ARIAL_9);
-			_myMuteButton.setPreferredSize(SMALL_BUTTON_SIZE);
+			_myMuteButton.setPreferredSize(new Dimension(20,12));
 			_myMuteButton.addActionListener(new ActionListener() {
 				
 				@Override
@@ -134,9 +139,17 @@ public class SwingTrackControlView extends JPanel{
 					repaint();
 				}
 			});
-			
-			add(_myMuteButton);
+			myConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+			myConstraints.weightx = 0;
+			myConstraints.weighty = 0;
+			myConstraints.gridx = 0;
+			myConstraints.gridy = 0;
+			myConstraints.gridwidth = 1;
+			myConstraints.insets = new Insets(2, 4, 2, 2);
+			add(_myMuteButton, myConstraints);
+			myConstraints.insets = new Insets(2, 2, 2, 2);
 		}
+		_myMuteButton.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
 		
 		if(
 			theTrackController instanceof CCCurveTrackController && 
@@ -148,29 +161,47 @@ public class SwingTrackControlView extends JPanel{
 				_myTrackController.min(theValue);
 			});
 
-			add(_myMinField);
+			myConstraints.weightx = 0;
+			myConstraints.weighty = 0;
+			myConstraints.gridx = 1;
+			myConstraints.gridy = 0;
+			myConstraints.gridwidth = 1;
+			add(_myMinField, myConstraints);
 			
 			_myMaxField = new CCNumberBox(_myTrackController.track().max(), -Float.MAX_VALUE, Float.MAX_VALUE, 2);
 			style(_myMaxField);
 			_myMaxField.changeEvents().add(theValue -> {
 				_myTrackController.max(theValue);
 			});
-			add(_myMaxField);
-			
-			CCLog.info(_myTrackController.track().max(), _myMaxField.getText(), _myMaxField.value());
+			myConstraints.weightx = 0;
+			myConstraints.gridx = 1;
+			myConstraints.gridy = 1;
+			myConstraints.gridwidth = 1;
+			add(_myMaxField, myConstraints);
 			
 			_myValueField = new JTextField();
 			style(_myValueField);
 			_myValueField.setText(_myTrackController.property().valueString());
-			add(_myValueField);
+			myConstraints.weightx = 0;
+			myConstraints.weighty = 1;
+			myConstraints.gridx = 1;
+			myConstraints.gridy = 2;
+			myConstraints.gridwidth = 1;
+			add(_myValueField, myConstraints);
 		}
 		
 		_myAddressField = new JLabel("");
-		_myAddressField.setPreferredSize(new Dimension(100,15));
 		_myAddressField.setFont(SwingGuiConstants.ARIAL_BOLD_10);
 		_myAddressField.setForeground(Color.WHITE);
+		myConstraints.weightx = 1;
+		myConstraints.weighty = 0;
+		myConstraints.gridx = 2;
+		myConstraints.gridy = 0;
+		myConstraints.gridwidth = 1;
+		myConstraints.gridheight = 2;
+		add(_myAddressField, myConstraints);
 		
-		add(_myAddressField);
+		
 		
 		_myListeners = new ArrayList<ActionListener>();
 		
@@ -180,8 +211,7 @@ public class SwingTrackControlView extends JPanel{
 			
 			@Override
 			public void mousePressed(MouseEvent theE) {
-				if (theE.getButton() == MouseEvent.BUTTON3)
-					_myPopUp.show(SwingTrackControlView.this, theE.getX(), theE.getY());
+				if (theE.getButton() == MouseEvent.BUTTON3) _myPopUp.show(SwingTrackControlView.this, theE.getX(), theE.getY());
 			}
 		});
 		
