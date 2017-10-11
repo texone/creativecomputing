@@ -63,6 +63,8 @@ public class CCControlApp  {
 	private void init(CCAnimator theAnimator){
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Test");
+        
+        
         try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
@@ -118,16 +120,15 @@ public class CCControlApp  {
 	}
 
 	public CCControlApp(Object theRootObject, CCAnimator theAnimator, Class<?> thePrefClass) {
-        preferences = Preferences.userNodeForPackage(thePrefClass);
-        
+        preferences = Preferences.userNodeForPackage(thePrefClass).node(thePrefClass.getSimpleName());
+       
 		init(theAnimator);
 		
 		ExceptionHandler.registerExceptionHandler();
 	}
 	
 	public CCControlApp(Object theRootObject, CCTimelineSynch theSynch, Class<?> thePrefClass) {
-		CCLog.info(thePrefClass.getName());
-        preferences = Preferences.userNodeForPackage(thePrefClass);
+        preferences = Preferences.userNodeForPackage(thePrefClass).node(thePrefClass.getSimpleName());
         
 		init(theSynch.animator());
 		theSynch.timeline(_myControlComponent.timeline());
@@ -158,7 +159,7 @@ public class CCControlApp  {
 	}
 	
 	public void setData(Object theData, String thePresetPath){
-		preferences = Preferences.userNodeForPackage(theData.getClass());
+//		preferences = Preferences.userNodeForPackage(theData.getClass());
 		_myControlComponent.setData(theData, thePresetPath);
 	}
 	

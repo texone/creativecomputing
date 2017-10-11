@@ -34,8 +34,8 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
         _myButton = new JToggleButton(theHandle.name(), theHandle.value());
         CCUIStyler.styleButton(_myButton, 102, 13);
         _myButton.addChangeListener(theE -> {
-        	if(!_myTriggerEvent)return;
-        	_myHandle.value(_myButton.isSelected(), true);
+        		if(!_myTriggerEvent)return;
+        		_myHandle.value(_myButton.isSelected(), true);
 		});
         _myButton.setSelected(_myValue);
 	}
