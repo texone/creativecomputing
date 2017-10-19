@@ -61,9 +61,7 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 		_myTrackController = theTrackController;
 		_myTimelineController = theTimelineController;
 
-		JMenuItem entryHead = new JMenuItem("Track Edit Tools");
-		entryHead.setFont(SwingGuiConstants.ARIAL_11);
-		add(entryHead);
+		addItem("Track Edit Tools", null);
 		addSeparator();
 		addTools();
 		addSeparator();
@@ -137,7 +135,7 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 	public void addItem(String theName, ActionListener theListener){
 		JMenuItem myItem = new JMenuItem(theName);
 		myItem.setFont(SwingGuiConstants.ARIAL_11);
-		myItem.addActionListener(theListener);
+		if(theListener != null)myItem.addActionListener(theListener);
 		add(myItem);
 	}
 	
