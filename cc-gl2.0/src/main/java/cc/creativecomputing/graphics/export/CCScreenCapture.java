@@ -301,7 +301,7 @@ public class CCScreenCapture {
 	 * necessary conversion step to display a Java2D image correctly
 	 * with OpenGL and vice versa. 
 	 **/
-	private static void flipImageVertically(BufferedImage image) {
+	public static void flipImageVertically(BufferedImage image) {
 		WritableRaster raster = image.getRaster();
 
 		Object scanline1 = null;
@@ -355,6 +355,7 @@ public class CCScreenCapture {
 		GL gl = CCGraphics.currentGL();
 
 		// Set up pixel storage modes
+	
 		PixelStorageModes psm = new PixelStorageModes();
 		psm.save(gl);
 
@@ -472,7 +473,6 @@ public class CCScreenCapture {
 			}
 	
 			BufferedImage image = readToBufferedImage(x, y, width, height, alpha);
-			_myFormat.write(thePath, image, theQuality);
 			if (!_myFormat.write(thePath, image, theQuality)) {
 				throw new CCScreenCaptureException("Unsupported file format " + fileSuffix);
 			}
@@ -486,7 +486,7 @@ public class CCScreenCapture {
 		return tmp[0];
 	}
 
-	private static void checkExtABGR() {
+	public static void checkExtABGR() {
 		GL gl = CCGraphics.currentGL();
 		if (!gl.isExtensionAvailable("GL_EXT_abgr")) {
 			throw new IllegalArgumentException(

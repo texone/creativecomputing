@@ -1,8 +1,14 @@
 package cc.creativecomputing.graphics.export;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.nio.ByteBuffer;
 import java.nio.file.Path;
 
 import javax.swing.SwingUtilities;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
@@ -17,7 +23,9 @@ import cc.creativecomputing.gl.app.events.CCKeyEvent;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
+import cc.creativecomputing.graphics.export.CCScreenCapture.PixelStorageModes;
 import cc.creativecomputing.image.CCImageIO.CCImageFormats;
+import cc.creativecomputing.image.format.CCImageIOFormat;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 
@@ -99,6 +107,10 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 	
 	private CCTriggerProgress _myProgress;
 	
+	private int _myThreads = 0;
+	
+
+	private CCImageIOFormat _myImageFormat = new CCImageIOFormat();
 	
 	@Override
 	public void display(CCGraphics g) {
@@ -109,12 +121,7 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 			_cHeight = g.height();
 		}
 		
-		int myCaptureX = CCMath.clamp(_cX, 0, g.width());
-		int myCaptureY = CCMath.clamp(_cY, 0, g.height());
-		int myCaptureWidth = _cWidth == 0 ? g.width() : _cWidth;
-		int myCaptureHeight = _cHeight == 0 ? g.height() : _cHeight;
-		myCaptureWidth = CCMath.min(myCaptureWidth, g.width() - myCaptureX);
-		myCaptureHeight = CCMath.min(myCaptureHeight, g.height() - myCaptureY);
+		
 		
 		if(!_myIsRecording){
 			if(_cDrawCaptureBounds){
@@ -131,11 +138,74 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 		}
 		
 		if(CCNIOUtil.fileExtension(_myRecordPath) == null)CCNIOUtil.addExtension(_myRecordPath, _myFormat.fileExtension);
-		if(_mySequenceSteps == 1){
-			CCScreenCapture.capture(_myRecordPath, myCaptureX, myCaptureY, myCaptureWidth, myCaptureHeight, _cAlpha, _cQuality);
-		}else{
-			CCScreenCapture.capture(_myRecordPath.resolve(_cPrepend + "_" + CCFormatUtil.nf(_myStep, 5) + "." + _myFormat.fileExtension), myCaptureX, myCaptureY, myCaptureWidth, myCaptureHeight, _cAlpha, _cQuality);
+		final Path myRecordPath;
+		if(_mySequenceSteps > 1){
+			myRecordPath = _myRecordPath.resolve(_cPrepend + "_" + CCFormatUtil.nf(_myStep, 5) + "." + _myFormat.fileExtension);
+		}else {
+			myRecordPath = _myRecordPath;
 		}
+		
+		int x = CCMath.clamp(_cX, 0, g.width());
+		int y = CCMath.clamp(_cY, 0, g.height());
+		int width = _cWidth == 0 ? g.width() : _cWidth;
+		int height = _cHeight == 0 ? g.height() : _cHeight;
+		width = CCMath.min(width, g.width() - x);
+		height = CCMath.min(height, g.height() - y);
+		
+		
+		String fileSuffix = CCNIOUtil.fileExtension(myRecordPath);
+		
+		if(fileSuffix == null){
+			throw new CCScreenCaptureException("Not able to perform screen capture because of missing file extension.");
+		}
+		
+		if(fileSuffix.equals("tga")){
+			CCScreenCapture.writeToTargaFile(myRecordPath, x,y,width, height,_cAlpha);
+			return;
+		}
+		
+		boolean alpha = _cAlpha;
+		if (alpha && (fileSuffix.equals("jpg") || fileSuffix.equals("jpeg"))) {
+			// JPEGs can't deal properly with alpha channels
+			alpha = false;
+		}
+		
+		int bufImgType = (alpha ? BufferedImage.TYPE_4BYTE_ABGR : BufferedImage.TYPE_3BYTE_BGR);
+		int readbackType = (alpha ? GL2.GL_ABGR_EXT : GL2.GL_BGR);
+
+		if (alpha) {
+			CCScreenCapture.checkExtABGR();
+		}
+
+		// Allocate necessary storage
+		BufferedImage image = new BufferedImage(width, height, bufImgType);
+
+		GL gl = CCGraphics.currentGL();
+			
+		PixelStorageModes psm = new PixelStorageModes();
+		psm.save(gl);
+		gl.glReadPixels(x, y, width, height, readbackType, GL.GL_UNSIGNED_BYTE,ByteBuffer.wrap(((DataBufferByte) image.getRaster().getDataBuffer()).getData()));
+		psm.restore(gl);
+
+		new Thread(() ->  {
+			_myThreads++;
+			
+			// Must flip BufferedImage vertically for correct results
+			CCScreenCapture.flipImageVertically(image);
+			
+			try{
+				_myImageFormat.write(myRecordPath, image, _cQuality);
+				if (!_myImageFormat.write(myRecordPath, image, _cQuality)) {
+					throw new CCScreenCaptureException("Unsupported file format " + fileSuffix);
+				}
+			}catch(Exception e){
+				throw new CCScreenCaptureException(e);
+			}
+			_myThreads--;
+			
+		}).start();
+		
+		CCLog.info(_myThreads);
 		_myStep++;
 		_myAnimator.fixedUpdateTime = 1f / (_myCaptureRate);
 		if(_myRecordTimeline){
