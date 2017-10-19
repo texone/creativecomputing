@@ -30,7 +30,7 @@ public abstract class CCEffect {
 	public String[] modulationSources(String[]theValueNames) {
 		String[] _myModulationSources = new String[theValueNames.length];
 		for(int i = 0; i < _myModulationSources.length; i++) {
-			_myModulationSources[i] = theValueNames + " modulation"; 
+			_myModulationSources[i] = theValueNames[i] + " modulation"; 
 		}
 		return _myModulationSources;
 	}
