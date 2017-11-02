@@ -33,9 +33,9 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
-import cc.creativecomputing.simulation.particles.impulses.CCGPUImpulse;
-import cc.creativecomputing.simulation.particles.render.CCGPUParticlePointRenderer;
-import cc.creativecomputing.simulation.particles.render.CCGPUParticleRenderer;
+import cc.creativecomputing.simulation.particles.impulses.CCImpulse;
+import cc.creativecomputing.simulation.particles.render.CCParticlePointRenderer;
+import cc.creativecomputing.simulation.particles.render.CCParticleRenderer;
 
 /**
  * This particle system renders particles as points. You can add different forces
@@ -52,7 +52,7 @@ import cc.creativecomputing.simulation.particles.render.CCGPUParticleRenderer;
  * You can use this data and overwrite them.
  * @author info
  * @demo cc.creativecomputing.gpu.particles.demo.CCParticlesNoiseFlowFieldTest
- * @see CCGPUQuadParticles
+ * @see CCQuadParticles
  */
 @SuppressWarnings("unused")
 public class CCParticles{
@@ -64,7 +64,7 @@ public class CCParticles{
 	
 	protected List<CCForce> _myForces;
 	protected List<CCConstraint> _myConstraints;
-	protected List<CCGPUImpulse> _myImpulses;
+	protected List<CCImpulse> _myImpulses;
 	
 	protected final int _myWidth;
 	protected final int _myHeight;
@@ -85,7 +85,7 @@ public class CCParticles{
 	@CCProperty(name = "contraints")
 	private Map<String, CCConstraint> _myContraintMap = new LinkedHashMap<>();
 	
-	private CCGPUParticleRenderer _myParticleRender;
+	private CCParticleRenderer _myParticleRender;
 	
 	/**
 	 * <p>
@@ -103,7 +103,7 @@ public class CCParticles{
 	 * <p>
 	 * How the particles are drawn is defined by a shader. You can pass a custom
 	 * shader to the particle system to define how the particles are drawn. To
-	 * create your own shader you need to extend the CCGPUDisplayShader and write your
+	 * create your own shader you need to extend the CCDisplayShader and write your
 	 * own cg shader.
 	 * </p>
 	 * 
@@ -116,10 +116,10 @@ public class CCParticles{
 	 */
 	public CCParticles(
 		final CCGraphics g,
-		final CCGPUParticleRenderer theRender,
+		final CCParticleRenderer theRender,
 		final List<CCForce> theForces, 
 		final List<CCConstraint> theConstraints, 
-		final List<CCGPUImpulse> theImpulse, 
+		final List<CCImpulse> theImpulse, 
 		final int theWidth, final int theHeight
 	){
 		_myForces = theForces;
@@ -158,16 +158,16 @@ public class CCParticles{
 	
 	public CCParticles(
 		final CCGraphics g,
-		CCGPUParticleRenderer theRender, 
+		CCParticleRenderer theRender, 
 		List<CCForce> theForces, 
 		List<CCConstraint> theConstraints, 
 		int theWidth, int theHeight
 	) {
-		this(g, theRender, theForces, theConstraints, new ArrayList<CCGPUImpulse>(), theWidth, theHeight);
+		this(g, theRender, theForces, theConstraints, new ArrayList<CCImpulse>(), theWidth, theHeight);
 	}
 
 	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCConstraint> theConstraints, int theWidth, int theHeight) {
-		this(g, new CCGPUParticlePointRenderer(), theForces, theConstraints, theWidth, theHeight);
+		this(g, new CCParticlePointRenderer(), theForces, theConstraints, theWidth, theHeight);
 	}
 
 	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCConstraint> theConstraints) {
@@ -215,7 +215,7 @@ public class CCParticles{
 		_mySwapTexture.endDrawCurrent(g);
 		
 		for(CCForce myForce:_myForces) {
-			myForce.reset();
+			myForce.reset(g);
 		}
 	}
 	
@@ -341,8 +341,8 @@ public class CCParticles{
 //		_myCurrentDataTexture.beginDraw(1);
 //		_myInitValue0Shader.start();
 //		_myGraphics.beginShape(CCDrawMode.POINTS);
-//		for(CCGPUParticleEmitter myEmitter:_myEmitter) {
-//			for (CCGPUParticle myChangedParticle:myEmitter.stateChangedParticles()){
+//		for(CCParticleEmitter myEmitter:_myEmitter) {
+//			for (CCParticle myChangedParticle:myEmitter.stateChangedParticles()){
 //				_myGraphics.textureCoords(0, myChangedParticle.age(), myChangedParticle.lifeTime(), myChangedParticle.isPermanent() ? 1 : 0, myChangedParticle.step());
 //				_myGraphics.vertex(myChangedParticle.x(),myChangedParticle.y());
 //			}
@@ -368,7 +368,7 @@ public class CCParticles{
 //		_myGraphics.beginShape(CCDrawMode.POINTS);
 //				
 //		while (_myActiveParticles.peek() != null && _myActiveParticles.peek().timeOfDeath() < _myCurrentTime){
-//			CCGPUParticle myParticle = _myActiveParticles.poll();
+//			CCParticle myParticle = _myActiveParticles.poll();
 //			if(myParticle.index == -1) continue;
 //			_myAvailableIndices.add(myParticle.index);
 //			_myActiveParticlesArray[myParticle.index].index = -1;
@@ -412,7 +412,7 @@ public class CCParticles{
 			myConstraint.update(theAnimator);
 		}
 		
-		for(CCGPUImpulse myImpulse:_myImpulses) {
+		for(CCImpulse myImpulse:_myImpulses) {
 			myImpulse.update(theAnimator);
 		}
 
@@ -466,7 +466,7 @@ public class CCParticles{
 		_myUpdateShader.staticPositionBlend(theBlend);
 	}
 	
-	public CCGPUParticleRenderer renderer() {
+	public CCParticleRenderer renderer() {
 		return _myParticleRender;
 	}
 }

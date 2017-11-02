@@ -29,7 +29,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
-import cc.creativecomputing.simulation.particles.impulses.CCGPUImpulse;
+import cc.creativecomputing.simulation.particles.impulses.CCImpulse;
 
 
 
@@ -69,7 +69,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		final CCGraphics theGraphics, 
 		final List<CCForce> theForces , 
 		final List<CCConstraint> theConstraints,
-		final List<CCGPUImpulse> theImpulses,
+		final List<CCImpulse> theImpulses,
 		final Path[] theShaderFile,
 		final int theWidth,
 		final int theHeight
@@ -125,7 +125,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		_myRandomTexture.wrap(CCTextureWrap.REPEAT);
 		
 		int myImpulseIndex = 0;
-		for(CCGPUImpulse myImpulse:theImpulses){
+		for(CCImpulse myImpulse:theImpulses){
 //			myImpulse.setShader(this, myImpulseIndex++, theWidth, theHeight);
 		}
 		
@@ -147,7 +147,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		final CCGraphics theGraphics, 
 		final List<CCForce> theForces, 
 		final List<CCConstraint> theConstrains,
-		final List<CCGPUImpulse> theImpulses,
+		final List<CCImpulse> theImpulses,
 		final int theWidth,
 		final int theHeight
 	){

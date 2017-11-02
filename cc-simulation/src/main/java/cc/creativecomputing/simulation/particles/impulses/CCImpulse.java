@@ -16,7 +16,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.simulation.particles.CCGLProgramInterface;
 import cc.creativecomputing.simulation.particles.CCParticlesUpdateShader;
 
-public abstract class CCGPUImpulse extends CCGLProgramInterface{
+public abstract class CCImpulse extends CCGLProgramInterface{
 	
 	protected String _myParameterIndex;
 	protected String _myShaderTypeName;
@@ -27,7 +27,7 @@ public abstract class CCGPUImpulse extends CCGLProgramInterface{
 	
 	private String _myStrengthParameter;
 	
-	public CCGPUImpulse(final String theShaderTypeName, final double theStrength){
+	public CCImpulse(final String theShaderTypeName, final double theStrength){
 		super(theShaderTypeName);
 
 		_myStrengthParameter  = parameter("strength");
