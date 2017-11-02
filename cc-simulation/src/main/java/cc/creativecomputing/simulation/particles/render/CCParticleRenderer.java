@@ -19,7 +19,7 @@ import cc.creativecomputing.simulation.particles.CCParticles;
  * @author christianriekoff
  *
  */
-public abstract class CCGPUParticleRenderer {
+public abstract class CCParticleRenderer {
 	
 	public abstract void setup(CCParticles theParticles);
 

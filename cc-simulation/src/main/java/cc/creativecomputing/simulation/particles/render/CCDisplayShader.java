@@ -16,7 +16,7 @@ import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.io.CCNIOUtil;
 
 
-public class CCGPUDisplayShader extends CCGLProgram{
+public class CCDisplayShader extends CCGLProgram{
 	
 	String _myPointSizeParameter;
 	String _myMinPointSizeParameter;
@@ -27,7 +27,7 @@ public class CCGPUDisplayShader extends CCGLProgram{
 	private double _myPointSize;
 	private double _myTanHalfFov;
 	
-	public CCGPUDisplayShader(final Path theVertexFile, final Path theFragmentFile) {
+	public CCDisplayShader(final Path theVertexFile, final Path theFragmentFile) {
 		super(theVertexFile, theFragmentFile);
 		
 		_myPointSizeParameter = "_uPointSize";
@@ -37,10 +37,10 @@ public class CCGPUDisplayShader extends CCGLProgram{
 		pointSize(1f);
 	}
 	
-	public CCGPUDisplayShader(){
+	public CCDisplayShader(){
 		this(
-			CCNIOUtil.classPath(CCGPUDisplayShader.class, "display_vertex.glsl"),
-			CCNIOUtil.classPath(CCGPUDisplayShader.class, "display_fragment.glsl")
+			CCNIOUtil.classPath(CCDisplayShader.class, "display_vertex.glsl"),
+			CCNIOUtil.classPath(CCDisplayShader.class, "display_fragment.glsl")
 		);
 		
 		
@@ -56,6 +56,7 @@ public class CCGPUDisplayShader extends CCGLProgram{
 	
 	@Override
 	public void start() {
+		super.start();
 		uniform1f(_myPointSizeParameter, _myPointSize);
 		uniform1f(_myTangHalfFovParameter, _myTanHalfFov);
 	}

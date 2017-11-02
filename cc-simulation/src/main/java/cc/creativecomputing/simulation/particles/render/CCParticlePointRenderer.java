@@ -10,25 +10,28 @@
  */
 package cc.creativecomputing.simulation.particles.render;
 
+import com.jogamp.opengl.GL2;
+
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCVBOMesh;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.simulation.particles.CCParticles;
 
 /**
  * @author christianriekoff
  *
  */
-public class CCGPUParticlePointRenderer extends CCGPUParticleRenderer{
+public class CCParticlePointRenderer extends CCParticleRenderer{
 
 	protected CCVBOMesh _myMesh;
 	
 	private CCParticles _myParticles;
-	private CCGPUDisplayShader _myDisplayShader;
+	private CCDisplayShader _myDisplayShader;
 	
-	public CCGPUParticlePointRenderer() {
-		_myDisplayShader = new CCGPUDisplayShader();
+	public CCParticlePointRenderer() {
+		_myDisplayShader = new CCDisplayShader();
 	}
 	
 	@Override
@@ -50,13 +53,12 @@ public class CCGPUParticlePointRenderer extends CCGPUParticleRenderer{
 
 	@Override
 	public void display(CCGraphics g){
-//		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
-////		_myParticles.dataBuffer().attachment(1).bind();
-//		_myDisplayShader.start();
-//		_myDisplayShader.tangHalfFov(CCMath.tan(g.camera().fov()) * g.height);
+		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
+		_myDisplayShader.start();
+		_myDisplayShader.tangHalfFov(CCMath.tan(g.camera().fov()) * g.height());
 		_myMesh.draw(g);
-//		_myDisplayShader.end();
-//		g.gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE) ;
+		_myDisplayShader.end();
+		g.gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE) ;
 	}
 	
 	public CCVBOMesh mesh(){
@@ -64,7 +66,7 @@ public class CCGPUParticlePointRenderer extends CCGPUParticleRenderer{
 	}
 	
 	public void pointSize(float thePointSize) {
-		if(_myDisplayShader == null)_myDisplayShader = new CCGPUDisplayShader();
+		if(_myDisplayShader == null)_myDisplayShader = new CCDisplayShader();
 		_myDisplayShader.pointSize(thePointSize);
 	}
 }
