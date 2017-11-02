@@ -465,6 +465,7 @@ public class CCColor implements Cloneable, CCBlendable<CCColor>{
 			b = theValues[2] / 255f;
 			g = theValues[1] / 255f;
 			r = theValues[0] / 255f;
+			break;
 		case 3:
 			b = theValues[2] / 255f;
 			g = theValues[1] / 255f;
