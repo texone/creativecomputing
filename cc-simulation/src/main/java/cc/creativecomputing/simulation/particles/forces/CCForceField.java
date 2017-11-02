@@ -16,7 +16,7 @@ import cc.creativecomputing.math.CCVector3;
 
 public class CCForceField extends CCForce{
 	
-	@CCProperty(name = "scale", min = 0, max = 1)
+	@CCProperty(name = "scale", min = 0, max = 10)
 	private double _myScale = 1;
 	@CCProperty(name = "octaves", min = 0, max = 5)
 	private int _cOctaves = 1;

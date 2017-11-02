@@ -23,7 +23,7 @@ import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.simulation.particles.CCParticles;
-import cc.creativecomputing.simulation.particles.render.CCGPUParticlePointRenderer;
+import cc.creativecomputing.simulation.particles.render.CCParticlePointRenderer;
 
 /**
  * This class calculates a density texture from a particles object, that can be used as force texture input to 
@@ -51,7 +51,7 @@ public class CCDensity extends CCForce{
 	}
 	
 	private CCParticles _myParticles;
-	private CCGPUParticlePointRenderer _myDefaultRenderer;
+	private CCParticlePointRenderer _myDefaultRenderer;
 	private CCShaderBuffer _myDensityBuffer;
 	private CCSobelFilter _mySobelFilter;	
 	
@@ -157,7 +157,7 @@ public class CCDensity extends CCForce{
 		super.setParticles(theParticles);
 		_myParticles = theParticles;
 		
-		_myDefaultRenderer = new CCGPUParticlePointRenderer();
+		_myDefaultRenderer = new CCParticlePointRenderer();
 		_myDefaultRenderer.setup(_myParticles);
 	}
 	

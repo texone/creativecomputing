@@ -68,7 +68,7 @@ public abstract class CCForce extends CCGLProgramInterface{
 	
 	public void update(final CCAnimator theAnimator) {}
 	
-	public void reset() {}
+	public void reset(CCGraphics g) {}
 	
 	/**
 	 * Set the strength of the force. The default value is one.
