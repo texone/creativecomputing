@@ -13,6 +13,7 @@ package cc.creativecomputing.core.logging;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -320,17 +321,30 @@ public class CCLog {
 		log(Level.INFO, new RuntimeException(theMessage, theCause));
 	}
 
-	/**
-	 * Log a message with INFO level.
-	 * @param theMessage the message to be logged
-	 */
-	public static void info(Object theMessage) {
-		if (theMessage == null) {
-			log(Level.INFO, "null");
-			return;
-		} 
-		log(Level.INFO, theMessage.toString());
-	}
+//	/**
+//	 * Log a message with INFO level.
+//	 * @param theMessage the message to be logged
+//	 */
+//	public static void info(Object theMessage) {
+//		if (theMessage == null) {
+//			log(Level.INFO, "null");
+//			return;
+//		} 
+//		if(theMessage.getClass().isArray()) {
+//			StringBuffer myMessage = new StringBuffer();
+//			
+//			for(int i = 0; i < Array.getLength(theMessage);i++) {
+//				myMessage.append(Array.get(theMessage, i));
+//				myMessage.append(" : ");
+//			}
+//			myMessage.delete(myMessage.length()-3, myMessage.length());
+//			log(Level.INFO, myMessage.toString());
+//			return;
+//			
+//		}
+//		
+//		log(Level.INFO, theMessage.toString());
+//	}
 	
 	/**
 	 * Log a message with INFO level all objects are concatenated with " : " String
@@ -339,8 +353,16 @@ public class CCLog {
 	public static void info(Object...theObjects) {
 		StringBuffer myMessage = new StringBuffer();
 		for(Object myObject:theObjects) {
-			myMessage.append(myObject);
-			myMessage.append(" : ");
+			if(myObject == null)continue;
+			if(myObject.getClass().isArray()){
+				for(int i = 0; i < Array.getLength(myObject);i++) {
+					myMessage.append(Array.get(myObject, i));
+					myMessage.append(" : ");
+				}
+			}else{
+				myMessage.append(myObject);
+				myMessage.append(" : ");
+			}
 		}
 		myMessage.delete(myMessage.length()-3, myMessage.length());
 		log(Level.INFO, myMessage.toString());
