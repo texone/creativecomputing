@@ -14,13 +14,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.DirectoryStream;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -30,17 +26,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import javax.swing.JFileChooser;
-
-import com.sun.nio.zipfs.ZipFileSystemProvider;
 
 import cc.creativecomputing.core.CCSystem;
 import cc.creativecomputing.core.CCSystem.CCOS;
@@ -341,19 +332,17 @@ public class CCNIOUtil {
 		return Paths.get(fileName(thePath));
 	}
 	
+	static public List<Path> list(final Path theFolder, boolean theRecursive){
+		return listImplementation(theFolder, entry -> {return true;}, theRecursive);
+	}
+	
 	/**
 	 * Returns an array of files in the given folder
 	 * @param theFolder
 	 * @return array of files in the given folder
 	 */
 	static public List<Path> list(final Path theFolder){
-		return listImplementation(theFolder, new DirectoryStream.Filter<Path>() {
-			
-			@Override
-			public boolean accept(Path entry) throws IOException {
-				return true;
-			}
-		});
+		return listImplementation(theFolder, entry -> {return true;}, false);
 	}
 	
 	/**
@@ -361,28 +350,29 @@ public class CCNIOUtil {
 	 * @param theFolder
 	 * @return array of files in the given folder
 	 */
+	static public List<Path> listFolder(final Path theFolder, boolean theRecursive){
+		return listImplementation(theFolder, entry -> {return entry.toFile().isDirectory();}, theRecursive);
+	}
+	
 	static public List<Path> listFolder(final Path theFolder){
-		return listImplementation(theFolder, new DirectoryStream.Filter<Path>() {
-			
-			@Override
-			public boolean accept(Path entry) throws IOException {
-				return entry.toFile().isDirectory();
-			}
-		});
+		return listFolder(theFolder, false);
 	}
 	
 	static private class FileExtensionFilter implements DirectoryStream.Filter<Path> {
 		private final String[] _myExtensions;
-		
-		private FileExtensionFilter(final String ... theExtensions){
+		private final boolean _myRecursive;
+		private FileExtensionFilter(final boolean theRecursive, final String ... theExtensions){
 			_myExtensions = new String[theExtensions.length];
 			
 			for(int i = 0; i < _myExtensions.length;i++){
 				_myExtensions[i] = "." + theExtensions[i];
 			}
+			
+			_myRecursive = theRecursive;
 		}
 		
 		public boolean accept(final Path thePath) {
+			if(_myRecursive && Files.isDirectory(thePath))return true;
 			for(String myExtension:_myExtensions){
 				if(thePath.getFileName().toString().toLowerCase().endsWith(myExtension))return true;
 			}
@@ -391,7 +381,11 @@ public class CCNIOUtil {
 	}
 	
 	static public List<Path> list(final Path theFolder, final String...theExtensions){
-		return listImplementation(theFolder, new FileExtensionFilter(theExtensions));
+		return listImplementation(theFolder, new FileExtensionFilter(false, theExtensions), false);
+	}
+	
+	static public List<Path> list(final Path theFolder, boolean theRecursive, final String...theExtensions){
+		return listImplementation(theFolder, new FileExtensionFilter(true, theExtensions), theRecursive);
 	}
 	
 	/**
@@ -402,10 +396,10 @@ public class CCNIOUtil {
 	 * @return
 	 */
 	static public List<Path> list(final Path theFolder, final DirectoryStream.Filter<Path> theFilter){
-		return listImplementation(theFolder, theFilter);
+		return listImplementation(theFolder, theFilter, false);
 	}
 
-	static public List<Path> listImplementation(Path theFolder, final DirectoryStream.Filter<Path> theFilter) {
+	static public List<Path> listImplementation(Path theFolder, final DirectoryStream.Filter<Path> theFilter, boolean theIsRecursive) {
 
 		if (!exists(theFolder)) {
 			theFolder = dataPath(theFolder.toString());
@@ -423,6 +417,7 @@ public class CCNIOUtil {
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(theFolder, theFilter)) {
 			for (Path path : directoryStream) {
 				myResult.add(path);
+				if(theIsRecursive && Files.isDirectory(path))myResult.addAll(listImplementation(path, theFilter, theIsRecursive));
 			}
 		} catch (IOException ex) {
 		}
