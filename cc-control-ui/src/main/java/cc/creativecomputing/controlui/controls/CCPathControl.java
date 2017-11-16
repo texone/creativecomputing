@@ -8,8 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import cc.creativecomputing.control.handles.CCPathHandle;
-import cc.creativecomputing.control.handles.CCPropertyEditListener;
-import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.io.CCNIOUtil;
 
@@ -17,14 +15,12 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 	
 	private JTextField _myTextField;
 	
-	private boolean _myIsInEdit = false;
-	
 	private JButton _myOpenButton;
 
 	public CCPathControl(CCPathHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(theValue -> {
+		addListener(theValue -> {
 			try{
 				if(_myHandle.value() == null)_myTextField.setText("");
 				else _myTextField.setText(_myHandle.value().toString());
@@ -33,20 +29,6 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 			}
 			
 		});
-		
-		theHandle.editEvents().add(new CCPropertyEditListener() {
-			
-			@Override
-			public void endEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = false;
-			}
-			
-			@Override
-			public void beginEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = true;
-			}
-		});
- 
 
         String _myValue = theHandle.path() == null ? "" : theHandle.path().toString();
         _myTextField = new JTextField(_myValue);
@@ -62,7 +44,7 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 				myPath = CCNIOUtil.selectInput("", null, _myHandle.extensions());
 			}
         	if(myPath == null)return;
-        	_myHandle.value(myPath, !_myIsInEdit);
+        	_myHandle.value(myPath, !_myHandle.isInEdit());
         	_myTextField.setText(myPath.toString());
 			
 		});

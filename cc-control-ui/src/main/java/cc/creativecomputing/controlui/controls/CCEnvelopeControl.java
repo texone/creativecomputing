@@ -20,7 +20,7 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 	public CCEnvelopeControl(CCEnvelopeHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(theValue -> {
+		addListener(theValue -> {
 			_myHandle.value((CCEnvelope)theValue, false);
         	_myCurveFrame.track().trackData(value().curve());
 			_myCurveFrame.render();

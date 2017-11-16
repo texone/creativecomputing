@@ -8,8 +8,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
+import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
+import cc.creativecomputing.core.logging.CCLog;
 
 public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>> implements CCControl{
 	
@@ -51,6 +53,16 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 		CCUIStyler.styleLabel(_myLabel);
 	}
 	
+	private CCPropertyListener<Type> _myListener = null;
+	
+	public void addListener(CCPropertyListener<Type> theListener){
+		_myHandle.events().add(_myListener = theListener);
+		CCLog.info(_myHandle.events().size());
+	}
+	
+	public void dispose() {
+		if(_myListener != null)_myHandle.events().remove(_myListener);
+	}
 	
 	
 	protected GridBagConstraints constraints(int theX, int theY, int theWidth, int theAnchor, int theTop, int theLeft, int theBottom, int theRight){

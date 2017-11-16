@@ -8,8 +8,6 @@ import javax.swing.JPanel;
 
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyEditListener;
-import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 
 public class CCGradientControl extends CCValueControl<CCGradient, CCGradientPropertyHandle>{
@@ -17,30 +15,15 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
 	private CCGradientEditor _myGradientEditor = new CCGradientEditor();
 	
 	private CCGradient _myGradient;
-	
-	@SuppressWarnings("unused")
-	private boolean _myIsInEdit = false;
 
 	static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);
 
 	public CCGradientControl(CCGradientPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(theValue -> {
+		_myHandle.events().add(theValue -> {
 			_myGradient = ((CCGradient)theValue).clone();
 			_myGradientEditor.gradient(_myGradient);
-		});
-		theHandle.editEvents().add(new CCPropertyEditListener() {
-			
-			@Override
-			public void endEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = false;
-			}
-			
-			@Override
-			public void beginEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = true;
-			}
 		});
 		
 		_myGradient = theHandle.value().clone();

@@ -30,7 +30,7 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 		super(theHandle, theControlComponent);
  
         //Create the label.
-		theHandle.events().add(theValue -> {
+		addListener(theValue -> {
 			_myTriggerEvent = false;
 			_myValue = ((Number)theValue).doubleValue();
 			updateSlider(_myValue);
@@ -69,32 +69,6 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
         });
         CCUIStyler.styleTextField(_myValueField, 100);
         
-//        _myValueField.changeEvents().add(theValue -> {
-//        		value(theValue, true);
-//        });
-//        _myValueField.addActionListener(theE -> {
-//	        	try{
-//	        		value(new ExpressionBuilder(_myValueField.getText()).build().evaluate(), true);
-//	        	}catch(Exception e){
-//	        		value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
-//	        	}
-//		});
-//        _myValueField.addKeyListener(new KeyAdapter() {
-//        	@Override
-//        	public void keyReleased(KeyEvent e) {
-//        		switch (e.getKeyCode()) {
-//				case KeyEvent.VK_UP:
-//					value(value().doubleValue() + 1, true);
-//					break;
-//				case KeyEvent.VK_DOWN:
-//					value(value().doubleValue() - 1, true);
-//					break;
-//
-//				default:
-//					break;
-//				}
-//        	}
-//		});
         _myValueField.setHorizontalAlignment(JTextField.LEFT);
         value(_myHandle.value().doubleValue(), true);
 	}

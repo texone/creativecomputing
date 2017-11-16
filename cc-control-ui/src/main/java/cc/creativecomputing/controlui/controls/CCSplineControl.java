@@ -20,7 +20,7 @@ public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 	public CCSplineControl(CCSplineHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(theValue -> {
+		addListener(theValue -> {
 			_myHandle.value((CCSpline)theValue, false);
 		});
 		
@@ -51,7 +51,6 @@ public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 
 	@Override
 	public CCSpline value() {
-		// TODO Auto-generated method stub
 		return _myHandle.value();
 	}
 }

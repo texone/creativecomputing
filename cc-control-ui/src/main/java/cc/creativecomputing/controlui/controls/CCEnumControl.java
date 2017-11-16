@@ -7,8 +7,6 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyEditListener;
-import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 
 public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>{
@@ -18,29 +16,16 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
 	private Enum<?> _myValue;
 	
 	private boolean _myTriggerEvent = true;
-	private boolean _myIsInEdit = false;
 	static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);
 
 	public CCEnumControl(CCEnumPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
  
-		theHandle.events().add( theValue -> {
+		addListener( theValue -> {
 			_myValue = (Enum<?>)theValue;
 			_myTriggerEvent = false;
 			_myEnums.setSelectedItem(_myHandle.value());
 			_myTriggerEvent = true;
-		});
-		theHandle.editEvents().add(new CCPropertyEditListener() {
-			
-			@Override
-			public void endEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = false;
-			}
-			
-			@Override
-			public void beginEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = true;
-			}
 		});
 
         _myValue = theHandle.value();
@@ -53,7 +38,7 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
         _myEnums.addItemListener(the -> {
         	if(!_myTriggerEvent)return;
         	if(_myEnums.getSelectedItem() == null)return;
-        	_myHandle.value((Enum<?>)_myEnums.getSelectedItem(), !_myIsInEdit);
+        	_myHandle.value((Enum<?>)_myEnums.getSelectedItem(), !_myHandle.isInEdit());
 		});
         _myEnums.setSelectedItem(_myHandle.value());
 	}
@@ -62,8 +47,6 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
 	public Enum<?> value() {
 		return _myValue;
 	}
-	
-	
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {

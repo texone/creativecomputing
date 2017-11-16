@@ -15,9 +15,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyEditListener;
-import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.math.CCColor;
 
@@ -82,33 +79,15 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	private JPanel _myColorPanel;
 	
 	private JColorChooser _myColorChooser;
-	
-	private boolean _myIsInEdit = false;
 
 	static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);
 
 	public CCColorControl(CCColorPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(new CCPropertyListener<CCColor>() {
-			
-			@Override
-			public void onChange(CCColor theValue) {
-				_myColor = theValue;
-				_myColorPanel.setBackground(_myColor.toAWTColor());
-			}
-		});
-		theHandle.editEvents().add(new CCPropertyEditListener() {
-			
-			@Override
-			public void endEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = false;
-			}
-			
-			@Override
-			public void beginEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = true;
-			}
+		addListener(theValue -> {
+			_myColor = theValue;
+			_myColorPanel.setBackground(_myColor.toAWTColor());
 		});
 		
 		_myColor = theHandle.value().clone();
@@ -128,15 +107,11 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 				Color myColor = _myColorChooser.getColor();
 				_myColorPanel.setBackground(myColor);
 				_myColor = new CCColor(myColor);
-				_myHandle.value(_myColor, _myIsInEdit);
+				_myHandle.value(_myColor, _myHandle.isInEdit());
 			}
 		});
-		
-        
-		
         _myButton = new JButton("edit color");
         CCUIStyler.styleButton(_myButton);
-        
 	}
 	
 	@Override
@@ -144,13 +119,10 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 		return _myColor;
 	}
 	
-	private JPanel _myPanel;
-	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		_myPanel = thePanel;
 		
-		_myButton.addActionListener(new ShowColorChooserAction(_myPanel, _myColorChooser));
+		_myButton.addActionListener(new ShowColorChooserAction(thePanel, _myColorChooser));
 		
 		thePanel.add(_myLabel,  constraints(0, theY, GridBagConstraints.LINE_END, 5, 5, 1, 5));
 		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 5, 1, 5));

@@ -16,6 +16,8 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
 	
 	private CCProgressWindow _myProgressWindow;
 	
+	private CCTriggerProgressListener _myProgressListener;
+	
 	public CCEventTriggerControl(CCEventTriggerHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
  
@@ -27,7 +29,7 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
 			_myHandle.trigger();
 		});
         
-        theHandle.progress().events().add(new CCTriggerProgressListener() {
+        _myHandle.progress().events().add(_myProgressListener = new CCTriggerProgressListener() {
     		@Override
     		public void start() {
     			_myProgressWindow = new CCProgressWindow();
@@ -44,11 +46,14 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
     		}
     		
     		@Override
-    		public void interrupt() {
-    			// TODO Auto-generated method stub
-    			
-    		}
+    		public void interrupt() {}
     	});
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		_myHandle.progress().events().remove(_myProgressListener);
 	}
 	
 	@Override

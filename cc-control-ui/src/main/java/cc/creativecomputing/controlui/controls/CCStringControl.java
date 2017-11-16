@@ -7,9 +7,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import cc.creativecomputing.control.handles.CCPropertyEditListener;
-import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 
@@ -18,39 +15,19 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 	private JTextField _myTextField;
 	
 	private boolean _myTriggerEvent = true;
-	
-	private boolean _myIsInEdit = false;
 
 	public CCStringControl(CCStringPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(new CCPropertyListener<String>() {
-			
-			@Override
-			public void onChange(String theValue) {
-				try{
-					_myTriggerEvent = false;
-					if(!_myHandle.value().equals(_myTextField.getText())){
-						_myTextField.setText(_myHandle.value());
-					}
-				}catch(Exception e){
-					
+		addListener( theValue -> {
+			try{
+				_myTriggerEvent = false;
+				if(!_myHandle.value().equals(_myTextField.getText())){
+					_myTextField.setText(_myHandle.value());
 				}
-				_myTriggerEvent = true;
-			}
-		});
-		
-		theHandle.editEvents().add(new CCPropertyEditListener() {
+			}catch(Exception e){}
+			_myTriggerEvent = true;
 			
-			@Override
-			public void endEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = false;
-			}
-			
-			@Override
-			public void beginEdit(CCPropertyHandle<?> theProperty) {
-				_myIsInEdit = true;
-			}
 		});
  
         //Create the Button.
@@ -64,13 +41,13 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 			@Override
 			public void removeUpdate(DocumentEvent theE) {
 				if(!_myTriggerEvent)return;
-				_myHandle.value(_myTextField.getText(), !_myIsInEdit);
+				_myHandle.value(_myTextField.getText(), !_myHandle.isInEdit());
 			}
 			
 			@Override
 			public void insertUpdate(DocumentEvent theE) {
 				if(!_myTriggerEvent)return;
-				_myHandle.value(_myTextField.getText(), !_myIsInEdit);
+				_myHandle.value(_myTextField.getText(), !_myHandle.isInEdit());
 			}
 			
 			@Override
@@ -83,8 +60,6 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 	public String value() {
 		return _myTextField.getText();
 	}
-	
-	
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {

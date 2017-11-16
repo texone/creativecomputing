@@ -19,7 +19,7 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 	public CCBooleanControl(CCBooleanPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.events().add(theValue ->{
+		addListener(theValue ->{
 			_myIsSelected = (Boolean)theValue;
 			_myTriggerEvent = false;
 			_myButton.setSelected(_myHandle.value());
@@ -27,15 +27,15 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 		});
  
         //Create the Button.
-		if(theHandle.value() == null){
-			theHandle.value(false, true);
+		if(_myHandle.value() == null){
+			_myHandle.value(false, true);
 		}
         boolean _myValue = theHandle.value();
         _myButton = new JToggleButton(theHandle.name(), theHandle.value());
         CCUIStyler.styleButton(_myButton, 102, 13);
         _myButton.addChangeListener(theE -> {
-        		if(!_myTriggerEvent)return;
-        		_myHandle.value(_myButton.isSelected(), true);
+        	if(!_myTriggerEvent)return;
+        	_myHandle.value(_myButton.isSelected(), true);
 		});
         _myButton.setSelected(_myValue);
 	}
@@ -44,8 +44,6 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 	public Boolean value() {
 		return _myIsSelected;
 	}
-	
-	
 	
 	@Override
 	public void addToComponent(JPanel thePanel, int theY, int theDepth) {

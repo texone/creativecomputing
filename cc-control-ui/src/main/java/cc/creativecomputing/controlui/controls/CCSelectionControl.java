@@ -10,9 +10,6 @@ import javax.swing.JPanel;
 
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.CCSelection.CCSelectionListener;
-import cc.creativecomputing.control.handles.CCPropertyEditListener;
-import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 
@@ -24,11 +21,13 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 	
 	private boolean _myTriggerEvent = true;
 	static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);
+	
+	private CCSelectionListener _mySelectionListener;
 
 	public CCSelectionControl(CCSelectionPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		theHandle.value().events().add(new CCSelectionListener() {
+		_myHandle.value().events().add(_mySelectionListener = new CCSelectionListener() {
 			
 			@Override
 			public void onChangeValues(CCSelection theSelection) {
@@ -46,25 +45,11 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 			}
 		});
  
-		theHandle.events().add(new CCPropertyListener<CCSelection>() {
-			
-			@Override
-			public void onChange(CCSelection theValue) {
-				_myValue = theValue;
-				_myTriggerEvent = false;
-				 _mySelection.setSelectedItem(_myHandle.value());
-				 _myTriggerEvent = true;
-			}
-		});
-		theHandle.editEvents().add(new CCPropertyEditListener() {
-			
-			@Override
-			public void endEdit(CCPropertyHandle<?> theProperty) {
-			}
-			
-			@Override
-			public void beginEdit(CCPropertyHandle<?> theProperty) {
-			}
+		addListener(theValue -> {
+			_myValue = (CCSelection)theValue;
+			_myTriggerEvent = false;
+			_mySelection.setSelectedItem(_myHandle.value());
+			_myTriggerEvent = true;
 		});
 
         _myValue = theHandle.value();
@@ -85,6 +70,12 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 			}
 		});
         _mySelection.setSelectedItem(_myHandle.value());
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		_myHandle.value().events().remove(_mySelectionListener);
 	}
 	
 	@Override
