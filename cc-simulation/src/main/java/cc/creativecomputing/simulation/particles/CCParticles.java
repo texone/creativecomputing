@@ -84,7 +84,7 @@ public class CCParticles{
 	private Map<String, CCForce> _myForceMap = new LinkedHashMap<>();
 	@CCProperty(name = "contraints")
 	private Map<String, CCConstraint> _myContraintMap = new LinkedHashMap<>();
-	
+	@CCProperty(name = "renderer")
 	private CCParticleRenderer _myParticleRender;
 	
 	/**
