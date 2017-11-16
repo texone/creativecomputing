@@ -13,6 +13,7 @@ package cc.creativecomputing.graphics.shader.imaging.filter;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
+import cc.creativecomputing.graphics.shader.imaging.CCImageFilter;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
  
 public class CCVectorFieldFilter extends CCImageFilter{

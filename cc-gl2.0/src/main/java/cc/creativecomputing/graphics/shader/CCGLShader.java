@@ -3,13 +3,16 @@ package cc.creativecomputing.graphics.shader;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.jogamp.opengl.GL2;
 
 import cc.creativecomputing.control.CCPropertyMap;
+import cc.creativecomputing.control.code.CCShaderFile;
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.control.code.CCShaderObject.CCShaderObjectInterface;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
@@ -25,22 +28,46 @@ import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCGLShader extends CCShaderObjectInterface{
 	
-	/**
-	 * Takes the given files and merges them to one String. 
-	 * This method is used to combine the different shader sources and get rid of the includes
-	 * inside the shader files.
-	 * @param thePaths
-	 * @return
-	 */
-	public static String buildSource(final Path...thePaths) {
-		StringBuffer myBuffer = new StringBuffer();
-		for(Path myPath:thePaths) {
-			myBuffer.append(CCNIOUtil.loadString(myPath));
-			myBuffer.append("\n");
-		}
-		
-		return myBuffer.toString();
-	}
+	private static String[] KEYWORDS = new String[]{
+			//Compatibility Profile Vertex Shader Built-In Inputs
+			"gl_Color",
+			"gl_SecondaryColor",
+			"in vec3 gl_Normal",
+			"gl_Vertex",
+			"gl_MultiTexCoord0",
+			"gl_MultiTexCoord1",
+			"gl_MultiTexCoord2",
+			"gl_MultiTexCoord3",
+			"gl_MultiTexCoord4",
+			"gl_MultiTexCoord5",
+			"gl_MultiTexCoord6",
+			"gl_MultiTexCoord7",
+			"gl_FogCoord;",
+			
+			//Built-In Constants
+			"gl_MaxVertexAttribs",
+			"gl_MaxVertexUniformComponents",
+			"gl_MaxVaryingFloats" + 
+			"gl_MaxVaryingComponents" + 
+			"gl_MaxVertexOutputComponents",
+			"gl_MaxGeometryInputComponents",
+			"gl_MaxGeometryOutputComponents",
+			"gl_MaxFragmentInputComponents",
+			"gl_MaxVertexTextureImageUnits",
+			"gl_MaxCombinedTextureImageUnits",
+			"gl_MaxTextureImageUnits",
+			"gl_MaxFragmentUniformComponents",
+			"gl_MaxDrawBuffers",
+			"gl_MaxClipDistances",
+			"gl_MaxGeometryTextureImageUnits",
+			"gl_MaxGeometryOutputVertices",
+			"gl_MaxGeometryTotalOutputComponents",
+			"gl_MaxGeometryUniformComponents",
+			"gl_MaxGeometryVaryingComponents",
+			"gl_MaxTextureUnits",
+			"gl_MaxTextureCoords",
+			"gl_MaxClipPlane;"
+	};
 	
 	public static CCShaderSource buildSourceObject(final Path...thePaths) {
 		CCShaderSource mySource = new CCShaderSource();
@@ -57,13 +84,13 @@ public class CCGLShader extends CCShaderObjectInterface{
 	protected CCShaderObjectType _myType;
 	protected Path[] _myFiles;
 	
-	private String _mySource;
+	private String[] _mySource;
 	
-	private String _myReloadSourceCode = null;
+	private String[] _myReloadSourceCode = null;
 	
 	private boolean _myReloadSource = false;
 	
-	@CCProperty(name = "code")
+	@CCProperty(name = "code", hide = true)
 	private CCShaderObject _myCode;
 	@CCProperty(name = "uniforms")
 	private CCObjectPropertyHandle _myUniformHandles = new CCObjectPropertyHandle(new CCDirectMember( new CCPropertyObject("uniforms", 0, 0)));
@@ -74,16 +101,49 @@ public class CCGLShader extends CCShaderObjectInterface{
 		
 		GL2 gl = CCGraphics.currentGL();
 		_myShaderID = (int)gl.glCreateShader(_myType.glID);
-		_myCode = new CCShaderObject(this);
-		loadShader(_myFiles);
+		
+		_myCode = new CCShaderObject(this, theFiles);
+		
+		loadShader(_myCode);
 	}
 	
-	CCGLShader(CCShaderObjectType theType, String theSource){
+	CCGLShader(CCShaderObjectType theType, String...theSource){
 		_myType = theType;
 		GL2 gl = CCGraphics.currentGL();
 		_myShaderID = (int)gl.glCreateShader(_myType.glID);
 		
-		loadShader(theSource, true, "");
+		loadShader(true, theSource);
+	}
+	
+	@Override
+	public void update() {
+		_myReloadSource = true;
+		_myReloadSourceCode = new String[_myCode.sourceCode().size()]; 
+		int i = 0;
+		for(CCShaderFile myFile:_myCode.sourceCode().values()){
+			_myReloadSourceCode[i++] = myFile.source();
+		}
+	}
+	
+	@Override
+	public String[] keywords() {
+		return KEYWORDS;
+	}
+	
+	@Override
+	public Path[] templates() {
+		Path myTemplatePath = CCNIOUtil.classPath(CCGLShader.class, "templates");
+		List<Path> myTemplates = CCNIOUtil.list(myTemplatePath, true, "glsl");
+		Path[] myResult = new Path[myTemplates.size()];
+		for(int i = 0; i < myTemplates.size();i++){
+			myResult[i] = myTemplatePath.relativize(myTemplates.get(i));
+		}
+		return myResult;
+	}
+	
+	@Override
+	public String templateSource(Path thePath) {
+		return CCNIOUtil.loadString(CCNIOUtil.classPath(this, "templates/" + thePath.toString()));
 	}
 
 	@Override
@@ -217,20 +277,73 @@ public class CCGLShader extends CCShaderObjectInterface{
 		gl.glDeleteShader(_myShaderID);
 	}
 	
-	private boolean loadShader(final Path...theFiles) {
-		if(theFiles == null || theFiles.length <= 0)return false;
-		String shaderSource = buildSource(theFiles);
-		StringBuffer myReplyBuffer = new StringBuffer();
-		if(theFiles != null){
-			myReplyBuffer.append("Problem inside the following " + _myType + " shader:");
-			for(Path myFile:theFiles) {
-				myReplyBuffer.append("\n");
-				myReplyBuffer.append(myFile);
+
+	
+	private boolean loadShader(boolean theThrowException, String...theSources){
+		Map<String,CCShaderUniform> myUniforms = new HashMap<>();
+		_myUniformHandles.children().clear();
+		_myUniforms.clear();
+		
+		String[] myCleanedSources = new String[theSources.length];
+		int mySourceID = 0;
+		StringBuffer mySourceBuffer = new StringBuffer();
+		for(String mySource:theSources){
+			String[] myLines = mySource.split(Pattern.quote("\n"));
+			String myPropertyLine = null;
+			
+			
+			for(int i = 0; i < myLines.length; i++){
+				String myLine = myLines[i];
+				myLine = myLine.trim();
+				if(myLine.length() == 0){
+					mySourceBuffer.append("\n");
+					continue;
+				}else if(myLine.startsWith("@CCProperty")){
+					mySourceBuffer.append("\n");
+					myPropertyLine = myLine;
+				}else if(myLine.startsWith("@")){
+					mySourceBuffer.append("\n");
+					continue;
+				}else if(myLine.startsWith("uniform")){
+					mySourceBuffer.append(myLine + "\n");
+					if(myPropertyLine != null)readProperty(myPropertyLine, myLine,myUniforms);
+					myPropertyLine = null;
+				}else{
+					myPropertyLine = null;
+					mySourceBuffer.append(myLine + "\n");
+				}
 			}
+			
+			myCleanedSources[mySourceID++] = mySource.toString();
 		}
-		return loadShader(shaderSource, true, myReplyBuffer.toString());
+		_myUniforms = myUniforms;
+		_myUniformHandles.forceChange();
+		
+		source(mySourceBuffer.toString());
+		compile();
+		if(!compileStatus()){
+			StringBuffer myReplyBuffer = new StringBuffer();
+			myReplyBuffer.append(getInfoLog());
+			_myInfoLog = myReplyBuffer.toString();
+			if(theThrowException)throw new CCShaderException(_myInfoLog);
+			return false;
+		}else{
+			_myInfoLog = "";
+		}
+		
+		_mySource = myCleanedSources;
+		
+		return true;
 	}
 	
+	private boolean loadShader(CCShaderObject theObject) {
+		String[] mySources = new String[theObject.sourceCode().size()]; 
+		int i = 0;
+		for(CCShaderFile myFile:theObject.sourceCode().values()){
+			mySources[i++] = myFile.source();
+		}
+		return loadShader(true, mySources);
+	}
 	
 	private String _myInfoLog;
 	
@@ -361,6 +474,7 @@ public class CCGLShader extends CCShaderObjectInterface{
 				}
 				return;
 			}
+			CCLog.info(myType, myName, myMin, myMax);
 			switch(myType){
 			case "float":
 				theUniforms.put(
@@ -411,70 +525,13 @@ public class CCGLShader extends CCShaderObjectInterface{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-
 	}
 	
-	private boolean loadShader(String theSource, boolean theThrowException, final String theErrorPrepend){
-		Map<String,CCShaderUniform> myUniforms = new HashMap<>();
-		_myUniformHandles.children().clear();
-		
-		String[] myLines = theSource.split(Pattern.quote("\n"));
-		String myPropertyLine = null;
-		
-		StringBuffer mySource = new StringBuffer();
-		
-		for(int i = 0; i < myLines.length; i++){
-			String myLine = myLines[i];
-			myLine = myLine.trim();
-			if(myLine.length() == 0){
-				mySource.append("\n");
-				continue;
-			}else if(myLine.startsWith("@CCProperty")){
-				mySource.append("\n");
-				myPropertyLine = myLine;
-			}else if(myLine.startsWith("@")){
-				mySource.append("\n");
-				continue;
-			}else if(myLine.startsWith("uniform")){
-				mySource.append(myLine + "\n");
-				if(myPropertyLine != null)readProperty(myPropertyLine, myLine,myUniforms);
-				myPropertyLine = null;
-			}else{
-				myPropertyLine = null;
-				mySource.append(myLine + "\n");
-			}
-		}
-		
-		_myUniforms = myUniforms;
-		_myUniformHandles.forceChange();
-		
-		theSource = mySource.toString();
-		
-		source(theSource);
-		compile();
-		if(!compileStatus()){
-			StringBuffer myReplyBuffer = new StringBuffer();
-			if(theErrorPrepend != null)myReplyBuffer.append(theErrorPrepend);
-			myReplyBuffer.append(getInfoLog());
-			_myInfoLog = myReplyBuffer.toString();
-			if(theThrowException)throw new CCShaderException(_myInfoLog);
-			return false;
-		}else{
-			_myInfoLog = "";
-		}
-		
-		_mySource = theSource;
-		
-		return true;
-	}
-	
-	@Override
-	public String sourceCode() {
+	public String[] sourceCode() {
 		return _mySource;
 	}
 	
-	@Override
-	public void sourceCode(String theSource) {
+	public void sourceCode(String[] theSource) {
 		if(!theSource.equals(_mySource)){
 			_myReloadSource = true;
 			_myReloadSourceCode = theSource;
@@ -484,15 +541,23 @@ public class CCGLShader extends CCShaderObjectInterface{
 	boolean checkReloadSource(){
 		if(!_myReloadSource)return false;
 		_myReloadSource = false;
-		if(!loadShader(_myReloadSourceCode, false, null))return false;
+		if(!loadShader(false, _myReloadSourceCode))return false;
 		return true;
 	}
 	
 	public void reloadFromSource(){
-		loadShader(_mySource, false, null);
+		loadShader(false, _mySource);
 	}
 	
 	public void reload(){
-		CCLog.info(loadShader(_myFiles));
+		loadShader(_myCode);
+	}
+	
+	public static void main(String[] args) {
+		
+		Path myTemplatePath = CCNIOUtil.classPath(CCGLShader.class, "templates");
+		for(Path myPath:CCNIOUtil.list(myTemplatePath, true, "glsl")){
+			CCLog.info(myTemplatePath.relativize(myPath));
+		}
 	}
 }

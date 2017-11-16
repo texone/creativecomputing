@@ -16,6 +16,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCRenderBuffer;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
+import cc.creativecomputing.graphics.shader.imaging.CCImageFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureMipmapFilter;
 import cc.creativecomputing.graphics.texture.CCTexture2D;

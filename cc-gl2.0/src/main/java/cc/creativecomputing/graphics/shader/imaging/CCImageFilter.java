@@ -8,24 +8,30 @@
  * Contributors:
  *     christianr - initial API and implementation
  */
-package cc.creativecomputing.graphics.shader.imaging.filter;
+package cc.creativecomputing.graphics.shader.imaging;
 
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 
 public abstract class CCImageFilter {
 	
+	protected CCTexture2D[] _myInputChannel;
+	
 	protected CCTexture2D _myInput;
+	
+	public CCImageFilter(){
+		_myInputChannel = new CCTexture2D[8];
+	}
 	
 	public CCImageFilter(CCTexture2D theInput){
 		_myInput = theInput;
 	}
 	
+	public void inputChannel(int theChannel, CCTexture2D theInput){
+		_myInputChannel[theChannel] = theInput;
+	}
+	
 	public abstract CCTexture2D output();
 	
 	public abstract void display(CCGraphics g);
-	
-	public void setInput (CCTexture2D theInput) {
-		_myInput = theInput;
-	}
 }

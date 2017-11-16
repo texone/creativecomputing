@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.graphics.shader.imaging.filter;
 
+import cc.creativecomputing.graphics.shader.imaging.CCImageFilter;
 import cc.creativecomputing.graphics.shader.util.CCRingStructure;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 

@@ -14,6 +14,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.shader.imaging.CCGPUSeperateGaussianBlur;
+import cc.creativecomputing.graphics.shader.imaging.CCImageFilter;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 
 public class CCBlurFilter extends CCImageFilter{
@@ -43,9 +44,6 @@ public class CCBlurFilter extends CCImageFilter{
 	@Override
 	public CCTexture2D output() {
 		return _myOutput.attachment(0);
-	}
-	public CCTexture2D input() {
-		return _myInput;
 	}
 	
 	public void setRadius (float theRadius) {
