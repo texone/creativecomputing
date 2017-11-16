@@ -13,7 +13,6 @@ public abstract class CCPropertyHandle<Type>{
 	protected final CCMember<CCProperty> _myMember;
 	
 	protected final CCListenerManager<CCPropertyListener> _myEvents = CCListenerManager.create(CCPropertyListener.class);
-	protected final CCListenerManager<CCPropertyEditListener> _myEditEvents = CCListenerManager.create(CCPropertyEditListener.class);
 	
 	protected Type _myValue = null;
 	protected Type _myPresetValue = null;
@@ -43,10 +42,6 @@ public abstract class CCPropertyHandle<Type>{
 	
 	public CCListenerManager<CCPropertyListener> events(){
 		return _myEvents;
-	}
-	
-	public CCListenerManager<CCPropertyEditListener> editEvents(){
-		return _myEditEvents;
 	}
 	
 	public void path(Path thePath){
@@ -182,12 +177,18 @@ public abstract class CCPropertyHandle<Type>{
 		}
 	}
 	
+	private boolean _myIsInEdit = false;
+	
+	public boolean isInEdit(){
+		return _myIsInEdit;
+	}
+	
 	public void beginEdit(){
-		_myEditEvents.proxy().beginEdit(this);
+		_myIsInEdit = true;
 	}
 	
 	public void endEdit(){
-		_myEditEvents.proxy().endEdit(this);
+		_myIsInEdit = false;
 	}
 	
 	public CCDataObject data(){
@@ -212,5 +213,10 @@ public abstract class CCPropertyHandle<Type>{
 
 	public boolean hasSubPreset() {
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return name();
 	}
 }

@@ -16,6 +16,7 @@ import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.control.code.CCRuntimeCompilable;
+import cc.creativecomputing.control.code.CCShaderFile;
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
@@ -110,10 +111,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			@Override
 			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {return new CCRealtimeCompileHandle(theParent, theMember);}
 		});
-		creatorMap.put(CCShaderObject.class, new CCHandleCreator(){
+		creatorMap.put(CCShaderFile.class, new CCHandleCreator(){
 			@Override
 			public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember) {
-				return new CCShaderCompileHandle(theParent, theMember);}
+				return new CCShaderFileHandle(theParent, theMember);}
 		});
 	}
 	
