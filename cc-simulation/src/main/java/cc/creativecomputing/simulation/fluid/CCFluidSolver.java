@@ -5,7 +5,7 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.events.CCMouseSimpleInfo;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
-import cc.creativecomputing.graphics.shader.CCGLShaderNoise;
+import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCGLSwapBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
@@ -151,7 +151,7 @@ public class CCFluidSolver {
 		_myNoiseFieldProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "noisefield.fs"));
 		_myBuoyancyProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "buoyancy.fs"));
 		
-		_myRandomTexture = new CCTexture2D(CCGLShaderNoise.randomData);
+		_myRandomTexture = new CCTexture2D(CCGLShaderUtil.randomData);
 		_myRandomTexture.textureFilter(CCTextureFilter.LINEAR);
 		_myRandomTexture.wrap(CCTextureWrap.REPEAT);
 		

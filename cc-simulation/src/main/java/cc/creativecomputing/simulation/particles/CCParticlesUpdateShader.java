@@ -18,7 +18,7 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLShader;
-import cc.creativecomputing.graphics.shader.CCGLShaderNoise;
+import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.shader.CCShaderSource;
@@ -98,7 +98,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 			
 			myIndex++;
 		}
-		shaderSource.setDefine("noise", CCGLShaderNoise.source);
+		shaderSource.setDefine("noise", CCGLShaderUtil.source);
 		shaderSource.setDefine("forces", myForcesBuffer.toString());
 		shaderSource.setApply("forces", myForcesApplyBuffer.toString());
 		
@@ -120,7 +120,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		init(null, null, shaderSource.source());
 		
 		
-		_myRandomTexture = new CCTexture2D(CCGLShaderNoise.randomData);
+		_myRandomTexture = new CCTexture2D(CCGLShaderUtil.randomData);
 		_myRandomTexture.textureFilter(CCTextureFilter.LINEAR);
 		_myRandomTexture.wrap(CCTextureWrap.REPEAT);
 		
@@ -134,11 +134,11 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		_myVelocityTextureParameter = "velocityTexture";
 		_myColorTextureParameter = "colorTexture";
 		_myStaticPositionTextureParameter = "staticPositions";
-		_myNoiseTextureParameter = CCGLShaderNoise.textureUniform;
+		_myNoiseTextureParameter = CCGLShaderUtil.textureUniform;
 		_myStaticPositionBlendParameter = "staticPositionBlend";
 		_myDeltaTimeParameter = "deltaTime";
 		
-		setTextureUniform(CCGLShaderNoise.textureUniform, _myRandomTexture);
+		setTextureUniform(CCGLShaderUtil.textureUniform, _myRandomTexture);
 		setTextureUniform(_myEnvelopeTextureParameter, _myEvelopeData.attachment(0));
 	}
 	
