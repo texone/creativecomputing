@@ -23,50 +23,203 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram.CCShaderObjectType;
+import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMath;
 
 public class CCGLShader extends CCShaderObjectInterface{
 	
 	private static String[] KEYWORDS = new String[]{
-			//Compatibility Profile Vertex Shader Built-In Inputs
-			"gl_Color",
-			"gl_SecondaryColor",
-			"in vec3 gl_Normal",
-			"gl_Vertex",
-			"gl_MultiTexCoord0",
-			"gl_MultiTexCoord1",
-			"gl_MultiTexCoord2",
-			"gl_MultiTexCoord3",
-			"gl_MultiTexCoord4",
-			"gl_MultiTexCoord5",
-			"gl_MultiTexCoord6",
-			"gl_MultiTexCoord7",
-			"gl_FogCoord;",
 			
-			//Built-In Constants
-			"gl_MaxVertexAttribs",
-			"gl_MaxVertexUniformComponents",
-			"gl_MaxVaryingFloats" + 
-			"gl_MaxVaryingComponents" + 
-			"gl_MaxVertexOutputComponents",
-			"gl_MaxGeometryInputComponents",
-			"gl_MaxGeometryOutputComponents",
-			"gl_MaxFragmentInputComponents",
-			"gl_MaxVertexTextureImageUnits",
-			"gl_MaxCombinedTextureImageUnits",
-			"gl_MaxTextureImageUnits",
-			"gl_MaxFragmentUniformComponents",
-			"gl_MaxDrawBuffers",
-			"gl_MaxClipDistances",
-			"gl_MaxGeometryTextureImageUnits",
-			"gl_MaxGeometryOutputVertices",
-			"gl_MaxGeometryTotalOutputComponents",
-			"gl_MaxGeometryUniformComponents",
-			"gl_MaxGeometryVaryingComponents",
-			"gl_MaxTextureUnits",
-			"gl_MaxTextureCoords",
-			"gl_MaxClipPlane;"
+		//Preprocessor
+		"#define", 
+		"#undef", 
+		"#if", 
+		"#ifdef", 
+		"#ifndef", 
+		"#else", 
+		"#elif", 
+		"#endif", 
+		"#error", 
+		"#pragma", 
+		"#extension", 
+		"#version", 
+		"#line",
+		
+		// basic types
+		"void",
+		"bool",
+		"int",
+		"uint",
+		"float",
+		"vec2",
+		"vec3",
+		"vec4",
+		"bec2",
+		"bec3",
+		"bec4",
+		"iec2",
+		"iec3",
+		"iec4",
+		"uvec2",
+		"uvec3",
+		"uvec4",
+		"mat2",
+		"mat3",
+		"mat4",
+		"mat2x2",
+		"mat2x3",
+		"mat2x4",
+		"mat3x2",
+		"mat3x3",
+		"mat3x4",
+		"mat4x2",
+		"mat4x3",
+		"mat4x4",
+		
+		//samplertypes
+		"sampler1D",
+		"sampler2D",
+		"sampler3D",
+		"samplerCube",
+		"sampler2DRect",
+		"sampler1DShadow",
+		"sampler2DShadow",
+		"sampler2DRectShadow",
+		"sampler1DArray",
+		"sampler2DArray",
+		"sampler1DShadow",
+		"sampler2DShadow",
+		"samplerBuffer",
+		"sampler2DMS",
+		
+		//Build in Variables
+		"gl_FragCoord",
+		"gl_FrontFacing",
+		"gl_ClipDistance[]",
+		"gl_FragColor", 
+		"gl_FragData[]", 
+		"gl_FragDepth",
+		"gl_PointCoord",
+		"gl_PrimitiveID",
+		
+			
+		//Compatibility Profile Vertex Shader Built-In Inputs
+		"gl_Color",
+		"gl_SecondaryColor",
+		"gl_Normal",
+		"gl_Vertex",
+		"gl_MultiTexCoord0",
+		"gl_MultiTexCoord1",
+		"gl_MultiTexCoord2",
+		"gl_MultiTexCoord3",
+		"gl_MultiTexCoord4",
+		"gl_MultiTexCoord5",
+		"gl_MultiTexCoord6",
+		"gl_MultiTexCoord7",
+		"gl_FogCoord;",
+			
+		//Built-In Constants
+		"gl_MaxVertexAttribs",
+		"gl_MaxVertexUniformComponents",
+		"gl_MaxVaryingFloats" + 
+		"gl_MaxVaryingComponents" + 
+		"gl_MaxVertexOutputComponents",
+		"gl_MaxGeometryInputComponents",
+		"gl_MaxGeometryOutputComponents",
+		"gl_MaxFragmentInputComponents",
+		"gl_MaxVertexTextureImageUnits",
+		"gl_MaxCombinedTextureImageUnits",
+		"gl_MaxTextureImageUnits",
+		"gl_MaxFragmentUniformComponents",
+		"gl_MaxDrawBuffers",
+		"gl_MaxClipDistances",
+		"gl_MaxGeometryTextureImageUnits",
+		"gl_MaxGeometryOutputVertices",
+		"gl_MaxGeometryTotalOutputComponents",
+		"gl_MaxGeometryUniformComponents",
+		"gl_MaxGeometryVaryingComponents",
+		"gl_MaxTextureUnits",
+		"gl_MaxTextureCoords",
+		"gl_MaxClipPlane",
+		
+		//Profile State
+		"gl_ModelViewMatrix",
+		"gl_ProjectionMatrix",
+		"gl_ModelViewProjectionMatrix",
+		"gl_TextureMatrix[]",
+		"gl_NormalMatrix",
+		"gl_ModelViewMatrixInverse",
+		"gl_ProjectionMatrixInverse",
+		"gl_ModelViewProjectionMatrixInverse",
+		"gl_TextureMatrixInverse[]",
+		"gl_ModelViewMatrixTranspose",
+		"gl_ProjectionMatrixTranspose",
+		"gl_ModelViewProjectionMatrixTranspose",
+		"gl_TextureMatrixTranspose[]",
+		"gl_ModelViewMatrixInverseTranspose",
+		"gl_ProjectionMatrixInverseTranspose",
+		"gl_ModelViewProjectionMatrixInverseTranspose",
+		"gl_TextureMatrixInverseTranspose[]",
+		"gl_NormalScale",
+		"gl_ClipPlane",
+		
+		//per vertex
+		"gl_FrontColor",
+		"gl_BackColor",
+		"gl_FrontSecondaryColor",
+		"gl_BackSecondaryColor",
+		"gl_TexCoord[]",
+		"gl_FogFragCoord",
+		"gl_Color",
+		"gl_SecondaryColor",
+		
+		// texture functions
+		"textureSize",
+		"texture",
+		"textureProj",
+		"textureLod",
+		"textureOffset",
+		"texelFetch",
+		"texelFetchOffset",
+		"textureProjOffset",
+		"textureLodOffset",
+		"textureProjLod",
+		"textureProjLodOffset",
+		"textureGrad",
+		"textureGradOffset",
+		"textureProjGrad",
+		"textureProjGradOffset",
+		
+		"texture1D",
+		"texture1DProj",
+		"texture1DLod",
+		"texture1DProjLod",
+		
+		"texture2D",
+		"texture2DProj",
+		"texture2DLod",
+		"texture2DProjLod",
+		
+		"texture3D",
+		"texture3DProj",
+		"texture3DLod",
+		"texture3DProjLod",
+
+		"textureCube",
+		"textureCubeLod",
+
+		"shadow1D",
+		"shadow1DProj",
+		"shadow1DLod",
+		"shadow1DProjLod",
+
+		"shadow2D",
+		"shadow2DProj",
+		"shadow2DLod",
+		"shadow2DProjLod"
 	};
 	
 	public static CCShaderSource buildSourceObject(final Path...thePaths) {
@@ -103,8 +256,11 @@ public class CCGLShader extends CCShaderObjectInterface{
 		_myShaderID = (int)gl.glCreateShader(_myType.glID);
 		
 		_myCode = new CCShaderObject(this, theFiles);
-		
-		loadShader(_myCode);
+		try{
+			loadShader(_myCode);
+		}catch(Exception e){
+			
+		}
 	}
 	
 	CCGLShader(CCShaderObjectType theType, String...theSource){
@@ -282,7 +438,6 @@ public class CCGLShader extends CCShaderObjectInterface{
 	private boolean loadShader(boolean theThrowException, String...theSources){
 		Map<String,CCShaderUniform> myUniforms = new HashMap<>();
 		_myUniformHandles.children().clear();
-		_myUniforms.clear();
 		
 		String[] myCleanedSources = new String[theSources.length];
 		int mySourceID = 0;
@@ -414,11 +569,6 @@ public class CCGLShader extends CCShaderObjectInterface{
 	
 	@SuppressWarnings("unchecked")
 	private void readProperty(String thePropertyLine, String theUniformLine, Map<String,CCShaderUniform> theUniforms){
-		CCLog.info(_myUniforms.size());
-		
-		for(String myKey:_myUniforms.keySet()){
-			CCLog.info(myKey);
-		}
 		try{
 			String myName = null;
 			double myMin = -1;
@@ -465,16 +615,14 @@ public class CCGLShader extends CCShaderObjectInterface{
 			String myType = myUniformParts[1];
 			String myUniformName = myUniformParts[2].replace(";", "");
 			String myKey = myType + ":" + myUniformName + ":" + myName;
-			CCLog.info("checks:" + myKey);
 			if(_myUniforms.containsKey(myKey)){
-				CCLog.info("contains:" + myKey);
 				theUniforms.put(myKey, _myUniforms.get(myKey));
 				for(CCNumberPropertyHandle<Double> myUniform:_myUniforms.get(myKey)._myProperties){
+					myUniform.minMax(myMin, myMax);
 					_myUniformHandles.children().put(myUniform.name(), myUniform);
 				}
 				return;
 			}
-			CCLog.info(myType, myName, myMin, myMax);
 			switch(myType){
 			case "float":
 				theUniforms.put(
@@ -519,7 +667,6 @@ public class CCGLShader extends CCShaderObjectInterface{
 				);
 				break;
 			}
-			CCLog.info("puts:" + myKey);
 		}catch(NumberFormatException nf){
 			
 		}catch(Exception e){

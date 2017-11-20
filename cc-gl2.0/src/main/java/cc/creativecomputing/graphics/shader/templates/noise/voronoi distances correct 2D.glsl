@@ -106,23 +106,6 @@ vec3 octavedNoise(in vec2 s){
 	if(myAmp > 0.0){
 		myResult /= myAmp;
 	}
- 
+	
 	return myResult;
-}
-
-@CCProperty(name = "x", min = 0, max = 1)
-uniform float x;
-@CCProperty(name = "y", min = 0, max = 1)
-uniform float y;
-@CCProperty(name = "z", min = 0, max = 1)
-uniform float z;
-@CCProperty(name = "w", min = 0, max = 1)
-uniform float w;
-
-void main(){
-	vec3 noise = octavedNoise(gl_FragCoord.xy ); 
-	float b = noise.x * x + noise.y * y + (1. - noise.x) * z + (1. - noise.y) * w;   
-	b /= x + y + z + w;  
-	b *= 2.;
-	gl_FragColor = vec4(b,b,b ,1); 
 }

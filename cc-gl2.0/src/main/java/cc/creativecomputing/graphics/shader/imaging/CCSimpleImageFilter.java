@@ -3,6 +3,7 @@ package cc.creativecomputing.graphics.shader.imaging;
 import java.nio.file.Path;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
@@ -19,6 +20,7 @@ public class CCSimpleImageFilter extends CCImageFilter{
 	public CCSimpleImageFilter(int theWidth, int theHeight, Path theFragmentShader) {
 		super();
 		_myOutput = new CCShaderBuffer(theWidth, theHeight, CCTextureTarget.TEXTURE_2D);
+		CCLog.info(theFragmentShader);
 		_myShader = new CCGLProgram(null, theFragmentShader);
 	}
 
@@ -29,9 +31,24 @@ public class CCSimpleImageFilter extends CCImageFilter{
 
 	@Override
 	public void display(CCGraphics g) {
+		boolean myUseTexture = false;
+		for(int i = 0; i < _myInputChannel.length;i++){
+			if(_myInputChannel[i] != null){
+				g.texture(i, _myInputChannel[i]);
+				myUseTexture = true;
+			}
+		}
 		_myShader.start();
+		_myShader.uniform2f("iResolution", _myOutput.width(), _myOutput.height());
+		for(int i = 0; i < _myInputChannel.length;i++){
+			if(_myInputChannel[i] != null){
+				_myShader.uniform1i("channel"+i, i);
+			}
+		}
 		_myOutput.draw(g);
 		_myShader.end();
+		
+		if(myUseTexture)g.noTexture();
 	}
 
 }

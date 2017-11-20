@@ -1,10 +1,13 @@
 package cc.creativecomputing.graphics.shader;
 
+import cc.creativecomputing.graphics.texture.CCTexture2D;
+import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
+import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 
-public class CCGLShaderNoise {
+public class CCGLShaderUtil {
 
 	public static CCImage randomData;
 	
@@ -31,6 +34,17 @@ public class CCGLShaderNoise {
 				randomData.setPixel(x, y, myBaseColorMap[x][y]);
 			}
 		}
+	}
+	
+	private static CCTexture2D randomTexture;
+	
+	public static CCTexture2D randomTexture(){
+		if(randomTexture == null){
+			randomTexture = new CCTexture2D(randomData);
+			randomTexture.textureFilter(CCTextureFilter.LINEAR);
+			randomTexture.wrap(CCTextureWrap.REPEAT);
+		}
+		return randomTexture;
 	}
 	
 	public static String textureUniform = "randomTexture";
