@@ -91,3 +91,7 @@ void main(){
 	
 	gl_FragColor = color;//vec4(normal,1.0);//bright;//vec4(normal,1.0);//pow(color,vec4(3., 2.0, 2.0, 1.0)); //vec4(normal * 0.5 + 0.5,1.0); // 
 }
+
+
+
+// bla 2

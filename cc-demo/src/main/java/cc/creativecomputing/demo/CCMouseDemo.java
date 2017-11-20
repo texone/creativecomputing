@@ -1,8 +1,7 @@
 package cc.creativecomputing.demo;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.gl.app.events.CCMouseAdapter;
-import cc.creativecomputing.gl.app.events.CCMouseEvent;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
@@ -15,12 +14,14 @@ public class CCMouseDemo extends CCGL2Adapter{
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
-		mouseMotionListener().add(new CCMouseAdapter() {
-			@Override
-			public void mouseMoved(CCMouseEvent theMouseEvent) {
-				_myMouseX = theMouseEvent.x();
-				_myMouseY = theMouseEvent.y();
-			}
+		
+		mousePressed().add(theEvent -> {
+			CCLog.info(theEvent.button());
+		});
+		
+		mouseMoved().add(theEvent -> {
+			_myMouseX = theEvent.x();
+			_myMouseY = theEvent.y();
 		});
 	}
 	

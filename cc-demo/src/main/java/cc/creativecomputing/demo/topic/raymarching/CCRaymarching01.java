@@ -7,16 +7,17 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
+import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 
-public class CCShaderNoise extends CCGL2Adapter {
+public class CCRaymarching01 extends CCGL2Adapter {
 
-	@CCProperty(name = "noise")
+	@CCProperty(name = "raymarch")
 	private CCGLProgram _myProgram;
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "shadernoise.fs"));
+		_myProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "raymarch.glsl"));
 	}
 
 	@Override
@@ -27,9 +28,12 @@ public class CCShaderNoise extends CCGL2Adapter {
 	public void display(CCGraphics g) {
 		g.ortho();
 		g.clear();
+		
+		g.texture(0, CCGLShaderUtil.randomTexture());
 		_myProgram.start();
 		_myProgram.uniform2f("iResolution", g.width(), g.height());
 		_myProgram.uniform1f("iTime", animator().time());
+		_myProgram.uniform1i("randomTexture", 0);
 		g.beginShape(CCDrawMode.QUADS);
 		g.vertex( g.width(),  g.height());
 		g.vertex(0,  g.height());
@@ -45,7 +49,7 @@ public class CCShaderNoise extends CCGL2Adapter {
 
 	public static void main(String[] args) {
 
-		CCShaderNoise demo = new CCShaderNoise();
+		CCRaymarching01 demo = new CCRaymarching01();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1680, 600);

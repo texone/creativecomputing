@@ -3,7 +3,6 @@ package cc.creativecomputing.demo.topic.simulation.reactivediffusion;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
