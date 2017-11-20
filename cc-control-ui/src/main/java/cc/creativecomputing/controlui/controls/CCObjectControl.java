@@ -219,7 +219,6 @@ public class CCObjectControl extends JPanel implements CCControl{
 		_myControlComponent.removeAll();
 	
 		for(CCPropertyHandle<?> myPropertyHandle:_myProperty.children().values()){
-			CCLog.info(myPropertyHandle.name());
 			if(theHideUnchanged && !myPropertyHandle.isChanged())continue;
 			
 			Class<?> myClass = myPropertyHandle.type();
