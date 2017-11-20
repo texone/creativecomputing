@@ -37,16 +37,16 @@ public class CCShaderFile {
 	}
 	
 	public void save(){
-		Path myFixedPath = Paths.get("");
+		Path myFixedPath = Paths.get("/");
 		
 		boolean myDoResolve = false;
 		for(Path myName:_myFile){
+			if(myName.toString().equals("target"))continue;
 			if(myName.toString().equals("classes")){
 				myFixedPath = myFixedPath.resolve("src/main/java");
-				myDoResolve = true;
 				continue;
 			}
-			if(myDoResolve)myFixedPath = myFixedPath.resolve(myName);
+			myFixedPath = myFixedPath.resolve(myName);
 			
 		}
 		CCLog.info(myFixedPath);
@@ -54,21 +54,21 @@ public class CCShaderFile {
 	}
 	
 	public static void main(String[] args) {
-		Path myPath = Paths.get("/Users/christianr/dev/cc2/creativecomputing/cc-demo/target/classes/cc/creativecomputing/demo/topic/simulation/reactivediffusion/lighting.glsl");
-		Path myFixedPath = Paths.get("");
-		boolean myDoResolve = false;
+		Path myPath = CCNIOUtil.classPath(CCShaderFile.class, "");
+		Path myFixedPath = Paths.get("/");
 		for(Path myName:myPath){
-			if(myName.toString().equals("classes")){
+			if(myName.toString().equals("target"))continue;
+			if(myName.toString().contains("classes")){
 				myFixedPath = myFixedPath.resolve("src/main/java");
-				myDoResolve = true;
 				continue;
 			}
-			if(myDoResolve)myFixedPath = myFixedPath.resolve(myName);
+			myFixedPath = myFixedPath.resolve(myName);
 			
 		}
 		
 		CCLog.info(myPath);
 		CCLog.info(myFixedPath);
-		
+
+		CCNIOUtil.saveString(myFixedPath.resolve("bla.txt"), "bla");
 	}
 }
