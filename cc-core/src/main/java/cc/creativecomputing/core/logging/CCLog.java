@@ -13,6 +13,7 @@ package cc.creativecomputing.core.logging;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -387,10 +388,23 @@ public class CCLog {
 	 * @param theMessage the message to be logged
 	 */
 	public static void info(Object theMessage) {
+
 		if (theMessage == null) {
 			log(Level.INFO, "null");
 			return;
 		} 
+		
+		if(theMessage.getClass().isArray()){
+			StringBuffer myBuffer = new StringBuffer();
+			for(int i = 0; i < Array.getLength(theMessage);i++){
+				myBuffer.append(Array.get(theMessage, i));
+				myBuffer.append(" : ");
+			}
+			myBuffer.delete(myBuffer.length() - 3, myBuffer.length());
+
+			log(Level.INFO, myBuffer.toString());
+			return;
+		}
 		log(Level.INFO, theMessage.toString());
 	}
 }
