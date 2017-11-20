@@ -353,7 +353,10 @@ public class CCLog {
 	public static void info(Object...theObjects) {
 		StringBuffer myMessage = new StringBuffer();
 		for(Object myObject:theObjects) {
-			if(myObject == null)continue;
+			if(myObject == null){
+				myMessage.append("null : ");
+				continue;
+			}
 			if(myObject.getClass().isArray()){
 				for(int i = 0; i < Array.getLength(myObject);i++) {
 					myMessage.append(Array.get(myObject, i));
@@ -364,7 +367,7 @@ public class CCLog {
 				myMessage.append(" : ");
 			}
 		}
-		myMessage.delete(myMessage.length()-3, myMessage.length());
+		if(myMessage.length() > 3)myMessage.delete(myMessage.length()-3, myMessage.length());
 		log(Level.INFO, myMessage.toString());
 	}
 
