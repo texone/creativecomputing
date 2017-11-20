@@ -256,10 +256,10 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderFile, CCShade
 			}
 			String myExtension = CCNIOUtil.fileExtension(myPath);
 			if(myExtension != null){
-				JMenuItem myItem = new JMenuItem(myPath.getFileName().toString());
+				JMenuItem myItem = new JMenuItem(myPath.getFileName().toString().replace(".glsl", ""));
 				myItem.addActionListener(e -> {
 					int myPosition = _myTextArea.getCaretPosition();
-					_myTextArea.insert(_myHandle.value().object().templateSource(myPath) + "\\n", myPosition);
+					_myTextArea.insert(_myHandle.value().object().templateSource(myPath) + "\\\\n", myPosition);
 				});
 				myFolder.add(myItem);
 			}
