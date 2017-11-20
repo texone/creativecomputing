@@ -49,15 +49,19 @@ public class CCPNGFormat extends CCStreamBasedTextureFormat{
 		switch(myInfo.channels) {
 		case 1:
 			myImage.pixelFormat(CCPixelFormat.LUMINANCE);
+			myImage.internalFormat(CCPixelInternalFormat.LUMINANCE);
 			break;
 		case 2:
 			myImage.pixelFormat(CCPixelFormat.LUMINANCE_ALPHA);
+			myImage.internalFormat(CCPixelInternalFormat.LUMINANCE_ALPHA);
 			break;
 		case 3:
 			myImage.pixelFormat(CCPixelFormat.RGB);
+			myImage.internalFormat(CCPixelInternalFormat.RGB);
 			break;
 		case 4:
 			myImage.pixelFormat(CCPixelFormat.RGBA);
+			myImage.internalFormat(CCPixelInternalFormat.RGBA);
 			break;
 		}
 		
