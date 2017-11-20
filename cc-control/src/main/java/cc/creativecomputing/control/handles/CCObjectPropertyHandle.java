@@ -22,6 +22,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
 import cc.creativecomputing.core.CCSelectable;
 import cc.creativecomputing.core.CCSelectionListener;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
@@ -149,9 +150,13 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		_mySettingsPath = theSettingsPath;
 		_myRootObject = theObject;
 		_myChildHandles = link(theObject);
-		_myPresetPath = createPresetPath();
-		
 		_myIsSelectable = CCReflectionUtil.implementsInterface(theObject.getClass(), CCSelectable.class);
+		_myPresetPath = createPresetPath();
+	}
+	
+	public CCObjectPropertyHandle(CCMember<CCProperty> theMember){
+		super(null, theMember);
+		theMember.value(this);
 	}
 	
 	public boolean isSelectable(){
@@ -166,11 +171,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		if( _myMember != null &&  _myMember.value() != null && _myMember.value() instanceof CCSelectable){
 			((CCSelectable)_myMember.value()).addListener(theListener);
 		}
-	}
-	
-	public CCObjectPropertyHandle(CCMember<CCProperty> theMember){
-		super(null, theMember);
-		theMember.value(this);
 	}
 	
 	public CCPropertyHandle<?> property(Path thePath, int theStart){
@@ -268,16 +268,26 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	public static Path dataPath = CCNIOUtil.dataPath("");
 	
 	private Path createPresetPath(){
-		Path myPresetPath = dataPath.resolve(_mySettingsPath);
-			
-		String[] myTypeParts = type() == null ? new String[]{name()} : type().getName().split("\\.");
-		for(String myPart:myTypeParts){
-			myPresetPath = myPresetPath.resolve(Paths.get(myPart));
+		if(type() == null || _myMember == null){
+			Path myPresetPath = dataPath.resolve(_mySettingsPath);
+			myPresetPath = myPresetPath.resolve(name());
+			return myPresetPath;
+		}else if(_myMember.type() ==  CCObjectPropertyHandle.class){
+			Path myPresetPath = _myParent.presetPath();
+			myPresetPath = myPresetPath.resolve(name());
+			return myPresetPath;
+		}else{
+			Path myPresetPath = dataPath.resolve(_mySettingsPath);
+			for(String myPart:type().getName().split("\\.")){
+				myPresetPath = myPresetPath.resolve(Paths.get(myPart));
+			}
+			return myPresetPath;
 		}
-		return myPresetPath;
+		
 	}
 	
 	public Path presetPath(){
+		if(_myPresetPath == null)_myPresetPath = createPresetPath();
 		return _myPresetPath;
 	}
 	
@@ -454,7 +464,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	}
 	
 	public void savePreset(String thePreset, CCPresetHandling theHandling) {
+		CCLog.info(presetPath(), thePreset);
+		
 		Path myPresetPath = presetPath().resolve(thePreset + ".json");
+		CCLog.info("add preset", thePreset, myPresetPath);
 		CCDataObject myResult = new CCDataObject();
 		myResult.put("value", myResult);
 		CCDataIO.saveDataObject(presetData(theHandling), myPresetPath, CCDataFormats.JSON);
@@ -563,6 +576,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		List<String> myResult = new ArrayList<>();
 		CCNIOUtil.createDirectories(presetPath());
 		for(Path myPath:CCNIOUtil.list(presetPath(), "json")){
+			CCLog.info(myPath);
 			String myPresetString = CCNIOUtil.fileName(myPath.getFileName().toString());
 			myResult.add(myPresetString);
 		}
