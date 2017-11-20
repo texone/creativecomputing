@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -159,7 +160,10 @@ public class CCNIOUtil {
 		
 		try {
 			Files.createDirectories(thePath, theAttributes);
-		} catch (IOException e) {
+		} catch(FileAlreadyExistsException e){
+			
+		}catch (IOException e) {
+		
 			throw new RuntimeException(e);
 		}
 	}
@@ -400,7 +404,6 @@ public class CCNIOUtil {
 	}
 
 	static public List<Path> listImplementation(Path theFolder, final DirectoryStream.Filter<Path> theFilter, boolean theIsRecursive) {
-
 		if (!exists(theFolder)) {
 			theFolder = dataPath(theFolder.toString());
 		}
