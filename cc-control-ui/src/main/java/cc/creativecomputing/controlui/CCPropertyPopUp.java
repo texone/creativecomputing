@@ -18,17 +18,10 @@ import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
-import cc.creativecomputing.math.CCColor;
 
 public class CCPropertyPopUp extends JPopupMenu {
 	
 	private static CCDataObject clipboard = null;
-	
-
-	
-	
-	
-	
 	
 	/**
 	 * 
