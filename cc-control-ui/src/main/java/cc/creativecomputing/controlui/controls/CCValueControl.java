@@ -57,7 +57,6 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 	
 	public void addListener(CCPropertyListener<Type> theListener){
 		_myHandle.events().add(_myListener = theListener);
-		CCLog.info(_myHandle.events().size());
 	}
 	
 	public void dispose() {
