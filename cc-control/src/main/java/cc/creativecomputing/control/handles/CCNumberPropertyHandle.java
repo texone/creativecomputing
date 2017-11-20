@@ -19,27 +19,10 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	public CCNumberPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember, CCDoubleConverter<Type> theToType) {
 		super(theParent, theMember);
 		_myToType = theToType;
-		_myMin = theMember.annotation() == null ? _myToType.toType(-1) : _myToType.toType(theMember.annotation().min());
-		_myMax = theMember.annotation() == null ? _myToType.toType(-1) :_myToType.toType(theMember.annotation().max());
-		
-		boolean myIsNumberBox = _myMin.doubleValue() == -1 && _myMax.doubleValue() == -1;
-		boolean myUseParentMinMax = 
-			myIsNumberBox && 
-			theParent._myMember != null && 
-			theParent._myMember.annotation() != null && 
-			(
-				theParent._myMember.annotation().min() != -1 || 
-				theParent._myMember.annotation().max() != -1
-			);
-		
-		if(myUseParentMinMax){
-			_myMin = _myToType.toType(theParent._myMember.annotation().min());
-			_myMax = _myToType.toType(theParent._myMember.annotation().max());
-		}else if(myIsNumberBox){
-			_myMin = _myToType.min();
-			_myMax = _myToType.max();
-			_myIsNumberBox = true;
-		}
+		minMax(
+			_myMember.annotation() == null ? _myToType.toType(-1) : _myToType.toType(_myMember.annotation().min()), 
+			_myMember.annotation() == null ? _myToType.toType(-1) : _myToType.toType(_myMember.annotation().max())
+		);
 	}
 	
 	public int digits(){
@@ -49,6 +32,30 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	
 	public boolean isNumberBox(){
 		return _myIsNumberBox;
+	}
+	
+	public void minMax(Type theMin, Type theMax){
+		_myMin = theMin;
+		_myMax = theMax;
+		
+		boolean myIsNumberBox = _myMin.doubleValue() == -1 && _myMax.doubleValue() == -1;
+		boolean myUseParentMinMax = 
+			myIsNumberBox && 
+			_myParent._myMember != null && 
+			_myParent._myMember.annotation() != null && 
+			(
+				_myParent._myMember.annotation().min() != -1 || 
+				_myParent._myMember.annotation().max() != -1
+			);
+		
+		if(myUseParentMinMax){
+			_myMin = _myToType.toType(_myParent._myMember.annotation().min());
+			_myMax = _myToType.toType(_myParent._myMember.annotation().max());
+		}else if(myIsNumberBox){
+			_myMin = _myToType.min();
+			_myMax = _myToType.max();
+			_myIsNumberBox = true;
+		}
 	}
 	
 	public Type min(){
