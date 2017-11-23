@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class CCShaderSource {
+public class CCShaderSourceTemplate {
 	
 	private static class CCShaderSourceInsert{
 		private String _myInsert = "";
@@ -22,7 +22,7 @@ public class CCShaderSource {
 	
 	private List<Object> _myParts;
 
-	public CCShaderSource(){
+	public CCShaderSourceTemplate(){
 		_myParts = new ArrayList<>();
 		_mySourceDefineMap = new HashMap<>();
 		_mySourceApplyMap = new HashMap<>();
