@@ -11,9 +11,9 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.time.CCHistoryDataPoint;
+import cc.creativecomputing.math.time.CCTimed;
 
-public class CCHistoryRenderer<Type extends CCHistoryDataPoint>{
+public class CCHistoryRenderer<Type extends CCTimed>{
 
 	@CCProperty(name = "history size", min = 1, max = 500) int _cHistorySize = 1;
 	@CCProperty(name = "time based") boolean _cTimeBased = false;
@@ -51,11 +51,11 @@ public class CCHistoryRenderer<Type extends CCHistoryDataPoint>{
 		_cRanges.put(theKey, new CCAnalyzeRange(theMin, theMax));
 	}
 	
-	public static interface CCHistoryValue<Type extends CCHistoryDataPoint>{
+	public static interface CCHistoryValue<Type extends CCTimed>{
 		public abstract double value(Type theData);
 	}
 	
-	public static class CCHistoryValueSettings<Type extends CCHistoryDataPoint>{
+	public static class CCHistoryValueSettings<Type extends CCTimed>{
 		@CCProperty(name = "max") 
 		protected double _cMax = 0;
 		@CCProperty(name = "show") 

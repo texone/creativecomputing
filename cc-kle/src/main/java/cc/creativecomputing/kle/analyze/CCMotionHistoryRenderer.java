@@ -6,17 +6,17 @@ import java.util.List;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.time.CCMotionHistoryDataPoint;
+import cc.creativecomputing.math.time.CCTimedMotionData;
 
-public class CCMotionHistoryRenderer extends CCHistoryRenderer<CCMotionHistoryDataPoint>{
+public class CCMotionHistoryRenderer extends CCHistoryRenderer<CCTimedMotionData>{
 
-	public void draw3D(CCGraphics g, List<CCMotionHistoryDataPoint> theData, CCHistoryValueSettings<CCMotionHistoryDataPoint> theSettings){
+	public void draw3D(CCGraphics g, List<CCTimedMotionData> theData, CCHistoryValueSettings<CCTimedMotionData> theSettings){
 		if(!theSettings._cShow)return;
 		float mySize = CCMath.max(_cHistorySize, theData.size());
 		if(_cDrawValues){
 			g.beginShape(CCDrawMode.LINE_STRIP);
 			float i = 0; 
-			for(CCMotionHistoryDataPoint myData:new ArrayList<>(theData)){
+			for(CCTimedMotionData myData:new ArrayList<>(theData)){
 				g.color(
 					theSettings._cColor.r, 
 					theSettings._cColor.g, 
@@ -30,7 +30,7 @@ public class CCMotionHistoryRenderer extends CCHistoryRenderer<CCMotionHistoryDa
 		if(_cDrawViolations){
 			g.beginShape(CCDrawMode.POINTS);
 			float i = 0; 
-			for(CCMotionHistoryDataPoint myData:new ArrayList<>(theData)){
+			for(CCTimedMotionData myData:new ArrayList<>(theData)){
 				if(theSettings.isOverMax(myData)){
 					g.color(
 						theSettings._cColor.r, 
@@ -46,8 +46,8 @@ public class CCMotionHistoryRenderer extends CCHistoryRenderer<CCMotionHistoryDa
 		}
 	}
 	
-	public void draw3D(CCGraphics g, List<CCMotionHistoryDataPoint> theData){
-		for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+	public void draw3D(CCGraphics g, List<CCTimedMotionData> theData){
+		for(CCHistoryValueSettings<CCTimedMotionData> mySettings:_cValueSettings.values()){
 			draw3D(g, theData, mySettings);
 		}
 	}

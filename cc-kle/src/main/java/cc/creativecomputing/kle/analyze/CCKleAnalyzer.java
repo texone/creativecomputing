@@ -13,17 +13,17 @@ import cc.creativecomputing.kle.lights.CCLightChannel;
 import cc.creativecomputing.kle.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.math.time.CCMotionHistoryDataPoint;
+import cc.creativecomputing.math.time.CCTimedMotionData;
 import cc.creativecomputing.math.util.CCHistogram;
 
 public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 	
 	public class CCMotionDataAnalyzer{
-		protected final List<CCMotionHistoryDataPoint> data;
+		protected final List<CCTimedMotionData> data;
 		protected final CCKleEffectable _myElement;
 		
 		protected CCMotionDataAnalyzer(CCKleEffectable theElement){
-			data = new ArrayList<CCMotionHistoryDataPoint>();
+			data = new ArrayList<CCTimedMotionData>();
 			_myElement = theElement;
 		}
 		
@@ -37,15 +37,15 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 		
 		public void addData(CCVector3 thePosition, double theLength, double theDeltaTime){
 			if(data.size() == 0){
-				data.add(new CCMotionHistoryDataPoint(thePosition, theLength, 0, 0, 0, theDeltaTime));
+				data.add(new CCTimedMotionData(thePosition, theLength, 0, 0, 0, theDeltaTime));
 				return;
 			}
 			
-			CCMotionHistoryDataPoint myLastData = data.get(data.size() - 1);
+			CCTimedMotionData myLastData = data.get(data.size() - 1);
 			double myVelocity = (theLength - myLastData.length) / theDeltaTime;
 			double myAcceleration = (myVelocity - myLastData.velocity) / theDeltaTime;
 			double myJerk = (myAcceleration - myLastData.acceleration) / theDeltaTime;
-			CCMotionHistoryDataPoint myNewData = new CCMotionHistoryDataPoint(thePosition, theLength, myVelocity, myAcceleration, myJerk, theDeltaTime);
+			CCTimedMotionData myNewData = new CCTimedMotionData(thePosition, theLength, myVelocity, myAcceleration, myJerk, theDeltaTime);
 			
 			while(_myUseHistorySize && data.size() >= _cHistorySize){
 				data.remove(0);
@@ -73,7 +73,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 			g.color(0f, _cAlpha);
 			double mySize = CCMath.max(_cHistorySize, data.size());
 			g.beginShape(CCDrawMode.LINE_STRIP);
-			for(CCMotionHistoryDataPoint myData:data){
+			for(CCTimedMotionData myData:data){
 				g.vertex(CCMath.map(i, 0, mySize, -g.width() / 2, g.width() / 2),CCMath.map(myData.length,_myChannel.min(),_myChannel.max(),0,theHeight));
 				i++;
 			}
@@ -137,20 +137,20 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 			if(data.size() == 0){
 				switch(_myChannelType){
 				case MOTORS:
-					data.add(new CCMotionHistoryDataPoint(_myElement.motorSetup().position(), 0, 0, 0, 0, theDeltaTime));
+					data.add(new CCTimedMotionData(_myElement.motorSetup().position(), 0, 0, 0, 0, theDeltaTime));
 					break;
 				case LIGHTS:
-					data.add(new CCMotionHistoryDataPoint(new CCVector3(), 0, 0, 0, 0, theDeltaTime));
+					data.add(new CCTimedMotionData(new CCVector3(), 0, 0, 0, 0, theDeltaTime));
 					break;
 				}
 				return;
 			}
-			CCMotionHistoryDataPoint myLastData = data.get(data.size() - 1);
+			CCTimedMotionData myLastData = data.get(data.size() - 1);
 			
 			double myVelocity = (_myElement.motorSetup().position().distance(myLastData.position)) / theDeltaTime;
 			double myAcceleration = (myVelocity - myLastData.velocity) / theDeltaTime;
 			double myJerk = (myAcceleration - myLastData.acceleration) / theDeltaTime;
-			CCMotionHistoryDataPoint myNewData = new CCMotionHistoryDataPoint(_myElement.motorSetup().position(), 0, myVelocity, myAcceleration, myJerk, theDeltaTime);
+			CCTimedMotionData myNewData = new CCTimedMotionData(_myElement.motorSetup().position(), 0, myVelocity, myAcceleration, myJerk, theDeltaTime);
 			while(_myUseHistorySize && data.size() >= _cHistorySize){
 				data.remove(0);
 			}
@@ -271,7 +271,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 			
 			int myNumberOfElements = CCMath.min(_cNumberOfElements, CCMath.max(_myElementAnalyzers.size() - _cElement,0));
 			int textIndex = -1;
-			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+			for(CCHistoryValueSettings<CCTimedMotionData> mySettings:_cValueSettings.values()){
 				int i = 0;
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
@@ -322,7 +322,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 			textIndex = -1;
 			g.pushMatrix();
 			g.translate(0, 0);
-			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+			for(CCHistoryValueSettings<CCTimedMotionData> mySettings:_cValueSettings.values()){
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
 					if(_cAnalyzeChannels){
@@ -361,7 +361,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 			textIndex = -1;
 			g.pushMatrix();
 			g.translate(0, -g.height()/2);
-			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+			for(CCHistoryValueSettings<CCTimedMotionData> mySettings:_cValueSettings.values()){
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
 					if(_cAnalyzeChannels){
@@ -399,7 +399,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 
 			myNumberOfElements = CCMath.min(_cNumberOfElements, CCMath.max(_myElementAnalyzers.size() - _cElement,0));
 			
-			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+			for(CCHistoryValueSettings<CCTimedMotionData> mySettings:_cValueSettings.values()){
 				int i = 0;
 				for(int e = 0; e < myNumberOfElements;e++){
 					CCElementAnalyzer myAnalyzer = _myElementAnalyzers.get(e);
@@ -442,7 +442,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 			double myHeight = g.height() / _cValueSettings.size();
 			double myWidth = g.width() / _cHistogram.bands();
 			int i = 0;
-			for(CCHistoryValueSettings<CCMotionHistoryDataPoint> mySettings:_cValueSettings.values()){
+			for(CCHistoryValueSettings<CCTimedMotionData> mySettings:_cValueSettings.values()){
 				_cHistogram.reset();
 				
 				
@@ -452,7 +452,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 							if(_cHistogramFrame){
 								_cHistogram.add(CCMath.abs(mySettings.normedValue(myChannelAnalyzer.data.get(myChannelAnalyzer.data.size() - 1))));
 							}else{
-								for(CCMotionHistoryDataPoint myData:myChannelAnalyzer.data){
+								for(CCTimedMotionData myData:myChannelAnalyzer.data){
 									_cHistogram.add(CCMath.abs(mySettings.normedValue(myData)));
 								}
 							}
@@ -461,7 +461,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 						if(_cHistogramFrame){
 							_cHistogram.add(CCMath.abs(mySettings.normedValue(myAnalyzer.data.get(myAnalyzer.data.size() - 1))));
 						}else{
-							for(CCMotionHistoryDataPoint myData:myAnalyzer.data){
+							for(CCTimedMotionData myData:myAnalyzer.data){
 								_cHistogram.add(CCMath.abs(mySettings.normedValue(myData)));
 							}
 						}
