@@ -28,6 +28,7 @@ import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.control.code.CCRuntimeCompilable;
 import cc.creativecomputing.control.code.CCShaderFile;
+import cc.creativecomputing.control.code.CCShaderSource;
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCControlMatrixHandle;
@@ -43,7 +44,7 @@ import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.handles.CCRealtimeCompileHandle;
 import cc.creativecomputing.control.handles.CCRuntimeCompileHandle;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
-import cc.creativecomputing.control.handles.CCShaderFileHandle;
+import cc.creativecomputing.control.handles.CCShaderSourceHandle;
 import cc.creativecomputing.control.handles.CCSplineHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
@@ -256,8 +257,8 @@ public class CCObjectControl extends JPanel implements CCControl{
 				myControl = new CCPathControl((CCPathHandle)myPropertyHandle, _myInfoPanel);
 			}else  if(myClass == CCRealtimeCompile.class){
 				myControl = new CCRealtimeCompileControl((CCRealtimeCompileHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == CCShaderFile.class){
-				myControl = new CCShaderCompileControl((CCShaderFileHandle)myPropertyHandle, _myInfoPanel);
+			}else  if(myClass == CCShaderSource.class){
+				myControl = new CCShaderCompileControl((CCShaderSourceHandle)myPropertyHandle, _myInfoPanel);
 			}else if(CCReflectionUtil.implementsInterface(myClass, CCRuntimeCompilable.class)){
 				myControl = new CCRuntimeCompileControl((CCRuntimeCompileHandle)myPropertyHandle, _myInfoPanel);
 			}else{

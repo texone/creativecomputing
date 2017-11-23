@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
-import javax.swing.JToggleButton;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -40,16 +38,14 @@ import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.Parser;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import cc.creativecomputing.control.code.CCShaderFile;
-import cc.creativecomputing.control.code.CCShaderObject;
-import cc.creativecomputing.control.handles.CCShaderFileHandle;
+import cc.creativecomputing.control.code.CCShaderSource;
+import cc.creativecomputing.control.handles.CCShaderSourceHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.controls.CCValueControl;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 
-public class CCShaderCompileControl extends CCValueControl<CCShaderFile, CCShaderFileHandle>{
+public class CCShaderCompileControl extends CCValueControl<CCShaderSource, CCShaderSourceHandle>{
 	
 	private class CCRealtimeCompileParser implements Parser{
 
@@ -126,7 +122,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderFile, CCShade
 	
 	private boolean _myTriggerEvent = true;
 
-	public CCShaderCompileControl(CCShaderFileHandle theHandle, CCControlComponent theControlComponent){
+	public CCShaderCompileControl(CCShaderSourceHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		_myEditorFrame = new JFrame();
@@ -135,7 +131,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderFile, CCShade
 		_myTextArea = new RSyntaxTextArea(20, 60);
 		_myTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
 		_myTextArea.setCodeFoldingEnabled(true);
-		_myTextArea.setText(_myHandle.value().source());
+		_myTextArea.setText(_myHandle.value().sourceCode());
 		_myTextArea.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
@@ -175,6 +171,13 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderFile, CCShade
 		_myErrorArea.setPreferredSize(_myTextArea.getPreferredSize());
 		JScrollPane sp2 = new JScrollPane(_myErrorArea);
 		mySplitPane.setBottomComponent(sp2);
+		
+		_myHandle.value().object().onError().add(object -> {
+			_myErrorArea.setText(object.errorLog());
+		});
+		_myHandle.value().object().onCompile().add(object -> {
+			_myErrorArea.setText("");
+		});
 	      
 		_myTextArea.addKeyListener(new KeyAdapter() {
 			@Override
@@ -199,7 +202,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderFile, CCShade
 		
 		theHandle.events().add(theValue -> {
 			_myTriggerEvent = false;
-			_myTextArea.setText(((CCShaderFile)theValue).source());
+			_myTextArea.setText(((CCShaderSource)theValue).sourceCode());
 			_myTriggerEvent = true;
 
 		});
@@ -224,7 +227,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderFile, CCShade
         
         _myResetButton = new JButton("reset");
         _myResetButton.addActionListener(theE -> {
-        	_myTextArea.setText(_myHandle.value().source());
+        	_myTextArea.setText(_myHandle.value().sourceCode());
 		});
         CCUIStyler.styleButton(_myResetButton, 30, 13);
         _myContainer.add(_myResetButton);
@@ -232,11 +235,10 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderFile, CCShade
 	
 	private void saveText(){
 		if(!_myTriggerEvent)return;
-		_myHandle.value().source(_myTextArea.getText());
+		_myHandle.value().sourceCode(_myTextArea.getText());
 		if(_myHandle.value().object().saveInFile() && _myHandle.value().object().autoSave()){
 			_myHandle.value().save();
 		}
-		_myErrorArea.setText(_myHandle.value().errorLog());
 	}
 	
 	private void addTemplates(){
@@ -294,8 +296,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderFile, CCShade
 	}
 
 	@Override
-	public CCShaderFile value() {
-		// TODO Auto-generated method stub
+	public CCShaderSource value() {
 		return _myHandle.value();
 	}
 }

@@ -1,34 +1,34 @@
 package cc.creativecomputing.control.handles;
 
-import cc.creativecomputing.control.code.CCShaderFile;
+import cc.creativecomputing.control.code.CCShaderSource;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
 
-public class CCShaderFileHandle extends CCPropertyHandle<CCShaderFile>{
+public class CCShaderSourceHandle extends CCPropertyHandle<CCShaderSource>{
 	
-	protected CCShaderFileHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
+	protected CCShaderSourceHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
 	}
 	
 	@Override
 	public CCDataObject data() {
 		CCDataObject myResult = super.data();
-		CCShaderFile myShaderObject = value();
+		CCShaderSource myShaderObject = value();
 		if(!myShaderObject.object().saveInFile()){
-			myResult.put("source", myShaderObject.source());
+			myResult.put("source", myShaderObject.sourceCode());
 		}
 		return myResult;
 	}
 	
 	@Override
 	public void data(CCDataObject theData) {
-		CCShaderFile myShaderObject = value();
+		CCShaderSource myShaderObject = value();
 		if(!myShaderObject.object().saveInFile()){
 			if(theData.containsKey("source")){	
-				myShaderObject.source(theData.getString("source"));
+				myShaderObject.sourceCode(theData.getString("source"));
 			}else{
-				myShaderObject.source("");
+				myShaderObject.sourceCode("");
 			}
 		}
 		onChange();
