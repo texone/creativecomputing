@@ -6,6 +6,7 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -14,6 +15,8 @@ public class CCRaymarching01 extends CCGL2Adapter {
 
 	@CCProperty(name = "raymarch")
 	private CCGLProgram _myProgram;
+	@CCProperty(name = "screen capture")
+	private CCScreenCaptureController _cScreenCapture;
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {

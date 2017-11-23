@@ -68,6 +68,84 @@ float noise( in vec3 p){
                            dot( hash( i + vec3(1.0,1.0,1.0) ), f - vec3(1.0,1.0,1.0) ), u.x), u.y), u.z );
 }
 
+// The MIT License
+// Copyright © 2017 Inigo Quilez
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+vec3 hash3(in vec3 p) {
+    vec3 q = vec3(dot(p, vec3(127.1, 311.7, 189.2)),
+                  dot(p, vec3(269.5, 183.3, 324.7)),
+                  dot(p, vec3(419.2, 371.9, 128.5)));
+    return fract(sin(q) * 43758.5453);
+}
+
+@CCProperty(name = "u", min = 0, max = 1)
+uniform float u;
+
+@CCProperty(name = "v", min = 0, max = 1)
+uniform float v;
+
+float voronoise(in vec3 x) {
+    // adapted from IQ's 2d voronoise:
+    // http://www.iquilezles.org/www/articles/voronoise/voronoise.htm
+    vec3 p = floor(x);
+    vec3 f = fract(x);
+
+    float s = 1.0 + 31.0 * v;
+    float va = 0.0;
+    float wt = 0.0;
+    for (int k=-2; k<=1; k++)
+    for (int j=-2; j<=1; j++)
+    for (int i=-2; i<=1; i++) {
+        vec3 g = vec3(float(i), float(j), float(k));
+        vec3 o = hash3(p + g) * vec3(u,u,1.0);
+        vec3 r = g - f + o + 0.5;
+        float d = dot(r, r);
+        float w = pow(1.0 - smoothstep(0.0, 1.414, sqrt(d)), s);
+        va += o.z * w;
+        wt += w;
+     }
+     return (va / wt) * 2. -1.;
+}
+
+
+@CCProperty(name = "scale", min = 0, max = 1)
+uniform float scale;
+@CCProperty(name = "gain", min = 0, max = 1)
+uniform float gain;
+@CCProperty(name = "octaves", min = 1, max = 4)
+uniform float octaves;
+@CCProperty(name = "lacunarity", min = 0, max = 4)
+uniform float lacunarity;
+
+float octavedNoise(in vec3 s){ 
+	float myScale = scale;
+	float myFallOff = gain;
+	
+	int myOctaves = int(floor(octaves)); 
+	float myResult = 0.; 
+	float myAmp = 0.;
+	
+	for(int i = 0; i < myOctaves;i++){
+		float noiseVal = noise(s * myScale); 
+		myResult += noiseVal * myFallOff;
+		myAmp += myFallOff;
+		myFallOff *= gain;
+		myScale *= lacunarity;
+	}
+	float myBlend = octaves - float(myOctaves);
+	
+	myResult += noise(s * myScale) * myFallOff * myBlend;   
+	myAmp += myFallOff * myBlend;
+	
+	if(myAmp > 0.0){
+		myResult /= myAmp;
+	}
+	
+	return myResult;
+}
+
 @CCProperty(name = "x offset", min = 0, max = 10)
 uniform float xOffset;
 @CCProperty(name = "z offset", min = 0, max = 10)
@@ -83,10 +161,25 @@ float fbm( vec3 p )
     return f;
 }
 
+
 @CCProperty(name = "cylinder", min = 0, max = 1)
 uniform float cylinder;
 @CCProperty(name = "noise", min = 0, max = 1)
 uniform float noise;
+
+float objectSDF(vec3 samplePoint){
+	return cylinderSDF(samplePoint, vec3(0., 1.5,0.5)) * cylinder + fbm(samplePoint*vec3(1.0, 1., 1.) ) * noise; 
+} 
+ 
+float twist( vec3 p ) 
+{
+    float c = cos(0.5*p.x);
+    float s = sin(0.5*p.x);
+    mat2  m = mat2(c,-s,s,c);
+    return objectSDF(vec3(p.x,m*p.yz));
+}
+
+
 
 /**
  * Signed distance function describing the scene.
@@ -95,8 +188,8 @@ uniform float noise;
  * Sign indicates whether the point is inside or outside the surface,
  * negative indicating inside.
  */
-float sceneSDF(vec3 samplePoint) {    
-	return cylinderSDF(samplePoint, vec3(0., 0.,0.3)) * cylinder + fbm(samplePoint*vec3(1.0, 1., 1.)) * noise; 
+float sceneSDF(vec3 samplePoint) { 
+	return twist(samplePoint);    
 }
 
 /**
@@ -151,6 +244,84 @@ vec3 estimateNormal(vec3 p) {
 
 uniform vec2 iResolution; 
 
+/**
+ * Lighting contribution of a single point light source via Phong illumination.
+ * 
+ * The vec3 returned is the RGB color of the light's contribution.
+ *
+ * k_a: Ambient color
+ * k_d: Diffuse color
+ * k_s: Specular color
+ * alpha: Shininess coefficient
+ * p: position of point being lit
+ * eye: the position of the camera
+ * lightPos: the position of the light
+ * lightIntensity: color/intensity of the light
+ *
+ * See https://en.wikipedia.org/wiki/Phong_reflection_model#Description
+ */
+vec3 phongContribForLight(vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye,
+                          vec3 lightPos, vec3 lightIntensity) {
+    vec3 N = estimateNormal(p);
+    vec3 L = normalize(lightPos - p);
+    vec3 V = normalize(eye - p);
+    vec3 R = normalize(reflect(-L, N));
+    
+    float dotLN = dot(L, N);
+    float dotRV = dot(R, V);
+    
+    if (dotLN < 0.0) {
+        // Light not visible from this point on the surface
+        return vec3(0.0, 0.0, 0.0);
+    } 
+    
+    if (dotRV < 0.0) {
+        // Light reflection in opposite direction as viewer, apply only diffuse
+        // component
+        return lightIntensity * (k_d * dotLN);
+    }
+    return lightIntensity * (k_d * dotLN + k_s * pow(dotRV, alpha));
+}
+
+uniform float iTime;
+/**
+ * Lighting via Phong illumination.
+ * 
+ * The vec3 returned is the RGB color of that point after lighting is applied.
+ * k_a: Ambient color
+ * k_d: Diffuse color
+ * k_s: Specular color
+ * alpha: Shininess coefficient
+ * p: position of point being lit
+ * eye: the position of the camera
+ *
+ * See https://en.wikipedia.org/wiki/Phong_reflection_model#Description
+ */
+vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
+    const vec3 ambientLight = 0.5 * vec3(1.0, 1.0, 1.0);
+    vec3 color = ambientLight * k_a;
+    /*
+    vec3 light1Pos = vec3(4.0 * sin(iTime),
+                          2.0,
+                          4.0 * cos(iTime));
+    vec3 light1Intensity = vec3(0.4, 0.4, 0.4);
+    
+    color += phongContribForLight(k_d, k_s, alpha, p, eye,
+                                  light1Pos,
+                                  light1Intensity);
+    */
+    vec3 light2Pos = vec3(20.0 * sin(0.37 * iTime),
+                          20.0 * cos(0.37 * iTime),
+                          2.0);
+    vec3 light2Intensity = vec3(1.);
+    
+    color += phongContribForLight(k_d, k_s, alpha, p, eye,
+                                  light2Pos,
+                                  light2Intensity);    
+                                  
+    return color; 
+}
+
 void main(  ){
 	vec3 dir = rayDirection(45.0, iResolution.xy, gl_FragCoord.xy); 
 	vec3 eye = vec3(0.0, 0.0, 15.0);
@@ -164,6 +335,15 @@ void main(  ){
     
 	// The closest point on the surface to the eyepoint along the view ray
 	vec3 p = eye + dist * dir;
+	p += noise(p * 9. +vec3(xOffset, 0.0,zOffset)) * dir * 0.5; 
+	p += noise(p * 200. +vec3(xOffset, 0.0,zOffset)) * dir * 0.1; 
     
-	gl_FragColor = vec4(estimateNormal(p), 1.0);
+    vec3 K_a = vec3(0.0, 0.0, 0.0);
+    vec3 K_d = vec3(1.5, 0.9, 0.);
+    vec3 K_s = vec3(1.0, 1.0, 1.0); 
+    float shininess = 100.0;
+    
+    vec3 color = phongIllumination(K_a, K_d, K_s, shininess, p, eye);
+    
+	gl_FragColor = vec4(color, 1.0);
 }

@@ -12,7 +12,7 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.kle.elements.CCKleChannelType;
+import cc.creativecomputing.kle.CCKleChannelType;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 

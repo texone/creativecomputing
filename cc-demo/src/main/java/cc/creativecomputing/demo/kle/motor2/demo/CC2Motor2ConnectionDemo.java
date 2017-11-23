@@ -12,11 +12,15 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
-import cc.creativecomputing.kle.elements.CCSequenceElements;
-import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionCalculations;
-import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionSetup;
-import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
+import cc.creativecomputing.graphics.camera.CCCameraController;
+import cc.creativecomputing.kle.CCKleChannelType;
+import cc.creativecomputing.kle.CCKleEffectManager;
+import cc.creativecomputing.kle.CCKleEffectable;
+import cc.creativecomputing.kle.CCKleEffectableRenderer;
+import cc.creativecomputing.kle.CCKleEffectables;
+import cc.creativecomputing.kle.motors.CC2Motor2ConnectionCalculations;
+import cc.creativecomputing.kle.motors.CC2Motor2ConnectionSetup;
+import cc.creativecomputing.kle.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 
@@ -25,27 +29,43 @@ public class CC2Motor2ConnectionDemo extends CCGL2Adapter{
 	@CCProperty(name = "bounds")
 	private CC2Motor2ConnectionCalculations _cBounds = new CC2Motor2ConnectionCalculations();
 	
-	private CCSequenceElements _mySequenceElements;
+	private CCKleEffectables _mySequenceElements;
 	
-	private class CCMotorArea{
+	@CCProperty(name = "renderer")
+	private CCKleEffectableRenderer _myRenderer;
+	
+	@CCProperty(name = "camera controller")
+	private CCCameraController _cCameraController;
+	
+
+	@CCProperty(name = "effects")
+	private CCKleEffectManager _myAnimator;
+	
+	@Override
+	public void init(CCGraphics g, CCAnimator theAnimator) {
+		_mySequenceElements = new CCKleEffectables();
+		for(int i = 0; i < 20;i++){
+			List<CCMotorChannel> myMotorChannels = new ArrayList<>();
+			myMotorChannels.add(new CCMotorChannel(i * 2, new CCVector3(-200, 0, i * 20), new CCVector3(-100, 400, i * 20)));
+			myMotorChannels.add(new CCMotorChannel(i * 2 + 1, new CCVector3( 200, 0, i * 20), new CCVector3( 100, 400, i * 20)));
+			
+			
+			_mySequenceElements.add(CCKleEffectable.createMotorElement(i, myMotorChannels,_cBounds, new CCVector3(0, 500, i * 20), 100));
+		}
+		_cBounds.setElements(_mySequenceElements);
 		
+		_cCameraController = new CCCameraController(this, g, 100);
 		
+		_myRenderer = new CCKleEffectableRenderer(_mySequenceElements);
+		
+		_myAnimator = new CCKleEffectManager(_mySequenceElements, CCKleChannelType.MOTORS, "x", "y");
+		_myAnimator.put("offset animation", new CCOffsetEffect());
 	}
 	
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
-		_mySequenceElements = new CCSequenceElements();
-		for(int i = 0; i < 20;i++){
-			List<CCMotorChannel> myMotorChannels = new ArrayList<>();
-			CCMotorChannel myMotor0 = new CCMotorChannel(i * 2, new CCVector3(-200, 0, i * 20), new CCVector3(-200, 400, i * 20));
-			CCMotorChannel myMotor1 = new CCMotorChannel(i * 2 + 1, new CCVector3( 200, 0, i * 20), new CCVector3( 200, 400, i * 20));
-			myMotorChannels.add(myMotor0);
-			myMotorChannels.add(myMotor1);
-//			CC2Motor2ConnectionSetup mySetup = new CC2Motor2ConnectionSetup(myMotorChannels, _cBounds, 200);
-//			_mySequenceElements.add(new CCSequenceElement(i, mySetup));
-		}
-		_cBounds.setElements(_mySequenceElements);
+		
 	}
 	
 	@Override
@@ -56,16 +76,16 @@ public class CC2Motor2ConnectionDemo extends CCGL2Adapter{
 	
 	@Override
 	public void update(CCAnimator theAnimator) {
+		_cBounds.update(theAnimator);
+		_myAnimator.update(theAnimator);
 	}
 	
 	@Override
 	public void display(CCGraphics g) {
 		g.clear();
 		
-		for(CCSequenceElement myElement:_mySequenceElements){
-			myElement.motorSetup().drawRopes(g);
-			myElement.motorSetup().drawElementBounds(g);
-		}
+		_cCameraController.camera().draw(g);
+		_myRenderer.draw(g);
 	}
 	
 	public static void main(String[] args) {

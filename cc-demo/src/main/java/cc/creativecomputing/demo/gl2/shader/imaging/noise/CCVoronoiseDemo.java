@@ -9,13 +9,13 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.imaging.filter.CCNormalMap;
-import cc.creativecomputing.graphics.shader.imaging.noise.CCVoronoiseGenerator;
+import cc.creativecomputing.graphics.shader.imaging.noise.CCNoiseGenerator;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCVoronoiseDemo extends CCGL2Adapter {
 
-	@CCProperty(name = "voronoise")
-	private CCVoronoiseGenerator _cVoronoise;
+	@CCProperty(name = "noise")
+	private CCNoiseGenerator _cVoronoise;
 
 	@CCProperty(name = "normalmap")
 	private CCNormalMap _cNormalMap;
@@ -30,7 +30,7 @@ public class CCVoronoiseDemo extends CCGL2Adapter {
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_cVoronoise = new CCVoronoiseGenerator(g.width(), g.height());
+		_cVoronoise = new CCNoiseGenerator(g.width(), g.height());
 		
 		_cNormalMap = new CCNormalMap(g.width(), g.height());
 		_cNormalMap.inputChannel(0, _cVoronoise.output());

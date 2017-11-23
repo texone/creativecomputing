@@ -2,7 +2,7 @@ package cc.creativecomputing.demo.kle.motorrotationdemo;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.demo.kle.motorrotationdemo.CCTriKiDemo.CCTriangleElement;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
+import cc.creativecomputing.kle.CCKleEffectable;
 import cc.creativecomputing.math.CCVector2;
 
 public abstract class CCTriKiAnimation<AnimationType extends CCTriKiAnimation> {
