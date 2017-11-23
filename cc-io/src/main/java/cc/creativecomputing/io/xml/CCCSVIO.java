@@ -1,8 +1,11 @@
 package cc.creativecomputing.io.xml;
 
+import java.io.PrintStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCCSVIO {
@@ -41,5 +44,47 @@ public class CCCSVIO {
 			}
 		}
 		return myResult;
+	}
+	
+	/**
+	 * Saves the XMLElement to a given filename.
+	 * 
+	 * @param theDataElement the element to be saved
+	 * @param thePath path to save the XMLElement as XML File 
+	 * @param theEncoding used for the XML File 
+	 */
+	public static void saveDataElement(final CCDataElement theDataElement, Path thePath, String theEncoding){
+		try{
+			if(theDataElement == null || theDataElement.children().size() <= 0)return;
+			CCDataElement myFirstElement = theDataElement.child(0);
+			
+			CCNIOUtil.createDirectories(thePath);
+			PrintStream myWriter = new PrintStream(Files.newOutputStream(thePath), true, theEncoding);
+			for(String myAttribute:myFirstElement.attributes()){
+				myWriter.print(myAttribute + ";");
+			}
+			myWriter.println();
+			for(CCDataElement myEntry:theDataElement){
+				for(String myAttribute:myFirstElement.attributes()){
+					myWriter.print(myEntry.attribute(myAttribute, "") + ";");
+				}
+				myWriter.println();
+			}
+			myWriter.flush();
+			myWriter.close();
+		}catch (Exception e){
+			e.printStackTrace();
+			CCLog.error("You cannot write to this destination. Make sure destionation is a valid path");
+		}
+	}
+	
+	/**
+	 * Saves the XMLElement to a given filename using standard encoding "ISO-8859-1".
+	 * 
+	 * @param theDataElement the element to be saved
+	 * @param thePath path to save the XMLElement as XML File 
+	 */
+	public static void saveDataElement(final CCDataElement theDataElement, Path thePath){
+		saveDataElement(theDataElement, thePath, "ISO-8859-1");
 	}
 }
