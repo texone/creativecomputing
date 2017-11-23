@@ -23,19 +23,19 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffect;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.kle.CCSequence;
-import cc.creativecomputing.kle.CCSequenceRecorder;
-import cc.creativecomputing.kle.elements.CCKleChannelType;
-import cc.creativecomputing.kle.elements.CCSequenceElementEffectManager;
-import cc.creativecomputing.kle.elements.CCSequenceElements;
-import cc.creativecomputing.kle.elements.motors.CC2Motor2ConnectionCalculations;
+import cc.creativecomputing.kle.CCKleChannelType;
+import cc.creativecomputing.kle.CCKleEffectManager;
+import cc.creativecomputing.kle.CCKleEffectables;
+import cc.creativecomputing.kle.motors.CC2Motor2ConnectionCalculations;
+import cc.creativecomputing.kle.sequence.CCSequence;
+import cc.creativecomputing.kle.sequence.CCSequenceRecorder;
 import cc.creativecomputing.math.CCMath;
 
 public class CCSequenceFormatsTest {
 
     private static CCAnimator _myAnimator;
     private static CCSequenceRecorder _myRecorder;
-	private static CCSequenceElements _mySequenceElements;
+	private static CCKleEffectables _mySequenceElements;
 	
 	private static class CCKleTestAnimation extends CCEffect{
 		
@@ -57,13 +57,13 @@ public class CCSequenceFormatsTest {
 	@BeforeClass
 	static public void createTestElements(){
 		CC2Motor2ConnectionCalculations myBounds = new CC2Motor2ConnectionCalculations();
-		_mySequenceElements = new CCSequenceElements(
+		_mySequenceElements = new CCKleEffectables(
 			CCNIOUtil.dataPath("config"), 
 			myBounds,
 			160
 		);
 		
-		CCSequenceElementEffectManager myAnimator = new CCSequenceElementEffectManager(_mySequenceElements, CCKleChannelType.MOTORS, "x", "y");
+		CCKleEffectManager myAnimator = new CCKleEffectManager(_mySequenceElements, CCKleChannelType.MOTORS, "x", "y");
 		myAnimator.put("test", new CCKleTestAnimation());
 		
 		_myAnimator = new CCAnimator();
@@ -80,7 +80,7 @@ public class CCSequenceFormatsTest {
 		}
 	}
 	
-	private void testFormat(CCSequenceFormats theFormat, String thePath){
+	private void testFormat(CCKleFormats theFormat, String thePath){
 		
         CCSequence myRecordedSequence = _myRecorder.sequence(CCKleChannelType.MOTORS);
         CCSequence myLoadedSequence;
@@ -97,13 +97,13 @@ public class CCSequenceFormatsTest {
         assertEquals(myRecordedSequence, myLoadedSequence);
 	}
 	
-	private void testContainer(CCSequenceContainers theContainer, String thePath){
+	private void testContainer(CCKleContainers theContainer, String thePath){
 //		_myRecorder.container(theContainer);
 //		_myRecorder.save(CCNIOUtil.dataPath(thePath));
 		
 		switch(theContainer){
 		case KLE_1:
-			Map<CCKleChannelType, CCSequence> mySequenceMap = new CCSequenceKLE1Container().load(CCNIOUtil.dataPath(thePath), _mySequenceElements);
+			Map<CCKleChannelType, CCSequence> mySequenceMap = new CCKleV1Container().load(CCNIOUtil.dataPath(thePath), _mySequenceElements);
 			 CCSequence myRecordedSequence = _myRecorder.sequence(CCKleChannelType.MOTORS);
 			 CCSequence myLoadedSequence = mySequenceMap.get(CCKleChannelType.MOTORS);
 			 assertEquals(myRecordedSequence, myLoadedSequence);
@@ -114,22 +114,22 @@ public class CCSequenceFormatsTest {
 
 //    @Test
     public void testRecordCSV() {
-    	testFormat(CCSequenceFormats.CSV, "export/csv");
+    	testFormat(CCKleFormats.CSV, "export/csv");
     }
     
 //    @Test
     public void testRecordPNG() {
-    	testFormat(CCSequenceFormats.PNG, "export/png");
+    	testFormat(CCKleFormats.PNG, "export/png");
     }
     
 //    @Test
     public void testRecordBIN() {
-    	testFormat(CCSequenceFormats.BIN, "export/test_bin");
+    	testFormat(CCKleFormats.BIN, "export/test_bin");
     }
     
 //    @Test
     public void testRecordKLE() {
-    	testContainer(CCSequenceContainers.KLE_1, "export/kle1.kle");
+    	testContainer(CCKleContainers.KLE_1, "export/kle1.kle");
     }
     
 //    @Test
@@ -137,16 +137,16 @@ public class CCSequenceFormatsTest {
     	CCSequence myRecordedSequence = _myRecorder.sequence(CCKleChannelType.MOTORS);
     	
     	CCSequence myLoadedSequence;
-    	myLoadedSequence = CCSequenceIO.load(CCNIOUtil.dataPath("export/test_bin/motors.bin"), _mySequenceElements.mappings().get(CCKleChannelType.MOTORS));
+    	myLoadedSequence = CCKleIO.load(CCNIOUtil.dataPath("export/test_bin/motors.bin"), _mySequenceElements.mappings().get(CCKleChannelType.MOTORS));
     	assertEquals(myRecordedSequence, myLoadedSequence);
 		
-    	myLoadedSequence = CCSequenceIO.load(CCNIOUtil.dataPath("export/csv"), _mySequenceElements.mappings().get(CCKleChannelType.MOTORS));
+    	myLoadedSequence = CCKleIO.load(CCNIOUtil.dataPath("export/csv"), _mySequenceElements.mappings().get(CCKleChannelType.MOTORS));
     	assertEquals(myRecordedSequence, myLoadedSequence);
 
-    	myLoadedSequence = CCSequenceIO.load(CCNIOUtil.dataPath("export/png"), _mySequenceElements.mappings().get(CCKleChannelType.MOTORS));
+    	myLoadedSequence = CCKleIO.load(CCNIOUtil.dataPath("export/png"), _mySequenceElements.mappings().get(CCKleChannelType.MOTORS));
     	assertEquals(myRecordedSequence, myLoadedSequence);
 
-    	myLoadedSequence = CCSequenceIO.load(CCNIOUtil.dataPath("export/kle1.kle"), _mySequenceElements.mappings().get(CCKleChannelType.MOTORS));
+    	myLoadedSequence = CCKleIO.load(CCNIOUtil.dataPath("export/kle1.kle"), _mySequenceElements.mappings().get(CCKleChannelType.MOTORS));
     	
     	assertEquals(myRecordedSequence, myLoadedSequence);
     }

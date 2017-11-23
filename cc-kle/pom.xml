@@ -18,6 +18,12 @@
       <artifactId>cc-artnet</artifactId>
       <version>${project.version}</version>
     </dependency>
+    
+	<dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-effectables</artifactId>
+      <version>${project.version}</version>
+    </dependency>
    
     <dependency>
       <groupId>cc.creativecomputing</groupId>

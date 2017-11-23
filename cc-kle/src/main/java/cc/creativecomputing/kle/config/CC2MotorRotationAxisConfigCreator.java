@@ -7,9 +7,9 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
-import cc.creativecomputing.kle.elements.motors.CC2MotorRotationAxisBounds;
-import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
+import cc.creativecomputing.kle.CCKleEffectable;
+import cc.creativecomputing.kle.motors.CC2MotorRotationAxisBounds;
+import cc.creativecomputing.kle.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
@@ -19,7 +19,7 @@ public class CC2MotorRotationAxisConfigCreator {
 	private CCDataElement _mySculptureXML;
 	private CCDataElement _myMappingsXML;
 
-	protected List<CCSequenceElement> _myElements = new ArrayList<>();
+	protected List<CCKleEffectable> _myElements = new ArrayList<>();
 	
 	public CC2MotorRotationAxisConfigCreator(int xRes, int yRes, double XSpace, double ySpace, double center, double amplitude, double radius, int frameRate){
 		
@@ -61,7 +61,7 @@ public class CC2MotorRotationAxisConfigCreator {
 				CCMatrix4x4 myTransform = new CCMatrix4x4();
 				myTransform.applyTranslationPost(new CCVector3(myX, myY, 0));
 				
-				CCSequenceElement myElement = new CCSequenceElement(
+				CCKleEffectable myElement = new CCKleEffectable(
 					myID, 
 					myMotorChannels, 
 					null,

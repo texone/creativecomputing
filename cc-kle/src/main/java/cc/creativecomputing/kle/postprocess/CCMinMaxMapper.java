@@ -2,8 +2,8 @@ package cc.creativecomputing.kle.postprocess;
 
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.kle.CCSequence;
-import cc.creativecomputing.kle.elements.CCSequenceMapping;
+import cc.creativecomputing.kle.CCKleMapping;
+import cc.creativecomputing.kle.sequence.CCSequence;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
 
@@ -13,7 +13,7 @@ public class CCMinMaxMapper implements CCSequenceProcessor{
 	private boolean _cInvert = false;
 
 	@Override
-	public void process(CCSequence theInput, CCSequenceMapping<?> theMapping, CCTriggerProgress theProcess) {
+	public void process(CCSequence theInput, CCKleMapping<?> theMapping, CCTriggerProgress theProcess) {
 		if(theInput == null)return ;
 		
 	

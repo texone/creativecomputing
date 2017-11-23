@@ -1,21 +1,3 @@
-/*
- * This file is part of artnet4j.
- * 
- * Copyright 2009 Karsten Schmidt (PostSpectacular Ltd.)
- * 
- * artnet4j is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * artnet4j is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with artnet4j. If not, see <http://www.gnu.org/licenses/>.
- */
 
 package cc.creativecomputing.kle.out;
 
@@ -27,9 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.kle.elements.CCSequenceChannel;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
-import cc.creativecomputing.kle.elements.CCSequenceElements;
+import cc.creativecomputing.kle.CCKleChannel;
+import cc.creativecomputing.kle.CCKleEffectable;
 import cc.creativecomputing.math.CCMath;
 import artnet4j.ArtNet;
 import artnet4j.ArtNetException;
@@ -45,10 +26,8 @@ public class CCKLEArtNetSender implements ArtNetDiscoveryListener {
 
 	private Map<String, ArtNetNode> _myNodeMap = new HashMap<>();
 
-	private CCSequenceElements _myElements;
-
 	private static class CCKLEUniverse {
-		private CCSequenceChannel[] _myChannels = new CCSequenceChannel[512];
+		private CCKleChannel[] _myChannels = new CCKleChannel[512];
 		int _myUniverse;
 
 		CCKLEUniverse(int theUniverse) {
@@ -68,13 +47,13 @@ public class CCKLEArtNetSender implements ArtNetDiscoveryListener {
 
 	private List<CCKLEInterface> _myInterfaces = new ArrayList<>();
 
-	public CCKLEArtNetSender(CCSequenceElements theElements) {
+	public CCKLEArtNetSender(List<CCKleEffectable> theElements) {
 		artnet = new ArtNet();
 
 		Map<String, Map<Integer, CCKLEUniverse>> myInterfaceMap = new HashMap<>();
 
-		for (CCSequenceElement myElement : theElements) {
-			for (CCSequenceChannel myChannel : myElement.channels()) {
+		for (CCKleEffectable myElement : theElements) {
+			for (CCKleChannel myChannel : myElement.channels()) {
 				if (myChannel.universe() < 0)
 					continue;
 				if (myChannel.channel() < 0)
@@ -172,7 +151,7 @@ public class CCKLEArtNetSender implements ArtNetDiscoveryListener {
 				dmx.setSequenceID(sequenceID % 255);
 				byte[] buffer = new byte[512];
 				for (int i = 0; i < buffer.length; i++) {
-					CCSequenceChannel myChannel = myUniverse._myChannels[i];
+					CCKleChannel myChannel = myUniverse._myChannels[i];
 					if (myChannel == null) {
 
 					} else {

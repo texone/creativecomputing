@@ -7,9 +7,9 @@ import java.util.List;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
-import cc.creativecomputing.kle.elements.CCSequenceElement;
-import cc.creativecomputing.kle.elements.motors.CC1Motor1ConnectionBounds;
-import cc.creativecomputing.kle.elements.motors.CCMotorChannel;
+import cc.creativecomputing.kle.CCKleEffectable;
+import cc.creativecomputing.kle.motors.CC1Motor1ConnectionBounds;
+import cc.creativecomputing.kle.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
@@ -19,7 +19,7 @@ public class CC1Motor1ConnectionConfigCreator {
 	private CCDataElement _mySculptureXML;
 	private CCDataElement _myMappingsXML;
 
-	protected List<CCSequenceElement> _myElements = new ArrayList<>();
+	protected List<CCKleEffectable> _myElements = new ArrayList<>();
 	
 	public CC1Motor1ConnectionConfigCreator(int xRes, int zRes, double XSpace, double zSpace, double top, double bottom, int frameRate){
 		
@@ -60,7 +60,7 @@ public class CC1Motor1ConnectionConfigCreator {
 				CCMatrix4x4 myTransform = new CCMatrix4x4();
 				myTransform.applyTranslationPost(new CCVector3(myX, 0, myZ));
 				
-				CCSequenceElement myElement = new CCSequenceElement(
+				CCKleEffectable myElement = new CCKleEffectable(
 					myID, 
 					myMotorChannels, 
 					null,

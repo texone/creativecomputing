@@ -11,6 +11,7 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.time.CCHistoryDataPoint;
 
 public class CCHistoryRenderer<Type extends CCHistoryDataPoint>{
 

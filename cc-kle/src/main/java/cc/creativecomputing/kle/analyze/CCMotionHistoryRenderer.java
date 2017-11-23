@@ -6,6 +6,7 @@ import java.util.List;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.time.CCMotionHistoryDataPoint;
 
 public class CCMotionHistoryRenderer extends CCHistoryRenderer<CCMotionHistoryDataPoint>{
 
