@@ -23,7 +23,6 @@ import java.util.Map;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.shader.CCGLProgram.CCShaderObjectType;
 import cc.creativecomputing.graphics.texture.CCTexture;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -405,17 +404,8 @@ public class CCGLProgram{
 		return get(GL2.GL_ACTIVE_UNIFORMS);
 	}
 	
-	private int _myTexIndex = 0;
 
 	public void start() {
-//		CCGraphics.debug();
-//		if(_myVertexShader != null)_myVertexShader.checkReload();
-//		if(_myFragmentShader != null)_myFragmentShader.checkReload();
-//		if(_myGeometryShader != null)_myGeometryShader.checkReload();
-		
-		
-//		reload();
-		
 		GL2 gl = CCGraphics.currentGL();
 		boolean myRelink = false;
 		for(CCGLShader myShader:_myShaderList){
@@ -428,7 +418,6 @@ public class CCGLProgram{
 			myShader.applyUniforms(this);
 		}
 		_myIsShaderInUse = true;
-		_myTexIndex = 0;
 	}
 
 	public void end() {

@@ -9,6 +9,7 @@ import cc.creativecomputing.math.CCMath;
 
 public class CCGLShaderUtil {
 
+	public static CCImage randomRGBAData;
 	public static CCImage randomData;
 	
 	static{
@@ -28,15 +29,27 @@ public class CCGLShaderUtil {
 			}
 		}
 		
+		randomRGBAData = new CCImage(256,256);
 		randomData = new CCImage(256,256);
-		for(int x = 0; x < randomData.width(); x++){
-			for(int y = 0; y < randomData.height(); y++){
-				randomData.setPixel(x, y, myBaseColorMap[x][y]);
+		for(int x = 0; x < randomRGBAData.width(); x++){
+			for(int y = 0; y < randomRGBAData.height(); y++){
+				randomRGBAData.setPixel(x, y, myBaseColorMap[x][y]);
+				randomData.setPixel(x, y, new CCColor(CCMath.random()));
 			}
 		}
 	}
 	
+	private static CCTexture2D randomRGBATexture;
 	private static CCTexture2D randomTexture;
+	
+	public static CCTexture2D randomRGBATexture(){
+		if(randomRGBATexture == null){
+			randomRGBATexture = new CCTexture2D(randomRGBAData);
+			randomRGBATexture.textureFilter(CCTextureFilter.LINEAR);
+			randomRGBATexture.wrap(CCTextureWrap.REPEAT);
+		}
+		return randomRGBATexture;
+	}
 	
 	public static CCTexture2D randomTexture(){
 		if(randomTexture == null){
