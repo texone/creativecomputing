@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCOffsetEffect;
-import cc.creativecomputing.effects.CCSignalEffect;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
@@ -19,9 +16,7 @@ import cc.creativecomputing.kle.CCKleEffectable;
 import cc.creativecomputing.kle.CCKleEffectableRenderer;
 import cc.creativecomputing.kle.CCKleEffectables;
 import cc.creativecomputing.kle.motors.CC2Motor2ConnectionCalculations;
-import cc.creativecomputing.kle.motors.CC2Motor2ConnectionSetup;
 import cc.creativecomputing.kle.motors.CCMotorChannel;
-import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 
 public class CC2Motor2ConnectionDemo extends CCGL2Adapter{

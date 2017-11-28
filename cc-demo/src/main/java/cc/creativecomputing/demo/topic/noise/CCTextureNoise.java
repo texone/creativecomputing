@@ -1,4 +1,4 @@
-package cc.creativecomputing.demo.topic.raymarching;
+package cc.creativecomputing.demo.topic.noise;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
@@ -11,16 +11,16 @@ import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 
-public class CCRaymarching01 extends CCGL2Adapter {
+public class CCTextureNoise extends CCGL2Adapter {
 
-	@CCProperty(name = "raymarch")
+	@CCProperty(name = "texturenoise")
 	private CCGLProgram _myProgram;
 	@CCProperty(name = "screen capture")
 	private CCScreenCaptureController _cScreenCapture;
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "raymarch.glsl"));
+		_myProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "texturenoise.glsl"));
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class CCRaymarching01 extends CCGL2Adapter {
 		g.ortho();
 		g.clear();
 		
-		g.texture(0, CCGLShaderUtil.randomRGBATexture());
+		g.texture(0, CCGLShaderUtil.randomTexture());
 		_myProgram.start();
 		_myProgram.uniform2f("iResolution", g.width(), g.height());
 		_myProgram.uniform1f("iTime", animator().time());
@@ -52,7 +52,7 @@ public class CCRaymarching01 extends CCGL2Adapter {
 
 	public static void main(String[] args) {
 
-		CCRaymarching01 demo = new CCRaymarching01();
+		CCTextureNoise demo = new CCTextureNoise();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1680, 600);

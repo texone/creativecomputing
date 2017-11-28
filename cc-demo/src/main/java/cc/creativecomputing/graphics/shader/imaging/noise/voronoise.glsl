@@ -133,7 +133,7 @@ uniform float octaves;
 uniform float lacunarity;
 
 vec4 octavedNoise(in vec2 s){
-	float myScale = scale * 10;
+	float myScale = scale * 10.;
 	float myFallOff = gain;
 	
 	int myOctaves = int(floor(octaves));
