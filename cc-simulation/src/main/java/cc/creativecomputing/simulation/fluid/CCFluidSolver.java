@@ -151,7 +151,7 @@ public class CCFluidSolver {
 		_myNoiseFieldProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "noisefield.fs"));
 		_myBuoyancyProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "buoyancy.fs"));
 		
-		_myRandomTexture = new CCTexture2D(CCGLShaderUtil.randomData);
+		_myRandomTexture = new CCTexture2D(CCGLShaderUtil.randomRGBAData);
 		_myRandomTexture.textureFilter(CCTextureFilter.LINEAR);
 		_myRandomTexture.wrap(CCTextureWrap.REPEAT);
 		
