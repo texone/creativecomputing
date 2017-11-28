@@ -21,7 +21,7 @@ import cc.creativecomputing.graphics.shader.CCGLShader;
 import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
-import cc.creativecomputing.graphics.shader.CCShaderSource;
+import cc.creativecomputing.graphics.shader.CCShaderSourceTemplate;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
@@ -81,7 +81,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		_myEnvelopeTextureParameter = "lifeTimeBlends";
 		_myEvelopeData = new CCShaderBuffer(100,theForces.size());
 
-		CCShaderSource shaderSource = CCGLShader.buildSourceObject(theShaderFile);
+		CCShaderSourceTemplate shaderSource = CCGLShader.buildSourceObject(theShaderFile);
 		
 		int myIndex = 0;
 		
@@ -120,7 +120,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		init(null, null, shaderSource.source());
 		
 		
-		_myRandomTexture = new CCTexture2D(CCGLShaderUtil.randomData);
+		_myRandomTexture = new CCTexture2D(CCGLShaderUtil.randomRGBAData);
 		_myRandomTexture.textureFilter(CCTextureFilter.LINEAR);
 		_myRandomTexture.wrap(CCTextureWrap.REPEAT);
 		
