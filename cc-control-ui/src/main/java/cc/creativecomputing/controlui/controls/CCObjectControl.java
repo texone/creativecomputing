@@ -14,7 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -27,7 +29,6 @@ import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.control.code.CCRuntimeCompilable;
-import cc.creativecomputing.control.code.CCShaderFile;
 import cc.creativecomputing.control.code.CCShaderSource;
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
@@ -215,7 +216,51 @@ public class CCObjectControl extends JPanel implements CCControl{
 	
 	private List<CCControl> _myControls = new ArrayList<>();
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static interface CCControlCreator{
+		public CCControl create(CCPropertyHandle<?> thePropertyHandle, CCControlComponent theInfoPanel);
+	}
+	
+	private static Map<Class<?>, CCControlCreator> creatorMap = new HashMap<>();
+	static{
+		creatorMap.put(CCTriggerProgress.class, (myHandle, myInfoPanel) -> {return new CCEventTriggerControl((CCEventTriggerHandle)myHandle, myInfoPanel);});
+		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		CCControlCreator myNumberCreator = (myHandle, myInfoPanel) -> {return new CCNumberControl((CCNumberPropertyHandle)myHandle, myInfoPanel);};
+		creatorMap.put(Float.class, myNumberCreator);
+		creatorMap.put(Float.TYPE, myNumberCreator);
+		creatorMap.put(Double.class, myNumberCreator);
+		creatorMap.put(Double.TYPE, myNumberCreator);
+		creatorMap.put(Integer.class, myNumberCreator);
+		creatorMap.put(Integer.TYPE, myNumberCreator);
+		
+		CCControlCreator myBooleanCreator = (myHandle, myInfoPanel) -> {return new CCBooleanControl((CCBooleanPropertyHandle)myHandle, myInfoPanel);};
+		creatorMap.put(Boolean.class, myBooleanCreator);
+		creatorMap.put(Boolean.TYPE, myBooleanCreator);
+
+		creatorMap.put(CCSelection.class, (myHandle, myInfoPanel) -> {return new CCSelectionControl((CCSelectionPropertyHandle)myHandle, myInfoPanel);});
+		creatorMap.put(CCColor.class, (myHandle, myInfoPanel) -> {return new CCColorControl((CCColorPropertyHandle)myHandle, myInfoPanel);});
+		creatorMap.put(CCGradient.class, (myHandle, myInfoPanel) -> {return new CCGradientControl((CCGradientPropertyHandle)myHandle, myInfoPanel);});
+		creatorMap.put(String.class, (myHandle, myInfoPanel) -> {return new CCStringControl((CCStringPropertyHandle)myHandle, myInfoPanel);});
+		creatorMap.put(CCControlMatrix.class, (myHandle, myInfoPanel) -> {return new CCControlMatrixControl((CCControlMatrixHandle)myHandle, myInfoPanel);});
+		creatorMap.put(CCEnvelope.class, (myHandle, myInfoPanel) -> {return new CCEnvelopeControl((CCEnvelopeHandle)myHandle, myInfoPanel);});
+		creatorMap.put(CCSplineHandle.class, (myHandle, myInfoPanel) -> {return new CCSplineControl((CCSplineHandle)myHandle, myInfoPanel);});
+		creatorMap.put(Path.class, (myHandle, myInfoPanel) -> {return new CCPathControl((CCPathHandle)myHandle, myInfoPanel);});
+		creatorMap.put(CCRealtimeCompile.class, (myHandle, myInfoPanel) -> {return new CCRealtimeCompileControl((CCRealtimeCompileHandle)myHandle, myInfoPanel);});
+		creatorMap.put(CCShaderSource.class, (myHandle, myInfoPanel) -> {return new CCShaderCompileControl((CCShaderSourceHandle)myHandle, myInfoPanel);});
+	}
+	
+	private static CCControlCreator handleCreator(Class<?> theClass){
+		if(theClass == null)return null;
+		CCControlCreator myCreator = null;
+		Class<?> myClass = theClass;
+		do{
+			CCLog.info(myClass);
+			myCreator = creatorMap.get(myClass);
+			myClass = myClass.getSuperclass();
+		}while(myClass != null && myCreator == null && myClass != Object.class);
+		return myCreator;
+	}
+	
 	private void createUI(boolean theHideUnchanged){
 		_myControlComponent.removeAll();
 	
@@ -225,40 +270,14 @@ public class CCObjectControl extends JPanel implements CCControl{
 			Class<?> myClass = myPropertyHandle.type();
 			
 			CCControl myControl;
-			if(myClass == null){
+			
+			CCControlCreator myCreator = handleCreator(myClass);
+			if(myCreator != null){
+				myControl = myCreator.create(myPropertyHandle, _myInfoPanel);
+			}else if(myClass == null){
 				myControl = new CCEventTriggerControl((CCEventTriggerHandle)myPropertyHandle, _myInfoPanel);
-			}else if(myClass == CCTriggerProgress.class){
-				myControl = new CCEventTriggerControl((CCEventTriggerHandle)myPropertyHandle, _myInfoPanel);
-			}else if(myClass == Float.class || myClass == Float.TYPE){
-				myControl = new CCNumberControl((CCNumberPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else if(myClass == Double.class || myClass == Double.TYPE){
-				myControl = new CCNumberControl((CCNumberPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == Integer.class || myClass == Integer.TYPE){
-				myControl = new CCNumberControl((CCNumberPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == Boolean.class || myClass == Boolean.TYPE){
-				myControl = new CCBooleanControl((CCBooleanPropertyHandle)myPropertyHandle, _myInfoPanel);
 			}else  if(myClass.isEnum()){
 				myControl = new CCEnumControl((CCEnumPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == CCSelection.class){
-				myControl = new CCSelectionControl((CCSelectionPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == CCColor.class){
-				myControl = new CCColorControl((CCColorPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == CCGradient.class){
-				myControl = new CCGradientControl((CCGradientPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == String.class){
-				myControl = new CCStringControl((CCStringPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == CCControlMatrix.class){
-				myControl = new CCControlMatrixControl((CCControlMatrixHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == CCEnvelope.class){
-				myControl = new CCEnvelopeControl((CCEnvelopeHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myPropertyHandle.getClass() == CCSplineHandle.class){
-				myControl = new CCSplineControl((CCSplineHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == Path.class){
-				myControl = new CCPathControl((CCPathHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == CCRealtimeCompile.class){
-				myControl = new CCRealtimeCompileControl((CCRealtimeCompileHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass == CCShaderSource.class){
-				myControl = new CCShaderCompileControl((CCShaderSourceHandle)myPropertyHandle, _myInfoPanel);
 			}else if(CCReflectionUtil.implementsInterface(myClass, CCRuntimeCompilable.class)){
 				myControl = new CCRuntimeCompileControl((CCRuntimeCompileHandle)myPropertyHandle, _myInfoPanel);
 			}else{

@@ -90,8 +90,8 @@ public class CCControlTreeComponent extends JPanel {
 			}
 
 			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger())
-					myPopupEvent(e);
+//				if (e.isPopupTrigger())
+//					myPopupEvent(e);
 			}
 		};
 
