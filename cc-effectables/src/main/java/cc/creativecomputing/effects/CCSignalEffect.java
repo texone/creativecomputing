@@ -28,6 +28,11 @@ public class CCSignalEffect extends CCEffect{
 	@CCProperty(name = "print")
 	private boolean _cPrint = false;
 	
+	@CCProperty(name = "sin scale")
+	private double _cSinScale = 2;
+	@CCProperty(name = "sin add")
+	private double _cSinAdd = -1;
+	
 	@Override
 	public String[] modulationSources(String[]theValueNames) {
 		String[] myResult = new String[theValueNames.length * 3];
@@ -88,7 +93,7 @@ public class CCSignalEffect extends CCEffect{
 				double myPhase = _myPhase + modulation( _myValueNames[i] + " phase").modulation(theEffectable, -1, 1);
 				myPhase *= modulation(_myValueNames[i] + " frequency").modulation(theEffectable, -1, 1);
 				double mySignal = _mySignal.value(myPhase);
-				mySignal = mySignal * 2 - 1;
+				mySignal = mySignal * _cSinScale + _cSinAdd;
 				double myAmount = modulation(_myValueNames[i] + " amount").modulation(theEffectable, -1, 1) * myBlend;
 				myResult[i] = mySignal * myAmount;
 			}

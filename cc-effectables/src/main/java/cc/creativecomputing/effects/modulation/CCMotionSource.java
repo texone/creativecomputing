@@ -10,7 +10,7 @@ import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.math.time.CCMotionHistoryDataPoint;
+import cc.creativecomputing.math.time.CCTimedMotionData;
 
 public class CCMotionSource extends CCModulationSource {
 
@@ -31,7 +31,7 @@ public class CCMotionSource extends CCModulationSource {
 	@CCProperty(name = "print")
 	private boolean _cPrint = false;
 	
-	private class CCMotionSourceHistoryPoint extends CCMotionHistoryDataPoint{
+	private class CCMotionSourceHistoryPoint extends CCTimedMotionData{
 		
 		public double maxVelocity = 0;
 		public double maxAcceleration = 0;
