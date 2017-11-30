@@ -22,7 +22,6 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
 import cc.creativecomputing.core.CCSelectable;
 import cc.creativecomputing.core.CCSelectionListener;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
@@ -81,7 +80,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		CCHandleCreator myCreator = null;
 		Class<?> myClass = theClass;
 		do{
-			CCLog.info(myClass);
 			myCreator = creatorMap.get(myClass);
 			myClass = myClass.getSuperclass();
 		}while(myClass != null && myCreator == null && myClass != Object.class);
@@ -89,7 +87,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	}
 	
 	public static void main(String[] args) {
-		CCLog.info(handleCreator(CCShaderFile.class).getClass().getName());
 	}
 	
 	private Map<String,CCPropertyHandle> _myChildHandles = new LinkedHashMap<>();
@@ -444,10 +441,8 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	}
 	
 	public void savePreset(String thePreset, CCPresetHandling theHandling) {
-		CCLog.info(presetPath(), thePreset);
 		
 		Path myPresetPath = presetPath().resolve(thePreset + ".json");
-		CCLog.info("add preset", thePreset, myPresetPath);
 		CCDataObject myResult = new CCDataObject();
 		myResult.put("value", myResult);
 		CCDataIO.saveDataObject(presetData(theHandling), myPresetPath, CCDataFormats.JSON);
@@ -556,7 +551,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		List<String> myResult = new ArrayList<>();
 		CCNIOUtil.createDirectories(presetPath());
 		for(Path myPath:CCNIOUtil.list(presetPath(), "json")){
-			CCLog.info(myPath);
 			String myPresetString = CCNIOUtil.fileName(myPath.getFileName().toString());
 			myResult.add(myPresetString);
 		}
