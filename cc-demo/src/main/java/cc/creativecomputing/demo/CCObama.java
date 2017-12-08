@@ -20,8 +20,13 @@ import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.random.CCRandom;
 import cc.creativecomputing.math.util.CCHistogram;
+import cc.creativecomputing.protocol.serial.hpgl.CCHPGL;
+import cc.creativecomputing.protocol.serial.hpgl.CCHPGL.CCHPPaperFormat;
 
 public class CCObama extends CCGL2Adapter {
+	
+	@CCProperty(name = "HP")
+	private CCHPGL _cHPGL;
 	
 	@CCProperty(name = "texture;")
 	private CCTexture2DAsset _cTexture;
@@ -41,12 +46,14 @@ public class CCObama extends CCGL2Adapter {
 	private double _cScale = 1;
 	
 	private CCVoronoi _myVoronoi = null;
+	private List<CCVector2> _myVertices = new ArrayList<>();
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_cTexture = new CCTexture2DAsset(_myContext);
 		_myHistogram = new CCHistogram();
 		_myHistogram2 = new CCHistogram();
+		_cHPGL = new CCHPGL(CCHPPaperFormat.A4);
 	}
 	
 	@CCProperty(name = "updateVoronoi")
@@ -77,6 +84,37 @@ public class CCObama extends CCGL2Adapter {
 
 	@Override
 	public void update(CCAnimator theAnimator) {
+		int myLastX = 0;
+		int myLastY = 0;
+		
+		if(_cHPGL.isConnected() && _myVertices.size() > 0){
+			CCVector2 v0 = _myVertices.remove(0);
+			CCVector2 v1 = _myVertices.remove(0);
+					
+			double myX1 = CCMath.map(v0.x, myMinX, myMaxX, 430, 7630);
+			double myY1 = CCMath.map(v0.y, myMinY, myMaxY, 200, 7400);
+			double myX2 = CCMath.map(v1.x, myMinX, myMaxX, 430, 7630);
+			double myY2 = CCMath.map(v1.y, myMinY, myMaxY, 200, 7400);
+//					_cHPGL.lineTo((int)CCMath.random(430,10430), (int)CCMath.random(200,7400));
+
+			CCLog.info(_myVertices.size() + " : " + myX1 + " : " + myY1);
+					
+			int x = CCMath.round(myX1);
+			int y = CCMath.round(myY1);
+			int x2 = CCMath.round(myX2);
+			int y2 = CCMath.round(myY2);
+			if(x == myLastX && y == myLastY){
+				return;
+			}
+			myLastX = x;
+			myLastY = y;
+					_cHPGL.line(x, y, x2,y2);
+					
+//					int radius = (int)CCMath.random(1000);
+//					int x = (int)CCMath.random(430 + radius,10430 - radius);
+//					int y = (int)CCMath.random(200 + radius,7400 - radius);
+//					_cHPGL.circle(x, y, radius);
+				}
 	}
 	
 	int width = 0;
@@ -88,6 +126,40 @@ public class CCObama extends CCGL2Adapter {
 	private int _cSpace = 100;
 	@CCProperty(name = "octaves", min = 1, max = 8)
 	private int octaves = 8;
+	
+	private double myMinX = 100000;
+	private double myMinY = 100000;
+	private double myMaxX = -100000;
+	private double myMaxY = -100000;
+	
+	@CCProperty(name = "plot")
+	public void plot(){
+		myMinX = 100000;
+		myMinY = 100000;
+		myMaxX = -100000;
+		myMaxY = -100000;
+		_myVertices.clear();
+		
+		for(int x = 0; x < _cTexture.value().width();x+=_cSpace){
+			for(int y = 0; y < _cTexture.value().height();y+=_cSpace){
+				double myBrightness = _cTexture.image().getPixel(x, y).brightness();
+				double myBrightness2 = _cEnvelope.value(myBrightness);
+				int octave = CCMath.round(octaves * myBrightness2);
+				if(x % CCMath.pow(2, octave)== 0){
+					myMinX = CCMath.min(x, myMinX);
+					myMinY = CCMath.min(y, myMinY);
+					myMaxX = CCMath.max(x, myMaxX);
+					myMaxY = CCMath.max(y + _cSpace, myMaxY);
+					_myVertices.add(new CCVector2(x,y));
+					_myVertices.add(new CCVector2(x,y + _cSpace));
+//					g.vertex(x  + _cSpace, y );
+//					g.vertex(x , y + _cSpace );
+				}
+			}
+		}
+	}
+	
+	
 
 	@Override
 	public void display(CCGraphics g) {
