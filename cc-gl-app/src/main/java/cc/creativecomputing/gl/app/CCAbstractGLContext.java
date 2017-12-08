@@ -255,6 +255,9 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	public void cursor(CCCursor theCursor){
 		_myContainer.cursor(theCursor);
 	}
+	public void noCursor(){
+		_myContainer.noCursor();
+	}
 	
 	private Map<String, CCPropertyListener<?>> _myListenerMap = new HashMap<>();
 	
