@@ -81,6 +81,8 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		debug = true;
 	}
 	
+	public static String yo = "YO";
+	
 	/**
 	 * Ends debugging.
 	 * @see #debug()

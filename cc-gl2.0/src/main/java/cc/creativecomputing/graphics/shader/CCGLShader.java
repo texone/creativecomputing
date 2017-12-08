@@ -10,7 +10,6 @@ import com.jogamp.opengl.GL2;
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.shader.CCGLProgram.CCShaderObjectType;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 

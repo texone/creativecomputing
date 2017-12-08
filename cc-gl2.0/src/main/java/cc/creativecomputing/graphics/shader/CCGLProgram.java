@@ -88,22 +88,6 @@ public class CCGLProgram{
 		return myResult;
 	}
 	
-	public static enum CCShaderObjectType{
-		
-		VERTEX(GL2.GL_VERTEX_SHADER, "vertex"),
-		FRAGMENT(GL2.GL_FRAGMENT_SHADER, "fragment"),
-		GEOMETRY(GL3.GL_GEOMETRY_SHADER, "geometry");
-		
-		int glID;
-		
-		String typeString;
-		
-		private CCShaderObjectType(final int theGLID, String theTypeString) {
-			glID = theGLID;
-			typeString = theTypeString;
-		}
-	}
-	
 	public static enum CCGeometryInputType{
 		
 		POINTS(GL.GL_POINTS),

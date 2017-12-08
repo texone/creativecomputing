@@ -37,4 +37,7 @@ public class CCGL2Context extends CCAbstractGLContext<CCGraphics>{
 		return GLProfile.getMaxFixedFunc(true);
 	}
 
+	public static void main(String[] args) {
+		
+	}
 }
