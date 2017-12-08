@@ -20,10 +20,10 @@ public class CCHotCodeReplaceDemo extends CCGL2Adapter {
 
 	@Override
 	public void update(CCAnimator theAnimator) {
-		_myObject.doSomthing();
+		//
 		
 		if(_myObject != _myLastObject){
-			_myLastObject = _myObject;
+			_myLastObject = _myObject;_myObject.doSomthing();
 			CCLog.info(_myObject);
 		}
 	}

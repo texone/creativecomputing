@@ -47,8 +47,7 @@ public class CCVoronoiDemo extends CCGL2Adapter {
 
 		CCStopWatch.instance().print(true);
 		CCStopWatch.instance().startWatch("voronoi");
-		_myVoronoi = new CCVoronoi(_myPoints, -g.width() / 2 + 20, g.width() / 2 - 20, -g.height() / 2 + 20,
-				g.height() / 2 - 20);
+		_myVoronoi = new CCVoronoi(_myPoints, -g.width() / 2 + 20, g.width() / 2 - 20, -g.height() / 2 + 20, g.height() / 2 - 20);
 		CCStopWatch.instance().endLast();
 
 		keyPressed().add(theEvent -> {
@@ -130,12 +129,12 @@ public class CCVoronoiDemo extends CCGL2Adapter {
 		g.blend(CCBlendMode.ADD);
 		g.strokeWeight(2);
 		g.color(0, 0, 255);
-		g.beginShape(CCDrawMode.LINES);
-		for (CCLine3 myLine : _myVoronoi.edges()) {
-			g.vertex(myLine.start());
-			g.vertex(myLine.end());
-		}
-		g.endShape();
+//		g.beginShape(CCDrawMode.LINES);
+//		for (CCLine3 myLine : _myVoronoi.edges()) {
+//			g.vertex(myLine.start());
+//			g.vertex(myLine.end());
+//		}
+//		g.endShape();
 
 		g.strokeWeight(1);
 		CCHEMesh myMesh = _myVoronoi.mesh();

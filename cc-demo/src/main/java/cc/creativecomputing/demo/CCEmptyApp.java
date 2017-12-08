@@ -4,6 +4,8 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMath;
 
 public class CCEmptyApp extends CCGL2Adapter{
 	
@@ -26,8 +28,11 @@ public class CCEmptyApp extends CCGL2Adapter{
 	public void display(CCGraphics g) {
 		
 		g.clear();
-		
-		g.rect(0,0,110,100);
+		for(int i = 0; i < 200; i++){
+
+			g.color(CCColor.random());
+			g.rect(CCMath.random(200),CCMath.random(200),110,100);
+		}
 	}
 	
 	public static void main(String[] args) {
