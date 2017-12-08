@@ -1,11 +1,16 @@
 package cc.creativecomputing.control.code.memorycompile;
 import javax.tools.*;
+
+import cc.creativecomputing.io.CCNIOUtil;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.SecureClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,31 +21,39 @@ import java.util.Map;
  * MASSIVELY based on http://javapracs.blogspot.de/2011/06/dynamic-in-memory-compilation-using.html by Rekha Kumari
  * (June 2011)
  */
-final public class InMemoryCompiler {
-
-    final public static class IMCSourceCode {
-
-        final public String fullClassName;
-        final public String sourceCode;
-
-        /**
-         * @param fullClassName Full name of the class that will be compiled. If the class should be in some package,
-         *                      fullName should contain it too, for example: "testpackage.DynaClass"
-         * @param sourceCode    the source code
-         */
-        public IMCSourceCode(final String fullClassName, final String sourceCode) {
-
-            this.fullClassName = fullClassName;
-            this.sourceCode = sourceCode;
-        }
-    }
+public class CCInMemoryCompiler {
+    
+    public static class IMCSourceCode{
+    	
+		public final String className;
+		public final Path sourcePath;
+		public final String sourceCode;
+		
+		public IMCSourceCode(Class<?> theClass){
+			String myClassName = theClass.getName();
+			String packageName = myClassName.substring(0, myClassName.lastIndexOf("."));
+			String classSimpleName = myClassName.substring(myClassName.lastIndexOf(".") + 1);
+			sourcePath = Paths.get("src/main/java", packageName.split("\\.")).resolve(classSimpleName + ".java");
+			
+			StringBuffer myBuffer = new StringBuffer();
+			for(String myLine : CCNIOUtil.loadStrings(sourcePath)){
+				if(myLine.trim().startsWith("package ")){
+					myLine = myLine.replace(packageName, "recompile." + packageName);
+				}
+				myBuffer.append(myLine);
+			}
+			sourceCode = myBuffer.toString();
+			
+			className = "recompile." + myClassName;
+		}
+	}
 
     final public boolean valid;
 
     final private List<IMCSourceCode> classSourceCodes;
     final private JavaFileManager fileManager;
 
-    public InMemoryCompiler(final List<IMCSourceCode> classSourceCodes) {
+    public CCInMemoryCompiler(final List<IMCSourceCode> classSourceCodes) {
 
         this.classSourceCodes = classSourceCodes;
 
@@ -104,7 +117,7 @@ final public class InMemoryCompiler {
         for (IMCSourceCode classSourceCode : classSourceCodes) {
             URI uri = null;
             try {
-                uri = URI.create("string:///" + classSourceCode.fullClassName.replace('.', '/') + JavaFileObject.Kind.SOURCE.extension);
+                uri = URI.create("string:///" + classSourceCode.className.replace('.', '/') + JavaFileObject.Kind.SOURCE.extension);
             } catch (Exception e) {
                 //                e.printStackTrace();
             }

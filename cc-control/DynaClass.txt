@@ -1,0 +1,15 @@
+
+package toast;
+
+public class DynaClass {
+    public static void main(final String[] args) {
+        System.out.println("Based massively on the work of Rekha Kumari, http://javapracs.blogspot.de/2011/06/dynamic-in-memory-compilation-using.html");
+        System.out.println("This is the main method speaking.");
+        System.out.println("Args: " + java.util.Arrays.toString(args));
+        final Test test = new Test();
+    }
+    public String toString() {
+        return "Hellos, I am " + 
+		this.getClass().getSimpleName();
+    }
+}

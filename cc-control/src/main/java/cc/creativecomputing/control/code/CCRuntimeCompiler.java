@@ -208,7 +208,7 @@ public class CCRuntimeCompiler implements Closeable {
 		private long _myLastModified = 0;
 		private JavaSourceFromString _mySource;
 		
-		private CCClassLoader(String theClassName){
+		public CCClassLoader(String theClassName){
 			_myClassPath = theClassName;
 			_mySource = new JavaSourceFromString(theClassName);
 			_myFileManager = new CCJavaFileManager(_myCompiler.getStandardFileManager(null, null, null));
@@ -363,14 +363,7 @@ public class CCRuntimeCompiler implements Closeable {
 	}
 	
 	private CCClassLoader loader(String theClassName){
-		synchronized (_myLoaderMap) {
-			CCClassLoader myResult = _myLoaderMap.get(theClassName);
-			if (myResult != null) return myResult;
-			
-			myResult = new CCClassLoader(theClassName);
-			_myLoaderMap.put(theClassName, myResult);
-			return myResult;
-		}
+		return new CCClassLoader(theClassName);
 	}
 
 
@@ -412,7 +405,7 @@ public class CCRuntimeCompiler implements Closeable {
 	}
 
 	public static Class<?> compileFromSource(Class<?> theClass){
-		CCClassLoader myLoader = instance().loader(theClass.getName());
+		CCClassLoader myLoader = new CCRuntimeCompiler().loader(theClass.getName());
         return myLoader.recompile();
 	}
 	
