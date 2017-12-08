@@ -66,7 +66,7 @@ void main( )
 	//final color
 	vec3 col = vec3(.4,0.2,0.1)/rz;
 	col=pow(abs(col),vec3(.99));
-	float d = dualfbm(p) * 0.; 
+	float d = dualfbm(p) * 1.5; 
 	vec3 col2 = mix(vec3(0.4,0.0,0.0), vec3(1.0,1.0,0.), d);
-	gl_FragColor = vec4(col,1.0 );//vec4(col,1.);
+	gl_FragColor = vec4(d,d,d,1.0 );//vec4(col,1.);
 }

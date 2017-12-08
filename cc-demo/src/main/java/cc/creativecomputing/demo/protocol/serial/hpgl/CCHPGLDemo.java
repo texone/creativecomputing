@@ -22,6 +22,8 @@ public class CCHPGLDemo extends CCGL2Adapter {
 	@Override
 	public void update(CCAnimator theAnimator) {
 		//,200,,7400
+		int myLastX = 0;
+		int myLastY = 0;
 		if(_cHPGL.isConnected()){
 //			_cHPGL.lineTo((int)CCMath.random(430,10430), (int)CCMath.random(200,7400));
 
