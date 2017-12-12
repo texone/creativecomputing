@@ -498,7 +498,7 @@ public class CCImageIO {
 		addImageFormat("gif", IMAGE_IO_FORMAT);
 
 		// Other special-case providers
-		addImageFormat("png", PNG_FORMAT);
+		addImageFormat("png", IMAGE_IO_FORMAT);
 		addImageFormat("dds", DDS_FORMAT);
 		addImageFormat("sgi", SGI_FORMAT);
 		addImageFormat("tga", TGA_FORMAT);
