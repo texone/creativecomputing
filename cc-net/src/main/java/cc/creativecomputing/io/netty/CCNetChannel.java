@@ -16,6 +16,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.io.net.CCNetListener;
 import cc.creativecomputing.io.netty.codec.CCNetCodec;
+import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoop;
 import io.netty.channel.EventLoopGroup;
@@ -35,7 +36,7 @@ public abstract class CCNetChannel<MessageType> {
 	protected final CCNetCodec<MessageType> _myCodec;
 
 	protected ChannelFuture _myFuture;
-
+	protected Bootstrap _myBootstrap;
 	protected EventLoopGroup _myGroup;
 
 	protected boolean _myIsConnected;

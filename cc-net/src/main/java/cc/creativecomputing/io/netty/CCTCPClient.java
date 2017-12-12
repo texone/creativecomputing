@@ -32,12 +32,12 @@ public class CCTCPClient<MessageType> extends CCClient<MessageType>{
 	
 	@Override
 	public void createBootstrap(){
-		Bootstrap myBootstrap = new Bootstrap();
+		_myBootstrap = new Bootstrap();
 		_myGroup = new NioEventLoopGroup();
-		myBootstrap.group(_myGroup);
-		myBootstrap.channel(NioSocketChannel.class);
-		myBootstrap.remoteAddress(new InetSocketAddress(_myIP, _myPort));
-		myBootstrap.handler(new ChannelInitializer<SocketChannel>() {
+		_myBootstrap.group(_myGroup);
+		_myBootstrap.channel(NioSocketChannel.class);
+		_myBootstrap.remoteAddress(new InetSocketAddress(_myIP, _myPort));
+		_myBootstrap.handler(new ChannelInitializer<SocketChannel>() {
 
 			@Override
 			public void initChannel(SocketChannel ch) throws Exception {
@@ -47,7 +47,7 @@ public class CCTCPClient<MessageType> extends CCClient<MessageType>{
 		});
 		
 		try {
-			_myFuture = myBootstrap.connect();
+			_myFuture = _myBootstrap.connect();
 			scheduleReconnect();
 			
 			_myFuture.sync();

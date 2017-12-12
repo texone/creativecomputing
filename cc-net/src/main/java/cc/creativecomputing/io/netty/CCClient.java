@@ -37,9 +37,10 @@ public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 		@Override
 		public void exceptionCaught(ChannelHandlerContext theCtx, Throwable cause) {
 			
-//			theCtx.close();
+			theCtx.close();
 
-//			scheduleReconnect(theCtx.channel().eventLoop()); 
+			scheduleReconnect(theCtx.channel().eventLoop()); 
+			cause.printStackTrace();
 //			throw new RuntimeException(cause);
 			
 		}
@@ -53,8 +54,9 @@ public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 		@Override
 		public void channelInactive(ChannelHandlerContext theCtx) throws Exception {
 			if(_myReconnectTime <= 0)return;
+//			scheduleReconnect(theCtx.channel().eventLoop()); 
+			connect();
 			
-			scheduleReconnect(theCtx.channel().eventLoop()); 
 		}
 
 		@Override
