@@ -49,7 +49,7 @@ import cc.creativecomputing.controlui.controls.CCValueControl;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCNIOUtil;
 
-public class CCShaderCompileControl extends CCValueControl<CCShaderSource, CCShaderSourceHandle>{
+public class CCTextEditControl extends CCValueControl<CCShaderSource, CCShaderSourceHandle>{
 	
 	private class CCRealtimeCompileParser implements Parser{
 
@@ -89,29 +89,15 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderSource, CCSha
 	 * Create a simple provider that adds some Java-related completions.
 	 */
 	private CompletionProvider createCompletionProvider(String[] theKeywords) {
-
-		// A DefaultCompletionProvider is the simplest concrete implementation
-		// of CompletionProvider. This provider has no understanding of
-		// language semantics. It simply checks the text entered up to the
-		// caret position for a match against known completions. This is all
-		// that is needed in the majority of cases.
+		
 		DefaultCompletionProvider provider = new DefaultCompletionProvider();
 
-		// Add completions for all Java keywords. A BasicCompletion is just
-		// a straightforward word completion.
 		for(String myKey:theKeywords){
 			provider.addCompletion(new BasicCompletion(provider, myKey));
 		}
-	      // Add a couple of "shorthand" completions. These completions don't
-	      // require the input text to be the same thing as the replacement text.
-	      provider.addCompletion(new ShorthandCompletion(provider, "sysout",
-	            "System.out.println(", "System.out.println("));
-	      provider.addCompletion(new ShorthandCompletion(provider, "syserr",
-	            "System.err.println(", "System.err.println("));
 
-	      return provider;
-
-	   }
+		return provider;
+	}
 
 	private JButton _myButton;
 	private JButton _myResetButton;
@@ -126,7 +112,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderSource, CCSha
 	
 	private boolean _myTriggerEvent = true;
 
-	public CCShaderCompileControl(CCShaderSourceHandle theHandle, CCControlComponent theControlComponent){
+	public CCTextEditControl(CCShaderSourceHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		_myEditorFrame = new JFrame();

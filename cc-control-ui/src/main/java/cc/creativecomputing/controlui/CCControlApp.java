@@ -159,7 +159,6 @@ public class CCControlApp  {
 	}
 	
 	public void setData(Object theData, String thePresetPath){
-//		preferences = Preferences.userNodeForPackage(theData.getClass());
 		_myControlComponent.setData(theData, thePresetPath);
 	}
 	
@@ -171,7 +170,6 @@ public class CCControlApp  {
 		return _myAnimatorListener;
 	}
 
-	
 	public CCPropertyMap propertyMap(){
 		return _myControlComponent.propertyMap();
 	}

@@ -15,7 +15,6 @@ import javax.swing.filechooser.FileFilter;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.controller.FileManager;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCFileChooser;
 import cc.creativecomputing.io.CCFileFilter;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -36,15 +35,12 @@ public class SwingFileMenu extends JMenu{
 		private List<Path> _myRecentFiles = new ArrayList<>();
 		
 		public CCRecentFileHandler(){
-
-			CCLog.info(CCControlApp.preferences.absolutePath());
 			loaditemsFromPreferences();
 		}
 		
 		private void loaditemsFromPreferences() {
 			for (int i = 0; i < MAX_RECENT_FILES; i++) {
 				String value = CCControlApp.preferences.get(PREF_NAME + i, "");
-				CCLog.info(value);
 				if(value == null)continue;
 				if(value.equals(""))continue;
 				

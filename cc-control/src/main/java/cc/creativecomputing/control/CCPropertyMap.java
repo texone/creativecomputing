@@ -183,6 +183,10 @@ public class CCPropertyMap {
 	}
 	
 	public void setData(Object theRootObject, String thePresetPath){
+		if(_myRootHandle != null){
+			_myRootHandle.relink(theRootObject);
+			return;
+		}
 		_myRootHandle = new CCObjectPropertyHandle(theRootObject, thePresetPath);
 	}
 	

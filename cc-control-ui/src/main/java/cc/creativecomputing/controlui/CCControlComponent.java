@@ -145,16 +145,14 @@ public class CCControlComponent extends JSplitPane{
 	}
 	
 	public void setPresets(CCObjectPropertyHandle theObjectHandle){
-//		_myPresetComponent.setPresets(theObjectHandle);
 	}
 	
 	public void setData(Object theData, String thePresetPath){
 		_myTreeComponent.setData(theData, thePresetPath);
-		_myTreeComponent.rootHandle().preset(0);
-//        _myPresetComponent.setPresets(_myTreeComponent.rootHandle());
-//        _myPresetComponent.loadFirstPreset();
-		
+		_myTreeComponent.rootHandle().preset(0);	
 	}
+	
+	
 	
 	public CCPropertyMap propertyMap(){
 		return _myTreeComponent.propertyMap();

@@ -50,6 +50,7 @@ import cc.creativecomputing.control.handles.CCSplineHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.controlui.CCColorMap;
+import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
 import cc.creativecomputing.controlui.controls.code.CCRealtimeCompileControl;
@@ -81,7 +82,6 @@ public class CCObjectControl extends JPanel implements CCControl{
 	private JLabel _myLabel;
 	
 	private CCPropertyListener<Object> _myListener;
-	
 
 	public CCObjectControl(CCObjectPropertyHandle thePropertyHandle, CCControlComponent theInfoPanel, int theDepth){
 		_myProperty = thePropertyHandle;
@@ -163,6 +163,10 @@ public class CCObjectControl extends JPanel implements CCControl{
 				setBorder(BorderFactory.createEmptyBorder());
 			}
 		});
+		
+		if(CCControlApp.preferences.getBoolean(_myProperty.path().toString() + "/open" , false)){
+			open();
+		}
 	}
 	
 	@Override
@@ -196,6 +200,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		_myInfoPanel.repaint();
 		_myIsSelected = true;
 		_myLabel.setText("[-] " + _myName);
+		CCControlApp.preferences.put(_myProperty.path().toString() + "/open" , true + "");
 	}
 	
 	public void close() {
@@ -208,6 +213,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		repaint();
 		_myIsSelected = false;	
 		_myLabel.setText("[+] " + _myName);
+		CCControlApp.preferences.put(_myProperty.path().toString() + "/open" , false + "");
 	}
 	
 	public JPanel controlComponent(){
@@ -254,7 +260,6 @@ public class CCObjectControl extends JPanel implements CCControl{
 		CCControlCreator myCreator = null;
 		Class<?> myClass = theClass;
 		do{
-			CCLog.info(myClass);
 			myCreator = creatorMap.get(myClass);
 			myClass = myClass.getSuperclass();
 		}while(myClass != null && myCreator == null && myClass != Object.class);

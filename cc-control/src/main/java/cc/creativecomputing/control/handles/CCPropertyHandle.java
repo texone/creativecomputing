@@ -10,7 +10,13 @@ import cc.creativecomputing.io.data.CCDataObject;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class CCPropertyHandle<Type>{
-	protected final CCMember<CCProperty> _myMember;
+	
+	public static String propertyName(CCMember<CCProperty> theMember){
+		if(theMember == null)return "";
+		return theMember.annotation() == null || theMember.annotation().name().equals("") ? theMember.memberName() : theMember.annotation().name();
+	}
+	
+	protected CCMember<CCProperty> _myMember;
 	
 	protected final CCListenerManager<CCPropertyListener> _myEvents = CCListenerManager.create(CCPropertyListener.class);
 	
@@ -55,8 +61,7 @@ public abstract class CCPropertyHandle<Type>{
 	}
 	
 	public String name(){
-		if(_myMember == null)return "";
-		return _myMember.annotation() == null || _myMember.annotation().name().equals("") ? memberName() : _myMember.annotation().name();
+		return propertyName(_myMember);
 	}
 	
 	public String memberName(){
@@ -65,6 +70,11 @@ public abstract class CCPropertyHandle<Type>{
 	
 	public CCMember member(){
 		return _myMember;
+	}
+	
+	public void member(CCMember theMember){
+		_myMember = theMember;
+		_myUpdateMember = true;
 	}
 	
 	public Type value(){

@@ -16,12 +16,12 @@ import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.control.code.CCRuntimeCompilable;
-import cc.creativecomputing.control.code.CCShaderFile;
 import cc.creativecomputing.control.code.CCShaderSource;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
 import cc.creativecomputing.core.CCSelectable;
 import cc.creativecomputing.core.CCSelectionListener;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
@@ -283,12 +283,31 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		return myResult;
 	}
 	
+	public void relink(Object theObject){
+		_myChildHandles = link(theObject);
+	}
+	
 	private Map<String,CCPropertyHandle> link(Object theObject){
 		
 		Map<String,CCPropertyHandle> myResult = new LinkedHashMap<>();
-		
-		List<CCField<CCProperty>> myFields = CCReflectionUtil.getFields(theObject, CCProperty.class);
-		for(CCField<CCProperty> myField:myFields){
+		for(CCField<CCProperty> myField:CCReflectionUtil.getFields(theObject, CCProperty.class)){
+			
+			String myName = propertyName(myField);
+
+			if(_myChildHandles.containsKey(myName)){
+				CCPropertyHandle myProperty = _myChildHandles.get(myName);
+				myProperty.member(myField);
+				if(myProperty instanceof CCObjectPropertyHandle){
+
+					CCObjectPropertyHandle myObjectPropertyHandle = (CCObjectPropertyHandle)myProperty;
+					myObjectPropertyHandle.relink(myField.value());
+				}
+				if(myProperty.type() == myField.type()){
+					myResult.put(myProperty.name(), myProperty);
+					continue;
+				}
+			}
+			
 			Class<?> myClass = myField.type();
 			CCPropertyHandle myProperty = null;
 			
@@ -590,9 +609,9 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 //		if(theOverWrite){
 //			_myOriginalValue = theValue;
 //		}
-//		_myValue = theValue;
-//		_myMember.value(theValue);
-//		onChange();
+		_myValue = theValue;
+		_myMember.value(theValue);
+		onChange();
 	}
 	
 	public void valueSiblings(Object theValue, String theName){

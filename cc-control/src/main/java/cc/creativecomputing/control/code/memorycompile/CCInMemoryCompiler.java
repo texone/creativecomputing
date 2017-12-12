@@ -1,21 +1,16 @@
 package cc.creativecomputing.control.code.memorycompile;
-import javax.tools.*;
-
-import cc.creativecomputing.io.CCNIOUtil;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.SecureClassLoader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.ToolProvider;
+
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.io.CCNIOUtil;
 
 /**
  * MASSIVELY based on http://javapracs.blogspot.de/2011/06/dynamic-in-memory-compilation-using.html by Rekha Kumari
@@ -23,159 +18,89 @@ import java.util.Map;
  */
 public class CCInMemoryCompiler {
     
-    public static class IMCSourceCode{
-    	
-		public final String className;
-		public final Path sourcePath;
-		public final String sourceCode;
-		
-		public IMCSourceCode(Class<?> theClass){
-			String myClassName = theClass.getName();
-			String packageName = myClassName.substring(0, myClassName.lastIndexOf("."));
-			String classSimpleName = myClassName.substring(myClassName.lastIndexOf(".") + 1);
-			sourcePath = Paths.get("src/main/java", packageName.split("\\.")).resolve(classSimpleName + ".java");
-			
-			StringBuffer myBuffer = new StringBuffer();
-			for(String myLine : CCNIOUtil.loadStrings(sourcePath)){
-				if(myLine.trim().startsWith("package ")){
-					myLine = myLine.replace(packageName, "recompile." + packageName);
-				}
-				myBuffer.append(myLine);
-			}
-			sourceCode = myBuffer.toString();
-			
-			className = "recompile." + myClassName;
-		}
-	}
-
-    final public boolean valid;
-
-    final private List<IMCSourceCode> classSourceCodes;
-    final private JavaFileManager fileManager;
-
-    public CCInMemoryCompiler(final List<IMCSourceCode> classSourceCodes) {
-
-        this.classSourceCodes = classSourceCodes;
-
-        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        if (compiler == null) {
-            fileManager = null;
-            valid = false;
-            System.err.println("ToolProvider.getSystemJavaCompiler() returned null! This program needs to be run on a system with an installed JDK.");
-            return;
+    private final List<CCInMemoryCompilerSourceCode> _myClassSourceCodes;
+    private final CCInMemoryFileManager _myFileManager;
+    private final JavaCompiler _myCompiler;
+    
+    
+    public CCInMemoryCompiler(){
+    	_myCompiler = ToolProvider.getSystemJavaCompiler();
+        if (_myCompiler == null) {
+            throw new RuntimeException("ToolProvider.getSystemJavaCompiler() returned null! This program needs to be run on a system with an installed JDK.");
         }
-        valid = true;
+    	_myFileManager = new CCInMemoryFileManager(_myCompiler);
+        _myClassSourceCodes = new ArrayList<>();
+    }
 
-        fileManager = new ForwardingJavaFileManager<JavaFileManager>(compiler.getStandardFileManager(null, null, null)) {
-
-            final private Map<String, ByteArrayOutputStream> byteStreams = new HashMap<>();
-
-            @Override
-            public ClassLoader getClassLoader(final Location location) {
-
-                return new SecureClassLoader() {
-
-                    @Override
-                    protected Class<?> findClass(final String className) throws ClassNotFoundException {
-
-                        final ByteArrayOutputStream bos = byteStreams.get(className);
-                        if (bos == null) {
-                            return null;
-                        }
-                        final byte[] b = bos.toByteArray();
-                        return super.defineClass(className, b, 0, b.length);
-                    }
-                };
-            }
-
-            @Override
-            public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) throws IOException {
-
-                return new SimpleJavaFileObject(URI.create("string:///" + className.replace('.', '/') + kind.extension), kind) {
-
-                    @Override
-                    public OutputStream openOutputStream() throws IOException {
-
-                        ByteArrayOutputStream bos = byteStreams.get(className);
-                        if (bos == null) {
-                            bos = new ByteArrayOutputStream();
-                            byteStreams.put(className, bos);
-                        }
-                        return bos;
-                    }
-                };
-            }
-        };
+    public CCInMemoryCompiler(final List<CCInMemoryCompilerSourceCode> classSourceCodes) {
+    	this();
+        _myClassSourceCodes.addAll(classSourceCodes);
+    }
+    
+    private String _myMainClassName = null;
+    private CCInMemoryCompilerSourceCode _myMainSource = null;
+    
+    private void scanSources(Path theFolder){
+    	for(Path myPath:CCNIOUtil.list(theFolder)){
+        	if(Files.isDirectory(myPath)){
+        		scanSources(myPath);
+        	}else{
+        		if(CCNIOUtil.fileExtension(myPath).equals("java")){
+        			_myClassSourceCodes.add(new CCInMemoryCompilerSourceCode(myPath));
+        		}
+        	}
+        	CCLog.info(myPath);
+        }
+    }
+    
+    public CCInMemoryCompiler(Class<?> theMainClass) {
+    	this();
+    	_myMainSource = new CCInMemoryCompilerSourceCode(theMainClass);
+        scanSources(_myMainSource.sourcePath.getParent());
+        _myMainClassName = _myMainSource.className;
+    }
+    
+    public boolean needsUpdated(){
+    	for (CCInMemoryCompilerSourceCode classSourceCode : _myClassSourceCodes) {
+            if(classSourceCode.needsUpdate())return true;
+        }
+    	return false;
     }
 
     public CompilerFeedback compile() {
-
-        if (!valid) {
-            return null;
+    	
+    	if(_myMainSource != null){
+    		_myClassSourceCodes.clear();
+            scanSources(_myMainSource.sourcePath.getParent());
+    	}
+    	_myFileManager.reset();
+    	
+        final List<JavaFileObject> myFiles = new ArrayList<>();
+        for (CCInMemoryCompilerSourceCode classSourceCode : _myClassSourceCodes) {
+            JavaFileObject myFileObject = classSourceCode.fileObject();
+            myFiles.add(myFileObject);
         }
-        final List<JavaFileObject> files = new ArrayList<>();
-        for (IMCSourceCode classSourceCode : classSourceCodes) {
-            URI uri = null;
-            try {
-                uri = URI.create("string:///" + classSourceCode.className.replace('.', '/') + JavaFileObject.Kind.SOURCE.extension);
-            } catch (Exception e) {
-                //                e.printStackTrace();
-            }
-            if (uri != null) {
-                final SimpleJavaFileObject sjfo = new SimpleJavaFileObject(uri, JavaFileObject.Kind.SOURCE) {
 
-                    @Override
-                    public CharSequence getCharContent(final boolean ignoreEncodingErrors) {
-
-                        return classSourceCode.sourceCode;
-                    }
-                };
-                files.add(sjfo);
-            }
-        }
+        if (myFiles.size() <= 0) return null;
 
         final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
-        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-
-        if (files.size() > 0) {
-            final JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, files);
-            return new CompilerFeedback(task.call(), diagnostics);
-        } else {
-            return null;
-        }
+        
+        final JavaCompiler.CompilationTask myCompileTask = _myCompiler.getTask(null, _myFileManager, diagnostics, null, null, myFiles);
+        return new CompilerFeedback(myCompileTask.call(), diagnostics);
+       
+    }
+    
+    public Class<?> getCompiledMainClass() throws ClassNotFoundException{
+    	if(_myMainClassName == null)return null;
+    	return getCompiledClass(_myMainClassName);
     }
 
-    public void runToString(final String className) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-        if (!valid) {
-            return;
-        }
-        final Class<?> theClass = getCompiledClass(className);
-        final Object instance = theClass.newInstance();
-        System.out.println(instance);
-    }
-
-    public void runMain(final String className, final String[] args) throws IllegalAccessException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
-
-        if (!valid) {
-            return;
-        }
-        final Class<?> theClass = getCompiledClass(className);
-        final Method mainMethod = theClass.getDeclaredMethod("main", String[].class);
-        mainMethod.invoke(null, new Object[] { args });
-    }
-
-    public Class<?> getCompiledClass(final String className) throws ClassNotFoundException {
-
-        if (!valid) {
-            throw new IllegalStateException("InMemoryCompiler instance not usable because ToolProvider.getSystemJavaCompiler() returned null: No JDK installed.");
-        }
-        final ClassLoader classLoader = fileManager.getClassLoader(null);
-        final Class<?> ret = classLoader.loadClass(className);
-        if (ret == null) {
+    public Class<?> getCompiledClass(final String theClassName) throws ClassNotFoundException {
+        final Class<?> myResult =  _myFileManager.getClassLoader(null).loadClass(theClassName);
+        if (myResult == null) {
             throw new ClassNotFoundException("Class returned by ClassLoader was null!");
         }
-        return ret;
+        return myResult;
     }
 }

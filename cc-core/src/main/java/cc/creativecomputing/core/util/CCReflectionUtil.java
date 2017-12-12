@@ -302,9 +302,12 @@ public class CCReflectionUtil {
 	
 	public static <Type extends Annotation>List<CCField<Type>> getFields(Object theObject, Class<Type> theAnnotation){
 		List<Field> myFields = new ArrayList<>();
+		List<CCField<Type>> myResult = new ArrayList<>();
+		
+		if(theObject == null)return myResult;
+		
 		CCReflectionUtil.getFields(theObject.getClass(), theAnnotation, myFields);
 		
-		List<CCField<Type>> myResult = new ArrayList<>();
 		for(Field myField:myFields){
 			try {
 				myResult.add(new CCField<Type>(myField, theObject, theAnnotation));
@@ -513,9 +516,12 @@ public class CCReflectionUtil {
 	
 	public static <Type extends Annotation>List<CCMethod<Type>> getMethods(Object theObject, Class<Type> theAnnotation){
 		List<Method> myMethods = new ArrayList<>();
+		List<CCMethod<Type>> myResult = new ArrayList<>();
+		
+		if(theObject == null)return myResult;
+		
 		getMethods(theObject.getClass(), theAnnotation, myMethods);
 		
-		List<CCMethod<Type>> myResult = new ArrayList<>();
 		for(Method myMethod:myMethods){
 			String myName = myMethod.getName();
 			Method myGetter = null;
