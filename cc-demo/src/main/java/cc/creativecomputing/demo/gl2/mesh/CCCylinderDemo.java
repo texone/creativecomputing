@@ -23,6 +23,7 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
+import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -108,9 +109,12 @@ public class CCCylinderDemo extends CCGL2Adapter {
 		g.blendMode(CCBlendMode.ADD);
 		g.color(1f, 1f);
 		_myDrawttributes.start(g);
+		g.texture(0, CCGLShaderUtil.randomTexture());
 		_myCylinderShader.start();
+		_myCylinderShader.uniform1f("iTime", animator().time());
 		_myMesh.draw(g);
 		_myCylinderShader.end();
+		g.noTexture();
 		_myDrawttributes.end(g);
 	}
 
@@ -121,6 +125,6 @@ public class CCCylinderDemo extends CCGL2Adapter {
 		myAppManager.glcontext().size(1800, 600);
 		myAppManager.animator().framerate = 30;
 		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
-		myAppManager.start();
+		myAppManager.start(); 
 	}
 }
