@@ -135,8 +135,8 @@ public class CCContainment extends CCNeighborHoodBehavior{
 	}
 	
 	private enum ProbeMode{
-		RANDOM, FEELER;
-	}
+		RANDOM, FEELER
+    }
 	
 	public static final ProbeMode RANDOM = ProbeMode.RANDOM;
 	public static final ProbeMode FEELER = ProbeMode.FEELER;
