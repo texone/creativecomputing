@@ -304,7 +304,7 @@ public class CCParticles{
 		Iterator<Entry<Integer, CCVector3>> it = _myPositionUpdates.entrySet().iterator();
 		
 	    while (it.hasNext()) {
-	        Map.Entry<Integer, CCVector3> pairs = (Map.Entry<Integer, CCVector3>)it.next();
+	        Map.Entry<Integer, CCVector3> pairs = it.next();
 	        
 	        g.textureCoords3D(0, pairs.getValue());
 			g.vertex(pairs.getKey() % _myWidth, pairs.getKey() / _myWidth);

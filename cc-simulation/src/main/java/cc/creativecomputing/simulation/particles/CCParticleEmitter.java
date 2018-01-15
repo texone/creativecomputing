@@ -15,10 +15,10 @@ import cc.creativecomputing.graphics.CCGraphics;
 
 public interface CCParticleEmitter {
 
-	public void setData(CCGraphics g);
+	void setData(CCGraphics g);
 	
-	public void reset();
+	void reset();
 
-	public void update(CCAnimator theAnimator);
+	void update(CCAnimator theAnimator);
 	
 }

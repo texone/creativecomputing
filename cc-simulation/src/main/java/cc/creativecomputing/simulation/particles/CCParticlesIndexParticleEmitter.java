@@ -278,7 +278,7 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 	public CCParticle emit(
 		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
-		final float theLifeTime, 
+		final double theLifeTime, 
 		final boolean theIsPermanent
 	){	
 		return emit(CCColor.WHITE, thePosition, theVelocity, theLifeTime, theIsPermanent);
