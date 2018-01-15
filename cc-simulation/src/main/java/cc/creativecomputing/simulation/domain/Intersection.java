@@ -56,8 +56,6 @@ public class Intersection {
 	static public boolean intersects(final CCBox theBox1, final CCBox theBox2) {
 		if (theBox1.max().x < theBox2.min().x || theBox1.min().x > theBox2.max().x)return false;
 		if (theBox1.max().y < theBox2.min().y || theBox1.min().y > theBox2.max().y)return false;
-		if (theBox1.max().z < theBox2.min().z || theBox1.min().z > theBox2.max().z)return false;
-		
-		return true;
-	}
+        return !(theBox1.max().z < theBox2.min().z) && !(theBox1.min().z > theBox2.max().z);
+    }
 }

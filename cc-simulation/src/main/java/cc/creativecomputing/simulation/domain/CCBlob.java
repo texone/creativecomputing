@@ -45,7 +45,7 @@ public class CCBlob extends CCDomain{
 		CCVector3 x = i_vector.clone();
 		x.subtractLocal(center);
 
-		double gX = (double)Math.exp(x.lengthSquared() * scale1) * scale2;
+		double gX = Math.exp(x.lengthSquared() * scale1) * scale2;
 		return (CCMath.random() < gX);
 	}
 	
@@ -56,7 +56,7 @@ public class CCBlob extends CCDomain{
 
 	    double y;
 	    do {
-	        y = -(double)Math.log(CCMath.random());
+	        y = -Math.log(CCMath.random());
 	    }while(CCMath.random() > Math.exp(-CCMath.sq(y - 1.0f)*0.5f));
 
 	    if(CCMath.random() > 0.5f)

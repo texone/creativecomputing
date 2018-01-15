@@ -73,7 +73,7 @@ public class Cylinder extends CCDomain{
 			axisLenInvSqr = 0f;
 		}
 		
-		n.multiplyLocal((double)Math.sqrt(axisLenInvSqr));
+		n.multiplyLocal(Math.sqrt(axisLenInvSqr));
 
 		// Find a vector orthogonal to n.
 		CCVector3 basis = new CCVector3(1.0f, 0.0f, 0.0f);
@@ -132,14 +132,14 @@ public class Cylinder extends CCDomain{
 
 	public CCVector3 generate(){
 		double dist = CCMath.random(); // Distance between base and tip
-		double theta = CCMath.random() * 2.0f * (double)Math.PI; // Angle around axis
+		double theta = CCMath.random() * 2.0f * Math.PI; // Angle around axis
 		
 		// Distance from axis
 		double r = radIn + CCMath.random() * radDif;
 
 		// Another way to do this is to choose a random point in a square and keep it if it's in the circle.
-		double x = scaleCoord(r * (double)Math.cos(theta),dist);
-		double y = scaleCoord(r * (double)Math.sin(theta),dist);
+		double x = scaleCoord(r * Math.cos(theta),dist);
+		double y = scaleCoord(r * Math.sin(theta),dist);
 		
 		CCVector3 axis = this.axis.clone();
 		axis.multiplyLocal(dist);

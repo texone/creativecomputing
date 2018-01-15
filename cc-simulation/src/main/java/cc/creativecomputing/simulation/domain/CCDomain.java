@@ -94,4 +94,4 @@ public abstract class CCDomain implements Cloneable{
 	
 	public void avoidance(final CCParticle theParticle, final CCVector3 theVector, final double theLookAhead, final double theEpsilon){}
 	
-};
+}

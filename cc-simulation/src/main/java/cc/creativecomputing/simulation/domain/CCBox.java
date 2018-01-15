@@ -138,10 +138,8 @@ public class CCBox extends CCDomain{
 		if (_myMaxCorner.x <= theMinCorner.x && _myMinCorner.x <= theMinCorner.x)return false;
 		if (_myMaxCorner.x >= theMaxCorner.x && _myMinCorner.x >= theMaxCorner.x)return false;
 		if (_myMaxCorner.y <= theMinCorner.y && _myMinCorner.y <= theMinCorner.y)return false;
-		if (_myMaxCorner.y >= theMaxCorner.y && _myMinCorner.y >= theMaxCorner.y)return false;
-		
-		return true;
-	}
+        return !(_myMaxCorner.y >= theMaxCorner.y) || !(_myMinCorner.y >= theMaxCorner.y);
+    }
 
 	public CCVector3 min(){
 		return _myMinCorner;

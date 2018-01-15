@@ -82,12 +82,12 @@ public class Disc extends CCDomain{
 
 	public CCVector3 generate(){
 		// Might be faster to generate a point in a square and reject if outside the circle
-		double theta = CCMath.random() * 2.0f * (double) Math.PI; // Angle around normal
+		double theta = CCMath.random() * 2.0f * Math.PI; // Angle around normal
 		// Distance from center
 		double r = radIn + CCMath.random() * dif;
 
-		double x = r * (double) Math.cos(theta); // Weighting of each frame vector
-		double y = r * (double) Math.sin(theta);
+		double x = r * Math.cos(theta); // Weighting of each frame vector
+		double y = r * Math.sin(theta);
 
 		CCVector3 u = this.u.clone();
 		u.multiplyLocal(x);
