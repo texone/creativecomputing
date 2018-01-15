@@ -105,7 +105,7 @@ public class CCFluidSolver {
 	@CCProperty(name = "temperature dissipation", min = 0.9, max = 1, digits = 4)
 	private double _myTemperatureDissipation = 0.998;
 	
-	private static enum CCFluidDrawMode{
+	private enum CCFluidDrawMode{
 		DENSITY,
 		VELOCITY,
 		DIVERGENCE,
