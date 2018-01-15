@@ -23,7 +23,7 @@ import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
 public class CCDensityBoxDemo extends CCGL2Adapter {
 	
-	private static enum CCDensityShow{
+	private enum CCDensityShow{
 		PARTICLES, DENSITY, FORCE
 	}
 	

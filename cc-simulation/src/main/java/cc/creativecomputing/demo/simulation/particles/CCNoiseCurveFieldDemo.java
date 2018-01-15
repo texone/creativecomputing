@@ -56,10 +56,10 @@ public class CCNoiseCurveFieldDemo extends CCGL2Adapter {
 		
 		mouseListener().add(
 			new CCMouseAdapter() {
-				public void mousePressed(CCMouseEvent theEvent) {};
-				
-				public void mouseReleased(CCMouseEvent theEvent) {};
-			}
+				public void mousePressed(CCMouseEvent theEvent) {}
+
+                public void mouseReleased(CCMouseEvent theEvent) {}
+            }
 		);
 		mouseMotionListener().add(new CCMouseAdapter() {
 			@Override

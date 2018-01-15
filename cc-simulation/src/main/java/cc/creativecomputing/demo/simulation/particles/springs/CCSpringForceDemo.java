@@ -66,7 +66,7 @@ public class CCSpringForceDemo extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 //		frameRate(30);
-		g.debug();
+		CCGraphics.debug();
 		List<CCForce> myForces = new ArrayList<>();
 		myForces.add(_myForceField);
 		_myForceField.strength(1f);

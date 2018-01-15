@@ -5,6 +5,7 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.graphics.CCDrawAttributes;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -17,6 +18,7 @@ import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCForceField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
+import cc.creativecomputing.simulation.particles.render.CCParticleQuadRenderer;
 
 public class CCForceFieldDemo extends CCGL2Adapter {
 	
@@ -29,13 +31,16 @@ public class CCForceFieldDemo extends CCGL2Adapter {
 	
 	private CCForceField _myForceField;
 	
+	@CCProperty(name = "draw attributes")
+	private CCDrawAttributes _cDrawAttributes = new CCDrawAttributes();
+	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 		myForces.add(new CCViscousDrag(0.3f));
 		myForces.add(_myForceField = new CCForceField());
 		
-		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 1000,1000);
+		_myParticles = new CCParticles(g, new CCParticleQuadRenderer(), myForces, new ArrayList<CCConstraint>(), 1000,1000);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);
@@ -63,9 +68,9 @@ public class CCForceFieldDemo extends CCGL2Adapter {
 		g.color(255);
 		g.pushMatrix();
 		_cCameraController.camera().draw(g);
-		g.blend(CCBlendMode.ADD);
-		g.color(255,50);
+		_cDrawAttributes.start(g);
 		_myParticles.display(g);
+		_cDrawAttributes.end(g);
 		g.popMatrix();
 		
 		g.blend();

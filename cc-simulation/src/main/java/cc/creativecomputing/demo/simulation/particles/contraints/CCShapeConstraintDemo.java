@@ -43,7 +43,7 @@ public class CCShapeConstraintDemo extends CCGL2Adapter {
 	
 	
 	
-	private static enum CCDensityShow{
+	private enum CCDensityShow{
 		PARTICLES, DENSITY, FORCE
 	}
 	
