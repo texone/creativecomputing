@@ -13,5 +13,5 @@ public interface MarkerListener {
 	 * Implement this method to define what happens when the time cursor goes over a marker
 	 * @param thePoint marker the timeline cursor has moved over
 	 */
-	public void onMarker(MarkerPoint thePoint);
+    void onMarker(MarkerPoint thePoint);
 }

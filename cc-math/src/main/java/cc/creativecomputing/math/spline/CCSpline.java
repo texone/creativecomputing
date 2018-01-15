@@ -30,7 +30,7 @@ public abstract class CCSpline{
 	protected boolean _myIsClosed;
 	protected List<Double> _mySegmentsLength;
 
-	public static enum CCSplineType {
+	public enum CCSplineType {
 		LINEAR, CATMULL_ROM, BEZIER, NURB, BLEND
 	}
 

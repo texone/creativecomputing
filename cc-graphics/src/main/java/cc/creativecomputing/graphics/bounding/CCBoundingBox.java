@@ -592,13 +592,10 @@ public class CCBoundingBox extends CCBoundingVolume {
             return false;
         }
 
-        if (CCMath.abs(_myCenter.x - bs.center().x) < bs.radius() + getXExtent()
+        return CCMath.abs(_myCenter.x - bs.center().x) < bs.radius() + getXExtent()
                 && CCMath.abs(_myCenter.y - bs.center().y) < bs.radius() + getYExtent()
-                && CCMath.abs(_myCenter.z - bs.center().z) < bs.radius() + getZExtent()) {
-            return true;
-        }
+                && CCMath.abs(_myCenter.z - bs.center().z) < bs.radius() + getZExtent();
 
-        return false;
     }
 
     @Override
@@ -613,12 +610,8 @@ public class CCBoundingBox extends CCBoundingVolume {
         } else if (_myCenter.y + getYExtent() < bb._myCenter.y - bb.getYExtent()
                 || _myCenter.y - getYExtent() > bb._myCenter.y + bb.getYExtent()) {
             return false;
-        } else if (_myCenter.z + getZExtent() < bb._myCenter.z - bb.getZExtent()
-                || _myCenter.z - getZExtent() > bb._myCenter.z + bb.getZExtent()) {
-            return false;
-        } else {
-            return true;
-        }
+        } else return !(_myCenter.z + getZExtent() < bb._myCenter.z - bb.getZExtent())
+                && !(_myCenter.z - getZExtent() > bb._myCenter.z + bb.getZExtent());
     }
 
     @Override

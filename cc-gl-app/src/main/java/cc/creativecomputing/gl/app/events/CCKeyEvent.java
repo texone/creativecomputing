@@ -63,13 +63,13 @@ public class CCKeyEvent extends CCEvent{
 	
 	public static final String KEY_EVENT = "KEY_EVENT";
 	
-	public static enum CCKeyEventType{
+	public enum CCKeyEventType{
 		PRESSED,
 		RELEASED,
 		TYPED
 	}
 	
-	public static enum CCKeyCode{
+	public enum CCKeyCode{
 		 /* Virtual key codes. */
 
 	    VK_ENTER 			( '\n'),
@@ -688,7 +688,7 @@ public class CCKeyEvent extends CCEvent{
 
 	    private int _myCode;
 	    
-	    private CCKeyCode(int theCode){
+	    CCKeyCode(int theCode){
 	    	_myCode = theCode;
 	    }
 	    

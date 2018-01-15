@@ -31,8 +31,8 @@ import cc.creativecomputing.core.events.CCListenerManager;
  */
 public class UndoHistory {
 	
-	public static interface HistoryListener{
-		public void onChange(UndoHistory theHistory);
+	public interface HistoryListener{
+		void onChange(UndoHistory theHistory);
 	}
 	
 	private static UndoHistory instance = new UndoHistory();

@@ -25,21 +25,21 @@ import java.awt.geom.Point2D;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
 
 public interface CCEventTrackListener{
-	public void onCreate(CCEventTrackController theController, TimedEventPoint thePoint);
+	void onCreate(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onChange(CCEventTrackController theController, TimedEventPoint thePoint);
+	void onChange(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onDelete(CCEventTrackController theController, TimedEventPoint thePoint);
+	void onDelete(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onProperties(CCEventTrackController theController, TimedEventPoint thePoint);
+	void onProperties(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onClick(CCEventTrackController theController, TimedEventPoint thePoint);
+	void onClick(CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onTime(double theTime, CCEventTrackController theController, TimedEventPoint thePoint);
+	void onTime(double theTime, CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onTimeChange(double theTime, double theOffset, CCEventTrackController theController, TimedEventPoint thePoint);
+	void onTimeChange(double theTime, double theOffset, CCEventTrackController theController, TimedEventPoint thePoint);
 	
-	public void onOut();
+	void onOut();
 	
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d);
+	void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d);
 }

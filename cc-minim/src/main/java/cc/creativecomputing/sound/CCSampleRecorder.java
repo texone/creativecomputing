@@ -38,19 +38,19 @@ public interface CCSampleRecorder extends CCAudioListener {
 	 * 
 	 * @return the full path to the file or an empty String
 	 */
-	public Path filePath();
+    Path filePath();
 
 	/**
 	 * Begins recording.
 	 *
 	 */
-	public void beginRecord();
+    void beginRecord();
 
 	/**
 	 * Halts recording.
 	 *
 	 */
-	public void endRecord();
+    void endRecord();
 
 	/**
 	 * Returns the current record state.

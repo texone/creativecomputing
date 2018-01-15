@@ -121,10 +121,10 @@ public final class ModbusUtil {
 	public static final byte[] toHex(int i) {
 		StringBuffer buf = new StringBuffer(2);
 		// don't forget the second hex digit
-		if (((int) i & 0xff) < 0x10) {
+		if ((i & 0xff) < 0x10) {
 			buf.append("0");
 		}
-		buf.append(Long.toString((int) i & 0xff, 16).toUpperCase());
+		buf.append(Long.toString(i & 0xff, 16).toUpperCase());
 		return buf.toString().getBytes();
 	}// toHex
 

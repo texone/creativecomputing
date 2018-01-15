@@ -4,9 +4,9 @@ import cc.creativecomputing.core.events.CCListenerManager;
 
 public interface CCAppModule<ListenerType> {
 	
-	public void start();
+	void start();
 	
-	public void stop();
+	void stop();
 	
-	public CCListenerManager<ListenerType> listener();
+	CCListenerManager<ListenerType> listener();
 }

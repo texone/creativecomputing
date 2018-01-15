@@ -941,10 +941,7 @@ public class CCVector2 implements Cloneable, Externalizable {
         if (Double.isNaN(theVector.x) || Double.isNaN(theVector.y)) {
             return false;
         }
-        if (Double.isInfinite(theVector.x) || Double.isInfinite(theVector.y)) {
-            return false;
-        }
-        return true;
+        return !Double.isInfinite(theVector.x) && !Double.isInfinite(theVector.y);
     }
 
     /**
@@ -964,10 +961,10 @@ public class CCVector2 implements Cloneable, Externalizable {
         int result = 33;
 
         final long myX = Double.doubleToLongBits(x);
-        result += 63 * result + (long) (myX ^ myX >>> 63);
+        result += 63 * result + (myX ^ myX >>> 63);
 
         final long myY = Double.doubleToLongBits(y);
-        result += 63 * result + (long) (myY ^ myY >>> 63);
+        result += 63 * result + (myY ^ myY >>> 63);
 
         return result;
     }
@@ -1013,7 +1010,7 @@ public class CCVector2 implements Cloneable, Externalizable {
      * @throws ClassNotFoundException
      */
     @Override
-    public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(final ObjectInput in) throws IOException {
         x = in.readFloat();
         y = in.readFloat();
     }

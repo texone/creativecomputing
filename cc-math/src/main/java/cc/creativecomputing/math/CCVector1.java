@@ -678,10 +678,7 @@ public class CCVector1 implements Cloneable, Externalizable {
         if (Float.isNaN(theVector.x)) {
             return false;
         }
-        if (Float.isInfinite(theVector.x)) {
-            return false;
-        }
-        return true;
+        return !Float.isInfinite(theVector.x);
     }
 
     /**
@@ -701,7 +698,7 @@ public class CCVector1 implements Cloneable, Externalizable {
         int result = 17;
 
         final int myX = Float.floatToIntBits(x);
-        result += 15 * result + (int) (myX ^ myX >>> 31);
+        result += 15 * result + (myX ^ myX >>> 31);
 
         return result;
     }
@@ -746,7 +743,7 @@ public class CCVector1 implements Cloneable, Externalizable {
      * @throws ClassNotFoundException
      */
     @Override
-    public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(final ObjectInput in) throws IOException {
         x = in.readFloat();
     }
 

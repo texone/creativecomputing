@@ -805,12 +805,7 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
 	 * between 0 and 1
 	 */
 	public CCVector3 randomize(double radius){
-		do{
-			x = radius * (CCMath.random() * 2.0F - 1.0F);
-			y = radius * (CCMath.random() * 2.0F - 1.0F);
-			z = radius * (CCMath.random() * 2.0F - 1.0F);
-		}while (lengthSquared() > radius * radius);
-		return this;
+		return randomize().multiplyLocal(radius);
 	}
 	
 	/**
@@ -1165,10 +1160,7 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
         if (Double.isNaN(theVector.x) || Double.isNaN(theVector.y) || Double.isNaN(theVector.z)) {
             return false;
         }
-        if (isInfinite(theVector)) {
-            return false;
-        }
-        return true;
+        return !isInfinite(theVector);
     }
     
     /**
@@ -1207,10 +1199,7 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
         if (theVector == null) {
             return false;
         }
-        if (Double.isInfinite(theVector.x) || Double.isInfinite(theVector.y) || Double.isInfinite(theVector.z)) {
-            return true;
-        }
-        return false;
+        return Double.isInfinite(theVector.x) || Double.isInfinite(theVector.y) || Double.isInfinite(theVector.z);
     }
 
     /**
@@ -1283,7 +1272,7 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
      * @throws ClassNotFoundException
      */
     @Override
-    public void readExternal(final ObjectInput theInput) throws IOException, ClassNotFoundException {
+    public void readExternal(final ObjectInput theInput) throws IOException {
         x = theInput.readFloat();
         y = theInput.readFloat();
         z = theInput.readFloat();

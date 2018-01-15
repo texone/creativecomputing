@@ -31,7 +31,7 @@ public interface CCMouseDraggedListener{
      * is within the bounds of the application window).
 	 * @param theMouseEvent the related mouse event
 	 */
-	public void mouseDragged(final CCMouseEvent theMouseEvent);
+    void mouseDragged(final CCMouseEvent theMouseEvent);
 	
 	
 }

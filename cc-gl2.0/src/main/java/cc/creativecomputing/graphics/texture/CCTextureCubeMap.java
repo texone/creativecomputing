@@ -21,7 +21,7 @@ import com.jogamp.opengl.GL;
  */
 public class CCTextureCubeMap extends CCTexture{
 	
-	public static enum CCCubeMapSide{
+	public enum CCCubeMapSide{
 		POSITIVE_X(GL.GL_TEXTURE_CUBE_MAP_POSITIVE_X),
 		POSITIVE_Y(GL.GL_TEXTURE_CUBE_MAP_POSITIVE_Y),
 		POSITIVE_Z(GL.GL_TEXTURE_CUBE_MAP_POSITIVE_Z),
@@ -31,7 +31,7 @@ public class CCTextureCubeMap extends CCTexture{
 		
 		public int glID;
 		
-		private CCCubeMapSide(final int theGLID) {
+		CCCubeMapSide(final int theGLID) {
 			glID = theGLID;
 		}
 	}

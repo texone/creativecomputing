@@ -21,7 +21,7 @@ public class GLShaderObject {
 	 * @author christianr
 	 *
 	 */
-	public static enum GLShaderType{
+	public enum GLShaderType{
 		/**
 		 * A shader of type VERTEX is a shader that is intended to run on the programmable vertex processor.
 		 */
@@ -45,7 +45,7 @@ public class GLShaderObject {
 		
 		int glID;
 		
-		private GLShaderType(int theGLID){
+		GLShaderType(int theGLID){
 			glID = theGLID;
 		}
 		
@@ -207,7 +207,7 @@ public class GLShaderObject {
 	}
 	
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() {
 		GL4 gl = GLGraphics.currentGL();
 		gl.glDeleteShader(_myID);
 	}

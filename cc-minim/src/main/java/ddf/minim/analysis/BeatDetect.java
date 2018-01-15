@@ -75,7 +75,7 @@ import cc.creativecomputing.sound.CCAudioBuffer;
 
 public class BeatDetect {
 
-	public static enum BeatDetectionMode {
+	public enum BeatDetectionMode {
 		/**
 		 * Constant used to request frequency energy tracking mode.
 		 * 
@@ -87,8 +87,8 @@ public class BeatDetect {
 		 * 
 		 * @example Analysis/SoundEnergyBeatDetection
 		 */
-		SOUND_ENERGY;
-	}
+		SOUND_ENERGY
+    }
 
 	private BeatDetectionMode algorithm;
 	private int sampleRate;
@@ -503,12 +503,12 @@ public class BeatDetect {
 		// compute C using a linear digression of C with V
 		float C = (-0.0025714f * V) + 1.5142857f;
 		// filter negaive values
-		float diff = (float) Math.max(instant - C * E, 0);
+		float diff = Math.max(instant - C * E, 0);
 		pushVal(diff);
 		// find the average of only the positive values in dBuffer
 		float dAvg = specAverage(dBuffer);
 		// filter negative values
-		float diff2 = (float) Math.max(diff - dAvg, 0);
+		float diff2 = Math.max(diff - dAvg, 0);
 		pushVar(diff2);
 		// report false if it's been less than 'sensitivity'
 		// milliseconds since the last true value
@@ -540,9 +540,9 @@ public class BeatDetect {
 			E = average(feBuffer[i]);
 			V = variance(feBuffer[i], E);
 			C = (-0.0025714f * V) + 1.5142857f;
-			diff = (float) Math.max(instant - C * E, 0);
+			diff = Math.max(instant - C * E, 0);
 			dAvg = specAverage(fdBuffer[i]);
-			diff2 = (float) Math.max(diff - dAvg, 0);
+			diff2 = Math.max(diff - dAvg, 0);
 			if (System.currentTimeMillis() - fTimer[i] < sensitivity) {
 				fIsOnset[i] = false;
 			} else if (diff2 > 0) {

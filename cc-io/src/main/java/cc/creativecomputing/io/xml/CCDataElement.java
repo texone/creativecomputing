@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.core.util.CCStringUtil;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.math.CCVector2i;
 
 /**
  * CCXMLElement is the basic class to work with xml. You can build a CCXMLElement and add 
@@ -157,11 +160,7 @@ public class CCDataElement implements Iterable<CCDataElement>{
 	 * @return boolean
 	 */
 	private boolean has(List<CCDataElement> toCheck){
-		if (toCheck.isEmpty() || toCheck == null){
-			return false;
-		}else{
-			return true;
-		}
+        return !toCheck.isEmpty() && toCheck != null;
 	}
 
 	/**
@@ -613,7 +612,55 @@ public class CCDataElement implements Iterable<CCDataElement>{
 	 */
 	public int countAttributes(){
 		return _myAttributes.size();
-
+	}
+	
+	public void add(String theName, CCColor theColor){
+		CCDataElement myColor = createChild(theName);
+		myColor.addAttribute("r", theColor.r);
+		myColor.addAttribute("g", theColor.g);
+		myColor.addAttribute("b", theColor.b);
+		myColor.addAttribute("a", theColor.a);
+	}
+	
+	public CCColor color(String theName){
+		CCDataElement myColor = child(theName);
+		if(myColor == null)return null;
+		return new CCColor(
+			myColor.doubleAttribute("r"),
+			myColor.doubleAttribute("g"),
+			myColor.doubleAttribute("b"),
+			myColor.doubleAttribute("a")
+		);
+	}
+	
+	public void add(String theName, CCVector2i theVector){
+		CCDataElement myVector = createChild(theName);
+		myVector.addAttribute("x", theVector.x);
+		myVector.addAttribute("y", theVector.y);
+	}
+	
+	public CCVector2i vector2i(String theName){
+		CCDataElement myVector = child(theName);
+		if(myVector == null)return null;
+		return new CCVector2i(
+			myVector.intAttribute("x"),
+			myVector.intAttribute("y")
+		);
+	}
+	
+	public void add(String theName, CCVector2 theVector){
+		CCDataElement myVector = createChild(theName);
+		myVector.addAttribute("x", theVector.x);
+		myVector.addAttribute("y", theVector.y);
+	}
+	
+	public CCVector2 vector2(String theName){
+		CCDataElement myVector = child(theName);
+		if(myVector == null)return null;
+		return new CCVector2(
+			myVector.doubleAttribute("x"),
+			myVector.doubleAttribute("y")
+		);
 	}
 
 	/**

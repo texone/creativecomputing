@@ -199,8 +199,7 @@ public class CCKerningTable {
 			if (getClass() != obj.getClass()) return false;
 			Key other = (Key)obj;
 			if (firstGlyphCode != other.firstGlyphCode) return false;
-			if (secondGlyphCode != other.secondGlyphCode) return false;
-			return true;
-		}
+            return secondGlyphCode == other.secondGlyphCode;
+        }
 	}
 }

@@ -13,5 +13,5 @@ package cc.creativecomputing.protocol.midi;
 import cc.creativecomputing.protocol.midi.messages.CCProgramChange;
 
 public interface CCIProgramChangeListener {
-	public void onProgramChange(final CCProgramChange theProgramChange);
+	void onProgramChange(final CCProgramChange theProgramChange);
 }

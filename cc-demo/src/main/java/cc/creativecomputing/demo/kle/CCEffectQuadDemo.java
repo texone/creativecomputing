@@ -346,7 +346,7 @@ public class CCEffectQuadDemo extends CCGL2Adapter {
 		}
 	}
 	
-	public static enum CCScreenDraw{
+	public enum CCScreenDraw{
 		LINE, QUAD, TEXTURE, FACE
 	}
 	

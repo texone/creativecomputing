@@ -40,7 +40,7 @@ public class CCTCPClient<MessageType> extends CCClient<MessageType>{
 		_myBootstrap.handler(new ChannelInitializer<SocketChannel>() {
 
 			@Override
-			public void initChannel(SocketChannel ch) throws Exception {
+			public void initChannel(SocketChannel ch) {
 				ch.pipeline().addLast(_myCodec.decoder());
 				ch.pipeline().addLast(_myCodec.encoder(), new CCClientHandler());
 			}
@@ -57,7 +57,7 @@ public class CCTCPClient<MessageType> extends CCClient<MessageType>{
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		CCTCPClient<String> myClient = new CCTCPClient<String>(new CCNetStringCodec(),"127.0.0.1", 12345);
 		myClient.connect();
 		myClient.write("texone");

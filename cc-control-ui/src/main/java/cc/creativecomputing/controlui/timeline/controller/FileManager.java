@@ -22,12 +22,12 @@ import cc.creativecomputing.io.data.CCDataObject;
 
 public class FileManager {
 	
-	public static interface FileManagerListener{
-		public void onLoad(Path thePath);
+	public interface FileManagerListener{
+		void onLoad(Path thePath);
 
-		public void onSave(Path thePath);
+		void onSave(Path thePath);
 
-		public void onNew(Path thePath);
+		void onNew(Path thePath);
 		
 	}
 	

@@ -43,6 +43,7 @@ public class CCGL2Application {
 	private CCGLAdapter<CCGraphics, CCGL2Context> _myOriginalCopy;
 	
 	private boolean _myUpdateUI = false;
+	private boolean _myIsUpdated = false;
 
 	public CCGL2Application(CCGLAdapter<CCGraphics, CCGL2Context> theGLAdapter, boolean useUI) {
 		_myUseUI = useUI;
@@ -54,7 +55,6 @@ public class CCGL2Application {
 		
 		_mySynch = new CCTimelineSynch(_myAnimator);
 		
-		
 		_myAnimator.listener().add(new CCAnimatorListener() {
 			
 			@Override
@@ -63,16 +63,25 @@ public class CCGL2Application {
 				
 				if(_cRealCompile){
 
-					if(_myExecutionManager == null)_myExecutionManager = new CCInMemoryExecutionManager(theGLAdapter.getClass());
-					if(_myExecutionManager.update()){
-						if(_myExecutionManager.mainObject()!= null){
-							_myUpdateUI = true;
+					if(_myExecutionManager == null)_myExecutionManager = new CCInMemoryExecutionManager(theGLAdapter.getClass(), theGLAdapter);
+					try{
+						if(_myExecutionManager.update()){
+							if(_myExecutionManager.mainObject()!= null){
+								_myUpdateUI = true;
+							}
 						}
+					}catch(Exception e){
+						e.printStackTrace();
 					}
 				}else{
 					_myAdapter = _myOriginalCopy;
 				}
+				try{
 				_myAdapter.update(theAnimator);
+				_myIsUpdated = true;
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 			}
 			
 			@Override
@@ -156,7 +165,12 @@ public class CCGL2Application {
 
 			@Override
 			public void display(CCGraphics g) {
-				_myAdapter.display(g);
+				if(!_myIsUpdated)return;
+				try{
+					_myAdapter.display(g);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 				if(_myUpdateUI){
 					_myUpdateUI = false;
 					_myAdapter = (CCGLAdapter<CCGraphics, CCGL2Context>)_myExecutionManager.mainObject();

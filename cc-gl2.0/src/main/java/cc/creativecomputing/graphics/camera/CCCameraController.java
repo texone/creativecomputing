@@ -60,8 +60,8 @@ public class CCCameraController {
 
 	}
 	
-	private static interface CCCameraMouseDragHandler {
-		public void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY);
+	private interface CCCameraMouseDragHandler {
+		void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY);
 	}
 	
 	private abstract class CCDampedAction extends CCAnimatorAdapter{
@@ -117,7 +117,7 @@ public class CCCameraController {
 	private static final CCVector3 LOOK = CCVector3.UNIT_Z;
 	private static final CCVector3 UP = CCVector3.UNIT_Y;
 
-	private static enum Constraint {
+	private enum Constraint {
 		YAW, PITCH, ROLL, SUPPRESS_ROLL
 	}
 
@@ -396,7 +396,7 @@ public class CCCameraController {
 		public void mouseClicked(CCMouseEvent theEvent) {
 			if(!_myIsActive)return;
 			
-			if (_myResetOnDoubleClick && 2 == (int)theEvent.clickCount()) {
+			if (_myResetOnDoubleClick && 2 == theEvent.clickCount()) {
 				reset();
 			}
 		}

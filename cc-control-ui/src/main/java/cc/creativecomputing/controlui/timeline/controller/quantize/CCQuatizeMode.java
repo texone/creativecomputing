@@ -30,7 +30,7 @@ public enum CCQuatizeMode{
 		
 		private final String _myDesc;
 		
-		private CCQuatizeMode( String theDesc, CCQuantizer theQuantizer){
+		CCQuatizeMode(String theDesc, CCQuantizer theQuantizer){
 			_myQuantizer = theQuantizer;
 			_myDesc = theDesc;
 		}

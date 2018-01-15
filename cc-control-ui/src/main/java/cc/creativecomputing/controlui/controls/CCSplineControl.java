@@ -21,7 +21,7 @@ public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 		super(theHandle, theControlComponent);
 		
 		addListener(theValue -> {
-			_myHandle.value((CCSpline)theValue, false);
+			_myHandle.value(theValue, false);
 		});
 		
 		_myCurveFrame = new CCSplineEditor(theHandle.name());

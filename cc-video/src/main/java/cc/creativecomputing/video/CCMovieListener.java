@@ -20,20 +20,20 @@ public interface CCMovieListener {
 	/**
 	 * Called when movie is started
 	 */
-	public void onPlay();
+    void onPlay();
 	
 	/**
 	 * Called when movie playback is stopped
 	 */
-	public void onStop();
+    void onStop();
 	
 	/**
 	 * Called when movie playback is paused
 	 */
-	public void onPause();
+    void onPause();
 	
 	/**
 	 * Called when the movie has reached its end
 	 */
-	public void onEnd();
+    void onEnd();
 }

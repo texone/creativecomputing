@@ -42,7 +42,7 @@ public interface CCMouseListener{
 	 * @see #mouseEntered(CCMouseEvent)
 	 * @see #mouseExited(CCMouseEvent)
 	 */
-	public void mousePressed(final CCMouseEvent theEvent);
+    void mousePressed(final CCMouseEvent theEvent);
 	
 	/**
 	 * Invoked when a mouse button has been released on the application window.
@@ -54,7 +54,7 @@ public interface CCMouseListener{
 	 * @see #mouseEntered(CCMouseEvent)
 	 * @see #mouseExited(CCMouseEvent)
 	 */
-	public void mouseReleased(final CCMouseEvent theEvent);
+    void mouseReleased(final CCMouseEvent theEvent);
 	
 	/**
 	 * Invoked when the mouse button has been clicked (pressed
@@ -67,7 +67,7 @@ public interface CCMouseListener{
 	 * @see #mouseEntered(CCMouseEvent)
 	 * @see #mouseExited(CCMouseEvent)
 	 */
-	public void mouseClicked(final CCMouseEvent theEvent);
+    void mouseClicked(final CCMouseEvent theEvent);
 	
 	/**
 	 * Invoked when the mouse enters the application window.
@@ -79,7 +79,7 @@ public interface CCMouseListener{
 	 * @see #mouseExited(CCMouseEvent)
 	 * @example events.CCMouseEnterExit
 	 */
-	public void mouseEntered(final CCMouseEvent theEvent);
+    void mouseEntered(final CCMouseEvent theEvent);
 	
 	/**
      * Invoked when the mouse exits the application window.
@@ -91,5 +91,5 @@ public interface CCMouseListener{
 	 * @see #mouseEntered(CCMouseEvent)
 	 * @example events.CCMouseEnterExit
 	 */
-	public void mouseExited(final CCMouseEvent theEvent);
+    void mouseExited(final CCMouseEvent theEvent);
 }

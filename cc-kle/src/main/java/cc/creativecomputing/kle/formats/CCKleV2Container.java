@@ -68,7 +68,7 @@ public class CCKleV2Container extends CCKleContainerFormat{
         
         final URI zipFile = URI.create("jar:" + thePath.toUri());
 
-        try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes);) {
+        try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes)) {
         	Path myFramesFolder = fs.getPath("frames");
         	Path myCsvFolder = fs.getPath("csv");
 			CCNIOUtil.createDirectories(myFramesFolder);
@@ -110,7 +110,7 @@ public class CCKleV2Container extends CCKleContainerFormat{
         
         Map<CCKleChannelType,CCSequence> myResult = new HashMap<CCKleChannelType, CCSequence>();
 
-        try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes);) {
+        try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes)) {
         	Path myFramesFolder = fs.getPath("frames");
 	        
 	        for(CCKleChannelType myKey:theMappings.keySet()){

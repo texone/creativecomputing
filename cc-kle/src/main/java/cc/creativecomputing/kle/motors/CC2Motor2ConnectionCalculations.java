@@ -40,7 +40,7 @@ public class CC2Motor2ConnectionCalculations extends CCMotorCalculations<CC2Moto
 	@CCProperty(name = "angle", min = -CCMath.PI, max = CCMath.PI)
 	protected double _cAngle = 0;
 	
-	private static enum CC2MotorFormular{
+	private enum CC2MotorFormular{
 		HERMITE,
 		POW,
 		NUMERIC_1

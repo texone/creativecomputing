@@ -25,7 +25,7 @@ public enum GLProgramInterface {
 	
 	private int _myGLID;
 	
-	private GLProgramInterface(int theGLID){
+	GLProgramInterface(int theGLID){
 		_myGLID = theGLID;
 	}
 	

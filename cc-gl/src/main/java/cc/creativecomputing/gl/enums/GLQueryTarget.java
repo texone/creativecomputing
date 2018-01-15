@@ -12,7 +12,7 @@ public enum GLQueryTarget {
 	
 	private int _myGLID;
 	
-	private GLQueryTarget(int theGLID){
+	GLQueryTarget(int theGLID){
 		_myGLID = theGLID;
 	}
 	

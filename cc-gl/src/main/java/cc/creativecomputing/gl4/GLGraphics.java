@@ -92,14 +92,14 @@ public class GLGraphics extends CCGLGraphics<GL4bc>{
 		gl.glLineWidth(theLideWidth);
 	}
 	
-	public static enum GLPolygonMode {
+	public enum GLPolygonMode {
 		POINT(GL4.GL_POINT),
 		LINE(GL4.GL_LINE),
 		FILL(GL4.GL_FILL);
 		
 		private int _myGLID;
 		
-		private GLPolygonMode(int theGLID){
+		GLPolygonMode(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -206,7 +206,7 @@ public class GLGraphics extends CCGLGraphics<GL4bc>{
 
 		private int glID;
 		
-		private GLFrontFace(int theGLID){
+		GLFrontFace(int theGLID){
 			glID = theGLID;
 		}
 		
@@ -244,14 +244,14 @@ public class GLGraphics extends CCGLGraphics<GL4bc>{
 		gl.glFrontFace(theFrontFace.glID());
 	}
 	
-	public static enum GLCullFace {
+	public enum GLCullFace {
 		FRONT(GL4.GL_FRONT),
 		BACK(GL4.GL_BACK),
 		FRONT_AND_BACK(GL4.GL_FRONT_AND_BACK);
 		
 		private int _myGLID;
 		
-		private GLCullFace(int theGLID){
+		GLCullFace(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -282,13 +282,13 @@ public class GLGraphics extends CCGLGraphics<GL4bc>{
 		gl.glDisable(GL4.GL_CULL_FACE);
 	}
 	
-	public static enum GLProvokingIndex{
+	public enum GLProvokingIndex{
 		FIRST_VERTEX_CONVENTION(GL4.GL_FIRST_VERTEX_CONVENTION),
 		LAST_VERTEX_CONVENTION(GL4.GL_LAST_VERTEX_CONVENTION);
 		
 		private int _myGLID;
 		
-		private GLProvokingIndex(int theGLID){
+		GLProvokingIndex(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -353,7 +353,7 @@ public class GLGraphics extends CCGLGraphics<GL4bc>{
 		
 		private int _myGLID;
 		
-		private GLColorBuffer(int theGLID){
+		GLColorBuffer(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -453,7 +453,7 @@ public class GLGraphics extends CCGLGraphics<GL4bc>{
 	 * @author christianriekoff
 	 *
 	 */
-	public static enum GLCompareFunction{
+	public enum GLCompareFunction{
 		/**
 		 * Always fails.
 		 */
@@ -585,7 +585,7 @@ public class GLGraphics extends CCGLGraphics<GL4bc>{
 		
 		private int _myGLID;
 		
-		private GLSourceBlendFunction(int theGLID){
+		GLSourceBlendFunction(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -633,7 +633,7 @@ public class GLGraphics extends CCGLGraphics<GL4bc>{
 		
 		private int _myGLID;
 		
-		private GLDestinationBlendFunction(int theGLID){
+		GLDestinationBlendFunction(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -839,7 +839,7 @@ public class GLGraphics extends CCGLGraphics<GL4bc>{
 	 * @author christianriekoff
 	 *
 	 */
-	public static enum GLStencilOperation{
+	public enum GLStencilOperation{
 		/**
 		 * Keeps the current value.
 		 */

@@ -7,7 +7,7 @@ public enum GLRenderbufferTarget {
 	
 	private int _myGLID;
 	
-	private GLRenderbufferTarget(int theGLID){
+	GLRenderbufferTarget(int theGLID){
 		_myGLID = theGLID;
 	}
 	

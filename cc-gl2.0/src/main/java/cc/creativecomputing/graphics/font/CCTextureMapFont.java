@@ -135,16 +135,16 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 //				(myY + _myFontMetrics.getAscent() + _myFontMetrics.getDescent() * 1.25f + myBlurRadius)
 //			);
 			
-			double myXOffset = myX - (double)myPixelBounds.getMinX();
-			double myYOffset = (myY + _myFontMetrics.getAscent() + _myFontMetrics.getDescent() * 1.25f - _myHeight) - (double)myPixelBounds.getMinY();
+			double myXOffset = myX - myPixelBounds.getMinX();
+			double myYOffset = (myY + _myFontMetrics.getAscent() + _myFontMetrics.getDescent() * 1.25f - _myHeight) - myPixelBounds.getMinY();
 			
 			_myChars[index] = new CCTextureMapChar(
 				c, 
 				myGlyphVector.getGlyphCode(0), 
 				-myXOffset,
 				myYOffset,
-				(double)myPixelBounds.getWidth() / _mySize, 
-				(double)myPixelBounds.getHeight() / _mySize,
+				myPixelBounds.getWidth() / _mySize,
+				myPixelBounds.getHeight() / _mySize,
 				charWidth(c),
 				_myHeight,
 				new CCVector2(
@@ -177,7 +177,7 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 		_myLeading = _myFontMetrics.getLeading();
 		
 		_myNormalizedAscent = (double)_myFontMetrics.getAscent() / _mySize;
-		_myNormalizedDescent = (double)_myDescent / _mySize;
+		_myNormalizedDescent = _myDescent / _mySize;
 		
 		try{
 			_myFontTexture = new CCTexture2D(CCImageIO.newImage(myCharImage));
@@ -194,15 +194,15 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 	public void beginText(CCGraphics g){
 		g.texture(_myFontTexture);
 		g.beginShape(CCDrawMode.QUADS);
-	};
-	
-	@Override
+	}
+
+    @Override
 	public void endText(CCGraphics g){
 		g.endShape();
 		g.noTexture();
-	};
+	}
 
-	public CCTextureMapChar[] chars(){
+    public CCTextureMapChar[] chars(){
 		return _myChars;
 	}
 	

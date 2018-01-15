@@ -26,7 +26,7 @@ public enum CCIELampOrientation {
 
 	int id;
 
-	private CCIELampOrientation(int theID) {
+	CCIELampOrientation(int theID) {
 		id = theID;
 	}
 	

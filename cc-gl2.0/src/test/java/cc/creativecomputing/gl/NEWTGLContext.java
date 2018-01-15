@@ -25,7 +25,7 @@ public class NEWTGLContext {
         }
     }
 
-    public static WindowContext createOffscreenWindow(GLCapabilities caps, int width, int height, boolean debugGL) throws InterruptedException {        
+    public static WindowContext createOffscreenWindow(GLCapabilities caps, int width, int height, boolean debugGL) {
         caps.setOnscreen(false);
         caps.setPBuffer(true);
         
@@ -63,7 +63,7 @@ public class NEWTGLContext {
         return new WindowContext(window, drawable, context);
     }
 
-    public static WindowContext createOnscreenWindow(GLCapabilities caps, int width, int height, boolean debugGL) throws InterruptedException {        
+    public static WindowContext createOnscreenWindow(GLCapabilities caps, int width, int height, boolean debugGL) {
         //
         // Create native windowing resources .. X11/Win/OSX
         // 

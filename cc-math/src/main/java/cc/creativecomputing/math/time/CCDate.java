@@ -279,6 +279,10 @@ public class CCDate {
 		return (((hours() * 60 + minutes()) * 60) + seconds() + milliSeconds() / 1000d) / (24d * 60d * 60d);
 	}
 	
+	public double daySeconds(){
+		return (((hours() * 60 + minutes()) * 60) + seconds() + milliSeconds() / 1000d);
+	}
+	
 	public double yearProgress(){
 		return _myCalendar.get(Calendar.DAY_OF_YEAR) / 365d;
 	}

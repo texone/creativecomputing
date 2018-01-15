@@ -5,7 +5,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 public interface CCNetCodec <MessageType> {
 
-	public ChannelInboundHandler[] decoder();
+	ChannelInboundHandler[] decoder();
 	
-	public MessageToByteEncoder<MessageType> encoder();
+	MessageToByteEncoder<MessageType> encoder();
 }

@@ -144,8 +144,8 @@ public class CCSunPositionDemo3D extends CCGL2Adapter{
 		
 		
 		private void draw(CCGraphics g) {
-			CCVector3 posPoint = CCSunCalc.sunPosition3D(_myDate, _myLatitude, _myLongitude);;
-			if (posPoint.z > -0.014) { // Nacht war vorher 0,018
+			CCVector3 posPoint = CCSunCalc.sunPosition3D(_myDate, _myLatitude, _myLongitude);
+            if (posPoint.z > -0.014) { // Nacht war vorher 0,018
 
 				g.pushMatrix();
 				g.translate(posPoint.x * _cRadius, posPoint.y * _cRadius, posPoint.z * _cRadius);

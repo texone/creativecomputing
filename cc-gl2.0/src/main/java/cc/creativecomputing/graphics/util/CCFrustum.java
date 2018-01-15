@@ -18,15 +18,15 @@ import cc.creativecomputing.math.CCPlane;
 import cc.creativecomputing.math.CCVector3;
 
 public class CCFrustum {
-	private static enum CCFrustumPlane {
+	private enum CCFrustumPlane {
 		TOP, BOTTOM, LEFT, RIGHT, NEARP, FARP
-	};
+	}
 
-	public static enum CCFrustumRelation {
+    public enum CCFrustumRelation {
 		OUTSIDE, INTERSECT, INSIDE
-	};
+	}
 
-	private CCPlane[] _myFrustumPlanes = new CCPlane[6];
+    private CCPlane[] _myFrustumPlanes = new CCPlane[6];
 
 	private CCVector3 _myNearTopLeft;
 	private CCVector3 _myNearTopRight;
@@ -61,7 +61,7 @@ public class CCFrustum {
 		_myNear = _myCamera.near();
 		_myFar = _myCamera.far();
 
-		_myTang = (double) CCMath.tan(_myFov * 0.5f);
+		_myTang = CCMath.tan(_myFov * 0.5f);
 		_myNearHeight = _myNear * _myTang;
 		_myNearWidth = _myNearHeight * _myAspect;
 		_myFarHeight = _myFar * _myTang;
@@ -294,4 +294,4 @@ public class CCFrustum {
 
 		g.endShape();
 	}
-};
+}

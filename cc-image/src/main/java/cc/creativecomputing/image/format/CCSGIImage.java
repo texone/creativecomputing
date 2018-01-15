@@ -383,7 +383,7 @@ public class CCSGIImage {
 			int oPtr = 0;
 			for (;;) {
 				byte pixel = _myTmpRead[iPtr++];
-				int count = (int) (pixel & 0x7F);
+				int count = pixel & 0x7F;
 				if (count == 0) {
 					return;
 				}

@@ -39,8 +39,8 @@ import cc.creativecomputing.math.CCMath;
 @SuppressWarnings("serial")
 public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackController> extends JPanel {
 
-	public static interface SwingTrackDataViewListener {
-		public void onRender(Graphics2D theG2D);
+	public interface SwingTrackDataViewListener {
+		void onRender(Graphics2D theG2D);
 	}
 
 	protected BufferedImage _myRenderBuffer;

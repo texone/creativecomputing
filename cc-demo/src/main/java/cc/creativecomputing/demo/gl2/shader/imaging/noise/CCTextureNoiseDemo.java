@@ -20,7 +20,7 @@ public class CCTextureNoiseDemo extends CCGL2Adapter {
 	@CCProperty(name = "normalmap")
 	private CCNormalMap _cNormalMap;
 	
-	private static enum CCDrawTex{
+	private enum CCDrawTex{
 		VORONOI,
 		NORMALMAP
 	}

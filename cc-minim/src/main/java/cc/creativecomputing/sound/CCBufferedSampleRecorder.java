@@ -95,7 +95,7 @@ final class CCBufferedSampleRecorder implements CCSampleRecorder {
 			if (channels == 1) {
 				for (int i = 0; i < buffers.size(); i++) {
 					int offset = i * length;
-					FloatBuffer fb = (FloatBuffer) buffers.get(i);
+					FloatBuffer fb = buffers.get(i);
 					fb.rewind();
 					// copy all the floats in fb to the first channel
 					// of fsb, starting at the index offset, and copy
@@ -105,8 +105,8 @@ final class CCBufferedSampleRecorder implements CCSampleRecorder {
 			} else {
 				for (int i = 0; i < buffers.size(); i += 2) {
 					int offset = (i / 2) * length;
-					FloatBuffer fbL = (FloatBuffer) buffers.get(i);
-					FloatBuffer fbR = (FloatBuffer) buffers.get(i + 1);
+					FloatBuffer fbL = buffers.get(i);
+					FloatBuffer fbR = buffers.get(i + 1);
 					fbL.rewind();
 					fbL.get(fsb.getChannel(0), offset, length);
 					fbR.rewind();

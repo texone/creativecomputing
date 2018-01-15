@@ -3,6 +3,7 @@ package cc.creativecomputing.control.code.memorycompile;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 
 public class CCInMemoryExecutionManager {
@@ -12,8 +13,9 @@ public class CCInMemoryExecutionManager {
 	private Class<?> _myMainClass;
 	private Object _myMainObjectInstance;
 
-	public CCInMemoryExecutionManager(Class<?> theMainClass){
+	public CCInMemoryExecutionManager(Class<?> theMainClass, Object theMainInstance){
 		_myCompiler = new CCInMemoryCompiler(theMainClass);
+		_myMainObjectInstance = theMainInstance;
 	}
 	
     public Object runMethod(final String theMethod, Object...theParameter) {
@@ -35,14 +37,17 @@ public class CCInMemoryExecutionManager {
 		try {
 			if(!_myCompiler.needsUpdated())return false;
 	        
-	        final CompilerFeedback compilerFeedback = _myCompiler.compile();
+	        final CCInMemoryCompilerFeedback compilerFeedback = _myCompiler.compile();
 	        System.out.println("\n\nCOMPILER FEEDBACK: " + compilerFeedback);
 	
 	        if (compilerFeedback != null && compilerFeedback.success) {
 	        		
 	        	_myMainClass = _myCompiler.getCompiledMainClass();
 				
-	        	_myMainObjectInstance = _myMainClass.newInstance();
+	        	Object myNewMainObjectInstance = _myMainClass.newInstance();
+	        	CCLog.info(_myMainObjectInstance);
+//	        	if(_myMainObjectInstance != null)CCInMemoryReferenceManager.copy(_myMainObjectInstance, myNewMainObjectInstance);
+	        	_myMainObjectInstance = myNewMainObjectInstance;
 	        }
 	        return true;
 		} catch (Exception e) {

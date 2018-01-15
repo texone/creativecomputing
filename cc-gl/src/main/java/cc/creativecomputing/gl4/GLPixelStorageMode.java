@@ -30,7 +30,7 @@ public enum GLPixelStorageMode {
 	
 	private int _myGLID;
 	
-	private GLPixelStorageMode(int theGLID){
+	GLPixelStorageMode(int theGLID){
 		_myGLID = theGLID;
 	}
 	

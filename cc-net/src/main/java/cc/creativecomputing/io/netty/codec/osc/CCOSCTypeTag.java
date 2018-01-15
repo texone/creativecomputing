@@ -83,7 +83,7 @@ public enum CCOSCTypeTag {
 
 	public final char typeChar;
 	
-	private CCOSCTypeTag(char theTypeChar){
+	CCOSCTypeTag(char theTypeChar){
 		typeChar = theTypeChar;
 	}
 	

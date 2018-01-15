@@ -21,7 +21,7 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 		super(theHandle, theControlComponent);
 		
 		addListener(theValue -> {
-			_myHandle.value((CCEnvelope)theValue, false);
+			_myHandle.value(theValue, false);
         	_myCurveFrame.track().trackData(value().curve());
 			_myCurveFrame.render();
 			_myCurveFrame.repaint();

@@ -16,7 +16,7 @@ public enum GLDataType {
 	
 	private int _myGLID;
 	
-	private GLDataType(int theGLID){
+	GLDataType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

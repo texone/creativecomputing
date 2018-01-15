@@ -431,7 +431,7 @@ public class GLVertexArray {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() {
 		GL4 gl = GLGraphics.currentGL();
 		gl.glDeleteVertexArrays(1, _myVertexArray);
 	}

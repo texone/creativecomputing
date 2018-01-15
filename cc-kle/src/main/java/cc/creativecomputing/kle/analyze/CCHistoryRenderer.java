@@ -51,8 +51,8 @@ public class CCHistoryRenderer<Type extends CCTimed>{
 		_cRanges.put(theKey, new CCAnalyzeRange(theMin, theMax));
 	}
 	
-	public static interface CCHistoryValue<Type extends CCTimed>{
-		public abstract double value(Type theData);
+	public interface CCHistoryValue<Type extends CCTimed>{
+		double value(Type theData);
 	}
 	
 	public static class CCHistoryValueSettings<Type extends CCTimed>{

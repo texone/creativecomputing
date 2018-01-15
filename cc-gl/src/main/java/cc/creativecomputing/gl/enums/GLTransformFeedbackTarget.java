@@ -7,7 +7,7 @@ public enum GLTransformFeedbackTarget {
 	
 	private int _myGLID;
 	
-	private GLTransformFeedbackTarget(int theGLID){
+	GLTransformFeedbackTarget(int theGLID){
 		_myGLID = theGLID;
 	}
 	

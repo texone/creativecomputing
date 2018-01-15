@@ -13,8 +13,8 @@ import cc.creativecomputing.core.events.CCListenerManager;
 @SuppressWarnings({"rawtypes","unchecked"})
 public abstract class CCAsset <AssetType>{
 	
-	public static interface CCAssetListener<AssetType>{
-		public void onChange(AssetType theAsset);
+	public interface CCAssetListener<AssetType>{
+		void onChange(AssetType theAsset);
 	}
 
 	protected AssetType _myAsset ;

@@ -212,7 +212,7 @@ public class Example_ch03_Instancing_A extends BareboneGLAbstractExperiment {
 			int w, int h) {
 		width = w;
 		height = h;
-		aspect = (float)height/width;
+		aspect = height /width;
 		myCam.updateProjectionMatrix(aspect);
 	}
 

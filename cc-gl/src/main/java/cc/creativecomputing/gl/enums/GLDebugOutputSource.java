@@ -13,7 +13,7 @@ public enum GLDebugOutputSource {
 	
 	private int _myGLID;
 	
-	private GLDebugOutputSource(int theGLID){
+	GLDebugOutputSource(int theGLID){
 		_myGLID = theGLID;
 	}
 	

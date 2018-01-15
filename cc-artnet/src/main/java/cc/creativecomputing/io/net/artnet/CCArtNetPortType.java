@@ -16,7 +16,7 @@ public enum CCArtNetPortType {
 
     public final int id;
 
-    private CCArtNetPortType(int id) {
+    CCArtNetPortType(int id) {
         this.id = id;
     }
     

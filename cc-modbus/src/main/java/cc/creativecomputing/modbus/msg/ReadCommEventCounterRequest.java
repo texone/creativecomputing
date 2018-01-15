@@ -129,7 +129,7 @@ public final class ReadCommEventCounterRequest extends CCAbstractModbusRequest {
 	 * readData -- dummy function.  There is no additional data
 	 * to read.
 	 */
-	public void readData(DataInput din) throws IOException {
+	public void readData(DataInput din) {
 	}
 
 	/**

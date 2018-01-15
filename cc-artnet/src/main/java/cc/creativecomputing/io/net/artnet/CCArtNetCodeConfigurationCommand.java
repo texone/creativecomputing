@@ -80,7 +80,7 @@ public enum CCArtNetCodeConfigurationCommand {
 
 	public final int id;
 
-	private CCArtNetCodeConfigurationCommand(int theID) {
+	CCArtNetCodeConfigurationCommand(int theID) {
 		id = theID;
 	}
 }

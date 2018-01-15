@@ -7,7 +7,7 @@ public enum CCPresetHandling {
 	
 	public final String desc;
 	
-	private CCPresetHandling(String theDesc) {
+	CCPresetHandling(String theDesc) {
 		desc = theDesc;
 	}
 }

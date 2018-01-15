@@ -83,7 +83,7 @@ import cc.creativecomputing.io.CCWriteMode;
  */
 public class CCImageIO {
 	
-	static public enum CCImageFormats{
+	public enum CCImageFormats{
 		DDS("dds"),
 		KTX("ktx"),
 		SGI("sgi"),
@@ -98,7 +98,7 @@ public class CCImageIO {
 		
 		public final String fileExtension;
 		
-		private CCImageFormats(final String theFileExtension){
+		CCImageFormats(final String theFileExtension){
 			fileExtension = theFileExtension;
 		}
 	}
@@ -378,7 +378,7 @@ public class CCImageIO {
 		final CCPixelInternalFormat theInternalFormat,
 		final CCPixelFormat thePixelFormat, 
 		final String theFileSuffix
-	)throws IOException, IllegalArgumentException {
+	)throws IllegalArgumentException {
 		if ((theInternalFormat == null) || (thePixelFormat == null)) {
 			throw new IllegalArgumentException("internalFormat and pixelFormat must be non-zero");
 		}

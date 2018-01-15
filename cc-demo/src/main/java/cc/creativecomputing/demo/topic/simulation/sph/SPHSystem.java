@@ -41,7 +41,7 @@ class SPHSystem {
 		cellSize = kernel;
 		gridSize.x = (int) (worldSize.x / cellSize);
 		gridSize.y = (int) (worldSize.y / cellSize);
-		totCell = (int) (gridSize.x) * (int) (gridSize.y);
+		totCell = gridSize.x * gridSize.y;
 
 		// params
 		gravity.x = 0.0f;
@@ -105,7 +105,7 @@ class SPHSystem {
 			return 0xffffffff;
 		}
 
-		int hash = (int) (pos.y) * (int) (gridSize.x) + (int) (pos.x);
+		int hash = pos.y * gridSize.x + pos.x;
 		if (hash >= totCell) {
 			System.out.printf("ERROR!\n");
 			// getchar();
@@ -297,4 +297,4 @@ class SPHSystem {
 		return cells;
 	}
 
-};
+}

@@ -21,8 +21,8 @@ import cc.creativecomputing.math.CCVector3;
 public class CCSphere extends CCPrimitive {
 
 	public enum CCSphereTextureMode {
-		LINEAR, PROJECTED, POLAR;
-	}
+		LINEAR, PROJECTED, POLAR
+    }
 
 	private int _myZSamples;
 

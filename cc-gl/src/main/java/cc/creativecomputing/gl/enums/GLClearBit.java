@@ -9,7 +9,7 @@ public enum GLClearBit {
 	
 	private int _myGLID;
 	
-	private GLClearBit(int theGLID){
+	GLClearBit(int theGLID){
 		_myGLID = theGLID;
 	}
 	

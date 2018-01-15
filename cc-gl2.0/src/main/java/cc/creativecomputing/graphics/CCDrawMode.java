@@ -79,7 +79,7 @@ public enum CCDrawMode{
 	
 	public int glID;
 	
-	private CCDrawMode(final int theGlID){
+	CCDrawMode(final int theGlID){
 		glID = theGlID;
 	}
 }

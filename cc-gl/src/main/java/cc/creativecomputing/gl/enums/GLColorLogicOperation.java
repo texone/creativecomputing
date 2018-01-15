@@ -22,7 +22,7 @@ public enum GLColorLogicOperation {
 	
 	private int _myGLID;
 	
-	private GLColorLogicOperation(int theGLID){
+	GLColorLogicOperation(int theGLID){
 		_myGLID = theGLID;
 	}
 	

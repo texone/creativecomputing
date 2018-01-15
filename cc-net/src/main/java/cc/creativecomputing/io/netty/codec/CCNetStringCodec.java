@@ -59,7 +59,7 @@ public class CCNetStringCodec implements CCNetCodec<String>{
 	    }
 
 		@Override
-		protected void encode(ChannelHandlerContext theCTX, String theString, ByteBuf theBuf) throws Exception {
+		protected void encode(ChannelHandlerContext theCTX, String theString, ByteBuf theBuf) {
 			theBuf.writeBytes(ByteBufUtil.encodeString(theCTX.alloc(), CharBuffer.wrap(theString + "\n"), _myCharset));
 		}
 	}

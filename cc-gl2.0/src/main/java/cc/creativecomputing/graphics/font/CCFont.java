@@ -132,15 +132,15 @@ public abstract class CCFont<CharType extends CCChar>{
 		_myFontMetrics = myGraphics.getFontMetrics();
 		_mySpaceWidth = (double)_myFontMetrics.charWidth(' ') / _mySize;
 		_myHeight = _myFontMetrics.getMaxAscent() + _myFontMetrics.getMaxDescent() * 1.25f;
-		_myNormalizedHeight = (double)_myHeight/ _mySize;
+		_myNormalizedHeight = _myHeight / _mySize;
 		
 		_myAscent = _myFontMetrics.getAscent();
 		_myDescent = _myFontMetrics.getDescent() * 1.25f;
 		
 		_myLeading = _myFontMetrics.getLeading();
 		
-		_myNormalizedAscent = (double)_myAscent / _mySize;
-		_myNormalizedDescent = (double)_myDescent / _mySize;
+		_myNormalizedAscent = _myAscent / _mySize;
+		_myNormalizedDescent = _myDescent / _mySize;
 		
 		createChars(myCharImage,myGraphics);
 	}
@@ -171,16 +171,16 @@ public abstract class CCFont<CharType extends CCChar>{
 	 * Called by the graphics object when rendering text, th
 	 * @param g
 	 */
-	public void beginText(CCGraphics g){};
-	
-	public double drawChar(CCGraphics g, int theIndex, double theSize, double theX, double theY, double theZ) {
+	public void beginText(CCGraphics g){}
+
+    public double drawChar(CCGraphics g, int theIndex, double theSize, double theX, double theY, double theZ) {
 		if(theIndex < 0 || theIndex > _myChars.length || _myChars[theIndex] == null)return 0;
 		return _myChars[theIndex].draw(g, theX, theY, theZ, theSize);
 	}
 	
-	public void endText(CCGraphics g){};
-	
-	/**
+	public void endText(CCGraphics g){}
+
+    /**
 	 * Get index for the char (convert from unicode to bagel charset).
 	 * @return index into arrays or -1 if not found
 	 */

@@ -28,7 +28,7 @@ public enum GLCapability {
 	
 	private int _myGLID;
 	
-	private GLCapability(int theGLID){
+	GLCapability(int theGLID){
 		_myGLID = theGLID;
 	}
 	

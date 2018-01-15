@@ -264,7 +264,7 @@ public class CCSVGPath extends CCSVGElement{
 
 			// Ensure radii are valid
 			if (rx == 0 || ry == 0) {
-				_myPath.lineTo((double) x, (double) y);
+				_myPath.lineTo(x, y);
 				return;
 			}
 
@@ -610,7 +610,7 @@ public class CCSVGPath extends CCSVGElement{
 		LinkedList<PathCommand> cmdList = new LinkedList<>();
 		char curCmd = 'Z';
 		while (tokens.size() != 0) {
-			String curToken = (String) tokens.removeFirst();
+			String curToken = tokens.removeFirst();
 			char initChar = curToken.charAt(0);
 			if ((initChar >= 'A' && initChar <= 'Z') || (initChar >= 'a' && initChar <= 'z')) {
 				curCmd = initChar;

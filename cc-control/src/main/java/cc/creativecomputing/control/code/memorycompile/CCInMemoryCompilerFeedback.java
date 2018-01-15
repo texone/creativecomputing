@@ -3,17 +3,20 @@ import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
+
+import cc.creativecomputing.core.logging.CCLog;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-final public class CompilerFeedback {
+final public class CCInMemoryCompilerFeedback {
 
     final public boolean success;
     final public List<CompilerMessage> messages = new ArrayList<>();
 
-    public CompilerFeedback(final Boolean success, final DiagnosticCollector<JavaFileObject> diagnostics) {
+    public CCInMemoryCompilerFeedback(final Boolean success, final DiagnosticCollector<JavaFileObject> diagnostics) {
 
         this.success = success != null && success;
         for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
@@ -45,8 +48,8 @@ final public class CompilerFeedback {
 
         final public String multiLineMessage;
 
-        final public int lineNumber;
-        final public int columnNumber;
+        public int lineNumber;
+        public int columnNumber;
 
         final public int textHighlightPos_lineStart;
         final public int textHighlightPos_problemStart;
@@ -81,8 +84,13 @@ final public class CompilerFeedback {
             typeOfProblem = diagnostic.getKind().name();
             typeOfProblem_forDebugging = "toString() = " + diagnostic.getKind().toString() + "; name() = " + typeOfProblem;
 
-            lineNumber = (int) compilerInfo.getLineNumber();
-            columnNumber = (int) compilerInfo.getColumnNumber();
+            try{
+	            lineNumber = (int) compilerInfo.getLineNumber();
+	            columnNumber = (int) compilerInfo.getColumnNumber();
+            }catch(Exception e){
+            	lineNumber = 0;
+            	columnNumber = 0;
+            }
 
             final int sourceLen = sourceCode.length();
             textHighlightPos_lineStart = (int) Math.min(Math.max(0, diagnostic.getStartPosition()), sourceLen);
@@ -110,7 +118,8 @@ final public class CompilerFeedback {
                     reformattedMessage.append(s2).append("\n");
                 }
             }
-
+            CCLog.info(sourceCode);
+            CCLog.info(textHighlightPos_problemStart, textHighlightPos_problemEnd);
             codeOfConcern = sourceCode.substring(textHighlightPos_problemStart, textHighlightPos_problemEnd);
             codeOfConcernLong = sourceCode.substring(textHighlightPos_lineStart, textHighlightPos_problemEnd);
             if (!codeOfConcern.isEmpty()) {
@@ -131,7 +140,7 @@ final public class CompilerFeedback {
         public String toStringForDebugging() {
 
             final StringBuilder ret = new StringBuilder();
-
+            ret.append(compilerInfo.getSource().getName());
             ret.append("Type of problem: ").append(typeOfProblem_forDebugging).append("\n\n");
             ret.append("Message:\n").append(multiLineMessage).append("\n\n");
 

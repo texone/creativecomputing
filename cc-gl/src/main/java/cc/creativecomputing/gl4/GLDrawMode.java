@@ -29,7 +29,7 @@ public enum GLDrawMode {
 
 	private int glID;
 	
-	private GLDrawMode(int theGLID){
+	GLDrawMode(int theGLID){
 		glID = theGLID;
 	}
 	

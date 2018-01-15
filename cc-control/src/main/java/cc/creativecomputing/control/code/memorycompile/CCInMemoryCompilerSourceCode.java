@@ -25,10 +25,11 @@ public class CCInMemoryCompilerSourceCode{
 			_myLastUpdateTime = CCNIOUtil.lastModified(sourcePath);
 			StringBuffer myBuffer = new StringBuffer();
 			for(String myLine : CCNIOUtil.loadStrings(sourcePath)){
-				if(myLine.trim().startsWith("package ")){
-					myLine = myLine.replace(_myPackageName, "recompile." + _myPackageName);
-				}
+//				if(myLine.trim().startsWith("package ")){
+				myLine = myLine.replace(_myPackageName, "recompile." + _myPackageName);
+				
 				myBuffer.append(myLine);
+				myBuffer.append('\n');
 			}
 			return myBuffer.toString();
     	}

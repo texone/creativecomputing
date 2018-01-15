@@ -11,7 +11,7 @@ public enum GLDebugOutputSeverity {
 	
 	private int _myGLID;
 	
-	private GLDebugOutputSeverity(int theGLID){
+	GLDebugOutputSeverity(int theGLID){
 		_myGLID = theGLID;
 	}
 	

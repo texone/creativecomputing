@@ -335,7 +335,7 @@ public class DumpReceiver
 					| (abData[2] & 0xFF);           // tempo in microseconds per beat
 			float bpm = convertTempo(nTempo);
 			// truncate it to 2 digits after dot
-			bpm = (float) (Math.round(bpm*100.0f)/100.0f);
+			bpm = Math.round(bpm*100.0f)/100.0f;
 			strMessage = "Set Tempo: "+bpm+" bpm";
 			break;
 

@@ -170,7 +170,7 @@ public class FastByteArrayInputStream extends InputStream {
 		return myCount;
 	}// skip
 
-	public int read() throws IOException {
+	public int read() {
 		// System.out.println("read()");
 		// System.out.println("count=" + count + " pos=" + pos);
 		return (pos < count) ? (buf[pos++] & 0xff) : (-1);
@@ -181,7 +181,7 @@ public class FastByteArrayInputStream extends InputStream {
 		return read(toBuf, 0, toBuf.length);
 	}// read
 
-	public int read(byte[] toBuf, int offset, int length) throws IOException {
+	public int read(byte[] toBuf, int offset, int length) {
 		// System.out.println("read(byte[],int,int)");
 		int avail = count - pos;
 		if (avail <= 0) {

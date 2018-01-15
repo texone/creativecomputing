@@ -38,13 +38,8 @@ public class CCMarkUpTextElement extends CCMarkUpElement {
         }
         CCMarkUpTextElement other = (CCMarkUpTextElement) obj;
         if (_myValue == null) {
-            if (other._myValue != null) {
-                return false;
-            }
-        } else if (!_myValue.equals(other._myValue)) {
-            return false;
-        }
-        return true;
+            return other._myValue == null;
+        } else return _myValue.equals(other._myValue);
     }
 
     @Override

@@ -60,9 +60,9 @@ public class CCCharSet {
 			myDefaultChars[index++] = EXTRA_CHARS[i];
 		}
 		REDUCED_CHARSET = new CCCharSet(myDefaultChars);
-	};
-	
-	public static CCCharSet EXTENDED_CHARSET;
+	}
+
+    public static CCCharSet EXTENDED_CHARSET;
 	static{
 		EXTENDED_CHARSET = new CCCharSet();
 		EXTENDED_CHARSET.addUnicodeBlock(CCUnicodeBlock.BASIC_LATIN);
@@ -70,9 +70,9 @@ public class CCCharSet {
 		EXTENDED_CHARSET.addUnicodeBlock(CCUnicodeBlock.LATIN_EXTENDED_A);
 		EXTENDED_CHARSET.addUnicodeBlock(CCUnicodeBlock.GENERAL_PUNCTUATION);
 		EXTENDED_CHARSET.addUnicodeBlock(CCUnicodeBlock.SUPERSCRIPTS_AND_SUBSCRIPTS);
-	};
-	
-	private char[] _myChars;
+	}
+
+    private char[] _myChars;
 	
 	public CCCharSet(final char[] theChars) {
 		_myChars = theChars;

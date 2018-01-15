@@ -88,7 +88,7 @@ public class CCGLProgram{
 		return myResult;
 	}
 	
-	public static enum CCGeometryInputType{
+	public enum CCGeometryInputType{
 		
 		POINTS(GL.GL_POINTS),
 		LINES(GL.GL_LINES),
@@ -100,12 +100,12 @@ public class CCGLProgram{
 		
 		int glID;
 		
-		private CCGeometryInputType(final int theGLID) {
+		CCGeometryInputType(final int theGLID) {
 			glID = theGLID;
 		}
 	}
 	
-	public static enum CCGeometryOutputType{
+	public enum CCGeometryOutputType{
 		
 		POINTS(GL.GL_POINTS),
 		LINE_STRIP(GL.GL_LINE_STRIP),
@@ -113,7 +113,7 @@ public class CCGLProgram{
 		
 		int glID;
 		
-		private CCGeometryOutputType(final int theGLID) {
+		CCGeometryOutputType(final int theGLID) {
 			glID = theGLID;
 		}
 	}
@@ -181,7 +181,7 @@ public class CCGLProgram{
 	
 	protected CCGLProgram(){
 		GL2 gl = CCGraphics.currentGL();
-		_myProgram = (int)gl.glCreateProgram();
+		_myProgram = gl.glCreateProgram();
 	}
 	
 	public CCGLProgram(

@@ -4,7 +4,7 @@ public interface ModbusListener extends Runnable {
 	/**
 	 * Main execution loop for this Modbus interface listener
 	 */
-	public void run();
+    void run();
 
 	/**
 	 * Sets the unit number for this Modbus interface listener.
@@ -13,14 +13,14 @@ public interface ModbusListener extends Runnable {
 	 *            Modbus unit number. A value of 0 indicates this Modbus
 	 *            interface accepts all unit numbers.
 	 */
-	public void setUnit(int unit);
+    void setUnit(int unit);
 
 	/**
 	 * Gets the unit number for this Modbus interface listener.
 	 * 
 	 * @returns The Modbus unit number.
 	 */
-	public int getUnit();
+    int getUnit();
 
 	/**
 	 * Sets the <i>listening</i> state for this Modbus interface. A Modbus
@@ -30,7 +30,7 @@ public interface ModbusListener extends Runnable {
 	 * @param listening
 	 *            This interface will accept and process requests.
 	 */
-	public void setListening(boolean listening);
+    void setListening(boolean listening);
 
 	/**
 	 * Gets the <i>listening</i> state for this Modbus interface. A Modbus
@@ -40,7 +40,7 @@ public interface ModbusListener extends Runnable {
 	 * 
 	 * @returns The current <i>listening</i> state.
 	 */
-	public boolean isListening();
+    boolean isListening();
 	
 	/**
 	 * Starts the listener thread with the <tt>ModbusListener</tt> in
@@ -48,10 +48,10 @@ public interface ModbusListener extends Runnable {
 	 * 
 	 * @returns The listener Thread.
 	 */
-	public Thread listen();
+    Thread listen();
 	
 	/**
 	 * Stop the listener thread for this <tt>ModbusListener</tt> instance.
 	 */
-	public void stop();
+    void stop();
 }

@@ -57,7 +57,7 @@ public interface ModbusTransaction {
    * <p>
    * @param req a <tt>ModbusRequest</tt>.
    */
-  public void setRequest(CCAbstractModbusRequest req);
+  void setRequest(CCAbstractModbusRequest req);
 
   /**
    * Returns the <tt>ModbusRequest</tt> instance
@@ -65,7 +65,7 @@ public interface ModbusTransaction {
    * <p>
    * @return the associated <tt>ModbusRequest</tt> instance.
    */
-  public CCAbstractModbusRequest getRequest();
+  CCAbstractModbusRequest getRequest();
 
   /**
    * Returns the <tt>ModbusResponse</tt> instance
@@ -73,7 +73,7 @@ public interface ModbusTransaction {
    * <p>
    * @return the associated <tt>ModbusRequest</tt> instance.
    */
-  public CCAbstractModbusResponse getResponse();
+  CCAbstractModbusResponse getResponse();
 
   /**
    * Returns the actual transaction identifier of
@@ -84,7 +84,7 @@ public interface ModbusTransaction {
    * @return the actual transaction identifier as
    *         <tt>int</tt>.
    */
-  public int getTransactionID();
+  int getTransactionID();
 
   /**
    * Set the amount of retries for opening
@@ -92,7 +92,7 @@ public interface ModbusTransaction {
    * <p>
    * @param retries the amount of retries as <tt>int</tt>.
    */
-  public void setRetries(int retries);
+  void setRetries(int retries);
 
   /**
    * Returns the amount of retries for opening
@@ -100,7 +100,7 @@ public interface ModbusTransaction {
    * <p>
    * @return the amount of retries as <tt>int</tt>.
    */
-  public int getRetries();
+  int getRetries();
 
 
   /**
@@ -109,7 +109,7 @@ public interface ModbusTransaction {
    * <p>
    * @param b true if checking validity, false otherwise.
    */
-  public void setCheckingValidity(boolean b);
+  void setCheckingValidity(boolean b);
 
   /**
    * Tests whether the validity of a transaction
@@ -117,7 +117,7 @@ public interface ModbusTransaction {
    * <p>
    * @return true if checking validity, false otherwise.
    */
-  public boolean isCheckingValidity();
+  boolean isCheckingValidity();
 
   /**
    * Executes this <tt>ModbusTransaction</tt>.
@@ -130,6 +130,6 @@ public interface ModbusTransaction {
    * @throws CCModbusException if an I/O error occurs,
    *         or the response is a modbus protocol exception.
    */
-  public void execute() throws CCModbusException;
+  void execute() throws CCModbusException;
 
 }//interface ModbusTransaction

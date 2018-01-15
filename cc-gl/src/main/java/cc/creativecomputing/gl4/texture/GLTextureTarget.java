@@ -38,7 +38,7 @@ public enum GLTextureTarget {
 	
 	private int _myGLID;
 	
-	private GLTextureTarget(int theGLID){
+	GLTextureTarget(int theGLID){
 		_myGLID = theGLID;
 	}
 	

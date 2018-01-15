@@ -38,8 +38,8 @@ public class CCPolygon2 implements Iterable<CCVector2>{
 	}
 	
 	private double angle2D(final double theX1, final double theY1, final double theX2, final double theY2){
-		double theta1 = (double)Math.atan2(theY1, theX1);
-		double theta2 = (double)Math.atan2(theY2, theX2);
+		double theta1 = Math.atan2(theY1, theX1);
+		double theta2 = Math.atan2(theY2, theX2);
 		double dtheta = theta2 - theta1;
 
 		while (dtheta > CCMath.PI)
@@ -94,10 +94,7 @@ public class CCPolygon2 implements Iterable<CCVector2>{
 			R += angle2D(p1x, p1y, p2x, p2y);
 		}
 
-		if (CCMath.abs(R) < CCMath.PI)
-			return false;
-		else
-			return true;
+        return !(CCMath.abs(R) < CCMath.PI);
 	}
 
 	public double signedArea() {

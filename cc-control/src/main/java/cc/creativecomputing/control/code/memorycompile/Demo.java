@@ -38,7 +38,7 @@ public class Demo {
     	while(true){
     		if(!myCompiler.needsUpdated())continue;
 	        
-	        final CompilerFeedback compilerFeedback = myCompiler.compile();
+	        final CCInMemoryCompilerFeedback compilerFeedback = myCompiler.compile();
 	        System.out.println("\n\nCOMPILER FEEDBACK: " + compilerFeedback);
 	
 	        if (compilerFeedback != null && compilerFeedback.success) {

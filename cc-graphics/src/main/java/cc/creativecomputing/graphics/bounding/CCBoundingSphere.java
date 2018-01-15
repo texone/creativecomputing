@@ -632,14 +632,11 @@ public class CCBoundingSphere extends CCBoundingVolume {
 			return false;
 		}
 
-		if (CCMath.abs(bb._myCenter.x - center().x) < radius() + bb.getXExtent()
-				&& CCMath.abs(bb._myCenter.y - center().y) < radius() + bb.getYExtent()
-				&& CCMath.abs(bb._myCenter.z - center().z) < radius() + bb.getZExtent()) {
-			return true;
-		}
+        return CCMath.abs(bb._myCenter.x - center().x) < radius() + bb.getXExtent()
+                && CCMath.abs(bb._myCenter.y - center().y) < radius() + bb.getYExtent()
+                && CCMath.abs(bb._myCenter.z - center().z) < radius() + bb.getZExtent();
 
-		return false;
-	}
+    }
 
 	@Override
 	public boolean intersectsOrientedBoundingBox(final OrientedBoundingBox obb) {

@@ -30,7 +30,7 @@ public enum GLPixelDataType {
 	
 	private int _myGLID;
 	
-	private GLPixelDataType(int theGLID){
+	GLPixelDataType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

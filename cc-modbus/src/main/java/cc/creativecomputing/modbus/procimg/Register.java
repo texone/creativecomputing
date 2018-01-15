@@ -85,7 +85,7 @@ public interface Register extends InputRegister {
 	 * @param v
 	 *            the value as unsigned short (<tt>int</tt>).
 	 */
-	public void setValue(int v);
+    void setValue(int v);
 
 	/**
 	 * Sets the content of this register from the given signed 16-bit value
@@ -94,7 +94,7 @@ public interface Register extends InputRegister {
 	 * @param s
 	 *            the value as <tt>short</tt>.
 	 */
-	public void setValue(short s);
+    void setValue(short s);
 
 	/**
 	 * Sets the content of this register from the given raw bytes.
@@ -102,5 +102,5 @@ public interface Register extends InputRegister {
 	 * @param bytes
 	 *            the raw data as <tt>byte[]</tt>.
 	 */
-	public void setValue(byte[] bytes);
+    void setValue(byte[] bytes);
 }

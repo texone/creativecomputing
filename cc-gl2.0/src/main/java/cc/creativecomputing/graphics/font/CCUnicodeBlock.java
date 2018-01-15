@@ -1283,7 +1283,7 @@ public class CCUnicodeBlock {
 	 * @since 1.5
 	 */
 	public static final CCUnicodeBlock forName(String blockName) {
-		CCUnicodeBlock block = (CCUnicodeBlock) map.get(blockName.toUpperCase(Locale.US));
+		CCUnicodeBlock block = map.get(blockName.toUpperCase(Locale.US));
 		if (block == null) {
 			throw new IllegalArgumentException();
 		}

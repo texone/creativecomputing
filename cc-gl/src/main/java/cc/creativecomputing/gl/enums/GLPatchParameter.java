@@ -9,7 +9,7 @@ public enum GLPatchParameter {
 	
 	private int _myGLID;
 	
-	private GLPatchParameter(int theGLID){
+	GLPatchParameter(int theGLID){
 		_myGLID = theGLID;
 	}
 	

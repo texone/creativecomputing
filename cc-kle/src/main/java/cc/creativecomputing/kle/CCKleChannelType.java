@@ -6,7 +6,7 @@ public enum CCKleChannelType {
 	
 	private String _myID;
 
-	private CCKleChannelType(String theID){
+	CCKleChannelType(String theID){
 		_myID = theID;
 	}
 	

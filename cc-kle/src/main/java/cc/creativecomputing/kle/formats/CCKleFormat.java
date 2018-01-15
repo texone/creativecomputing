@@ -8,11 +8,11 @@ import cc.creativecomputing.kle.sequence.CCSequenceRecorder.CCSequenceElementRec
 
 public interface CCKleFormat {
 	
-	public void save(Path theFile, CCKleMapping<?> theMapping, CCSequence theSequence);
+	void save(Path theFile, CCKleMapping<?> theMapping, CCSequence theSequence);
 	
-	public void savePosition(Path theFile, CCSequenceElementRecording theRecording, boolean[] theSave);
+	void savePosition(Path theFile, CCSequenceElementRecording theRecording, boolean[] theSave);
 
-	public CCSequence load(Path theFile, CCKleMapping<?> theMapping);
+	CCSequence load(Path theFile, CCKleMapping<?> theMapping);
 	
-	public String extension();
+	String extension();
 }

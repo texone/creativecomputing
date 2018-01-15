@@ -19,9 +19,9 @@ import java.io.IOException;
  */
 public class CCSystem {
 
-	public static enum CCOS {
-		WINDOWS, MACOSX, LINUX, OTHER;
-	}
+	public enum CCOS {
+		WINDOWS, MACOSX, LINUX, OTHER
+    }
 
 	/**
 	 * Current platform in use, one of WINDOWS, MACOSX, LINUX or OTHER.
@@ -108,7 +108,7 @@ public class CCSystem {
 		}
 	}
 	
-	public static enum CCEndianess{
+	public enum CCEndianess{
 		LITTLE_ENDIAN, BIG_ENDIAN
 	}
 	

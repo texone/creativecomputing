@@ -51,6 +51,6 @@ public interface DigitalIn {
    *
    * @return true if set, false otherwise.
    */
-  public boolean isSet();
+  boolean isSet();
   
 }//DigitalIn

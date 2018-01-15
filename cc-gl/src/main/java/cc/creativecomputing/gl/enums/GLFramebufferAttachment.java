@@ -25,7 +25,7 @@ public enum GLFramebufferAttachment {
 	
 	private int _myGLID;
 	
-	private GLFramebufferAttachment(int theGLID){
+	GLFramebufferAttachment(int theGLID){
 		_myGLID = theGLID;
 	}
 	

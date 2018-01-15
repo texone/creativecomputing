@@ -176,7 +176,8 @@ public class MovieSimple implements GLEventListener {
                 renderString(drawable, font, pixelSize, text3, 1 /* col */, -3 /* row */, 0, height, -1, true);
                 renderString(drawable, font, pixelSize, text4, 1 /* col */, -2 /* row */, 0, height, -1, true);
             }
-        } };
+        } }
+
     private InfoTextRendererGLELBase textRendererGLEL = null;
     private boolean displayOSD = true;
 
@@ -378,7 +379,8 @@ public class MovieSimple implements GLEventListener {
     public boolean getOrthoProjection() { return orthoProjection; }
 
     public boolean hasEffect(final int e) { return 0 != ( effects & e ) ; }
-    public void setEffects(final int e) { effects = e; };
+    public void setEffects(final int e) { effects = e; }
+
     public void setTransparency(final float alpha) {
         this.effects |= EFFECT_TRANSPARENT;
         this.alpha = alpha;
@@ -871,13 +873,14 @@ public class MovieSimple implements GLEventListener {
                     destroyWindow(window);
                 }
             }
-        };
+        }
+
     public final static MyGLMediaEventListener myGLMediaEventListener = new MyGLMediaEventListener();
 
     static boolean loopEOS = false;
     static boolean origSize;
 
-    public static void main(final String[] args) throws IOException, URISyntaxException {
+    public static void main(final String[] args) throws URISyntaxException {
         int swapInterval = 1;
         int width = 800;
         int height = 600;

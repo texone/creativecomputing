@@ -116,7 +116,7 @@ public enum GLSlDataType {
 	
 	private int _myGLID;
 	
-	private GLSlDataType(int theGLID){
+	GLSlDataType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

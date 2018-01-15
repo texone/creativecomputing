@@ -246,7 +246,7 @@ class UDPSlaveTerminal implements UDPTerminal {
 				try {
 					// 1. pickup the message and corresponding request
 					byte[] message = (byte[]) m_SendQueue.take();
-					DatagramPacket req = (DatagramPacket) m_Requests
+					DatagramPacket req = m_Requests
 							.remove(new Integer(ModbusUtil
 									.registersToInt(message)));
 					// 2. create new Package with corresponding address and port

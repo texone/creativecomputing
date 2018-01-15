@@ -39,9 +39,7 @@ public class CCFileFilter extends FileFilter implements FilenameFilter{
 					return true;
 
 			}
-		} else if (pathname.isDirectory()) {
-			return true;
-		}
+		} else return pathname.isDirectory();
 		return false;
 	}
 

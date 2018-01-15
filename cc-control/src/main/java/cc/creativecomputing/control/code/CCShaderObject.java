@@ -55,12 +55,12 @@ public abstract class CCShaderObject {
 		return myBuffer;
 	}
 	
-	public static interface CCShaderCompileListener{
-		public void onRecompile(CCShaderObject theShader);
+	public interface CCShaderCompileListener{
+		void onRecompile(CCShaderObject theShader);
 	}
 	
-	public static interface CCShaderErrorListener{
-		public void onError(CCShaderObject theShader);
+	public interface CCShaderErrorListener{
+		void onError(CCShaderObject theShader);
 	}
 	private CCListenerManager<CCShaderCompileListener> _myCompileEvents = CCListenerManager.create(CCShaderCompileListener.class);
 	private CCListenerManager<CCShaderErrorListener> _myErrorEvents = CCListenerManager.create(CCShaderErrorListener.class);

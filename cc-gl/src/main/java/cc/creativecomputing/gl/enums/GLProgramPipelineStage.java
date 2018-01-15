@@ -13,7 +13,7 @@ public enum GLProgramPipelineStage {
 	
 	private int _myGLID;
 	
-	private GLProgramPipelineStage(int theGLID){
+	GLProgramPipelineStage(int theGLID){
 		_myGLID = theGLID;
 	}
 	

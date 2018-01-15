@@ -68,13 +68,13 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	        // Listening for OK and Cancel Events in a JColorChooser Dialog
 	        setEnabled(false);
 	    }
-	};
+	}
+
+    private JButton _myButton;
 	
-	private JButton _myButton;
-	
-	private CCColor _myLastColor = new CCColor();;
-	
-	private CCColor _myColor;
+	private CCColor _myLastColor = new CCColor();
+
+    private CCColor _myColor;
 	
 	private JPanel _myColorPanel;
 	

@@ -114,11 +114,11 @@ public enum CCPixelType{
 	
 	public final int bytesPerChannel;
 	
-	private CCPixelType(final int theBytesPerChannel){
+	CCPixelType(final int theBytesPerChannel){
 		bytesPerChannel = theBytesPerChannel;
 	}
 	
-	private CCPixelType(){
+	CCPixelType(){
 		this(-1);
 	}
 }

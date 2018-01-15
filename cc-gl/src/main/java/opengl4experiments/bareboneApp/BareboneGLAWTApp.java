@@ -28,8 +28,7 @@ import com.jogamp.opengl.util.Animator;
 
 public class BareboneGLAWTApp {
 
-	public static void main(String[] args) throws InstantiationException,
-			IllegalAccessException {
+	public static void main(String[] args) {
 
 		Class myDemoClass = null;
 		for (int i = 0; i < args.length; i++) {

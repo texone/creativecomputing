@@ -707,6 +707,56 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 		}
 		return this;
 	}
+	
+	/**
+	 * Sets the values of this matrix to the values of the provided double array.
+	 * 
+	 * @param theSource
+	 * @param theRowMajor
+	 * @return this matrix for chaining
+	 * @throws NullPointerException
+	 *             if source is null.
+	 * @throws ArrayIndexOutOfBoundsException
+	 *             if source array has a length less than 16.
+	 */
+	public CCMatrix4x4 fromArray(final float[] theSource, final boolean theRowMajor) {
+		if (theRowMajor) {
+			m00 = theSource[0];
+			m01 = theSource[1];
+			m02 = theSource[2];
+			m03 = theSource[3];
+			m10 = theSource[4];
+			m11 = theSource[5];
+			m12 = theSource[6];
+			m13 = theSource[7];
+			m20 = theSource[8];
+			m21 = theSource[9];
+			m22 = theSource[10];
+			m23 = theSource[11];
+			m30 = theSource[12];
+			m31 = theSource[13];
+			m32 = theSource[14];
+			m33 = theSource[15];
+		} else {
+			m00 = theSource[0];
+			m10 = theSource[1];
+			m20 = theSource[2];
+			m30 = theSource[3];
+			m01 = theSource[4];
+			m11 = theSource[5];
+			m21 = theSource[6];
+			m31 = theSource[7];
+			m02 = theSource[8];
+			m12 = theSource[9];
+			m22 = theSource[10];
+			m32 = theSource[11];
+			m03 = theSource[12];
+			m13 = theSource[13];
+			m23 = theSource[14];
+			m33 = theSource[15];
+		}
+		return this;
+	}
 
 	/**
 	 * Replaces a column in this matrix with the values of the given array.
@@ -2075,12 +2125,9 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 			return false;
 		} else if (Double.isNaN(matrix.m32) || Double.isInfinite(matrix.m32)) {
 			return false;
-		} else if (Double.isNaN(matrix.m33) || Double.isInfinite(matrix.m33)) {
-			return false;
-		}
+		} else return !Double.isNaN(matrix.m33) && !Double.isInfinite(matrix.m33);
 
-		return true;
-	}
+    }
 
 	/**
 	 * @return true if this Matrix is orthonormal
@@ -2154,12 +2201,8 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 		if (CCMath.abs(my30 * my20 + my31 * my21 + my32 * my22 + my33 * my23 - 0.0) > CCMath.ZERO_TOLERANCE) {
 			return false;
 		}
-		if (CCMath.abs(my30 * my30 + my31 * my31 + my32 * my32 + my33 * my33 - 1.0) > CCMath.ZERO_TOLERANCE) {
-			return false;
-		}
-
-		return true;
-	}
+        return !(CCMath.abs(my30 * my30 + my31 * my31 + my32 * my32 + my33 * my33 - 1.0) > CCMath.ZERO_TOLERANCE);
+    }
 
 	/**
 	 * @return the string representation of this matrix.
@@ -2304,12 +2347,9 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 			return false;
 		} else if (CCMath.abs(m32 - comp.m32) > CCMath.ALLOWED_DEVIANCE) {
 			return false;
-		} else if (CCMath.abs(m33 - comp.m33) > CCMath.ALLOWED_DEVIANCE) {
-			return false;
-		}
+		} else return !(CCMath.abs(m33 - comp.m33) > CCMath.ALLOWED_DEVIANCE);
 
-		return true;
-	}
+    }
 
 	/**
 	 * @param theObject
@@ -2355,12 +2395,9 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 			return false;
 		} else if (m32 != comp.m32) {
 			return false;
-		} else if (m33 != comp.m33) {
-			return false;
-		}
+		} else return !(m33 != comp.m33);
 
-		return true;
-	}
+    }
 
 	// /////////////////
 	// Method for Cloneable
@@ -2384,7 +2421,7 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 	 * @throws ClassNotFoundException
 	 */
 	@Override
-	public void readExternal(final ObjectInput theInput) throws IOException, ClassNotFoundException {
+	public void readExternal(final ObjectInput theInput) throws IOException {
 		m00 = theInput.readDouble();
 		m01 = theInput.readDouble();
 		m02 = theInput.readDouble();

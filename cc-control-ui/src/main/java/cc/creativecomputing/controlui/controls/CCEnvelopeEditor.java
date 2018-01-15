@@ -21,13 +21,19 @@ package cc.creativecomputing.controlui.controls;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import cc.creativecomputing.control.timeline.Track;
+import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.view.SwingCurvePanel;
+import cc.creativecomputing.core.logging.CCLog;
 
 /**
  * @author christianriekoff
@@ -40,6 +46,13 @@ public class CCEnvelopeEditor extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private SwingCurvePanel _myCurvePanel;
+	
+	private void saveWindowPosition(String thePath){
+		CCControlApp.preferences.put(thePath + "/x" , getX() + "");
+		CCControlApp.preferences.put(thePath + "/y" , getY() + "");
+		CCControlApp.preferences.put(thePath + "/width" , getWidth() + "");
+		CCControlApp.preferences.put(thePath + "/height" , getHeight() + "");
+	}
 
 	public CCEnvelopeEditor(String theTitle) {
 		super(theTitle);
@@ -55,6 +68,44 @@ public class CCEnvelopeEditor extends JFrame {
 
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(containerPanel, BorderLayout.CENTER);
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				CCControlApp.preferences.put(theTitle + "/open" , true + "");
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				CCControlApp.preferences.put(theTitle + "/open" , false + "");
+			}
+		});
+		
+		addComponentListener(new ComponentAdapter() {
+			
+			@Override
+			public void componentResized(ComponentEvent e) {
+				saveWindowPosition(theTitle);
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				saveWindowPosition(theTitle);
+			}
+			
+		});
+		
+		if(CCControlApp.preferences.getInt(theTitle + "/x", -1) != -1){
+			CCLog.info(CCControlApp.preferences.getInt(theTitle + "/x", -1), CCControlApp.preferences.getInt(theTitle + "/y", -1));
+			setLocation(
+				CCControlApp.preferences.getInt(theTitle + "/x", -1), 
+				CCControlApp.preferences.getInt(theTitle + "/y", -1)
+			);
+			setSize(
+				CCControlApp.preferences.getInt(theTitle + "/width", -1), 
+				CCControlApp.preferences.getInt(theTitle + "/height", -1)
+			);
+		}
 
 		pack();
 	}

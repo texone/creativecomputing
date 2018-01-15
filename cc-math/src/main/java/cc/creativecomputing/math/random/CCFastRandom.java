@@ -164,7 +164,7 @@ public class CCFastRandom {
 	 * @return gaussian random
 	 */
 	public float gaussianRandom() {
-		return (CCMath.constrain((float)nextGaussian() / 4,-1 ,1 ) + 1) / 2;
+		return (CCMath.constrain(nextGaussian() / 4,-1 ,1 ) + 1) / 2;
 	}
 	
 	/**

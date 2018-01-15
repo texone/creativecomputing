@@ -19,7 +19,7 @@ public class CCCamera {
 	 * D. These are the "near" and "far" values. The frustum values are stored
 	 * in an array with the following mappings:
 	 */
-	public static enum CCFrustumPlane {
+	public enum CCFrustumPlane {
 		NEAR, // near
 		FAR, // far
 		BOTTOM, // bottom

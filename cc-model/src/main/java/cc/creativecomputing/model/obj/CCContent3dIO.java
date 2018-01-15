@@ -17,9 +17,9 @@ import cc.creativecomputing.model.obj.CCOBJParser;
 
 public class CCContent3dIO {
 	
-	public static enum CCContent3DFormat{
-		OBJ;
-	}
+	public enum CCContent3DFormat{
+		OBJ
+    }
 	
 	public static final CCContent3DFormat OBJ = CCContent3DFormat.OBJ;
 	

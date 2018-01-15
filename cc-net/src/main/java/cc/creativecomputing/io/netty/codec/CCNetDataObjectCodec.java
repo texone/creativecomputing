@@ -19,7 +19,7 @@ public class CCNetDataObjectCodec implements CCNetCodec<CCDataObject>{
 	private static class CCJsonEncoder extends MessageToByteEncoder<CCDataObject>{
 
 		@Override
-		protected void encode(ChannelHandlerContext theContext, CCDataObject theMessage, ByteBuf theBuf) throws Exception {
+		protected void encode(ChannelHandlerContext theContext, CCDataObject theMessage, ByteBuf theBuf) {
 			String myXMLString = (String)CCDataIO.toFormatType(theMessage, CCDataFormats.JSON);
 			theBuf.writeBytes(myXMLString.getBytes());
 		}
@@ -33,7 +33,7 @@ public class CCNetDataObjectCodec implements CCNetCodec<CCDataObject>{
 	
 	private static class CCJsonDecoder extends ByteToMessageDecoder{
 		@Override
-		protected void decode(ChannelHandlerContext theContext, ByteBuf theBuf, List<Object> theObjects) throws Exception {
+		protected void decode(ChannelHandlerContext theContext, ByteBuf theBuf, List<Object> theObjects) {
 			String myJsonString = theBuf.toString(CharsetUtil.UTF_8);
 			theBuf.readBytes(theBuf.readableBytes()).release();
 			try{

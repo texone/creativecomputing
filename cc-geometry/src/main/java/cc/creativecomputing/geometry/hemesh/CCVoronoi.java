@@ -372,7 +372,7 @@ public class CCVoronoi {
 		
 		private void insert(Halfedge he, CCVoronoiFace v, double offset) {
 			he.vertex = v;
-			he.ystar = (double) (v._myCoordinate.y + offset);
+			he.ystar = v._myCoordinate.y + offset;
 			Halfedge last = PQhash[bucket(he)];
 			Halfedge next;
 			while ((next = last.PQnext) != null && (he.ystar > next.ystar || (he.ystar == next.ystar && v._myCoordinate.x > next.vertex._myCoordinate.x))) {
@@ -594,7 +594,7 @@ public class CCVoronoi {
 		double adx = dx > 0 ? dx : -dx;
 		double ady = dy > 0 ? dy : -dy;
 		// get the slope of the line
-		newedge.c = (double) (s1._myCoordinate.x * dx + s1._myCoordinate.y * dy + (dx * dx + dy * dy) * 0.5);
+		newedge.c = s1._myCoordinate.x * dx + s1._myCoordinate.y * dy + (dx * dx + dy * dy) * 0.5;
 
 		if (adx > ady) {
 			newedge.a = 1.0f;
@@ -743,11 +743,7 @@ public class CCVoronoi {
 
 		e = el.ELedge;
 		topsite = e.reg[1];
-		if (p.x > topsite._myCoordinate.x) {
-			right_of_site = true;
-		} else {
-			right_of_site = false;
-		}
+        right_of_site = p.x > topsite._myCoordinate.x;
 		if (right_of_site && el.ELpm == LE) {
 			return (true);
 		}
@@ -787,11 +783,11 @@ public class CCVoronoi {
 			t3 = yl - topsite._myCoordinate.y;
 			above = t1 * t1 > t2 * t2 + t3 * t3;
 		}
-		return (el.ELpm == LE ? above : !above);
+		return ((el.ELpm == LE) == above);
 	}
 
 	private CCVoronoiFace rightreg(Halfedge he) {
-		if (he.ELedge == (Edge) null)
+		if (he.ELedge == null)
 		// if this halfedge has no edge, return the bottom site (whatever
 		// that is)
 		{
@@ -807,7 +803,7 @@ public class CCVoronoi {
 		double dx, dy;
 		dx = s._myCoordinate.x - t._myCoordinate.x;
 		dy = s._myCoordinate.y - t._myCoordinate.y;
-		return (double) (Math.sqrt(dx * dx + dy * dy));
+		return Math.sqrt(dx * dx + dy * dy);
 	}
 
 	// create a new site where the HalfEdges el1 and el2 intersect - note that

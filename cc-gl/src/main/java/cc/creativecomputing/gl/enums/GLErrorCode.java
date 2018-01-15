@@ -14,7 +14,7 @@ public enum GLErrorCode {
 	
 	private int _myGLID;
 	
-	private GLErrorCode(int theGLID){
+	GLErrorCode(int theGLID){
 		_myGLID = theGLID;
 	}
 	

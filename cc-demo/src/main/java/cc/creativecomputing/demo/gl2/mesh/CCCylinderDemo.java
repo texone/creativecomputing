@@ -93,7 +93,7 @@ public class CCCylinderDemo extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myMesh = new CCCylinderMesh(1,1,360,1000);
+		_myMesh = new CCCylinderMesh(1,1,720,2000);
 
 		_myCameraController1 = new CCCameraController(this, g, 100);
 		_myCylinderShader = new CCGLProgram(

@@ -7,10 +7,10 @@ import cc.creativecomputing.core.events.CCListenerManager;
 
 public class CCSelection {
 	
-	public static interface CCSelectionListener{
-		public void onChange(String theValue);
+	public interface CCSelectionListener{
+		void onChange(String theValue);
 		
-		public void onChangeValues(CCSelection theSelection);
+		void onChangeValues(CCSelection theSelection);
 	}
 
 	private List<String> _myValues = new ArrayList<String>();

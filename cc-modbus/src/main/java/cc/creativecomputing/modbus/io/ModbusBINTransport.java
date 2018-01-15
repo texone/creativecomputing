@@ -229,7 +229,7 @@ public class ModbusBINTransport extends ModbusSerialTransport {
 	 * @param out the output stream to be used for writing.
 	 * @throws java.io.IOException if an I\O related error occurs.
 	 */
-	public void prepareStreams(InputStream in, OutputStream out) throws IOException {
+	public void prepareStreams(InputStream in, OutputStream out) {
 		m_InputStream = new DataInputStream(new ASCIIInputStream(in));
 		m_OutputStream = new ASCIIOutputStream(out);
 		m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);

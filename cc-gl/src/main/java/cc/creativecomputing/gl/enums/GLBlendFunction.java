@@ -25,7 +25,7 @@ public enum GLBlendFunction {
 	
 	private int _myGLID;
 	
-	private GLBlendFunction(int theGLID){
+	GLBlendFunction(int theGLID){
 		_myGLID = theGLID;
 	}
 	

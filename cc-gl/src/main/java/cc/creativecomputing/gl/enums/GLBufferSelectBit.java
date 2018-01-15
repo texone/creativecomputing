@@ -9,7 +9,7 @@ public enum GLBufferSelectBit {
 	
 	private int _myGLID;
 	
-	private GLBufferSelectBit(int theGLID){
+	GLBufferSelectBit(int theGLID){
 		_myGLID = theGLID;
 	}
 	

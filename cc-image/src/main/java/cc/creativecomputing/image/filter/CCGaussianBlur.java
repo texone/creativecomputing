@@ -167,7 +167,7 @@ public class CCGaussianBlur extends CCConvolutionFilter {
 		double sigma = radius/3;
 		double sigma22 = 2*sigma*sigma;
 		double sigmaPi2 = 2*CCImageMath.PI*sigma;
-		double sqrtSigmaPi2 = (double)Math.sqrt(sigmaPi2);
+		double sqrtSigmaPi2 = Math.sqrt(sigmaPi2);
 		double radius2 = radius*radius;
 		double total = 0;
 		int index = 0;

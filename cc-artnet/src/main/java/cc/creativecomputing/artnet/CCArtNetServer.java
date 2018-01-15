@@ -33,23 +33,23 @@ import cc.creativecomputing.io.net.CCUDPServer;
 
 public class CCArtNetServer extends CCUDPServer<ArtNetPacket> {
 	
-	public static interface CCArtNetServerPacketBroadcastedListener {
+	public interface CCArtNetServerPacketBroadcastedListener {
 	    void artNetPacketBroadcasted(ArtNetPacket thePacket);
 	}
 	
-	public static interface CCArtNetServerPacketReceivedListener {
+	public interface CCArtNetServerPacketReceivedListener {
 	    void artNetPacketReceived(ArtNetPacket thePacket);
 	}
 	
-	public static interface CCArtNetServerPacketUnicastedListener {
+	public interface CCArtNetServerPacketUnicastedListener {
 	    void artNetPacketUnicasted(ArtNetPacket thePacket);
 	}
 	
-	public static interface CCArtNetServerStartedListener {
+	public interface CCArtNetServerStartedListener {
 	    void artNetServerStarted(CCArtNetServer theServer);
 	}
 	
-	public static interface CCArtNetServerStoppedListener {
+	public interface CCArtNetServerStoppedListener {
 	    void artNetServerStopped(CCArtNetServer theServer);
 	}
 	
@@ -127,9 +127,9 @@ public class CCArtNetServer extends CCUDPServer<ArtNetPacket> {
 	public void connect() {
 		CCLog.info(_myLocalAddress.port() + ":" + _myLocalAddress.ip());
 		connect(_myLocalAddress.getAddress());
-	};
+	}
 
-	@Override
+    @Override
 	public void connect(InetSocketAddress theAddress){
 		super.connect(theAddress);
 		_myServerStartedEvents.proxy().artNetServerStarted(this);

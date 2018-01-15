@@ -173,7 +173,8 @@ public class MovieSBSStereo implements StereoGLEventListener {
                 renderString(drawable, font, pixelSize, text3, 1 /* col */, -3 /* row */, 0, height,  0, true);
                 renderString(drawable, font, pixelSize, text4, 1 /* col */, -2 /* row */, 0, height,  1, true);
             }
-        } };
+        } }
+
     private final boolean enableTextRendererGLEL = false;
     private InfoTextRendererGLELBase textRendererGLEL = null;
     private boolean displayOSD = false;
@@ -841,6 +842,7 @@ public class MovieSBSStereo implements StereoGLEventListener {
                     destroyWindow(window);
                 }
             }
-        };
+        }
+
     public final static StereoGLMediaEventListener stereoGLMediaEventListener = new StereoGLMediaEventListener();
 }

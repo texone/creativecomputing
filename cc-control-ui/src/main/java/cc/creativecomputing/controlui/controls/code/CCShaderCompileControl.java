@@ -276,8 +276,6 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderSource, CCSha
 		CCControlApp.preferences.put(_myHandle.path().toString() + "/width" , _myEditorFrame.getWidth() + "");
 		CCControlApp.preferences.put(_myHandle.path().toString() + "/height" , _myEditorFrame.getHeight() + "");
 		CCControlApp.preferences.put(_myHandle.path().toString() + "/devider" , _mySplitPane.getDividerLocation() + "");
-		CCLog.info(CCControlApp.preferences.getInt(_myHandle.path().toString() + "/x", -1), CCControlApp.preferences.getInt(_myHandle.path().toString() + "/y", -1));
-		
 	}
 	
 	private void saveText(){

@@ -57,14 +57,14 @@ public interface ModbusTransport {
    * @throws IOException if a stream
    *         cannot be closed properly.
    */
-  public void close() throws IOException;
+  void close() throws IOException;
   
   /**
    * Creates a Modbus transaction for the underlying transport.
    * 
    * @return the new transaction
    */
-  public ModbusTransaction createTransaction();
+  ModbusTransaction createTransaction();
 
   /**
    * Writes a <tt<ModbusMessage</tt> to the
@@ -75,7 +75,7 @@ public interface ModbusTransport {
    *         written properly to the raw output stream of
    *         this <tt>ModbusTransport</tt>.
    */
-  public void writeMessage(CCModbusMessage msg) throws ModbusIOException;
+  void writeMessage(CCModbusMessage msg) throws ModbusIOException;
 
   /**
    * Reads a <tt>ModbusRequest</tt> from the
@@ -86,7 +86,7 @@ public interface ModbusTransport {
    *         read properly from the raw input stream of
    *         this <tt>ModbusTransport</tt>.
    */
-  public CCAbstractModbusRequest readRequest() throws ModbusIOException;
+  CCAbstractModbusRequest readRequest() throws ModbusIOException;
 
   /**
    * Reads a <tt>ModbusResponse</tt> from the
@@ -97,6 +97,6 @@ public interface ModbusTransport {
    *         read properly from the raw input stream of
    *         this <tt>ModbusTransport</tt>.
    */
-  public CCAbstractModbusResponse readResponse() throws ModbusIOException;
+  CCAbstractModbusResponse readResponse() throws ModbusIOException;
 
 }//class ModbusTransport

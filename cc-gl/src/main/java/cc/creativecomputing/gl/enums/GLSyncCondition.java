@@ -7,7 +7,7 @@ public enum GLSyncCondition {
 	
 	private int _myGLID;
 	
-	private GLSyncCondition(int theGLID){
+	GLSyncCondition(int theGLID){
 		_myGLID = theGLID;
 	}
 	

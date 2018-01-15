@@ -12,6 +12,6 @@ package cc.creativecomputing.gl.app.events;
 
 public interface CCMouseWheelListener {
 
-	public void mouseWheelMoved(CCMouseWheelEvent the);
+	void mouseWheelMoved(CCMouseWheelEvent the);
 	
 }

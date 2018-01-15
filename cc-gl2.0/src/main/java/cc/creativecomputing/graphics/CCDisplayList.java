@@ -27,8 +27,8 @@ public class CCDisplayList{
 	 * @example shape
 	 */
 	public CCDisplayList(){
-		_myID = CCGraphics.currentGL().glGenLists(1);;
-	}
+		_myID = CCGraphics.currentGL().glGenLists(1);
+    }
 
 	/**
 	 * Use this method to start the recording of your shape, all previous recordings

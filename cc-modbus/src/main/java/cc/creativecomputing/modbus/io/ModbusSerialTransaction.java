@@ -159,7 +159,7 @@ public class ModbusSerialTransaction implements ModbusTransaction {
 		this.m_TransDelayMS = newTransDelayMS;
 	}
 
-	public void execute() throws ModbusIOException, CCModbusSlaveException, CCModbusException {
+	public void execute() throws CCModbusException {
 		// 1. assert executeability
 		assertExecutable();
 
@@ -222,7 +222,7 @@ public class ModbusSerialTransaction implements ModbusTransaction {
 	 *
 	 * @throws CCModbusException if the transaction is not valid.
 	 */
-	private void checkValidity() throws CCModbusException {
+	private void checkValidity() {
 
 	}// checkValidity
 

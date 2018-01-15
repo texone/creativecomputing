@@ -13,4 +13,4 @@ class Particle {
 	public double pres;
 
 	public Particle next;
-};
+}

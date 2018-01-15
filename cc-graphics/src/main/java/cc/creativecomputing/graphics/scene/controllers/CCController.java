@@ -10,7 +10,7 @@ public abstract class CCController <ObjectType extends CCControlledObject>{
 	 * @author christianr
 	 *
 	 */
-	public static enum CCrepeatTypeType {
+	public enum CCrepeatTypeType {
 		CLAMP, WRAP, CYCLE
 	}
 
@@ -96,7 +96,7 @@ public abstract class CCController <ObjectType extends CCControlledObject>{
 		double timeRange = maxTime - minTime;
 		if (timeRange > 0.0) {
 			double multiples = (controlTime - minTime) / timeRange;
-			double integerTime = (double)Math.floor(multiples);
+			double integerTime = Math.floor(multiples);
 			double fractionTime = multiples - integerTime;
 			if (repeatType == CCrepeatTypeType.WRAP) {
 				return minTime + fractionTime * timeRange;
@@ -116,4 +116,4 @@ public abstract class CCController <ObjectType extends CCControlledObject>{
 		return minTime;
 	}
 
-};
+}

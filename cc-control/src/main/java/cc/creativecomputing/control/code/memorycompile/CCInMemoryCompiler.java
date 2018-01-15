@@ -41,6 +41,7 @@ public class CCInMemoryCompiler {
     private CCInMemoryCompilerSourceCode _myMainSource = null;
     
     private void scanSources(Path theFolder){
+    	CCLog.info("SCAN");
     	for(Path myPath:CCNIOUtil.list(theFolder)){
         	if(Files.isDirectory(myPath)){
         		scanSources(myPath);
@@ -67,7 +68,7 @@ public class CCInMemoryCompiler {
     	return false;
     }
 
-    public CompilerFeedback compile() {
+    public CCInMemoryCompilerFeedback compile() {
     	
     	if(_myMainSource != null){
     		_myClassSourceCodes.clear();
@@ -87,7 +88,7 @@ public class CCInMemoryCompiler {
 
         
         final JavaCompiler.CompilationTask myCompileTask = _myCompiler.getTask(null, _myFileManager, diagnostics, null, null, myFiles);
-        return new CompilerFeedback(myCompileTask.call(), diagnostics);
+        return new CCInMemoryCompilerFeedback(myCompileTask.call(), diagnostics);
        
     }
     

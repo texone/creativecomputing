@@ -20,7 +20,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 
 	private final static float MIN_EVENT_TIME = 0.0001f;
 	
-	public static enum EventAction{
+	public enum EventAction{
 		DRAG_START, 
 		DRAG_START_OFFSET,
 		DRAG_END, 
@@ -141,7 +141,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 				if(_myPressCurveCoords.time() > myLower.time() && _myPressCurveCoords.time() < myUpper.time()) {
 					_myDraggedPoints = new ArrayList<ControlPoint>();
 					_myDraggedPoints.add(myLower);
-					_myEditedEvent = (TimedEventPoint)myLower;
+					_myEditedEvent = myLower;
 					if(!mySwitchAction){
 						_myDragAction = EventAction.DRAG_BLOCK;
 					}else{
@@ -396,7 +396,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 		
 		if(_myDraggedPoints != null && _myEditedEvent != null) {
 			UndoHistory.instance().apply(new MoveEventAction(
-				(CCEventTrackController)_myController, 
+                    _myController,
 				_myEditedEvent, 
 				_myStartPoints.get(0),  
 				_myEditedEvent,

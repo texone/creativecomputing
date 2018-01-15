@@ -12,7 +12,7 @@ public enum GLPrecisionType {
 	
 	private int _myGLID;
 	
-	private GLPrecisionType(int theGLID){
+	GLPrecisionType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

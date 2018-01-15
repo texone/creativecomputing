@@ -1,17 +1,17 @@
 package cc.creativecomputing.controlui.timeline.view.track;
 
 public interface CCTrackView {
-	public int width();
+	int width();
 	
-	public int height();
+	int height();
 	
-	public void render();
+	void render();
 
-	public void update();
+	void update();
 
-	public void value(String theValue);
+	void value(String theValue);
 
-	public void mute(boolean theIsMuted);
+	void mute(boolean theIsMuted);
 
-	public void moveRangeCursor();
+	void moveRangeCursor();
 }

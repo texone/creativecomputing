@@ -33,7 +33,7 @@ public class CCInMemoryFileManager extends ForwardingJavaFileManager<JavaFileMan
         return new SecureClassLoader() {
 
             @Override
-            protected Class<?> findClass(final String className) throws ClassNotFoundException {
+            protected Class<?> findClass(final String className) {
 
                 final ByteArrayOutputStream bos = _myByteStreams.get(className);
                 if (bos == null) {
@@ -51,12 +51,12 @@ public class CCInMemoryFileManager extends ForwardingJavaFileManager<JavaFileMan
     	final String className, 
     	final JavaFileObject.Kind kind, 
     	final FileObject sibling
-    ) throws IOException {
+    ) {
 
         return new SimpleJavaFileObject(URI.create("string:///" + className.replace('.', '/') + kind.extension), kind) {
 
             @Override
-            public OutputStream openOutputStream() throws IOException {
+            public OutputStream openOutputStream() {
 
                 ByteArrayOutputStream bos = _myByteStreams.get(className);
                 if (bos == null) {

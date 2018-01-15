@@ -12,7 +12,7 @@ public enum CCSignalType {
 
 	private CCSignal _mySignal;
 
-	private CCSignalType(CCSignal theSignal) {
+	CCSignalType(CCSignal theSignal) {
 		_mySignal = theSignal;
 	}
 

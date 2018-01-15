@@ -39,7 +39,7 @@ public abstract class CCTexture{
 	 * @author christianriekoff
 	 *
 	 */
-	public static enum CCTextureCompressionHint{
+	public enum CCTextureCompressionHint{
 		/**
 		 * choose fastest algorithm for compression
 		 */
@@ -55,7 +55,7 @@ public abstract class CCTexture{
         
         public int glID;
 		
-		private CCTextureCompressionHint(final int theGLID) {
+		CCTextureCompressionHint(final int theGLID) {
 			glID = theGLID;
 		}
 	}
@@ -67,7 +67,7 @@ public abstract class CCTexture{
 	 * @author christian riekoff
 	 *
 	 */
-	public static enum CCTextureWrap{
+	public enum CCTextureWrap{
 		/**
 		 * clamps the texture if you use values going over the image range. The needed
 		 * texels are taken from the texture border.
@@ -97,12 +97,12 @@ public abstract class CCTexture{
         
         public int glID;
 		
-		private CCTextureWrap(final int theGLID) {
+		CCTextureWrap(final int theGLID) {
 			glID = theGLID;
 		}
 	}
 	
-	public static enum CCTextureFilter{
+	public enum CCTextureFilter{
 		/**
 		 * Returns the value of the texture element that is nearest 
 		 * (in Manhattan distance) to the center of the pixel being textured.
@@ -119,7 +119,7 @@ public abstract class CCTexture{
 
         public int glID;
 		
-		private CCTextureFilter(final int theGLID) {
+		CCTextureFilter(final int theGLID) {
 			glID = theGLID;
 		}
 	}
@@ -130,7 +130,7 @@ public abstract class CCTexture{
 	 * @author christianriekoff
 	 *
 	 */
-	public static enum CCTextureMipmapFilter{
+	public enum CCTextureMipmapFilter{
 		/**
          * Chooses the mipmap that most closely matches the size of the pixel 
          * being textured.
@@ -143,10 +143,10 @@ public abstract class CCTexture{
          * nearest to the center of the pixel) to produce a texture value from 
          * each mipmap. The final texture value is a weighted average of those two values.
          */
-        LINEAR;
-	}
+        LINEAR
+    }
 	
-	public static enum CCTextureTarget{
+	public enum CCTextureTarget{
 		TEXTURE_1D(GL2.GL_TEXTURE_1D),
 		TEXTURE_2D(GL.GL_TEXTURE_2D),
 		TEXTURE_3D(GL2.GL_TEXTURE_3D),
@@ -155,7 +155,7 @@ public abstract class CCTexture{
         
         public int glID;
 		
-		private CCTextureTarget(final int theGLID) {
+		CCTextureTarget(final int theGLID) {
 			glID = theGLID;
 		}
 	}
@@ -166,7 +166,7 @@ public abstract class CCTexture{
 	 * @author Christian Riekoff
 	 *
 	 */
-	public static enum CCTextureEnvironmentMode{ 
+	public enum CCTextureEnvironmentMode{
 		/**
 		 * Texel color values are multiplied by the geometry fragment color values.
 		 */
@@ -199,7 +199,7 @@ public abstract class CCTexture{
 		
 		private final int glID;
 		
-		private CCTextureEnvironmentMode(final int theGlID){
+		CCTextureEnvironmentMode(final int theGlID){
 			glID = theGlID;
 		}
 	}
@@ -210,14 +210,14 @@ public abstract class CCTexture{
 	 * @author christianriekoff
 	 *
 	 */
-	public static enum CCDepthTextureMode{
+	public enum CCDepthTextureMode{
 		LUMINANCE(GL.GL_LUMINANCE), 
 		INTENSITY(GL2.GL_INTENSITY),
 		ALPHA(GL.GL_ALPHA);
 		
 		private final int glID;
 		
-		private CCDepthTextureMode(final int theGlID){
+		CCDepthTextureMode(final int theGlID){
 			glID = theGlID;
 		}
 	}

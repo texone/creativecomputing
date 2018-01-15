@@ -14,7 +14,7 @@ import cc.creativecomputing.protocol.midi.messages.CCNote;
 
 public interface CCINoteListener {
 
-	public void onNoteOn(final CCNote theNote);
+	void onNoteOn(final CCNote theNote);
 	
-	public void onNoteOff(final CCNote theNote);
+	void onNoteOff(final CCNote theNote);
 }

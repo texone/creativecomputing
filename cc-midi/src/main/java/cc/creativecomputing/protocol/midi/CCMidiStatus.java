@@ -115,7 +115,7 @@ public enum CCMidiStatus {
 	
 	private final int _myStatusByte;
 	
-	private CCMidiStatus(final int theByte){
+	CCMidiStatus(final int theByte){
 		_myStatusByte = theByte;
 	}
 	

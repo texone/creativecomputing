@@ -58,7 +58,7 @@ public class CCKleV1Container extends CCKleContainerFormat{
         
         final URI zipFile = URI.create("jar:file:" + thePath.toUri().getPath());
 
-        try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes);) {
+        try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes)) {
 	        
 	        Path myMetaInfFolder = fs.getPath("META-INF");
 			CCNIOUtil.createDirectories(myMetaInfFolder);
@@ -136,7 +136,7 @@ public class CCKleV1Container extends CCKleContainerFormat{
         
         Map<CCKleChannelType,CCSequence> myResult = new HashMap<CCKleChannelType, CCSequence>();
 
-        try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes);) {
+        try (FileSystem fs = FileSystems.newFileSystem(zipFile, attributes)) {
         	Path myFramesFolder = fs.getPath("frames");
         	
         	CCLog.info(myFramesFolder);
@@ -179,7 +179,7 @@ public class CCKleV1Container extends CCKleContainerFormat{
         
         final URI zipFile = URI.create("jar:file:" + CCNIOUtil.dataPath("bla4.zip").toUri().getPath());
         
-        try (FileSystem zipFileSys = FileSystems.newFileSystem(zipFile, attributes);) {
+        try (FileSystem zipFileSys = FileSystems.newFileSystem(zipFile, attributes)) {
         	Path path = zipFileSys.getPath("docer");
         	Files.write( zipFileSys.getPath( "/j1.txt" ), "The truth is out there. Anybody got the URL?".getBytes() );
         	Files.write( zipFileSys.getPath( "/j2.txt" ), "The more I C, the less I see.".getBytes() );
@@ -191,10 +191,10 @@ public class CCKleV1Container extends CCKleContainerFormat{
 	    attributes.put("create", "true");
 	    
 	    URI zipFile = URI.create("jar:file:" + CCNIOUtil.dataPath("bla.zip").toUri().getPath());
-	    try (FileSystem zipFileSys = FileSystems.newFileSystem(zipFile, attributes);) {
+	    try (FileSystem zipFileSys = FileSystems.newFileSystem(zipFile, attributes)) {
 	      Path path = zipFileSys.getPath("docs2");
 	      Files.createDirectory(path);
-	      try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(zipFileSys.getPath("/"));) {
+	      try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(zipFileSys.getPath("/"))) {
 	        for (Path file : directoryStream) {
 	          System.out.println(file.getFileName());
 	        }

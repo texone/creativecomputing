@@ -190,14 +190,14 @@ public class FastByteArrayOutputStream
     count = 0;
   }//reset
 
-  public void write(int b) throws IOException {
+  public void write(int b) {
     if (count + 1 > buf.length) {
       bump(1);
     }
     buf[count++] = (byte) b;
   }//write
 
-  public void write(byte[] fromBuf) throws IOException {
+  public void write(byte[] fromBuf) {
     int needed = count + fromBuf.length - buf.length;
     if (needed > 0) {
       bump(needed);
@@ -207,8 +207,7 @@ public class FastByteArrayOutputStream
     }
   }//write
 
-  public void write(byte[] fromBuf, int offset, int length)
-      throws IOException {
+  public void write(byte[] fromBuf, int offset, int length) {
 
     int needed = count + length - buf.length;
     if (needed > 0) {

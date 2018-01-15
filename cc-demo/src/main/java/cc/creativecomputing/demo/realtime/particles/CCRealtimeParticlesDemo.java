@@ -2,15 +2,23 @@ package cc.creativecomputing.demo.realtime.particles;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector2;
 
 public class CCRealtimeParticlesDemo extends CCGL2Adapter {
 	
+	@CCProperty(name = "rectColor")
+	private CCColor _crectColor = new CCColor();
+	
 	@CCProperty(name = "particles")
-	private CCParticles _myParticles;
+	private CCParticles _cParticles = new CCParticles();
+	
+	@CCProperty(name = "test", min = 0, max = 1)
+	private double _ctest = 1; 
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
@@ -18,16 +26,14 @@ public class CCRealtimeParticlesDemo extends CCGL2Adapter {
 
 	@Override
 	public void update(CCAnimator theAnimator) {
-		if(_myParticles == null)_myParticles = new CCParticles();
-		_myParticles.update(theAnimator);
 		
-		_myParticles.addParticle(new CCVector2(), new CCVector2().randomize(40));
 	}
 
 	@Override
 	public void display(CCGraphics g) {
 		g.clear();
-		_myParticles.draw(g);
+		g.color(_crectColor);
+		g.rect(0,0,100,10);
 	}
 
 	public static void main(String[] args) {

@@ -6,5 +6,5 @@ import cc.creativecomputing.control.handles.CCPropertyListener;
 
 public interface CCPropertyFeedbackObject {
 
-	public Map<String, CCPropertyListener<?>> propertyListener();
+	Map<String, CCPropertyListener<?>> propertyListener();
 }

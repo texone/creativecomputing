@@ -12,7 +12,7 @@ public enum CCArtNetPortBehavior {
 	
 	public final int id;
 
-	private CCArtNetPortBehavior(int theID) {
+	CCArtNetPortBehavior(int theID) {
 		id = theID;
 	}
 }

@@ -8,7 +8,7 @@ public enum GLFramebufferTarget {
 	
 	private int _myGLID;
 	
-	private GLFramebufferTarget(int theGLID){
+	GLFramebufferTarget(int theGLID){
 		_myGLID = theGLID;
 	}
 	

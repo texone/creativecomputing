@@ -32,13 +32,13 @@ import cc.creativecomputing.io.data.format.CCXMLFormat;
  */
 public class CCDataIO{
 	
-	static public enum CCDataFormats{
+	public enum CCDataFormats{
 		JSON("json"),
 		XML("xml");
 		
 		public final String fileExtension;
 		
-		private CCDataFormats(final String theFileExtension){
+		CCDataFormats(final String theFileExtension){
 			fileExtension = theFileExtension;
 		}
 	}

@@ -7,5 +7,5 @@ package cc.creativecomputing.io.netty.codec.osc;
  * 
  */
 public interface CCOSCPacket {
-	public void reset();
+	void reset();
 }

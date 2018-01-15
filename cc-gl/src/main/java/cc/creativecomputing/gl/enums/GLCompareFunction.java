@@ -14,7 +14,7 @@ public enum GLCompareFunction {
 	
 	private int _myGLID;
 	
-	private GLCompareFunction(int theGLID){
+	GLCompareFunction(int theGLID){
 		_myGLID = theGLID;
 	}
 	

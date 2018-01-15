@@ -28,9 +28,9 @@ import cc.creativecomputing.math.CCMath;
 
 public class CCWorleyNoise extends CCSignal{
 	
-	public static interface CCWorleyFormular{
-		public int neededDistances();
-		public double[] value(double[] values, double theAmp);
+	public interface CCWorleyFormular{
+		int neededDistances();
+		double[] value(double[] values, double theAmp);
 	}
 	
 	public static class CCWorleyDefaultFormular implements CCWorleyFormular{
@@ -172,14 +172,14 @@ public class CCWorleyNoise extends CCSignal{
 	/**
 	* Distance measure type constants
 	*/
-	public static enum CCWorleyDistType{
+	public enum CCWorleyDistType{
 		EUCLIDEAN,
 		CITYBLOCK,
 		MANHATTAN,
 		QUADRATIC
 	}
 	
-	public static enum CCWorleyFormularType{
+	public enum CCWorleyFormularType{
 		DEFAULT(new CCWorleyDefaultFormular()),
 		F0(new CCWorleyF0Formular()),
 		F1(new CCWorleyF1Formular()),
@@ -188,7 +188,7 @@ public class CCWorleyNoise extends CCSignal{
 		
 		private final CCWorleyFormular _myFormular;
 		
-		private CCWorleyFormularType(CCWorleyFormular theFormular){
+		CCWorleyFormularType(CCWorleyFormular theFormular){
 			_myFormular = theFormular;
 		}
 	}

@@ -93,14 +93,10 @@ public class CCEventManager {
 //		CCLog.info("Events ,  Attempting to remove delegate function from event type: " + theListener.eventType().getName());
 
 		List<CCEventListener<?>> eventListenerList = _myListener.get(theListener.eventType());
-		
-		if (eventListenerList.remove(theListener)) {
-//			CCLog.info("Events , Successfully removed delegate function from event type: " + theListener.eventType().getName());
-			return true;
-		}
 
-		return false;
-	}
+        return eventListenerList.remove(theListener);
+
+    }
 	
 	/**
 	 * Removes the listeners from the internal tables.
@@ -255,4 +251,4 @@ public class CCEventManager {
 		return instance;
 	}
 
-};
+}

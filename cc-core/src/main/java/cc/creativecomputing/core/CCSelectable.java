@@ -2,9 +2,9 @@ package cc.creativecomputing.core;
 
 public interface CCSelectable {
 
-	public boolean isSelected();
+	boolean isSelected();
 	
-	public void select(boolean theSelect);
+	void select(boolean theSelect);
 	
-	public void addListener(CCSelectionListener theListener);
+	void addListener(CCSelectionListener theListener);
 }

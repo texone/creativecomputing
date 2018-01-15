@@ -64,7 +64,7 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	 * Represents the operations that will happen by default when the user initiates a 
 	 * "close" on the application.
 	 */
-	public static enum CCCloseOperation{
+	public enum CCCloseOperation{
 		/**
 		 * Don't do anything; require the program to handle the operation in the 
 		 * windowClosing method of a registered WindowListener object.
@@ -88,7 +88,7 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 		
 		private int _myID;
 		
-		private CCCloseOperation(final int theID) {
+		CCCloseOperation(final int theID) {
 			_myID = theID;
 		}
 		
@@ -105,7 +105,7 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	 * @author christianr
 	 *
 	 */
-	public static enum CCPixelScale{
+	public enum CCPixelScale{
 		/**
 		 * Setting surface-pixel-scale of 1.0f, results in same pixel- and window-units.
 		 */
@@ -117,7 +117,7 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 		
 		private float _myID;
 		
-		private CCPixelScale(float theID){
+		CCPixelScale(float theID){
 			_myID = theID;
 		}
 		

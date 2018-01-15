@@ -24,6 +24,7 @@ public class CCEnvelopeHandle extends CCPropertyHandle<CCEnvelope>{
 	@Override
 	public void data(CCDataObject theData) {
 		CCEnvelope myEnvelope = new CCEnvelope();
+		myEnvelope.curve().clear();
 		myEnvelope.curve().data(theData.getObject("curve"));
 		value(myEnvelope, true);
 	}

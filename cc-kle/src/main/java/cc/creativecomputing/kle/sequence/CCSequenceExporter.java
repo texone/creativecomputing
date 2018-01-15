@@ -91,8 +91,8 @@ public class CCSequenceExporter {
 						ex.printStackTrace();
 					}
 				}
-			};
-		});
+			}
+        });
 	}
 	
 	public void savePositions(Path theRecordPath, CCSequenceElementRecording theRecordings){
@@ -121,8 +121,8 @@ public class CCSequenceExporter {
 						ex.printStackTrace();
 					}
 				}
-			};
-		});
+			}
+        });
 		
 	}
 }

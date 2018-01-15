@@ -54,7 +54,7 @@ public class CCLowPassFS extends CCIIRFilter {
 	@Override
 	protected void calcCoeff() {
 		double freqFrac = _myFrequency / _mySampleRate;
-		double x = (double) Math.exp(-14.445 * freqFrac);
+		double x = Math.exp(-14.445 * freqFrac);
 		a = new double[] { CCMath.pow(1 - x, 4) };
 		b = new double[] { 4 * x, -6 * x * x, 4 * x * x * x, -x * x * x * x };
 	}

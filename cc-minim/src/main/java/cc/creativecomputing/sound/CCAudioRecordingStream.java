@@ -92,7 +92,7 @@ public class CCAudioRecordingStream implements Runnable, CCAudioStream {
 		rawBytes = new byte[buffer.getByteArrayBufferSize(format)];
 		CCSoundIO.debug("JSBaseAudioRecordingStream :: rawBytes has length " + rawBytes.length);
 
-		skipBytes = new byte[(int) AudioUtils.millis2BytesFrameAligned(10000, format)];
+		skipBytes = new byte[AudioUtils.millis2BytesFrameAligned(10000, format)];
 		CCSoundIO.debug("JSBaseAudioRecordingStream :: skipBytes has length " + skipBytes.length);
 
 		finished = false;
@@ -103,7 +103,7 @@ public class CCAudioRecordingStream implements Runnable, CCAudioStream {
 		play = false;
 		numLoops = 0;
 		loopBegin = 0;
-		loopEnd = (int) AudioUtils.millis2BytesFrameAligned(msLen, format);
+		loopEnd = AudioUtils.millis2BytesFrameAligned(msLen, format);
 
 		silence = new float[bufferSize];
 		iothread = null;
@@ -480,9 +480,9 @@ public class CCAudioRecordingStream implements Runnable, CCAudioStream {
 			loopBegin = start;
 		}
 		if (stop <= getMillisecondLength() && stop > start) {
-			loopEnd = (int) AudioUtils.millis2BytesFrameAligned(stop, format);
+			loopEnd = AudioUtils.millis2BytesFrameAligned(stop, format);
 		} else {
-			loopEnd = (int) AudioUtils.millis2BytesFrameAligned(getMillisecondLength(), format);
+			loopEnd = AudioUtils.millis2BytesFrameAligned(getMillisecondLength(), format);
 		}
 	}
 
@@ -492,7 +492,7 @@ public class CCAudioRecordingStream implements Runnable, CCAudioStream {
 	 * @return the current position, in milliseconds in the source
 	 */
 	public int getMillisecondPosition() {
-		return (int) AudioUtils.bytes2Millis(totalBytesRead, format);
+		return AudioUtils.bytes2Millis(totalBytesRead, format);
 	}
 
 	/**

@@ -37,5 +37,5 @@ public interface CCKeyReleasedListener {
 	 * @see CCGLAdapter#keyReleased()
 	 * 
 	 */
-	public void keyReleased(final CCKeyEvent theKeyEvent);
+    void keyReleased(final CCKeyEvent theKeyEvent);
 }

@@ -250,7 +250,7 @@ public class CCOSCEncoder extends MessageToByteEncoder<CCOSCPacket> {
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext theCTX, CCOSCPacket thePacket, ByteBuf theBuf) throws Exception {
+	protected void encode(ChannelHandlerContext theCTX, CCOSCPacket thePacket, ByteBuf theBuf) {
 		encode(thePacket, theBuf);
 	}
 }

@@ -1,5 +1,7 @@
 package cc.creativecomputing.core.util;
 
+import java.nio.ByteBuffer;
+
 /**
  * Utility class for bit conversions
  * @author christianr
@@ -19,5 +21,9 @@ public class CCBitUtil {
 	
 	public static int combine(int the0, int the1, int the2, int the3) {
 		return (the3 << 24) | (the2 << 16) | (the1 << 8) | the0;
+	}
+	
+	public static byte[] split(int theInt){
+		return ByteBuffer.allocate(4).putInt(theInt).array();
 	}
 }

@@ -141,8 +141,8 @@ public class CCAudioController {
 
 		public float value() {
 			int millis = (int) System.currentTimeMillis();
-			float norm = (float) (millis - tstart) / (tend - tstart);
-			float range = (float) (vend - vstart);
+			float norm = (millis - tstart) / (tend - tstart);
+			float range = vend - vstart;
 			return vstart + range * norm;
 		}
 

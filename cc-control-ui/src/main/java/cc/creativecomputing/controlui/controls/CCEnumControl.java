@@ -22,7 +22,7 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
 		super(theHandle, theControlComponent);
  
 		addListener( theValue -> {
-			_myValue = (Enum<?>)theValue;
+			_myValue = theValue;
 			_myTriggerEvent = false;
 			_myEnums.setSelectedItem(_myHandle.value());
 			_myTriggerEvent = true;

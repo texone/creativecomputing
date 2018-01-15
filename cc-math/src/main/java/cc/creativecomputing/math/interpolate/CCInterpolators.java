@@ -10,7 +10,7 @@ public enum CCInterpolators {
 
 	private final CCInterpolator _myInterpolator;
 	
-	private CCInterpolators(final CCInterpolator theInterpolator){
+	CCInterpolators(final CCInterpolator theInterpolator){
 		_myInterpolator = theInterpolator;
 	}
 	

@@ -78,7 +78,7 @@ public enum CCCursor {
 
 	private Cursor _myJavaCursor;
 
-	private CCCursor(final int theJavaID) {
+	CCCursor(final int theJavaID) {
 		_myJavaCursor = new Cursor(theJavaID);
 	}
 

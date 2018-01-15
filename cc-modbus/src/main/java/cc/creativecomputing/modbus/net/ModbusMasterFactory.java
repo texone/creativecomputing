@@ -49,7 +49,7 @@ public class ModbusMasterFactory {
 				CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(parms.getPortName());
 				if (portId.getPortType() != CommPortIdentifier.PORT_SERIAL) return null;
 				
-				CommPort port = (SerialPort) portId.open("serial madness", 2000);
+				CommPort port = portId.open("serial madness", 2000);
 //				CommPort port = new RXTXPort(parms.getPortName());
 
 				transport.setCommPort(port);

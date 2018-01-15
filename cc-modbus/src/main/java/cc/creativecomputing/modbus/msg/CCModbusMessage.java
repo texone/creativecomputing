@@ -52,13 +52,13 @@ public interface CCModbusMessage extends CCTransportable {
 	 * Check the flag which indicates that this <tt>ModbusMessage</tt> is for a
 	 * headless (serial, or headless networked) connection.
 	 */
-	public boolean isHeadless();
+    boolean isHeadless();
 
 	/**
 	 * Sets the flag that marks this <tt>ModbusMessage</tt> as headless (for
 	 * serial transport).
 	 */
-	public void setHeadless();
+    void setHeadless();
 
 	/**
 	 * Returns the transaction identifier of this <tt>ModbusMessage</tt> as
@@ -70,7 +70,7 @@ public interface CCModbusMessage extends CCTransportable {
 	 * 
 	 * @return the transaction identifier as <tt>int</tt>.
 	 */
-	public int transactionID();
+    int transactionID();
 
 	/**
 	 * Returns the protocol identifier of this <tt>ModbusMessage</tt> as
@@ -82,7 +82,7 @@ public interface CCModbusMessage extends CCTransportable {
 	 * 
 	 * @return the protocol identifier as <tt>int</tt>.
 	 */
-	public int protocolID();
+    int protocolID();
 
 	/**
 	 * Returns the length of the data appended after the protocol header.
@@ -90,7 +90,7 @@ public interface CCModbusMessage extends CCTransportable {
 	 * 
 	 * @return the data length as <tt>int</tt>.
 	 */
-	public int dataLength();
+    int dataLength();
 
 	/**
 	 * Returns the unit identifier of this <tt>ModbusMessage</tt> as
@@ -102,7 +102,7 @@ public interface CCModbusMessage extends CCTransportable {
 	 * 
 	 * @return the unit identifier as <tt>int</tt>.
 	 */
-	public int unitID();
+    int unitID();
 
 	/**
 	 * Returns the function code of this <tt>ModbusMessage</tt> as
@@ -118,7 +118,7 @@ public interface CCModbusMessage extends CCTransportable {
 	 * 
 	 * @see cc.creativecomputing.modbus.CCModbusFunctionCode
 	 */
-	public CCModbusFunctionCode functionCode();
+    CCModbusFunctionCode functionCode();
 
 	/**
 	 * Returns the <i>raw</i> message as an array of bytes.
@@ -127,7 +127,7 @@ public interface CCModbusMessage extends CCTransportable {
 	 * @return the <i>raw</i> message as <tt>byte[]</tt>.
 	 * 
 	 */
-	public byte[] message();
+    byte[] message();
 
 	/**
 	 * Returns the <i>raw</i> message as <tt>String</tt> containing a
@@ -141,5 +141,5 @@ public interface CCModbusMessage extends CCTransportable {
 	 *         hexadecimal series of bytes.
 	 * 
 	 */
-	public String hexMessage();
+    String hexMessage();
 }

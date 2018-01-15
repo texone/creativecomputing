@@ -177,7 +177,7 @@ public class CCIOUtil{
 	 * @author christianriekoff
 	 *
 	 */
-	public static enum CCCharSet{
+	public enum CCCharSet{
 		/**
 		 * Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the Unicode character set
 		 */
@@ -210,7 +210,7 @@ public class CCIOUtil{
 		
 		String _myValue;
 		
-		private CCCharSet(final String theValue) {
+		CCCharSet(final String theValue) {
 			_myValue = theValue;
 		}
 	}

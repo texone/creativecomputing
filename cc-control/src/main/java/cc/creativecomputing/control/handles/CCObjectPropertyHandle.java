@@ -14,8 +14,6 @@ import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.code.CCRealtimeCompile;
-import cc.creativecomputing.control.code.CCRuntimeCompilable;
 import cc.creativecomputing.control.code.CCShaderSource;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
@@ -41,8 +39,8 @@ import cc.creativecomputing.math.spline.CCSpline;
 @SuppressWarnings({"rawtypes","unchecked"})
 public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	
-	private static interface CCHandleCreator{
-		public CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember);
+	private interface CCHandleCreator{
+		CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember);
 	}
 	
 	private static Map<Class<?>, CCHandleCreator> creatorMap = new HashMap<>();
@@ -71,7 +69,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		creatorMap.put(CCSpline.class, (theParent, theMember) -> {return new CCSplineHandle(theParent, theMember);});
 		creatorMap.put(Path.class, (theParent, theMember) -> {return new CCPathHandle(theParent, theMember);});
 		creatorMap.put(CCSelection.class, (theParent, theMember) -> {return new CCSelectionPropertyHandle(theParent, theMember);});
-		creatorMap.put(CCRealtimeCompile.class, (theParent, theMember) -> {return new CCRealtimeCompileHandle(theParent, theMember);});
 		creatorMap.put(CCShaderSource.class, (theParent, theMember) -> {return new CCShaderSourceHandle(theParent, theMember);});
 	}
 	
@@ -293,6 +290,8 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(CCField<CCProperty> myField:CCReflectionUtil.getFields(theObject, CCProperty.class)){
 			
 			String myName = propertyName(myField);
+			
+			CCLog.info(myName);
 
 			if(_myChildHandles.containsKey(myName)){
 				CCPropertyHandle myProperty = _myChildHandles.get(myName);
@@ -323,10 +322,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 				myProperty = myObjectPropertyHandle;
 				
 			}else{
-				if(CCReflectionUtil.implementsInterface(myClass, CCRuntimeCompilable.class)){
-					myProperty = new CCRuntimeCompileHandle(this, myField);
-					
-				}else if(myField.value() == null){
+				if(myField.value() == null){
 					continue;
 				}else if(myField.value() instanceof Map && ((Map)myField.value()).size() <= 0){
 					continue;

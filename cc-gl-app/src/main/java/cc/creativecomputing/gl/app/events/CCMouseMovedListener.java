@@ -29,5 +29,5 @@ public interface CCMouseMovedListener{
      * Invoked when the mouse cursor has been moved.
 	 * @param theMouseEvent the related mouse event
      */
-	public void mouseMoved(final CCMouseEvent theMouseEvent);
+    void mouseMoved(final CCMouseEvent theMouseEvent);
 }

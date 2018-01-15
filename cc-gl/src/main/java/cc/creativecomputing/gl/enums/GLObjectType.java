@@ -17,7 +17,7 @@ public enum GLObjectType {
 	
 	private int _myGLID;
 	
-	private GLObjectType(int theGLID){
+	GLObjectType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

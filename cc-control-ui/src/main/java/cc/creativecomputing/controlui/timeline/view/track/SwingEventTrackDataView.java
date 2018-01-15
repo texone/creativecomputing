@@ -35,8 +35,8 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 	public SwingEventTrackDataView(SwingTrackDataRenderer theDataRenderer, TimelineController theTimelineController, CCEventTrackController theTrackController) {
 		super(theTimelineController, theTrackController);
 		
-		_myEventPopup = new SwingEventPopup((CCEventTrackController)_myController);
-		_myCreateEventPopup = new SwingEventCreatePopup((CCEventTrackController)_myController);
+		_myEventPopup = new SwingEventPopup(_myController);
+		_myCreateEventPopup = new SwingEventCreatePopup(_myController);
     	_myTrackDataRenderer = theDataRenderer;
 		
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released BACK_SPACE"), "delete event");
@@ -64,7 +64,7 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 
 	@Override
 	public void showPopUp(MouseEvent theEvent) {
-		TimedEventPoint myEvent = ((CCEventTrackController)_myController).clickedPoint(theEvent);
+		TimedEventPoint myEvent = _myController.clickedPoint(theEvent);
 		
 		if(myEvent != null) {
 			_myEventPopup.event(myEvent);
@@ -120,7 +120,7 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 
 				Point2D myPos = _myController.curveToViewSpace(new ControlPoint(myPoint.time(),1));
 				g2d.drawString(myPoint.contentOffset() + "", (int) myPos.getX() + 5, (int) myPos.getY() + 35);
-				((CCEventTrackController)_myController).renderTimedEvent(myPoint, myLowerCorner, myUpperCorner, myLowerBound, myUpperBound, g2d);
+				_myController.renderTimedEvent(myPoint, myLowerCorner, myUpperCorner, myLowerBound, myUpperBound, g2d);
 				g2d.setClip(myClip);
 			}
 			
@@ -146,7 +146,7 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 	
 	@Override
 	public void drawTimelineInfos(Graphics g) {
-		EventAction myDragAction = ((CCEventTrackController)_myController).dragAction();
+		EventAction myDragAction = _myController.dragAction();
 		
 		if(myDragAction == null)return;
 	

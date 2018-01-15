@@ -27,7 +27,7 @@ public class CCCompressor extends CCFilter {
 		
 	}
 
-	public static enum ProcessType {
+	public enum ProcessType {
 		Compressor, Limiter
 	}
 

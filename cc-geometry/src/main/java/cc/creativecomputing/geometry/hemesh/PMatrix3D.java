@@ -272,7 +272,7 @@ public final class PMatrix3D  /*, PConstants*/ {
 
 
   public void shearX(double angle) {
-    double t = (double) Math.tan(angle);
+    double t = Math.tan(angle);
     apply(1, t, 0, 0,
           0, 1, 0, 0,
           0, 0, 1, 0,
@@ -281,7 +281,7 @@ public final class PMatrix3D  /*, PConstants*/ {
 
 
   public void shearY(double angle) {
-    double t = (double) Math.tan(angle);
+    double t = Math.tan(angle);
     apply(1, 0, 0, 0,
           t, 1, 0, 0,
           0, 0, 1, 0,
@@ -759,10 +759,10 @@ public final class PMatrix3D  /*, PConstants*/ {
   }
 
   static private final double sin(double angle) {
-    return (double) Math.sin(angle);
+    return Math.sin(angle);
   }
 
   static private final double cos(double angle) {
-    return (double) Math.cos(angle);
+    return Math.cos(angle);
   }
 }

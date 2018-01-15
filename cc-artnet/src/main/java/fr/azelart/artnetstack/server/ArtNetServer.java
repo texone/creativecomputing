@@ -96,7 +96,7 @@ public class ArtNetServer extends Thread implements Runnable {
 	 * @throws SocketException if socket error
 	 * @throws UnknownHostException if we can't find the host.
 	 */
-	public ArtNetServer(final InetAddress inetAddress, final int port) throws SocketException, UnknownHostException {
+	public ArtNetServer(final InetAddress inetAddress, final int port) throws SocketException {
 		listenersListPacket = new ArrayList<ArtNetPacketListener>();
 		listenersListServer = new ArrayList<ServerListener>();
 		datagramSocket = new DatagramSocket(port);

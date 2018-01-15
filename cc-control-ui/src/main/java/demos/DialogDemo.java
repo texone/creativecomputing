@@ -515,7 +515,7 @@ public class DialogDemo extends JPanel {
                         + "and still use the main window.");
                     label.setHorizontalAlignment(JLabel.CENTER);
                     Font font = label.getFont();
-                    label.setFont(label.getFont().deriveFont(font.PLAIN,
+                    label.setFont(label.getFont().deriveFont(Font.PLAIN,
                                                              14.0f));
  
                     JButton closeButton = new JButton("Close");

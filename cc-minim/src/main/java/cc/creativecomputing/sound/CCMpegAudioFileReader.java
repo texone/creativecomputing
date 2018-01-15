@@ -520,12 +520,12 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 		if (((commentv2 == null) || (commentv2.length() == 0)) && (commentv1 != null)) {
 			props.put("comment", commentv1);
 		}
-		String trackv1 = "" + ((int) (frames[126] & 0xff));
+		String trackv1 = "" + (frames[126] & 0xff);
 		String trackv2 = (String) props.get("mp3.id3tag.track");
 		if (((trackv2 == null) || (trackv2.length() == 0)) && (trackv1 != null)) {
 			props.put("mp3.id3tag.track", trackv1);
 		}
-		int genrev1 = (int) (frames[127] & 0xff);
+		int genrev1 = frames[127] & 0xff;
 		if ((genrev1 >= 0) && (genrev1 < id3v1genres.length)) {
 			String genrev2 = (String) props.get("mp3.id3tag.genre");
 			if (((genrev2 == null) || (genrev2.length() == 0))) {
@@ -583,7 +583,7 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 		if (!"ID3".equals(new String(bframes, 0, 3))) {
 			throw new CCSoundException("No ID3v2 header found!");
 		}
-		int v2version = (int) (bframes[3] & 0xFF);
+		int v2version = bframes[3] & 0xFF;
 		props.put("mp3.id3tag.v2.version", String.valueOf(v2version));
 		if (v2version < 2 || v2version > 4) {
 			throw new CCSoundException("Unsupported ID3v2 version " + v2version + "!");
@@ -600,8 +600,8 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 					// ID3v2.3 & ID3v2.4
 					String code = new String(bframes, i, 4);
 					// build the size of the frame from the four size bytes
-					size = (int) ((bframes[i + 4] << 24) & 0xFF000000 | (bframes[i + 5] << 16) & 0x00FF0000
-							| (bframes[i + 6] << 8) & 0x0000FF00 | (bframes[i + 7]) & 0x000000FF);
+					size = (bframes[i + 4] << 24) & 0xFF000000 | (bframes[i + 5] << 16) & 0x00FF0000
+							| (bframes[i + 6] << 8) & 0x0000FF00 | (bframes[i + 7]) & 0x000000FF;
 					// inc i by 10 because the id3 frame header size is 10 bytes
 					i += 10;
 					if (!codeToPropName.containsKey(code)) {
@@ -620,12 +620,12 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 					if (value == null) {
 						value = "";
 					}
-					String propName = (String) codeToPropName.get(code);
+					String propName = codeToPropName.get(code);
 					props.put(propName, value);
 				} else {
 					// ID3v2.2
 					String scode = new String(bframes, i, 3);
-					size = (int) (0x00000000) + (bframes[i + 3] << 16) + (bframes[i + 4] << 8) + (bframes[i + 5]);
+					size = 0x00000000 + (bframes[i + 3] << 16) + (bframes[i + 4] << 8) + (bframes[i + 5]);
 					i += 6;
 					if (!codeToPropName.containsKey(scode)) {
 						throw new CCSoundException("Don't know the ID3 code " + scode);
@@ -639,7 +639,7 @@ class CCMpegAudioFileReader extends TAudioFileReader {
 					if (value == null) {
 						value = "";
 					}
-					String propName = (String) codeToPropName.get(scode);
+					String propName = codeToPropName.get(scode);
 					props.put(propName, value);
 				}
 			}

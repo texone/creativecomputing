@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.SeekableByteChannel;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystems;
@@ -212,9 +214,25 @@ public class CCNIOUtil {
 	}
 	
 	static public ByteBuffer loadBytes(Path thePath){
-		CCFileInputChannel myFileChannel = new CCFileInputChannel(thePath);
-		return myFileChannel.read();
+//		CCFileInputChannel myFileChannel = new CCFileInputChannel(thePath);
+//		return myFileChannel.read();
+		ByteBuffer buffer = null;
+		try{
+	        if (Files.isReadable(thePath)) {
+	            try (SeekableByteChannel fc = Files.newByteChannel(thePath)) {
+	                buffer = ByteBuffer.allocateDirect((int)fc.size() + 1).order(ByteOrder.nativeOrder());
+	                while (fc.read(buffer) != -1) {
+	                    ;
+	                }
+	            }
+	        } 
+	        buffer.flip();
+	        return buffer.slice();
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
 	}
+	
 	
 	static public void saveBytes(Path thePath, ByteBuffer theBuffer){
 		CCFileOutputChannel myFileChannel = new CCFileOutputChannel(thePath);

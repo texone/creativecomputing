@@ -14,7 +14,7 @@ public class CCNetByteCodec implements CCNetCodec<ByteBuffer>{
 	private static class CCByteBufferEncoder extends MessageToByteEncoder<ByteBuffer>{
 
 		@Override
-		protected void encode(ChannelHandlerContext theContext, ByteBuffer theMessage, ByteBuf theBuf) throws Exception {
+		protected void encode(ChannelHandlerContext theContext, ByteBuffer theMessage, ByteBuf theBuf) {
 			theBuf.writeBytes(theMessage);
 		}
 		
@@ -27,7 +27,7 @@ public class CCNetByteCodec implements CCNetCodec<ByteBuffer>{
 	
 	private static class CCByteBufferDecoder extends ByteToMessageDecoder{
 		@Override
-		protected void decode(ChannelHandlerContext theContext, ByteBuf theBuf, List<Object> theObjects) throws Exception {
+		protected void decode(ChannelHandlerContext theContext, ByteBuf theBuf, List<Object> theObjects) {
 			ByteBuffer myResult = theBuf.nioBuffer();
 			theBuf.readBytes(theBuf.readableBytes()).release();
 			try{

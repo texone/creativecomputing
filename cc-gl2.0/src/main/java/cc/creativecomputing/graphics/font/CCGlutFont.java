@@ -20,7 +20,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 
 public class CCGlutFont extends CCFont<CCGlutChar>{
 	
-	public static enum CCGlutFontType{
+	public enum CCGlutFontType{
 		BITMAP_8_BY_13(GLUT.BITMAP_8_BY_13),
 		BITMAP_9_BY_15(GLUT.BITMAP_9_BY_15),
 		BITMAP_HELVETICA_10(GLUT.BITMAP_HELVETICA_10),
@@ -31,7 +31,7 @@ public class CCGlutFont extends CCFont<CCGlutChar>{
 		
 		public final int glID;
 		
-		private CCGlutFontType(final int theGLID){
+		CCGlutFontType(final int theGLID){
 			glID = theGLID;
 		}
 	}
@@ -93,15 +93,15 @@ public class CCGlutFont extends CCFont<CCGlutChar>{
 	public void beginText(CCGraphics g){
 		g.gl.glPushMatrix();
 //		g.gl.glPushAttrib(GL.GL_CURRENT_BIT);		//save current raster position
-	};
-	
-	@Override
+	}
+
+    @Override
 	public void endText(CCGraphics g){
 //		g.gl.glPopAttrib();
 		g.gl.glPopMatrix();
-	};
+	}
 
-	/**
+    /**
 	 * Width of this character for a font of size 1.
 	 */
 	public double width(final char theChar){

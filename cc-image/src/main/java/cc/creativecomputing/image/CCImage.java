@@ -45,11 +45,11 @@ public class CCImage {
 	 * Defines a callback mechanism to allow the user to explicitly deallocate native resources (memory-mapped files,
 	 * etc.) associated with a particular TextureData.
 	 */
-	public static interface Flusher {
+	public interface Flusher {
 		/**
 		 * Flushes any native resources associated with this TextureData.
 		 */
-		public void flush();
+        void flush();
 	}
 	
 	/**
@@ -195,7 +195,7 @@ public class CCImage {
 		_myIsDataCompressed = theIsDataCompressed;
 		_myMustFlipVertically = theMustFlipVertically;
 		
-		_myBuffer = (Buffer[]) theMipmapData.clone();
+		_myBuffer = theMipmapData.clone();
 		_myFlusher = theFlusher;
 		
 		_myPixelStorageModes = new CCPixelStorageModes();
@@ -230,25 +230,25 @@ public class CCImage {
 		
 		switch(theType) {
 		case FLOAT:
-			FloatBuffer myFloatBuffer = CCBufferUtil.newFloatBuffer(_myPixelFormat.numberOfChannels * _myWidth * _myHeight);
+			FloatBuffer myFloatBuffer = CCBufferUtil.newDirectFloatBuffer(_myPixelFormat.numberOfChannels * _myWidth * _myHeight);
 			CCBufferUtil.fill(myFloatBuffer, 0);
 			myBuffer = myFloatBuffer;
 			break;
 		case BYTE:
 		case UNSIGNED_BYTE:
-			ByteBuffer myByteBuffer = CCBufferUtil.newByteBuffer(_myPixelFormat.numberOfChannels * _myWidth * _myHeight);
+			ByteBuffer myByteBuffer = CCBufferUtil.newDirectByteBuffer(_myPixelFormat.numberOfChannels * _myWidth * _myHeight);
 			CCBufferUtil.fill(myByteBuffer, (byte)0);
 			myBuffer = myByteBuffer;
 			break;
 		case SHORT:
 		case UNSIGNED_SHORT:
-			ShortBuffer myShortBuffer = CCBufferUtil.newShortBuffer(_myPixelFormat.numberOfChannels * _myWidth * _myHeight);
+			ShortBuffer myShortBuffer = CCBufferUtil.newDirectShortBuffer(_myPixelFormat.numberOfChannels * _myWidth * _myHeight);
 			CCBufferUtil.fill(myShortBuffer, (short)0);
 			myBuffer = myShortBuffer;
 			break;
 		case INT:
 		case UNSIGNED_INT:
-			IntBuffer myIntBuffer = CCBufferUtil.newIntBuffer(_myPixelFormat.numberOfChannels * _myWidth * _myHeight);
+			IntBuffer myIntBuffer = CCBufferUtil.newDirectIntBuffer(_myPixelFormat.numberOfChannels * _myWidth * _myHeight);
 			CCBufferUtil.fill(myIntBuffer, 0);
 			myBuffer = myIntBuffer;
 			break;

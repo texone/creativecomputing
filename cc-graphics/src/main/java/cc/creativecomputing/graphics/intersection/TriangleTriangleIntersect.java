@@ -193,12 +193,8 @@ public class TriangleTriangleIntersect {
 				sort(isect1);
 				sort(isect2);
 			}
-			if (isect1[1] < isect2[0] || isect2[1] < isect1[0]) {
-				return false;
-			}
-
-			return true;
-		} finally {
+            return !(isect1[1] < isect2[0]) && !(isect2[1] < isect1[0]);
+        } finally {
 		}
 	}
 
@@ -332,12 +328,9 @@ public class TriangleTriangleIntersect {
 		b = -(U0[i0] - U2[i0]);
 		c = -a * U2[i0] - b * U2[i1];
 		d2 = a * V0[i0] + b * V0[i1] + c;
-		if (d0 * d1 > 0.0 && d0 * d2 > 0.0) {
-			return true;
-		}
+        return d0 * d1 > 0.0 && d0 * d2 > 0.0;
 
-		return false;
-	}
+    }
 
 	private static boolean edgeAgainstTriEdges(final double[] v0, final double[] v1, final double[] u0, final double[] u1, final double[] u2,
 			final int i0, final int i1) {
@@ -353,11 +346,8 @@ public class TriangleTriangleIntersect {
 			return true;
 		}
 		/* test edge u2,u1 against v0,v1 */
-		if (edgeEdgeTest(v0, u2, u0, i0, i1, aX, aY)) {
-			return true;
-		}
-		return false;
-	}
+        return edgeEdgeTest(v0, u2, u0, i0, i1, aX, aY);
+    }
 
 	private static boolean edgeEdgeTest(final double[] v0, final double[] u0, final double[] u1, final int i0, final int i1, final double aX,
 			final double Ay) {
@@ -370,13 +360,9 @@ public class TriangleTriangleIntersect {
 		if ((f > 0 && d >= 0 && d <= f) || (f < 0 && d <= 0 && d >= f)) {
 			final double e = aX * Cy - Ay * Cx;
 			if (f > 0) {
-				if (e >= 0 && e <= f) {
-					return true;
-				}
+                return e >= 0 && e <= f;
 			} else {
-				if (e <= 0 && e >= f) {
-					return true;
-				}
+                return e <= 0 && e >= f;
 			}
 		}
 		return false;

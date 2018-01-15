@@ -19,8 +19,8 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class CCNumberBox extends JTextField implements MouseListener, MouseMotionListener {
 
-	public static interface CCChangeValueBoxListener {
-		public void changeValue(double theValue);
+	public interface CCChangeValueBoxListener {
+		void changeValue(double theValue);
 	}
 
 	/**

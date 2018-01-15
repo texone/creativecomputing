@@ -15,7 +15,7 @@ import cc.creativecomputing.math.signal.CCMixSignal;
 
 public class CCInterpolationDemo extends CCGL2Adapter{
 	
-	public static enum CCInterpolationType{
+	public enum CCInterpolationType{
 		LINEAR, CUBIC, HERMITE
 	}
 	
@@ -56,7 +56,7 @@ public class CCInterpolationDemo extends CCGL2Adapter{
 	public void update(CCAnimator theAnimator) {
 		_myValues.clear();
 		for(int i = 0; i <= _cResolution;i++){
-			double myInput = i / (double)_cResolution;
+			double myInput = i / _cResolution;
 			_myValues.add(_cSignal.value(myInput * _cSignalScale) - 0.5);
 		}
 		

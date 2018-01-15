@@ -300,7 +300,7 @@ public class CCCamera{
 		_myFoV = 60 * CCMath.DEG_TO_RAD; // at least for now
 		_myAspect = (double) g.width() / (double) g.height();
 		
-		_myPosition = new CCVector3(0, 0, g.height() / 2.0f / ((double) Math.tan(_myFoV / 2.0f)));
+		_myPosition = new CCVector3(0, 0, g.height() / 2.0f / Math.tan(_myFoV / 2.0f));
 		_myTarget = new CCVector3(0,0,0);
 		_myUp = new CCVector3(0,1,0);
 		
@@ -337,7 +337,7 @@ public class CCCamera{
 	public void drawFrustum(CCGraphics g){
 		if(_myViewport != null)_myAspect = _myViewport.aspectRatio();
 		
-		double ymax = _myNearClip * (double) Math.tan(_myFoV / 2.0f);
+		double ymax = _myNearClip * Math.tan(_myFoV / 2.0f);
 		double ymin = -ymax;
 
 		double xmin = ymin * _myAspect;
@@ -964,7 +964,7 @@ public class CCCamera{
 			viewport, 0,
 			myResultArray, 0
 		);
-		return new CCVector3((double)myResultArray[0],(double)myResultArray[1],(double)myResultArray[2]);
+		return new CCVector3(myResultArray[0], myResultArray[1], myResultArray[2]);
 	}
 	
 	/**
@@ -991,7 +991,7 @@ public class CCCamera{
 			viewport, 0,
 			myResultArray, 0
 		);
-		return new CCVector3((double)myResultArray[0],(double)myResultArray[1],(double)myResultArray[2]);
+		return new CCVector3(myResultArray[0], myResultArray[1], myResultArray[2]);
 	}
 
 	/**

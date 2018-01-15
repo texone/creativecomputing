@@ -34,19 +34,19 @@ import cc.creativecomputing.core.logging.CCLog;
 
 public class CCArtNetNodeDiscovery implements CCArtNetServerPacketReceivedListener, Runnable {
 	
-	public static interface CCArtNetNewNodeListener{
+	public interface CCArtNetNewNodeListener{
 		void newNode(ArtNetNode theNode);
 	}
 	
-	public static interface CCArtNetNodeDisconnectedListener{
+	public interface CCArtNetNodeDisconnectedListener{
 		void nodeDisconnected(ArtNetNode theNode);
 	}
 	
-	public static interface CCArtNetDiscoveryCompletedListener{
+	public interface CCArtNetDiscoveryCompletedListener{
 		void discoveryCompleted(List<ArtNetNode> theNodes);
 	}
 	
-	public static interface CCArtNetDiscoveryFailedListener{
+	public interface CCArtNetDiscoveryFailedListener{
 		void discoveryFailed(Throwable t);
 	}
 

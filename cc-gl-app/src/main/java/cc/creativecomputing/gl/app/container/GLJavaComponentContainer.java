@@ -146,7 +146,7 @@ public class GLJavaComponentContainer extends GLContainer{
 							rm = RepaintManager.currentManager(comp);
 							repaintManagers.put(rm, rm);
 							// Need to dirty this region
-							Rectangle dirty = (Rectangle) dirtyRegions.get(comp);
+							Rectangle dirty = dirtyRegions.get(comp);
 							if (dirty == null) {
 								dirty = new Rectangle(x, y, visible.width, visible.height);
 								dirtyRegions.put(comp, dirty);
@@ -166,7 +166,7 @@ public class GLJavaComponentContainer extends GLContainer{
 
 			// Dirty any needed regions on non-optimizable components
 			for (JComponent comp : dirtyRegions.keySet()) {
-				Rectangle rect = (Rectangle) dirtyRegions.get(comp);
+				Rectangle rect = dirtyRegions.get(comp);
 				RepaintManager rm = RepaintManager.currentManager(comp);
 				rm.addDirtyRegion(comp, rect.x, rect.y, rect.width, rect.height);
 			}
@@ -180,7 +180,7 @@ public class GLJavaComponentContainer extends GLContainer{
 		}
 	}
 	
-	private static interface CCJavaContainer {
+	private interface CCJavaContainer {
 
 		void addWindowListener(WindowAdapter theCreateWindowAdapter);
 

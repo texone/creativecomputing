@@ -154,7 +154,7 @@ public class CopyOfCCUDPServer<MessageType> extends CCNetServer<DatagramChannel,
 		_myEvents.proxy().messageReceived(theMessage);
 	}
 	
-	protected void flipDecodeDispatch(SocketAddress sender) throws IOException {
+	protected void flipDecodeDispatch(SocketAddress sender) {
 		final MessageType myMessage;
 
 		try {

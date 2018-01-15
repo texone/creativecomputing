@@ -14,7 +14,7 @@ public enum GLStencilOperation {
 	
 	private int _myGLID;
 	
-	private GLStencilOperation(int theGLID){
+	GLStencilOperation(int theGLID){
 		_myGLID = theGLID;
 	}
 	

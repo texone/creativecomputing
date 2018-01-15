@@ -18,7 +18,7 @@ public interface CCTransportable {
 	 *
 	 * @return the number of bytes that will be written as <tt>int</tt>.
 	 */
-	public int outputLength();
+    int outputLength();
 
 	/**
 	 * Writes this <tt>Transportable</tt> to the given <tt>DataOutput</tt>.
@@ -26,7 +26,7 @@ public interface CCTransportable {
 	 * @param theDataOut the <tt>DataOutput</tt> to write to.
 	 * @throws java.io.IOException if an I/O error occurs.
 	 */
-	public void writeTo(DataOutput theDataOut) throws IOException;
+    void writeTo(DataOutput theDataOut) throws IOException;
 
 	/**
 	 * Reads this <tt>Transportable</tt> from the given <tt>DataInput</tt>.
@@ -35,6 +35,6 @@ public interface CCTransportable {
 	 * @throws java.io.IOException if an I/O error occurs or the data is
 	 *             invalid.
 	 */
-	public void readFrom(DataInput theDataIn) throws IOException;
+    void readFrom(DataInput theDataIn) throws IOException;
 
 }

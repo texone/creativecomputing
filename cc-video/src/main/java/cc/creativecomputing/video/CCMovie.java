@@ -19,7 +19,7 @@ public interface CCMovie{
 	 * -2 starts the movie playing backward at double speed, and so on. A value of 0 stops the movie.
 	 * @param speed
 	 */
-	public void rate(double speed);
+    void rate(double speed);
 
 	/**
 	 * Positive values indicate forward rates and negative values indicate reverse rates. 
@@ -27,64 +27,64 @@ public interface CCMovie{
 	 * movie is playing backward at double speed, and so on. A value of 0 means the movie is paused or stopped.
 	 * @return a movie's play back rate.
 	 */
-	public double rate();
+    double rate();
 	
 	/**
 	 * Use this method to get the frame rate of the movie.
 	 * @return the frame rate of the movie
 	 */
-	public double frameRate();
+    double frameRate();
 
 	/**
 	 * Returns the current time of the movie as a relative value between 0 and 1.
 	 * @return progress of movie play back
 	 */
-	public double progress();
+    double progress();
 
 	/**
 	 * Returns the current time of the movie in seconds
 	 * @return the time in milliseconds
 	 */
-	public double time();
+    double time();
 
 	/**
 	 * Sets the time for movie play back
 	 * @param theNewTime new time for movie play back
 	 */
-	public void time(double theNewTime);
+    void time(double theNewTime);
 	
-	public void goToBeginning();
+	void goToBeginning();
 	
 	/**
 	 * Returns the length of the movie in seconds
 	 * @return length of the movie in seconds
 	 */
-	public double duration();
+    double duration();
 
 	/**
 	 * Volume values range from -1.0 to 1.0. Negative values play no sound 
 	 * but preserve the absolute value of the volume setting.
 	 * @return
 	 */
-	public double volume();
+    double volume();
 
 	/**
 	 * Volume values range from -1.0 to 1.0. Negative values play no sound 
 	 * but preserve the absolute value of the volume setting.
 	 * @param volume
 	 */
-	public void volume(double volume);
+    void volume(double volume);
 
 	/**
 	 * Starts the movie in loop modus
 	 */
-	public void loop();
+    void loop();
 	
 	/**
 	 * true activates looping false turns looping off
 	 * @param doLoop
 	 */
-	public void loop(final boolean doLoop);
+    void loop(final boolean doLoop);
 
 	/**
 	 * Returns true if the movie is running otherwise false. 
@@ -92,7 +92,7 @@ public interface CCMovie{
 	 * when it is not looping.
 	 * @return
 	 */
-	public boolean isRunning();
+    boolean isRunning();
 
 	/**
 	 * Starts the movie, if loop is set false. The movie stops after it has been
@@ -101,23 +101,23 @@ public interface CCMovie{
 	 * from its last position.
 	 * @param restart
 	 */
-	public void play();
+    void play();
 
 	/**
 	 * 
 	 * 
 	 */
-	public void play(boolean restart);
+    void play(boolean restart);
 	
 	/**
 	 * Pauses a movie during playback. If a movie is started again with play(), it will continue from where it was
 	 * paused.
 	 */
-	public void pause();
+    void pause();
 
 	/**
 	 * Stops a movie from continuing. The playback returns to the beginning so when a movie is played, it will begin
 	 * from the beginning.
 	 */
-	public void stop();
+    void stop();
 }

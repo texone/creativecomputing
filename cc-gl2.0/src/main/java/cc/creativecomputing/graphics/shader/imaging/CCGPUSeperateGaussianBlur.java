@@ -89,7 +89,7 @@ public class CCGPUSeperateGaussianBlur extends CCGPUConvolutionShader{
 			if (distance > radius2)
 				_myMatrix[index] = 0;
 			else
-				_myMatrix[index] = (double)Math.exp(-(distance)/sigma22) / sqrtSigmaPi2;
+				_myMatrix[index] = Math.exp(-(distance)/sigma22) / sqrtSigmaPi2;
 			
 			total += _myMatrix[index];
 			index++;

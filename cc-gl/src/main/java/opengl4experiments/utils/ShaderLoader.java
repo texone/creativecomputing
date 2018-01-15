@@ -92,7 +92,7 @@ public class ShaderLoader {
 	            gl.glGetShaderiv(shader, GL2ES2.GL_INFO_LOG_LENGTH, logLength, 0);
 
 	            byte[] log = new byte[logLength[0]];
-	            gl.glGetShaderInfoLog(shader, logLength[0], (int[])null, 0, log, 0);
+	            gl.glGetShaderInfoLog(shader, logLength[0], null, 0, log, 0);
 
 	            System.err.println("Error compiling the shader type: "  + type[0] + new String(log));
 	            System.exit(1);

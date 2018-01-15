@@ -9,7 +9,7 @@ public enum GLTessGenPrimitiveType {
 	
 	private int _myGLID;
 	
-	private GLTessGenPrimitiveType(int theGLID){
+	GLTessGenPrimitiveType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

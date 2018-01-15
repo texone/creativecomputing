@@ -286,7 +286,7 @@ public class GLWindowContainer extends GLContainer{
 		new CCWindowThread() {
             public void windowTask() {
             	_myWindow.setFullscreen(theSetFullScreen);
-            };
+            }
         }.start();
 	}
 	
@@ -295,7 +295,7 @@ public class GLWindowContainer extends GLContainer{
 		new CCWindowThread() {
             public void windowTask() {
             	_myWindow.setSurfaceScale(new float[]{_myContext.pixelScale.id(), _myContext.pixelScale.id()});
-            };
+            }
         }.start();
 	}
 	

@@ -46,8 +46,8 @@ public class CCDLADendron extends CCGL2Adapter {
 		public void reset() {
 			// Reset the Particle to a new random location
 			// and a zeroed-out velocity.
-			px = (double) (Math.random() * (double) rasterWidth);
-			py = (double) (Math.random() * (double) rasterHeight);
+			px = Math.random() * (double) rasterWidth;
+			py = Math.random() * (double) rasterHeight;
 			vx = 0;
 			vy = 0;
 		}
@@ -83,8 +83,8 @@ public class CCDLADendron extends CCGL2Adapter {
 
 			// Compute a random deflection for the Particle,
 			// and modify its velocity slightly in that direction.
-			dx = (double) (Math.random() - 0.5f) * maxParticleVelocity;
-			dy = (double) (Math.random() - 0.5f) * maxParticleVelocity;
+			dx = (Math.random() - 0.5f) * maxParticleVelocity;
+			dy = (Math.random() - 0.5f) * maxParticleVelocity;
 			vx = A * vx + B * dx;
 			vy = A * vy + B * dy;
 

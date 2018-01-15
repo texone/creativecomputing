@@ -9,7 +9,7 @@ public enum GLHintOption {
 	
 	private int _myGLID;
 	
-	private GLHintOption(int theGLID){
+	GLHintOption(int theGLID){
 		_myGLID = theGLID;
 	}
 	

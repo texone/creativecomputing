@@ -1258,10 +1258,7 @@ public class CCQuaternion implements Cloneable, Externalizable {
         if (Double.isNaN(quat.z) || Double.isInfinite(quat.z)) {
             return false;
         }
-        if (Double.isNaN(quat.w) || Double.isInfinite(quat.w)) {
-            return false;
-        }
-        return true;
+        return !Double.isNaN(quat.w) && !Double.isInfinite(quat.w);
     }
 
     /**
@@ -1354,7 +1351,7 @@ public class CCQuaternion implements Cloneable, Externalizable {
      * @throws ClassNotFoundException
      */
     @Override
-    public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(final ObjectInput in) throws IOException {
         x = in.readDouble();
         y = in.readDouble();
         z = in.readDouble();

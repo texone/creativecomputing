@@ -7,7 +7,7 @@ public enum GLSyncType {
 	
 	private int _myGLID;
 	
-	private GLSyncType(int theGLID){
+	GLSyncType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -51,33 +51,33 @@ public interface UDPTerminal {
    *
    * @return an <tt>InetAddress</tt> instance.
    */
-  public InetAddress getLocalAddress();
+  InetAddress getLocalAddress();
 
   /**
    * Returns the local port of this <tt>UDPTerminal</tt>.
    *
    * @return the local port as <tt>int</tt>.
    */
-  public int getLocalPort();
+  int getLocalPort();
 
   /**
    * Tests if this <tt>UDPTerminal</tt> is active.
    *
    * @return <tt>true</tt> if active, <tt>false</tt> otherwise.
    */
-  public boolean isActive();
+  boolean isActive();
 
   /**
    * Activate this <tt>UDPTerminal</tt>.
    *
    * @throws java.lang.Exception if there is a network failure.
    */
-  public void activate() throws Exception;
+  void activate() throws Exception;
 
   /**
    * Deactivates this <tt>UDPTerminal</tt>.
    */
-  public void deactivate();
+  void deactivate();
 
   /**
    * Returns the <tt>ModbusTransport</tt> associated with this
@@ -85,7 +85,7 @@ public interface UDPTerminal {
    *
    * @return a <tt>ModbusTransport</tt> instance.
    */
-  public ModbusUDPTransport getModbusTransport();
+  ModbusUDPTransport getModbusTransport();
 
   /**
    * Sends the given message.
@@ -93,7 +93,7 @@ public interface UDPTerminal {
    * @param msg the message as <tt>byte[]</tt>.
    * @throws Exception if sending the message fails.
    */
-  public void sendMessage(byte[] msg) throws Exception;
+  void sendMessage(byte[] msg) throws Exception;
 
   /**
    * Receives and returns a message.
@@ -101,6 +101,6 @@ public interface UDPTerminal {
    * @return the message as a newly allocated <tt>byte[]</tt>.
    * @throws Exception if receiving a message fails.
    */
-  public byte[] receiveMessage() throws Exception;
+  byte[] receiveMessage() throws Exception;
 
 }//interface UDPTerminal

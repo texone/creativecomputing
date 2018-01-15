@@ -13,7 +13,7 @@ public enum GLFramebufferStatus {
 	
 	private int _myGLID;
 	
-	private GLFramebufferStatus(int theGLID){
+	GLFramebufferStatus(int theGLID){
 		_myGLID = theGLID;
 	}
 	

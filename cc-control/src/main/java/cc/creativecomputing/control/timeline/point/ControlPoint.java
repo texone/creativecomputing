@@ -9,7 +9,7 @@ import cc.creativecomputing.math.CCColor;
 
 public class ControlPoint {
 	
-	public static enum ControlPointType {
+	public enum ControlPointType {
 		STEP, 
 		LINEAR, 
 		BEZIER, 
@@ -18,9 +18,9 @@ public class ControlPoint {
 		TIMED_EVENT, 
 		TIMED_DATA_START,
 		TIMED_DATA_END
-	};
-	
-	public static enum HandleType{
+	}
+
+    public enum HandleType{
 		BEZIER_IN_HANDLE, BEZIER_OUT_HANDLE, TIME_END
 	}
 	

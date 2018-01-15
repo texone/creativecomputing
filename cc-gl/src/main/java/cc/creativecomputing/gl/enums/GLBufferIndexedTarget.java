@@ -10,7 +10,7 @@ public enum GLBufferIndexedTarget {
 	
 	private int _myGLID;
 	
-	private GLBufferIndexedTarget(int theGLID){
+	GLBufferIndexedTarget(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -52,7 +52,7 @@ public class CCMouseEvent extends CCEvent{
 	 * @author texone
 	 *
 	 */
-	public static enum CCMouseButton{
+	public enum CCMouseButton{
 		/**
 		 * constant indicating that the left mouse button is pressed
 		 */
@@ -82,7 +82,7 @@ public class CCMouseEvent extends CCEvent{
 		}
 	}
 	
-	public static enum CCMouseEventType{
+	public enum CCMouseEventType{
 		/**
 	     * The "mouse clicked" event. This <code>MouseEvent</code>
 	     * occurs when a mouse button is pressed and released.

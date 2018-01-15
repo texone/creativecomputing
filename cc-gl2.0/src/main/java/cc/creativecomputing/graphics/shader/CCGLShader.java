@@ -230,7 +230,7 @@ public class CCGLShader extends CCShaderObject{
 		_myFiles = theFiles;
 		
 		GL2 gl = CCGraphics.currentGL();
-		_myShaderID = (int)gl.glCreateShader(_myType.glID);
+		_myShaderID = gl.glCreateShader(_myType.glID);
 		
 		try{
 			loadShader();
@@ -243,7 +243,7 @@ public class CCGLShader extends CCShaderObject{
 		super(theSource);
 		_myType = theType;
 		GL2 gl = CCGraphics.currentGL();
-		_myShaderID = (int)gl.glCreateShader(_myType.glID);
+		_myShaderID = gl.glCreateShader(_myType.glID);
 
 		loadShader(true);
 	}
@@ -372,7 +372,7 @@ public class CCGLShader extends CCShaderObject{
 	 */
 	public void source(String theSource){
 		GL2 gl = CCGraphics.currentGL();
-		gl.glShaderSource(_myShaderID, 1, new String[] { theSource },(int[]) null, 0);
+		gl.glShaderSource(_myShaderID, 1, new String[] { theSource }, null, 0);
 	}
 	
 	/**
@@ -471,9 +471,8 @@ public class CCGLShader extends CCShaderObject{
 	boolean checkReloadSource(){
 		if(!_myReloadSource)return false;
 		_myReloadSource = false;
-		if(!loadShader(false))return false;
-		return true;
-	}
+        return loadShader(false);
+    }
 	
 	public void reload(){
 		loadShader();

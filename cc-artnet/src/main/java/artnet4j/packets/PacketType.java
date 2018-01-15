@@ -36,7 +36,7 @@ public enum PacketType {
 	private final int opCode;
 	private final Class<? extends ArtNetPacket> packetClass;
 
-	private PacketType(int code, Class<? extends ArtNetPacket> clazz) {
+	PacketType(int code, Class<? extends ArtNetPacket> clazz) {
 		opCode = code;
 		packetClass = clazz;
 	}

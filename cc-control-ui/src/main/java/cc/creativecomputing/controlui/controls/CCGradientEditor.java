@@ -61,9 +61,9 @@ public class CCGradientEditor extends JPanel {
 	        setEnabled(false);
 	        CCGradientEditor.this.setEnabled(true);
 	    }
-	};
+	}
 
-	private int _mySelectedPoint;
+    private int _mySelectedPoint;
 
 	private CCGradient _myGradient = new CCGradient();
 	/** The polygon used for the markers */
@@ -78,8 +78,8 @@ public class CCGradientEditor extends JPanel {
 	/** The height of the gradient bar */
 	private int _myHeight;
 	
-	public static interface GradientListener{
-		public void onChange(CCGradient theGradient);
+	public interface GradientListener{
+		void onChange(CCGradient theGradient);
 	}
 
 	private CCListenerManager<GradientListener> _myEvents = CCListenerManager.create(GradientListener.class);
@@ -172,12 +172,9 @@ public class CCGradientEditor extends JPanel {
 		int dx = (int) Math.abs((_myX + (_myWidth * pt.position())) - theE.getX());
 		int dy = Math.abs((_myY + _myHeight + 7) - theE.getY());
 
-		if ((dx < 5) && (dy < 7)) {
-			return true;
-		}
+        return (dx < 5) && (dy < 7);
 
-		return false;
-	}
+    }
 
 	/**
 	 * Add a new control point

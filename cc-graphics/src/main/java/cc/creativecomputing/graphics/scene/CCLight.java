@@ -28,11 +28,11 @@ import cc.creativecomputing.math.CCVector3;
  */
 public class CCLight extends CCSpatial {
 
-	public static enum CCLightType {
+	public enum CCLightType {
 		AMBIENT, DIRECTIONAL, POINT, SPOT
-	};
+	}
 
-	protected CCLightType _myType;
+    protected CCLightType _myType;
 
 	// Construction and destruction.
 	public CCLight(CCLightType theType) {

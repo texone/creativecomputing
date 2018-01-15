@@ -18,7 +18,7 @@ public enum GLPrimitiveType {
 	
 	private int _myGLID;
 	
-	private GLPrimitiveType(int theGLID){
+	GLPrimitiveType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

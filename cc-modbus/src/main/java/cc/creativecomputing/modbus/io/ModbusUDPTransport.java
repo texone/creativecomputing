@@ -62,8 +62,7 @@ public class ModbusUDPTransport
   private BytesOutputStream m_ByteOut;
   private BytesInputStream m_ByteIn;
 
-  public void close()
-      throws IOException {
+  public void close() {
     //?
   }//close
 
@@ -84,7 +83,7 @@ public class ModbusUDPTransport
       synchronized (m_ByteOut) {
     	  int len = msg.outputLength();
     	  m_ByteOut.reset();
-    	  msg.writeTo((DataOutput) m_ByteOut);
+    	  msg.writeTo(m_ByteOut);
     	  byte data[] = m_ByteOut.getBuffer();
     	  data = Arrays.copyOf(data, len);
     	  m_Terminal.sendMessage(data);

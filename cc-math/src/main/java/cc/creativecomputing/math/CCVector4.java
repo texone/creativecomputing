@@ -880,11 +880,8 @@ public class CCVector4 implements Cloneable, Externalizable {
 		if (Double.isNaN(theVector.x) || Double.isNaN(theVector.y) || Double.isNaN(theVector.z) || Double.isNaN(theVector.w)) {
 			return false;
 		}
-		if (Double.isInfinite(theVector.x) || Double.isInfinite(theVector.y) || Double.isInfinite(theVector.z) || Double.isInfinite(theVector.w)) {
-			return false;
-		}
-		return true;
-	}
+        return !Double.isInfinite(theVector.x) && !Double.isInfinite(theVector.y) && !Double.isInfinite(theVector.z) && !Double.isInfinite(theVector.w);
+    }
 
 	/**
 	 * @return the string representation of this vector.
@@ -958,7 +955,7 @@ public class CCVector4 implements Cloneable, Externalizable {
 	 * @throws ClassNotFoundException
 	 */
 	@Override
-	public void readExternal(final ObjectInput theInput) throws IOException, ClassNotFoundException {
+	public void readExternal(final ObjectInput theInput) throws IOException {
 		x = theInput.readDouble();
 		y = theInput.readDouble();
 		z = theInput.readDouble();

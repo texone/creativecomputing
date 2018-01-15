@@ -9,7 +9,7 @@ public enum GLTransformFeedbackPrimitiveType {
 	
 	private int _myGLID;
 	
-	private GLTransformFeedbackPrimitiveType(int theGLID){
+	GLTransformFeedbackPrimitiveType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

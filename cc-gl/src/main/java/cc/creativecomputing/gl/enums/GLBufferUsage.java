@@ -15,7 +15,7 @@ public enum GLBufferUsage {
 	
 	private int _myGLID;
 	
-	private GLBufferUsage(int theGLID){
+	GLBufferUsage(int theGLID){
 		_myGLID = theGLID;
 	}
 	

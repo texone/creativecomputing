@@ -365,7 +365,7 @@ private String fragmentShaderString =
             gl.glGetShaderiv(vertShader, GL2ES2.GL_INFO_LOG_LENGTH, logLength, 0);
 
             byte[] log = new byte[logLength[0]];
-            gl.glGetShaderInfoLog(vertShader, logLength[0], (int[])null, 0, log, 0);
+            gl.glGetShaderInfoLog(vertShader, logLength[0], null, 0, log, 0);
 
             System.err.println("Error compiling the vertex shader: " + new String(log));
             System.exit(1);
@@ -385,7 +385,7 @@ private String fragmentShaderString =
             gl.glGetShaderiv(fragShader, GL2ES2.GL_INFO_LOG_LENGTH, logLength, 0);
 
             byte[] log = new byte[logLength[0]];
-            gl.glGetShaderInfoLog(fragShader, logLength[0], (int[])null, 0, log, 0);
+            gl.glGetShaderInfoLog(fragShader, logLength[0], null, 0, log, 0);
 
             System.err.println("Error compiling the fragment shader: " + new String(log));
             System.exit(1);
@@ -475,7 +475,7 @@ private String fragmentShaderString =
             0.0f, 0.0f, 0.0f, 1.0f,
         };
         model_view_projection =  translate(identity_matrix,0.0f,0.0f, -0.1f);
-        model_view_projection =  rotate(model_view_projection,(float)30f*(float)s,1.0f,0.0f,1.0f);
+        model_view_projection =  rotate(model_view_projection, 30f *(float)s,1.0f,0.0f,1.0f);
 
         // Send the final projection matrix to the vertex shader by
         // using the uniform location id obtained during the init part.

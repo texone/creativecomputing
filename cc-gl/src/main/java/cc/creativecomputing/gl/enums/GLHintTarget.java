@@ -10,7 +10,7 @@ public enum GLHintTarget {
 	
 	private int _myGLID;
 	
-	private GLHintTarget(int theGLID){
+	GLHintTarget(int theGLID){
 		_myGLID = theGLID;
 	}
 	

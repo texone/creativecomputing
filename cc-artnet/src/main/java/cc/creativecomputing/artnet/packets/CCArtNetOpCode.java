@@ -155,7 +155,7 @@ public enum CCArtNetOpCode {
 	public final int id;
 	private final Class<? extends ArtNetPacket> _myPacketClass;
 
-	private CCArtNetOpCode(int theID, Class<? extends ArtNetPacket> theClass) {
+	CCArtNetOpCode(int theID, Class<? extends ArtNetPacket> theClass) {
 		id = theID;
 		_myPacketClass = theClass;
 	}

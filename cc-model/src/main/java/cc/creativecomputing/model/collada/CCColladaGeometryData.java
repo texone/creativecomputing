@@ -152,7 +152,7 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 					CCColladaGeometryInput myInput = new CCColladaGeometryInput(
 						myVertexSementic,
 						Integer.parseInt(myTriangleInputXML.attribute("offset")),
-						(CCColladaSource)theSources.get(mySource)
+                            theSources.get(mySource)
 					);
 					myInputs.add(myInput);
 				}
@@ -161,7 +161,7 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 				CCColladaGeometryInput myInput = new CCColladaGeometryInput(
 					mySementic,
 					Integer.parseInt(myTriangleInputXML.attribute("offset")),
-					(CCColladaSource)theSources.get(myTriangleInputXML.attribute("source").substring(1))
+                        theSources.get(myTriangleInputXML.attribute("source").substring(1))
 				);
 				myInputs.add(myInput);
 				break;

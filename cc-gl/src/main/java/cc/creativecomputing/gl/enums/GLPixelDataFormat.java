@@ -25,7 +25,7 @@ public enum GLPixelDataFormat {
 	
 	private int _myGLID;
 	
-	private GLPixelDataFormat(int theGLID){
+	GLPixelDataFormat(int theGLID){
 		_myGLID = theGLID;
 	}
 	

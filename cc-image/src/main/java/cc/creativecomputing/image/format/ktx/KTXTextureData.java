@@ -75,7 +75,7 @@ public class KTXTextureData {
 		setMipmapLevel(level, numberOfArrayElements, numberOfFaces, faces, bytesPerFace);
 	}
 
-	protected void readFace(InputStream in, ByteOrder inputOrder, int glTypeSize, ByteBuffer out) throws KTXFormatException, IOException {
+	protected void readFace(InputStream in, ByteOrder inputOrder, int glTypeSize, ByteBuffer out) throws IOException {
 		KTXUtil.readFully(in, out);
 		if (inputOrder != out.order()) {
 			KTXUtil.swapEndian(out, glTypeSize);

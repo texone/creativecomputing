@@ -33,9 +33,9 @@ class CCSVGRadialGradient extends CCSVGGradient {
 			Point2D t2 = transform.transform(new Point2D.Double(cx + r, cy),
 					null);
 
-			this.cx = (double) t1.getX();
-			this.cy = (double) t1.getY();
-			this.r = (double) (t2.getX() - t1.getX());
+			this.cx = t1.getX();
+			this.cy = t1.getY();
+			this.r = t2.getX() - t1.getX();
 		}
 	}
 	

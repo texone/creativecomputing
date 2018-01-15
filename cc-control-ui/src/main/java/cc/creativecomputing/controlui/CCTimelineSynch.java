@@ -9,7 +9,7 @@ import cc.creativecomputing.protocol.midi.CCMidiTimeCode;
 
 public class CCTimelineSynch implements CCAnimatorListener{
 	
-	public static enum CCSynchMode{
+	public enum CCSynchMode{
 		OFF,
 		MASTER,
 		SLAVE

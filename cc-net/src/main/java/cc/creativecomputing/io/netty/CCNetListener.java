@@ -40,5 +40,5 @@ public interface CCNetListener<MessageType> {
 	 *            the time if no time tag was specified or the
 	 *            message is expected to be processed immediately
 	 */
-	public void messageReceived(CCNetMessage<MessageType> theMessage);
+    void messageReceived(CCNetMessage<MessageType> theMessage);
 }

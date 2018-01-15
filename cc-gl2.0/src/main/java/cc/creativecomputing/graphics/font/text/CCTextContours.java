@@ -13,6 +13,7 @@ package cc.creativecomputing.graphics.font.text;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.graphics.font.CCOutlineChar;
 import cc.creativecomputing.graphics.font.CCOutlineFont;
 import cc.creativecomputing.math.CCVector2;
 
@@ -39,28 +40,28 @@ public class CCTextContours extends CCText{
 	public void breakText() {
 		super.breakText();
 
-//		for(CCTextGridLinePart myGridLine:_myTextGrid.gridLines()) {
-//			for (int i = 0; i < myGridLine.charIndices().length; i++) {
-//				int myCharIndex = myGridLine.charIndices()[i];
-//				
-//				final CCOutlineChar glyph = (CCOutlineChar)_myFont.chars()[myCharIndex];
-//				
-//				for(List<CCVector2> myPath:glyph.contour()){
-//					List<CCVector2> myContour = new ArrayList<CCVector2>();
-//					for(CCVector2 myVertex:myPath){
-//						myContour.add(
-//							new CCVector2(
-//								_myPosition.x + myGridLine.x(i) + myVertex.x, 
-//								_myPosition.y + myGridLine.y() + ascent() - myVertex.y
-//							)
-//						);
-//					}
-//					_myContours.add(myContour);
-//				}
-//			}
-//			
-//			
-//		}
+		for(CCTextGridLinePart myGridLine:_myTextGrid.gridLines()) {
+			for (int i = 0; i < myGridLine.charIndices().length; i++) {
+				int myCharIndex = myGridLine.charIndices()[i];
+				
+				final CCOutlineChar glyph = (CCOutlineChar)_myTextParts.get(0)._myFont.chars()[myCharIndex];
+				
+				for(List<CCVector2> myPath:glyph.contour()){
+					List<CCVector2> myContour = new ArrayList<CCVector2>();
+					for(CCVector2 myVertex:myPath){
+						myContour.add(
+							new CCVector2(
+								_myPosition.x + myGridLine.x(i) + myVertex.x, 
+								_myPosition.y + myGridLine.y() + ascent() - myVertex.y
+							)
+						);
+					}
+					_myContours.add(myContour);
+				}
+			}
+			
+			
+		}
 	}
 	
 	

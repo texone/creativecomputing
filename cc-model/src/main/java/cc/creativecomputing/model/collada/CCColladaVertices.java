@@ -59,13 +59,13 @@ class CCColladaVertices extends CCColladaSubTag {
 	
 	String source(String theSementic) {
 		return _mySourceMap.get(theSementic);
-	};
-	
-	String source() {
+	}
+
+    String source() {
 		return _mySourceMap.get(POSITION);
-	};
-	
-	boolean hasSource(String theSemantic) {
+	}
+
+    boolean hasSource(String theSemantic) {
 		return _mySourceMap.containsKey(theSemantic);
 	}
 

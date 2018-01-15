@@ -54,7 +54,7 @@ public class GLTexture {
 		
 		private int _myGLID;
 		
-		private GLTexturePARAMETER(int theGLID){
+		GLTexturePARAMETER(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -212,7 +212,7 @@ public class GLTexture {
 	}
 	
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() {
 		GL4 gl = GLGraphics.currentGL();
 		gl.glDeleteTextures(1, GLBufferUtil.wrapParameters(_myID));
 	}

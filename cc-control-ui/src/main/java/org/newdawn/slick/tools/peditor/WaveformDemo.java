@@ -79,11 +79,11 @@ implements ActionListener {
     }
     
     public interface PlayerRef {
-        public Object getLock();
-        public PlayStat getStat();
-        public File getFile();
-        public void playbackEnded();
-        public void drawDisplay(float[] samples, int svalid);
+        Object getLock();
+        PlayStat getStat();
+        File getFile();
+        void playbackEnded();
+        void drawDisplay(float[] samples, int svalid);
     }
     
     private JFrame mainFrame = new JFrame("Waveform Demo");
@@ -401,7 +401,7 @@ implements ActionListener {
                 showError(ioe);
             }
             
-            return (Void)null;
+            return null;
         }
         
         @Override

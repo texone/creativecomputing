@@ -137,9 +137,9 @@ public class CCMath {
 	 */
 	static public int signalBit(float theValue) {
 		return floatToBits(theValue) & 0x80000000;
-	};
+	}
 
-	/**
+    /**
 	 * returns the value of 1.0f in bitwise form
 	 */
 	static public int oneInBits() {
@@ -167,7 +167,7 @@ public class CCMath {
 	}
 
 	public static final double mag(double abc[]) {
-		return (double) Math.sqrt(abc[0] * abc[0] + abc[1] * abc[1] + abc[2]
+		return Math.sqrt(abc[0] * abc[0] + abc[1] * abc[1] + abc[2]
 				* abc[2]);
 	}
 
@@ -218,19 +218,19 @@ public class CCMath {
 	}
 
 	static public final double log(double a) {
-		return (double) Math.log(a);
+		return Math.log(a);
 	}
 	
 	static public final double log2(double a){
-		return (double) (Math.log(a) / log(2));
+		return Math.log(a) / log(2);
 	}
 	
 	static public final double log10(double a){
-		return (double) Math.log10(a);
+		return Math.log10(a);
 	}
 
 	static public final double exp(double a) {
-		return (double) Math.exp(a);
+		return Math.exp(a);
 	}
 
 	static public final float pow(float a, float b) {
@@ -347,15 +347,48 @@ public class CCMath {
 	static public final float blend(final float theStart, final float theStop, final float theBlend) {
 		return theStart + (theStop - theStart) * theBlend;
 	}
-	
+	/**
+	 * Blends between a start and an end value according to the given blend.
+	 * The blend parameter is the amount to interpolate between the two values 
+	 * where 0.0 equal to the first point, 0.1 is very near the first point, 
+	 * 0.5 is half-way in between, etc. The blend function is convenient for 
+	 * creating motion along a straight path and for drawing dotted lines.
+	 * 
+	 * @param theStart first value
+	 * @param theStop second value
+	 * @param theBlend between 0.0 and 1.0
+	 * @return
+	 */
 	static public final double blend(final double theStart, final double theStop, final double theBlend) {
 		return theStart + (theStop - theStart) * theBlend;
 	}
-	
+	/**
+	 * Blends between a start and an end value according to the given blend.
+	 * The blend parameter is the amount to interpolate between the two values 
+	 * where 0.0 equal to the first point, 0.1 is very near the first point, 
+	 * 0.5 is half-way in between, etc. The blend function is convenient for 
+	 * creating motion along a straight path and for drawing dotted lines.
+	 * 
+	 * @param theStart first value
+	 * @param theStop second value
+	 * @param theBlend between 0.0 and 1.0
+	 * @return
+	 */
 	static public final long blend(final long theStart, final long theStop, final double theBlend) {
 		return (long)(theStart + (theStop - theStart) * theBlend);
 	}
-	
+	/**
+	 * Blends between a start and an end value according to the given blend.
+	 * The blend parameter is the amount to interpolate between the two values 
+	 * where 0.0 equal to the first point, 0.1 is very near the first point, 
+	 * 0.5 is half-way in between, etc. The blend function is convenient for 
+	 * creating motion along a straight path and for drawing dotted lines.
+	 * 
+	 * @param theStart first value
+	 * @param theStop second value
+	 * @param theBlend between 0.0 and 1.0
+	 * @return
+	 */
 	static public final double[] blend(final double[] theStart, final double[] theStop, final double theBlend) {
 		double[] result = new double[min(theStart.length, theStop.length)];
 		for(int i = 0; i < result.length; i++){
@@ -389,7 +422,17 @@ public class CCMath {
 	static public final float norm(final float theValue, final float theMin, final float theMax) {
 		return (theValue - theMin) / (theMax - theMin);
 	}
-	
+	/**
+	 * <p>Normalizes a number from another range into a value between 0 and 1.</p>
+	 * <p>Identical to map(value, low, high, 0, 1);</p>
+	 * <p>Numbers outside the range are not clamped to 0 and 1, because out-of-range 
+	 * values are often intentional and useful.</p>
+	 * 
+	 * @param theValue The incoming value to be converted
+	 * @param theMin Lower bound of the value's current range
+	 * @param theMax Upper bound of the value's current range
+	 * @return
+	 */
 	static public final double norm(final double theValue, final double theMin, final double theMax) {
 		return (theValue - theMin) / (theMax - theMin);
 	}
@@ -548,7 +591,7 @@ public class CCMath {
 	}
 
 	public static final double tan(double angle) {
-		return (double) Math.tan(angle);
+		return Math.tan(angle);
 	}
 
 	public static final float asin(float value) {
@@ -616,7 +659,7 @@ public class CCMath {
 	}
 
 	static public final int round(float theValue) {
-		return (int) Math.round(theValue);
+		return Math.round(theValue);
 	}
 
 	static public final int round(double theValue) {
@@ -663,11 +706,11 @@ public class CCMath {
 	}
 
 	static public final double mag(double a, double b) {
-		return (double) Math.sqrt(a * a + b * b);
+		return Math.sqrt(a * a + b * b);
 	}
 
 	static public final double mag(double a, double b, double c) {
-		return (double) Math.sqrt(a * a + b * b + c * c);
+		return Math.sqrt(a * a + b * b + c * c);
 	}
 
 	static public final double dist(double x1, double y1, double x2, double y2) {
@@ -769,7 +812,7 @@ public class CCMath {
         c3 = 2 * theT * theP0 + (theT - 3) * theP1 + (3 - 2 * theT) * theP2 + -theT * theP3;
         c4 = -theT * theP0 + (2 - theT) * theP1 + (theT - 2) * theP2 + theT * theP3;
 
-        return (double) (((c4 * theU + c3) * theU + c2) * theU + c1);
+        return ((c4 * theU + c3) * theU + c2) * theU + c1;
     }
     
     public static double cubicBlend(

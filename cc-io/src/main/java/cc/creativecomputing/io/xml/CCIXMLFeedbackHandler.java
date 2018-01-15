@@ -11,5 +11,5 @@
 package cc.creativecomputing.io.xml;
 
 public interface CCIXMLFeedbackHandler<XMLTool extends CCAbstractXMLTool>{
-	public void onXMLFeedback(final XMLTool theTool);
+	void onXMLFeedback(final XMLTool theTool);
 }

@@ -20,7 +20,7 @@ public enum GLMemoryBarrierBit {
 	
 	private int _myGLID;
 	
-	private GLMemoryBarrierBit(int theGLID){
+	GLMemoryBarrierBit(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -55,7 +55,7 @@ public enum CCIESGonimeterType {
 
 	int id;
 
-	private CCIESGonimeterType(int theID) {
+	CCIESGonimeterType(int theID) {
 		id = theID;
 	}
 	

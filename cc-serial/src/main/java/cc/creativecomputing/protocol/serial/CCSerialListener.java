@@ -31,7 +31,7 @@ public interface CCSerialListener {
 	 * 
 	 * @param theSerial the serial port that received data
 	 */
-	public void onSerialEvent(final CCSerialInput theSerialPort);
+    void onSerialEvent(final CCSerialInput theSerialPort);
 	
 
 }

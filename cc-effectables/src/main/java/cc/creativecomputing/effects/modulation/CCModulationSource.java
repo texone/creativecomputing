@@ -6,8 +6,8 @@ import cc.creativecomputing.effects.CCEffectable;
 
 public  class CCModulationSource {
 	
-	public static interface CCModulationImplementation{
-		public double modulation(CCEffectManager<?> theEffectManager, CCEffectable theEffectable);
+	public interface CCModulationImplementation{
+		double modulation(CCEffectManager<?> theEffectManager, CCEffectable theEffectable);
 	}
 
 	private final String _myName;

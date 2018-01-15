@@ -113,7 +113,7 @@ public class BandCenters extends CCGL2Adapter {
 		g.text("Spectrum Center Frequency: " + centerFrequency, 5, 15);
 
 		// draw the linear averages
-		int w = (int) (g.width() / fftLin.avgSize());
+		int w = g.width() / fftLin.avgSize();
 		for (int i = 0; i < fftLin.avgSize(); i++) {
 			if (mouseX >= i * w && mouseX <= i * w + w) {
 				centerFrequency = fftLin.getAverageCenterFrequency(i);
@@ -130,7 +130,7 @@ public class BandCenters extends CCGL2Adapter {
 
 		// draw the logarithmic averages
 		fftLog.forward(jingle.mix);
-		w = (int) (g.width() / fftLog.avgSize());
+		w = g.width() / fftLog.avgSize();
 		for (int i = 0; i < fftLog.avgSize(); i++) {
 			if (mouseX >= i * w && mouseX <= i * w + w) {
 				centerFrequency = fftLog.getAverageCenterFrequency(i);

@@ -46,44 +46,44 @@ public abstract class CCServer<MessageType> extends CCNetChannel<MessageType>{
 		}
 
 		@Override
-		public void handlerAdded(ChannelHandlerContext theContext) throws Exception {
+		public void handlerAdded(ChannelHandlerContext theContext) {
 //			CCLog.info("handlerAdded");
 		}
 
 		@Override
-		public void handlerRemoved(ChannelHandlerContext theContext) throws Exception {
+		public void handlerRemoved(ChannelHandlerContext theContext) {
 //			CCLog.info("handlerRemoved");
 		}
 
 		@Override
-		public void channelActive(ChannelHandlerContext theContext) throws Exception {
+		public void channelActive(ChannelHandlerContext theContext) {
 //			CCLog.info("channelActive");
 		}
 
 		@Override
-		public void channelInactive(ChannelHandlerContext theContext) throws Exception {
+		public void channelInactive(ChannelHandlerContext theContext) {
 //			CCLog.info("channelInactive");
 		}
 
 		@Override
-		public void channelRegistered(ChannelHandlerContext theContext) throws Exception {
+		public void channelRegistered(ChannelHandlerContext theContext) {
 //			CCLog.info("channelRegistered:" + theContext.channel().remoteAddress());
 			_myConnectedChannels.add(theContext.channel());
 		}
 
 		@Override
-		public void channelUnregistered(ChannelHandlerContext theContext) throws Exception {
+		public void channelUnregistered(ChannelHandlerContext theContext) {
 //			CCLog.info("channelUnregistered:" + theContext.channel().remoteAddress());
 			_myConnectedChannels.remove(theContext.channel());
 		}
 
 		@Override
-		public void channelWritabilityChanged(ChannelHandlerContext theContext) throws Exception {
+		public void channelWritabilityChanged(ChannelHandlerContext theContext) {
 //			CCLog.info("channelWritabilityChanged");
 		}
 
 		@Override
-		public void userEventTriggered(ChannelHandlerContext theContext, Object arg1) throws Exception {
+		public void userEventTriggered(ChannelHandlerContext theContext, Object arg1) {
 //			CCLog.info("userEventTriggered");
 		}
 	}

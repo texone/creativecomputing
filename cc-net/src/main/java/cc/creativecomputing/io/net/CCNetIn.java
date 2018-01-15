@@ -239,7 +239,7 @@ public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType
 		return new java.text.SimpleDateFormat("HH:mm:ss.SSS").format(new java.util.Date());
 	}
 
-	protected void flipDecodeDispatch(SocketAddress sender) throws IOException {
+	protected void flipDecodeDispatch(SocketAddress sender) {
 		final MessageType myMessage;
 
 		try {

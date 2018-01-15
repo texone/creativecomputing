@@ -35,7 +35,7 @@ public interface CCMouseMotionListener{
 	 * @param theMouseEvent the related mouse event
 	 * @see #mouseDragged(CCMouseEvent)
 	 */
-	public void mouseDragged(final CCMouseEvent theMouseEvent);
+    void mouseDragged(final CCMouseEvent theMouseEvent);
 	
 	/**
      * Invoked when the mouse cursor has been moved onto a component
@@ -44,5 +44,5 @@ public interface CCMouseMotionListener{
 	 * @param theMouseEvent the related mouse event
      * @see #mouseMoved(CCMouseEvent)
      */
-	public void mouseMoved(final CCMouseEvent theMouseEvent);
+    void mouseMoved(final CCMouseEvent theMouseEvent);
 }

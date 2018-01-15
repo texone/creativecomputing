@@ -127,11 +127,8 @@ public class CCAABB {
 		if (theVector.y < _myMin.y || theVector.y > _myMax.y) {
 			return false;
 		}
-		if (theVector.z < _myMin.z || theVector.z > _myMax.z) {
-			return false;
-		}
-		return true;
-	}
+        return !(theVector.z < _myMin.z) && !(theVector.z > _myMax.z);
+    }
 
 	/**
 	 * Checks if the box intersects the passed in one.

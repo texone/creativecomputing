@@ -24,7 +24,7 @@ package cc.creativecomputing.controlui.timeline.view;
  *
  */
 public interface TimedContentView {
-	public int timeToViewX(double theTime);
+	int timeToViewX(double theTime);
 	
-	public double viewXToTime(int theViewX, boolean theGetPos);
+	double viewXToTime(int theViewX, boolean theGetPos);
 }

@@ -9,7 +9,7 @@ public enum GLTessGenPrimitiveSpacing {
 	
 	private int _myGLID;
 	
-	private GLTessGenPrimitiveSpacing(int theGLID){
+	GLTessGenPrimitiveSpacing(int theGLID){
 		_myGLID = theGLID;
 	}
 	

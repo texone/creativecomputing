@@ -37,7 +37,7 @@ public enum CCKleFormats {
 	private final CCKleFormat _myFormat;
 	private final boolean _mySavePosition;
 	
-	private CCKleFormats(CCKleFormat theFormat, boolean theSavePosition){
+	CCKleFormats(CCKleFormat theFormat, boolean theSavePosition){
 		_myFormat = theFormat;
 		_mySavePosition = theSavePosition;
 	}

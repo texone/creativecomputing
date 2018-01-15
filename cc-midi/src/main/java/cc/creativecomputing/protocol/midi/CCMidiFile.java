@@ -15,7 +15,7 @@ import javax.sound.midi.Sequence;
 
 public class CCMidiFile {
 	
-	public static enum CCMidiDivsion{
+	public enum CCMidiDivsion{
 		/**
 	     * The tempo-based timing type, for which the resolution is expressed in pulses (ticks) per quarter note.
 	     */
@@ -39,7 +39,7 @@ public class CCMidiFile {
 	    
 	    private float _myDivision;
 		
-		private CCMidiDivsion(float theDivision){
+		CCMidiDivsion(float theDivision){
 			_myDivision = theDivision;
 		}
 	}

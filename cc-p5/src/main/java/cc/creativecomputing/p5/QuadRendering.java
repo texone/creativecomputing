@@ -19,10 +19,10 @@ public class QuadRendering extends PApplet {
 		@CCProperty(name = "x", min = 0, max = 500)
 		private float _cX = random(0,500);
 		@CCProperty(name = "y", min = 0, max = 500)
-		private float _cY = random(0,500);;
-		@CCProperty(name = "width", min = 0, max = 200)
-		private float _cWidth = random(0,200);;
-		@CCProperty(name = "height", min = 0, max = 200)
+		private float _cY = random(0,500);
+        @CCProperty(name = "width", min = 0, max = 200)
+		private float _cWidth = random(0,200);
+        @CCProperty(name = "height", min = 0, max = 200)
 		private float _cHeight = random(0,200);
 		@CCProperty(name = "color")
 		private CCColor _cColor = new CCColor();

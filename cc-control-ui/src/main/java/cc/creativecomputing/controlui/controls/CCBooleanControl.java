@@ -20,7 +20,7 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 		super(theHandle, theControlComponent);
 		
 		addListener(theValue ->{
-			_myIsSelected = (Boolean)theValue;
+			_myIsSelected = theValue;
 			_myTriggerEvent = false;
 			_myButton.setSelected(_myHandle.value());
 			_myTriggerEvent = true;

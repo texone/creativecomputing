@@ -10,7 +10,7 @@ public enum GLAccesMode {
 
 	private int glID;
 	
-	private GLAccesMode(int theGLID){
+	GLAccesMode(int theGLID){
 		glID = theGLID;
 	}
 	

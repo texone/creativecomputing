@@ -515,9 +515,7 @@ public class TrackData extends TreeSet<ControlPoint>{
 	public boolean isLeaf(ControlPoint thePoint) {
 		if (contains(thePoint)) {
 			ControlPoint myTreeLeaf = floor(thePoint);
-			if (myTreeLeaf.equals(thePoint)) {
-				return true;
-			}
+            return myTreeLeaf.equals(thePoint);
 		}
 		return false;
 	}

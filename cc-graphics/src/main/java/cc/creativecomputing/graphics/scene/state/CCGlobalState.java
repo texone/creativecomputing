@@ -4,7 +4,7 @@ import cc.creativecomputing.gl4.GLGraphics;
 
 public abstract class CCGlobalState {
 	
-	public static enum CCGlobalStateType {
+	public enum CCGlobalStateType {
 		ALPHA, CULL, SHADE, WIREFRAME, DEPTH_BUFFER, OFFSET, STENCIL
 	}
 	

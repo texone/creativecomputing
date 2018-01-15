@@ -32,7 +32,7 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
         //Create the label.
 		addListener(theValue -> {
 			_myTriggerEvent = false;
-			_myValue = ((Number)theValue).doubleValue();
+			_myValue = theValue.doubleValue();
 			updateSlider(_myValue);
 			_myValueField.setText(theHandle.valueString());
 			_myTriggerEvent = true;

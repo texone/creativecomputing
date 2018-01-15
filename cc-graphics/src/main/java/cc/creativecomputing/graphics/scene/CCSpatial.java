@@ -31,7 +31,7 @@ public abstract class CCSpatial extends CCControlledObject{
 	protected CCVisualEffect _myEffect = null;
 	
 	// Culling parameters.
-    public static enum CCCullingMode
+    public enum CCCullingMode
     {
         // Determine visibility state by comparing the world bounding volume
         // to culling planes.
@@ -46,7 +46,7 @@ public abstract class CCSpatial extends CCControlledObject{
         // a Node is encountered, the bNoCull parameter is set to 'true' in
         // the recursive chain GetVisibleSet/OnGetVisibleSet.
         CULL_NEVER
-    };
+    }
 
     public CCCullingMode Culling;
 	

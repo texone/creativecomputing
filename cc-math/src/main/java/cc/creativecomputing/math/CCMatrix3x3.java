@@ -1588,11 +1588,8 @@ public class CCMatrix3x3 implements Cloneable, Externalizable{
             return false;
         } else if (Double.isNaN(matrix._m21) || Double.isInfinite(matrix._m21)) {
             return false;
-        } else if (Double.isNaN(matrix._m22) || Double.isInfinite(matrix._m22)) {
-            return false;
-        }
+        } else return !Double.isNaN(matrix._m22) && !Double.isInfinite(matrix._m22);
 
-        return true;
     }
 
     /**
@@ -1615,11 +1612,8 @@ public class CCMatrix3x3 implements Cloneable, Externalizable{
             return false;
         } else if (CCMath.abs(_m20 * _m10 + _m21 * _m11 + _m22 * _m12 - 0.0) > CCMath.ZERO_TOLERANCE) {
             return false;
-        } else if (CCMath.abs(_m20 * _m20 + _m21 * _m21 + _m22 * _m22 - 1.0) > CCMath.ZERO_TOLERANCE) {
-            return false;
-        }
+        } else return !(CCMath.abs(_m20 * _m20 + _m21 * _m21 + _m22 * _m22 - 1.0) > CCMath.ZERO_TOLERANCE);
 
-        return true;
     }
 
     /**
@@ -1744,11 +1738,8 @@ public class CCMatrix3x3 implements Cloneable, Externalizable{
             return false;
         } else if (_m21 != comp._m21) {
             return false;
-        } else if (_m22 != comp._m22) {
-            return false;
-        }
+        } else return !(_m22 != comp._m22);
 
-        return true;
     }
 
     // /////////////////
@@ -1773,7 +1764,7 @@ public class CCMatrix3x3 implements Cloneable, Externalizable{
      * @throws ClassNotFoundException
      */
     @Override
-    public void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(final ObjectInput in) throws IOException {
         _m00 = in.readDouble();
         _m01 = in.readDouble();
         _m02 = in.readDouble();

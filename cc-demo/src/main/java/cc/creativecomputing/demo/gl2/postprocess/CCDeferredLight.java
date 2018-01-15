@@ -10,8 +10,8 @@ public class CCDeferredLight {
 	protected CCVector3 mPosition = new CCVector3();
 	protected float mIntensity = 1f;
 	protected float mRadius = 1f;
-	protected float mVolume = 10f;;
-	protected int mPad0 = 0;
+	protected float mVolume = 10f;
+    protected int mPad0 = 0;
 	protected int mPad1 = 0;
 
 	public CCDeferredLight() {

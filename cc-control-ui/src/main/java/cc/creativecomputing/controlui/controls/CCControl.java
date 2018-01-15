@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 
 public interface CCControl {
 	
-	public void addToComponent(JPanel thePanel, int theY, int theDepth);
+	void addToComponent(JPanel thePanel, int theY, int theDepth);
 	
-	public void dispose();
+	void dispose();
 }

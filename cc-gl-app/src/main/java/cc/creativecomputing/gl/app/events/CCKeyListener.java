@@ -38,7 +38,7 @@ public interface CCKeyListener {
 	 * @see #keyReleased(CCKeyEvent)
 	 * @see #keyTyped(CCKeyEvent)
 	 */
-	public void keyPressed(final CCKeyEvent theKeyEvent);
+    void keyPressed(final CCKeyEvent theKeyEvent);
 	
 	/**
 	 * The keyReleased() function is called once every time a key is released. 
@@ -50,7 +50,7 @@ public interface CCKeyListener {
 	 * @see #keyTyped(CCKeyEvent)
 	 * 
 	 */
-	public void keyReleased(final CCKeyEvent theKeyEvent);
+    void keyReleased(final CCKeyEvent theKeyEvent);
 	
 	/**
 	 * The keyTyped() function is called once every time a key is pressed, 
@@ -64,5 +64,5 @@ public interface CCKeyListener {
 	 * @see #keyPressed(CCKeyEvent)
 	 * @see #keyReleased(CCKeyEvent)
 	 */
-	public void keyTyped(final CCKeyEvent theKeyEvent);
+    void keyTyped(final CCKeyEvent theKeyEvent);
 }

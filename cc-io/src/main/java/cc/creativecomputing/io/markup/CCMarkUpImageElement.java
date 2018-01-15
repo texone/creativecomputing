@@ -47,13 +47,8 @@ public class CCMarkUpImageElement extends CCMarkUpElement {
             return false;
         }
         if (_myText == null) {
-            if (other._myText != null) {
-                return false;
-            }
-        } else if (!_myText.equals(other._myText)) {
-            return false;
-        }
-        return true;
+            return other._myText == null;
+        } else return _myText.equals(other._myText);
     }
 
     @Override

@@ -72,9 +72,7 @@ public abstract class CCMarkUpElement implements Iterable<CCMarkUpElement>{
             return false;
         }
         if (_myParent == null) {
-            if (other._myParent != null) {
-                return false;
-            }
+            return other._myParent == null;
         }
         return true;
     }

@@ -25,7 +25,7 @@ import cc.creativecomputing.core.CCProperty;
  */
 public class CCPlane implements Cloneable, Externalizable {
 
-	public static enum Side {
+	public enum Side {
 		/**
 		 * On the side of the plane opposite of the plane's normal vector.
 		 */
@@ -39,8 +39,8 @@ public class CCPlane implements Cloneable, Externalizable {
 		/**
 		 * Not on either side - in other words, on the plane itself.
 		 */
-		Neither;
-	}
+		Neither
+    }
 
 	private static final long serialVersionUID = 1L;
 

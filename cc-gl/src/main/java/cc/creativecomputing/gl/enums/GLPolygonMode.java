@@ -9,7 +9,7 @@ public enum GLPolygonMode {
 	
 	private int _myGLID;
 	
-	private GLPolygonMode(int theGLID){
+	GLPolygonMode(int theGLID){
 		_myGLID = theGLID;
 	}
 	

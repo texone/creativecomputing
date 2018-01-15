@@ -34,7 +34,7 @@ import cc.creativecomputing.protocol.serial.CCSerialModule;
  *
  */
 public class CCHPGL {
-	boolean DEBUG = false;
+	boolean DEBUG = true;
 
 	public double DEFAULT_FONT_HEIGHT = 0.2;
 	public double DEFAULT_LABEL_DIRECTION = 0; // right
@@ -78,14 +78,14 @@ public class CCHPGL {
 		return _mySerial.active();
 	}
 	
-	public static enum CCHPPaperFormat{
+	public enum CCHPPaperFormat{
 		A4,
 		A3,
 		A,
 		B
 	}
 	
-	public static enum CCHPGLCommand{
+	public enum CCHPGLCommand{
 		/**
 		 *  Input Scaling Point
 		 */
@@ -245,7 +245,11 @@ public class CCHPGL {
 		/**
 		 * User-defined Character
 		 */
-		UC 
+		UC , 
+		/**
+		 * Velocity Select
+		 */
+		VS 
 	}
 
 	// COMMUNICATION
@@ -272,7 +276,7 @@ public class CCHPGL {
 	
 	private void write(CCHPGLCommand theCommand, Object...theParameters){
 		StringBuffer myCommand = new StringBuffer();
-		myCommand.append(myCommand);
+		myCommand.append(theCommand);
 		for(Object myParameter:theParameters){
 			myCommand.append(" ");
 			myCommand.append(myParameter);
@@ -791,7 +795,7 @@ public class CCHPGL {
 	 * @author christianr
 	 *
 	 */
-	public static enum CCHPGLFillType{
+	public enum CCHPGLFillType{
 		/**
 		 * Painting out interactive at space specified by PT command (FT command interval and angle are ignored)
 		 */
@@ -811,7 +815,7 @@ public class CCHPGL {
 		
 		private int id;
 		
-		private CCHPGLFillType(int theID){
+		CCHPGLFillType(int theID){
 			id = theID;
 		}
 	}
@@ -833,7 +837,7 @@ public class CCHPGL {
 		write(CCHPGLCommand.FT, theFillType.id, theFillInterval, theFillAngle);
 	}
 	
-	public static enum CCHPGLLinePattern{
+	public enum CCHPGLLinePattern{
 		/**
 		 * Point is plotted at specifying point
 		 */
@@ -865,7 +869,7 @@ public class CCHPGL {
 		
 		private int id;
 		
-		private CCHPGLLinePattern(int theID){
+		CCHPGLLinePattern(int theID){
 			id = theID;
 		}
 	}
@@ -930,6 +934,10 @@ public class CCHPGL {
 	 */
 	public void selectPen(int thePen){
 		write(CCHPGLCommand.SP, thePen);
+	}
+	
+	public void velocitySelect(int _cSpeed) {
+		write(CCHPGLCommand.VS, _cSpeed);
 	}
 	
 	/**
@@ -1126,6 +1134,7 @@ public class CCHPGL {
 		// _this.line(theX0 / 10, theY0 / 10, theX1 / 10, theY1 / 10);
 		write("PU" + (int) theX0 + "," + (int) theY0 + ";");
 		write("PD" + (int) theX1 + "," + (int) theY1 + ";");
+		write("PU" + (int) theX1 + "," + (int) theY1 + ";");
 	}
 
 	public void bezier(int theX0, int theY0, int theX1, int theY1, int theX2, int theY2, int theX3, int theY3) {
@@ -1143,5 +1152,7 @@ public class CCHPGL {
 	public void bezierDetail(double _detail) {
 		bezierDetailLevel = _detail;
 	}
+
+	
 
 }

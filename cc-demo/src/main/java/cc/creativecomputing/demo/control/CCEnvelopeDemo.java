@@ -3,7 +3,6 @@ package cc.creativecomputing.demo.control;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.code.CCCompileObject;
-import cc.creativecomputing.control.code.CCRealtimeCompile;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
@@ -20,8 +19,8 @@ import cc.creativecomputing.math.spline.CCSpline;
 
 public class CCEnvelopeDemo extends CCGL2Adapter{
 	
-	public static interface CCRealtimeGraph extends CCCompileObject{
-		public void draw(CCGraphics g);
+	public interface CCRealtimeGraph extends CCCompileObject{
+		void draw(CCGraphics g);
 	}
 	
 	@CCProperty(name = "envelope")
@@ -48,9 +47,6 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 	@CCProperty(name = "draw mode")
 	private CCDrawMode _myDrawMode = CCDrawMode.POINTS;
 	
-	@CCProperty(name = "real time visual")
-	private CCRealtimeCompile<CCRealtimeGraph> _myRealTimeGraph;
-	
 	@CCProperty(name = "texture asset")
 	private CCTexture2DAsset _myAsset;
 	
@@ -70,8 +66,6 @@ public class CCEnvelopeDemo extends CCGL2Adapter{
 	
 	@Override
 	public void start(CCAnimator theAnimator) {
-		_myRealTimeGraph = new CCRealtimeCompile<CCRealtimeGraph>("cc.creativecomputing.control.CCRealtimeGraphImp", CCRealtimeGraph.class);
-		_myRealTimeGraph.createObject();
 	}
 	
 	@Override

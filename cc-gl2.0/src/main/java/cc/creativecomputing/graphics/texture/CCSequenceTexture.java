@@ -145,7 +145,7 @@ public class CCSequenceTexture extends CCTexture2D implements CCAnimatorListener
 	}
 
 	public double progress() {
-		return time() / (double) duration();
+		return time() / duration();
 	}
 
 	public void rate(double theRate) {

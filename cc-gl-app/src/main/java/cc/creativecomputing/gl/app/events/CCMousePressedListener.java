@@ -42,6 +42,6 @@ public interface CCMousePressedListener{
 	 * @see #mouseEntered(CCMouseEvent)
 	 * @see #mouseExited(CCMouseEvent)
 	 */
-	public void mousePressed(final CCMouseEvent theEvent);
+    void mousePressed(final CCMouseEvent theEvent);
 	
 }

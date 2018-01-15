@@ -29,7 +29,7 @@ public enum GLProgramResourceProperty {
 	
 	private int _myGLID;
 	
-	private GLProgramResourceProperty(int theGLID){
+	GLProgramResourceProperty(int theGLID){
 		_myGLID = theGLID;
 	}
 	

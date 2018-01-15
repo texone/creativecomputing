@@ -9,7 +9,7 @@ public enum GLFace {
 	
 	private int _myGLID;
 	
-	private GLFace(int theGLID){
+	GLFace(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -124,7 +124,7 @@ public enum CCModbusFunctionCode {
 
 	public int id;
 
-	private CCModbusFunctionCode(int theID) {
+	CCModbusFunctionCode(int theID) {
 		id = theID;
 	}
 	

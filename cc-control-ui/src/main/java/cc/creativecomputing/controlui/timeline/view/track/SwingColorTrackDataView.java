@@ -32,7 +32,7 @@ public class SwingColorTrackDataView extends SwingBlendableTrackDataView<CCColor
 		Point2D p1 = _myController.curveToViewSpace(myFirstPoint);
 		Point2D p2 = _myController.curveToViewSpace(mySecondPoint);
 
-		CCColorTrackController myColorTrackController = (CCColorTrackController) _myController;
+		CCColorTrackController myColorTrackController = _myController;
 
 		for (double x = p1.getX(); x <= p2.getX(); x++) {
 			double myTime = _myController.viewXToTime((int) x, true);

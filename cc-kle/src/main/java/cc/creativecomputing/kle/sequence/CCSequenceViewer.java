@@ -31,11 +31,11 @@ public class CCSequenceViewer {
 	private CCShaderBuffer _myMotionData;
 	private CCGraphics g;
 	
-	public static enum CCSequenceDrawMode{
+	public enum CCSequenceDrawMode{
 		POSITION, SPEED, ACCELERATION, JERK
 	}
 	
-	public static enum CCSequenceDrawStyle{
+	public enum CCSequenceDrawStyle{
 		IMAGE, LINE, LINES, SIMULATION, SIMULATIONS
 	}
 	

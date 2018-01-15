@@ -30,7 +30,7 @@ public enum CCArtNetNodeReportCode {
     public final String id;
     public final String description;
 
-    private CCArtNetNodeReportCode(String theId, String theDesc) {
+    CCArtNetNodeReportCode(String theId, String theDesc) {
         id = theId;
         description = theDesc;
     }

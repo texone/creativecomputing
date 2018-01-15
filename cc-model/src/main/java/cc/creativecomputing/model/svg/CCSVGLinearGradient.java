@@ -31,10 +31,10 @@ class CCSVGLinearGradient extends CCSVGGradient {
 			Point2D t1 = transform.transform(new Point2D.Double(x1, y1), null);
 			Point2D t2 = transform.transform(new Point2D.Double(x2, y2), null);
 
-			this.x1 = (double) t1.getX();
-			this.y1 = (double) t1.getY();
-			this.x2 = (double) t2.getX();
-			this.y2 = (double) t2.getY();
+			this.x1 = t1.getX();
+			this.y1 = t1.getY();
+			this.x2 = t2.getX();
+			this.y2 = t2.getY();
 		}
 	}
 	

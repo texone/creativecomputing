@@ -53,7 +53,7 @@ public interface DigitalOut {
    *
    * @return true if set, false otherwise.
    */
-  public boolean isSet();
+  boolean isSet();
 
   /**
    * Sets the state of this <tt>DigitalOut</tt>.
@@ -61,6 +61,6 @@ public interface DigitalOut {
    *
    * @param b true if to be set, false otherwise.
    */
-  public void set(boolean b);
+  void set(boolean b);
 
 }//DigitalOut

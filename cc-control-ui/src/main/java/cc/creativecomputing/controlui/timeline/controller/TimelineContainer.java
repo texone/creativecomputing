@@ -18,13 +18,13 @@ import cc.creativecomputing.core.events.CCListenerManager;
 
 public class TimelineContainer implements FileManagerListener, HistoryListener{
 	
-	public static interface TimelineChangeListener{
+	public interface TimelineChangeListener{
 		
-		public void resetTimelines();
+		void resetTimelines();
 		
-		public void changeTimeline(TimelineController theController);
+		void changeTimeline(TimelineController theController);
 		
-		public void addTimeline(String theTimeline);
+		void addTimeline(String theTimeline);
 	}
 	
 	protected final Map<String,TimelineController> _myTimelineController;

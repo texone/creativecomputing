@@ -8,7 +8,7 @@ public enum GLSyncStatus {
 	
 	private int _myGLID;
 	
-	private GLSyncStatus(int theGLID){
+	GLSyncStatus(int theGLID){
 		_myGLID = theGLID;
 	}
 	

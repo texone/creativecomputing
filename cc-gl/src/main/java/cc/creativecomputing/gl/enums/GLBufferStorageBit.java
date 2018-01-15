@@ -8,7 +8,7 @@ public enum GLBufferStorageBit {
 	
 	private int _myGLID;
 	
-	private GLBufferStorageBit(int theGLID){
+	GLBufferStorageBit(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -32,5 +32,5 @@ public interface CCSizeListener{
 	 * @param theHeight the new height of the application window
 	 * @shortdesc Called when the application window is resized.
 	 */
-	public void size(final int theWidth, final int theHeight);
+    void size(final int theWidth, final int theHeight);
 }

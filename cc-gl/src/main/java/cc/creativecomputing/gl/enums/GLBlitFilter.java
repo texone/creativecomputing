@@ -8,7 +8,7 @@ public enum GLBlitFilter {
 	
 	private int _myGLID;
 	
-	private GLBlitFilter(int theGLID){
+	GLBlitFilter(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -48,7 +48,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 		JOINT, NODE
 	}
 	
-	public static enum CCColladaSceneNodeInstanceType{
+	public enum CCColladaSceneNodeInstanceType{
 		CAMERA,
 		CONTROLLER,
 		GEOMETRY,

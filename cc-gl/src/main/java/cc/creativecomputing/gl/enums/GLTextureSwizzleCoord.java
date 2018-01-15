@@ -11,7 +11,7 @@ public enum GLTextureSwizzleCoord {
 	
 	private int _myGLID;
 	
-	private GLTextureSwizzleCoord(int theGLID){
+	GLTextureSwizzleCoord(int theGLID){
 		_myGLID = theGLID;
 	}
 	

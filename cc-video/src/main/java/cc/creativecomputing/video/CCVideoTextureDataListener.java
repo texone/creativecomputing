@@ -18,6 +18,6 @@ import cc.creativecomputing.image.CCImage;
  *
  */
 public interface CCVideoTextureDataListener{
-	public void onInit(final CCImage theData);
-	public void onUpdate(final CCImage theData);
+	void onInit(final CCImage theData);
+	void onUpdate(final CCImage theData);
 }

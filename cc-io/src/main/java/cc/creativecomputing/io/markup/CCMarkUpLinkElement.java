@@ -42,14 +42,9 @@ public class CCMarkUpLinkElement extends CCMarkUpElement {
 		}
 		CCMarkUpLinkElement other = (CCMarkUpLinkElement) obj;
 		if (_myTarget == null) {
-			if (other._myTarget != null) {
-				return false;
-			}
-		} else if (!_myTarget.equals(other._myTarget)) {
-			return false;
-		}
-		return true;
-	}
+            return other._myTarget == null;
+		} else return _myTarget.equals(other._myTarget);
+    }
 	
 	@Override
 	public String toString() {

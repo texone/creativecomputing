@@ -292,7 +292,7 @@ public class GLShaderProgram{
 		return _myID;
 	}
 	
-	public static enum GLProgramParameter {
+	public enum GLProgramParameter {
 		/**
 		 * returns GL_TRUE if program is currently flagged for deletion, and GL_FALSE otherwise.
 		 */
@@ -378,7 +378,7 @@ public class GLShaderProgram{
 		
 		private int _myGLID;
 		
-		private GLProgramParameter(int theGLID){
+		GLProgramParameter(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -480,13 +480,13 @@ public class GLShaderProgram{
 	 */
 //	COMPUTE_WORK_GROUP_SIZE(GL4.GL_COMPUTE_WORK_GROUP_SIZE),
 	
-	public static enum GLTransformFeedbackMode {
+	public enum GLTransformFeedbackMode {
 		INTERLEAVED_ATTRIBS(GL4.GL_INTERLEAVED_ATTRIBS),
 		SEPARATE_ATTRIBS(GL4.GL_SEPARATE_ATTRIBS);
 		
 		private int _myGLID;
 		
-		private GLTransformFeedbackMode(int theGLID){
+		GLTransformFeedbackMode(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -581,7 +581,7 @@ public class GLShaderProgram{
 		return _myAttributes;
 	}
 	
-	public static enum GLAttributeType{
+	public enum GLAttributeType{
 		FLOAT(GL4.GL_FLOAT), 
 		FLOAT_VEC2(GL4.GL_FLOAT_VEC2), 
 		FLOAT_VEC3(GL4.GL_FLOAT_VEC3), 
@@ -619,7 +619,7 @@ public class GLShaderProgram{
 		
 		private int _myGLID;
 		
-		private GLAttributeType(int theGLID){
+		GLAttributeType(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -771,7 +771,7 @@ public class GLShaderProgram{
 		theParameters.apply(this);
 	}
 	
-	public static enum GLUniformType{
+	public enum GLUniformType{
 		FLOAT(GL4.GL_FLOAT), 
 		FLOAT_VEC2(GL4.GL_FLOAT_VEC2), 
 		FLOAT_VEC3(GL4.GL_FLOAT_VEC3), 
@@ -892,7 +892,7 @@ public class GLShaderProgram{
 		
 		private int _myGLID;
 		
-		private GLUniformType(int theGLID){
+		GLUniformType(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -1084,7 +1084,7 @@ public class GLShaderProgram{
 	/**
 	 * Specifies the parameter of the shader program stage to query. 
 	 */
-	public static enum GLProgramStageQuery{
+	public enum GLProgramStageQuery{
 		/**
 		 * number of active subroutine variables in the stage
 		 */
@@ -1108,7 +1108,7 @@ public class GLShaderProgram{
 		
 		private int _myGLID;
 		
-		private GLProgramStageQuery(int theGLID){
+		GLProgramStageQuery(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -1381,7 +1381,7 @@ public class GLShaderProgram{
 	}
 	
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() {
 		GL4 gl = GLGraphics.currentGL();
 		gl.glDeleteProgram(_myID);
 	}

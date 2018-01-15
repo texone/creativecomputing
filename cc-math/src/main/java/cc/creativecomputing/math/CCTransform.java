@@ -648,7 +648,7 @@ public class CCTransform implements Cloneable, Externalizable {
 			_myIsRotationMatrix = true;
 			_myIsUniformScale = true;
 		} else {
-			_myIsRotationMatrix = rotationMatrixGuaranteed ? true : _myMatrix.isOrthonormal();
+			_myIsRotationMatrix = rotationMatrixGuaranteed || _myMatrix.isOrthonormal();
 			_myIsUniformScale = _myIsRotationMatrix && _myScale.x == _myScale.y && _myScale.y == _myScale.z;
 		}
 	}
@@ -811,13 +811,9 @@ public class CCTransform implements Cloneable, Externalizable {
 		if (transform == null) {
 			return false;
 		}
-		if (!CCVector3.isValid(transform.scale()) || !CCVector3.isValid(transform.translation())
-				|| !CCMatrix3x3.isValid(transform.getMatrix())) {
-			return false;
-		}
-
-		return true;
-	}
+        return CCVector3.isValid(transform.scale()) && CCVector3.isValid(transform.translation())
+                && CCMatrix3x3.isValid(transform.getMatrix());
+    }
 
 	/**
 	 * @return the string representation of this triangle.

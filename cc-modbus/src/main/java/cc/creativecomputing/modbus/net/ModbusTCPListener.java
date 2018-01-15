@@ -207,8 +207,8 @@ public class ModbusTCPListener implements ModbusListener {
 				} else {
 					incoming.close();
 				}
-			};
-		} catch (SocketException iex) {
+			}
+        } catch (SocketException iex) {
 			if (! m_Listening) {
 				return;
 			} else {

@@ -47,8 +47,8 @@ public class CCKleEffectables extends ArrayList<CCKleEffectable>{
 		for(int c = 0; c < theColumns; c++){
 			for(int r = 0; r < theRows; r++){
 				CCKleEffectable myElement = new CCKleEffectable(i, new CCLightRGBSetup(i * 3, i * 3 + 1, i * 3 + 2));
-				myElement.column(c);;
-				myElement.row(r);
+				myElement.column(c);
+                myElement.row(r);
 				myResult.add(myElement);
 				i++;
 			}

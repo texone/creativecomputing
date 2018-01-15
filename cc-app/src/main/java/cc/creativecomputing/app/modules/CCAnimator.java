@@ -16,6 +16,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.events.CCListenerManager;
 
 // http://www.java-gaming.org/index.php?topic=24220.0
 
@@ -24,12 +25,23 @@ import cc.creativecomputing.core.CCProperty;
  */
 public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 	
+	public static interface CCAnimatorStartListener{
+		public void start(CCAnimator theAnimator);
+	}
+	
+	public static interface CCAnimatorStopListener{
+		public void stop(CCAnimator theAnimator);
+	}
+	public static interface CCAnimatorUpdateListener{
+		public void update(CCAnimator theAnimator);
+	}
+	
 	/**
 	 * Timers in java can 
 	 * @author christianr
 	 *
 	 */
-	public static enum CCAnimationMode{
+	public enum CCAnimationMode{
 		FRAMERATE_PERFORMANT,
 		FRAMERATE_PRECISE,
 		AS_FAST_AS_POSSIBLE,
@@ -41,7 +53,7 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 	 * @author christianr
 	 *
 	 */
-	public static enum CCExceptionHandling{
+	public enum CCExceptionHandling{
 		/**
 		 * Causes the Animator to ignore exceptions produced while animating
 		 */
@@ -84,6 +96,12 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 	private volatile boolean _myShouldStop;
 	
 	 Scanner scanner = new Scanner(new InputStreamReader(System.in));
+	 
+	 protected final CCListenerManager<CCAnimatorStartListener> _myStartListeners = CCListenerManager.create(CCAnimatorStartListener.class);
+	 
+	 protected final CCListenerManager<CCAnimatorStopListener> _myStopListeners = CCListenerManager.create(CCAnimatorStopListener.class);
+	 
+	 protected final CCListenerManager<CCAnimatorUpdateListener> _myUpdateListeners = CCListenerManager.create(CCAnimatorUpdateListener.class);
 
 	/** 
 	 * Creates a new, empty Animator. 
@@ -94,6 +112,18 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 	
 	public CCAnimator(){
 		this("animator");
+	}
+	
+	public CCListenerManager<CCAnimatorStartListener> startEvents(){
+		return _myStartListeners;
+	}
+	
+	public CCListenerManager<CCAnimatorStopListener> stopEvents(){
+		return _myStopListeners;
+	}
+	
+	public CCListenerManager<CCAnimatorUpdateListener> updateEvents(){
+		return _myUpdateListeners;
 	}
 	
 	@CCProperty(name = "fix update time")
@@ -112,7 +142,7 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 	private double _myDeltaVariation = 0;
 	private double _myTimeSinceStart = 0;
 	
-	private void calculateDeltaTime(){
+	public void calculateDeltaTime(){
 		if(fixUpdateTime){
 			_myFrameRateLastNanos = System.nanoTime();
 			_myDeltatime =  fixedUpdateTime;
@@ -133,7 +163,7 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 		if (_myDeltaTimeNanos == 0)return;
 		
 		_myDeltaVariation = _myDeltatime;
-		_myDeltatime = (double)(_myDeltaTimeNanos / 1e9);
+		_myDeltatime = _myDeltaTimeNanos / 1e9;
 		_myDeltaVariation -= _myDeltatime;
 		_myTimeSinceStart += _myDeltatime;
 		_myFrameRate = 1f / _myDeltatime;
@@ -143,6 +173,7 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 		calculateDeltaTime();
 		_myFrameCount++;
 		_myListeners.proxy().update(this);
+		_myUpdateListeners.proxy().update(this);
 	}
 	
 //	public String appTime(){
@@ -242,6 +273,7 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 		}
 		if (!_myMainLoop.isAlive()) {
 			_myListeners.proxy().start(this);
+			_myStartListeners.proxy().start(this);
 			_myMainLoop.start();
 		}
 	}
@@ -279,6 +311,7 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 			}
 		}
 		_myListeners.proxy().stop(this);
+		_myStopListeners.proxy().stop(this);
 	}
 
 	/**

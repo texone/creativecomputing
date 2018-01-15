@@ -31,10 +31,10 @@ import cc.creativecomputing.math.CCMath;
 
 public class CCScreenCaptureController extends CCGL2Adapter{
 	
-	public static interface CCSequenceRecorderListener{
-		public void start();
+	public interface CCSequenceRecorderListener{
+		void start();
 		
-		public void end();
+		void end();
 	}
 	
 	private CCListenerManager<CCSequenceRecorderListener> _myRecordListeners = CCListenerManager.create(CCSequenceRecorderListener.class);

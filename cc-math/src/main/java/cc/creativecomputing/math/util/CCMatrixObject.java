@@ -1,9 +1,9 @@
 package cc.creativecomputing.math.util;
 
 public interface CCMatrixObject<Type extends CCMatrixObject<Type>>{
-	public Type create(double[] theData);
+	Type create(double[] theData);
 	
-	public double[] data();
+	double[] data();
 	
-	public int dataSize();
+	int dataSize();
 }

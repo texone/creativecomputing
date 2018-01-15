@@ -507,7 +507,7 @@ public class CCSoundIO {
 			stream.close();
 			if (baseFileFormat instanceof TAudioFileFormat) {
 				TAudioFileFormat fileFormat = (TAudioFileFormat) baseFileFormat;
-				props = (Map<String, Object>) fileFormat.properties();
+				props = fileFormat.properties();
 				if (props.size() == 0) {
 					throw new CCSoundException("No file properties available for " + thePath + ".");
 				} else {

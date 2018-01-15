@@ -54,7 +54,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @throws IllegalAddressException
 	 *             if the reference is invalid.
 	 */
-	public void setDigitalOut(int ref, DigitalOut out)
+    void setDigitalOut(int ref, DigitalOut out)
 			throws IllegalAddressException;
 
 	/**
@@ -63,7 +63,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param out
 	 *            the <tt>DigitalOut</tt> instance to be added.
 	 */
-	public void addDigitalOut(DigitalOut out);
+    void addDigitalOut(DigitalOut out);
 
 	/**
 	 * Adds a new <tt>DigitalOut</tt> instance at the given reference.
@@ -71,7 +71,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param ref - the reference for the instance.
 	 * @param out - the <tt>DigitalOut</tt> instance to be added.
 	 */
-	public void addDigitalOut(int ref, DigitalOut out);
+    void addDigitalOut(int ref, DigitalOut out);
 
 	/**
 	 * Removes a given <tt>DigitalOut</tt> instance.
@@ -79,7 +79,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param out
 	 *            the <tt>DigitalOut</tt> instance to be removed.
 	 */
-	public void removeDigitalOut(DigitalOut out);
+    void removeDigitalOut(DigitalOut out);
 
 	/**
 	 * Sets a new <tt>DigitalIn</tt> instance at the given reference.
@@ -92,7 +92,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @throws IllegalAddressException
 	 *             if the reference is invalid.
 	 */
-	public void setDigitalIn(int ref, DigitalIn di)
+    void setDigitalIn(int ref, DigitalIn di)
 			throws IllegalAddressException;
 
 	/**
@@ -101,7 +101,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param di
 	 *            the <tt>DigitalIn</tt> instance to be added.
 	 */
-	public void addDigitalIn(DigitalIn di);
+    void addDigitalIn(DigitalIn di);
 
 	/**
 	 * Adds a new <tt>DigitalIn</tt> instance at the given reference, possibly
@@ -111,7 +111,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param di
 	 *            the <tt>DigitalIn</tt> instance to be added.
 	 */
-	public void addDigitalIn(int ref, DigitalIn di);
+    void addDigitalIn(int ref, DigitalIn di);
 
 	/**
 	 * Removes a given <tt>DigitalIn</tt> instance.
@@ -119,7 +119,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param di
 	 *            the <tt>DigitalIn</tt> instance to be removed.
 	 */
-	public void removeDigitalIn(DigitalIn di);
+    void removeDigitalIn(DigitalIn di);
 
 	/**
 	 * Sets a new <tt>InputRegister</tt> instance at the given reference.
@@ -132,7 +132,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @throws IllegalAddressException
 	 *             if the reference is invalid.
 	 */
-	public void setInputRegister(int ref, InputRegister reg)
+    void setInputRegister(int ref, InputRegister reg)
 			throws IllegalAddressException;
 
 	/**
@@ -141,7 +141,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>InputRegister</tt> instance to be added.
 	 */
-	public void addInputRegister(InputRegister reg);
+    void addInputRegister(InputRegister reg);
 
 	/**
 	 * Adds a new <tt>InputRegister</tt> instance, possibly
@@ -151,7 +151,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>InputRegister</tt> instance to be added.
 	 */
-	public void addInputRegister(int ref, InputRegister reg);
+    void addInputRegister(int ref, InputRegister reg);
 
 	/**
 	 * Removes a given <tt>InputRegister</tt> instance.
@@ -159,7 +159,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>InputRegister</tt> instance to be removed.
 	 */
-	public void removeInputRegister(InputRegister reg);
+    void removeInputRegister(InputRegister reg);
 
 	/**
 	 * Sets a new <tt>Register</tt> instance at the given reference.
@@ -172,7 +172,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @throws IllegalAddressException
 	 *             if the reference is invalid.
 	 */
-	public void setRegister(int ref, Register reg)
+    void setRegister(int ref, Register reg)
 			throws IllegalAddressException;
 
 	/**
@@ -181,7 +181,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>Register</tt> instance to be added.
 	 */
-	public void addRegister(Register reg);
+    void addRegister(Register reg);
 
 	/**
 	 * Adds a new <tt>Register</tt> instance, possibly
@@ -191,7 +191,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>Register</tt> instance to be added.
 	 */
-	public void addRegister(int ref, Register reg);
+    void addRegister(int ref, Register reg);
 
 	/**
 	 * Removes a given <tt>Register</tt> instance.
@@ -199,7 +199,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>Register</tt> instance to be removed.
 	 */
-	public void removeRegister(Register reg);
+    void removeRegister(Register reg);
 
 	/**
 	 * Sets a new <tt>File</tt> instance at the given reference.
@@ -212,7 +212,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @throws IllegalAddressException
 	 *             if the reference is invalid.
 	 */
-	public void setFile(int ref, File reg)
+    void setFile(int ref, File reg)
 			throws IllegalAddressException;
 
 	/**
@@ -221,7 +221,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>File</tt> instance to be added.
 	 */
-	public void addFile(File reg);
+    void addFile(File reg);
 
 	/**
 	 * Adds a new <tt>File</tt> instance, possibly
@@ -231,7 +231,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>File</tt> instance to be added.
 	 */
-	public void addFile(int ref, File reg);
+    void addFile(int ref, File reg);
 
 	/**
 	 * Removes a given <tt>File</tt> instance.
@@ -239,7 +239,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>File</tt> instance to be removed.
 	 */
-	public void removeFile(File reg);
+    void removeFile(File reg);
 
 	/**
 	 * Sets a new <tt>FIFO</tt> instance at the given reference.
@@ -252,7 +252,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @throws IllegalAddressException
 	 *             if the reference is invalid.
 	 */
-	public void setFIFO(int ref, FIFO reg)
+    void setFIFO(int ref, FIFO reg)
 			throws IllegalAddressException;
 
 	/**
@@ -261,7 +261,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>FIFO</tt> instance to be added.
 	 */
-	public void addFIFO(FIFO reg);
+    void addFIFO(FIFO reg);
 
 	/**
 	 * Adds a new <tt>FIFO</tt> instance, possibly
@@ -271,7 +271,7 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>FIFO</tt> instance to be added.
 	 */
-	public void addFIFO(int ref, FIFO reg);
+    void addFIFO(int ref, FIFO reg);
 
 	/**
 	 * Removes a given <tt>FIFO</tt> instance.
@@ -279,21 +279,21 @@ public interface ProcessImageImplementation extends ProcessImage {
 	 * @param reg
 	 *            the <tt>FIFO</tt> instance to be removed.
 	 */
-	public void removeFIFO(FIFO reg);
+    void removeFIFO(FIFO reg);
 
 	/**
 	 * Defines the set state (i.e. <b>true</b>) of a digital input or output.
 	 */
-	public static final byte DIG_TRUE = 1;
+    byte DIG_TRUE = 1;
 
 	/**
 	 * Defines the unset state (i.e. <b>false</b>) of a digital input or output.
 	 */
-	public static final byte DIG_FALSE = 0;
+    byte DIG_FALSE = 0;
 
 	/**
 	 * Defines the invalid (unset, neither true nor false) state of a digital
 	 * input or output.
 	 */
-	public static final byte DIG_INVALID = -1;
+    byte DIG_INVALID = -1;
 }

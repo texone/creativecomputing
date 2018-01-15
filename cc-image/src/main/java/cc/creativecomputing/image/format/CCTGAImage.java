@@ -185,7 +185,7 @@ public class CCTGAImage {
 		 * 
 		 * @return empty new string
 		 **/
-		public final String readLine() throws IOException {
+		public final String readLine() {
 			return new String();
 		}
 
@@ -194,7 +194,7 @@ public class CCTGAImage {
 		 * 
 		 * @return empty new string
 		 **/
-		public final String readUTF() throws IOException {
+		public final String readUTF() {
 			return new String();
 		}
 	}
@@ -395,13 +395,13 @@ public class CCTGAImage {
 			buf.put((byte) imageType);
 			buf.putShort((short) firstEntryIndex);
 			buf.putShort((short) colorMapLength);
-			buf.put((byte) colorMapEntrySize);
+			buf.put(colorMapEntrySize);
 			buf.putShort((short) xOrigin);
 			buf.putShort((short) yOrigin);
 			buf.putShort((short) width);
 			buf.putShort((short) height);
-			buf.put((byte) pixelDepth);
-			buf.put((byte) imageDescriptor);
+			buf.put(pixelDepth);
+			buf.put(imageDescriptor);
 			if (idLength > 0) {
 				try {
 					byte[] chars = imageID.getBytes("US-ASCII");

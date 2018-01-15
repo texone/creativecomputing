@@ -36,7 +36,7 @@ public class SwingGradientTrackDataView extends SwingBlendableTrackDataView<CCGr
 		Point2D p1 = _myController.curveToViewSpace(myFirstPoint);
 		Point2D p2 = _myController.curveToViewSpace(mySecondPoint);
 
-		CCGradientTrackController myGradientTrackController = (CCGradientTrackController) _myController;
+		CCGradientTrackController myGradientTrackController = _myController;
 
 		try {
 		for (double x = p1.getX(); x <= p2.getX() && x < _myRenderBuffer.getWidth(); x++) {

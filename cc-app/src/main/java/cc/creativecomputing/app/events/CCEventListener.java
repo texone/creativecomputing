@@ -12,7 +12,7 @@ package cc.creativecomputing.app.events;
 
 public interface CCEventListener<EventType extends CCEvent> {
 	
-	public Class<EventType> eventType();
+	Class<EventType> eventType();
 	
-	public void handleEvent(EventType theEvent);
+	void handleEvent(EventType theEvent);
 }

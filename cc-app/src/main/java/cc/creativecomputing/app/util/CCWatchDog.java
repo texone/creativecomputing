@@ -28,7 +28,7 @@ import cc.creativecomputing.io.xml.CCXMLIO;
 public class CCWatchDog extends Thread{
 	
 	private interface CCWatchDogCommandHandler{
-		public void onCommand(final String theValue);
+		void onCommand(final String theValue);
 	}
 	
 	private class CCWatchDogFrameRateRestart implements CCWatchDogCommandHandler{

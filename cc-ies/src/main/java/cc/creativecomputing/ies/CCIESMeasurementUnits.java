@@ -14,7 +14,7 @@ public enum CCIESMeasurementUnits {
 	METERS(2);
 	int id;
 
-	private CCIESMeasurementUnits(int theID) {
+	CCIESMeasurementUnits(int theID) {
 		id = theID;
 	}
 	

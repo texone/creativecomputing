@@ -45,7 +45,7 @@ public class CCTCPServer<MessageType> extends CCServer<MessageType>{
 		}
 		myBootStrap.childHandler(new ChannelInitializer<SocketChannel>() {
 			@Override
-			public void initChannel(SocketChannel ch) throws Exception {
+			public void initChannel(SocketChannel ch) {
 				ch.pipeline().addLast(_myCodec.decoder());
 				ch.pipeline().addLast(_myCodec.encoder());
 				ch.pipeline().addLast(myServerHandler);
@@ -59,7 +59,7 @@ public class CCTCPServer<MessageType> extends CCServer<MessageType>{
 		_myFuture.channel().closeFuture().await();
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		
 		CCTCPServer<String> myServer = new CCTCPServer<String>(new CCNetStringCodec());
 		myServer.connect();

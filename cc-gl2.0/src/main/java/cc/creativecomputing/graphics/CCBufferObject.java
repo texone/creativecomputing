@@ -31,7 +31,7 @@ public class CCBufferObject {
 	 * @author Riekoff
 	 *
 	 */
-	public static enum CCBufferTarget{
+	public enum CCBufferTarget{
 		/**
 		 * Array buffers store vertex attributes such as color, 
 		 * position, texture coordinates, or other custom attributes.
@@ -75,7 +75,7 @@ public class CCBufferObject {
     
 		private final int glId;
 		  
-		private CCBufferTarget(final int theglID){
+		CCBufferTarget(final int theglID){
 			glId = theglID;
 		}
 	}
@@ -85,7 +85,7 @@ public class CCBufferObject {
 	 * @author Riekoff
 	 *
 	 */
-	public static enum CCUsageFrequency{
+	public enum CCUsageFrequency{
 		/**
 		 * The data store contents will be modified once and used at most a few times.
 		 */
@@ -97,15 +97,15 @@ public class CCBufferObject {
 		/**
 		 * The data store contents will be modified repeatedly and used many times.
 		 */
-		DYNAMIC;
-	}
+		DYNAMIC
+    }
 	
 	/**
 	 * the type of buffer access
 	 * @author Riekoff
 	 *
 	 */
-	public static enum CCUsageTYPE{
+	public enum CCUsageTYPE{
 		/**
 		 * The data store contents are modified by the application, and used as 
 		 * the source for GL drawing and image specification commands.
@@ -120,8 +120,8 @@ public class CCBufferObject {
 		 * The data store contents are modified by reading data from the GL, 
 		 * and used as the source for GL drawing and image specification commands.
 		 */
-		COPY;
-	}
+		COPY
+    }
 
 	private int[] _myBufferID;
 	
@@ -377,7 +377,7 @@ public class CCBufferObject {
 	}
 	
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() {
 		CCGraphics.currentGL().glDeleteBuffers(1, _myBufferID, 0);
 	}
 }

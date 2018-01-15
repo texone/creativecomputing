@@ -125,7 +125,7 @@ public abstract class CCOSCPacket {
 	 *             in case some of the writing procedures failed.
 	 * @see CCOSCPacketCodec#encode(CCOSCPacket, ByteBuffer )
 	 */
-	public final void encode(CCOSCPacketCodec c, ByteBuffer b)throws IOException {
+	public final void encode(CCOSCPacketCodec c, ByteBuffer b) {
 		c.encode(this, b);
 	}
 
@@ -149,7 +149,7 @@ public abstract class CCOSCPacket {
 	 * @see CCOSCPacketCodec#decode(ByteBuffer )
 	 */
 	// public static OSCPacket decode( ByteBuffer b, Map m )
-	public static CCOSCPacket decode(ByteBuffer b) throws IOException {
+	public static CCOSCPacket decode(ByteBuffer b) {
 		return CCOSCPacketCodec.getDefaultCodec().decode(b);
 	}
 

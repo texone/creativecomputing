@@ -25,7 +25,7 @@ package cc.creativecomputing.controlui.util;
  */
 public interface Action {
 
-	public void apply();
+	void apply();
 	
-	public void undo();
+	void undo();
 }

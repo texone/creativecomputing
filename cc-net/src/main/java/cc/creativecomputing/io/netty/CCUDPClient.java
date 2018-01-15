@@ -43,7 +43,7 @@ public class CCUDPClient<MessageType> extends CCClient<MessageType> {
 		myBootstrap.handler(new ChannelInitializer<DatagramChannel>() {
 
 			@Override
-			public void initChannel(DatagramChannel ch) throws Exception {
+			public void initChannel(DatagramChannel ch) {
 				ch.pipeline().addLast(_myCodec.decoder());
 				ch.pipeline().addLast(_myCodec.encoder(), new CCClientHandler());
 			}

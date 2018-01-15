@@ -52,6 +52,6 @@ public interface Observer {
    * @param o an <tt>Observable</tt> instance.
    * @param arg an arbitrary argument to be passed.
    */
-  public void update(Observable o, Object arg);
+  void update(Observable o, Object arg);
 
 }//interface Observer

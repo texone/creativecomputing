@@ -66,7 +66,7 @@ public class CCBandPass extends CCIIRFilter {
 	protected void calcCoeff() {
 		double R = 1 - 3 * _myBandWidth;
 		double fracFreq = frequency() / _mySampleRate;
-		double T = 2 * (double) Math.cos(2 * Math.PI * fracFreq);
+		double T = 2 * Math.cos(2 * Math.PI * fracFreq);
 		double K = (1 - R * T + R * R) / (2 - T);
 		a = new double[] { 1 - K, (K - R) * T, R * R - K };
 		b = new double[] { R * T, -R * R };

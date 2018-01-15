@@ -350,7 +350,7 @@ public enum CCPixelInternalFormat{
 	public final int offset3;
 	public final int offset4;
 	
-	private CCPixelInternalFormat(final int theNumberOfChannels, final int theOffset1, final int theOffset2, final int theOffset3, final int theOffset4){
+	CCPixelInternalFormat(final int theNumberOfChannels, final int theOffset1, final int theOffset2, final int theOffset3, final int theOffset4){
 		numberOfChannels = theNumberOfChannels;
 		offset1 = theOffset1;
 		offset2 = theOffset2;

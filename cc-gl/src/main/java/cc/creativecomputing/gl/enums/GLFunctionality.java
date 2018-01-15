@@ -7,7 +7,7 @@ public enum GLFunctionality {
 	
 	private int _myGLID;
 	
-	private GLFunctionality(int theGLID){
+	GLFunctionality(int theGLID){
 		_myGLID = theGLID;
 	}
 	

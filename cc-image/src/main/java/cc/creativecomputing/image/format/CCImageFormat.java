@@ -42,11 +42,11 @@ public interface CCImageFormat {
 	 * 
 	 * @throws CCImageException if an error occurred while reading the file
 	 */
-	public CCImage createImage(
-		Path theFile, 
-		CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat, 
-		String theFileSuffix
-	) throws CCImageException;
+    CCImage createImage(
+            Path theFile,
+            CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat,
+            String theFileSuffix
+    ) throws CCImageException;
 
 	/**
 	 * Produces an image object from a stream, or returns null if the file format was not supported by this
@@ -65,11 +65,11 @@ public interface CCImageFormat {
 	 * 
 	 * @throws CCImageException if an error occurred while reading the stream
 	 */
-	public CCImage createImage(
-		InputStream theStream, 
-		CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat, 
-		String theFileSuffix
-	) throws CCImageException;
+    CCImage createImage(
+            InputStream theStream,
+            CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat,
+            String theFileSuffix
+    ) throws CCImageException;
 
 	/**
 	 * Produces an image object from a URL, or returns null if the file format was not supported by this
@@ -88,16 +88,16 @@ public interface CCImageFormat {
 	 * 
 	 * @throws CCImageException if an error occurred while reading the URL
 	 */
-	public CCImage createImage(
-		URL theUrl, 
-		CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat, 
-		String theFileSuffix
-	) throws CCImageException;
+    CCImage createImage(
+            URL theUrl,
+            CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat,
+            String theFileSuffix
+    ) throws CCImageException;
 
 	/**
 	 * Writes the given TextureData to the passed file. Returns true if this TextureWriter successfully handled the
 	 * writing of the file, otherwise false. May throw IOException if either this writer did not support certain
 	 * parameters of the TextureData or if an I/O error occurred.
 	 */
-	public boolean write(Path theFile, CCImage theData, double theQuality) throws CCImageException;
+    boolean write(Path theFile, CCImage theData, double theQuality) throws CCImageException;
 }

@@ -7,7 +7,7 @@ import ddf.minim.analysis.WindowFunction;
 
 public class CCFFT {
 	
-	private static enum CCFFTWindowType{
+	private enum CCFFTWindowType{
 		BARTLETT(FFT.BARTLETT),
 		BARTLETTHANN(FFT.BARTLETTHANN),
 		BLACKMAN(FFT.BLACKMAN),
@@ -21,13 +21,13 @@ public class CCFFT {
 		
 		private WindowFunction _myWindowFunction;
 		
-		private CCFFTWindowType(WindowFunction theWindowFunction){
+		CCFFTWindowType(WindowFunction theWindowFunction){
 			_myWindowFunction = theWindowFunction;
 		}
 		
 	}
 	
-	private static enum CCFFTAveraging{
+	private enum CCFFTAveraging{
 		NONE,
 		LINEAR,
 		LOGARITHMIC

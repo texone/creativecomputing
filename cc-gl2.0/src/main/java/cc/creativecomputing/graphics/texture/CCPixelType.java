@@ -126,12 +126,12 @@ public enum CCPixelType{
 	public final int glID;
 	public final int bytesPerChannel;
 	
-	private CCPixelType(final int theGLid, final int theBytesPerChannel){
+	CCPixelType(final int theGLid, final int theBytesPerChannel){
 		glID = theGLid;
 		bytesPerChannel = theBytesPerChannel;
 	}
 	
-	private CCPixelType(final int theGLid){
+	CCPixelType(final int theGLid){
 		this(theGLid, -1);
 	}
 }

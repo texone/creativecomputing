@@ -63,7 +63,7 @@ public class CCControlComponent extends JSplitPane{
 			
 			@Override
 			public void changeTimeline(TimelineController theController) {
-				((SwingTimelineView)_myTimelineContainer.activeTimeline().view()).controller(theController);
+				_myTimelineContainer.activeTimeline().view().controller(theController);
 //				_myControlsTimelinePane.setRightComponent(((SwingTimelineView)theController.view()).container());
 			}
 
@@ -87,7 +87,7 @@ public class CCControlComponent extends JSplitPane{
         CCUIStyler.styleSplitPane(_myControlsTimelinePane);
         _myControlsTimelinePane.setLeftComponent(myScrollPane);
         _myControlsTimelinePane.setDividerLocation(330 * SwingGuiConstants.SCALE);
-        _myControlsTimelinePane.setRightComponent((SwingTimelineView)_myTimelineContainer.activeTimeline().view());
+        _myControlsTimelinePane.setRightComponent(_myTimelineContainer.activeTimeline().view());
         
         _myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
         	
@@ -96,7 +96,7 @@ public class CCControlComponent extends JSplitPane{
 			
 			@Override
 			public void changeTimeline(TimelineController theController) {
-		        _myControlsTimelinePane.setRightComponent((SwingTimelineView)_myTimelineContainer.activeTimeline().view());
+		        _myControlsTimelinePane.setRightComponent(_myTimelineContainer.activeTimeline().view());
 			}
 			
 			@Override

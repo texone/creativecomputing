@@ -68,7 +68,7 @@ public enum CCOSCCodecMode {
 
 	int mask;
 	
-	private CCOSCCodecMode(int theMask){
+	CCOSCCodecMode(int theMask){
 		mask = theMask;
 	}
 }

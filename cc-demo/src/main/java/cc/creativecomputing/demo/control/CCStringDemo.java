@@ -12,8 +12,8 @@ import cc.creativecomputing.graphics.font.CCFontIO;
 
 public class CCStringDemo extends CCGL2Adapter{
 	
-	public static interface CCRealtimeGraph extends CCCompileObject{
-		public void draw(CCGraphics g);
+	public interface CCRealtimeGraph extends CCCompileObject{
+		void draw(CCGraphics g);
 	}
 	
 	

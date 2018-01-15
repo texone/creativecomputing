@@ -22,29 +22,29 @@ import cc.creativecomputing.math.CCColor;
 
 public class CCPropertyMap {
 	
-	public static interface CCPropertyMapVisitor{
+	public interface CCPropertyMapVisitor{
 		
-		public void onRoot(CCObjectPropertyHandle theRoot);
+		void onRoot(CCObjectPropertyHandle theRoot);
 		
-		public void onFloat(CCNumberPropertyHandle<Float> theHandle);
+		void onFloat(CCNumberPropertyHandle<Float> theHandle);
 		
-		public void onInt(CCNumberPropertyHandle<Integer> theHandle);
+		void onInt(CCNumberPropertyHandle<Integer> theHandle);
 		
-		public void onBoolean(CCBooleanPropertyHandle theHandle);
+		void onBoolean(CCBooleanPropertyHandle theHandle);
 		
-		public void onString(CCStringPropertyHandle theHandle);
+		void onString(CCStringPropertyHandle theHandle);
 		
-		public void onEnum(CCEnumPropertyHandle theHandle);
+		void onEnum(CCEnumPropertyHandle theHandle);
 		
-		public void onColor(CCColorPropertyHandle theHandle);
+		void onColor(CCColorPropertyHandle theHandle);
 		
-		public void onGradient(CCGradientPropertyHandle theHandle);
+		void onGradient(CCGradientPropertyHandle theHandle);
 		
-		public void onEnvelope(CCEnvelopeHandle theHandle);
+		void onEnvelope(CCEnvelopeHandle theHandle);
 		
-		public void onControlMatrix(CCControlMatrixHandle theHandle);
+		void onControlMatrix(CCControlMatrixHandle theHandle);
 		
-		public void onObject(CCObjectPropertyHandle theHandle);
+		void onObject(CCObjectPropertyHandle theHandle);
 	}
 	
 	public void visit(CCPropertyMapVisitor theVisitor){
@@ -86,16 +86,16 @@ public class CCPropertyMap {
 		}
 	}
 	
-	public static interface CCDoubleConverter<Type extends Number>{
-		public Type toType(double theValue);
+	public interface CCDoubleConverter<Type extends Number>{
+		Type toType(double theValue);
 		
-		public Type min();
+		Type min();
 		
-		public Type max();
+		Type max();
 		
-		public String toString(Number theValue);
+		String toString(Number theValue);
 		
-		public Class<Type> type();
+		Class<Type> type();
 	}
 	
 	public static CCDoubleConverter<Float> floatConverter = new CCDoubleConverter<Float>(){

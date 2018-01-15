@@ -275,7 +275,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 	 * 
 	 *  @return a <tt>ModbusRequest</tt> to be processed by the slave simulator
 	 */
-	public CCAbstractModbusRequest readRequest() throws ModbusIOException {
+	public CCAbstractModbusRequest readRequest() {
 		ModbusCoupler coupler = ModbusCoupler.getReference();
 
 		if (coupler == null || coupler.isMaster())
@@ -659,8 +659,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 	 * @throws IOException
 	 *             if an I\O error occurs.
 	 */
-	public void prepareStreams(InputStream in, OutputStream out)
-			throws IOException {
+	public void prepareStreams(InputStream in, OutputStream out) {
 		m_InputStream = in; // new RTUInputStream(in);
 		m_OutputStream = out;
 

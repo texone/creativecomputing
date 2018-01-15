@@ -113,7 +113,7 @@ public enum GLLimitQuery {
 	
 	private int _myGLID;
 	
-	private GLLimitQuery(int theGLID){
+	GLLimitQuery(int theGLID){
 		_myGLID = theGLID;
 	}
 	

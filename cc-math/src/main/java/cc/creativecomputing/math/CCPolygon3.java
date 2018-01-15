@@ -74,9 +74,9 @@ public class CCPolygon3 implements Iterable<CCVector3>{
 	
 	private static final double MODULUS(CCVector3 p) {
 		return CCMath.sqrt(p.x*p.x + p.y*p.y + p.z*p.z);
-	};
-	
-	public boolean isInShape(final double theX, final double theY, final double theZ) {
+	}
+
+    public boolean isInShape(final double theX, final double theY, final double theZ) {
 
 		double anglesum = 0, costheta;
 

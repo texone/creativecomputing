@@ -17,8 +17,8 @@ import cc.creativecomputing.math.spline.CCSpline;
 
 public class CCSplineDemo extends CCGL2Adapter{
 	
-	public static interface CCRealtimeGraph extends CCCompileObject{
-		public void draw(CCGraphics g);
+	public interface CCRealtimeGraph extends CCCompileObject{
+		void draw(CCGraphics g);
 	}
 	
 	@CCProperty(name = "linear spline")

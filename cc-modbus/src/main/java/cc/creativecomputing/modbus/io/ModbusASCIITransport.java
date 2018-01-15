@@ -140,8 +140,7 @@ public class ModbusASCIITransport
               calculateLRC(m_InBuffer, 0, m_ByteInOut.size(), 1)) {
             continue;
           }
-          ;
-          m_ByteIn.reset(m_InBuffer, m_ByteInOut.size());
+            m_ByteIn.reset(m_InBuffer, m_ByteInOut.size());
           in = m_ByteIn.readUnsignedByte();
           //check message with this slave unit identifier
           if (in != ModbusCoupler.getReference().getUnitID()) {
@@ -234,7 +233,7 @@ public class ModbusASCIITransport
    * @param out the output stream to be used for writing.
    * @throws IOException if an I\O related error occurs.
    */
-  public void prepareStreams(InputStream in, OutputStream out) throws IOException {
+  public void prepareStreams(InputStream in, OutputStream out) {
     m_InputStream = new DataInputStream(new ASCIIInputStream(in));
     m_OutputStream = new ASCIIOutputStream(out);
     m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);

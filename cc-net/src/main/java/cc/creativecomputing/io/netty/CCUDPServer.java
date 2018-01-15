@@ -46,10 +46,10 @@ public class CCUDPServer<MessageType> extends CCServer<MessageType>{
 //		myBootStrap.option(ChannelOption.SO_BROADCAST, true);
 		myBootStrap.handler(new ChannelInitializer<DatagramChannel>() {
 			@Override
-			public void initChannel(DatagramChannel ch) throws Exception {
+			public void initChannel(DatagramChannel ch) {
 				ch.pipeline().addLast("udpDecoder", new MessageToMessageDecoder<DatagramPacket>() {
 					@Override
-					protected void decode(ChannelHandlerContext ctx, DatagramPacket msg, List<Object> out) throws Exception {
+					protected void decode(ChannelHandlerContext ctx, DatagramPacket msg, List<Object> out) {
 						out.add(msg.content());
 						msg.retain();
 					}

@@ -3,6 +3,6 @@ package cc.creativecomputing.app.modules;
 
 public interface CCConsoleLineListener {
 
-	public void start (CCConsoleLineReaderModule theModule);
-	public void onLine(String theLine);
+	void start(CCConsoleLineReaderModule theModule);
+	void onLine(String theLine);
 }

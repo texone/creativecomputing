@@ -94,7 +94,7 @@ public interface NonWordDataHandler {
 	 * 
 	 * @return the raw data as <tt>byte[]</tt>.
 	 */
-	public byte[] getData();
+    byte[] getData();
 
 	/**
 	 * Reads the non-word raw data based on an arbitrary implemented structure.
@@ -111,8 +111,8 @@ public interface NonWordDataHandler {
 	 * @throws EOFException
 	 *             if the stream ends before all data is read.
 	 */
-	public void readData(DataInput in, int reference, int count)
-			throws IOException, EOFException;
+    void readData(DataInput in, int reference, int count)
+			throws IOException;
 
 	/**
 	 * Returns the word count of the data. Note that this should be the length
@@ -120,7 +120,7 @@ public interface NonWordDataHandler {
 	 * 
 	 * @return the number of words the data consists of.
 	 */
-	public int getWordCount();
+    int getWordCount();
 
 	/**
 	 * Commits the data if it has been read into an intermediate repository.
@@ -133,7 +133,7 @@ public interface NonWordDataHandler {
 	 * @return -1 if the commit was successful, a Modbus exception code valid
 	 *         for the read/write multiple registers commands otherwise.
 	 */
-	public CCModbusExceptionCode commitUpdate();
+    CCModbusExceptionCode commitUpdate();
 
 	/**
 	 * Prepares the raw data, putting it together from a backing data store.
@@ -148,5 +148,5 @@ public interface NonWordDataHandler {
 	 * @param count
 	 *            to specify the number of bytes as <tt>int</tt>.
 	 */
-	public void prepareData(int reference, int count);
+    void prepareData(int reference, int count);
 }

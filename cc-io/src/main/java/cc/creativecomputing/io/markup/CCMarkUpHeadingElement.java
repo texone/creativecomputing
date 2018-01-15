@@ -33,10 +33,7 @@ public class CCMarkUpHeadingElement extends CCMarkUpTextElement {
             return false;
         }
         CCMarkUpHeadingElement other = (CCMarkUpHeadingElement) obj;
-        if (_myLevel != other._myLevel) {
-            return false;
-        }
-        return true;
+        return _myLevel == other._myLevel;
     }
 
     @Override

@@ -15,7 +15,7 @@ public enum CCShaderObjectType{
 	
 	String typeString;
 	
-	private CCShaderObjectType(final int theGLID, String theTypeString) {
+	CCShaderObjectType(final int theGLID, String theTypeString) {
 		glID = theGLID;
 		typeString = theTypeString;
 	}

@@ -46,7 +46,7 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 		});
  
 		addListener(theValue -> {
-			_myValue = (CCSelection)theValue;
+			_myValue = theValue;
 			_myTriggerEvent = false;
 			_mySelection.setSelectedItem(_myHandle.value());
 			_myTriggerEvent = true;

@@ -186,8 +186,8 @@ public class ModbusTCPTransaction implements ModbusTransaction {
 		m_Retries = num;
 	}
 
-	public void execute() throws ModbusIOException, CCModbusSlaveException,
-			CCModbusException {
+	public void execute() throws
+            CCModbusException {
 
 		if (m_Request == null || m_Connection == null)
 			throw new CCModbusException("Invalid request or connection");

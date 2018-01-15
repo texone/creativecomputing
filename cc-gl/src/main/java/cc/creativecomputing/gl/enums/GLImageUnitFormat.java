@@ -45,7 +45,7 @@ public enum GLImageUnitFormat {
 	
 	private int _myGLID;
 	
-	private GLImageUnitFormat(int theGLID){
+	GLImageUnitFormat(int theGLID){
 		_myGLID = theGLID;
 	}
 	

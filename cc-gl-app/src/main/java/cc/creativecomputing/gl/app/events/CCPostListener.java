@@ -24,5 +24,5 @@ public interface CCPostListener{
 	/**
 	 * The post method is called directly after the draw call.
 	 */
-	public void post();
+    void post();
 }

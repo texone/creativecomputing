@@ -24,7 +24,7 @@ public abstract class CCBoundingVolume implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public enum Type {
-        Sphere, AABB, OBB;
+        Sphere, AABB, OBB
     }
 
     protected int _checkPlane = 0;

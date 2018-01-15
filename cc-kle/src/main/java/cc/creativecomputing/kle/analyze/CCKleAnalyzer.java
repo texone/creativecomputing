@@ -156,7 +156,6 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 			}
 			data.add(myNewData);
 			
-			
 			for(CCChannelAnalyzer<?> myChannelAnalyzer:_myChannelAnalyzers){
 				myChannelAnalyzer.update(theDeltaTime);
 			}
@@ -167,15 +166,23 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 		}
 	}
 	
-	public static enum CCAnalyzeMode{
+	/**
+	 * Current Mode for kle data analyzation
+	 * @author christianr
+	 *
+	 */
+	public enum CCAnalyzeMode{
+		/**
+		 * Shows the data integrated into the 3D view
+		 */
 		ANALYZE_3D, 
 		ANALYZE_CURVES, 
 		ANALYZE_CURVES_ON_TOP, 
 		ANALYZE_MIN_MAX, 
 		ANALYZE_SPECTROGRAM, 
 		ANALYZE_HISTOGRAM, 
-		OFF;
-	}
+		OFF
+    }
 
 	protected List<CCKleEffectable> _myElements;
 	

@@ -11,8 +11,8 @@ import cc.creativecomputing.graphics.font.CCFontIO;
 
 public class CCMultiParameterMethodDemo extends CCGL2Adapter{
 	
-	public static interface CCRealtimeGraph extends CCCompileObject{
-		public void draw(CCGraphics g);
+	public interface CCRealtimeGraph extends CCCompileObject{
+		void draw(CCGraphics g);
 	}
 	
 	private double _myX = 0;

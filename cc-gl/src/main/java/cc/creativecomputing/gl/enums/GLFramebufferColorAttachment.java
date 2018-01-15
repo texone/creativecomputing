@@ -22,7 +22,7 @@ public enum GLFramebufferColorAttachment {
 	
 	private int _myGLID;
 	
-	private GLFramebufferColorAttachment(int theGLID){
+	GLFramebufferColorAttachment(int theGLID){
 		_myGLID = theGLID;
 	}
 	

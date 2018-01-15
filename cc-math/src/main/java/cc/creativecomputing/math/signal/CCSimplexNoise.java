@@ -139,7 +139,7 @@ public class CCSimplexNoise extends CCSignal{
 		double[] myValues = noiseImpl(theX);
 		double[] myResult = new double[myValues.length];
 		for(int i = 0; i < myResult.length;i++) {
-			myResult[i] = (double)myValues[i];
+			myResult[i] = myValues[i];
 		}
 		return myResult;
 	}

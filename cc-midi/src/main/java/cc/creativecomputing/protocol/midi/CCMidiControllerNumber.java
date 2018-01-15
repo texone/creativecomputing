@@ -146,7 +146,7 @@ public enum CCMidiControllerNumber {
 	
 	public final int number;
 	
-	private CCMidiControllerNumber(int theNumber){
+	CCMidiControllerNumber(int theNumber){
 		number = theNumber;
 	}
 }

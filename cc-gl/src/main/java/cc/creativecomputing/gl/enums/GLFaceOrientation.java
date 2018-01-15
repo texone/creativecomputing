@@ -8,7 +8,7 @@ public enum GLFaceOrientation {
 	
 	private int _myGLID;
 	
-	private GLFaceOrientation(int theGLID){
+	GLFaceOrientation(int theGLID){
 		_myGLID = theGLID;
 	}
 	

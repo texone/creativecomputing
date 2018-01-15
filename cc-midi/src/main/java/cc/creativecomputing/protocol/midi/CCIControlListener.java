@@ -14,5 +14,5 @@ import cc.creativecomputing.protocol.midi.messages.CCMidiControl;
 
 public interface CCIControlListener {
 
-	public void onControl(final CCMidiControl theController);
+	void onControl(final CCMidiControl theController);
 }

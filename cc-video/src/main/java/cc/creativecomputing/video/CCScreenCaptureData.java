@@ -55,8 +55,8 @@ public class CCScreenCaptureData extends CCVideo {
 		 */
 		private static final long serialVersionUID = -8104620285897870152L;
 
-		public static interface CCScreenGrabAreaListener{
-			public void onChange();
+		public interface CCScreenGrabAreaListener{
+			void onChange();
 		}
 		
 		private CCListenerManager<CCScreenGrabAreaListener> _mEvents = new CCListenerManager<CCScreenGrabAreaListener>(CCScreenGrabAreaListener.class);

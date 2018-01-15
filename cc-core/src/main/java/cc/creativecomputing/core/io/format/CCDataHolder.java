@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface CCDataHolder<MapType extends Map<String, Object>, ListType extends List<Object>> {
 
-	public MapType createMap();
+	MapType createMap();
 	
-	public ListType createList();
+	ListType createList();
 }

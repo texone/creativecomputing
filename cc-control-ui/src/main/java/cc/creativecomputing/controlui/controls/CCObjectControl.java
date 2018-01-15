@@ -27,8 +27,6 @@ import cc.creativecomputing.control.CCControlMatrix;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.code.CCRealtimeCompile;
-import cc.creativecomputing.control.code.CCRuntimeCompilable;
 import cc.creativecomputing.control.code.CCShaderSource;
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
@@ -42,8 +40,6 @@ import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
-import cc.creativecomputing.control.handles.CCRealtimeCompileHandle;
-import cc.creativecomputing.control.handles.CCRuntimeCompileHandle;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCShaderSourceHandle;
 import cc.creativecomputing.control.handles.CCSplineHandle;
@@ -53,12 +49,8 @@ import cc.creativecomputing.controlui.CCColorMap;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
-import cc.creativecomputing.controlui.controls.code.CCRealtimeCompileControl;
-import cc.creativecomputing.controlui.controls.code.CCRuntimeCompileControl;
 import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.math.CCColor;
 
 public class CCObjectControl extends JPanel implements CCControl{
@@ -104,7 +96,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 					myConstraints.anchor = GridBagConstraints.LINE_START;
 					myConstraints.fill = GridBagConstraints.HORIZONTAL;
 					add(_myControlComponent, myConstraints);
-					getParent().revalidate();
+					if(getParent() != null)getParent().revalidate(); 
 					theInfoPanel.invalidate(); 
 					theInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
 					theInfoPanel.repaint();
@@ -222,8 +214,8 @@ public class CCObjectControl extends JPanel implements CCControl{
 	
 	private List<CCControl> _myControls = new ArrayList<>();
 	
-	private static interface CCControlCreator{
-		public CCControl create(CCPropertyHandle<?> thePropertyHandle, CCControlComponent theInfoPanel);
+	private interface CCControlCreator{
+		CCControl create(CCPropertyHandle<?> thePropertyHandle, CCControlComponent theInfoPanel);
 	}
 	
 	private static Map<Class<?>, CCControlCreator> creatorMap = new HashMap<>();
@@ -251,7 +243,6 @@ public class CCObjectControl extends JPanel implements CCControl{
 		creatorMap.put(CCEnvelope.class, (myHandle, myInfoPanel) -> {return new CCEnvelopeControl((CCEnvelopeHandle)myHandle, myInfoPanel);});
 		creatorMap.put(CCSplineHandle.class, (myHandle, myInfoPanel) -> {return new CCSplineControl((CCSplineHandle)myHandle, myInfoPanel);});
 		creatorMap.put(Path.class, (myHandle, myInfoPanel) -> {return new CCPathControl((CCPathHandle)myHandle, myInfoPanel);});
-		creatorMap.put(CCRealtimeCompile.class, (myHandle, myInfoPanel) -> {return new CCRealtimeCompileControl((CCRealtimeCompileHandle)myHandle, myInfoPanel);});
 		creatorMap.put(CCShaderSource.class, (myHandle, myInfoPanel) -> {return new CCShaderCompileControl((CCShaderSourceHandle)myHandle, myInfoPanel);});
 	}
 	
@@ -283,8 +274,6 @@ public class CCObjectControl extends JPanel implements CCControl{
 				myControl = new CCEventTriggerControl((CCEventTriggerHandle)myPropertyHandle, _myInfoPanel);
 			}else  if(myClass.isEnum()){
 				myControl = new CCEnumControl((CCEnumPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else if(CCReflectionUtil.implementsInterface(myClass, CCRuntimeCompilable.class)){
-				myControl = new CCRuntimeCompileControl((CCRuntimeCompileHandle)myPropertyHandle, _myInfoPanel);
 			}else{
 				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;
 				CCObjectControl myObjectControl = new CCObjectControl(myObjectHandle, _myInfoPanel, _myDepth + 1);

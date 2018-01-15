@@ -16,7 +16,7 @@ public class CCShaderNoise extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myProgram = CCGLProgram.createEmptyFrament();
-		g.debug();
+		CCGraphics.debug();
 	}
 
 	@Override

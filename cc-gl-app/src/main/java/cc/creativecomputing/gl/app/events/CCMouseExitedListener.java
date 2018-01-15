@@ -43,5 +43,5 @@ public interface CCMouseExitedListener{
 	 * @see #mouseEntered(CCMouseEvent)
 	 * @example events.CCMouseEnterExit
 	 */
-	public void mouseExited(final CCMouseEvent theEvent);
+    void mouseExited(final CCMouseEvent theEvent);
 }

@@ -84,14 +84,14 @@ public class MidiDeviceGetter {
       System.out.println("close inputDevice: "
             + inputDevice.getDeviceInfo().toString());
       inputDevice.close();
-      System.out.println(("Received " + ((DumpReceiver) r).seCount
+      System.out.println(("Received " + DumpReceiver.seCount
             + " sysex messages with a total of "
-            + ((DumpReceiver) r).seByteCount + " bytes"));
-      System.out.println(("Received " + ((DumpReceiver) r).smCount
+            + DumpReceiver.seByteCount + " bytes"));
+      System.out.println(("Received " + DumpReceiver.smCount
             + " short messages with a total of "
-            + ((DumpReceiver) r).smByteCount + " bytes"));
+            + DumpReceiver.smByteCount + " bytes"));
       System.out.println(("Received a total of "
-                  + (((DumpReceiver) r).smByteCount + 
-                        ((DumpReceiver) r).seByteCount) + " bytes"));
+                  + (DumpReceiver.smByteCount +
+              DumpReceiver.seByteCount) + " bytes"));
    }
 }

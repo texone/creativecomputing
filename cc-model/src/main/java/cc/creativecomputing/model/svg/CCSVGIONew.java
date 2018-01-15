@@ -218,8 +218,8 @@ public class CCSVGIONew {
 			Point2D t1 = xform.transform(new Point2D.Double(x1, y1), null);
 			Point2D t2 = xform.transform(new Point2D.Double(x2, y2), null);
 			return new CCSVGLinearGradientContext(
-				(double) t1.getX(), (double) t1.getY(), 
-				(double) t2.getX(), (double) t2.getY()
+                    t1.getX(), t1.getY(),
+                    t2.getX(), t2.getY()
 			);
 		}
 
@@ -253,7 +253,7 @@ public class CCSVGIONew {
 				// make normalized version of base vector
 				double nx = tx2 - tx1;
 				double ny = ty2 - ty1;
-				double len = (double) Math.sqrt(nx * nx + ny * ny);
+				double len = Math.sqrt(nx * nx + ny * ny);
 				if (len != 0) {
 					nx /= len;
 					ny /= len;

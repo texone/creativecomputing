@@ -8,7 +8,7 @@ public class DemoMainClass {
 	
     public static void main(final String[] args) {
     	
-    	CCInMemoryExecutionManager myExecutionManager = new CCInMemoryExecutionManager(DynaClass.class);
+    	CCInMemoryExecutionManager myExecutionManager = new CCInMemoryExecutionManager(DynaClass.class, null);
     	
     	while(true){
 

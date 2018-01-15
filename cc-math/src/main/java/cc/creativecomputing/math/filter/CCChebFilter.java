@@ -51,12 +51,12 @@ import cc.creativecomputing.math.CCMath;
  */
 public class CCChebFilter extends CCIIRFilter {
 	
-	public static enum ChebFilterType{
+	public enum ChebFilterType{
 		/** A constant used to indicate a low pass filter. */
 		LP,
 		/** A constant used to indicate a high pass filter. */
-		HP;
-	}
+		HP
+    }
 	
 	private ChebFilterType _myType;
 	private int _myPoles;
@@ -295,8 +295,8 @@ public class CCChebFilter extends CCIIRFilter {
 		// precalc
 		double angle = CCMath.PI / (np * 2) + (p - 1) * CCMath.PI / np;
 
-		double rp = -(double) Math.cos(angle);
-		double ip = (double) Math.sin(angle);
+		double rp = -Math.cos(angle);
+		double ip = Math.sin(angle);
 
 		// warp from a circle to an ellipse
 		if (_myRipple > 0) {
@@ -304,21 +304,21 @@ public class CCChebFilter extends CCIIRFilter {
 			double ratio = 100.f / (100.f - _myRipple);
 			double ratioSquared = ratio * ratio;
 
-			double es = 1.f / (double) Math.sqrt(ratioSquared - 1.f);
+			double es = 1.f / Math.sqrt(ratioSquared - 1.f);
 
 			double oneOverNP = 1.f / np;
 			double esSquared = es * es;
 
-			double vx = oneOverNP * (double) Math.log(es + Math.sqrt(esSquared + 1.f));
-			double kx = oneOverNP * (double) Math.log(es + Math.sqrt(esSquared - 1.f));
+			double vx = oneOverNP * Math.log(es + Math.sqrt(esSquared + 1.f));
+			double kx = oneOverNP * Math.log(es + Math.sqrt(esSquared - 1.f));
 
-			double expKX = (double) Math.exp(kx);
-			double expNKX = (double) Math.exp(-kx);
+			double expKX = Math.exp(kx);
+			double expNKX = Math.exp(-kx);
 
 			kx = (expKX + expNKX) * 0.5f;
 
-			double expVX = (double) Math.exp(vx);
-			double expNVX = (double) Math.exp(-vx);
+			double expVX = Math.exp(vx);
+			double expNVX = Math.exp(-vx);
 			double oneOverKX = 1.f / kx;
 
 			rp *= ((expVX - expNVX) * 0.5f) * oneOverKX;
@@ -326,7 +326,7 @@ public class CCChebFilter extends CCIIRFilter {
 		}
 
 		// s-domain to z-domain conversion
-		double t = 2.f * (double) Math.tan(0.5f);
+		double t = 2.f * Math.tan(0.5f);
 		double w = CCMath.TWO_PI * (frequency() / _mySampleRate);
 		double m = rp * rp + ip * ip;
 
@@ -353,9 +353,9 @@ public class CCChebFilter extends CCIIRFilter {
 		double halfW = w * 0.5f;
 
 		if (_myType == ChebFilterType.HP) {
-			k = -(double) Math.cos(halfW + 0.5f) / (double) Math.cos(halfW - 0.5f);
+			k = -Math.cos(halfW + 0.5f) / Math.cos(halfW - 0.5f);
 		} else {
-			k = (double) Math.sin(0.5f - halfW) / (double) Math.sin(0.5f + halfW);
+			k = Math.sin(0.5f - halfW) / Math.sin(0.5f + halfW);
 		}
 
 		// precalc

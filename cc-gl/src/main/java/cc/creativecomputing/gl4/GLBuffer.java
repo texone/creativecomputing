@@ -18,7 +18,7 @@ public class GLBuffer {
 	 * @author christianr
 	 *
 	 */
-	public static enum GLBufferTarget{
+	public enum GLBufferTarget{
 		/**
 		 * target that is used to set vertex array data pointers
 		 * using vertex arrays. this is the target that you will 
@@ -82,7 +82,7 @@ public class GLBuffer {
 		
 		public int glID;
 		
-		private GLBufferTarget(int theGLID){
+		GLBufferTarget(int theGLID){
 			glID = theGLID;
 		}
 	}
@@ -92,7 +92,7 @@ public class GLBuffer {
 	 * @author christianr
 	 *
 	 */
-	public static enum GLDataAccesFrequency{
+	public enum GLDataAccesFrequency{
 		/**
 		 * The data store contents will be modified once and used at most a few times.
 		 */
@@ -112,7 +112,7 @@ public class GLBuffer {
 	 * @author christianr
 	 *
 	 */
-	public static enum GLDataAccesNature{
+	public enum GLDataAccesNature{
 		/**
 		 * The data store contents are modified by the application, and used as the source for GL drawing and image specification commands.
 		 */
@@ -580,7 +580,7 @@ public class GLBuffer {
 	}
 	
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() {
 		GLGraphics.currentGL().glDeleteBuffers(1, GLBufferUtil.wrapParameters(_myID));
 	}
 }

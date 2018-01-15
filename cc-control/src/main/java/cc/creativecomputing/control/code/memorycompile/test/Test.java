@@ -7,6 +7,6 @@ public class Test {
     
     @Override
     public String toString() {
-    	return "YP";
+    	return "YP S";
     }
 }

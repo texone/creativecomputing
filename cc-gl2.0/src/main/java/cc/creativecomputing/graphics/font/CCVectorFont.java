@@ -44,14 +44,14 @@ public class CCVectorFont extends CCFont<CCVectorChar> {
 	@Override
 	public void beginText(CCGraphics g){
 		g.beginShape(CCDrawMode.TRIANGLES);
-	};
-	
-	@Override
+	}
+
+    @Override
 	public void endText(CCGraphics g){
 		g.endShape();
-	};
+	}
 
-	@Override
+    @Override
 	protected void createChars(final BufferedImage theCharImage, final Graphics2D theGraphics) {
 		_myTesselator = new CCVectorFontTesselator();
 		

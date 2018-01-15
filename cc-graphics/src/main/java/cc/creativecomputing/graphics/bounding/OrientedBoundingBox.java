@@ -738,12 +738,8 @@ public class OrientedBoundingBox extends CCBoundingVolume {
 		fR0 = afEA.x * aafAbsC[1][2] + afEA.y * aafAbsC[0][2];
 		fR1 = afEB.x * aafAbsC[2][1] + afEB.y * aafAbsC[2][0];
 		fR01 = fR0 + fR1;
-		if (fR > fR01) {
-			return false;
-		}
-
-		return true;
-	}
+        return !(fR > fR01);
+    }
 
 	@Override
 	public boolean intersects(final CCBoundingVolume bv) {
@@ -965,12 +961,8 @@ public class OrientedBoundingBox extends CCBoundingVolume {
 			fR0 = afEA.x * aafAbsC[1][2] + afEA.y * aafAbsC[0][2];
 			fR1 = afEB.x * aafAbsC[2][1] + afEB.y * aafAbsC[2][0];
 			fR01 = fR0 + fR1;
-			if (fR > fR01) {
-				return false;
-			}
-
-			return true;
-		} finally {
+            return !(fR > fR01);
+        } finally {
 
 		}
 	}
@@ -1163,12 +1155,8 @@ public class OrientedBoundingBox extends CCBoundingVolume {
 		fR0 = afEA.x * aafAbsC[1][2] + afEA.y * aafAbsC[0][2];
 		fR1 = afEB.x * aafAbsC[2][1] + afEB.y * aafAbsC[2][0];
 		fR01 = fR0 + fR1;
-		if (fR > fR01) {
-			return false;
-		}
-
-		return true;
-	}
+        return !(fR > fR01);
+    }
 
 	@Override
 	public boolean intersects(final CCRay3 ray) {
@@ -1227,13 +1215,8 @@ public class OrientedBoundingBox extends CCBoundingVolume {
 
 		fAWxDdU[2] = CCMath.abs(wCrossD.dot(_zAxis));
 		rhs = _extent.x * fAWdU[1] + _extent.y * fAWdU[0];
-		if (fAWxDdU[2] > rhs) {
-			return false;
-
-		}
-
-		return true;
-	}
+        return !(fAWxDdU[2] > rhs);
+    }
 
 	@Override
 	public IntersectionRecord intersectsWhere(final CCRay3 ray) {
@@ -1358,12 +1341,8 @@ public class OrientedBoundingBox extends CCBoundingVolume {
 		}
 
 		coeff = _myCompVect1.dot(_zAxis);
-		if (CCMath.abs(coeff) > _extent.z) {
-			return false;
-		}
-
-		return true;
-	}
+        return !(CCMath.abs(coeff) > _extent.z);
+    }
 
 	@Override
 	public double distanceToEdge(final CCVector3 point) {

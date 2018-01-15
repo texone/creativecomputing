@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.math;
 
+import java.nio.FloatBuffer;
 
 /**
  * 3x2 affine matrix implementation.
@@ -40,6 +41,18 @@ public class CCMatrix32 {
 		double m10, double m11, double m12
 	) {
 		set(m00, m01, m02, m10, m11, m12);
+	}
+	
+	public CCMatrix32(
+		FloatBuffer theBuffer
+	) {
+		m00 = theBuffer.get();
+		m01 = theBuffer.get();
+		m02 = theBuffer.get();
+
+		m10 = theBuffer.get();
+		m11 = theBuffer.get();
+		m12 = theBuffer.get();
 	}
 
 	/**

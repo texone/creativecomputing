@@ -4,14 +4,14 @@ import cc.creativecomputing.core.events.CCListenerManager;
 
 public class CCTriggerProgress {
 	
-	public static interface CCTriggerProgressListener{
-		public void start();
+	public interface CCTriggerProgressListener{
+		void start();
 		
-		public void progress(double theProgress);
+		void progress(double theProgress);
 		
-		public void end();
+		void end();
 		
-		public void interrupt();
+		void interrupt();
 	}
 	
 	private CCListenerManager<CCTriggerProgressListener> _myEvents = new CCListenerManager<>(CCTriggerProgressListener.class);

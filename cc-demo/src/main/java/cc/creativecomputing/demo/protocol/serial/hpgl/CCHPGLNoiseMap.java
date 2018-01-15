@@ -72,7 +72,7 @@ public class CCHPGLNoiseMap extends CCGL2Adapter {
 		
 		CCLog.info(_cHPGL.isConnected() + ":" + _myCurrentVertices.size());
 		
-//		_cHPGL.velocitySelect(_cSpeed);
+		_cHPGL.velocitySelect(_cSpeed);
 //
 //		_cHPGL.write(CCHPGLCommand.VS, 0, _cSpeed);
 		if(_cHPGL.isConnected() && _myCurrentVertices.size() > 0){

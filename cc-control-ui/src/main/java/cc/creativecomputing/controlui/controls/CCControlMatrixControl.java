@@ -21,7 +21,7 @@ public class CCControlMatrixControl extends CCValueControl<CCControlMatrix, CCCo
 		super(theHandle, theControlComponent);
 		
 		addListener(theValue -> {
-			_myHandle.value((CCControlMatrix)theValue, false);
+			_myHandle.value(theValue, false);
 //			_myMatrixFrame.track().trackData(value().curve());
 			_myMatrixFrame.render();
 			_myMatrixFrame.repaint();

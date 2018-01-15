@@ -8,7 +8,7 @@ public enum GLBufferMapAccess {
 	
 	private int _myGLID;
 	
-	private GLBufferMapAccess(int theGLID){
+	GLBufferMapAccess(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -10,7 +10,7 @@ public enum GLSyncWaitResult {
 	
 	private int _myGLID;
 	
-	private GLSyncWaitResult(int theGLID){
+	GLSyncWaitResult(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -134,8 +134,8 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 				_myFormat = CCPixelFormat.LUMINANCE_INTEGER;
 				break;
 			case 2:
-				_myInternalFormat = CCPixelInternalFormat.LUMINANCE_ALPHA;;
-				_myFormat = CCPixelFormat.LUMINANCE_ALPHA_INTEGER;
+				_myInternalFormat = CCPixelInternalFormat.LUMINANCE_ALPHA;
+                _myFormat = CCPixelFormat.LUMINANCE_ALPHA_INTEGER;
 				break;
 			case 3:
 				_myInternalFormat = myIs16Bit ? CCPixelInternalFormat.RGB16I : CCPixelInternalFormat.RGB32I;

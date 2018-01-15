@@ -1,6 +1,8 @@
 package cc.creativecomputing.controlui;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
@@ -60,6 +62,13 @@ public class CCControlApp  {
 	
 	public static Preferences preferences;
 	
+	private void saveWindowPosition(String thePath){
+		CCControlApp.preferences.put(thePath + "/x" , _myFrame.getX() + "");
+		CCControlApp.preferences.put(thePath + "/y" , _myFrame.getY() + "");
+		CCControlApp.preferences.put(thePath + "/width" , _myFrame.getWidth() + "");
+		CCControlApp.preferences.put(thePath + "/height" , _myFrame.getHeight() + "");
+	}
+	
 	private void init(CCAnimator theAnimator){
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Test");
@@ -117,6 +126,32 @@ public class CCControlApp  {
         InputMap im = (InputMap)UIManager.get("Button.focusInputMap");
         im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
         im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
+        
+        _myFrame.addComponentListener(new ComponentAdapter() {
+			
+			@Override
+			public void componentResized(ComponentEvent e) {
+				saveWindowPosition("CCControlApp");
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				saveWindowPosition("CCControlApp");
+			}
+			
+		});
+		
+		if(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1) != -1){
+			CCLog.info(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), CCControlApp.preferences.getInt("CCControlApp" + "/y", -1));
+			_myFrame.setLocation(
+				CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), 
+				CCControlApp.preferences.getInt("CCControlApp" + "/y", -1)
+			);
+			_myFrame.setSize(
+				CCControlApp.preferences.getInt("CCControlApp" + "/width", -1), 
+				CCControlApp.preferences.getInt("CCControlApp" + "/height", -1)
+			);
+		}
 	}
 
 	public CCControlApp(Object theRootObject, CCAnimator theAnimator, Class<?> thePrefClass) {

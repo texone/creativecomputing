@@ -302,8 +302,6 @@ public class CCPixelStorageModes {
 		_mySkipImages = theSkipImages;
 	}
 	
-
-	
 	public CCPixelStorageModes clone() {
 		CCPixelStorageModes myResult = new CCPixelStorageModes();
 		myResult._mySwapBytes = _mySwapBytes;

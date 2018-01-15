@@ -30,7 +30,7 @@ public enum NodeStyle {
     private int id;
     private Class<? extends ArtNetNode> nodeClass;
 
-    private NodeStyle(int id, Class<? extends ArtNetNode> nodeClass) {
+    NodeStyle(int id, Class<? extends ArtNetNode> nodeClass) {
         this.id = id;
         this.nodeClass = nodeClass;
     }

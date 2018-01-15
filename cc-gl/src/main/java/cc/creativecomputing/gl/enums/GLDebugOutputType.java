@@ -16,7 +16,7 @@ public enum GLDebugOutputType {
 	
 	private int _myGLID;
 	
-	private GLDebugOutputType(int theGLID){
+	GLDebugOutputType(int theGLID){
 		_myGLID = theGLID;
 	}
 	

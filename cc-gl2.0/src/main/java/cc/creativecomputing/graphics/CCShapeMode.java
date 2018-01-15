@@ -11,5 +11,5 @@
 package cc.creativecomputing.graphics;
 
 public enum CCShapeMode{
-	CORNER,CORNERS,RADIUS,CENTER;
+	CORNER,CORNERS,RADIUS,CENTER
 }

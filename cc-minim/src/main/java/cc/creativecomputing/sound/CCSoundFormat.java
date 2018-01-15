@@ -13,7 +13,7 @@ public enum CCSoundFormat {
 	
 	private final AudioFileFormat.Type _myType;
 	
-	private CCSoundFormat(AudioFileFormat.Type theType){
+	CCSoundFormat(AudioFileFormat.Type theType){
 		_myType = theType;
 	}
 	

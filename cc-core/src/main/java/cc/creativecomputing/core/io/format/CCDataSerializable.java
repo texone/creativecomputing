@@ -4,8 +4,8 @@ import java.util.Map;
 
 public interface CCDataSerializable{
 
-	public void data(Map<String,Object> theData);
+	void data(Map<String, Object> theData);
 	
-	public Map<String,Object> data();
+	Map<String,Object> data();
 	
 }

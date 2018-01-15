@@ -67,7 +67,7 @@ public enum CCModbusExceptionCode {
 
 	public int id;
 
-	private CCModbusExceptionCode(int theID) {
+	CCModbusExceptionCode(int theID) {
 		id = theID;
 	}
 

@@ -13,8 +13,8 @@ import cc.creativecomputing.graphics.font.text.CCText;
 
 public class CCTextDemo extends CCGL2Adapter{
 	
-	public static interface CCRealtimeGraph extends CCCompileObject{
-		public void draw(CCGraphics g);
+	public interface CCRealtimeGraph extends CCCompileObject{
+		void draw(CCGraphics g);
 	}
 	
 	

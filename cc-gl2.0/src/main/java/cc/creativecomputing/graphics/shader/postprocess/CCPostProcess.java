@@ -19,7 +19,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 
 public class CCPostProcess {
 	
-	private static enum CCPostProcessDebug{
+	private enum CCPostProcessDebug{
 		POSITIONS,
 		NORMALS,
 		COLORS,
@@ -91,4 +91,4 @@ public class CCPostProcess {
 			break;
 		}
 	}
-};
+}

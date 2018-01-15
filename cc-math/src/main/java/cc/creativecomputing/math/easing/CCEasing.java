@@ -14,7 +14,7 @@ import cc.creativecomputing.math.CCMath;
 
 public abstract class CCEasing {
 	
-	public static enum CCEaseFormular {
+	public enum CCEaseFormular {
 		LINEAR(new CCLinearEasing()),
 		EXPONENTIAL(new CCExponentialEasing()),
 		PENDUALR(new CCPendularEasing()),
@@ -25,7 +25,7 @@ public abstract class CCEasing {
 		
 		private CCEasing _myEasing;
 		
-		private CCEaseFormular(CCEasing theEasing){
+		CCEaseFormular(CCEasing theEasing){
 			_myEasing = theEasing;
 		}
 		

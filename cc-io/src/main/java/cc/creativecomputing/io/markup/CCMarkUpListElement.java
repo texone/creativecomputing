@@ -2,7 +2,7 @@ package cc.creativecomputing.io.markup;
 
 public class CCMarkUpListElement extends CCMarkUpElement {
 
-	public static enum CCMarkupListStyle{
+	public enum CCMarkupListStyle{
 		UNORDERED,
 		ORDERED
 	}
@@ -47,10 +47,7 @@ public class CCMarkUpListElement extends CCMarkUpElement {
             return false;
         }
         CCMarkUpListElement other = (CCMarkUpListElement) obj;
-        if (_myStyle != other._myStyle) {
-            return false;
-        }
-        return true;
+        return _myStyle == other._myStyle;
     }
     
     @Override

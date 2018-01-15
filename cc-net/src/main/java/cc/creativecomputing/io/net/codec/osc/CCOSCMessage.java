@@ -246,7 +246,7 @@ public class CCOSCMessage extends CCOSCPacket {
 	 * @throws IllegalArgumentException occurs in some cases of buffer underflow
 	 * @see CCOSCPacketCodec#decodeMessage(String, ByteBuffer )
 	 */
-	public static CCOSCMessage decodeMessage(String theAddress, ByteBuffer theBuffer) throws IOException {
+	public static CCOSCMessage decodeMessage(String theAddress, ByteBuffer theBuffer) {
 		return CCOSCPacketCodec.getDefaultCodec().decodeMessage(theAddress, theBuffer);
 	}
 }

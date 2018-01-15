@@ -102,7 +102,7 @@ public enum GLPixelDataInternalFormat {
 	
 	private int _myGLID;
 	
-	private GLPixelDataInternalFormat(int theGLID){
+	GLPixelDataInternalFormat(int theGLID){
 		_myGLID = theGLID;
 	}
 	

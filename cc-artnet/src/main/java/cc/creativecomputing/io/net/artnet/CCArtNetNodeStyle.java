@@ -38,7 +38,7 @@ public enum CCArtNetNodeStyle {
 
 	public final int id;
 
-	private CCArtNetNodeStyle(int id) {
+	CCArtNetNodeStyle(int id) {
 		this.id = id;
 	}
 

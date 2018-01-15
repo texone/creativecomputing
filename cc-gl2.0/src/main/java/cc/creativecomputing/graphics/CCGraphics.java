@@ -489,7 +489,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @author Riekoff
 	 *
 	 */
-	public static enum CCDepthFunc{
+	public enum CCDepthFunc{
 		/**
 		 * Never passes.
 		 */
@@ -615,7 +615,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @author christianriekoff
 	 *
 	 */
-	public static enum CCStencilFunction{
+	public enum CCStencilFunction{
 		/**
 		 * Always fails.
 		 */
@@ -709,7 +709,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @author christianriekoff
 	 *
 	 */
-	public static enum CCStencilOperation{
+	public enum CCStencilOperation{
 		/**
 		 * Keeps the current value.
 		 */
@@ -777,7 +777,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @author info
 	 *
 	 */
-	static public enum CCBlendFactor{
+	public enum CCBlendFactor{
 		/**
 		 * (0,0,0,0)
 		 */
@@ -842,12 +842,12 @@ public class CCGraphics extends CCGLGraphics<GL2>{
         
 		private final int glId;
 		  
-		private CCBlendFactor(final int theglID){
+		CCBlendFactor(final int theglID){
 			glId = theglID;
 		}
 	}
 	
-	public static enum CCBlendEquation{
+	public enum CCBlendEquation{
 		ADD(GL.GL_FUNC_ADD), 
 		SUBTRACT(GL.GL_FUNC_SUBTRACT),
         REVERSE_SUBTRACT(GL.GL_FUNC_REVERSE_SUBTRACT), 
@@ -856,7 +856,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
     
 		private final int glId;
 		  
-		private CCBlendEquation(final int theglID){
+		CCBlendEquation(final int theglID){
 			glId = theglID;
 		}
 	}
@@ -976,7 +976,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	   * @author info
 	   *
 	   */
-	public static enum CCBlendMode {
+	public enum CCBlendMode {
 		ALPHA(CCBlendFactor.ONE, CCBlendFactor.ONE_MINUS_SRC_ALPHA, CCBlendEquation.ADD), 
 		BLEND(CCBlendFactor.SRC_ALPHA, CCBlendFactor.ONE_MINUS_SRC_ALPHA, CCBlendEquation.ADD), 
 		REPLACE(CCBlendFactor.ONE, CCBlendFactor.ZERO, CCBlendEquation.ADD), 
@@ -994,7 +994,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		private final CCBlendEquation _myEquation;
 		private final CCBlendEquation _myAlphaEquation;
 
-		private CCBlendMode(final CCBlendFactor theSrcFactor, final CCBlendFactor theDstFactor, final CCBlendEquation theEquation) {
+		CCBlendMode(final CCBlendFactor theSrcFactor, final CCBlendFactor theDstFactor, final CCBlendEquation theEquation) {
 			_mySrcFactor = theSrcFactor;
 			_myDstFactor = theDstFactor;
 			_mySrcAlphaFactor = theSrcFactor;
@@ -1003,8 +1003,8 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 			_myAlphaEquation = theEquation;
 		}
 
-		private CCBlendMode(final CCBlendFactor theSrcFactor, final CCBlendFactor theDstFactor, final CCBlendEquation theEquation, final CCBlendFactor theSrcAlphaFactor,
-				final CCBlendFactor theDstAlphaFactor, final CCBlendEquation theAlphaEquation) {
+		CCBlendMode(final CCBlendFactor theSrcFactor, final CCBlendFactor theDstFactor, final CCBlendEquation theEquation, final CCBlendFactor theSrcAlphaFactor,
+                    final CCBlendFactor theDstAlphaFactor, final CCBlendEquation theAlphaEquation) {
 			_mySrcFactor = theSrcFactor;
 			_myDstFactor = theDstFactor;
 			_mySrcAlphaFactor = theSrcAlphaFactor;
@@ -1098,7 +1098,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	}
 	
 	public void clearColor(final CCColor theColor){
-		clearColor((double)theColor.r,(double)theColor.g,(double)theColor.b,(double)theColor.a);
+		clearColor(theColor.r, theColor.g, theColor.b, theColor.a);
 	}
 	
 	public void clearColor(final int theRGB) {
@@ -1255,9 +1255,9 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		}
 	}
 
-	public static enum CCTextureMode {
-		IMAGE, NORMALIZED, TARGET_BASED;
-	}
+	public enum CCTextureMode {
+		IMAGE, NORMALIZED, TARGET_BASED
+    }
 
 	protected CCTextureMode _myTextureMode = CCTextureMode.TARGET_BASED;
 
@@ -1372,7 +1372,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	/////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////
 	
-	public static enum CCMatrixMode{
+	public enum CCMatrixMode{
 		/**
 		 * Applies subsequent matrix operations to the modelview matrix stack.
 		 */
@@ -1389,7 +1389,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		int glID;
 		int glMatrixID;
 		
-		private CCMatrixMode(final int theGlID, final int theGlMatrixID){
+		CCMatrixMode(final int theGlID, final int theGlMatrixID){
 			glID = theGlID;
 			glMatrixID = theGlMatrixID;
 		}
@@ -1576,7 +1576,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		rotate(CCMath.degrees(myAngle),myAxis.x,myAxis.y,myAxis.z);
 	}
 	
-	public static enum CCRotationOrder{
+	public enum CCRotationOrder{
 		XYZ,
 		XZY,
 		YXZ,
@@ -1808,7 +1808,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public static enum CCAttributeMask{
+	public enum CCAttributeMask{
 		/**
 		 * Accumulation buffer clear value
 		 */
@@ -1832,12 +1832,12 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		
 		int glID;
 		
-		private CCAttributeMask(final int theGlID){
+		CCAttributeMask(final int theGlID){
 			glID = theGlID;
 		}
 	}
 	
-	public static enum CCAttributeBit{
+	public enum CCAttributeBit{
 		
 	}
 	
@@ -1867,14 +1867,14 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	/**
 	 * Specifies whether front- or back-facing facets are candidates for culling.
 	 */
-	public static enum CCCullFace{
+	public enum CCCullFace{
 		FRONT(GL.GL_FRONT),
 		BACK(GL.GL_BACK),
 		FRONT_AND_BACK(GL.GL_FRONT_AND_BACK);
 		
 		int glID;
 		
-		private CCCullFace(final int theGlID){
+		CCCullFace(final int theGlID){
 			glID = theGlID;
 		}
 	}
@@ -1906,13 +1906,13 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		gl.glDisable(GL.GL_CULL_FACE);
 	}
 	
-	public static enum CCFace{
+	public enum CCFace{
 		CLOCK_WISE(GL.GL_CW),
 		COUNTER_CLOCK_WISE(GL.GL_CCW);
 		
 		int glID;
 		
-		private CCFace(final int theGlID){
+		CCFace(final int theGlID){
 			glID = theGlID;
 		}
 	}
@@ -1948,14 +1948,14 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		gl.glFrontFace(theFace.glID);
 	}
 	
-	public static enum CCPolygonMode{
+	public enum CCPolygonMode{
 		POINT(GL2.GL_POINT),
 		LINE(GL2.GL_LINE),
 		FILL(GL2.GL_FILL);
 		
 		int glID;
 		
-		private CCPolygonMode(final int theGlID){
+		CCPolygonMode(final int theGlID){
 			glID = theGlID;
 		}
 	}
@@ -3381,7 +3381,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @author texone
 	 *
 	 */
-	public static enum CCTextureEnvironmentMode{
+	public enum CCTextureEnvironmentMode{
 		/**
 		 * Texel values are applied to geometry fragment values. If blending 
 		 * is enabled and the texture contains an alpha channel, the geometry 
@@ -3414,7 +3414,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		
 		private final int glID;
 		
-		private CCTextureEnvironmentMode(final int theGlID){
+		CCTextureEnvironmentMode(final int theGlID){
 			glID = theGlID;
 		}
 	}
@@ -3491,7 +3491,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @author christianriekoff
 	 *
 	 */
-	public static enum CCTextureGenMode{
+	public enum CCTextureGenMode{
 		/**
 		 * When the texture generation mode is set to <code>OBJECT_LINEAR</code>, 
 		 * texture coordinates are generated using the following function:
@@ -3549,13 +3549,13 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		private final int glID;
 		private final int glPlaneId;
 		
-		private CCTextureGenMode(final int theGlID, final int thePlaneID){
+		CCTextureGenMode(final int theGlID, final int thePlaneID){
 			glID = theGlID;
 			glPlaneId = thePlaneID;
 		}
 	}
 	
-	public static enum CCTextureGenCoord{
+	public enum CCTextureGenCoord{
 		S(GL2.GL_S, GL2.GL_TEXTURE_GEN_S),
 		T(GL2.GL_T, GL2.GL_TEXTURE_GEN_T),
 		R(GL2.GL_R, GL2.GL_TEXTURE_GEN_R),
@@ -3564,7 +3564,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		private final int glID;
 		private final int glGenID;
 		
-		private CCTextureGenCoord(final int theGlID, final int theGenID){
+		CCTextureGenCoord(final int theGlID, final int theGenID){
 			glID = theGlID;
 			glGenID = theGenID;
 		}
@@ -4039,7 +4039,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 */
 	public void perspective(double fov, double aspect, double zNear, double zFar){
 		//double ymax = zNear * tan(fovy * PI / 360.0f);
-		double ymax = zNear * (double) Math.tan(fov / 2.0f);
+		double ymax = zNear * Math.tan(fov / 2.0f);
 		double ymin = -ymax;
 
 		double xmin = ymin * aspect;
@@ -4097,8 +4097,8 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 *
 	 */
 	public enum CCColorMaterialMode{
-		OFF, EMISSION, AMBIENT, DIFFUSE, AMBIENT_AND_DIFFUSE, SPECULAR;
-	}
+		OFF, EMISSION, AMBIENT, DIFFUSE, AMBIENT_AND_DIFFUSE, SPECULAR
+    }
 	
 	private CCColorMaterialMode _myColorMaterialMode;
 	private CCCullFace _myColorMaterialFace;

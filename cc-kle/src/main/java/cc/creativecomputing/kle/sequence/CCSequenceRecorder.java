@@ -39,10 +39,10 @@ import cc.creativecomputing.math.easing.CCEasing.CCEaseMode;
 
 public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
-	public static interface CCSequenceRecorderListener{
-		public void start();
+	public interface CCSequenceRecorderListener{
+		void start();
 		
-		public void end();
+		void end();
 	}
 	
 	public class CCSequenceChannelRecording extends CCSequence{
@@ -257,7 +257,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	private List<CCKleChannelType> _myChannelsToRecord = new ArrayList<>();
 	
-	private static enum CCRecordMode{
+	private enum CCRecordMode{
 		SEQUENCE, TIMELINE, FRAME
 	}
 	

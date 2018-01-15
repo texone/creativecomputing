@@ -46,13 +46,13 @@ public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 		}
 
 		@Override
-		public void handlerAdded(ChannelHandlerContext theCtx) throws Exception {}
+		public void handlerAdded(ChannelHandlerContext theCtx) {}
 
 		@Override
-		public void handlerRemoved(ChannelHandlerContext theCtx) throws Exception {}
+		public void handlerRemoved(ChannelHandlerContext theCtx) {}
 
 		@Override
-		public void channelInactive(ChannelHandlerContext theCtx) throws Exception {
+		public void channelInactive(ChannelHandlerContext theCtx) {
 			if(_myReconnectTime <= 0)return;
 //			scheduleReconnect(theCtx.channel().eventLoop()); 
 			connect();
@@ -60,19 +60,19 @@ public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 		}
 
 		@Override
-		public void channelReadComplete(ChannelHandlerContext theCtx) throws Exception {}
+		public void channelReadComplete(ChannelHandlerContext theCtx) {}
 
 		@Override
-		public void channelRegistered(ChannelHandlerContext theCtx) throws Exception {}
+		public void channelRegistered(ChannelHandlerContext theCtx) {}
 
 		@Override
-		public void channelUnregistered(ChannelHandlerContext theCtx) throws Exception {}
+		public void channelUnregistered(ChannelHandlerContext theCtx) {}
 
 		@Override
-		public void channelWritabilityChanged(ChannelHandlerContext theCtx) throws Exception {}
+		public void channelWritabilityChanged(ChannelHandlerContext theCtx) {}
 
 		@Override
-		public void userEventTriggered(ChannelHandlerContext theCtx, Object arg1) throws Exception {}
+		public void userEventTriggered(ChannelHandlerContext theCtx, Object arg1) {}
 	}
 
 	public CCClient(CCNetCodec<MessageType> theCodec, String theIP, int thePort) {
@@ -98,7 +98,7 @@ public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 		_myFuture.channel().writeAndFlush(theMessage);
 	}
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		CCTCPClient<CCDataObject> myClient = new CCTCPClient<CCDataObject>(new CCNetDataObjectCodec(),"127.0.0.1", 12345);
 		myClient.connect();
 	}

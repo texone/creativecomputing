@@ -6,5 +6,5 @@ import cc.creativecomputing.kle.sequence.CCSequence;
 
 public interface CCSequenceProcessor {
 
-	public void process(CCSequence theInput, CCKleMapping<?> theMapping, CCTriggerProgress theProcess);
+	void process(CCSequence theInput, CCKleMapping<?> theMapping, CCTriggerProgress theProcess);
 }

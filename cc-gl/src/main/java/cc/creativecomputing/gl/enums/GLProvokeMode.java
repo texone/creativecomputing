@@ -8,7 +8,7 @@ public enum GLProvokeMode {
 	
 	private int _myGLID;
 	
-	private GLProvokeMode(int theGLID){
+	GLProvokeMode(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -187,12 +187,12 @@ public class CCMultiFontText {
 	 * @author christianriekoff
 	 *
 	 */
-	public static interface CCTextListener{
+	public interface CCTextListener{
 		/**
 		 * This method is called by the text object, every time its text is changed
 		 * @param theText
 		 */
-		public void onChangeText(CCMultiFontText theText);
+        void onChangeText(CCMultiFontText theText);
 	}
 	
 	/**
@@ -256,7 +256,7 @@ public class CCMultiFontText {
 			// place letters
 			
 			_myX[0] = theX;
-			final double mySpace = (double)(_myWidth - _myTextPart.font().width(theTextBuffer, theStart, theEnd)* _myTextPart.size())/(theEnd - theStart - 1);
+			final double mySpace = (_myWidth - _myTextPart.font().width(theTextBuffer, theStart, theEnd)* _myTextPart.size()) /(theEnd - theStart - 1);
 			int myLastIndex = -1;
 
 			for (int index = theStart; index < theEnd; index++) {

@@ -189,7 +189,7 @@ public class CCIECalc {
 
 		for (int i = 0; i < IE_HORZ; i++){
 			for (int j = 0; j < theData.photometricalData().horizontalAngles().length; j++){
-				if (Math.abs(((double) i * IE_H_ANGLE) - (double) theData.photometricalData().horizontalAngles()[j]) < 1.0) {
+				if (Math.abs(((double) i * IE_H_ANGLE) - theData.photometricalData().horizontalAngles()[j]) < 1.0) {
 					horz_num++;
 					h_angle[i] = j;
 					horz_flag[i] = true;
@@ -209,7 +209,7 @@ public class CCIECalc {
 		
 		for (int i = 0; i < IE_VERT_CAND; i++){
 			for (int j = 0; j < theData.photometricalData().verticalAngles().length; j++){
-				if (Math.abs((i * IE_V_ANGLE) - (double) theData.photometricalData().verticalAngles()[j]) < 1.0) {
+				if (Math.abs((i * IE_V_ANGLE) - theData.photometricalData().verticalAngles()[j]) < 1.0) {
 					v_angle[i] = j;
 					vert_flag[i] = true;
 				}
@@ -374,8 +374,8 @@ public class CCIECalc {
 		for (int n = IE_VERT_FLUX / 2; n < IE_VERT_FLUX; n++)
 			phi_u += (double) flux[n];
 
-		phi_d /= (double) total_lm;
-		phi_u /= (double) total_lm;
+		phi_d /= total_lm;
+		phi_u /= total_lm;
 
 		if (g < 0.001) {
 			/* Calculate the coefficient of utilization */
@@ -388,7 +388,7 @@ public class CCIECalc {
 			Dg += Math.exp(-IE_A[n] * Math.pow(g, IE_B[n])) * (double) flux[n];
 
 		if (phi_d > 0.001)
-			Dg /= (phi_d * (double) total_lm);
+			Dg /= (phi_d * total_lm);
 
 		/* Calculate the form factor approximation */
 		double f23 = 0.026 + 0.503 * Math.exp(-0.270 * g) + 0.470 * Math.exp(-0.119 * g);
@@ -506,8 +506,8 @@ public class CCIECalc {
 		double phi_u = 0.0; /* Total upward luminaire flux */
 		for (int n = IE_VERT_FLUX / 2; n < IE_VERT_FLUX; n++)
 			phi_u += (double) flux[n];
-		phi_d /= (double) total_lm;
-		phi_u /= (double) total_lm;
+		phi_d /= total_lm;
+		phi_u /= total_lm;
 
 		if (g < 0.001) {
 			/* Calculate the coefficient of utilization */
@@ -527,7 +527,7 @@ public class CCIECalc {
 			Dg += Math.exp(-IE_A[n] * Math.pow(g, IE_B[n])) * (double) flux[n];
 
 		if (phi_d > 0.001)
-			Dg /= (phi_d * (double) total_lm);
+			Dg /= (phi_d * total_lm);
 
 		/* Calculate the form factor approximation */
 		double f23 = 0.026 + 0.503 * Math.exp(-0.270 * g) + 0.470 * Math.exp(-0.119 * g);

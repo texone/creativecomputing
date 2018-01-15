@@ -17,7 +17,7 @@ public enum GLColorBuffer {
 	
 	private int _myGLID;
 	
-	private GLColorBuffer(int theGLID){
+	GLColorBuffer(int theGLID){
 		_myGLID = theGLID;
 	}
 	

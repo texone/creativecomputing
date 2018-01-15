@@ -11,7 +11,7 @@ public enum GLBlendEquation {
 	
 	private int _myGLID;
 	
-	private GLBlendEquation(int theGLID){
+	GLBlendEquation(int theGLID){
 		_myGLID = theGLID;
 	}
 	

@@ -98,7 +98,7 @@ public class CCGStreamerMovie extends CCMovieData {
 	@SuppressWarnings("unused")
 	private double nanoSecToSecFrac(double theNanoSeconds) {
 		theNanoSeconds /= 1E9;
-		return (double) theNanoSeconds;
+		return theNanoSeconds;
 	}
 
 	private long secToNanoLong(double theSeconds) {
@@ -302,7 +302,7 @@ public class CCGStreamerMovie extends CCMovieData {
 
 	@Override
 	public double volume() {
-		return (double) gplayer.getVolume();
+		return gplayer.getVolume();
 	}
 
 	@Override
@@ -326,7 +326,7 @@ public class CCGStreamerMovie extends CCMovieData {
 	 * @return double
 	 */
 	public double frameRate() {
-		return (double) gplayer.getVideoSinkFrameRate();
+		return gplayer.getVideoSinkFrameRate();
 	}
 
 	public int frame() {

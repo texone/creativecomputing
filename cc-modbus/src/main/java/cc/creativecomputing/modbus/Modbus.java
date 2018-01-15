@@ -47,39 +47,39 @@ public interface Modbus {
    * JVM flag for debug mode. Can be set passing the system property
    * com.ghgande.j2mod.modbus.debug=false|true (-D flag to the jvm).
    */
-  public static boolean debug = false;//"true".equals(System.getProperty("com.ghgande.modbus.debug"));
+  boolean debug = false;//"true".equals(System.getProperty("com.ghgande.modbus.debug"));
 
   /**
    * Defines the byte representation of the coil state <b>on</b>.
    */
-  public static final int COIL_ON = (byte) 255;
+  int COIL_ON = (byte) 255;
 
   /**
    * Defines the byte representation of the coil state <b>pos</b>.
    */
-  public static final int COIL_OFF = 0;
+  int COIL_OFF = 0;
 
   /**
    * Defines the word representation of the coil state <b>on</b>.
    */
-  public static final byte[] COIL_ON_BYTES = {(byte) COIL_ON, (byte) COIL_OFF};
+  byte[] COIL_ON_BYTES = {(byte) COIL_ON, (byte) COIL_OFF};
 
   /**
    * Defines the word representation of the coil state <b>pos</b>.
    */
-  public static final byte[] COIL_OFF_BYTES = {(byte) COIL_OFF, (byte) COIL_OFF};
+  byte[] COIL_OFF_BYTES = {(byte) COIL_OFF, (byte) COIL_OFF};
 
   /**
    * Defines the maximum number of bits in multiple read/write
    * of input discretes or coils (<b>2000</b>).
    */
-  public static final int MAX_BITS = 2000;
+  int MAX_BITS = 2000;
 
   /**
    * Defines the Modbus slave exception offset that is added to the
    * function code, to flag an exception.
    */
-  public static final int EXCEPTION_OFFSET = 128;			//the last valid function code is 127
+  int EXCEPTION_OFFSET = 128;			//the last valid function code is 127
 
  
 
@@ -88,58 +88,58 @@ public interface Modbus {
    * Defines the default port number of Modbus
    * (=<tt>502</tt>).
    */
-  public static final int DEFAULT_PORT = 502;
+  int DEFAULT_PORT = 502;
 
   /**
    * Defines the maximum message length in bytes
    * (=<tt>256</tt>).
    */
-  public static final int MAX_MESSAGE_LENGTH = 256;
+  int MAX_MESSAGE_LENGTH = 256;
 
   /**
    * Defines the default transaction identifier (=<tt>0</tt>).
    */
-  public static final int DEFAULT_TRANSACTION_ID = 0;
+  int DEFAULT_TRANSACTION_ID = 0;
 
   /**
    * Defines the default protocol identifier (=<tt>0</tt>).
    */
-  public static final int DEFAULT_PROTOCOL_ID = 0;
+  int DEFAULT_PROTOCOL_ID = 0;
 
   /**
    * Defines the default unit identifier (=<tt>0</tt>).
    */
-  public static final int DEFAULT_UNIT_ID = 0;
+  int DEFAULT_UNIT_ID = 0;
 
   /**
    * Defines the default setting for validity checking
    * in transactions (=<tt>true</tt>).
    */
-  public static final boolean DEFAULT_VALIDITYCHECK = true;
+  boolean DEFAULT_VALIDITYCHECK = true;
 
   /**
    * Defines the default setting for I/O operation timeouts
    * in milliseconds (=<tt>3000</tt>).
    */
-  public static final int DEFAULT_TIMEOUT = 3000;
+  int DEFAULT_TIMEOUT = 3000;
 
   /**
    * Defines the default reconnecting setting for
    * transactions (=<tt>false</tt>).
    */
-  public static final boolean DEFAULT_RECONNECTING = false;
+  boolean DEFAULT_RECONNECTING = false;
 
   /**
    * Defines the default amount of retires for opening
    * a connection (=<tt>3</tt>).
    */
-  public static final int DEFAULT_RETRIES = 3;
+  int DEFAULT_RETRIES = 3;
 
   /**
    * Defines the default number of msec to delay before transmission
    * (=<tt>50</tt>).
    */
-  public static final int DEFAULT_TRANSMIT_DELAY = 0;
+  int DEFAULT_TRANSMIT_DELAY = 0;
 
   /**
    * Defines the maximum value of the transaction identifier.
@@ -149,27 +149,27 @@ public interface Modbus {
    * limited to signed 16-bit integers to prevent problems with servers
    * that might incorrectly assume the value is a signed value.
    */
-  public static final int MAX_TRANSACTION_ID = Short.MAX_VALUE;
+  int MAX_TRANSACTION_ID = Short.MAX_VALUE;
 
 
   /**
    * Defines the serial encoding "ASCII".
    */
-  public static final String SERIAL_ENCODING_ASCII = "ascii";
+  String SERIAL_ENCODING_ASCII = "ascii";
 
   /**
    * Defines the serial encoding "RTU".
    */
-  public static final String SERIAL_ENCODING_RTU = "rtu";
+  String SERIAL_ENCODING_RTU = "rtu";
 
   /**
    * Defines the serial encoding "BIN".
    */
-  public static final String SERIAL_ENCODING_BIN = "bin";
+  String SERIAL_ENCODING_BIN = "bin";
 
   /**
    * Defines the default serial encoding (ASCII).
    */
-  public static final String DEFAULT_SERIAL_ENCODING = SERIAL_ENCODING_ASCII;
+  String DEFAULT_SERIAL_ENCODING = SERIAL_ENCODING_ASCII;
 
 }

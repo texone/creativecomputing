@@ -8,7 +8,7 @@ public enum GLTextureCompareMode {
 	
 	private int _myGLID;
 	
-	private GLTextureCompareMode(int theGLID){
+	GLTextureCompareMode(int theGLID){
 		_myGLID = theGLID;
 	}
 	

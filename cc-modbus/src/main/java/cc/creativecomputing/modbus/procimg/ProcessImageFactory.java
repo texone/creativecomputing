@@ -47,14 +47,14 @@ public interface ProcessImageFactory {
    *
    * @return a ProcessImageImplementation instance.
    */
-  public ProcessImageImplementation createProcessImageImplementation();
+  ProcessImageImplementation createProcessImageImplementation();
 
   /**
    * Returns a new DigitalIn instance.
    *
    * @return a DigitalIn instance.
    */
-  public DigitalIn createDigitalIn();
+  DigitalIn createDigitalIn();
 
   /**
    * Returns a new DigitalIn instance with the given state.
@@ -62,14 +62,14 @@ public interface ProcessImageFactory {
    * @param state true if set, false otherwise.
    * @return a DigitalIn instance.
    */
-  public DigitalIn createDigitalIn(boolean state);
+  DigitalIn createDigitalIn(boolean state);
 
   /**
    * Returns a new DigitalOut instance.
    *
    * @return a DigitalOut instance.
    */
-  public DigitalOut createDigitalOut();
+  DigitalOut createDigitalOut();
 
   /**
    * Returns a new DigitalOut instance with the
@@ -78,14 +78,14 @@ public interface ProcessImageFactory {
    * @param b true if set, false otherwise.
    * @return a DigitalOut instance.
    */
-  public DigitalOut createDigitalOut(boolean b);
+  DigitalOut createDigitalOut(boolean b);
 
   /**
    * Returns a new InputRegister instance.
    *
    * @return an InputRegister instance.
    */
-  public InputRegister createInputRegister();
+  InputRegister createInputRegister();
 
   /**
    * Returns a new InputRegister instance with a
@@ -95,14 +95,14 @@ public interface ProcessImageFactory {
    * @param b2 the second <tt>byte</tt>.
    * @return an InputRegister instance.
    */
-  public InputRegister createInputRegister(byte b1, byte b2);
+  InputRegister createInputRegister(byte b1, byte b2);
 
   /**
    * Creates a new Register instance.
    *
    * @return a Register instance.
    */
-  public Register createRegister();
+  Register createRegister();
 
   /**
    * Returns a new Register instance with a
@@ -112,6 +112,6 @@ public interface ProcessImageFactory {
    * @param b2 the second <tt>byte</tt>.
    * @return a Register instance.
    */
-   public Register createRegister(byte b1, byte b2);
+  Register createRegister(byte b1, byte b2);
 
 }//interface ProcessImageFactory

@@ -10,7 +10,7 @@ public enum GLStringQuery {
 	
 	private int _myGLID;
 	
-	private GLStringQuery(int theGLID){
+	GLStringQuery(int theGLID){
 		_myGLID = theGLID;
 	}
 	

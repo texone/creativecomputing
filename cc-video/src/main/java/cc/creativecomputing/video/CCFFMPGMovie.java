@@ -344,7 +344,7 @@ public class CCFFMPGMovie extends CCMovieData {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() {
 		// Free the RGB image
 		av_free(_myBuffer);
 		av_free(_myRGBFrame);

@@ -130,7 +130,7 @@ public final class ReadExceptionStatusRequest extends CCAbstractModbusRequest {
 	/**
 	 * readData -- dummy function.  There is no data with the request.
 	 */
-	public void readData(DataInput din) throws IOException {
+	public void readData(DataInput din) {
 	}
 
 	/**

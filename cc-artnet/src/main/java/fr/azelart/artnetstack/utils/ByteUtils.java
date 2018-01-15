@@ -229,12 +229,10 @@ public class ByteUtils {
 	public static int toInt(byte[] data) {
 	    if (data == null || data.length != 4) return 0x0;
 	    // ----------
-	    return (int)( // NOTE: type cast not necessary for int
-	            (0xff & data[0]) << 24  |
-	            (0xff & data[1]) << 16  |
-	            (0xff & data[2]) << 8   |
-	            (0xff & data[3]) << 0
-	            );
+	    return (0xff & data[0]) << 24  |
+        (0xff & data[1]) << 16  |
+        (0xff & data[2]) << 8   |
+        (0xff & data[3]) << 0;
 	}
 	public static int[] toIntA(byte[] data) {
 	    if (data == null || data.length % 4 != 0) return null;
@@ -253,18 +251,14 @@ public class ByteUtils {
 	public static long toLong(byte[] data) {
 	    if (data == null || data.length != 8) return 0x0;
 	    // ----------
-	    return (long)(
-	            // (Below) convert to longs before shift because digits
-	            //         are lost with ints beyond the 32-bit limit
-	            (long)(0xff & data[0]) << 56  |
-	            (long)(0xff & data[1]) << 48  |
-	            (long)(0xff & data[2]) << 40  |
-	            (long)(0xff & data[3]) << 32  |
-	            (long)(0xff & data[4]) << 24  |
-	            (long)(0xff & data[5]) << 16  |
-	            (long)(0xff & data[6]) << 8   |
-	            (long)(0xff & data[7]) << 0
-	            );
+	    return (long)(0xff & data[0]) << 56  |
+        (long)(0xff & data[1]) << 48  |
+        (long)(0xff & data[2]) << 40  |
+        (long)(0xff & data[3]) << 32  |
+        (long)(0xff & data[4]) << 24  |
+        (long)(0xff & data[5]) << 16  |
+        (long)(0xff & data[6]) << 8   |
+        (long)(0xff & data[7]) << 0;
 	}
 	public static long[] toLongA(byte[] data) {
 	    if (data == null || data.length % 8 != 0) return null;
@@ -331,7 +325,7 @@ public class ByteUtils {
 	}
 	/* ========================= */
 	public static boolean toBoolean(byte[] data) {
-	    return (data == null || data.length == 0) ? false : data[0] != 0x00;
+	    return (data != null && data.length != 0) && data[0] != 0x00;
 	}
 	public static boolean[] toBooleanA(byte[] data) {
 	    // Advanced Technique: Extract the boolean array's length

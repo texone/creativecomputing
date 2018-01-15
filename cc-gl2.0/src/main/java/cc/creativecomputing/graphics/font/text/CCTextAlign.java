@@ -16,5 +16,5 @@ package cc.creativecomputing.graphics.font.text;
  *
  */
 public enum CCTextAlign{
-	RIGHT, LEFT,CENTER, JUSTIFY;
+	RIGHT, LEFT,CENTER, JUSTIFY
 }

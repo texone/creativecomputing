@@ -115,7 +115,7 @@ public class Example_misc_PlyModel extends BareboneGLAbstractExperiment {
 			int w, int h) {
 		width = w;
 		height = h;
-		aspect = (float)height/width;
+		aspect = height /width;
 		myCam.updateProjectionMatrix(aspect);
 	}
 

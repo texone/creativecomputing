@@ -18,8 +18,8 @@ public class CCTextInputDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 823514954709391337L;
 
-	public static interface CCTextChangeListener{
-		public void onChangeText(String theText);
+	public interface CCTextChangeListener{
+		void onChangeText(String theText);
 	}
 	
 	private JTextField _myTextField;

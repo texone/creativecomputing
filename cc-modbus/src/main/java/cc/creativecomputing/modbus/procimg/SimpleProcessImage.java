@@ -408,7 +408,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
 
 	public Register getRegister(int ref) throws IllegalAddressException {
 		try {
-			Register result = (Register) m_Registers.elementAt(ref);
+			Register result = m_Registers.elementAt(ref);
 			if (result == null)
 				throw new IllegalAddressException();
 			

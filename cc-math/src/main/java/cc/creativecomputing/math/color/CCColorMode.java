@@ -4,7 +4,7 @@ import cc.creativecomputing.math.CCColor;
 
 public interface CCColorMode {
 
-	public CCColor toRGB  (double...args);
+	CCColor toRGB(double... args);
 	
-	public double[] fromRGB(CCColor theColor);
+	double[] fromRGB(CCColor theColor);
 }

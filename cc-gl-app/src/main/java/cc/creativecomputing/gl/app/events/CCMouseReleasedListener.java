@@ -44,6 +44,6 @@ public interface CCMouseReleasedListener{
 	 * @see #mouseEntered(CCMouseEvent)
 	 * @see #mouseExited(CCMouseEvent)
 	 */
-	public void mouseReleased(final CCMouseEvent theEvent);
+    void mouseReleased(final CCMouseEvent theEvent);
 	
 }

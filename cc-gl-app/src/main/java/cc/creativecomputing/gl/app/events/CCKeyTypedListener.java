@@ -42,5 +42,5 @@ public interface CCKeyTypedListener {
 	 * @see CCKeyEvent
 	 * @see CCGLAdapter#keyTyped()
 	 */
-	public void keyTyped(final CCKeyEvent theKeyEvent);
+    void keyTyped(final CCKeyEvent theKeyEvent);
 }

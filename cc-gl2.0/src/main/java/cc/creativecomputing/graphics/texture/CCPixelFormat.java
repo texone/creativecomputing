@@ -167,7 +167,7 @@ public enum CCPixelFormat{
 	public final int numberOfChannels;
 	public final int[] offsets;
 	
-	private CCPixelFormat(final int theGLid, final int theNumberOfBytes, final int theOffset1, final int theOffset2, final int theOffset3, final int theOffset4){
+	CCPixelFormat(final int theGLid, final int theNumberOfBytes, final int theOffset1, final int theOffset2, final int theOffset3, final int theOffset4){
 		glID = theGLid;
 		numberOfChannels = theNumberOfBytes;
 		offsets = new int[4];

@@ -154,9 +154,8 @@ public class ModbusUDPTransaction
     m_Retries = num;
   }//setRetries
 
-  public void execute() throws ModbusIOException,
-      CCModbusSlaveException,
-      CCModbusException {
+  public void execute() throws
+          CCModbusException {
 
     //1. assert executeability
     assertExecutable();
@@ -231,7 +230,7 @@ ex.printStackTrace();
    *
    * @throws CCModbusException if this transaction has not been valid.
    */
-  private void checkValidity() throws CCModbusException {
+  private void checkValidity() {
     //1.check transaction number
     //if(m_Request.getTransactionID()!=m_Response.getTransactionID()) {
 

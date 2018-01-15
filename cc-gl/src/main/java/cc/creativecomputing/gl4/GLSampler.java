@@ -74,7 +74,7 @@ public class GLSampler {
 	 * @author christianr
 	 *
 	 */
-	public static enum GLTextureMinFilter {
+	public enum GLTextureMinFilter {
 		/**
 		 * Returns the value of the texture element that is nearest (in
 		 * Manhattan distance) to the center of the pixel being textured.
@@ -117,7 +117,7 @@ public class GLSampler {
 		
 		private int _myGLID;
 		
-		private GLTextureMinFilter(int theGLID){
+		GLTextureMinFilter(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -178,7 +178,7 @@ public class GLSampler {
 
 		private int _myGLID;
 
-		private GLTextureMagFilter(int theGLID) {
+		GLTextureMagFilter(int theGLID) {
 			_myGLID = theGLID;
 		}
 
@@ -219,7 +219,7 @@ public class GLSampler {
 		
 		private int _myGLID;
 		
-		private GLTextureWrap(int theGLID){
+		GLTextureWrap(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -245,7 +245,7 @@ public class GLSampler {
 		
 		private int _myGLID;
 		
-		private GLTextureWrapCoord(int theGLID){
+		GLTextureWrapCoord(int theGLID){
 			_myGLID = theGLID;
 		}
 		
@@ -282,7 +282,7 @@ public class GLSampler {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
+	protected void finalize() {
 		GL4 gl = GLGraphics.currentGL();
 		gl.glDeleteSamplers(1, GLBufferUtil.wrapParameters(_myID));
 	}

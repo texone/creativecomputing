@@ -31,7 +31,7 @@ import cc.creativecomputing.core.logging.CCLog;
  */
 public class CCApplication{
 	
-	public static enum CCApplicationProgress{
+	public enum CCApplicationProgress{
 		CREATED, CALLED_TO_START, RUNNING, CALLED_TO_STOP, STOPPED
 	}
 	

@@ -65,7 +65,7 @@ public class KTXMetaData implements Iterable<Entry<String, byte[]>> {
 		}
 	}
 
-	private void read0(ByteBuffer buf, ByteOrder inputOrder, int length) throws KTXFormatException, UnsupportedEncodingException {
+	private void read0(ByteBuffer buf, ByteOrder inputOrder, int length) {
 		buf.order(inputOrder);
 		buf.limit(length);
 

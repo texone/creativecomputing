@@ -31,7 +31,7 @@ import cc.creativecomputing.math.CCMath;
  */
 public class TimeRangeController {
 	
-	public static enum TimeRangeEditFunction{
+	public enum TimeRangeEditFunction{
 		MOVE_BOTH, MOVE_START, MOVE_END, ON_OFF
 	}
 	
