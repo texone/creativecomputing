@@ -694,4 +694,154 @@ public class CCMesh {
         drawArray(g);
     	disable(g);
     }
+    
+    private CCVector4 tangent(CCVector3 normal, CCVector3 tangent, CCVector3 bitangent){
+    	double myDot = normal.dot(tangent);
+        // Gram-Schmidt orthogonalize
+    	// tangent[a] = (t - n * Dot(n, t)).Normalize();
+    	CCVector3 myTangent = tangent.subtract(normal.multiply(myDot)).normalizeLocal();
+
+        // Calculate handedness
+        //tangent[a].w = (Dot(Cross(n, t), tan2[a]) < 0.0F) ? -1.0F : 1.0F;
+    	CCVector3 myCross = normal.cross(tangent);
+    	double myHandedness = myCross.dot(bitangent) < 0 ? -1 : 1;
+    	
+        return new CCVector4(myTangent, myHandedness);
+    }
+    
+    private CCVector3[] calculateTangents(int theID0, int theID1, int theID2, int theTextureSource){
+    	int myVertexIndex0 = theID0 * _myVertexSize;
+		CCVector3 v1 = new CCVector3(
+			_myVertices.get(myVertexIndex0 + 0),
+			_myVertices.get(myVertexIndex0 + 1),
+			_myVertices.get(myVertexIndex0 + 2)
+		);
+		int myVertexIndex1 = theID1 * _myVertexSize;
+		CCVector3 v2 = new CCVector3(
+			_myVertices.get(myVertexIndex1 + 0),
+			_myVertices.get(myVertexIndex1 + 1),
+			_myVertices.get(myVertexIndex1 + 2)
+		);
+		int myVertexIndex2 = theID2 * _myVertexSize;
+		CCVector3 v3 = new CCVector3(
+			_myVertices.get(myVertexIndex2 + 0),
+			_myVertices.get(myVertexIndex2 + 1),
+			_myVertices.get(myVertexIndex2 + 2)
+		);
+	    	
+		int myTexIndex0 = theID0 * _myTextureCoordSize[theTextureSource];
+		CCVector2 w1 = new CCVector2(
+			_myTextureCoords[theTextureSource].get(myTexIndex0 + 0), 
+			_myTextureCoords[theTextureSource].get(myTexIndex0 + 1)
+	    );
+		int myTexIndex1 = theID1 * _myTextureCoordSize[theTextureSource];
+		CCVector2 w2 = new CCVector2(
+    	    _myTextureCoords[theTextureSource].get(myTexIndex1 + 0), 
+    	    _myTextureCoords[theTextureSource].get(myTexIndex1 + 1)
+		);
+		int myTexIndex2 = theID2 * _myTextureCoordSize[theTextureSource];
+		CCVector2 w3 = new CCVector2(
+			_myTextureCoords[theTextureSource].get(myTexIndex2 + 0), 
+			_myTextureCoords[theTextureSource].get(myTexIndex2 + 1)
+		);
+	    	
+		double x1 = v2.x - v1.x;
+		double y1 = v2.y - v1.y;
+		double z1 = v2.z - v1.z;
+		
+		double x2 = v3.x - v1.x;
+		double y2 = v3.y - v1.y;
+		double z2 = v3.z - v1.z;
+		
+		double s1 = w2.x - w1.x;
+		double t1 = w2.y - w1.y;
+		
+		double s2 = w3.x - w1.x;
+		double t2 = w3.y - w1.y;
+		
+		double r = 1.0F / (s1 * t2 - s2 * t1);
+	    
+		return new CCVector3[]{
+			new CCVector3(
+				(t2 * x1 - t1 * x2) * r, 
+				(t2 * y1 - t1 * y2) * r,
+				(t2 * z1 - t1 * z2) * r
+			),
+			new CCVector3(
+				(s1 * x2 - s2 * x1) * r, 
+				(s1 * y2 - s2 * y1) * r,
+				(s1 * z2 - s2 * z1) * r
+			)
+		};
+    }
+    
+    public void generateTangents(int theTextureSource, int theTextureTarget){
+
+    	if(_myDrawMode != CCDrawMode.TRIANGLES)return;
+    	if(_myVertexSize != 3)return;
+    	    
+    	prepareTextureCoordData(theTextureTarget, 4);
+    	
+    	if(_myIndices == null){
+	    	for(int i = 0; i < _myNumberOfVertices;i+=3){
+	    		
+	    		int myNormalIndex0 = i * 3;
+	    		CCVector3 n1 = new CCVector3(
+	    			_myNormals.get(myNormalIndex0 + 0),
+	    			_myNormals.get(myNormalIndex0 + 1),
+	    			_myNormals.get(myNormalIndex0 + 2)
+	    	    );
+	    		int myNormalIndex1 = (i + 1) * 3;
+	    		CCVector3 n2 = new CCVector3(
+	    	    	_myNormals.get(myNormalIndex1 + 0),
+	    	    	_myNormals.get(myNormalIndex1 + 1),
+	    	    	_myNormals.get(myNormalIndex1 + 2)
+	    		);
+	    		int myNormalIndex2 = (i + 2) * 3;
+	    		CCVector3 n3 = new CCVector3(
+	    	    	_myNormals.get(myNormalIndex2 + 0),
+	    	    	_myNormals.get(myNormalIndex2 + 1),
+	    	    	_myNormals.get(myNormalIndex2 + 2)
+	    		);
+
+	    		CCVector3[] myTangents = calculateTangents(i, i + 1, i + 2, theTextureSource);
+	    		CCVector3 myTangent = myTangents[0];
+	    		CCVector3 myBiTangent = myTangents[1];
+
+	    		CCVector4 myTangent1 = tangent(n1, myTangent, myBiTangent);
+	    		CCVector4 myTangent2 = tangent(n2, myTangent, myBiTangent);
+	    		CCVector4 myTangent3 = tangent(n3, myTangent, myBiTangent);
+	    		
+	    		addTextureCoords(theTextureTarget, myTangent1);
+	    		addTextureCoords(theTextureTarget, myTangent2);
+	    		addTextureCoords(theTextureTarget, myTangent3);
+	    	}
+    	}else{
+    		CCVector3[] myTangents = new CCVector3[_myNumberOfVertices];
+    		CCVector3[] myBiTangents = new CCVector3[_myNumberOfVertices];
+    		for(int i = 0; i < _myNumberOfIndices;i+=3){
+    			int i1 = _myIndices.get(i);
+    			int i2 = _myIndices.get(i + 1);
+    			int i3 = _myIndices.get(i + 2);    		
+
+	    		CCVector3[] myTriTangents = calculateTangents(i1, i2, i3, theTextureSource);
+	    		myTangents[i1] = myTriTangents[0];
+	    		myTangents[i2] = myTriTangents[0];
+	    		myTangents[i3] = myTriTangents[0];
+
+	    		myBiTangents[i1] = myTriTangents[1];
+	    		myBiTangents[i2] = myTriTangents[1];
+	    		myBiTangents[i3] = myTriTangents[1];
+    		}
+    		
+    		for(int i = 0; i < _myNumberOfVertices;i++){
+    			CCVector3 myNormal = new CCVector3(
+    	    	    _myNormals.get(i * 3 + 0),
+    	    	    _myNormals.get(i * 3 + 1),
+    	    	    _myNormals.get(i * 3 + 2)
+    	    	);
+    			addTextureCoords(theTextureTarget, tangent(myNormal, myTangents[i], myBiTangents[i]));
+    		}
+    	}
+    }
 }

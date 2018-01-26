@@ -2,6 +2,7 @@ package cc.creativecomputing.graphics;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
+import cc.creativecomputing.graphics.CCGraphics.CCCullFace;
 import cc.creativecomputing.graphics.CCGraphics.CCPolygonMode;
 import cc.creativecomputing.math.CCColor;
 
@@ -23,6 +24,8 @@ public class CCDrawAttributes {
 	private double _cPointSize = 1;
 	@CCProperty(name = "color")
 	private CCColor _cColor = new CCColor();
+	@CCProperty(name = "cullface")
+	private CCCullFace _cCullFace = CCCullFace.NONE;
 	
 	
 	public void start(CCGraphics g){
@@ -44,6 +47,8 @@ public class CCDrawAttributes {
 		g.strokeWeight(_cStrokeWeight);
 		g.pointSize(_cPointSize);
 		g.color(_cColor);
+		
+		g.cullFace(_cCullFace);
 	}
 	
 	public void end(CCGraphics g){

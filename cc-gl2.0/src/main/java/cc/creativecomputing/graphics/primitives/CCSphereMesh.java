@@ -15,27 +15,25 @@ import java.util.List;
 
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 
-public class CCSphereMesh{
+public class CCSphereMesh extends CCVBOMesh{
 	
 	private CCVector3 _myCenter;
 	private double _myRadius;
 	private int _myResolution;
 	
-	private CCMesh _myMesh;
-	
 	public CCSphereMesh(final CCVector3 theCenter, final double theRadius, final int theResolution){
+		super(CCDrawMode.TRIANGLES, ((theResolution/2 + 1) * theResolution));
 		_myCenter = theCenter;
 		_myRadius = theRadius;
 		_myResolution = theResolution;
 		
-		_myMesh = new CCMesh(CCDrawMode.TRIANGLES);
-		
 		_myResolution = CCMath.max(_myResolution, 4);
+		
+		prepareNormalData();
 		
 		createSphere(theResolution/2, theResolution);
 	}
@@ -52,8 +50,6 @@ public class CCSphereMesh{
 		
 		double myTheta;
 		double myPhi;
-		
-		_myMesh = new CCMesh(CCDrawMode.TRIANGLES,(myPointRows + 1) * myPointsPerRow);
 
 		for (i = 0; i <= myPointRows; i++){
 			for (j = 0; j < myPointsPerRow; j++){
@@ -64,8 +60,8 @@ public class CCSphereMesh{
 				y = CCMath.sin(myTheta * CCMath.PI) * CCMath.sin(myPhi * CCMath.TWO_PI);
 				z = CCMath.cos(myTheta * CCMath.PI);
 				
-				_myMesh.addNormal(x,y,z);
-				_myMesh.addVertex(
+				addNormal(x,y,z);
+				addVertex(
 //					_myRadius * x + _myCenter.x(),
 //					_myRadius * y + _myCenter.y(),
 //					_myRadius * z + _myCenter.z()
@@ -74,7 +70,7 @@ public class CCSphereMesh{
 					_myRadius * z
 				
 				);
-				_myMesh.addTextureCoords(myPhi,myTheta);
+				addTextureCoords(myPhi,myTheta);
 			}
 		}
 
@@ -90,11 +86,7 @@ public class CCSphereMesh{
 				myIndices.add((i)   * myPointsPerRow +j + 1);
 			}
 		}
-		_myMesh.indices(myIndices);
-	}
-
-	public CCMesh mesh(){
-		return _myMesh;
+		indices(myIndices);
 	}
 	
 	public CCVector3 center() {
@@ -105,7 +97,7 @@ public class CCSphereMesh{
 		
 		g.pushMatrix();
 		g.translate(_myCenter);
-		_myMesh.draw(g);
+		super.draw(g);
 //		g.ellipse(0,0,0, 100);
 		g.popMatrix();
 	}

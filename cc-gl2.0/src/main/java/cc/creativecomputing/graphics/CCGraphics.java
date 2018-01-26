@@ -1395,6 +1395,8 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		}
 	}
 	
+	private CCMatrixMode _myMatrixMode = CCMatrixMode.MODELVIEW;
+	
 	/**
 	 * Specifies whether the modelview, projection, or texture matrix will be modified, 
 	 * using the argument MODELVIEW, PROJECTION, or TEXTURE for mode. Subsequent 
@@ -1405,6 +1407,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * Three values are accepted: MODELVIEW, PROJECTION, and TEXTURE.
 	 */
 	public void matrixMode(final CCMatrixMode theMode){
+		_myMatrixMode = theMode;
 		gl.glMatrixMode(theMode.glID);
 	}
 	
@@ -1431,6 +1434,11 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * a modeling transformation.
 	 */
 	public void loadIdentity(){
+		switch(_myMatrixMode){
+		case MODELVIEW:
+//			_myModelMatrix.setIdentity();
+			break;
+		}
 		gl.glLoadIdentity();
 		
 		//gl.glTranslatef(0,0,-400.00001f);
@@ -1446,6 +1454,11 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @related matrixMode ( )
 	 */
 	public void loadMatrix(final CCMatrix4x4 theMatrix){
+		switch(_myMatrixMode){
+		case MODELVIEW:
+//			_myModelMatrix.set(theMatrix);
+			break;
+		}
 		gl.glLoadMatrixd(theMatrix.toDoubleBuffer(_myDoubleBuffer));
 	}
 	
@@ -1868,6 +1881,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * Specifies whether front- or back-facing facets are candidates for culling.
 	 */
 	public enum CCCullFace{
+		NONE(GL.GL_NONE),
 		FRONT(GL.GL_FRONT),
 		BACK(GL.GL_BACK),
 		FRONT_AND_BACK(GL.GL_FRONT_AND_BACK);
@@ -1898,6 +1912,10 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @see #noCullFace()
 	 */
 	public void cullFace(CCCullFace theFace){
+		if(theFace == CCCullFace.NONE){
+			noCullFace();
+			return;
+		}
 		gl.glEnable(GL.GL_CULL_FACE);
 		gl.glCullFace(theFace.glID);
 	}
