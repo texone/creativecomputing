@@ -19,7 +19,6 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
 import cc.creativecomputing.core.CCSelectable;
 import cc.creativecomputing.core.CCSelectionListener;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
@@ -290,8 +289,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(CCField<CCProperty> myField:CCReflectionUtil.getFields(theObject, CCProperty.class)){
 			
 			String myName = propertyName(myField);
-			
-			CCLog.info(myName);
 
 			if(_myChildHandles.containsKey(myName)){
 				CCPropertyHandle myProperty = _myChildHandles.get(myName);
