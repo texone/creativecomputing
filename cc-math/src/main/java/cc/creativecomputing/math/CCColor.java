@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCBlendable;
-import cc.creativecomputing.core.events.CCColor;
 import cc.creativecomputing.core.util.CCBitUtil;
 import cc.creativecomputing.math.CCMath;
 

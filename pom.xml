@@ -3,7 +3,7 @@
     <groupId>cc.creativecomputing</groupId>
     <artifactId>cc-main</artifactId>
     <packaging>pom</packaging>
-    <version>2.0</version>
+    <version>3.0</version>
     
     <name>creativecomputing</name>
     <description>A free, open source 3D graphics engine written in Java</description>
@@ -34,10 +34,7 @@
         <module>cc-core</module>
         <module>cc-effectables</module>
         <module>cc-geometry</module>
-        <module>cc-gl-app</module>
-        <module>cc-gl</module>
-        <module>cc-gl2.0</module>
-        <module>cc-graphics</module>
+        <module>cc-gl2</module>
         <module>cc-image</module>
         <module>cc-ies</module>
         <module>cc-io</module>
@@ -51,6 +48,7 @@
         <module>cc-p5</module>
         <module>cc-serial</module>
         <module>cc-simulation</module>
+        <module>cc-ui</module>
         <module>cc-video</module>
         <module>cc-flightxml</module>
         <module>cc-demo</module>
