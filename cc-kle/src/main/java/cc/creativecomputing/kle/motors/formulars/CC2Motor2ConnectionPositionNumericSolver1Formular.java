@@ -1,7 +1,6 @@
 package cc.creativecomputing.kle.motors.formulars;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.motors.CC2Motor2ConnectionSetup;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
