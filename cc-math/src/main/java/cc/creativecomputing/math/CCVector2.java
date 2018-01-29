@@ -117,6 +117,10 @@ public class CCVector2 implements Cloneable, Externalizable {
         this(theSource.x, theSource.y);
     }
     
+    public CCVector2(final CCVector2i theSource) {
+        this(theSource.x, theSource.y);
+    }
+    
     /**
      * Checks if one of the components of the vector is nan
      * @return true if one the vectors components is NaN
@@ -1050,5 +1054,9 @@ public class CCVector2 implements Cloneable, Externalizable {
 
 	public CCVector2 rotateLocal(double r){
 		return rotate(r, this);
+	}
+
+	public boolean isZero() {
+		return x == 0 && y == 0;
 	}
 }
