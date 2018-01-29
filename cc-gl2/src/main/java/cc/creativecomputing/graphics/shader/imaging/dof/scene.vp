@@ -1,0 +1,27 @@
+uniform float4x4 modelViewProjection : state.matrix.mvp;
+uniform float4x4 modelView : state.matrix.modelview[0];
+
+uniform float focalDistance;
+uniform float focalRange;
+
+void main(
+	in 	float4 	iPosition	: POSITION,
+	in  float2  iTexCoord	: TEXCOORD0,
+	in 	float4 	iColor		: COLOR,
+	
+	out float4 	oPosition	: POSITION,
+	out float2 	oTexCoord	: TEXCOORD0,
+	out float4 	oColor		: COLOR,
+	out float 	blur		: TEXCOORD1
+){
+  	
+  	
+
+	oPosition = mul(modelViewProjection, iPosition);
+	oTexCoord = iTexCoord;
+	oColor = iColor;
+	
+	float4 PosWV = mul(modelView, iPosition);
+	blur = clamp(abs(-PosWV.z - focalDistance) / focalRange, 0.0, 1.0);
+}
+
