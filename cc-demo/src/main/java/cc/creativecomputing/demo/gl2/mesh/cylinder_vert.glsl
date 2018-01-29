@@ -15,7 +15,7 @@ float fbm(in vec2 p)
 	float z=2.;
 	float rz = 0.;
 	vec2 bp = p;
-	for (float i= 0.;i < 5.;i++)
+	for (float i= 0.;i < 3.;i++)
 	{
 		rz+= abs((noise(p)-0.5)*2.)/z;
 		z = z*2.;
@@ -85,5 +85,5 @@ void main(){
 	
 	gl_FrontColor = vec4(d,d,d,1.0);
 	gl_TexCoord[0].xyz = dNormal;
-	gl_TexCoord[1].xy = gl_Vertex.xy;
+	gl_TexCoord[1].xyz = myPos.xyz * vec3(0.01,0.05,0.1) * 10.;
 }
