@@ -437,7 +437,7 @@ public class CCNIOUtil {
 		List<Path> myResult = new ArrayList<>();
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(theFolder, theFilter)) {
 			for (Path path : directoryStream) {
-				myResult.add(path);
+				if(!Files.isDirectory(path))myResult.add(path);
 				if(theIsRecursive && Files.isDirectory(path))myResult.addAll(listImplementation(path, theFilter, theIsRecursive));
 			}
 		} catch (IOException ex) {
