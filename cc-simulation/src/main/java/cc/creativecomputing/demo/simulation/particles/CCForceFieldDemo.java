@@ -18,7 +18,8 @@ import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCForceField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
-import cc.creativecomputing.simulation.particles.render.CCParticleQuadRenderer;
+import cc.creativecomputing.simulation.particles.render.CCParticlePrimitiveRenderer;
+import cc.creativecomputing.simulation.particles.render.CCParticlePrimitiveRenderer.CCParticlePrimitive;
 
 public class CCForceFieldDemo extends CCGL2Adapter {
 	
@@ -40,7 +41,7 @@ public class CCForceFieldDemo extends CCGL2Adapter {
 		myForces.add(new CCViscousDrag(0.3f));
 		myForces.add(_myForceField = new CCForceField());
 		
-		_myParticles = new CCParticles(g, new CCParticleQuadRenderer(), myForces, new ArrayList<CCConstraint>(), 1000,1000);
+		_myParticles = new CCParticles(g, new CCParticlePrimitiveRenderer(CCParticlePrimitive.PYRAMIDE), myForces, new ArrayList<CCConstraint>(), 1000,1000);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);

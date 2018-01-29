@@ -22,8 +22,9 @@ import cc.creativecomputing.simulation.particles.forces.CCForceField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 import cc.creativecomputing.simulation.particles.render.CCParticlePrimitiveRenderer;
 import cc.creativecomputing.simulation.particles.render.CCParticlePrimitiveRenderer.CCParticlePrimitive;
+import cc.creativecomputing.simulation.particles.render.CCParticleTrailRenderer;
 
-public class CCForceFieldQuadDemo extends CCGL2Adapter {
+public class CCForceFieldTrailsDemo extends CCGL2Adapter {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
@@ -52,14 +53,14 @@ public class CCForceFieldQuadDemo extends CCGL2Adapter {
 	private CCScreenCaptureController _cScreenCapture;
 	@CCProperty(name = "clear")
 	private boolean _cClear = true;
-	
+	CCParticleTrailRenderer myRender;
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 		myForces.add(new CCViscousDrag(0.3f));
 		myForces.add(_myForceField = new CCForceField());
 		
-		_myParticles = new CCParticles(g, new CCParticlePrimitiveRenderer(CCParticlePrimitive.LINE), myForces, new ArrayList<CCConstraint>(), 300,300);
+		_myParticles = new CCParticles(g, myRender = new CCParticleTrailRenderer(20), myForces, new ArrayList<CCConstraint>(), 15,300);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);
@@ -94,13 +95,13 @@ public class CCForceFieldQuadDemo extends CCGL2Adapter {
 		_myParticles.display(g);
 		_cDrawAttributes.end(g);
 		g.popMatrix();
-		
+		g.image(myRender.trailData(), 0,0);
 		g.blend();
 	}
 
 	public static void main(String[] args) {
 
-		CCForceFieldQuadDemo demo = new CCForceFieldQuadDemo();
+		CCForceFieldTrailsDemo demo = new CCForceFieldTrailsDemo();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1200, 600);
