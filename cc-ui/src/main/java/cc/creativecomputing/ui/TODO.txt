@@ -1,0 +1,6 @@
+add ui builder
+
+Add cms backbone and possibility to insert and edit content from inside the ui
+
+
+Add hidden elements to add attributes used in application logic

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+	<widgets>
+		<widget id="widgetContainer">
+			<translation x="-400" , y="0" />
+			<children>
+				<widget id="fill_background_widget" width="50" height="50">
+					<translation x="0" , y="0" />
+					<background type="fill_background">
+						<color red="1" green="0" blue="0" alpha="1" />
+					</background>
+				</widget>
+				<widget id="rounded_background_widget" width="50" height="50">
+					<translation x="55" , y="0" />
+					<background type="rounded_background">
+						<color red="0" green="1" blue="0" alpha="1" />
+						<radius>10</radius>
+					</background>
+				</widget>
+				<widget id="gradient_background_widget_left_right" width="50" height="50">
+					<translation x="110" , y="0" />
+					<background type="gradient_background">
+						<gradient>
+							<left red="1" green="0" blue="0" alpha="1" />
+							<right red="0" green="1" blue="1" alpha="1" />
+						</gradient>
+					</background>
+				</widget>
+				<widget id="gradient_background_widget_top_bottom" width="50" height="50">
+					<translation x="165" , y="0" />
+					<background type="gradient_background">
+						<gradient>
+							<top red="1" green="0" blue="0" alpha="1" />
+							<bottom red="0" green="1" blue="1" alpha="1" />
+						</gradient>
+					</background>
+				</widget>
+				<widget id="gradient_background_widget" width="50" height="50">
+					<translation x="220" , y="0" />
+					<background type="gradient_background">
+						<gradient>
+							<left_top red="1" green="0" blue="0" alpha="1" />
+							<left_bottom red="0" green="1" blue="1" alpha="1" />
+							<right red="1" green="1" blue="1" alpha="1" />
+						</gradient>
+					</background>
+				</widget>
+				
+				<widget id="line_border_widget" width="50" height="50">
+					<translation x="0" , y="55" />
+					<border type="line_border">
+						<color red="1" green="0" blue="0" alpha="1" />
+					</border>
+				</widget>
+				
+			</children>
+		</widget>
+	</widgets>
+</ui>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+	<fonts>
+		<font id="label1" name="helvetica" size="14" font_type="texture"/>
+		<font id="label2" name="helvetica" size="30" font_type="texture"/>
+	</fonts>
+	
+	<textures>
+		<uitexture id="slider_button">
+			<file>white/slider_button.png</file>
+			<spacing left="3" right="3" top="3" bottom="3"/>
+		</uitexture>
+		<uitexture id="slider_bar">
+			<file>white/slider_bar.png</file>
+			<spacing left="3" right="3" top="3" bottom="3"/>
+			<horizontal_splices>
+				<texture_splice texture_start="0" texture_end="6" stretch="false"/>
+				<texture_splice texture_start="6" texture_end="15" stretch="true"/>
+				<texture_splice texture_start="15" texture_end="21" stretch="false"/>
+			</horizontal_splices>
+		</uitexture>
+		
+		<uitexture id="valuebox_back">
+			<file>white/valuebox_back.png</file>
+			<spacing left="4" right="4" top="4" bottom="4"/>
+			<horizontal_splices>
+				<texture_splice texture_start="0" texture_end="9" stretch="false"/>
+				<texture_splice texture_start="9" texture_end="18" stretch="true"/>
+				<texture_splice texture_start="18" texture_end="27" stretch="false"/>
+			</horizontal_splices>
+		</uitexture>
+		<uitexture id="valuebox_up">
+			<file>white/valuebox_up.png</file>
+		</uitexture>
+		<uitexture id="valuebox_down">
+			<file>white/valuebox_down.png</file>
+		</uitexture>
+	</textures>
+	
+	<templates>
+	
+		<template id="decorator1">
+			<background type="fill_background">
+				<color red="1" green="0" blue="0" alpha="1"/>
+				<radius>5</radius>
+			</background>
+		</template>
+		
+		<template id="decorator2">
+			<foreground type="text_foreground" font="label1">
+				<color red="0.75" green="0.75" blue="0.75" alpha="1"/>
+				<horizontal_alignment>CENTER</horizontal_alignment>
+				<vertical_alignment>CENTER</vertical_alignment>
+				<text>buttong1</text>
+			</foreground>
+		</template>
+		
+		<template id="label1">
+			
+		</template>
+	</templates>
+	
+	<widgets>
+		
+		<widget id="button1" width="100" height="50" >
+			<event_handler>
+				<action type="animation_action" states="OVER" widget="button1">
+					<animation duration="1">
+						<properties>
+							<animation_property target="background.color">
+								<value type="color" red="0" green="0" blue="0" alpha="1"/>
+							</animation_property>
+						</properties>
+					</animation>
+				</action>
+				<action type="animation_action" states="OUT" widget="button1">
+					<animation duration="0.5">
+						<properties>
+							<animation_property target="background.color">
+								<value type="color" red="1" green="1" blue="1" alpha="1"/>
+							</animation_property>
+						</properties>
+					</animation>
+				</action>
+			</event_handler>
+			<horizontal_alignment>RIGHT</horizontal_alignment>
+			<template id="decorator1"/>
+			<template id="decorator2"/>
+		</widget>
+		
+		<slider_widget id="slider1" width="100" height="11">
+			<translation x="0" y="-25"/>
+			<bar width="100" height="6">
+				<translation x="0" y="4"/>
+				<background type="texture_background">
+					<texture>slider_bar</texture>
+				</background>
+			</bar>
+			<button width="11" height="11">
+				<translation x="0" y="2"/>
+				<background type="texture_background">
+					<texture>slider_button</texture>
+				</background>
+			</button>
+			<label>
+				<translation x="110" y="0"/>
+				<foreground type="text_foreground" font="label1">
+					<color red="0.75" green="0.75" blue="0.75" alpha="1"/>
+					<text>slider1</text>
+				</foreground>
+			</label>
+		</slider_widget>
+		
+		<valuebox_widget id="valuebox1" width="100" height="13">
+			<down width="8" height="8">
+				<translation x="5" y="1"/>
+				<background type="texture_background">
+					<color red="0" green="0" blue="0" alpha="1"/>
+					<texture>valuebox_down</texture>
+				</background>
+			</down>
+			<up width="8" height="8">
+				<translation x="87" y="1"/>
+				<background type="texture_background">
+					<color red="0" green="0" blue="0" alpha="1"/>
+					<texture>valuebox_up</texture>
+				</background>
+			</up>
+			<value_field id="textfield2" width="100" height="10" >
+				<translation x="50" y="-4"/>
+				<textfield font="label1" >
+					<horizontal_alignment>CENTER</horizontal_alignment>
+					<color red="0" green="0" blue="0" alpha="1"/>
+					<text>200.0</text>
+				</textfield>
+			</value_field>
+			<background type="texture_background">
+				<texture>valuebox_back</texture>
+			</background>
+		</valuebox_widget>
+		
+		<textfield_widget id="textfield1" width="100" height="10">
+			<translation x="0" y="-200"/>
+			<textfield font="label2">
+				<text>TEXONE
+				BLABLA
+				blablab</text>
+			</textfield>
+		</textfield_widget>
+		
+		<textfield_widget id="textfield2" width="200" height="200" >
+			<translation x="-200" y="0"/>
+			<textfield font="label1" linebreak="BLOCK">
+				<text>lorem ipsum 40</text>
+			</textfield>
+		</textfield_widget>
+	</widgets>
+	
+</ui>
