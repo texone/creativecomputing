@@ -27,6 +27,15 @@ public class CCGLMouseEvent {
 		y = theY;
 	}
 	
+	public CCGLMouseEvent(CCGLMouseEvent theEvent, double theX, double theY) {
+		button = theEvent.button;
+		action = theEvent.action;
+		_myMod = theEvent._myMod;
+		time = theEvent.time;
+		x = theX;
+		y = theY;
+	}
+	
 	public boolean isShiftDown(){
 		return _myMod.isFlagSet(GLFW_MOD_SHIFT);
 	}

@@ -5,6 +5,7 @@ import cc.creativecomputing.gl.app.CCGLApp;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCCharSet;
+import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCOutlineFont;
 import cc.creativecomputing.graphics.font.CCTextAlign;
 import cc.creativecomputing.graphics.font.CCTextField;
@@ -63,14 +64,14 @@ public class CCEnttypoDemo extends CCGLApp{
 		g.line(-g.width()/2, 0, g.width()/2, 0);
 		g.line(-g.width()/2, 100, g.width()/2, 100);
 		CCLog.info(myChar);
-		_myTextureField.text(CCCharSet.ENTYPO.chars()[myChar] + "");
+		_myTextureField.text(CCEntypoIcon.ICON_CHEVRON_LEFT.text);
 		_myVectorField.text(CCCharSet.ENTYPO.chars()[myChar] + "");
 		_myTextureField.draw(g);
 		_myVectorField.draw(g);
 		g.line(0, -50, _myTextureField.width(), -50);
 		g.popMatrix();
 		
-		g.image(_myFont.texture(), 0,0);
+		g.image(_myFont.texture(), -g.width()/2,0);
 	}
 	
 	public static void main(String[] args) {

@@ -3,11 +3,11 @@ package cc.creativecomputing.graphics.font;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLAction;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCTextField.CCPlacedTextChar;
-import cc.creativecomputing.io.CCClipboard;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
@@ -21,7 +21,7 @@ public class CCTextFieldController {
 	private CCGLWindow _myWindow;
 	
 	public CCTextFieldController(CCTextField theTextField){
-		
+		_myTextField = theTextField;
 	}
 	
 	public CCTextFieldController(CCTextField theTextField, CCGLWindow theWindow){
@@ -29,52 +29,30 @@ public class CCTextFieldController {
 		_myWindow = theWindow;
 		_myWindow.mouseMoveEvents.add(pos -> {});
 		
-		_myWindow.mousePressEvents.add(event -> {
-			int cursorIndex = cursorIndex(mouseCoords(event.x, event.y));
-			moveCursorTo(cursorIndex, event.isShiftDown());
-		});
-		_myWindow.mouseDragEvents.add(pos -> {
-			int cursorIndex = cursorIndex(mouseCoords(pos.x, pos.y));
-			moveCursorTo(cursorIndex, true);
-		});
+		_myWindow.mousePressEvents.add(this::mousePress);
+		_myWindow.mouseDragEvents.add(this::mouseDrag);
 		
-		_myWindow.keyPressEvents.add(this::keyMove);
-		_myWindow.keyRepeatEvents.add(this::keyMove);
+		_myWindow.keyPressEvents.add(this::keyPress);
+		_myWindow.keyRepeatEvents.add(this::keyPress);
 		
-		_myWindow.keyCharEvents.add(theChar -> {
-			if(_myIsValueText) {
-				switch(theChar) {
-				case '0':
-				case '1':
-				case '2':
-				case '3':
-				case '4':
-				case '5':
-				case '6':
-				case '7':
-				case '8':
-				case '9':
-				case '.':
-					append(theChar + "");
-					break;
-				case '\n':
-//					_myDecorator.showCursor(false);
-//					endSelection();
-					break;
-				}
-			}else {
-//				if(_myDecorator.text().font().canDisplay(theChar)) {
-					append(theChar + "");
-//				}
-			}
-		});
+		_myWindow.keyCharEvents.add(this::keyChar);
 		
 		_myWindow.drawEvents.add((gr)->{
 			if(g == null)g = gr;
 		});
 	}
 	
-	private void keyMove(CCGLKeyEvent theEvent){
+	public void mousePress(CCGLMouseEvent theEvent) {
+		int cursorIndex = cursorIndex(mouseCoords(theEvent.x, theEvent.y));
+		moveCursorTo(cursorIndex, theEvent.isShiftDown());
+	}
+	
+	public void mouseDrag(CCVector2 thePosition) {
+		int cursorIndex = cursorIndex(mouseCoords(thePosition.x, thePosition.y));
+		moveCursorTo(cursorIndex, true);
+	}
+	
+	public void keyPress(CCGLKeyEvent theEvent){
 		CCLog.info(theEvent.key);
 		switch(theEvent.key){
 		case KEY_LEFT:
@@ -90,15 +68,45 @@ public class CCTextFieldController {
 			break;
 			
 		case KEY_C:
-			copySelectionToClipboard();
+			if(theEvent.isControlDown() || theEvent.isSuperDown())copySelectionToClipboard();
 			break;
 		case KEY_X:
-			copySelectionToClipboard();
-			delete();
+			if(theEvent.isControlDown() || theEvent.isSuperDown()) {
+				copySelectionToClipboard();
+				delete();
+			}
 			break;
 		case KEY_V:
-			pasteClipboard();
+			if(theEvent.isControlDown() || theEvent.isSuperDown())pasteClipboard();
 			break;
+		}
+	}
+	
+	public void keyChar(char theChar) {
+		if(_myIsValueText) {
+			switch(theChar) {
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+			case '.':
+				append(theChar + "");
+				break;
+			case '\n':
+//				_myDecorator.showCursor(false);
+//				endSelection();
+				break;
+			}
+		}else {
+//			if(_myDecorator.text().font().canDisplay(theChar)) {
+				append(theChar + "");
+//			}
 		}
 	}
 	
@@ -123,13 +131,13 @@ public class CCTextFieldController {
 			myStartIndex = myTmp;
 		}
 		String myText = _myTextField.text().substring(myStartIndex, myEndIndex);
-		CCLog.info(myText);
-		_myWindow.clipboardString(myText);
-		CCLog.info(myText);
+		
+		if(_myWindow != null)_myWindow.clipboardString(myText);
+		
 	}
 	
 	private void pasteClipboard() {
-		append(_myWindow.clipboardString());
+		if(_myWindow != null)append(_myWindow.clipboardString());
 	}
 	
 	private void delete() {
@@ -169,6 +177,12 @@ public class CCTextFieldController {
 	}
 	
 	private CCVector2 mouseCoords(double theX, double theY){
+		if(g == null) {
+			return new CCVector2(
+				theX - _myTextField.position().x,
+				theY - _myTextField.position().y
+			);
+		}
 		return new CCVector2(
 			theX - g.width()/2 - _myTextField.position().x,
 			g.height()/2 - theY - _myTextField.position().y
@@ -198,8 +212,11 @@ public class CCTextFieldController {
 					return i;
 				}else if(thePosition.x < 0 && myChar.x == 0){
 					return i;
-				}else if(myChar.x > myNextChar.x && thePosition.x > myChar.x){
-					return i;
+				}else if((myNextChar == null || myChar.x > myNextChar.x) && thePosition.x > myChar.x){
+					if(thePosition.x < myChar.x - myChar.width / 2) {
+						return i;
+					}
+					return i + 1;
 				}
 			}
 		}
@@ -319,6 +336,14 @@ public class CCTextFieldController {
 //			break;
 //			
 //		}
+	}
+
+	public int startIndex() {
+		return _myStartIndex;
+	}
+
+	public int endIndex() {
+		return _myEndIndex;
 	}
 	
 	

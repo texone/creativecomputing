@@ -36,4 +36,5 @@ public class CCGLKeyEvent {
 	public boolean isSuperDown(){
 		return _myMod.isFlagSet(GLFW_MOD_SUPER);
 	}
+	
 }

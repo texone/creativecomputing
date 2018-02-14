@@ -156,6 +156,7 @@ public class CCTextField {
 	}
 	
 	public void breakText(){
+		_myHeight = 0;
 		if(_myText == null)return;
 		_myCharGrid.clear();
 		double myX = 0;

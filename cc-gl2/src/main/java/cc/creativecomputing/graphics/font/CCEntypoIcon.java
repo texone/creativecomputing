@@ -415,7 +415,10 @@ public enum CCEntypoIcon {
 	
 	public final int id;
 	
+	public final String text;
+	
 	private CCEntypoIcon(int theid){
 		id = theid;
+		text = (char)id + "";
 	}
 }

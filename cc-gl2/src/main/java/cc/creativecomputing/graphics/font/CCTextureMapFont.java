@@ -14,7 +14,6 @@ import java.nio.file.Path;
 
 import org.lwjgl.stb.STBTTPackedchar;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCFontImage.CCFontQuad;
@@ -67,9 +66,7 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 		for (int i = 0; i < _myCharCount; i++) {
 			char myChar = _myCharSet.chars()[i];
 			int myGlyphIndex = index(myChar);
-			CCLog.info(i, (int)myChar, Integer.toHexString(myChar),_myChardata);
 			CCFontQuad myQuad = null;
-			CCLog.info((int)myChar, _myChardata.limit() ,myFirstChar);
 			if((int)myChar - myFirstChar < _myChardata.limit())myQuad = _myFontImage.quad(_myChardata, myChar - myFirstChar);
 			_myChars[myGlyphIndex] = new CCTextureMapChar(
 				myChar, 

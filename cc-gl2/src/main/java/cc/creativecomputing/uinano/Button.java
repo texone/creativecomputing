@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.lwjgl.nanovg.NVGPaint;
 
-import cc.creativecomputing.core.events.CCTriggerEvent;
+import cc.creativecomputing.core.events.CCEvent;
 import cc.creativecomputing.core.events.CCBooleanEvent;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.gl.app.CCGLAction;
@@ -88,7 +88,7 @@ public class Button extends CCWidget {
 	protected CCColor mTextColor = new CCColor();
 
 	/// The callback issued for all types of buttons.
-	public CCListenerManager<CCTriggerEvent> mCallback = CCListenerManager.create(CCTriggerEvent.class);
+	public CCListenerManager<CCEvent> mCallback = CCListenerManager.create(CCEvent.class);
 
 	/// The callback issued for toggle buttons.
 	protected CCListenerManager<CCBooleanEvent> mChangeCallback = CCListenerManager.create(CCBooleanEvent.class);
