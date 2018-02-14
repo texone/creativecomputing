@@ -19,6 +19,7 @@
  */
 package cc.creativecomputing.ui.decorator.background;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.io.xml.property.CCXMLProperty;
 import cc.creativecomputing.io.xml.property.CCXMLPropertyObject;
 import cc.creativecomputing.math.CCColor;
@@ -27,19 +28,18 @@ import cc.creativecomputing.math.CCColor;
  * @author christianriekoff
  *
  */
-@CCXMLPropertyObject(name = "ui_gradient")
 public class CCUIGradient {
 
-	@CCXMLProperty(name = "left_top", optional = true)
+	@CCProperty(name = "left_top")
 	private CCColor _myLeftTop;
 
-	@CCXMLProperty(name = "right_top", optional = true)
+	@CCProperty(name = "right_top")
 	private CCColor _myRightTop;
 
-	@CCXMLProperty(name = "left_bottom", optional = true)
+	@CCProperty(name = "left_bottom")
 	private CCColor _myLeftBottom;
 
-	@CCXMLProperty(name = "right_bottom", optional = true)
+	@CCProperty(name = "right_bottom")
 	private CCColor _myRightBottom;
 	
 	public CCUIGradient() {
@@ -65,25 +65,25 @@ public class CCUIGradient {
 		return _myRightBottom;
 	}
 	
-	@CCXMLProperty(name = "left", optional = true)
+	@CCProperty(name = "left")
 	public void left(CCColor theColor) {
 		_myLeftTop.set(theColor);
 		_myLeftBottom.set(theColor);
 	}
 	
-	@CCXMLProperty(name = "right", optional = true)
+	@CCProperty(name = "right")
 	public void right(CCColor theColor) {
 		_myRightTop.set(theColor);
 		_myRightBottom.set(theColor);
 	}
 	
-	@CCXMLProperty(name = "top", optional = true)
+	@CCProperty(name = "top")
 	public void top(CCColor theColor) {
 		_myLeftTop.set(theColor);
 		_myRightTop.set(theColor);
 	}
 	
-	@CCXMLProperty(name = "bottom", optional = true)
+	@CCProperty(name = "bottom")
 	public void bottom(CCColor theColor) {
 		_myLeftBottom.set(theColor);
 		_myRightBottom.set(theColor);

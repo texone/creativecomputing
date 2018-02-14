@@ -55,22 +55,22 @@ public class CCUIWidgetAnimationDemo extends CCApp {
 	
 	@Override
 	public void mousePressed(CCMouseEvent theMouseEvent) {
-		_myWidget.checkEvent(mouseToScreen(theMouseEvent), CCUIInputEventType.PRESS);
+		_myWidget.checkMouseEvent(mouseToScreen(theMouseEvent), CCUIInputEventType.PRESS);
 	}
 	
 	@Override
 	public void mouseReleased(CCMouseEvent theMouseEvent) {
-		_myWidget.checkEvent(mouseToScreen(theMouseEvent), CCUIInputEventType.RELEASE);
+		_myWidget.checkMouseEvent(mouseToScreen(theMouseEvent), CCUIInputEventType.RELEASE);
 	}
 
 	@Override
 	public void mouseMoved(CCMouseEvent theMouseEvent) {
-		_myWidget.checkEvent(mouseToScreen(theMouseEvent), CCUIInputEventType.MOVE);
+		_myWidget.checkMouseEvent(mouseToScreen(theMouseEvent), CCUIInputEventType.MOVE);
 	}
 
 	@Override
 	public void mouseDragged(CCMouseEvent theMouseEvent) {
-		_myWidget.checkEvent(mouseToScreen(theMouseEvent), CCUIInputEventType.DRAGG);
+		_myWidget.checkMouseEvent(mouseToScreen(theMouseEvent), CCUIInputEventType.DRAGG);
 	}
 
 	public static void main(String[] args) {

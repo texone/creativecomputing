@@ -23,7 +23,7 @@ import cc.creativecomputing.CCApp;
 import cc.creativecomputing.CCApplicationManager;
 import cc.creativecomputing.ui.CCUI;
 import cc.creativecomputing.ui.input.CCUIInput;
-import cc.creativecomputing.ui.input.CCUIMouseInput;
+import cc.creativecomputing.ui.input.CCUIContext;
 import cc.creativecomputing.ui.widget.CCUISliderWidget;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 import cc.creativecomputing.ui.widget.CCUIValueBoxWidget;
@@ -46,7 +46,7 @@ public class CCUILoadWidgetsDemo extends CCApp {
 		
 		_myUI = new CCUI(this);
 		_myUI.loadUI("ui.xml");
-		_myUIInput = new CCUIMouseInput(this, _myUI);
+		_myUIInput = new CCUIContext(this, _myUI);
 		
 		_myButton = _myUI.createWidget("button1");
 		_myButton.property2f(CCUIWidget.TRANSLATION_PROPERTY).set(0,-100);

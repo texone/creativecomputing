@@ -26,7 +26,7 @@ import cc.creativecomputing.io.CCIOUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.ui.CCUI;
 import cc.creativecomputing.ui.input.CCUIInput;
-import cc.creativecomputing.ui.input.CCUIMouseInput;
+import cc.creativecomputing.ui.input.CCUIContext;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
 public class CCUIDecoratorDemo extends CCGLApp {
@@ -39,7 +39,7 @@ public class CCUIDecoratorDemo extends CCGLApp {
 	public void setup(CCGraphics g, CCGLTimer theTimer) {
 		_myUI = new CCUI(this);
 		_myUI.loadUI(CCNIOUtil.classPath(this, "decorator.xml"));
-		_myUIInput = new CCUIMouseInput(this._myMainWindow, _myUI);
+		_myUIInput = new CCUIContext(this._myMainWindow, _myUI);
 		
 		_myContainerWidget = _myUI.createWidget("widgetContainer");
 	}

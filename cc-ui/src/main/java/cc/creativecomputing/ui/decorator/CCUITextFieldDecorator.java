@@ -20,11 +20,19 @@
 package cc.creativecomputing.ui.decorator;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.gl.app.CCGLTimer;
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCTextAlign;
+import cc.creativecomputing.graphics.font.CCTextArea;
 import cc.creativecomputing.graphics.font.CCTextField;
+import cc.creativecomputing.graphics.font.CCTextFieldController;
+import cc.creativecomputing.graphics.font.CCTextField.CCPlacedTextChar;
 import cc.creativecomputing.graphics.font.text.CCLineBreakMode;
 import cc.creativecomputing.graphics.font.util.CCLoremIpsumGenerator;
+import cc.creativecomputing.io.xml.property.CCXMLProperty;
+import cc.creativecomputing.io.xml.property.CCXMLPropertyObject;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.CCUI;
@@ -35,7 +43,7 @@ import cc.creativecomputing.ui.widget.CCUIWidget;
 /**
  * @author christianriekoff
  */
-public class CCUITextDecorator extends CCUIForegroundDecorator{
+public class CCUITextFieldDecorator extends CCUIForegroundDecorator{
 	
 	@CCProperty(name="font")
 	private String _myFont;
@@ -44,7 +52,7 @@ public class CCUITextDecorator extends CCUIForegroundDecorator{
 	private CCColor _myColor = new CCColor(1f);
 	
 	@CCProperty(name = "background_color")
-	private CCColor _myBackgroundColor = new CCColor(1f);
+	private CCColor _myBackgroundColor = new CCColor(0.1f);
 	
 	@CCProperty(name="linebreak")
 	private CCLineBreakMode _myLineBreakMode = CCLineBreakMode.NONE;
@@ -68,17 +76,12 @@ public class CCUITextDecorator extends CCUIForegroundDecorator{
 	private int _myCursorStartIndex = 0;
 	private int _myCursorEndIndex = 0;
 	
+	private CCTextFieldController _myController;
 	
-	/**
-	 * @param theID
-	 */
-	public CCUITextDecorator() {
-		super("text");
-	}
-	
-	public CCUITextDecorator(CCTextField theTextField) {
+	public CCUITextFieldDecorator(CCTextField theTextField, CCTextFieldController theController) {
 		super("text");
 		_myText = theTextField;
+		_myController = theController;
 	}
 	
 	
@@ -191,10 +194,13 @@ public class CCUITextDecorator extends CCUIForegroundDecorator{
 	public void endCursorIndex(int theEndCursorIndex) {
 		_myCursorEndIndex = theEndCursorIndex;
 	}
+	
+	private boolean _myShowCursorBlink = false;
 
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.newui.decorator.CCUIDecorator#draw(cc.creativecomputing.graphics.CCGraphics, cc.creativecomputing.newui.widget.CCUIWidget)
-	 */
+	public void update(CCGLTimer theTimer) {
+		_myShowCursorBlink = theTimer.time() % 1 > 0.5 && _myShowCursor;
+	}
+	
 	@Override
 	public void draw(CCGraphics g, CCUIWidget theWidget) {
 		switch(_myVerticalAlignment) {
@@ -209,10 +215,71 @@ public class CCUITextDecorator extends CCUIForegroundDecorator{
 			break;
 		}
 		
+//		if(_myIsInSelection) {
+//			g.color(_myBackgroundColor);
+//			_myText.textGrid().drawHeighlight(g, _myCursorStartIndex, _myCursorEndIndex);
+//		}
+		
 		_myText.position(_myAlignment.x * (theWidget.width() - _myText.width()) + theWidget.inset(), _myAlignment.y - theWidget.inset());
+		
+		g.pushMatrix();
+		g.translate(_myText.position());
+//		g.ellipse(myMouseX, myMouseY, 20);
+		
+		g.color(_myBackgroundColor);
+		g.beginShape(CCDrawMode.QUADS);
+		;
+		int myStart = _myController.startIndex() > _myController.endIndex() ? _myController.endIndex() : _myController.startIndex();
+		int myEnd = _myController.startIndex() > _myController.endIndex() ? _myController.startIndex() : _myController.endIndex();
+		
+		for(int i = myStart; i < myEnd;i++){
+			CCPlacedTextChar myChar = _myText.charGrid().get(i);
+			g.vertex(myChar.x, myChar.y + _myText.ascent());
+			g.vertex(myChar.x, myChar.y + _myText.descent());
+			g.vertex(myChar.x + myChar.width, myChar.y + _myText.descent());
+			g.vertex(myChar.x + myChar.width, myChar.y + _myText.ascent());
+		}
+		g.endShape();
+		
+		g.strokeWeight(2);
+		g.beginShape(CCDrawMode.LINES);
+		
+		if(_myController.startIndex() >= 0 && _myShowCursorBlink){
+			g.color(255);
+			double myX;
+			double myY;
+			if(_myController.startIndex() >= _myText.charGrid().size()) {
+				CCPlacedTextChar myChar = _myText.charGrid().get(_myController.startIndex() - 1);
+				myX = myChar.x + myChar.width;
+				myY = myChar.y;
+			}else {
+				CCPlacedTextChar myChar = _myText.charGrid().get(_myController.startIndex());
+				myX = myChar.x;
+				myY = myChar.y;
+			}
+			g.vertex(myX, myY + _myText.ascent());
+			g.vertex(myX, myY + _myText.descent());
+		}
+//		if(_myController.endIndex() > 0){
+//			g.color(255,0,0);
+//			CCPlacedTextChar myChar = _myText.charGrid().get(_myController.endIndex());
+//			g.vertex(myChar.x, myChar.y + _myText.ascent());
+//			g.vertex(myChar.x, myChar.y + _myText.descent());
+//		}
+		g.endShape();
+		g.popMatrix();
 		
 		g.color(_myColor);
 		_myText.draw(g);
+		
+//		if(_myShowCursor) {
+//			CCVector2 myCursorPosition = cursorPosition();
+//			g.color(255,0,0);
+//			g.line(
+//				(int)myCursorPosition.x, myCursorPosition.y, 
+//				(int)myCursorPosition.x, myCursorPosition.y - _myText.size()
+//			);
+//		}
 	}
 
 }

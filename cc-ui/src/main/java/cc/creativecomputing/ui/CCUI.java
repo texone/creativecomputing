@@ -25,11 +25,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.core.CCPropertyObject;
 import cc.creativecomputing.gl.app.CCGLApp;
-import cc.creativecomputing.gl.font.CCFont;
-import cc.creativecomputing.gl.font.CCTextureMapFont;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.graphics.font.CCTextureMapFont;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;

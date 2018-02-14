@@ -29,7 +29,6 @@ import cc.creativecomputing.ui.widget.CCUIWidget;
  * @author christianriekoff
  *
  */
-@CCXMLPropertyObject(name=CCUIGradientBackgroundDecorator.ID)
 public class CCUIGradientBackgroundDecorator extends CCUIBackgroundDecorator{
 	
 	public final static String ID = "gradient_background";
@@ -44,6 +43,10 @@ public class CCUIGradientBackgroundDecorator extends CCUIBackgroundDecorator{
 	public CCUIGradientBackgroundDecorator() {
 		super("gradient");
 	}
+	
+	public CCUIGradient gradient() {
+		return _myGradient;
+	}
 
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.newui.decorator.CCUIDecorator#draw(cc.creativecomputing.graphics.CCGraphics, cc.creativecomputing.newui.widget.CCUIWidget)
@@ -51,14 +54,14 @@ public class CCUIGradientBackgroundDecorator extends CCUIBackgroundDecorator{
 	@Override
 	public void draw(CCGraphics g, CCUIWidget theWidget) {
 		g.beginShape(CCDrawMode.QUADS);
-		g.color(_myGradient.leftBottom());
-		g.vertex(0,0);
-		g.color(_myGradient.rightBottom());
-		g.vertex(theWidget.width(), 0);
-		g.color(_myGradient.rightTop());
-		g.vertex(theWidget.width(), theWidget.height());
 		g.color(_myGradient.leftTop());
-		g.vertex(0, theWidget.height());
+		g.vertex(0,0);
+		g.color(_myGradient.rightTop());
+		g.vertex(theWidget.width(), 0);
+		g.color(_myGradient.rightBottom());
+		g.vertex(theWidget.width(), -theWidget.height());
+		g.color(_myGradient.leftBottom());
+		g.vertex(0, -theWidget.height());
 		g.endShape();
 	}
 

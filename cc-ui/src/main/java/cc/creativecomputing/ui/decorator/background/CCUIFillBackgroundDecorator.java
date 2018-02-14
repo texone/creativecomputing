@@ -46,6 +46,11 @@ public class CCUIFillBackgroundDecorator extends CCUIBackgroundDecorator{
 		super("fill");
 		_myRectangle = new CCRectangle();
 	}
+	
+	public CCUIFillBackgroundDecorator(CCColor theColor) {
+		this();
+		_myColor = theColor;
+	}
 
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.newui.decorator.CCUIDecorator#draw(cc.creativecomputing.graphics.CCGraphics, cc.creativecomputing.newui.widget.CCUIWidget)
@@ -53,7 +58,7 @@ public class CCUIFillBackgroundDecorator extends CCUIBackgroundDecorator{
 	@Override
 	public void draw(CCGraphics g, CCUIWidget theWidget) {
 		_myRectangle.color().set(_myColor);
-		_myRectangle.position(0, 0);
+		_myRectangle.position(0, -theWidget.height());
 		_myRectangle.size(theWidget.width(), theWidget.height());
 		_myRectangle.draw(g);
 	}

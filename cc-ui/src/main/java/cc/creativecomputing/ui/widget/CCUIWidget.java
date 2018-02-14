@@ -23,7 +23,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.events.CCCharEvent;
+import cc.creativecomputing.core.events.CCEvent;
+import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.gl.app.CCGLAction;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.gl.app.CCGLTimer;
+import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWKeyListener;
+import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMouseListener;
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.io.xml.property.CCXMLProperty;
 import cc.creativecomputing.io.xml.property.CCXMLPropertyObject;
@@ -44,6 +54,9 @@ import cc.creativecomputing.ui.event.CCUIWidgetEventListener;
 import cc.creativecomputing.ui.event.CCUIWidgetEventType;
 import cc.creativecomputing.ui.event.CCUIWidgetInteractionEvent;
 import cc.creativecomputing.ui.event.CCUIWidgetUpdateEvent;
+import cc.creativecomputing.ui.layout.CCUIPane;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
+import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 
 /**
  * @author christianriekoff
@@ -53,7 +66,7 @@ import cc.creativecomputing.ui.event.CCUIWidgetUpdateEvent;
 public class CCUIWidget{
 
 	protected CCMatrix32 _myMatrix = new CCMatrix32();
-	private CCMatrix32 _myInverseMatrix = new CCMatrix32();
+	protected CCMatrix32 _myInverseMatrix = new CCMatrix32();
 	
 	@CCProperty(name="translation")
 	private CCVector2 _myTranslation = new CCVector2();
@@ -74,23 +87,22 @@ public class CCUIWidget{
 	@CCProperty(name="foreground")
 	protected CCUIForegroundDecorator _myForeground;
 	
-//	@CCXMLProperty(name="event_handler")
-	private List<CCUIWidgetEventListener> _myListener = new ArrayList<CCUIWidgetEventListener>();
 	
 	private boolean _myIsOver = false;
 	private boolean _myIsPressed = false;
 	
 	@CCProperty(name = "width")
-	private double _myWidth = 0;
+	protected double _myWidth = 0;
 	
 	@CCProperty(name = "height")
-	private double _myHeight = 0;
+	protected double _myHeight = 0;
+	
+	@CCProperty(name = "inset")
+	protected double _myInset = 0;
 	
 	@CCProperty(name = "edit_policy")
 	protected CCUIEditPolicy _myEditPolicy = CCUIEditPolicy.ADMIN;
 	
-	@CCProperty(name = "children")
-	private List<CCUIWidget> _myChildren;
 	
 	private boolean _myIsInEditMode = false;
 	
@@ -103,18 +115,6 @@ public class CCUIWidget{
 		this(0,0);
 	}
 	
-	public void setup(CCUI theUI, CCUIWidget theParent) {
-		if(_myBackground != null) {
-			_myBackground.setup(theUI, this);
-		}
-		if(_myBorder != null)_myBorder.setup(theUI, this);
-		if(_myForeground != null)_myForeground.setup(theUI, this);
-		
-		if(_myChildren == null)return;
-		for(CCUIWidget myWidget:_myChildren) {
-			myWidget.setup(theUI, this);
-		}
-	}
 
 	public CCUIHorizontalAlignment horizontalAlignment() {
 		return _myHorizontalAlignment;
@@ -132,8 +132,12 @@ public class CCUIWidget{
 		_myVerticalAlignment = theVerticalAlignment;
 	}
 	
-	public CCMatrix32 transformation() {
+	public CCMatrix32 transform() {
 		return _myMatrix;
+	}
+	
+	public CCMatrix32 inverseTransform() {
+		return _myInverseMatrix;
 	}
 	
 	public CCVector2 translation(){
@@ -168,137 +172,97 @@ public class CCUIWidget{
 		return _myForeground;
 	}
 	
-	public void addChild(CCUIWidget theWidget) {
-		if(_myChildren == null)_myChildren = new ArrayList<CCUIWidget>();
-		_myChildren.add(theWidget);
-	}
 	
-	public void removeChild(CCUIWidget theWidget) {
-		if(_myChildren == null)return;
-		_myChildren.remove(theWidget);
+	
+	public boolean isInsideLocal(CCVector2 theVector) {
+		return 
+			theVector.x >= 0 && 
+			theVector.x <= width() &&
+			theVector.y <= 0 && 
+			theVector.y >= -height();
 	}
 	
 	public boolean isInside(CCVector2 theVector) {
 		CCVector2 myTransformedVector = _myInverseMatrix.transform(theVector);
-		return 
-			myTransformedVector.x >= 0 && 
-			myTransformedVector.x <= width() &&
-			myTransformedVector.y <= 0 && 
-			myTransformedVector.y >= -height();
+		return isInsideLocal(theVector);
 	}
 	
 	public boolean isInside(double theX, double theY) {
 		return isInside(new CCVector2(theX, theY));
 	}
 	
-	public void addListener(CCUIWidgetEventListener theListener) {
-		_myListener.add(theListener);
-	}
+//	private void handleEvent(CCVector2 theVector, CCVector2 theTransformedVector, CCUIInputEventType theEventType) {
+//		
+//		
+//		
+//		switch(theEventType) {
+//		
+//		case CLICK:
+//			if(myIsInside) {
+//				callListener(CCUIWidgetEventType.CLICK, theVector, theTransformedVector);
+//			}
+//			break;
+//		case DOUBLE_CLICK:
+//			if(myIsInside) {
+//				callListener(CCUIWidgetEventType.DOUBLE_CLICK, theVector, theTransformedVector);
+//			}
+//			break;
+//		
+//		case MOVE:
+//			if(_myIsOver && !myIsInside) {
+//				callListener(CCUIWidgetEventType.OUT, theVector, theTransformedVector);
+//				_myIsOver = false;
+//			}
+//			
+//			if(!_myIsOver && myIsInside) {
+//				callListener(CCUIWidgetEventType.OVER, theVector, theTransformedVector);
+//				_myIsOver = true;
+//			}
+//			if(myIsInside) {
+//				callListener(CCUIWidgetEventType.MOVE, theVector, theTransformedVector);
+//			}else {
+//				callListener(CCUIWidgetEventType.MOVE_OUTSIDE, theVector, theTransformedVector);
+//			}
+//			break;
+//		case DRAGG:
+//			if(_myIsOver && !myIsInside) {
+//				callListener(CCUIWidgetEventType.OUT, theVector, theTransformedVector);
+//				_myIsOver = false;
+//			}
+//			
+//			if(!_myIsOver && myIsInside) {
+//				callListener(CCUIWidgetEventType.OVER, theVector, theTransformedVector);
+//				_myIsOver = true;
+//			}
+//			if(myIsInside) {
+//				callListener(CCUIWidgetEventType.DRAGG, theVector, theTransformedVector);
+//			}else {
+//				callListener(CCUIWidgetEventType.DRAGG_OUTSIDE, theVector, theTransformedVector);
+//			}
+//			break;
+//		}
+//	}
 	
-	public void removeListener(CCUIWidgetEventListener theListener) {
-		_myListener.remove(theListener);
-	}
 	
-	private void callListener(CCUIWidgetEventType theEventType, CCVector2 thePosition, CCVector2 theTransformedPosition) {
-		for(CCUIWidgetEventListener myListener:new ArrayList<CCUIWidgetEventListener>(_myListener)) {
-			myListener.onEvent(new CCUIWidgetInteractionEvent(theEventType, thePosition, theTransformedPosition), this);
-		}
-	}
 	
-	private void handleEvent(CCVector2 theVector, CCVector2 theTransformedVector, CCUIInputEventType theEventType) {
-		boolean myIsInside = isInside(theTransformedVector);
+	
+	public final CCListenerManager<CCGLFWMouseListener> mouseReleasedOutside = CCListenerManager.create(CCGLFWMouseListener.class);
+	public final CCListenerManager<CCGLFWMouseListener> mouseReleased = CCListenerManager.create(CCGLFWMouseListener.class);
+	public final CCListenerManager<CCGLFWMouseListener> mousePressed = CCListenerManager.create(CCGLFWMouseListener.class);
+	
+	public final CCListenerManager<CCEvent> focusGained = CCListenerManager.create(CCEvent.class);
+	public final CCListenerManager<CCEvent> focusLost = CCListenerManager.create(CCEvent.class);
+	
+	public final CCListenerManager<CCGLFWKeyListener> keyReleased = CCListenerManager.create(CCGLFWKeyListener.class);
+	public final CCListenerManager<CCGLFWKeyListener> keyPressed = CCListenerManager.create(CCGLFWKeyListener.class);
+	public final CCListenerManager<CCGLFWKeyListener> keyRepeatEvents = CCListenerManager.create(CCGLFWKeyListener.class);
+	public final CCListenerManager<CCCharEvent> keyChar = CCListenerManager.create(CCCharEvent.class);
+	
+	public void update(CCGLTimer theTimer) {
 		
-		switch(theEventType) {
-		case PRESS:
-			if(myIsInside) {
-				callListener(CCUIWidgetEventType.PRESS, theVector, theTransformedVector);
-				_myIsPressed = true;
-			} else {
-				callListener(CCUIWidgetEventType.PRESS_OUTSIDE, theVector, theTransformedVector);
-			}
-			break;
-		case CLICK:
-			if(myIsInside) {
-				callListener(CCUIWidgetEventType.CLICK, theVector, theTransformedVector);
-			}
-			break;
-		case DOUBLE_CLICK:
-			if(myIsInside) {
-				callListener(CCUIWidgetEventType.DOUBLE_CLICK, theVector, theTransformedVector);
-			}
-			break;
-		case RELEASE:
-			if(!_myIsPressed)return;
-			if(myIsInside) {
-				callListener(CCUIWidgetEventType.RELEASE, theVector, theTransformedVector);
-			}else {
-				callListener(CCUIWidgetEventType.RELEASE_OUTSIDE, theVector, theTransformedVector);
-			}
-			_myIsPressed = false;
-			break;
-		case MOVE:
-			if(_myIsOver && !myIsInside) {
-				callListener(CCUIWidgetEventType.OUT, theVector, theTransformedVector);
-				_myIsOver = false;
-			}
-			
-			if(!_myIsOver && myIsInside) {
-				callListener(CCUIWidgetEventType.OVER, theVector, theTransformedVector);
-				_myIsOver = true;
-			}
-			if(myIsInside) {
-				callListener(CCUIWidgetEventType.MOVE, theVector, theTransformedVector);
-			}else {
-				callListener(CCUIWidgetEventType.MOVE_OUTSIDE, theVector, theTransformedVector);
-			}
-			break;
-		case DRAGG:
-			if(_myIsOver && !myIsInside) {
-				callListener(CCUIWidgetEventType.OUT, theVector, theTransformedVector);
-				_myIsOver = false;
-			}
-			
-			if(!_myIsOver && myIsInside) {
-				callListener(CCUIWidgetEventType.OVER, theVector, theTransformedVector);
-				_myIsOver = true;
-			}
-			if(myIsInside) {
-				callListener(CCUIWidgetEventType.DRAGG, theVector, theTransformedVector);
-			}else {
-				callListener(CCUIWidgetEventType.DRAGG_OUTSIDE, theVector, theTransformedVector);
-			}
-			break;
-		}
 	}
 	
-	public void checkEvent(CCVector2 theVector, CCUIInputEventType theEventType) {
-		CCVector2 myTransformedVector = _myInverseMatrix.transform(theVector);
-		
-		if(_myListener.size() > 0) {
-			handleEvent(theVector, myTransformedVector, theEventType);
-		}
-		
-		if(_myChildren == null)return;
-		for(CCUIWidget myWidget:_myChildren) {
-			myWidget.checkEvent(myTransformedVector, theEventType);
-		}
-	}
-	
-	public void keyEvent(CCGLKeyEvent theKeyEvent, CCUIInputEventType theEventType) {
-		if(_myChildren == null)return;
-		for(CCUIWidget myWidget:_myChildren) {
-			myWidget.keyEvent(theKeyEvent, theEventType);
-		}
-	}
-	
-	public void keyCharEvent(char theChar){
-		if(_myChildren == null)return;
-		for(CCUIWidget myWidget:_myChildren) {
-			myWidget.keyCharEvent(theChar);
-		}
-	}
-	
-	public void update(double theDeltaTime) {
+	public void updateMatrices(){
 		_myMatrix.reset();
 		_myMatrix.translate(_myTranslation);
 		_myMatrix.rotate(CCMath.radians(_myRotation.x));
@@ -331,36 +295,33 @@ public class CCUIWidget{
 		_myMatrix.translate(_myAlignmentX * _myWidth, _myAlignmentY * _myHeight);
 		
 		_myInverseMatrix = _myMatrix.inverse();
-		
-		for(CCUIWidgetEventListener myListener:new ArrayList<CCUIWidgetEventListener>(_myListener)) {
-			myListener.onEvent(new CCUIWidgetUpdateEvent(theDeltaTime), this);
-		}
-		
-		if(_myChildren == null)return;
-		for(CCUIWidget myWidget:_myChildren) {
-			myWidget.update(theDeltaTime);
-		}
 	}
 	
 	public void draw(CCGraphics g) {
 		g.pushMatrix();
 		g.applyMatrix(_myMatrix);
 		
-		if(_myBackground != null)_myBackground.draw(g, this);
-		if(_myBorder != null)_myBorder.draw(g, this);
-		if(_myForeground != null)_myForeground.draw(g, this);
-		
-		if(_myChildren != null) {;
-			for(CCUIWidget myChild:_myChildren) {
-				myChild.draw(g);
-			}
-		}
+		drawContent(g);
 		
 		g.popMatrix();
 	}
 	
+	public void drawContent(CCGraphics g) {
+		if(_myBackground != null)_myBackground.draw(g, this);
+		if(_myBorder != null)_myBorder.draw(g, this);
+		if(_myForeground != null)_myForeground.draw(g, this);
+		
+		g.color(255,0,0);
+		g.beginShape(CCDrawMode.LINE_LOOP);
+		g.vertex(0,0);
+		g.vertex(width(),0);
+		g.vertex(width(),-height());
+		g.vertex(0,-height());
+		g.endShape();
+	}
+	
 	public double width() {
-		return _myWidth;
+		return _myWidth + _myInset * 2;
 	}
 	
 	public void width(double theWidth) {
@@ -368,11 +329,19 @@ public class CCUIWidget{
 	}
 	
 	public double height() {
-		return _myHeight;
+		return _myHeight + _myInset * 2;
 	}
 	
 	public void height(double theHeight) {
 		_myHeight = theHeight;
+	}
+	
+	public double inset() {
+		return _myInset;
+	}
+	
+	public void inset(double theInset) {
+		_myInset = theInset;
 	}
 	
 	public double x() {

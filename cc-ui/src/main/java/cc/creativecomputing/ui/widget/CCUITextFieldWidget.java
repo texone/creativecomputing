@@ -19,20 +19,16 @@
  */
 package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.gl.app.CCGLKeyEvent;
-import cc.creativecomputing.gl.font.CCTextArea;
-import cc.creativecomputing.gl.font.CCTextField;
-import cc.creativecomputing.gl.font.CCTextField.CCTextListener;
-import cc.creativecomputing.gl.font.CCTextFieldController;
+import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.font.text.CCLineBreakMode;
-import cc.creativecomputing.io.xml.property.CCXMLProperty;
-import cc.creativecomputing.io.xml.property.CCXMLPropertyObject;
+import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.graphics.font.CCTextField;
+import cc.creativecomputing.graphics.font.CCTextFieldController;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.ui.CCUI;
-import cc.creativecomputing.ui.CCUIInputEventType;
-import cc.creativecomputing.ui.decorator.CCUITextDecorator;
-import cc.creativecomputing.ui.decorator.background.CCUIBackgroundDecorator;
-import cc.creativecomputing.ui.decorator.controller.CCUITextDecoratorController;
+import cc.creativecomputing.ui.decorator.CCUITextFieldDecorator;
 
 /**
  * @author christianriekoff
@@ -42,69 +38,57 @@ public class CCUITextFieldWidget extends CCUIWidget{
 	
 	
 	
-	@CCXMLProperty(name = "textfield")
-	private CCUITextDecorator _myTextDecorator;
+	@CCProperty(name = "textfield")
+	private CCTextField _myTextField;
 	
-	private CCUITextFieldBackgroundDecorator _myTextBackground;
+	private CCUITextFieldDecorator _myTextDecorator;
 	
 	private CCTextFieldController _myTextController;
 
-	public CCUITextFieldWidget() {
-		_myTextDecorator = new CCUITextDecorator();
-		_myBackground = new CCUITextFieldBackgroundDecorator();
-		_myTextController = new CCTextFieldController();
+	public CCUITextFieldWidget(CCFont<?> theFont, String theText) {
+		_myTextField = new CCTextField(theFont, theText);
+		_myTextController = new CCTextFieldController(_myTextField);
+		_myForeground = _myTextDecorator = new CCUITextFieldDecorator(_myTextField, _myTextController);
+		
+		mousePressed.add(_myTextController::mousePress);
+		mouseReleased.add(event -> {});
+		
+		focusLost.add(() ->{_myTextDecorator.showCursor(false);});
+		focusGained.add(() ->{_myTextDecorator.showCursor(true);});
+		
+		keyPressed.add(_myTextController::keyPress);
+		keyChar.add(_myTextController::keyChar);
+		keyChar.add(theChar -> {CCLog.info(" key", theChar);});
+
+		inset(2);
+	}
+	
+	public CCTextField text() {
+		return _myTextField;
 	}
 	
 	@Override
-	public void onChangeText(CCTextField theText) {
-		if(theText.lineBreak() == CCLineBreakMode.NONE) {
-			width(theText.width());
-			height(theText.height());
-		}
+	public double width() {
+		return CCMath.max(_myWidth,_myTextField.width()) + _myInset * 2;
 	}
 	
-	public CCTextArea text() {
-		return _myTextDecorator.text();
+	@Override
+	public double height() {
+		return _myTextField.height() + _myInset * 2;
 	}
 	
 	public void valueText(boolean theIsValueBox) {
-		_myTextController.valueText(theIsValueBox);
+//		_myTextController.valueText(theIsValueBox);
 	}
 	
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.newui.widget.CCUIWidget#setup(cc.creativecomputing.newui.CCUI)
-	 */
 	@Override
-	public void setup(CCUI theUI, CCUIWidget theParent) {
-		super.setup(theUI, theParent);
+	public void update(CCGLTimer theTimer) {
+		super.update(theTimer);
 		
-		_myTextDecorator.setup(theUI, this);
-		onChangeText(_myTextDecorator.text());
 		
-		_myTextDecorator.text().events().add(this);
-		_myTextController.append(this, _myTextDecorator);
-		
-		_myForeground  = _myTextDecorator;
+		_myTextDecorator.update(theTimer);
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.newui.widget.CCUIWidget#keyEvent(cc.creativecomputing.events.CCKeyEvent, cc.creativecomputing.newui.CCUIInputEventType)
-	 */
-	@Override
-	public void keyEvent(CCGLKeyEvent theKeyEvent, CCUIInputEventType theEventType) {
-		super.keyEvent(theKeyEvent, theEventType);
-		if(_myTextController != null)_myTextController.keyEvent(theKeyEvent, theEventType);
-	}
-	@Override
-	public void keyCharEvent(char theChar) {
-		super.keyCharEvent(theChar);
-		if(_myTextController != null)_myTextController.keyCharEvent(theChar);
-	}
-	
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.newui.widget.CCUIWidget#draw(cc.creativecomputing.graphics.CCGraphics)
-	 */
 	@Override
 	public void draw(CCGraphics g) {
 		g.pushMatrix();

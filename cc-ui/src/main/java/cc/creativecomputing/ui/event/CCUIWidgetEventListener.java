@@ -32,5 +32,5 @@ public interface CCUIWidgetEventListener {
 	 * @param theVector
 	 * @param theTransformedVector
 	 */
-	void onEvent(CCUIWidgetEvent theEvent, CCUIWidget theWidget);
+	void onEvent(CCUIWidgetInteractionEvent theEvent, CCUIWidget theWidget);
 }
