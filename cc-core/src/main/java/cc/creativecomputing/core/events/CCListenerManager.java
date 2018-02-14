@@ -48,7 +48,7 @@ public class CCListenerManager<ListenerType> implements Iterable<ListenerType>{
 	 * The list used to hold the registered listeners. This list is intentionally a thread-safe copy-on-write-array so
 	 * that traversals over the list of listeners will be atomic.
 	 */
-	private final List<ListenerType> _myListeners = new ArrayList<ListenerType>();
+	private final List<ListenerType> _myListeners = new ArrayList<>();
 
 	/**
 	 * The proxy representing the collection of listeners. Calls to this proxy object will sent to all registered
