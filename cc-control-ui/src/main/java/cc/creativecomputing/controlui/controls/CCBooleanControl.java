@@ -7,10 +7,11 @@ import javax.swing.JToggleButton;
 
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
+import cc.creativecomputing.ui.widget.CCUICheckBoxWidget;
 
 public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyHandle>{
 	
-	private JToggleButton _myButton;
+	private CCUICheckBoxWidget _myButton;
 	
 	private boolean _myIsSelected;
 	
@@ -31,7 +32,7 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 			_myHandle.value(false, true);
 		}
         boolean _myValue = theHandle.value();
-        _myButton = new JToggleButton(theHandle.name(), theHandle.value());
+        _myButton = new CCUICheckBoxWidget(theHandle.name(), theHandle.value());
         CCUIStyler.styleButton(_myButton, 102, 13);
         _myButton.addChangeListener(theE -> {
         	if(!_myTriggerEvent)return;

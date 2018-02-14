@@ -12,12 +12,14 @@ import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.gl.app.CCGLMouseButton;
+import cc.creativecomputing.ui.widget.CCUILabelWidget;
 
 public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>> implements CCControl{
 	
 	protected Handle _myHandle;
 	
-	protected JLabel _myLabel;
+	protected CCUILabelWidget _myLabel;
 	
 	protected CCPropertyPopUp _myPopUp;
 	
@@ -31,26 +33,20 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 		_myPopUp = new CCPropertyPopUp(theHandle, _myControlComponent);
 		
         //Create the label.
-		_myLabel = new JLabel(_myHandle.name(), JLabel.LEFT);
-		
-		_myLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				if(e.isAltDown()){
-					_myHandle.restoreDefault();
-					return;
-				}
-				if(e.isControlDown()){
-					_myHandle.restorePreset();
-					return;
-				}
-				if(e.getButton() == MouseEvent.BUTTON3){
-					_myPopUp.show(_myLabel, e.getX(), e.getY());
-				}
+		_myLabel = new CCUILabelWidget(_myHandle.name(), JLabel.LEFT);
+		_myLabel.mousePressed.add(e -> {
+			if(e.isAltDown()){
+				_myHandle.restoreDefault();
+				return;
+			}
+			if(e.isControlDown()){
+				_myHandle.restorePreset();
+				return;
+			}
+			if(e.button == CCGLMouseButton.BUTTON_RIGHT){
+				_myPopUp.show(_myLabel, e.x, e.y);
 			}
 		});
-		
-		CCUIStyler.styleLabel(_myLabel);
 	}
 	
 	private CCPropertyListener<Type> _myListener = null;
