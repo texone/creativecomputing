@@ -17,6 +17,8 @@ import cc.creativecomputing.kle.motors.CC1Motor1ConnectionSetup;
 import cc.creativecomputing.kle.motors.CC2Motor1ConnectionBounds;
 import cc.creativecomputing.kle.motors.CC2Motor1ConnectionSetup;
 import cc.creativecomputing.kle.motors.CC2Motor2ConnectionCalculations;
+import cc.creativecomputing.kle.motors.CC2Motor2ConnectionLinearBounds;
+import cc.creativecomputing.kle.motors.CC2Motor2ConnectionLinearSetup;
 import cc.creativecomputing.kle.motors.CC2Motor2ConnectionSetup;
 import cc.creativecomputing.kle.motors.CC2MotorRotationAxisBounds;
 import cc.creativecomputing.kle.motors.CC2MotorRotationAxisSetup;
@@ -95,6 +97,8 @@ public class CCKleEffectable extends CCEffectable{
 			return new CC2Motor1ConnectionSetup(theMotors, (CC2Motor1ConnectionBounds)theBounds, theElementRadius);
 		case SETUP_2_MOTOR_2_CONNECTION:
 			return new CC2Motor2ConnectionSetup(this, theMotors, (CC2Motor2ConnectionCalculations)theBounds, theCentroid,  theElementRadius);
+		case SETUP_2_MOTOR_2_CONNECTION_LINEAR:
+			return new CC2Motor2ConnectionLinearSetup(theMotors, (CC2Motor2ConnectionLinearBounds)theBounds,  theElementRadius);
 		case SETUP_1_MOTOR_1_CONNECTION:
 			return new CC1Motor1ConnectionSetup(theMotors, (CC1Motor1ConnectionBounds)theBounds, theCentroid);
 		case SETUP_2_MOTOR_ROTATION_AXIS:

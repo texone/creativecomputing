@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.kle.CCKleChannel;
@@ -45,6 +46,8 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 			double myVelocity = (theLength - myLastData.length) / theDeltaTime;
 			double myAcceleration = (myVelocity - myLastData.velocity) / theDeltaTime;
 			double myJerk = (myAcceleration - myLastData.acceleration) / theDeltaTime;
+
+			if(_myElement.id() == 0)CCLog.info(myVelocity);
 			CCTimedMotionData myNewData = new CCTimedMotionData(thePosition, theLength, myVelocity, myAcceleration, myJerk, theDeltaTime);
 			
 			while(_myUseHistorySize && data.size() >= _cHistorySize){
@@ -150,6 +153,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 			double myVelocity = (_myElement.motorSetup().position().distance(myLastData.position)) / theDeltaTime;
 			double myAcceleration = (myVelocity - myLastData.velocity) / theDeltaTime;
 			double myJerk = (myAcceleration - myLastData.acceleration) / theDeltaTime;
+			if(_myElement.id() == 0)CCLog.info(myVelocity);
 			CCTimedMotionData myNewData = new CCTimedMotionData(_myElement.motorSetup().position(), 0, myVelocity, myAcceleration, myJerk, theDeltaTime);
 			while(_myUseHistorySize && data.size() >= _cHistorySize){
 				data.remove(0);

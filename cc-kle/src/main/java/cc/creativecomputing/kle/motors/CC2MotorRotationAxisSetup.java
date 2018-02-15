@@ -2,10 +2,8 @@ package cc.creativecomputing.kle.motors;
 
 import java.util.List;
 
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 
 public class CC2MotorRotationAxisSetup extends CCMotorSetup{

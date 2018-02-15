@@ -3,6 +3,7 @@ package cc.creativecomputing.kle.lights;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 
 
@@ -31,6 +32,7 @@ public class CCLightRGBSetup extends CCLightSetup{
 	
 	@Override
 	public void setByRelativePosition(double... theValues) {
+		CCLog.info(theValues);
 		if(theValues.length == 1){
 			_myLightR.value(theValues[0]);
 			_myLightG.value(theValues[0]);
