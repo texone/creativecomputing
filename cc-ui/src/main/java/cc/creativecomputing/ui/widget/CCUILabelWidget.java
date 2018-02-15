@@ -20,7 +20,7 @@
 package cc.creativecomputing.ui.widget;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.graphics.font.CCTextField;
 import cc.creativecomputing.ui.decorator.CCUITextDecorator;
@@ -56,15 +56,9 @@ public class CCUILabelWidget extends CCUIWidget{
 	}
 	
 	@Override
-	public void draw(CCGraphics g) {
-		g.pushMatrix();
-		g.applyMatrix(_myMatrix);
+	public void update(CCGLTimer theTimer) {
+		super.update(theTimer);
 		_myTextField.position(_myInset, _myInset);
-		if(_myBackground != null)_myBackground.draw(g, this);
-		if(_myBorder != null)_myBorder.draw(g, this);
-		if(_myForeground != null)_myForeground.draw(g, this);
-		
-		g.popMatrix();
 	}
 	
 	@Override

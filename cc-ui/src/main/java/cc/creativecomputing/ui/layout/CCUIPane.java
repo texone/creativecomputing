@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
@@ -53,29 +52,31 @@ public class CCUIPane extends CCUIWidget{
 	
 	public void addChild(CCUIWidget theWidget) {
 		if(_myChildren == null)_myChildren = new ArrayList<CCUIWidget>();
+		theWidget.parent(this);
 		_myChildren.add(theWidget);
+		
+		root().updateMatrices();
 	}
 	
 	public void removeChild(CCUIWidget theWidget) {
 		if(_myChildren == null)return;
-		_myChildren.remove(theWidget);
+		if(_myChildren.remove(theWidget)){
+			theWidget.parent(null);
+		}
 	}
 	
-	public CCUIWidget childAtPosition(CCVector2 thePosition, CCVector2 theLocalMouseCoord) {
+	public CCUIWidget childAtPosition(CCVector2 thePosition) {
 		for(CCUIWidget myWidget:_myChildren) {
 			if(myWidget instanceof CCUIPane) {
-				CCVector2 myTransformedVector = myWidget.inverseTransform().transform(thePosition);
-				CCLog.info(thePosition,myTransformedVector, myWidget, myWidget.x(), myWidget.y());
-				CCUIWidget myResult = ((CCUIPane)myWidget).childAtPosition(myTransformedVector, theLocalMouseCoord);
+				CCVector2 myTransformedVector = myWidget.localInverseTransform().transform(thePosition);
+				CCUIWidget myResult = ((CCUIPane)myWidget).childAtPosition(myTransformedVector);
 				if(myResult != null){
 					return myResult;
 				}
 			}else {
-				CCVector2 myTransformedVector = myWidget.inverseTransform().transform(thePosition);
+				CCVector2 myTransformedVector = myWidget.localInverseTransform().transform(thePosition);
 				boolean myIsInside = myWidget.isInsideLocal(myTransformedVector);
-				CCLog.info(thePosition,myTransformedVector, myWidget, myWidget.x(), myWidget.y());
 				if(myIsInside) {
-					if(theLocalMouseCoord != null)theLocalMouseCoord.set(myTransformedVector);
 					return myWidget;
 				}
 			}

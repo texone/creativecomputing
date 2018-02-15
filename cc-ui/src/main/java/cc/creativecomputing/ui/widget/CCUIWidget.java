@@ -19,44 +19,27 @@
  */
 package cc.creativecomputing.ui.widget;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCCharEvent;
 import cc.creativecomputing.core.events.CCEvent;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.gl.app.CCGLAction;
-import cc.creativecomputing.gl.app.CCGLKeyEvent;
-import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWKeyListener;
 import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMouseListener;
+import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMousePosListener;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.xml.property.CCXMLProperty;
 import cc.creativecomputing.io.xml.property.CCXMLPropertyObject;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCVector1;
 import cc.creativecomputing.math.CCVector2;
-import cc.creativecomputing.ui.CCUI;
 import cc.creativecomputing.ui.CCUIEditPolicy;
 import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIInputEventType;
-import cc.creativecomputing.ui.CCUIPropertyObject;
 import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.decorator.CCUIForegroundDecorator;
 import cc.creativecomputing.ui.decorator.background.CCUIBackgroundDecorator;
 import cc.creativecomputing.ui.decorator.border.CCUIBorderDecorator;
-import cc.creativecomputing.ui.event.CCUIWidgetEventListener;
-import cc.creativecomputing.ui.event.CCUIWidgetEventType;
-import cc.creativecomputing.ui.event.CCUIWidgetInteractionEvent;
-import cc.creativecomputing.ui.event.CCUIWidgetUpdateEvent;
-import cc.creativecomputing.ui.layout.CCUIPane;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 
 /**
  * @author christianriekoff
@@ -65,8 +48,11 @@ import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 @CCXMLPropertyObject(name = "widget")
 public class CCUIWidget{
 
-	protected CCMatrix32 _myMatrix = new CCMatrix32();
-	protected CCMatrix32 _myInverseMatrix = new CCMatrix32();
+	protected CCMatrix32 _myLocalMatrix = new CCMatrix32();
+	protected CCMatrix32 _myLocalInverseMatrix = new CCMatrix32();
+
+	protected CCMatrix32 _myWorldMatrix = new CCMatrix32();
+	protected CCMatrix32 _myWorldInverseMatrix = new CCMatrix32();
 	
 	@CCProperty(name="translation")
 	private CCVector2 _myTranslation = new CCVector2();
@@ -87,10 +73,6 @@ public class CCUIWidget{
 	@CCProperty(name="foreground")
 	protected CCUIForegroundDecorator _myForeground;
 	
-	
-	private boolean _myIsOver = false;
-	private boolean _myIsPressed = false;
-	
 	@CCProperty(name = "width")
 	protected double _myWidth = 0;
 	
@@ -103,8 +85,7 @@ public class CCUIWidget{
 	@CCProperty(name = "edit_policy")
 	protected CCUIEditPolicy _myEditPolicy = CCUIEditPolicy.ADMIN;
 	
-	
-	private boolean _myIsInEditMode = false;
+	protected CCUIWidget _myParent;
 	
 	public CCUIWidget(double theWidth, double theHeight) {
 		_myWidth = theWidth;
@@ -115,7 +96,19 @@ public class CCUIWidget{
 		this(0,0);
 	}
 	
-
+	public void parent(CCUIWidget theParent){
+		_myParent = theParent;
+	}
+	
+	public CCUIWidget parent(){
+		return _myParent;
+	}
+	
+	public CCUIWidget root(){
+		if(_myParent == null)return this;
+		else return _myParent.root();
+	}
+	
 	public CCUIHorizontalAlignment horizontalAlignment() {
 		return _myHorizontalAlignment;
 	}
@@ -132,12 +125,20 @@ public class CCUIWidget{
 		_myVerticalAlignment = theVerticalAlignment;
 	}
 	
-	public CCMatrix32 transform() {
-		return _myMatrix;
+	public CCMatrix32 localTransform() {
+		return _myLocalMatrix;
 	}
 	
-	public CCMatrix32 inverseTransform() {
-		return _myInverseMatrix;
+	public CCMatrix32 localInverseTransform() {
+		return _myLocalInverseMatrix;
+	}
+	
+	public CCMatrix32 worldTransform() {
+		return _myWorldMatrix;
+	}
+	
+	public CCMatrix32 worldInverseTransform() {
+		return _myWorldInverseMatrix;
 	}
 	
 	public CCVector2 translation(){
@@ -183,7 +184,6 @@ public class CCUIWidget{
 	}
 	
 	public boolean isInside(CCVector2 theVector) {
-		CCVector2 myTransformedVector = _myInverseMatrix.transform(theVector);
 		return isInsideLocal(theVector);
 	}
 	
@@ -243,12 +243,11 @@ public class CCUIWidget{
 //		}
 //	}
 	
-	
-	
-	
 	public final CCListenerManager<CCGLFWMouseListener> mouseReleasedOutside = CCListenerManager.create(CCGLFWMouseListener.class);
 	public final CCListenerManager<CCGLFWMouseListener> mouseReleased = CCListenerManager.create(CCGLFWMouseListener.class);
 	public final CCListenerManager<CCGLFWMouseListener> mousePressed = CCListenerManager.create(CCGLFWMouseListener.class);
+	public final CCListenerManager<CCGLFWMousePosListener> mouseMoved = CCListenerManager.create(CCGLFWMousePosListener.class);
+	public final CCListenerManager<CCGLFWMousePosListener> mouseDragged = CCListenerManager.create(CCGLFWMousePosListener.class);
 	
 	public final CCListenerManager<CCEvent> focusGained = CCListenerManager.create(CCEvent.class);
 	public final CCListenerManager<CCEvent> focusLost = CCListenerManager.create(CCEvent.class);
@@ -263,10 +262,10 @@ public class CCUIWidget{
 	}
 	
 	public void updateMatrices(){
-		_myMatrix.reset();
-		_myMatrix.translate(_myTranslation);
-		_myMatrix.rotate(CCMath.radians(_myRotation.x));
-		_myMatrix.scale(_myScale.x, _myScale.y);
+		_myLocalMatrix.reset();
+		_myLocalMatrix.translate(_myTranslation);
+		_myLocalMatrix.rotate(CCMath.radians(_myRotation.x));
+		_myLocalMatrix.scale(_myScale.x, _myScale.y);
 		
 		double _myAlignmentX = 0;
 		switch(_myHorizontalAlignment) {
@@ -292,14 +291,24 @@ public class CCUIWidget{
 			_myAlignmentY = -0f;
 			break;
 		}
-		_myMatrix.translate(_myAlignmentX * _myWidth, _myAlignmentY * _myHeight);
+		_myLocalMatrix.translate(_myAlignmentX * _myWidth, _myAlignmentY * _myHeight);
 		
-		_myInverseMatrix = _myMatrix.inverse();
+		_myLocalInverseMatrix = _myLocalMatrix.inverse();
+		
+		if(_myParent != null){
+			_myWorldMatrix = _myParent._myWorldMatrix.clone();
+			_myWorldMatrix.preApply(_myLocalMatrix);
+			
+			_myWorldInverseMatrix = _myWorldMatrix.inverse();
+		}else{
+			_myWorldMatrix = _myLocalMatrix;
+			_myWorldInverseMatrix = _myLocalInverseMatrix;
+		}
 	}
 	
 	public void draw(CCGraphics g) {
 		g.pushMatrix();
-		g.applyMatrix(_myMatrix);
+		g.applyMatrix(_myLocalMatrix);
 		
 		drawContent(g);
 		
@@ -358,5 +367,9 @@ public class CCUIWidget{
 	
 	public void y(double theY) {
 		_myTranslation.y = theY;
+	}
+	
+	public CCUIWidget overlayWidget(){
+		return null;
 	}
 }

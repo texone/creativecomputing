@@ -19,27 +19,23 @@
  */
 package cc.creativecomputing.demo.ui;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCCharSet;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
-import cc.creativecomputing.graphics.font.CCVectorFont;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.ui.decorator.background.CCUIBackgroundDecorator;
 import cc.creativecomputing.ui.decorator.background.CCUIFillBackgroundDecorator;
 import cc.creativecomputing.ui.decorator.background.CCUIGradientBackgroundDecorator;
-import cc.creativecomputing.ui.decorator.background.CCUIRoundedBackgroundDecorator;
 import cc.creativecomputing.ui.decorator.border.CCUILineBorderDecorator;
-import cc.creativecomputing.ui.event.CCUIWidgetEvent;
-import cc.creativecomputing.ui.event.CCUIWidgetEventListener;
 import cc.creativecomputing.ui.input.CCUIContext;
-import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
+import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
 import cc.creativecomputing.ui.widget.CCUICheckBoxWidget;
 import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
@@ -88,9 +84,12 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 	
 	public CCUIDropDownWidget createDropDown() {
 		CCUIDropDownWidget myDropDown = new CCUIDropDownWidget(_myFont);
-		myDropDown.background(new CCUIFillBackgroundDecorator(new CCColor(0.3d)));
+		CCUIBackgroundDecorator myBackground = new CCUIFillBackgroundDecorator(new CCColor(0.3d));
+		myDropDown.background(myBackground);
 		myDropDown.border(new CCUILineBorderDecorator(new CCColor(1d), 1, 0));
 		myDropDown.width(100);
+		
+		myDropDown.menue().background(myBackground);
 		
 		myDropDown.addItem("item 1");
 		myDropDown.addItem("item 2");

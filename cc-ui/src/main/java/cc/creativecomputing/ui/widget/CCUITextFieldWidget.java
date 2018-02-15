@@ -92,7 +92,7 @@ public class CCUITextFieldWidget extends CCUIWidget{
 	@Override
 	public void draw(CCGraphics g) {
 		g.pushMatrix();
-		g.applyMatrix(_myMatrix);
+		g.applyMatrix(_myLocalMatrix);
 		
 		if(_myBackground != null)_myBackground.draw(g, this);
 		if(_myBorder != null)_myBorder.draw(g, this);
