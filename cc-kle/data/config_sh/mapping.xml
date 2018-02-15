@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<mappings>
+	<mapping name="motors" columns="1" rows="2" depth="1" frameRate="5" bits="16">
+		<channel id="0" column="0" row="0" depth="0" min="-90.0" max="90.0"/>
+		<channel id="0" column="0" row="1" depth="0" min="0" max="200.0"/>
+	</mapping>
+</mappings>
