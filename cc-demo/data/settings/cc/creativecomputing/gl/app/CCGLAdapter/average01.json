@@ -1,0 +1,99 @@
+{"value": {
+  "_mySpectogram": {
+    "name": "spectogram",
+    "value": {
+      "_cSecondsGrid": {
+        "min": 1,
+        "max": 30,
+        "name": "seconds grid",
+        "value": 30
+      },
+      "analyzeUsingAudioRecordingStream": {},
+      "_cCurveScale": {
+        "min": 0,
+        "max": 1000,
+        "name": "curve scale",
+        "value": 255
+      },
+      "_cDrawCurves": {
+        "name": "curves",
+        "value": true
+      },
+      "_cCurveStep": {
+        "min": 1,
+        "max": 30,
+        "name": "curve step",
+        "value": 16
+      },
+      "_cAmp": {
+        "min": 0,
+        "max": 10,
+        "name": "amp",
+        "value": 1
+      },
+      "_cAverages": {
+        "name": "averages",
+        "value": true
+      },
+      "_cPow": {
+        "min": 0,
+        "max": 1,
+        "name": "pow",
+        "value": 0.23600000143051147
+      }
+    }
+  },
+  "_myFFT": {
+    "name": "fft",
+    "value": {
+      "_cLogBandwidth": {
+        "min": 2,
+        "max": 220,
+        "name": "log bandwidth",
+        "value": 220
+      },
+      "_cLogBandsPerOctave": {
+        "min": 1,
+        "max": 10,
+        "name": "log bands per octave",
+        "value": 10
+      },
+      "_cAveraging": {
+        "name": "averaging",
+        "value": "LOGARITHMIC"
+      },
+      "_cSmoothing": {
+        "min": 0,
+        "max": 1,
+        "name": "smoothing",
+        "value": 0
+      },
+      "_cLinearAverages": {
+        "min": 2,
+        "max": 512,
+        "name": "linear averages",
+        "value": 64
+      },
+      "_cNormalize": {
+        "name": "normalize",
+        "value": false
+      },
+      "_cAverageSmoothing": {
+        "min": 0,
+        "max": 1,
+        "name": "average smoothing",
+        "value": 0.9900000095367432
+      },
+      "_cWindowType": {
+        "name": "window type",
+        "value": "NONE"
+      },
+      "_cMaxReduction": {
+        "min": 0,
+        "max": 1,
+        "name": "max reduction",
+        "value": 0
+      }
+    }
+  }
+}}

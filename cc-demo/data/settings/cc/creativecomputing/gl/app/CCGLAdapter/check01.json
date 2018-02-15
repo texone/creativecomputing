@@ -1,0 +1,339 @@
+{"value": {
+  "filter": {
+    "name": "filter",
+    "value": {
+      "bypass": {
+        "name": "bypass",
+        "value": false
+      },
+      "ripple": {
+        "min": 0,
+        "max": 1,
+        "name": "ripple",
+        "value": 0
+      },
+      "poles": {
+        "min": 2,
+        "max": 20,
+        "name": "poles",
+        "value": 4
+      },
+      "freqency": {
+        "min": 0,
+        "max": 1,
+        "name": "freqency",
+        "value": 0.5
+      },
+      "type": {
+        "name": "type",
+        "value": "LP"
+      },
+      "sample rate": {
+        "min": 0,
+        "max": 60,
+        "name": "sample rate",
+        "value": 5.039999961853027
+      }
+    }
+  },
+  "motion limiter": {
+    "name": "motion limiter",
+    "value": {
+      "move start": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "move start",
+        "value": 0
+      },
+      "max jerk": {
+        "min": 0,
+        "max": 5000,
+        "name": "max jerk",
+        "value": 0.2
+      },
+      "threshold": {
+        "min": 0,
+        "max": 10,
+        "name": "threshold",
+        "value": 0
+      },
+      "move range": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "move range",
+        "value": 1
+      },
+      "bypass": {
+        "name": "bypass",
+        "value": false
+      },
+      "apply scale": {
+        "min": 0,
+        "max": 1,
+        "name": "apply scale",
+        "value": 1
+      },
+      "lookAhead": {
+        "min": 0,
+        "max": 10,
+        "name": "lookAhead",
+        "value": 0
+      },
+      "constrain 2": {
+        "min": 0,
+        "max": 1,
+        "name": "constrain 2",
+        "value": 1
+      },
+      "draw targets": {
+        "name": "draw targets",
+        "value": true
+      },
+      "constrain 1": {
+        "min": 0,
+        "max": 1,
+        "name": "constrain 1",
+        "value": 0
+      },
+      "max vel": {
+        "min": 0,
+        "max": 1000,
+        "name": "max vel",
+        "value": 0.1
+      },
+      "draw future points": {
+        "name": "draw future points",
+        "value": true
+      },
+      "max acc": {
+        "min": 0,
+        "max": 1000,
+        "name": "max acc",
+        "value": 0.1
+      },
+      "sample rate": {
+        "min": 0,
+        "max": 60,
+        "name": "sample rate",
+        "value": 0.1
+      }
+    }
+  },
+  "height acc": {
+    "min": 0,
+    "max": 500,
+    "name": "height acc",
+    "value": 391.5
+  },
+  "height jerk": {
+    "min": 0,
+    "max": 500,
+    "name": "height jerk",
+    "value": 28.5
+  },
+  "limiter": {
+    "name": "limiter",
+    "value": {
+      "bypass": {
+        "name": "bypass",
+        "value": true
+      },
+      "Knee": {
+        "min": 0,
+        "max": 2,
+        "name": "Knee",
+        "value": 1
+      },
+      "Ratio (x:1)": {
+        "min": 1,
+        "max": 20,
+        "name": "Ratio (x:1)",
+        "value": 1.1710000038146973
+      },
+      "Pre-gain": {
+        "min": 0,
+        "max": 2,
+        "name": "Pre-gain",
+        "value": 1
+      },
+      "Attack time (ms)": {
+        "min": 0,
+        "max": 3,
+        "name": "Attack time (ms)",
+        "value": 0
+      },
+      "Post-gain": {
+        "min": 0,
+        "max": 2,
+        "name": "Post-gain",
+        "value": 1
+      },
+      "process type": {
+        "name": "process type",
+        "value": "Limiter"
+      },
+      "Release time ": {
+        "min": 0.009999999776482582,
+        "max": 3,
+        "name": "Release time ",
+        "value": 0.009999999776482582
+      },
+      "reset": {},
+      "Lookahead time ": {
+        "min": 0,
+        "max": 0.20000000298023224,
+        "name": "Lookahead time ",
+        "value": 0
+      },
+      "Threshold": {
+        "min": 0,
+        "max": 1,
+        "name": "Threshold",
+        "value": 1
+      },
+      "sample rate": {
+        "min": 0,
+        "max": 60,
+        "name": "sample rate",
+        "value": 5
+      }
+    }
+  },
+  "height vel": {
+    "min": 0,
+    "max": 500,
+    "name": "height vel",
+    "value": 401
+  },
+  "real time filter": {
+    "name": "real time filter",
+    "source": "package cc.creativecomputing.demo.math.signal;\n\nimport cc.creativecomputing.demo.math.signal.CCMixedSignalDemo.CCRealtimeFilter;\nimport cc.creativecomputing.math.CCMath;\n\npublic class CCRealtimeFilterImp extends CCRealtimeFilter{\n\n\tprivate double threshold = 0.5;\n\n\tprivate double fadeLength = 10;\n\n\tprivate double _mySampleRate = 5;\n\t\n\tpublic void process(double[] theData){\n\n\t\tint counter = 0;\n\t\tint fadeAdd = (int)(fadeLength * _mySampleRate) + 1;\n\n\t\tint fadeMode = 0;\n\t\t\n\t\tfor (int i = 0; i < theData.length; i++) {\n\t\t\tint foreCast = i + fadeAdd;\n\n\t\t\tif(foreCast < theData.length){\n\t\t\t\tif(theData[foreCast] >= threshold && fadeMode != 1){\n\t\t\t\t\tfadeMode = 1;\n\t\t\t\t}\n\t\t\t\t\n\t\t\t\tif(theData[i] < threshold && fadeMode != 2 && counter >= ){\n\t\t\t\t\tfadeMode = 2;\n\t\t\t\t}\n\t\t\t}\n\t\t\t\n\t\t\tSystem.out.println(counter + \":\" + fadeMode);\n\n\t\t\t\n\t\t\tswitch(fadeMode){\n\t\t\t\tcase 0:\n\t\t\t\t\ttheData[i] = theData[i];\n\t\t\t\t\tbreak;\n\t\t\t\tcase 1:\n\t\t\t\t\tif(counter < fadeAdd)counter++;\n\t\t\t\t\tbreak;\n\t\t\t\tcase 2:\n\t\t\t\t\tif(counter > 0)counter--;\n\t\t\t\t\tbreak;\n\t\t\t}\n\t\t\tdouble fade = CCMath.smoothStep(0,1,CCMath.saturate((double)counter / fadeAdd));\n\t\t\ttheData[i] = CCMath.blend(theData[i], threshold,fade);\n/*\n\t\t\tif(theData[i] > threshold){\n\t\t\t\ttheData[i] = threshold;\n\t\t\t}*/\n\t\t\t\n\t\t\n\t\t}\n\t}\n\t\n}",
+    "value": "cc.creativecomputing.control.code.CCRealtimeCompile@2685b7b0"
+  },
+  "signal": {
+    "name": "signal",
+    "value": {
+      "worley": {
+        "min": 0,
+        "max": 1,
+        "name": "worley",
+        "value": 0
+      },
+      "amp": {
+        "min": 0,
+        "max": 1,
+        "name": "amp",
+        "value": 1
+      },
+      "sloped tri": {
+        "min": 0,
+        "max": 1,
+        "name": "sloped tri",
+        "value": 0
+      },
+      "saw": {
+        "min": 0,
+        "max": 1,
+        "name": "saw",
+        "value": 0
+      },
+      "simplex": {
+        "min": 0,
+        "max": 1,
+        "name": "simplex",
+        "value": 1
+      },
+      "scale": {
+        "min": 0,
+        "max": 1,
+        "name": "scale",
+        "value": 0.002
+      },
+      "tri": {
+        "min": 0,
+        "max": 1,
+        "name": "tri",
+        "value": 0
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 10,
+        "name": "lacunarity",
+        "value": 2
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.5
+      },
+      "octaves": {
+        "min": 1,
+        "max": 10,
+        "name": "octaves",
+        "value": 3.0249998569488525
+      },
+      "square": {
+        "min": 0,
+        "max": 1,
+        "name": "square",
+        "value": 0.32100000977516174
+      },
+      "sine": {
+        "min": 0,
+        "max": 1,
+        "name": "sine",
+        "value": 0
+      },
+      "worley setup": {
+        "name": "worley setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 2
+          },
+          "amp": {
+            "min": 0,
+            "max": 10,
+            "name": "amp",
+            "value": 1
+          },
+          "formular": {
+            "name": "formular",
+            "value": "DEFAULT"
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "distance type": {
+            "name": "distance type",
+            "value": "EUCLIDEAN"
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          }
+        }
+      }
+    }
+  },
+  "height": {
+    "min": 0,
+    "max": 500,
+    "name": "height",
+    "value": 184
+  }
+}}

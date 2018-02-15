@@ -1,0 +1,106 @@
+{
+  "fragment": {
+    "name": "fragment",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "cylinder_frag.glsl": {
+        "name": "cylinder_frag.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@3a4528ec"
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {}
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  },
+  "vertex": {
+    "name": "vertex",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": false
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 4,
+            "name": "octaves",
+            "value": 4
+          },
+          "warp2": {
+            "min": 0,
+            "max": 10,
+            "name": "warp2",
+            "value": 9.610000610351562
+          },
+          "warp1": {
+            "min": 0,
+            "max": 10,
+            "name": "warp1",
+            "value": 10
+          },
+          "nromal Displace": {
+            "min": -20,
+            "max": 20,
+            "name": "nromal Displace",
+            "value": 0
+          },
+          "length": {
+            "min": 1,
+            "max": 2000,
+            "name": "length",
+            "value": 922.5390014648438
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 0.328000009059906
+          },
+          "iTime": {
+            "min": 0,
+            "max": 10,
+            "name": "iTime",
+            "value": 2.3855572058978654
+          },
+          "radius": {
+            "min": 1,
+            "max": 300,
+            "name": "radius",
+            "value": 36.28200149536133
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 4,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5260000228881836
+          }
+        }
+      },
+      "cylinder_vert.glsl": {
+        "name": "cylinder_vert.glsl",
+        "source": "// The MIT License\n// Copyright © 2017 Inigo Quilez\n// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n\n// Computes the analytic derivatives of a 3D Gradient Noise. This can be used for example to compute normals to a\n// 3d rocks based on Gradient Noise without approximating the gradient by having to take central differences. More\n// info here: http://iquilezles.org/www/articles/gradientnoise/gradientnoise.htm\n\nvec3 hash(vec3 p){\n\tp = vec3(\n\t\tdot(p, vec3(127.1, 311.7, 74.7)),\n\t\tdot(p, vec3(269.5, 183.3, 246.1)),\n\t\tdot(p, vec3(113.5, 271.9, 124.6))\n\t);\n\n\treturn -1.0 + 2.0 * fract(sin(p) * 43758.5453123);\n}\n\n// return value noise (in x) and its derivatives (in yzw)\nvec4 noise( in vec3 x ){\n    // grid\n    vec3 p = floor(x);\n    vec3 w = fract(x);\n    \n    #if 1\n    // quintic interpolant\n    vec3 u = w*w*w*(w*(w*6.0-15.0)+10.0);\n    vec3 du = 30.0*w*w*(w*(w-2.0)+1.0);\n    #else\n    // cubic interpolant\n    vec3 u = w*w*(3.0-2.0*w);\n    vec3 du = 6.0*w*(1.0-w);\n    #endif    \n    \n    // gradients\n    vec3 ga = hash( p+vec3(0.0,0.0,0.0) );\n    vec3 gb = hash( p+vec3(1.0,0.0,0.0) );\n\tvec3 gc = hash( p+vec3(0.0,1.0,0.0) );\n\tvec3 gd = hash( p+vec3(1.0,1.0,0.0) );\n\tvec3 ge = hash( p+vec3(0.0,0.0,1.0) );\n\tvec3 gf = hash( p+vec3(1.0,0.0,1.0) );\n    vec3 gg = hash( p+vec3(0.0,1.0,1.0) );\n    vec3 gh = hash( p+vec3(1.0,1.0,1.0) );\n    \n    // projections\n    float va = dot( ga, w-vec3(0.0,0.0,0.0) );\n    float vb = dot( gb, w-vec3(1.0,0.0,0.0) );\n    float vc = dot( gc, w-vec3(0.0,1.0,0.0) );\n    float vd = dot( gd, w-vec3(1.0,1.0,0.0) );\n    float ve = dot( ge, w-vec3(0.0,0.0,1.0) );\n    float vf = dot( gf, w-vec3(1.0,0.0,1.0) );\n    float vg = dot( gg, w-vec3(0.0,1.0,1.0) );\n    float vh = dot( gh, w-vec3(1.0,1.0,1.0) );\n\t\n    // interpolations\n    return vec4( va + u.x*(vb-va) + u.y*(vc-va) + u.z*(ve-va) + u.x*u.y*(va-vb-vc+vd) + u.y*u.z*(va-vc-ve+vg) + u.z*u.x*(va-vb-ve+vf) + (-va+vb+vc-vd+ve-vf-vg+vh)*u.x*u.y*u.z,    // value\n                 ga + u.x*(gb-ga) + u.y*(gc-ga) + u.z*(ge-ga) + u.x*u.y*(ga-gb-gc+gd) + u.y*u.z*(ga-gc-ge+gg) + u.z*u.x*(ga-gb-ge+gf) + (-ga+gb+gc-gd+ge-gf-gg+gh)*u.x*u.y*u.z +   // derivatives\n                 du * (vec3(vb,vc,ve) - va + u.yzx*vec3(va-vb-vc+vd,va-vc-ve+vg,va-vb-ve+vf) + u.zxy*vec3(va-vb-ve+vf,va-vb-vc+vd,va-vc-ve+vg) + u.yzx*u.zxy*(-va+vb+vc-vd+ve-vf-vg+vh) ));\n}\n\n@CCProperty(name = \"scale\", min = 0, max = 1)\nuniform float scale;\n@CCProperty(name = \"gain\", min = 0, max = 1)\nuniform float gain;\n@CCProperty(name = \"octaves\", min = 1, max = 4)\nuniform float octaves;\n@CCProperty(name = \"lacunarity\", min = 0, max = 4)\nuniform float lacunarity;\n\n// replace outType, inType and evalFunc with whatever you need\n\nvec4 fbm(in vec3 s){ \n\tfloat myScale = scale * .1;\n\tfloat myFallOff = gain;\n\t\n\tint myOctaves = int(floor(octaves)); \n\tvec4 myResult = vec4(0.);  \n\tfloat myAmp = 0.;\n\t\n\tfor(int i = 0; i < myOctaves;i++){\n\t\tvec4 noiseVal = noise(s * myScale); \n\t\tmyResult += noiseVal * myFallOff;\n\t\tmyAmp += myFallOff;\n\t\tmyFallOff *= gain;\n\t\tmyScale *= lacunarity;\n\t}\n\tfloat myBlend = octaves - float(myOctaves);\n\t\n\tmyResult += noise(s * myScale) * myFallOff * myBlend;    \n\tmyAmp += myFallOff * myBlend;\n\t\n\tif(myAmp > 0.0){\n\t\tmyResult /= myAmp;\n\t}\n \n\treturn myResult;\n}\n\n@CCProperty(name = \"warp1\", min = 0, max = 10)\nuniform float warp1;\n\nvec4 warp1domain(in vec3 p, out vec4 q){\n\tq = fbm(p + vec3(0.0,0.0,0.0));\n\n\treturn fbm(p + warp1 * q.yzw); \n}\n\n@CCProperty(name = \"warp2\", min = 0, max = 10)\nuniform float warp2;\n\nvec4 warp2domain(in vec3 p, out vec4 q, out vec4 r){\n\tq = fbm(p );\n\n\tr = fbm( p + warp1*q.yzw );\n\n\treturn fbm( p + warp2 * r.yzw); \n}\n\n@CCProperty(name = \"radius\", min = 1, max = 300)\nuniform float radius;\n\n@CCProperty(name = \"length\", min = 1, max = 2000)\nuniform float length;\n\n@CCProperty(name = \"nromal Displace\", min = -20, max = 20)\nuniform float normalDisplace;\n\n\nvec4 ridge(in vec3 s){  \n\tfloat myScale = scale * 0.1;\n\tfloat myFallOff = gain;\n\t\n\tint myOctaves = int(floor(octaves)); \n\tvec4 myResult = vec4(0.);  \n\tfloat myAmp = 0.;\n\t s *= myScale; \n\tfor(int i = 0; i < myOctaves;i++){\n\t\tvec4 noiseVal = noise(s);  \n\t\tmyResult += abs(noiseVal) * myFallOff;\n\t\tmyAmp += myFallOff;\n\t\tmyFallOff *= gain;\n\t\ts = s * lacunarity; \n\t}\n\tfloat myBlend = octaves - float(myOctaves);\n\t\n\tmyResult += abs(noise(s)) * myFallOff * myBlend;    \n\tmyAmp += myFallOff * myBlend;\n\t\n\tif(myAmp > 0.0){\n\t\tmyResult /= myAmp;\n\t}\n \tmyResult = 1. - myResult;\n \t//myResult = pow(myResult , 10.);\n\treturn myResult;\n}\n\n// The MIT License\n// Copyright © 2013 Inigo Quilez\n// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n\n//===============================================================================================\n//===============================================================================================\n\n\nvec3 hash(vec3 x){\n\tx = vec3(\n\t\tdot(x,vec3(127.1,311.7, 74.7)),\n\t\tdot(x,vec3(269.5,183.3,246.1)),\n\t\tdot(x,vec3(113.5,271.9,124.6))\n\t);\n\n\treturn fract(sin(x)*43758.5453123);\n}\n\n// returns closest, second closest, and cell id\nvec3 noisew(in vec3 x){\n\tvec3 p = floor(x);\n\tvec3 f = fract(x);\n\n\tfloat id = 0.0;\n\tvec2 res = vec2( 100.0 );\n\tfor(int k=-1; k<=1; k++ )\n\tfor(int j=-1; j<=1; j++ )\n\tfor(int i=-1; i<=1; i++ ){\n\t\tvec3 b = vec3(float(i), float(j), float(k));\n\t\tvec3 r = vec3( b ) - f + hash( p + b );\n\t\tfloat d = dot( r, r );\n\n\t\tif( d < res.x ){\n\t\t\tid = dot( p+b, vec3(1.0,57.0,113.0 ) );\n\t\t\tres = vec2( d, res.x );\t\t\t\n\t\t}else if( d < res.y ){\n\t\t\tres.y = d;\n\t\t}\n\t}\n\n\treturn vec3( sqrt( res ), abs(id) );\n}\n\n\n\n\n\n\nvec3 octavedNoise(in vec3 s){ \n\tfloat myScale = scale;\n\tfloat myFallOff = gain;\n\t\n\tint myOctaves = int(floor(octaves)); \n\tvec3 myResult = vec3(0.);  \n\tfloat myAmp = 0.;\n\t\n\tfor(int i = 0; i < myOctaves;i++){\n\t\tvec3 noiseVal = noise(s * myScale);   \n\t\tmyResult += noiseVal * myFallOff;\n\t\tmyAmp += myFallOff;\n\t\tmyFallOff *= gain;\n\t\tmyScale *= lacunarity;\n\t}\n\tfloat myBlend = octaves - float(myOctaves);\n\t\n\tmyResult += noise(s * myScale) * myFallOff * myBlend;    \n\tmyAmp += myFallOff * myBlend;\n\t\n\tif(myAmp > 0.0){\n\t\tmyResult /= myAmp;\n\t}\n\t\n\treturn myResult;\n}\n\n@CCProperty(name = \"iTime\", min = 0, max = 10)\nuniform float iTime;\n\nvoid main(){\n\tvec4 myPos = gl_Vertex * vec4(length / 2., radius, radius, 1.);\n\tmyPos.xyz += (noise(vec3(gl_Vertex.x * 2. + 100. +iTime,0.0,0.)).x ) * 50.;\n\tvec4 q;\n\tvec4 r;\n\tvec4 myNoise = warp2domain(myPos.xyz+vec3(iTime,0.0,0.0), q,r);\n\tmyPos.yz *= 1. + myNoise.x * 0.8 + q.yz * 0.3 + r.yw * 0.3;\n\tmyPos.xyz -= (myNoise.yzw * 2. - 1.) * vec3(normalDisplace); \n\n\tvec3 myNormal = normalize(gl_Normal.xyz + (myNoise.yzw * 2. - 1.) * 0.3);\n\tgl_Position = gl_ModelViewProjectionMatrix * myPos;\n\tgl_FrontColor = vec4((myNormal+ 1.) / 2., 1.0); \n}",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@1eda15bf"
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": false
+      }
+    }
+  }
+}

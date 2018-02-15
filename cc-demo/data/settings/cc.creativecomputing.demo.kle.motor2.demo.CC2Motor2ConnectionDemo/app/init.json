@@ -1,0 +1,1064 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "renderer": {
+        "name": "renderer",
+        "value": {
+          "bound color": {
+            "a": 1,
+            "r": 1,
+            "b": 0,
+            "g": 0,
+            "name": "bound color",
+            "value": {
+              "a": 1,
+              "r": 1,
+              "b": 0,
+              "g": 0,
+              "blendable_type": "cc.creativecomputing.math.CCColor"
+            }
+          },
+          "rope color": {
+            "a": 1,
+            "r": 1,
+            "b": 0,
+            "g": 0,
+            "name": "rope color",
+            "value": {
+              "a": 1,
+              "r": 1,
+              "b": 0,
+              "g": 0,
+              "blendable_type": "cc.creativecomputing.math.CCColor"
+            }
+          }
+        }
+      },
+      "effects": {
+        "name": "effects",
+        "value": {
+          "offset animation": {
+            "name": "offset animation",
+            "value": {
+              "x modulation": {
+                "name": "x modulation",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": -1
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "group blends": {
+                "name": "group blends",
+                "value": {"group_0": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "group_0",
+                  "value": 1
+                }}
+              },
+              "y modulation": {
+                "name": "y modulation",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": -0.421999990940094
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "blend": {
+                "min": 0,
+                "max": 1,
+                "name": "blend",
+                "value": 1
+              },
+              "channelblend": {
+                "min": 0,
+                "max": 1,
+                "name": "channelblend",
+                "value": 0
+              }
+            }
+          },
+          "end add": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "end add",
+            "value": 0.5
+          },
+          "end scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "end scale",
+            "value": 0.5
+          },
+          "x scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "x scale",
+            "value": 1
+          },
+          "y default": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "y default",
+            "value": 1
+          },
+          "y scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "y scale",
+            "value": 1
+          },
+          "x default": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "x default",
+            "value": 1
+          },
+          "normalize": {
+            "name": "normalize",
+            "value": false
+          },
+          "bypass amount": {
+            "name": "bypass amount",
+            "value": false
+          },
+          "global scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "global scale",
+            "value": 1
+          },
+          "animation blender": {
+            "name": "animation blender",
+            "value": {
+              "apply blend": {
+                "min": 0,
+                "max": 1,
+                "name": "apply blend",
+                "value": 0
+              },
+              "modulation": {
+                "name": "modulation",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "blend": {
+                "min": 0,
+                "max": 1,
+                "name": "blend",
+                "value": 0
+              },
+              "blend range": {
+                "min": 0,
+                "max": 1,
+                "name": "blend range",
+                "value": 0
+              },
+              "reverse": {
+                "name": "reverse",
+                "value": true
+              }
+            }
+          },
+          "modulation sources": {
+            "name": "modulation sources",
+            "value": {}
+          },
+          "combine": {
+            "name": "combine",
+            "value": {}
+          }
+        }
+      },
+      "bounds": {
+        "name": "bounds",
+        "value": {
+          "offset": {
+            "min": 0,
+            "max": 1,
+            "name": "offset",
+            "value": 0
+          },
+          "max velocity": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "max velocity",
+            "value": 0
+          },
+          "radius scale": {
+            "min": 0,
+            "max": 2,
+            "name": "radius scale",
+            "value": 1
+          },
+          "min rope angle": {
+            "min": 0,
+            "max": 30,
+            "name": "min rope angle",
+            "value": 6
+          },
+          "max jerk": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "max jerk",
+            "value": 0
+          },
+          "bottom width": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "bottom width",
+            "value": 250.7519859227394
+          },
+          "formular": {
+            "name": "formular",
+            "value": "NUMERIC_1"
+          },
+          "top distance": {
+            "min": 0,
+            "max": 2000,
+            "name": "top distance",
+            "value": 0
+          },
+          "top width": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "top width",
+            "value": 400
+          },
+          "apply filter": {
+            "name": "apply filter",
+            "value": false
+          },
+          "formulars": {
+            "name": "formulars",
+            "value": {
+              "numeric 1": {
+                "name": "numeric 1",
+                "value": {
+                  "depth rotation": {
+                    "min": 0,
+                    "max": 40,
+                    "name": "depth rotation",
+                    "value": 5
+                  },
+                  "depth position": {
+                    "min": 0,
+                    "max": 40,
+                    "name": "depth position",
+                    "value": 5
+                  },
+                  "color": {
+                    "a": 1,
+                    "r": 0,
+                    "b": 0,
+                    "g": 0,
+                    "name": "color",
+                    "value": {
+                      "a": 1,
+                      "r": 0,
+                      "b": 0,
+                      "g": 0,
+                      "blendable_type": "cc.creativecomputing.math.CCColor"
+                    }
+                  },
+                  "use negatino": {
+                    "name": "use negatino",
+                    "value": true
+                  }
+                }
+              },
+              "hermite": {
+                "name": "hermite",
+                "value": {
+                  "max angle": {
+                    "min": 0,
+                    "max": 70,
+                    "name": "max angle",
+                    "value": 60
+                  },
+                  "lower hermite": {
+                    "name": "lower hermite",
+                    "value": {
+                      "tension": {
+                        "min": -1,
+                        "max": 2,
+                        "name": "tension",
+                        "value": 0
+                      },
+                      "bias": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "bias",
+                        "value": 0
+                      },
+                      "v0": {
+                        "min": -1,
+                        "max": 3,
+                        "name": "v0",
+                        "value": 0.5
+                      },
+                      "v3": {
+                        "min": -1,
+                        "max": 3,
+                        "name": "v3",
+                        "value": 0.5
+                      }
+                    }
+                  },
+                  "upper border": {
+                    "min": 2000,
+                    "max": 0,
+                    "name": "upper border",
+                    "value": 2000
+                  },
+                  "lower border": {
+                    "min": 2000,
+                    "max": 0,
+                    "name": "lower border",
+                    "value": 2000
+                  },
+                  "color": {
+                    "a": 1,
+                    "r": 0,
+                    "b": 0,
+                    "g": 0,
+                    "name": "color",
+                    "value": {
+                      "a": 1,
+                      "r": 0,
+                      "b": 0,
+                      "g": 0,
+                      "blendable_type": "cc.creativecomputing.math.CCColor"
+                    }
+                  },
+                  "center hermite": {
+                    "name": "center hermite",
+                    "value": {
+                      "tension": {
+                        "min": -1,
+                        "max": 2,
+                        "name": "tension",
+                        "value": 0
+                      },
+                      "bias": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "bias",
+                        "value": 0
+                      },
+                      "v0": {
+                        "min": -1,
+                        "max": 3,
+                        "name": "v0",
+                        "value": 0.5
+                      },
+                      "v3": {
+                        "min": -1,
+                        "max": 3,
+                        "name": "v3",
+                        "value": 0.5
+                      }
+                    }
+                  },
+                  "upper hermite": {
+                    "name": "upper hermite",
+                    "value": {
+                      "tension": {
+                        "min": -1,
+                        "max": 2,
+                        "name": "tension",
+                        "value": 0
+                      },
+                      "bias": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "bias",
+                        "value": 0
+                      },
+                      "v0": {
+                        "min": -1,
+                        "max": 3,
+                        "name": "v0",
+                        "value": 0.5
+                      },
+                      "v3": {
+                        "min": -1,
+                        "max": 3,
+                        "name": "v3",
+                        "value": 0.5
+                      }
+                    }
+                  }
+                }
+              },
+              "pow": {
+                "name": "pow",
+                "value": {
+                  "pow lower": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "pow lower",
+                    "value": 0
+                  },
+                  "max angle": {
+                    "min": 0,
+                    "max": 70,
+                    "name": "max angle",
+                    "value": 60
+                  },
+                  "pow upper": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "pow upper",
+                    "value": 0
+                  },
+                  "upper border": {
+                    "min": 2000,
+                    "max": 0,
+                    "name": "upper border",
+                    "value": 2000
+                  },
+                  "lower border": {
+                    "min": 2000,
+                    "max": 0,
+                    "name": "lower border",
+                    "value": 2000
+                  },
+                  "color": {
+                    "a": 1,
+                    "r": 0,
+                    "b": 0,
+                    "g": 0,
+                    "name": "color",
+                    "value": {
+                      "a": 1,
+                      "r": 0,
+                      "b": 0,
+                      "g": 0,
+                      "blendable_type": "cc.creativecomputing.math.CCColor"
+                    }
+                  },
+                  "pow center": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "pow center",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          },
+          "x limiter": {
+            "name": "x limiter",
+            "value": {
+              "move start": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "move start",
+                "value": 0
+              },
+              "max jerk": {
+                "min": 0,
+                "max": 5000,
+                "name": "max jerk",
+                "value": 600
+              },
+              "threshold": {
+                "min": 0,
+                "max": 10,
+                "name": "threshold",
+                "value": 1
+              },
+              "move range": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "move range",
+                "value": 1
+              },
+              "bypass": {
+                "name": "bypass",
+                "value": true
+              },
+              "apply scale": {
+                "min": 0,
+                "max": 1,
+                "name": "apply scale",
+                "value": 1
+              },
+              "lookAhead": {
+                "min": 0,
+                "max": 10,
+                "name": "lookAhead",
+                "value": 1
+              },
+              "constrain 2": {
+                "min": 0,
+                "max": 1,
+                "name": "constrain 2",
+                "value": 1
+              },
+              "draw targets": {
+                "name": "draw targets",
+                "value": true
+              },
+              "constrain 1": {
+                "min": 0,
+                "max": 1,
+                "name": "constrain 1",
+                "value": 0
+              },
+              "max vel": {
+                "min": 0,
+                "max": 1000,
+                "name": "max vel",
+                "value": 600
+              },
+              "draw future points": {
+                "name": "draw future points",
+                "value": true
+              },
+              "max acc": {
+                "min": 0,
+                "max": 1000,
+                "name": "max acc",
+                "value": 800
+              },
+              "sample rate": {
+                "min": 0,
+                "max": 60,
+                "name": "sample rate",
+                "value": 0.1
+              }
+            }
+          },
+          "calc back": {
+            "name": "calc back",
+            "value": false
+          },
+          "angle": {
+            "min": -3.141592653589793,
+            "max": 3.141592653589793,
+            "name": "angle",
+            "value": 0
+          },
+          "max acceleration": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "max acceleration",
+            "value": 0
+          },
+          "y limiter": {
+            "name": "y limiter",
+            "value": {
+              "move start": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "move start",
+                "value": 0
+              },
+              "max jerk": {
+                "min": 0,
+                "max": 5000,
+                "name": "max jerk",
+                "value": 600
+              },
+              "threshold": {
+                "min": 0,
+                "max": 10,
+                "name": "threshold",
+                "value": 1
+              },
+              "move range": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "move range",
+                "value": 1
+              },
+              "bypass": {
+                "name": "bypass",
+                "value": true
+              },
+              "apply scale": {
+                "min": 0,
+                "max": 1,
+                "name": "apply scale",
+                "value": 1
+              },
+              "lookAhead": {
+                "min": 0,
+                "max": 10,
+                "name": "lookAhead",
+                "value": 1
+              },
+              "constrain 2": {
+                "min": 0,
+                "max": 1,
+                "name": "constrain 2",
+                "value": 1
+              },
+              "draw targets": {
+                "name": "draw targets",
+                "value": true
+              },
+              "constrain 1": {
+                "min": 0,
+                "max": 1,
+                "name": "constrain 1",
+                "value": 0
+              },
+              "max vel": {
+                "min": 0,
+                "max": 1000,
+                "name": "max vel",
+                "value": 600
+              },
+              "draw future points": {
+                "name": "draw future points",
+                "value": true
+              },
+              "max acc": {
+                "min": 0,
+                "max": 1000,
+                "name": "max acc",
+                "value": 800
+              },
+              "sample rate": {
+                "min": 0,
+                "max": 60,
+                "name": "sample rate",
+                "value": 0.1
+              }
+            }
+          },
+          "bottom distance": {
+            "min": 0,
+            "max": 2000,
+            "name": "bottom distance",
+            "value": 710
+          }
+        }
+      },
+      "camera controller": {
+        "name": "camera controller",
+        "value": {
+          "distance": {
+            "min": 1,
+            "max": 20000,
+            "name": "distance",
+            "value": 1108.1379423350531
+          },
+          "center": {
+            "name": "center",
+            "value": {
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "name": "x",
+                "value": 28.155848187285716
+              },
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "name": "y",
+                "value": -563.4069788331107
+              },
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "rotation": {
+            "name": "rotation",
+            "value": {
+              "w": {
+                "min": -1,
+                "max": 1,
+                "name": "w",
+                "value": -0.07714228153912955
+              },
+              "x": {
+                "min": -1,
+                "max": 1,
+                "name": "x",
+                "value": 0.06316490425995264
+              },
+              "y": {
+                "min": -1,
+                "max": 1,
+                "name": "y",
+                "value": 0.9867718412836796
+              },
+              "z": {
+                "min": -1,
+                "max": 1,
+                "name": "z",
+                "value": 0.12783034271400995
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1900
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 1000
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.44640406991707
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}

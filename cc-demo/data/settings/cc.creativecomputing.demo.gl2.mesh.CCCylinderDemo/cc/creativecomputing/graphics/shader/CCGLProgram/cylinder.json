@@ -1,0 +1,57 @@
+{
+  "fragment": {
+    "name": "fragment",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "cylinder_frag.glsl": {
+        "name": "cylinder_frag.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@64d6ed75"
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {}
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  },
+  "vertex": {
+    "name": "vertex",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {
+          "length": {
+            "min": 0,
+            "max": 500,
+            "name": "length",
+            "value": 414.5
+          },
+          "radius": {
+            "min": 0,
+            "max": 100,
+            "name": "radius",
+            "value": 14.5
+          }
+        }
+      },
+      "cylinder_vert.glsl": {
+        "name": "cylinder_vert.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@547e4a93"
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  }
+}

@@ -1,0 +1,230 @@
+{"value": {
+  "blend a refraction": {
+    "min": 0,
+    "max": 1,
+    "name": "blend a refraction",
+    "value": 1
+  },
+  "voronoise": {
+    "name": "voronoise",
+    "value": {"shader objects": {
+      "name": "shader objects",
+      "value": {"fragment": {
+        "name": "fragment",
+        "source": "// Created by inigo quilez - iq/2014\n// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.\n\n\n// This is a procedural pattern that has 2 parameters, that generalizes cell-noise,\n// perlin-noise and voronoi, all of which can be written in terms of the former as:\n//\n// cellnoise(x) = pattern(0,0,x)\n// perlin(x) = pattern(0,1,x)\n// voronoi(x) = pattern(1,0,x)\n//\n// From this generalization of the three famouse patterns, a new one (which I call\n// \"Voronoise\") emerges naturally. It's like perlin noise a bit, but within a jittered\n// grid like voronoi):\n//\n// voronoise(x) = pattern(1,1,x)\n//\n// Not sure what one would use this generalization for, because it's slightly slower\n// than perlin or voronoise (and certainly much slower than cell noise), and in the\n// end as a shading TD you just want one or another depending of the type of visual\n// features you are looking for, I can't see a blending being needed in real life.\n// But well, if only for the math fun it was worth trying. And they say a bit of\n// mathturbation can be healthy anyway!\n\n\n// Use the mouse to blend between different patterns:\n\n// ell noise    u=0,v=0\n// voronoi      u=1,v=0\n// perlin noise u=0,v1=\n// voronoise    u=1,v=1\n\n// More info here: http://iquilezles.org/www/articles/voronoise/voronoise.htm\n\nvec3 hash3( vec2 p )\n{\n    vec3 q = vec3( dot(p,vec2(127.1,311.7)),\n                  dot(p,vec2(269.5,183.3)),\n                  dot(p,vec2(419.2,371.9)) );\n    return fract(sin(q)*43758.5453);\n}\n\nfloat noise01( in vec2 x, vec3 uv )\n{\n    vec2 p = floor(x);\n    vec2 f = fract(x);\n    \n    float k = 1.0+63.0*pow(1.0-uv.y,4.0);\n    \n    float va = 0.0;\n    float wt = 0.0;\n    for( int j=-2; j<=2; j++ )\n        for( int i=-2; i<=2; i++ )\n        {\n            vec2 g = vec2( float(i),float(j) );\n            vec3 o = hash3( p + g )*vec3(uv.x,uv.x,1.0);\n            vec2 r = g - f + o.xy;\n            float d = dot(r,r);\n            float ww = pow( 1.0-smoothstep(0.0,1.6,sqrt(d)), k );\n            va += o.z*ww;\n            wt += ww;\n        }\n    \n    return va/wt;\n}\n\nfloat hash1( float n ) { return fract(sin(n)*43758.5453); }\nvec2  hash2( vec2  p ) { p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) ); return fract(sin(p)*43758.5453); }\n\n\nuniform vec3 noiseBlend;\nuniform float time;\n\nvec4 voronoi( in vec2 x )\n{\n    vec2 n = floor( x );\n    vec2 f = fract( x );\n\n\tvec3 m = vec3( 8.0 );\n\tfloat m2 = 8.0;\n    for( int j=-2; j<=2; j++ )\n    for( int i=-2; i<=2; i++ )\n    {\n        vec2 g = vec2( float(i),float(j) );\n        vec2 o = hash2( n + g );\n\n\t\t// animate\n        o = 0.5 + 0.5*sin( time * 0.8 + 6.2831*o );    \n \n\t\tvec2 r = g - f + o;\n\n        // euclidean\t\t\n\t\tvec2 d0 = vec2( sqrt(dot(r,r)), 1.0 );\n        // manhattam\t\t\n\t\tvec2 d1 = vec2( 0.71*(abs(r.x) + abs(r.y)), 1.0 );\n        // triangular\t\t\n\t\tvec2 d2 = vec2( max(abs(r.x)*0.866025+r.y*0.5,-r.y), \n\t\t\t\t        step(0.0,0.5*abs(r.x)+0.866025*r.y)*(1.0+step(0.0,r.x)) );\n\n\t\tvec2 d = d0;   \n\n\t\td = d0 * noiseBlend.x;\n\t\td += d1 * noiseBlend.y;\n\t\td += d2 * noiseBlend.z;\n\n\t\td /= (noiseBlend.x + noiseBlend.y + noiseBlend.z);\n\t\t\n        if( d.x<m.x )\n        {\n\t\t\tm2 = m.x;\n            m.x = d.x;\n            m.y = hash1( dot(n+g,vec2(7.0,113.0) ) );\n\t\t\tm.z = d.y;\n        }\n\t\telse if( d.x<m2 )\n\t\t{\n\t\t\tm2 = d.x;\n\t\t}\n\n    }\n    return vec4( m, m2-m.x );\n}\n\nuniform float scale;\nuniform float gain;\nuniform float octaves;\nuniform float lacunarity;\n\nvec4 octavedNoise(in vec2 s){\n    float myScale = scale;\n    float myFallOff = gain;\n    \n    int myOctaves = int(floor(octaves));\n    vec4 myResult = vec4(0.); \n    float myAmp = 0.;\n    \n    for(int i = 0; i < myOctaves;i++){\n        vec4 noiseVal = voronoi(s * myScale);\n        myResult += noiseVal * myFallOff;\n        myAmp += myFallOff;\n        myFallOff *= gain;\n        myScale *= lacunarity;\n    }\n    float myBlend = octaves - float(myOctaves);\n    \n    myResult += voronoi(s * myScale) * myFallOff * myBlend;   \n    myAmp += myFallOff * myBlend;\n    \n    if(myAmp > 0.0){\n        myResult /= myAmp;\n    }\n    \n    return myResult;\n}\n\nuniform vec2 iResolution;\nuniform sampler2D tex0; \nuniform sampler2D tex1; \nuniform float randomOffset;\n\nuniform float blendARefraction;\nuniform float blendBRefraction;\nuniform float blendAB;\nuniform float blendRandom;\n\nuniform vec4 fBlends;\n\nvoid main(){\n\tvec2 uv = gl_FragCoord.xy / iResolution.xx;\n\tvec2 texUV = gl_FragCoord.xy / iResolution.xy;\n\ttexUV = vec2(texUV.x, 1.0 - texUV.y); \n    \n\tvec4 fxyzw = octavedNoise( 24.0*uv); \n    \n\tfloat f =  fxyzw.x * fBlends.x;\n\tf +=  fxyzw.y * fBlends.y;\n\tf +=  fxyzw.z * fBlends.z;\n\tf +=  fxyzw.w * fBlends.w;\n\tf /= (fBlends.x + fBlends.y + fBlends.z + fBlends.w);\n\n\tvec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2))) / iResolution * randomOffset * 20.0;\n\t//texUV += dir;\n\n\tfloat noiseBlendARefraction = smoothstep(f,f + blendRandom,blendARefraction * (1.0 + blendRandom)); \n\tfloat noiseBlendBRefraction = smoothstep(f,f + blendRandom,blendBRefraction * (1.0 + blendRandom)); \n\tfloat noiseBlendAB = smoothstep(f,f + blendRandom,blendAB * (1.0 + blendRandom)); \n\t\n\n\tvec4 color0 = texture2D(tex0,texUV + dir * noiseBlendARefraction); \n\tvec4 color1 = texture2D(tex1,texUV + dir * noiseBlendBRefraction);\n\t\n\tvec4 color = mix(color0, color1, noiseBlendAB);   \n    \n    gl_FragColor = color;//vec4(f);//vec4(texUV,0.0,1.0);vec4(f.xyz,1);//vec4( dir, 0.0, 1.0 );\n}\n",
+        "value": "cc.creativecomputing.control.code.CCShaderObject@224dcee8"
+      }}
+    }}
+  },
+  "f z blend": {
+    "min": 0,
+    "max": 1,
+    "name": "f z blend",
+    "value": 0
+  },
+  "f x blend": {
+    "min": 0,
+    "max": 1,
+    "name": "f x blend",
+    "value": 0.19599999487400055
+  },
+  "scale": {
+    "min": 0,
+    "max": 1,
+    "name": "scale",
+    "value": 0.7229999899864197
+  },
+  "randomness": {
+    "min": 0,
+    "max": 200,
+    "name": "randomness",
+    "value": 3
+  },
+  "screen capture": {
+    "name": "screen capture",
+    "value": {
+      "full window": {},
+      "record key": {
+        "name": "record key",
+        "value": true
+      },
+      "format": {
+        "name": "format",
+        "value": "JPG"
+      },
+      "prepend": {
+        "name": "prepend",
+        "value": "frame_"
+      },
+      "draw bounds": {
+        "name": "draw bounds",
+        "value": false
+      },
+      "quality": {
+        "min": 0,
+        "max": 1,
+        "name": "quality",
+        "value": 1
+      },
+      "seconds": {
+        "min": 1,
+        "max": 1000,
+        "name": "seconds",
+        "value": 100
+      },
+      "record frame": {},
+      "alpha": {
+        "name": "alpha",
+        "value": false
+      },
+      "x": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "x",
+        "value": 0
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 4320
+      },
+      "y": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "y",
+        "value": 0
+      },
+      "capture rate": {
+        "min": 1,
+        "max": 60,
+        "name": "capture rate",
+        "value": 30
+      },
+      "record sequence": {},
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 337
+      },
+      "record timeline loop": {}
+    }
+  },
+  "f w blend": {
+    "min": 0,
+    "max": 1,
+    "name": "f w blend",
+    "value": 0.20999999344348907
+  },
+  "lacunarity": {
+    "min": 0,
+    "max": 2,
+    "name": "lacunarity",
+    "value": 2
+  },
+  "gain": {
+    "min": 0,
+    "max": 1,
+    "name": "gain",
+    "value": 0.6320000290870667
+  },
+  "texture 1": {
+    "name": "texture 1",
+    "value": {
+      "generate mipmaps": {
+        "name": "generate mipmaps",
+        "value": false
+      },
+      "filter": {
+        "name": "filter",
+        "value": "LINEAR"
+      },
+      "path": {
+        "name": "path",
+        "value": "./data/fra/Storyboard4.png"
+      },
+      "mipmap filter": {
+        "name": "mipmap filter",
+        "value": "NEAREST"
+      },
+      "wrap": {
+        "name": "wrap",
+        "value": "MIRRORED_REPEAT"
+      }
+    }
+  },
+  "noise blend y": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend y",
+    "value": 0
+  },
+  "octaves": {
+    "min": 0,
+    "max": 10,
+    "name": "octaves",
+    "value": 4
+  },
+  "noise blend z": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend z",
+    "value": 1
+  },
+  "blend b refraction": {
+    "min": 0,
+    "max": 1,
+    "name": "blend b refraction",
+    "value": 0
+  },
+  "texture 0": {
+    "name": "texture 0",
+    "value": {
+      "generate mipmaps": {
+        "name": "generate mipmaps",
+        "value": false
+      },
+      "filter": {
+        "name": "filter",
+        "value": "LINEAR"
+      },
+      "path": {
+        "name": "path",
+        "value": "./data/fra/SP_START.png"
+      },
+      "mipmap filter": {
+        "name": "mipmap filter",
+        "value": "NEAREST"
+      },
+      "wrap": {
+        "name": "wrap",
+        "value": "MIRRORED_REPEAT"
+      }
+    }
+  },
+  "noise blend x": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend x",
+    "value": 0
+  },
+  "blend ab": {
+    "min": 0,
+    "max": 1,
+    "name": "blend ab",
+    "value": 0.4860000014305115
+  },
+  "f y blend": {
+    "min": 0,
+    "max": 1,
+    "name": "f y blend",
+    "value": 1
+  },
+  "blend random": {
+    "min": 0,
+    "max": 1,
+    "name": "blend random",
+    "value": 0.2630000114440918
+  }
+}}

@@ -1,0 +1,301 @@
+{"value": {
+  "amount": {
+    "min": 0,
+    "max": 1,
+    "name": "amount",
+    "value": 1
+  },
+  "light x": {
+    "min": -1,
+    "max": 1,
+    "name": "light x",
+    "value": 0
+  },
+  "offset": {
+    "min": 0,
+    "max": 10,
+    "name": "offset",
+    "value": 0
+  },
+  "light y": {
+    "min": -1,
+    "max": 1,
+    "name": "light y",
+    "value": 0
+  },
+  "texture": {
+    "name": "texture",
+    "value": {"path": {"name": "path"}}
+  },
+  "rotation": {
+    "min": 0,
+    "max": 1,
+    "name": "rotation",
+    "value": 0.2630000114440918
+  },
+  "camera controller": {
+    "name": "camera controller",
+    "value": {
+      "distance": {
+        "min": 1,
+        "max": 20000,
+        "name": "distance",
+        "value": 218.1865756584217
+      },
+      "center": {
+        "name": "center",
+        "value": {
+          "x": {
+            "min": -10000,
+            "max": 10000,
+            "name": "x",
+            "value": 21.568023521062415
+          },
+          "y": {
+            "min": -10000,
+            "max": 10000,
+            "name": "y",
+            "value": -1.8663298113923934
+          },
+          "z": {
+            "min": -10000,
+            "max": 10000,
+            "name": "z",
+            "value": -19.12609150475742
+          }
+        }
+      },
+      "rotation": {
+        "name": "rotation",
+        "value": {
+          "w": {
+            "min": -1,
+            "max": 1,
+            "name": "w",
+            "value": 0.6708007574546535
+          },
+          "x": {
+            "min": -1,
+            "max": 1,
+            "name": "x",
+            "value": -0.7416353025939388
+          },
+          "y": {
+            "min": -1,
+            "max": 1,
+            "name": "y",
+            "value": 8.922317371624607E-5
+          },
+          "z": {
+            "min": -1,
+            "max": 1,
+            "name": "z",
+            "value": 0.0018476427913667532
+          }
+        }
+      }
+    }
+  },
+  "specularBrightPow": {
+    "min": -1,
+    "max": 150,
+    "name": "specularBrightPow",
+    "value": 1
+  },
+  "noise amount": {
+    "min": 0,
+    "max": 5,
+    "name": "noise amount",
+    "value": 1
+  },
+  "noise scale": {
+    "min": 0,
+    "max": 1,
+    "name": "noise scale",
+    "value": 1
+  },
+  "filter": {
+    "name": "filter",
+    "value": "LINEAR"
+  },
+  "rot 1": {
+    "min": -3.141592653589793,
+    "max": 3.141592653589793,
+    "name": "rot 1",
+    "value": 0
+  },
+  "alpha": {
+    "min": 0,
+    "max": 1,
+    "name": "alpha",
+    "value": 1
+  },
+  "specularPow": {
+    "min": -1,
+    "max": 10,
+    "name": "specularPow",
+    "value": 1
+  },
+  "noise": {
+    "name": "noise",
+    "value": {
+      "worley": {
+        "min": 0,
+        "max": 1,
+        "name": "worley",
+        "value": 0.20999999344348907
+      },
+      "amp": {
+        "min": 0,
+        "max": 1,
+        "name": "amp",
+        "value": 1
+      },
+      "sloped tri": {
+        "min": 0,
+        "max": 1,
+        "name": "sloped tri",
+        "value": 0
+      },
+      "saw": {
+        "min": 0,
+        "max": 1,
+        "name": "saw",
+        "value": 0
+      },
+      "simplex": {
+        "min": 0,
+        "max": 1,
+        "name": "simplex",
+        "value": 0
+      },
+      "scale": {
+        "min": 0,
+        "max": 1,
+        "name": "scale",
+        "value": 0.14399999380111694
+      },
+      "tri": {
+        "min": 0,
+        "max": 1,
+        "name": "tri",
+        "value": 0
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 10,
+        "name": "lacunarity",
+        "value": 2
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.5
+      },
+      "octaves": {
+        "min": 1,
+        "max": 10,
+        "name": "octaves",
+        "value": 2.5390000343322754
+      },
+      "square": {
+        "min": 0,
+        "max": 1,
+        "name": "square",
+        "value": 0
+      },
+      "sine": {
+        "min": 0,
+        "max": 1,
+        "name": "sine",
+        "value": 0
+      },
+      "worley setup": {
+        "name": "worley setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 1
+          },
+          "amp": {
+            "min": 0,
+            "max": 10,
+            "name": "amp",
+            "value": 1
+          },
+          "formular": {
+            "name": "formular",
+            "value": "F1F0"
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "distance type": {
+            "name": "distance type",
+            "value": "CITYBLOCK"
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          }
+        }
+      }
+    }
+  },
+  "angle": {
+    "min": 0,
+    "max": 1.5707963267948966,
+    "name": "angle",
+    "value": 0.7853981633974483
+  },
+  "light z": {
+    "min": -1,
+    "max": 1,
+    "name": "light z",
+    "value": 1
+  },
+  "radius": {
+    "min": 0,
+    "max": 1000,
+    "name": "radius",
+    "value": 100
+  },
+  "rot 0": {
+    "min": -1.5707963267948966,
+    "max": 1.5707963267948966,
+    "name": "rot 0",
+    "value": 0
+  },
+  "tex offset": {
+    "min": 0,
+    "max": 1,
+    "name": "tex offset",
+    "value": 1
+  },
+  "height": {
+    "min": 0,
+    "max": 300,
+    "name": "height",
+    "value": 100
+  },
+  "geom offset": {
+    "min": -300,
+    "max": 300,
+    "name": "geom offset",
+    "value": 100
+  }
+}}

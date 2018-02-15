@@ -1,0 +1,124 @@
+{
+  "envelope": {
+    "curve": {"points": [
+      {
+        "in": {
+          "time": 0,
+          "type": "HANDLE",
+          "value": 0
+        },
+        "time": 0,
+        "type": "BEZIER",
+        "value": 0,
+        "out": {
+          "time": 0.11805427824628764,
+          "type": "HANDLE",
+          "value": 0
+        }
+      },
+      {
+        "in": {
+          "time": 0.1655172413793104,
+          "type": "HANDLE",
+          "value": 0.4181425277951101
+        },
+        "time": 0.32758620689655177,
+        "type": "BEZIER",
+        "value": 0.6197718631178708,
+        "out": {
+          "time": 0.48965517241379314,
+          "type": "HANDLE",
+          "value": 0.8214011984406315
+        }
+      },
+      {
+        "in": {
+          "time": 0.8551724137931034,
+          "type": "HANDLE",
+          "value": 1
+        },
+        "time": 1,
+        "type": "BEZIER",
+        "value": 1,
+        "out": {
+          "time": 1,
+          "type": "HANDLE",
+          "value": 1
+        }
+      }
+    ]},
+    "name": "envelope",
+    "value": "cc.creativecomputing.control.CCEnvelope@65ddd8fe"
+  },
+  "alpha": {
+    "min": 0,
+    "max": 1,
+    "name": "alpha",
+    "value": 0
+  },
+  "HP": {
+    "name": "HP",
+    "value": {
+      "bezier detail": {
+        "min": 0,
+        "max": 100,
+        "name": "bezier detail",
+        "value": 10
+      },
+      "serial": {
+        "name": "serial",
+        "value": {
+          "paritybit": {
+            "name": "paritybit",
+            "value": "NONE"
+          },
+          "refresh port list": {},
+          "stopbits": {
+            "name": "stopbits",
+            "value": "STOPBITS_1"
+          },
+          "rate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "rate",
+            "value": 9600
+          },
+          "port": {
+            "name": "port",
+            "value": ""
+          },
+          "databits": {
+            "name": "databits",
+            "value": "DATABITS_8"
+          },
+          "connect": {"name": "connect"}
+        }
+      }
+    }
+  },
+  "texture;": {
+    "name": "texture;",
+    "value": {
+      "generate mipmaps": {
+        "name": "generate mipmaps",
+        "value": false
+      },
+      "filter": {
+        "name": "filter",
+        "value": "LINEAR"
+      },
+      "path": {
+        "name": "path",
+        "value": "./data/obama/barack_2983x4000_z_2984x4000_l.JPG"
+      },
+      "mipmap filter": {
+        "name": "mipmap filter",
+        "value": "NEAREST"
+      },
+      "wrap": {
+        "name": "wrap",
+        "value": "CLAMP"
+      }
+    }
+  }
+}

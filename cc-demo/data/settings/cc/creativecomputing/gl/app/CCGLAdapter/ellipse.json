@@ -1,0 +1,10 @@
+{
+  "name": "app",
+  "type": "cc.creativecomputing.gl.app.CCGLAdapter",
+  "value": {"_myRealTimeGraph": {
+    "name": "real time visual",
+    "source": "package cc.creativecomputing.demo.control;\n\nimport cc.creativecomputing.demo.control.CCRealtimeCodingDemo.CCRealtimeGraph;\nimport cc.creativecomputing.graphics.CCGraphics;\nimport java.lang.Object;\n\npublic class CCRealtimeGraphImp implements CCRealtimeGraph{\n\n\tpublic void draw(CCGraphics g){\n\t\tg.ellipse(0,0,100,100);\n\t}\n\n\tpublic Object[] parameters(){\n\t\treturn null;\n\t}\n\n\tpublic void onRecompile(){\n\t}\n\n\n}",
+    "type": "cc.creativecomputing.control.code.CCRealtimeCompile",
+    "value": "cc.creativecomputing.control.code.CCRealtimeCompile@4777c36a"
+  }}
+}

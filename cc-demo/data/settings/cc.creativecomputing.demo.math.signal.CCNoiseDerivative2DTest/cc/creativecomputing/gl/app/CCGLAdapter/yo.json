@@ -1,0 +1,49 @@
+{"value": {
+  "alpha": {
+    "min": 0,
+    "max": 1,
+    "name": "alpha",
+    "value": 0.14399999380111694
+  },
+  "length": {
+    "min": 1,
+    "max": 200,
+    "name": "length",
+    "value": 45.57600021362305
+  },
+  "noise": {
+    "name": "noise",
+    "value": {
+      "octaves": {
+        "min": 1,
+        "max": 10,
+        "name": "octaves",
+        "value": 8.685999870300293
+      },
+      "scale": {
+        "min": 0,
+        "max": 1,
+        "name": "scale",
+        "value": 0.008
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 10,
+        "name": "lacunarity",
+        "value": 2
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.5
+      }
+    }
+  },
+  "space": {
+    "min": 1,
+    "max": 10,
+    "name": "space",
+    "value": 4.789000034332275
+  }
+}}

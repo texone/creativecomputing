@@ -1,0 +1,56 @@
+{
+  "name": "fft",
+  "type": "cc.creativecomputing.minim.CCFFT",
+  "value": {
+    "_cLogBandwidth": {
+      "min": 2,
+      "max": 220,
+      "precision": "",
+      "name": "log bandwidth",
+      "type": "int",
+      "value": 13
+    },
+    "_cLogBandsPerOctave": {
+      "min": 1,
+      "max": 10,
+      "precision": "",
+      "name": "log bands per octave",
+      "type": "int",
+      "value": 1
+    },
+    "_cAveraging": {
+      "name": "averaging",
+      "type": "cc.creativecomputing.minim.CCFFT$CCFFTAveraging",
+      "value": "LINEAR"
+    },
+    "_cSmoothing": {
+      "min": 0,
+      "max": 1,
+      "precision": "",
+      "name": "smoothing",
+      "type": "float",
+      "value": 0.8289999961853027
+    },
+    "_cLinearAverages": {
+      "min": 2,
+      "max": 512,
+      "precision": "",
+      "name": "linear averages",
+      "type": "int",
+      "value": 5
+    },
+    "_cAverageSmoothing": {
+      "min": 0,
+      "max": 1,
+      "precision": "",
+      "name": "average smoothing",
+      "type": "float",
+      "value": 0.6510000228881836
+    },
+    "_cWindowType": {
+      "name": "window type",
+      "type": "cc.creativecomputing.minim.CCFFT$CCFFTWindowType",
+      "value": "BLACKMAN"
+    }
+  }
+}

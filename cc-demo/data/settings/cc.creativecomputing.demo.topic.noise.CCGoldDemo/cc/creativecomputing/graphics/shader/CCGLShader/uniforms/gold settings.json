@@ -1,0 +1,98 @@
+{
+  "haze color.x": {
+    "min": 0,
+    "max": 1,
+    "name": "haze color.x",
+    "value": 0.6439999938011169
+  },
+  "haze color.z": {
+    "min": 0,
+    "max": 1,
+    "name": "haze color.z",
+    "value": 0.09200000017881393
+  },
+  "haze color.y": {
+    "min": 0,
+    "max": 1,
+    "name": "haze color.y",
+    "value": 0.19699999690055847
+  },
+  "edge Noise": {
+    "min": 0,
+    "max": 0.5,
+    "name": "edge Noise",
+    "value": 0.05900000035762787
+  },
+  "cold": {
+    "min": 0,
+    "max": 2,
+    "name": "cold",
+    "value": 1.0260000228881836
+  },
+  "bow": {
+    "min": 0,
+    "max": 1,
+    "name": "bow",
+    "value": 1
+  },
+  "gold": {
+    "min": 0,
+    "max": 1,
+    "name": "gold",
+    "value": 0.8420000076293945
+  },
+  "liquid": {
+    "min": 0,
+    "max": 0.2,
+    "name": "liquid",
+    "value": 0.08420000225305557
+  },
+  "haze": {
+    "min": 0,
+    "max": 2,
+    "name": "haze",
+    "value": 1.2879999876022339
+  },
+  "edge Range": {
+    "min": 0,
+    "max": 1.5,
+    "name": "edge Range",
+    "value": 0.531000018119812
+  },
+  "start glow": {
+    "min": 0,
+    "max": 2,
+    "name": "start glow",
+    "value": 1.6299999952316284
+  },
+  "gold color.x": {
+    "min": 0,
+    "max": 4,
+    "name": "gold color.x",
+    "value": 2.4200000762939453
+  },
+  "gold color.y": {
+    "min": 0,
+    "max": 4,
+    "name": "gold color.y",
+    "value": 2.052000045776367
+  },
+  "gold color.z": {
+    "min": 0,
+    "max": 4,
+    "name": "gold color.z",
+    "value": 0.9480000138282776
+  },
+  "progress": {
+    "min": -10,
+    "max": 10,
+    "name": "progress",
+    "value": 0.7799994945526123
+  },
+  "glow": {
+    "min": 0,
+    "max": 2,
+    "name": "glow",
+    "value": 1.1039999723434448
+  }
+}

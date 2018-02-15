@@ -1,0 +1,560 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "Apple Inc. : Bus 1"
+        }}
+      },
+      "animator": {
+        "name": "animator",
+        "value": {
+          "fixed update time": {
+            "min": 0,
+            "max": 1,
+            "name": "fixed update time",
+            "value": 1
+          },
+          "fix update time": {
+            "name": "fix update time",
+            "value": false
+          },
+          "framerate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "framerate",
+            "value": 60
+          },
+          "animationMode": {
+            "name": "animationMode",
+            "value": "PERFORMANT"
+          },
+          "show frame rate": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "show frame rate",
+            "value": 62.052697011883396
+          },
+          "exceptionHandling": {
+            "name": "exceptionHandling",
+            "value": "THROW"
+          }
+        }
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": -3600
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {"crash map": {
+      "name": "crash map",
+      "value": {
+        "Process exited with status 1.": {
+          "name": "Process exited with status 1.",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Process terminated with signal 11 (Segmentation fault).": {
+          "name": "Process terminated with signal 11 (Segmentation fault).",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Process exited with status 143.": {
+          "name": "Process exited with status 143.",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Process terminated with signal 9 (Killed).": {
+          "name": "Process terminated with signal 9 (Killed).",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Sending SIGKILL...": {
+          "name": "Sending SIGKILL...",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Try to terminate application.": {
+          "name": "Try to terminate application.",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Process exited with status 0.": {
+          "name": "Process exited with status 0.",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 0,
+              "g": 0,
+              "name": "color",
+              "value": "ffff0000"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Started successfully": {
+          "name": "Started successfully",
+          "value": {
+            "color": {
+              "a": 0.2078431397676468,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "35ffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": true
+            }
+          }
+        },
+        "Restart from Network": {
+          "name": "Restart from Network",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Shutdown from Network": {
+          "name": "Shutdown from Network",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 0,
+              "b": 0.6901960968971252,
+              "g": 1,
+              "name": "color",
+              "value": "ff00ffb0"
+            },
+            "active": {
+              "name": "active",
+              "value": true
+            }
+          }
+        },
+        "Restarting application.": {
+          "name": "Restarting application.",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Process terminated with signal 6 (Aborted).": {
+          "name": "Process terminated with signal 6 (Aborted).",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Could not read heartbeatfile: /home/microzoo/skeletonserver/shared/heartbeat_right.xml": {
+          "name": "Could not read heartbeatfile: /home/microzoo/skeletonserver/shared/heartbeat_right.xml",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 0,
+              "g": 0.5647059082984924,
+              "name": "color",
+              "value": "ffff9000"
+            },
+            "active": {
+              "name": "active",
+              "value": true
+            }
+          }
+        },
+        "### Exception: Attribute not found: secondsSince1970 in node: xml": {
+          "name": "### Exception: Attribute not found: secondsSince1970 in node: xml",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Terminate because: Received restart command.": {
+          "name": "Terminate because: Received restart command.",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Terminate because: Application shutdown": {
+          "name": "Terminate because: Application shutdown",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 0.5372549295425415,
+              "g": 0,
+              "name": "color",
+              "value": "ffff0089"
+            },
+            "active": {
+              "name": "active",
+              "value": true
+            }
+          }
+        },
+        "Terminate because: Failed to detect heartbeat.": {
+          "name": "Terminate because: Failed to detect heartbeat.",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Reboot from Network": {
+          "name": "Reboot from Network",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "O.k., terminated.": {
+          "name": "O.k., terminated.",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 1,
+              "g": 1,
+              "name": "color",
+              "value": "ffffffff"
+            },
+            "active": {
+              "name": "active",
+              "value": false
+            }
+          }
+        },
+        "Could not read heartbeatfile: /home/microzoo/skeletonserver/shared/heartbeat_left.xml": {
+          "name": "Could not read heartbeatfile: /home/microzoo/skeletonserver/shared/heartbeat_left.xml",
+          "value": {
+            "color": {
+              "a": 1,
+              "r": 1,
+              "b": 0,
+              "g": 0.9647058844566345,
+              "name": "color",
+              "value": "fffff600"
+            },
+            "active": {
+              "name": "active",
+              "value": true
+            }
+          }
+        },
+        "java exited: Internal quit.": {
+          "name": "java exited: Internal quit.",
+          "value": {
+            "color": {
+              "a": 0.14901961386203766,
+              "r": 0,
+              "b": 1,
+              "g": 0.07058823853731155,
+              "name": "color",
+              "value": "260012ff"
+            },
+            "active": {
+              "name": "active",
+              "value": true
+            }
+          }
+        }
+      }
+    }}
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {}
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": 452
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": 386
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1285
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": true
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 637
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 0.03448275849223137
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": true
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "AS_FAST_AS_POSSIBLE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 62.052697011883396
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}}

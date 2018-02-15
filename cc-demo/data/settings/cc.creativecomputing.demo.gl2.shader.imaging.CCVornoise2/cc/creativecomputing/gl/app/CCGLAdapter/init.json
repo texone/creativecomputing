@@ -1,0 +1,86 @@
+{"value": {
+  "f z blend": {
+    "min": 0,
+    "max": 1,
+    "name": "f z blend",
+    "value": 1
+  },
+  "blend": {
+    "min": 0,
+    "max": 1,
+    "name": "blend",
+    "value": 1
+  },
+  "f x blend": {
+    "min": 0,
+    "max": 1,
+    "name": "f x blend",
+    "value": 1
+  },
+  "scale": {
+    "min": 0,
+    "max": 1,
+    "name": "scale",
+    "value": 0.026000000536441803
+  },
+  "randomness": {
+    "min": 0,
+    "max": 200,
+    "name": "randomness",
+    "value": 7.800000190734863
+  },
+  "f w blend": {
+    "min": 0,
+    "max": 1,
+    "name": "f w blend",
+    "value": 1
+  },
+  "lacunarity": {
+    "min": 0,
+    "max": 2,
+    "name": "lacunarity",
+    "value": 2
+  },
+  "gain": {
+    "min": 0,
+    "max": 1,
+    "name": "gain",
+    "value": 0.5389999747276306
+  },
+  "noise blend y": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend y",
+    "value": 0
+  },
+  "octaves": {
+    "min": 0,
+    "max": 10,
+    "name": "octaves",
+    "value": 10
+  },
+  "noise blend z": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend z",
+    "value": 1
+  },
+  "noise blend x": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend x",
+    "value": 0
+  },
+  "f y blend": {
+    "min": 0,
+    "max": 1,
+    "name": "f y blend",
+    "value": 1
+  },
+  "blend random": {
+    "min": 0,
+    "max": 1,
+    "name": "blend random",
+    "value": 0.3160000145435333
+  }
+}}

@@ -1,0 +1,670 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "height2": {
+        "min": 0,
+        "max": 1,
+        "name": "height2",
+        "value": 0.20999999344348907
+      },
+      "offset": {
+        "min": 0,
+        "max": 1,
+        "name": "offset",
+        "value": 0
+      },
+      "drawmode": {
+        "name": "drawmode",
+        "value": "LINE_STRIP"
+      },
+      "plot": {},
+      "alpha": {
+        "min": 0,
+        "max": 1,
+        "name": "alpha",
+        "value": 1
+      },
+      "HP": {
+        "name": "HP",
+        "value": {
+          "bezier detail": {
+            "min": 0,
+            "max": 100,
+            "name": "bezier detail",
+            "value": 10
+          },
+          "serial": {
+            "name": "serial",
+            "value": {
+              "paritybit": {
+                "name": "paritybit",
+                "value": "NONE"
+              },
+              "refresh port list": {},
+              "stopbits": {
+                "name": "stopbits",
+                "value": "STOPBITS_1"
+              },
+              "rate": {
+                "min": -2147483648,
+                "max": 2147483647,
+                "name": "rate",
+                "value": 9600
+              },
+              "port": {
+                "name": "port",
+                "value": "/dev/tty.usbserial-FTBZ33D0"
+              },
+              "databits": {
+                "name": "databits",
+                "value": "DATABITS_8"
+              },
+              "connect": {
+                "name": "connect",
+                "value": false
+              }
+            }
+          }
+        }
+      },
+      "signal": {
+        "name": "signal",
+        "value": {
+          "square setup": {
+            "name": "square setup",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 1
+              },
+              "pulsewidth": {
+                "min": 0,
+                "max": 1,
+                "name": "pulsewidth",
+                "value": 0.5
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              },
+              "norm": {
+                "name": "norm",
+                "value": true
+              }
+            }
+          },
+          "worley": {
+            "min": 0,
+            "max": 1,
+            "name": "worley",
+            "value": 0
+          },
+          "amp": {
+            "min": 0,
+            "max": 1,
+            "name": "amp",
+            "value": 1
+          },
+          "sloped tri": {
+            "min": 0,
+            "max": 1,
+            "name": "sloped tri",
+            "value": 0
+          },
+          "saw": {
+            "min": 0,
+            "max": 1,
+            "name": "saw",
+            "value": 1
+          },
+          "simplex": {
+            "min": 0,
+            "max": 1,
+            "name": "simplex",
+            "value": 0
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 0.005
+          },
+          "tri": {
+            "min": 0,
+            "max": 1,
+            "name": "tri",
+            "value": 0
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.289000004529953
+          },
+          "norm": {
+            "name": "norm",
+            "value": true
+          },
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 2.062000036239624
+          },
+          "square": {
+            "min": 0,
+            "max": 1,
+            "name": "square",
+            "value": 0
+          },
+          "sine": {
+            "min": 0,
+            "max": 1,
+            "name": "sine",
+            "value": 0
+          },
+          "worley setup": {
+            "name": "worley setup",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 1
+              },
+              "amp": {
+                "min": 0,
+                "max": 10,
+                "name": "amp",
+                "value": 1
+              },
+              "formular": {
+                "name": "formular",
+                "value": "F1F0"
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              },
+              "norm": {
+                "name": "norm",
+                "value": true
+              },
+              "distance type": {
+                "name": "distance type",
+                "value": "MANHATTAN"
+              }
+            }
+          },
+          "tri setup": {
+            "name": "tri setup",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 1
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              },
+              "norm": {
+                "name": "norm",
+                "value": true
+              },
+              "ratio": {
+                "min": 0,
+                "max": 1,
+                "name": "ratio",
+                "value": 0.5
+              }
+            }
+          }
+        }
+      },
+      "rotations": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "rotations",
+        "value": 150
+      },
+      "steps": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "steps",
+        "value": 120000
+      },
+      "signal 2": {
+        "name": "signal 2",
+        "value": {
+          "square setup": {
+            "name": "square setup",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 1
+              },
+              "pulsewidth": {
+                "min": 0,
+                "max": 1,
+                "name": "pulsewidth",
+                "value": 0.5
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              },
+              "norm": {
+                "name": "norm",
+                "value": true
+              }
+            }
+          },
+          "worley": {
+            "min": 0,
+            "max": 1,
+            "name": "worley",
+            "value": 0
+          },
+          "amp": {
+            "min": 0,
+            "max": 1,
+            "name": "amp",
+            "value": 0
+          },
+          "sloped tri": {
+            "min": 0,
+            "max": 1,
+            "name": "sloped tri",
+            "value": 0
+          },
+          "saw": {
+            "min": 0,
+            "max": 1,
+            "name": "saw",
+            "value": 0
+          },
+          "simplex": {
+            "min": 0,
+            "max": 1,
+            "name": "simplex",
+            "value": 0
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 1
+          },
+          "tri": {
+            "min": 0,
+            "max": 1,
+            "name": "tri",
+            "value": 0
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          },
+          "norm": {
+            "name": "norm",
+            "value": true
+          },
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 1
+          },
+          "square": {
+            "min": 0,
+            "max": 1,
+            "name": "square",
+            "value": 0
+          },
+          "sine": {
+            "min": 0,
+            "max": 1,
+            "name": "sine",
+            "value": 0
+          },
+          "worley setup": {
+            "name": "worley setup",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 1
+              },
+              "amp": {
+                "min": 0,
+                "max": 10,
+                "name": "amp",
+                "value": 1
+              },
+              "formular": {
+                "name": "formular",
+                "value": "DEFAULT"
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              },
+              "norm": {
+                "name": "norm",
+                "value": true
+              },
+              "distance type": {
+                "name": "distance type",
+                "value": "EUCLIDEAN"
+              }
+            }
+          },
+          "tri setup": {
+            "name": "tri setup",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 1
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              },
+              "norm": {
+                "name": "norm",
+                "value": true
+              },
+              "ratio": {
+                "min": 0,
+                "max": 1,
+                "name": "ratio",
+                "value": 0.5
+              }
+            }
+          }
+        }
+      },
+      "height": {
+        "min": 0,
+        "max": 5000,
+        "name": "height",
+        "value": 660
+      }
+    }
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "AUTOMAX"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1000
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 500
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 20
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 19.91951996028526
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}}

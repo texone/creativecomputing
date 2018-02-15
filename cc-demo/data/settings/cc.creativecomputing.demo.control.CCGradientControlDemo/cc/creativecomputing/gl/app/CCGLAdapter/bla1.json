@@ -1,0 +1,41 @@
+{"value": {
+  "gradient b": {
+    "gradient": [{
+      "a": 1,
+      "r": 1,
+      "b": 1,
+      "g": 1,
+      "position": 0.5116279125213623
+    }],
+    "name": "gradient b",
+    "value": [{}]
+  },
+  "gradient c": {
+    "gradient": [{
+      "a": 1,
+      "r": 1,
+      "b": 1,
+      "g": 1,
+      "position": 0.0872092992067337
+    }],
+    "name": "gradient c",
+    "value": [{}]
+  },
+  "slide": {
+    "min": 0,
+    "max": 1,
+    "name": "slide",
+    "value": 0
+  },
+  "gradient a": {
+    "gradient": [{
+      "a": 1,
+      "r": 1,
+      "b": 1,
+      "g": 1,
+      "position": 0.25
+    }],
+    "name": "gradient a",
+    "value": [{}]
+  }
+}}

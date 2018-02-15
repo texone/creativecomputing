@@ -1,0 +1,16 @@
+{"value": {"envelope": {
+  "curve": {"points": [
+    {
+      "time": 0.11724137931034481,
+      "type": "LINEAR",
+      "value": 0.8326996197718631
+    },
+    {
+      "time": 0.7413793103448275,
+      "type": "LINEAR",
+      "value": 0.188212927756654
+    }
+  ]},
+  "name": "envelope",
+  "value": "cc.creativecomputing.control.CCEnvelope@66ba8a12"
+}}}

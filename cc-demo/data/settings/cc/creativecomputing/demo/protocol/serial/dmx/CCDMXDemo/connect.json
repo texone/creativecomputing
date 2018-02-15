@@ -1,0 +1,162 @@
+{
+  "_myDMX": {
+    "name": "dmx",
+    "type": "cc.creativecomputing.protocol.serial.dmx.CCDMX",
+    "value": {"_mySerial": {
+      "name": "serial",
+      "type": "cc.creativecomputing.protocol.serial.CCSerialModule",
+      "value": {
+        "parityBit": {
+          "name": "paritybit",
+          "type": "cc.creativecomputing.protocol.serial.CCSerialParityBit",
+          "value": "NONE"
+        },
+        "_myPortSelection": {
+          "name": "port",
+          "type": "cc.creativecomputing.control2.CCSelection",
+          "value": "/dev/tty.usbserial-EN119017"
+        },
+        "rate": {
+          "min": -2147483648,
+          "max": 2147483647,
+          "precision": "",
+          "name": "rate",
+          "type": "int",
+          "value": 115200
+        },
+        "stopBits": {
+          "name": "stopbits",
+          "type": "cc.creativecomputing.protocol.serial.CCSerialStopBit",
+          "value": "STOPBITS_1"
+        },
+        "refreshPortList": {"name": "refresh port list"},
+        "dataBits": {
+          "name": "databits",
+          "type": "cc.creativecomputing.protocol.serial.CCSerialDataBit",
+          "value": "DATABITS_8"
+        },
+        "connect": {
+          "name": "connect",
+          "type": "boolean",
+          "value": true
+        }
+      }
+    }}
+  },
+  "_myContext": {
+    "name": "gl context",
+    "type": "cc.creativecomputing.gl.app.CCAbstractGLContext",
+    "value": {
+      "_myContainer": {
+        "name": "container",
+        "type": "cc.creativecomputing.gl.app.container.GLContainer",
+        "value": {}
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCPixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "type": "boolean",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowY",
+        "type": "int",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "type": "cc.creativecomputing.gl.app.container.GLContainerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowX",
+        "type": "int",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "type": "boolean",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "type": "java.lang.String",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "type": "java.lang.String",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "antialiasing",
+        "type": "int",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "type": "cc.creativecomputing.gl.app.CCDisplayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "type": "boolean",
+        "value": false
+      },
+      "showOnStart": {
+        "name": "showOnStart",
+        "type": "boolean",
+        "value": true
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "type": "cc.creativecomputing.math.CCColor",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "width",
+        "type": "int",
+        "value": 1000
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "type": "boolean",
+        "value": true
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCCloseOperation",
+        "value": "EXIT_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "height",
+        "type": "int",
+        "value": 500
+      }
+    }
+  },
+  "triggerDemo": {"name": "trigger"}
+}

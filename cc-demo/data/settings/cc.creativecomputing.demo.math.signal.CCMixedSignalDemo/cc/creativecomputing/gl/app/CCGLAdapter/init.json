@@ -1,0 +1,198 @@
+{"value": {
+  "signal": {
+    "name": "signal",
+    "value": {
+      "square setup": {
+        "name": "square setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 2
+          },
+          "pulsewidth": {
+            "min": 0,
+            "max": 1,
+            "name": "pulsewidth",
+            "value": 0.5
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          }
+        }
+      },
+      "worley": {
+        "min": 0,
+        "max": 1,
+        "name": "worley",
+        "value": 0
+      },
+      "amp": {
+        "min": 0,
+        "max": 1,
+        "name": "amp",
+        "value": 1
+      },
+      "sloped tri": {
+        "min": 0,
+        "max": 1,
+        "name": "sloped tri",
+        "value": 0
+      },
+      "saw": {
+        "min": 0,
+        "max": 1,
+        "name": "saw",
+        "value": 0
+      },
+      "simplex": {
+        "min": 0,
+        "max": 1,
+        "name": "simplex",
+        "value": 0
+      },
+      "scale": {
+        "min": 0,
+        "max": 1,
+        "name": "scale",
+        "value": 0.003
+      },
+      "tri": {
+        "min": 0,
+        "max": 1,
+        "name": "tri",
+        "value": 1
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 10,
+        "name": "lacunarity",
+        "value": 2
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.5
+      },
+      "octaves": {
+        "min": 1,
+        "max": 10,
+        "name": "octaves",
+        "value": 1
+      },
+      "square": {
+        "min": 0,
+        "max": 1,
+        "name": "square",
+        "value": 0
+      },
+      "sine": {
+        "min": 0,
+        "max": 1,
+        "name": "sine",
+        "value": 0
+      },
+      "worley setup": {
+        "name": "worley setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 2
+          },
+          "amp": {
+            "min": 0,
+            "max": 10,
+            "name": "amp",
+            "value": 1
+          },
+          "formular": {
+            "name": "formular",
+            "value": "DEFAULT"
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "distance type": {
+            "name": "distance type",
+            "value": "EUCLIDEAN"
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          }
+        }
+      },
+      "tri setup": {
+        "name": "tri setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 2
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "ratio": {
+            "min": 0,
+            "max": 1,
+            "name": "ratio",
+            "value": 0.46000000834465027
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          }
+        }
+      }
+    }
+  },
+  "height": {
+    "min": 0,
+    "max": 500,
+    "name": "height",
+    "value": 500
+  }
+}}

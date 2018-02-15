@@ -1,0 +1,297 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "Apple Inc. : Bus 1"
+        }}
+      },
+      "animator": {
+        "name": "animator",
+        "value": {
+          "fixed update time": {
+            "min": 0,
+            "max": 1,
+            "name": "fixed update time",
+            "value": 1
+          },
+          "fix update time": {
+            "name": "fix update time",
+            "value": false
+          },
+          "framerate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "framerate",
+            "value": 60
+          },
+          "animationMode": {
+            "name": "animationMode",
+            "value": "PERFORMANT"
+          },
+          "show frame rate": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "show frame rate",
+            "value": 47.9769718211574
+          },
+          "exceptionHandling": {
+            "name": "exceptionHandling",
+            "value": "THROW"
+          }
+        }
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": -3600
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "spectogram": {
+        "name": "spectogram",
+        "value": {
+          "curve scale": {
+            "min": 0,
+            "max": 1000,
+            "name": "curve scale",
+            "value": 0
+          },
+          "curves": {
+            "name": "curves",
+            "value": true
+          },
+          "amp": {
+            "min": 0,
+            "max": 10,
+            "name": "amp",
+            "value": 1
+          },
+          "averages": {
+            "name": "averages",
+            "value": true
+          },
+          "curve step": {
+            "min": 1,
+            "max": 30,
+            "name": "curve step",
+            "value": 7
+          },
+          "pow": {
+            "min": 0,
+            "max": 1,
+            "name": "pow",
+            "value": 1
+          },
+          "seconds grid": {
+            "min": 1,
+            "max": 30,
+            "name": "seconds grid",
+            "value": 30
+          },
+          "analyze stream": {}
+        }
+      },
+      "fft": {
+        "name": "fft",
+        "value": {
+          "log bandwidth": {
+            "min": 2,
+            "max": 220,
+            "name": "log bandwidth",
+            "value": 22
+          },
+          "window type": {
+            "name": "window type",
+            "value": "GAUSS"
+          },
+          "linear averages": {
+            "min": 2,
+            "max": 512,
+            "name": "linear averages",
+            "value": 64
+          },
+          "average smoothing": {
+            "min": 0,
+            "max": 1,
+            "name": "average smoothing",
+            "value": 0.9900000095367432
+          },
+          "averaging": {
+            "name": "averaging",
+            "value": "LOGARITHMIC"
+          },
+          "normalize": {
+            "name": "normalize",
+            "value": true
+          },
+          "smoothing": {
+            "min": 0,
+            "max": 1,
+            "name": "smoothing",
+            "value": 0.5130000114440918
+          },
+          "max reduction": {
+            "min": 0,
+            "max": 1,
+            "name": "max reduction",
+            "value": 0.15800000727176666
+          },
+          "log bands per octave": {
+            "min": 1,
+            "max": 10,
+            "name": "log bands per octave",
+            "value": 3
+          }
+        }
+      }
+    }
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {}
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": 452
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": 386
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1285
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": true
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 637
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 0.03448275849223137
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": true
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "AS_FAST_AS_POSSIBLE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 47.9769718211574
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}}

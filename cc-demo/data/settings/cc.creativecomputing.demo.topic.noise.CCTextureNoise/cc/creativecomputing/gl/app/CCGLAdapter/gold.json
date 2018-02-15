@@ -1,0 +1,194 @@
+{
+  "texturenoise": {
+    "name": "texturenoise",
+    "value": {"fragment": {
+      "name": "fragment",
+      "value": {
+        "auto save": {
+          "name": "auto save",
+          "value": true
+        },
+        "texturenoise.glsl": {
+          "name": "texturenoise.glsl",
+          "value": "cc.creativecomputing.control.code.CCShaderFile@6bac9932"
+        },
+        "uniforms": {
+          "name": "uniforms",
+          "value": {
+            "light amount": {
+              "min": 0,
+              "max": 200,
+              "name": "light amount",
+              "value": 18.19999885559082
+            },
+            "rough": {
+              "min": 0,
+              "max": 1,
+              "name": "rough",
+              "value": 0.013000000268220901
+            },
+            "max light amount": {
+              "min": 0,
+              "max": 1,
+              "name": "max light amount",
+              "value": 0.289000004529953
+            },
+            "light shape": {
+              "min": 0,
+              "max": 10,
+              "name": "light shape",
+              "value": 1.9700000286102295
+            },
+            "light pow": {
+              "min": 0,
+              "max": 10,
+              "name": "light pow",
+              "value": 5.130000114440918
+            },
+            "zoom": {
+              "min": 1,
+              "max": 5,
+              "name": "zoom",
+              "value": 5
+            },
+            "typo smoke": {
+              "min": 0,
+              "max": 4,
+              "name": "typo smoke",
+              "value": 1.4000000000000004
+            },
+            "dfbmAmount": {
+              "min": 0,
+              "max": 100,
+              "name": "dfbmAmount",
+              "value": 39.0909090909091
+            },
+            "pure": {
+              "min": 0,
+              "max": 1,
+              "name": "pure",
+              "value": 0.10400000214576721
+            },
+            "lacunarity": {
+              "min": 0,
+              "max": 4,
+              "name": "lacunarity",
+              "value": 2.6545454545454548
+            },
+            "typo glow": {
+              "min": 0,
+              "max": 1,
+              "name": "typo glow",
+              "value": 0.20909090909090933
+            },
+            "gain": {
+              "min": 0,
+              "max": 1,
+              "name": "gain",
+              "value": 0.5636363636363636
+            },
+            "frequency": {
+              "min": 0,
+              "max": 1,
+              "name": "frequency",
+              "value": 0.39500001072883606
+            },
+            "octaves": {
+              "min": 1,
+              "max": 10,
+              "name": "octaves",
+              "value": 2.6470000743865967
+            },
+            "amplitude": {
+              "min": 0,
+              "max": 1,
+              "name": "amplitude",
+              "value": 0.6050000190734863
+            },
+            "min light amount": {
+              "min": 0,
+              "max": 1,
+              "name": "min light amount",
+              "value": 0.328000009059906
+            }
+          }
+        },
+        "save in file": {
+          "name": "save in file",
+          "value": true
+        }
+      }
+    }}
+  },
+  "screen capture": {
+    "name": "screen capture",
+    "value": {
+      "full window": {},
+      "record key": {
+        "name": "record key",
+        "value": true
+      },
+      "format": {
+        "name": "format",
+        "value": "JPEG"
+      },
+      "prepend": {
+        "name": "prepend",
+        "value": "frame_"
+      },
+      "draw bounds": {
+        "name": "draw bounds",
+        "value": false
+      },
+      "quality": {
+        "min": 0,
+        "max": 1,
+        "name": "quality",
+        "value": 0.9070000052452087
+      },
+      "seconds": {
+        "min": 1,
+        "max": 1000,
+        "name": "seconds",
+        "value": 100
+      },
+      "record frame": {},
+      "alpha": {
+        "name": "alpha",
+        "value": false
+      },
+      "x": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "x",
+        "value": 0
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1680
+      },
+      "y": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "y",
+        "value": 0
+      },
+      "capture rate": {
+        "min": 1,
+        "max": 60,
+        "name": "capture rate",
+        "value": 30
+      },
+      "record sequence": {},
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      },
+      "record timeline loop": {}
+    }
+  }
+}

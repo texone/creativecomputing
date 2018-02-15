@@ -1,0 +1,14 @@
+{
+  "depth scale": {
+    "min": 0,
+    "max": 100,
+    "name": "depth scale",
+    "value": 19.600000381469727
+  },
+  "offset": {
+    "min": 0,
+    "max": 10,
+    "name": "offset",
+    "value": 1.5800000429153442
+  }
+}

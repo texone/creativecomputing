@@ -1,0 +1,255 @@
+{"value": {
+  "map density noise amp": {
+    "min": 0,
+    "max": 10,
+    "name": "map density noise amp",
+    "value": 5
+  },
+  "depth0": {
+    "name": "depth0",
+    "value": {
+      "r": {
+        "min": 0,
+        "max": 1,
+        "name": "r",
+        "value": 1
+      },
+      "b": {
+        "min": 0,
+        "max": 1,
+        "name": "b",
+        "value": 1
+      },
+      "amp": {
+        "min": 0,
+        "max": 5,
+        "name": "amp",
+        "value": 0.9399999380111694
+      },
+      "g": {
+        "min": 0,
+        "max": 1,
+        "name": "g",
+        "value": 1
+      }
+    }
+  },
+  "march steps": {
+    "min": 0,
+    "max": 200,
+    "name": "march steps",
+    "value": 34
+  },
+  "depth1": {
+    "name": "depth1",
+    "value": {
+      "r": {
+        "min": 0,
+        "max": 1,
+        "name": "r",
+        "value": 1
+      },
+      "b": {
+        "min": 0,
+        "max": 1,
+        "name": "b",
+        "value": 1
+      },
+      "amp": {
+        "min": 0,
+        "max": 5,
+        "name": "amp",
+        "value": 0.8500000238418579
+      },
+      "g": {
+        "min": 0,
+        "max": 1,
+        "name": "g",
+        "value": 1
+      }
+    }
+  },
+  "z depth blend": {
+    "min": -0.5,
+    "max": 1.5,
+    "name": "z depth blend",
+    "value": 0.9160000085830688
+  },
+  "origin x": {
+    "min": -10,
+    "max": 10,
+    "name": "origin x",
+    "value": -0.19999980926513672
+  },
+  "origin y": {
+    "min": -10,
+    "max": 10,
+    "name": "origin y",
+    "value": -0.19999980926513672
+  },
+  "density0": {
+    "name": "density0",
+    "value": {
+      "r": {
+        "min": 0,
+        "max": 1,
+        "name": "r",
+        "value": 1
+      },
+      "b": {
+        "min": 0,
+        "max": 1,
+        "name": "b",
+        "value": 1
+      },
+      "amp": {
+        "min": 0,
+        "max": 5,
+        "name": "amp",
+        "value": 0.7949999570846558
+      },
+      "g": {
+        "min": 0,
+        "max": 1,
+        "name": "g",
+        "value": 1
+      }
+    }
+  },
+  "map density start": {
+    "min": -5,
+    "max": 5,
+    "name": "map density start",
+    "value": -3.120000123977661
+  },
+  "map density scale": {
+    "min": 0,
+    "max": 1,
+    "name": "map density scale",
+    "value": 0.37700000405311584
+  },
+  "density1": {
+    "name": "density1",
+    "value": {
+      "r": {
+        "min": 0,
+        "max": 1,
+        "name": "r",
+        "value": 1
+      },
+      "b": {
+        "min": 0,
+        "max": 1,
+        "name": "b",
+        "value": 1
+      },
+      "amp": {
+        "min": 0,
+        "max": 5,
+        "name": "amp",
+        "value": 1.0800000429153442
+      },
+      "g": {
+        "min": 0,
+        "max": 1,
+        "name": "g",
+        "value": 1
+      }
+    }
+  },
+  "saturation": {
+    "min": 0,
+    "max": 10,
+    "name": "saturation",
+    "value": 0
+  },
+  "origin z": {
+    "min": -10,
+    "max": 10,
+    "name": "origin z",
+    "value": -10
+  },
+  "map density sinus color mod": {
+    "min": 0,
+    "max": 1,
+    "name": "map density sinus color mod",
+    "value": 0
+  },
+  "march step size": {
+    "min": 0,
+    "max": 1,
+    "name": "march step size",
+    "value": 0.02800000086426735
+  },
+  "brightness": {
+    "min": 0,
+    "max": 10,
+    "name": "brightness",
+    "value": 0
+  },
+  "contrast": {
+    "min": 0,
+    "max": 10,
+    "name": "contrast",
+    "value": 2.630000114440918
+  },
+  "noise": {
+    "name": "noise",
+    "value": {
+      "octaves": {
+        "min": 1,
+        "max": 10,
+        "name": "octaves",
+        "value": 5
+      },
+      "speed x": {
+        "min": -10,
+        "max": 10,
+        "name": "speed x",
+        "value": 0
+      },
+      "speed y": {
+        "min": -10,
+        "max": 10,
+        "name": "speed y",
+        "value": -0.37999987602233887
+      },
+      "speed gain": {
+        "min": 0,
+        "max": 2,
+        "name": "speed gain",
+        "value": 0.6420000195503235
+      },
+      "speed z": {
+        "min": -10,
+        "max": 10,
+        "name": "speed z",
+        "value": 0.18000006675720215
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 10,
+        "name": "lacunarity",
+        "value": 2.069999933242798
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.5
+      }
+    }
+  },
+  "mask blend": {
+    "min": 0,
+    "max": 1,
+    "name": "mask blend",
+    "value": 1
+  },
+  "z depth range": {
+    "min": 0,
+    "max": 10,
+    "name": "z depth range",
+    "value": 1.9800000190734863
+  }
+}}

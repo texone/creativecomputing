@@ -1,0 +1,97 @@
+{"value": {
+  "color scale": {
+    "min": -1,
+    "max": 1,
+    "name": "color scale",
+    "value": 0.3140000104904175
+  },
+  "blend": {
+    "min": 0,
+    "max": 1,
+    "name": "blend",
+    "value": 1
+  },
+  "scale": {
+    "min": 0,
+    "max": 1,
+    "name": "scale",
+    "value": 0.8820000290870667
+  },
+  "randomness": {
+    "min": 0,
+    "max": 200,
+    "name": "randomness",
+    "value": 3
+  },
+  "lacunarity": {
+    "min": 0,
+    "max": 2,
+    "name": "lacunarity",
+    "value": 2
+  },
+  "gain": {
+    "min": 0,
+    "max": 1,
+    "name": "gain",
+    "value": 0.5
+  },
+  "noise blend y": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend y",
+    "value": 0.2240000069141388
+  },
+  "octaves": {
+    "min": 0,
+    "max": 10,
+    "name": "octaves",
+    "value": 2
+  },
+  "noise blend z": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend z",
+    "value": 0.19599999487400055
+  },
+  "brightness scale": {
+    "min": -1,
+    "max": 1,
+    "name": "brightness scale",
+    "value": 0.3680000305175781
+  },
+  "color shift": {
+    "min": -1,
+    "max": 1,
+    "name": "color shift",
+    "value": 0
+  },
+  "noise blend x": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend x",
+    "value": 0.6710000038146973
+  },
+  "noise": {
+    "name": "noise",
+    "value": {"shader objects": {
+      "name": "shader objects",
+      "value": {"fragment": {
+        "name": "fragment",
+        "source": "// Created by inigo quilez - iq/2014\n// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.\n\n\n// This is a procedural pattern that has 2 parameters, that generalizes cell-noise,\n// perlin-noise and voronoi, all of which can be written in terms of the former as:\n//\n// cellnoise(x) = pattern(0,0,x)\n// perlin(x) = pattern(0,1,x)\n// voronoi(x) = pattern(1,0,x)\n//\n// From this generalization of the three famouse patterns, a new one (which I call\n// \"Voronoise\") emerges naturally. It's like perlin noise a bit, but within a jittered\n// grid like voronoi):\n//\n// voronoise(x) = pattern(1,1,x)\n//\n// Not sure what one would use this generalization for, because it's slightly slower\n// than perlin or voronoise (and certainly much slower than cell noise), and in the\n// end as a shading TD you just want one or another depending of the type of visual\n// features you are looking for, I can't see a blending being needed in real life.\n// But well, if only for the math fun it was worth trying. And they say a bit of\n// mathturbation can be healthy anyway!\n\n\n// Use the mouse to blend between different patterns:\n\n// ell noise    u=0,v=0\n// voronoi      u=1,v=0\n// perlin noise u=0,v1=\n// voronoise    u=1,v=1\n\n// More info here: http://iquilezles.org/www/articles/voronoise/voronoise.htm\n\nfloat hash1(float n){\n\treturn fract(sin(n) * 43758.5453);\n}\nvec2 hash2(vec2  p){\n\tp = vec2(\n\t\tdot(p, vec2(127.1,311.7)), \n\t\tdot(p, vec2(269.5,183.3))\n\t); \n\treturn fract(sin(p) * 43758.5453);\n}\n\nvec3 hash3(vec2 p){\n\tvec3 q = vec3(\n\t\tdot(p,vec2(127.1,311.7)),\n\t\tdot(p,vec2(269.5,183.3)),\n\t\tdot(p,vec2(419.2,371.9))\n\t);\n    return fract(sin(q) * 43758.5453);\n}\n\nfloat voronoise(vec2 pos, vec3 uv){\n\tvec2 cell = floor(pos);\n\tvec2 cellOffset = fract(pos);\n\n\tfloat irregular = uv.x;\n\tfloat smoothness = uv.y;\n    \n\tfloat sharpness = 1.0 + 63.0 * pow(1.0 - smoothness, 4.0);\n\n\tfloat value = 0.0;\n\tfloat accum = 0.0;\n    \n\t// Sample the surrounding cells, from -2 to +2\n\t// This is necessary for the smoothing as well as the irregular grid.\n\tfor(float x = -2.; x <= 2.; x++) \n\t\tfor(float y = -2.; y <= 2.; y++){\n\n\t\t\tvec2 samplePos = vec2(x ,y);  \n \n \t\t\t// Center of the cell is not at the center of the block for irregular noise.\n\t\t\t// Note that all the coordinates are in \"block\"-space, \n\t\t\t//0 is the current block, 1 is one block further, etc\n\t\t\tvec3 center = hash3(cell + samplePos) * vec3(uv.x, uv.x, 1.0);\n\t\t\tfloat centerDistance = length(samplePos - cellOffset + center.xy);\n\t\t\t\n\t\t\t// High sharpness = Only extreme values = Hard borders = 64\n\t\t\t// Low sharpness = No extreme values = Soft borders = 1\n\t\t\tfloat sample = pow(1.0 - smoothstep(0.0, 1.6, sqrt(centerDistance)), sharpness); \n            \n\t\t\tvalue += center.z * sample;\n\t\t\taccum += sample; \n\t\t}\n    \n\t\treturn value / accum;\n}\n\nfloat voronoise2(vec2 pos, vec3 uv){ \n\tvec2 cell = floor(pos);\n\tvec2 cellOffset = fract(pos);\n \n\tvec4 m = vec4(8.0, 0.0, 0.0, 0.0);\n\n\tfloat smoothness = uv.x;\n    \n\t// Sample the surrounding cells, from -2 to +2\n\t// This is necessary for the smoothing as well as the irregular grid.\n\tfor(float x = -2.; x <= 2.; x++) \n\t\tfor(float y = -2.; y <= 2.; y++){\n\n\t\t\tvec2 samplePos = vec2(x ,y);\n\t\t\t\n\t\t\t// Center of the cell is not at the center of the block for irregular noise.\n\t\t\t// Note that all the coordinates are in \"block\"-space, \n\t\t\t//0 is the current block, 1 is one block further, etc\n\t\t\tvec3 center = hash3(cell + samplePos); \n\t\t\n\t\t\t// distance to cell\t\t\n\t\t\tfloat centerDistance = length(samplePos - cellOffset + center.xy); \n\t\t\n\t\t\t// do the smooth min for colors and distances\t\t \n\t\t\tfloat hashDistance = \n\t\t\t\thash1(\n\t\t\t\t\tdot(\n\t\t\t\t\t\tcell + samplePos,\n\t\t\t\t\t\tvec2(7.0, 113.0)\n\t\t\t\t\t)\n\t\t\t\t\n\t\t\t);\n\t\t\t\n\t\t\tfloat h = smoothstep( 0.0, 1.0, 0.5 + 0.5*(m.x - centerDistance) / smoothness); \n\n\t\t\tvec2 distances = vec2(centerDistance, hashDistance); \n\t\t\t\n\t\t\tm.xy = mix(m.xy, distances, h) - h * (1.0-h) * smoothness/(1.0 + 3.0 * smoothness); // distance \n\t\t\t //m.y = mix(m.y, col, h) - h * (1.0 - h) * smoothness / (1.0 + 3.0 * smoothness); // color  \n\t\t}\n\t\n\treturn m.y;\n}\n\nfloat voronoise3(vec2 pos, vec3 uv){ \n\tvec2 cell = floor(pos);\n\tvec2 cellOffset = fract(pos); \n\n\tfloat mode = uv.x * 3.;\n\tfloat smoothness = uv.y;\n\n\tvec3 m = vec3( 8.0 );\n\tfloat m2 = 8.0;\n\n\tfloat sharpness = 1.0 + 63.0 * pow(1.0 - smoothness, 4.0); \n\n\tfloat value = 0.0;\n\tfloat accum = 0.0;\n\t\n\t// Sample the surrounding cells, from -2 to +2\n\t// This is necessary for the smoothing as well as the irregular grid.\n\tfor(float x = -2.; x <= 2.; x++) \n\t\tfor(float y = -2.; y <= 2.; y++){\n\n\t\t\tvec2 samplePos = vec2(x ,y); \n\n\t\t\t// Center of the cell is not at the center of the block for irregular noise.\n\t\t\t// Note that all the coordinates are in \"block\"-space, \n\t\t\t//0 is the current block, 1 is one block further, etc\n\t\t\tvec3 center = hash3( cell + samplePos );\n\n\t\t\tvec2 r = samplePos - cellOffset + center.xy; \n\t\n\t\t\tvec2 euclideanDistance = vec2(length(r), 1.0 );\t\n\t\t\tvec2 manhattanDistance = vec2(0.71 * (abs(r.x) + abs(r.y)), 1.0 );\t\t\n\t\t\tvec2 triangularDistance = vec2(\n\t\t\t\tmax(abs(r.x)*0.866025+r.y*0.5,-r.y), \n\t\t\t\tstep(0.0,0.5*abs(r.x)+0.866025*r.y)*(1.0+step(0.0,r.x))\n\t\t\t);\n\n\t\t\tvec2 d = euclideanDistance;\n\t\t\tif( mode < 3.0 ) d = mix( triangularDistance, euclideanDistance, fract(mode) );\n\t\t\tif( mode < 2.0 ) d = mix( manhattanDistance, triangularDistance, fract(mode) );\n\t\t\tif( mode < 1.0 ) d = mix( euclideanDistance, manhattanDistance, fract(mode) );\n\n\t\t\t// High sharpness = Only extreme values = Hard borders = 64\n\t\t\t// Low sharpness = No extreme values = Soft borders = 1\n\t\t\tfloat sample = pow(1.0 - smoothstep(0.0, 1.6, sqrt(d.x)), sharpness);\n            \n\t\t\tvalue += center.z * sample;\n\t\t\taccum += sample; \n\t\t\n\t\t\tif( d.x < m.x ){\n\t\t\t\tm2 = m.x;\n\t\t\t\tm.x = d.x;\n\t\t\t\tm.y = hash1( dot(cell + samplePos, vec2(7.0, 113.0)));\n\t\t\t\tm.z = d.y;\n\t\t\t} else if( d.x < m2 ){\n\t\t\t\tm2 = d.x;\n\t\t\t}\n\n\t\t}\n    //vec4( m, m2-m.x );\n    return value / accum;\n}\n\nuniform float scale;\nuniform float gain;\nuniform float octaves;\nuniform float lacunarity;\n\nfloat octavedNoise(in vec2 s, vec3 d){\n    float myScale = scale;\n    float myFallOff = gain;\n    \n    int myOctaves = int(floor(octaves));\n    float myResult = 0.;\n    float myAmp = 0.;\n    \n    for(int i = 0; i < myOctaves;i++){\n        float noiseVal = voronoise3(s * myScale, d); \n        myResult += noiseVal * myFallOff;\n        myAmp += myFallOff;\n        myFallOff *= gain;\n        myScale *= lacunarity;\n    }\n    float myBlend = octaves - float(myOctaves);\n    \n    myResult += voronoise3(s * myScale, d) * myFallOff * myBlend;\n    myAmp += myFallOff * myBlend; \n    \n    if(myAmp > 0.0){\n        myResult /= myAmp;\n    }\n    \n    return myResult;\n}\n\nuniform vec2 iResolution;\nuniform vec3 noiseBlend;\nuniform sampler2D tex0; \nuniform sampler2D tex1; \nuniform float randomOffset;\n\nuniform float blend;\nuniform float blendRandom;\n\nuniform float colorScale;\nuniform float colorShift;\n\nuniform float brightnessScale;\nuniform float brightnessShift;\n\nuniform vec2 noiseOffset;\n\nvoid main(){\n    vec2 uv = gl_FragCoord.xy / iResolution.xx;\n    vec2 texUV = gl_FragCoord.xy / iResolution.xy;\n    texUV = vec2(texUV.x, 1.0 - texUV.y); \n    \n    float f = octavedNoise( 24.0*uv + noiseOffset, noiseBlend);\n    \n    vec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2))) / iResolution * randomOffset * 10.;\n\ttexUV += dir;\n\t\n\ttexUV.x *= colorScale;\n\ttexUV.x += colorShift;\n\t\n\ttexUV.y *= brightnessScale;\n\ttexUV.y += brightnessShift;  \n\tvec4 color0 = texture2D(tex0,texUV);\n\tvec4 color1 = texture2D(tex0,texUV + vec2(0.5,0.0));\n\n\tfloat noiseBlend = smoothstep(blend - 0.05,blend,f);   \n\t\n\tvec4 color = mix(color0, color1, noiseBlend); \n    \n    gl_FragColor = color;//vec4(f,f,f,1);//vec4( dir, 0.0, 1.0 );\n}\n\n\n\n",
+        "value": "cc.creativecomputing.control.code.CCShaderObject@67a58631"
+      }}
+    }}
+  },
+  "brightness shift": {
+    "min": -1,
+    "max": 1,
+    "name": "brightness shift",
+    "value": 0.6039999723434448
+  },
+  "blend random": {
+    "min": 0,
+    "max": 1,
+    "name": "blend random",
+    "value": 1
+  }
+}}

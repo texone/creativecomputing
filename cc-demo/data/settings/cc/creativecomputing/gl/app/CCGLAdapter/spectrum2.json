@@ -1,0 +1,133 @@
+{"value": {
+  "pow": {
+    "min": 0,
+    "max": 10,
+    "name": "pow",
+    "value": 4.210000038146973
+  },
+  "asset": {
+    "name": "asset",
+    "value": {
+      "spec max": {
+        "min": 0,
+        "max": 1,
+        "name": "spec max",
+        "value": 0.05
+      },
+      "fft amp": {
+        "min": 0,
+        "max": 10,
+        "name": "fft amp",
+        "value": 1
+      },
+      "min max": {
+        "min": 0,
+        "max": 1,
+        "name": "min max",
+        "value": 1
+      },
+      "min time offset": {
+        "min": 0.01,
+        "max": 1,
+        "name": "min time offset",
+        "value": 0.10000000149011612
+      },
+      "use fft": {
+        "name": "use fft",
+        "value": true
+      },
+      "volume": {
+        "min": 0,
+        "max": 1,
+        "name": "volume",
+        "value": 1
+      },
+      "fft pow": {
+        "min": 0,
+        "max": 1,
+        "name": "fft pow",
+        "value": 1
+      },
+      "spec min": {
+        "min": 0,
+        "max": 1,
+        "name": "spec min",
+        "value": 0.02
+      },
+      "path": {
+        "name": "path",
+        "value": ""
+      },
+      "update spectrum": {},
+      "fft": {
+        "name": "fft",
+        "value": {
+          "log bandwidth": {
+            "min": 2,
+            "max": 220,
+            "name": "log bandwidth",
+            "value": 22
+          },
+          "window type": {
+            "name": "window type",
+            "value": "NONE"
+          },
+          "linear averages": {
+            "min": 2,
+            "max": 512,
+            "name": "linear averages",
+            "value": 64
+          },
+          "average smoothing": {
+            "min": 0,
+            "max": 1,
+            "name": "average smoothing",
+            "value": 0.800000011920929
+          },
+          "averaging": {
+            "name": "averaging",
+            "value": "NONE"
+          },
+          "normalize": {
+            "name": "normalize",
+            "value": false
+          },
+          "smoothing": {
+            "min": 0,
+            "max": 1,
+            "name": "smoothing",
+            "value": 0.9900000095367432
+          },
+          "max reduction": {
+            "min": 0,
+            "max": 1,
+            "name": "max reduction",
+            "value": 0
+          },
+          "log bands per octave": {
+            "min": 1,
+            "max": 10,
+            "name": "log bands per octave",
+            "value": 10
+          }
+        }
+      },
+      "fft max reduction": {
+        "min": 0,
+        "max": 1,
+        "name": "fft max reduction",
+        "value": 0.001
+      },
+      "normalize": {
+        "name": "normalize",
+        "value": true
+      },
+      "pan": {
+        "min": -1,
+        "max": 1,
+        "name": "pan",
+        "value": 0
+      }
+    }
+  }
+}}

@@ -1,0 +1,217 @@
+{
+  "voronoise": {
+    "name": "voronoise",
+    "value": {"fragment": {
+      "name": "fragment",
+      "value": {
+        "auto save": {
+          "name": "auto save",
+          "value": true
+        },
+        "uniforms": {
+          "name": "uniforms",
+          "value": {
+            "octave random": {
+              "min": 0,
+              "max": 1,
+              "name": "octave random",
+              "value": 0.4860000014305115
+            },
+            "manhattan": {
+              "min": 0,
+              "max": 1,
+              "name": "manhattan",
+              "value": 0
+            },
+            "scale": {
+              "min": 0,
+              "max": 1,
+              "name": "scale",
+              "value": 0.19599999487400055
+            },
+            "lacunarity": {
+              "min": 0,
+              "max": 4,
+              "name": "lacunarity",
+              "value": 2
+            },
+            "gain": {
+              "min": 0,
+              "max": 1,
+              "name": "gain",
+              "value": 0.5
+            },
+            "octaves": {
+              "min": 1,
+              "max": 5,
+              "name": "octaves",
+              "value": 5
+            },
+            "bla3.z": {
+              "min": 0,
+              "max": 3,
+              "name": "bla3.z",
+              "value": 0
+            },
+            "euclidian": {
+              "min": 0,
+              "max": 1,
+              "name": "euclidian",
+              "value": 0
+            },
+            "triangular": {
+              "min": 0,
+              "max": 1,
+              "name": "triangular",
+              "value": 1
+            },
+            "time": {
+              "min": 10,
+              "max": 30,
+              "name": "time",
+              "value": 10
+            },
+            "bla3.w": {
+              "min": 0,
+              "max": 3,
+              "name": "bla3.w",
+              "value": 3
+            },
+            "bla3.y": {
+              "min": 0,
+              "max": 3,
+              "name": "bla3.y",
+              "value": 0
+            },
+            "bla3.x": {
+              "min": 0,
+              "max": 3,
+              "name": "bla3.x",
+              "value": 0
+            }
+          }
+        },
+        "voronoise.glsl": {
+          "name": "voronoise.glsl",
+          "value": "cc.creativecomputing.control.code.CCShaderFile@650dc743"
+        },
+        "save in file": {
+          "name": "save in file",
+          "value": true
+        }
+      }
+    }}
+  },
+  "shaper": {
+    "curve": {"points": [
+      {
+        "time": 0.1953846153846154,
+        "type": "LINEAR",
+        "value": 0.8493723849372385
+      },
+      {
+        "time": 0.3569230769230769,
+        "type": "LINEAR",
+        "value": 0.2343096234309623
+      },
+      {
+        "time": 0.4307692307692308,
+        "type": "LINEAR",
+        "value": 0.9372384937238494
+      },
+      {
+        "time": 0.5415384615384615,
+        "type": "LINEAR",
+        "value": 0.17154811715481166
+      },
+      {
+        "time": 0.5861538461538461,
+        "type": "LINEAR",
+        "value": 0.9288702928870293
+      },
+      {
+        "time": 0.9954776895702162,
+        "type": "LINEAR",
+        "value": 0
+      },
+      {
+        "time": 1.01067615658363,
+        "type": "LINEAR",
+        "value": 0
+      }
+    ]},
+    "name": "shaper",
+    "value": "cc.creativecomputing.control.CCEnvelope@2b3f5f09"
+  },
+  "screen capture": {
+    "name": "screen capture",
+    "value": {
+      "full window": {},
+      "record key": {
+        "name": "record key",
+        "value": true
+      },
+      "format": {
+        "name": "format",
+        "value": "PNG"
+      },
+      "prepend": {
+        "name": "prepend",
+        "value": "frame_"
+      },
+      "draw bounds": {
+        "name": "draw bounds",
+        "value": false
+      },
+      "quality": {
+        "min": 0,
+        "max": 1,
+        "name": "quality",
+        "value": 1
+      },
+      "seconds": {
+        "min": 1,
+        "max": 1000,
+        "name": "seconds",
+        "value": 100
+      },
+      "record frame": {},
+      "alpha": {
+        "name": "alpha",
+        "value": false
+      },
+      "x": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "x",
+        "value": 0
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 0
+      },
+      "y": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "y",
+        "value": 0
+      },
+      "capture rate": {
+        "min": 1,
+        "max": 60,
+        "name": "capture rate",
+        "value": 1
+      },
+      "record sequence": {},
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 0
+      },
+      "record timeline loop": {}
+    }
+  }
+}

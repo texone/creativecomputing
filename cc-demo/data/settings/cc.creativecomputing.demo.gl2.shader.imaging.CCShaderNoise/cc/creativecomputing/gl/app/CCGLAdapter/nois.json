@@ -1,0 +1,103 @@
+{"value": {
+  "color scale": {
+    "min": -1,
+    "max": 1,
+    "name": "color scale",
+    "value": 0
+  },
+  "blend": {
+    "min": 0,
+    "max": 1,
+    "name": "blend",
+    "value": 0.4860000014305115
+  },
+  "scale": {
+    "min": 0,
+    "max": 1,
+    "name": "scale",
+    "value": 0.4860000014305115
+  },
+  "randomness": {
+    "min": 0,
+    "max": 200,
+    "name": "randomness",
+    "value": 63.20000457763672
+  },
+  "lacunarity": {
+    "min": 0,
+    "max": 2,
+    "name": "lacunarity",
+    "value": 2
+  },
+  "gain": {
+    "min": 0,
+    "max": 1,
+    "name": "gain",
+    "value": 0.44600000977516174
+  },
+  "noise blend y": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend y",
+    "value": 0
+  },
+  "octaves": {
+    "min": 0,
+    "max": 10,
+    "name": "octaves",
+    "value": 5.78000020980835
+  },
+  "noise blend z": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend z",
+    "value": 0.6169999837875366
+  },
+  "brightness scale": {
+    "min": -1,
+    "max": 1,
+    "name": "brightness scale",
+    "value": -0.18599998950958252
+  },
+  "color shift": {
+    "min": -1,
+    "max": 1,
+    "name": "color shift",
+    "value": 0
+  },
+  "noise blend x": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend x",
+    "value": 0
+  },
+  "noise": {
+    "name": "noise",
+    "value": {"fragment": {
+      "name": "fragment",
+      "value": {
+        "code": {
+          "name": "code",
+          "source": "// Created by inigo quilez - iq/2014\n// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.\n\n\n// This is a procedural pattern that has 2 parameters, that generalizes cell-noise,\n// perlin-noise and voronoi, all of which can be written in terms of the former as:\n//\n// cellnoise(x) = pattern(0,0,x)\n// perlin(x) = pattern(0,1,x)\n// voronoi(x) = pattern(1,0,x)\n//\n// From this generalization of the three famouse patterns, a new one (which I call\n// \"Voronoise\") emerges naturally. It's like perlin noise a bit, but within a jittered\n// grid like voronoi):\n//\n// voronoise(x) = pattern(1,1,x)\n//\n// Not sure what one would use this generalization for, because it's slightly slower\n// than perlin or voronoise (and certainly much slower than cell noise), and in the\n// end as a shading TD you just want one or another depending of the type of visual\n// features you are looking for, I can't see a blending being needed in real life.\n// But well, if only for the math fun it was worth trying. And they say a bit of\n// mathturbation can be healthy anyway!\n\n\n// Use the mouse to blend between different patterns:\n\n// ell noise    u=0,v=0\n// voronoi      u=1,v=0\n// perlin noise u=0,v1=\n// voronoise    u=1,v=1\n\n// More info here: http://iquilezles.org/www/articles/voronoise/voronoise.htm\n\nvec3 hash3( vec2 p )\n{\nvec3 q = vec3( dot(p,vec2(127.1,311.7)),\ndot(p,vec2(269.5,183.3)),\ndot(p,vec2(419.2,371.9)) );\nreturn fract(sin(q)*43758.5453);\n}\n\nfloat noise01( in vec2 x, vec3 uv )\n{\nvec2 p = floor(x);\nvec2 f = fract(x);\n\nfloat k = 1.0+63.0*pow(1.0-uv.y,4.0);\n\nfloat va = 0.0;\nfloat wt = 0.0;\nfor( int j=-2; j<=2; j++ )\nfor( int i=-2; i<=2; i++ )\n{\nvec2 g = vec2( float(i),float(j) );\nvec3 o = hash3( p + g )*vec3(uv.x,uv.x,1.0);\nvec2 r = g - f + o.xy;\nfloat d = dot(r,r);\nfloat ww = pow( 1.0-smoothstep(0.0,1.6,sqrt(d)), k );\nva += o.z*ww;\nwt += ww;\n}\n\nreturn va/wt;\n}\n\nuniform float scale;\nuniform float gain;\nuniform float octaves;\nuniform float lacunarity;\n\nfloat octavedNoise(in vec2 s, vec3 d){\nfloat myScale = scale;\nfloat myFallOff = gain;\n\nint myOctaves = int(floor(octaves));\nfloat myResult = 0.;\nfloat myAmp = 0.;\n\nfor(int i = 0; i < myOctaves;i++){\nfloat noiseVal = noise01(s * myScale, d);\nmyResult += noiseVal * myFallOff;\nmyAmp += myFallOff;\nmyFallOff *= gain;\nmyScale *= lacunarity;\n}\nfloat myBlend = octaves - float(myOctaves);\n\nmyResult += noise01(s * myScale, d) * myFallOff * myBlend;\nmyAmp += myFallOff * myBlend;\n\nif(myAmp > 0.0){\nmyResult /= myAmp;\n}\n\nreturn myResult;\n}\n\nuniform vec2 iResolution;\nuniform vec3 noiseBlend;\nuniform sampler2D tex0;\nuniform sampler2D tex1;\nuniform float randomOffset;\n\nuniform float blend;\nuniform float blendRandom;\n\nuniform float colorScale;\nuniform float colorShift;\n\nuniform float brightnessScale;\nuniform float brightnessShift;\n\nuniform vec2 noiseOffset;\n\nvoid main(){\nvec2 uv = gl_FragCoord.xy / iResolution.xx;\nvec2 texUV = gl_FragCoord.xy / iResolution.xy;\ntexUV = vec2(texUV.x, 1.0 - texUV.y);\n\nfloat f = octavedNoise( 24.0*uv + noiseOffset, noiseBlend);\n\nvec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2))) / iResolution * randomOffset * 10.;\ntexUV += dir;\n\ntexUV.x *= colorScale;\ntexUV.x += colorShift;\n\ntexUV.y *= brightnessScale;\ntexUV.y += brightnessShift;\nvec4 color0 = texture2D(tex0,texUV);\nvec4 color1 = texture2D(tex0,texUV + vec2(0.5,0.0));\n\nfloat noiseBlend = smoothstep(blend - 0.05,blend,f);\n\nvec4 color = mix(color0, color1, noiseBlend);\n\ngl_FragColor = vec4(noiseBlend,noiseBlend,noiseBlend,1);//vec4( dir, 0.0, 1.0 );\n}\n",
+          "value": "cc.creativecomputing.control.code.CCShaderObject@3e5db4d2"
+        },
+        "uniforms": {
+          "name": "uniforms",
+          "value": {}
+        }
+      }
+    }}
+  },
+  "brightness shift": {
+    "min": -1,
+    "max": 1,
+    "name": "brightness shift",
+    "value": 0
+  },
+  "blend random": {
+    "min": 0,
+    "max": 1,
+    "name": "blend random",
+    "value": 0
+  }
+}}

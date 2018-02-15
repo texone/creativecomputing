@@ -1,0 +1,50 @@
+{"value": {
+  "refraction": {
+    "min": 0,
+    "max": 500,
+    "name": "refraction",
+    "value": 184
+  },
+  "inner edges strength": {
+    "min": 0,
+    "max": 1,
+    "name": "inner edges strength",
+    "value": 0.19599999487400055
+  },
+  "blend": {
+    "min": 0,
+    "max": 0.05,
+    "name": "blend",
+    "value": 0.011850000359117985
+  },
+  "splash radius": {
+    "min": 0,
+    "max": 20,
+    "name": "splash radius",
+    "value": 6.320000171661377
+  },
+  "damping": {
+    "min": 0.9,
+    "max": 0.998,
+    "name": "damping",
+    "value": 0.8999999761581421
+  },
+  "splash amplitude": {
+    "min": 0,
+    "max": 0.2,
+    "name": "splash amplitude",
+    "value": 0.10759999603033066
+  },
+  "blend2": {
+    "min": 0,
+    "max": 0.05,
+    "name": "blend2",
+    "value": 0.015150000341236591
+  },
+  "normal height scale": {
+    "min": 0,
+    "max": 500,
+    "name": "normal height scale",
+    "value": 66
+  }
+}}

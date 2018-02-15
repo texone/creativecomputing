@@ -1,0 +1,160 @@
+{
+  "_myContext": {
+    "name": "gl context",
+    "type": "cc.creativecomputing.gl.app.CCAbstractGLContext",
+    "value": {
+      "_myContainer": {
+        "name": "container",
+        "type": "cc.creativecomputing.gl.app.container.GLContainer",
+        "value": {}
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCPixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "type": "boolean",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowY",
+        "type": "int",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "type": "cc.creativecomputing.gl.app.container.GLContainerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowX",
+        "type": "int",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "type": "boolean",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "type": "java.lang.String",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "type": "java.lang.String",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "antialiasing",
+        "type": "int",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "type": "cc.creativecomputing.gl.app.CCDisplayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "type": "boolean",
+        "value": false
+      },
+      "showOnStart": {
+        "name": "showOnStart",
+        "type": "boolean",
+        "value": true
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "type": "cc.creativecomputing.math.CCColor",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "width",
+        "type": "int",
+        "value": 1000
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "type": "boolean",
+        "value": true
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCCloseOperation",
+        "value": "EXIT_ON_CLOSE"
+      },
+      "_myAnimatorModule": {
+        "name": "animator",
+        "type": "cc.creativecomputing.app.modules.CCAnimator",
+        "value": {
+          "fixedUpdateTime": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "fixed update time",
+            "type": "double",
+            "value": 1
+          },
+          "framerate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "precision": "",
+            "name": "framerate",
+            "type": "int",
+            "value": 30
+          },
+          "fixUpdateTime": {
+            "name": "fix update time",
+            "type": "boolean",
+            "value": false
+          },
+          "animationMode": {
+            "name": "animationMode",
+            "type": "cc.creativecomputing.app.modules.CCAnimator$CCAnimationMode",
+            "value": "FRAMERATE_PRECISE"
+          },
+          "exceptionHandling": {
+            "name": "exceptionHandling",
+            "type": "cc.creativecomputing.app.modules.CCAnimator$CCExceptionHandling",
+            "value": "THROW"
+          }
+        }
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "height",
+        "type": "int",
+        "value": 500
+      }
+    }
+  },
+  "_myRealTimeGraph": {
+    "name": "real time visual",
+    "source": "package cc.creativecomputing.demo.control;\n\nimport cc.creativecomputing.demo.control.CCRealtimeCodingDemo.CCRealtimeGraph;\nimport cc.creativecomputing.graphics.CCGraphics;\nimport java.lang.Object;\n\npublic class CCRealtimeGraphImp implements CCRealtimeGraph{\n\n\tpublic void draw(CCGraphics g){\n\t\tg.rect(0,0,100, 100);\n\t}\n\n\tpublic Object[] parameters(){\n\t\treturn null;\n\t}\n\n\tpublic void onRecompile(){\n\t}\n\n\n}",
+    "type": "cc.creativecomputing.control.code.CCRealtimeCompile",
+    "value": "cc.creativecomputing.control.code.CCRealtimeCompile@6f7135eb"
+  }
+}

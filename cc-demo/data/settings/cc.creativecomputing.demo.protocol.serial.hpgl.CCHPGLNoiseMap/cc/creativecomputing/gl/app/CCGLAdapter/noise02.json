@@ -1,0 +1,290 @@
+{
+  "xspace": {
+    "min": -1.7976931348623157E308,
+    "max": 1.7976931348623157E308,
+    "name": "xspace",
+    "value": 50
+  },
+  "x move": {
+    "min": -1.7976931348623157E308,
+    "max": 1.7976931348623157E308,
+    "name": "x move",
+    "value": 50
+  },
+  "displace": {
+    "min": -1.7976931348623157E308,
+    "max": 1.7976931348623157E308,
+    "name": "displace",
+    "value": 50
+  },
+  "HP": {
+    "name": "HP",
+    "value": {
+      "bezier detail": {
+        "min": 0,
+        "max": 100,
+        "name": "bezier detail",
+        "value": 10
+      },
+      "serial": {
+        "name": "serial",
+        "value": {
+          "paritybit": {
+            "name": "paritybit",
+            "value": "NONE"
+          },
+          "refresh port list": {},
+          "stopbits": {
+            "name": "stopbits",
+            "value": "STOPBITS_1"
+          },
+          "rate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "rate",
+            "value": 9600
+          },
+          "port": {
+            "name": "port",
+            "value": ""
+          },
+          "databits": {
+            "name": "databits",
+            "value": "DATABITS_8"
+          },
+          "connect": {"name": "connect"}
+        }
+      }
+    }
+  },
+  "y move": {
+    "min": -1.7976931348623157E308,
+    "max": 1.7976931348623157E308,
+    "name": "y move",
+    "value": 50
+  },
+  "signal": {
+    "name": "signal",
+    "value": {
+      "square setup": {
+        "name": "square setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 1
+          },
+          "pulsewidth": {
+            "min": 0,
+            "max": 1,
+            "name": "pulsewidth",
+            "value": 0.5
+          },
+          "scale": {
+            "min": 0,
+            "max": 10,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          },
+          "norm": {
+            "name": "norm",
+            "value": true
+          }
+        }
+      },
+      "worley": {
+        "min": 0,
+        "max": 1,
+        "name": "worley",
+        "value": 1
+      },
+      "amp": {
+        "min": 0,
+        "max": 1,
+        "name": "amp",
+        "value": 1
+      },
+      "sloped tri": {
+        "min": 0,
+        "max": 1,
+        "name": "sloped tri",
+        "value": 0
+      },
+      "saw": {
+        "min": 0,
+        "max": 1,
+        "name": "saw",
+        "value": 0
+      },
+      "simplex": {
+        "min": 0,
+        "max": 1,
+        "name": "simplex",
+        "value": 0
+      },
+      "scale": {
+        "min": 0,
+        "max": 10,
+        "name": "scale",
+        "value": 0.01
+      },
+      "tri": {
+        "min": 0,
+        "max": 1,
+        "name": "tri",
+        "value": 0
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 10,
+        "name": "lacunarity",
+        "value": 4.070000171661377
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.328000009059906
+      },
+      "norm": {
+        "name": "norm",
+        "value": true
+      },
+      "octaves": {
+        "min": 1,
+        "max": 10,
+        "name": "octaves",
+        "value": 2.178999900817871
+      },
+      "square": {
+        "min": 0,
+        "max": 1,
+        "name": "square",
+        "value": 0
+      },
+      "sine": {
+        "min": 0,
+        "max": 1,
+        "name": "sine",
+        "value": 0
+      },
+      "worley setup": {
+        "name": "worley setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 1
+          },
+          "amp": {
+            "min": 0,
+            "max": 10,
+            "name": "amp",
+            "value": 1
+          },
+          "formular": {
+            "name": "formular",
+            "value": "F0"
+          },
+          "scale": {
+            "min": 0,
+            "max": 10,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          },
+          "norm": {
+            "name": "norm",
+            "value": true
+          },
+          "distance type": {
+            "name": "distance type",
+            "value": "EUCLIDEAN"
+          }
+        }
+      },
+      "tri setup": {
+        "name": "tri setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 1
+          },
+          "scale": {
+            "min": 0,
+            "max": 10,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          },
+          "norm": {
+            "name": "norm",
+            "value": true
+          },
+          "ratio": {
+            "min": 0,
+            "max": 1,
+            "name": "ratio",
+            "value": 0.5
+          }
+        }
+      }
+    }
+  },
+  "ySpace": {
+    "min": -1.7976931348623157E308,
+    "max": 1.7976931348623157E308,
+    "name": "ySpace",
+    "value": 1.5
+  },
+  "xRes": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "xRes",
+    "value": 20
+  },
+  "yRes": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "yRes",
+    "value": 300
+  }
+}

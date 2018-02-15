@@ -1,0 +1,321 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "length": {
+        "min": 0,
+        "max": 1000,
+        "name": "length",
+        "value": 100
+      },
+      "scale": {
+        "min": 1,
+        "max": 20,
+        "name": "scale",
+        "value": 1.9880000352859497
+      },
+      "number of points": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "number of points",
+        "value": 0
+      },
+      "point": {
+        "min": 1,
+        "max": 20,
+        "name": "point",
+        "value": 1
+      },
+      "space": {
+        "min": 0,
+        "max": 30,
+        "name": "space",
+        "value": 2
+      },
+      "histogram 2": {
+        "name": "histogram 2",
+        "value": {"histogram bands": {
+          "min": -2147483648,
+          "max": 2147483647,
+          "name": "histogram bands",
+          "value": 10
+        }}
+      },
+      "histogram": {
+        "name": "histogram",
+        "value": {"histogram bands": {
+          "min": -2147483648,
+          "max": 2147483647,
+          "name": "histogram bands",
+          "value": 10
+        }}
+      },
+      "octaves": {
+        "min": 1,
+        "max": 8,
+        "name": "octaves",
+        "value": 8
+      },
+      "updateVoronoi": {},
+      "envelope": {
+        "curve": {"points": [
+          {
+            "in": {
+              "time": 0,
+              "type": "HANDLE",
+              "value": 0
+            },
+            "time": 0,
+            "type": "BEZIER",
+            "value": 0,
+            "out": {
+              "time": 0.08986495322194593,
+              "type": "HANDLE",
+              "value": 0
+            }
+          },
+          {
+            "in": {
+              "time": 0.1982168604073853,
+              "type": "HANDLE",
+              "value": 0.8155893536121673
+            },
+            "time": 0.24827586206896557,
+            "type": "BEZIER",
+            "value": 0.8783269961977187,
+            "out": {
+              "time": 0.29833486373054596,
+              "type": "HANDLE",
+              "value": 0.9410646387832701
+            }
+          },
+          {
+            "in": {
+              "time": 0.922354791441868,
+              "type": "HANDLE",
+              "value": 1
+            },
+            "time": 1,
+            "type": "BEZIER",
+            "value": 1,
+            "out": {
+              "time": 1,
+              "type": "HANDLE",
+              "value": 1
+            }
+          }
+        ]},
+        "name": "envelope",
+        "value": "cc.creativecomputing.control.CCEnvelope@f70b7ff"
+      },
+      "alpha": {
+        "min": 0,
+        "max": 1,
+        "name": "alpha",
+        "value": 0
+      },
+      "texture;": {
+        "name": "texture;",
+        "value": {
+          "generate mipmaps": {
+            "name": "generate mipmaps",
+            "value": false
+          },
+          "filter": {
+            "name": "filter",
+            "value": "LINEAR"
+          },
+          "path": {
+            "name": "path",
+            "value": "./data/obama/barack_2983x4000_z_2984x4000_l.JPG"
+          },
+          "mipmap filter": {
+            "name": "mipmap filter",
+            "value": "NEAREST"
+          },
+          "wrap": {
+            "name": "wrap",
+            "value": "CLAMP"
+          }
+        }
+      },
+      "draw voronoi": {
+        "name": "draw voronoi",
+        "value": false
+      }
+    }
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 1200
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 9.237201676951152
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}

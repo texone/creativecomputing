@@ -1,0 +1,125 @@
+{"value": {
+  "diffuse amp": {
+    "min": 0,
+    "max": 1,
+    "name": "diffuse amp",
+    "value": 0.8820000290870667
+  },
+  "light shader": {
+    "name": "light shader",
+    "value": {"shader objects": {
+      "name": "shader objects",
+      "value": {"fragment": {
+        "name": "fragment",
+        "source": "#version 120 \r\n\r\nuniform sampler2D colorTex;\r\nuniform sampler2D brightTex;\r\nuniform sampler2D veloTex;\n\n\r\nuniform float amp = 1;\r\nuniform float powVal = 1;\r\n\r\nuniform vec2 gridSize;\r\n\r\nvec3 rgb2hsv(vec3 c)\r\n{\r\n    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\r\n    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));\r\n    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));\r\n\r\n    float d = q.x - min(q.w, q.y);\r\n    float e = 1.0e-10;\r\n    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\r\n}\r\n\r\nvec3 hsv2rgb(vec3 c)\r\n{\r\n    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\r\n    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\r\n    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\r\n}\r\n\r\nuniform vec3 lightDir = vec3(0.75,0,1);\r\nuniform float diffuseAmp;\r\nuniform float specularAmp;\r\nuniform float specularBrightAmp;\r\n\r\nuniform float specularPow = 5;\r\nuniform float specularBrightPow = 3;\r\n\r\nvoid main(){\r\n\r\n\tvec4 color = texture2D(colorTex, gl_FragCoord.xy / gridSize.xy);\r\n\tvec4 bright = texture2D(brightTex, gl_FragCoord.xy / gridSize.xy);\r\n\r/*\n\tfloat scale = bright.r + bright.g;\r\n\tfloat blend = scale;\r\n\tscale *= amp; \r\n\t//scale = mod(scale, 0.9);\r\n\tscale = pow((cos(scale * 4) - 1) / 2,2);\r\n\tscale = min(scale, 1);\r\n\tscale = pow(scale,powVal); \r\n\r\n\tvec3 hsv = rgb2hsv(color.rgb); \r\n\thsv.r += bright.g * 1.5;  \r\n\thsv.r += blend * 0.03;\r\n\t//hsv.g -= blend * 0.06;\r\n\tcolor.rgb = hsv2rgb(hsv); \r\n\tcolor.rgb *= scale;\r*/\n\r\n\t//normal\r\n    float s01 = texture2D(brightTex, (gl_FragCoord.xy + vec2(-1,0)) / gridSize.xy).x;\r\n    float s21 = texture2D(brightTex, (gl_FragCoord.xy + vec2(1,0)) / gridSize.xy).x;\r\n    float s10 = texture2D(brightTex, (gl_FragCoord.xy + vec2(0,-1)) / gridSize.xy).x;\r\n    float s12 = texture2D(brightTex, (gl_FragCoord.xy + vec2(0,1)) / gridSize.xy).x; \r\n    \r\n    vec3 va = normalize(vec3(0.01,0,(s21-s01)));\r\n    vec3 vb = normalize(vec3(0,0.01,s12-s10));\r\n    vec3 normal = cross(va,vb);\r\n    //normal = texture2D(veloTex, gl_FragCoord.xy / gridSize.xy).xyz; \n\t\r\n\tfloat ppDiffuse\t\t\t= abs( dot( normal, normalize(lightDir) )); \r\n\tfloat ppSpecular\t\t= pow( ppDiffuse, specularPow );\r\n\tfloat ppSpecularBright\t= pow( ppDiffuse, specularBrightPow );\r\n\t\r\n\tcolor.rgb = color.rgb * mix(1,ppDiffuse,diffuseAmp) + ppSpecular * specularAmp + ppSpecularBright * specularBrightAmp;\r\n\r\n\tgl_FragColor = color;  \n\t//gl_FragColor = vec4(normal, 1.0);   \n}\r\n\n",
+        "value": "cc.creativecomputing.control.code.CCShaderObject@3f6bef5c"
+      }}
+    }}
+  },
+  "specular bright amp": {
+    "min": 0,
+    "max": 1,
+    "name": "specular bright amp",
+    "value": 0
+  },
+  "light x": {
+    "min": -1,
+    "max": 1,
+    "name": "light x",
+    "value": 0
+  },
+  "light y": {
+    "min": -1,
+    "max": 1,
+    "name": "light y",
+    "value": 0
+  },
+  "specular pow": {
+    "min": 0,
+    "max": 10,
+    "name": "specular pow",
+    "value": 3.0199999809265137
+  },
+  "update": {
+    "name": "update",
+    "value": false
+  },
+  "fluid draw mode": {
+    "name": "fluid draw mode",
+    "value": "DENSITY"
+  },
+  "specular amp": {
+    "min": 0,
+    "max": 1,
+    "name": "specular amp",
+    "value": 0
+  },
+  "draw lighted": {
+    "name": "draw lighted",
+    "value": false
+  },
+  "specular bright pow": {
+    "min": 0,
+    "max": 10,
+    "name": "specular bright pow",
+    "value": 1.4399999380111694
+  },
+  "light z": {
+    "min": -1,
+    "max": 1,
+    "name": "light z",
+    "value": 1
+  },
+  "time": {
+    "name": "time",
+    "value": {"step": {
+      "min": 0,
+      "max": 1,
+      "name": "step",
+      "value": 1
+    }}
+  },
+  "solver": {
+    "name": "solver",
+    "value": {
+      "viscosity": {
+        "min": 0,
+        "max": 1,
+        "name": "viscosity",
+        "value": 0.3
+      },
+      "curl": {
+        "min": 0,
+        "max": 1,
+        "name": "curl",
+        "value": 0.3
+      },
+      "velocity radius": {
+        "min": 0,
+        "max": 1,
+        "name": "velocity radius",
+        "value": 0.01
+      },
+      "apply vorticity": {
+        "name": "apply vorticity",
+        "value": false
+      },
+      "dissipation": {
+        "min": 0.9,
+        "max": 1,
+        "name": "dissipation",
+        "value": 0.9868000149726868
+      },
+      "apply viscosity": {
+        "name": "apply viscosity",
+        "value": false
+      },
+      "color radius": {
+        "min": 0,
+        "max": 1,
+        "name": "color radius",
+        "value": 0.14399999380111694
+      }
+    }
+  }
+}}

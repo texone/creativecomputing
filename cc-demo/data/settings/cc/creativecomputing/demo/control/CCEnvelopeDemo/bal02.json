@@ -1,0 +1,169 @@
+{
+  "_myEnvelope": {
+    "curves": [],
+    "name": "envelope",
+    "type": "cc.creativecomputing.control2.CCEnvelope",
+    "value": "cc.creativecomputing.control2.CCEnvelope@2c109a75"
+  },
+  "_myClearColor": {
+    "a": 1,
+    "r": 0,
+    "b": 0,
+    "g": 0,
+    "name": "clear color",
+    "type": "cc.creativecomputing.math.CCColor",
+    "value": "ff000000"
+  },
+  "_myContext": {
+    "name": "gl context",
+    "type": "cc.creativecomputing.gl.app.CCAbstractGLContext",
+    "value": {
+      "_myContainer": {
+        "name": "container",
+        "type": "cc.creativecomputing.gl.app.container.GLContainer",
+        "value": {}
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCPixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "type": "boolean",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowY",
+        "type": "int",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "type": "cc.creativecomputing.gl.app.container.GLContainerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowX",
+        "type": "int",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "type": "boolean",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "type": "java.lang.String",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "type": "java.lang.String",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "antialiasing",
+        "type": "int",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "type": "cc.creativecomputing.gl.app.CCDisplayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "type": "boolean",
+        "value": false
+      },
+      "showOnStart": {
+        "name": "showOnStart",
+        "type": "boolean",
+        "value": true
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "type": "cc.creativecomputing.math.CCColor",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "width",
+        "type": "int",
+        "value": 1000
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "type": "boolean",
+        "value": true
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCCloseOperation",
+        "value": "EXIT_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "height",
+        "type": "int",
+        "value": 500
+      }
+    }
+  },
+  "_cTextX": {
+    "min": -3.4028235E38,
+    "max": 3.4028235E38,
+    "precision": "",
+    "name": "text x",
+    "type": "float",
+    "value": -300
+  },
+  "_myRealTimeGraph": {
+    "name": "real time visual",
+    "type": "cc.creativecomputing.control.code.CCRealtimeCompile",
+    "value": "cc.creativecomputing.control.code.CCRealtimeCompile@140792ab"
+  },
+  "triggerDemo": {"name": "trigger"},
+  "_myDrawMode": {
+    "name": "draw mode",
+    "type": "cc.creativecomputing.graphics.CCDrawMode",
+    "value": "POINTS"
+  },
+  "_myString": {
+    "name": "stringr",
+    "type": "java.lang.String",
+    "value": "texoner"
+  },
+  "_cDrawText": {
+    "name": "draw text",
+    "type": "boolean",
+    "value": true
+  },
+  "_myAsset": {
+    "name": "texture asset",
+    "type": "cc.creativecomputing.graphics.texture.CCTexture2DAsset",
+    "value": {"path": {
+      "name": "path",
+      "type": "java.nio.file.Path"
+    }}
+  }
+}

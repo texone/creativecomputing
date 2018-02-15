@@ -1,0 +1,265 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "animator": {
+        "name": "animator",
+        "value": {
+          "fixed update time": {
+            "min": 0,
+            "max": 1,
+            "name": "fixed update time",
+            "value": 1
+          },
+          "fix update time": {
+            "name": "fix update time",
+            "value": false
+          },
+          "framerate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "framerate",
+            "value": 30
+          },
+          "animationMode": {
+            "name": "animationMode",
+            "value": "FRAMERATE_PRECISE"
+          },
+          "show frame rate": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "show frame rate",
+            "value": 29.941928826717735
+          },
+          "exceptionHandling": {
+            "name": "exceptionHandling",
+            "value": "THROW"
+          }
+        }
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "noise blend y": {
+        "min": 0,
+        "max": 1,
+        "name": "noise blend y",
+        "value": 0.42100000381469727
+      },
+      "octaves": {
+        "min": 0,
+        "max": 10,
+        "name": "octaves",
+        "value": 1
+      },
+      "voronoise": {
+        "name": "voronoise",
+        "value": {"shader objects": {
+          "name": "shader objects",
+          "value": {"fragment": {
+            "name": "fragment",
+            "source": "// Created by inigo quilez - iq/2014\n// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.\n\n\n// This is a procedural pattern that has 2 parameters, that generalizes cell-noise,\n// perlin-noise and voronoi, all of which can be written in terms of the former as:\n//\n// cellnoise(x) = pattern(0,0,x)\n// perlin(x) = pattern(0,1,x)\n// voronoi(x) = pattern(1,0,x)\n//\n// From this generalization of the three famouse patterns, a new one (which I call\n// \"Voronoise\") emerges naturally. It's like perlin noise a bit, but within a jittered\n// grid like voronoi):\n//\n// voronoise(x) = pattern(1,1,x)\n//\n// Not sure what one would use this generalization for, because it's slightly slower\n// than perlin or voronoise (and certainly much slower than cell noise), and in the\n// end as a shading TD you just want one or another depending of the type of visual\n// features you are looking for, I can't see a blending being needed in real life.\n// But well, if only for the math fun it was worth trying. And they say a bit of\n// mathturbation can be healthy anyway!\n\n\n// Use the mouse to blend between different patterns:\n\n// ell noise    u=0,v=0\n// voronoi      u=1,v=0\n// perlin noise u=0,v1=\n// voronoise    u=1,v=1\n\n// More info here: http://iquilezles.org/www/articles/voronoise/voronoise.htm\n\nvec3 hash3( vec2 p )\n{\n    vec3 q = vec3( dot(p,vec2(127.1,311.7)),\n                  dot(p,vec2(269.5,183.3)),\n                  dot(p,vec2(419.2,371.9)) );\n    return fract(sin(q)*43758.5453);\n}\n\nfloat iqnoise( in vec2 x, vec2 uv )\n{\n    vec2 p = floor(x);\n    vec2 f = fract(x);\n    \n    float k = 1.0+63.0*pow(1.0-uv.y,4.0);\n    \n    float va = 0.0;\n    float wt = 0.0;\n    for( int j=-2; j<=2; j++ )\n        for( int i=-2; i<=2; i++ )\n        {\n            vec2 g = vec2( float(i),float(j) );\n            vec3 o = hash3( p + g )*vec3(uv.x,uv.x,1.0);\n            vec2 r = g - f + o.xy;\n            float d = dot(r,r);\n            float ww = pow( 1.0-smoothstep(0.0,1.6,sqrt(d)), k );\n            va += o.z*ww;\n            wt += ww;\n        }\n    \n    return va/wt;\n}\n\nuniform float scale;\nuniform float gain;\nuniform float octaves;\nuniform float lacunarity;\n\nfloat octavedNoise(in vec2 s, vec2 d){\n    float myScale = scale;\n    float myFallOff = gain;\n    \n    int myOctaves = int(floor(octaves));\n    float myResult = 0.;\n    float myAmp = 0.;\n    \n    for(int i = 0; i < myOctaves;i++){\n        float noiseVal = iqnoise(s * myScale, d);\n        myResult += noiseVal * myFallOff;\n        myAmp += myFallOff;\n        myFallOff *= gain;\n        myScale *= lacunarity;\n    }\n    float myBlend = octaves - float(myOctaves);\n    \n    myResult += iqnoise(s * myScale, d) * myFallOff * myBlend;\n    myAmp += myFallOff * myBlend;\n    \n    if(myAmp > 0.0){\n        myResult /= myAmp;\n    }\n    \n    return myResult;\n}\n\nuniform vec2 iResolution;\nuniform vec2 noiseBlend;\nuniform sampler2D tex0; \nuniform sampler2D tex1; \nuniform float randomOffset;\n\nuniform float blend;\nuniform float blendRandom;\n\nvoid main(){\n    vec2 uv = gl_FragCoord.xy / iResolution.xx;\n    vec2 texUV = gl_FragCoord.xy / iResolution.xy;\n    texUV = vec2(texUV.x, 1.0 - texUV.y); \n    \n    float f = octavedNoise( 24.0*uv, noiseBlend);\n    \n    vec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2))) / iResolution * randomOffset;\n\ttexUV += dir;\n\tvec4 color0 = texture2D(tex0,texUV);\n\tvec4 color1 = texture2D(tex1,texUV);\n\n\tfloat noiseBlend = smoothstep(blend - 0.05,blend,f);   \n\t\n\tvec4 color = mix(color0, color1, noiseBlend); \n    \n    gl_FragColor = color;//vec4(f,f,f,1);//vec4( dir, 0.0, 1.0 );\n}\n\n\n",
+            "value": "cc.creativecomputing.control.code.CCShaderObject@6fc6233c"
+          }}
+        }}
+      },
+      "blend": {
+        "min": 0,
+        "max": 1,
+        "name": "blend",
+        "value": 0.673605423093039
+      },
+      "noise blend x": {
+        "min": 0,
+        "max": 1,
+        "name": "noise blend x",
+        "value": 1
+      },
+      "scale": {
+        "min": 0,
+        "max": 1,
+        "name": "scale",
+        "value": 0.75
+      },
+      "randomness": {
+        "min": 0,
+        "max": 200,
+        "name": "randomness",
+        "value": 84
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 2,
+        "name": "lacunarity",
+        "value": 2
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.4860000014305115
+      },
+      "blend random": {
+        "min": 0,
+        "max": 1,
+        "name": "blend random",
+        "value": 0.7360000014305115
+      }
+    }
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {}
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.941928826717735
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}}

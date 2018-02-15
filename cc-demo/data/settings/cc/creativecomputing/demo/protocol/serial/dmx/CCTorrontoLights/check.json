@@ -1,0 +1,884 @@
+{
+  "_cLength": {
+    "min": 0,
+    "max": 200,
+    "precision": "",
+    "name": "length",
+    "type": "float",
+    "value": 107.4000015258789
+  },
+  "_myAnimator": {
+    "name": "animator",
+    "type": "cc.creativecomputing.kle.animation.CCKleFloatAnimator",
+    "value": {
+      "offset": {
+        "name": "offset",
+        "type": "cc.creativecomputing.kle.animation.CCKleFloatOffsetAnimation",
+        "value": {
+          "_cChannelBlend": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "channelblend",
+            "type": "float",
+            "value": 0
+          },
+          "_cModulation": {
+            "name": "modulation",
+            "type": "cc.creativecomputing.kle.animation.CCKleModulation",
+            "value": {
+              "_cRandomOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "random offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cGroupModOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "group mod offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cMod": {
+                "min": 2,
+                "max": 8,
+                "precision": "",
+                "name": "mod",
+                "type": "int",
+                "value": 2
+              },
+              "_cGroupMod": {
+                "min": 2,
+                "max": 6,
+                "precision": "",
+                "name": "group mod",
+                "type": "int",
+                "value": 2
+              },
+              "_cElementOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "element offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cYOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "y offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cGlobalOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "global offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cModOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "mod offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cXOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "x offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cGroupOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "group offset",
+                "type": "float",
+                "value": 0
+              }
+            }
+          },
+          "_cBlend": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "blend",
+            "type": "float",
+            "value": 0
+          },
+          "_cAmount": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "amount",
+            "type": "float",
+            "value": 0
+          }
+        }
+      },
+      "_cScale": {
+        "min": 0,
+        "max": 3,
+        "precision": "",
+        "name": "scale",
+        "type": "float",
+        "value": 1
+      },
+      "signal": {
+        "name": "signal",
+        "type": "cc.creativecomputing.kle.animation.CCKleFloatSignalAnimation",
+        "value": {
+          "_cChannelBlend": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "channelblend",
+            "type": "float",
+            "value": 0
+          },
+          "_mySignal": {
+            "name": "signal",
+            "type": "cc.creativecomputing.kle.animation.CCKleSignal",
+            "value": {
+              "_mySignal": {
+                "name": "signal",
+                "type": "cc.creativecomputing.math.signal.CCMixSignal",
+                "value": {
+                  "_cSimplex": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "simplex",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cSine": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "sine",
+                    "type": "float",
+                    "value": 1
+                  },
+                  "_cSquare": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "square",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cAmp": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "amp",
+                    "type": "float",
+                    "value": 1
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "scale",
+                    "type": "float",
+                    "value": 1
+                  },
+                  "_cSlopedTri": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "sloped tri",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "bands": {
+                    "min": 1,
+                    "max": 10,
+                    "precision": "",
+                    "name": "octaves",
+                    "type": "float",
+                    "value": 1
+                  },
+                  "_cSaw": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "saw",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cTri": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "tri",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "precision": "",
+                    "name": "lacunarity",
+                    "type": "float",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "gain",
+                    "type": "float",
+                    "value": 0.5
+                  }
+                }
+              },
+              "_cFactor": {
+                "min": 1,
+                "max": 10,
+                "precision": "",
+                "name": "factor",
+                "type": "float",
+                "value": 1
+              },
+              "_cSpeed": {
+                "min": 0,
+                "max": 50,
+                "precision": "",
+                "name": "phase speed",
+                "type": "float",
+                "value": 1
+              },
+              "_cModulation": {
+                "name": "modulation",
+                "type": "cc.creativecomputing.kle.animation.CCKleModulation",
+                "value": {
+                  "_cRandomOffset": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "random offset",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cGroupModOffset": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "group mod offset",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cOffset": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "offset",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cMod": {
+                    "min": 2,
+                    "max": 8,
+                    "precision": "",
+                    "name": "mod",
+                    "type": "int",
+                    "value": 2
+                  },
+                  "_cGroupMod": {
+                    "min": 2,
+                    "max": 6,
+                    "precision": "",
+                    "name": "group mod",
+                    "type": "int",
+                    "value": 2
+                  },
+                  "_cElementOffset": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "element offset",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cYOffset": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "y offset",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cGlobalOffset": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "global offset",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cModOffset": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "mod offset",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cXOffset": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "x offset",
+                    "type": "float",
+                    "value": 0
+                  },
+                  "_cGroupOffset": {
+                    "min": 0,
+                    "max": 1,
+                    "precision": "",
+                    "name": "group offset",
+                    "type": "float",
+                    "value": 0
+                  }
+                }
+              },
+              "_cAmount": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "amount",
+                "type": "float",
+                "value": 1
+              },
+              "_cUseGlobalPhase": {
+                "name": "use global phase",
+                "type": "boolean",
+                "value": false
+              }
+            }
+          },
+          "_cSpeed": {
+            "min": 0,
+            "max": 10,
+            "precision": "",
+            "name": "phase speed",
+            "type": "float",
+            "value": 0
+          },
+          "_cBlend": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "blend",
+            "type": "float",
+            "value": 1
+          }
+        }
+      },
+      "_myAnimationBlender": {
+        "name": "animation blender",
+        "type": "cc.creativecomputing.kle.animation.CCKleAnimationBlender",
+        "value": {
+          "_cApplyBlendRange": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "apply blend",
+            "type": "float",
+            "value": 0
+          },
+          "_cBlendRange": {
+            "min": 0,
+            "max": 1,
+            "precision": "",
+            "name": "blend range",
+            "type": "float",
+            "value": 0
+          },
+          "_cModulation": {
+            "name": "modulation",
+            "type": "cc.creativecomputing.kle.animation.CCKleModulation",
+            "value": {
+              "_cRandomOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "random offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cGroupModOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "group mod offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cMod": {
+                "min": 2,
+                "max": 8,
+                "precision": "",
+                "name": "mod",
+                "type": "int",
+                "value": 2
+              },
+              "_cGroupMod": {
+                "min": 2,
+                "max": 6,
+                "precision": "",
+                "name": "group mod",
+                "type": "int",
+                "value": 2
+              },
+              "_cElementOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "element offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cYOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "y offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cGlobalOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "global offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cModOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "mod offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cXOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "x offset",
+                "type": "float",
+                "value": 0
+              },
+              "_cGroupOffset": {
+                "min": 0,
+                "max": 1,
+                "precision": "",
+                "name": "group offset",
+                "type": "float",
+                "value": 0
+              }
+            }
+          },
+          "_cBlend": {
+            "min": -3.4028235E38,
+            "max": 3.4028235E38,
+            "precision": "",
+            "name": "_cBlend",
+            "type": "float",
+            "value": 0
+          },
+          "_cReverse": {
+            "name": "reverse",
+            "type": "boolean",
+            "value": true
+          }
+        }
+      }
+    }
+  },
+  "_myContext": {
+    "name": "gl context",
+    "type": "cc.creativecomputing.gl.app.CCAbstractGLContext",
+    "value": {
+      "_myContainer": {
+        "name": "container",
+        "type": "cc.creativecomputing.gl.app.container.GLContainer",
+        "value": {}
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCPixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "type": "boolean",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowY",
+        "type": "int",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "type": "cc.creativecomputing.gl.app.container.GLContainerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowX",
+        "type": "int",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "type": "boolean",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "type": "java.lang.String",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "type": "java.lang.String",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "antialiasing",
+        "type": "int",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "type": "cc.creativecomputing.gl.app.CCDisplayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "type": "boolean",
+        "value": false
+      },
+      "showOnStart": {
+        "name": "showOnStart",
+        "type": "boolean",
+        "value": true
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "type": "cc.creativecomputing.math.CCColor",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "width",
+        "type": "int",
+        "value": 1000
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "type": "boolean",
+        "value": true
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCCloseOperation",
+        "value": "EXIT_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "height",
+        "type": "int",
+        "value": 500
+      }
+    }
+  },
+  "_myLightMap": {
+    "name": "lights",
+    "type": "java.util.Map",
+    "value": {
+      "light 4": {
+        "name": "light 4",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 4
+        }}
+      },
+      "light 5": {
+        "name": "light 5",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 5
+        }}
+      },
+      "light 3": {
+        "name": "light 3",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 3
+        }}
+      },
+      "light 8": {
+        "name": "light 8",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 8
+        }}
+      },
+      "light 9": {
+        "name": "light 9",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 9
+        }}
+      },
+      "light 6": {
+        "name": "light 6",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 6
+        }}
+      },
+      "light 7": {
+        "name": "light 7",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 7
+        }}
+      },
+      "light 18": {
+        "name": "light 18",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 18
+        }}
+      },
+      "light 17": {
+        "name": "light 17",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 17
+        }}
+      },
+      "light 16": {
+        "name": "light 16",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 16
+        }}
+      },
+      "light 15": {
+        "name": "light 15",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 15
+        }}
+      },
+      "light 14": {
+        "name": "light 14",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 14
+        }}
+      },
+      "light 13": {
+        "name": "light 13",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 13
+        }}
+      },
+      "light 12": {
+        "name": "light 12",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 12
+        }}
+      },
+      "light 11": {
+        "name": "light 11",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 11
+        }}
+      },
+      "light 10": {
+        "name": "light 10",
+        "type": "cc.creativecomputing.demo.protocol.serial.dmx.CCTorrontoLights$CCLight",
+        "value": {"_cDMXChannel": {
+          "min": 0,
+          "max": 30,
+          "precision": "",
+          "name": "dmx channel",
+          "type": "int",
+          "value": 10
+        }}
+      }
+    }
+  },
+  "_cThickness": {
+    "min": 0,
+    "max": 100,
+    "precision": "",
+    "name": "thickness",
+    "type": "float",
+    "value": 46.20000076293945
+  },
+  "_cWidth": {
+    "min": 0,
+    "max": 1000,
+    "precision": "",
+    "name": "width",
+    "type": "float",
+    "value": 547
+  },
+  "triggerDemo": {"name": "trigger"},
+  "_cLengthScale": {
+    "min": 0,
+    "max": 2,
+    "precision": "",
+    "name": "length scale",
+    "type": "float",
+    "value": 0.7720000147819519
+  },
+  "_cHeight": {
+    "min": 0,
+    "max": 1000,
+    "precision": "",
+    "name": "height",
+    "type": "float",
+    "value": 557
+  },
+  "_cTip": {
+    "min": 0,
+    "max": 100,
+    "precision": "",
+    "name": "tip",
+    "type": "float",
+    "value": 23.600000381469727
+  }
+}

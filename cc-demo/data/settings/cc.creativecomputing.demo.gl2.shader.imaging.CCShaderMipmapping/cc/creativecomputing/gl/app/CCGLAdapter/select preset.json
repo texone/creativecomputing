@@ -1,0 +1,71 @@
+{"value": {
+  "lod": {
+    "min": 1,
+    "max": 10,
+    "name": "lod",
+    "value": 5.734000205993652
+  },
+  "camera controller": {
+    "name": "camera controller",
+    "value": {
+      "distance": {
+        "min": 1,
+        "max": 20000,
+        "name": "distance",
+        "value": 5427.801759996513
+      },
+      "center": {
+        "name": "center",
+        "value": {
+          "x": {
+            "min": -10000,
+            "max": 10000,
+            "name": "x",
+            "value": 0
+          },
+          "y": {
+            "min": -10000,
+            "max": 10000,
+            "name": "y",
+            "value": 0
+          },
+          "z": {
+            "min": -10000,
+            "max": 10000,
+            "name": "z",
+            "value": 0
+          }
+        }
+      },
+      "rotation": {
+        "name": "rotation",
+        "value": {
+          "w": {
+            "min": -1,
+            "max": 1,
+            "name": "w",
+            "value": 0.9582347609988879
+          },
+          "x": {
+            "min": -1,
+            "max": 1,
+            "name": "x",
+            "value": -0.26796766999397736
+          },
+          "y": {
+            "min": -1,
+            "max": 1,
+            "name": "y",
+            "value": -0.03141748876505605
+          },
+          "z": {
+            "min": -1,
+            "max": 1,
+            "name": "z",
+            "value": 0.09482832936997598
+          }
+        }
+      }
+    }
+  }
+}}

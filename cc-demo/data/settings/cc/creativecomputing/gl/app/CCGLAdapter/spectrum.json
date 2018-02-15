@@ -1,0 +1,99 @@
+{"value": {
+  "spectogram": {
+    "name": "spectogram",
+    "value": {
+      "curve scale": {
+        "min": 0,
+        "max": 1000,
+        "name": "curve scale",
+        "value": 0
+      },
+      "curves": {
+        "name": "curves",
+        "value": true
+      },
+      "amp": {
+        "min": 0,
+        "max": 10,
+        "name": "amp",
+        "value": 1
+      },
+      "averages": {
+        "name": "averages",
+        "value": true
+      },
+      "curve step": {
+        "min": 1,
+        "max": 30,
+        "name": "curve step",
+        "value": 7
+      },
+      "pow": {
+        "min": 0,
+        "max": 1,
+        "name": "pow",
+        "value": 1
+      },
+      "seconds grid": {
+        "min": 1,
+        "max": 30,
+        "name": "seconds grid",
+        "value": 30
+      },
+      "analyze stream": {}
+    }
+  },
+  "fft": {
+    "name": "fft",
+    "value": {
+      "log bandwidth": {
+        "min": 2,
+        "max": 220,
+        "name": "log bandwidth",
+        "value": 22
+      },
+      "window type": {
+        "name": "window type",
+        "value": "GAUSS"
+      },
+      "linear averages": {
+        "min": 2,
+        "max": 512,
+        "name": "linear averages",
+        "value": 64
+      },
+      "average smoothing": {
+        "min": 0,
+        "max": 1,
+        "name": "average smoothing",
+        "value": 0.9900000095367432
+      },
+      "averaging": {
+        "name": "averaging",
+        "value": "LOGARITHMIC"
+      },
+      "normalize": {
+        "name": "normalize",
+        "value": true
+      },
+      "smoothing": {
+        "min": 0,
+        "max": 1,
+        "name": "smoothing",
+        "value": 0.5130000114440918
+      },
+      "max reduction": {
+        "min": 0,
+        "max": 1,
+        "name": "max reduction",
+        "value": 0.15800000727176666
+      },
+      "log bands per octave": {
+        "min": 1,
+        "max": 10,
+        "name": "log bands per octave",
+        "value": 3
+      }
+    }
+  }
+}}

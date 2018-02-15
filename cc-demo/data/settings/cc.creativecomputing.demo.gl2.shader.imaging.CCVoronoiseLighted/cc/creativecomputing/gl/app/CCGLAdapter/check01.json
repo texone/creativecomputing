@@ -1,0 +1,173 @@
+{"value": {
+  "diffuse amp": {
+    "min": 0,
+    "max": 1,
+    "name": "diffuse amp",
+    "value": 0.36800000071525574
+  },
+  "tex x blend": {
+    "min": 0,
+    "max": 1,
+    "name": "tex x blend",
+    "value": 0
+  },
+  "normal y blend": {
+    "min": 0,
+    "max": 1,
+    "name": "normal y blend",
+    "value": 0
+  },
+  "light x": {
+    "min": -1,
+    "max": 1,
+    "name": "light x",
+    "value": 0.5
+  },
+  "light y": {
+    "min": -1,
+    "max": 1,
+    "name": "light y",
+    "value": 0.2879999876022339
+  },
+  "blend": {
+    "min": 0,
+    "max": 1,
+    "name": "blend",
+    "value": 0
+  },
+  "normal w blend": {
+    "min": 0,
+    "max": 1,
+    "name": "normal w blend",
+    "value": 0.15800000727176666
+  },
+  "specular pow": {
+    "min": 0,
+    "max": 10,
+    "name": "specular pow",
+    "value": 1.840000033378601
+  },
+  "scale": {
+    "min": 0,
+    "max": 1,
+    "name": "scale",
+    "value": 0.19599999487400055
+  },
+  "tex z blend": {
+    "min": 0,
+    "max": 1,
+    "name": "tex z blend",
+    "value": 0
+  },
+  "gain": {
+    "min": 0,
+    "max": 1,
+    "name": "gain",
+    "value": 0.5649999976158142
+  },
+  "noise blend y": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend y",
+    "value": 0
+  },
+  "octaves": {
+    "min": 0,
+    "max": 10,
+    "name": "octaves",
+    "value": 2.0999999046325684
+  },
+  "noise blend z": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend z",
+    "value": 1
+  },
+  "specular amp": {
+    "min": 0,
+    "max": 1,
+    "name": "specular amp",
+    "value": 0.2370000034570694
+  },
+  "specular bright pow": {
+    "min": 0,
+    "max": 10,
+    "name": "specular bright pow",
+    "value": 1.4399999380111694
+  },
+  "noise blend x": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend x",
+    "value": 0
+  },
+  "light z": {
+    "min": -1,
+    "max": 1,
+    "name": "light z",
+    "value": 0.44599997997283936
+  },
+  "blend random": {
+    "min": 0,
+    "max": 1,
+    "name": "blend random",
+    "value": 0
+  },
+  "tex w blend": {
+    "min": 0,
+    "max": 1,
+    "name": "tex w blend",
+    "value": 0
+  },
+  "specular bright amp": {
+    "min": 0,
+    "max": 1,
+    "name": "specular bright amp",
+    "value": 0.13099999725818634
+  },
+  "tex y blend": {
+    "min": 0,
+    "max": 1,
+    "name": "tex y blend",
+    "value": 0
+  },
+  "normal z blend": {
+    "min": 0,
+    "max": 1,
+    "name": "normal z blend",
+    "value": 0
+  },
+  "randomness": {
+    "min": 0,
+    "max": 200,
+    "name": "randomness",
+    "value": 26.19999885559082
+  },
+  "lighting": {
+    "name": "lighting",
+    "value": {"shader objects": {
+      "name": "shader objects",
+      "value": {"fragment": {
+        "name": "fragment",
+        "source": "#version 120 \n\nuniform sampler2D colorTex;\nuniform sampler2D brightTex;\n\nuniform float amp = 1;\nuniform float powVal = 1;\n\nvec3 rgb2hsv(vec3 c)\n{\n    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\n    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));\n    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));\n\n    float d = q.x - min(q.w, q.y);\n    float e = 1.0e-10;\n    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\n\nvec3 hsv2rgb(vec3 c)\n{\n    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n\nuniform vec3 lightDir = vec3(0.75,0,1);\nuniform float diffuseAmp;\nuniform float specularAmp;\nuniform float specularBrightAmp;\n\nuniform float specularPow = 5;\nuniform float specularBrightPow = 3;\n\nuniform vec2 windowSize;\n\nvoid main(){\n\n\tvec2 uv = gl_FragCoord.xy / windowSize;\n\tvec4 bright = texture2D(brightTex, uv); \n\n\tfloat f = bright.x; \n\tvec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2))) / windowSize * 120.0;\n\tvec2 texUV = uv + dir;\n\t\n\tvec4 color = texture2D(colorTex, texUV);\n\n\tvec2 xOffset = vec2(1.0 / windowSize.x, 0.0);\n     vec2 yOffset = vec2(0.0, 1.0 / windowSize.y);\n/*\n\tfloat scale = bright.r + bright.g;\n\tfloat blend = scale;\n\tscale *= amp; \n\t//scale = mod(scale, 0.9);\n\tscale = pow((cos(scale * 4) - 1) / 2,2);\n\tscale = min(scale, 1);\n\tscale = pow(scale,powVal); \n\n\tvec3 hsv = rgb2hsv(color.rgb); \n\thsv.r += bright.g * 1.5;  \n\thsv.r += blend * 0.03;\n\t//hsv.g -= blend * 0.06;\n\tcolor.rgb = hsv2rgb(hsv); \n\tcolor.rgb *= scale;\n\t*/\n\t//color = min(color, vec4(1.0,1.0,1.0,1.0)); \n\tfloat scale = length(color); \n\n\tvec3 hsv = rgb2hsv(color.rgb); \n\t\n\t//hsv.r += bright.g;  \n\t//hsv.g -= blend * 0.06;\n\tcolor.rgb = hsv2rgb(hsv); \n\t\n\t//normal\n    float s01 = texture2D(brightTex, uv - xOffset).y;\n    float s21 = texture2D(brightTex, uv + xOffset).y;\n    float s10 = texture2D(brightTex, uv - yOffset).y;\n    float s12 = texture2D(brightTex, uv + yOffset).y; \n    \n    vec3 va = normalize(vec3(0.001,0,(s21-s01)));\n    vec3 vb = normalize(vec3(0,0.001,s12-s10));\n    vec3 normal = cross(va,vb);\n\t\n\tfloat ppDiffuse\t\t= abs( dot( normal, normalize(lightDir) )); \n\tfloat ppSpecular\t\t= pow( ppDiffuse, specularPow );\n\tfloat ppSpecularBright\t= pow( ppDiffuse, specularBrightPow );\n\tcolor.rgb = color.rgb * mix(1,ppDiffuse,diffuseAmp) + ppSpecular * specularAmp + ppSpecularBright * specularBrightAmp;\n\t\n\tgl_FragColor = pow(color,vec4(3., 2.0, 2.0, 1.0)); //vec4(normal * 0.5 + 0.5,1.0); // \n}\n\n\n\n",
+        "value": "cc.creativecomputing.control.code.CCShaderObject@3b21f301"
+      }}
+    }}
+  },
+  "lacunarity": {
+    "min": 0,
+    "max": 2,
+    "name": "lacunarity",
+    "value": 2
+  },
+  "draw lighted": {
+    "name": "draw lighted",
+    "value": true
+  },
+  "normal x blend": {
+    "min": 0,
+    "max": 1,
+    "name": "normal x blend",
+    "value": 0.14399999380111694
+  }
+}}

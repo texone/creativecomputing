@@ -1,0 +1,92 @@
+{"value": {
+  "device setup": {
+    "name": "device setup",
+    "value": {}
+  },
+  "visible": {
+    "name": "visible",
+    "value": true
+  },
+  "pixelScale": {
+    "name": "pixelScale",
+    "value": "IDENTITY"
+  },
+  "resizable": {
+    "name": "resizable",
+    "value": true
+  },
+  "windowY": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "windowY",
+    "value": -1
+  },
+  "containerType": {
+    "name": "containerType",
+    "value": "NEWT"
+  },
+  "windowX": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "windowX",
+    "value": -1
+  },
+  "alwaysOnTop": {
+    "name": "alwaysOnTop",
+    "value": false
+  },
+  "assetPaths": {
+    "name": "assetPaths",
+    "value": ""
+  },
+  "title": {
+    "name": "title",
+    "value": "Creative Computing Application"
+  },
+  "antialiasing": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "antialiasing",
+    "value": 8
+  },
+  "displayMode": {
+    "name": "displayMode",
+    "value": "WINDOW"
+  },
+  "undecorated": {
+    "name": "undecorated",
+    "value": false
+  },
+  "fullscreen": {
+    "name": "fullscreen",
+    "value": false
+  },
+  "background": {
+    "a": 1,
+    "r": 0,
+    "b": 0,
+    "g": 0,
+    "name": "background",
+    "value": "ff000000"
+  },
+  "width": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "width",
+    "value": 1200
+  },
+  "inVsync": {
+    "name": "inVsync",
+    "value": false
+  },
+  "closeOperation": {
+    "name": "closeOperation",
+    "value": "HIDE_ON_CLOSE"
+  },
+  "height": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "height",
+    "value": 600
+  }
+}}

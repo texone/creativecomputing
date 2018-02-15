@@ -1,0 +1,60 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": "OFF"
+  },
+  "midi in": {
+    "name": "midi in",
+    "value": {"device": {
+      "name": "device",
+      "value": "Apple Inc. : Bus 1"
+    }}
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 60
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "PERFORMANT"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 100.02784775281438
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  },
+  "bpm": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "bpm",
+    "value": 120
+  },
+  "time offset": {
+    "min": -1.7976931348623157E308,
+    "max": 1.7976931348623157E308,
+    "name": "time offset",
+    "value": -3600
+  }
+}}

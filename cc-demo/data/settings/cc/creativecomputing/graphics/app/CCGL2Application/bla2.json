@@ -1,0 +1,196 @@
+{
+  "_myAnimator": {
+    "name": "animator",
+    "type": "cc.creativecomputing.app.modules.CCAnimator",
+    "value": {
+      "fixedUpdateTime": {
+        "min": 0,
+        "max": 1,
+        "precision": "",
+        "name": "fixed update time",
+        "type": "double",
+        "value": 1
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "framerate",
+        "type": "int",
+        "value": 30
+      },
+      "fixUpdateTime": {
+        "name": "fix update time",
+        "type": "boolean",
+        "value": false
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "type": "cc.creativecomputing.app.modules.CCAnimator$CCAnimationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "type": "cc.creativecomputing.app.modules.CCAnimator$CCExceptionHandling",
+        "value": "THROW"
+      }
+    }
+  },
+  "_myAdapter": {
+    "name": "app",
+    "type": "cc.creativecomputing.gl.app.CCGLAdapter",
+    "value": {}
+  },
+  "_myGLContext": {
+    "name": "gl context",
+    "type": "cc.creativecomputing.graphics.app.CCGL2Context",
+    "value": {
+      "_myContainer": {
+        "name": "container",
+        "type": "cc.creativecomputing.gl.app.container.GLContainer",
+        "value": {
+          "showPointer": {
+            "name": "show pointer",
+            "type": "boolean",
+            "value": true
+          },
+          "windowY": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "precision": "",
+            "name": "window y",
+            "type": "int",
+            "value": -1
+          },
+          "windowX": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "precision": "",
+            "name": "window x",
+            "type": "int",
+            "value": -1
+          },
+          "title": {
+            "name": "title",
+            "type": "java.lang.String",
+            "value": ""
+          },
+          "decorated": {
+            "name": "decorated",
+            "type": "boolean",
+            "value": false
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "type": "boolean",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCPixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "type": "boolean",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowY",
+        "type": "int",
+        "value": 397
+      },
+      "containerType": {
+        "name": "containerType",
+        "type": "cc.creativecomputing.gl.app.container.GLContainerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "windowX",
+        "type": "int",
+        "value": 297
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "type": "boolean",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "type": "java.lang.String",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "type": "java.lang.String",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "antialiasing",
+        "type": "int",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "type": "cc.creativecomputing.gl.app.CCDisplayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "type": "boolean",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "type": "boolean",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "type": "cc.creativecomputing.math.CCColor",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "width",
+        "type": "int",
+        "value": 1387
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "type": "boolean",
+        "value": true
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "type": "cc.creativecomputing.gl.app.CCAbstractGLContext$CCCloseOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "precision": "",
+        "name": "height",
+        "type": "int",
+        "value": 342
+      }
+    }
+  }
+}

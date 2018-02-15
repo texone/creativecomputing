@@ -1,0 +1,55 @@
+{"value": {"sun info layer": {
+  "name": "sun info layer",
+  "value": {
+    "sun range outline color": {
+      "a": 1,
+      "r": 1,
+      "b": 0.14901961386203766,
+      "g": 0.7882353067398071,
+      "name": "sun range outline color",
+      "value": "ffffc926"
+    },
+    "sun color": {
+      "a": 1,
+      "r": 1,
+      "b": 0,
+      "g": 0.7529411911964417,
+      "name": "sun color",
+      "value": "ffffc000"
+    },
+    "time": {
+      "min": 0,
+      "max": 24,
+      "name": "time",
+      "value": 9.480000495910645
+    },
+    "radius": {
+      "min": 1,
+      "max": 365,
+      "name": "radius",
+      "value": 200
+    },
+    "day": {
+      "min": 1,
+      "max": 365,
+      "name": "day",
+      "value": 120.39200592041016
+    },
+    "sun path color": {
+      "a": 1,
+      "r": 1,
+      "b": 0.7686274647712708,
+      "g": 0.9411764740943909,
+      "name": "sun path color",
+      "value": "fffff0c4"
+    },
+    "sun range color": {
+      "a": 0.6196078658103943,
+      "r": 0.8313725590705872,
+      "b": 0.3686274588108063,
+      "g": 0.7176470756530762,
+      "name": "sun range color",
+      "value": "9ed4b75e"
+    }
+  }
+}}}

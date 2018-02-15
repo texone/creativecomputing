@@ -1,0 +1,56 @@
+{
+  "octaves": {
+    "min": 1,
+    "max": 4,
+    "name": "octaves",
+    "value": 1
+  },
+  "offset": {
+    "min": 0,
+    "max": 10,
+    "name": "offset",
+    "value": 4.070000171661377
+  },
+  "w": {
+    "min": 0,
+    "max": 1,
+    "name": "w",
+    "value": 0
+  },
+  "x": {
+    "min": 0,
+    "max": 1,
+    "name": "x",
+    "value": 1
+  },
+  "scale": {
+    "min": 0,
+    "max": 1,
+    "name": "scale",
+    "value": 0.09200000017881393
+  },
+  "y": {
+    "min": 0,
+    "max": 1,
+    "name": "y",
+    "value": 1
+  },
+  "z": {
+    "min": 0,
+    "max": 1,
+    "name": "z",
+    "value": 0
+  },
+  "lacunarity": {
+    "min": 0,
+    "max": 4,
+    "name": "lacunarity",
+    "value": 2
+  },
+  "gain": {
+    "min": 0,
+    "max": 1,
+    "name": "gain",
+    "value": 0.5260000228881836
+  }
+}

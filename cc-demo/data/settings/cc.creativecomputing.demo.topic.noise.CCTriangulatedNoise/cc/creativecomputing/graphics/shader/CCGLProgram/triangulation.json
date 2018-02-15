@@ -1,0 +1,22 @@
+{"fragment": {
+  "name": "fragment",
+  "value": {
+    "auto save": {
+      "name": "auto save",
+      "value": true
+    },
+    "uniforms": {
+      "name": "uniforms",
+      "value": {}
+    },
+    "source 0": {
+      "name": "source 0",
+      "source": "//Triangulator by nimitz (twitter: @stormoid)\n\n#define ITR 40\n#define FAR 100.\n#define time iTime*0.02\n\nmat2 m2 = mat2(0.934, 0.358, -0.358, 0.934);\n\nfloat tri(in float x){\n\treturn abs(fract(x * 0.5)-0.5);\n}\n\nfloat heightmap(in vec2 p){\n\tp*=.05;\n\tfloat z=2.;\n\tfloat rz = 0.;\n\tfor (float i= 1.;i < 4.;i++ ){\n\t\trz+= tri(p.x+tri(p.y*3.))/z;\n\t\tz = z*-.85;\n\t\tp = p*1.32;\n\t\t//p*= m2;\n\t}\n\trz += sin(p.y+sin(p.x*.9))*.7+.3;\n\treturn rz*5.;\n}\n\n//from jessifin (https://www.shadertoy.com/view/lslXDf)\nvec3 bary(vec2 a, vec2 b, vec2 c, vec2 p) {\n    vec2 v0 = b - a, v1 = c - a, v2 = p - a;\n    float inv_denom = 1.0 / (v0.x * v1.y - v1.x * v0.y)+1e-9;\n    float v = (v2.x * v1.y - v1.x * v2.y) * inv_denom;\n    float w = (v0.x * v2.y - v2.x * v0.y) * inv_denom;\n    float u = 1.0 - v - w;\n    return abs(vec3(u,v,w));\n}\n\n/*\n\tIdea is quite simple, find which (triangular) side of a given tile we're in,\n\tthen get 3 samples and compute height using barycentric coordinates.\n*/\n\n\nfloat map(vec3 p){\n\tp.xz *= 1.;\n    vec3 q = fract(p) - 0.5;\n    vec3 iq = floor(p);\n    vec2 p1 = vec2(iq.x-.5, iq.z+.5);\n    vec2 p2 = vec2(iq.x+.5, iq.z-.5);\n    \n    float d1 = heightmap(p1);\n    float d2 = heightmap(p2);\n    \n    float sw = sign(q.x+q.z); \n    vec2 px = vec2(iq.x+.5*sw, iq.z+.5*sw);\n    float dx = heightmap(px);\n    vec3 bar = bary(vec2(.5*sw,.5*sw),vec2(-.5,.5),vec2(.5,-.5), q.xz);\n    return (bar.x*dx + bar.y*d1 + bar.z*d2 + p.y + 3.)*.9;\n}\n\nfloat map2(vec2 p){\n\t//vec3 p = vec3(pos.x,0.0, pos.y); \n    vec2 q = fract(p) - 0.5;\n    vec2 iq = floor(p);\n    vec2 p1 = vec2(iq.x-.5, iq.y+.5);\n    vec2 p2 = vec2(iq.x+.5, iq.y-.5);\n    \n    float d1 = heightmap(p1);\n    float d2 = heightmap(p2);\n    \n    float sw = sign(q.x+q.y); \n    vec2 px = vec2(iq.x+.5*sw, iq.y+.5*sw);\n    float dx = heightmap(px);\n    vec3 bar = bary(vec2(.5*sw,.5*sw),vec2(-.5,.5),vec2(.5,-.5), q.xy);\n    return (bar.x*dx + bar.y*d1 + bar.z*d2 + 3.)*.9;\n}\n\nfloat march(in vec3 ro, in vec3 rd)\n{\n\tfloat precis = 0.001;\n    float h=precis*2.0;\n    float d = 0.;\n    for( int i=0; i<ITR; i++ )\n    {\n        if( abs(h)<precis || d>FAR ) break;\n        d += h;\n\t    float res = map(ro+rd*d)*1.1;\n        h = res;\n    }\n\treturn d;\n}\n\nvec3 normal(const in vec3 p)\n{  \n    vec2 e = vec2(-1., 1.)*0.01;\n\treturn normalize(e.yxx*map(p + e.yxx) + e.xxy*map(p + e.xxy) + \n\t\t\t\t\t e.xyx*map(p + e.xyx) + e.yyy*map(p + e.yyy) );   \n}\n\nuniform vec2 iResolution; \nuniform float iTime;\n\nmat2 mm2(in float a){float c = cos(a), s = sin(a);return mat2(c,-s,s,c);}  \nvoid main( ) {\t\n    vec2 bp = gl_FragCoord.xy/iResolution.xy;\n\tvec2 p = bp-0.5;\n\tp.x*=iResolution.x/iResolution.y;\n    vec2 um = vec2(0.45+sin(time*0.7)*2., -.18);\n    \n    vec3 ro = vec3(sin(time*0.7+1.)*20.,40., time*50.);\n    vec3 eye = normalize(vec3(cos(um.x), um.y*5., sin(um.x)));\n    vec3 right = normalize(vec3(cos(um.x+1.5708), 0., sin(um.x+1.5708)));\n    right.xy *= mm2(sin(time*0.7)*0.3);\n    vec3 up = normalize(cross(right, eye));\n\tvec3 rd = normalize((p.x*right+p.y*up)*1.+eye);\n\t\n\tfloat rz = march(ro,rd);\n    vec3 col = vec3(0.);\n    \n    if ( rz < FAR )\n    {\n        vec3 pos = ro+rz*rd;\n        vec3 nor= normal(pos);\n        vec3 ligt = normalize(vec3(-.2, 0.05, -0.2));\n        \n        float dif = clamp(dot( nor, ligt ), 0., 1.);\n        float fre = pow(clamp(1.0+dot(nor,rd),0.0,1.0), 3.);\n        vec3 brdf = 2.*vec3(0.10,0.11,0.1);\n        brdf += 1.9*dif*vec3(.8,1.,.05);\n        col = vec3(0.35,0.07,0.5);\n        col = col*brdf + fre*0.5*vec3(.7,.8,1.);\n    }\n    col = clamp(col,0.,1.);\n\tcol = pow(col,vec3(.9));\n    col *= pow( 16.0*bp.x*bp.y*(1.0-bp.x)*(1.0-bp.y), 0.1);\n\n    float d = map2(p * 50.) * 0.1;  \n\tgl_FragColor = vec4( col, 1.0 );\n} ",
+      "value": "cc.creativecomputing.control.code.CCShaderSource@6e3e5966"
+    },
+    "save in file": {
+      "name": "save in file",
+      "value": false
+    }
+  }
+}}

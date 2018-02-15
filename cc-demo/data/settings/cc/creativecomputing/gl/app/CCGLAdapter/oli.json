@@ -1,0 +1,140 @@
+{"value": {
+  "camera controller": {
+    "name": "camera controller",
+    "value": {
+      "distance": {
+        "min": 1,
+        "max": 20000,
+        "name": "distance",
+        "value": 646.8831995635838
+      },
+      "center": {
+        "name": "center",
+        "value": {
+          "x": {
+            "min": -10000,
+            "max": 10000,
+            "name": "x",
+            "value": 221.2991666047004
+          },
+          "y": {
+            "min": -10000,
+            "max": 10000,
+            "name": "y",
+            "value": -59.757811982459366
+          },
+          "z": {
+            "min": -10000,
+            "max": 10000,
+            "name": "z",
+            "value": 13.594209281909755
+          }
+        }
+      },
+      "rotation": {
+        "name": "rotation",
+        "value": {
+          "w": {
+            "min": -1,
+            "max": 1,
+            "name": "w",
+            "value": 0.6333842135491095
+          },
+          "x": {
+            "min": -1,
+            "max": 1,
+            "name": "x",
+            "value": 0.3252625429035571
+          },
+          "y": {
+            "min": -1,
+            "max": 1,
+            "name": "y",
+            "value": -0.5712802438475679
+          },
+          "z": {
+            "min": -1,
+            "max": 1,
+            "name": "z",
+            "value": 0.40824943257787927
+          }
+        }
+      }
+    }
+  },
+  "draw mode": {
+    "name": "draw mode",
+    "value": "POINTS"
+  },
+  "ring mapping": {
+    "name": "ring mapping",
+    "value": {
+      "res": {
+        "min": 30,
+        "max": 360,
+        "name": "res",
+        "value": 33
+      },
+      "element alpha": {
+        "min": 0,
+        "max": 1,
+        "name": "element alpha",
+        "value": 0.5
+      },
+      "rings": {
+        "min": 4,
+        "max": 40,
+        "name": "rings",
+        "value": 10
+      },
+      "radius 1": {
+        "min": 0,
+        "max": 200,
+        "name": "radius 1",
+        "value": 157.59999084472656
+      },
+      "alpha": {
+        "min": 0,
+        "max": 1,
+        "name": "alpha",
+        "value": 0.052000001072883606
+      },
+      "radius 0": {
+        "min": 0,
+        "max": 200,
+        "name": "radius 0",
+        "value": 105.20000457763672
+      },
+      "parts": {
+        "min": 1,
+        "max": 10,
+        "name": "parts",
+        "value": 10
+      },
+      "distance 1": {
+        "min": 0,
+        "max": 2000,
+        "name": "distance 1",
+        "value": 131.4291483669794
+      },
+      "distance 0": {
+        "min": 0,
+        "max": 2000,
+        "name": "distance 0",
+        "value": 184
+      },
+      "connections": {
+        "min": 2,
+        "max": 5,
+        "name": "connections",
+        "value": 2
+      },
+      "random 0": {
+        "min": 0,
+        "max": 2,
+        "name": "random 0",
+        "value": 0.18186212071636362
+      }
+    }
+  }
+}}

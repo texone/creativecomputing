@@ -1,0 +1,36 @@
+{"value": {
+  "address pattern": {
+    "name": "address pattern",
+    "value": "/bli/bla/blub"
+  },
+  "add double property": {},
+  "protocol": {
+    "name": "protocol",
+    "value": "UDP"
+  },
+  "port": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "port",
+    "value": 12345
+  },
+  "osc handles": {
+    "name": "osc handles",
+    "value": {"bli": {
+      "name": "bli",
+      "value": {"bla": {
+        "name": "bla",
+        "value": {"blub": {
+          "min": 0,
+          "max": 1,
+          "name": "blub",
+          "value": 0.38199999928474426
+        }}
+      }}
+    }}
+  },
+  "ip": {
+    "name": "ip",
+    "value": "127.0.0,1"
+  }
+}}

@@ -1,0 +1,134 @@
+{"value": {
+  "random octave 0": {
+    "min": 0,
+    "max": 1,
+    "name": "random octave 0",
+    "value": 0.30300000309944153
+  },
+  "random octave 1": {
+    "min": 0,
+    "max": 1,
+    "name": "random octave 1",
+    "value": 1
+  },
+  "blend": {
+    "min": 0,
+    "max": 1,
+    "name": "blend",
+    "value": 0
+  },
+  "scale": {
+    "min": 0,
+    "max": 10,
+    "name": "scale",
+    "value": 1
+  },
+  "lacunarity": {
+    "min": 0,
+    "max": 10,
+    "name": "lacunarity",
+    "value": 2
+  },
+  "random octave blend": {
+    "min": 0,
+    "max": 1,
+    "name": "random octave blend",
+    "value": 1
+  },
+  "gain": {
+    "min": 0,
+    "max": 1,
+    "name": "gain",
+    "value": 0.5
+  },
+  "octaves": {
+    "min": 1,
+    "max": 10,
+    "name": "octaves",
+    "value": 10
+  },
+  "texture 1": {
+    "name": "texture 1",
+    "value": {
+      "generate mipmaps": {
+        "name": "generate mipmaps",
+        "value": false
+      },
+      "filter": {
+        "name": "filter",
+        "value": "LINEAR"
+      },
+      "path": {
+        "name": "path",
+        "value": "/Users/christianr/dev/cc2/creativecomputing/cc-demo/./src/main/java/cc/creativecomputing/demo/gl2/fractal/storyboard/08.jpg"
+      },
+      "mipmap filter": {
+        "name": "mipmap filter",
+        "value": "NEAREST"
+      },
+      "wrap": {
+        "name": "wrap",
+        "value": "MIRRORED_REPEAT"
+      }
+    }
+  },
+  "texture 0": {
+    "name": "texture 0",
+    "value": {
+      "generate mipmaps": {
+        "name": "generate mipmaps",
+        "value": false
+      },
+      "filter": {
+        "name": "filter",
+        "value": "LINEAR"
+      },
+      "path": {
+        "name": "path",
+        "value": "/Users/christianr/dev/cc2/creativecomputing/cc-demo/./data/storyboard/00.jpg"
+      },
+      "mipmap filter": {
+        "name": "mipmap filter",
+        "value": "NEAREST"
+      },
+      "wrap": {
+        "name": "wrap",
+        "value": "MIRRORED_REPEAT"
+      }
+    }
+  },
+  "random offset": {
+    "min": 0,
+    "max": 1,
+    "name": "random offset",
+    "value": 0.15800000727176666
+  },
+  "show texture": {
+    "name": "show texture",
+    "value": false
+  },
+  "tri shader": {
+    "name": "tri shader",
+    "value": {"shader objects": {
+      "name": "shader objects",
+      "value": {
+        "fragment": {
+          "name": "fragment",
+          "source": "\r\n\r\nuniform float time;\r\nuniform vec2 resolution;\r\n\r\nfloat rand(vec2 co)\r\n{\r\n    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\r\n}\r\n\r\nvec3 hsv2rgb(float h, float s, float v)\r\n{\r\n    h = fract(h);\r\n    vec3 c = smoothstep(2./6., 1./6., abs(h - vec3(0.5, 2./6., 4./6.)));\r\n    c.r = 1.-c.r;\r\n    /*\r\n    vec3 c = vec3(\r\n    smoothstep(1./6., 2./6., abs(h -0.5)),\r\n        1.-smoothstep(1./6., 2./6., abs(h -2./6.)),\r\n        1.-smoothstep(1./6., 2./6., abs(h -4./6.))\r\n        );*/\r\n    return mix(vec3(s), vec3(1.0), c) * v;\r\n}\r\n\r\nvec3 getRandomColor(float f, float t)\r\n{\r\n    return hsv2rgb(f+t, 0.2+cos(sin(f))*0.3, 0.9);\r\n}\r\n\nfloat tri(vec2 s, float d){\n    vec2 f = s * d;\n\n    // tris\n    f = mod(f, 48.); // because i failed somewhere\n    \n    f = f + vec2(0,0.5) * floor(f).x;\n    s = fract(f);\n    f = floor(f);\n\n    d = s.y - 0.5;\n    float l = abs(d) + 0.5 * s.x;\n    float ff = f.x+f.y;\n    f = mix(f, f+sign(d)*vec2(0,0.5), step(0.5, l));\n    l = mix(ff, ff+sign(d)*0.5, step(0.5, l));\n\n    return l * rand(vec2(f));\n}\n\nuniform float scale;\nuniform float gain;\nuniform float octaves;\nuniform float lacunarity;\nuniform float randomOctave0;\nuniform float randomOctave1;\nuniform float randomOctaveBlend;\n\n\nfloat octavedTri(vec2 s, float d, float randomOctave){\n\tfloat myScale = scale;\n\tfloat myFallOff = gain;\n\t\t\n\tint myOctaves = int(floor(octaves));\n\tfloat myResult = 0.;\n\tfloat myAmp = 0.;\n\n\tfloat myRandom0 = 0.;\n\tfloat myRandom1 = 0.;\n\n\tfloat myTransition = 0.;\n\t\t\n\tfor(int i = 0; i < myOctaves;i++){\n\t\tfloat triRandom = tri(s, d * myScale);\n\t\tmyResult += triRandom * myFallOff;\n\t\tmyAmp += myFallOff;\n\t\tif(mod(triRandom, 1.0) > randomOctave){\n\t\t\treturn myResult / myAmp;\n\t\t}\n\t\tmyFallOff *= gain;\n\t\tmyScale *= lacunarity;\n\t}\n\tfloat myBlend = octaves - float(myOctaves);\n\t\n\tmyResult += tri(s, d * myScale) * myFallOff * myBlend;\n\tmyAmp += myFallOff * myBlend;\n\t\n\tif(myAmp > 0.0){\n\t\tmyResult /= myAmp;\n\t}\n\t\n\treturn myResult;\n}\n\nuniform sampler2D tex0;\nuniform sampler2D tex1;\nuniform sampler3D tex3d;\nuniform float randomOffset;\nuniform float randomBlend;\nuniform float blend;\n\r\nvoid main(){\r\n\tfloat mx = max( resolution.x, resolution.y );\r\n\tfloat t = time * 0.3;\r\n\tvec2 s = gl_TexCoord[0].yx / mx + vec2(t, 0) * 0.2;\r\n\tvec2 texCoord = gl_TexCoord[0].xy / resolution;\n\ttexCoord = vec2(texCoord.x, 1.0 - texCoord.y);\n\n\tint octaves = 4;\n\r\n\tfloat f0 = octavedTri(s, 12.15, randomOctave0);\n\tfloat f1 = octavedTri(s, 12.15, randomOctave1);\n\tfloat f = mix(f0, f1, randomOctaveBlend);\n\r\n   // vec3 color = getRandomColor(f * 2., t);\n\n\tvec2 offset = normalize(vec2(cos(f * 6.2), sin(f * 6.2))) * (randomOffset * 0.1);\n\r\n\tvec3 color0 = texture2D(tex0,texCoord + offset).rgb;\n\tvec3 color1 = texture2D(tex1,texCoord + offset).rgb;\n\n\tfloat colorBlend = clamp((blend) * (1. + randomBlend) + mod(f, 1.0) * randomBlend - randomBlend,0.,1.);\n\tvec3 color = mix(color0, color1, colorBlend);  \n\n\t//color = texture3D(tex3d, vec3(texCoord + offset, colorBlend)).rgb;\n    \r\n\tgl_FragData[0] =  vec4(color, 1.);\r\n\tgl_FragData[1] = gl_TexCoord[1];\r\n\tgl_FragData[2] = gl_TexCoord[2];\r\n\tgl_FragData[3] = gl_TexCoord[3];\n}\r\n\n",
+          "value": "cc.creativecomputing.control.code.CCShaderObject@68c9084e"
+        },
+        "vertex": {
+          "name": "vertex",
+          "source": "#version 120 \n\nvoid main(){\n\tgl_TexCoord[0] = gl_MultiTexCoord0;\n\tgl_TexCoord[1] = gl_MultiTexCoord1;\n\tgl_TexCoord[2] = gl_MultiTexCoord2;\n\tgl_TexCoord[3] = gl_MultiTexCoord3;\n\t\n\tgl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;\n}\n",
+          "value": "cc.creativecomputing.control.code.CCShaderObject@33c8e758"
+        }
+      }
+    }}
+  },
+  "random blend": {
+    "min": 0,
+    "max": 1,
+    "name": "random blend",
+    "value": 1
+  }
+}}

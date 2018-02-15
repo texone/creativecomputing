@@ -1,0 +1,230 @@
+{"value": {
+  "dla": {
+    "name": "dla",
+    "value": {
+      "diffuse amp": {
+        "min": 0,
+        "max": 1,
+        "name": "diffuse amp",
+        "value": 0.2370000034570694
+      },
+      "specular bright amp": {
+        "min": 0,
+        "max": 1,
+        "name": "specular bright amp",
+        "value": 0.5130000114440918
+      },
+      "light x": {
+        "min": -1,
+        "max": 1,
+        "name": "light x",
+        "value": -0.4739999771118164
+      },
+      "light y": {
+        "min": -1,
+        "max": 1,
+        "name": "light y",
+        "value": 0.42200005054473877
+      },
+      "crystal": {
+        "name": "crystal",
+        "value": {"shader objects": {
+          "name": "shader objects",
+          "value": {"fragment": {
+            "name": "fragment",
+            "source": "#version 120 \n\nuniform sampler2DRect crystalTexture0; \nuniform sampler2DRect crystalTexture1; \nuniform sampler2DRect particleTexture;\nuniform float increase;\n\nuniform vec2 OFFSETS[ 8 ] = vec2[8](\n\tvec2( 1.0, -1.0 ),\n\tvec2( 0.0, -1.0 ),\n\tvec2(-1.0, -1.0 ),\n\tvec2( 1.0,  0.0 ),\n\tvec2(-1.0,  0.0 ),\n\tvec2( 1.0,  1.0 ),\n\tvec2( 0.0,  1.0 ),\n\tvec2(-1.0,  1.0 ) \n);\n\nvec3 hsv2rgb(vec3 c){\n    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n\nvoid main(){\n\n\tvec4 iTexCoord = gl_TexCoord[0];\n\tvec4 oColor = texture2DRect(crystalTexture0,iTexCoord.xy);\n\tvec4 oBright = texture2DRect(crystalTexture1,iTexCoord.xy);\n\t\n\tif(length(oBright.rgb) > 0){\n\t\toBright.r += increase;\n\t}else{\n\t\tvec4 c;\n\t\tfloat count;\n\t\tfor(int i = 0; i < 8; i++){\n\t\t\tvec4 myCol = texture2DRect(crystalTexture0,iTexCoord.xy + OFFSETS[i]);\n\t\t\tif(length(myCol.rgb) > 0){\n\t\t\t\tc += myCol;\n\t\t\t\tcount++;\n\t\t\t}\n\t\t}\n\t\tc /= count; \n\n\t\tvec4 particleCol = texture2DRect(particleTexture,iTexCoord.xy);\n\t\t//vec4(hsv2rgb(vec3(mod(gl_Vertex.z * 100, 1.0) * 0.2,1.0,1.0)), 1.0);\n\t\tif(length(c.rgb) > 0 && length(particleCol.r) > 0){\n\t\t\toBright = vec4(increase, particleCol.y, increase, 1.0); \n\t\t\toColor = c;  \n\t\t\toColor.a = 1;\n\t\t}\n\t\t\n\t}\n\t\n\tgl_FragData[0] = oColor; \n\tgl_FragData[1] = oBright; \n}\n",
+            "value": "cc.creativecomputing.control.code.CCShaderObject@410b73f7"
+          }}
+        }}
+      },
+      "specular pow": {
+        "min": 0,
+        "max": 10,
+        "name": "specular pow",
+        "value": 0.39000001549720764
+      },
+      "particle shader": {
+        "name": "particle shader",
+        "value": {"shader objects": {
+          "name": "shader objects",
+          "value": {"fragment": {
+            "name": "fragment",
+            "source": "#version 120 \n\nuniform sampler2D randomTexture;\nuniform sampler2DRect positionTexture;\nuniform sampler2DRect crystalTexture;\n\nuniform vec2 texOffset;\nuniform vec2 boundary;\n\nuniform float speed;\nuniform float replacement;\n\nvoid main(){\n\n\tvec2 iTexCoord = gl_FragCoord.xy; \n\tvec4 oPosition = texture2DRect(positionTexture, iTexCoord);\n\tvec4 crystalColor = texture2DRect(crystalTexture,oPosition.xy);\n\t\n\tfloat mySpeed = speed;\n\t\n\tif(crystalColor.x > 0){\n\t\tmySpeed *= 3;\n\t}\n\n\tvec2 texCoord = oPosition.xy;\n\tvec4 random = (texture2D(randomTexture, texCoord) - 0.5) * mySpeed; \n\t\n\toPosition+= vec4(random.x, random.y,0,0);\n\t\n\tif(oPosition.x > boundary.x)oPosition.x -= boundary.x;\n\tif(oPosition.x < 0)oPosition.x += boundary.x;\n\tif(oPosition.y > boundary.y)oPosition.y -= boundary.y;\n\tif(oPosition.y < 0)oPosition.y += boundary.y;\n\t\n\tgl_FragColor = oPosition;\n\t\n}\n",
+            "value": "cc.creativecomputing.control.code.CCShaderObject@4e14467a"
+          }}
+        }}
+      },
+      "crystal draw": {
+        "name": "crystal draw",
+        "value": {"shader objects": {
+          "name": "shader objects",
+          "value": {"fragment": {
+            "name": "fragment",
+            "source": "#version 120 \r\n\r\nuniform sampler2DRect colorTex;\r\nuniform sampler2DRect brightTex;\r\n\nuniform float amp = 1;\nuniform float powVal = 1;\n\nvec3 rgb2hsv(vec3 c)\n{\n    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\n    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));\n    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));\n\n    float d = q.x - min(q.w, q.y);\n    float e = 1.0e-10;\n    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\n\nvec3 hsv2rgb(vec3 c)\n{\n    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n\nuniform vec3 lightDir = vec3(0.75,0,1);\nuniform float diffuseAmp;\nuniform float specularAmp;\nuniform float specularBrightAmp;\n\nuniform float specularPow = 5;\nuniform float specularBrightPow = 3;\n\r\nvoid main(){\r\n\r\n\tvec4 color = texture2DRect(colorTex, gl_FragCoord.xy);\r\n\tvec4 bright = texture2DRect(brightTex, gl_FragCoord.xy);\r\n\n\tfloat scale = bright.r + bright.g;\n\tfloat blend = scale;\n\tscale *= amp; \n\t//scale = mod(scale, 0.9);\n\tscale = pow((cos(scale * 4) - 1) / 2,2);\n\tscale = min(scale, 1);\n\tscale = pow(scale,powVal); \n\n\tvec3 hsv = rgb2hsv(color.rgb); \n\thsv.r += bright.g * 1.5;  \n\thsv.r += blend * 0.03;\n\t//hsv.g -= blend * 0.06;\n\tcolor.rgb = hsv2rgb(hsv); \n\tcolor.rgb *= scale;\n\n\t//normal\n    float s01 = texture2DRect(brightTex, gl_FragCoord.xy + vec2(-1,0)).x;\n    float s21 = texture2DRect(brightTex, gl_FragCoord.xy + vec2(1,0)).x;\n    float s10 = texture2DRect(brightTex, gl_FragCoord.xy + vec2(0,-1)).x;\n    float s12 = texture2DRect(brightTex, gl_FragCoord.xy + vec2(0,1)).x; \n    \n    \tvec3 va = normalize(vec3(0.001,0,(s21-s01)));\n    \tvec3 vb = normalize(vec3(0,0.001,s12-s10));\n    \tvec3 normal = cross(va,vb);\n\t\n\tfloat ppDiffuse\t\t\t= abs( dot( normal, normalize(lightDir) )); \n\tfloat ppSpecular\t\t= pow( ppDiffuse, specularPow );\n\tfloat ppSpecularBright\t= pow( ppDiffuse, specularBrightPow );\n\t\n\tcolor.rgb = color.rgb * mix(1,ppDiffuse,diffuseAmp) + ppSpecular * specularAmp * scale + ppSpecularBright * specularBrightAmp * scale;\n\n\tgl_FragColor = color;\n}\n",
+            "value": "cc.creativecomputing.control.code.CCShaderObject@65d622ce"
+          }}
+        }}
+      },
+      "init values": {
+        "name": "init values",
+        "value": {"shader objects": {
+          "name": "shader objects",
+          "value": {"fragment": {
+            "name": "fragment",
+            "source": "void main(){\r\n    gl_FragColor = gl_TexCoord[0];\r\n}\r\n\n",
+            "value": "cc.creativecomputing.control.code.CCShaderObject@75137fc"
+          }}
+        }}
+      },
+      "drawParticles": {
+        "name": "drawParticles",
+        "value": false
+      },
+      "particle speed": {
+        "min": 10,
+        "max": 1000,
+        "name": "particle speed",
+        "value": 50
+      },
+      "specular amp": {
+        "min": 0,
+        "max": 1,
+        "name": "specular amp",
+        "value": 0.43299999833106995
+      },
+      "create particles": {},
+      "specular bright pow": {
+        "min": 0,
+        "max": 10,
+        "name": "specular bright pow",
+        "value": 2.0999999046325684
+      },
+      "particle replacement": {
+        "min": 1,
+        "max": 20,
+        "name": "particle replacement",
+        "value": 20
+      },
+      "particle amount": {
+        "min": 0,
+        "max": 1,
+        "name": "particle amount",
+        "value": 0.2630000114440918
+      },
+      "brightness increase": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "brightness increase",
+        "value": 0.003
+      },
+      "light z": {
+        "min": -1,
+        "max": 1,
+        "name": "light z",
+        "value": -0.18599998950958252
+      },
+      "particle output shader": {
+        "name": "particle output shader",
+        "value": {"shader objects": {
+          "name": "shader objects",
+          "value": {
+            "fragment": {
+              "name": "fragment",
+              "source": "uniform float amount;\n\nvoid main(){\n\tif(gl_TexCoord[0].z > amount)discard;\n\tgl_FragColor = gl_Color;\n}\n",
+              "value": "cc.creativecomputing.control.code.CCShaderObject@1ddf782a"
+            },
+            "vertex": {
+              "name": "vertex",
+              "source": "#version 120\n\nvec3 hsv2rgb(vec3 c){\n    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n\nvoid main (){\n\tgl_Position = gl_ModelViewProjectionMatrix * vec4(gl_Vertex.xyz,1.0); \n\tgl_TexCoord[0] = vec4(gl_Vertex.xyz,1.0);\n\tgl_FrontColor = vec4(1.0,gl_Vertex.z,0.0, 1.0);\n}",
+              "value": "cc.creativecomputing.control.code.CCShaderObject@7114da7d"
+            }
+          }
+        }}
+      }
+    }
+  },
+  "reset": {},
+  "swp height": {
+    "min": 0,
+    "max": 1,
+    "name": "swp height",
+    "value": 1
+  },
+  "screencapture": {
+    "name": "screencapture",
+    "value": {
+      "full window": {},
+      "record key": {
+        "name": "record key",
+        "value": true
+      },
+      "format": {
+        "name": "format",
+        "value": "JPG"
+      },
+      "prepend": {
+        "name": "prepend",
+        "value": "frame_"
+      },
+      "draw bounds": {
+        "name": "draw bounds",
+        "value": false
+      },
+      "quality": {
+        "min": 0,
+        "max": 1,
+        "name": "quality",
+        "value": 1
+      },
+      "seconds": {
+        "min": 1,
+        "max": 1000,
+        "name": "seconds",
+        "value": 100
+      },
+      "record frame": {},
+      "alpha": {
+        "name": "alpha",
+        "value": false
+      },
+      "x": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "x",
+        "value": 0
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1280
+      },
+      "y": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "y",
+        "value": 0
+      },
+      "capture rate": {
+        "min": 1,
+        "max": 60,
+        "name": "capture rate",
+        "value": 30
+      },
+      "record sequence": {},
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 720
+      },
+      "record timeline loop": {}
+    }
+  },
+  "swp width": {
+    "min": 0,
+    "max": 1,
+    "name": "swp width",
+    "value": 0
+  }
+}}

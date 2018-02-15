@@ -1,0 +1,5 @@
+{"value": {"real time visual": {
+  "name": "real time visual",
+  "source": "package cc.creativecomputing.demo.control;\n\nimport cc.creativecomputing.demo.control.CCRealtimeCodingDemo.CCRealtimeGraph;\nimport cc.creativecomputing.graphics.CCGraphics;\nimport cc.creativecomputing.graphics.CCDrawMode;\n\npublic class CCRealtimeGraphImp extends CCRealtimeGraph{\n\t\n\n\tpublic void draw(CCGraphics g){\n\t\tg.color(255);\n\t\tg.rect(0,0,100,100);\n\t\tg.beginShape(CCDrawMode.LINES);\n\t\tg.vertex(0,0);\n\t\tg.vertex(100,100);\n\t\tg.endShape();\n\t}\n}",
+  "value": "cc.creativecomputing.control.code.CCRealtimeCompile@269ad5d"
+}}}

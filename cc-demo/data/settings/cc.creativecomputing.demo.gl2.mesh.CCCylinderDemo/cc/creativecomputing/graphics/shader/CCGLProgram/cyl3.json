@@ -1,0 +1,87 @@
+{
+  "fragment": {
+    "name": "fragment",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "cylinder_frag.glsl": {
+        "name": "cylinder_frag.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@4cf08e5e"
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {}
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  },
+  "vertex": {
+    "name": "vertex",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {
+          "normal offset": {
+            "min": 0,
+            "max": 0.1,
+            "name": "normal offset",
+            "value": 0.014399999752640724
+          },
+          "normal blend": {
+            "min": 0,
+            "max": 1,
+            "name": "normal blend",
+            "value": 0.44600000977516174
+          },
+          "length": {
+            "min": 10,
+            "max": 500,
+            "name": "length",
+            "value": 473.53997802734375
+          },
+          "scale": {
+            "min": 0,
+            "max": 2,
+            "name": "scale",
+            "value": 0.6320000290870667
+          },
+          "displacement": {
+            "min": 0,
+            "max": 200,
+            "name": "displacement",
+            "value": 26.19999885559082
+          },
+          "dual fbm": {
+            "min": 0,
+            "max": 20,
+            "name": "dual fbm",
+            "value": 20
+          },
+          "radius": {
+            "min": 10,
+            "max": 100,
+            "name": "radius",
+            "value": 25.299999237060547
+          }
+        }
+      },
+      "cylinder_vert.glsl": {
+        "name": "cylinder_vert.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@2a228bf0"
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{"value": {
+  "color scale": {
+    "min": -1,
+    "max": 1,
+    "name": "color scale",
+    "value": 0.156000018119812
+  },
+  "blend": {
+    "min": 0,
+    "max": 1,
+    "name": "blend",
+    "value": 0.5130000114440918
+  },
+  "scale": {
+    "min": 0,
+    "max": 1,
+    "name": "scale",
+    "value": 0.328000009059906
+  },
+  "randomness": {
+    "min": 0,
+    "max": 200,
+    "name": "randomness",
+    "value": 200
+  },
+  "lacunarity": {
+    "min": 0,
+    "max": 2,
+    "name": "lacunarity",
+    "value": 2
+  },
+  "gain": {
+    "min": 0,
+    "max": 1,
+    "name": "gain",
+    "value": 0.75
+  },
+  "noise blend y": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend y",
+    "value": 0.30300000309944153
+  },
+  "octaves": {
+    "min": 0,
+    "max": 10,
+    "name": "octaves",
+    "value": 2.240000009536743
+  },
+  "noise blend z": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend z",
+    "value": 0
+  },
+  "brightness scale": {
+    "min": -1,
+    "max": 1,
+    "name": "brightness scale",
+    "value": 1
+  },
+  "color shift": {
+    "min": -1,
+    "max": 1,
+    "name": "color shift",
+    "value": 0.2879999876022339
+  },
+  "noise blend x": {
+    "min": 0,
+    "max": 1,
+    "name": "noise blend x",
+    "value": 1
+  },
+  "brightness shift": {
+    "min": -1,
+    "max": 1,
+    "name": "brightness shift",
+    "value": 1
+  },
+  "blend random": {
+    "min": 0,
+    "max": 1,
+    "name": "blend random",
+    "value": 0.578000009059906
+  }
+}}

@@ -1,0 +1,615 @@
+{"value": {
+  "filter": {
+    "name": "filter",
+    "value": {
+      "exponential": {
+        "name": "exponential",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "skip range": {
+            "min": 0,
+            "max": 50,
+            "name": "skip range",
+            "value": 50
+          },
+          "weight": {
+            "min": 0,
+            "max": 1,
+            "name": "weight",
+            "value": 0
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 0.1
+          }
+        }
+      },
+      "motion limiter": {
+        "name": "motion limiter",
+        "value": {
+          "move start": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "move start",
+            "value": 0
+          },
+          "max jerk": {
+            "min": 0,
+            "max": 5000,
+            "name": "max jerk",
+            "value": 600
+          },
+          "threshold": {
+            "min": 0,
+            "max": 10,
+            "name": "threshold",
+            "value": 1
+          },
+          "move range": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "move range",
+            "value": 1
+          },
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "apply scale": {
+            "min": 0,
+            "max": 1,
+            "name": "apply scale",
+            "value": 1
+          },
+          "lookAhead": {
+            "min": 0,
+            "max": 10,
+            "name": "lookAhead",
+            "value": 1
+          },
+          "constrain 2": {
+            "min": 0,
+            "max": 1,
+            "name": "constrain 2",
+            "value": 1
+          },
+          "draw targets": {
+            "name": "draw targets",
+            "value": true
+          },
+          "constrain 1": {
+            "min": 0,
+            "max": 1,
+            "name": "constrain 1",
+            "value": 0
+          },
+          "max vel": {
+            "min": 0,
+            "max": 1000,
+            "name": "max vel",
+            "value": 600
+          },
+          "draw future points": {
+            "name": "draw future points",
+            "value": true
+          },
+          "max acc": {
+            "min": 0,
+            "max": 1000,
+            "name": "max acc",
+            "value": 800
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 0.1
+          }
+        }
+      },
+      "double moving average": {
+        "name": "double moving average",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "forecast": {
+            "min": 0,
+            "max": 10,
+            "name": "forecast",
+            "value": 0
+          },
+          "buffer size": {
+            "min": 1,
+            "max": 100,
+            "name": "buffer size",
+            "value": 1
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 0.1
+          }
+        }
+      },
+      "median": {
+        "name": "median",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "buffer size": {
+            "min": 1,
+            "max": 100,
+            "name": "buffer size",
+            "value": 44
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 0.1
+          }
+        }
+      },
+      "one euro": {
+        "name": "one euro",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "minimum cutoff": {
+            "min": 0,
+            "max": 1,
+            "name": "minimum cutoff",
+            "value": 0.02
+          },
+          "cutoff slope": {
+            "min": 0,
+            "max": 1,
+            "name": "cutoff slope",
+            "value": 0
+          },
+          "derivative cutoff": {
+            "min": 0,
+            "max": 1,
+            "name": "derivative cutoff",
+            "value": 0.02
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 0.1
+          }
+        }
+      },
+      "cheb": {
+        "name": "cheb",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "ripple": {
+            "min": 0,
+            "max": 1,
+            "name": "ripple",
+            "value": 0.5
+          },
+          "poles": {
+            "min": 2,
+            "max": 20,
+            "name": "poles",
+            "value": 4
+          },
+          "freqency": {
+            "min": 0,
+            "max": 1,
+            "name": "freqency",
+            "value": 0.15800000727176666
+          },
+          "type": {
+            "name": "type",
+            "value": "LP"
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 10.260000228881836
+          }
+        }
+      },
+      "moving average": {
+        "name": "moving average",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "buffer size": {
+            "min": 1,
+            "max": 100,
+            "name": "buffer size",
+            "value": 16
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 0.1
+          }
+        }
+      },
+      "fir": {
+        "name": "fir",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": false
+          },
+          "cut off": {
+            "min": 0,
+            "max": 1,
+            "name": "cut off",
+            "value": 0.10400000214576721
+          },
+          "size": {
+            "min": 10,
+            "max": 100,
+            "name": "size",
+            "value": 30
+          },
+          "weight": {
+            "min": 0,
+            "max": 4,
+            "name": "weight",
+            "value": 0.9480000138282776
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 5
+          }
+        }
+      },
+      "compressor": {
+        "name": "compressor",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "Knee": {
+            "min": 0,
+            "max": 2,
+            "name": "Knee",
+            "value": 0.20000000298023224
+          },
+          "Ratio (x:1)": {
+            "min": 1,
+            "max": 20,
+            "name": "Ratio (x:1)",
+            "value": 1
+          },
+          "Pre-gain": {
+            "min": 0,
+            "max": 2,
+            "name": "Pre-gain",
+            "value": 1
+          },
+          "Attack time (ms)": {
+            "min": 0,
+            "max": 3,
+            "name": "Attack time (ms)",
+            "value": 3
+          },
+          "Post-gain": {
+            "min": 0,
+            "max": 2,
+            "name": "Post-gain",
+            "value": 1
+          },
+          "process type": {
+            "name": "process type",
+            "value": "Compressor"
+          },
+          "Release time ": {
+            "min": 0.009999999776482582,
+            "max": 3,
+            "name": "Release time ",
+            "value": 3
+          },
+          "reset": {},
+          "Lookahead time ": {
+            "min": 0,
+            "max": 0.20000000298023224,
+            "name": "Lookahead time ",
+            "value": 0
+          },
+          "Threshold": {
+            "min": 0,
+            "max": 1,
+            "name": "Threshold",
+            "value": 0
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 0.1
+          }
+        }
+      },
+      "double exponential": {
+        "name": "double exponential",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "weight": {
+            "min": 0,
+            "max": 1,
+            "name": "weight",
+            "value": 0.052000001072883606
+          },
+          "forecast": {
+            "min": 0,
+            "max": 10,
+            "name": "forecast",
+            "value": 0.5199999809265137
+          },
+          "trend weight": {
+            "min": 0,
+            "max": 1,
+            "name": "trend weight",
+            "value": 0.013000000268220901
+          },
+          "sample rate": {
+            "min": 0,
+            "max": 60,
+            "name": "sample rate",
+            "value": 0.1
+          }
+        }
+      }
+    }
+  },
+  "random": {
+    "min": 0,
+    "max": 1,
+    "name": "random",
+    "value": 0
+  },
+  "height acc": {
+    "min": 0,
+    "max": 500,
+    "name": "height acc",
+    "value": 500
+  },
+  "height jerk": {
+    "min": 0,
+    "max": 500,
+    "name": "height jerk",
+    "value": 500
+  },
+  "height vel": {
+    "min": 0,
+    "max": 500,
+    "name": "height vel",
+    "value": 500
+  },
+  "real time filter": {
+    "name": "real time filter",
+    "source": "package cc.creativecomputing.demo.math.signal;\n\nimport cc.creativecomputing.demo.math.signal.CCMixedSignalFilterDemo.CCRealtimeFilter;\n\npublic class CCRealtimeFilterImp extends CCRealtimeFilter{}",
+    "value": "cc.creativecomputing.control.code.CCRealtimeCompile@1598c546"
+  },
+  "signal": {
+    "name": "signal",
+    "value": {
+      "square setup": {
+        "name": "square setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 2
+          },
+          "pulsewidth": {
+            "min": 0,
+            "max": 1,
+            "name": "pulsewidth",
+            "value": 0.5
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          }
+        }
+      },
+      "worley": {
+        "min": 0,
+        "max": 1,
+        "name": "worley",
+        "value": 1
+      },
+      "amp": {
+        "min": 0,
+        "max": 1,
+        "name": "amp",
+        "value": 1
+      },
+      "sloped tri": {
+        "min": 0,
+        "max": 1,
+        "name": "sloped tri",
+        "value": 0
+      },
+      "saw": {
+        "min": 0,
+        "max": 1,
+        "name": "saw",
+        "value": 0
+      },
+      "simplex": {
+        "min": 0,
+        "max": 1,
+        "name": "simplex",
+        "value": 0
+      },
+      "scale": {
+        "min": 0,
+        "max": 1,
+        "name": "scale",
+        "value": 0.013000000268220901
+      },
+      "tri": {
+        "min": 0,
+        "max": 1,
+        "name": "tri",
+        "value": 0
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 10,
+        "name": "lacunarity",
+        "value": 2
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.5
+      },
+      "octaves": {
+        "min": 1,
+        "max": 10,
+        "name": "octaves",
+        "value": 1
+      },
+      "square": {
+        "min": 0,
+        "max": 1,
+        "name": "square",
+        "value": 0
+      },
+      "sine": {
+        "min": 0,
+        "max": 1,
+        "name": "sine",
+        "value": 0
+      },
+      "worley setup": {
+        "name": "worley setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 2
+          },
+          "amp": {
+            "min": 0,
+            "max": 10,
+            "name": "amp",
+            "value": 1
+          },
+          "formular": {
+            "name": "formular",
+            "value": "DEFAULT"
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "distance type": {
+            "name": "distance type",
+            "value": "EUCLIDEAN"
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          }
+        }
+      },
+      "tri setup": {
+        "name": "tri setup",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 10,
+            "name": "octaves",
+            "value": 2
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 1
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 10,
+            "name": "lacunarity",
+            "value": 2
+          },
+          "ratio": {
+            "min": 0,
+            "max": 1,
+            "name": "ratio",
+            "value": 0.5
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5
+          }
+        }
+      }
+    }
+  },
+  "height": {
+    "min": 0,
+    "max": 500,
+    "name": "height",
+    "value": 223.5
+  }
+}}

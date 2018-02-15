@@ -1,0 +1,266 @@
+{"value": {
+  "map density noise amp": {
+    "min": 0,
+    "max": 10,
+    "name": "map density noise amp",
+    "value": 5.697948455810547
+  },
+  "shader": {
+    "name": "shader",
+    "value": {"shader objects": {
+      "name": "shader objects",
+      "value": {"fragment": {
+        "name": "fragment",
+        "source": "\nuniform float time;\nuniform sampler2D randomTexture;\nuniform sampler2D inputMask;\nuniform vec2 randomTextureResolution;\nuniform vec2 resolution;\n\n/* \nfloat hash( float n ) { return fract(sin(n)*43758.5453123); }\n\nfloat noise( in vec3 x )\n{\n    vec3 p = floor(x);\n    vec3 f = fract(x);\n    f = f * f * (3.0 - 2.0 * f);\n\t\n    float n = p.x + p.y * 157.0 + 113.0 * p.z;\n    return mix(mix(mix( hash(n+  0.0), hash(n+  1.0),f.x),\n                   mix( hash(n+157.0), hash(n+158.0),f.x),f.y),\n               mix(mix( hash(n+113.0), hash(n+114.0),f.x),\n                   mix( hash(n+270.0), hash(n+271.0),f.x),f.y),f.z);\n}\n\n*/\nfloat noise( in vec3 x ){\n    vec3 p = floor(x);\n    vec3 f = fract(x);\n\tf = f * f * (3.0 - 2.0 * f);\n\t\n\tvec2 uv = (p.xy + vec2(37.0, 17.0) * p.z) + f.xy;\n\tvec2 rg = texture2D( randomTexture, (uv+ 0.5) / 256.0, -100.0 ).yx;\n\treturn mix( rg.x, rg.y, f.z );\n}\n\nuniform int octaves;\nuniform float gain;\nuniform float lacunarity;\n\nuniform float speedGain;\nuniform vec3 noiseMovement;\n\nfloat octavedNoise(in vec3 p){\n\tfloat result = 0.0;\n\tfloat myFallOff = gain;\n\tfloat mySpeedFallOff = speedGain;\n\tfloat myAmp = 0.0;\n\t\n\tvec3 q = p - noiseMovement * mySpeedFallOff * time;\n\tfor(int i = 0; i < octaves; i++){\n\t\tmyAmp += myFallOff;\n\t\tresult += myFallOff * noise( q ); \n\t\tq = q * lacunarity - noiseMovement * time * mySpeedFallOff;\n\t\tmyFallOff *= gain;\n\t\tmySpeedFallOff *= speedGain;\n\t}\n\t\n\treturn result / myAmp;\n}\n\nuniform float densityStart;\nuniform float densityNoiseAmp;\nuniform float densitySinusColorMod;\n\nuniform float maskBlend;\n\nuniform float zBlendStart;\nuniform float zBlendRange;\n\nfloat density( vec3 p ){\n\tfloat result = densityStart + p.z;\n\n\tfloat noiseValue = octavedNoise(p + vec3(0.0,0.0,zBlendStart));\n\n\tresult = clamp(result + densityNoiseAmp * noiseValue, 0.0, 1.0 );\n\t\n\treturn result;\n}\n\nuniform float marchStepSize;\nuniform int marchSteps;\n\nuniform float densityScale;\n\nuniform vec4 densityColor0;\nuniform float densityColor0Amp;\nuniform vec4 densityColor1;\nuniform float densityColor1Amp;\n\nuniform vec4 depthColor0;\nuniform float depthColor0Amp;\nuniform vec4 depthColor1;\nuniform float depthColor1Amp;\n\nvec3 raymarch( in vec3 rayOrigin, in vec3 rayDirection){\n\tvec4 sum = vec4( 0.0 );\n\n\tfloat t = 0.0;\n\n    // dithering\t\n\tt += marchStepSize * texture2D( randomTexture, gl_FragCoord.xy / randomTextureResolution.x ).x;\n\t\n\tfor( int i = 0; i < marchSteps; i++ ){\n\t\tif( sum.a > 0.99 ) continue;\n\t\t\n\t\tvec3 pos = rayOrigin + t * rayDirection;\n\t\tfloat densityValue = density(pos);\n\t\t\n\t\tvec3 col = mix(densityColor0Amp * densityColor0.rgb, densityColor1Amp * densityColor1.rgb, densityValue ) + densitySinusColorMod * sin(pos);\n\t\t//vec3 col = mix( vec3(1.0,0.9,0.8), vec3(0.4,0.15,0.1), densityValue ) + densitySinusColorMod * sin(pos);\n\t\t//col.rgb *= mix( 3.1 * vec3(1.0, 0.5, 0.05), vec3(0.48, 0.53, 0.5), clamp((pos.z - 0.2) / 2.0, 0.0, 1.0 ) );\n\t\tcol *= mix(depthColor0Amp * depthColor0.rgb, depthColor1Amp * depthColor1.rgb, clamp((pos.z + zBlendStart) / zBlendRange, 0.0, 1.0 ) );\n\t\t\n\t\tdensityValue *= densityScale;\n\t\tcol.rgb *= densityValue;\n\n\t\tsum = sum + vec4(col, densityValue) * (1.0 - sum.a);\t\n\n\t\tt += marchStepSize;\n\t}\n\n\treturn clamp( sum.xyz, 0.0, 1.0 );\n\t//return clamp( sum.aaa, 0.0, 1.0 );\n}\n\nuniform vec3 rayOrigin;\n\nuniform vec3 cameraPosition;\n\nuniform float brightness;\nuniform float saturation;\nuniform float contrast;\n\n// For all settings: 1.0 = 100% 0.5=50% 1.5 = 150%\nvec3 ContrastSaturationBrightness(vec3 color){\n\t// Increase or decrease theese values to adjust r, g and b color channels seperately\n\tconst float AvgLumR = 0.5;\n\tconst float AvgLumG = 0.5;\n\tconst float AvgLumB = 0.5;\n\t\n\tconst vec3 LumCoeff = vec3(0.2125, 0.7154, 0.0721);\n\t\n\tvec3 AvgLumin = vec3(AvgLumR, AvgLumG, AvgLumB);\n\tvec3 brtColor = color * brightness;\n\tvec3 intensity = vec3(dot(brtColor, LumCoeff));\n\tvec3 satColor = mix(intensity, brtColor, saturation);\n\tvec3 conColor = mix(AvgLumin, satColor, contrast);\n\treturn conColor;\n}\n\nvoid main(void){\n\tvec2 q = gl_FragCoord.xy / resolution.xy;\n    vec2 p = -1.0 + 2.0 * q;\n    //p *= 0.5;\n    p.x *= resolution.x/ resolution.y;\n    \n\t\n    // camera\n    //vec3 rayOrigin = 5.0 * normalize(vec3(1.0, 1.5, 0.0));\n\t\n\t// build ray\n    vec3 ww = normalize(  - rayOrigin);\n    vec3 uu = normalize(cross( vec3(0.0,1.0,0.0), ww ));\n    vec3 vv = normalize(cross(ww,uu));\n    //vec3 rayDirection = normalize( p.x * uu + p.y * vv + 2.0 * ww );\n\t\n    // raymarch\t\n\t//vec3 col = raymarch( rayOrigin, rayDirection);\n\tvec3 rayDirection = normalize(vec3(p,0.0) - cameraPosition);\n\tvec3 color = raymarch( vec3(p,0.0), rayDirection );\n\t\n\t// contrast and vignetting\t\n\t//color = ContrastSaturationBrightness(color);\n\t//color = color * 0.5 + 0.5 * color * color * (3.0 - 2.0 * color);\n\t//color *= 0.25 + 0.75 * pow( 16.0 * q.x * q.y * (1.0 - q.x) * (1.0 - q.y), 0.1 );\n\tvec4 mask = texture2D(inputMask,(q));\n\tvec3 result = mix(mask.rgb, vec3(1.0), color);\n    gl_FragColor = vec4( result, 1.0 );\n}\n\n",
+        "value": "cc.creativecomputing.control.code.CCShaderObject@b21c9c9"
+      }}
+    }}
+  },
+  "depth0": {
+    "name": "depth0",
+    "value": {
+      "r": {
+        "min": 0,
+        "max": 1,
+        "name": "r",
+        "value": 1
+      },
+      "b": {
+        "min": 0,
+        "max": 1,
+        "name": "b",
+        "value": 0
+      },
+      "amp": {
+        "min": 0,
+        "max": 5,
+        "name": "amp",
+        "value": 0.9850000143051147
+      },
+      "g": {
+        "min": 0,
+        "max": 1,
+        "name": "g",
+        "value": 0
+      }
+    }
+  },
+  "march steps": {
+    "min": 0,
+    "max": 200,
+    "name": "march steps",
+    "value": 34
+  },
+  "depth1": {
+    "name": "depth1",
+    "value": {
+      "r": {
+        "min": 0,
+        "max": 1,
+        "name": "r",
+        "value": 1
+      },
+      "b": {
+        "min": 0,
+        "max": 1,
+        "name": "b",
+        "value": 1
+      },
+      "amp": {
+        "min": 0,
+        "max": 5,
+        "name": "amp",
+        "value": 1.100000023841858
+      },
+      "g": {
+        "min": 0,
+        "max": 1,
+        "name": "g",
+        "value": 1
+      }
+    }
+  },
+  "z depth blend": {
+    "min": -0.5,
+    "max": 1.5,
+    "name": "z depth blend",
+    "value": 1.5
+  },
+  "origin x": {
+    "min": -10,
+    "max": 10,
+    "name": "origin x",
+    "value": 0
+  },
+  "origin y": {
+    "min": -10,
+    "max": 10,
+    "name": "origin y",
+    "value": 0
+  },
+  "density0": {
+    "name": "density0",
+    "value": {
+      "r": {
+        "min": 0,
+        "max": 1,
+        "name": "r",
+        "value": 0.578000009059906
+      },
+      "b": {
+        "min": 0,
+        "max": 1,
+        "name": "b",
+        "value": 1
+      },
+      "amp": {
+        "min": 0,
+        "max": 5,
+        "name": "amp",
+        "value": 1
+      },
+      "g": {
+        "min": 0,
+        "max": 1,
+        "name": "g",
+        "value": 0.7229999899864197
+      }
+    }
+  },
+  "map density start": {
+    "min": -5,
+    "max": 5,
+    "name": "map density start",
+    "value": -4.072474956512451
+  },
+  "map density scale": {
+    "min": 0,
+    "max": 1,
+    "name": "map density scale",
+    "value": 0.05999999865889549
+  },
+  "density1": {
+    "name": "density1",
+    "value": {
+      "r": {
+        "min": 0,
+        "max": 1,
+        "name": "r",
+        "value": 1
+      },
+      "b": {
+        "min": 0,
+        "max": 1,
+        "name": "b",
+        "value": 1
+      },
+      "amp": {
+        "min": 0,
+        "max": 5,
+        "name": "amp",
+        "value": 1.0499999523162842
+      },
+      "g": {
+        "min": 0,
+        "max": 1,
+        "name": "g",
+        "value": 0.9729999899864197
+      }
+    }
+  },
+  "saturation": {
+    "min": 0,
+    "max": 10,
+    "name": "saturation",
+    "value": 0
+  },
+  "origin z": {
+    "min": -10,
+    "max": 10,
+    "name": "origin z",
+    "value": -10
+  },
+  "map density sinus color mod": {
+    "min": 0,
+    "max": 1,
+    "name": "map density sinus color mod",
+    "value": 0
+  },
+  "march step size": {
+    "min": 0,
+    "max": 1,
+    "name": "march step size",
+    "value": 0.06499999761581421
+  },
+  "brightness": {
+    "min": 0,
+    "max": 10,
+    "name": "brightness",
+    "value": 0.7900000214576721
+  },
+  "contrast": {
+    "min": 0,
+    "max": 10,
+    "name": "contrast",
+    "value": 0
+  },
+  "noise": {
+    "name": "noise",
+    "value": {
+      "octaves": {
+        "min": 1,
+        "max": 10,
+        "name": "octaves",
+        "value": 5
+      },
+      "speed x": {
+        "min": -10,
+        "max": 10,
+        "name": "speed x",
+        "value": 0.10000000149011612
+      },
+      "speed y": {
+        "min": -10,
+        "max": 10,
+        "name": "speed y",
+        "value": 0
+      },
+      "speed gain": {
+        "min": 0,
+        "max": 2,
+        "name": "speed gain",
+        "value": 0.656000018119812
+      },
+      "speed z": {
+        "min": -10,
+        "max": 10,
+        "name": "speed z",
+        "value": 0.20000000298023224
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 10,
+        "name": "lacunarity",
+        "value": 2
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.5
+      }
+    }
+  },
+  "mask blend": {
+    "min": 0,
+    "max": 1,
+    "name": "mask blend",
+    "value": 1
+  },
+  "z depth range": {
+    "min": 0,
+    "max": 10,
+    "name": "z depth range",
+    "value": 0
+  }
+}}

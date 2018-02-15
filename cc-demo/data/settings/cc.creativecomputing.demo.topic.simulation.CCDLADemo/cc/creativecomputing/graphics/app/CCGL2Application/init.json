@@ -1,0 +1,209 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "animator": {
+        "name": "animator",
+        "value": {
+          "fixed update time": {
+            "min": 0,
+            "max": 1,
+            "name": "fixed update time",
+            "value": 1
+          },
+          "fix update time": {
+            "name": "fix update time",
+            "value": false
+          },
+          "framerate": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "framerate",
+            "value": 30
+          },
+          "animationMode": {
+            "name": "animationMode",
+            "value": "FRAMERATE_PRECISE"
+          },
+          "show frame rate": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "show frame rate",
+            "value": 29.389478836959576
+          },
+          "exceptionHandling": {
+            "name": "exceptionHandling",
+            "value": "THROW"
+          }
+        }
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {"buffer program": {
+      "name": "buffer program",
+      "value": {"shader objects": {
+        "name": "shader objects",
+        "value": {"fragment": {
+          "name": "fragment",
+          "source": "#version 120 \n\n// Created by inigo quilez - 2015\n// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0\n\nfloat hash1( float n ){\n    return fract(sin(n)*138.5453123);\n}\n\nfloat isInside( vec2 p, vec2 c ) {\n\tvec2 d = abs(p-c-0.5) - 0.5; \n\treturn -max(d.x,d.y);\n}\n\nuniform vec2 iChannelResolution;\nuniform sampler2D iChannel0;\n\nuniform int iFrame;\nuniform float iGlobalTime;\n\nvoid main(){\n\tvec2 fragCoord = gl_TexCoord[0].st;\n\tvec2 cen = 0.5 * iChannelResolution.xy;\n    \n    //-----------------------------------------------    \n    // load\n    //-----------------------------------------------    \n    vec4  m = texture2D( iChannel0, (vec2(0.0,0.0)+0.5) / iChannelResolution.xy);\n    float r = texture2D( iChannel0, (vec2(1.0,0.0)+0.5)/ iChannelResolution.xy).x;\n    vec2  f = texture2D( iChannel0, fragCoord / iChannelResolution.xy).xy;\n\n    //-----------------------------------------------    \n    // reset\n    //-----------------------------------------------    \n    if( iFrame==0 ){\n        r = 0.005*iChannelResolution.x;\n        if( length(fragCoord-cen) < r ) f = vec2(1.0,0.0);\n        m = vec4( cen.x+r*1.2, cen.y, -1.0, 0.0 );\n    }\n    \n    for( int k=0; k < 12; k++ ){\n        // move particle\n        vec2 om = m.xy;\n        m.xy += m.zw * 1.0;\n\n        bool touch = false;\n\n        // if touch, stick\n        float n = texture2D( iChannel0, (m.xy+0.5) / iChannelResolution.xy).x;\n        \n        if( n > 0.5 ){\n            touch = true;\n            r = max( r, length(om-cen) );\n            if( isInside(fragCoord,om.xy) > 0.0 ){\n                f.x = 1.0;\n                f.y = 0.1 * float(150 * iFrame + k) / 150.0;\n            }\n\n        }\n\n        // if outside or touch, respawn\n        float d = length( m.xy - cen );\n        if( touch || d > r*1.1 ){\n            m.x = -1.0 + 2.0*hash1( iGlobalTime*1.0 + float(k));\n            m.y = -1.0 + 2.0*hash1( iGlobalTime*1.1 + 43.17 + float(k)*3.13);\n            m.xy = cen + normalize(m.xy)*r*1.1;\n\n            m.z = -1.0 + 2.0*hash1( iGlobalTime*1.2 + 13.13 + float(k)*23.71);\n            m.w = -1.0 + 2.0*hash1( iGlobalTime*1.3 + 37.73 + float(k)*17.9 );\n            m.zw = cen + normalize(m.zw)*r*0.9;\n            m.zw = normalize( m.zw - m.xy);\n        }\n    }\n\n    //-----------------------------------------------    \n    // store\n    //-----------------------------------------------    \n    \n    if( fragCoord.x < 1.0 && fragCoord.y < 1.0 )\n        gl_FragColor = m;\n    else if( fragCoord.x<2.0 && fragCoord.y < 1.0 )\n        gl_FragColor = vec4(r,0.0,0.0,0.0);\n    else\n        gl_FragColor = vec4(f,0.0,0.0);\n\n    //gl_FragColor = vec4(fragCoord.x, fragCoord.y, 0, 1.0);\n}\n",
+          "value": "cc.creativecomputing.control.code.CCShaderObject@414f0741"
+        }}
+      }}
+    }}
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {}
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.389478836959576
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}}

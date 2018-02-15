@@ -1,0 +1,100 @@
+{
+  "fragment": {
+    "name": "fragment",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "cylinder_frag.glsl": {
+        "name": "cylinder_frag.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@77791bf3"
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {
+          "dual fbm": {
+            "min": 0,
+            "max": 20,
+            "name": "dual fbm",
+            "value": 20
+          },
+          "t scale": {
+            "min": 0,
+            "max": 20,
+            "name": "t scale",
+            "value": 20
+          }
+        }
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  },
+  "vertex": {
+    "name": "vertex",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {
+          "normal offset": {
+            "min": 0,
+            "max": 0.1,
+            "name": "normal offset",
+            "value": 0.003900000127032399
+          },
+          "normal blend": {
+            "min": 0,
+            "max": 1,
+            "name": "normal blend",
+            "value": 0.42100000381469727
+          },
+          "length": {
+            "min": 10,
+            "max": 500,
+            "name": "length",
+            "value": 500
+          },
+          "scale": {
+            "min": 0,
+            "max": 2,
+            "name": "scale",
+            "value": 0.5260000228881836
+          },
+          "displacement": {
+            "min": 0,
+            "max": 200,
+            "name": "displacement",
+            "value": 26.19999885559082
+          },
+          "dual fbm": {
+            "min": 0,
+            "max": 20,
+            "name": "dual fbm",
+            "value": 6.840000152587891
+          },
+          "radius": {
+            "min": 10,
+            "max": 100,
+            "name": "radius",
+            "value": 20.6200008392334
+          }
+        }
+      },
+      "cylinder_vert.glsl": {
+        "name": "cylinder_vert.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@859401d"
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  }
+}

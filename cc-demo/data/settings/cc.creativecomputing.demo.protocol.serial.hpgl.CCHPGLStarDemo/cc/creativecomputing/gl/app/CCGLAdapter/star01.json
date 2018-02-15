@@ -1,0 +1,153 @@
+{
+  "start scale": {
+    "min": 0,
+    "max": 2,
+    "name": "start scale",
+    "value": 1.7640000581741333
+  },
+  "x star": {
+    "min": 0,
+    "max": 1000,
+    "name": "x star",
+    "value": 763
+  },
+  "start rotation": {
+    "min": 0,
+    "max": 90,
+    "name": "start rotation",
+    "value": 54
+  },
+  "y star": {
+    "min": 0,
+    "max": 720,
+    "name": "y star",
+    "value": 360
+  },
+  "end scale": {
+    "min": 0,
+    "max": 10,
+    "name": "end scale",
+    "value": 1.0399999618530273
+  },
+  "draw": {},
+  "iterations": {
+    "min": 0,
+    "max": 100,
+    "name": "iterations",
+    "value": 100
+  },
+  "font dis": {
+    "min": 0,
+    "max": 200,
+    "name": "font dis",
+    "value": 52
+  },
+  "x font": {
+    "min": 0,
+    "max": 1000,
+    "name": "x font",
+    "value": 763
+  },
+  "spread": {
+    "curve": {"points": [
+      {
+        "in": {
+          "time": 0,
+          "type": "HANDLE",
+          "value": 0
+        },
+        "time": 0,
+        "type": "BEZIER",
+        "value": 0,
+        "out": {
+          "time": 0.29657796025276184,
+          "type": "HANDLE",
+          "value": 0
+        }
+      },
+      {
+        "in": {
+          "time": 0.7034220397472382,
+          "type": "HANDLE",
+          "value": 1
+        },
+        "time": 1,
+        "type": "BEZIER",
+        "value": 1,
+        "out": {
+          "time": 1,
+          "type": "HANDLE",
+          "value": 1
+        }
+      }
+    ]},
+    "name": "spread",
+    "value": "cc.creativecomputing.control.CCEnvelope@265ae47b"
+  },
+  "pen 2": {
+    "a": 1,
+    "r": 0.0313725508749485,
+    "b": 0,
+    "g": 0.5215686559677124,
+    "name": "pen 2",
+    "value": {
+      "a": 1,
+      "r": 0.0313725508749485,
+      "b": 0,
+      "g": 0.5215686559677124,
+      "blendable_type": "cc.creativecomputing.math.CCColor"
+    }
+  },
+  "pen 1": {
+    "a": 1,
+    "r": 0.11372549086809158,
+    "b": 0,
+    "g": 1,
+    "name": "pen 1",
+    "value": {
+      "a": 1,
+      "r": 0.11372549086809158,
+      "b": 0,
+      "g": 1,
+      "blendable_type": "cc.creativecomputing.math.CCColor"
+    }
+  },
+  "pen 3": {
+    "a": 0.16862745583057404,
+    "r": 1,
+    "b": 0,
+    "g": 0,
+    "name": "pen 3",
+    "value": {
+      "a": 0.16862745583057404,
+      "r": 1,
+      "b": 0,
+      "g": 0,
+      "blendable_type": "cc.creativecomputing.math.CCColor"
+    }
+  },
+  "inner radius": {
+    "min": 10,
+    "max": 200,
+    "name": "inner radius",
+    "value": 52.560001373291016
+  },
+  "outer radius": {
+    "min": 10,
+    "max": 200,
+    "name": "outer radius",
+    "value": 135.02000427246094
+  },
+  "end rotation1": {
+    "min": 0,
+    "max": 180,
+    "name": "end rotation1",
+    "value": 126
+  },
+  "y fot": {
+    "min": 0,
+    "max": 720,
+    "name": "y fot",
+    "value": 321.1199951171875
+  }
+}

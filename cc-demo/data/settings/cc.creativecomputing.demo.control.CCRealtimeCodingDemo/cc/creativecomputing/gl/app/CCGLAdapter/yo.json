@@ -1,0 +1,5 @@
+{"value": {"real time visual": {
+  "name": "real time visual",
+  "source": "package cc.creativecomputing.demo.control;\n\nimport cc.creativecomputing.core.CCProperty;\nimport cc.creativecomputing.demo.control.CCRealtimeCodingDemo.CCRealtimeGraph;\nimport cc.creativecomputing.graphics.CCGraphics;\nimport java.lang.Object;\n\npublic class CCRealtimeGraphImp implements CCRealtimeGraph{\n\t@CCProperty(name = \"c\")\n\tprivate double _c;\n\tpublic void draw(CCGraphics g){\n\t\tg.clear();\n\t}\n\n\tpublic Object[] parameters(){\n\t\treturn null;\n\t}\n\n\tpublic void onRecompile(){\n\t}\n\n\n}",
+  "value": "cc.creativecomputing.control.code.CCRealtimeCompile@19fdc9f"
+}}}

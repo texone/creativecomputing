@@ -1,0 +1,99 @@
+{
+  "fragment": {
+    "name": "fragment",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "cylinder_frag.glsl": {
+        "name": "cylinder_frag.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@128fe80b"
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {}
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  },
+  "vertex": {
+    "name": "vertex",
+    "value": {
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 4,
+            "name": "octaves",
+            "value": 4
+          },
+          "warp2": {
+            "min": 0,
+            "max": 1000,
+            "name": "warp2",
+            "value": 13
+          },
+          "warp1": {
+            "min": 0,
+            "max": 1000,
+            "name": "warp1",
+            "value": 13
+          },
+          "nromal Displace": {
+            "min": -20,
+            "max": 20,
+            "name": "nromal Displace",
+            "value": 0
+          },
+          "length": {
+            "min": 1,
+            "max": 2000,
+            "name": "length",
+            "value": 708.64599609375
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 0.18400000035762787
+          },
+          "radius": {
+            "min": 1,
+            "max": 300,
+            "name": "radius",
+            "value": 32.39500045776367
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 4,
+            "name": "lacunarity",
+            "value": 2.2079999446868896
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.5260000228881836
+          }
+        }
+      },
+      "cylinder_vert.glsl": {
+        "name": "cylinder_vert.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@419b744e"
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  }
+}

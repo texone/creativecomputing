@@ -1,0 +1,351 @@
+{"value": {
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "diffuse amp": {
+        "min": 0,
+        "max": 1,
+        "name": "diffuse amp",
+        "value": 0
+      },
+      "tex x blend": {
+        "min": 0,
+        "max": 1,
+        "name": "tex x blend",
+        "value": 0
+      },
+      "normal y blend": {
+        "min": 0,
+        "max": 1,
+        "name": "normal y blend",
+        "value": 0
+      },
+      "light x": {
+        "min": -1,
+        "max": 1,
+        "name": "light x",
+        "value": -0.10799998044967651
+      },
+      "light y": {
+        "min": -1,
+        "max": 1,
+        "name": "light y",
+        "value": 0.6039999723434448
+      },
+      "blend": {
+        "min": 0,
+        "max": 1,
+        "name": "blend",
+        "value": 0.38199999928474426
+      },
+      "normal w blend": {
+        "min": 0,
+        "max": 1,
+        "name": "normal w blend",
+        "value": 0
+      },
+      "specular pow": {
+        "min": 0,
+        "max": 10,
+        "name": "specular pow",
+        "value": 3.680000066757202
+      },
+      "scale": {
+        "min": 0,
+        "max": 1,
+        "name": "scale",
+        "value": 0.2630000114440918
+      },
+      "tex z blend": {
+        "min": 0,
+        "max": 1,
+        "name": "tex z blend",
+        "value": 0.2240000069141388
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.5519999861717224
+      },
+      "noise blend y": {
+        "min": 0,
+        "max": 1,
+        "name": "noise blend y",
+        "value": 0
+      },
+      "octaves": {
+        "min": 0,
+        "max": 10,
+        "name": "octaves",
+        "value": 3.5399999618530273
+      },
+      "noise blend z": {
+        "min": 0,
+        "max": 1,
+        "name": "noise blend z",
+        "value": 0.5130000114440918
+      },
+      "specular amp": {
+        "min": 0,
+        "max": 1,
+        "name": "specular amp",
+        "value": 0
+      },
+      "specular bright pow": {
+        "min": 0,
+        "max": 10,
+        "name": "specular bright pow",
+        "value": 2.630000114440918
+      },
+      "noise blend x": {
+        "min": 0,
+        "max": 1,
+        "name": "noise blend x",
+        "value": 0
+      },
+      "light z": {
+        "min": -1,
+        "max": 1,
+        "name": "light z",
+        "value": 0.3680000305175781
+      },
+      "blend random": {
+        "min": 0,
+        "max": 1,
+        "name": "blend random",
+        "value": 0.36800000071525574
+      },
+      "tex w blend": {
+        "min": 0,
+        "max": 1,
+        "name": "tex w blend",
+        "value": 0
+      },
+      "specular bright amp": {
+        "min": 0,
+        "max": 1,
+        "name": "specular bright amp",
+        "value": 0
+      },
+      "tex y blend": {
+        "min": 0,
+        "max": 1,
+        "name": "tex y blend",
+        "value": 0.5379999876022339
+      },
+      "normal z blend": {
+        "min": 0,
+        "max": 1,
+        "name": "normal z blend",
+        "value": 0
+      },
+      "randomness": {
+        "min": 0,
+        "max": 200,
+        "name": "randomness",
+        "value": 68.4000015258789
+      },
+      "lighting": {
+        "name": "lighting",
+        "value": {"fragment": {
+          "name": "fragment",
+          "value": {
+            "code": {
+              "name": "code",
+              "source": "#version 120\n\nuniform sampler2D colorTex;\nuniform sampler2D brightTex;\n\nuniform float amp = 1;\nuniform float powVal = 1;\n\nvec3 rgb2hsv(vec3 c)\n{\nvec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\nvec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));\nvec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));\n\nfloat d = q.x - min(q.w, q.y);\nfloat e = 1.0e-10;\nreturn vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\n\nvec3 hsv2rgb(vec3 c)\n{\nvec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\nvec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\nreturn c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n\nuniform vec3 lightDir = vec3(0.75,0,1);\nuniform float diffuseAmp;\nuniform float specularAmp;\nuniform float specularBrightAmp;\n\nuniform float specularPow = 5;\nuniform float specularBrightPow = 3;\n\nuniform vec2 windowSize;\n\nvoid main(){\n\nvec2 uv = gl_FragCoord.xy / windowSize;\nvec4 bright = texture2D(brightTex, uv);\n\nfloat f = bright.x;\nvec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2))) / windowSize * 120.0;\nvec2 texUV = uv + dir;\n\nvec4 color = texture2D(colorTex, texUV);\n\nvec2 xOffset = vec2(1.0 / windowSize.x, 0.0);\nvec2 yOffset = vec2(0.0, 1.0 / windowSize.y);\n/*\nfloat scale = bright.r + bright.g;\nfloat blend = scale;\nscale *= amp;\n//scale = mod(scale, 0.9);\nscale = pow((cos(scale * 4) - 1) / 2,2);\nscale = min(scale, 1);\nscale = pow(scale,powVal);\n\nvec3 hsv = rgb2hsv(color.rgb);\nhsv.r += bright.g * 1.5;\nhsv.r += blend * 0.03;\n//hsv.g -= blend * 0.06;\ncolor.rgb = hsv2rgb(hsv);\ncolor.rgb *= scale;\n*/\n//color = min(color, vec4(1.0,1.0,1.0,1.0));\nfloat scale = length(color);\n\nvec3 hsv = rgb2hsv(color.rgb);\n\n//hsv.r += bright.g;\n//hsv.g -= blend * 0.06;\ncolor.rgb = hsv2rgb(hsv);\n\n//normal\nfloat s01 = texture2D(brightTex, uv - xOffset).y;\nfloat s21 = texture2D(brightTex, uv + xOffset).y;\nfloat s10 = texture2D(brightTex, uv - yOffset).y;\nfloat s12 = texture2D(brightTex, uv + yOffset).y;\n\nvec3 va = normalize(vec3(0.001,0,(s21-s01)));\nvec3 vb = normalize(vec3(0,0.001,s12-s10));\nvec3 normal = cross(va,vb);\n\nfloat ppDiffuse\t\t= abs( dot( normal, normalize(lightDir) ));\nfloat ppSpecular\t\t= pow( ppDiffuse, specularPow );\nfloat ppSpecularBright\t= pow( ppDiffuse, specularBrightPow );\ncolor.rgb = color.rgb * mix(1,ppDiffuse,diffuseAmp) + ppSpecular * specularAmp + ppSpecularBright * specularBrightAmp;\n\ngl_FragColor = pow(color,vec4(3., 2.0, 2.0, 1.0)); //vec4(normal * 0.5 + 0.5,1.0); //\n}\n",
+              "value": "cc.creativecomputing.control.code.CCShaderObject@7d7b149c"
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {}
+            }
+          }
+        }}
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 2,
+        "name": "lacunarity",
+        "value": 1.3940000534057617
+      },
+      "draw lighted": {
+        "name": "draw lighted",
+        "value": true
+      },
+      "normal x blend": {
+        "min": 0,
+        "max": 1,
+        "name": "normal x blend",
+        "value": 0.2240000069141388
+      }
+    }
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": "ff000000"
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1680
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.128286508156354
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}}

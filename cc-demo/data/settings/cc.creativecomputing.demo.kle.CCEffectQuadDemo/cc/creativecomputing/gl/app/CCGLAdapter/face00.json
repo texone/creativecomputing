@@ -1,0 +1,1608 @@
+{"value": {
+  "screen width": {
+    "min": 10,
+    "max": 500,
+    "name": "screen width",
+    "value": 32
+  },
+  "y max": {
+    "min": 0,
+    "max": 200,
+    "name": "y max",
+    "value": 84
+  },
+  "easeDistance": {
+    "min": 0,
+    "max": 100,
+    "name": "easeDistance",
+    "value": 28.799999237060547
+  },
+  "depth Test": {
+    "name": "depth Test",
+    "value": true
+  },
+  "band scale": {
+    "min": 0,
+    "max": 30,
+    "name": "band scale",
+    "value": 5.489999771118164
+  },
+  "texture attributes": {
+    "name": "texture attributes",
+    "value": {
+      "point size": {
+        "min": 0.1,
+        "max": 50,
+        "name": "point size",
+        "value": 1
+      },
+      "stroke weight": {
+        "min": 0.1,
+        "max": 50,
+        "name": "stroke weight",
+        "value": 1
+      },
+      "color": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "color",
+        "value": "ff000000"
+      },
+      "polygon mode": {
+        "name": "polygon mode",
+        "value": "FILL"
+      },
+      "depth test": {
+        "name": "depth test",
+        "value": true
+      },
+      "blend mode": {
+        "name": "blend mode",
+        "value": "BLEND"
+      },
+      "depth mask": {
+        "name": "depth mask",
+        "value": true
+      }
+    }
+  },
+  "min tex X": {
+    "min": -500,
+    "max": 500,
+    "name": "min tex X",
+    "value": -447
+  },
+  "screen space": {
+    "min": 0,
+    "max": 100,
+    "name": "screen space",
+    "value": 2.6000001430511475
+  },
+  "blend mode": {
+    "name": "blend mode",
+    "value": "BLEND"
+  },
+  "min tex Y": {
+    "min": -500,
+    "max": 500,
+    "name": "min tex Y",
+    "value": -158
+  },
+  "band width": {
+    "min": 0,
+    "max": 30,
+    "name": "band width",
+    "value": 5.489999771118164
+  },
+  "quad attributes": {
+    "name": "quad attributes",
+    "value": {
+      "point size": {
+        "min": 0.1,
+        "max": 50,
+        "name": "point size",
+        "value": 1
+      },
+      "stroke weight": {
+        "min": 0.1,
+        "max": 50,
+        "name": "stroke weight",
+        "value": 1
+      },
+      "color": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "color",
+        "value": "ff000000"
+      },
+      "polygon mode": {
+        "name": "polygon mode",
+        "value": "FILL"
+      },
+      "depth test": {
+        "name": "depth test",
+        "value": true
+      },
+      "blend mode": {
+        "name": "blend mode",
+        "value": "BLEND"
+      },
+      "depth mask": {
+        "name": "depth mask",
+        "value": true
+      }
+    }
+  },
+  "screen color": {
+    "a": 1,
+    "r": 0,
+    "b": 0,
+    "g": 0,
+    "name": "screen color",
+    "value": "ff000000"
+  },
+  "screen draw": {
+    "name": "screen draw",
+    "value": "FACE"
+  },
+  "clear color": {
+    "a": 1,
+    "r": 0,
+    "b": 0,
+    "g": 0,
+    "name": "clear color",
+    "value": "ff000000"
+  },
+  "ease mode": {
+    "name": "ease mode",
+    "value": "IN"
+  },
+  "camera": {
+    "name": "camera",
+    "value": {
+      "distance": {
+        "min": 1,
+        "max": 20000,
+        "name": "distance",
+        "value": 3387.482003130469
+      },
+      "center": {
+        "name": "center",
+        "value": {
+          "x": {
+            "min": -10000,
+            "max": 10000,
+            "name": "x",
+            "value": 14.984520485844406
+          },
+          "y": {
+            "min": -10000,
+            "max": 10000,
+            "name": "y",
+            "value": 54.68262289932517
+          },
+          "z": {
+            "min": -10000,
+            "max": 10000,
+            "name": "z",
+            "value": 0
+          }
+        }
+      },
+      "rotation": {
+        "name": "rotation",
+        "value": {
+          "w": {
+            "min": -1,
+            "max": 1,
+            "name": "w",
+            "value": 1
+          },
+          "x": {
+            "min": -1,
+            "max": 1,
+            "name": "x",
+            "value": 0
+          },
+          "y": {
+            "min": -1,
+            "max": 1,
+            "name": "y",
+            "value": 0
+          },
+          "z": {
+            "min": -1,
+            "max": 1,
+            "name": "z",
+            "value": 0
+          }
+        }
+      }
+    }
+  },
+  "screencapture controller": {
+    "name": "screencapture controller",
+    "value": {
+      "full window": {},
+      "format": {
+        "name": "format",
+        "value": "PNG"
+      },
+      "prepend": {
+        "name": "prepend",
+        "value": "frame_"
+      },
+      "draw bounds": {
+        "name": "draw bounds",
+        "value": false
+      },
+      "quality": {
+        "min": 0,
+        "max": 1,
+        "name": "quality",
+        "value": 1
+      },
+      "seconds": {
+        "min": 1,
+        "max": 1000,
+        "name": "seconds",
+        "value": 100
+      },
+      "record frame": {},
+      "alpha": {
+        "name": "alpha",
+        "value": false
+      },
+      "x": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "x",
+        "value": 0
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 0
+      },
+      "y": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "y",
+        "value": 0
+      },
+      "capture rate": {
+        "min": 1,
+        "max": 60,
+        "name": "capture rate",
+        "value": 1
+      },
+      "record sequence": {},
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 0
+      },
+      "record timeline loop": {}
+    }
+  },
+  "max tex Y": {
+    "min": -500,
+    "max": 500,
+    "name": "max tex Y",
+    "value": 184.00001525878906
+  },
+  "color 0": {
+    "a": 1,
+    "r": 1,
+    "b": 0,
+    "g": 0.48235294222831726,
+    "name": "color 0",
+    "value": "ffff7b00"
+  },
+  "color 1": {
+    "a": 1,
+    "r": 1,
+    "b": 0,
+    "g": 0.8588235378265381,
+    "name": "color 1",
+    "value": "ffffdb00"
+  },
+  "line attributes": {
+    "name": "line attributes",
+    "value": {
+      "point size": {
+        "min": 0.1,
+        "max": 50,
+        "name": "point size",
+        "value": 1
+      },
+      "stroke weight": {
+        "min": 0.1,
+        "max": 50,
+        "name": "stroke weight",
+        "value": 2.04610013961792
+      },
+      "color": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "color",
+        "value": "ff000000"
+      },
+      "polygon mode": {
+        "name": "polygon mode",
+        "value": "FILL"
+      },
+      "depth test": {
+        "name": "depth test",
+        "value": false
+      },
+      "blend mode": {
+        "name": "blend mode",
+        "value": "ADD"
+      },
+      "depth mask": {
+        "name": "depth mask",
+        "value": true
+      }
+    }
+  },
+  "max tex X": {
+    "min": -500,
+    "max": 500,
+    "name": "max tex X",
+    "value": 500
+  },
+  "color 2": {
+    "a": 1,
+    "r": 1,
+    "b": 0,
+    "g": 0.29411765933036804,
+    "name": "color 2",
+    "value": "ffff4b00"
+  },
+  "ease formular": {
+    "name": "ease formular",
+    "value": "SINE"
+  },
+  "_cTexZoom": {
+    "min": 0,
+    "max": 1,
+    "name": "_cTexZoom",
+    "value": 0.3090909090909091
+  },
+  "effects": {
+    "name": "effects",
+    "value": {
+      "amount animations": {
+        "name": "amount animations",
+        "value": {}
+      },
+      "offset": {
+        "name": "offset",
+        "value": {
+          "group blends": {
+            "name": "group blends",
+            "value": {"group_0": {
+              "min": 0,
+              "max": 1,
+              "name": "group_0",
+              "value": 1
+            }}
+          },
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 1
+          },
+          "channelblend": {
+            "min": 0,
+            "max": 1,
+            "name": "channelblend",
+            "value": 1
+          },
+          "modulations": {
+            "name": "modulations",
+            "value": {
+              "y modulation": {
+                "name": "y modulation",
+                "value": {
+                  "group mod": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group mod",
+                    "value": 2
+                  },
+                  "mod": {
+                    "min": 2,
+                    "max": 48,
+                    "name": "mod",
+                    "value": 2
+                  },
+                  "offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "offset",
+                    "value": 0
+                  },
+                  "group offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group offset",
+                    "value": 0
+                  },
+                  "group div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group div offset",
+                    "value": 0
+                  },
+                  "div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "div offset",
+                    "value": 0
+                  },
+                  "global offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "global offset",
+                    "value": 0
+                  },
+                  "x offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x offset",
+                    "value": 0
+                  },
+                  "div": {
+                    "min": 2,
+                    "max": 8,
+                    "name": "div",
+                    "value": 2
+                  },
+                  "element offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "element offset",
+                    "value": 0
+                  },
+                  "group div": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group div",
+                    "value": 2
+                  },
+                  "mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "mod offset",
+                    "value": 0.7879999876022339
+                  },
+                  "group mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group mod offset",
+                    "value": 0
+                  },
+                  "y offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y offset",
+                    "value": 0
+                  },
+                  "random offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random offset",
+                    "value": -0.05199998617172241
+                  }
+                }
+              },
+              "o1 modulation": {
+                "name": "o1 modulation",
+                "value": {
+                  "group mod": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group mod",
+                    "value": 2
+                  },
+                  "mod": {
+                    "min": 2,
+                    "max": 48,
+                    "name": "mod",
+                    "value": 2
+                  },
+                  "offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "offset",
+                    "value": 0
+                  },
+                  "group offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group offset",
+                    "value": 0
+                  },
+                  "group div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group div offset",
+                    "value": 0
+                  },
+                  "div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "div offset",
+                    "value": 0
+                  },
+                  "global offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "global offset",
+                    "value": 0
+                  },
+                  "x offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x offset",
+                    "value": 0
+                  },
+                  "div": {
+                    "min": 2,
+                    "max": 8,
+                    "name": "div",
+                    "value": 2
+                  },
+                  "element offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "element offset",
+                    "value": 0
+                  },
+                  "group div": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group div",
+                    "value": 2
+                  },
+                  "mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "mod offset",
+                    "value": 0
+                  },
+                  "group mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group mod offset",
+                    "value": 0
+                  },
+                  "y offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y offset",
+                    "value": 0
+                  },
+                  "random offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random offset",
+                    "value": 0
+                  }
+                }
+              },
+              "o0 modulation": {
+                "name": "o0 modulation",
+                "value": {
+                  "group mod": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group mod",
+                    "value": 2
+                  },
+                  "mod": {
+                    "min": 2,
+                    "max": 48,
+                    "name": "mod",
+                    "value": 2
+                  },
+                  "offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "offset",
+                    "value": 0
+                  },
+                  "group offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group offset",
+                    "value": 0
+                  },
+                  "group div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group div offset",
+                    "value": 0
+                  },
+                  "div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "div offset",
+                    "value": 0
+                  },
+                  "global offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "global offset",
+                    "value": 0
+                  },
+                  "x offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x offset",
+                    "value": 0
+                  },
+                  "div": {
+                    "min": 2,
+                    "max": 8,
+                    "name": "div",
+                    "value": 2
+                  },
+                  "element offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "element offset",
+                    "value": 0
+                  },
+                  "group div": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group div",
+                    "value": 2
+                  },
+                  "mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "mod offset",
+                    "value": 0
+                  },
+                  "group mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group mod offset",
+                    "value": 0
+                  },
+                  "y offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y offset",
+                    "value": 0
+                  },
+                  "random offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random offset",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "scales": {
+        "name": "scales",
+        "value": {
+          "o0 scale": {
+            "min": 0,
+            "max": 1,
+            "name": "o0 scale",
+            "value": 1
+          },
+          "y scale": {
+            "min": 0,
+            "max": 1,
+            "name": "y scale",
+            "value": 1
+          },
+          "o1 scale": {
+            "min": 0,
+            "max": 1,
+            "name": "o1 scale",
+            "value": 1
+          }
+        }
+      },
+      "normalize": {
+        "name": "normalize",
+        "value": false
+      },
+      "bypass amount": {
+        "name": "bypass amount",
+        "value": false
+      },
+      "filters": {
+        "name": "filters",
+        "value": {}
+      },
+      "animation blender": {
+        "name": "animation blender",
+        "value": {
+          "apply blend": {
+            "min": 0,
+            "max": 1,
+            "name": "apply blend",
+            "value": 1
+          },
+          "modulation": {
+            "name": "modulation",
+            "value": {
+              "group mod": {
+                "min": 2,
+                "max": 6,
+                "name": "group mod",
+                "value": 2
+              },
+              "mod": {
+                "min": 2,
+                "max": 48,
+                "name": "mod",
+                "value": 3
+              },
+              "offset": {
+                "min": -1,
+                "max": 1,
+                "name": "offset",
+                "value": 0.026000022888183594
+              },
+              "group offset": {
+                "min": -1,
+                "max": 1,
+                "name": "group offset",
+                "value": 0
+              },
+              "group div offset": {
+                "min": -1,
+                "max": 1,
+                "name": "group div offset",
+                "value": 0
+              },
+              "div offset": {
+                "min": -1,
+                "max": 1,
+                "name": "div offset",
+                "value": 0
+              },
+              "global offset": {
+                "min": -1,
+                "max": 1,
+                "name": "global offset",
+                "value": 0
+              },
+              "x offset": {
+                "min": -1,
+                "max": 1,
+                "name": "x offset",
+                "value": 0
+              },
+              "div": {
+                "min": 2,
+                "max": 8,
+                "name": "div",
+                "value": 2
+              },
+              "element offset": {
+                "min": -1,
+                "max": 1,
+                "name": "element offset",
+                "value": 1
+              },
+              "group div": {
+                "min": 2,
+                "max": 6,
+                "name": "group div",
+                "value": 2
+              },
+              "mod offset": {
+                "min": -1,
+                "max": 1,
+                "name": "mod offset",
+                "value": 0
+              },
+              "group mod offset": {
+                "min": -1,
+                "max": 1,
+                "name": "group mod offset",
+                "value": 0
+              },
+              "y offset": {
+                "min": -1,
+                "max": 1,
+                "name": "y offset",
+                "value": 0
+              },
+              "random offset": {
+                "min": -1,
+                "max": 1,
+                "name": "random offset",
+                "value": 0
+              }
+            }
+          },
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 0
+          },
+          "blend range": {
+            "min": 0,
+            "max": 1,
+            "name": "blend range",
+            "value": 0.6840000152587891
+          },
+          "reverse": {
+            "name": "reverse",
+            "value": true
+          }
+        }
+      },
+      "signal": {
+        "name": "signal",
+        "value": {
+          "phase speed": {
+            "min": 0,
+            "max": 50,
+            "name": "phase speed",
+            "value": 0.05
+          },
+          "group blends": {
+            "name": "group blends",
+            "value": {"group_0": {
+              "min": 0,
+              "max": 1,
+              "name": "group_0",
+              "value": 1
+            }}
+          },
+          "reset phase": {},
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 1
+          },
+          "amount modulations": {
+            "name": "amount modulations",
+            "value": {
+              "o0 amount modulation": {
+                "name": "o0 amount modulation",
+                "value": {
+                  "group mod": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group mod",
+                    "value": 2
+                  },
+                  "mod": {
+                    "min": 2,
+                    "max": 48,
+                    "name": "mod",
+                    "value": 3
+                  },
+                  "offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "offset",
+                    "value": 1
+                  },
+                  "group offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group offset",
+                    "value": 0
+                  },
+                  "group div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group div offset",
+                    "value": 0
+                  },
+                  "div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "div offset",
+                    "value": 0
+                  },
+                  "global offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "global offset",
+                    "value": 0
+                  },
+                  "x offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x offset",
+                    "value": 0
+                  },
+                  "div": {
+                    "min": 2,
+                    "max": 8,
+                    "name": "div",
+                    "value": 2
+                  },
+                  "element offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "element offset",
+                    "value": 0
+                  },
+                  "group div": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group div",
+                    "value": 2
+                  },
+                  "mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "mod offset",
+                    "value": 0.156000018119812
+                  },
+                  "group mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group mod offset",
+                    "value": 0
+                  },
+                  "y offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y offset",
+                    "value": 0
+                  },
+                  "random offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random offset",
+                    "value": 0
+                  }
+                }
+              },
+              "y amount modulation": {
+                "name": "y amount modulation",
+                "value": {
+                  "group mod": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group mod",
+                    "value": 2
+                  },
+                  "mod": {
+                    "min": 2,
+                    "max": 48,
+                    "name": "mod",
+                    "value": 2
+                  },
+                  "offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "offset",
+                    "value": 0.6545454545454545
+                  },
+                  "group offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group offset",
+                    "value": 0
+                  },
+                  "group div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group div offset",
+                    "value": 0
+                  },
+                  "div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "div offset",
+                    "value": 0
+                  },
+                  "global offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "global offset",
+                    "value": 0
+                  },
+                  "x offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x offset",
+                    "value": 0
+                  },
+                  "div": {
+                    "min": 2,
+                    "max": 8,
+                    "name": "div",
+                    "value": 2
+                  },
+                  "element offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "element offset",
+                    "value": 0
+                  },
+                  "group div": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group div",
+                    "value": 2
+                  },
+                  "mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "mod offset",
+                    "value": 0
+                  },
+                  "group mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group mod offset",
+                    "value": 0
+                  },
+                  "y offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y offset",
+                    "value": 0
+                  },
+                  "random offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random offset",
+                    "value": 0
+                  }
+                }
+              },
+              "o1 amount modulation": {
+                "name": "o1 amount modulation",
+                "value": {
+                  "group mod": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group mod",
+                    "value": 2
+                  },
+                  "mod": {
+                    "min": 2,
+                    "max": 48,
+                    "name": "mod",
+                    "value": 2
+                  },
+                  "offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "offset",
+                    "value": 0
+                  },
+                  "group offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group offset",
+                    "value": 0
+                  },
+                  "group div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group div offset",
+                    "value": 0
+                  },
+                  "div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "div offset",
+                    "value": 0
+                  },
+                  "global offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "global offset",
+                    "value": 0
+                  },
+                  "x offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x offset",
+                    "value": 0
+                  },
+                  "div": {
+                    "min": 2,
+                    "max": 8,
+                    "name": "div",
+                    "value": 2
+                  },
+                  "element offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "element offset",
+                    "value": 0
+                  },
+                  "group div": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group div",
+                    "value": 2
+                  },
+                  "mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "mod offset",
+                    "value": 0
+                  },
+                  "group mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group mod offset",
+                    "value": 0
+                  },
+                  "y offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y offset",
+                    "value": 0
+                  },
+                  "random offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random offset",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          },
+          "phase scale": {
+            "min": 1,
+            "max": 10,
+            "name": "phase scale",
+            "value": 1
+          },
+          "signal": {
+            "name": "signal",
+            "value": {
+              "worley": {
+                "min": 0,
+                "max": 1,
+                "name": "worley",
+                "value": 0
+              },
+              "amp": {
+                "min": 0,
+                "max": 1,
+                "name": "amp",
+                "value": 1
+              },
+              "sloped tri": {
+                "min": 0,
+                "max": 1,
+                "name": "sloped tri",
+                "value": 0
+              },
+              "saw": {
+                "min": 0,
+                "max": 1,
+                "name": "saw",
+                "value": 0
+              },
+              "simplex": {
+                "min": 0,
+                "max": 1,
+                "name": "simplex",
+                "value": 0
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 1
+              },
+              "tri": {
+                "min": 0,
+                "max": 1,
+                "name": "tri",
+                "value": 0
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              },
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 2
+              },
+              "square": {
+                "min": 0,
+                "max": 1,
+                "name": "square",
+                "value": 0
+              },
+              "sine": {
+                "min": 0,
+                "max": 1,
+                "name": "sine",
+                "value": 1
+              },
+              "worley setup": {
+                "name": "worley setup",
+                "value": {
+                  "octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "octaves",
+                    "value": 2
+                  },
+                  "amp": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "amp",
+                    "value": 1
+                  },
+                  "formular": {
+                    "name": "formular",
+                    "value": "DEFAULT"
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "distance type": {
+                    "name": "distance type",
+                    "value": "EUCLIDEAN"
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  }
+                }
+              }
+            }
+          },
+          "channelblend": {
+            "min": 0,
+            "max": 1,
+            "name": "channelblend",
+            "value": 0
+          },
+          "modulations": {
+            "name": "modulations",
+            "value": {
+              "y modulation": {
+                "name": "y modulation",
+                "value": {
+                  "group mod": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group mod",
+                    "value": 2
+                  },
+                  "mod": {
+                    "min": 2,
+                    "max": 48,
+                    "name": "mod",
+                    "value": 6
+                  },
+                  "offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "offset",
+                    "value": 0
+                  },
+                  "group offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group offset",
+                    "value": 0
+                  },
+                  "group div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group div offset",
+                    "value": 0
+                  },
+                  "div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "div offset",
+                    "value": 0
+                  },
+                  "global offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "global offset",
+                    "value": 0
+                  },
+                  "x offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x offset",
+                    "value": 0
+                  },
+                  "div": {
+                    "min": 2,
+                    "max": 8,
+                    "name": "div",
+                    "value": 8
+                  },
+                  "element offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "element offset",
+                    "value": 0.16363636363636358
+                  },
+                  "group div": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group div",
+                    "value": 2
+                  },
+                  "mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "mod offset",
+                    "value": 0.34545454545454546
+                  },
+                  "group mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group mod offset",
+                    "value": 0
+                  },
+                  "y offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y offset",
+                    "value": 0
+                  },
+                  "random offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random offset",
+                    "value": 0
+                  }
+                }
+              },
+              "o1 modulation": {
+                "name": "o1 modulation",
+                "value": {
+                  "group mod": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group mod",
+                    "value": 2
+                  },
+                  "mod": {
+                    "min": 2,
+                    "max": 48,
+                    "name": "mod",
+                    "value": 3
+                  },
+                  "offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "offset",
+                    "value": 0.5520000457763672
+                  },
+                  "group offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group offset",
+                    "value": 0
+                  },
+                  "group div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group div offset",
+                    "value": 0
+                  },
+                  "div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "div offset",
+                    "value": 0
+                  },
+                  "global offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "global offset",
+                    "value": 0
+                  },
+                  "x offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x offset",
+                    "value": 0
+                  },
+                  "div": {
+                    "min": 2,
+                    "max": 8,
+                    "name": "div",
+                    "value": 2
+                  },
+                  "element offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "element offset",
+                    "value": 1
+                  },
+                  "group div": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group div",
+                    "value": 2
+                  },
+                  "mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "mod offset",
+                    "value": 2.220446049250313E-16
+                  },
+                  "group mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group mod offset",
+                    "value": 0
+                  },
+                  "y offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y offset",
+                    "value": 0
+                  },
+                  "random offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random offset",
+                    "value": 0
+                  }
+                }
+              },
+              "o0 modulation": {
+                "name": "o0 modulation",
+                "value": {
+                  "group mod": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group mod",
+                    "value": 2
+                  },
+                  "mod": {
+                    "min": 2,
+                    "max": 48,
+                    "name": "mod",
+                    "value": 3
+                  },
+                  "offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "offset",
+                    "value": 0
+                  },
+                  "group offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group offset",
+                    "value": 0
+                  },
+                  "group div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group div offset",
+                    "value": 0
+                  },
+                  "div offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "div offset",
+                    "value": 0
+                  },
+                  "global offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "global offset",
+                    "value": 0
+                  },
+                  "x offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x offset",
+                    "value": 0
+                  },
+                  "div": {
+                    "min": 2,
+                    "max": 8,
+                    "name": "div",
+                    "value": 2
+                  },
+                  "element offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "element offset",
+                    "value": 0.10399997234344482
+                  },
+                  "group div": {
+                    "min": 2,
+                    "max": 6,
+                    "name": "group div",
+                    "value": 2
+                  },
+                  "mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "mod offset",
+                    "value": 0
+                  },
+                  "group mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "group mod offset",
+                    "value": 0
+                  },
+                  "y offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y offset",
+                    "value": 0
+                  },
+                  "random offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random offset",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "screen height": {
+    "min": 10,
+    "max": 500,
+    "name": "screen height",
+    "value": 18
+  }
+}}

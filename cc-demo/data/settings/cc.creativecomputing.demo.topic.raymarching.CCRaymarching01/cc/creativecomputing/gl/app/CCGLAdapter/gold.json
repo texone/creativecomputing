@@ -1,0 +1,85 @@
+{"raymarch": {
+  "name": "raymarch",
+  "value": {"fragment": {
+    "name": "fragment",
+    "value": {
+      "raymarch.glsl": {
+        "name": "raymarch.glsl",
+        "value": "cc.creativecomputing.control.code.CCShaderFile@4191e103"
+      },
+      "auto save": {
+        "name": "auto save",
+        "value": true
+      },
+      "uniforms": {
+        "name": "uniforms",
+        "value": {
+          "octaves": {
+            "min": 1,
+            "max": 4,
+            "name": "octaves",
+            "value": 1.431999921798706
+          },
+          "x offset": {
+            "min": 0,
+            "max": 10,
+            "name": "x offset",
+            "value": 5.789999961853027
+          },
+          "u": {
+            "min": 0,
+            "max": 1,
+            "name": "u",
+            "value": 0.30300000309944153
+          },
+          "v": {
+            "min": 0,
+            "max": 1,
+            "name": "v",
+            "value": 0.42100000381469727
+          },
+          "z offset": {
+            "min": 0,
+            "max": 10,
+            "name": "z offset",
+            "value": 9.470000267028809
+          },
+          "noise": {
+            "min": 0,
+            "max": 1,
+            "name": "noise",
+            "value": 1
+          },
+          "scale": {
+            "min": 0,
+            "max": 1,
+            "name": "scale",
+            "value": 0.4860000014305115
+          },
+          "cylinder": {
+            "min": 0,
+            "max": 1,
+            "name": "cylinder",
+            "value": 0.20999999344348907
+          },
+          "lacunarity": {
+            "min": 0,
+            "max": 4,
+            "name": "lacunarity",
+            "value": 1.628000020980835
+          },
+          "gain": {
+            "min": 0,
+            "max": 1,
+            "name": "gain",
+            "value": 0.42100000381469727
+          }
+        }
+      },
+      "save in file": {
+        "name": "save in file",
+        "value": true
+      }
+    }
+  }}
+}}
