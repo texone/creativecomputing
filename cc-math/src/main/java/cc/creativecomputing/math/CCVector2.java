@@ -84,6 +84,19 @@ public class CCVector2 implements Cloneable, Externalizable {
 	public static double angle(CCVector2 theVec){
 		return CCMath.atan2(-theVec.y, theVec.x);
 	}
+    
+    public static CCVector2 toPolar(CCVector2 theCartesian){
+    	double radius = theCartesian.length();
+    	double angleInRadians = CCMath.acos( theCartesian.x / radius );
+    	return new CCVector2(angleInRadians, radius);
+    }
+    
+    public static CCVector2 toCartesian(CCVector2 thePolar){
+    	return new CCVector2(
+    		CCMath.cos( thePolar.x ) * thePolar.y,
+    		CCMath.sin( thePolar.x ) * thePolar.y
+    	);
+    }
 
 	@CCProperty(name = "x")
     public double x = 0;
