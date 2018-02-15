@@ -2,9 +2,6 @@ package cc.creativecomputing.controlui.timeline.view.track;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-
-import com.sun.prism.paint.Color;
 
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
