@@ -25,6 +25,10 @@
             <email>christian@riekoff.com</email>
         </developer>
     </developers>
+
+    <properties>
+        <lwjgl.version>3.1.6</lwjgl.version>
+    </properties>
     
     <modules>
         <module>cc-app</module>
