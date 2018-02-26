@@ -1,14 +1,30 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.control;
 
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.math.CCVector2;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public abstract class CCAsset <AssetType>{
@@ -92,13 +108,13 @@ public abstract class CCAsset <AssetType>{
 	
 	public void time(double theGlobalTime, double theEventTime, double theContentOffset){}
 	
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
-		if(theTimedEvent.content() == null || theTimedEvent.content().value() == null) {
-			return;
-		}
-		
-//		Point2D myPos = theView.controller().curveToViewSpace(new ControlPoint(theTimedEvent.time(),1));
-//		Point2D myEndPos = theView.controller().curveToViewSpace(new ControlPoint(theTimedEvent.endTime(),1));
+//	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+//		if(theTimedEvent.content() == null || theTimedEvent.content().value() == null) {
+//			return;
+//		}
+//		
+//		CCVector2 myPos = theView.controller().curveToViewSpace(new ControlPoint(theTimedEvent.time(),1));
+//		CCVector2 myEndPos = theView.controller().curveToViewSpace(new ControlPoint(theTimedEvent.endTime(),1));
 //		double width = myEndPos.getX() - myPos.getX();
 //		theG2d.setColor(new Color(0,0,0,100));
 //		
@@ -111,9 +127,9 @@ public abstract class CCAsset <AssetType>{
 //			myIndex--;
 //		}
 //		theG2d.drawString(myText.toString(), (int) myPos.getX() + 5, (int) myPos.getY() + 15);
-	}
+//	}
 	
-	public void reset(TimedEventPoint theTimedEvent){
+	public void reset(CCTimedEventPoint theTimedEvent){
 		theTimedEvent.contentOffset(0);
 	}
 	

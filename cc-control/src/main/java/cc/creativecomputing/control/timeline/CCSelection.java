@@ -14,29 +14,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.control.code.memorycompile;
+package cc.creativecomputing.control.timeline;
 
-import cc.creativecomputing.control.code.memorycompile.test.DynaClass;
-
-public class DemoMainClass {
-
+public class CCSelection extends CCTimeRange{
 	
+	public CCSelection() {
+		super();
+	}
 	
-    public static void main(final String[] args) {
-    	
-    	CCInMemoryExecutionManager myExecutionManager = new CCInMemoryExecutionManager(DynaClass.class, null);
-    	
-    	while(true){
+	public CCSelection(double theLowerBound, double theUpperBound) {
+		super(theLowerBound, theUpperBound);
+	}
 
-    		myExecutionManager.update();
-    		System.out.println(myExecutionManager.runMethod("toString"));
-	        
-    		try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-    }
 }

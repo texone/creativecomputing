@@ -1,33 +1,30 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.control.timeline.point;
 
 
-import cc.creativecomputing.control.timeline.TrackData;
+import cc.creativecomputing.control.timeline.CCTrackData;
 import cc.creativecomputing.io.data.CCDataObject;
 
 /**
  * @author christianriekoff
  * 
  */
-public class TimedEventPoint extends ControlPoint {
+public class CCTimedEventPoint extends CCControlPoint {
 	
 	
 	public static class TimedData{
@@ -61,7 +58,7 @@ public class TimedEventPoint extends ControlPoint {
 		}
 	}
 
-	private HandleControlPoint _myEndPoint;
+	private CCHandleControlPoint _myEndPoint;
 	
 	private long _myID;
 	
@@ -73,8 +70,8 @@ public class TimedEventPoint extends ControlPoint {
 	
 	private double _myContentOffset = 0;
 
-	public TimedEventPoint() {
-		super(ControlPointType.TIMED_EVENT);
+	public CCTimedEventPoint() {
+		super(CCControlPointType.TIMED_EVENT);
 	}
 	
 	public double contentOffset(){
@@ -85,8 +82,8 @@ public class TimedEventPoint extends ControlPoint {
 		_myContentOffset = theContentOffset;
 	}
 
-	public TimedEventPoint(double theTime, double theValue) {
-		super(theTime, theValue, ControlPointType.TIMED_EVENT);
+	public CCTimedEventPoint(double theTime, double theValue) {
+		super(theTime, theValue, CCControlPointType.TIMED_EVENT);
 		_myID = System.currentTimeMillis();
 	}
 	
@@ -122,11 +119,11 @@ public class TimedEventPoint extends ControlPoint {
 		return true;
 	}
 
-	public HandleControlPoint endPoint() {
+	public CCHandleControlPoint endPoint() {
 		return _myEndPoint;
 	}
 
-	public void endPoint(HandleControlPoint theEndPoint) {
+	public void endPoint(CCHandleControlPoint theEndPoint) {
 		_myEndPoint = theEndPoint;
 	}
 	
@@ -136,7 +133,7 @@ public class TimedEventPoint extends ControlPoint {
 	
 	public void endTime(double theEndTime) {
 		if(_myEndPoint == null) {
-			_myEndPoint = new HandleControlPoint(this, HandleType.TIME_END);
+			_myEndPoint = new CCHandleControlPoint(this, CCHandleType.TIME_END);
 		}
 		_myEndPoint.time(theEndTime);
 	}
@@ -147,7 +144,7 @@ public class TimedEventPoint extends ControlPoint {
 	 * @see de.artcom.timeline.model.ControlPoint#interpolateValue(double, de.artcom.timeline.model.TrackData)
 	 */
 	@Override
-	public double interpolateValue(double theTime, TrackData theData) {
+	public double interpolateValue(double theTime, CCTrackData theData) {
 		return value();
 	}
 	
@@ -155,8 +152,8 @@ public class TimedEventPoint extends ControlPoint {
 	 * @see de.artcom.timeline.model.points.ControlPoint#clone()
 	 */
 	@Override
-	public TimedEventPoint clone() {
-		TimedEventPoint myResult = new TimedEventPoint(_myTime, _myValue);
+	public CCTimedEventPoint clone() {
+		CCTimedEventPoint myResult = new CCTimedEventPoint(_myTime, _myValue);
 		myResult.endPoint(_myEndPoint);
 		return myResult;
 	}
@@ -180,9 +177,9 @@ public class TimedEventPoint extends ControlPoint {
 		_myID = theData.getLong("id");
 		_myEventType = theData.getString("eventType");
 		CCDataObject myEndHandleData = theData.getObject("end");
-		_myEndPoint = new HandleControlPoint(
+		_myEndPoint = new CCHandleControlPoint(
 			this, 
-			HandleType.TIME_END, 
+			CCHandleType.TIME_END, 
 			myEndHandleData.getDouble(TIME_ATTRIBUTE), 
 			myEndHandleData.getDouble(VALUE_ATTRIBUTE)
 		);

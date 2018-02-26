@@ -1,15 +1,31 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.control.timeline.point;
 
 
 import cc.creativecomputing.control.CCGradient;
-import cc.creativecomputing.control.timeline.TrackData;
+import cc.creativecomputing.control.timeline.CCTrackData;
 import cc.creativecomputing.core.CCBlendable;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCColor;
 
-public class ControlPoint {
+public class CCControlPoint {
 	
-	public enum ControlPointType {
+	public enum CCControlPointType {
 		STEP, 
 		LINEAR, 
 		BEZIER, 
@@ -20,7 +36,7 @@ public class ControlPoint {
 		TIMED_DATA_END
 	}
 
-    public enum HandleType{
+    public enum CCHandleType{
 		BEZIER_IN_HANDLE, BEZIER_OUT_HANDLE, TIME_END
 	}
 	
@@ -30,27 +46,27 @@ public class ControlPoint {
 	/**
 	 * Type of the curve after this point
 	 */
-	private ControlPointType _myType;
+	private CCControlPointType _myType;
 	
-	protected ControlPoint _myPrevious;
-	protected ControlPoint _myNext;
+	protected CCControlPoint _myPrevious;
+	protected CCControlPoint _myNext;
 	
 	protected double _myTime;
 	protected double _myValue;
 	
-	public ControlPoint() {
-		this(0, 0, ControlPointType.LINEAR);
+	public CCControlPoint() {
+		this(0, 0, CCControlPointType.LINEAR);
 	}
 	
-	public ControlPoint(ControlPointType theControlPointType) {
+	public CCControlPoint(CCControlPointType theControlPointType) {
 		this(0, 0, theControlPointType);
 	}
 
-	public ControlPoint(double theTime, double theValue) {
-		this(theTime, theValue, ControlPointType.LINEAR);
+	public CCControlPoint(double theTime, double theValue) {
+		this(theTime, theValue, CCControlPointType.LINEAR);
 	}
 	
-	public ControlPoint(double theTime, double theValue, ControlPointType theControlPointType) {
+	public CCControlPoint(double theTime, double theValue, CCControlPointType theControlPointType) {
 		_myTime = theTime;
 		_myValue = theValue;
 		
@@ -77,62 +93,62 @@ public class ControlPoint {
 	/**
 	 * @return the _myType
 	 */
-	public ControlPointType getType() {
+	public CCControlPointType type() {
 		return _myType;
 	}
 
 	/**
 	 * @param myType the _myType to set
 	 */
-	public void setType(ControlPointType theType) {
+	public void type(CCControlPointType theType) {
 		_myType = theType;
 	}
 	
-	public ControlPoint getPrevious() {
+	public CCControlPoint previous() {
 		return _myPrevious;
 	}
 	
-	public void setPrevious( ControlPoint thePoint ) {
+	public void previous( CCControlPoint thePoint ) {
 		if (thePoint == this) {
 			return;
 		}
 		_myPrevious = thePoint;
 	}
 	
-	public ControlPoint getNext() {
+	public CCControlPoint next() {
 		return _myNext;
 	}
 	
-	public void setNext( ControlPoint thePoint ) {
+	public void next( CCControlPoint thePoint ) {
 		if (thePoint == this) {
 			return;
 		}
 		_myNext = thePoint;
 	}
 	
-	public void append( ControlPoint thePoint) {
+	public void append( CCControlPoint thePoint) {
 		if (thePoint == this) {
 			return;
 		}
 		if (thePoint != null) {
-			thePoint.setPrevious(this);
+			thePoint.previous(this);
 			if (_myNext != null) {
-				_myNext.setPrevious(thePoint);
-				thePoint.setNext(_myNext);
+				_myNext.previous(thePoint);
+				thePoint.next(_myNext);
 			}
 		}
 		_myNext = thePoint;
 	}
 	
-	public void prepend( ControlPoint thePoint ) {
+	public void prepend( CCControlPoint thePoint ) {
 		if (thePoint == this) {
 			return;
 		}
 		if (thePoint != null) {
-			thePoint.setNext(this);
+			thePoint.next(this);
 			if (_myPrevious != null) {
-				_myPrevious.setNext( thePoint );
-				thePoint.setPrevious(_myPrevious);
+				_myPrevious.next( thePoint );
+				thePoint.previous(_myPrevious);
 			}
 		}
 		_myPrevious = thePoint;
@@ -154,7 +170,7 @@ public class ControlPoint {
 		_myTime = theTime;
 	}
 	
-	public double interpolateValue(double theTime, TrackData theData) {
+	public double interpolateValue(double theTime, CCTrackData theData) {
 		return _myValue;
 	}
 	
@@ -166,40 +182,40 @@ public class ControlPoint {
 		_myValue = theValue;
 	}
 
-    public double distance(final ControlPoint theOtherPoint) {
+    public double distance(final CCControlPoint theOtherPoint) {
         double myTimeDistance = _myTime - theOtherPoint.time();
         double myValueDistance = _myValue - theOtherPoint.value();
         return Math.sqrt(myTimeDistance*myTimeDistance + myValueDistance*myValueDistance);
     }
 	
-	public boolean isPrevious(ControlPoint thePoint) {
+	public boolean isPrevious(CCControlPoint thePoint) {
 		if (thePoint._myTime > _myTime) {
 			return true;
 		} else if (thePoint._myTime < _myTime) {
 			return false;
 		}
-		ControlPoint myCurrent = _myNext;
+		CCControlPoint myCurrent = _myNext;
 		while ( myCurrent != null ) {
 			if (myCurrent == thePoint) {
 				return true;
 			}
-			myCurrent = myCurrent.getNext();
+			myCurrent = myCurrent.next();
 		}
 		return false;
 	}
 	
-	public boolean isNext(ControlPoint thePoint) {
+	public boolean isNext(CCControlPoint thePoint) {
 		if (thePoint._myTime < _myTime) {
 			return true;
 		} else if (thePoint._myTime > _myTime) {
 			return false;
 		}
-		ControlPoint myCurrent = _myPrevious;
+		CCControlPoint myCurrent = _myPrevious;
 		while( myCurrent != null ) {
 			if (myCurrent == thePoint) {
 				return true;
 			}
-			myCurrent = myCurrent.getPrevious();
+			myCurrent = myCurrent.previous();
 		}
 		return false;
 	}
@@ -209,17 +225,17 @@ public class ControlPoint {
 		_myPrevious = null;
 	}
 	
-	public ControlPoint clone() {
-		return new ControlPoint(_myTime, _myValue);
+	public CCControlPoint clone() {
+		return new CCControlPoint(_myTime, _myValue);
 	}
 	
 
 	@Override
 	public boolean equals(Object theObj) {
-		if(!(theObj instanceof ControlPoint)) {
+		if(!(theObj instanceof CCControlPoint)) {
 			return false;
 		}
-		return ((ControlPoint)theObj).time() == _myTime && ((ControlPoint)theObj).value() == _myValue;
+		return ((CCControlPoint)theObj).time() == _myTime && ((CCControlPoint)theObj).value() == _myValue;
 	}
 	
 	public String toString() {

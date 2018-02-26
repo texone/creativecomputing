@@ -1,15 +1,30 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.control.timeline;
-
-import java.awt.Color;
 
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
+import cc.creativecomputing.math.CCColor;
 
-public abstract class AbstractTrack {
+public abstract class CCAbstractTrack {
 
 	protected final CCPropertyHandle<?> _myProperty;
 	
-	private Color _myColor;
+	private CCColor _myColor;
 	
 	private boolean _myMuteFlag;
 	
@@ -18,7 +33,7 @@ public abstract class AbstractTrack {
 	protected double _myMin = 0;
 	protected double _myMax = 1;
 
-	public AbstractTrack(CCPropertyHandle<?> theProperty) {
+	public CCAbstractTrack(CCPropertyHandle<?> theProperty) {
 		_myMuteFlag = false;
 		_myProperty = theProperty;
 		if(_myProperty instanceof CCNumberPropertyHandle<?>) {
@@ -31,7 +46,7 @@ public abstract class AbstractTrack {
 				_myMax = myNumberHandle.value().doubleValue() + 10;
 			}
 		}
-		_myColor = Color.lightGray;
+		_myColor = CCColor.LIGHT_GRAY;
 	}
 	
 	public CCPropertyHandle<?> property() {
@@ -63,11 +78,11 @@ public abstract class AbstractTrack {
 		_myMax = theMax;
 	}
 	
-	public Color color() {
+	public CCColor color() {
 		return _myColor;
 	}
 	
-	public void color(Color theColor) {
+	public void color(CCColor theColor) {
 		_myColor = theColor;
 	}
 }

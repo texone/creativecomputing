@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.control.timeline;
 
 import java.util.ArrayList;
@@ -7,26 +23,26 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
-import cc.creativecomputing.control.timeline.point.BezierControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
+import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataObject;
-import cc.creativecomputing.control.timeline.point.LinearControlPoint;
-import cc.creativecomputing.control.timeline.point.MarkerPoint;
-import cc.creativecomputing.control.timeline.point.StepControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCLinearControlPoint;
+import cc.creativecomputing.control.timeline.point.CCMarkerPoint;
+import cc.creativecomputing.control.timeline.point.CCStepControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.math.CCMath;
 
-public class TrackData extends TreeSet<ControlPoint>{
+public class CCTrackData extends TreeSet<CCControlPoint>{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6993915141725326263L;
 
-	private static class TimelineComparator implements Comparator<ControlPoint> {
-		public int compare(ControlPoint p1, ControlPoint p2) {
+	private static class TimelineComparator implements Comparator<CCControlPoint> {
+		public int compare(CCControlPoint p1, CCControlPoint p2) {
 			if (p1.time() < p2.time()) {
 				return -1;
 			} else if (p1.time() == p2.time()) {
@@ -39,9 +55,9 @@ public class TrackData extends TreeSet<ControlPoint>{
 	private int _mySize = 0;
 	protected boolean _myDirtyFlag = false;
 	
-	protected Track _myTrack;
+	protected CCTrack _myTrack;
 
-	public TrackData(Track theTrack) {
+	public CCTrackData(CCTrack theTrack) {
 		super(new TimelineComparator());
 		_myTrack = theTrack;
 	}
@@ -62,10 +78,10 @@ public class TrackData extends TreeSet<ControlPoint>{
 	 * Reverses the data of the given range
 	 */
 	public void reverse(double theStartTime, double theEndTime){
-		List<ControlPoint> myRangeCopy = copyRange(theStartTime, theEndTime);
+		List<CCControlPoint> myRangeCopy = copyRange(theStartTime, theEndTime);
 		removeAll(theStartTime, theEndTime);
 		
-		for(ControlPoint myPoint:myRangeCopy){
+		for(CCControlPoint myPoint:myRangeCopy){
 			double myNewTime = theEndTime - myPoint.time() + theStartTime;
 			myPoint.time(myNewTime);
 			add(myPoint);
@@ -76,13 +92,13 @@ public class TrackData extends TreeSet<ControlPoint>{
 	/**
 	 * @param thePoint
 	 */
-	public boolean add(ControlPoint thePoint) {
+	public boolean add(CCControlPoint thePoint) {
 
 		_mySize += 1;
 		_myDirtyFlag = true;
 		
 		if (contains(thePoint)) {
-			ControlPoint myTreeLeaf = floor(thePoint);
+			CCControlPoint myTreeLeaf = floor(thePoint);
 			if (myTreeLeaf.equals(thePoint)) {
 				_mySize -=1;
 				_myDirtyFlag = false;
@@ -98,12 +114,12 @@ public class TrackData extends TreeSet<ControlPoint>{
 		} else { // new leaf
 			super.add(thePoint);
 			thePoint.cutLoose();
-			ControlPoint myLower = lower(thePoint);
+			CCControlPoint myLower = lower(thePoint);
 			if (myLower != null) {
 				myLower = getLastOnSamePosition(myLower);
 				myLower.append(thePoint);
 			}
-			ControlPoint myHigher = higher(thePoint);
+			CCControlPoint myHigher = higher(thePoint);
 			if (myHigher != null) {
 				myHigher.prepend(thePoint);
 			}
@@ -111,8 +127,8 @@ public class TrackData extends TreeSet<ControlPoint>{
 		return true;
 	}
 
-	public ControlPoint createSamplePoint(double theTime) {
-		return new ControlPoint(theTime, 0);
+	public CCControlPoint createSamplePoint(double theTime) {
+		return new CCControlPoint(theTime, 0);
 	}
 
 	/**
@@ -121,34 +137,34 @@ public class TrackData extends TreeSet<ControlPoint>{
 	 * @param theTime
 	 * @return
 	 */
-	public ControlPoint getFirstPointAt(double theTime) {
-		return ceiling(new ControlPoint(theTime, 0));
+	public CCControlPoint getFirstPointAt(double theTime) {
+		return ceiling(new CCControlPoint(theTime, 0));
 	}
 
-	public ControlPoint getLastOnSamePosition(ControlPoint thePoint) {
+	public CCControlPoint getLastOnSamePosition(CCControlPoint thePoint) {
 		if (!contains(thePoint)) {
 			return thePoint;
 		} else {
-			ControlPoint myTreeLeaf = floor(thePoint);
+			CCControlPoint myTreeLeaf = floor(thePoint);
 			if(myTreeLeaf == null)return thePoint;
 			while (myTreeLeaf.hasNext()) {
-				if (myTreeLeaf.getNext().time() != thePoint.time()) {
+				if (myTreeLeaf.next().time() != thePoint.time()) {
 					return myTreeLeaf;
 				} else {
-					myTreeLeaf = myTreeLeaf.getNext();
+					myTreeLeaf = myTreeLeaf.next();
 				}
 			}
 			return myTreeLeaf;
 		}
 	}
 
-	public ControlPoint getLastPointAt(double theTime) {
-		return getLastOnSamePosition(ceiling(new ControlPoint(theTime, 0)));
+	public CCControlPoint getLastPointAt(double theTime) {
+		return getLastOnSamePosition(ceiling(new CCControlPoint(theTime, 0)));
 	}
 
-	public ControlPoint getLastPoint() {
+	public CCControlPoint getLastPoint() {
 		try {
-			ControlPoint myLast = last();
+			CCControlPoint myLast = last();
 			return getLastOnSamePosition(myLast);
 		} catch (NoSuchElementException e) {
 			return null;
@@ -160,7 +176,7 @@ public class TrackData extends TreeSet<ControlPoint>{
 	 * @return
 	 */
 	public double getLastTime(){
-		ControlPoint myLastPoint = getLastPoint();
+		CCControlPoint myLastPoint = getLastPoint();
 		if (myLastPoint != null) {
 			return myLastPoint.time();
 		}
@@ -181,9 +197,9 @@ public class TrackData extends TreeSet<ControlPoint>{
 			return 0.0;
 		}
 		
-		ControlPoint mySample = createSamplePoint(theTime);
-		ControlPoint myLower = lower(mySample);
-		ControlPoint myCeiling = ceiling(mySample);
+		CCControlPoint mySample = createSamplePoint(theTime);
+		CCControlPoint myLower = lower(mySample);
+		CCControlPoint myCeiling = ceiling(mySample);
 
 		if (myLower == null) {
 			if (myCeiling != null) {
@@ -204,7 +220,7 @@ public class TrackData extends TreeSet<ControlPoint>{
 		return 0.0;
 	}
 
-	private void insertBefore(ControlPoint theLocation, ControlPoint theInsertion) {
+	private void insertBefore(CCControlPoint theLocation, CCControlPoint theInsertion) {
 		theLocation.prepend(theInsertion);
 		// the first element in the double linked list at the same x position
 		// becomes the new tree leaf
@@ -220,22 +236,22 @@ public class TrackData extends TreeSet<ControlPoint>{
 	 * @param theEndTime
 	 * @return
 	 */
-	public ArrayList<ControlPoint> rangeList(double theStartTime, double theEndTime) {
-		ArrayList<ControlPoint> myRange = new ArrayList<ControlPoint>();
+	public ArrayList<CCControlPoint> rangeList(double theStartTime, double theEndTime) {
+		ArrayList<CCControlPoint> myRange = new ArrayList<CCControlPoint>();
 		
-		ControlPoint myMinPoint = ceiling(new ControlPoint(theStartTime, 0));
+		CCControlPoint myMinPoint = ceiling(new CCControlPoint(theStartTime, 0));
 
 		if (myMinPoint == null || myMinPoint.time() > theEndTime) {
 			return myRange;
 		}
-		ControlPoint myMaxPoint = floor(new ControlPoint(theEndTime, 0));
+		CCControlPoint myMaxPoint = floor(new CCControlPoint(theEndTime, 0));
 
 		myMaxPoint = getLastOnSamePosition(myMaxPoint);
-		ControlPoint myCurrentPoint = myMinPoint;
+		CCControlPoint myCurrentPoint = myMinPoint;
 
 		while (myCurrentPoint != null && myCurrentPoint != myMaxPoint) {
 			myRange.add(myCurrentPoint);
-			myCurrentPoint = myCurrentPoint.getNext();
+			myCurrentPoint = myCurrentPoint.next();
 		}
 		myRange.add(myMaxPoint);
 		return myRange;
@@ -249,18 +265,18 @@ public class TrackData extends TreeSet<ControlPoint>{
 	 * @param theEndTime
 	 * @return
 	 */	
-	public ArrayList<ControlPoint> copyRange(double theStartTime, double theEndTime) {
-		ArrayList<ControlPoint> myRange = rangeList(theStartTime, theEndTime);
-		ArrayList<ControlPoint> myCopy = new ArrayList<ControlPoint>();
-		Iterator<ControlPoint> it = myRange.iterator();
+	public ArrayList<CCControlPoint> copyRange(double theStartTime, double theEndTime) {
+		ArrayList<CCControlPoint> myRange = rangeList(theStartTime, theEndTime);
+		ArrayList<CCControlPoint> myCopy = new ArrayList<CCControlPoint>();
+		Iterator<CCControlPoint> it = myRange.iterator();
 
-		ControlPoint myControlPoint = null;
+		CCControlPoint myControlPoint = null;
 		while (it.hasNext()) {
-			ControlPoint myNext = it.next().clone();
+			CCControlPoint myNext = it.next().clone();
 			myNext.cutLoose();
 			if (myControlPoint != null) {
-				myControlPoint.setNext(myNext);
-				myNext.setPrevious(myControlPoint);
+				myControlPoint.next(myNext);
+				myNext.previous(myControlPoint);
 			}
 			myCopy.add(myNext);
 			myControlPoint = myNext;
@@ -270,33 +286,33 @@ public class TrackData extends TreeSet<ControlPoint>{
 
 	}
 
-	public ArrayList<ControlPoint> rangeList(double theMinValue) {
-		ArrayList<ControlPoint> myRange = new ArrayList<ControlPoint>();
-		ControlPoint myMinPoint = ceiling(new ControlPoint(theMinValue, 0));
+	public ArrayList<CCControlPoint> rangeList(double theMinValue) {
+		ArrayList<CCControlPoint> myRange = new ArrayList<CCControlPoint>();
+		CCControlPoint myMinPoint = ceiling(new CCControlPoint(theMinValue, 0));
 
 		if (myMinPoint == null) {
 			return myRange;
 		}
 
-		ControlPoint myCurrentPoint = myMinPoint;
+		CCControlPoint myCurrentPoint = myMinPoint;
 
 		while (myCurrentPoint != null) {
 			myRange.add(myCurrentPoint);
-			myCurrentPoint = myCurrentPoint.getNext();
+			myCurrentPoint = myCurrentPoint.next();
 		}
 		return myRange;
 	}
 
 	
-	public boolean remove(ControlPoint thePoint) {
+	public boolean remove(CCControlPoint thePoint) {
 		boolean myResult = false;
 		if (contains(thePoint)) { // we have one ore more points at the location
-			ControlPoint myTreeLeaf = floor(thePoint); // get the tree leaf
+			CCControlPoint myTreeLeaf = floor(thePoint); // get the tree leaf
 			if (myTreeLeaf == thePoint) { // we are removing the leaf
 				
 				if (myTreeLeaf.hasNext()) { // maybe add a new leaf
 					super.remove(myTreeLeaf);
-					super.add(myTreeLeaf.getNext()); // this will replace the old leaf
+					super.add(myTreeLeaf.next()); // this will replace the old leaf
 				} else {
 					super.remove(myTreeLeaf);
 				}
@@ -305,10 +321,10 @@ public class TrackData extends TreeSet<ControlPoint>{
 		}
 		// update double linked list
 		if (thePoint.hasPrevious()) {
-			thePoint.getPrevious().setNext(thePoint.getNext());
+			thePoint.previous().next(thePoint.next());
 		}
 		if (thePoint.hasNext()) {
-			thePoint.getNext().setPrevious(thePoint.getPrevious());
+			thePoint.next().previous(thePoint.previous());
 		}
 		_mySize -= 1;
 		_myDirtyFlag = true;
@@ -316,7 +332,7 @@ public class TrackData extends TreeSet<ControlPoint>{
 		return myResult;
 	}
 
-	public void move(ControlPoint thePoint, ControlPoint theTargetLocation) {
+	public void move(CCControlPoint thePoint, CCControlPoint theTargetLocation) {
 		boolean rebuild_search_tree = true;//thePoint.getTime() != theTargetLocation.getTime();
 		if (rebuild_search_tree) {
 			remove(thePoint);
@@ -335,42 +351,42 @@ public class TrackData extends TreeSet<ControlPoint>{
 	 * @param theMaxValue
 	 */
 	public void removeAll(double theMinValue, double theMaxValue) {
-		ArrayList<ControlPoint> myRange = rangeList(theMinValue, theMaxValue);
+		ArrayList<CCControlPoint> myRange = rangeList(theMinValue, theMaxValue);
 		if (myRange.size() == 0) {
 			return;
 		}
 		// connect the point before
-		ControlPoint myLower = lower(myRange.get(0));
-		ControlPoint myHigher = higher(myRange.get(myRange.size() - 1));
+		CCControlPoint myLower = lower(myRange.get(0));
+		CCControlPoint myHigher = higher(myRange.get(myRange.size() - 1));
 		if (myLower != null) {
 			myLower = getLastOnSamePosition(myLower);
-			myLower.setNext(myHigher);
+			myLower.next(myHigher);
 			if (myHigher != null) {
-				myHigher.setPrevious(myLower);
+				myHigher.previous(myLower);
 			}
 		} else if (myHigher != null) {
-			myHigher.setPrevious(null);
+			myHigher.previous(null);
 		}
-		for (ControlPoint myCurrentPoint : myRange) {
+		for (CCControlPoint myCurrentPoint : myRange) {
 			remove(myCurrentPoint);
 		}
 	}
 
-	public void replaceAll(double theKey, double theRange, ArrayList<ControlPoint> theArray) {
+	public void replaceAll(double theKey, double theRange, ArrayList<CCControlPoint> theArray) {
 		if (theArray.size() == 0) {
 			return;
 		}
 		
 		removeAll(theKey, theKey + theRange);
-		for (ControlPoint myPoint : theArray) {
+		for (CCControlPoint myPoint : theArray) {
 			myPoint.cutLoose();
-			ControlPoint myClone = myPoint.clone();
+			CCControlPoint myClone = myPoint.clone();
 			myClone.time(myPoint.time() + theKey);
 			add(myClone);
 		}
 	}
 
-	public void insertAll(double theInsertTime, double theRange, ArrayList<ControlPoint> theArray) {
+	public void insertAll(double theInsertTime, double theRange, ArrayList<CCControlPoint> theArray) {
 		if (theArray.size() == 0) {
 			return;
 		}
@@ -387,12 +403,12 @@ public class TrackData extends TreeSet<ControlPoint>{
 	 * @param theAddRangePoints if this is true points are added to 
 	 */
 	public void insertTime(double theInsertTime, double theTime, boolean theAddRangePoints) {
-		ControlPoint myCurrentPoint = ceiling(new ControlPoint(theInsertTime, 0));
-		ArrayList<ControlPoint> myTmpList = new ArrayList<ControlPoint>();
+		CCControlPoint myCurrentPoint = ceiling(new CCControlPoint(theInsertTime, 0));
+		ArrayList<CCControlPoint> myTmpList = new ArrayList<CCControlPoint>();
 		while (myCurrentPoint != null) {
 			myCurrentPoint.time(myCurrentPoint.time() + theTime);
 			myTmpList.add(myCurrentPoint);
-			myCurrentPoint = myCurrentPoint.getNext();
+			myCurrentPoint = myCurrentPoint.next();
 		}
 	}
 	
@@ -402,16 +418,16 @@ public class TrackData extends TreeSet<ControlPoint>{
 	
 	public void cutRangeAndTime(double theInsertTime, double theTime){
 		removeAll(theInsertTime, theInsertTime + theTime);
-		ControlPoint myCurrentPoint = ceiling(new ControlPoint(theInsertTime, 0));
-		ArrayList<ControlPoint> myTmpList = new ArrayList<ControlPoint>();
+		CCControlPoint myCurrentPoint = ceiling(new CCControlPoint(theInsertTime, 0));
+		ArrayList<CCControlPoint> myTmpList = new ArrayList<CCControlPoint>();
 		double myLastTime = 0;
 		while (myCurrentPoint != null) {
-			ControlPoint myPoint = myCurrentPoint.clone();
+			CCControlPoint myPoint = myCurrentPoint.clone();
 			myPoint.time(myCurrentPoint.time()- theInsertTime - theTime);
 			myLastTime = myCurrentPoint.time();
 			myPoint.value(myCurrentPoint.value());
 			myTmpList.add(myPoint);
-			myCurrentPoint = myCurrentPoint.getNext();
+			myCurrentPoint = myCurrentPoint.next();
 		}
 
 		removeAll( theInsertTime + theTime, myLastTime);
@@ -421,10 +437,10 @@ public class TrackData extends TreeSet<ControlPoint>{
 	public void cutRange(double theMinValue, double theMaxValue) {
 		removeAll(theMinValue, theMaxValue);
 		double myRange = theMaxValue - theMinValue;
-		ControlPoint myCurrentPoint = ceiling(new ControlPoint(theMaxValue, 0));
+		CCControlPoint myCurrentPoint = ceiling(new CCControlPoint(theMaxValue, 0));
 		while (myCurrentPoint != null) {
-			this.move(myCurrentPoint, new ControlPoint(myCurrentPoint.time() - myRange, myCurrentPoint.value()));
-			myCurrentPoint = myCurrentPoint.getNext();
+			this.move(myCurrentPoint, new CCControlPoint(myCurrentPoint.time() - myRange, myCurrentPoint.value()));
+			myCurrentPoint = myCurrentPoint.next();
 		}
 	}
 	
@@ -434,75 +450,75 @@ public class TrackData extends TreeSet<ControlPoint>{
 		
 		double myMoveRange = myScaledTime - myTime;
 		
-		ControlPoint myCurrentPoint = ceiling(new ControlPoint(theEndTime, 0));
+		CCControlPoint myCurrentPoint = ceiling(new CCControlPoint(theEndTime, 0));
 		while (myCurrentPoint != null) {
-			move(myCurrentPoint, new ControlPoint(myCurrentPoint.time() + myMoveRange, myCurrentPoint.value()));
-			myCurrentPoint = myCurrentPoint.getNext();
+			move(myCurrentPoint, new CCControlPoint(myCurrentPoint.time() + myMoveRange, myCurrentPoint.value()));
+			myCurrentPoint = myCurrentPoint.next();
 		}
 		
-		ArrayList<ControlPoint> myRange = rangeList(theStartTime, theEndTime);
+		ArrayList<CCControlPoint> myRange = rangeList(theStartTime, theEndTime);
 		if (myRange.size() == 0) {
 			return;
 		}
 		
-		for(ControlPoint myControlPoint : myRange) {
+		for(CCControlPoint myControlPoint : myRange) {
 			myTime = myControlPoint.time() - theStartTime;
 			myScaledTime = myTime * theScale;
 			myMoveRange = myScaledTime - myTime;
 			
-			move(myCurrentPoint, new ControlPoint(myCurrentPoint.time() + myMoveRange, myCurrentPoint.value()));
-			myCurrentPoint = myCurrentPoint.getNext();
+			move(myCurrentPoint, new CCControlPoint(myCurrentPoint.time() + myMoveRange, myCurrentPoint.value()));
+			myCurrentPoint = myCurrentPoint.next();
 		}
 	}
 	
 	public void scaleRange(double theStartTime1, double theEndTime1, double theStartTime2, double theEndTime2) {
 		if(theEndTime2 - theStartTime2 > theEndTime1 - theStartTime1){
 			//move points at the end
-			ControlPoint myCurrentPoint = ceiling(new ControlPoint(theEndTime1, 0));
+			CCControlPoint myCurrentPoint = ceiling(new CCControlPoint(theEndTime1, 0));
 			double myEndMove = theEndTime2 - theEndTime1;
 			while (myCurrentPoint != null) {
-				move(myCurrentPoint, new ControlPoint(myCurrentPoint.time() + myEndMove, myCurrentPoint.value()));
-				myCurrentPoint = myCurrentPoint.getNext();
+				move(myCurrentPoint, new CCControlPoint(myCurrentPoint.time() + myEndMove, myCurrentPoint.value()));
+				myCurrentPoint = myCurrentPoint.next();
 			}
 			
 			//move points at the start
-			myCurrentPoint = floor(new ControlPoint(theStartTime1, 0));
+			myCurrentPoint = floor(new CCControlPoint(theStartTime1, 0));
 			double myStartMove = theStartTime2 - theStartTime1;
 			while (myCurrentPoint != null) {
-				move(myCurrentPoint, new ControlPoint(myCurrentPoint.time() + myStartMove, myCurrentPoint.value()));
-				myCurrentPoint = myCurrentPoint.getPrevious();
+				move(myCurrentPoint, new CCControlPoint(myCurrentPoint.time() + myStartMove, myCurrentPoint.value()));
+				myCurrentPoint = myCurrentPoint.previous();
 			}
 			
-			ArrayList<ControlPoint> myRange = rangeList(theStartTime1, theEndTime1);
+			ArrayList<CCControlPoint> myRange = rangeList(theStartTime1, theEndTime1);
 			
-			for(ControlPoint myControlPoint : myRange) {
+			for(CCControlPoint myControlPoint : myRange) {
 				double myNewTime = CCMath.map(myControlPoint.time(), theStartTime1, theEndTime1, theStartTime2, theEndTime2);
-				move(myControlPoint, new ControlPoint(myNewTime, myControlPoint.value()));
-				myControlPoint = myControlPoint.getNext();
+				move(myControlPoint, new CCControlPoint(myNewTime, myControlPoint.value()));
+				myControlPoint = myControlPoint.next();
 			}
 		}else{
-			ArrayList<ControlPoint> myRange = rangeList(theStartTime1, theEndTime1);
+			ArrayList<CCControlPoint> myRange = rangeList(theStartTime1, theEndTime1);
 			
-			for(ControlPoint myControlPoint : myRange) {
+			for(CCControlPoint myControlPoint : myRange) {
 				double myNewTime = CCMath.map(myControlPoint.time(), theStartTime1, theEndTime1, theStartTime2, theEndTime2);
-				move(myControlPoint, new ControlPoint(myNewTime, myControlPoint.value()));
-				myControlPoint = myControlPoint.getNext();
+				move(myControlPoint, new CCControlPoint(myNewTime, myControlPoint.value()));
+				myControlPoint = myControlPoint.next();
 			}
 			
 			//move points at the end
-			ControlPoint myCurrentPoint = ceiling(new ControlPoint(theEndTime1, 0));
+			CCControlPoint myCurrentPoint = ceiling(new CCControlPoint(theEndTime1, 0));
 			double myEndMove = theEndTime2 - theEndTime1;
 			while (myCurrentPoint != null) {
-				move(myCurrentPoint, new ControlPoint(myCurrentPoint.time() + myEndMove, myCurrentPoint.value()));
-				myCurrentPoint = myCurrentPoint.getNext();
+				move(myCurrentPoint, new CCControlPoint(myCurrentPoint.time() + myEndMove, myCurrentPoint.value()));
+				myCurrentPoint = myCurrentPoint.next();
 			}
 			
 			//move points at the start
-			myCurrentPoint = floor(new ControlPoint(theStartTime1, 0));
+			myCurrentPoint = floor(new CCControlPoint(theStartTime1, 0));
 			double myStartMove = theStartTime2 - theStartTime1;
 			while (myCurrentPoint != null) {
-				move(myCurrentPoint, new ControlPoint(myCurrentPoint.time() + myStartMove, myCurrentPoint.value()));
-				myCurrentPoint = myCurrentPoint.getPrevious();
+				move(myCurrentPoint, new CCControlPoint(myCurrentPoint.time() + myStartMove, myCurrentPoint.value()));
+				myCurrentPoint = myCurrentPoint.previous();
 			}
 		}
 		
@@ -512,9 +528,9 @@ public class TrackData extends TreeSet<ControlPoint>{
 		return _mySize;
 	}
 
-	public boolean isLeaf(ControlPoint thePoint) {
+	public boolean isLeaf(CCControlPoint thePoint) {
 		if (contains(thePoint)) {
-			ControlPoint myTreeLeaf = floor(thePoint);
+			CCControlPoint myTreeLeaf = floor(thePoint);
             return myTreeLeaf.equals(thePoint);
 		}
 		return false;
@@ -528,10 +544,10 @@ public class TrackData extends TreeSet<ControlPoint>{
 	
 	public CCDataObject data(double theStartTime, double theEndTime) {
 		CCDataObject myTrackData = new CCDataObject();
-		ArrayList<ControlPoint> myPoints = rangeList(theStartTime, theEndTime);
+		ArrayList<CCControlPoint> myPoints = rangeList(theStartTime, theEndTime);
 	
 		CCDataArray myPointDataArray = new CCDataArray();
-		for (ControlPoint myPoint:myPoints) {
+		for (CCControlPoint myPoint:myPoints) {
 			CCDataObject myControlPointData = myPoint.data(theStartTime, theEndTime);
 			myPointDataArray.add(myControlPointData);
 		}
@@ -539,28 +555,28 @@ public class TrackData extends TreeSet<ControlPoint>{
 		return myTrackData;
 	}
 	
-	private ControlPoint createPoint(CCDataObject theData){
-		ControlPoint myPoint;
-		ControlPointType myType = ControlPointType.valueOf(theData.getString(ControlPoint.CONTROL_POINT_TYPE_ATTRIBUTE));
+	private CCControlPoint createPoint(CCDataObject theData){
+		CCControlPoint myPoint;
+		CCControlPointType myType = CCControlPointType.valueOf(theData.getString(CCControlPoint.CONTROL_POINT_TYPE_ATTRIBUTE));
 			
 		switch(myType) {
 		case STEP:
-			myPoint = new StepControlPoint();
+			myPoint = new CCStepControlPoint();
 			break;
 		case LINEAR:
-			myPoint = new LinearControlPoint();
+			myPoint = new CCLinearControlPoint();
 			break;
 		case BEZIER:
-			myPoint = new BezierControlPoint();
+			myPoint = new CCBezierControlPoint();
 			break;
 		case MARKER:
-			myPoint = new MarkerPoint();
+			myPoint = new CCMarkerPoint();
 			break;
 		case TIMED_EVENT:
-			myPoint = new TimedEventPoint();
+			myPoint = new CCTimedEventPoint();
 			break;
 		default:
-			myPoint = new LinearControlPoint();
+			myPoint = new CCLinearControlPoint();
 		}
 		myPoint.data(theData);
 		return myPoint;
@@ -580,7 +596,7 @@ public class TrackData extends TreeSet<ControlPoint>{
 		CCDataArray myPointDataArray = theData.getArray("points");
 		for (Object myControlPointObject:myPointDataArray) {
 			CCDataObject myControlPointData = (CCDataObject)myControlPointObject;
-			ControlPoint myPoint = createPoint(myControlPointData);
+			CCControlPoint myPoint = createPoint(myControlPointData);
 			myPoint.time(myPoint.time() + theTime);
 			add(myPoint);
 		}

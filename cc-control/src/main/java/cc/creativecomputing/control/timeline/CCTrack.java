@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.control.timeline;
 
 import java.nio.file.Path;
@@ -7,19 +23,17 @@ import java.util.Map;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.io.data.CCDataObject;
 
-public class Track extends AbstractTrack{
+public class CCTrack extends CCAbstractTrack{
 
-	private TrackData _myTrackData;
-    
-    private boolean _myAccumulateData = false;
+	private CCTrackData _myTrackData;
 	
 	private Map<String, String> _myExtras;
 
 	
 	
-	public Track(CCPropertyHandle<?> theProperty){
+	public CCTrack(CCPropertyHandle<?> theProperty){
 		super(theProperty);
-		_myTrackData = new TrackData(this);
+		_myTrackData = new CCTrackData(this);
 	}
 	
 	public void extras(Map<String, String> theExtras) {
@@ -35,23 +49,11 @@ public class Track extends AbstractTrack{
 		_myExtras.put(theKey, theValue);
 	}
 	
-	public void accumulateData(final boolean theAccumulateData) {
-		_myAccumulateData = theAccumulateData;
-		
-		if(_myAccumulateData && !(_myTrackData instanceof AccumulatedTrackData)) {
-			_myTrackData = new AccumulatedTrackData(this);
-		}
-	}
-	
-	public boolean accumulateData() {
-		return _myAccumulateData;
-	}
-	
-	public TrackData trackData() {
+	public CCTrackData trackData() {
 		return _myTrackData;
 	}
 	
-	public void trackData(TrackData theTrackData) {
+	public void trackData(CCTrackData theTrackData) {
 		_myTrackData = theTrackData;
 		_myDirtyFlag = false;
 	}
@@ -69,7 +71,6 @@ public class Track extends AbstractTrack{
 	private static final String TRACK_EXTRAS = "Extras";
 	public static final String PATH_ATTRIBUTE = "path";
 	private static final String MUTE_ATTRIBUTE = "mute";
-	private static final String ACCUMULATE_ATTRIBUTE = "accumulate";
 	private static final String MIN_ATTRIBUTE = "min";
 	private static final String MAX_ATTRIBUTE = "max";
 	
@@ -77,10 +78,9 @@ public class Track extends AbstractTrack{
 		CCDataObject myTrackData = new CCDataObject();
 		myTrackData.put(PATH_ATTRIBUTE, path().toString());
 		myTrackData.put(MUTE_ATTRIBUTE, mute());
-		myTrackData.put(ACCUMULATE_ATTRIBUTE, accumulateData());
 		myTrackData.put(MIN_ATTRIBUTE, min());
 		myTrackData.put(MAX_ATTRIBUTE, max());
-		myTrackData.put(TrackData.TRACKDATA_ELEMENT, trackData().data(theStart, theEnd));
+		myTrackData.put(CCTrackData.TRACKDATA_ELEMENT, trackData().data(theStart, theEnd));
 		
 		if(_myExtras != null && _myExtras.size() > 0) {
 			CCDataObject myExtraData = new CCDataObject();
@@ -97,9 +97,8 @@ public class Track extends AbstractTrack{
 		mute(theTrackData.getBoolean(MUTE_ATTRIBUTE));
 		min(theTrackData.getDouble(MIN_ATTRIBUTE, 0));
 		max(theTrackData.getDouble(MAX_ATTRIBUTE, 1));
-		accumulateData(theTrackData.getBoolean(ACCUMULATE_ATTRIBUTE, false));
 		
-		CCDataObject myTrackData = theTrackData.getObject(TrackData.TRACKDATA_ELEMENT);
+		CCDataObject myTrackData = theTrackData.getObject(CCTrackData.TRACKDATA_ELEMENT);
 //		TrackData myTrackData;
 //		if(accumulateData()) {
 //			myTrackData = new AccumulatedTrackData(this);
@@ -120,7 +119,7 @@ public class Track extends AbstractTrack{
 	}
 	
 	public void insertData(CCDataObject theTrackData, double theTime){
-		CCDataObject myTrackData = theTrackData.getObject(TrackData.TRACKDATA_ELEMENT);
+		CCDataObject myTrackData = theTrackData.getObject(CCTrackData.TRACKDATA_ELEMENT);
 		_myTrackData.insert(myTrackData, theTime);
 		
 		CCDataObject myExtrasData = theTrackData.getObject(TRACK_EXTRAS);

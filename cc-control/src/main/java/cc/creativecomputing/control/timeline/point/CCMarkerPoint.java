@@ -14,44 +14,52 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.control.handles;
+package cc.creativecomputing.control.timeline.point;
 
-import cc.creativecomputing.control.CCEnvelope;
-import cc.creativecomputing.control.timeline.CCTrackData;
-import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
 
-public class CCEnvelopeHandle extends CCPropertyHandle<CCEnvelope>{
+/**
+ * @author christianriekoff
+ *
+ */
+public class CCMarkerPoint extends CCControlPoint{
 	
-	protected CCEnvelopeHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
-		super(theParent, theMember);
+	private String _myName;
+
+	public CCMarkerPoint() {
+		super(CCControlPointType.MARKER);
+	}
+
+	public CCMarkerPoint(double theTime, final String theName) {
+		super(theTime, 0, CCControlPointType.MARKER);
+		_myName = theName;
+	}
+
+	public String name() {
+		return _myName;
+	}
+	
+	public void name(String theName) {
+		_myName = theName;
 	}
 	
 	@Override
-	public CCDataObject data() {
-		CCDataObject myResult = super.data();
-		CCEnvelope myEnvelope = value();
-		CCTrackData myCurve = myEnvelope.curve();
-		myResult.put("curve", myCurve.data());
+	public CCMarkerPoint clone() {
+		return new CCMarkerPoint(time(), _myName);
+	}
+	
+	private static final String CONTROL_POINT_NAME_ATTRIBUTE = "name";
+	
+	@Override
+	public CCDataObject data(double theStartTime, double theEndTime) {
+		CCDataObject myResult = super.data(theStartTime, theEndTime);
+		myResult.put(CONTROL_POINT_NAME_ATTRIBUTE, _myName);
 		return myResult;
 	}
 	
 	@Override
 	public void data(CCDataObject theData) {
-		CCEnvelope myEnvelope = new CCEnvelope();
-		myEnvelope.curve().clear();
-		myEnvelope.curve().data(theData.getObject("curve"));
-		value(myEnvelope, true);
-	}
-	
-	@Override
-	public double normalizedValue() {
-		return 0;
-	}
-
-	@Override
-	public String valueString() {
-		return null;
+		super.data(theData);
+		_myName = theData.getString(CONTROL_POINT_NAME_ATTRIBUTE);
 	}
 }

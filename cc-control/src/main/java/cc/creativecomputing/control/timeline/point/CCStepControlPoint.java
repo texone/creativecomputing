@@ -14,35 +14,38 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.control;
+package cc.creativecomputing.control.timeline.point;
 
 import cc.creativecomputing.control.timeline.CCTrackData;
-import cc.creativecomputing.control.timeline.point.CCLinearControlPoint;
+import cc.creativecomputing.core.CCBlendable;
 
-public class CCEnvelope {
-	
-	private CCTrackData _myCurrentCurve = null;
-	
-	public CCEnvelope(){
-		_myCurrentCurve = new CCTrackData(null);
-		_myCurrentCurve.add(new CCLinearControlPoint(0, 0));
-		_myCurrentCurve.add(new CCLinearControlPoint(1, 1));
+public class CCStepControlPoint extends CCControlPoint{
+
+	public CCStepControlPoint() {
+		super(CCControlPointType.STEP);
+	}
+
+	public CCStepControlPoint(double theTime, double theValue) {
+		super(theTime, theValue, CCControlPointType.STEP);
 	}
 	
-	
-	
-	public CCTrackData curve(){
-		return _myCurrentCurve;
+	public CCStepControlPoint(CCControlPoint theControlPoint) {
+		this(theControlPoint.time(), theControlPoint.value());
 	}
 	
-	
-	
-	public double value(double theTime){
-		if(_myCurrentCurve == null)return 0;
-		try{
-			return _myCurrentCurve.value(theTime);
-		}catch(Exception e){
-			return 0;
+	public double interpolateValue(double theTime, CCTrackData theData) {
+		CCControlPoint myPrevious = previous();
+		
+		if(myPrevious != null) {
+			return myPrevious.value();
 		}
+		
+		return super.value();
+	}
+	
+	public CCControlPoint clone() {
+		CCControlPoint myCopy = new CCStepControlPoint(time(), value());
+		if(_myBlendable!= null)myCopy._myBlendable = (CCBlendable<?>)_myBlendable.clone();
+		return myCopy;
 	}
 }

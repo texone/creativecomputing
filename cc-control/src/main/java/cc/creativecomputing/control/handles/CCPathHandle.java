@@ -1,15 +1,30 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.control.handles;
 
-import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import cc.creativecomputing.control.CCAsset;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.math.CCVector2;
 
 public class CCPathHandle extends CCPropertyHandle<Path>{
 	
@@ -64,11 +79,11 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 		_myAsset.time(theGlobalTime, theEventTime, theContentOffset);
 	}
 	
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
-		_myAsset.renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
-	}
+//	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+//		_myAsset.renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
+//	}
 	
-	public void reset(TimedEventPoint theTimedEvent){
+	public void reset(CCTimedEventPoint theTimedEvent){
 		_myAsset.reset(theTimedEvent);
 	}
 	
