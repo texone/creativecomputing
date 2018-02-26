@@ -1,30 +1,36 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.view.menu;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
-import javax.swing.filechooser.FileFilter;
-
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.controller.FileManager;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
+import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.io.CCFileChooser;
-import cc.creativecomputing.io.CCFileFilter;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.ui.widget.CCUIMenu;
 
-public class SwingFileMenu extends JMenu{
+public class CCFileMenu extends CCUIMenu{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6837663569844298314L;
 	private final FileManager _myFileManager;
 	private final CCFileChooser _myFileChooser;
 	
@@ -56,12 +62,13 @@ public class SwingFileMenu extends JMenu{
 		}
 		
 		private void addRecentItem(Path thePath){
-			JMenuItem myFileItem = new JMenuItem(thePath.toString());
-			myFileItem.addActionListener(event ->{
-				_myFileChooser.setDirectory(thePath.getParent());
-				_myFileManager.loadProject(thePath);
-			});
-			myRecentItem.add(myFileItem);
+			myRecentItem.addItem(
+				thePath.toString(),
+				() ->{
+					_myFileChooser.setDirectory(thePath.getParent());
+					_myFileManager.loadProject(thePath);
+				}
+			);
 		}
 		
 		public void addFile(Path thePath){
@@ -89,65 +96,49 @@ public class SwingFileMenu extends JMenu{
 	
 	private CCRecentFileHandler _myRecentFileHandler;
 
-	public SwingFileMenu(TimelineContainer theTimelineContainer){
-		super("File");
+	public CCFileMenu(CCFont<?> theFont, CCTimelineContainer theTimelineContainer){
+		super(theFont);
 		_myFileManager = theTimelineContainer.fileManager();
 		
-		_myFileChooser = new CCFileChooser();
-		FileFilter myXMLFilter = new CCFileFilter("xml", "xml");
-		FileFilter myJSONFilter = new CCFileFilter("json", "json");
-		_myFileChooser.addChoosableFileFilter(myXMLFilter);
-		_myFileChooser.addChoosableFileFilter(myJSONFilter);
-		_myFileChooser.setFileFilter(myJSONFilter);
+		_myFileChooser = new CCFileChooser("xml", "json");
 		addTimelineFileItems();
 
 		_myRecentFileHandler = new CCRecentFileHandler();
 	}
 	
-	private JMenu myRecentItem;
+	private CCUIMenu myRecentItem;
 	
 	private void addTimelineFileItems(){
+		addItem(
+			"Load", 
+			() -> {
+				Path myPath = _myFileChooser.openFile("Load Project");
+				if (myPath == null) return;
+				_myFileManager.loadProject(myPath);
+				_myRecentFileHandler.addFile(myPath);
+			}
+		).toolTipText("Loads an existing project.");
 		
-		setMnemonic(KeyEvent.VK_F);
+		addItem(
+			"NEW",
+			() -> {
+				_myFileChooser.resetPath();
+				_myFileManager.newProject();
+			}
+		).toolTipText("Creates a new Project.");
 		
-		JMenuItem myLoadItem = new JMenuItem("Load");
-		myLoadItem.addActionListener(e -> {
-			Path myPath = _myFileChooser.chosePath("Load Project");
-			if (myPath == null) return;
-			_myFileManager.loadProject(myPath);
-			_myRecentFileHandler.addFile(myPath);
-			
-		});
-		myLoadItem.setToolTipText("Loads an existing project.");
-		myLoadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.META_MASK));
-		add(myLoadItem);
-		
-		JMenuItem myNewItem = new JMenuItem("New");
-		myNewItem.addActionListener(e -> {
-			_myFileChooser.resetPath();
-			_myFileManager.newProject();
-			
-		});
-		myNewItem.setToolTipText("Creates a new Project.");
-		myNewItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.META_MASK));
-		add(myNewItem);
-		
-		JMenuItem mySaveItem = new JMenuItem("Save");
-		mySaveItem.addActionListener(e -> {
-			Path myPath = _myFileChooser.chosePath("Save Project");
-			if(myPath != null){
+		addItem(
+			"Save",
+			() -> {
+				Path myPath = _myFileChooser.saveFile("Save Project");
+				if(myPath == null)return;
 				_myFileManager.saveProject(myPath);
 				_myRecentFileHandler.addFile(myPath);
 			}
-			
-		});
-		mySaveItem.setToolTipText("Saves the content of all tracks.");
-		mySaveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.META_MASK));
-		add(mySaveItem);
+		).toolTipText("Saves the content of all tracks.");
 		
-		myRecentItem = new JMenu("Recent");
-		myRecentItem.setToolTipText("Open a recent file.");
-		add(myRecentItem);
+		myRecentItem = new CCUIMenu(_myFont);
+		addItem("Recent").toolTipText("Open a recent file.");
 		
 //		JMenuItem mySaveAsItem = new JMenuItem("Save As ...");
 //		mySaveAsItem.addActionListener(new ActionListener() {
@@ -163,13 +154,13 @@ public class SwingFileMenu extends JMenu{
 //		mySaveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.META_MASK | ActionEvent.SHIFT_MASK));
 //		add(mySaveAsItem);
 //		
-		JMenuItem mySaveSelectionItem = new JMenuItem("Export Selection");
-		mySaveSelectionItem.addActionListener(e -> {
-			Path myPath = _myFileChooser.chosePath("save selection");
-			if (myPath != null) _myFileManager.exportCurrentTimelineSelection(myPath);
-		});
-		mySaveSelectionItem.setToolTipText("Saves the content of all tracks.");
-		add(mySaveSelectionItem);
+		addItem(
+			"Export Selection",
+			() -> {
+				Path myPath = _myFileChooser.saveFile("save selection");
+				if (myPath != null) _myFileManager.exportCurrentTimelineSelection(myPath);
+			}
+		).toolTipText("Saves the content of all tracks.");
 	}
 
 }

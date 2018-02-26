@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui;
 
 import java.awt.GridLayout;
@@ -30,8 +46,6 @@ public class CCControlTreeComponent extends JPanel {
 	private CCObjectPropertyHandle _myRootHandle;
 
 	private CCControlComponent _myControlCompoent;
-
-	private CCPropertyMap _myPropertyMap;
 	
 	private CCObjectControl _myLastControl;
 
@@ -69,8 +83,6 @@ public class CCControlTreeComponent extends JPanel {
 		JScrollPane treeView = new JScrollPane(_myTree);
 		treeView.setBorder(new EmptyBorder(0, 0, 0, 0));
 		add(treeView);
-
-		_myPropertyMap = new CCPropertyMap();
 
 		// add MouseListener to tree
 		MouseAdapter ma = new MouseAdapter() {
@@ -124,12 +136,5 @@ public class CCControlTreeComponent extends JPanel {
 		}
 	}
 
-	public CCObjectPropertyHandle rootHandle() {
-		return _myPropertyMap.rootHandle();
-	}
-
-	public CCPropertyMap propertyMap() {
-		return _myPropertyMap;
-	}
 
 }

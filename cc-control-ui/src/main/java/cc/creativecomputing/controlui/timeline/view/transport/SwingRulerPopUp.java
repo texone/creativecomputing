@@ -1,61 +1,50 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.transport;
 
-import java.awt.Component;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-
+import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.view.CCTextInputDialog;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.ui.widget.CCUIMenu;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-public class SwingRulerPopUp extends JPopupMenu {
+public class SwingRulerPopUp extends CCUIMenu {
 		
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7869280073371142253L;
 	protected CCTransportController _myTransportController;
-	private TimelineController _myTimelineController;
+	private CCTimelineController _myTimelineController;
 	
-	private SwingRulerView _myRulerView;
+	private CCRulerView _myRulerView;
 
-	public SwingRulerPopUp(SwingRulerView theRulerView, TimelineController theTimelineController) {
+	public SwingRulerPopUp(CCRulerView theRulerView, CCTimelineController theTimelineController) {
+		super(CCUIConstants.DEFAULT_FONT);
 		_myRulerView = theRulerView;
 		_myTimelineController = theTimelineController;
 		_myTransportController = _myTimelineController.transportController();
 
-		JMenuItem entryHead = new JMenuItem("Ruler Functions");
-		entryHead.setFont(SwingGuiConstants.ARIAL_11);
-		add(entryHead);
+		addItem("Ruler Functions");
 		addSeparator();
 		addFunctions();
-		addShortCuts();
 	}
 	
 	protected double _myMouseTime;
@@ -64,46 +53,21 @@ public class SwingRulerPopUp extends JPopupMenu {
 		_myMouseTime = theTime;
 	}
 	
-	public void addShortCuts(){
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e-> {
-			if(e.getID() != KeyEvent.KEY_PRESSED)return false;
-			switch(e.getKeyCode()){
-			case KeyEvent.VK_BACK_SPACE:
-				break;
-			}
-			if(!(e.isControlDown() || e.isMetaDown()))return false;
-			switch(e.getKeyCode()){
-			case KeyEvent.VK_C:
-				break;
-			}
-			return false;  
-		});
-	}
-	
 	protected double _myClickedTime = 0;
 	
-	@Override
-	public void show(Component invoker, int x, int y) {
-		super.show(invoker, x, y);
+	public void show( double x, double y) {
 		_myClickedTime = _myTransportController.viewXToTime(x, true);
 	}
 	
-	private MouseEvent _myMouseEvent;
+	private CCGLMouseEvent _myMouseEvent;
 	
-	public void show(Component invoker, MouseEvent e) {
+	public void show(CCGLMouseEvent e) {
 		_myMouseEvent = e;
-		show(invoker, e.getX(), e.getY());
-	}
-	
-	public void addItem(String theName, ActionListener theListener){
-		JMenuItem myItem = new JMenuItem(theName);
-		myItem.setFont(SwingGuiConstants.ARIAL_11);
-		myItem.addActionListener(theListener);
-		add(myItem);
+		show(e.x, e.y);
 	}
 	
 	public void addFunctions() {
-		addItem("Insert Time",theEvent -> {
+		addItem("Insert Time",() -> {
 			
 			new CCTextInputDialog(
 				"Insert Time", 
@@ -123,11 +87,11 @@ public class SwingRulerPopUp extends JPopupMenu {
 			
 		});
 		
-		addItem("Remove Time", theEvent -> {
+		addItem("Remove Time", () -> {
 			_myTimelineController.removeTime();
 		});
 		
-		addItem("Add Marker",theEvent -> {
+		addItem("Add Marker",() -> {
 			SwingRulerMarkerDialog _myMarkerFrame = new SwingRulerMarkerDialog(_myRulerView, "MARKER");
 		    _myMarkerFrame.setSize( 300, 200 ); 
 			_myMarkerFrame.setLocation(_myMouseEvent.getXOnScreen(), _myMouseEvent.getYOnScreen());
@@ -136,15 +100,15 @@ public class SwingRulerPopUp extends JPopupMenu {
 		
 		addSeparator();
 		
-		addItem("Reset Zoom", theE -> {
+		addItem("Reset Zoom", () -> {
 			_myTimelineController.zoomController().reset();
 		});
 
-		addItem("Zoom to Max", theE -> {
+		addItem("Zoom to Max", () -> {
 			_myTimelineController.zoomToMaximum();
 		});
 
-		addItem("Zoom to Loop",theE -> {
+		addItem("Zoom to Loop",() -> {
 			_myTimelineController.zoomToLoop();
 		});
 	}

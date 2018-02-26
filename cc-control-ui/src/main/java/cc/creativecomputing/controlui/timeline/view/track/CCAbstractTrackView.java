@@ -1,36 +1,46 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
-import java.awt.Color;
-import java.awt.Cursor;
+import cc.creativecomputing.gl.app.CCGLCursorShape;
+import cc.creativecomputing.gl.app.CCGLWindow;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.ui.layout.CCUIPane;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-public abstract class SwingAbstractTrackView extends JPanel implements CCTrackView{
+public abstract class CCAbstractTrackView extends CCUIPane implements CCTrackView{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7700094752340157349L;
+	protected CCAbstractTrackDataView<?> _myDataView;
 	
-	protected SwingAbstractTrackDataView<?> _myDataView;
+	protected CCGLWindow _myMainFrame;
 	
-	protected JFrame _myMainFrame;
-	
-	public SwingAbstractTrackView(
-		JFrame theMainFrame,
-		SwingAbstractTrackDataView<?> theDataView
+	public CCAbstractTrackView(
+		CCGLWindow theMainFrame,
+		CCAbstractTrackDataView<?> theDataView
 	){
 		_myMainFrame = theMainFrame;
 		_myDataView = theDataView;
 	}
 	
-	public SwingAbstractTrackView(JFrame theMainFrame){
+	public CCAbstractTrackView(CCGLWindow theMainFrame){
 		_myMainFrame = theMainFrame;
 		_myDataView = null;
 	}
 	
-	public SwingAbstractTrackView(){
+	public CCAbstractTrackView(){
 		
 	}
 
@@ -40,12 +50,12 @@ public abstract class SwingAbstractTrackView extends JPanel implements CCTrackVi
 
 	public abstract void max(final double theMax);
 
-	public abstract void color(Color theColor);
+	public abstract void color(CCColor theColor);
 
 	public void value(String theValue) {}
 	
 
-	public SwingAbstractTrackDataView<?> dataView() {
+	public CCAbstractTrackDataView<?> dataView() {
 		return _myDataView;
 	}
 	
@@ -61,28 +71,30 @@ public abstract class SwingAbstractTrackView extends JPanel implements CCTrackVi
 		_myDataView.renderInfo();
 	}
 	
-	public int height() {
+	@Override
+	public double height() {
         return _myDataView.height();
     }
     
-    public int width() {
+	@Override
+    public double width() {
     	return _myDataView.width();
     }
     
     public void selectCursor() {
-    	_myMainFrame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    	_myMainFrame.cursor(CCGLCursorShape.HAND);
     }
     
     public void resizeCursor(){
-    	_myMainFrame.setCursor(new Cursor(Cursor.E_RESIZE_CURSOR));
+    	_myMainFrame.cursor(CCGLCursorShape.HRESIZE);
     }
     
     public void moveCursor(){
-    	_myMainFrame.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+    	_myMainFrame.cursor(CCGLCursorShape.CROSSHAIR);
     }
     
     public void defaultCursor() {
-    	_myMainFrame.setCursor(Cursor.getDefaultCursor());
+    	_myMainFrame.cursor(CCGLCursorShape.ARROW);
     }
 	
 	public void moveRangeCursor() {

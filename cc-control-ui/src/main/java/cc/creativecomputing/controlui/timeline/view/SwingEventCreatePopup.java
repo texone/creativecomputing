@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /*  
  * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
  *  
@@ -26,6 +42,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 
 
@@ -58,13 +75,13 @@ public  class SwingEventCreatePopup extends JPopupMenu {
 		_myEventTrackController = theEventTrackController;
 
 		JMenuItem entryHead = new JMenuItem("Create Event");
-		entryHead.setFont(SwingGuiConstants.ARIAL_11);
+		entryHead.setFont(CCUIConstants.ARIAL_11);
 		add(entryHead);
 		addSeparator();
 		
 		for(String myEventType:theEventTrackController.eventTypes()) {
 			JMenuItem myStepItem = new JMenuItem(myEventType);
-			myStepItem.setFont(SwingGuiConstants.ARIAL_11);
+			myStepItem.setFont(CCUIConstants.ARIAL_11);
 			myStepItem.addActionListener(new CreateAction(myEventType));
 			add(myStepItem);
 		}

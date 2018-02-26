@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
 import java.awt.GridBagConstraints;
@@ -10,6 +26,7 @@ import javax.swing.JTextField;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
 
 public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 	
@@ -32,7 +49,6 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 
         String _myValue = theHandle.path() == null ? "" : theHandle.path().toString();
         _myTextField = new JTextField(_myValue);
-        CCUIStyler.styleTextField(_myTextField, 100);
         
         _myOpenButton = new JButton("edit");
         _myOpenButton.addActionListener(theE -> {
@@ -48,13 +64,12 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
         	_myTextField.setText(myPath.toString());
 			
 		});
-        CCUIStyler.styleButton(_myOpenButton, 30, 15);
 	}
 	
 	
 	
 	@Override
-	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
+	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
 		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 1, 5));
 		thePanel.add(_myTextField, constraints(1, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
 		thePanel.add(_myOpenButton, constraints(2, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));

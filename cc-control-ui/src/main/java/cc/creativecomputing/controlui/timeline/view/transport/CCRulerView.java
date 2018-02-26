@@ -1,68 +1,71 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.transport;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.Stroke;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
+
 import java.text.DecimalFormat;
 
-import javax.swing.JFrame;
-
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
-import cc.creativecomputing.control.timeline.point.MarkerPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
+import cc.creativecomputing.control.timeline.point.CCMarkerPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.CCNumberBox.CCChangeValueBoxListener;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
-import cc.creativecomputing.controlui.timeline.controller.CCTransportController.RulerInterval;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController.CCRulerInterval;
+import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.gl.app.CCGLMouseButton;
+import cc.creativecomputing.graphics.CCDrawMode;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCVector2;
 
-@SuppressWarnings("serial")
-public class SwingRulerView extends SwingAbstractTrackView implements CCChangeValueBoxListener{
+public class CCRulerView extends CCAbstractTrackView implements CCChangeValueBoxListener{
 	
 	public static final int MAX_RULER_LABELS = 10;
 	public static final double MIN_RULER_INTERVAL = 0.25;
 	
-	private TimelineController _myTimelineController;
+	private CCTimelineController _myTimelineController;
 	private CCTransportController _myTransportController;
 	
 	private SwingRulerPopUp _myRulerPopUp;
 	
-	public SwingRulerView(JFrame theMainFrame, TimelineController theTimelineController) {
-		super(theMainFrame);
+	public CCRulerView(CCTimelineController theTimelineController) {
+		super();
 		if(theTimelineController != null){
 			_myTimelineController = theTimelineController;
 			_myTransportController = theTimelineController.transportController();
 		    _myRulerPopUp = new SwingRulerPopUp(this, theTimelineController);
 		}
 	    
-		
-		addMouseListener(new MouseAdapter() {
+		mouseReleased.add(e -> {
+			if(_myTransportController == null)return;
+			_myTransportController.mouseReleased(e);
+		});
 			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				if(_myTransportController == null)return;
-				
-				_myTransportController.mouseReleased(e);
-			}
 			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				if(_myTransportController == null)return;
+		mousePressed.add(e -> {
+			if(_myTransportController == null)return;
 				
-				boolean myIsRightClick = e.getButton() == MouseEvent.BUTTON3 || (e.isControlDown() && e.getButton() == MouseEvent.BUTTON1);
+			boolean myIsRightClick = e.button == CCGLMouseButton.BUTTON_3 || (e.isControlDown() && e.button== CCGLMouseButton.BUTTON_1);
 				
-				if (myIsRightClick) {
+			if (myIsRightClick) {
 //					new CCTextInputDialog(
 //						"Insert Time", 
 //						"Specify the time to insert in seconds.", 
@@ -80,46 +83,39 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 //					.size(400,200)
 //					.open();
 					
-					CCLog.info("show pop");
-					try {
-						_myRulerPopUp.show(SwingRulerView.this, e);
-					}catch(Exception ex) {
-						ex.printStackTrace();
-					}
-    				} else if (e.getButton() == MouseEvent.BUTTON1) {
-    					_myTransportController.mousePressed(e);
-    				}
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
+				CCLog.info("show pop");
+				try {
+					_myRulerPopUp.show( e);
+				}catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			} else if (e.button== CCGLMouseButton.BUTTON_1) {
 				_myTransportController.mousePressed(e);
 			}
 		});
 		
-		addMouseMotionListener(new MouseAdapter() {
-			
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				
-				if (_myTransportController == null)return;
-				
-				_myTransportController.mouseDragged(e);
-				updateUI();
-			}
-			
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				if (_myTransportController == null)return;
-				
-				_myTransportController.mouseMoved(e);
-			}
-		});
+		mouseClicked.add(e ->{_myTransportController.mousePressed(e);});
 		
-		setLayout(new FlowLayout(FlowLayout.LEFT));
+		mouseDragged.add(p -> {
+			if (_myTransportController == null)return;
+			
+			_myTransportController.mouseDragged(p);
+			updateUI();
+		});
+			
+		mouseMoved.add(p->{
+			if (_myTransportController == null)return;
+			
+			_myTransportController.mouseMoved(p);
+		});	
 	}
 	
-	public void timelineController(TimelineController theTimelineController){
+	
+	
+	private void updateUI() {
+	}
+
+	public void timelineController(CCTimelineController theTimelineController){
 		_myTimelineController = theTimelineController;
 		_myTransportController = theTimelineController.transportController();
 	    _myRulerPopUp = new SwingRulerPopUp(this, theTimelineController);
@@ -134,40 +130,27 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 		updateUI();
 	}
 	
-	public Dimension getMinimumSize() {
-		return new Dimension(0, 20 * SwingGuiConstants.SCALE);
-	}
-	
-	public Dimension getPreferredSize() {
-		return new Dimension(0, 20 * SwingGuiConstants.SCALE);
-	}
-	
-	public Dimension getMaximumSize() {
-		return new Dimension(5000, 20 * SwingGuiConstants.SCALE);
-	}
-	
 	public void setViewWidth(int theViewWidth) {
 		updateUI();
 	}
 	
-	public static final Stroke THIN_STROKE = new BasicStroke(1);
-	public static final Stroke THICK_STROKE = new BasicStroke(2);
+	public static final double THIN_STROKE = 1;
+	public static final double THICK_STROKE = 2;
 	
-	public static final Color TEXT_COLOR = new Color(100);
-	public static final Color STEP_COLOR = new Color(0.8f, 0.8f, 0.8f);
-	public static final Color SUB_STEP_COLOR = new Color(0.9f, 0.9f, 0.9f);
+	public static final CCColor TEXT_COLOR = new CCColor(100);
+	public static final CCColor STEP_COLOR = new CCColor(0.8f, 0.8f, 0.8f);
+	public static final CCColor SUB_STEP_COLOR = new CCColor(0.9f, 0.9f, 0.9f);
 	
 	@Override
-	public void paintComponent(Graphics g) {
+	public void drawContent(CCGraphics g) {
 		g.translate(0, 0);
-		Graphics2D myG2 = (Graphics2D)g;
-		g.setColor(new Color(255,255,255));
-		g.fillRect(0, 0, getWidth(), getHeight() );
+		g.color(1d);
+		g.rect(0, 0, width(), height() );
 		
 		if(_myTimelineController == null)return;
 		if(_myTransportController == null)return;
 		
-		RulerInterval ri = _myTransportController.rulerInterval();
+		CCRulerInterval ri = _myTransportController.rulerInterval();
 
 		DecimalFormat myFormat = new DecimalFormat();
         myFormat.applyPattern("#0.##");
@@ -179,30 +162,30 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 	        int myX = _myTransportController.timeToViewX(step);
 	        if(myX < 0)continue;
 
-			myG2.setStroke(THICK_STROKE);
-			g.setColor(SUB_STEP_COLOR);
-			g.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
-			g.setColor(STEP_COLOR);
-			g.drawLine(myX, 0, myX, getHeight());
+			g.strokeWeight(THICK_STROKE);
+			g.color(SUB_STEP_COLOR);
+			g.line(0, height() / 2, width(), height() / 2);
+			g.color(STEP_COLOR);
+			g.line(myX, 0, myX, height());
 			
 			int myTimeX = myX;
 			
-			g.setColor(SUB_STEP_COLOR);
-			myG2.setStroke(THIN_STROKE);
+			g.color(SUB_STEP_COLOR);
+			g.strokeWeight(THIN_STROKE);
 			
 			for(int i = 1; i < _myTimelineController.drawRaster();i++) {
 				myX = _myTransportController.timeToViewX(step + ri.interval() * i / _myTimelineController.drawRaster());
-				g.drawLine(myX, getHeight(), myX, getHeight() / 4 * 3);
+				g.line(myX, height(), myX, height() / 4 * 3);
 			}
 			
 			
 			String myTimeString = _myTransportController.timeToString(step);
 			
-			g.setFont(SwingGuiConstants.ARIAL_BOLD_10);
-	        g.setColor(TEXT_COLOR);
-			g.drawString(myTimeString, myTimeX + 5, 11 * SwingGuiConstants.SCALE);
+			g.textFont(CCUIConstants.DEFAULT_FONT);
+	        g.color(TEXT_COLOR);
+			g.text(myTimeString, myTimeX + 5, 11 * CCUIConstants.SCALE);
 		}
-		ControlPoint myCurrentPoint = _myTransportController.trackData().ceiling(new ControlPoint(_myTransportController.lowerBound(),0));
+		CCControlPoint myCurrentPoint = _myTransportController.trackData().ceiling(new CCControlPoint(_myTransportController.lowerBound(),0));
 //		if(myCurrentPoint == null) {
 //			myCurrentPoint = _myTransportController.trackData().ceiling(new ControlPoint(_myTransportController.lowerBound(),0));
 //		}
@@ -212,56 +195,56 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
                 break;
             }
 
-            if(myCurrentPoint instanceof MarkerPoint) {
-	            Point2D myUserPoint = _myTransportController.curveToViewSpace(myCurrentPoint);
-	            MarkerPoint myMarker = (MarkerPoint)myCurrentPoint;
-	            int myMarkerX = (int)myUserPoint.getX();
+            if(myCurrentPoint instanceof CCMarkerPoint) {
+	            CCVector2 myUserPoint = _myTransportController.curveToViewSpace(myCurrentPoint);
+	            CCMarkerPoint myMarker = (CCMarkerPoint)myCurrentPoint;
+	            int myMarkerX = (int)myUserPoint.x;
 	            
-	            g.setColor(new Color(1f, 0f,0f));
-				g.drawLine(myMarkerX, getHeight()/2, myMarkerX, getHeight());
-				g.drawString(myMarker.name(), myMarkerX + 5, getHeight()/2 + 15);
+	            g.color(new CCColor(1f, 0f,0f));
+				g.line(myMarkerX, height()/2, myMarkerX, height());
+				g.text(myMarker.name(), myMarkerX + 5, height()/2 + 15);
 				
-				Polygon myPolygon = new Polygon();
-				myPolygon.addPoint(myMarkerX, getHeight()/2 + 5);
-				myPolygon.addPoint(myMarkerX - 5, getHeight()/2);
-				myPolygon.addPoint(myMarkerX + 5, getHeight()/2);
-				g.fillPolygon(myPolygon);
+				g.beginShape(CCDrawMode.POLYGON);
+				g.vertex(myMarkerX, height()/2 + 5);
+				g.vertex(myMarkerX - 5, height()/2);
+				g.vertex(myMarkerX + 5, height()/2);
+				g.endShape();
             }
             
-            if(myCurrentPoint.getType() == ControlPointType.TIMED_EVENT) {
-            	BasicStroke myThinStroke = new BasicStroke(0.5f);
-            	myG2.setStroke(myThinStroke);
-            	myG2.setColor(new Color(100,100,255,50));
+            if(myCurrentPoint.type() == CCControlPointType.TIMED_EVENT) {
+            	g.strokeWeight(0.5);
+            	g.color(new CCColor(100,100,255,50));
             	
-            	TimedEventPoint myPoint = (TimedEventPoint) myCurrentPoint;
-        		Point2D myLowerCorner = _myTransportController.curveToViewSpace(new ControlPoint(myCurrentPoint.time(), 1));
-        		Point2D myUpperCorner = _myTransportController.curveToViewSpace(new ControlPoint(myPoint.endPoint().time(),0));
+            	CCTimedEventPoint myPoint = (CCTimedEventPoint) myCurrentPoint;
+        		CCVector2 myLowerCorner = _myTransportController.curveToViewSpace(new CCControlPoint(myCurrentPoint.time(), 1));
+        		CCVector2 myUpperCorner = _myTransportController.curveToViewSpace(new CCControlPoint(myPoint.endPoint().time(),0));
 
-        		myG2.fillRect(
-        			(int) myLowerCorner.getX(), getHeight() * 3 / 4,
-        			(int) myUpperCorner.getX() - (int) myLowerCorner.getX(), getHeight()/4
+        		g.rect(
+        			myLowerCorner.x, height() * 3 / 4,
+        			myUpperCorner.x - myLowerCorner.x, height()/4
         		);
-        		myG2.setColor(new Color(0,0,255));
-        		myG2.drawLine((int) myLowerCorner.getX(), getHeight() * 3 / 4, (int) myLowerCorner.getX(), getHeight());
-        		myG2.drawLine((int) myUpperCorner.getX(), getHeight() * 3 / 4, (int) myUpperCorner.getX(), getHeight());
+        		g.color(new CCColor(0,0,255));
+        		g.line(myLowerCorner.x, height() * 3 / 4, myLowerCorner.x, height());
+        		g.line(myUpperCorner.x, height() * 3 / 4, myUpperCorner.x, height());
             }
             
 			
-            myCurrentPoint = myCurrentPoint.getNext();
+            myCurrentPoint = myCurrentPoint.next();
         }
 		
 		int myTransportX = Math.max(0, _myTransportController.timeToViewX(_myTransportController.time()));
-		Polygon myPolygon = new Polygon();
-		myPolygon.addPoint(myTransportX - 5, getHeight()/2);
-		myPolygon.addPoint(myTransportX - 5, getHeight() - 5);
-		myPolygon.addPoint(myTransportX, getHeight());
-		myPolygon.addPoint(myTransportX + 5, getHeight() - 5);
-		myPolygon.addPoint(myTransportX + 5, getHeight()/2);
-		g.setColor(new Color(0.6f, 0.6f, 0.6f));
-		g.fillPolygon(myPolygon);
+
+		g.color(0.6f);
+		g.beginShape(CCDrawMode.POLYGON);
+		g.vertex(myTransportX - 5, height()/2);
+		g.vertex(myTransportX - 5, height() - 5);
+		g.vertex(myTransportX, height());
+		g.vertex(myTransportX + 5, height() - 5);
+		g.vertex(myTransportX + 5, height()/2);
+		g.endShape();
 		
-		g.setColor(new Color(0.8f, 0.8f, 0.8f));
-		g.drawLine(myTransportX, getHeight()/2, myTransportX, getHeight());
+		g.color(new CCColor(0.8f, 0.8f, 0.8f));
+		g.line(myTransportX, height()/2, myTransportX, height());
 		
 		int myLoopStartX = Math.max(0,_myTransportController.timeToViewX(_myTransportController.loopStart()));
 		int myLoopEndX = Math.max(0,_myTransportController.timeToViewX(_myTransportController.loopEnd()));
@@ -269,24 +252,16 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 		if(myLoopStartX == myLoopEndX)return;
 
 		if(_myTransportController.doLoop()) {
-			g.setColor(new Color(1f, 0.0f,0.0f,0.5f));
-			g.drawRect(myLoopStartX, 0, myLoopEndX - myLoopStartX, getHeight()/2);
-			g.setColor(new Color(1f, 0.0f,0.0f,0.25f));
-			g.fillRect(myLoopStartX, 0, myLoopEndX - myLoopStartX, getHeight()/2);
+			g.color(new CCColor(1f, 0.0f,0.0f,0.5f));
+			g.rect(myLoopStartX, 0, myLoopEndX - myLoopStartX, height()/2, true);
+			g.color(new CCColor(1f, 0.0f,0.0f,0.25f));
+			g.rect(myLoopStartX, 0, myLoopEndX - myLoopStartX, height()/2);
 		}else {
-			g.setColor(new Color(0.7f, 0.7f,0.7f,0.5f));
-			g.drawRect(myLoopStartX, 0, myLoopEndX - myLoopStartX, getHeight()/2);
-			g.setColor(new Color(0.7f, 0.7f,0.7f,0.25f));
-			g.fillRect(myLoopStartX, 0, myLoopEndX - myLoopStartX, getHeight()/2);
+			g.color(new CCColor(0.7f, 0.7f,0.7f,0.5f));
+			g.rect(myLoopStartX, 0, myLoopEndX - myLoopStartX, height()/2, true);
+			g.color(new CCColor(0.7f, 0.7f,0.7f,0.25f));
+			g.rect(myLoopStartX, 0, myLoopEndX - myLoopStartX, height()/2);
 		}
-	}
-
-	public int height() {
-		return getHeight();
-	}
-	
-	public int width() {
-		return getWidth();
 	}
 
 	@Override
@@ -299,6 +274,6 @@ public class SwingRulerView extends SwingAbstractTrackView implements CCChangeVa
 	public void max(double theMax) {}
 
 	@Override
-	public void color(Color theColor) {}
+	public void color(CCColor theColor) {}
 
 }

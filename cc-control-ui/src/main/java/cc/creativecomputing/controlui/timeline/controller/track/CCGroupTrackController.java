@@ -1,31 +1,29 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
 package cc.creativecomputing.controlui.timeline.controller.track;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.control.timeline.GroupTrack;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.control.timeline.CCGroupTrack;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
+import cc.creativecomputing.math.CCColor;
 
 
 /**
@@ -34,14 +32,14 @@ import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
  */
 public class CCGroupTrackController extends CCEventTrackController{
 
-	private GroupTrack _myGroupTrack;
+	private CCGroupTrack _myGroupTrack;
 	private SwingGroupTrackView _myGroupTrackView;
 	
 	private List<CCTrackController> _myTracks = new ArrayList<>();
 	
 	public CCGroupTrackController(
-		TimelineController theTimelineController,
-		GroupTrack theGroupTrack
+		CCTimelineController theTimelineController,
+		CCGroupTrack theGroupTrack
 	) {
 		super(theTimelineController, theGroupTrack, null);
 		_myParent = this;
@@ -73,7 +71,7 @@ public class CCGroupTrackController extends CCEventTrackController{
 		return _myGroupTrackView;
 	}
 	
-	public GroupTrack groupTrack() {
+	public CCGroupTrack groupTrack() {
 //		GroupTrack myGroupTrack = new GroupTrack();
 //		myGroupTrack .setAddress(_myGroupTrack.address());
 //		myGroupTrack.color(_myGroupTrack.color());
@@ -134,7 +132,7 @@ public class CCGroupTrackController extends CCEventTrackController{
 	/**
 	 * @param theNewColor
 	 */
-	public void color(Color theNewColor) {
+	public void color(CCColor theNewColor) {
 		_myGroupTrack.color(theNewColor);
 		if(_myGroupTrackView!=null)_myGroupTrackView.color(theNewColor);
 		synchronized(_myTracks){

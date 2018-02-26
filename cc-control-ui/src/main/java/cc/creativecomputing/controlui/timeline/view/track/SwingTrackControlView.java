@@ -1,47 +1,44 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.KeyStroke;
 
 import cc.creativecomputing.controlui.CCNumberBox;
-import cc.creativecomputing.controlui.controls.CCUIStyler;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCBooleanTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
+import cc.creativecomputing.ui.widget.CCUILabelWidget;
+import cc.creativecomputing.ui.widget.CCUIMenu;
+import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 
 
-@SuppressWarnings("serial")
-public class SwingTrackControlView extends JPanel{
+public class SwingTrackControlView extends CCUIGridPane{
 	
-	static final Dimension SMALL_BUTTON_SIZE = new Dimension(20,15);
+	static final CCVector2 SMALL_BUTTON_SIZE = new CCVector2(20,15);
 	static final int RESIZE_HANDLE_HEIGHT = 5;
-	static final Dimension ADDRESS_FIELD_SIZE = new Dimension(100,20);
-	
-	static final String REMOVE_ACTION = "remove";
+	static final CCVector2 ADDRESS_FIELD_SIZE = new CCVector2(100,20);
 
 
     static final public DecimalFormat VALUE_FORMAT;
@@ -50,54 +47,32 @@ public class SwingTrackControlView extends JPanel{
     		VALUE_FORMAT.applyPattern("#0.000");
     }
 	
-	private class SingleTrackControlPopup extends JPopupMenu{
+	private class CCSingleTrackControlPopup extends CCUIMenu{
 
-		public SingleTrackControlPopup() {
-			this.setFont(SwingGuiConstants.ARIAL_9);
+		public CCSingleTrackControlPopup() {
+			super(CCUIConstants.DEFAULT_FONT);
 			
-			JMenuItem entryHead = new JMenuItem("Track Edit Funtions");
-			entryHead.setFont(SwingGuiConstants.ARIAL_11);
-			add(entryHead);
+			addItem("Track Edit Funtions");
 			addSeparator();
-			
-			JMenuItem myRemoveItem = new JMenuItem("remove track");
-			myRemoveItem.setFont(SwingGuiConstants.ARIAL_11);
-			myRemoveItem.setActionCommand(REMOVE_ACTION);
-			myRemoveItem.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent theE) {
-					_myTimelineController.removeTrack(_myTrackController.property().path());
-				}
-			});
-			add(myRemoveItem);
-			
-			JMenuItem myResetZoomItem = new JMenuItem("reset zoom");
-			myResetZoomItem.setFont(SwingGuiConstants.ARIAL_11);
-			myResetZoomItem.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent theE) {
-				}
-			});
-			add(myResetZoomItem);
+			addItem("remove track", ()->{_myTimelineController.removeTrack(_myTrackController.property().path());});
+			addItem("reset zoom");
 		}
 	
 	}
 	
-	private TimelineController _myTimelineController;
+	private CCTimelineController _myTimelineController;
 	private CCTrackController _myTrackController;
 	private JToggleButton _myMuteButton;
 	private CCNumberBox _myMinField;
 	private CCNumberBox _myMaxField;
-	private JTextField _myValueField;
-	private JLabel _myAddressField;
+	private CCUITextFieldWidget _myValueField;
+	private CCUILabelWidget _myAddressField;
 	private ArrayList<ActionListener> _myListeners;
 	
-	private SingleTrackControlPopup _myPopUp = new SingleTrackControlPopup();
+	private CCSingleTrackControlPopup _myPopUp = new CCSingleTrackControlPopup();
 	
 	public SwingTrackControlView(
-		TimelineController theTimelineController,
+		CCTimelineController theTimelineController,
 		CCTrackController theTrackController
 	) {
 		_myTimelineController = theTimelineController;
@@ -113,13 +88,13 @@ public class SwingTrackControlView extends JPanel{
 
 		add( Box.createHorizontalStrut(0));//(theTrackController.property().path().getNameCount() - 1) * 5));
 		
-		if(SwingGuiConstants.CREATE_MUTE_BUTTON) {
+		if(CCUIConstants.CREATE_MUTE_BUTTON) {
 			_myMuteButton = new JToggleButton("m");
 			_myMuteButton.setBackground(Color.WHITE);
 			_myMuteButton.setForeground(Color.BLACK);
 	//		_myMuteButton.setBorderPainted(false);
 			_myMuteButton.setMargin(new Insets(0, 0, 0, 0));
-			_myMuteButton.setFont(SwingGuiConstants.ARIAL_9);
+			_myMuteButton.setFont(CCUIConstants.ARIAL_9);
 			_myMuteButton.setPreferredSize(new Dimension(20,12));
 			_myMuteButton.addActionListener(new ActionListener() {
 				
@@ -191,7 +166,7 @@ public class SwingTrackControlView extends JPanel{
 		}
 		
 		_myAddressField = new JLabel("");
-		_myAddressField.setFont(SwingGuiConstants.ARIAL_BOLD_10);
+		_myAddressField.setFont(CCUIConstants.ARIAL_BOLD_10);
 		_myAddressField.setForeground(Color.WHITE);
 		myConstraints.weightx = 1;
 		myConstraints.weighty = 0;
@@ -217,13 +192,8 @@ public class SwingTrackControlView extends JPanel{
 		
 	}
 	
-	private void style(JTextField theTextField){
-		CCUIStyler.styleTextField(theTextField, 45);
-		theTextField.setHorizontalAlignment(JTextField.RIGHT);
-	}
-	
-	public void color(Color theColor) {
-		setBackground(theColor);
+	public void color(CCColor theColor) {
+		background(new CCUIFillDrawable(theColor));
 	}
 	
 	public void addActionListener( ActionListener theListener ) {
@@ -253,36 +223,5 @@ public class SwingTrackControlView extends JPanel{
 	public void value(final String theValue) {
 		if(_myValueField != null)_myValueField.setText(theValue);
 	}
-
-	@Override
-	public void finalize() {
-	}
 	
-	@Override
-	protected void paintComponent( Graphics g ) {
-	    if ( !isOpaque( ) ){
-	        super.paintComponent( g );
-	        return;
-	    }
-	 
-	    Graphics2D g2d = (Graphics2D)g;
-	    
-	    int w = getWidth( );
-	    int h = getHeight( );
-	    
-	    Color color1 = getBackground( );
-	    Color color2 = color1.darker( );
-	     
-	    // Paint a gradient from top to bottom
-	    GradientPaint gp = new GradientPaint(
-	        0, 0, color1,
-	        0, h, color2 );
-
-	    g2d.setPaint( gp );
-	    g2d.fillRect( 0, 0, w, h );
-	 
-	    setOpaque( false );
-	    super.paintComponent( g );
-	    setOpaque( true );
-	}
 }

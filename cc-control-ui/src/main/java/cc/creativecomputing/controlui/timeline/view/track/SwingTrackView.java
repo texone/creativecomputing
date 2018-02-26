@@ -1,44 +1,33 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-
-import javax.swing.JFrame;
-
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackControlView;
+import cc.creativecomputing.gl.app.CCGLWindow;
+import cc.creativecomputing.math.CCColor;
 
 
 /**
  * @author christianriekoff
  *
  */
-public class SwingTrackView extends SwingAbstractTrackView{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3531407762182546621L;
+public class SwingTrackView extends CCAbstractTrackView{
 	
 	public static final double PICK_RADIUS = 10;
     public static final double GRID_INTERVAL = 5; // curve is calculated every GRID_INTERVAL points
@@ -46,9 +35,9 @@ public class SwingTrackView extends SwingAbstractTrackView{
 	private SwingTrackControlView _myControlView;
 	
 	public SwingTrackView(
-		JFrame theMainFrame,
-    		SwingAbstractTrackDataView<?> theDataView,
-		TimelineController theTimelineController,
+		CCGLWindow theMainFrame,
+    		CCAbstractTrackDataView<?> theDataView,
+		CCTimelineController theTimelineController,
 		CCTrackController theController
 	) {
 		super(theMainFrame, theDataView);
@@ -60,7 +49,7 @@ public class SwingTrackView extends SwingAbstractTrackView{
 		return _myControlView;
 	}
 
-	public void color(Color theColor) {
+	public void color(CCColor theColor) {
 		_myControlView.color(theColor);
 		_myDataView.color(theColor);
 	}

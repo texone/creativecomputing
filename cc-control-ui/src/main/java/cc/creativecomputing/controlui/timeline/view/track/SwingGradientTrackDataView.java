@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
 import java.awt.Graphics2D;
@@ -7,8 +23,8 @@ import java.awt.image.BufferedImage;
 import com.sun.prism.paint.Color;
 
 import cc.creativecomputing.control.CCGradient;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGradientTrackController;
 import cc.creativecomputing.core.logging.CCLog;
 
@@ -19,18 +35,18 @@ public class SwingGradientTrackDataView extends SwingBlendableTrackDataView<CCGr
 	 */
 	private static final long serialVersionUID = -8117392771151385531L;
 	
-	public SwingGradientTrackDataView(TimelineController theTimelineController, CCGradientTrackController theTrackController) {
+	public SwingGradientTrackDataView(CCTimelineController theTimelineController, CCGradientTrackController theTrackController) {
 		super(theTimelineController, theTrackController);
 	}
 
 	@Override
-	public void renderBlendData(Graphics2D g2d, ControlPoint myFirstPoint, ControlPoint mySecondPoint) {
+	public void renderBlendData(Graphics2D g2d, CCControlPoint myFirstPoint, CCControlPoint mySecondPoint) {
 		if (myFirstPoint.equals(mySecondPoint)) {
 			return;
 		}
 
 		if (mySecondPoint == null) {
-			mySecondPoint = new ControlPoint(_myTrackContext.upperBound(), myFirstPoint.value());
+			mySecondPoint = new CCControlPoint(_myTrackContext.upperBound(), myFirstPoint.value());
 		}
 
 		Point2D p1 = _myController.curveToViewSpace(myFirstPoint);

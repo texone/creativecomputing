@@ -1,18 +1,33 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller;
 
-import java.awt.geom.Point2D;
-
-import cc.creativecomputing.control.timeline.TimeRange;
-import cc.creativecomputing.controlui.timeline.view.SwingConstants;
+import cc.creativecomputing.control.timeline.CCTimeRange;
+import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 
 public class CCZoomController  {
 	
 	private double _myLowerBound;
 	private double _myUpperBound;
-	private Point2D _myDragStart;
+	private CCVector2 _myDragStart;
 	private double _myLastV;
 	private double _myLastH;
 	
@@ -23,7 +38,7 @@ public class CCZoomController  {
 	
 	public CCZoomController() {
 		_myLowerBound = 0;
-		_myUpperBound = SwingConstants.DEFAULT_RANGE;
+		_myUpperBound = CCUIConstants.DEFAULT_RANGE;
 	}
 	
 	public void addZoomable(CCZoomable theZoomable) {
@@ -35,7 +50,7 @@ public class CCZoomController  {
 		_myZoomables.remove(theZoomable);
 	}
 	
-	public void startDrag( Point2D theViewCoords ) {
+	public void startDrag( CCVector2 theViewCoords ) {
 		_myDragStart = theViewCoords;
 	}
 	
@@ -45,10 +60,10 @@ public class CCZoomController  {
 		_myLastH = 0;
 	}
 	
-	public void performDrag( Point2D theViewCoords, int theViewWidth ) {
+	public void performDrag( CCVector2 theViewCoords, double theViewWidth ) {
 		if (_myDragStart != null) {
-			double myVMovement = theViewCoords.getY() - _myDragStart.getY();
-			double myHMovement = theViewCoords.getX() - _myDragStart.getX();
+			double myVMovement = theViewCoords.y - _myDragStart.y;
+			double myHMovement = theViewCoords.x - _myDragStart.x;
 			
 			if(CCMath.abs(myVMovement) > CCMath.abs(myHMovement)){
 				myHMovement = 0;
@@ -63,7 +78,7 @@ public class CCZoomController  {
 			myHDelta = myHDelta / theViewWidth * (_myUpperBound - _myLowerBound);
 			
 			// zooming should occur around the point where you grab the time line
-			double myFixPoint = theViewCoords.getX() / theViewWidth;
+			double myFixPoint = theViewCoords.x / theViewWidth;
 			
 			_myLowerBound -= myVDelta * myFixPoint;
 			if (_myLowerBound < 0) {
@@ -103,7 +118,7 @@ public class CCZoomController  {
 	}
 	
 	public void reset() {
-		setRange(new TimeRange(0, SwingConstants.DEFAULT_RANGE));
+		setRange(new CCTimeRange(0, CCUIConstants.DEFAULT_RANGE));
 	}
 	
 	public void minRange(double theMinRange) {
@@ -114,7 +129,7 @@ public class CCZoomController  {
 		_myMaxRange = theMaxRange;
 	}
 	
-	public void setRange(TimeRange theRange) {
+	public void setRange(CCTimeRange theRange) {
 		if(theRange.end() <= theRange.start())return;
 		
 		_myLowerBound = theRange.start();

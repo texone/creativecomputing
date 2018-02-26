@@ -1,39 +1,36 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller;
 
-import java.awt.Cursor;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.control.timeline.TimeRange;
-import cc.creativecomputing.control.timeline.TrackData;
-import cc.creativecomputing.control.timeline.TrackType;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.MarkerPoint;
+import cc.creativecomputing.control.timeline.CCTimeRange;
+import cc.creativecomputing.control.timeline.CCTrackData;
+import cc.creativecomputing.control.timeline.CCTrackType;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCMarkerPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
-import cc.creativecomputing.controlui.timeline.view.transport.SwingRulerView;
+import cc.creativecomputing.controlui.timeline.view.transport.CCRulerView;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 
 /**
@@ -42,13 +39,13 @@ import cc.creativecomputing.math.CCMath;
  */
 public class CCTransportController extends CCTrackDataController implements CCZoomable{
 	
-	public static class RulerInterval{
+	public static class CCRulerInterval{
 		private double _myMin;
 		private double _myMax;
 		
 		private double _myInterval;
 		
-		public RulerInterval(double theMax, double theMin, double theInterval) {
+		public CCRulerInterval(double theMax, double theMin, double theInterval) {
 			_myMin = theMin;
 			_myMax = theMax;
 			_myInterval = theInterval;
@@ -73,13 +70,13 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		}
 	}
 	
-	private List<RulerInterval> _myIntervals = new ArrayList<CCTransportController.RulerInterval>();
+	private List<CCRulerInterval> _myIntervals = new ArrayList<CCTransportController.CCRulerInterval>();
 	
-	private TrackData _myMarkerList;
+	private CCTrackData _myMarkerList;
 	
-	public SwingRulerView _myRulerView;
+	public CCRulerView _myRulerView;
 	
-	public TimeRangeController _myTimeRangeController;
+	public CCTimeRangeController _myTimeRangeController;
 
 	private boolean _myDefineLoop = false;
 	private int _myStartClickX = 0;
@@ -99,26 +96,26 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	
 	private boolean _myIsInLoop = false;
 	
-	private TimeRange _myLoop = new TimeRange();
+	private CCTimeRange _myLoop = new CCTimeRange();
 	
-	private TimelineController _myTimelineController;
+	private CCTimelineController _myTimelineController;
 	
-	private RulerInterval _myInterval;
+	private CCRulerInterval _myInterval;
 	
 	private boolean _myUseBeats = false;
 	
 	private double _myBPM = 120;
 	
-	public CCTransportController(TimelineController theTimelineController) {
+	public CCTransportController(CCTimelineController theTimelineController) {
 		super(theTimelineController, null);
 		_myTimelineController = theTimelineController;
-		_myMarkerList = new TrackData(null);
+		_myMarkerList = new CCTrackData(null);
 		
 		_myIsPlaying = false;
 		_myCurrentTime = 0;
 		_mySpeedFactor = 1;
 		
-		_myInterval = new RulerInterval(Float.MAX_VALUE, 0f, 1f);
+		_myInterval = new CCRulerInterval(Float.MAX_VALUE, 0f, 1f);
 		createIntervals();
 	}
 	
@@ -128,16 +125,16 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		_myInterval = currentInterval();
 	}
 	
-	private RulerInterval currentInterval() {
-		int myDevides = _myRulerView.width() / MIN_SPACE;
+	private CCRulerInterval currentInterval() {
+		int myDevides = (int)(_myRulerView.width() / MIN_SPACE);
 		double myInterval = (_myUpperBound - _myLowerBound) / myDevides;
 		
-		for(RulerInterval myRulerInterval:_myIntervals) {
+		for(CCRulerInterval myRulerInterval:_myIntervals) {
 			if(myRulerInterval.isInInterval(myInterval)) {
 				return myRulerInterval;
 			}
 		}
-		return new RulerInterval(Float.MAX_VALUE, 0f, 1f);
+		return new CCRulerInterval(Float.MAX_VALUE, 0f, 1f);
 	}
 	
 	private void createIntervals() {
@@ -148,50 +145,50 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 			for(int i = 1; i < 16;i++){
 				double myUpperInterval = myBarTime * CCMath.pow(2, i);
 				double mylowerInterval = myBarTime * CCMath.pow(2, i - 1);
-				_myIntervals.add(new RulerInterval(myUpperInterval, mylowerInterval, myUpperInterval));
+				_myIntervals.add(new CCRulerInterval(myUpperInterval, mylowerInterval, myUpperInterval));
 			}
 			for(int i = 1; i < 16;i++){
 				double myUpperInterval = myBarTime * CCMath.pow(0.5, i - 1);
 				double mylowerInterval = myBarTime * CCMath.pow(0.5, i);
-				_myIntervals.add(new RulerInterval(myUpperInterval, mylowerInterval, myUpperInterval));
+				_myIntervals.add(new CCRulerInterval(myUpperInterval, mylowerInterval, myUpperInterval));
 			}
 		}else{
-			_myIntervals.add(new RulerInterval(18000, 9000, 18000));
-			_myIntervals.add(new RulerInterval(9000, 3600, 7200));
-			_myIntervals.add(new RulerInterval(3600, 1800, 3600));
+			_myIntervals.add(new CCRulerInterval(18000, 9000, 18000));
+			_myIntervals.add(new CCRulerInterval(9000, 3600, 7200));
+			_myIntervals.add(new CCRulerInterval(3600, 1800, 3600));
 			
-			_myIntervals.add(new RulerInterval(1800, 1500, 1800));
-			_myIntervals.add(new RulerInterval(1500, 600, 1200));
-			_myIntervals.add(new RulerInterval(600, 300, 600));
+			_myIntervals.add(new CCRulerInterval(1800, 1500, 1800));
+			_myIntervals.add(new CCRulerInterval(1500, 600, 1200));
+			_myIntervals.add(new CCRulerInterval(600, 300, 600));
 			
-			_myIntervals.add(new RulerInterval(300, 150, 300));
-			_myIntervals.add(new RulerInterval(150, 60, 120));
-			_myIntervals.add(new RulerInterval(60, 30, 60));
+			_myIntervals.add(new CCRulerInterval(300, 150, 300));
+			_myIntervals.add(new CCRulerInterval(150, 60, 120));
+			_myIntervals.add(new CCRulerInterval(60, 30, 60));
 			
-			_myIntervals.add(new RulerInterval(30, 20, 30));
-			_myIntervals.add(new RulerInterval(20, 10, 20));
+			_myIntervals.add(new CCRulerInterval(30, 20, 30));
+			_myIntervals.add(new CCRulerInterval(20, 10, 20));
 			
-			_myIntervals.add(new RulerInterval(10, 5, 10));
-			_myIntervals.add(new RulerInterval(5, 2, 5));
-			_myIntervals.add(new RulerInterval(2, 1, 2));
+			_myIntervals.add(new CCRulerInterval(10, 5, 10));
+			_myIntervals.add(new CCRulerInterval(5, 2, 5));
+			_myIntervals.add(new CCRulerInterval(2, 1, 2));
 			
-			_myIntervals.add(new RulerInterval(1.0000, 0.5000f, 1));
-			_myIntervals.add(new RulerInterval(0.5000, 0.2500f, 0.5f));
-			_myIntervals.add(new RulerInterval(0.2500, 0.1000f, 0.2f));
+			_myIntervals.add(new CCRulerInterval(1.0000, 0.5000f, 1));
+			_myIntervals.add(new CCRulerInterval(0.5000, 0.2500f, 0.5f));
+			_myIntervals.add(new CCRulerInterval(0.2500, 0.1000f, 0.2f));
 	
-			_myIntervals.add(new RulerInterval(0.1000, 0.0500f, 0.1f));
-			_myIntervals.add(new RulerInterval(0.0500, 0.0250f, 0.05f));
-			_myIntervals.add(new RulerInterval(0.0250, 0.0100f, 0.02f));
+			_myIntervals.add(new CCRulerInterval(0.1000, 0.0500f, 0.1f));
+			_myIntervals.add(new CCRulerInterval(0.0500, 0.0250f, 0.05f));
+			_myIntervals.add(new CCRulerInterval(0.0250, 0.0100f, 0.02f));
 	
-			_myIntervals.add(new RulerInterval(0.0100, 0.0050f, 0.01f));
-			_myIntervals.add(new RulerInterval(0.0050, 0.0025f, 0.005f));
-			_myIntervals.add(new RulerInterval(0.0025, 0.0010f, 0.002f));
+			_myIntervals.add(new CCRulerInterval(0.0100, 0.0050f, 0.01f));
+			_myIntervals.add(new CCRulerInterval(0.0050, 0.0025f, 0.005f));
+			_myIntervals.add(new CCRulerInterval(0.0025, 0.0010f, 0.002f));
 			
-			_myIntervals.add(new RulerInterval(0.0010, 0.0000f, 0.001f));
+			_myIntervals.add(new CCRulerInterval(0.0010, 0.0000f, 0.001f));
 		}
 	}
 	
-	public RulerInterval rulerInterval() {
+	public CCRulerInterval rulerInterval() {
 		return _myInterval;
 	}
 	
@@ -256,7 +253,7 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	 * @param theTime time of the marker
 	 */
 	public void addMarker(final String theName, final double theTime) {
-		_myMarkerList.add(new MarkerPoint(theTime, theName));
+		_myMarkerList.add(new CCMarkerPoint(theTime, theName));
 		if(_myRulerView != null)_myRulerView.render();
 	}
 	
@@ -276,22 +273,22 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		_myMarkerListener.add(theMarkerListener);
 	}
 	
-	public TrackData marker() {
+	public CCTrackData marker() {
 		return _myMarkerList;
 	}
 	
-	public TimeRange loopRange() {
+	public CCTimeRange loopRange() {
 		return _myLoop;
 	}
 	
-	public void rulerView(SwingRulerView theRulerView) {
+	public void rulerView(CCRulerView theRulerView) {
 		view(theRulerView);
 		_myRulerView = theRulerView;
-		_myTimeRangeController = new TimeRangeController(_myTimelineController, loopRange(), this);
+		_myTimeRangeController = new CCTimeRangeController(_myTimelineController, loopRange(), this);
 		_myInterval = currentInterval();
 	}
 	
-	private MarkerPoint _myLastMarker = null;
+	private CCMarkerPoint _myLastMarker = null;
 	
 	public double time() {
 		return _myCurrentTime;
@@ -354,7 +351,7 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		return _myUpperBound;
 	}
 	
-	private void moveTransport(final int theMouseX, boolean theQuantize) {
+	private void moveTransport(final double theMouseX, boolean theQuantize) {
 		if(_myRulerView == null)return;
 		double myClickedTime = viewXToTime(theMouseX, true);
 		if(theQuantize)myClickedTime = _myTimelineController.quantize(myClickedTime);
@@ -362,16 +359,16 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	}
 	
 	@Override
-	public TrackData trackData() {
+	public CCTrackData trackData() {
 		return _myMarkerList;
 	}
 	
-	public void trackData(TrackData theTrackData) {
+	public void trackData(CCTrackData theTrackData) {
 		_myMarkerList = theTrackData;
 	}
 	
-	public TrackType trackType() {
-		return TrackType.MARKER;
+	public CCTrackType trackType() {
+		return CCTrackType.MARKER;
 	}
     
 //    public double viewXToTime(int theViewX) {
@@ -382,19 +379,14 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 //        return _myRulerView.timeToViewX(theTime);
 //    }
 	
-	public Point2D curveToViewSpace(ControlPoint thePoint) {
-        Point2D myResult = new Point2D.Double();
-        int myX = timeToViewX(thePoint.time());
-        int myY = 0; // reverse y axis
-        myResult.setLocation(myX, myY);
-        return myResult;
+	public CCVector2 curveToViewSpace(CCControlPoint thePoint) {
+        return new CCVector2(timeToViewX(thePoint.time()),0);
     }
     
 	@Override
-    public ControlPoint viewToCurveSpace(Point2D thePoint, boolean theGetPos) {
-        ControlPoint myResult = new ControlPoint();
-        
-        myResult.time(viewXToTime((int) thePoint.getX(), theGetPos));
+    public CCControlPoint viewToCurveSpace(CCVector2 thePoint, boolean theGetPos) {
+        CCControlPoint myResult = new CCControlPoint();
+        myResult.time(viewXToTime((int) thePoint.x, theGetPos));
         myResult.value(0);
         
         return myResult;
@@ -413,24 +405,23 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 //	}
 	
 	/* (non-Javadoc)
-     * @see de.artcom.timeline.controller.TrackDataController#dragPointImp(java.awt.geom.Point2D, boolean)
+     * @see de.artcom.timeline.controller.TrackDataController#dragPointImp(java.awt.geom.CCVector2, boolean)
      */
-    public void dragPointImp(ControlPoint theDraggedPoint, ControlPoint myTargetPosition, ControlPoint theMovement, boolean theIsPressedShift) {
-    	ControlPoint myPoint = _myTrackContext.quantize(myTargetPosition);
+    public void dragPointImp(CCControlPoint theDraggedPoint, CCControlPoint myTargetPosition, CCControlPoint theMovement, boolean theIsPressedShift) {
+    	CCControlPoint myPoint = _myTrackContext.quantize(myTargetPosition);
     	trackData().move(theDraggedPoint, myPoint);
     }
 	
 	private double _myLoopStart = 0;
 	private double _myLoopEnd = 0;
 	
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(CCGLMouseEvent e) {
 		if(_myRulerView == null)return;
-		boolean myPressedShift = (e.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) == MouseEvent.SHIFT_DOWN_MASK;
 		
-		_myDefineLoop = e.getY() < _myRulerView.height() / 2;
+		_myDefineLoop = e.y < _myRulerView.height() / 2;
 		
 		if(!_myDefineLoop) {
-			moveTransport(e.getX(), myPressedShift);
+			moveTransport(e.x, e.isShiftDown());
 		}else {
 			_myTimeRangeController.mousePressed(e);
 			
@@ -441,19 +432,17 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		_myTimelineController.renderInfo();
 	}
 	
-	public void mouseMoved(MouseEvent e) {
-		_myDefineLoop = e.getY() < _myRulerView.height() / 2;
+	public void mouseMoved(CCVector2  e) {
+		_myDefineLoop = e.y < _myRulerView.height() / 2;
 		try {
 		if(_myDefineLoop) {
 			switch(_myTimeRangeController.action(e)) {
 			case MOVE_BOTH:
-				_myRulerView.setCursor(new Cursor(Cursor.MOVE_CURSOR));
-				_myRulerView.updateUI();
+//				_myRulerView.setCursor(new Cursor(Cursor.MOVE_CURSOR));
 				break;
 			case MOVE_END:
 			case MOVE_START:
-				_myRulerView.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
-				_myRulerView.updateUI();
+//				_myRulerView.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
 				break;
 			}
 		}
@@ -462,11 +451,9 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		}
 	}
 	
-	public void mouseDragged(MouseEvent e) {
-		boolean myPressedShift = (e.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) == MouseEvent.SHIFT_DOWN_MASK;
-		
+	public void mouseDragged(CCVector2 e) {
 		if(!_myDefineLoop) {
-			moveTransport(e.getX(), myPressedShift);
+			moveTransport(e.x, false);
 			_myTimelineController.renderInfo();
 			
 			_myTimelineController.renderInfo();
@@ -476,15 +463,12 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		}
 	}
 	
-	public void mouseReleased(MouseEvent e) {
-		boolean myPressedShift = (e.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) == MouseEvent.SHIFT_DOWN_MASK;
+	public void mouseReleased(CCGLMouseEvent e) {
 		if(_myDefineLoop) {
-			if(e.getX() == _myStartClickX ) {
+			if(e.x == _myStartClickX ) {
 				doLoop(false);
 			}else {
-
-				if(myPressedShift) {
-				
+				if(e.isShiftDown()) {
 					_myTimelineController.scaleTracks(
 						_myLoopStart, _myLoopEnd, 
 						_myTimeRangeController._myLoopStart, _myTimeRangeController._myLoopEnd
@@ -492,8 +476,8 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 				}
 			}
 		}else {
-			if(!myPressedShift) {
-//				moveTransport(e.getX());
+			if(!e.isShiftDown()) {
+//				moveTransport(e.x);
 			}else {
 //				super.mouseReleased(e, null);
 			}
@@ -545,7 +529,7 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		}
 		_myTransportEvents.proxy().time(_myCurrentTime);
 			
-		MarkerPoint myCurrentMarker = (MarkerPoint)_myMarkerList.getFirstPointAt(_myCurrentTime);
+		CCMarkerPoint myCurrentMarker = (CCMarkerPoint)_myMarkerList.getFirstPointAt(_myCurrentTime);
 		if(myCurrentMarker != _myLastMarker && _myLastMarker != null){
 			for(MarkerListener myListener:_myMarkerListener){
 				myListener.onMarker(_myLastMarker);

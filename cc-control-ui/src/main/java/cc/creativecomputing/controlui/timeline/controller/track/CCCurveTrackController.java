@@ -1,33 +1,30 @@
-/*  
- * Copyright (c) 2011 Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
 package cc.creativecomputing.controlui.timeline.controller.track;
 
-import java.awt.geom.Point2D;
-
-import cc.creativecomputing.control.timeline.Track;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.control.timeline.CCTrack;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCCreateTool;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCCurveTool;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.math.CCVector2;
 
 /**
  * @author christianriekoff
@@ -46,8 +43,8 @@ public abstract class CCCurveTrackController extends CCTrackController{
 	 * @param theParent
 	 */
 	public CCCurveTrackController(
-		TrackContext theTrackContext, 
-		Track theTrack, 
+		CCTrackContext theTrackContext, 
+		CCTrack theTrack, 
 		CCGroupTrackController theParent
 	) {
 		super(theTrackContext, theTrack, theParent);
@@ -69,7 +66,7 @@ public abstract class CCCurveTrackController extends CCTrackController{
 				_myChangedValue = false;
 				return;
 			}
-			for(ControlPoint myPoint:_mySelectedPoints){
+			for(CCControlPoint myPoint:_mySelectedPoints){
 				applyValue(myPoint, null);
 			}
 			_myTrackView.render();
@@ -105,21 +102,21 @@ public abstract class CCCurveTrackController extends CCTrackController{
 	}
 	
 	@Override
-	public ControlPoint draggedPoint() {
+	public CCControlPoint draggedPoint() {
 		return _myCreateTool.draggedPoint();
 	}
 	
-	public Point2D selectionStart(){
+	public CCVector2 selectionStart(){
 		return _myCreateTool.selectionStart();
 	}
 	
-	public Point2D selectionEnd(){
+	public CCVector2 selectionEnd(){
 		return _myCreateTool.selectionEnd();
 	}
 	
 	@Override
 	public void writeValue(double theTime) {
-		_myCreateTool.createPoint(new ControlPoint(theTime, _myProperty.normalizedValue()));
+		_myCreateTool.createPoint(new CCControlPoint(theTime, _myProperty.normalizedValue()));
 	}
 	
 	private boolean _myApplyValue = true;
@@ -128,7 +125,7 @@ public abstract class CCCurveTrackController extends CCTrackController{
 		_myApplyValue = theApplyValue;
 	}
 	
-	public void applyValue(ControlPoint thePoint, Object theValue) {
+	public void applyValue(CCControlPoint thePoint, Object theValue) {
 		thePoint.value(_myProperty.normalizedValue());
 	}
 }

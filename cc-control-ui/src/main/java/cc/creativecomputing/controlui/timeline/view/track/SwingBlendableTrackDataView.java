@@ -1,119 +1,124 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
-
-import cc.creativecomputing.control.timeline.point.BezierControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCBlendableTrackController;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCVector2;
 
-public abstract class SwingBlendableTrackDataView<ControllerType extends CCBlendableTrackController<?>> extends SwingAbstractTrackDataView<ControllerType> {
+public abstract class SwingBlendableTrackDataView<ControllerType extends CCBlendableTrackController<?>> extends CCAbstractTrackDataView<ControllerType> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8117392771151385531L;
 	private SwingCurveTrackPopup _myToolChooserPopup;
 
-	public SwingBlendableTrackDataView(TimelineController theTimelineController, ControllerType theTrackController) {
+	public SwingBlendableTrackDataView(CCTimelineController theTimelineController, ControllerType theTrackController) {
 		super(theTimelineController, theTrackController);
 		_myToolChooserPopup = new SwingCurveTrackPopup(theTrackController, theTimelineController);
 	}
 
 	@Override
-	public void showPopUp(MouseEvent theEvent) {
-		_myToolChooserPopup.show(SwingBlendableTrackDataView.this, theEvent);
+	public void showPopUp(CCGLMouseEvent theEvent) {
+		_myToolChooserPopup.show(theEvent);
 
 	}
 
-	public abstract void renderBlendData(Graphics2D g2d, ControlPoint myFirstPoint, ControlPoint mySecondPoint);
+	public abstract void renderBlendData(CCGraphics g, CCControlPoint myFirstPoint, CCControlPoint mySecondPoint);
 
-	private void renderBlendData(Graphics2D g2d) {
+	private void renderBlendData(CCGraphics g) {
 		if (_myController.trackData().size() == 0) {
 			return;
 		}
 
-		ControlPoint myMinPoint = _myController.trackData().floor(new ControlPoint(_myTrackContext.lowerBound(), 0));
+		CCControlPoint myMinPoint = _myController.trackData().floor(new CCControlPoint(_myTrackContext.lowerBound(), 0));
 		if (myMinPoint == null) {
-			myMinPoint = new ControlPoint(_myTrackContext.lowerBound(), _myController.trackData().value(_myTrackContext.lowerBound()));
+			myMinPoint = new CCControlPoint(_myTrackContext.lowerBound(), _myController.trackData().value(_myTrackContext.lowerBound()));
 		}
 
-		ControlPoint myMaxPoint = _myController.trackData().ceiling(new ControlPoint(_myTrackContext.upperBound(), 0));
+		CCControlPoint myMaxPoint = _myController.trackData().ceiling(new CCControlPoint(_myTrackContext.upperBound(), 0));
 
 		if (myMaxPoint == null) {
-			myMaxPoint = new ControlPoint(_myTrackContext.upperBound(), _myController.trackData().value(_myTrackContext.upperBound()));
+			myMaxPoint = new CCControlPoint(_myTrackContext.upperBound(), _myController.trackData().value(_myTrackContext.upperBound()));
 		}
 		myMaxPoint = _myController.trackData().getLastOnSamePosition(myMaxPoint);
 
-		ControlPoint myCurrentPoint = _myController.trackData().ceiling(new ControlPoint(_myTrackContext.lowerBound(), 0));
-		ControlPoint myLastPoint = myMinPoint;
+		CCControlPoint myCurrentPoint = _myController.trackData().ceiling(new CCControlPoint(_myTrackContext.lowerBound(), 0));
+		CCControlPoint myLastPoint = myMinPoint;
 		while (myCurrentPoint != null && myCurrentPoint != myMaxPoint) {
-			renderBlendData(g2d, myLastPoint, myCurrentPoint);
+			renderBlendData(g, myLastPoint, myCurrentPoint);
 			myLastPoint = myCurrentPoint;
-			myCurrentPoint = myCurrentPoint.getNext();
+			myCurrentPoint = myCurrentPoint.next();
 		}
-		renderBlendData(g2d, myLastPoint, myMaxPoint);
+		renderBlendData(g, myLastPoint, myMaxPoint);
 	}
 	
-	private void adjustHandles(ControlPoint thePoint) {
-		if(!(thePoint instanceof BezierControlPoint))return;
+	private void adjustHandles(CCControlPoint thePoint) {
+		if(!(thePoint instanceof CCBezierControlPoint))return;
 		
-		BezierControlPoint myPoint = (BezierControlPoint) thePoint;
+		CCBezierControlPoint myPoint = (CCBezierControlPoint) thePoint;
 		myPoint.inHandle().value(myPoint.inHandle().value() * 0.5);
 		myPoint.outHandle().value(myPoint.outHandle().value() * 0.5);
 	}
 
-	private void drawBlendedCurve(Graphics2D g2d) {
+	private void drawBlendedCurve(CCGraphics g) {
 		if (_myController.trackData().size() == 0) {
-			GeneralPath myPath = new GeneralPath();
-			Point2D p1 = _myController.curveToViewSpace(new ControlPoint(0, _myController.value(0)));
-			myPath.moveTo(0, p1.getY() / 2);
-			myPath.lineTo(getWidth(), p1.getY() / 2);
+			CCVector2 p1 = _myController.curveToViewSpace(new CCControlPoint(0, _myController.value(0)));
+			g.line(0, p1.y / 2);
+			myPath.lineTo(getWidth(), p1.y / 2);
 
-			g2d.setColor(_myFillColor);
-			g2d.draw(myPath);
+			g.color(_myFillColor);
+			g.draw(myPath);
 			return;
 		}
 
-		ControlPoint myMinPoint = _myController.trackData().floor(new ControlPoint(_myTrackContext.lowerBound(), 0));
+		CCControlPoint myMinPoint = _myController.trackData().floor(new CCControlPoint(_myTrackContext.lowerBound(), 0));
 		if (myMinPoint == null) {
-			myMinPoint = new ControlPoint(_myTrackContext.lowerBound(), _myController.trackData().value(_myTrackContext.lowerBound()) / 2);
+			myMinPoint = new CCControlPoint(_myTrackContext.lowerBound(), _myController.trackData().value(_myTrackContext.lowerBound()) / 2);
 		}
-		Point2D p1 = _myController.curveToViewSpace(myMinPoint);
+		CCVector2 p1 = _myController.curveToViewSpace(myMinPoint);
 
 		GeneralPath myPath = new GeneralPath();
-		myPath.moveTo(p1.getX(), p1.getY());
+		myPath.moveTo(p1.x, p1.y);
 
-		ControlPoint myMaxPoint = _myController.trackData().ceiling(new ControlPoint(_myTrackContext.upperBound(), 0));
+		CCControlPoint myMaxPoint = _myController.trackData().ceiling(new CCControlPoint(_myTrackContext.upperBound(), 0));
 
 		if (myMaxPoint == null) {
-			myMaxPoint = new ControlPoint(_myTrackContext.upperBound(), _myController.trackData().value(_myTrackContext.upperBound()) / 2);
+			myMaxPoint = new CCControlPoint(_myTrackContext.upperBound(), _myController.trackData().value(_myTrackContext.upperBound()) / 2);
 		}
 		myMaxPoint = _myController.trackData().getLastOnSamePosition(myMaxPoint);
 
-		ControlPoint myCurrentPoint = _myController.trackData().ceiling(new ControlPoint(_myTrackContext.lowerBound(), 0));
-		ControlPoint myLastPoint = myMinPoint;
+		CCControlPoint myCurrentPoint = _myController.trackData().ceiling(new CCControlPoint(_myTrackContext.lowerBound(), 0));
+		CCControlPoint myLastPoint = myMinPoint;
 		while (myCurrentPoint != null && myCurrentPoint != myMaxPoint) {
-			ControlPoint c0 = myLastPoint.clone();
+			CCControlPoint c0 = myLastPoint.clone();
 			c0.value(0.0);
-			ControlPoint c1 = myCurrentPoint.clone();
+			CCControlPoint c1 = myCurrentPoint.clone();
 			c1.value(0.5);
 			adjustHandles(c0);
 			adjustHandles(c1);
 			drawCurvePiece(c0, c1, myPath, true);
 			myLastPoint = myCurrentPoint;
-			myCurrentPoint = myCurrentPoint.getNext();
+			myCurrentPoint = myCurrentPoint.next();
 		}
-		ControlPoint c0 = myLastPoint.clone();
+		CCControlPoint c0 = myLastPoint.clone();
 		c0.value(0.0);
-		ControlPoint c1 = myMaxPoint.clone();
+		CCControlPoint c1 = myMaxPoint.clone();
 		c1.value(0.0);
 		adjustHandles(c0);
 		adjustHandles(c1);
@@ -124,27 +129,26 @@ public abstract class SwingBlendableTrackDataView<ControllerType extends CCBlend
 		myPath.closePath();
 
 		if (!_myController.track().mute()) {
-			g2d.setPaint(new GradientPaint(0, 0, _myFillColor, 0, getHeight(), _myLineColor));
+			g.setPaint(new GradientPaint(0, 0, _myFillColor, 0, getHeight(), _myLineColor));
 		} else {
-			g2d.setPaint(new GradientPaint(0, 0, _myFillColor.brighter(), 0, getHeight(), _myLineColor.brighter()));
+			g.setPaint(new GradientPaint(0, 0, _myFillColor.brighter(), 0, getHeight(), _myLineColor.brighter()));
 		}
-		g2d.fill(myPath);
+		g.fill(myPath);
 
-		g2d.setColor(_myLineColor);
-		g2d.draw(myPath);
+		g.color(_myLineColor);
+		g.draw(myPath);
 	}
 
 	@Override
-	public void renderData(Graphics2D g2d) {
+	public void renderData(CCGraphics g) {
 		try {
-		renderBlendData(g2d);
-		drawBlendedCurve(g2d);
+		renderBlendData(g);
+		drawBlendedCurve(g);
 
 		// paint curve points
-		BasicStroke myThinStroke = new BasicStroke(0.5f);
-		g2d.setStroke(myThinStroke);
-		g2d.setColor(_myDotColor);
-		ControlPoint myCurrentPoint = _myController.trackData().getFirstPointAt(_myTrackContext.lowerBound());
+		g.strokeWeight(0.5);
+		g.color(_myDotColor);
+		CCControlPoint myCurrentPoint = _myController.trackData().getFirstPointAt(_myTrackContext.lowerBound());
 
 		while (myCurrentPoint != null) {
 			if (myCurrentPoint.time() > _myTrackContext.upperBound()) {
@@ -152,33 +156,33 @@ public abstract class SwingBlendableTrackDataView<ControllerType extends CCBlend
 			}
 
 			
-			g2d.setColor(_myDotColor);
-			Point2D myUserPoint = _myController.curveToViewSpace(myCurrentPoint);
+			g.color(_myDotColor);
+			CCVector2 myUserPoint = _myController.curveToViewSpace(myCurrentPoint);
 			if (myCurrentPoint.isSelected()) {
-				g2d.setColor(Color.red);
+				g.color(Color.red);
 			}
 
-			point(myUserPoint);
-			line(new Point2D.Double(myUserPoint.getX(), height() / 2), new Point2D.Double(myUserPoint.getX(), 0));
-			g2d.setColor(_myDotColor);
+			g.point(myUserPoint);
+			g.line(myUserPoint.x, height() / 2, myUserPoint.x, 0);
+			g.color(_myDotColor);
 
-			// g2d.drawString(myCurrentPoint.value() +"",
-			// (int)myUserPoint.getX(), (int)myUserPoint.getY());
+			// g.drawString(myCurrentPoint.value() +"",
+			// (int)myUserPoint.x, (int)myUserPoint.y);
 
 //			if (myCurrentPoint.getType() == ControlPointType.BEZIER) {
 //				BezierControlPoint myBezierPoint = (BezierControlPoint) myCurrentPoint;
 //				
-//				Point2D myUserHandle = _myController.curveToViewSpace(myBezierPoint.inHandle());
-//				myUserHandle.setLocation(myUserHandle.getX(), myUserHandle.getY() / 2 + height() / 2);
+//				CCVector2 myUserHandle = _myController.curveToViewSpace(myBezierPoint.inHandle());
+//				myUserHandle.setLocation(myUserHandle.x, myUserHandle.y / 2 + height() / 2);
 //				line(myUserPoint, myUserHandle);
 //				point(myUserHandle);
 //
 //				myUserHandle = _myController.curveToViewSpace(myBezierPoint.outHandle());
-//				myUserHandle.setLocation(myUserHandle.getX(), myUserHandle.getY() / 2 + height() / 2);
+//				myUserHandle.setLocation(myUserHandle.x, myUserHandle.y / 2 + height() / 2);
 //				line(myUserPoint, myUserHandle);
 //				point(myUserHandle);
 //			}
-			myCurrentPoint = myCurrentPoint.getNext();
+			myCurrentPoint = myCurrentPoint.next();
 		}
 		}catch(Exception e) {
 			e.printStackTrace();

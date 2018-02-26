@@ -1,41 +1,38 @@
-/*  
- * Copyright (c) 2011 Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.track;
 
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.control.handles.CCPropertyListener;
-import cc.creativecomputing.control.timeline.Track;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.control.timeline.CCTrack;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.actions.AddControlPointAction;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCEventTrackTool;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCEventTrackTool.EventAction;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCVector2;
 
 /**
  * @author christianriekoff
@@ -54,8 +51,8 @@ public class CCEventTrackController extends CCTrackController {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public CCEventTrackController(
-		TimelineController theTimelineController,
-		Track theTrack, 
+		CCTimelineController theTimelineController,
+		CCTrack theTrack, 
 		CCGroupTrackController theParent
 	) {
 		super(theTimelineController, theTrack, theParent);
@@ -111,22 +108,22 @@ public class CCEventTrackController extends CCTrackController {
 		return myResult;
 	}
 	
-	public void delete(TimedEventPoint theEvent) {
+	public void delete(CCTimedEventPoint theEvent) {
 		trackData().remove(theEvent);
 		_myEventTrackListener.proxy().onDelete(this, theEvent);
 	}
 	
-	public void properties(TimedEventPoint theEvent) {
+	public void properties(CCTimedEventPoint theEvent) {
 		_myEventTrackListener.proxy().onProperties(this, theEvent);
 	}
 	
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double upperTime, Graphics2D theG2d){
+	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double upperTime, CCGraphics theG2d){
 		_myEventTrackListener.proxy().renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, upperTime, theG2d);
 	}
 	
-	public void createPoint(MouseEvent theEvent, String theEventType) {
-		Point2D myViewCoords = new Point2D.Double(theEvent.getX(), theEvent.getY());
-		TimedEventPoint myPoint = _myEventTrackTool.createPoint(myViewCoords);
+	public void createPoint(CCGLMouseEvent theEvent, String theEventType) {
+		CCVector2 myViewCoords = new CCVector2(theEvent.x, theEvent.y);
+		CCTimedEventPoint myPoint = _myEventTrackTool.createPoint(myViewCoords);
 		myPoint.eventType(theEventType);
 		_myEventTrackListener.proxy().onCreate(this, myPoint);
 		UndoHistory.instance().apply(new AddControlPointAction(this, myPoint));
@@ -134,22 +131,22 @@ public class CCEventTrackController extends CCTrackController {
 	
 	
 	public void writeValue(double theTime){
-		ControlPoint myControlPoint = new ControlPoint(theTime, _myProperty.normalizedValue());
+		CCControlPoint myControlPoint = new CCControlPoint(theTime, _myProperty.normalizedValue());
 		_myEventTrackTool.createPoint(myControlPoint);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see de.artcom.timeline.controller.TrackDataController#dragPointImp(java.awt.geom.Point2D, boolean)
+	 * @see de.artcom.timeline.controller.TrackDataController#dragPointImp(java.awt.geom.CCVector2, boolean)
 	 */
 	
 	
-	private TimedEventPoint pointAt(double theTime) {
-		ControlPoint myCurveCoords = new ControlPoint(theTime, 0);
-		TimedEventPoint myLower = (TimedEventPoint)trackData().lower(myCurveCoords);
+	private CCTimedEventPoint pointAt(double theTime) {
+		CCControlPoint myCurveCoords = new CCControlPoint(theTime, 0);
+		CCTimedEventPoint myLower = (CCTimedEventPoint)trackData().lower(myCurveCoords);
 		if(myLower == null) return null;
-		ControlPoint myUpper = myLower.endPoint();
+		CCControlPoint myUpper = myLower.endPoint();
 		if(myUpper == null) return null;
 		if(myCurveCoords.time() > myLower.time() && myCurveCoords.time() < myUpper.time()) {
 			return myLower;
@@ -157,19 +154,19 @@ public class CCEventTrackController extends CCTrackController {
 		return null;
 	}
 	
-	public TimedEventPoint clickedPoint(MouseEvent e) {
-		Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
-		ControlPoint myCurveCoords = viewToCurveSpace(myViewCoords, true);
+	public CCTimedEventPoint clickedPoint(CCGLMouseEvent e) {
+		CCVector2 myViewCoords = new CCVector2(e.x, e.y);
+		CCControlPoint myCurveCoords = viewToCurveSpace(myViewCoords, true);
 		return pointAt(myCurveCoords.time());
 	}
 	
-	public TimedEventPoint editedEvent(){
+	public CCTimedEventPoint editedEvent(){
 		return _myEventTrackTool.editedEvent();
 	}
 
 	@Override
 	public void timeImplementation(double theTime, double theValue) {
-		TimedEventPoint myEventPoint = pointAt(theTime);
+		CCTimedEventPoint myEventPoint = pointAt(theTime);
 		
 	    	if(myEventPoint == null || myEventPoint.content() == null || myEventPoint.content().value() == null){
 	    		_myTrack.property().restorePreset();

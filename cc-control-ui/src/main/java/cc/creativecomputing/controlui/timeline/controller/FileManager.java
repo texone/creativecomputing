@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller;
 
 import java.nio.file.Path;
@@ -6,10 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import cc.creativecomputing.control.timeline.AbstractTrack;
-import cc.creativecomputing.control.timeline.GroupTrack;
-import cc.creativecomputing.control.timeline.TrackData;
-import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuatizeMode;
+import cc.creativecomputing.control.timeline.CCAbstractTrack;
+import cc.creativecomputing.control.timeline.CCGroupTrack;
+import cc.creativecomputing.control.timeline.CCTrackData;
+import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuantizeMode;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.util.UndoHistory;
@@ -74,15 +90,15 @@ public class FileManager {
 				theTransportController.doLoop(theTransportData.getBoolean(LOOP_ACTIVE_ATTRIBUTE));
 			}
 			
-			CCDataObject myTrackDataData = theTransportData.getObject(TrackData.TRACKDATA_ELEMENT);
+			CCDataObject myTrackDataData = theTransportData.getObject(CCTrackData.TRACKDATA_ELEMENT);
 			if(myTrackDataData != null) {
-				TrackData myTrackData = new TrackData(null);
+				CCTrackData myTrackData = new CCTrackData(null);
 				myTrackData.data(myTrackDataData);
 				theTransportController.trackData(myTrackData);
 			}
 		}
 		
-		private void loadGroupTrack(CCDataObject theData, TimelineController theTimeline){
+		private void loadGroupTrack(CCDataObject theData, CCTimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
 			CCGroupTrackController myController;
@@ -94,7 +110,7 @@ public class FileManager {
 			}
 			myController.groupTrack().data(theData);
 			
-			Object myData = theData.get(GroupTrack.GROUP_TRACKS);
+			Object myData = theData.get(CCGroupTrack.GROUP_TRACKS);
 			if(myData instanceof CCDataArray){
 				for(Object myObject:(CCDataArray)myData){
 					try{
@@ -109,7 +125,7 @@ public class FileManager {
 			
 		}
 		
-		private void loadDataTrack(CCDataObject theData, TimelineController theTimeline){
+		private void loadDataTrack(CCDataObject theData, CCTimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
 			CCTrackController myController;
@@ -122,7 +138,7 @@ public class FileManager {
 			myController.data(theData);
 		}
 		
-		private void loadTrack(CCDataObject theData, TimelineController theTimeline){
+		private void loadTrack(CCDataObject theData, CCTimelineController theTimeline){
 			if(theData.containsKey("tracks")){
 				loadGroupTrack(theData, theTimeline);
 			}else{
@@ -130,11 +146,11 @@ public class FileManager {
 			}
 		}
 		
-		private void loadTracks(CCDataObject theTimelineData, TimelineController theTimeline){
+		private void loadTracks(CCDataObject theTimelineData, CCTimelineController theTimeline){
 			loadTrack(theTimelineData, theTimeline);
 		}
 		
-		private void loadTimeline(CCDataObject myTimelineData, TimelineController theTimelineController){
+		private void loadTimeline(CCDataObject myTimelineData, CCTimelineController theTimelineController){
 			CCDataObject myTransportData = myTimelineData.getObject(TRANSPORT_ELEMENT);
 			loadTransport(myTransportData, theTimelineController.transportController());
 				
@@ -147,7 +163,7 @@ public class FileManager {
 			}
 			
 			if(myTimelineData.containsKey(QUANTIZE_ATTRIBUTE)){
-				theTimelineController.quantizer(CCQuatizeMode.valueOf(myTimelineData.getString(QUANTIZE_ATTRIBUTE)));
+				theTimelineController.quantizer(CCQuantizeMode.valueOf(myTimelineData.getString(QUANTIZE_ATTRIBUTE)));
 			}
 			theTimelineController.resetClipTracks();
 			if(myTimelineData.containsKey(TIMELINE_ELEMENT)){
@@ -163,7 +179,7 @@ public class FileManager {
 			}
 		}
 		
-		public void loadTimeline(Path thePath, TimelineController theTimelineController) {
+		public void loadTimeline(Path thePath, CCTimelineController theTimelineController) {
 			CCDataObject myTimelineData = CCDataIO.createDataObject(thePath);
 			if(myTimelineData == null)throw new RuntimeException("the given timelinedocument:" + thePath +" does not exist");
 			loadTimeline(myTimelineData, theTimelineController);
@@ -176,19 +192,19 @@ public class FileManager {
 			List<String> myKeys = new ArrayList<>(myTimelinesObject.keySet());
 			Collections.sort(myKeys);
 			for(String myTimeline:myKeys){
-				TimelineController myController = _myTimelineContainer.addTimeline(myTimeline);
+				CCTimelineController myController = _myTimelineContainer.addTimeline(myTimeline);
 				loadTimeline(myTimelinesObject.getObject(myTimeline), myController);
 			}
 			
 		}
 		
-		private void insertGroupTrack(CCDataObject theData, TimelineController theTimeline){
+		private void insertGroupTrack(CCDataObject theData, CCTimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
 			CCGroupTrackController myController = theTimeline.createGroupController(myPath);
 			myController.groupTrack().insertData(theData, theTimeline.transportController().time());
 			
-			Object myData = theData.get(GroupTrack.GROUP_TRACKS);
+			Object myData = theData.get(CCGroupTrack.GROUP_TRACKS);
 			if(myData instanceof CCDataArray){
 				for(Object myObject:(CCDataArray)myData){
 					insertTrack((CCDataObject)myObject, theTimeline);
@@ -199,14 +215,14 @@ public class FileManager {
 			
 		}
 		
-		private void insertDataTrack(CCDataObject theData, TimelineController theTimeline){
+		private void insertDataTrack(CCDataObject theData, CCTimelineController theTimeline){
 			if(!theData.containsKey("path"))return;
 			Path myPath = Paths.get(theData.getString("path"));
 			CCTrackController myController = theTimeline.createController(myPath);
 			myController.track().insertData(theData, theTimeline.transportController().time());
 		}
 		
-		private void insertTrack(CCDataObject theData, TimelineController theTimeline){
+		private void insertTrack(CCDataObject theData, CCTimelineController theTimeline){
 			CCLog.info(theData);
 			if(theData.containsKey("tracks")){
 				insertGroupTrack(theData, theTimeline);
@@ -215,11 +231,11 @@ public class FileManager {
 			}
 		}
 		
-		private void insertTracks(CCDataObject theTimelineData, TimelineController theTimeline){
+		private void insertTracks(CCDataObject theTimelineData, CCTimelineController theTimeline){
 			insertTrack(theTimelineData, theTimeline);
 		}
 		
-		public List<AbstractTrack> insertTracks(Path thePath, TimelineController theTimelineController) {
+		public List<CCAbstractTrack> insertTracks(Path thePath, CCTimelineController theTimelineController) {
 			
 			try {
 				CCDataObject myTimelineData = CCDataIO.createDataObject(thePath);
@@ -275,7 +291,7 @@ public class FileManager {
 			return myTransportData;
 		}
 		
-		private CCDataObject createTimelineData(TimelineController theTimelineController, boolean theSaveSelection) {
+		private CCDataObject createTimelineData(CCTimelineController theTimelineController, boolean theSaveSelection) {
 			CCDataObject myTimelineData = new CCDataObject();
 			myTimelineData.put(LOWER_BOUND_ATTRIBUTE, theTimelineController.zoomController().lowerBound());
 			myTimelineData.put(UPPER_BOUND_ATTRIBUTE, theTimelineController.zoomController().upperBound());
@@ -306,7 +322,7 @@ public class FileManager {
 			return myTimelineData;
 		}
 		
-		public void saveTimeline(Path thePath, TimelineController theTimelineController) {
+		public void saveTimeline(Path thePath, CCTimelineController theTimelineController) {
 			CCDataObject myTimelineData = createTimelineData(theTimelineController, false);
 			CCDataIO.saveDataObject(myTimelineData, thePath);
 		}
@@ -320,7 +336,7 @@ public class FileManager {
 			CCDataIO.saveDataObject(myProjecteData, thePath);
 		}
 		
-		public void saveTimelineSelection(Path thePath, TimelineController theTimelineController) {
+		public void saveTimelineSelection(Path thePath, CCTimelineController theTimelineController) {
 			CCDataObject myTimelineData = createTimelineData(theTimelineController, true);
 			CCDataIO.saveDataObject(myTimelineData, thePath);
 		}
@@ -328,14 +344,14 @@ public class FileManager {
 	
 	private DataSerializer _mySerializer;
 	
-	private TimelineContainer _myTimelineContainer;
+	private CCTimelineContainer _myTimelineContainer;
 	
 	private CCListenerManager<FileManagerListener> _myEvents = CCListenerManager.create(FileManagerListener.class);
 	
 	private String _myExtension = "json";
 	private String _myDescription = "Data Path";
 	
-	public FileManager(TimelineContainer theTimelineContainer) {
+	public FileManager(CCTimelineContainer theTimelineContainer) {
 		_mySerializer = new DataSerializer();
 		_myTimelineContainer = theTimelineContainer;
 	}
@@ -358,7 +374,7 @@ public class FileManager {
 	}
 	
 	public void replaceCurrentTimeline(Path thePath) {
-		TimelineController myController = _myTimelineContainer.activeTimeline();
+		CCTimelineController myController = _myTimelineContainer.activeTimeline();
 		myController.removeAll();
 		_mySerializer.loadTimeline(thePath, myController);
 		_myEvents.proxy().onLoad(thePath);

@@ -1,28 +1,35 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
 
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.TimelineChangeListener;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.controlui.timeline.view.SwingTimelineContainerView;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer.TimelineChangeListener;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
+import cc.creativecomputing.controlui.timeline.view.CCTimelineContainerView;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLWindow;
+import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
+import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
 
-public class CCControlComponent extends JSplitPane{
+public class CCControlComponent extends CCUIVerticalFlowPane{
 
 	/**
 	 * 
@@ -31,18 +38,15 @@ public class CCControlComponent extends JSplitPane{
 
 	private CCControlTreeComponent _myTreeComponent;
 	
-	private final JSplitPane _myControlsTimelinePane;
+	private final CCUIHorizontalFlowPane _myControlsTimelinePane;
 	
 	private JPanel _myInfoPanel;
 	
 //	private CCPresetComponent _myPresetComponent;
 	
-	private TimelineContainer _myTimelineContainer;
-	private SwingTimelineContainerView _myTimelineView;
+	private CCTimelineContainerView _myTimelineView;
 	
-	public CCControlComponent(JFrame theMainFrame){
-		super(JSplitPane.VERTICAL_SPLIT, true);
-		CCUIStyler.styleSplitPane(this);
+	public CCControlComponent(CCGLWindow theMainFrame){
 		_myInfoPanel = new JPanel();
 		_myInfoPanel.setLayout(new BorderLayout());
 		_myInfoPanel.setBackground(Color.GRAY);
@@ -54,15 +58,15 @@ public class CCControlComponent extends JSplitPane{
 		myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		_myTreeComponent = new CCControlTreeComponent("app", this);
-		_myTimelineView = new SwingTimelineContainerView(theMainFrame);
-		_myTimelineContainer = new TimelineContainer(_myTreeComponent.propertyMap());
+		_myTimelineView = new CCTimelineContainerView(theMainFrame);
+		_myTimelineContainer = new CCTimelineContainer(_myTreeComponent.propertyMap());
 		_myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
 			
 			@Override
 			public void resetTimelines() {}
 			
 			@Override
-			public void changeTimeline(TimelineController theController) {
+			public void changeTimeline(CCTimelineController theController) {
 				_myTimelineContainer.activeTimeline().view().controller(theController);
 //				_myControlsTimelinePane.setRightComponent(((SwingTimelineView)theController.view()).container());
 			}
@@ -83,11 +87,9 @@ public class CCControlComponent extends JSplitPane{
 //        myControlsPane.setBottomComponent(myScrollPane);
         
 
-        _myControlsTimelinePane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-        CCUIStyler.styleSplitPane(_myControlsTimelinePane);
-        _myControlsTimelinePane.setLeftComponent(myScrollPane);
-        _myControlsTimelinePane.setDividerLocation(330 * SwingGuiConstants.SCALE);
-        _myControlsTimelinePane.setRightComponent(_myTimelineContainer.activeTimeline().view());
+        _myControlsTimelinePane = new CCUIHorizontalFlowPane();
+        _myControlsTimelinePane.addChild(myScrollPane);
+        _myControlsTimelinePane.addChild(_myTimelineContainer.activeTimeline().view());
         
         _myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
         	
@@ -95,8 +97,8 @@ public class CCControlComponent extends JSplitPane{
         	public void resetTimelines() {}
 			
 			@Override
-			public void changeTimeline(TimelineController theController) {
-		        _myControlsTimelinePane.setRightComponent(_myTimelineContainer.activeTimeline().view());
+			public void changeTimeline(CCTimelineController theController) {
+//		        _myControlsTimelinePane.setRightComponent(_myTimelineContainer.activeTimeline().view());
 			}
 			
 			@Override
@@ -104,30 +106,21 @@ public class CCControlComponent extends JSplitPane{
 			}
 		});
         
-        JSplitPane myTreeControlsTimelinePane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-        CCUIStyler.styleSplitPane(myTreeControlsTimelinePane);
-        myTreeControlsTimelinePane.setLeftComponent(_myTreeComponent);
+        CCUIHorizontalFlowPane myTreeControlsTimelinePane = new CCUIHorizontalFlowPane();
+        myTreeControlsTimelinePane.addChild(_myTreeComponent);
+        myTreeControlsTimelinePane.addChild(_myControlsTimelinePane);
         
-        myTreeControlsTimelinePane.setRightComponent(_myControlsTimelinePane);
-        myTreeControlsTimelinePane.setDividerLocation(200 * SwingGuiConstants.SCALE); 
-        
-        setTopComponent(_myTimelineView.transportView());
-        setBottomComponent(myTreeControlsTimelinePane);
-		setDividerLocation(30 * SwingGuiConstants.SCALE);
-        
-        Dimension minimumSize = new Dimension(200 * SwingGuiConstants.SCALE, 50 * SwingGuiConstants.SCALE);
-        _myTreeComponent.setMinimumSize(minimumSize);
-        _myInfoPanel.setMinimumSize(minimumSize);
-        setPreferredSize(new Dimension(1800 * SwingGuiConstants.SCALE, 300 * SwingGuiConstants.SCALE));
+        addChild(_myTimelineView.transportView());
+        addChild(myTreeControlsTimelinePane);
 	}
 
 	
 	
-	public SwingTimelineContainerView view(){
+	public CCTimelineContainerView view(){
 		return _myTimelineView;
 	}
 	
-	public TimelineContainer timeline(){
+	public CCTimelineContainer timeline(){
 		return _myTimelineContainer;
 	}
 	
@@ -157,59 +150,5 @@ public class CCControlComponent extends JSplitPane{
 	public CCPropertyMap propertyMap(){
 		return _myTreeComponent.propertyMap();
 	}
-	
-	/**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event dispatch thread.
-     */
-    private static void createAndShowGUI() {
-//        if (useSystemLookAndFeel) {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception e) {
-                System.err.println("Couldn't use system look and feel.");
-            }
-//        }
- 
-        //Create and set up the window.
-        JFrame frame = new JFrame("TreeDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
- 
-        CCControlComponent myControlComponent = new CCControlComponent(frame);
-        myControlComponent.setData(new CCTestClass2(), "settings");
-//        myControlComponent.setData();
-        
-        //Add content to the window.
-        frame.add(myControlComponent);
- 
-        //Display the window.
-        frame.pack();
-        frame.setVisible(true);
-    }
-    
-    public static class CCTestClass{
-		@CCProperty(name = "int test", min = 0, max = 100)
-		private int _myInt = 10;
-		@CCProperty(name = "float test", min = 0, max = 100)
-		private float _myFloat = 10;
-	}
-	
-	public static class CCTestClass2{
-		@CCProperty(name = "bool test")
-		private boolean _myBoolean = true;
-		@CCProperty(name = "object test")
-		private CCTestClass _myInnerObject = new CCTestClass();
-	}
- 
-    public static void main(String[] args) {
-        //Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
-    }
 
 }

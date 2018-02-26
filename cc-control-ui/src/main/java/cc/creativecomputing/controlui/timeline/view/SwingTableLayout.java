@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view;
 
 import java.awt.Component;
@@ -10,7 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.controlui.CCUIConstants;
 
 public class SwingTableLayout implements LayoutManager2 {
 	
@@ -82,7 +98,7 @@ public class SwingTableLayout implements LayoutManager2 {
 				}
 				_myColumnWeights.add(1.0f);
 				// HACK
-				_myColumnWeights.set(1, SwingGuiConstants.DEFAULT_TRACK_CONTROL_WEIGHT);
+				_myColumnWeights.set(1, CCUIConstants.DEFAULT_TRACK_CONTROL_WEIGHT);
 			}
 			_myConstraintsMap.put(theComponent, myConstraints);
 		}

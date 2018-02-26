@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
 import java.awt.Color;
@@ -18,29 +34,29 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.controlui.timeline.view.SwingMultiTrackPanel;
 import cc.creativecomputing.controlui.timeline.view.SwingTableLayout;
+import cc.creativecomputing.gl.app.CCGLWindow;
 
 
-@SuppressWarnings("serial")
-public class SwingGroupTrackView extends SwingAbstractTrackView {
+public class SwingGroupTrackView extends CCAbstractTrackView {
 	
 	private class SingleGroupTrackControlPopup extends JPopupMenu{
 
 		public SingleGroupTrackControlPopup() {
-			this.setFont(SwingGuiConstants.ARIAL_9);
+			this.setFont(CCUIConstants.ARIAL_9);
 			
 			JMenuItem entryHead = new JMenuItem("Group Edit Funtions");
-			entryHead.setFont(SwingGuiConstants.ARIAL_11);
+			entryHead.setFont(CCUIConstants.ARIAL_11);
 			add(entryHead);
 			addSeparator();
 			
 			JMenuItem myRemoveItem = new JMenuItem("remove track");
-			myRemoveItem.setFont(SwingGuiConstants.ARIAL_11);
+			myRemoveItem.setFont(CCUIConstants.ARIAL_11);
 			myRemoveItem.setActionCommand("remove");
 			myRemoveItem.addActionListener(new ActionListener() {
 				
@@ -52,7 +68,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 			add(myRemoveItem);
 			
 			JMenuItem myColorItem = new JMenuItem("color track");
-			myColorItem.setFont(SwingGuiConstants.ARIAL_11);
+			myColorItem.setFont(CCUIConstants.ARIAL_11);
 			myColorItem.addActionListener(new ActionListener() {
 				
 				@Override
@@ -63,7 +79,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 			add(myColorItem);
 			
 			JMenuItem myWriteItem = new JMenuItem("write values");
-			myWriteItem.setFont(SwingGuiConstants.ARIAL_11);
+			myWriteItem.setFont(CCUIConstants.ARIAL_11);
 			myWriteItem.addActionListener(new ActionListener() {
 				
 				@Override
@@ -96,7 +112,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
     }
 	
 	private CCGroupTrackController _myGroupController;
-	private TimelineController _myTimelineController;
+	private CCTimelineController _myTimelineController;
 	private JLabel _myOpenButton;
 	private JLabel _myAddressField;
 	private ArrayList<ActionListener> _myListeners;
@@ -108,10 +124,10 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 	private boolean _myShowUnusedItems = true;
 	
 	public SwingGroupTrackView(
-		JFrame theMainFrame,
-	    SwingAbstractTrackDataView<?> theDataView,
+		CCGLWindow theMainFrame,
+	    CCAbstractTrackDataView<?> theDataView,
 		SwingMultiTrackPanel theMultiTrackPanel, 
-		TimelineController theTimelineController, 
+		CCTimelineController theTimelineController, 
 		CCGroupTrackController theGroupController
 	) {
 		super(theMainFrame, theDataView);
@@ -132,7 +148,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 //		_myOpenButton.setBorderPainted(false);
 		
 		_myOpenButton.setForeground(Color.WHITE);
-		_myOpenButton.setFont(SwingGuiConstants.ARIAL_BOLD_10);
+		_myOpenButton.setFont(CCUIConstants.ARIAL_BOLD_10);
 		_myOpenButton.addMouseListener(new MouseAdapter() {
 			
 			@Override
@@ -151,7 +167,7 @@ public class SwingGroupTrackView extends SwingAbstractTrackView {
 		
 		_myAddressField = new JLabel(theGroupController.track().path().getFileName().toString());
 		_myAddressField.setPreferredSize(new Dimension(100,10));
-		_myAddressField.setFont(SwingGuiConstants.ARIAL_BOLD_10);
+		_myAddressField.setFont(CCUIConstants.ARIAL_BOLD_10);
 		_myAddressField.setForeground(Color.WHITE);
 		
 		add(_myAddressField);

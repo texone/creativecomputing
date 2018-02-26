@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /*  
  * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
  *  
@@ -19,7 +35,7 @@
  */
 package cc.creativecomputing.controlui.timeline.controller.actions;
 
-import cc.creativecomputing.control.timeline.point.ControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
 import cc.creativecomputing.controlui.util.Action;
 
@@ -30,9 +46,9 @@ import cc.creativecomputing.controlui.util.Action;
 public class AddControlPointAction implements Action{
 	
 	private CCTrackDataController _myTrackDataController;
-	private ControlPoint _myControlPoint;
+	private CCControlPoint _myControlPoint;
 	
-	public AddControlPointAction(CCTrackDataController theTrackDataController, ControlPoint theControlPoint) {
+	public AddControlPointAction(CCTrackDataController theTrackDataController, CCControlPoint theControlPoint) {
 		_myTrackDataController = theTrackDataController;
 		_myControlPoint = theControlPoint;
 	}

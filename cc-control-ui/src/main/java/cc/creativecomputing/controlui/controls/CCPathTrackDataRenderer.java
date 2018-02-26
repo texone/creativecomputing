@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
 import java.awt.Color;
@@ -5,21 +21,21 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackDataView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackDataView;
+import cc.creativecomputing.controlui.timeline.view.track.CCTrackDataRenderer;
 
-public class CCPathTrackDataRenderer extends SwingTrackDataRenderer{
+public class CCPathTrackDataRenderer extends CCTrackDataRenderer{
 
 	
 	@Override
-	public void renderTimedEvent(TimedEventPoint theTimedEvent, SwingAbstractTrackDataView<?> theView, Graphics2D theG2d) {	
+	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCAbstractTrackDataView<?> theView, Graphics2D theG2d) {	
 		if(theTimedEvent.content() == null || theTimedEvent.content().value() == null) {
 			return;
 		}
-		Point2D myPos = theView.controller().curveToViewSpace(new ControlPoint(theTimedEvent.time(),1));
-		Point2D myEndPos = theView.controller().curveToViewSpace(new ControlPoint(theTimedEvent.endTime(),1));
+		Point2D myPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.time(),1));
+		Point2D myEndPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.endTime(),1));
 		double width = myEndPos.getX() - myPos.getX();
 		theG2d.setColor(new Color(0,0,0,100));
 		

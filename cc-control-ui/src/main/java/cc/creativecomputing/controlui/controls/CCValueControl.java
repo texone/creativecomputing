@@ -1,18 +1,32 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JLabel;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
-import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.gl.app.CCGLMouseButton;
+import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
 
 public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>> implements CCControl{
@@ -33,7 +47,10 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 		_myPopUp = new CCPropertyPopUp(theHandle, _myControlComponent);
 		
         //Create the label.
-		_myLabel = new CCUILabelWidget(_myHandle.name(), JLabel.LEFT);
+		_myLabel = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT, _myHandle.name());
+		_myLabel.horizontalAlignment (CCUIHorizontalAlignment.RIGHT);
+		_myLabel.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		
 		_myLabel.mousePressed.add(e -> {
 			if(e.isAltDown()){
 				_myHandle.restoreDefault();
@@ -44,9 +61,13 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 				return;
 			}
 			if(e.button == CCGLMouseButton.BUTTON_RIGHT){
-				_myPopUp.show(_myLabel, e.x, e.y);
+				_myPopUp.isActive(true);
 			}
 		});
+	}
+
+	public Handle property() {
+		return _myHandle;
 	}
 	
 	private CCPropertyListener<Type> _myListener = null;

@@ -1,78 +1,76 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.track;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.timeline.TrackData;
-import cc.creativecomputing.control.timeline.point.BezierControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
-import cc.creativecomputing.control.timeline.point.HandleControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.CCTrackData;
+import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
+import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
+import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.actions.RemoveControlPointAction;
-import cc.creativecomputing.controlui.timeline.view.TimedContentView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
+import cc.creativecomputing.controlui.timeline.view.CCTimedContentView;
+import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
+import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 /**
  * @author christianriekoff
  *
  */
-public abstract class CCTrackDataController implements CCZoomable, TimedContentView {
+public abstract class CCTrackDataController implements CCZoomable, CCTimedContentView {
 
-	protected SwingAbstractTrackView _myTrackView;
+	protected CCAbstractTrackView _myTrackView;
 
-	protected TrackContext _myTrackContext;
+	protected CCTrackContext _myTrackContext;
 
-	protected TimelineController _myTimelineController;
+	protected CCTimelineController _myTimelineController;
 
 	protected CCPropertyHandle<?> _myProperty;
 
-	public CCTrackDataController(TrackContext theTrackContext, CCPropertyHandle<?> theProperty) {
+	public CCTrackDataController(CCTrackContext theTrackContext, CCPropertyHandle<?> theProperty) {
 		_myTrackContext = theTrackContext;
 		_myProperty = theProperty;
-		if (_myTrackContext instanceof TimelineController)
-			_myTimelineController = (TimelineController) theTrackContext;
+		if (_myTrackContext instanceof CCTimelineController)
+			_myTimelineController = (CCTimelineController) theTrackContext;
 	}
 
-	public TrackContext context() {
+	public CCTrackContext context() {
 		return _myTrackContext;
 	}
 
-	public void view(SwingAbstractTrackView theView) {
+	public void view(CCAbstractTrackView theView) {
 		_myTrackView = theView;
 	}
 
-	public SwingAbstractTrackView view() {
+	public CCAbstractTrackView view() {
 		return _myTrackView;
 	}
 
-	public abstract TrackData trackData();
+	public abstract CCTrackData trackData();
 
 	public CCPropertyHandle<?> property() {
 		return _myProperty;
@@ -85,7 +83,7 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 	}
 
 	public void clearSelection() {
-		for (ControlPoint myPoint : _mySelectedPoints) {
+		for (CCControlPoint myPoint : _mySelectedPoints) {
 			myPoint.setSelected(false);
 		}
 		_mySelectedPoints.clear();
@@ -93,24 +91,24 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 	}
 
 	public void deleteSelection() {
-		for (ControlPoint myPoint : selectedPoints()) {
+		for (CCControlPoint myPoint : selectedPoints()) {
 			trackData().remove(myPoint);
 		}
 		clearSelection();
 		view().render();
 	}
 
-	public List<ControlPoint> copySelection() {
-		List<ControlPoint> clipBoard = new ArrayList<>();
-		for (ControlPoint myPoint : selectedPoints()) {
+	public List<CCControlPoint> copySelection() {
+		List<CCControlPoint> clipBoard = new ArrayList<>();
+		for (CCControlPoint myPoint : selectedPoints()) {
 			clipBoard.add(myPoint.clone());
 		}
 		return clipBoard;
 	}
 
-	public List<ControlPoint> cutSelection() {
-		List<ControlPoint> clipBoard = new ArrayList<>();
-		for (ControlPoint myPoint : selectedPoints()) {
+	public List<CCControlPoint> cutSelection() {
+		List<CCControlPoint> clipBoard = new ArrayList<>();
+		for (CCControlPoint myPoint : selectedPoints()) {
 			trackData().remove(myPoint);
 			clipBoard.add(myPoint.clone());
 		}
@@ -119,14 +117,14 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 		return clipBoard;
 	}
 
-	public void paste(List<ControlPoint> thePoints, double theTime) {
+	public void paste(List<CCControlPoint> thePoints, double theTime) {
 		if (thePoints == null)
 			return;
 		if (thePoints.size() < 1)
 			return;
-		ControlPoint myFirstPoint = thePoints.get(0);
-		for (ControlPoint myPoint : thePoints) {
-			ControlPoint myCopy = myPoint.clone();
+		CCControlPoint myFirstPoint = thePoints.get(0);
+		for (CCControlPoint myPoint : thePoints) {
+			CCControlPoint myCopy = myPoint.clone();
 			myCopy.time(myCopy.time() - myFirstPoint.time() + theTime);
 			trackData().add(myCopy);
 		}
@@ -134,10 +132,9 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 	}
 
 	@Override
-	public double viewXToTime(int theViewX, boolean theGetPos) {
+	public double viewXToTime(double theViewX, boolean theGetPos) {
 		try {
-			return (double) theViewX / (double) _myTrackView.width() * (_myTrackContext.viewTime())
-					+ (theGetPos ? _myTrackContext.lowerBound() : 0);
+			return theViewX / (double) _myTrackView.width() * (_myTrackContext.viewTime()) + (theGetPos ? _myTrackContext.lowerBound() : 0);
 		} catch (Exception e) {
 			return 0;
 		}
@@ -152,9 +149,9 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 	//
 	// public abstract int timeToViewX(double theCurveX);
 
-	public abstract Point2D curveToViewSpace(ControlPoint thePoint);
+	public abstract CCVector2 curveToViewSpace(CCControlPoint thePoint);
 
-	public abstract ControlPoint viewToCurveSpace(Point2D thePoint, boolean theGetPos);
+	public abstract CCControlPoint viewToCurveSpace(CCVector2 thePoint, boolean theGetPos);
 
 	@Override
 	public void setRange(double theLowerBound, double theUpperBound) {
@@ -167,24 +164,24 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 	}
 
 	// picks the nearest point (could be null) and returns it in view space
-	public ControlPoint pickNearestPoint(Point2D theViewCoords) {
-		ControlPoint myPickCoords = viewToCurveSpace(theViewCoords, true);
+	public CCControlPoint pickNearestPoint(CCVector2 theViewCoords) {
+		CCControlPoint myPickCoords = viewToCurveSpace(theViewCoords, true);
 		double myPickRange = pickRange();
 
 		if (trackData() == null)
 			return null;
 
-		ArrayList<ControlPoint> myPoints = trackData().rangeList(myPickCoords.time() - myPickRange,
+		ArrayList<CCControlPoint> myPoints = trackData().rangeList(myPickCoords.time() - myPickRange,
 				myPickCoords.time() + myPickRange);
 
 		if (myPoints.size() == 0) {
 			return null;
 		}
 
-		Point2D myCurrentPoint = curveToViewSpace(myPoints.get(0));
-		ControlPoint myNearest = myPoints.get(0);
+		CCVector2 myCurrentPoint = curveToViewSpace(myPoints.get(0));
+		CCControlPoint myNearest = myPoints.get(0);
 		double myMinDistance = myCurrentPoint.distance(theViewCoords);
-		for (ControlPoint myPoint : myPoints) {
+		for (CCControlPoint myPoint : myPoints) {
 			myCurrentPoint = curveToViewSpace(myPoint);
 			double myDistance = myCurrentPoint.distance(theViewCoords);
 			if (myDistance < myMinDistance) {
@@ -195,8 +192,8 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 		return myNearest;
 	}
 
-	public void removePoint(Point2D theViewCoords) {
-		ControlPoint myNearestPoint = pickNearestPoint(theViewCoords);
+	public void removePoint(CCVector2 theViewCoords) {
+		CCControlPoint myNearestPoint = pickNearestPoint(theViewCoords);
 		if (myNearestPoint == null)
 			return;
 		trackData().remove(myNearestPoint);
@@ -204,19 +201,19 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 		UndoHistory.instance().apply(new RemoveControlPointAction(this, myNearestPoint));
 	}
 
-	public HandleControlPoint pickHandle(Point2D theViewCoords) {
-		ControlPoint myCurveCoords = viewToCurveSpace(theViewCoords, true);
+	public CCHandleControlPoint pickHandle(CCVector2 theViewCoords) {
+		CCControlPoint myCurveCoords = viewToCurveSpace(theViewCoords, true);
 
 		if (trackData() == null)
 			return null;
 
-		ControlPoint myNextPoint = trackData().ceiling(myCurveCoords);
-		ControlPoint myPreviousPoint = trackData().lower(myCurveCoords);
+		CCControlPoint myNextPoint = trackData().ceiling(myCurveCoords);
+		CCControlPoint myPreviousPoint = trackData().lower(myCurveCoords);
 
 		if (myNextPoint != null) {
-			switch (myNextPoint.getType()) {
+			switch (myNextPoint.type()) {
 			case BEZIER:
-				HandleControlPoint myInputHandle = ((BezierControlPoint) myNextPoint).inHandle();
+				CCHandleControlPoint myInputHandle = ((CCBezierControlPoint) myNextPoint).inHandle();
 
 				if (curveToViewSpace(myInputHandle).distance(theViewCoords) < SwingTrackView.PICK_RADIUS) {
 					return myInputHandle;
@@ -227,8 +224,8 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 			}
 
 			myNextPoint = trackData().higher(myNextPoint);
-			if (myNextPoint != null && myNextPoint.getType() == ControlPointType.BEZIER) {
-				HandleControlPoint myInputHandle = ((BezierControlPoint) myNextPoint).inHandle();
+			if (myNextPoint != null && myNextPoint.type() == CCControlPointType.BEZIER) {
+				CCHandleControlPoint myInputHandle = ((CCBezierControlPoint) myNextPoint).inHandle();
 				if (curveToViewSpace(myInputHandle).distance(theViewCoords) < SwingTrackView.PICK_RADIUS) {
 					return myInputHandle;
 				}
@@ -236,18 +233,18 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 		}
 
 		if (myPreviousPoint != null) {
-			switch (myPreviousPoint.getType()) {
+			switch (myPreviousPoint.type()) {
 			case BEZIER:
-				HandleControlPoint myOutputHandle = ((BezierControlPoint) myPreviousPoint).outHandle();
+				CCHandleControlPoint myOutputHandle = ((CCBezierControlPoint) myPreviousPoint).outHandle();
 
 				if (curveToViewSpace(myOutputHandle).distance(theViewCoords) < SwingTrackView.PICK_RADIUS) {
 					return myOutputHandle;
 				}
 				break;
 			case TIMED_EVENT:
-				HandleControlPoint myTimedEnd = ((TimedEventPoint) myPreviousPoint).endPoint();
+				CCHandleControlPoint myTimedEnd = ((CCTimedEventPoint) myPreviousPoint).endPoint();
 
-				if (Math.abs(curveToViewSpace(myTimedEnd).getX() - theViewCoords.getX()) < SwingTrackView.PICK_RADIUS) {
+				if (CCMath.abs(curveToViewSpace(myTimedEnd).x - theViewCoords.x) < SwingTrackView.PICK_RADIUS) {
 					return myTimedEnd;
 				}
 				break;
@@ -256,11 +253,11 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 			}
 
 			myPreviousPoint = trackData().lower(myPreviousPoint);
-			if (myPreviousPoint == null || myPreviousPoint.getType() != ControlPointType.BEZIER) {
+			if (myPreviousPoint == null || myPreviousPoint.type() != CCControlPointType.BEZIER) {
 				return null;
 			}
 
-			HandleControlPoint myOutputHandle = ((BezierControlPoint) myPreviousPoint).outHandle();
+			CCHandleControlPoint myOutputHandle = ((CCBezierControlPoint) myPreviousPoint).outHandle();
 			if (curveToViewSpace(myOutputHandle).distance(theViewCoords) < SwingTrackView.PICK_RADIUS) {
 				return myOutputHandle;
 			}
@@ -269,21 +266,21 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 		return null;
 	}
 
-	protected List<ControlPoint> _mySelectedPoints = new ArrayList<>();
+	protected List<CCControlPoint> _mySelectedPoints = new ArrayList<>();
 
 	public void deactivate() {
-		for (ControlPoint myPoint : _mySelectedPoints) {
+		for (CCControlPoint myPoint : _mySelectedPoints) {
 			myPoint.setSelected(false);
 		}
 		_mySelectedPoints.clear();
 		_myTrackView.render();
 	}
 
-	public List<ControlPoint> selectedPoints() {
+	public List<CCControlPoint> selectedPoints() {
 		return _mySelectedPoints;
 	}
 
-	// public double distance(ControlPoint theNearest, Point2D theViewCoords) {
+	// public double distance(ControlPoint theNearest, CCVector2 theViewCoords) {
 	// if(this instanceof EventTrackController || this instanceof
 	// CCBlendableTrackController)
 	// return Math.abs(curveToViewSpace(theNearest).getX() -
@@ -292,9 +289,9 @@ public abstract class CCTrackDataController implements CCZoomable, TimedContentV
 	// return curveToViewSpace(theNearest).distance(theViewCoords);
 	// }
 
-	public double distance(ControlPoint theNearest, Point2D theViewCoords) {
+	public double distance(CCControlPoint theNearest, CCVector2 theViewCoords) {
 		if (this instanceof CCEventTrackController || this instanceof CCBlendableTrackController)
-			return Math.abs(curveToViewSpace(theNearest).getX() - theViewCoords.getX());
+			return CCMath.abs(curveToViewSpace(theNearest).x - theViewCoords.y);
 		else
 			return curveToViewSpace(theNearest).distance(theViewCoords);
 	}

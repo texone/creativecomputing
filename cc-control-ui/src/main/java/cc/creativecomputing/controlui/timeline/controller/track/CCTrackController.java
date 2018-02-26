@@ -1,52 +1,48 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.track;
 
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
-
-import cc.creativecomputing.control.timeline.Selection;
-import cc.creativecomputing.control.timeline.Track;
-import cc.creativecomputing.control.timeline.TrackData;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.control.timeline.CCSelection;
+import cc.creativecomputing.control.timeline.CCTrack;
+import cc.creativecomputing.control.timeline.CCTrackData;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTool;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
-import cc.creativecomputing.controlui.timeline.view.TimedContentView;
+import cc.creativecomputing.controlui.timeline.view.CCTimedContentView;
+import cc.creativecomputing.gl.app.CCGLKeyEvent;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 
 /**
  * @author christianriekoff
  *
  */
-public abstract class CCTrackController extends CCTrackDataController implements CCZoomable, TimedContentView{
+public abstract class CCTrackController extends CCTrackDataController implements CCZoomable, CCTimedContentView{
 	
-	protected Track _myTrack;
+	protected CCTrack _myTrack;
 	
-	private Selection _mySelection;
+	private CCSelection _mySelection;
 	
 	protected CCGroupTrackController _myParent;
 	
@@ -55,8 +51,8 @@ public abstract class CCTrackController extends CCTrackDataController implements
 	protected boolean _myChangedValue = false;
 	
 	public CCTrackController(
-		TrackContext theTrackContext, 
-		Track theTrack, 
+		CCTrackContext theTrackContext, 
+		CCTrack theTrack, 
 		CCGroupTrackController theParent
 	) {
 		super(theTrackContext, theTrack.property());
@@ -70,13 +66,13 @@ public abstract class CCTrackController extends CCTrackDataController implements
 	
 	public abstract CCTimelineTools activeTool();
 	
-	public ControlPoint draggedPoint(){return null;}
+	public CCControlPoint draggedPoint(){return null;}
 	
 	public boolean isParentOpen(){
 		return _myParent == null || _myParent.isOpen();
 	}
 	
-	public Track track() {
+	public CCTrack track() {
 		return _myTrack;
 	}
 	
@@ -93,7 +89,7 @@ public abstract class CCTrackController extends CCTrackDataController implements
 		updateView();
 	}
 	
-	public void trackData(Track theTrack) {
+	public void trackData(CCTrack theTrack) {
 		_myTrack = theTrack;
 		updateView();
 	}
@@ -123,13 +119,13 @@ public abstract class CCTrackController extends CCTrackDataController implements
 	
 	public abstract void writeValue(double theTime);
 	
-	public void color(Color theColor) {
+	public void color(CCColor theColor) {
 		// TODO fix color track
 //		_myTimelineController.colorTrack(theColor, _myTrack.address());
 	}
 	
 	@Override
-	public TrackData trackData() {
+	public CCTrackData trackData() {
 		return _myTrack.trackData();
 	}
 	
@@ -155,11 +151,11 @@ public abstract class CCTrackController extends CCTrackDataController implements
 	public abstract void timeImplementation(double theTime, double theValue);
 	
 	public double maxTime(){
-		ControlPoint myLastPoint = trackData().getLastPoint();
+		CCControlPoint myLastPoint = trackData().getLastPoint();
 		if(myLastPoint == null)return 0;
 		
-		if(myLastPoint instanceof TimedEventPoint) {
-			return ((TimedEventPoint)myLastPoint).endTime();
+		if(myLastPoint instanceof CCTimedEventPoint) {
+			return ((CCTimedEventPoint)myLastPoint).endTime();
 		}
 		
 		return myLastPoint.time();
@@ -189,44 +185,43 @@ public abstract class CCTrackController extends CCTrackDataController implements
 //    	return CCMath.blend(_myTrack.minValue(), _myTrack.maxValue(), value(theTime));
 //    }
 
-    public Point2D curveToViewSpace(ControlPoint thePoint) {
-        Point2D myResult = new Point2D.Double();
-        int myX = timeToViewX(thePoint.time());
-        int myY = (int) ((1 - thePoint.value()) * (_myTrackView.height() - 5) + 2.5); // reverse y axis
-        myResult.setLocation(myX, myY);
+	@Override
+    public CCVector2 curveToViewSpace(CCControlPoint thePoint) {
+        CCVector2 myResult = new CCVector2();
+        myResult.x = timeToViewX(thePoint.time());
+        myResult.y = (int) ((1 - thePoint.value()) * (_myTrackView.height() - 5) + 2.5); // reverse y axis
         return myResult;
     }
     
     
-    public Point2D curveToViewSpace(ControlPoint thePoint, double theTimeOffset) {
-        Point2D myResult = new Point2D.Double();
-        int myX = timeToViewX(thePoint.time() + theTimeOffset);
-        int myY = (int) ((1 - thePoint.value()) * (_myTrackView.height() - 5) + 2.5); // reverse y axis
-        myResult.setLocation(myX, myY);
+    public CCVector2 curveToViewSpace(CCControlPoint thePoint, double theTimeOffset) {
+        CCVector2 myResult = new CCVector2();
+        myResult.x = timeToViewX(thePoint.time() + theTimeOffset);
+        myResult.y = (int) ((1 - thePoint.value()) * (_myTrackView.height() - 5) + 2.5); 
         return myResult;
     }
     
-    public ControlPoint viewToCurveSpace(Point2D thePoint, boolean theGetPos) {
-        ControlPoint myResult = new ControlPoint();
+    public CCControlPoint viewToCurveSpace(CCVector2 thePoint, boolean theGetPos) {
+        CCControlPoint myResult = new CCControlPoint();
         
-        myResult.time(viewXToTime((int) thePoint.getX(), theGetPos));
-        double myValue = CCMath.constrain(1 - (thePoint.getY() - 2.5) / (_myTrackView.height() - 5),0,1);
+        myResult.time(viewXToTime((int) thePoint.x, theGetPos));
+        double myValue = CCMath.constrain(1 - (thePoint.y - 2.5) / (_myTrackView.height() - 5),0,1);
 //        myValue = _myTrack.property() != null ? _myTrack.property().formatNormalizedValue(myValue) : myValue;
         myResult.value(myValue);
         return myResult;
     }
     
-    public void selection(Selection theSelection) {
+    public void selection(CCSelection theSelection) {
 	    	_mySelection = theSelection;
 	    	if(_myTrackView != null)_myTrackView.render();
     }
     
-    public Selection selection() {
+    public CCSelection selection() {
     		return _mySelection;
     }
     
-    public void mousePressed(MouseEvent e) {
-	    	Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
+    public void mousePressed(CCGLMouseEvent e) {
+	    	CCVector2 myViewCoords = new CCVector2(e.x, e.y);
 				
 	    	if (e.isAltDown()) {
 	    		_myTrackContext.zoomController().startDrag(myViewCoords);
@@ -238,7 +233,7 @@ public abstract class CCTrackController extends CCTrackDataController implements
 	}
 
 
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(CCGLMouseEvent e) {
 		if (e.isAltDown()) {
 			_myTrackContext.zoomController().endDrag();
 			return;
@@ -249,9 +244,9 @@ public abstract class CCTrackController extends CCTrackDataController implements
         _myTrackView.render();
 	}
 	
-	public void mouseMoved(MouseEvent e){
+	public void mouseMoved(CCVector2 e){
 		_myActiveTool.mouseMoved(e);
-//		Point2D myViewCoords = new Point2D.Double(e.getX(), e.getY());
+//		CCVector2 myViewCoords = new CCVector2.Double(e.getX(), e.getY());
 //
 //		ControlPoint myNearest = pickNearestPoint(myViewCoords);
 //        ControlPoint myTensionHandle = pickHandle(myViewCoords);
@@ -268,15 +263,15 @@ public abstract class CCTrackController extends CCTrackDataController implements
 //		}
 	}
 	
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(CCGLKeyEvent e) {
 		_myActiveTool.keyPressed(e);
 	}
 	
-	public void keyReleased(KeyEvent e) {
+	public void keyReleased(CCGLKeyEvent e) {
 		_myActiveTool.keyReleased(e);
 	}
 
-	public void mouseDragged(MouseEvent e) {
+	public void mouseDragged(CCVector2 e) {
 		_myActiveTool.mouseDragged(e);
 		_myTrackView.render();
 	}

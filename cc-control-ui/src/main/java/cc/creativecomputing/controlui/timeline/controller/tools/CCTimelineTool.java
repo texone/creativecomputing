@@ -1,26 +1,42 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.tools;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
-
-import cc.creativecomputing.control.timeline.point.ControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
+import cc.creativecomputing.gl.app.CCGLKey;
+import cc.creativecomputing.gl.app.CCGLKeyEvent;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.math.CCVector2;
 
 public class CCTimelineTool<ControllerType extends CCTrackController> {
 	
-    protected int _myPressX;
-    protected int _myPressY;
+    protected double _myPressX;
+    protected double _myPressY;
     
-    protected int _myMovX;
-    protected int _myMovY;
+    protected double _myMovX;
+    protected double _myMovY;
     
-    protected Point2D _myPressViewCoords;
-    protected ControlPoint _myPressCurveCoords;
+    protected CCVector2 _myPressViewCoords;
+    protected CCControlPoint _myPressCurveCoords;
 
-    protected Point2D _myViewCoords;
-    protected ControlPoint _myCurveCoords;
-    protected ControlPoint _myCurveMovement;
+    protected CCVector2 _myViewCoords;
+    protected CCControlPoint _myCurveCoords;
+    protected CCControlPoint _myCurveMovement;
 
     protected boolean _mySnap = false;
     
@@ -31,57 +47,57 @@ public class CCTimelineTool<ControllerType extends CCTrackController> {
 		_myController = theController;
 	}
 	
-	protected int _myKeyCode;
+	protected CCGLKey _myKeyCode;
 	
-	public void keyPressed(KeyEvent e) {
-		_myKeyCode = e.getKeyCode();
+	public void keyPressed(CCGLKeyEvent e) {
+		_myKeyCode = e.key;
 	}
 	
-	public void keyReleased(KeyEvent e) {
-		_myKeyCode = -1;
+	public void keyReleased(CCGLKeyEvent e) {
+		_myKeyCode = null;
 	}
 	
-	public void mousePressed(MouseEvent theEvent){
-		_myPressX = theEvent.getX();
-		_myPressY = theEvent.getY();
+	public void mousePressed(CCGLMouseEvent theEvent){
+		_myPressX = theEvent.x;
+		_myPressY = theEvent.y;
 		
-		_myPressViewCoords = new Point2D.Double(theEvent.getX(), theEvent.getY());
+		_myPressViewCoords = new CCVector2(theEvent.x, theEvent.y);
 		_myPressCurveCoords = _myController.viewToCurveSpace(_myPressViewCoords, true);
 	}
 	
-	private void updateMotion(MouseEvent theEvent){
-		_myMovX = _myPressX - theEvent.getX();
-		_myMovY = _myPressY - theEvent.getY();
+	private void updateMotion(CCVector2 theEvent){
+		_myMovX = _myPressX - theEvent.x;
+		_myMovY = _myPressY - theEvent.y;
 		
-		if(_myKeyCode == KeyEvent.VK_X) {
+		if(_myKeyCode == CCGLKey.KEY_X) {
 			_myMovY = 0;
 		}
-		if(_myKeyCode == KeyEvent.VK_Y) {
+		if(_myKeyCode == CCGLKey.KEY_Y) {
 			_myMovX = 0;
 		}
 
-		_myViewCoords = new Point2D.Double(theEvent.getX(), theEvent.getY());
+		_myViewCoords = new CCVector2(theEvent.x, theEvent.y);
 		_myCurveCoords = _myController.viewToCurveSpace(_myViewCoords, true);
 		
 		if(_myMovY > 0){
-			_myCurveMovement = _myController.viewToCurveSpace(new Point2D.Double(-_myMovX, _myMovY), false);
+			_myCurveMovement = _myController.viewToCurveSpace(new CCVector2(-_myMovX, _myMovY), false);
 			_myCurveMovement.value(1 - _myCurveMovement.value());
 		}else{
-			_myCurveMovement = _myController.viewToCurveSpace(new Point2D.Double(-_myMovX, -_myMovY), false);
+			_myCurveMovement = _myController.viewToCurveSpace(new CCVector2(-_myMovX, -_myMovY), false);
 			_myCurveMovement.value( _myCurveMovement.value() - 1);
 		}
 	} 
 	
-	public void mouseMoved(MouseEvent theEvent){
-		_myViewCoords = new Point2D.Double(theEvent.getX(), theEvent.getY());
+	public void mouseMoved(CCVector2 theEvent){
+		_myViewCoords = new CCVector2(theEvent.x, theEvent.y);
 		_myCurveCoords = _myController.viewToCurveSpace(_myViewCoords, true);
 	}
 	
-	public void mouseDragged(MouseEvent theEvent){
+	public void mouseDragged(CCVector2 theEvent){
 		updateMotion(theEvent);
 	}
 	
-	public void mouseReleased(MouseEvent theEvent){
-		_myKeyCode = -1;
+	public void mouseReleased(CCGLMouseEvent theEvent){
+		_myKeyCode = null;
 	}
 }

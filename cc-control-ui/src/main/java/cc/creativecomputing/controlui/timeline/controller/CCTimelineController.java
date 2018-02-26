@@ -1,28 +1,21 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -43,17 +36,17 @@ import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
-import cc.creativecomputing.control.timeline.AbstractTrack;
-import cc.creativecomputing.control.timeline.GroupTrack;
-import cc.creativecomputing.control.timeline.TimeRange;
-import cc.creativecomputing.control.timeline.Track;
-import cc.creativecomputing.control.timeline.TrackData;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.CCAbstractTrack;
+import cc.creativecomputing.control.timeline.CCGroupTrack;
+import cc.creativecomputing.control.timeline.CCTimeRange;
+import cc.creativecomputing.control.timeline.CCTrack;
+import cc.creativecomputing.control.timeline.CCTrackData;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.CCColorMap;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCPresetTrackObject;
-import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuatizeMode;
+import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuantizeMode;
 import cc.creativecomputing.controlui.timeline.controller.track.CCBooleanTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCColorTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCDoubleTrackController;
@@ -65,16 +58,20 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCIntegerTrackCo
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTriggerTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
+import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 
 /**
  * @author christianriekoff
  * 
  */
-public class TimelineController extends TrackContext implements CCTransportable{
+public class CCTimelineController extends CCTrackContext implements CCTransportable{
 	
 	private CCTransportController _myTransportController;
 	
@@ -89,11 +86,11 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	
 	private final CCPropertyMap _myPropertyMap;
 	
-	private final TimelineContainer _myTimelineContainer;
+	private final CCTimelineContainer _myTimelineContainer;
 
-	protected CCQuatizeMode _myQuantizeMode;
+	protected CCQuantizeMode _myQuantizeMode;
 	
-	public TimelineController(TimelineContainer theTimelineContainer, CCPropertyMap thePropertyMap) {
+	public CCTimelineController(CCTimelineContainer theTimelineContainer, CCPropertyMap thePropertyMap) {
 		super();
 		_myTimelineContainer = theTimelineContainer;
 		_myTransportController = new CCTransportController(this);
@@ -104,7 +101,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		
 		_myPropertyMap = thePropertyMap;
 
-		_myQuantizeMode = CCQuatizeMode.OFF;
+		_myQuantizeMode = CCQuantizeMode.OFF;
 	}
 	
 	public void view(SwingTimelineView theView){
@@ -138,7 +135,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	 * Raster resolution to align the track data
 	 * @param theRaster Raster resolution to align the track data
 	 */
-	public void quantizer(CCQuatizeMode theQuantizeMode){
+	public void quantizer(CCQuantizeMode theQuantizeMode){
 		_myQuantizeMode = theQuantizeMode;
 	}
 	
@@ -146,7 +143,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	 * Raster resolution to align the track data
 	 * @return Raster resolution to align the track data
 	 */
-	public CCQuatizeMode quantizer(){
+	public CCQuantizeMode quantizer(){
 		return _myQuantizeMode;
 	}
 	
@@ -156,7 +153,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	 * @param thePoint
 	 * @return
 	 */
-	public ControlPoint quantize(ControlPoint thePoint) {
+	public CCControlPoint quantize(CCControlPoint thePoint) {
     	double myTime = quantize(thePoint.time());
         thePoint.time(myTime);
         return thePoint;
@@ -199,7 +196,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	 * 0 and the time of that point.
 	 */
 	public void zoomToMaximum() {
-		_myZoomController.setRange(new TimeRange(0, maximumTime()));
+		_myZoomController.setRange(new CCTimeRange(0, maximumTime()));
 	}
 	
 	public CCGroupTrackController rootController(){
@@ -240,7 +237,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		}
 	}
 	
-	public void colorTrack(final Color theColor, final Path thePath) {
+	public void colorTrack(final CCColor theColor, final Path thePath) {
 		CCTrackController myTrackController = _myTrackControllerMap.get(thePath);
 		if(myTrackController != null) {
 			myTrackController.track().color(theColor);
@@ -272,7 +269,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		
 		if(myResult != null) return myResult;
 		
-		GroupTrack myGroupTrack = new GroupTrack(theProperty);
+		CCGroupTrack myGroupTrack = new CCGroupTrack(theProperty);
 		Map<String, String> myExtraMap = new HashMap<>();
 		myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 		myGroupTrack.extras(myExtraMap);
@@ -282,7 +279,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		myResult = new CCGroupTrackController(this, myGroupTrack);
 		myResult.events().add(new CCEventTrackAdapter() {
 			@Override
-			public void onProperties(CCEventTrackController theController, TimedEventPoint thePoint) {
+			public void onProperties(CCEventTrackController theController, CCTimedEventPoint thePoint) {
 				_myView.openGroupPresetDialog(theProperty, theController, thePoint);
 			}
 		});
@@ -340,7 +337,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	private List<CCPropertyHandle<?>> _myClipTrackHandles = new ArrayList<CCPropertyHandle<?>>();
 	
 	public CCGroupTrackController createClipGroup(Path thePath){
-		GroupTrack myGroupTrack = new GroupTrack(thePath);
+		CCGroupTrack myGroupTrack = new CCGroupTrack(thePath);
 		Map<String, String> myExtraMap = new HashMap<>();
 		myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 		myGroupTrack.extras(myExtraMap);
@@ -382,12 +379,12 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		myEventController.events().add(myClipTrackObject);
 		myEventController.events().add(new CCEventTrackAdapter() {
 			@Override
-			public void onProperties(CCEventTrackController theController, TimedEventPoint thePoint) {
+			public void onProperties(CCEventTrackController theController, CCTimedEventPoint thePoint) {
 				_myView.openClipTrackDialog(theController, thePoint);
 			}
 			
 			@Override
-			public void onTime(double theTime, CCEventTrackController theController, TimedEventPoint thePoint) {
+			public void onTime(double theTime, CCEventTrackController theController, CCTimedEventPoint thePoint) {
 				// TODO Auto-generated method stub
 				super.onTime(theTime, theController, thePoint);
 			}
@@ -416,7 +413,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		if(_myTrackControllerMap.containsKey(myPath))return _myTrackControllerMap.get(myPath);
 		
 		CCGroupTrackController myGroup = _myGrouptrackControllerMap.get(theProperty.parent().path());
-		Track myTrack = new Track(theProperty);
+		CCTrack myTrack = new CCTrack(theProperty);
 		myTrack.color(CCColorMap.getColor(theProperty.path()));
 		
 		CCTrackController myTrackController = null;
@@ -457,7 +454,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 			myEventController.events().add(new CCEventTrackAdapter() {
 				
 				@Override
-				public void onTime(double theTime, CCEventTrackController theController, TimedEventPoint thePoint) {
+				public void onTime(double theTime, CCEventTrackController theController, CCTimedEventPoint thePoint) {
 					((CCPathHandle)theProperty).time(theTime, theTime - thePoint.time(), thePoint.contentOffset());
 				}
 				
@@ -467,8 +464,8 @@ public class TimelineController extends TrackContext implements CCTransportable{
 				}
 				
 				@Override
-				public void renderTimedEvent(TimedEventPoint theTimedEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
-					((CCPathHandle)theProperty).renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
+				public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double UpperTime, CCGraphics theG2d) {
+//					((CCPathHandle)theProperty).renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
 				}
 			});
 			myEventController.splitDrag(true);
@@ -495,7 +492,7 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		_myTrackController.add(myTrackController);
 		
 		if(_myView != null){
-			SwingAbstractTrackView myTrackView = _myView.addTrack(_myTrackCount, myTrackController,  theObject);
+			CCAbstractTrackView myTrackView = _myView.addTrack(_myTrackCount, myTrackController,  theObject);
 			myTrackController.view(myTrackView);
 			myTrackController.view().color(myTrack.color());
 		}
@@ -578,14 +575,14 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	}
 	
 	@SuppressWarnings("unused")
-	private void insertDataTrack(Track theTrack, double theRange) {
+	private void insertDataTrack(CCTrack theTrack, double theRange) {
 		CCTrackController myTrackController = _myTrackControllerMap.get(theTrack.property().path());
 		if(myTrackController != null) {
 			myTrackController.trackData().insertAll(_myTransportController.time(), theRange, theTrack.trackData().rangeList(0, theRange));
 		}
 	}
 	
-	private double checkMaxTime(double theMaxTime, TrackData theTrackData){
+	private double checkMaxTime(double theMaxTime, CCTrackData theTrackData){
 		double myLastTime = theTrackData.getLastTime();
 		if (myLastTime > theMaxTime) {
 			return myLastTime;
@@ -593,11 +590,11 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		return theMaxTime;
 	}
 	
-	private double checkMaxTime(double theMaxTime, Track theTrack){
+	private double checkMaxTime(double theMaxTime, CCTrack theTrack){
 		return checkMaxTime(theMaxTime, theTrack.trackData());
 	}
 	
-	private void insertTrackData(double theInsertTime, double theMaxTime, Track theTrack){
+	private void insertTrackData(double theInsertTime, double theMaxTime, CCTrack theTrack){
 		CCTrackController myController = _myTrackControllerMap.get(theTrack.property().path());
 		if(myController == null){
 			return;
@@ -605,15 +602,15 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		myController.trackData().insertAll(theInsertTime, theMaxTime, theTrack.trackData().rangeList(0));
 	}
 	
-	public void insertTracks(List<AbstractTrack> theTracks, TrackData theMarkerTrack){
+	public void insertTracks(List<CCAbstractTrack> theTracks, CCTrackData theMarkerTrack){
 		if(theTracks == null)return;
 		
 		double myMaxTime = 0;
-		for (AbstractTrack myAbstractTrack : theTracks) {
-			if(myAbstractTrack instanceof Track) {
-				myMaxTime = checkMaxTime(myMaxTime, (Track)myAbstractTrack);
-			}else if(myAbstractTrack instanceof GroupTrack) {
-				for(Track myTrack:((GroupTrack)myAbstractTrack).tracks()) {
+		for (CCAbstractTrack myAbstractTrack : theTracks) {
+			if(myAbstractTrack instanceof CCTrack) {
+				myMaxTime = checkMaxTime(myMaxTime, (CCTrack)myAbstractTrack);
+			}else if(myAbstractTrack instanceof CCGroupTrack) {
+				for(CCTrack myTrack:((CCGroupTrack)myAbstractTrack).tracks()) {
 					myMaxTime = checkMaxTime(myMaxTime, myTrack);
 				}
 			}
@@ -623,13 +620,13 @@ public class TimelineController extends TrackContext implements CCTransportable{
 		double myInsertTime = _myTransportController.time();
 		
 		
-		for (AbstractTrack myAbstractTrack : theTracks) {
-			if(myAbstractTrack instanceof GroupTrack) {
-				for(Track myTrack:((GroupTrack)myAbstractTrack).tracks()) {
+		for (CCAbstractTrack myAbstractTrack : theTracks) {
+			if(myAbstractTrack instanceof CCGroupTrack) {
+				for(CCTrack myTrack:((CCGroupTrack)myAbstractTrack).tracks()) {
 					insertTrackData(myInsertTime, myMaxTime, myTrack);
 				}
-			}else if(myAbstractTrack instanceof Track) {
-				Track myTrack = (Track)myAbstractTrack;
+			}else if(myAbstractTrack instanceof CCTrack) {
+				CCTrack myTrack = (CCTrack)myAbstractTrack;
 				insertTrackData(myInsertTime, myMaxTime, myTrack);
 			}
 		}
@@ -671,16 +668,16 @@ public class TimelineController extends TrackContext implements CCTransportable{
 	
 	private int _myTrackCount = 0;
 	
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(CCGLMouseEvent e) {
 	}
 
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(CCGLMouseEvent e) {
 	}
 
-	public void mouseDragged(MouseEvent e) {
+	public void mouseDragged(CCGLMouseEvent e) {
 	}
 
-	public void mouseMoved(MouseEvent e) {
+	public void mouseMoved(CCGLMouseEvent e) {
 	}
 
 	/**

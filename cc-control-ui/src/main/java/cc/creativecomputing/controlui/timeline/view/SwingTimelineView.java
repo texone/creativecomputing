@@ -1,39 +1,37 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JViewport;
-import javax.swing.border.EmptyBorder;
 
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
-import cc.creativecomputing.control.timeline.TimeRange;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.CCTimeRange;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.controls.CCClipTrackDataRenderer;
 import cc.creativecomputing.controlui.controls.CCPathTrackDataRenderer;
 import cc.creativecomputing.controlui.controls.CCStringTrackDataRenderer;
-import cc.creativecomputing.controlui.controls.CCUIStyler;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.arrange.SwingClipTrackObjectDialog;
 import cc.creativecomputing.controlui.timeline.controller.arrange.SwingGroupTrackObjectDialog;
@@ -44,16 +42,17 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCGradientTrackC
 import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingMultiTrackPanel.MultiTrackMouseAdapter;
-import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackDataView;
+import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingColorTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingEventTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingEventTrackDialog;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGradientTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackDataRenderer;
+import cc.creativecomputing.controlui.timeline.view.track.CCTrackDataRenderer;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
-import cc.creativecomputing.controlui.timeline.view.transport.SwingRulerView;
+import cc.creativecomputing.controlui.timeline.view.transport.CCRulerView;
+import cc.creativecomputing.math.CCVector2;
 
 
 @SuppressWarnings("serial")
@@ -66,18 +65,18 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
     private JViewport _myViewport;
 	private SwingMultiTrackPanel _myRulerPanel;
 	private SwingMultiTrackPanel _myMultiTrackPanel;
-	private SwingRulerView _myRuler;
+	private CCRulerView _myRuler;
 	
 	private List<Object> _myTracks = new ArrayList<Object>();
 	
-	private TimelineController _myTimelineController;
+	private CCTimelineController _myTimelineController;
 	
 	private SwingClipTrackObjectDialog _myClipTrackObjectDialog;
 	private SwingGroupTrackObjectDialog _myGroupTrackObjectDialog;
 	
 	private final JFrame _myMainFrame;
 
-	public SwingTimelineView(JFrame theMainFrame, TimelineContainer theTimelineContainer) {
+	public SwingTimelineView(JFrame theMainFrame, CCTimelineContainer theTimelineContainer) {
 		super(JSplitPane.VERTICAL_SPLIT);
 		
 		_myMainFrame = theMainFrame;
@@ -85,10 +84,10 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		_myPane.setLayout(new BorderLayout());
 //		_myPane.add(createColoredLabel("TEXONE", Color.RED, new Point(300,100)), 3);
 
-		_myRuler = new SwingRulerView(_myMainFrame, null);
+		_myRuler = new CCRulerView(null);
 		Path myRulerPath = Paths.get("ruler");
 		_myRulerPanel = new SwingMultiTrackPanel(_myPane);
-		_myRulerPanel.insertTrackView(new JPanel(), myRulerPath, 0, 30 * SwingGuiConstants.SCALE, true);
+		_myRulerPanel.insertTrackView(new JPanel(), myRulerPath, 0, 30 * CCUIConstants.SCALE, true);
 		_myRulerPanel.insertTrackDataView(_myRuler, myRulerPath, 0);
 		 
 		_myMultiTrackPanel = new SwingMultiTrackPanel(_myPane);
@@ -98,7 +97,7 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		
 		_myViewport = new JViewport();
         _myViewport.add(_myMultiTrackPanel);
-        _myViewport.setBounds(0, 0, 300 * SwingGuiConstants.SCALE, 300 * SwingGuiConstants.SCALE);
+        _myViewport.setBounds(0, 0, 300 * CCUIConstants.SCALE, 300 * CCUIConstants.SCALE);
         
         _myScrollPane = new JScrollPane(_myMultiTrackPanel);
         _myScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -115,7 +114,7 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 			double myMax = Math.max(myUpper, _myTimelineController.maximumTime());
 			myValue *= myMax;
 			double myRange = myUpper - myLower;
-			_myTimelineController.zoomController().setRange(new TimeRange(myValue, myValue + myRange));
+			_myTimelineController.zoomController().setRange(new CCTimeRange(myValue, myValue + myRange));
 		});
 		
 		 _myPane.add(_myJScrollbar, BorderLayout.PAGE_END);
@@ -128,14 +127,14 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		_myPane.addComponentListener(this);
 		
 		CCUIStyler.styleSplitPane(this);
-		setDividerLocation(30 * SwingGuiConstants.SCALE);
+		setDividerLocation(30 * CCUIConstants.SCALE);
 		setEnabled(false);
 		
 		setTopComponent(_myRulerPanel);
 		setBottomComponent(_myPane);
 	}
 	
-	public void controller(TimelineController theController){
+	public void controller(CCTimelineController theController){
 		_myTimelineController = theController;
 		_myTimelineController.zoomController().addZoomable((theLower, theUpper) ->{
 				double myMax = Math.max(theUpper, _myTimelineController.maximumTime());
@@ -151,7 +150,7 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		return _myPane;
 	}
 	
-	public SwingRulerView rulerView() {
+	public CCRulerView rulerView() {
 		return _myRuler;
 	}
 	
@@ -191,10 +190,10 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 	public SwingTrackView addTrack(int theIndex, CCTrackController theTrackDataController, CCClipTrackObject theObject) {
 		assert (theIndex >= 0);
 
-		SwingAbstractTrackDataView<?> myDataView = null;
+		CCAbstractTrackDataView<?> myDataView = null;
 		
 		if(theTrackDataController instanceof CCEventTrackController){
-			SwingTrackDataRenderer myTrackDataRenderer = null;
+			CCTrackDataRenderer myTrackDataRenderer = null;
 			if(
 				theTrackDataController.track().property() instanceof CCStringPropertyHandle || 
 				theTrackDataController.track().property() instanceof CCEnumPropertyHandle || 
@@ -276,43 +275,25 @@ public class SwingTimelineView extends JSplitPane implements ComponentListener {
 		}_myTimelineController.closeGroups();
 	}
 
-	public Dimension getMaximumSize() {
+	public CCVector2 getMaximumSize() {
 		int myMaxYSize = 0;
 		for (Component myPanel : _myMultiTrackPanel) {
 			myMaxYSize += myPanel.getMaximumSize().getHeight();
 		}
-		return new Dimension(6000, myMaxYSize);
-	}
-	
-	@Override
-	public void componentHidden(ComponentEvent e) {}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {}
-
-	@Override
-	public void componentResized(ComponentEvent e) {
-//		if (e.getSource().getClass().equals(SwingTrackDataView.class)) {
-//			((SwingTrackDataView) e.getSource()).render();
-//		}
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-		
+		return new CCVector2(6000, myMaxYSize);
 	}
 	
 	private SwingEventTrackDialog _myEventTrackDialog = new SwingEventTrackDialog();
 
-	public void openEventDialog(ControlPoint thePoint) {
+	public void openEventDialog(CCControlPoint thePoint) {
 		_myEventTrackDialog.setVisible(true);
 	}
 
-	public void openClipTrackDialog(CCEventTrackController theController, TimedEventPoint thePoint) {
+	public void openClipTrackDialog(CCEventTrackController theController, CCTimedEventPoint thePoint) {
 		_myClipTrackObjectDialog.edit(theController, thePoint);
 	}
 
-	public void openGroupPresetDialog(CCObjectPropertyHandle theHandle, CCEventTrackController theController, TimedEventPoint thePoint) {
+	public void openGroupPresetDialog(CCObjectPropertyHandle theHandle, CCEventTrackController theController, CCTimedEventPoint thePoint) {
 		_myGroupTrackObjectDialog.edit(theHandle, theController, thePoint);
 	}
 

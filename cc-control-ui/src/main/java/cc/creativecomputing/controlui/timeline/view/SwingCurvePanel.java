@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /*  
  * Copyright (c) 2012 Christian Riekoff <info@texone.org>  
  *  
@@ -25,30 +41,30 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.JFrame;
 
-import cc.creativecomputing.control.timeline.Track;
-import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.control.timeline.CCTrack;
+import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.track.CCDoubleTrackController;
-import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
+import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
 
 /**
  * @author christianriekoff
  *
  */
-public class SwingCurvePanel extends SwingAbstractTrackView implements ComponentListener{
+public class SwingCurvePanel extends CCAbstractTrackView implements ComponentListener{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1507288020816738412L;
-	private TrackContext _myTrackContext;
+	private CCTrackContext _myTrackContext;
 	private CCDoubleTrackController _myTrackController;
-	private Track _myTrack;
+	private CCTrack _myTrack;
 	
 	public SwingCurvePanel(JFrame theFrame) {
 		_myMainFrame = theFrame;
-		_myTrackContext = new TrackContext();
-		_myTrack = new Track(null);
+		_myTrackContext = new CCTrackContext();
+		_myTrack = new CCTrack(null);
 		_myTrackController = new CCDoubleTrackController(_myTrackContext,_myTrack, null);
 		_myDataView = new SwingCurveTrackDataView(null, _myTrackController);
 		_myDataView.isEnvelope(true);
@@ -59,7 +75,7 @@ public class SwingCurvePanel extends SwingAbstractTrackView implements Component
 		_myTrackContext.zoomController().addZoomable(_myTrackController);
 	}
 	
-	public Track track(){
+	public CCTrack track(){
 		return _myTrack;
 	}
 	

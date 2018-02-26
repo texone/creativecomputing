@@ -1,168 +1,166 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.view.menu;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.nio.file.Path;
 
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
-
 import cc.creativecomputing.controlui.timeline.controller.FileManager;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.util.UndoHistory;
+import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.io.CCFileChooser;
-import cc.creativecomputing.io.CCFileFilter;
+import cc.creativecomputing.ui.widget.CCUICheckBox;
+import cc.creativecomputing.ui.widget.CCUIMenu;
 
-public class SwingTimelineMenu extends JMenu{
+public class CCTimelineMenu extends CCUIMenu{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7702761824018449400L;
-	private final FileManager _myFileManager;
+	private FileManager _myFileManager;
 	private CCFileChooser _myFileChooser;
-	private TimelineContainer _myTimelineContainer;
+	private CCTimelineContainer _myTimelineContainer;
 
-	public SwingTimelineMenu(TimelineContainer theTimelineContainer){
-		super("Timeline");
+	public CCTimelineMenu(CCFont<?> theFont, CCTimelineContainer theTimelineContainer){
+		super(theFont);
 		_myFileManager = theTimelineContainer.fileManager();
 		_myTimelineContainer = theTimelineContainer;
 		
-		_myFileChooser = new CCFileChooser();
-		_myFileChooser.addChoosableFileFilter(new CCFileFilter("xml", "xml"));
-		_myFileChooser.addChoosableFileFilter(new CCFileFilter("json", "json"));
+		_myFileChooser = new CCFileChooser("xml", "json");
 		
 		addTimelineFileItems();
 		addSeparator();
 		
 		addEditItems();
 		addSeparator();
-		addViewItems();
-		addSeparator();
-		SwingQuantizeMenu myQuantizeMenue = new SwingQuantizeMenu(theTimelineContainer);
-		add(myQuantizeMenue);
+//		addViewItems();
+//		addSeparator();
+//		CCQuantizeMenu myQuantizeMenue = new CCQuantizeMenu(theFont, theTimelineContainer);
+//		addItem("Quantize", myQuantizeMenue);
 	}
 	
+	
+
 	private void addTimelineFileItems(){
 		
-		setMnemonic(KeyEvent.VK_T);
+		addItem(
+			"Replace",
+			() -> {
+				Path myPath = _myFileChooser.openFile("open");
+				if (myPath != null) _myFileManager.replaceCurrentTimeline(myPath);
+			}
+		).toolTipText("Replaces the current active timeline.");
 		
-		JMenuItem myLoadItem = new JMenuItem("Replace");
-		myLoadItem.addActionListener(theE -> {
-			Path myPath = _myFileChooser.chosePath("open");
-			if (myPath != null) _myFileManager.replaceCurrentTimeline(myPath);
-		});
-		myLoadItem.setToolTipText("Replaces the current active timeline.");
-		myLoadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.META_MASK));
-		add(myLoadItem);
+		addItem(
+			"Add",
+			() -> {
+				Path myPath = _myFileChooser.openFile("open");
+				if (myPath != null) _myFileManager.addToCurrentTimeline(myPath);
+			}
+		).toolTipText("Loads the tracks from the file and adds them to the current timeline.");
 		
-		JMenuItem myLoadAddItem = new JMenuItem("Add");
-		myLoadAddItem.addActionListener(theE -> {
-			Path myPath = _myFileChooser.chosePath("open");
-			if (myPath != null) _myFileManager.addToCurrentTimeline(myPath);
-		});
-		myLoadAddItem.setToolTipText("Loads the tracks from the file and adds them to the current timeline.");
-		myLoadAddItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.META_MASK | ActionEvent.SHIFT_MASK));
-		add(myLoadItem);
+		addItem(
+			"Clear",() -> {
+				_myFileChooser.resetPath();
+				_myFileManager.resetTimeline();
+			}
+		).toolTipText("Clears the current active timeline");;
 		
-		JMenuItem myNewItem = new JMenuItem("Clear");
-		myNewItem.addActionListener(theE -> {
-			_myFileChooser.resetPath();
-			_myFileManager.resetTimeline();
-		});
-		myNewItem.setToolTipText("Clears the current active timeline");
-		myNewItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.META_MASK));
-		add(myNewItem);
 		
-		JMenuItem myInsertItem = new JMenuItem("Insert at Time");
-		myInsertItem.addActionListener(theE -> {
-			Path myPath = _myFileChooser.chosePath("open");
-			if (myPath != null) _myFileManager.insertAtTimeToCurrentTimeline(myPath);
-		});
-		myInsertItem.setToolTipText("Inserts the data for in the file and the timeline.");
-		myInsertItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.META_MASK | ActionEvent.SHIFT_MASK));
-		add(myInsertItem);
+		addItem(
+			"Insert at Time",
+			() -> {
+				Path myPath = _myFileChooser.openFile("open");
+				if (myPath != null) _myFileManager.insertAtTimeToCurrentTimeline(myPath);
+			}
+		).toolTipText("Inserts the data for in the file and the timeline.");
 		
-		JMenuItem mySaveItem = new JMenuItem("Export");
-		mySaveItem.addActionListener(theE -> {
-			Path myPath = _myFileChooser.chosePath("Export Timeline");
-			if(myPath != null)_myFileManager.exportCurrentTimeline(myPath);
-		});
-		mySaveItem.setToolTipText("Saves the content of all tracks.");
-		mySaveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.META_MASK));
-		add(mySaveItem);
-		add(mySaveItem);
 		
-		JMenuItem mySaveSelectionItem = new JMenuItem("Export Selection");
-		mySaveSelectionItem.addActionListener(theE -> {
-			Path myPath = _myFileChooser.chosePath("save selection");
-			if (myPath != null) _myFileManager.exportCurrentTimelineSelection(myPath);
-		});
-		mySaveSelectionItem.setToolTipText("Saves the content of all tracks.");
-		add(mySaveSelectionItem);
+		addItem(
+			"Export",
+			() -> {
+				Path myPath = _myFileChooser.saveFile("Export Timeline");
+				if(myPath != null)_myFileManager.exportCurrentTimeline(myPath);
+			}
+		).toolTipText("Saves the content of all tracks.");
+		
+		
+		addItem(
+			"Export Selection",
+			() -> {
+				Path myPath = _myFileChooser.saveFile("save selection");
+				if (myPath != null) _myFileManager.exportCurrentTimelineSelection(myPath);
+			}
+		).toolTipText("Saves the content of all tracks.");
 	}
 	
 	private void addEditItems(){
-		if(SwingGuiConstants.CREATE_UNDO_ENTRIES) {
-			JMenuItem myUndoMenu = new JMenuItem("Undo");
-			myUndoMenu.addActionListener(theE -> {
-				UndoHistory.instance().undo();
-			});
-			myUndoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.META_MASK));
-			myUndoMenu.setMnemonic(KeyEvent.VK_Z);
-			add(myUndoMenu);
+		if(CCUIConstants.CREATE_UNDO_ENTRIES) {
+			addItem(
+				"Undo",
+				() -> {
+					UndoHistory.instance().undo();
+				}
+			);
 			
-			JMenuItem myRedoMenu = new JMenuItem("Redo");
-			myRedoMenu.addActionListener(theE -> {
-				UndoHistory.instance().redo();
-			});
-			myRedoMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.META_MASK | ActionEvent.SHIFT_MASK));
-			myRedoMenu.setMnemonic(KeyEvent.VK_R);
-			add(myRedoMenu);
+			addItem(
+				"Redo",
+				() -> {
+					UndoHistory.instance().redo();
+				}
+			);
 		}
 
-//		JMenuItem myCutMenu = new JMenuItem("Cut");
-//		myCutMenu.addActionListener(theE -> {
+//		CCUIMenuItem myCutMenu = new CCUIMenuItem("Cut");
+//		myCutMenu.addActionListener(() -> {
 //			_myTimelineContainer.activeTimeline().toolController().selectionController().cut();
 //		});
 //		myCutMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.META_MASK));
 //		myCutMenu.setMnemonic(KeyEvent.VK_T);
-//		add(myCutMenu);
+//		addItem(myCutMenu);
 //
-//		JMenuItem myCopyMenu = new JMenuItem("Copy");
-//		myCopyMenu.addActionListener(theE -> {
+//		CCUIMenuItem myCopyMenu = new CCUIMenuItem("Copy");
+//		myCopyMenu.addActionListener(() -> {
 //			_myTimelineContainer.activeTimeline().toolController().selectionController().copy();
 //		});
 //		myCopyMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.META_MASK));
 //		myCopyMenu.setMnemonic(KeyEvent.VK_P);
-//		add(myCopyMenu);
+//		addItem(myCopyMenu);
 //
-//		JMenuItem myPasteMenu = new JMenuItem("Paste");
-//		myPasteMenu.addActionListener(theE -> {
+//		CCUIMenuItem myPasteMenu = new CCUIMenuItem("Paste");
+//		myPasteMenu.addActionListener(() -> {
 //			_myTimelineContainer.activeTimeline().toolController().selectionController().insert();
 //		});
 //		myPasteMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.META_MASK));
 //		myPasteMenu.setMnemonic(KeyEvent.VK_A);
-//		add(myPasteMenu);
+//		addItem(myPasteMenu);
 //
-//		JMenuItem myReplaceMenu = new JMenuItem("Replace");
-//		myReplaceMenu.addActionListener(theE -> {
+//		CCUIMenuItem myReplaceMenu = new CCUIMenuItem("Replace");
+//		myReplaceMenu.addActionListener(() -> {
 //			_myTimelineContainer.activeTimeline().toolController().selectionController().replace();
 //		});
 //		myReplaceMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.SHIFT_MASK | ActionEvent.META_MASK));
 //		myReplaceMenu.setMnemonic(KeyEvent.VK_R);
-//		add(myReplaceMenu);
+//		addItem(myReplaceMenu);
 
 		// TODO fix write values
-//		JMenuItem myWriteValuesMenue = new JMenuItem("Write Values");
+//		CCUIMenuItem myWriteValuesMenue = new CCUIMenuItem("Write Values");
 //		myWriteValuesMenue.addActionListener(new ActionListener() {
 //			
 //			@Override
-//			public void actionPerformed(ActionEvent theE) {
+//			public void actionPerformed(ActionEvent ()) {
 //				_myTimelineController.writeValues();
 //			}
 //		});
@@ -170,32 +168,31 @@ public class SwingTimelineMenu extends JMenu{
 //		myWriteValuesMenue.setMnemonic(KeyEvent.VK_W);
 //		add(myWriteValuesMenue);
 		
-		JMenuItem myReverseTracksMenue = new JMenuItem("Reverse");
-		myReverseTracksMenue.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().reverseTracks();
-		});
-		add(myReverseTracksMenue);
 		
-		JMenuItem myCreateClipTrackMenue = new JMenuItem("Create Clip Track");
-		myCreateClipTrackMenue.addActionListener(theE -> {
-			_myTimelineContainer.activeTimeline().createClipTrack();
-		});
-		add(myCreateClipTrackMenue);
+		addItem(
+			"Reverse",
+			() -> {
+				_myTimelineContainer.activeTimeline().reverseTracks();
+			}
+		);
+		
+		addItem(
+			"Create Clip Track",
+			() -> {
+				_myTimelineContainer.activeTimeline().createClipTrack();
+			}
+		);
 	}
 	
 	private void addViewItems(){
-		
-		ActionListener myShowUnusedTracksListener = new ActionListener() {
-			public void actionPerformed(ActionEvent theE) {
-				JCheckBoxMenuItem myButton = (JCheckBoxMenuItem)theE.getSource();
-				boolean selected = myButton.isSelected();
+		CCUICheckBox myCheckBox = new CCUICheckBox();
+		addItem(
+			myCheckBox,
+			"Hide Unused Tracks", 
+			()->{
+				boolean selected = myCheckBox.isSelected();
 				_myTimelineContainer.activeTimeline().hideUnusedTracks(selected);
 			}
-		};
-		
-		JCheckBoxMenuItem myHideUnusedTracksItem = new JCheckBoxMenuItem("Hide Unused Tracks");
-		myHideUnusedTracksItem.setSelected(false);
-		myHideUnusedTracksItem.addActionListener(myShowUnusedTracksListener);
-		add(myHideUnusedTracksItem);
+		);
 	}
 }

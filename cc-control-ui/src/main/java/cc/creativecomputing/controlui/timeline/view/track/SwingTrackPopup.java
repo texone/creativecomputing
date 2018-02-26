@@ -1,46 +1,35 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
-import java.awt.Component;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButtonMenuItem;
-
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.CCTextInputDialog;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.ui.widget.CCUIMenu;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-public abstract class SwingTrackPopup<ControllerType extends CCTrackController> extends JPopupMenu {
+public abstract class SwingTrackPopup<ControllerType extends CCTrackController> extends CCUIMenu {
 	
 	static List<SwingTrackPopup<?>> _myPopUps = new ArrayList<>();
 		
@@ -50,18 +39,19 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 	private static final long serialVersionUID = -7869280073371142253L;
 	protected CCTrackController _myTrackController;
 	private List<JRadioButtonMenuItem> _myToolGroup = new ArrayList<>();
-	private TimelineController _myTimelineController;
+	private CCTimelineController _myTimelineController;
 	
-	private static List<ControlPoint> clipBoard = null;
+	private static List<CCControlPoint> clipBoard = null;
 	
 	private static CCTrackController controller = null;
 
-	public SwingTrackPopup(ControllerType theTrackController, TimelineController theTimelineController) {
+	public SwingTrackPopup(ControllerType theTrackController, CCTimelineController theTimelineController) {
+		super(CCUIConstants.DEFAULT_FONT);
 		_myPopUps.add(this);
 		_myTrackController = theTrackController;
 		_myTimelineController = theTimelineController;
 
-		addItem("Track Edit Tools", null);
+		addItem("Track Edit Tools");
 		addSeparator();
 		addTools();
 		addSeparator();
@@ -109,17 +99,15 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 	
 	protected double _myClickedTime = 0;
 	
-	@Override
-	public void show(Component invoker, int x, int y) {
-		super.show(invoker, x, y);
+	public void show(double x, double y) {
 		_myClickedTime = _myTrackController.viewXToTime(x, true);
 	}
 	
-	private MouseEvent _myMouseEvent;
+	private CCGLMouseEvent _myMouseEvent;
 	
-	public void show(Component invoker, MouseEvent e) {
+	public void show(CCGLMouseEvent e) {
 		_myMouseEvent = e;
-		show(invoker, e.getX(), e.getY());
+		show(e.x, e.y);
 	}
 	
 	public void activevateTool(CCTimelineTools theTool){
@@ -132,15 +120,8 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 		}
 	}
 	
-	public void addItem(String theName, ActionListener theListener){
-		JMenuItem myItem = new JMenuItem(theName);
-		myItem.setFont(SwingGuiConstants.ARIAL_11);
-		if(theListener != null)myItem.addActionListener(theListener);
-		add(myItem);
-	}
-	
 	public void addFunctions() {
-		addItem("Insert Time",theEvent -> {
+		addItem("Insert Time",() -> {
 			
 			new CCTextInputDialog(
 				"Insert Time", 
@@ -151,7 +132,7 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 					try {
 						myTime = new ExpressionBuilder(input).build().evaluate();
 					} catch (Exception ex) {}
-					_myTrackController.trackData().insertTime(_myTrackController.viewXToTime(_myMouseEvent.getX(), true),myTime);
+					_myTrackController.trackData().insertTime(_myTrackController.viewXToTime(_myMouseEvent.x, true),myTime);
 					_myTrackController.view().render();
 				}
 			)
@@ -161,7 +142,7 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 			
 		});
 		
-		addItem("Remove Time", theEvent -> {
+		addItem("Remove Time", () -> {
 			double myLowerBound = _myTimelineController.transportController().loopStart();
 			double myUpperBound = _myTimelineController.transportController().loopEnd();
 			double myRange = myUpperBound - myLowerBound;
@@ -170,22 +151,22 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 			_myTrackController.view().render();
 		});
 
-		addItem("Reset Track",theEvent -> {
+		addItem("Reset Track",() -> {
 			if(_myTrackController == null)return;
 			_myTrackController.reset();
 		});
 		
-		addItem("Clear Selection", theEvent -> {
+		addItem("Clear Selection", () -> {
 			if(_myTrackController == null)return;
 			_myTrackController.clearSelection();
 		});
 		
-		addItem("Delete",theEvent -> {
+		addItem("Delete",() -> {
 			if(_myTrackController == null)return;
 			_myTrackController.deleteSelection();
 		});
 		
-		addItem("Copy",theEvent -> {
+		addItem("Copy",() -> {
 			if(_myTrackController == null)return;
 			if(_myTrackController.selectedPoints().size() <= 0) {
 				return;
@@ -194,12 +175,12 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 			clipBoard = _myTrackController.copySelection();
 		});
 		
-		addItem("Cut",theEvent -> {
+		addItem("Cut",() -> {
 			if(_myTrackController == null)return;
 			clipBoard = _myTrackController.cutSelection();
 		});
 		
-		addItem("Paste",theEvent -> {
+		addItem("Paste",() -> {
 			if(_myTrackController == null)return;
 			if(_myTimelineController == null)return;
 			_myTrackController.paste(clipBoard, _myTimelineController.transportController().time());
@@ -207,13 +188,12 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 	}
 	
 	public void addTools(){
-		ButtonGroup myToolGroup = new ButtonGroup();
 		int i = 0;
 		for(CCTimelineTools myTool:_myTrackController.tools()) {
 			
 			JRadioButtonMenuItem myStepItem = new JRadioButtonMenuItem(myTool.name());
-			myStepItem.setFont(SwingGuiConstants.ARIAL_11);
-			myStepItem.addActionListener(theEvent -> {
+			myStepItem.setFont(CCUIConstants.ARIAL_11);
+			myStepItem.addActionListener(() -> {
 				for(SwingTrackPopup<?> myPopUP:_myPopUps){
 					myPopUP.activevateTool(myTool);
 				}

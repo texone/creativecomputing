@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.transport;
 
 import java.awt.Dimension;
@@ -23,17 +39,18 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import cc.creativecomputing.controlui.CCNumberBox;
+import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportable;
 import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.TimelineChangeListener;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer.TimelineChangeListener;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 
 @SuppressWarnings("serial")
-public class SwingTransportView extends JPanel implements CCZoomable, CCTransportable{
+public class CCTransportView extends CCUIHorizontalFlowPane implements CCZoomable, CCTransportable{
 	
 	private static final int MAX_SLIDER_VALUE = 1000;
 	
@@ -41,8 +58,8 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 	
 	private static final float CURVE_POW = 4;
 
-	private TimelineContainer _myTimelineContainer;
-	private TimelineController _myTimelineController;
+	private CCTimelineContainer _myTimelineContainer;
+	private CCTimelineController _myTimelineController;
 	
 	private JButton _myPlayButton;
 	private JButton _myLoopButton;
@@ -61,19 +78,19 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 	private JComboBox<String> _myTimelines;
 	private ComboBoxEditor _myTimelinesComboEditor;
 	
-	public SwingTransportView(TimelineContainer theTimelineContainer) {
+	public CCTransportView(CCTimelineContainer theTimelineContainer) {
 		_myTimelineContainer = theTimelineContainer;
 		_myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
 			
 			@Override
-			public void changeTimeline(TimelineController theController) {
-				_myTimelineController.zoomController().removeZoomable(SwingTransportView.this);
-				_myTimelineController.transportController().transportEvents().remove(SwingTransportView.this);
+			public void changeTimeline(CCTimelineController theController) {
+				_myTimelineController.zoomController().removeZoomable(CCTransportView.this);
+				_myTimelineController.transportController().transportEvents().remove(CCTransportView.this);
 				
 				_myTimelineController = theController;
 				
-				_myTimelineController.zoomController().addZoomable(SwingTransportView.this);
-				_myTimelineController.transportController().transportEvents().add(SwingTransportView.this);
+				_myTimelineController.zoomController().addZoomable(CCTransportView.this);
+				_myTimelineController.transportController().transportEvents().add(CCTransportView.this);
 				zoomFromSlider();
 			}
 			
@@ -148,7 +165,7 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 		createTimelineCombo();
         
 		_myTimelineController.zoomController().addZoomable(this);
-		_myTimelineController.transportController().transportEvents().add(SwingTransportView.this);
+		_myTimelineController.transportController().transportEvents().add(CCTransportView.this);
 		zoomFromSlider();
 		
 		time(0);
@@ -178,7 +195,7 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 		_myTimeField = new TimeField(_myTimelineContainer);
 		add(_myTimeField);
 		
-		if(SwingGuiConstants.CREATE_SPEED_CONTROL) {
+		if(CCUIConstants.CREATE_SPEED_CONTROL) {
 			_mySpeedValue = new CCNumberBox(1,0.1f,10, 2);
 			_mySpeedValue.changeEvents().add(theValue -> {
 				_myTimelineContainer.activeTimeline().transportController().speed(theValue);
@@ -187,10 +204,10 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 			add(_mySpeedValue);
 			
 			JLabel mySpeedLabel = new JLabel("speed");
-			mySpeedLabel.setFont(SwingGuiConstants.ARIAL_11);
+			mySpeedLabel.setFont(CCUIConstants.ARIAL_11);
 			add(mySpeedLabel);
 		}
-		if(SwingGuiConstants.CREATE_SPEED_CONTROL){
+		if(CCUIConstants.CREATE_SPEED_CONTROL){
 			_myBPMValue = new CCNumberBox(120,1,360, 2);
 			_myBPMValue.changeEvents().add(theValue -> {
 				_myTimelineContainer.activeTimeline().transportController().bpm(theValue);
@@ -199,7 +216,7 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 			add(_myBPMValue);
 			
 			JLabel myBPMLabel = new JLabel("bpm");
-			myBPMLabel.setFont(SwingGuiConstants.ARIAL_11);
+			myBPMLabel.setFont(CCUIConstants.ARIAL_11);
 			add(myBPMLabel);
 		}
 	}
@@ -239,7 +256,7 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 	
 	private void createTimelineCombo(){
 		JLabel myTimelineLabel = new JLabel("timeline");
-		myTimelineLabel.setFont(SwingGuiConstants.ARIAL_11);
+		myTimelineLabel.setFont(CCUIConstants.ARIAL_11);
 		add(myTimelineLabel);
 		_myTimelines = new JComboBox<String>();
 		for(String myKey:_myTimelineContainer.timelineKeys()){

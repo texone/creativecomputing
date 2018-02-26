@@ -1,48 +1,63 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.tools;
 
-import java.awt.event.MouseEvent;
-
-import cc.creativecomputing.control.timeline.TrackData;
-import cc.creativecomputing.control.timeline.point.BezierControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.HandleControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
-import cc.creativecomputing.control.timeline.point.ControlPoint.HandleType;
+import cc.creativecomputing.control.timeline.CCTrackData;
+import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCHandleType;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
 
 public class CCCurveTool extends CCTimelineTool<CCCurveTrackController>{
 
 	protected static float MAX_DRAG_X = 100;
 	
-    protected BezierControlPoint _myFloorBezier;
-    protected BezierControlPoint _myCeilBezier;
+    protected CCBezierControlPoint _myFloorBezier;
+    protected CCBezierControlPoint _myCeilBezier;
     
     public CCCurveTool(CCCurveTrackController theController) {
 		super(false, theController);
 	}
     
-	protected BezierControlPoint makeBezier(ControlPoint thePoint, TrackData theData){
-    		if(thePoint.getType() == ControlPointType.BEZIER)return (BezierControlPoint)thePoint;
+	protected CCBezierControlPoint makeBezier(CCControlPoint thePoint, CCTrackData theData){
+    		if(thePoint.type() == CCControlPointType.BEZIER)return (CCBezierControlPoint)thePoint;
     	
 	    	theData.remove(thePoint);
 	    	
-	    	BezierControlPoint myResult = new BezierControlPoint(thePoint.time(), thePoint.value());
+	    	CCBezierControlPoint myResult = new CCBezierControlPoint(thePoint.time(), thePoint.value());
 	    	myResult.blendable(thePoint.blendable());
-	    	HandleControlPoint myInHandle = new HandleControlPoint(myResult,HandleType.BEZIER_IN_HANDLE, myResult.time(), myResult.value());
+	    	CCHandleControlPoint myInHandle = new CCHandleControlPoint(myResult,CCHandleType.BEZIER_IN_HANDLE, myResult.time(), myResult.value());
 	    	myResult.inHandle(myInHandle);
-	    	HandleControlPoint myOutHandle = new HandleControlPoint(myResult,HandleType.BEZIER_OUT_HANDLE, myResult.time(), myResult.value());
+	    	CCHandleControlPoint myOutHandle = new CCHandleControlPoint(myResult,CCHandleType.BEZIER_OUT_HANDLE, myResult.time(), myResult.value());
 	    	myResult.outHandle(myOutHandle);
 	    	theData.add(myResult);
 	    	return myResult;
     }
 
     @Override
-    public void mousePressed(MouseEvent theEvent){
+    public void mousePressed(CCGLMouseEvent theEvent){
 		super.mousePressed(theEvent);
     	
-		ControlPoint myFloor = _myController.trackData().floor(_myPressCurveCoords);
-		ControlPoint myCeil = _myController.trackData().ceiling(_myPressCurveCoords);
+		CCControlPoint myFloor = _myController.trackData().floor(_myPressCurveCoords);
+		CCControlPoint myCeil = _myController.trackData().ceiling(_myPressCurveCoords);
 		
 		if(myFloor != null && myCeil != null){
 			_myFloorBezier = makeBezier(myFloor, _myController.trackData());
@@ -54,14 +69,14 @@ public class CCCurveTool extends CCTimelineTool<CCCurveTrackController>{
 	}
     
     @Override
-	public void mouseDragged(MouseEvent theEvent) {
+	public void mouseDragged(CCGLMouseEvent theEvent) {
     		super.mouseDragged(theEvent);
     	
 		if(_myFloorBezier == null)return;
 		if(_myCeilBezier == null)return;
     	
 		if(CCMath.abs(_myMovX) > CCMath.abs(_myMovY)){
-	    		float myXBlend = CCMath.saturate(CCMath.norm(CCMath.abs(_myMovX), 0, MAX_DRAG_X));
+	    		double myXBlend = CCMath.saturate(CCMath.norm(CCMath.abs(_myMovX), 0, MAX_DRAG_X));
 	    		if(_myMovX < 0){
 	    			_myFloorBezier.outHandle().value(_myFloorBezier.value());
 	    			_myFloorBezier.outHandle().time(CCMath.blend(_myFloorBezier.time(), _myCeilBezier.time(), myXBlend));

@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /*  
  * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
  *  
@@ -21,8 +37,8 @@ package cc.creativecomputing.controlui.timeline.controller.actions;
 
 import java.util.ArrayList;
 
-import cc.creativecomputing.control.timeline.TimeRange;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
+import cc.creativecomputing.control.timeline.CCTimeRange;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.util.Action;
 
@@ -34,10 +50,10 @@ import cc.creativecomputing.controlui.util.Action;
 public class CutAction implements Action{
 	
 	private CCTrackController _myTrackDataController;
-	private ArrayList<ControlPoint> _myControlPoints;
-	private TimeRange _myTimeRange;
+	private ArrayList<CCControlPoint> _myControlPoints;
+	private CCTimeRange _myTimeRange;
 	
-	public CutAction(CCTrackController theTrackDataController, ArrayList<ControlPoint> theControlPoints, TimeRange theTimeRange) {
+	public CutAction(CCTrackController theTrackDataController, ArrayList<CCControlPoint> theControlPoints, CCTimeRange theTimeRange) {
 		_myTrackDataController = theTrackDataController;
 		_myControlPoints = theControlPoints;
 		_myTimeRange = theTimeRange;

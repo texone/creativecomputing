@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /*  
  * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
  *  
@@ -19,8 +35,8 @@
  */
 package cc.creativecomputing.controlui.timeline.controller.actions;
 
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
 import cc.creativecomputing.controlui.util.Action;
@@ -32,17 +48,17 @@ import cc.creativecomputing.controlui.util.Action;
 public class MoveEventAction implements Action{
 	
 	private CCTrackDataController _myEventTrackController;
-	private TimedEventPoint _myEventPoint;
-	private ControlPoint _myEndControlPoint;
-	private ControlPoint _myStartControlPoint;
+	private CCTimedEventPoint _myEventPoint;
+	private CCControlPoint _myEndControlPoint;
+	private CCControlPoint _myStartControlPoint;
 	private double _myEventStartEnd;
 	private double _myEventEndEnd;
 	
 	public MoveEventAction(
 		CCEventTrackController theEventTrackController, 
-		TimedEventPoint theEventPoint, 
-		ControlPoint theStartControlPoint, 
-		ControlPoint theEndControlPoint,
+		CCTimedEventPoint theEventPoint, 
+		CCControlPoint theStartControlPoint, 
+		CCControlPoint theEndControlPoint,
 		double theEventStartEnd,
 		double theEventEndEnd
 	) {

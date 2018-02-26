@@ -1,59 +1,54 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Transparency;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-
-import javax.swing.JPanel;
-
-import cc.creativecomputing.control.timeline.point.BezierControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
+import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
+import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
+import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
-import cc.creativecomputing.controlui.timeline.controller.CCTransportController.RulerInterval;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController.CCRulerInterval;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
-import cc.creativecomputing.controlui.timeline.view.SwingConstants;
-import cc.creativecomputing.controlui.timeline.view.transport.SwingRulerView;
+import cc.creativecomputing.controlui.timeline.view.transport.CCRulerView;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.gl.app.CCGLMouseButton;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.shape.CCPath2D;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.ui.widget.CCUIWidget;
 
-@SuppressWarnings("serial")
-public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackController> extends JPanel {
+public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackController> extends CCUIWidget {
 
 	public interface SwingTrackDataViewListener {
-		void onRender(Graphics2D theG2D);
+		void onRender(CCGraphics theG2D);
 	}
 
-	protected BufferedImage _myRenderBuffer;
-
-	protected Color _myLineColor = SwingConstants.LINE_COLOR;
-	protected Color _myFillColor = SwingConstants.FILL_COLOR;
-	protected Color _myDotColor = SwingConstants.DOT_COLOR;
-
-	private boolean _myRedraw = true;
+	protected CCColor _myLineCCColor = CCUIConstants.LINE_COLOR;
+	protected CCColor _myFillCCColor = CCUIConstants.FILL_COLOR;
+	protected CCColor _myDotCCColor = CCUIConstants.DOT_COLOR;
 
 	protected ControllerType _myController;
-	protected TimelineController _myTimelineController;
-	protected TrackContext _myTrackContext;
+	protected CCTimelineController _myTimelineController;
+	protected CCTrackContext _myTrackContext;
 
 	private CCListenerManager<SwingTrackDataViewListener> _myEvents = CCListenerManager.create(SwingTrackDataViewListener.class);
 
@@ -63,221 +58,165 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 
 	protected boolean _myIsMousePressed = false;
 
-	protected MouseEvent _myMouseEvent = null;
+	protected CCGLMouseEvent _myMouseEvent = null;
 
 	private SwingTrackPopup<ControllerType> _myToolChooserPopup;
 
-	public SwingAbstractTrackDataView(TimelineController theTimelineController, ControllerType theTrackController) {
+	public CCAbstractTrackDataView(CCTimelineController theTimelineController, ControllerType theTrackController) {
 		_myTimelineController = theTimelineController;
 		_myTrackContext = theTrackController.context();
 		_myController = theTrackController;
 
-		setName("timeline" + (int) Math.floor(100 * Math.random()));
-		// setBorder(BorderFactory.createLineBorder(Color.gray));
+		mousePressed.add(e -> {
+			_myMouseEvent = e;
+			boolean myIsRightClick = e.button == CCGLMouseButton.BUTTON_3 || (e.isControlDown() && e.button == CCGLMouseButton.BUTTON_1);
 
-		addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent theE) {
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				_myMouseEvent = e;
-				boolean myIsRightClick = e.getButton() == MouseEvent.BUTTON3 || (e.isControlDown() && e.getButton() == MouseEvent.BUTTON1);
-
-				if (myIsRightClick) {
-					showPopUp(e);
-				} else if (e.getButton() == MouseEvent.BUTTON1) {
-					_myIsMousePressed = true;
-					_myController.mousePressed(e);
-				}
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				_myMouseEvent = e;
-				if (e.getButton() == MouseEvent.BUTTON1) {
-					_myIsMousePressed = false;
-					repaint();
-					_myController.mouseReleased(e);
-				}
-				requestFocusInWindow();
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				_myMouseEvent = null;
-				renderInfo();
+			if (myIsRightClick) {
+				showPopUp(e);
+			} else if (e.button == CCGLMouseButton.BUTTON_1) {
+				_myIsMousePressed = true;
+				_myController.mousePressed(e);
 			}
 		});
 
-		addMouseMotionListener(new MouseAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				_myMouseEvent = e;
-				if (e.isAltDown() && !_myIsEnvelope) {
-					_myTrackContext.zoomController().performDrag(new Point2D.Double(e.getX(), e.getY()), width());
-					return;
-				}
-				_myController.mouseDragged(e);
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				_myMouseEvent = e;
-				_myController.mouseMoved(e);
-				renderInfo();
+		mouseReleased.add(e -> {
+			_myMouseEvent = e;
+			if (e.button == CCGLMouseButton.BUTTON_1) {
+				_myIsMousePressed = false;
+				_myController.mouseReleased(e);
 			}
 		});
 
-		addKeyListener(new KeyAdapter() {
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				_myController.keyPressed(e);
+		mouseDragged.add(pos -> {
+			if (_myMouseEvent.isAltDown() && !_myIsEnvelope) {
+				_myTrackContext.zoomController().performDrag(pos, width());
+				return;
 			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				_myController.keyReleased(e);
-			}
+			_myController.mouseDragged(pos);
+		});
+
+		mouseMoved.add(pos -> {
+			_myController.mouseMoved(pos);
 		});
 		
-		addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				//_myController.context().zoomController().updateZoomables();
-				render();
-			}
-			
-			
-			
-			@Override
-			public void componentShown(ComponentEvent e) {
-				render();
-			}
+//			@Override
+//			public void mouseExited(CCGLMouseEvent e) {
+//				_myMouseEvent = null;
+//				renderInfo();
+//			}
+
+		keyPressed.add(e -> {
+			_myController.keyPressed(e);
+		});	
+
+		keyReleased.add(e -> {
+			_myController.keyReleased(e);
 		});
-		
+
 	}
 
-	public void showPopUp(MouseEvent theEvent) {
-		_myToolChooserPopup.show(SwingAbstractTrackDataView.this, theEvent);
+	public void showPopUp(CCGLMouseEvent theEvent) {
+		_myToolChooserPopup.show(theEvent);
 	}
 
 	public CCTrackController controller() {
 		return _myController;
 	}
 
-	public TrackContext context() {
+	public CCTrackContext context() {
 		return _myTrackContext;
 	}
 
-	public Color fillColor() {
-		return _myFillColor;
+	public CCColor fillCCColor() {
+		return _myFillCCColor;
 	}
 
-	public Color lineColor() {
-		return _myLineColor;
+	public CCColor lineCCColor() {
+		return _myLineCCColor;
 	}
 
-	// public Dimension getPreferredSize() {
-	// return new Dimension(Integer.MAX_VALUE, 150);
-	// }
-	//
-	// public Dimension getMaximumSize() {
-	// return new Dimension(Integer.MAX_VALUE, 500);
-	// }
-
-	private Color brighter(Color theColor, float theScale, int theAlpha) {
-		float myRed = (255 - theColor.getRed()) * theScale;
-		float myGreen = (255 - theColor.getGreen()) * theScale;
-		float myBlue = (255 - theColor.getBlue()) * theScale;
-
-		return new Color(255 - (int) myRed, 255 - (int) myGreen, 255 - (int) myBlue, theAlpha);
+	public void CCColor(CCColor theCCColor) {
+		_myDotCCColor = theCCColor;
+		_myLineCCColor = theCCColor.brighter(0.5);
+		_myFillCCColor = theCCColor.brighter(0.25);
+		_myLineCCColor.a = 0.5;
+		_myFillCCColor.a = 0.5;
 	}
 
-	public void color(Color theColor) {
-		_myDotColor = theColor;
-		_myLineColor = brighter(theColor, 0.5f, 125);
-		_myFillColor = brighter(theColor, 0.25f, 125);
-		render();
-	}
-
-	public void drawCurvePiece(ControlPoint myFirstPoint, ControlPoint mySecondPoint, GeneralPath thePath, boolean theToFirst) {
+	public void drawCurvePiece(CCControlPoint myFirstPoint, CCControlPoint mySecondPoint, CCPath2D thePath, boolean theToFirst) {
 		if (myFirstPoint.equals(mySecondPoint)) {
 			return;
 		}
 
 		if (mySecondPoint == null) {
-			mySecondPoint = new ControlPoint(_myTrackContext.upperBound(), myFirstPoint.value());
+			mySecondPoint = new CCControlPoint(_myTrackContext.upperBound(), myFirstPoint.value());
 		}
 
 		boolean myIsBezier = false;
-		Point2D p1 = _myController.curveToViewSpace(myFirstPoint);
-		Point2D p2 = _myController.curveToViewSpace(mySecondPoint);
-		double myA1X = p1.getX();
-		double myA1Y = p1.getY();
-		double myA2X = p2.getX();
-		double myA2Y = p2.getY();
-		double myX = p2.getX();
-		double myY = p2.getY();
+		CCVector2 p1 = _myController.curveToViewSpace(myFirstPoint);
+		CCVector2 p2 = _myController.curveToViewSpace(mySecondPoint);
+		double myA1X = p1.x;
+		double myA1Y = p1.y;
+		double myA2X = p2.x;
+		double myA2Y = p2.y;
+		double myX = p2.x;
+		double myY = p2.y;
 
 		if (theToFirst) {
 			thePath.lineTo(myA1X, myA1Y);
 		}
 
-		if (mySecondPoint.getType() == ControlPointType.STEP) {
+		if (mySecondPoint.type() == CCControlPointType.STEP) {
 			thePath.lineTo(myA2X, myA1Y);
 			thePath.lineTo(myA2X, myA2Y);
 			return;
 		}
 
-		if (mySecondPoint.getType() == ControlPointType.BEZIER) {
+		if (mySecondPoint.type() == CCControlPointType.BEZIER) {
 			myIsBezier = true;
-			BezierControlPoint myBezier2Point = (BezierControlPoint) mySecondPoint;
-			Point2D myHandle = _myController.curveToViewSpace(myBezier2Point.inHandle());
-			myA2X = myHandle.getX();
-			myA2Y = myHandle.getY();
+			CCBezierControlPoint myBezier2Point = (CCBezierControlPoint) mySecondPoint;
+			CCVector2 myHandle = _myController.curveToViewSpace(myBezier2Point.inHandle());
+			myA2X = myHandle.x;
+			myA2Y = myHandle.y;
 
 		}
-		if (myFirstPoint.getType() == ControlPointType.BEZIER) {
+		if (myFirstPoint.type() == CCControlPointType.BEZIER) {
 			myIsBezier = true;
-			BezierControlPoint myBezier1Point = (BezierControlPoint) myFirstPoint;
-			Point2D myHandle = _myController.curveToViewSpace(myBezier1Point.outHandle());
-			myA1X = myHandle.getX();
-			myA1Y = myHandle.getY();
+			CCBezierControlPoint myBezier1Point = (CCBezierControlPoint) myFirstPoint;
+			CCVector2 myHandle = _myController.curveToViewSpace(myBezier1Point.outHandle());
+			myA1X = myHandle.x;
+			myA1Y = myHandle.y;
 		}
 		if (myIsBezier) {
 			thePath.curveTo(myA1X, myA1Y, myA2X, myA2Y, myX, myY);
 			return;
 		}
 
-		if (mySecondPoint.getType() == ControlPointType.LINEAR) {
+		if (mySecondPoint.type() == CCControlPointType.LINEAR) {
 			thePath.lineTo(myX, myY);
 			return;
 		}
 
-		// if(mySecondPoint.getType() == ControlPointType.CUBIC &&
+		// if(mySecondPoint.type() == CCControlPointType.CUBIC &&
 		// mySecondPoint.hasNext()){
 		// ControlPoint myNextPoint = mySecondPoint.getNext();
-		// Point2D myp2 = _myController.curveToViewSpace(myNextPoint);
-		// thePath.quadTo(myX, myY, myp2.getX(), myp2.getY());
+		// CCVector2 myp2 = _myController.curveToViewSpace(myNextPoint);
+		// thePath.quadTo(myX, myY, myp2.x, myp2.y);
 		// return;
 		// }
 
 		// if(theDrawInterval){
-		double myInterval = SwingTrackView.GRID_INTERVAL / getWidth() * (_myTrackContext.viewTime());
+		double myInterval = SwingTrackView.GRID_INTERVAL / width() * (_myTrackContext.viewTime());
 		double myStart = myInterval * Math.floor(myFirstPoint.time() / myInterval);
 
 		for (double step = myStart + myInterval; step < mySecondPoint.time(); step = step + myInterval) {
 			double myValue = _myController.trackData().value(step);
-			p1 = _myController.curveToViewSpace(new ControlPoint(step, myValue));
-			thePath.lineTo(p1.getX(), p1.getY());
+			p1 = _myController.curveToViewSpace(new CCControlPoint(step, myValue));
+			thePath.lineTo(p1.x, p1.y);
 		}
 		// }
 
-		thePath.lineTo(p2.getX(), p2.getY());
+		thePath.lineTo(p2.x, p2.y);
 	}
 
 	// private void drawGridLines(Graphics g) {
@@ -285,44 +224,19 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 	// TrackView.GRID_INTERVAL;
 	// int myIntervalFactor = 1;
 	// if (myNumberOfLines > MAX_GRID_LINES) {
-	// myIntervalFactor = (int) (myNumberOfLines / MAX_GRID_LINES + 1);
+	// myIntervalFactor =  (myNumberOfLines / MAX_GRID_LINES + 1);
 	// }
 	// double myStart = TrackView.GRID_INTERVAL *
 	// (Math.floor(_myController.lowerBound() / TrackView.GRID_INTERVAL));
 	// for (double step = myStart; step <= _myController.upperBound(); step =
 	// step + myIntervalFactor * TrackView.GRID_INTERVAL) {
 	// double myX = (step - _myController.lowerBound()) /
-	// (_myController.viewTime()) * getWidth();
-	// g.setColor(new Color(0.9f, 0.9f, 0.9f));
-	// g.drawLine((int) myX, 0, (int) myX, this.getHeight());
+	// (_myController.viewTime()) * width();
+	// g.color(new CCColor(0.9f, 0.9f, 0.9f));
+	// g.line( myX, 0,  myX, this.height());
 	// }
 	// }
 
-	public void render() {
-		try {
-			// checks if the current time-line is visible in the parent
-			// containers,
-			// so only visible time-line panels are rendered i.e. when zooming
-			Rectangle myVisibleRect = new Rectangle();
-			computeVisibleRect(myVisibleRect);
-			if (!myVisibleRect.isEmpty()) {
-				renderImplementation();
-				_myRedraw = false;
-			} else {
-				_myRedraw = true;
-			}
-
-			events().proxy().onRender(g2d);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-		update();
-	}
-
-	public void renderInfo() {
-		// _myRedraw = false;
-		update();
-	}
 
 	private boolean _myIsEnvelope = false;
 
@@ -330,120 +244,83 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 		_myIsEnvelope = theDrawGrid;
 	}
 
-	public void point(Point2D thePoint) {
-		g2d.fillOval(
-			(int) thePoint.getX() - SwingConstants.CURVE_POINT_SIZE / 2,
-			(int) thePoint.getY() - SwingConstants.CURVE_POINT_SIZE / 2, 
-			SwingConstants.CURVE_POINT_SIZE,
-			SwingConstants.CURVE_POINT_SIZE
-		);
-	}
+//	public void point(CCVector2 thePoint) {
+//		g.rect(
+//			 thePoint.x - CCUIConstants.CURVE_POINT_SIZE / 2,
+//			 thePoint.y - CCUIConstants.CURVE_POINT_SIZE / 2, 
+//			CCUIConstants.CURVE_POINT_SIZE,
+//			CCUIConstants.CURVE_POINT_SIZE
+//		);
+//	}
 
-	public void line(Point2D thePoint1, Point2D thePoint2) {
-		g2d.drawLine((int) thePoint1.getX(), (int) thePoint1.getY(), (int) thePoint2.getX(), (int) thePoint2.getY());
-	}
 
-	public Graphics2D g2d() {
-		return g2d;
-	}
+	public abstract void renderData(CCGraphics g);
 
-	public abstract void renderData(Graphics2D g2d);
-
-	protected Graphics2D g2d = null;
-
-	private void createContext() {
-		try {
-			// obtain the current system graphical settings
-		    GraphicsConfiguration gfx_config = GraphicsEnvironment.
-		        getLocalGraphicsEnvironment().getDefaultScreenDevice().
-		        getDefaultConfiguration();
-		    
-		    _myRenderBuffer = gfx_config.createCompatibleImage(getWidth(), getHeight(),Transparency.TRANSLUCENT);
-
-		    CCLog.info(_myRenderBuffer.getType(),BufferedImage.TYPE_INT_ARGB);
-//			_myRenderBuffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics g = _myRenderBuffer.getGraphics();
-
-			RenderingHints myRenderingHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			myRenderingHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-
-			g2d = (Graphics2D) g;
-			g2d.setRenderingHints(myRenderingHints);
-		} catch (NegativeArraySizeException e) {
-
-		}
-	}
-
-	private int _myLastWidth = 0;
-	private int _myLastHeight = 0;
+	private double _myLastWidth = 0;
+	private double _myLastHeight = 0;
 
 	// does a full rendering of the function. we only need to do that if we're
 	// visible and we edit points or
 	// zoom in and out...
-	private void renderImplementation() {
+	private void renderImplementation(CCGraphics g) {
 
-		if (getWidth() <= 0 || getHeight() <= 0)
+		if (width() <= 0 || height() <= 0)
 			return;
 
 		if (!_myController.isParentOpen())
 			return;
 
-		if (getWidth() != _myLastWidth || getHeight() != _myLastHeight || g2d == null) {
-			createContext();
-			_myLastWidth = getWidth();
-			_myLastHeight = getHeight();
+		if (width() != _myLastWidth || height() != _myLastHeight || g == null) {
+			_myLastWidth = width();
+			_myLastHeight = height();
 		}
 
-		if (g2d == null)
+		if (g == null)
 			return;
 		
 		// paint background
-		g2d.setComposite(AlphaComposite.Clear);
-		g2d.setColor(new Color(255, 255, 255, 0));
-		g2d.fillRect(0, 0, getWidth(), getHeight());
-		g2d.setComposite(AlphaComposite.SrcOver);
+		g.color(255);
+		g.rect(0, 0, width(), height());
 
 		// paint curve
-		BasicStroke myThickStroke = new BasicStroke(1.5f);
-		g2d.setStroke(myThickStroke);
+		g.strokeWeight(1.5f);
 
-		renderData(g2d);
+		renderData(g);
 	}
 
-	private void drawTransportInfos(Graphics g) {
+	private void drawTransportInfos(CCGraphics g) {
 		// draw loop if existent
 		if (_myTimelineController == null)
 			return;
 
 		if (_myTimelineController.transportController().doLoop()) {
-			Point2D myLowerCorner = _myController.curveToViewSpace(new ControlPoint(_myTimelineController.transportController().loopStart(), 1));
-			Point2D myUpperCorner = _myController.curveToViewSpace(new ControlPoint(_myTimelineController.transportController().loopEnd(), 0));
+			CCVector2 myLowerCorner = _myController.curveToViewSpace(new CCControlPoint(_myTimelineController.transportController().loopStart(), 1));
+			CCVector2 myUpperCorner = _myController.curveToViewSpace(new CCControlPoint(_myTimelineController.transportController().loopEnd(), 0));
 
-			g.setColor(new Color(0.15f, 0.15f, 0.15f, 0.05f));
-			g.fillRect((int) myLowerCorner.getX(), (int) myLowerCorner.getY(), (int) myUpperCorner.getX() - (int) myLowerCorner.getX(), (int) myUpperCorner.getY());
-			g.setColor(new Color(0.8f, 0.8f, 0.8f));
-			g.drawLine((int) myLowerCorner.getX(), getHeight() + 1, (int) myLowerCorner.getX(), 0);
-			g.drawLine((int) myUpperCorner.getX(), getHeight() + 1, (int) myUpperCorner.getX(), 0);
+			g.color(new CCColor(0.15f, 0.15f, 0.15f, 0.05f));
+			g.rect( myLowerCorner.x,  myLowerCorner.y,  myUpperCorner.x -  myLowerCorner.x,  myUpperCorner.y);
+			g.color(new CCColor(0.8f, 0.8f, 0.8f));
+			g.line( myLowerCorner.x, height() + 1,  myLowerCorner.x, 0);
+			g.line( myUpperCorner.x, height() + 1,  myUpperCorner.x, 0);
 		}
 
 		double myTime = _myTimelineController.transportController().time();
 		int myViewX = _myController.timeToViewX(myTime);
 
-		if (myViewX >= 0 && myViewX <= getWidth()) {
-			g.setColor(new Color(0.1f, 0.1f, 0.1f, 0.5f));
-			g.drawLine(myViewX, 0, myViewX, getHeight());
+		if (myViewX >= 0 && myViewX <= width()) {
+			g.color(new CCColor(0.1f, 0.1f, 0.1f, 0.5f));
+			g.line(myViewX, 0, myViewX, height());
 		}
 	}
 
-	public abstract void drawTimelineInfos(Graphics g);
+	public abstract void drawTimelineInfos(CCGraphics g);
 
-	private void drawTimelineBack(Graphics g) {
+	private void drawTimelineBack(CCGraphics g) {
 		if (_myTimelineController == null) {
 			return;
 		}
-		Graphics2D myG2 = (Graphics2D) g;
 		CCTransportController myTransportController = _myTimelineController.transportController();
-		RulerInterval ri = myTransportController.rulerInterval();
+		CCRulerInterval ri = myTransportController.rulerInterval();
 
 		double myStart = ri.interval() * (Math.floor(myTransportController.lowerBound() / ri.interval()));
 
@@ -453,21 +330,21 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 			if (myX < 0)
 				continue;
 
-			g.setColor(SwingRulerView.STEP_COLOR);
-			myG2.setStroke(SwingRulerView.THIN_STROKE);
-			g.drawLine(myX, 0, myX, getHeight());
+			g.color(CCRulerView.STEP_COLOR);
+			g.strokeWeight(CCRulerView.THIN_STROKE);
+			g.line(myX, 0, myX, height());
 
-			g.setColor(SwingRulerView.SUB_STEP_COLOR);
-			myG2.setStroke(SwingRulerView.THIN_STROKE);
+			g.color(CCRulerView.SUB_STEP_COLOR);
+			g.strokeWeight(CCRulerView.THIN_STROKE);
 
 			for (int i = 1; i < _myTimelineController.drawRaster(); i++) {
 				myX = myTransportController.timeToViewX(step + ri.interval() * i / _myTimelineController.drawRaster());
-				g.drawLine(myX, 0, myX, getHeight());
+				g.line(myX, 0, myX, height());
 			}
 
 		}
 
-		ControlPoint myCurrentPoint = _myTimelineController.transportController().trackData().getFirstPointAt(_myTrackContext.lowerBound());
+		CCControlPoint myCurrentPoint = _myTimelineController.transportController().trackData().getFirstPointAt(_myTrackContext.lowerBound());
 
 		while (myCurrentPoint != null) {
 			if (myCurrentPoint.time() > _myTrackContext.upperBound())
@@ -475,42 +352,35 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 
 			int myMarkerX = _myController.timeToViewX(myCurrentPoint.time());
 
-			g.setColor(new Color(1f, 0f, 0f));
-			g.drawLine(myMarkerX, 0, myMarkerX, getHeight());
+			g.color(new CCColor(1f, 0f, 0f));
+			g.line(myMarkerX, 0, myMarkerX, height());
 
-			myCurrentPoint = myCurrentPoint.getNext();
+			myCurrentPoint = myCurrentPoint.next();
 		}
 	}
 
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+	public void drawContent(CCGraphics g) {
 
 		drawTimelineBack(g);
 
 		if (_myIsEnvelope) {
-			Graphics2D myG2 = (Graphics2D) g;
 
 			for (int i = 0; i <= 8; i++) {
-				int myX = (int) CCMath.map(i, 0, 8, 0, width());
-				int myY = (int) CCMath.map(i, 0, 8, 0, height());
+				double myX =  CCMath.map(i, 0, 8, 0, width());
+				double myY =  CCMath.map(i, 0, 8, 0, height());
 
 				if (i % 2 == 0)
-					g.setColor(Color.gray);
+					g.color(CCColor.GRAY);
 				else
-					g.setColor(SwingRulerView.STEP_COLOR);
+					g.color(CCRulerView.STEP_COLOR);
 
-				myG2.setStroke(SwingRulerView.THIN_STROKE);
-				g.drawLine(myX, 0, myX, getHeight());
-				g.drawLine(0, myY, getWidth(), myY);
+				g.strokeWeight(CCRulerView.THIN_STROKE);
+				g.line(myX, 0, myX, height());
+				g.line(0, myY, width(), myY);
 			}
 		}
 
-		if (_myRedraw) {
-			renderImplementation();
-			_myRedraw = false;
-		}
-
-		g.drawImage(_myRenderBuffer, 0, 0, null);
+		renderImplementation(g);
 
 		drawTransportInfos(g);
 		if (_myTimelineController != null) {
@@ -520,15 +390,15 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 		// paint selection
 		if (_myController.selection() != null) {
 
-			Point2D myLowerCorner = _myController.curveToViewSpace(new ControlPoint(_myController.selection().start(), 1));
-			Point2D myUpperCorner = _myController.curveToViewSpace(new ControlPoint(_myController.selection().end(), 0));
+			CCVector2 myLowerCorner = _myController.curveToViewSpace(new CCControlPoint(_myController.selection().start(), 1));
+			CCVector2 myUpperCorner = _myController.curveToViewSpace(new CCControlPoint(_myController.selection().end(), 0));
 
-			g.setColor(SwingConstants.SELECTION_COLOR);
-			g.fillRect((int) myLowerCorner.getX(), (int) myLowerCorner.getY(), (int) myUpperCorner.getX() - (int) myLowerCorner.getX(), (int) myUpperCorner.getY());
+			g.color(CCUIConstants.SELECTION_COLOR);
+			g.rect( myLowerCorner.x,  myLowerCorner.y,  myUpperCorner.x -  myLowerCorner.x,  myUpperCorner.y);
 
-			g.setColor(SwingConstants.SELECTION_BORDER_COLOR);
-			g.drawLine((int) myLowerCorner.getX(), getHeight(), (int) myLowerCorner.getX(), 0);
-			g.drawLine((int) myUpperCorner.getX(), (int) myUpperCorner.getY(), (int) myUpperCorner.getX(), 0);
+			g.color(CCUIConstants.SELECTION_BORDER_COLOR);
+			g.line( myLowerCorner.x, height(),  myLowerCorner.x, 0);
+			g.line( myUpperCorner.x,  myUpperCorner.y,  myUpperCorner.x, 0);
 		}
 	}
 
@@ -536,15 +406,10 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 		updateUI();
 	}
 
-	public int height() {
-		return getHeight();
+	private void updateUI() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public int width() {
-		return getWidth();
-	}
-
-	@Override
-	public void finalize() {
-	}
+	
 }

@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.arrange;
 
 import java.awt.Dimension;
@@ -19,11 +35,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedData;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint.TimedData;
+import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class SwingGroupTrackObjectDialog extends JDialog implements ActionListener, PropertyChangeListener {
@@ -70,10 +86,10 @@ public class SwingGroupTrackObjectDialog extends JDialog implements ActionListen
 		
 	}
 	
-	private TimedEventPoint _myEventPoint;
+	private CCTimedEventPoint _myEventPoint;
 	private CCEventTrackController _myController;
 	
-	public void edit(CCObjectPropertyHandle theObject, CCEventTrackController theController, TimedEventPoint theEventPoint){
+	public void edit(CCObjectPropertyHandle theObject, CCEventTrackController theController, CCTimedEventPoint theEventPoint){
 		setPresets(theObject);
 		_myEventPoint = theEventPoint;
 		_myController = theController;
@@ -91,7 +107,7 @@ public class SwingGroupTrackObjectDialog extends JDialog implements ActionListen
 	
 	private void createPresetCombo(){
 		JLabel myTimelineLabel = new JLabel("timeline");
-		myTimelineLabel.setFont(SwingGuiConstants.ARIAL_11);
+		myTimelineLabel.setFont(CCUIConstants.ARIAL_11);
 		add(myTimelineLabel);
 		CCNIOUtil.createDirectories(CCNIOUtil.dataPath("settings"));
 		_myPresetList = new JComboBox<String>();

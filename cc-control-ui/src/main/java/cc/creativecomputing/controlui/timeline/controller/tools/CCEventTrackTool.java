@@ -1,20 +1,36 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.tools;
 
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint.HandleType;
-import cc.creativecomputing.control.timeline.point.HandleControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedData;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCHandleType;
+import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint.TimedData;
 import cc.creativecomputing.controlui.timeline.controller.actions.MoveEventAction;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 
@@ -37,9 +53,9 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 	
 	private boolean _mySplitDrag = false;
 
-	private TimedEventPoint _myEditedEvent = null;
-    protected List<ControlPoint> _myDraggedPoints;
-    protected List<ControlPoint> _myStartPoints;
+	private CCTimedEventPoint _myEditedEvent = null;
+    protected List<CCControlPoint> _myDraggedPoints;
+    protected List<CCControlPoint> _myStartPoints;
 
 	private double _myStartEnd;
 	
@@ -61,35 +77,35 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 		_myController.view().render();
 	}
 	
-	public TimedEventPoint createPoint(Point2D theViewCoords){
+	public CCTimedEventPoint createPoint(CCVector2 theViewCoords){
 		return createPoint(_myController.viewToCurveSpace(theViewCoords, true));
 	}
 	
-	public void setEndPoint(TimedEventPoint thePoint){
+	public void setEndPoint(CCTimedEventPoint thePoint){
 		double myViewTime = _myController.context().zoomController().upperBound() - _myController.context().zoomController().lowerBound();
 		myViewTime /= 10;
 		
 		double myEventEndTime = thePoint.time() + myViewTime;
 		
-		ControlPoint myHigherPoint = thePoint.getNext();
+		CCControlPoint myHigherPoint = thePoint.next();
 		if(myHigherPoint != null) {
 			myEventEndTime = Math.min(myHigherPoint.time(), myEventEndTime);
 		}
 		
-		HandleControlPoint myEndPoint = new HandleControlPoint(
+		CCHandleControlPoint myEndPoint = new CCHandleControlPoint(
 				thePoint, 
-			HandleType.TIME_END, 
+			CCHandleType.TIME_END, 
 			myEventEndTime, 
 			1.0
 		);
 		thePoint.endPoint(myEndPoint);
 	}
 	
-	public TimedEventPoint createPoint(ControlPoint theCurveCoords) {
+	public CCTimedEventPoint createPoint(CCControlPoint theCurveCoords) {
 		double myBlend = theCurveCoords.value();
 		myBlend = CCMath.round(myBlend);
 
-		TimedEventPoint myEventPoint = new TimedEventPoint(theCurveCoords.time(), myBlend);
+		CCTimedEventPoint myEventPoint = new CCTimedEventPoint(theCurveCoords.time(), myBlend);
 		myEventPoint.content(new TimedData(_myController.property().value()));
         _myController.trackData().add(myEventPoint);
         
@@ -99,34 +115,34 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
         return myEventPoint;
     }
 
-	public TimedEventPoint editedEvent(){
+	public CCTimedEventPoint editedEvent(){
 		return _myEditedEvent;
 	}
 
 	@Override
-	public void mousePressed(MouseEvent theEvent) {
+	public void mousePressed(CCGLMouseEvent theEvent) {
 		super.mousePressed(theEvent);
 		
 		boolean mySwitchAction = _mySplitDrag && _myPressCurveCoords.value() > 0.5;
 			 
-		ControlPoint myControlPoint = _myController.pickNearestPoint(_myPressViewCoords);
-		HandleControlPoint myHandle = _myController.pickHandle(_myPressViewCoords);
+		CCControlPoint myControlPoint = _myController.pickNearestPoint(_myPressViewCoords);
+		CCHandleControlPoint myHandle = _myController.pickHandle(_myPressViewCoords);
 		
 		_myEditedEvent = null;
 		
 		if (myHandle != null) {
-			_myDraggedPoints = new ArrayList<ControlPoint>();
+			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myHandle);
-			_myEditedEvent = (TimedEventPoint)myHandle.parent();
+			_myEditedEvent = (CCTimedEventPoint)myHandle.parent();
 			if(!(_mySplitDrag && _myCurveCoords.value() < 0.5)){
 				_myDragAction = EventAction.DRAG_END;
 			}else{
 				_myDragAction = EventAction.DRAG_END_OFFSET;
 			}
-		} else if (myControlPoint != null  && Math.abs(_myController.curveToViewSpace(myControlPoint).getX() - _myPressViewCoords.getX()) < SwingTrackView.PICK_RADIUS){
-			_myDraggedPoints = new ArrayList<ControlPoint>();
+		} else if (myControlPoint != null  && Math.abs(_myController.curveToViewSpace(myControlPoint).x - _myPressViewCoords.x) < SwingTrackView.PICK_RADIUS){
+			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myControlPoint);
-			_myEditedEvent = (TimedEventPoint)myControlPoint;
+			_myEditedEvent = (CCTimedEventPoint)myControlPoint;
 			if(!mySwitchAction){
 				_myDragAction = EventAction.DRAG_START;
 			}else{
@@ -134,12 +150,12 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 			}
 		} else {
 			
-			TimedEventPoint myLower = (TimedEventPoint)_myController.trackData().lower(_myCurveCoords);
+			CCTimedEventPoint myLower = (CCTimedEventPoint)_myController.trackData().lower(_myCurveCoords);
 
 			if(myLower != null) {
-				ControlPoint myUpper = myLower.endPoint();
+				CCControlPoint myUpper = myLower.endPoint();
 				if(_myPressCurveCoords.time() > myLower.time() && _myPressCurveCoords.time() < myUpper.time()) {
-					_myDraggedPoints = new ArrayList<ControlPoint>();
+					_myDraggedPoints = new ArrayList<CCControlPoint>();
 					_myDraggedPoints.add(myLower);
 					_myEditedEvent = myLower;
 					if(!mySwitchAction){
@@ -162,35 +178,35 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 			_myStartEnd = _myEditedEvent.endTime();
 		}
 		if(_myDraggedPoints != null) {
-			 _myStartPoints = new ArrayList<ControlPoint>();
-			 for(ControlPoint myDraggedPoint:_myDraggedPoints){
+			 _myStartPoints = new ArrayList<CCControlPoint>();
+			 for(CCControlPoint myDraggedPoint:_myDraggedPoints){
 				 _myStartPoints.add(myDraggedPoint.clone());
 			 }
 		}
 	}
 	
 	@Override
-	public void mouseMoved(MouseEvent theEvent) {
+	public void mouseMoved(CCGLMouseEvent theEvent) {
 		super.mouseMoved(theEvent);
 		_myDragAction = null;
 				
 		
 		boolean mySwitchAction = _mySplitDrag && _myCurveCoords.value() > 0.5;
 		
-		ControlPoint myControlPoint = _myController.pickNearestPoint(_myViewCoords);
-		HandleControlPoint myHandle = _myController.pickHandle(_myViewCoords);
+		CCControlPoint myControlPoint = _myController.pickNearestPoint(_myViewCoords);
+		CCHandleControlPoint myHandle = _myController.pickHandle(_myViewCoords);
 		
 		
 		if (myHandle != null) {
-			_myDraggedPoints = new ArrayList<ControlPoint>();
+			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myHandle);
 			if(!(_mySplitDrag && _myCurveCoords.value() < 0.5)){
 				_myDragAction = EventAction.DRAG_END;
 			}else{
 				_myDragAction = EventAction.DRAG_END_OFFSET;
 			}
-		} else if (myControlPoint != null  && Math.abs(_myController.curveToViewSpace(myControlPoint).getX() - _myPressViewCoords.getX()) < SwingTrackView.PICK_RADIUS){
-			_myDraggedPoints = new ArrayList<ControlPoint>();
+		} else if (myControlPoint != null  && Math.abs(_myController.curveToViewSpace(myControlPoint).x - _myPressViewCoords.x) < SwingTrackView.PICK_RADIUS){
+			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myControlPoint);
 			if(!mySwitchAction){
 				_myDragAction = EventAction.DRAG_START;
@@ -199,13 +215,13 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 			}
 		} else {
 			
-			TimedEventPoint myLower = (TimedEventPoint)_myController.trackData().lower(_myCurveCoords);
+			CCTimedEventPoint myLower = (CCTimedEventPoint)_myController.trackData().lower(_myCurveCoords);
 
 			if(myLower != null) {
-				ControlPoint myUpper = myLower.endPoint();
-				ControlPoint myCoords = _myController.viewToCurveSpace(_myViewCoords, true);
+				CCControlPoint myUpper = myLower.endPoint();
+				CCControlPoint myCoords = _myController.viewToCurveSpace(_myViewCoords, true);
 				if(myCoords.time() > myLower.time() && myCoords.time() < myUpper.time()) {
-					_myDraggedPoints = new ArrayList<ControlPoint>();
+					_myDraggedPoints = new ArrayList<CCControlPoint>();
 					_myDraggedPoints.add(myLower);
 					if(!mySwitchAction){
 						_myDragAction = EventAction.DRAG_BLOCK;
@@ -219,22 +235,22 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 		}
 	}
 	
-	private boolean dragBlock(ControlPoint theDraggedPoint, ControlPoint theMovement){
+	private boolean dragBlock(CCControlPoint theDraggedPoint, CCControlPoint theMovement){
 		if(_myStartPoints == null)return false;
 		if(_myCurveCoords == null)return false;
 		
-		TimedEventPoint myTimedEvent = (TimedEventPoint) theDraggedPoint;
+		CCTimedEventPoint myTimedEvent = (CCTimedEventPoint) theDraggedPoint;
 		
 		double myMove = theMovement.time();
-		ControlPoint myMovedTarget = new ControlPoint(_myStartPoints.get(0).time() + myMove, 1.0);
+		CCControlPoint myMovedTarget = new CCControlPoint(_myStartPoints.get(0).time() + myMove, 1.0);
 		double myEndOffset = myTimedEvent.endPoint().time() - myTimedEvent.time();
 
 		double myTime = _myController.context().quantize(myMovedTarget).time();
-		TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint.getPrevious();
+		CCTimedEventPoint myLowerPoint = (CCTimedEventPoint)theDraggedPoint.previous();
 		if(myLowerPoint != null) {
 			myTime = Math.max(myLowerPoint.endTime(), myTime);
 		}
-		ControlPoint myHigherPoint = theDraggedPoint.getNext();
+		CCControlPoint myHigherPoint = theDraggedPoint.next();
 		if(myHigherPoint != null) {
 			myTime = Math.min(myHigherPoint.time(), myTime + myEndOffset) - myEndOffset;
 		}
@@ -249,14 +265,14 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 		return true;
 	}
 	
-	private void dragStart(ControlPoint theDraggedPoint, ControlPoint theMousePoint){
-		TimedEventPoint myTimedEvent = (TimedEventPoint) theDraggedPoint;
+	private void dragStart(CCControlPoint theDraggedPoint, CCControlPoint theMousePoint){
+		CCTimedEventPoint myTimedEvent = (CCTimedEventPoint) theDraggedPoint;
 		
 		double myTime = _myController.context().quantize(theMousePoint).time();
-		HandleControlPoint myEnd = myTimedEvent.endPoint();
+		CCHandleControlPoint myEnd = myTimedEvent.endPoint();
 		myTime = Math.min(myEnd.time() - MIN_EVENT_TIME, myTime);
 
-		TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint.getPrevious();
+		CCTimedEventPoint myLowerPoint = (CCTimedEventPoint)theDraggedPoint.previous();
 		if(myLowerPoint != null) {
 			if(myTime < myLowerPoint.endTime())myLowerPoint.endTime(myTime);
 			if(myTime < myLowerPoint.time())_myController.trackData().remove(myLowerPoint);
@@ -265,13 +281,13 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 		_myController.trackData().move(theDraggedPoint, theMousePoint);
 	}
 	
-	private void dragEndHandle(ControlPoint theDraggedPoint, ControlPoint theMousePoint){
-		HandleControlPoint myControlPoint = (HandleControlPoint)theDraggedPoint;
-		ControlPoint myStart = myControlPoint.parent();
+	private void dragEndHandle(CCControlPoint theDraggedPoint, CCControlPoint theMousePoint){
+		CCHandleControlPoint myControlPoint = (CCHandleControlPoint)theDraggedPoint;
+		CCControlPoint myStart = myControlPoint.parent();
 		
 		double myTime = Math.max(myStart.time() + MIN_EVENT_TIME, theMousePoint.time());
 
-		TimedEventPoint myHigherPoint = (TimedEventPoint)myStart.getNext();
+		CCTimedEventPoint myHigherPoint = (CCTimedEventPoint)myStart.next();
 		if(myHigherPoint != null) {
 			if(myTime > myHigherPoint.time())myHigherPoint.time(myTime);
 			if(myTime > myHigherPoint.endTime())_myController.trackData().remove(myHigherPoint);
@@ -281,8 +297,8 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 		theDraggedPoint.value(theMousePoint.value());
 	}
 	
-	private void dragPoint(ControlPoint theDraggedPoint, ControlPoint myTargetPosition, ControlPoint theMovement, boolean theIsPressedShift) {
-		ControlPoint myMousePoint = _myController.context().quantize(myTargetPosition);
+	private void dragPoint(CCControlPoint theDraggedPoint, CCControlPoint myTargetPosition, CCControlPoint theMovement, boolean theIsPressedShift) {
+		CCControlPoint myMousePoint = _myController.context().quantize(myTargetPosition);
 			
 		switch(_myDragAction){
 		case DRAG_BLOCK:
@@ -296,25 +312,25 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 			break;
 		case DRAG_START_OFFSET:
 			dragStart(theDraggedPoint, myMousePoint);
-			if(theDraggedPoint != null && theDraggedPoint instanceof TimedEventPoint){
-				TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint;
+			if(theDraggedPoint != null && theDraggedPoint instanceof CCTimedEventPoint){
+				CCTimedEventPoint myLowerPoint = (CCTimedEventPoint)theDraggedPoint;
 				double myTime = _myController.context().quantize(theMovement.time());
 				myLowerPoint.contentOffset(_myLastOffset - myTime);
 			}
 			break;
 		case DRAG_END_OFFSET:
 			dragEndHandle(theDraggedPoint, myMousePoint);
-			if(theDraggedPoint != null && theDraggedPoint instanceof HandleControlPoint){
+			if(theDraggedPoint != null && theDraggedPoint instanceof CCHandleControlPoint){
 
-				HandleControlPoint myControlPoint = (HandleControlPoint)theDraggedPoint;
-				TimedEventPoint myLowerPoint = (TimedEventPoint)(myControlPoint.parent());
+				CCHandleControlPoint myControlPoint = (CCHandleControlPoint)theDraggedPoint;
+				CCTimedEventPoint myLowerPoint = (CCTimedEventPoint)(myControlPoint.parent());
 				double myTime = _myController.context().quantize(theMovement.time());
 				myLowerPoint.contentOffset(_myLastOffset + myTime);
 			}
 			break;
 		case DRAG_CONTENT:
-			if(theDraggedPoint != null && theDraggedPoint instanceof TimedEventPoint){
-				TimedEventPoint myLowerPoint = (TimedEventPoint)theDraggedPoint;
+			if(theDraggedPoint != null && theDraggedPoint instanceof CCTimedEventPoint){
+				CCTimedEventPoint myLowerPoint = (CCTimedEventPoint)theDraggedPoint;
 				double myTime = _myController.context().quantize(theMovement.time());
 				myLowerPoint.contentOffset(_myLastOffset + myTime);
 			}
@@ -324,14 +340,14 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 	}
 	
 	@Override
-	public void mouseDragged(MouseEvent theEvent) {
+	public void mouseDragged(CCGLMouseEvent theEvent) {
 		super.mouseDragged(theEvent);
 		
 		if(_myIsInDrag == false){
 			if(_myController.selectedPoints().size() > 0){
 				_myDraggedPoints.addAll(_myController.selectedPoints());
 				_myStartPoints.clear();
-				 for(ControlPoint myDraggedPoint:_myDraggedPoints){
+				 for(CCControlPoint myDraggedPoint:_myDraggedPoints){
 					 _myStartPoints.add(myDraggedPoint.clone());
 				 }
 			}
@@ -343,28 +359,26 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 		if(_myStartPoints == null)return;
 			
 		for(int i = 0; i < _myDraggedPoints.size();i++){
-			ControlPoint myStartPoint = _myStartPoints.get(i).clone();
-			ControlPoint myTarget = new ControlPoint(
+			CCControlPoint myStartPoint = _myStartPoints.get(i).clone();
+			CCControlPoint myTarget = new CCControlPoint(
 				myStartPoint.time() + _myCurveMovement.time(), 
 				CCMath.saturate(myStartPoint.value() + _myCurveMovement.value())
 			);
-			ControlPoint myDraggedPoint = _myDraggedPoints.get(i);
-				
-			boolean myPressedShift = (theEvent.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) == MouseEvent.SHIFT_DOWN_MASK;
+			CCControlPoint myDraggedPoint = _myDraggedPoints.get(i);
 	
-			dragPoint(myDraggedPoint, myTarget, _myCurveMovement, myPressedShift);        
+			dragPoint(myDraggedPoint, myTarget, _myCurveMovement, theEvent.isShiftDown());        
 		}
 	}
 	
 	@Override
-	public void mouseReleased(MouseEvent theEvent) {
+	public void mouseReleased(CCGLMouseEvent theEvent) {
 		_myDragAction = null;
 		if(_myEditedEvent != null) {
 			_myController.events().proxy().onChange(_myController, _myEditedEvent);
 			
 		}else{
-			for(ControlPoint myEvent:_myController.trackData()){
-				((TimedEventPoint)myEvent).isSelected(false);
+			for(CCControlPoint myEvent:_myController.trackData()){
+				((CCTimedEventPoint)myEvent).isSelected(false);
 			}
 			_myController.property().endEdit();
 			_myController.property().restorePreset();
@@ -377,7 +391,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 			return;
 		}
 		
-		if (theEvent.getX() == _myPressX && theEvent.getY() == _myPressY && !_myAddedNewPoint) {
+		if (theEvent.x == _myPressX && theEvent.y == _myPressY && !_myAddedNewPoint) {
 			_myController.events().proxy().onClick(_myController, _myEditedEvent);
 			
 			if(_myEditedEvent != null){
@@ -386,9 +400,9 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 				_myController.property().beginEdit();
 		        _myController.view().render();
 			}else{
-				if(!theEvent.isMetaDown()){
-					for(ControlPoint myEvent:_myController.trackData()){
-						((TimedEventPoint)myEvent).isSelected(false);
+				if(!theEvent.isSuperDown()){
+					for(CCControlPoint myEvent:_myController.trackData()){
+						((CCTimedEventPoint)myEvent).isSelected(false);
 					}
 				}
 			}

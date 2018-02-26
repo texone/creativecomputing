@@ -1,8 +1,24 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.track;
 
-import cc.creativecomputing.control.timeline.Track;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.controlui.timeline.controller.TrackContext;
+import cc.creativecomputing.control.timeline.CCTrack;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCBlendableCurveTool;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCBlendableTool;
 import cc.creativecomputing.core.CCBlendable;
@@ -11,7 +27,7 @@ import cc.creativecomputing.core.CCBlendable;
 public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>> extends CCDoubleTrackController{
 	
 
-	public CCBlendableTrackController(TrackContext theTrackContext, Track theTrack, CCGroupTrackController theParent) {
+	public CCBlendableTrackController(CCTrackContext theTrackContext, CCTrack theTrack, CCGroupTrackController theParent) {
 		super(theTrackContext, theTrack, theParent);
 		_myCreateTool = new CCBlendableTool<>(this);
 		_myCurveTool = new CCBlendableCurveTool(this);
@@ -19,7 +35,7 @@ public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>>
 	}
 	
 	@Override
-	public void applyValue(ControlPoint thePoint, Object theValue) {
+	public void applyValue(CCControlPoint thePoint, Object theValue) {
 		thePoint.blendable((Type)_myProperty.value());
 	}
 
@@ -39,9 +55,9 @@ public abstract class CCBlendableTrackController<Type extends CCBlendable<Type>>
 			return createDefault();
 		}
 		
-		ControlPoint mySample = trackData().createSamplePoint(theTime);
-		ControlPoint myLower = trackData().lower(mySample);
-		ControlPoint myCeiling = trackData().ceiling(mySample);
+		CCControlPoint mySample = trackData().createSamplePoint(theTime);
+		CCControlPoint myLower = trackData().lower(mySample);
+		CCControlPoint myCeiling = trackData().ceiling(mySample);
 		
 		if(myLower != null)myLower.value(0);
 		if(myCeiling != null)myCeiling.value(1);

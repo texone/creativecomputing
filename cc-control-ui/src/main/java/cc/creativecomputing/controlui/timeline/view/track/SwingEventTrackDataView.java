@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
 import java.awt.BasicStroke;
@@ -12,17 +28,17 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCEventTrackTool.EventAction;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingEventCreatePopup;
 import cc.creativecomputing.controlui.timeline.view.SwingEventPopup;
 import cc.creativecomputing.math.CCMath;
 
-public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventTrackController>{
+public class SwingEventTrackDataView extends CCAbstractTrackDataView<CCEventTrackController>{
 	
 	/**
 	 * 
@@ -30,9 +46,9 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 	private static final long serialVersionUID = -7428010925887801272L;
 	private SwingEventPopup _myEventPopup;
     private SwingEventCreatePopup _myCreateEventPopup;
-    protected SwingTrackDataRenderer _myTrackDataRenderer;
+    protected CCTrackDataRenderer _myTrackDataRenderer;
 
-	public SwingEventTrackDataView(SwingTrackDataRenderer theDataRenderer, TimelineController theTimelineController, CCEventTrackController theTrackController) {
+	public SwingEventTrackDataView(CCTrackDataRenderer theDataRenderer, CCTimelineController theTimelineController, CCEventTrackController theTrackController) {
 		super(theTimelineController, theTrackController);
 		
 		_myEventPopup = new SwingEventPopup(_myController);
@@ -51,7 +67,7 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 
 				@Override
         		public void actionPerformed(ActionEvent e) {
-        			TimedEventPoint myEvent = _myController.editedEvent();
+        			CCTimedEventPoint myEvent = _myController.editedEvent();
         			if(myEvent != null && myEvent.isSelected()){
         				_myController.delete(myEvent);
         				render();
@@ -64,7 +80,7 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 
 	@Override
 	public void showPopUp(MouseEvent theEvent) {
-		TimedEventPoint myEvent = _myController.clickedPoint(theEvent);
+		CCTimedEventPoint myEvent = _myController.clickedPoint(theEvent);
 		
 		if(myEvent != null) {
 			_myEventPopup.event(myEvent);
@@ -80,9 +96,9 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
     	BasicStroke myThinStroke = new BasicStroke(0.5f);
 		g2d.setStroke(myThinStroke);
 		g2d.setColor(_myDotColor);
-		ControlPoint myCurrentPoint = _myController.trackData().floor(new ControlPoint(_myTrackContext.lowerBound(),0));
+		CCControlPoint myCurrentPoint = _myController.trackData().floor(new CCControlPoint(_myTrackContext.lowerBound(),0));
 		if(myCurrentPoint == null) {
-			myCurrentPoint = _myController.trackData().ceiling(new ControlPoint(_myTrackContext.lowerBound(),0));
+			myCurrentPoint = _myController.trackData().ceiling(new CCControlPoint(_myTrackContext.lowerBound(),0));
 		}
 		
 		while (myCurrentPoint != null) {
@@ -90,12 +106,12 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 				break;
 			}
 
-			if (myCurrentPoint.getType() == ControlPointType.TIMED_EVENT) {
-				TimedEventPoint myPoint = (TimedEventPoint) myCurrentPoint;
+			if (myCurrentPoint.type() == CCControlPointType.TIMED_EVENT) {
+				CCTimedEventPoint myPoint = (CCTimedEventPoint) myCurrentPoint;
 				double myLowerBound = CCMath.max(myCurrentPoint.time(), context().lowerBound());
 	        	double myUpperBound = CCMath.min(myPoint.endPoint().time(), context().upperBound());
-				Point2D myLowerCorner = _myController.curveToViewSpace(new ControlPoint(myLowerBound, 1));
-				Point2D myUpperCorner = _myController.curveToViewSpace(new ControlPoint(myUpperBound,0));
+				Point2D myLowerCorner = _myController.curveToViewSpace(new CCControlPoint(myLowerBound, 1));
+				Point2D myUpperCorner = _myController.curveToViewSpace(new CCControlPoint(myUpperBound,0));
 
 				if(myPoint.isSelected()){
 					g2d.setColor(_myFillColor.darker());
@@ -118,13 +134,13 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 					_myTrackDataRenderer.renderTimedEvent(myPoint, this, g2d);
 				}
 
-				Point2D myPos = _myController.curveToViewSpace(new ControlPoint(myPoint.time(),1));
+				Point2D myPos = _myController.curveToViewSpace(new CCControlPoint(myPoint.time(),1));
 				g2d.drawString(myPoint.contentOffset() + "", (int) myPos.getX() + 5, (int) myPos.getY() + 35);
 				_myController.renderTimedEvent(myPoint, myLowerCorner, myUpperCorner, myLowerBound, myUpperBound, g2d);
 				g2d.setClip(myClip);
 			}
 			
-			myCurrentPoint = myCurrentPoint.getNext();
+			myCurrentPoint = myCurrentPoint.next();
 		}
     }
 	
@@ -150,7 +166,7 @@ public class SwingEventTrackDataView extends SwingAbstractTrackDataView<CCEventT
 		
 		if(myDragAction == null)return;
 	
-		ControlPoint myDraggedPoint = _myController.draggedPoint();
+		CCControlPoint myDraggedPoint = _myController.draggedPoint();
 		
 		if(myDraggedPoint == null)return;
 		

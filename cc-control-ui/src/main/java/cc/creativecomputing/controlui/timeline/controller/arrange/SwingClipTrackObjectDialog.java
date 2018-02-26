@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.arrange;
 
 import java.awt.Dimension;
@@ -19,14 +35,14 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint.TimedData;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint.TimedData;
+import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.controls.CCUIStyler;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.TimelineChangeListener;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer.TimelineChangeListener;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
-import cc.creativecomputing.controlui.timeline.controller.TimelineController;
-import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 
 public class SwingClipTrackObjectDialog extends JDialog implements ActionListener, PropertyChangeListener {
 	/**
@@ -36,12 +52,12 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 
 	private JComboBox<String> _myTimelines;
 
-	private final TimelineContainer _myTimelineContainer;
+	private final CCTimelineContainer _myTimelineContainer;
 	
 	private JPanel _myPanel;
 
 	/** Creates the reusable dialog. */
-	public SwingClipTrackObjectDialog(TimelineContainer theTimelineContainer) {
+	public SwingClipTrackObjectDialog(CCTimelineContainer theTimelineContainer) {
 		super();
 
 		setTitle("Edit Event");
@@ -50,7 +66,7 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 		_myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
 
 			@Override
-			public void changeTimeline(TimelineController theController) {}
+			public void changeTimeline(CCTimelineController theController) {}
 			
 			@Override
 			public void addTimeline(String theTimeline) {
@@ -88,10 +104,10 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 		pack();
 	}
 	
-	private TimedEventPoint _myEventPoint;
+	private CCTimedEventPoint _myEventPoint;
 	private CCEventTrackController _myController;
 	
-	public void edit(CCEventTrackController theController, TimedEventPoint theEventPoint){
+	public void edit(CCEventTrackController theController, CCTimedEventPoint theEventPoint){
 		_myEventPoint = theEventPoint;
 		_myController = theController;
 		Point myLoc = MouseInfo.getPointerInfo().getLocation();
@@ -101,7 +117,7 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 	
 	private void createTimelineCombo(){
 		JLabel myTimelineLabel = new JLabel("timeline");
-		myTimelineLabel.setFont(SwingGuiConstants.ARIAL_11);
+		myTimelineLabel.setFont(CCUIConstants.ARIAL_11);
 		add(myTimelineLabel);
 		_myTimelines = new JComboBox<String>();
 		for(String myKey:_myTimelineContainer.timelineKeys()){

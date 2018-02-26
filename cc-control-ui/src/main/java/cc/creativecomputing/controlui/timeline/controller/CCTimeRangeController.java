@@ -1,47 +1,44 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller;
 
-import java.awt.event.MouseEvent;
-
-import cc.creativecomputing.control.timeline.TimeRange;
-import cc.creativecomputing.controlui.timeline.view.TimedContentView;
+import cc.creativecomputing.control.timeline.CCTimeRange;
+import cc.creativecomputing.controlui.timeline.view.CCTimedContentView;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 /**
  * @author christianriekoff
  *
  */
-public class TimeRangeController {
+public class CCTimeRangeController {
 	
-	public enum TimeRangeEditFunction{
+	public enum CCTimeRangeEditFunction{
 		MOVE_BOTH, MOVE_START, MOVE_END, ON_OFF
 	}
 	
-	protected TrackContext _myTrackContext;
+	protected CCTrackContext _myTrackContext;
 
-	protected TimeRange _myTimeRange;
-	protected TimedContentView _myTransportView;
-	protected TimeRangeEditFunction _myLoopAction;
+	protected CCTimeRange _myTimeRange;
+	protected CCTimedContentView _myTransportView;
+	protected CCTimeRangeEditFunction _myLoopAction;
 	
-	private int _myStartClickX = 0;
+	private double _myStartClickX = 0;
 	private double _myStartTime;
 	private double _myLastTime;
 	protected double _myLoopStart = 0;
@@ -50,36 +47,36 @@ public class TimeRangeController {
 	protected double _myNewLoopStart;
 	protected double _myNewLoopEnd;
 	
-	public TimeRangeController(
-		TrackContext theTrackContext,
-		TimeRange theTimeRange, 
-		TimedContentView theView
+	public CCTimeRangeController(
+		CCTrackContext theTrackContext,
+		CCTimeRange theTimeRange, 
+		CCTimedContentView theView
 	) {
 		_myTrackContext = theTrackContext;
 		_myTimeRange = theTimeRange;
 		_myTransportView = theView;
 	}
 	
-	protected TimeRangeController(TrackContext theTrackContext) {
+	protected CCTimeRangeController(CCTrackContext theTrackContext) {
 		_myTrackContext = theTrackContext;
 	}
 	
-	public void mousePressed(MouseEvent e) {
-		double myCurveX = _myTransportView.viewXToTime(e.getX(), true);
+	public void mousePressed(CCGLMouseEvent e) {
+		double myCurveX = _myTransportView.viewXToTime(e.x, true);
 			
 		int myLoopStart = _myTransportView.timeToViewX(_myTimeRange.start());
 		int myLoopEnd = _myTransportView.timeToViewX(_myTimeRange.end());
-		_myLoopAction = TimeRangeEditFunction.ON_OFF;
+		_myLoopAction = CCTimeRangeEditFunction.ON_OFF;
 			
-		if(CCMath.abs(myLoopStart - e.getX()) < 5) {
-			_myLoopAction = TimeRangeEditFunction.MOVE_START;
-		}else if(CCMath.abs(myLoopEnd - e.getX()) < 5) {
-			_myLoopAction = TimeRangeEditFunction.MOVE_END;
+		if(CCMath.abs(myLoopStart - e.x) < 5) {
+			_myLoopAction = CCTimeRangeEditFunction.MOVE_START;
+		}else if(CCMath.abs(myLoopEnd - e.x) < 5) {
+			_myLoopAction = CCTimeRangeEditFunction.MOVE_END;
 		}else if(myCurveX > _myTimeRange.start() && myCurveX < _myTimeRange.end()){
-			_myLoopAction = TimeRangeEditFunction.MOVE_BOTH;
+			_myLoopAction = CCTimeRangeEditFunction.MOVE_BOTH;
 		}
 			
-		_myStartClickX = e.getX();
+		_myStartClickX = e.x;
 		_myStartTime = myCurveX;
 		_myLastTime = myCurveX;
 		
@@ -87,27 +84,27 @@ public class TimeRangeController {
 		_myLoopEnd = _myTimeRange.end();
 	}
 	
-	public TimeRangeEditFunction action(MouseEvent e) {
-		double myCurveX = _myTransportView.viewXToTime(e.getX(), true);
+	public CCTimeRangeEditFunction action(CCVector2 e) {
+		double myCurveX = _myTransportView.viewXToTime(e.x, true);
 		int myLoopStart = _myTransportView.timeToViewX(_myTimeRange.start());
 		int myLoopEnd = _myTransportView.timeToViewX(_myTimeRange.end());
 		
-		if(CCMath.abs(myLoopStart - e.getX()) < 5) {
-			return TimeRangeEditFunction.MOVE_START;
-		}else if(CCMath.abs(myLoopEnd - e.getX()) < 5) {
-			return TimeRangeEditFunction.MOVE_END;
+		if(CCMath.abs(myLoopStart - e.x) < 5) {
+			return CCTimeRangeEditFunction.MOVE_START;
+		}else if(CCMath.abs(myLoopEnd - e.x) < 5) {
+			return CCTimeRangeEditFunction.MOVE_END;
 		}else if(myCurveX > _myTimeRange.start() && myCurveX < _myTimeRange.end()){
-			return TimeRangeEditFunction.MOVE_BOTH;
+			return CCTimeRangeEditFunction.MOVE_BOTH;
 		}
-		return TimeRangeEditFunction.ON_OFF;
+		return CCTimeRangeEditFunction.ON_OFF;
 	}
 	
-	public TimeRangeEditFunction loopAction() {
+	public CCTimeRangeEditFunction loopAction() {
 		return _myLoopAction;
 	}
 	
-	public void mouseDragged(MouseEvent e) {
-		double myCurveX = _myTransportView.viewXToTime(e.getX(), true);
+	public void mouseDragged(CCVector2 e) {
+		double myCurveX = _myTransportView.viewXToTime(e.x, true);
 //		myCurveX = _myTimelineController.snapToRaster(myCurveX);
 
 		switch (_myLoopAction) {
@@ -127,7 +124,7 @@ public class TimeRangeController {
 			_myNewLoopEnd = _myTrackContext.quantize(myCurveMoveEnd);
 			break;
 		default:
-			if (e.getX() < _myStartClickX) {
+			if (e.x < _myStartClickX) {
 				_myNewLoopStart = _myTrackContext.quantize(myCurveX);
 				_myNewLoopEnd = _myTrackContext.quantize(_myStartTime);
 			} else {
@@ -142,8 +139,8 @@ public class TimeRangeController {
 		_myTrackContext.renderInfo();
 	}
 	
-	public void mouseReleased(MouseEvent e) {
-		if(e.getX() == _myStartClickX && _myLoopAction == TimeRangeEditFunction.ON_OFF) {
+	public void mouseReleased(CCGLMouseEvent e) {
+		if(e.x == _myStartClickX && _myLoopAction == CCTimeRangeEditFunction.ON_OFF) {
 			_myTimeRange.range(_myStartTime, _myStartTime);
 		}
 	}

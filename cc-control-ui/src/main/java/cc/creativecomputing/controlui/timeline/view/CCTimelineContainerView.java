@@ -1,45 +1,63 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 
-import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
-import cc.creativecomputing.controlui.timeline.view.transport.SwingTransportView;
-import cc.creativecomputing.controlui.view.menu.SwingFileMenu;
-import cc.creativecomputing.controlui.view.menu.SwingTimelineMenu;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
+import cc.creativecomputing.controlui.timeline.view.transport.CCTransportView;
+import cc.creativecomputing.controlui.view.menu.CCFileMenu;
+import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.controlui.view.menu.CCTimelineMenu;
+import cc.creativecomputing.ui.widget.CCUIMenu;
 
-public class SwingTimelineContainerView {
+public class CCTimelineContainerView {
 
-	private SwingTransportView _myTransport;
+	private CCTransportView _myTransport;
 	
-	private JMenu _myTimelineMenue;
-	private JMenu _myFileMenue;
+	private CCUIMenu _myTimelineMenue;
+	private CCUIMenu _myFileMenue;
 	
-	private JFrame _myMainFrame;
+	private CCFont<?> _myFont;
 	
-	public SwingTimelineContainerView(JFrame theMainFrame){
-		_myMainFrame = theMainFrame;
+	public CCTimelineContainerView(CCFont<?> theFont){
+		_myFont = theFont;
 	}
 	
-	public void timelineContainer(TimelineContainer theTimelineContainer){
-		_myTransport = new SwingTransportView(theTimelineContainer);
-		_myTimelineMenue = new SwingTimelineMenu(theTimelineContainer);
-		_myFileMenue = new SwingFileMenu(theTimelineContainer);
+	public void timelineContainer(CCTimelineContainer theTimelineContainer){
+		_myTransport = new CCTransportView(theTimelineContainer);
+		_myTimelineMenue = new CCTimelineMenu(_myFont, theTimelineContainer);
+		_myFileMenue = new CCFileMenu(_myFont, theTimelineContainer);
 	}
 
-	public JMenu fileMenu(){
+	public CCUIMenu fileMenu(){
 		return _myFileMenue;
 	}
 	
-	public JMenu timelineMenu(){
+	public CCUIMenu timelineMenu(){
 		return _myTimelineMenue;
 	}
 	
-	public SwingTransportView transportView() {
+	public CCTransportView transportView() {
 		return _myTransport;
 	}
 
-	public SwingTimelineView createView(TimelineContainer theTimelineContainer) {
-		return new SwingTimelineView(_myMainFrame, theTimelineContainer);
+	public SwingTimelineView createView(CCTimelineContainer theTimelineContainer) {
+		return new SwingTimelineView(theTimelineContainer);
 	}
 }

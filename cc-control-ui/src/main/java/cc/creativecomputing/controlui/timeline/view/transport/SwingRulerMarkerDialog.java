@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.transport;
 
 import java.awt.event.ActionEvent;
@@ -13,7 +29,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import cc.creativecomputing.control.timeline.point.MarkerPoint;
+import cc.creativecomputing.control.timeline.point.CCMarkerPoint;
 
 
 class SwingRulerMarkerDialog extends JDialog implements ActionListener, PropertyChangeListener {
@@ -29,12 +45,12 @@ class SwingRulerMarkerDialog extends JDialog implements ActionListener, Property
 		private String btnString1 = "Add";
 		private String btnString2 = "Cancel";
 		
-		private MarkerPoint _myMarkerPoint;
+		private CCMarkerPoint _myMarkerPoint;
 		
-		private SwingRulerView _myRulerView;
+		private CCRulerView _myRulerView;
 
 		/** Creates the reusable dialog. */
-		public SwingRulerMarkerDialog(SwingRulerView theRulerView, String aWord) {
+		public SwingRulerMarkerDialog(CCRulerView theRulerView, String aWord) {
 			super();
 
 			_myRulerView = theRulerView;
@@ -134,7 +150,7 @@ class SwingRulerMarkerDialog extends JDialog implements ActionListener, Property
 			}
 		}
 		
-		public void marker(MarkerPoint theMarkerPoint) {
+		public void marker(CCMarkerPoint theMarkerPoint) {
 			_myMarkerPoint = theMarkerPoint;
 			_myTextField.setText(_myMarkerPoint.name());
 		}

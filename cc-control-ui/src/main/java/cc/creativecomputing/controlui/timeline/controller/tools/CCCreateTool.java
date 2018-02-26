@@ -1,33 +1,49 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.tools;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
-import cc.creativecomputing.control.timeline.point.BezierControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
-import cc.creativecomputing.control.timeline.point.ControlPoint.HandleType;
-import cc.creativecomputing.control.timeline.point.HandleControlPoint;
-import cc.creativecomputing.control.timeline.point.LinearControlPoint;
-import cc.creativecomputing.control.timeline.point.StepControlPoint;
+import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCHandleType;
+import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
+import cc.creativecomputing.control.timeline.point.CCLinearControlPoint;
+import cc.creativecomputing.control.timeline.point.CCStepControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.actions.AddControlPointAction;
 import cc.creativecomputing.controlui.timeline.controller.actions.MoveControlPointAction;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.gl.app.CCGLKeyEvent;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 
 	protected boolean _myAddedNewPoint = false;
 
-	protected List<ControlPoint> _myDraggedPoints;
-	protected List<ControlPoint> _myStartPoints;
+	protected List<CCControlPoint> _myDraggedPoints;
+	protected List<CCControlPoint> _myStartPoints;
 
 	protected boolean _myIsInDrag = false;
 
@@ -49,31 +65,31 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		return _myIsInDrag;
 	}
 
-	public ControlPoint draggedPoint() {
+	public CCControlPoint draggedPoint() {
 		if (_myDraggedPoints == null || _myDraggedPoints.size() == 0)
 			return null;
 		return _myDraggedPoints.get(0);
 	}
 
-	public ControlPoint createPoint(Point2D theViewCoords) {
+	public CCControlPoint createPoint(CCVector2 theViewCoords) {
 		return createPoint(_myController.viewToCurveSpace(theViewCoords, true));
 	}
 
-	public ControlPoint createPoint(ControlPoint myControlPoint) {
+	public CCControlPoint createPoint(CCControlPoint myControlPoint) {
 		switch (_myTool) {
 		case TRIGGER_POINT:
-			myControlPoint = new StepControlPoint(new ControlPoint(myControlPoint.time(), 0.5));
+			myControlPoint = new CCStepControlPoint(new CCControlPoint(myControlPoint.time(), 0.5));
 			break;
 		case STEP_POINT:
-			myControlPoint = new StepControlPoint(myControlPoint);
+			myControlPoint = new CCStepControlPoint(myControlPoint);
 			break;
 		case LINEAR_POINT:
-			myControlPoint = new LinearControlPoint(myControlPoint);
+			myControlPoint = new CCLinearControlPoint(myControlPoint);
 			break;
 		case BEZIER_POINT:
-			BezierControlPoint myBezierPoint = new BezierControlPoint(myControlPoint);
+			CCBezierControlPoint myBezierPoint = new CCBezierControlPoint(myControlPoint);
 
-			ControlPoint myLower = _myController.trackData().lower(myControlPoint);
+			CCControlPoint myLower = _myController.trackData().lower(myControlPoint);
 			double myTime;
 			if (myLower == null) {
 				myTime = myControlPoint.time() - 1;
@@ -81,10 +97,10 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 				myTime = myLower.time() + myControlPoint.time();
 				myTime /= 2;
 			}
-			HandleControlPoint myInHandle = new HandleControlPoint(myBezierPoint, HandleType.BEZIER_IN_HANDLE, myTime, myControlPoint.value());
+			CCHandleControlPoint myInHandle = new CCHandleControlPoint(myBezierPoint, CCHandleType.BEZIER_IN_HANDLE, myTime, myControlPoint.value());
 			myBezierPoint.inHandle(myInHandle);
 
-			ControlPoint myHigher = _myController.trackData().higher(myControlPoint);
+			CCControlPoint myHigher = _myController.trackData().higher(myControlPoint);
 			if (myHigher == null) {
 				myTime = myControlPoint.time() + myControlPoint.time() - myTime;
 			} else {
@@ -92,7 +108,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 				myTime /= 2;
 			}
 
-			HandleControlPoint myOutHandle = new HandleControlPoint(myBezierPoint, HandleType.BEZIER_OUT_HANDLE, myTime, myControlPoint.value());
+			CCHandleControlPoint myOutHandle = new CCHandleControlPoint(myBezierPoint, CCHandleType.BEZIER_OUT_HANDLE, myTime, myControlPoint.value());
 			myBezierPoint.outHandle(myOutHandle);
 
 			myControlPoint = myBezierPoint;
@@ -106,33 +122,33 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		return myControlPoint;
 	}
 
-	private Point2D _mySelectionStart;
-	private Point2D _mySelectionEnd;
+	private CCVector2 _mySelectionStart;
+	private CCVector2 _mySelectionEnd;
 
-	public Point2D selectionStart() {
+	public CCVector2 selectionStart() {
 		return _mySelectionStart;
 	}
 
-	public Point2D selectionEnd() {
+	public CCVector2 selectionEnd() {
 		return _mySelectionEnd;
 	}
 
 	@Override
-	public void mousePressed(MouseEvent theEvent) {
+	public void mousePressed(CCGLMouseEvent theEvent) {
 		super.mousePressed(theEvent);
 
 		_mySnap = true;
 		_myIsInDrag = false;
 
-		ControlPoint myControlPoint = _myController.pickNearestPoint(_myPressViewCoords);
-		ControlPoint myHandle = _myTool == CCTimelineTools.BEZIER_POINT ? _myController.pickHandle(_myPressViewCoords) : null;
+		CCControlPoint myControlPoint = _myController.pickNearestPoint(_myPressViewCoords);
+		CCControlPoint myHandle = _myTool == CCTimelineTools.BEZIER_POINT ? _myController.pickHandle(_myPressViewCoords) : null;
 		if(myHandle != null)myControlPoint = null;
 		
 		if (myHandle != null) {
-			_myDraggedPoints = new ArrayList<ControlPoint>();
+			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myHandle);
 		} else if (myControlPoint != null && _myController.curveToViewSpace(myControlPoint).distance(_myPressViewCoords) < SwingTrackView.PICK_RADIUS) {
-			_myDraggedPoints = new ArrayList<ControlPoint>();
+			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myControlPoint);
 		} else {
 			// ControlPoint myFloor =
@@ -140,9 +156,9 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 			// ControlPoint myCeil =
 			// theController.trackData().ceiling(_myPressCurveCoords);
 
-			if (theEvent.getClickCount() == 2) {
+			if (theEvent.clickCount == 2) {
 				_myAddedNewPoint = true;
-				_myDraggedPoints = new ArrayList<ControlPoint>();
+				_myDraggedPoints = new ArrayList<CCControlPoint>();
 				_myDraggedPoints.add(createPoint(_myPressViewCoords));
 				_myHasAdd = true;
 			} else {
@@ -155,8 +171,8 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		}
 
 		if (!_myHasAdd && _myDraggedPoints != null) {
-			_myStartPoints = new ArrayList<ControlPoint>();
-			for (ControlPoint myDraggedPoint : _myDraggedPoints) {
+			_myStartPoints = new ArrayList<CCControlPoint>();
+			for (CCControlPoint myDraggedPoint : _myDraggedPoints) {
 				_myStartPoints.add(myDraggedPoint.clone());
 			}
 		}
@@ -167,26 +183,26 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		}
 	}
 
-	private void moveOppositeHandle(HandleControlPoint theMovedHandle, HandleControlPoint theHandleToMove) {
-		ControlPoint myCenter = theMovedHandle.parent();
-		Point2D myPoint = new Point2D.Double(theMovedHandle.time() - myCenter.time(), theMovedHandle.value() - myCenter.value());
-		theHandleToMove.time(myCenter.time() - myPoint.getX());
-		theHandleToMove.value(Math.max(0, Math.min(myCenter.value() - myPoint.getY(), 1)));
+	private void moveOppositeHandle(CCHandleControlPoint theMovedHandle, CCHandleControlPoint theHandleToMove) {
+		CCControlPoint myCenter = theMovedHandle.parent();
+		CCVector2 myPoint = new CCVector2(theMovedHandle.time() - myCenter.time(), theMovedHandle.value() - myCenter.value());
+		theHandleToMove.time(myCenter.time() - myPoint.x);
+		theHandleToMove.value(Math.max(0, Math.min(myCenter.value() - myPoint.y, 1)));
 	}
 
-	private void dragPoint(ControlPoint theDraggedPoint, ControlPoint myTargetPosition, boolean theIsPressedShift) {
-		if (theDraggedPoint.getType().equals(ControlPointType.HANDLE)) {
+	private void dragPoint(CCControlPoint theDraggedPoint, CCControlPoint myTargetPosition, boolean theIsPressedShift) {
+		if (theDraggedPoint.type().equals(CCControlPointType.HANDLE)) {
 			// first get next point:
-			HandleControlPoint myHandle = (HandleControlPoint) theDraggedPoint;
-			ControlPoint myParent = ((HandleControlPoint) theDraggedPoint).parent();
+			CCHandleControlPoint myHandle = (CCHandleControlPoint) theDraggedPoint;
+			CCControlPoint myParent = ((CCHandleControlPoint) theDraggedPoint).parent();
 			// ControlPoint myCurveCoords = myTargetPosition;
-			ControlPoint myPreviousPoint = myParent.getPrevious();
+			CCControlPoint myPreviousPoint = myParent.previous();
 
 			switch (myHandle.handleType()) {
 			case BEZIER_IN_HANDLE:
 				if (myPreviousPoint == null)
 					return;
-				ControlPoint myPoint = _myController.context().quantize(myTargetPosition);
+				CCControlPoint myPoint = _myController.context().quantize(myTargetPosition);
 
 				double time = CCMath.min(myParent.time(), myPoint.time());
 
@@ -202,7 +218,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 				theDraggedPoint.value(myPoint.value());
 
 				if (theIsPressedShift) {
-					HandleControlPoint myOutHandle = ((BezierControlPoint) myParent).outHandle();
+					CCHandleControlPoint myOutHandle = ((CCBezierControlPoint) myParent).outHandle();
 					moveOppositeHandle(myHandle, myOutHandle);
 				}
 
@@ -212,7 +228,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 
 				time = CCMath.max(myParent.time(), myPoint.time());
 
-				ControlPoint myNextPoint = myParent.getNext();
+				CCControlPoint myNextPoint = myParent.next();
 
 				if (myNextPoint != null) {
 					// if(myNextPoint.getType() == ControlPointType.BEZIER) {
@@ -228,7 +244,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 				theDraggedPoint.value(myPoint.value());
 
 				if (theIsPressedShift) {
-					HandleControlPoint myInHandle = ((BezierControlPoint) myParent).inHandle();
+					CCHandleControlPoint myInHandle = ((CCBezierControlPoint) myParent).inHandle();
 					moveOppositeHandle(myHandle, myInHandle);
 				}
 				break;
@@ -237,15 +253,15 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 			}
 			_myController.trackData().move(myParent, myParent);
 		} else {
-			ControlPoint myPoint = _myController.context().quantize(myTargetPosition);
+			CCControlPoint myPoint = _myController.context().quantize(myTargetPosition);
 
 			double myValueChange = myPoint.value() - theDraggedPoint.value();
 
 			_myController.trackData().move(theDraggedPoint, _myController.context().quantize(myPoint));
 
-			switch (theDraggedPoint.getType()) {
+			switch (theDraggedPoint.type()) {
 			case BEZIER:
-				BezierControlPoint myBezierPoint = (BezierControlPoint) theDraggedPoint;
+				CCBezierControlPoint myBezierPoint = (CCBezierControlPoint) theDraggedPoint;
 				myBezierPoint.inHandle().value(myBezierPoint.inHandle().value() + myValueChange);
 				myBezierPoint.outHandle().value(myBezierPoint.outHandle().value() + myValueChange);
 				break;
@@ -261,7 +277,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent theEvent) {
+	public void mouseDragged(CCGLMouseEvent theEvent) {
 		super.mouseDragged(theEvent);
 
 		if (_myDraggedPoints == null) {
@@ -272,7 +288,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		if (_myIsInDrag == false) {
 			boolean myAddSelection = true;
 			if (_myDraggedPoints != null && _myDraggedPoints.size() > 0) {
-				myAddSelection = _myDraggedPoints.get(0).getType() != ControlPointType.HANDLE;
+				myAddSelection = _myDraggedPoints.get(0).type() != CCControlPointType.HANDLE;
 			}
 			if(_myDraggedPoints.size() == 1 && !_myDraggedPoints.get(0).isSelected()) {
 				_myController.clearSelection();
@@ -281,7 +297,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 			if (myAddSelection && _myController.selectedPoints().size() > 0) {
 				_myDraggedPoints.addAll(_myController.selectedPoints());
 				_myStartPoints.clear();
-				for (ControlPoint myDraggedPoint : _myDraggedPoints) {
+				for (CCControlPoint myDraggedPoint : _myDraggedPoints) {
 					_myStartPoints.add(myDraggedPoint.clone());
 				}
 			}
@@ -293,33 +309,31 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 			return;
 
 		for (int i = 0; i < _myDraggedPoints.size(); i++) {
-			ControlPoint myStartPoint = _myStartPoints.get(i).clone();
-			ControlPoint myTarget = new ControlPoint(myStartPoint.time() + _myCurveMovement.time(), CCMath.saturate(myStartPoint.value() + _myCurveMovement.value()));
-			ControlPoint myDraggedPoint = _myDraggedPoints.get(i);
+			CCControlPoint myStartPoint = _myStartPoints.get(i).clone();
+			CCControlPoint myTarget = new CCControlPoint(myStartPoint.time() + _myCurveMovement.time(), CCMath.saturate(myStartPoint.value() + _myCurveMovement.value()));
+			CCControlPoint myDraggedPoint = _myDraggedPoints.get(i);
 
-			boolean myPressedShift = (theEvent.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) == MouseEvent.SHIFT_DOWN_MASK;
-
-			dragPoint(myDraggedPoint, myTarget, myPressedShift);
+			dragPoint(myDraggedPoint, myTarget, theEvent.isShiftDown());
 		}
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent theEvent) {
+	public void mouseReleased(CCGLMouseEvent theEvent) {
 		super.mouseReleased(theEvent);
 
 		if (_mySelectionStart != null) {
-			ControlPoint mySelectionStartCurve = _myController.viewToCurveSpace(_mySelectionStart, true);
-			ControlPoint mySelectionEndCurve = _myController.viewToCurveSpace(_mySelectionEnd, true);
+			CCControlPoint mySelectionStartCurve = _myController.viewToCurveSpace(_mySelectionStart, true);
+			CCControlPoint mySelectionEndCurve = _myController.viewToCurveSpace(_mySelectionEnd, true);
 			double myStartTime = CCMath.min(mySelectionStartCurve.time(), mySelectionEndCurve.time());
 			double myEndTime = CCMath.max(mySelectionStartCurve.time(), mySelectionEndCurve.time());
 			double myMinValue = CCMath.min(mySelectionStartCurve.value(), mySelectionEndCurve.value());
 			double myMaxValue = CCMath.max(mySelectionStartCurve.value(), mySelectionEndCurve.value());
-			List<ControlPoint> mySelectedPoints = _myController.trackData().rangeList(myStartTime, myEndTime);
+			List<CCControlPoint> mySelectedPoints = _myController.trackData().rangeList(myStartTime, myEndTime);
 
 			if (!theEvent.isShiftDown())
 				_myController.clearSelection();
 
-			for (ControlPoint mySelectedPoint : mySelectedPoints) {
+			for (CCControlPoint mySelectedPoint : mySelectedPoints) {
 				if (mySelectedPoint.value() < myMinValue || mySelectedPoint.value() > myMaxValue)
 					continue;
 				if (!_myController.selectedPoints().contains(mySelectedPoint)) {
@@ -333,8 +347,8 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 			return;
 		}
 
-		if (theEvent.getClickCount() == 2 && theEvent.getX() == _myPressX && theEvent.getY() == _myPressY && !_myAddedNewPoint) {
-			Point2D myViewCoords = new Point2D.Double(theEvent.getX(), theEvent.getY());
+		if (theEvent.clickCount == 2 && theEvent.x == _myPressX && theEvent.y == _myPressY && !_myAddedNewPoint) {
+			CCVector2 myViewCoords = new CCVector2(theEvent.x, theEvent.y);
 			_myController.removePoint(myViewCoords);
 		} else {
 			if (_myHasAdd) {
@@ -360,7 +374,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 				_myController.clearSelection();
 			}
 
-			ControlPoint myPoint = _myDraggedPoints.get(0);
+			CCControlPoint myPoint = _myDraggedPoints.get(0);
 			myPoint.toggleSelection();
 			if (myPoint.isSelected()) {
 				if(_myController.selectedPoints().size() <= 0)onSelection(myPoint);
@@ -376,21 +390,21 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 	}
 	
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(CCGLKeyEvent e) {
 		super.keyPressed(e);
 		double _myTimeChange = 0;
 		double _myValueChange = 0;
-		switch(e.getKeyCode()) {
-		case KeyEvent.VK_UP:
+		switch(e.key) {
+		case KEY_UP:
 			_myValueChange = 0.1;
 			break;
-		case KeyEvent.VK_DOWN:
+		case KEY_DOWN:
 			_myValueChange = -0.1;
 			break;
-		case KeyEvent.VK_LEFT:
+		case KEY_LEFT:
 			_myTimeChange = -_myController.context().viewTime() / 100;
 			break;
-		case KeyEvent.VK_RIGHT:
+		case KEY_RIGHT:
 			_myTimeChange = _myController.context().viewTime() / 100;
 			break;
 		}
@@ -401,19 +415,19 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		
 		_myTimeChange *= e.isShiftDown() ? 0.1 : 1;
 		_myValueChange *= e.isShiftDown() ? 0.1 : 1;
-		for(ControlPoint myPoint:_myController.selectedPoints()) {
-			dragPoint(myPoint,new ControlPoint(myPoint.time() + _myTimeChange, CCMath.saturate(myPoint.value() + _myValueChange)), false);
+		for(CCControlPoint myPoint:_myController.selectedPoints()) {
+			dragPoint(myPoint,new CCControlPoint(myPoint.time() + _myTimeChange, CCMath.saturate(myPoint.value() + _myValueChange)), false);
 		}
 		_myController.view().render();
 	}
 	
 	@Override
-	public void keyReleased(KeyEvent e) {
+	public void keyReleased(CCGLKeyEvent e) {
 		super.keyReleased(e);
 		_myIsInDrag = false;
 	}
 	
-	private void updatePropertyValue(ControlPoint thePoint) {
+	private void updatePropertyValue(CCControlPoint thePoint) {
 		if(!( _myController.property() instanceof CCNumberPropertyHandle)) {
 			return;
 		}
@@ -422,7 +436,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		_myController.property().fromDoubleValue(myValue, false);
 	}
 	
-	public void onSelection(ControlPoint thePoint) {
+	public void onSelection(CCControlPoint thePoint) {
 		updatePropertyValue(thePoint);
 	}
 }

@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller;
 
 import java.nio.file.Path;
@@ -10,36 +26,36 @@ import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.timeline.controller.FileManager.FileManagerListener;
-import cc.creativecomputing.controlui.timeline.view.SwingTimelineContainerView;
+import cc.creativecomputing.controlui.timeline.view.CCTimelineContainerView;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.controlui.util.UndoHistory.HistoryListener;
 import cc.creativecomputing.core.events.CCListenerManager;
 
 
-public class TimelineContainer implements FileManagerListener, HistoryListener{
+public class CCTimelineContainer implements FileManagerListener, HistoryListener{
 	
 	public interface TimelineChangeListener{
 		
 		void resetTimelines();
 		
-		void changeTimeline(TimelineController theController);
+		void changeTimeline(CCTimelineController theController);
 		
 		void addTimeline(String theTimeline);
 	}
 	
-	protected final Map<String,TimelineController> _myTimelineController;
-	protected final FileManager _myFileManager;
-	protected final CCPropertyMap _myPropertyMap;
+	protected Map<String,CCTimelineController> _myTimelineController;
+	protected FileManager _myFileManager;
+	protected CCPropertyMap _myPropertyMap;
 	
 	protected CCListenerManager<TimelineChangeListener> _myTimelineChangeListener = CCListenerManager.create(TimelineChangeListener.class);
 
-	protected TimelineController _myActiveController;
-	protected SwingTimelineContainerView _myTimelineContainerView;
+	protected CCTimelineController _myActiveController;
+	protected CCTimelineContainerView _myTimelineContainerView;
 
-	public TimelineContainer(CCPropertyMap theProperties){
+	public CCTimelineContainer(CCPropertyMap theProperties){
 		_myPropertyMap = theProperties;
 		_myTimelineController = new TreeMap<>();
-		_myActiveController = new TimelineController(this, _myPropertyMap);
+		_myActiveController = new CCTimelineController(this, _myPropertyMap);
 		_myTimelineController.put("default", _myActiveController);
 		_myFileManager = new FileManager(this);
 		_myFileManager.events().add(this);
@@ -58,7 +74,7 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 		return _myTimelineChangeListener;
 	}
 	
-	public void view(SwingTimelineContainerView theTimelineContainerView){
+	public void view(CCTimelineContainerView theTimelineContainerView){
 		_myTimelineContainerView = theTimelineContainerView;
 		_myActiveController.view(_myTimelineContainerView.createView(this));
 		_myTimelineContainerView.timelineContainer(this);
@@ -68,7 +84,7 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 		return _myTimelineController.keySet();
 	}
 	
-	public TimelineController timeline(String theKey){
+	public CCTimelineController timeline(String theKey){
 		return _myTimelineController.get(theKey);
 	}
 	
@@ -76,7 +92,7 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 		return "default";
 	}
 	
-	public TimelineController activeTimeline(){
+	public CCTimelineController activeTimeline(){
 		return _myActiveController;
 	}
 	
@@ -86,9 +102,9 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 		_myTimelineChangeListener.proxy().changeTimeline(_myActiveController);
 	}
 	
-	public TimelineController addTimeline(String theTimeline){
+	public CCTimelineController addTimeline(String theTimeline){
 		if(_myTimelineController.containsKey(theTimeline))return _myTimelineController.get(theTimeline);
-		_myActiveController = new TimelineController(this, _myPropertyMap);
+		_myActiveController = new CCTimelineController(this, _myPropertyMap);
 		_myActiveController.view(_myTimelineContainerView.createView(this));
 		_myTimelineController.put(theTimeline, _myActiveController);
 		_myTimelineChangeListener.proxy().addTimeline(theTimeline);
