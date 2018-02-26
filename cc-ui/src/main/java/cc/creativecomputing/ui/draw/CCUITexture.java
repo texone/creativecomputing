@@ -1,49 +1,41 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
-package cc.creativecomputing.ui.decorator.background;
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 
+package cc.creativecomputing.ui.draw;
+
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
-import cc.creativecomputing.image.CCImageIO;
-import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.io.xml.property.CCXMLProperty;
-import cc.creativecomputing.io.xml.property.CCXMLPropertyObject;
-import cc.creativecomputing.ui.CCUI;
 import cc.creativecomputing.ui.CCUISpacing;
 
 /**
  * @author christianriekoff
  *
  */
-@CCXMLPropertyObject(name = "uitexture")
 public class CCUITexture {
 	
-	@CCXMLPropertyObject(name="texture_splice")
 	public static class CCUITextureSplice{
-		@CCXMLProperty(name="texture_start", node=false)
+		@CCProperty(name="texture_start")
 		private double _myStart;
-		@CCXMLProperty(name="texture_end", node=false)
+		@CCProperty(name="texture_end")
 		private double _myEnd;
 		
-		@CCXMLProperty(name="stretch", node=false)
+		@CCProperty(name="stretch")
 		private boolean _myIsStretch;
 		
 		private CCUITextureSplice() {
@@ -51,18 +43,18 @@ public class CCUITexture {
 		}
 	}
 	
-	@CCXMLProperty(name = "spacing", optional = true)
+	@CCProperty(name = "spacing")
 	private CCUISpacing _mySpacing = new CCUISpacing();
 
-	@CCXMLProperty(name="file")
+	@CCProperty(name="file")
 	private String _myTextureFile;
 	
 	private CCTexture2D _myTexture;
 	
-	@CCXMLProperty(name="vertical_splices", optional = true)
+	@CCProperty(name="vertical_splices")
 	private CCUITextureSplice[] _myVerticalSplices;
 	
-	@CCXMLProperty(name="horizontal_splices", optional = true)
+	@CCProperty(name="horizontal_splices")
 	private CCUITextureSplice[] _myHorizontalSplices;
 	
 //	private double _myLeftOver = 0;
@@ -72,10 +64,6 @@ public class CCUITexture {
 	
 	public CCUITexture() {
 		
-	}
-	
-	public void setup(CCUI theUI) {
-		_myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath(_myTextureFile)));
 	}
 	
 	private double[][] splicesToPositions(CCUITextureSplice[] theSplices, double theSize, double theTextureSize, double theStart) {

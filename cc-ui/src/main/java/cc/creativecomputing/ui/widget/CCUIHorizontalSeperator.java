@@ -14,30 +14,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.ui.layout;
+package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
-import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.graphics.CCGraphics;
 
-public class CCUIVerticalFlowPane extends CCUIPane {
+public class CCUIHorizontalSeperator extends CCUIWidget{
 
-	@Override
-	public void addChild(CCUIWidget widget) {
-		super.addChild(widget);
-		
-		double myX = _myInset;
-		double myY = -_myInset;
-		double myMaxWidth = 0;
-		for(CCUIWidget myWidget:children()) {
-			myWidget.translation().set(myX, myY);
-			myY -= myWidget.height();
-			myY -= _cVerticalSpace;
-			myMaxWidth = CCMath.max(myMaxWidth,myWidget.width());
-		}
-		_myMinSize = new CCVector2(2 * _myInset + myMaxWidth, -myY - _cVerticalSpace + _myInset);
-		updateMatrices();
+	public CCUIHorizontalSeperator(double theHeight){
+		_myHeight = theHeight;
 	}
 	
+	@Override
+	public double width() {
+		return _myParent.width() - _myParent.inset() * 2;
+	}
 	
+	@Override
+	public void drawContent(CCGraphics g) {
+		g.color(255);
+		g.rect(0, -_myHeight / 2 - 2, width(), 4);
+	}
 }

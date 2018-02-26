@@ -1,11 +1,25 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.ui.layout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
 public class CCUIGridPane extends CCUIPane{
@@ -14,9 +28,6 @@ public class CCUIGridPane extends CCUIPane{
 		
 		private CCUIWidget widget;
 		
-		public CCUIHorizontalAlignment horizontalAlignment = CCUIHorizontalAlignment.LEFT;
-		public CCUIVerticalAlignment verticalAlignment = CCUIVerticalAlignment.TOP;
-		
 		public int column;
 		public int columnSpan;
 		
@@ -24,9 +35,6 @@ public class CCUIGridPane extends CCUIPane{
 		public int rowSpan;
 		
 		private void set(CCUITableEntry theEntry) {
-			horizontalAlignment = theEntry.horizontalAlignment;
-			verticalAlignment = theEntry.verticalAlignment;
-			
 			column = theEntry.column;
 			row = theEntry.row;
 			
@@ -66,6 +74,8 @@ public class CCUIGridPane extends CCUIPane{
 		addChild(theWidget,new CCUITableEntry());
 	}
 	
+	private int _myRows = 0;
+	
 	public void addChild(CCUIWidget theWidget, CCUITableEntry theEntry) {
 		super.addChild(theWidget);
 		
@@ -78,20 +88,20 @@ public class CCUIGridPane extends CCUIPane{
 		for(double myColumnWidth:_myColumnWidths) {
 			myScale += myColumnWidth;
 		}
-		myScale = (width() - 2 * _cMargin - (_myColumnWidths.length - 1) * -_cSpace) / myScale;
-		double myX = _cMargin;
+		myScale = (width() - 2 * _myInset - (_myColumnWidths.length - 1) * -_cHorizontalSpace) / myScale;
+		double myX = _myInset;
 		_myColumnXs = new double[_myColumnWidths.length];
 		for(int i = 0; i < _myColumnWidths.length;i++) {
 			_myColumnWidths[i] = _myColumnWidths[i] * myScale;
 			_myColumnXs[i] = myX;
-			myX += _myColumnWidths[i] + _cSpace;
+			myX += _myColumnWidths[i] + _cHorizontalSpace;
 		}
 		
 		double myHeight = 0;
 		
 		for(CCUITableEntry myEntry:_myEntries) {
 			CCUIWidget myWidget = myEntry.widget;
-			switch(myEntry.horizontalAlignment) {
+			switch(myWidget.horizontalAlignment()) {
 			case LEFT:
 				myWidget.translation().x = _myColumnXs[myEntry.column];
 				break;
@@ -102,9 +112,21 @@ public class CCUIGridPane extends CCUIPane{
 				myWidget.translation().x = _myColumnXs[myEntry.column] + _myColumnWidths[myEntry.column] / 2 - myWidget.width() / 2;
 				break;
 			}
-			myWidget.translation().y = -_cMargin - myEntry.row * (_myRowHeight + _cSpace);
+			myWidget.translation().y = -_myInset - myEntry.row * (_myRowHeight + _cVerticalSpace);
+			switch(myWidget.verticalAlignment()){
+			case TOP:
+				break;
+			case CENTER:
+				myWidget.translation().y -= (_myRowHeight - myWidget.height()) / 2;
+				break;
+			case BOTTOM:
+				myWidget.translation().y -= (_myRowHeight - myWidget.height());
+				break;
+			}
 			
-			myHeight = CCMath.max(myHeight, (myEntry.row + 1) * (_myRowHeight + _cSpace) - _cSpace + _cMargin * 2);
+			myHeight = CCMath.max(myHeight, (myEntry.row + 1) * (_myRowHeight + _cVerticalSpace) - _cVerticalSpace + _myInset * 2);
+			
+			_myRows =  CCMath.max(myEntry.row ,_myRows);
 		}
 		
 		_myMinSize.x = width();

@@ -1,29 +1,25 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
-package cc.creativecomputing.ui.decorator.background;
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
+package cc.creativecomputing.ui.draw;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shape.CCRoundedRectangle;
-import cc.creativecomputing.io.xml.property.CCXMLProperty;
-import cc.creativecomputing.io.xml.property.CCXMLPropertyObject;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
@@ -31,14 +27,11 @@ import cc.creativecomputing.ui.widget.CCUIWidget;
  * @author christianriekoff
  *
  */
-@CCXMLPropertyObject(name=CCUIRoundedBackgroundDecorator.ID)
-public class CCUIRoundedBackgroundDecorator extends CCUIBackgroundDecorator{
-	
-	public final static String ID = "rounded_background";
+public class CCUIRoundedFillDrawable implements CCUIDrawable{
 	
 	private CCRoundedRectangle _myRoundedRectangle;
 	
-	@CCXMLProperty(name = "color")
+	@CCProperty(name = "color")
 	private CCColor _myColor = new CCColor(1f);
 	
 	@CCProperty(name = "radius")
@@ -47,14 +40,13 @@ public class CCUIRoundedBackgroundDecorator extends CCUIBackgroundDecorator{
 	/**
 	 * @param theID
 	 */
-	public CCUIRoundedBackgroundDecorator(CCColor theColor, double theRadius) {
+	public CCUIRoundedFillDrawable(CCColor theColor, double theRadius) {
 		this();
 		_myColor = theColor;
 		_myCornerRadius = theRadius;
 	}
 	
-	public CCUIRoundedBackgroundDecorator(){
-		super("fill");
+	public CCUIRoundedFillDrawable(){
 		_myRoundedRectangle = new CCRoundedRectangle();
 	}
 
@@ -66,7 +58,7 @@ public class CCUIRoundedBackgroundDecorator extends CCUIBackgroundDecorator{
 		_myRoundedRectangle.color().set(_myColor);
 		_myRoundedRectangle.gradientColor().set(_myColor);
 		_myRoundedRectangle.radius(_myCornerRadius);
-		_myRoundedRectangle.position(0, 0);
+		_myRoundedRectangle.position(0, -theWidget.height());
 		_myRoundedRectangle.size(theWidget.width(), theWidget.height());
 		_myRoundedRectangle.draw(g);
 	}

@@ -1,24 +1,22 @@
-/*  
- * Copyright (c) 2018  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.demo.ui;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -27,21 +25,24 @@ import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.ui.CCUIContext;
 import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.decorator.background.CCUIBackgroundDecorator;
-import cc.creativecomputing.ui.decorator.background.CCUIFillBackgroundDecorator;
-import cc.creativecomputing.ui.decorator.background.CCUIGradientBackgroundDecorator;
-import cc.creativecomputing.ui.decorator.border.CCUILineBorderDecorator;
-import cc.creativecomputing.ui.input.CCUIContext;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
+import cc.creativecomputing.ui.draw.CCUIGradientDrawable;
+import cc.creativecomputing.ui.draw.CCUIRoundedFillDrawable;
+import cc.creativecomputing.ui.draw.CCUIStrokeDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
-import cc.creativecomputing.ui.widget.CCUICheckBoxWidget;
+import cc.creativecomputing.ui.widget.CCUICheckBox;
 import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
 import cc.creativecomputing.ui.widget.CCUIIconWidget;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
+import cc.creativecomputing.ui.widget.CCUISlider;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
+import cc.creativecomputing.ui.widget.CCUIValueBox;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
 public class CCUIWidgetPlacementDemo extends CCGLApp {
@@ -49,18 +50,18 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 	public CCUIWidget createObjectBarWidget() {
 		CCUIHorizontalFlowPane myBarWidget = new CCUIHorizontalFlowPane(400, 0);
 		myBarWidget.translation().set(0,0);
-		myBarWidget.margin(5);
+		myBarWidget.inset(5);
 		myBarWidget.space(5);
 		
-		CCUIGradientBackgroundDecorator myGradientBack = new CCUIGradientBackgroundDecorator();
+		CCUIGradientDrawable myGradientBack = new CCUIGradientDrawable();
 		myGradientBack.gradient().top(new CCColor(CCColor.GREEN));
 		myGradientBack.gradient().bottom(new CCColor(CCColor.GREEN.darker()));
 		myBarWidget.background(myGradientBack);
 
-		CCUIIconWidget myIconWidget = new CCUIIconWidget(CCEntypoIcon.ICON_CHEVRON_DOWN);
+		CCUIIconWidget myIconWidget = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_DOWN);
 		myIconWidget.mouseReleased.add(event -> {
 			myIconWidget.active(!myIconWidget.active());
-			myIconWidget.text().text(myIconWidget.active() ? CCEntypoIcon.ICON_CHEVRON_DOWN.text : CCEntypoIcon.ICON_CHEVRON_RIGHT.text);
+			myIconWidget.text().text(myIconWidget.active() ? CCEntypoIcon.ICON_TRIANGLE_DOWN.text : CCEntypoIcon.ICON_TRIANGLE_RIGHT.text);
 		});
 		myBarWidget.addChild(myIconWidget);
 		
@@ -69,51 +70,77 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 		return myBarWidget;
 	}
 	
-	public CCUICheckBoxWidget createCheckBox() {
-		CCUICheckBoxWidget myCheckBox = new CCUICheckBoxWidget();
-		myCheckBox.background(new CCUIFillBackgroundDecorator(new CCColor(0.3d)));
+	public CCUICheckBox createCheckBox() {
+		CCUICheckBox myCheckBox = new CCUICheckBox();
+		myCheckBox.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		myCheckBox.verticalAlignment(CCUIVerticalAlignment.CENTER);
 		return myCheckBox;
 	}
 	
 	public CCUITextFieldWidget createTextField() {
 		CCUITextFieldWidget myTextField = new CCUITextFieldWidget(_myFont, "TEXONE");
-		myTextField.background(new CCUIFillBackgroundDecorator(new CCColor(0.3d)));
+		myTextField.background(new CCUIFillDrawable(new CCColor(0.3d)));
 		myTextField.width(100);
+		myTextField.inset(4);
+		myTextField.verticalAlignment(CCUIVerticalAlignment.CENTER);
 		return myTextField;
 	}
 	
 	public CCUIDropDownWidget createDropDown() {
 		CCUIDropDownWidget myDropDown = new CCUIDropDownWidget(_myFont);
-		CCUIBackgroundDecorator myBackground = new CCUIFillBackgroundDecorator(new CCColor(0.3d));
+		myDropDown.inset(4);
+		myDropDown.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		CCUIFillDrawable myBackground = new CCUIFillDrawable(new CCColor(0.3d));
 		myDropDown.background(myBackground);
-		myDropDown.border(new CCUILineBorderDecorator(new CCColor(1d), 1, 0));
 		myDropDown.width(100);
 		
 		myDropDown.menue().background(myBackground);
+		myDropDown.itemSelectBackground(new CCUIFillDrawable(new CCColor(0.5d)));
+		myDropDown.itemBackground(new CCUIFillDrawable(new CCColor(0.3d)));
 		
-		myDropDown.addItem("item 1");
+		myDropDown.addItem("Item 1");
 		myDropDown.addItem("item 2");
 		myDropDown.addItem("item 3");
+		myDropDown.addSeparator();
 		myDropDown.addItem("item 4");
 		return myDropDown;
 	}
 	
+	public CCUITextFieldWidget createValueBox() {
+		CCUIValueBox myTextField = new CCUIValueBox(_myFont, 0);
+		myTextField.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		myTextField.width(100);
+		myTextField.inset(4);
+		myTextField.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		return myTextField;
+	}
+	
+	public CCUISlider createSlider() {
+		CCUISlider mySlider = new CCUISlider(100,14, 0, 100, 50);
+		mySlider.background(new CCUIRoundedFillDrawable(new CCColor(0.3d), 7));
+		mySlider.foreground(new CCUIFillDrawable(new CCColor(0.7d)));
+		mySlider.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		return mySlider;
+	}
+	
 	public CCUIWidget createPropertyWidget() {
 		CCUIGridPane myPropertyWidget = new CCUIGridPane(400,0);
-		myPropertyWidget.margin(5);
-		myPropertyWidget.space(5);
+		myPropertyWidget.inset(5);
+		myPropertyWidget.space(10);
 		myPropertyWidget.columnWidths(10,10,10);
-		myPropertyWidget.rowHeight(30);
+		myPropertyWidget.rowHeight(25);
 		
-		for(int i = 0; i < 10;i++) {
+		for(int i = 0; i < 50;i++) {
 			CCUITableEntry myEntry = new CCUITableEntry();
 			myEntry.column = 0;
 			myEntry.row = i;
-			myEntry.horizontalAlignment = CCUIHorizontalAlignment.RIGHT;
-			myPropertyWidget.addChild(new CCUILabelWidget(_myFont, "prop" + i), myEntry);
+			CCUILabelWidget myLabel = new CCUILabelWidget(_myFont, "prop" + i);
+			myLabel.horizontalAlignment (CCUIHorizontalAlignment.RIGHT);
+			myLabel.verticalAlignment(CCUIVerticalAlignment.CENTER);
+			myPropertyWidget.addChild(myLabel, myEntry);
 			myEntry.column = 1;
-			myEntry.horizontalAlignment = CCUIHorizontalAlignment.LEFT;
-			switch(i % 3) {
+			
+			switch(i % 5) {
 			case 0:
 				myPropertyWidget.addChild(createCheckBox(), myEntry);
 				break;
@@ -122,6 +149,12 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 				break;
 			case 2:
 				myPropertyWidget.addChild(createDropDown(), myEntry);
+				break;
+			case 3:
+				myPropertyWidget.addChild(createSlider(), myEntry);
+				break;
+			case 4:
+				myPropertyWidget.addChild(createValueBox(), myEntry);
 				break;
 			}
 		}
@@ -143,13 +176,15 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 		
 
 		CCUIVerticalFlowPane myVerticalPane = new CCUIVerticalFlowPane();
-		myVerticalPane.margin(5);
+		myVerticalPane.inset(5);
 		myVerticalPane.space(5);
+		myVerticalPane.translation().set(-window().framebufferSize().x / 2, window().framebufferSize().y / 2);
 		_myContext = new CCUIContext(_myMainWindow, myVerticalPane);
 
 		_myContext.widget().addChild(createObjectBarWidget());
 		_myContext.widget().addChild(createPropertyWidget());
 
+		_myMainWindow.scrollEvents.add((x,y) -> {CCLog.info(x,y);});
 		
 //		_myMainWindow.mouseMoveEvents.add(pos -> {
 //			if(_myWidget.isInside(pos.x - g.width()/2, g.height()/2 - pos.y)){

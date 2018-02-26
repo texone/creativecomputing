@@ -14,30 +14,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.ui.layout;
+package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
-import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 
-public class CCUIVerticalFlowPane extends CCUIPane {
+public class CCUIMenuBar extends CCUIHorizontalFlowPane{
 
-	@Override
-	public void addChild(CCUIWidget widget) {
-		super.addChild(widget);
-		
-		double myX = _myInset;
-		double myY = -_myInset;
-		double myMaxWidth = 0;
-		for(CCUIWidget myWidget:children()) {
-			myWidget.translation().set(myX, myY);
-			myY -= myWidget.height();
-			myY -= _cVerticalSpace;
-			myMaxWidth = CCMath.max(myMaxWidth,myWidget.width());
-		}
-		_myMinSize = new CCVector2(2 * _myInset + myMaxWidth, -myY - _cVerticalSpace + _myInset);
-		updateMatrices();
+	public CCFont<?> _myFont;
+	public CCUIMenuBar(CCFont<?> theFont){
+		super();
+		_myFont = theFont;
+		space(30);
 	}
 	
-	
+	public void add(String theTitle, CCUIMenu theMenue){
+		CCUIDropDownWidget myDropDown = new CCUIDropDownWidget(_myFont, theTitle, theMenue);
+		myDropDown.adjustLabelBySelection(false);
+		addChild(myDropDown);
+		theMenue.translation().set(0, -height());
+	}
 }

@@ -1,6 +1,23 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.ui.layout;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import cc.creativecomputing.core.CCProperty;
@@ -13,18 +30,17 @@ import cc.creativecomputing.ui.widget.CCUIWidget;
 /**
  * Basic interface of a layout engine.
  */
-public class CCUIPane extends CCUIWidget{
-	
-	@CCProperty(name = "margin")
-	protected double _cMargin = 0;
+public class CCUIPane extends CCUIWidget implements Iterable<CCUIWidget>{
 
-	@CCProperty(name = "space")
-	protected double _cSpace = 0;
+	@CCProperty(name = "horizontal space")
+	protected double _cHorizontalSpace = 0;
+	@CCProperty(name = "vertical space")
+	protected double _cVerticalSpace = 0;
 	
 	protected CCVector2 _myMinSize = new CCVector2();
 
 	@CCProperty(name = "children")
-	protected List<CCUIWidget> _myChildren;
+	protected final List<CCUIWidget> _myChildren = new ArrayList<>();
 	
 	public CCUIPane() {
 		super();
@@ -42,16 +58,12 @@ public class CCUIPane extends CCUIWidget{
 		return _myMinSize;
 	}
 	
-	public void margin(double theMargin) {
-		_cMargin = theMargin;
-	}
-	
 	public void space(double theSpace) {
-		_cSpace = theSpace;
+		_cHorizontalSpace = theSpace;
+		_cVerticalSpace = theSpace;
 	}
 	
 	public void addChild(CCUIWidget theWidget) {
-		if(_myChildren == null)_myChildren = new ArrayList<CCUIWidget>();
 		theWidget.parent(this);
 		_myChildren.add(theWidget);
 		
@@ -66,10 +78,11 @@ public class CCUIPane extends CCUIWidget{
 	}
 	
 	public CCUIWidget childAtPosition(CCVector2 thePosition) {
+		thePosition = _myLocalInverseMatrix.transform(thePosition);
 		for(CCUIWidget myWidget:_myChildren) {
 			if(myWidget instanceof CCUIPane) {
-				CCVector2 myTransformedVector = myWidget.localInverseTransform().transform(thePosition);
-				CCUIWidget myResult = ((CCUIPane)myWidget).childAtPosition(myTransformedVector);
+//				CCVector2 myTransformedVector = myWidget.localInverseTransform().transform(thePosition);
+				CCUIWidget myResult = ((CCUIPane)myWidget).childAtPosition(thePosition);
 				if(myResult != null){
 					return myResult;
 				}
@@ -87,12 +100,12 @@ public class CCUIPane extends CCUIWidget{
 	
 	@Override
 	public double width() {
-		return CCMath.max(_myWidth, minSize().x) + _myInset * 2;
+		return CCMath.max(_myWidth, minSize().x);
 	}
 	
 	@Override
 	public double height() {
-		return CCMath.max(_myHeight, minSize().y) + _myInset * 2;
+		return CCMath.max(_myHeight, minSize().y);
 	}
 	
 	@Override
@@ -121,6 +134,11 @@ public class CCUIPane extends CCUIWidget{
 		for(CCUIWidget myChild:_myChildren) {
 			myChild.draw(g);
 		}
+	}
+
+	@Override
+	public Iterator<CCUIWidget> iterator() {
+		return _myChildren.iterator();
 	}
 	
 }

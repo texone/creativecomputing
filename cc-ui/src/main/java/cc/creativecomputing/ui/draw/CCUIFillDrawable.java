@@ -18,28 +18,29 @@
 package cc.creativecomputing.ui.draw;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.shape.CCRectangle;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
 /**
  * @author christianriekoff
  *
  */
-public class CCUIGradientDrawable implements CCUIDrawable{
+public class CCUIFillDrawable implements CCUIDrawable{
 	
+	private CCRectangle _myRectangle;
 	
-	@CCProperty(name = "gradient")
-	private CCUIGradient _myGradient = new CCUIGradient();
+	@CCProperty(name = "color")
+	private CCColor _myColor = new CCColor(1f);
 
-	/**
-	 * @param theID
-	 */
-	public CCUIGradientDrawable() {
+	public CCUIFillDrawable() {
+		_myRectangle = new CCRectangle();
 	}
 	
-	public CCUIGradient gradient() {
-		return _myGradient;
+	public CCUIFillDrawable(CCColor theColor) {
+		this();
+		_myColor = theColor;
 	}
 
 	/* (non-Javadoc)
@@ -47,16 +48,10 @@ public class CCUIGradientDrawable implements CCUIDrawable{
 	 */
 	@Override
 	public void draw(CCGraphics g, CCUIWidget theWidget) {
-		g.beginShape(CCDrawMode.QUADS);
-		g.color(_myGradient.leftTop());
-		g.vertex(0,0);
-		g.color(_myGradient.rightTop());
-		g.vertex(theWidget.width(), 0);
-		g.color(_myGradient.rightBottom());
-		g.vertex(theWidget.width(), -theWidget.height());
-		g.color(_myGradient.leftBottom());
-		g.vertex(0, -theWidget.height());
-		g.endShape();
+		_myRectangle.color().set(_myColor);
+		_myRectangle.position(0, -theWidget.height());
+		_myRectangle.size(theWidget.width(), theWidget.height());
+		_myRectangle.draw(g);
 	}
 
 }

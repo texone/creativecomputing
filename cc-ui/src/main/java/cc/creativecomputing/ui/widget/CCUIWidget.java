@@ -1,22 +1,20 @@
-/*  
- * Copyright (c) 2009  Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
 package cc.creativecomputing.ui.widget;
 
 import cc.creativecomputing.core.CCProperty;
@@ -27,9 +25,7 @@ import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWKeyListener;
 import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMouseListener;
 import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMousePosListener;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.xml.property.CCXMLPropertyObject;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCVector1;
@@ -37,15 +33,12 @@ import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.CCUIEditPolicy;
 import cc.creativecomputing.ui.CCUIHorizontalAlignment;
 import cc.creativecomputing.ui.CCUIVerticalAlignment;
-import cc.creativecomputing.ui.decorator.CCUIForegroundDecorator;
-import cc.creativecomputing.ui.decorator.background.CCUIBackgroundDecorator;
-import cc.creativecomputing.ui.decorator.border.CCUIBorderDecorator;
+import cc.creativecomputing.ui.draw.CCUIDrawable;
 
 /**
  * @author christianriekoff
  *
  */
-@CCXMLPropertyObject(name = "widget")
 public class CCUIWidget{
 
 	protected CCMatrix32 _myLocalMatrix = new CCMatrix32();
@@ -64,14 +57,14 @@ public class CCUIWidget{
 	@CCProperty(name="horizontal_alignment")
 	private CCUIHorizontalAlignment _myHorizontalAlignment = CCUIHorizontalAlignment.LEFT;
 	@CCProperty(name="vertical_alignment")
-	private CCUIVerticalAlignment _myVerticalAlignment = CCUIVerticalAlignment.BOTTOM;
+	private CCUIVerticalAlignment _myVerticalAlignment = CCUIVerticalAlignment.TOP;
 	
 	@CCProperty(name="background")
-	protected CCUIBackgroundDecorator _myBackground;
+	protected CCUIDrawable _myBackground;
 	@CCProperty(name="border")
-	protected CCUIBorderDecorator _myBorder;
+	protected CCUIDrawable _myBorder;
 	@CCProperty(name="foreground")
-	protected CCUIForegroundDecorator _myForeground;
+	protected CCUIDrawable _myForeground;
 	
 	@CCProperty(name = "width")
 	protected double _myWidth = 0;
@@ -87,6 +80,8 @@ public class CCUIWidget{
 	
 	protected CCUIWidget _myParent;
 	
+	protected boolean _myIsActive = true;
+	
 	public CCUIWidget(double theWidth, double theHeight) {
 		_myWidth = theWidth;
 		_myHeight = theHeight;
@@ -94,6 +89,14 @@ public class CCUIWidget{
 	
 	public CCUIWidget() {
 		this(0,0);
+	}
+	
+	public boolean isActive(){
+		return _myIsActive;
+	}
+	
+	public void isActive(boolean theIsActive){
+		_myIsActive = theIsActive;
 	}
 	
 	public void parent(CCUIWidget theParent){
@@ -153,38 +156,41 @@ public class CCUIWidget{
 		return _myRotation;
 	}
 	
-	public void background(CCUIBackgroundDecorator theBackground) {
+	public void background(CCUIDrawable theBackground) {
 		_myBackground = theBackground;
 	}
 	
-	public void border(CCUIBorderDecorator theBorder) {
+	public void border(CCUIDrawable theBorder) {
 		_myBorder = theBorder;
 	}
 	
-	public CCUIBorderDecorator border() {
+	public CCUIDrawable border() {
 		return _myBorder;
 	}
 	
-	public void foreground(CCUIForegroundDecorator theForeground) {
+	public void foreground(CCUIDrawable theForeground) {
 		_myForeground = theForeground;
 	}
 	
-	public CCUIForegroundDecorator foreground() {
+	public CCUIDrawable foreground() {
 		return _myForeground;
 	}
 	
-	
+	public boolean isInsideLocal(double theX, double theY) {
+		return 
+			theX >= 0 && 
+			theX <= width() &&
+			theY <= 0 && 
+			theY >= -height();
+	}
 	
 	public boolean isInsideLocal(CCVector2 theVector) {
-		return 
-			theVector.x >= 0 && 
-			theVector.x <= width() &&
-			theVector.y <= 0 && 
-			theVector.y >= -height();
+		return isInsideLocal(theVector.x, theVector.y);
 	}
 	
 	public boolean isInside(CCVector2 theVector) {
-		return isInsideLocal(theVector);
+		CCVector2 myLocalPos = _myWorldInverseMatrix.transform(theVector);
+		return isInsideLocal(myLocalPos);
 	}
 	
 	public boolean isInside(double theX, double theY) {
@@ -246,6 +252,7 @@ public class CCUIWidget{
 	public final CCListenerManager<CCGLFWMouseListener> mouseReleasedOutside = CCListenerManager.create(CCGLFWMouseListener.class);
 	public final CCListenerManager<CCGLFWMouseListener> mouseReleased = CCListenerManager.create(CCGLFWMouseListener.class);
 	public final CCListenerManager<CCGLFWMouseListener> mousePressed = CCListenerManager.create(CCGLFWMouseListener.class);
+	public final CCListenerManager<CCGLFWMouseListener> mouseClicked = CCListenerManager.create(CCGLFWMouseListener.class);
 	public final CCListenerManager<CCGLFWMousePosListener> mouseMoved = CCListenerManager.create(CCGLFWMousePosListener.class);
 	public final CCListenerManager<CCGLFWMousePosListener> mouseDragged = CCListenerManager.create(CCGLFWMousePosListener.class);
 	
@@ -291,7 +298,7 @@ public class CCUIWidget{
 			_myAlignmentY = -0f;
 			break;
 		}
-		_myLocalMatrix.translate(_myAlignmentX * _myWidth, _myAlignmentY * _myHeight);
+//		_myLocalMatrix.translate(_myAlignmentX * _myWidth, _myAlignmentY * _myHeight);
 		
 		_myLocalInverseMatrix = _myLocalMatrix.inverse();
 		
@@ -320,13 +327,13 @@ public class CCUIWidget{
 		if(_myBorder != null)_myBorder.draw(g, this);
 		if(_myForeground != null)_myForeground.draw(g, this);
 		
-		g.color(255,0,0);
-		g.beginShape(CCDrawMode.LINE_LOOP);
-		g.vertex(0,0);
-		g.vertex(width(),0);
-		g.vertex(width(),-height());
-		g.vertex(0,-height());
-		g.endShape();
+//		g.color(255,0,0);
+//		g.beginShape(CCDrawMode.LINE_LOOP);
+//		g.vertex(0,0);
+//		g.vertex(width(),0);
+//		g.vertex(width(),-height());
+//		g.vertex(0,-height());
+//		g.endShape();
 	}
 	
 	public double width() {
