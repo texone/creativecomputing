@@ -43,11 +43,11 @@ public class CCSequenceExporter {
 			@Override
 			public void run() {
 				
-				int myRetVal = _myFileChooser.show("");
+				int myRetVal = _myFileChooser.save("");
 				if (myRetVal == JFileChooser.APPROVE_OPTION) {
 					try {
 						Path myChoosenPath = _myFileChooser.path();
-						String myExtension = _myFileChooser.extension();
+						String myExtension = _myFileChooser.extensions();
 						
 						switch(myExtension){
 						case "KLE_1":
@@ -101,7 +101,7 @@ public class CCSequenceExporter {
 			@Override
 			public void run() {
 				
-				int myRetVal = _myFileChooser.show("");
+				int myRetVal = _myFileChooser.save("");
 				if (myRetVal == JFileChooser.APPROVE_OPTION) {
 					try {
 						Path myChoosenPath = _myFileChooser.path();

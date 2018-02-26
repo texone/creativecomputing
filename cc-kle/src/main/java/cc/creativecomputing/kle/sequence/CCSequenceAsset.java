@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import cc.creativecomputing.control.CCAsset;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -133,7 +133,7 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	}
 	
 	@Override
-	public void reset(TimedEventPoint theTimedEvent){
+	public void reset(CCTimedEventPoint theTimedEvent){
 		theTimedEvent.contentOffset(0);
 		
 		Path myFilePath = Paths.get(theTimedEvent.content().value().toString());
@@ -147,7 +147,7 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 	}
 	
 	@Override
-	public void renderTimedEvent(TimedEventPoint theEvent,Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+	public void renderTimedEvent(CCTimedEventPoint theEvent,Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
 		super.renderTimedEvent(theEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
 		
 		if(theEvent.content() == null || theEvent.content().value() == null)return;

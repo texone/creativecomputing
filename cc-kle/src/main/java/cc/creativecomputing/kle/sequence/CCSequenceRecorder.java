@@ -11,8 +11,8 @@ import javax.swing.JFileChooser;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
-import cc.creativecomputing.control.timeline.point.ControlPoint;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.core.CCProperty;
@@ -443,7 +443,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 			_myFileChooser.addChoosableFileFilter(new CCFileFilter(myFormat.name()));
 		}
 		
-		int myRetVal = _myFileChooser.show("");
+		int myRetVal = _myFileChooser.save("");
 		if (myRetVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				Path myChoosenPath = _myFileChooser.path();
@@ -521,8 +521,8 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 
 				CCLog.info(myTrack.property().path().toString());
 				List<CCKleSegment> myResult = new ArrayList<>();
-				for(ControlPoint myPoint:myTrack.trackData()){
-					TimedEventPoint myEventPoint = (TimedEventPoint)myPoint;
+				for(CCControlPoint myPoint:myTrack.trackData()){
+					CCTimedEventPoint myEventPoint = (CCTimedEventPoint)myPoint;
 					CCLog.info(myEventPoint.content().value() + ":" + myEventPoint.time() + ":" + myEventPoint.endTime());
 					CCKleSegment mySegment = new CCKleSegment(
 						myEventPoint.content().value().toString(), 

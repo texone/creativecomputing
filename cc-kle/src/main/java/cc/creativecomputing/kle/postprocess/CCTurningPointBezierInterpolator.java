@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.control.handles.CCTriggerProgress;
-import cc.creativecomputing.control.timeline.util.CubicSolver;
+import cc.creativecomputing.control.timeline.util.CCCubicSolver;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.CCKleMapping;
 import cc.creativecomputing.kle.sequence.CCSequence;
@@ -27,7 +27,7 @@ public class CCTurningPointBezierInterpolator implements CCSequenceProcessor{
 		double c = -3 * theTime0 + 3 * theTime1;
 		double d = theTime0 - theTime;
 
-		double[] myResult = CubicSolver.solveCubic(a, b, c, d);
+		double[] myResult = CCCubicSolver.solveCubic(a, b, c, d);
 		int i = 0;
 		while(i < myResult.length - 1 && (myResult[i] < 0 || myResult[i] > 1)) {
 			i++;
