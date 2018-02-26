@@ -118,6 +118,7 @@ public class CCGLApp {
 		
 		// Make the OpenGL context current
 		_myContext.makeContextCurrent(_myMainWindow);
+		GL.createCapabilities();
 		// Enable v-sync
 		_myContext.swapInterval(1);
 
@@ -155,10 +156,10 @@ public class CCGLApp {
 		while (latch.get() != 0) {
 
 			for (CCGLWindow myWindow:new ArrayList<>(_myWindows)) {
+                _myContext.makeContextCurrent(myWindow);
 				if(!myWindow.isPrepared()){
 					myWindow.prepareForDraw();
 				}
-                _myContext.makeContextCurrent(myWindow);
 
                 myWindow.draw();
                 glfwPollEvents();
@@ -166,6 +167,18 @@ public class CCGLApp {
                 if (myWindow.shouldClose()) {
                 	myWindow.freeCallbacks();
                     myWindow.destroy();
+                    
+                    // make sure to close if windows are active but not visible
+                    int myVisibleWindows = 0;
+                    for(CCGLWindow myWindow2:new ArrayList<>(_myWindows)){
+                    	myVisibleWindows += myWindow2.isVisible() ? 1 : 0;
+                    }
+                    if(myVisibleWindows == 0){
+                    	for(CCGLWindow myWindow2:new ArrayList<>(_myWindows)){
+                    		myWindow2.shouldClose(true);
+                        }
+                    }
+                    myWindow.isVisible();
                     _myWindows.remove(myWindow);
                     latch.decrementAndGet();
                 }

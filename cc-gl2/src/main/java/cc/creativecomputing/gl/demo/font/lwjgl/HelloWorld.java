@@ -1,4 +1,4 @@
-package cc.creativecomputing.gl.app;
+package cc.creativecomputing.gl.demo.font.lwjgl;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;

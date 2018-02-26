@@ -80,6 +80,11 @@ public class CCTextField {
 		text(theText);
 	}
 	
+	public CCTextField(String theText){
+		_myPosition = new CCVector3();
+		text(theText);
+	}
+	
 	public CCTextCharGrid charGrid(){
 		return _myCharGrid;
 	}
@@ -152,12 +157,18 @@ public class CCTextField {
 	
 	public CCTextField align(CCTextAlign theAlign){
 		_myAlign = theAlign;
+		breakText();
 		return this;
+	}
+	
+	public CCTextAlign align() {
+		return _myAlign;
 	}
 	
 	public void breakText(){
 		_myHeight = 0;
 		if(_myText == null)return;
+		if(_myFont == null)return;
 		_myCharGrid.clear();
 		double myX = 0;
 		double myY = 0;

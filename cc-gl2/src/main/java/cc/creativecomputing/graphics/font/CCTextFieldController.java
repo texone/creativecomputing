@@ -1,7 +1,8 @@
 package cc.creativecomputing.graphics.font;
 
+import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.events.CCStringEvent;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.gl.app.CCGLAction;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.gl.app.CCGLWindow;
@@ -15,10 +16,11 @@ public class CCTextFieldController {
 
 	private CCTextField _myTextField;
 	
-	
 	private CCGraphics g;
 	
 	private CCGLWindow _myWindow;
+	
+	public CCListenerManager<CCStringEvent> changeEvents = CCListenerManager.create(CCStringEvent.class);
 	
 	public CCTextFieldController(CCTextField theTextField){
 		_myTextField = theTextField;
@@ -53,7 +55,6 @@ public class CCTextFieldController {
 	}
 	
 	public void keyPress(CCGLKeyEvent theEvent){
-		CCLog.info(theEvent.key);
 		switch(theEvent.key){
 		case KEY_LEFT:
 			moveCursorLeft(theEvent.isShiftDown());
@@ -79,12 +80,16 @@ public class CCTextFieldController {
 		case KEY_V:
 			if(theEvent.isControlDown() || theEvent.isSuperDown())pasteClipboard();
 			break;
+		case KEY_ENTER:
+			changeEvents.proxy().event(_myTextField.text());
+			break;
 		}
 	}
 	
 	public void keyChar(char theChar) {
 		if(_myIsValueText) {
 			switch(theChar) {
+			case '-':
 			case '0':
 			case '1':
 			case '2':
@@ -143,6 +148,7 @@ public class CCTextFieldController {
 	private void delete() {
 		StringBuffer myText = new StringBuffer(_myTextField.text());
 		if(_myStartIndex == _myEndIndex){
+			if(_myStartIndex == 0)return;
 			moveCursorLeft(false);
 			myText.deleteCharAt(_myStartIndex);
 		}else{

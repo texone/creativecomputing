@@ -1,24 +1,24 @@
 package cc.creativecomputing.gl.demo.font;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCCharSet;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.graphics.font.CCOutlineFont;
 import cc.creativecomputing.graphics.font.CCTextAlign;
 import cc.creativecomputing.graphics.font.CCTextField;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
-import cc.creativecomputing.graphics.font.CCVectorFont;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCMath;
 
 public class CCEnttypoDemo extends CCGLApp{
 	
 	private CCTextField _myTextureField;
-	private CCTextField _myVectorField;
+	private CCTextField _myDescField;
 	
 	private CCTextureMapFont _myFont;
+	
+	private int _myStartChar = 0;
 	
 	@Override
 	public void setup(CCGraphics g, CCGLTimer theTimer) {
@@ -28,18 +28,28 @@ public class CCEnttypoDemo extends CCGLApp{
 			.align(CCTextAlign.LEFT)
 			.fontSize(40);
 		
-		_myVectorField = new CCTextField(new CCVectorFont(CCCharSet.ENTYPO,CCNIOUtil.dataPath("fonts/entypo.ttf"), 40), "")
-			.position(100, -100)
-			.align(CCTextAlign.LEFT)
-			.fontSize(40);
+		_myDescField = new CCTextField(_myFont = new CCTextureMapFont(CCCharSet.REDUCED,CCNIOUtil.dataPath("fonts/Lato/Lato-Bold.ttf"), 20, 2,2), "")
+				.position(0, -100)
+				.align(CCTextAlign.LEFT)
+				.fontSize(20);
+		
+		_myMainWindow.keyReleaseEvents.add(event -> {
+			switch(event.key){
+			case KEY_LEFT:
+				_myStartChar -= (g.height() - 60) / 50;
+				_myStartChar = CCMath.max(_myStartChar, 0);
+				break;
+			case KEY_RIGHT:
+				_myStartChar += (g.height() - 60) / 50;
+				_myStartChar = CCMath.min(_myStartChar, CCEntypoIcon.values().length);
+				break;
+			}
+		});
 			
 	}
 	
 	private double _myRotation = 0;
 	
-	private int myChar;
-	
-	private int frame = 0;
 	
 	@Override
 	public void update(CCGLTimer theTimer) {
@@ -48,34 +58,41 @@ public class CCEnttypoDemo extends CCGLApp{
 //		_myTextFieldLeft.fontSize(myFontSize);
 //		_myTextFieldCenter.fontSize(myFontSize);
 //		_myTextFieldRight.fontSize(myFontSize);
-		myChar = (frame / 10) % CCCharSet.ENTYPO.chars().length;
-		frame++;
 	}
 	
 	@Override
 	public void display(CCGraphics g) {
-		g.clearColor(1.0f, 0.0f, 0.0f, 0.0f);
+		g.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		g.ortho2D();
 		g.clear();
 		g.pushMatrix();
 		g.rotate(_myRotation);
 		g.translate(0,0);
 		g.color(1d);
-		g.line(-g.width()/2, -100, g.width()/2, -100);
-		g.line(-g.width()/2, 0, g.width()/2, 0);
-		g.line(-g.width()/2, 100, g.width()/2, 100);
-		CCLog.info(myChar);
-		_myTextureField.text(CCEntypoIcon.ICON_CHEVRON_LEFT.text);
-		_myVectorField.text(CCCharSet.ENTYPO.chars()[myChar] + "");
-		_myTextureField.draw(g);
-		_myVectorField.draw(g);
+		int myCounter = _myStartChar;
+		for(int x = 20; x < g.width() - 20;x += 500) {
+			for(int y = 40; y < g.height()-20;y += 50) {
+				if(myCounter >= CCEntypoIcon.values().length) continue;
+				_myTextureField.position(x, y);
+				_myTextureField.text(CCEntypoIcon.values()[myCounter].text);
+				_myTextureField.draw(g);
+				
+				_myDescField.position(x + 60,y + 10);
+				_myDescField.text(CCEntypoIcon.values()[myCounter] + "");
+				_myDescField.draw(g);
+				myCounter++;
+			}
+		}
 		g.line(0, -50, _myTextureField.width(), -50);
 		g.popMatrix();
 		
-		g.image(_myFont.texture(), -g.width()/2,0);
+//		g.image(_myFont.texture(), -g.width()/2,0);
 	}
 	
 	public static void main(String[] args) {
 		CCEnttypoDemo myDemo = new CCEnttypoDemo();
+		myDemo.width = 1800;
+		myDemo.height = 1000;
 		myDemo.run();
 	}
 }

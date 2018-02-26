@@ -26,8 +26,6 @@ import cc.creativecomputing.math.CCVector2i;
 
 public class CCGLWindow {
 	
-	
-
 	private final long _myID;
 	private GLCapabilities _myCapabilities;
 	private CCGraphics _myGraphics;
@@ -165,6 +163,10 @@ public class CCGLWindow {
 	public static interface CCGLFWSizeListener{
 		public void size(CCGLWindow theWindow, int theWidth, int theHeight);
 	}
+	
+	public static interface CCGLFWPositionListener{
+		public void position(CCGLWindow theWindow, int theX, int theY);
+	}
 
 	public static interface CCGLFWCloseListener{
 		public void close(CCGLWindow theWindow);
@@ -176,10 +178,6 @@ public class CCGLWindow {
 	
 	public static interface CCGLFWIconifyListener{
 		public void iconify(CCGLWindow theWindow, boolean theIconify);
-	}
-	
-	public static interface CCGLFWPositionListener{
-		public void position(CCGLWindow theWindow, int theX, int theY);
 	}
 	
 	public static interface CCGLFWRefreshListener{
@@ -242,8 +240,6 @@ public class CCGLWindow {
 	
 	
 	private void setKeyCallbacks(){
-		
-		
 		glfwSetCharCallback(_myID, (window,theChar)->{
 			keyCharEvents.proxy().event((char)theChar);
 		});
@@ -285,6 +281,7 @@ public class CCGLWindow {
 	public final CCListenerManager<CCGLFWMousePosListener> mouseExitEvents = CCListenerManager.create(CCGLFWMousePosListener.class);
 	public final CCListenerManager<CCGLFWMousePosListener> mouseMoveEvents = CCListenerManager.create(CCGLFWMousePosListener.class);
 	public final CCListenerManager<CCGLFWMousePosListener> mouseDragEvents = CCListenerManager.create(CCGLFWMousePosListener.class);
+	public final CCListenerManager<CCGLFWMouseListener> mouseClickEvents = CCListenerManager.create(CCGLFWMouseListener.class);
 	
 	public static interface CCGLFWScrollListener{
 		public void event(double theX, double theY);
@@ -294,6 +291,8 @@ public class CCGLWindow {
 	private double _myMouseX;
 	private double _myMouseY;
 	private boolean _myMousePressed;
+	
+	private long _myPressMillis = 0;
 	
 	private void setMouseCallbacks(){
 		glfwSetCursorEnterCallback(_myID, (window, enter) -> {
@@ -328,10 +327,15 @@ public class CCGLWindow {
 			CCGLMouseEvent myMouseEvent = new CCGLMouseEvent(button, action, mods,_myMouseX, _myMouseY);
 			switch(action){
 			case GLFW_RELEASE:
+
 				mouseReleaseEvents.proxy().event(myMouseEvent);
+				if(System.currentTimeMillis() - _myPressMillis < 200){
+					mouseClickEvents.proxy().event(myMouseEvent);
+				}
 				_myMousePressed = false;
 				break;
 			case GLFW_PRESS:
+				_myPressMillis = System.currentTimeMillis();
 				mousePressEvents.proxy().event(myMouseEvent);
 				_myMousePressed = true;
 				break;
@@ -472,6 +476,21 @@ public class CCGLWindow {
 	public void position(int theX, int theY){
 		glfwSetWindowPos(_myID, theX, theY);
 	}
+	
+	/**
+	 * This function retrieves the position, in screen coordinates, of the upper-left corner of the client area of the specified window.
+	 * 
+	 * @return vector with x y position of the window
+	 */
+	public CCVector2i position(){
+		try (MemoryStack stack = stackPush()) {
+			IntBuffer x = stack.mallocInt(1); // int*
+			IntBuffer y = stack.mallocInt(1); // int*
+
+			glfwGetWindowPos(_myID, x, y);
+			return new CCVector2i(x.get(0), y.get(0));
+		}
+	} 
 
 	/**
 	 * This function hides the specified window if it was previously visible. If

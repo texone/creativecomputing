@@ -61,6 +61,8 @@ import cc.creativecomputing.core.CCSystem;
 import cc.creativecomputing.core.CCSystem.CCEndianess;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
+import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.graphics.font.CCTextField;
 import cc.creativecomputing.graphics.texture.CCTexture;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.io.CCBufferUtil;
@@ -4642,5 +4644,17 @@ public class CCGraphics{
 		blendMode(mode);
 		copy(sx1, sy1, sx2, sy2, dx1, dy1, dx2, dy2);
 		endBlend();
+	}
+	
+	private CCTextField _myTextField;
+
+	public void textFont(CCFont<?> theFont) {
+		_myTextField = new CCTextField(theFont, "");
+	}
+
+	public void text(String theText, double theX, double theY) {
+		_myTextField.text(theText);
+		_myTextField.position(theX, theY);
+		_myTextField.draw(this);
 	}
 }

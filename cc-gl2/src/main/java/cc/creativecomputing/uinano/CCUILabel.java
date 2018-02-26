@@ -39,6 +39,10 @@ public class CCUILabel extends CCWidget {
 			_myFontSize = fontSize;
 		}
 	}
+	
+	public CCTextField text() {
+		return _myText;
+	}
 
 	/**
 	 * Get the label's text caption

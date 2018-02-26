@@ -411,7 +411,8 @@ public enum CCEntypoIcon {
 	ICON_YOUKO(0x0000F297),
 	ICON_YOUKO_WITH_CIRCLE(0x0000F298),
 	ICON_YOUTUBE(0x0000F299),
-	ICON_YOUTUBE_WITH_CIRCLE(0x0000F29A);
+	ICON_YOUTUBE_WITH_CIRCLE(0x0000F29A),
+	OFF(0,"");
 	
 	public final int id;
 	
@@ -420,5 +421,9 @@ public enum CCEntypoIcon {
 	private CCEntypoIcon(int theid){
 		id = theid;
 		text = (char)id + "";
+	}
+	private CCEntypoIcon(int theid, String theText){
+		id = theid;
+		text = theText;
 	}
 }

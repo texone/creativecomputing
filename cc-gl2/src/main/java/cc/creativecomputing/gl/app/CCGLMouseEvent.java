@@ -18,6 +18,8 @@ public class CCGLMouseEvent {
 	
 	public final double y;
 	
+	public int clickCount = 0;
+	
 	public CCGLMouseEvent(int theButton, int theAction, int theMods, double theX, double theY){
 		button = CCGLMouseButton.button(theButton);
 		action = CCGLAction.action(theAction);
