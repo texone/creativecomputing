@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
-import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
@@ -111,7 +111,7 @@ public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 			return CCMath.pow(_myAsset.spectrum(CCMath.blend(_cSpecMin, _cSpecMax, theOffset), _myPlayTimeMillis), _cPow) * _cAmp;
 		}
 
-		public CCAudioAssetData checkSpectrumData(TimedEventPoint theEvent) {
+		public CCAudioAssetData checkSpectrumData(CCTimedEventPoint theEvent) {
 			CCAudioAssetData myAudioData = null;
 			Path myFilePath = Paths.get(theEvent.content().value().toString());
 			
@@ -203,7 +203,7 @@ public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 	
 	
 	@Override
-	public void renderTimedEvent(TimedEventPoint theEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+	public void renderTimedEvent(CCTimedEventPoint theEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
 		if(theEvent.content() == null || theEvent.content().value() == null)return;
 		
 		CCAudioAssetData myAudioData = _myAssetFFT.checkSpectrumData(theEvent);
