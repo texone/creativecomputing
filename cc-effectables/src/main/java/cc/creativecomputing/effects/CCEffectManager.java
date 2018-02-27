@@ -10,10 +10,12 @@ import java.util.Set;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.modulation.CCConstantSource;
 import cc.creativecomputing.effects.modulation.CCIDSource;
 import cc.creativecomputing.effects.modulation.CCModulationSource;
 import cc.creativecomputing.effects.modulation.CCRandomSource;
+import cc.creativecomputing.effects.modulation.CCRelativeSource;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.filter.CCFilter;
 
@@ -81,6 +83,9 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 		Type myFirstEffectable = theEffectables.get(0);
 		for(String myIDSource:myFirstEffectable._myIdBasedSources.keySet()){
 			addIdSources(myIDSource);
+		}
+		for(String myRelativeSource:myFirstEffectable._myRelativeSources.keySet()){
+			addRelativeSources(new CCRelativeSource(myRelativeSource));
 		}
 	}
 	

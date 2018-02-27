@@ -194,6 +194,10 @@ public class CCKleEffectable extends CCEffectable{
 			if(myKey.equals("id"))continue;
 			myIDSources.addAttribute(myKey, _myIdBasedSources.get(myKey));
 		}
+		CCDataElement myRelativeSources = myResult.createChild("relative_sources");
+		for(String myKey:_myRelativeSources.keySet()){
+			myRelativeSources.addAttribute(myKey, _myRelativeSources.get(myKey));
+		}
 		
 		return myResult;
 	}

@@ -174,6 +174,12 @@ public class CCKleEffectables extends ArrayList<CCKleEffectable>{
 					myElement.addIdBasedSource(myKey, myIdSourceData.intAttribute(myKey));
 				}
 			}
+			CCDataElement myRelativeSourceData = myElementXML.child("relative_sources");
+			if(myRelativeSourceData != null){
+				for(String myKey:myRelativeSourceData.attributes()){
+					myElement.addRelativeSource(myKey, myRelativeSourceData.doubleAttribute(myKey));
+				}
+			}
 			if(myLightPosition != null)myElement.lightSetup().position().set(myLightPosition);
 			add(myElement);
 			

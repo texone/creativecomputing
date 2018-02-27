@@ -16,11 +16,18 @@ public  class CCModulationSource {
 	
 	protected boolean _myIsUpdated = true;
 	
+	protected boolean _myIsDynamic = false;
+	
+	public CCModulationSource(String theName, boolean theIsDynamic, CCModulationImplementation theImplementation){
+		_myName = theName;
+		_myModulationImplementation = theImplementation;
+		_myIsDynamic = theIsDynamic;
+	}
+
 	public CCModulationSource(String theName, CCModulationImplementation theImplementation){
 		_myName = theName;
 		_myModulationImplementation = theImplementation;
 	}
-
 
 	public String name(){
 		return _myName;
@@ -31,7 +38,7 @@ public  class CCModulationSource {
 	}
 	
 	public boolean isUpdated(){
-		return _myIsUpdated;
+		return _myIsUpdated || _myIsDynamic;
 	}
 	
 	public void isUpdated(boolean theIsUpdated){

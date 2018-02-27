@@ -1,6 +1,7 @@
 package cc.creativecomputing.effects;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cc.creativecomputing.app.modules.CCAnimator;
@@ -29,9 +30,9 @@ public abstract class CCEffectable implements CCSelectable{
 	@CCProperty(name = "active")
 	public boolean _cActive = true;
 	@CCProperty(name = "relative sources", hide = true)
-	public Map<String, Double> _myRelativeSources = new HashMap<String, Double>();
+	public Map<String, Double> _myRelativeSources = new LinkedHashMap<>();
 	@CCProperty(name = "id sources", hide = true)
-	public Map<String, Integer> _myIdBasedSources = new HashMap<String, Integer>();
+	public Map<String, Integer> _myIdBasedSources = new LinkedHashMap<>();
 	
 	private boolean _cIsSelected = false;
 	
