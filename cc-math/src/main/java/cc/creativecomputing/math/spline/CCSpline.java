@@ -11,6 +11,7 @@
 package cc.creativecomputing.math.spline;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import cc.creativecomputing.math.CCMath;
@@ -23,7 +24,7 @@ import cc.creativecomputing.math.CCVector3;
  * </p>
  * <a href="http://en.wikipedia.org/wiki/Spline_(mathematics)">spline at wikipedia</a>
  */
-public abstract class CCSpline{
+public abstract class CCSpline implements Iterable<CCVector3>{
 	
 	protected List<CCVector3> _myPoints = new ArrayList<>();
 
@@ -158,6 +159,11 @@ public abstract class CCSpline{
 	 */
 	public List<CCVector3> points () {
 		return _myPoints;
+	}
+	
+	@Override
+	public Iterator<CCVector3> iterator() {
+		return _myPoints.iterator();
 	}
 
 	protected abstract void computeTotalLengthImpl ();
