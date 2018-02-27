@@ -234,9 +234,40 @@ vec3 _sample(vec2 coord){
 
 }
 
+@CCProperty(name = "circle pos", min = 0, max = 3000)
+uniform vec2 circlePos;
+@CCProperty(name = "circle radius", min = 0, max = 1000)
+uniform float circleRadius;
+@CCProperty(name = "circle blend radius", min = 0, max = 1000)
+uniform float circleBlendRadius;
 
-void main(  )
-{
+float circle(vec2 uv, vec2 pos, float rad, float blend) {
+	float d = length(pos - uv);
+	float t = clamp(d, 0.0, 1.0);
+	//return 1.0 - t;
+	return 1.0 - smoothstep(rad - blend, rad,d);
+}
+
+@CCProperty(name = "rect0 pos", min = 0, max = 3000)
+uniform vec2 rect0Pos;
+@CCProperty(name = "rect0 size", min = 0, max = 1000)
+uniform vec2 rect0Size;
+@CCProperty(name = "rect0 radius", min = 0, max = 1000)
+uniform float rect0Radius;
+@CCProperty(name = "rect0 blend radius", min = 0, max = 1000)
+uniform float rect0BlendRadius;
+
+float roundRect(vec2 uv, vec2 pos, in vec2 halfSize, float rad, float blend){
+	//length(max(abs(uv - pos) - (halfSize - rad), vec2(0.0))) - rad
+	return 1.0 - smoothstep( 0., 1., length(max(abs(uv - pos) - (halfSize), vec2(0.0))));
+}
+
+
+
+void main(){
+
+	float shape = circle(gl_FragCoord.xy, circlePos, circleRadius,circleBlendRadius);
+	shape = max(shape,roundRect(gl_FragCoord.xy,rect0Pos,rect0Size / 2.0, rect0Radius, rect0BlendRadius));
     time=iTime;
     // Sample the scene, with a distorted coordinate to simulate heat haze.
     vec2 uv = gl_FragCoord.xy / iResolution.xy;
@@ -245,5 +276,7 @@ void main(  )
     gl_FragColor.rgb=_sample(uv+vec2(cos(smoothNoise2(vec2(-time*10.0+uv.y*10.0,uv.x)))*0.01,0.0));
     gl_FragColor.rgb=tonemap(gl_FragColor.rgb)*1.2;
     gl_FragColor.a = 1.;
+ 
+   // gl_FragColor = vec4(shape);
 }
 

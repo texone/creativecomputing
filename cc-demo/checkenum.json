@@ -1,0 +1,57 @@
+{"timelines": {"default": {
+  "lower_bound": 0,
+  "timeline": {
+    "path": "app",
+    "min": 0,
+    "max": 1,
+    "accumulate": false,
+    "mute": false,
+    "type": "GroupTrack",
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app/app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "type": "GroupTrack",
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [{
+        "path": "app/app/draw mode",
+        "min": 0,
+        "max": 1,
+        "accumulate": false,
+        "mute": false,
+        "type": "cc.creativecomputing.graphics.CCDrawMode",
+        "Extras": {},
+        "eventTypes": "new",
+        "TrackData": {"points": [{
+          "end": {
+            "time": 8.908216795696209,
+            "type": "HANDLE",
+            "value": 0.8571428571428571
+          },
+          "time": 0,
+          "id": 1447057879664,
+          "type": "TIMED_EVENT",
+          "value": 0,
+          "content": {"value": "POINTS"}
+        }]}
+      }],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  },
+  "upper_bound": 55.8368034362793,
+  "Transport": {
+    "loop_end": 9.645628061417346,
+    "loop_active": true,
+    "marker": {"points": []},
+    "loop_start": -0.9585717328116617,
+    "speed": 1
+  }
+}}}

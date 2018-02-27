@@ -1,0 +1,81 @@
+{"timelines": {"default": {
+  "lower_bound": 0,
+  "timeline": [{
+    "path": "app",
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app/app",
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [{
+        "path": "app/app/color",
+        "accumulate": false,
+        "mute": false,
+        "TrackData": {"points": [
+          {
+            "a": 1,
+            "r": 0.8705882352941177,
+            "b": 0.09803921568627451,
+            "g": 0.050980392156862744,
+            "end": {
+              "time": 33.374728058817624,
+              "type": "HANDLE",
+              "value": 0.9545454545454546
+            },
+            "time": 14.264805314878538,
+            "id": 1450449367598,
+            "type": "COLOR",
+            "value": 0.790909090909091
+          },
+          {
+            "a": 1,
+            "r": 0.050980392156862744,
+            "b": 0.8705882352941177,
+            "g": 0.30980392156862746,
+            "end": {
+              "time": 74.51725516737433,
+              "type": "HANDLE",
+              "value": 0.681818181818182
+            },
+            "time": 44.7333215214152,
+            "id": 1450449369607,
+            "type": "COLOR",
+            "value": 0.46363636363636385
+          },
+          {
+            "a": 1,
+            "r": 0.6941176470588235,
+            "b": 0.17647058823529413,
+            "g": 0.5529411764705883,
+            "end": {
+              "time": 116.50052651335753,
+              "type": "HANDLE",
+              "value": 1
+            },
+            "time": 92.37500140799983,
+            "id": 1450449370724,
+            "type": "COLOR",
+            "value": 0
+          }
+        ]}
+      }],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 129.07571411132812,
+  "Transport": {
+    "loop_end": 0,
+    "loop_active": false,
+    "marker": {"points": []},
+    "loop_start": 0,
+    "speed": 1
+  }
+}}}

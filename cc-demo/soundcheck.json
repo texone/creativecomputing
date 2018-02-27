@@ -1,0 +1,58 @@
+{"timelines": {"default": {
+  "lower_bound": 0,
+  "timeline": [{
+    "path": "app",
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app/app",
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [{
+        "path": "app/app/asset",
+        "accumulate": false,
+        "mute": false,
+        "Extras": {},
+        "eventTypes": "new",
+        "open": true,
+        "tracks": [{
+          "path": "app/app/asset/path",
+          "accumulate": false,
+          "mute": false,
+          "Extras": {},
+          "eventTypes": "new",
+          "TrackData": {"points": [{
+            "end": {
+              "time": 9.063204716328833,
+              "type": "HANDLE",
+              "value": 1
+            },
+            "time": 0.6244164168067244,
+            "id": 1455002609060,
+            "eventType": "new",
+            "type": "TIMED_EVENT",
+            "value": 0,
+            "content": {"value": "/Users/christianr/dev/cc2/creativecomputing/cc-demo/./data/sound/01 Verses.wav"}
+          }]}
+        }],
+        "TrackData": {"points": []}
+      }],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 34.16761457256292,
+  "Transport": {
+    "loop_end": 0,
+    "loop_active": false,
+    "marker": {"points": []},
+    "loop_start": 0,
+    "speed": 1
+  }
+}}}

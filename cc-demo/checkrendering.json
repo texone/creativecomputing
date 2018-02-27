@@ -1,0 +1,112 @@
+{"timelines": {"default": {
+  "lower_bound": 0.868264876253109,
+  "quantize": "OFF",
+  "timeline": [{
+    "path": "app",
+    "min": 0,
+    "max": 1,
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app/app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [
+        {
+          "path": "app/app/diagram x",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "TrackData": {"points": [
+            {
+              "time": 1.945245380953577,
+              "type": "LINEAR",
+              "value": 0.31818181818181823
+            },
+            {
+              "time": 2.9918719717927305,
+              "type": "LINEAR",
+              "value": 0.7
+            }
+          ]}
+        },
+        {
+          "path": "app/app/diagram y",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "TrackData": {"points": [
+            {
+              "time": 2.0298212670819935,
+              "type": "LINEAR",
+              "value": 0.6090909090909091
+            },
+            {
+              "time": 2.99187197179273,
+              "type": "LINEAR",
+              "value": 0.26363636363636367
+            }
+          ]}
+        },
+        {
+          "path": "app/app/diagram width",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "TrackData": {"points": [
+            {
+              "time": 1.7549496371646403,
+              "type": "LINEAR",
+              "value": 0.40909090909090906
+            },
+            {
+              "time": 3.013015943324834,
+              "type": "LINEAR",
+              "value": 0.9181818181818182
+            }
+          ]}
+        },
+        {
+          "path": "app/app/diagram height",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "TrackData": {"points": [
+            {
+              "time": 1.7443776513985882,
+              "type": "LINEAR",
+              "value": 0.9181818181818182
+            },
+            {
+              "time": 2.949584028728522,
+              "type": "LINEAR",
+              "value": 0.2272727272727273
+            }
+          ]}
+        }
+      ],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 12.571699527312944,
+  "Transport": {
+    "loop_end": 3.304035986238361,
+    "loop_active": true,
+    "marker": {"points": []},
+    "loop_start": 2.0549137383384077,
+    "speed": 1
+  }
+}}}

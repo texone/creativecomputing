@@ -1,0 +1,127 @@
+{"timelines": {
+  "default": {
+    "lower_bound": 0,
+    "timeline": {
+      "path": "app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "type": "GroupTrack",
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [{
+        "path": "app/app",
+        "min": 0,
+        "max": 1,
+        "accumulate": false,
+        "mute": false,
+        "type": "GroupTrack",
+        "Extras": {},
+        "eventTypes": "new",
+        "open": true,
+        "tracks": [{
+          "path": "app/app/rect width",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "type": "float",
+          "TrackData": {"points": [
+            {
+              "time": 0.09334763948497854,
+              "type": "LINEAR",
+              "value": 0.045454545454545414
+            },
+            {
+              "time": 0.17703862660944206,
+              "type": "LINEAR",
+              "value": 0.8636363636363636
+            }
+          ]}
+        }],
+        "TrackData": {"points": []}
+      }],
+      "TrackData": {"points": []}
+    },
+    "upper_bound": 10,
+    "Transport": {
+      "loop_end": 0,
+      "loop_active": false,
+      "marker": {"points": []},
+      "loop_start": 0,
+      "speed": 1
+    }
+  },
+  "yo": {
+    "lower_bound": 0,
+    "timeline": {
+      "path": "app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "type": "GroupTrack",
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [{
+        "path": "app/app",
+        "min": 0,
+        "max": 1,
+        "accumulate": false,
+        "mute": false,
+        "type": "GroupTrack",
+        "Extras": {},
+        "eventTypes": "new",
+        "open": true,
+        "tracks": [{
+          "path": "app/app/rect width",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "type": "float",
+          "TrackData": {"points": [
+            {
+              "time": 1.2007811579841394,
+              "type": "LINEAR",
+              "value": 0.2272727272727273
+            },
+            {
+              "time": 3.7304267974707264,
+              "type": "LINEAR",
+              "value": 0.5727272727272728
+            },
+            {
+              "time": 6.276082852397102,
+              "type": "LINEAR",
+              "value": 0.5727272727272728
+            },
+            {
+              "time": 8.213343120611514,
+              "type": "LINEAR",
+              "value": 0.26363636363636367
+            },
+            {
+              "time": 9.606249263873115,
+              "type": "LINEAR",
+              "value": 0.5909090909090908
+            }
+          ]}
+        }],
+        "TrackData": {"points": []}
+      }],
+      "TrackData": {"points": []}
+    },
+    "upper_bound": 15.033780097961426,
+    "Transport": {
+      "loop_end": 0,
+      "loop_active": false,
+      "marker": {"points": []},
+      "loop_start": 0,
+      "speed": 1
+    }
+  }
+}}

@@ -19,6 +19,7 @@ public class CCMotionRealtime extends CCGL2Adapter {
 
 	@Override
 	public void update(CCAnimator theAnimator) {
+		CCLog.info("bla:", theAnimator.frames());
 	}
 
 	@Override

@@ -1,0 +1,12 @@
+{"timelines": {"default": {
+  "lower_bound": 0,
+  "timeline": [],
+  "upper_bound": 9.863662719726562,
+  "Transport": {
+    "loop_end": 0,
+    "loop_active": false,
+    "marker": {"points": []},
+    "loop_start": 0,
+    "speed": 1
+  }
+}}}

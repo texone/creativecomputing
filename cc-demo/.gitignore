@@ -1,7 +1,5 @@
 /realtimeCode/
-*.json
 *.classpath
-/.settings/
 /target/
 *.project
 /export/
