@@ -48,6 +48,8 @@ public class CCSVGIO {
 			return Double.parseDouble(text.substring(0, len)) * 90;
 		} else if (text.endsWith("px")) {
 			return Double.parseDouble(text.substring(0, len));
+		} else if (text.endsWith("%")) {
+			return Double.parseDouble(text.substring(0, text.length() - 1));
 		} else {
 			return Double.parseDouble(text);
 		}

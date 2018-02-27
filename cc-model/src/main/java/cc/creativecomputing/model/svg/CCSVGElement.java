@@ -134,6 +134,10 @@ public abstract class CCSVGElement {
 		}
 	}
 	
+	public CCMatrix32 transform(){
+		return matrix;
+	}
+	
 	public CCShapeKind kind(){
 		return _myKind;
 	}

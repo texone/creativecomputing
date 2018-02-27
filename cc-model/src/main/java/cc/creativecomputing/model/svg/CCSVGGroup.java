@@ -153,7 +153,6 @@ public class CCSVGGroup extends CCSVGElement implements Iterable<CCSVGElement>{
 	@Override
 	public void drawImplementation(CCGraphics g, boolean theFill) {
 		for(CCSVGElement myChild:_myChildren){
-			CCLog.info(myChild.name());
 			myChild.draw(g);
 		}
 	}

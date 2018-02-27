@@ -392,8 +392,7 @@ public class CCSVGPath extends CCSVGElement{
 		}
 
 		public String toString() {
-			return "A " + rx + " " + ry + " " + xAxisRot + " " + largeArc + " "
-					+ sweep + " " + x + " " + y;
+			return "A " + rx + " " + ry + " " + xAxisRot + " " + largeArc + " " + sweep + " " + x + " " + y;
 		}
 	}
 
