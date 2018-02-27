@@ -44,11 +44,11 @@ public class CCInMemoryCompilerSourceCode{
 	
 	private long _myLastUpdateTime = 0;
 	
-	public CCInMemoryCompilerSourceCode(Class<?> theClass){
+	public CCInMemoryCompilerSourceCode(String theSourceFolder, Class<?> theClass){
 		String myClassName = theClass.getName();
 		_myPackageName = myClassName.substring(0, myClassName.lastIndexOf("."));
 		String classSimpleName = myClassName.substring(myClassName.lastIndexOf(".") + 1);
-		sourcePath = Paths.get("src/main/java", _myPackageName.split("\\.")).resolve(classSimpleName + ".java");
+		sourcePath = Paths.get(theSourceFolder, _myPackageName.split("\\.")).resolve(classSimpleName + ".java");
 		className = "recompile." + myClassName;
 		
 		_myFileObject = new CCInMemoryFileObject(className);

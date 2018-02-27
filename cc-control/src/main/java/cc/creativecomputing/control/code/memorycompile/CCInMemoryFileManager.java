@@ -1,7 +1,6 @@
 package cc.creativecomputing.control.code.memorycompile;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.security.SecureClassLoader;
@@ -14,6 +13,8 @@ import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
+
+import cc.creativecomputing.core.logging.CCLog;
 
 public class CCInMemoryFileManager extends ForwardingJavaFileManager<JavaFileManager>{
 
@@ -47,10 +48,10 @@ public class CCInMemoryFileManager extends ForwardingJavaFileManager<JavaFileMan
 
     @Override
     public JavaFileObject getJavaFileForOutput(
-    	final Location location, 
-    	final String className, 
-    	final JavaFileObject.Kind kind, 
-    	final FileObject sibling
+	    	final Location location, 
+	    	final String className, 
+	    	final JavaFileObject.Kind kind, 
+	    	final FileObject sibling
     ) {
 
         return new SimpleJavaFileObject(URI.create("string:///" + className.replace('.', '/') + kind.extension), kind) {
@@ -61,6 +62,7 @@ public class CCInMemoryFileManager extends ForwardingJavaFileManager<JavaFileMan
                 ByteArrayOutputStream bos = _myByteStreams.get(className);
                 if (bos == null) {
                     bos = new ByteArrayOutputStream();
+                	CCLog.info(className,bos);
                     _myByteStreams.put(className, bos);
                 }
                 return bos;
