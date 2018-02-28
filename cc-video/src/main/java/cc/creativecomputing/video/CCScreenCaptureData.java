@@ -40,8 +40,6 @@ import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCPixelType;
 import cc.creativecomputing.math.CCMath;
 
-import com.sun.awt.AWTUtilities;
-
 /**
  * @author christianriekoff
  * 
@@ -80,8 +78,6 @@ public class CCScreenCaptureData extends CCVideo {
 			
 			addMouseListener(this);
 			addMouseMotionListener(this);
-			
-			AWTUtilities.setWindowOpaque(this, false);
 		}
 		
 		@CCProperty(name = "draw area")
