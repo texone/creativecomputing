@@ -20,29 +20,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
+import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
 import cc.creativecomputing.controlui.timeline.view.transport.CCTransportView;
 import cc.creativecomputing.controlui.view.menu.CCFileMenu;
 import cc.creativecomputing.controlui.view.menu.CCTimelineMenu;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCEvent;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
-import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.font.CCCharSet;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.math.CCVector2i;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIContext;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
 import cc.creativecomputing.ui.widget.CCUIMenu;
 import cc.creativecomputing.ui.widget.CCUIMenuBar;
-import cc.creativecomputing.ui.widget.CCUIMenuItem;
 
 public class CCControlApp  {
 	
@@ -66,18 +63,17 @@ public class CCControlApp  {
 		  }
 		}
 
-	private Map<String, CCCustomMenu> _myCustomMenues = new HashMap<String, CCCustomMenu>();
+	private Map<String, CCCustomMenu> _myCustomMenues = new HashMap<>();
 	
-	private CCPropertyMap _myPropertyMap;
+	private CCObjectPropertyHandle _myRootHandle;
 
+	protected CCFileManager _myFileManager;
 	private CCTimelineContainer _myTimelineContainer;
 	
-//	private CCControlComponent _myControlComponent;
+	private CCControlComponent _myControlComponent;
 	
 	private CCTransportView _myTransport;
 	
-	private CCUIMenu _myTimelineMenue;
-	private CCUIMenu _myFileMenue;
 
 	private CCUIMenuBar _myMenuBar;
 	
@@ -88,38 +84,43 @@ public class CCControlApp  {
 	
 	public static Preferences preferences;
 	
-	private CCTextureMapFont _myFont;
-	
 	private CCUIContext _myContext;
 	
-	private void init(CCGLApp theApp){
+	private void init(CCGLApp theApp, Object theObject){
 		
-		_myFont = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
+		CCUIConstants.DEFAULT_FONT = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
+		CCUIConstants.DEFAULT_FONT_2 = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 40, 2, 2);
+		CCUIConstants.MENUE_FONT = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
 
         // Create and set up the window.
         _myWindow = theApp.createWindow(400,400,"Creative Computing Controls");
-
-		_myPropertyMap = new CCPropertyMap();
 		
-		_myTimelineContainer = new CCTimelineContainer(_myPropertyMap);
+        setData(theObject);
+		_myTimelineContainer = new CCTimelineContainer(_myRootHandle);
 
 //        _myControlComponent = new CCControlComponent(_myWindow);
         
         CCUIVerticalFlowPane myVerticalPane = new CCUIVerticalFlowPane();
 		myVerticalPane.inset(5);
-		myVerticalPane.space(50);
+		myVerticalPane.space(5);
 		myVerticalPane.translation().set(-_myWindow.framebufferSize().x / 2, _myWindow.framebufferSize().y / 2);
 		myVerticalPane.updateMatrices();
         _myContext = new CCUIContext(_myWindow, myVerticalPane);
+        
+        _myWindow.frameBufferSizeEvents.add(size ->{
+        		CCLog.info(size);
+        		_myContext.widget().translation().set(-size.x / 2, size.y / 2);
+        		_myContext.widget().updateMatrices();
+        });
 //        
-//////		_myTransport = new CCTransportView(_myTimelineContainer);
-		_myFileMenue = new CCFileMenu(_myFont, _myTimelineContainer);
-		_myTimelineMenue = new CCTimelineMenu(_myFont, _myTimelineContainer);
-//
-        _myMenuBar = new CCUIMenuBar(_myFont);
-        _myMenuBar.add("file", _myFileMenue);
-        _myMenuBar.add("timeline", _myTimelineMenue);
+        _myFileManager = new CCFileManager();
+        _myMenuBar = new CCUIMenuBar(CCUIConstants.MENUE_FONT);
+        _myMenuBar.add("file", new CCFileMenu(CCUIConstants.MENUE_FONT, _myFileManager, _myTimelineContainer));
+        _myMenuBar.add("timeline", new CCTimelineMenu(CCUIConstants.MENUE_FONT, _myFileManager, _myTimelineContainer));
         _myContext.widget().addChild(_myMenuBar);
+
+		_myTransport = new CCTransportView(_myTimelineContainer);
+		_myContext.widget().addChild(_myTransport);
 //        
 //        // Add content to the window.
 ////		_myContext.widget().addChild(_myControlComponent);
@@ -161,8 +162,7 @@ public class CCControlApp  {
 
 	public CCControlApp(CCGLApp theApp, Object theRootObject, Class<?> thePrefClass) {
         preferences = Preferences.userNodeForPackage(thePrefClass).node(thePrefClass.getSimpleName());
-       
-		init(theApp);
+		init(theApp, theRootObject);
 //		
 //		ExceptionHandler.registerExceptionHandler();
 	}
@@ -175,6 +175,13 @@ public class CCControlApp  {
         this(theApp, theApp);
 	}
 	
+	public void setData(Object theObject) {
+		if(_myRootHandle != null) {
+			_myRootHandle.relink(theObject);
+		}
+		_myRootHandle = new CCObjectPropertyHandle(theObject, "settings");
+	}
+	
 //	public CCControlApp(CCGLApp theApp, Object theRootObject, CCTimelineSynch theSynch, Class<?> thePrefClass) {
 //        preferences = Preferences.userNodeForPackage(thePrefClass).node(thePrefClass.getSimpleName());
 //        
@@ -183,18 +190,15 @@ public class CCControlApp  {
 //	}
 
 	public CCObjectPropertyHandle rootHandle() {
-		return _myPropertyMap.rootHandle();
+		return _myRootHandle;
 	}
 
-	public CCPropertyMap propertyMap() {
-		return _myPropertyMap;
-	}
 	
 	public void update(double theDeltaTime){
 		if(!_cUpdate)return;
 		try{
 //			_myControlComponent.timeline().update(theDeltaTime);
-			_myPropertyMap.rootHandle().update(theDeltaTime);
+			_myRootHandle.update(theDeltaTime);
 		}catch(Exception e){
 			
 		}
@@ -203,7 +207,7 @@ public class CCControlApp  {
 	public void time(double theTime){
 		try{
 //			_myControlComponent.timeline().time(theTime);
-			_myPropertyMap.rootHandle().update(0);
+			_myRootHandle.update(0);
 		}catch(Exception e){
 			
 		}

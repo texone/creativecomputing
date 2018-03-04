@@ -16,19 +16,18 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.GridBagConstraints;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import cc.creativecomputing.control.handles.CCEventTriggerHandle;
 import cc.creativecomputing.control.handles.CCTriggerProgress.CCTriggerProgressListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCProgressWindow;
+import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
+import cc.creativecomputing.ui.widget.CCUILabelWidget;
+import cc.creativecomputing.uinano.CCUILabel;
 
 public class CCEventTriggerControl extends CCValueControl<Object, CCEventTriggerHandle>{
 	
-	private JButton _myButton;
+	private CCUILabelWidget _myButton;
 	
 	private CCProgressWindow _myProgressWindow;
 	
@@ -39,9 +38,8 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
  
         //Create the Button.
 
-        _myButton = new JButton(theHandle.name());
-        CCUIStyler.styleButton(_myButton, 103, 13);
-        _myButton.addActionListener(theE -> {
+        _myButton = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT, "bang");
+        _myButton.mouseReleased.add(theE -> {
 			_myHandle.trigger();
 		});
         
@@ -80,7 +78,7 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
 	
 	
 	@Override
-	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
+	public void addToPane(CCUIGridPane thePanel, int theY, int theDepth) {
 		thePanel.add(_myLabel, 	constraints(0, theY, GridBagConstraints.LINE_END, 	5, 5, 1, 5));
 		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 4, 1, 5));
 	}

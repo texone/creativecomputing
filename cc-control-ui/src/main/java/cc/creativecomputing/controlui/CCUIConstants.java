@@ -46,6 +46,8 @@ import cc.creativecomputing.math.CCColor;
 public class CCUIConstants {
 	
 	public static CCFont<?> DEFAULT_FONT;
+	public static CCFont<?> DEFAULT_FONT_2;
+	public static CCFont<?> MENUE_FONT;
 
 	public static int SCALE = 1;
 	

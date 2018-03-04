@@ -169,9 +169,9 @@ public class CCPropertyPopUp extends CCUIMenu {
 			_myPresetMenue.addItem(myCheckBox,myPreset, () -> {
 				for(CCUIWidget myWidget: _myPresetMenue) {
 					CCUIMenuItem myItem = (CCUIMenuItem)myWidget;
-					myItem.checkBox().isSelected(false);
+					myItem.checkBox().isSelected(false, true);
 				}
-				myCheckBox.isSelected(true);
+				myCheckBox.isSelected(true, true);
 				((CCObjectPropertyHandle)_myProperty).preset(myPreset);
 			});
 		}

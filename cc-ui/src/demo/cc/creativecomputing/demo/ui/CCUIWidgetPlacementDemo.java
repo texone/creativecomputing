@@ -31,17 +31,21 @@ import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.draw.CCUIGradientDrawable;
 import cc.creativecomputing.ui.draw.CCUIRoundedFillDrawable;
-import cc.creativecomputing.ui.draw.CCUIStrokeDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
 import cc.creativecomputing.ui.widget.CCUICheckBox;
+import cc.creativecomputing.ui.widget.CCUIColorPicker;
 import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
+import cc.creativecomputing.ui.widget.CCUIFileWidget;
+import cc.creativecomputing.ui.widget.CCUIGradientWidget;
 import cc.creativecomputing.ui.widget.CCUIIconWidget;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
 import cc.creativecomputing.ui.widget.CCUISlider;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
+import cc.creativecomputing.ui.widget.CCUITreeWidget;
+import cc.creativecomputing.ui.widget.CCUITreeWidget.CCUITreeNode;
 import cc.creativecomputing.ui.widget.CCUIValueBox;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
@@ -123,6 +127,38 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 		return mySlider;
 	}
 	
+	public CCUIWidget createColorPicker(){
+		CCUIColorPicker myWidget = new CCUIColorPicker(_myFont,CCColor.RED, 100, 14);
+		myWidget.inset(4);
+		return myWidget;
+	}
+	
+	public CCUIWidget createGradient(){
+		CCUIGradientWidget myWidget = new CCUIGradientWidget(220,14);
+		myWidget.inset(4);
+		return myWidget;
+	}
+	
+	public CCUIFileWidget createFile() {
+		CCUIFileWidget myDropDown = new CCUIFileWidget(_myFont);
+		myDropDown.inset(4);
+		myDropDown.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		CCUIFillDrawable myBackground = new CCUIFillDrawable(new CCColor(0.3d));
+		myDropDown.background(myBackground);
+		myDropDown.width(220);
+		
+		myDropDown.menue().background(myBackground);
+		myDropDown.itemSelectBackground(new CCUIFillDrawable(new CCColor(0.5d)));
+		myDropDown.itemBackground(new CCUIFillDrawable(new CCColor(0.3d)));
+		
+		myDropDown.addItem("Item 1");
+		myDropDown.addItem("item 2");
+		myDropDown.addItem("item 3");
+		myDropDown.addSeparator();
+		myDropDown.addItem("item 4");
+		return myDropDown;
+	}
+	
 	public CCUIWidget createPropertyWidget() {
 		CCUIGridPane myPropertyWidget = new CCUIGridPane(400,0);
 		myPropertyWidget.inset(5);
@@ -140,7 +176,7 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 			myPropertyWidget.addChild(myLabel, myEntry);
 			myEntry.column = 1;
 			
-			switch(i % 5) {
+			switch(i % 8) {
 			case 0:
 				myPropertyWidget.addChild(createCheckBox(), myEntry);
 				break;
@@ -151,10 +187,26 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 				myPropertyWidget.addChild(createDropDown(), myEntry);
 				break;
 			case 3:
+				myEntry.column = 2;
 				myPropertyWidget.addChild(createSlider(), myEntry);
+				myEntry.column = 1;
+				myPropertyWidget.addChild(createValueBox(), myEntry);
 				break;
 			case 4:
 				myPropertyWidget.addChild(createValueBox(), myEntry);
+				break;
+			case 5:
+				myPropertyWidget.addChild(createColorPicker(), myEntry);
+				break;
+			case 6:
+				myEntry.columnSpan = 2;
+				myPropertyWidget.addChild(createGradient(), myEntry);
+				myEntry.columnSpan = 1;
+				break;
+			case 7:
+				myEntry.columnSpan = 2;
+				myPropertyWidget.addChild(createFile(), myEntry);
+				myEntry.columnSpan = 1;
 				break;
 			}
 		}
@@ -168,21 +220,43 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 	private CCTextureMapFont _myFont;
 	
 	private CCUIContext _myContext;
+	
+	private CCUITreeWidget _myTreeWidget;
+	
+	
+	private void addNodes(CCUITreeNode theNode, int theDepth){
+		if(theDepth == 0)return;
+		for(int i = 0; i < 3;i++){
+			addNodes(theNode.addNode("node " + i), theDepth - 1);
+		}
+	}
+	
+	private CCUITreeWidget createTreeWidget(){
+		CCUITreeWidget myResult = new CCUITreeWidget(_myFont, "app");
+		myResult.width(400);
+		addNodes(myResult.root(),3);
+		return myResult;
+	}
 
 	@Override
 	public void setup(CCGraphics g, CCGLTimer theTimer) {
 
 		_myFont = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
 		
+		CCUIHorizontalFlowPane myHorizontalPane = new CCUIHorizontalFlowPane();
+		myHorizontalPane.translation().set(-window().framebufferSize().x / 2, window().framebufferSize().y / 2);
+		_myContext = new CCUIContext(_myMainWindow, myHorizontalPane);
 
+		_myTreeWidget = new CCUITreeWidget(_myFont, "app");
+		_myTreeWidget.width(400);
+		_myContext.widget().addChild(createTreeWidget());
+		
 		CCUIVerticalFlowPane myVerticalPane = new CCUIVerticalFlowPane();
 		myVerticalPane.inset(5);
 		myVerticalPane.space(5);
-		myVerticalPane.translation().set(-window().framebufferSize().x / 2, window().framebufferSize().y / 2);
-		_myContext = new CCUIContext(_myMainWindow, myVerticalPane);
-
-		_myContext.widget().addChild(createObjectBarWidget());
-		_myContext.widget().addChild(createPropertyWidget());
+		myVerticalPane.addChild(createObjectBarWidget());
+		myVerticalPane.addChild(createPropertyWidget());
+		_myContext.widget().addChild(myVerticalPane);
 
 		_myMainWindow.scrollEvents.add((x,y) -> {CCLog.info(x,y);});
 		

@@ -16,23 +16,17 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.controlui.timeline.controller.FileManager.FileManagerListener;
 import cc.creativecomputing.controlui.timeline.view.CCTimelineContainerView;
-import cc.creativecomputing.controlui.util.UndoHistory;
-import cc.creativecomputing.controlui.util.UndoHistory.HistoryListener;
 import cc.creativecomputing.core.events.CCListenerManager;
 
 
-public class CCTimelineContainer implements FileManagerListener, HistoryListener{
+public class CCTimelineContainer {
 	
 	public interface TimelineChangeListener{
 		
@@ -44,23 +38,23 @@ public class CCTimelineContainer implements FileManagerListener, HistoryListener
 	}
 	
 	protected Map<String,CCTimelineController> _myTimelineController;
-	protected FileManager _myFileManager;
-	protected CCPropertyMap _myPropertyMap;
+	protected CCObjectPropertyHandle _myRootHandle;
 	
 	protected CCListenerManager<TimelineChangeListener> _myTimelineChangeListener = CCListenerManager.create(TimelineChangeListener.class);
 
 	protected CCTimelineController _myActiveController;
 	protected CCTimelineContainerView _myTimelineContainerView;
 
-	public CCTimelineContainer(CCPropertyMap theProperties){
-		_myPropertyMap = theProperties;
+	public CCTimelineContainer(CCObjectPropertyHandle theRootHandle){
 		_myTimelineController = new TreeMap<>();
-		_myActiveController = new CCTimelineController(this, _myPropertyMap);
+		rootProperty(theRootHandle);
+	}
+	
+	public void rootProperty(CCObjectPropertyHandle theRootHandle) {
+		_myRootHandle = theRootHandle;
+		_myTimelineController.clear();
+		_myActiveController = new CCTimelineController(this, _myRootHandle);
 		_myTimelineController.put("default", _myActiveController);
-		_myFileManager = new FileManager(this);
-		_myFileManager.events().add(this);
-		
-		UndoHistory.instance().events().add(this);
 	}
 	
 	public void reset(){
@@ -104,27 +98,11 @@ public class CCTimelineContainer implements FileManagerListener, HistoryListener
 	
 	public CCTimelineController addTimeline(String theTimeline){
 		if(_myTimelineController.containsKey(theTimeline))return _myTimelineController.get(theTimeline);
-		_myActiveController = new CCTimelineController(this, _myPropertyMap);
+		_myActiveController = new CCTimelineController(this, _myRootHandle);
 		_myActiveController.view(_myTimelineContainerView.createView(this));
 		_myTimelineController.put(theTimeline, _myActiveController);
 		_myTimelineChangeListener.proxy().addTimeline(theTimeline);
 		return _myActiveController;
-	}
-	
-	public FileManager fileManager(){
-		return _myFileManager;
-	}
-	
-	public void extension(String theExtension, String theDescription) {
-		_myFileManager.extension(theExtension, theDescription);
-	}
-	
-	public void loadFile(Path thePath){
-		_myFileManager.replaceCurrentTimeline(thePath);
-	}
-	
-	public void loadFile(String thePath){
-		_myFileManager.replaceCurrentTimeline(Paths.get(thePath));
 	}
 	
 	public void update(double theDeltaTime){
@@ -157,31 +135,5 @@ public class CCTimelineContainer implements FileManagerListener, HistoryListener
 			_myActiveController.track(thePropertyHandle.path()).writeValue(_myActiveController.transportController().time());
 		}
 	}
-	
-	@Override
-	public void onLoad(Path thePath) {
-	}
-	
-	@Override
-	public void onChange(UndoHistory theHistory) {
-		
-	} 
-	
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.timeline.controller.FileManager.FileManagerListener#onSave(java.io.Path)
-	 */
-	@Override
-	public void onSave(Path thePath) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.timeline.controller.FileManager.FileManagerListener#onNew(java.io.Path)
-	 */
-	@Override
-	public void onNew(Path thePath) {
-		// TODO Auto-generated method stub
-		
-	}
+
 }

@@ -24,12 +24,12 @@ import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWKeyListener;
 import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMouseListener;
-import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMousePosListener;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCVector1;
 import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.math.CCVector2.CCVector2Event;
 import cc.creativecomputing.ui.CCUIEditPolicy;
 import cc.creativecomputing.ui.CCUIHorizontalAlignment;
 import cc.creativecomputing.ui.CCUIVerticalAlignment;
@@ -80,6 +80,8 @@ public class CCUIWidget{
 	
 	protected CCUIWidget _myParent;
 	
+	protected CCUIWidget _myOverlay;
+	
 	protected boolean _myIsActive = true;
 	
 	public CCUIWidget(double theWidth, double theHeight) {
@@ -97,6 +99,12 @@ public class CCUIWidget{
 	
 	public void isActive(boolean theIsActive){
 		_myIsActive = theIsActive;
+	}
+	
+	public CCUIWidget overlayWidget(){
+		if( _myOverlay == null)return null;
+		if(_myOverlay.isActive())return _myOverlay;
+		return null;
 	}
 	
 	public void parent(CCUIWidget theParent){
@@ -253,8 +261,8 @@ public class CCUIWidget{
 	public final CCListenerManager<CCGLFWMouseListener> mouseReleased = CCListenerManager.create(CCGLFWMouseListener.class);
 	public final CCListenerManager<CCGLFWMouseListener> mousePressed = CCListenerManager.create(CCGLFWMouseListener.class);
 	public final CCListenerManager<CCGLFWMouseListener> mouseClicked = CCListenerManager.create(CCGLFWMouseListener.class);
-	public final CCListenerManager<CCGLFWMousePosListener> mouseMoved = CCListenerManager.create(CCGLFWMousePosListener.class);
-	public final CCListenerManager<CCGLFWMousePosListener> mouseDragged = CCListenerManager.create(CCGLFWMousePosListener.class);
+	public final CCListenerManager<CCVector2Event> mouseMoved = CCListenerManager.create(CCVector2Event.class);
+	public final CCListenerManager<CCVector2Event> mouseDragged = CCListenerManager.create(CCVector2Event.class);
 	
 	public final CCListenerManager<CCEvent> focusGained = CCListenerManager.create(CCEvent.class);
 	public final CCListenerManager<CCEvent> focusLost = CCListenerManager.create(CCEvent.class);
@@ -311,6 +319,16 @@ public class CCUIWidget{
 			_myWorldMatrix = _myLocalMatrix;
 			_myWorldInverseMatrix = _myLocalInverseMatrix;
 		}
+		
+		if(_myOverlay == null)return;
+		
+		_myOverlay._myLocalMatrix.set(_myLocalMatrix);
+		_myOverlay._myLocalMatrix.translate(_myOverlay.translation());
+		_myOverlay._myLocalInverseMatrix = _myOverlay._myLocalMatrix.inverse();
+//		_myMenue._myWorldMatrix.set(_myWorldMatrix);
+		CCMatrix32 myWorldInverse = _myWorldMatrix.clone();
+		myWorldInverse.translate(_myOverlay.translation());
+		_myOverlay._myWorldInverseMatrix.set(myWorldInverse.inverse());
 	}
 	
 	public void draw(CCGraphics g) {
@@ -319,6 +337,14 @@ public class CCUIWidget{
 		
 		drawContent(g);
 		
+		g.popMatrix();
+		
+		if(_myOverlay == null)return;
+		if(!_myOverlay.isActive())return;
+		
+		g.pushMatrix();
+		g.translate(0, 0, 1);
+		_myOverlay.draw(g);
 		g.popMatrix();
 	}
 	
@@ -374,9 +400,5 @@ public class CCUIWidget{
 	
 	public void y(double theY) {
 		_myTranslation.y = theY;
-	}
-	
-	public CCUIWidget overlayWidget(){
-		return null;
 	}
 }

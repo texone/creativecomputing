@@ -26,34 +26,30 @@ import cc.creativecomputing.core.events.CCListenerManager;
  * @author christianriekoff
  *
  */
-public class UndoHistory {
+public class CCControlUndoHistory {
 	
-	public interface HistoryListener{
-		void onChange(UndoHistory theHistory);
+	public interface CCHistoryEvent{
+		void event(CCControlUndoHistory theHistory);
 	}
 	
-	private static UndoHistory instance = new UndoHistory();
+	private static CCControlUndoHistory instance = new CCControlUndoHistory();
 	
-	public static UndoHistory instance() {
+	public static CCControlUndoHistory instance() {
 		return instance;
 	}
 
 	private List<Action> _myActions = new ArrayList<Action>();
 	private int _myIndex = 0;
 	
-	private CCListenerManager<HistoryListener> _myListenerManager = CCListenerManager.create(HistoryListener.class);
+	public final CCListenerManager<CCHistoryEvent> events = CCListenerManager.create(CCHistoryEvent.class);
 	
-	private UndoHistory() {
+	private CCControlUndoHistory() {
 		
-	}
-	
-	public CCListenerManager<HistoryListener> events() {
-		return _myListenerManager;
 	}
 	
 	public void clear() {
 		_myActions.clear();
-		_myListenerManager.proxy().onChange(this);
+		events.proxy().event(this);
 		_myIndex = -1;
 	}
 	
@@ -61,14 +57,14 @@ public class UndoHistory {
 		if(_myIndex+1 < _myActions.size())_myActions.subList(_myIndex + 1, _myActions.size()).clear();
 		_myActions.add(theAction);
 		_myIndex = _myActions.size() - 1;
-		_myListenerManager.proxy().onChange(this);
+		events.proxy().event(this);
 	}
 	
 	public void undo() {
 		if(_myIndex >= 0) {
 			_myActions.get(_myIndex).undo();
 			_myIndex--;
-			_myListenerManager.proxy().onChange(this);
+			events.proxy().event(this);
 		}
 	}
 	
@@ -76,7 +72,7 @@ public class UndoHistory {
 		if(_myIndex >= -1 && _myIndex < _myActions.size() - 1) {
 			_myIndex++;
 			_myActions.get(_myIndex).apply();
-			_myListenerManager.proxy().onChange(this);
+			events.proxy().event(this);
 		}
 	}
 	

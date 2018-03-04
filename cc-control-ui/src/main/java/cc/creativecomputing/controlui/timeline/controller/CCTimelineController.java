@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
@@ -71,7 +70,7 @@ import cc.creativecomputing.math.CCVector2;
  * @author christianriekoff
  * 
  */
-public class CCTimelineController extends CCTrackContext implements CCTransportable{
+public class CCTimelineController extends CCTrackContext {
 	
 	private CCTransportController _myTransportController;
 	
@@ -84,22 +83,22 @@ public class CCTimelineController extends CCTrackContext implements CCTransporta
 	private Map<Path, CCTrackController> _myTrackControllerMap;
 	private List<CCTrackController> _myTrackController;
 	
-	private final CCPropertyMap _myPropertyMap;
+	private final CCObjectPropertyHandle _myRootHandle;
 	
 	private final CCTimelineContainer _myTimelineContainer;
 
 	protected CCQuantizeMode _myQuantizeMode;
 	
-	public CCTimelineController(CCTimelineContainer theTimelineContainer, CCPropertyMap thePropertyMap) {
+	public CCTimelineController(CCTimelineContainer theTimelineContainer, CCObjectPropertyHandle theRootHandle) {
 		super();
 		_myTimelineContainer = theTimelineContainer;
 		_myTransportController = new CCTransportController(this);
-		_myTransportController.transportEvents().add(this);
+		_myTransportController.timeEvents.add(this::time);
 		
 		_myTrackControllerMap = new HashMap<>();
 		_myTrackController = new ArrayList<>();
 		
-		_myPropertyMap = thePropertyMap;
+		_myRootHandle = theRootHandle;
 
 		_myQuantizeMode = CCQuantizeMode.OFF;
 	}
@@ -111,8 +110,8 @@ public class CCTimelineController extends CCTrackContext implements CCTransporta
 		_myZoomController.addZoomable(_myTransportController);
 	}
 	
-	public CCPropertyMap propertyMap(){
-		return _myPropertyMap;
+	public CCObjectPropertyHandle rootHandle(){
+		return _myRootHandle;
 	}
 	
 	public SwingTimelineView view() {
@@ -314,7 +313,7 @@ public class CCTimelineController extends CCTrackContext implements CCTransporta
 	}
 	
 	public CCGroupTrackController createGroupController(Path thePath){
-		return createGroupController((CCObjectPropertyHandle)_myPropertyMap.property(thePath));
+		return createGroupController((CCObjectPropertyHandle)_myRootHandle.property(thePath));
 	}
 	
 	private static class TrackRenderAction implements CCPropertyListener<Object>{
@@ -469,18 +468,9 @@ public class CCTimelineController extends CCTrackContext implements CCTransporta
 				}
 			});
 			myEventController.splitDrag(true);
-			_myTransportController.addStateListener(new TransportStateListener() {
+			_myTransportController.playEvents.add(t -> {((CCPathHandle)theProperty).play();});
+			_myTransportController.stopEvents.add(t -> {((CCPathHandle)theProperty).stop();});
 				
-				@Override
-				public void stop(double theTime) {
-					((CCPathHandle)theProperty).stop();
-				}
-				
-				@Override
-				public void play(double theTime) {
-					((CCPathHandle)theProperty).play();
-				}
-			});
 			myTrackController = myEventController;
 			Map<String, String> myExtraMap = new HashMap<>();
 			myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
@@ -516,7 +506,7 @@ public class CCTimelineController extends CCTrackContext implements CCTransporta
 		if(thePath.startsWith("clip arrange")){
 			return createClipTrack();
 		}
-		return createController(_myPropertyMap.property(thePath), null);
+		return createController(_myRootHandle.property(thePath), null);
 	}
 	
 	public void removeTrack(Path thePath){
@@ -692,7 +682,6 @@ public class CCTimelineController extends CCTrackContext implements CCTransporta
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.timeline.controller.TransportTimeListener#time(double)
 	 */
-	@Override
 	public void time(double theTime) {
 		for(CCPropertyHandle<?> myHandle:new ArrayList<>(_myClipTrackHandles)){
 			myHandle.update(0);

@@ -16,23 +16,18 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-
-import javax.swing.JPanel;
-
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
+import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
+import cc.creativecomputing.ui.widget.CCUIGradientWidget;
 
 public class CCGradientControl extends CCValueControl<CCGradient, CCGradientPropertyHandle>{
 	
-	private CCGradientEditor _myGradientEditor = new CCGradientEditor();
+	private CCUIGradientWidget _myGradientEditor = new CCUIGradientWidget(240,14);
 	
 	private CCGradient _myGradient;
-
-	static final Dimension SMALL_BUTTON_SIZE = new Dimension(100,15);
 
 	public CCGradientControl(CCGradientPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
@@ -46,7 +41,7 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
  
         //Create the Button.
 		_myGradientEditor.gradient(_myGradient);
-		_myGradientEditor.events().add(theGradient -> {
+		_myGradientEditor.changeEvents.add(theGradient -> {
 			_myHandle.value(theGradient, false);
 		});
 	}
@@ -56,18 +51,15 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
 		return _myGradient;
 	}
 	
-	private JPanel _myPanel;
-	
 	@Override
-	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		thePanel.add(_myLabel,  constraints(0, theY, GridBagConstraints.LINE_END, 5, 5, 1, 5));
+	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
+		CCUITableEntry myEntry = new CCUITableEntry();
+		myEntry.column = 0;
+		myEntry.row = theY;
+		thePane.addChild(_myLabel, myEntry);
 		
-		_myPanel = thePanel;
-		_myGradientEditor.setPreferredSize(new Dimension(202,20));
-		_myGradientEditor.setBackground(_myPanel.getBackground());
-		JPanel myPanel = new JPanel();
-		myPanel.setBackground(new Color(255,0,0));
-		thePanel.add(_myGradientEditor,  constraints(1, theY, 2, GridBagConstraints.LINE_START,0, 0, 0, 0));
-//		thePanel.add(_myColorPanel, myConstraints);
+		myEntry.column = 1;
+		myEntry.columnSpan = 2;
+		thePane.addChild(_myGradientEditor, myEntry);
 	}
 }

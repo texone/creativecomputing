@@ -31,7 +31,7 @@ import cc.creativecomputing.controlui.timeline.controller.actions.AddControlPoin
 import cc.creativecomputing.controlui.timeline.controller.actions.MoveControlPointAction;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
-import cc.creativecomputing.controlui.util.UndoHistory;
+import cc.creativecomputing.controlui.util.CCControlUndoHistory;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
@@ -353,7 +353,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		} else {
 			if (_myHasAdd) {
 				_myHasAdd = false;
-				UndoHistory.instance().apply(new AddControlPointAction(_myController, _myDraggedPoints.get(0)));
+				CCControlUndoHistory.instance().apply(new AddControlPointAction(_myController, _myDraggedPoints.get(0)));
 				_myDraggedPoints = null;
 				return;
 			}
@@ -363,7 +363,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 				return;
 			}
 
-			UndoHistory.instance().apply(new MoveControlPointAction(_myController, _myDraggedPoints, _myStartPoints, _myDraggedPoints));
+			CCControlUndoHistory.instance().apply(new MoveControlPointAction(_myController, _myDraggedPoints, _myStartPoints, _myDraggedPoints));
 
 			if (_myIsInDrag || _myDraggedPoints.size() != 1) {
 				_myDraggedPoints = null;

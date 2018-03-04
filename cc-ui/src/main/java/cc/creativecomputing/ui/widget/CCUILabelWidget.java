@@ -57,7 +57,7 @@ public class CCUILabelWidget extends CCUIWidget{
 	@Override
 	public void update(CCGLTimer theTimer) {
 		super.update(theTimer);
-		_myTextField.position(_myInset, _myInset);
+		_myTextField.position(0, _myInset);
 	}
 	
 	@Override

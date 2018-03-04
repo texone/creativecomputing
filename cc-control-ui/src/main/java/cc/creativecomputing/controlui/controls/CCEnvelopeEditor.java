@@ -50,6 +50,7 @@ import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.view.SwingCurvePanel;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.gl.app.CCGLWindow;
 
 /**
  * @author christianriekoff
@@ -70,7 +71,7 @@ public class CCEnvelopeEditor extends JFrame {
 		CCControlApp.preferences.put(thePath + "/height" , getHeight() + "");
 	}
 
-	public CCEnvelopeEditor(String theTitle) {
+	public CCEnvelopeEditor(String theTitle, CCGLWindow theWindow) {
 		super(theTitle);
 		_myCurvePanel = new SwingCurvePanel(this);
 	
@@ -85,6 +86,12 @@ public class CCEnvelopeEditor extends JFrame {
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(containerPanel, BorderLayout.CENTER);
 		
+		theWindow.closeEvents.add(e -> {
+			CCControlApp.preferences.put(theTitle + "/open" , false + "");
+		});
+		theWindow.windowSizeEvents.add(e -> {
+			
+		});
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -93,7 +100,6 @@ public class CCEnvelopeEditor extends JFrame {
 			
 			@Override
 			public void windowClosed(WindowEvent e) {
-				CCControlApp.preferences.put(theTitle + "/open" , false + "");
 			}
 		});
 		

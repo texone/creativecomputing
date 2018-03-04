@@ -40,7 +40,7 @@ public class CCUIFillDrawable implements CCUIDrawable{
 	
 	public CCUIFillDrawable(CCColor theColor) {
 		this();
-		_myColor = theColor;
+		_myColor = theColor.clone();
 	}
 
 	/* (non-Javadoc)
@@ -52,6 +52,10 @@ public class CCUIFillDrawable implements CCUIDrawable{
 		_myRectangle.position(0, -theWidget.height());
 		_myRectangle.size(theWidget.width(), theWidget.height());
 		_myRectangle.draw(g);
+	}
+
+	public CCColor color() {
+		return _myColor;
 	}
 
 }

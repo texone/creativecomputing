@@ -16,7 +16,10 @@
  ******************************************************************************/
 package cc.creativecomputing.ui.widget;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 
 public class CCUIMenuBar extends CCUIHorizontalFlowPane{
@@ -31,6 +34,9 @@ public class CCUIMenuBar extends CCUIHorizontalFlowPane{
 	public void add(String theTitle, CCUIMenu theMenue){
 		CCUIDropDownWidget myDropDown = new CCUIDropDownWidget(_myFont, theTitle, theMenue);
 		myDropDown.adjustLabelBySelection(false);
+		myDropDown.showIcon(false);
+		myDropDown.itemSelectBackground(new CCUIFillDrawable(new CCColor(100)));
+		theMenue.background(new CCUIFillDrawable(new CCColor(50)));
 		addChild(myDropDown);
 		theMenue.translation().set(0, -height());
 	}

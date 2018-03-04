@@ -141,6 +141,10 @@ public class CCUIContext{
 		CCVector2 myLocalPos = _myLastPressedWidget.worldInverseTransform().transform(mouseToScreen(event));
 		CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y);
 		_myLastPressedWidget.mouseClicked.proxy().event(myLocalEvent);
+		
+		if(_myLastPressedWidget.overlayWidget() != null){
+			_myOverlay = _myLastPressedWidget.overlayWidget();
+		}
 	}
 	
 	private void mouseMoved(CCVector2 pos){

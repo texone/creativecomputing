@@ -28,7 +28,7 @@ import cc.creativecomputing.controlui.timeline.controller.actions.AddControlPoin
 import cc.creativecomputing.controlui.timeline.controller.tools.CCEventTrackTool;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCEventTrackTool.EventAction;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
-import cc.creativecomputing.controlui.util.UndoHistory;
+import cc.creativecomputing.controlui.util.CCControlUndoHistory;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -126,7 +126,7 @@ public class CCEventTrackController extends CCTrackController {
 		CCTimedEventPoint myPoint = _myEventTrackTool.createPoint(myViewCoords);
 		myPoint.eventType(theEventType);
 		_myEventTrackListener.proxy().onCreate(this, myPoint);
-		UndoHistory.instance().apply(new AddControlPointAction(this, myPoint));
+		CCControlUndoHistory.instance().apply(new AddControlPointAction(this, myPoint));
 	}
 	
 	

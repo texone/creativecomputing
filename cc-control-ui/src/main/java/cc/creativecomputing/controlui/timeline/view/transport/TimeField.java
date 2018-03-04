@@ -44,7 +44,6 @@ class TimeField extends JTextField implements FocusListener, ActionListener, Mou
 	
 	public TimeField(CCTimelineContainer theTimelineContainer) {
 		_myTimelineContainer = theTimelineContainer;
-		CCUIStyler.styleTransportComponent(this, 64, 20);
 		setPreferredSize(new Dimension(80 * CCUIConstants.SCALE,20 * CCUIConstants.SCALE));
 		
 		addFocusListener(this);

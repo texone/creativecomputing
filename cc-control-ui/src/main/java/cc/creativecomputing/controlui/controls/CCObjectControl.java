@@ -50,17 +50,17 @@ import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
 import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
+import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
+import cc.creativecomputing.ui.draw.CCUIGradientDrawable;
+import cc.creativecomputing.ui.draw.CCUIStrokeDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
-import cc.creativecomputing.uinano.CCUILabel;
+import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
+import cc.creativecomputing.ui.widget.CCUIIconWidget;
+import cc.creativecomputing.ui.widget.CCUILabelWidget;
 
 public class CCObjectControl extends CCUIGridPane implements CCControl{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2697384457010979576L;
 	
 	private CCControlComponent _myInfoPanel;
 	public CCUIGridPane _myControlPane = null;
@@ -73,34 +73,27 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 	
 	protected CCObjectPropertyHandle _myProperty;
 	
-	private CCUILabel _myLabel;
+	private CCUIHorizontalFlowPane myBarWidget;
 	
 	private CCPropertyListener<Object> _myListener;
 
 	public CCObjectControl(CCObjectPropertyHandle thePropertyHandle, CCControlComponent theInfoPanel, int theDepth){
 		_myProperty = thePropertyHandle;
 
-		_myControlPane = new JPanel(new GridBagLayout());
-		_myControlPane.background(CCColorMap.getColor(_myProperty.path()).brighter());
+		_myControlPane = new CCUIGridPane();
+		_myControlPane.background(new CCUIFillDrawable(CCColorMap.getColor(_myProperty.path()).brighter()));
 		_myProperty.events().add(_myListener = theValue ->{
 			try{
 				if(_myIsSelected){
-					remove(_myControlPane);
+					removeChild(_myControlPane);
 				}
 				createUI(false);
 				if(_myIsSelected){
-					GridBagConstraints myConstraints = new GridBagConstraints();
-					myConstraints.gridx = 0;
-					myConstraints.gridy = 1;
-					myConstraints.gridwidth = 3;
-					myConstraints.weightx = 1.0;
-					myConstraints.anchor = GridBagConstraints.LINE_START;
-					myConstraints.fill = GridBagConstraints.HORIZONTAL;
-					add(_myControlPane, myConstraints);
-					if(getParent() != null)getParent().revalidate(); 
-					theInfoPanel.invalidate(); 
-					theInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
-					theInfoPanel.repaint();
+					CCUITableEntry myConstraints = new CCUITableEntry();
+					myConstraints.column = 0;
+					myConstraints.row = 1;
+					myConstraints.columnSpan = 3;
+					addChild(_myControlPane, myConstraints);
 					
 				}
 			}catch(Exception e){
@@ -108,57 +101,65 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 			}
 		});
 		
-		setBackground(CCColorMap.getColor(_myProperty.path()));
+		myBarWidget = new CCUIHorizontalFlowPane(400, 0);
+		myBarWidget.translation().set(0,0);
+		myBarWidget.inset(5);
+		myBarWidget.space(5);
+		
+		CCUIGradientDrawable myGradientBack = new CCUIGradientDrawable();
+		CCColor myColor = CCColorMap.getColor(_myProperty.path());
+		myGradientBack.gradient().top(myColor);
+		myGradientBack.gradient().bottom(myColor.darker());
+		myBarWidget.background(myGradientBack);
+
+		CCUIIconWidget myIconWidget = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_DOWN);
+		myIconWidget.mouseReleased.add(event -> {
+			switch(event.button){
+			case BUTTON_1:
+				myIconWidget.active(!myIconWidget.active());
+				myIconWidget.text().text(myIconWidget.active() ? CCEntypoIcon.ICON_TRIANGLE_DOWN.text : CCEntypoIcon.ICON_TRIANGLE_RIGHT.text);
+				if(myIconWidget.active()){
+					open();
+				}else{
+					close();
+				}
+				break;
+			case BUTTON_3:
+//				popup().show(_myLabel, event.x, event.y);
+				break;
+			}
+			
+		});
+		myBarWidget.addChild(myIconWidget);
+		
+		CCUILabelWidget myLabel = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT, _myName);
+		myBarWidget.addChild(myLabel);
 		
 		_myDepth = theDepth;
 		
 		_myInfoPanel = theInfoPanel;
-		setLayout(new GridBagLayout());
 		
 		_myName = _myProperty.name();
-		
-		GridBagConstraints myConstraints = new GridBagConstraints();
-		myConstraints.gridx = 0;
-		myConstraints.gridy = 0;
-		myConstraints.gridwidth = 3;
-		myConstraints.anchor = GridBagConstraints.LINE_START;
-		myConstraints.fill = GridBagConstraints.HORIZONTAL;
-		myConstraints.weightx = 1f;
-		myConstraints.insets = new Insets(0, (5  + 10 * (_myDepth - 1)) * CCUIConstants.SCALE, 0, 5 * CCUIConstants.SCALE);
 	
-		_myLabel = new JLabel("[+] " + _myName, SwingConstants.LEFT);
-		_myLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		_myLabel.setForeground(Color.WHITE);
-		_myLabel.setFont(CCUIConstants.ARIAL_BOLD_10);
-		_myLabel.setPreferredSize(new Dimension(100 * CCUIConstants.SCALE,15 * CCUIConstants.SCALE));
-		
-		_myLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent theE) {
-				if(theE.getButton() == MouseEvent.BUTTON1){
-					if(_myIsSelected){
-						close();
-					}else{
-						open();
-					}
-				}
-				if(theE.getButton() == MouseEvent.BUTTON3){
-					popup().show(_myLabel, theE.getX(), theE.getY());
-				}
-			}
-		});
-		add(_myLabel, myConstraints);
 		thePropertyHandle.addSelectionListener(isSelected -> {
 			if(isSelected){
-				setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Color.red));
+				border(new CCUIStrokeDrawable(CCColor.RED, 1, 0));
 			}else{
-				setBorder(BorderFactory.createEmptyBorder());
+				border(null);
 			}
 		});
 		
 		if(CCControlApp.preferences.getBoolean(_myProperty.path().toString() + "/open" , false)){
 			open();
 		}
+	}
+	
+	private CCUITableEntry entryInfo(int theRow){
+		CCUITableEntry myConstraints = new CCUITableEntry();
+		myConstraints.column = 0;
+		myConstraints.row = theRow;
+		myConstraints.columnSpan = 3;
+		return myConstraints;
 	}
 	
 	@Override
@@ -177,21 +178,9 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 	
 	public void open() {
 		createUI(false);
+		addChild(_myControlPane, entryInfo(1));
 		
-		GridBagConstraints myConstraints = new GridBagConstraints();
-		myConstraints.gridx = 0;
-		myConstraints.gridy = 1;
-		myConstraints.gridwidth = 3;
-		myConstraints.weightx = 1f;
-		myConstraints.anchor = GridBagConstraints.LINE_START;
-		myConstraints.fill = GridBagConstraints.HORIZONTAL;
-		addChild(_myControlPane, myConstraints);
-		
-		_myInfoPanel.invalidate(); 
-		_myInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
-		_myInfoPanel.repaint();
 		_myIsSelected = true;
-		_myLabel.setText("[-] " + _myName);
 		CCControlApp.preferences.put(_myProperty.path().toString() + "/open" , true + "");
 	}
 	
@@ -199,12 +188,8 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 		for(CCControl myControl:_myControls){
 			myControl.dispose();
 		}
-		remove(_myControlPane);
-		invalidate(); 
-		validate(); // or ((JComponent) getContentPane()).revalidate();
-		repaint();
+		removeChild(_myControlPane);
 		_myIsSelected = false;	
-		_myLabel.setText("[+] " + _myName);
 		CCControlApp.preferences.put(_myProperty.path().toString() + "/open" , false + "");
 	}
 	
@@ -305,13 +290,6 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 
 	@Override
 	public void addToPane(CCUIGridPane thePanel, int theY, int theDepth) {
-		GridBagConstraints myConstraints = new GridBagConstraints();
-		myConstraints.gridx = 0;
-		myConstraints.gridwidth = 3;
-		myConstraints.gridy = theY;
-		myConstraints.weightx = 1d;
-		myConstraints.anchor = GridBagConstraints.LINE_START;
-		myConstraints.fill = GridBagConstraints.HORIZONTAL;
-		thePanel.add(this, myConstraints);
+		thePanel.addChild(this, entryInfo(theY));
 	}
 }

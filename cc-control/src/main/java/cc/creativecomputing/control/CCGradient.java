@@ -28,6 +28,11 @@ import cc.creativecomputing.math.CCMath;
 
 public class CCGradient extends ArrayList<CCGradientPoint> implements CCBlendable<CCGradient>{
 	
+	public interface CCGradientEvent{
+		void event(CCGradient theGradient);
+	}
+
+	
 	/**
 	 * 
 	 */

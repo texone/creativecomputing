@@ -22,6 +22,10 @@ import cc.creativecomputing.core.CCProperty;
  * double-precision.
  */
 public class CCVector2 implements Cloneable, Externalizable {
+	
+	public static interface CCVector2Event{
+		public void event(CCVector2 theVector);
+	}
 
     private static final long serialVersionUID = 1L;
 

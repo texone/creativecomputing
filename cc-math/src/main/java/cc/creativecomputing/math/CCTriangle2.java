@@ -98,8 +98,8 @@ public class CCTriangle2 {
 		CCVector2 v1 = b().subtract(a());
 		
 		CCVector2 myResult = a().clone();
-		myResult.add(v0.multiplyLocal(thePoint.x));
-		myResult.add(v1.multiplyLocal(thePoint.y));
+		myResult.addLocal(v0.multiplyLocal(thePoint.x));
+		myResult.addLocal(v1.multiplyLocal(thePoint.y));
 		return myResult;
 	}
 

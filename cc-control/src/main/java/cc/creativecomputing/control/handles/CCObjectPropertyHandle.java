@@ -155,6 +155,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		}
 	}
 	
+	public CCPropertyHandle<?> property(Path thePath){
+		return property(thePath, 1);
+	}
+	
 	public CCPropertyHandle<?> property(Path thePath, int theStart){
 		Path myName = thePath.getName(theStart);
 		

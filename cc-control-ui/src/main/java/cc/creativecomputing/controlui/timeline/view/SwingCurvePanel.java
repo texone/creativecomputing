@@ -46,6 +46,8 @@ import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.track.CCDoubleTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
+import cc.creativecomputing.gl.app.CCGLWindow;
+import cc.creativecomputing.math.CCColor;
 
 /**
  * @author christianriekoff
@@ -61,7 +63,7 @@ public class SwingCurvePanel extends CCAbstractTrackView implements ComponentLis
 	private CCDoubleTrackController _myTrackController;
 	private CCTrack _myTrack;
 	
-	public SwingCurvePanel(JFrame theFrame) {
+	public SwingCurvePanel(CCGLWindow theFrame) {
 		_myMainFrame = theFrame;
 		_myTrackContext = new CCTrackContext();
 		_myTrack = new CCTrack(null);
@@ -114,5 +116,5 @@ public class SwingCurvePanel extends CCAbstractTrackView implements ComponentLis
 	public void max(double theMax) {}
 
 	@Override
-	public void color(Color theColor) {}
+	public void color(CCColor theColor) {}
 }

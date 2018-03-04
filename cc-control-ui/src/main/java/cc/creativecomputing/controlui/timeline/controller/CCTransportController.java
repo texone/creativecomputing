@@ -27,6 +27,7 @@ import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCMarkerPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
 import cc.creativecomputing.controlui.timeline.view.transport.CCRulerView;
+import cc.creativecomputing.core.events.CCDoubleEvent;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
@@ -87,8 +88,9 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	private double _myCurrentTime;
 	private double _mySpeedFactor;
 	
-	private CCListenerManager<CCTransportable> _myTransportEvents = CCListenerManager.create(CCTransportable.class);
-	private CCListenerManager<TransportStateListener> _myStateListener = CCListenerManager.create(TransportStateListener.class);
+	public final CCListenerManager<CCDoubleEvent> timeEvents = CCListenerManager.create(CCDoubleEvent.class);
+	public final CCListenerManager<CCDoubleEvent> playEvents = CCListenerManager.create(CCDoubleEvent.class);
+	public final CCListenerManager<CCDoubleEvent> stopEvents = CCListenerManager.create(CCDoubleEvent.class);
 	
 	private CCListenerManager<MarkerListener> _myMarkerListener = CCListenerManager.create(MarkerListener.class);
 	
@@ -494,9 +496,12 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		} else {
 			_myIsPlaying = true;
 		}
-		for(TransportStateListener myStateListener:_myStateListener){
-			myStateListener.play(_myCurrentTime);
-		}
+		playEvents.proxy().event(_myCurrentTime);
+	}
+	
+	public void pause() {
+		_myIsPlaying = false;
+		stopEvents.proxy().event(_myCurrentTime);
 	}
 	
 	public void stop() {
@@ -504,14 +509,12 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 			rewind();
 		}
 		_myIsPlaying = false;
-		for(TransportStateListener myStateListener:_myStateListener){
-			myStateListener.stop(_myCurrentTime);
-		}
+		stopEvents.proxy().event(_myCurrentTime);
 	}
 	
 	public void rewind() {
 		_myCurrentTime = _myLoopStart;
-		_myTransportEvents.proxy().time(_myCurrentTime);
+		timeEvents.proxy().event(_myCurrentTime);
 	}
 	
 	public void loop() {
@@ -527,7 +530,7 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		if(_myIsInLoop && _myCurrentTime > _myLoop.end()) {
 			_myCurrentTime = _myLoop.start() + _myCurrentTime - _myLoop.end();
 		}
-		_myTransportEvents.proxy().time(_myCurrentTime);
+		timeEvents.proxy().event(_myCurrentTime);
 			
 		CCMarkerPoint myCurrentMarker = (CCMarkerPoint)_myMarkerList.getFirstPointAt(_myCurrentTime);
 		if(myCurrentMarker != _myLastMarker && _myLastMarker != null){
@@ -543,7 +546,7 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	public void time(double theTime) {
 		theTime = CCMath.max(0,theTime);
 		_myCurrentTime = theTime;
-		_myTransportEvents.proxy().time(_myCurrentTime);
+		timeEvents.proxy().event(_myCurrentTime);
 //		if(theTime < _myLastTime || theTime - _myLastTime > 0.1){
 //			_myLastTime = theTime;
 //			_myLastMarker = null;
@@ -561,15 +564,5 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 //		_myLastMarker = myCurrentMarker;
 	}
 	
-	public CCListenerManager<CCTransportable> transportEvents(){
-		return _myTransportEvents;
-	}
 	
-	public void addStateListener(TransportStateListener theTransportable) {
-		_myStateListener.add(theTransportable);
-	}
-	
-	public void removeStateListener(TransportStateListener theTransportable) {
-		_myStateListener.remove(theTransportable);
-	}
 }

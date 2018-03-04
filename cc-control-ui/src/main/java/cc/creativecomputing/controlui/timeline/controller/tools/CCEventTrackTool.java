@@ -27,7 +27,7 @@ import cc.creativecomputing.control.timeline.point.CCTimedEventPoint.TimedData;
 import cc.creativecomputing.controlui.timeline.controller.actions.MoveEventAction;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
-import cc.creativecomputing.controlui.util.UndoHistory;
+import cc.creativecomputing.controlui.util.CCControlUndoHistory;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -409,7 +409,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 		}
 		
 		if(_myDraggedPoints != null && _myEditedEvent != null) {
-			UndoHistory.instance().apply(new MoveEventAction(
+			CCControlUndoHistory.instance().apply(new MoveEventAction(
                     _myController,
 				_myEditedEvent, 
 				_myStartPoints.get(0),  

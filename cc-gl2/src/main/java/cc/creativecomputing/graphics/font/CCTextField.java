@@ -98,6 +98,10 @@ public class CCTextField {
 		return this;
 	}
 	
+	public double fontSize() {
+		return _myFontSize;
+	}
+	
 
 	/**
 	 * 

@@ -197,7 +197,8 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 	public void drawContent(CCGraphics g) {
 		super.drawContent(g);
 		g.color(255);
-		_myIcon.text().position().set(width() - _myIcon.width(), - _myIcon.height(), 0);
+		_myIcon.text().fontSize(_myTextField.fontSize());
+		_myIcon.text().position().set(width() - _myIcon.width(), -_myIcon.height()   , 0);
 		_myIcon.text().draw(g);
 		
 	}

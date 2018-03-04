@@ -3,6 +3,7 @@ package cc.creativecomputing.gl.app;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_SAMPLES;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
@@ -88,7 +89,8 @@ public class CCGLApp {
 		// the window will stay hidden after creation
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); 
 		// the window will be resizable										
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); 
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); 						
+		glfwWindowHint(GLFW_SAMPLES, 8); 
 
 		// Create the window
 		_myContext = new CCGLContext();

@@ -33,7 +33,7 @@ import cc.creativecomputing.controlui.timeline.controller.actions.RemoveControlP
 import cc.creativecomputing.controlui.timeline.view.CCTimedContentView;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
-import cc.creativecomputing.controlui.util.UndoHistory;
+import cc.creativecomputing.controlui.util.CCControlUndoHistory;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
@@ -198,7 +198,7 @@ public abstract class CCTrackDataController implements CCZoomable, CCTimedConten
 			return;
 		trackData().remove(myNearestPoint);
 		_myTrackView.render();
-		UndoHistory.instance().apply(new RemoveControlPointAction(this, myNearestPoint));
+		CCControlUndoHistory.instance().apply(new RemoveControlPointAction(this, myNearestPoint));
 	}
 
 	public CCHandleControlPoint pickHandle(CCVector2 theViewCoords) {

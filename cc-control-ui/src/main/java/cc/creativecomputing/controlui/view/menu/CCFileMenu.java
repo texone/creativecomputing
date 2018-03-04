@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.controlui.CCControlApp;
-import cc.creativecomputing.controlui.timeline.controller.FileManager;
+import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
+import cc.creativecomputing.controlui.util.CCControlUndoHistory;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.io.CCFileChooser;
@@ -31,7 +32,7 @@ import cc.creativecomputing.ui.widget.CCUIMenu;
 
 public class CCFileMenu extends CCUIMenu{
 	
-	private final FileManager _myFileManager;
+	private final CCFileManager _myFileManager;
 	private final CCFileChooser _myFileChooser;
 	
 	private static final int MAX_RECENT_FILES = 10;
@@ -66,7 +67,7 @@ public class CCFileMenu extends CCUIMenu{
 				thePath.toString(),
 				() ->{
 					_myFileChooser.setDirectory(thePath.getParent());
-					_myFileManager.loadProject(thePath);
+					_myFileManager.loadProject(thePath, _myTimelineContainer);
 				}
 			);
 		}
@@ -95,10 +96,11 @@ public class CCFileMenu extends CCUIMenu{
 	}
 	
 	private CCRecentFileHandler _myRecentFileHandler;
+	private CCTimelineContainer _myTimelineContainer;
 
-	public CCFileMenu(CCFont<?> theFont, CCTimelineContainer theTimelineContainer){
+	public CCFileMenu(CCFont<?> theFont, CCFileManager theFileManager, CCTimelineContainer theTimeline){
 		super(theFont);
-		_myFileManager = theTimelineContainer.fileManager();
+		_myFileManager = theFileManager;
 		
 		_myFileChooser = new CCFileChooser("xml", "json");
 		addTimelineFileItems();
@@ -108,13 +110,19 @@ public class CCFileMenu extends CCUIMenu{
 	
 	private CCUIMenu myRecentItem;
 	
+	private void loadProject(Path thePath) {
+		_myTimelineContainer.reset();
+		_myFileManager.loadProject(thePath, _myTimelineContainer);
+		CCControlUndoHistory.instance().clear();
+	}
+	
 	private void addTimelineFileItems(){
 		addItem(
 			"Load", 
 			() -> {
 				Path myPath = _myFileChooser.openFile("Load Project");
 				if (myPath == null) return;
-				_myFileManager.loadProject(myPath);
+				_myFileManager.loadProject(myPath, _myTimelineContainer);
 				_myRecentFileHandler.addFile(myPath);
 			}
 		).toolTipText("Loads an existing project.");
@@ -123,7 +131,7 @@ public class CCFileMenu extends CCUIMenu{
 			"NEW",
 			() -> {
 				_myFileChooser.resetPath();
-				_myFileManager.newProject();
+				_myTimelineContainer.reset();
 			}
 		).toolTipText("Creates a new Project.");
 		
@@ -132,7 +140,8 @@ public class CCFileMenu extends CCUIMenu{
 			() -> {
 				Path myPath = _myFileChooser.saveFile("Save Project");
 				if(myPath == null)return;
-				_myFileManager.saveProject(myPath);
+				_myFileManager.saveProject(myPath, _myTimelineContainer);
+				CCControlUndoHistory.instance().clear();
 				_myRecentFileHandler.addFile(myPath);
 			}
 		).toolTipText("Saves the content of all tracks.");
@@ -158,7 +167,9 @@ public class CCFileMenu extends CCUIMenu{
 			"Export Selection",
 			() -> {
 				Path myPath = _myFileChooser.saveFile("save selection");
-				if (myPath != null) _myFileManager.exportCurrentTimelineSelection(myPath);
+				if (myPath == null)return;
+				_myFileManager.saveTimelineSelection(myPath, _myTimelineContainer.activeTimeline());
+				CCControlUndoHistory.instance().clear();
 			}
 		).toolTipText("Saves the content of all tracks.");
 	}

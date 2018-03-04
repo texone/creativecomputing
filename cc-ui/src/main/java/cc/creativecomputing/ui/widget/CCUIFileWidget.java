@@ -26,7 +26,7 @@ import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.draw.CCUIDrawable;
 
-public class CCUIDropDownWidget extends CCUILabelWidget{
+public class CCUIFileWidget extends CCUILabelWidget{
 	
 	private CCUIMenu _myMenue;
 	
@@ -39,18 +39,16 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	
 	private boolean _myAdjustLabel = true;
 	
-	private CCUIIconWidget _myIcon;
-	
-	private boolean _myShowIcon = true;;
+	private CCUIIconWidget _myChevron;
 	
 	public CCListenerManager<CCStringEvent> changeEvents = CCListenerManager.create(CCStringEvent.class);
 	
-	public CCUIDropDownWidget(CCFont<?> theFont, String theTitle, CCUIMenu theMenue) {
+	public CCUIFileWidget(CCFont<?> theFont, String theTitle, CCUIMenu theMenue) {
 		super(theFont, theTitle);
 		_myOverlay = _myMenue = theMenue;
 		_myMenue.parent(this);
 		
-		_myIcon = new CCUIIconWidget(CCEntypoIcon.ICON_SELECT_ARROWS);
+		_myChevron = new CCUIIconWidget(CCEntypoIcon.ICON_FOLDER);
 
 		inset(2);
 		
@@ -109,10 +107,6 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 		_myAdjustLabel = theAdjustLabel;
 	}
 	
-	public void showIcon(boolean theShowIcon) {
-		_myShowIcon = theShowIcon;
-	}
-	
 	private void handleHover(CCVector2 pos){
 		for(CCUIMenuItem myItem:_myMenue.items()){
 			myItem.background(_myItemBackground);
@@ -124,11 +118,11 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 		}
 	}
 	
-	public CCUIDropDownWidget(CCFont<?> theFont, CCUIMenu theMenue) {
+	public CCUIFileWidget(CCFont<?> theFont, CCUIMenu theMenue) {
 		this(theFont, "...", theMenue);
 	}
 	
-	public CCUIDropDownWidget(CCFont<?> theFont){
+	public CCUIFileWidget(CCFont<?> theFont){
 		this(theFont, new CCUIMenu(theFont));
 	}
 	
@@ -179,9 +173,8 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	@Override
 	public void drawContent(CCGraphics g) {
 		super.drawContent(g);
-		if(!_myShowIcon)return;
-		_myIcon.text().position().set(width() - _myIcon.width(), - _myIcon.height(), 0);
-		_myIcon.text().draw(g);
+		_myChevron.text().position().set(width() - _myChevron.width() - _myInset, - _myChevron.height(), 0);
+		_myChevron.text().draw(g);
 		
 	}
 
