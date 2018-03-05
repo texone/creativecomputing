@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>cc.creativecomputing</groupId>
+    <artifactId>cc-main</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>2.0</version>
+  </parent>
+
+  <artifactId>cc-ads</artifactId>
+  <name>creative computing ads</name>
+  
+  <dependencies>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-io</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>de.beckhoff</groupId>
+      <artifactId>ads</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+  </dependencies>
+
+<repositories>
+    <repository>
+        <id>local-maven-repo</id>
+        <url>file:///${project.basedir}/local-maven-repo</url>
+    </repository>
+</repositories>
+</project>
