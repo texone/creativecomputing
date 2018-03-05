@@ -49,6 +49,12 @@
       <version>${project.version}</version>
     </dependency>
     
+	<dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-serial</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
     <dependency>
 	  <groupId>org.apache.commons</groupId>
 	  <artifactId>commons-math3</artifactId>

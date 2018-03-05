@@ -2,23 +2,21 @@
 package cc.creativecomputing.kle.out;
 
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.kle.CCKleChannel;
-import cc.creativecomputing.kle.CCKleEffectable;
-import cc.creativecomputing.math.CCMath;
 import artnet4j.ArtNet;
 import artnet4j.ArtNetException;
 import artnet4j.ArtNetNode;
 import artnet4j.events.ArtNetDiscoveryListener;
 import artnet4j.packets.ArtDmxPacket;
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.kle.CCKleChannel;
+import cc.creativecomputing.kle.CCKleEffectable;
+import cc.creativecomputing.math.CCMath;
 
-public class CCKLEArtNetSender implements ArtNetDiscoveryListener {
+public class CCKLEArtNetSender extends CCKLESender implements ArtNetDiscoveryListener {
 
 	private ArtNet artnet;
 
@@ -26,65 +24,11 @@ public class CCKLEArtNetSender implements ArtNetDiscoveryListener {
 
 	private Map<String, ArtNetNode> _myNodeMap = new HashMap<>();
 
-	private static class CCKLEUniverse {
-		private CCKleChannel[] _myChannels = new CCKleChannel[512];
-		int _myUniverse;
-
-		CCKLEUniverse(int theUniverse) {
-			_myUniverse = theUniverse;
-		}
-	}
-
-	private static class CCKLEInterface {
-		List<CCKLEUniverse> _myUniverses = new ArrayList<>();
-
-		private String _myName;
-
-		public CCKLEInterface(String theName) {
-			_myName = theName;
-		}
-	}
-
-	private List<CCKLEInterface> _myInterfaces = new ArrayList<>();
-
 	public CCKLEArtNetSender(List<CCKleEffectable> theElements) {
+		super(theElements);
 		artnet = new ArtNet();
 
-		Map<String, Map<Integer, CCKLEUniverse>> myInterfaceMap = new HashMap<>();
-
-		for (CCKleEffectable myElement : theElements) {
-			for (CCKleChannel myChannel : myElement.channels()) {
-				if (myChannel.universe() < 0)
-					continue;
-				if (myChannel.channel() < 0)
-					continue;
-				if (myChannel.interfaceName() == null)
-					continue;
-
-				if (!myInterfaceMap.containsKey(myChannel.interfaceName())) {
-					myInterfaceMap.put(myChannel.interfaceName(), new HashMap<>());
-				}
-				Map<Integer, CCKLEUniverse> myUniverseMap = myInterfaceMap.get(myChannel.interfaceName());
-				if (!myUniverseMap.containsKey(myChannel.universe())) {
-					myUniverseMap.put(myChannel.universe(), new CCKLEUniverse(myChannel.universe()));
-				}
-				myUniverseMap.get(myChannel.universe())._myChannels[myChannel.channel()] = myChannel;
-			}
-		}
-
-		for (String myInterfaceName : myInterfaceMap.keySet()) {
-			Map<Integer, CCKLEUniverse> myUniverseMap = myInterfaceMap.get(myInterfaceName);
-			CCKLEInterface myInterface = new CCKLEInterface(myInterfaceName);
-			myInterface._myUniverses.addAll(myUniverseMap.values());
-			Collections.sort(myInterface._myUniverses, (a, b) -> {
-				return Integer.compare(a._myUniverse, b._myUniverse);
-			});
-			_myInterfaces.add(myInterface);
-		}
-
-		Collections.sort(_myInterfaces, (a, b) -> {
-			return a._myName.compareTo(b._myName);
-		});
+		
 
 //		for (CCKLEInterface myInterface : _myInterfaces) {
 //			CCLog.info(myInterface._myName);
@@ -112,7 +56,7 @@ public class CCKLEArtNetSender implements ArtNetDiscoveryListener {
 	public void discoveryCompleted(List<ArtNetNode> nodes) {
 		System.out.println(nodes.size() + " nodes found:");
 		for (ArtNetNode n : nodes) {
-			System.out.println(n);
+			CCLog.info(n);
 		}
 	}
 
@@ -134,24 +78,25 @@ public class CCKLEArtNetSender implements ArtNetDiscoveryListener {
 		}
 	}
 
-	public void update(CCAnimator theAnimator) {
+	@Override
+	public void send() {
 		for (CCKLEInterface myInterface : _myInterfaces) {
 			// if(!_myNodeMap.containsKey(myInterface._myName))continue;
 
-			ArtNetNode myNode = _myNodeMap.get(myInterface._myName);
+			ArtNetNode myNode = _myNodeMap.get(myInterface.name);
 //			if (myNode != null)
 //				CCLog.info(myNode.getIPAddress().getHostAddress());
-			for (CCKLEUniverse myUniverse : myInterface._myUniverses) {
-				if (myNode != null && myUniverse._myUniverse >= myNode.getNumPorts())
+			for (CCKLEUniverse myUniverse : myInterface.universes) {
+				if (myNode != null && myUniverse.universe >= myNode.getNumPorts())
 					continue;
 
 				ArtDmxPacket dmx = new ArtDmxPacket();
 				if (myNode != null)
-					dmx.setUniverse(myNode.getSubNet(), myNode.getDmxOuts()[myUniverse._myUniverse]);
+					dmx.setUniverse(myNode.getSubNet(), myNode.getDmxOuts()[myUniverse.universe]);
 				dmx.setSequenceID(sequenceID % 255);
 				byte[] buffer = new byte[512];
 				for (int i = 0; i < buffer.length; i++) {
-					CCKleChannel myChannel = myUniverse._myChannels[i];
+					CCKleChannel myChannel = myUniverse.channels[i];
 					if (myChannel == null) {
 
 					} else {
