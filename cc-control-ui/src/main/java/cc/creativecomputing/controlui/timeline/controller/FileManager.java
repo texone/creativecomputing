@@ -136,6 +136,7 @@ public class FileManager {
 		
 		private void loadTimeline(CCDataObject myTimelineData, TimelineController theTimelineController){
 			CCDataObject myTransportData = myTimelineData.getObject(TRANSPORT_ELEMENT);
+			CCLog.info(myTransportData.keySet().toArray());
 			loadTransport(myTransportData, theTimelineController.transportController());
 				
 			if (myTimelineData.containsKey(LOWER_BOUND_ATTRIBUTE)) {

@@ -27,11 +27,8 @@ public class CCControlTreeComponent extends JPanel {
 	private JTree _myTree;
 
 	private DefaultMutableTreeNode _myRootNode;
-	private CCObjectPropertyHandle _myRootHandle;
 
 	private CCControlComponent _myControlCompoent;
-
-	private CCPropertyMap _myPropertyMap;
 	
 	private CCObjectControl _myLastControl;
 
@@ -70,7 +67,7 @@ public class CCControlTreeComponent extends JPanel {
 		treeView.setBorder(new EmptyBorder(0, 0, 0, 0));
 		add(treeView);
 
-		_myPropertyMap = new CCPropertyMap();
+		
 
 		// add MouseListener to tree
 		MouseAdapter ma = new MouseAdapter() {
@@ -98,18 +95,9 @@ public class CCControlTreeComponent extends JPanel {
 		_myTree.addMouseListener(ma);
 	}
 
-	public CCObjectPropertyHandle rootProperty() {
-		return _myRootHandle;
-	}
-
-	public void setData(Object theObject, String thePresetPath) {
-		_myPropertyMap.setData(theObject, thePresetPath);
-
-		_myRootHandle = _myPropertyMap.rootHandle();
-		CCObjectControl myObjectControl = new CCObjectControl(_myRootHandle, _myControlCompoent, 0);
-		_myRootNode.setUserObject(_myRootHandle);
-		createTree(_myRootHandle, _myRootNode);
-		_myControlCompoent.showContent(myObjectControl);
+	public void setData(CCPropertyMap thePropertyMap) {
+		_myRootNode.setUserObject(thePropertyMap.rootHandle());
+		createTree(thePropertyMap.rootHandle(), _myRootNode);
 	}
 	
 	private void createTree(CCObjectPropertyHandle theHandle, DefaultMutableTreeNode theParent){
@@ -123,13 +111,4 @@ public class CCControlTreeComponent extends JPanel {
 			}
 		}
 	}
-
-	public CCObjectPropertyHandle rootHandle() {
-		return _myPropertyMap.rootHandle();
-	}
-
-	public CCPropertyMap propertyMap() {
-		return _myPropertyMap;
-	}
-
 }

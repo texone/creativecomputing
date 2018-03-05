@@ -67,6 +67,7 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCTriggerTrackCo
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 
@@ -707,7 +708,9 @@ public class TimelineController extends TrackContext implements CCTransportable{
 //				myYO.time(theTime);
 //			}
 		}
-		if(_myRootController != null)_myRootController.time(theTime);
+		if(_myRootController != null){
+			_myRootController.time(theTime);
+		}
 		renderInfo();
 	}
 }

@@ -14,6 +14,7 @@ import cc.creativecomputing.controlui.timeline.view.SwingTimelineContainerView;
 import cc.creativecomputing.controlui.util.UndoHistory;
 import cc.creativecomputing.controlui.util.UndoHistory.HistoryListener;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 
 
 public class TimelineContainer implements FileManagerListener, HistoryListener{
@@ -64,6 +65,10 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 		_myTimelineContainerView.timelineContainer(this);
 	}
 	
+	public SwingTimelineContainerView view(){
+		return _myTimelineContainerView;
+	}
+	
 	public Set<String> timelineKeys(){
 		return _myTimelineController.keySet();
 	}
@@ -89,7 +94,7 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 	public TimelineController addTimeline(String theTimeline){
 		if(_myTimelineController.containsKey(theTimeline))return _myTimelineController.get(theTimeline);
 		_myActiveController = new TimelineController(this, _myPropertyMap);
-		_myActiveController.view(_myTimelineContainerView.createView(this));
+		if(_myTimelineContainerView != null)_myActiveController.view(_myTimelineContainerView.createView(this));
 		_myTimelineController.put(theTimeline, _myActiveController);
 		_myTimelineChangeListener.proxy().addTimeline(theTimeline);
 		return _myActiveController;

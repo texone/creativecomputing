@@ -34,6 +34,7 @@ import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTool;
 import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
 import cc.creativecomputing.controlui.timeline.view.TimedContentView;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCMath;
 
@@ -135,7 +136,7 @@ public abstract class CCTrackController extends CCTrackDataController implements
 	
 	public void time(double theTime){
 		double myValue = 0;
-		
+
 		if(_myTrack.property() != null){
 			_myChangedValue = true;
 			if(!track().mute()){

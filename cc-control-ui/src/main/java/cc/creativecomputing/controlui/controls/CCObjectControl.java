@@ -60,8 +60,8 @@ public class CCObjectControl extends JPanel implements CCControl{
 	 */
 	private static final long serialVersionUID = 2697384457010979576L;
 	
-	private CCControlComponent _myInfoPanel;
-	public JPanel _myControlComponent = null;
+	private CCControlComponent _myControlComponent;
+	public JPanel _myControlsPanel = null;
 	
 	private boolean _myIsSelected = false;
 	
@@ -75,16 +75,16 @@ public class CCObjectControl extends JPanel implements CCControl{
 	
 	private CCPropertyListener<Object> _myListener;
 
-	public CCObjectControl(CCObjectPropertyHandle thePropertyHandle, CCControlComponent theInfoPanel, int theDepth){
+	public CCObjectControl(CCObjectPropertyHandle thePropertyHandle, CCControlComponent theControlComponent, int theDepth){
 		_myProperty = thePropertyHandle;
 
-		_myControlComponent = new JPanel(new GridBagLayout());
-		_myControlComponent.setBackground(CCColorMap.getColor(_myProperty.path()).brighter());
-		_myControlComponent.setBorder(BorderFactory.createEmptyBorder());
+		_myControlsPanel = new JPanel(new GridBagLayout());
+		_myControlsPanel.setBackground(CCColorMap.getColor(_myProperty.path()).brighter());
+		_myControlsPanel.setBorder(BorderFactory.createEmptyBorder());
 		_myProperty.events().add(_myListener = theValue ->{
 			try{
 				if(_myIsSelected){
-					remove(_myControlComponent);
+					remove(_myControlsPanel);
 				}
 				createUI(false);
 				if(_myIsSelected){
@@ -95,11 +95,11 @@ public class CCObjectControl extends JPanel implements CCControl{
 					myConstraints.weightx = 1.0;
 					myConstraints.anchor = GridBagConstraints.LINE_START;
 					myConstraints.fill = GridBagConstraints.HORIZONTAL;
-					add(_myControlComponent, myConstraints);
+					add(_myControlsPanel, myConstraints);
 					if(getParent() != null)getParent().revalidate(); 
-					theInfoPanel.invalidate(); 
-					theInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
-					theInfoPanel.repaint();
+					theControlComponent.invalidate(); 
+					theControlComponent.validate(); // or ((JComponent) getContentPane()).revalidate();
+					theControlComponent.repaint();
 					
 				}
 			}catch(Exception e){
@@ -112,7 +112,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		
 		_myDepth = theDepth;
 		
-		_myInfoPanel = theInfoPanel;
+		_myControlComponent = theControlComponent;
 		setLayout(new GridBagLayout());
 		
 		_myName = _myProperty.name();
@@ -170,7 +170,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 	}
 	
 	public CCPropertyPopUp popup() {
-		return new CCPropertyPopUp(CCObjectControl.this, _myProperty, _myInfoPanel);
+		return new CCPropertyPopUp(CCObjectControl.this, _myProperty, _myControlComponent);
 	}
 	
 	private int _myGridY = 0;
@@ -185,11 +185,11 @@ public class CCObjectControl extends JPanel implements CCControl{
 		myConstraints.weightx = 1f;
 		myConstraints.anchor = GridBagConstraints.LINE_START;
 		myConstraints.fill = GridBagConstraints.HORIZONTAL;
-		add(_myControlComponent, myConstraints);
+		add(_myControlsPanel, myConstraints);
 		
-		_myInfoPanel.invalidate(); 
-		_myInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
-		_myInfoPanel.repaint();
+		_myControlComponent.invalidate(); 
+		_myControlComponent.validate(); // or ((JComponent) getContentPane()).revalidate();
+		_myControlComponent.repaint();
 		_myIsSelected = true;
 		_myLabel.setText("[-] " + _myName);
 		CCControlApp.preferences.put(_myProperty.path().toString() + "/open" , true + "");
@@ -199,7 +199,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		for(CCControl myControl:_myControls){
 			myControl.dispose();
 		}
-		remove(_myControlComponent);
+		remove(_myControlsPanel);
 		invalidate(); 
 		validate(); // or ((JComponent) getContentPane()).revalidate();
 		repaint();
@@ -209,7 +209,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 	}
 	
 	public JPanel controlComponent(){
-		return _myControlComponent;
+		return _myControlsPanel;
 	}
 	
 	private List<CCControl> _myControls = new ArrayList<>();
@@ -258,7 +258,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 	}
 	
 	private void createUI(boolean theHideUnchanged){
-		_myControlComponent.removeAll();
+		_myControlsPanel.removeAll();
 	
 		for(CCPropertyHandle<?> myPropertyHandle:_myProperty.children().values()){
 			if(theHideUnchanged && !myPropertyHandle.isChanged())continue;
@@ -269,18 +269,18 @@ public class CCObjectControl extends JPanel implements CCControl{
 			
 			CCControlCreator myCreator = handleCreator(myClass);
 			if(myCreator != null){
-				myControl = myCreator.create(myPropertyHandle, _myInfoPanel);
+				myControl = myCreator.create(myPropertyHandle, _myControlComponent);
 			}else if(myClass == null){
-				myControl = new CCEventTriggerControl((CCEventTriggerHandle)myPropertyHandle, _myInfoPanel);
+				myControl = new CCEventTriggerControl((CCEventTriggerHandle)myPropertyHandle, _myControlComponent);
 			}else  if(myClass.isEnum()){
-				myControl = new CCEnumControl((CCEnumPropertyHandle)myPropertyHandle, _myInfoPanel);
+				myControl = new CCEnumControl((CCEnumPropertyHandle)myPropertyHandle, _myControlComponent);
 			}else{
 				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;
-				CCObjectControl myObjectControl = new CCObjectControl(myObjectHandle, _myInfoPanel, _myDepth + 1);
+				CCObjectControl myObjectControl = new CCObjectControl(myObjectHandle, _myControlComponent, _myDepth + 1);
 				myControl = myObjectControl;
 			}
 
-			myControl.addToComponent(_myControlComponent, _myGridY, _myDepth + 1);
+			myControl.addToComponent(_myControlsPanel, _myGridY, _myDepth + 1);
 			_myControls.add(myControl);
 			_myGridY++;
 		}
@@ -288,16 +288,16 @@ public class CCObjectControl extends JPanel implements CCControl{
 	
 	public void hideUnchanged(){
 		createUI(true);
-		_myInfoPanel.invalidate(); 
-		_myInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
-		_myInfoPanel.repaint();
+		_myControlComponent.invalidate(); 
+		_myControlComponent.validate(); // or ((JComponent) getContentPane()).revalidate();
+		_myControlComponent.repaint();
 	}
 	
 	public void showUnchanged(){
 		createUI(false);
-		_myInfoPanel.invalidate(); 
-		_myInfoPanel.validate(); // or ((JComponent) getContentPane()).revalidate();
-		_myInfoPanel.repaint();
+		_myControlComponent.invalidate(); 
+		_myControlComponent.validate(); // or ((JComponent) getContentPane()).revalidate();
+		_myControlComponent.repaint();
 	}
 	
 	public CCObjectPropertyHandle propertyHandle(){

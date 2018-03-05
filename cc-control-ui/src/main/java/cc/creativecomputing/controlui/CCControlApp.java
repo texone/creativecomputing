@@ -20,6 +20,9 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.controlui.timeline.controller.TimelineContainer;
+import cc.creativecomputing.controlui.timeline.controller.TimelineController;
+import cc.creativecomputing.controlui.timeline.controller.TimelineContainer.TimelineChangeListener;
+import cc.creativecomputing.controlui.timeline.view.SwingTimelineContainerView;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 
@@ -50,6 +53,11 @@ public class CCControlApp  {
 	private CCControlComponent _myControlComponent;
 	
 	private CCAnimatorAdapter _myAnimatorListener;
+	
+	private TimelineContainer _myTimelineContainer;
+	private SwingTimelineContainerView _myTimelineView;
+	
+	private CCPropertyMap _myPropertyMap;
 
 	private JMenuBar _myMenuBar;
 	
@@ -59,6 +67,8 @@ public class CCControlApp  {
 	private CCAnimator _myAnimator;
 	@CCProperty(name = "update timeline")
 	private boolean _cUpdate = true;
+	
+	private boolean _myShowUI;
 	
 	public static Preferences preferences;
 	
@@ -70,6 +80,35 @@ public class CCControlApp  {
 	}
 	
 	private void init(CCAnimator theAnimator){
+		_myPropertyMap = new CCPropertyMap();
+		_myTimelineContainer = new TimelineContainer(_myPropertyMap);
+		_myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
+			
+			@Override
+			public void resetTimelines() {}
+			
+			@Override
+			public void changeTimeline(TimelineController theController) {
+				if(!_myShowUI)return;
+				_myTimelineContainer.activeTimeline().view().controller(theController);
+//				_myControlsTimelinePane.setRightComponent(((SwingTimelineView)theController.view()).container());
+			}
+
+			@Override
+			public void addTimeline(String theTimeline) {
+			}
+		});
+		 _myAnimator = theAnimator;
+		 _myAnimatorListener = new CCAnimatorAdapter() {
+			 @Override
+			 public void update(CCAnimator theAnimator) {
+				 CCControlApp.this.update(theAnimator.deltaTime());
+			 }
+		 };
+		 _myAnimator.listener().add(_myAnimatorListener);
+		if(!_myShowUI)return;
+
+		
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Test");
         
@@ -100,23 +139,20 @@ public class CCControlApp  {
         _myFrame = new JFrame("Creative Computing Controls");
         _myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        _myControlComponent = new CCControlComponent(_myFrame);
+		_myTimelineView = new SwingTimelineContainerView(_myFrame);
+        
+		_myTimelineContainer.view(_myTimelineView);
+
+        _myControlComponent = new CCControlComponent(_myTimelineContainer);
 
         // Add content to the window.
         _myFrame.add(_myControlComponent);
      		
-        _myAnimator = theAnimator;
-        _myAnimatorListener = new CCAnimatorAdapter() {
-        	@Override
-        	public void update(CCAnimator theAnimator) {
-        		CCControlApp.this.update(theAnimator.deltaTime());
-        	}
-        };
-        _myAnimator.listener().add(_myAnimatorListener);
+       
      		
         _myMenuBar = new JMenuBar();
-        _myMenuBar.add(_myControlComponent.view().fileMenu());
-        _myMenuBar.add(_myControlComponent.view().timelineMenu());
+        _myMenuBar.add(_myTimelineView.fileMenu());
+        _myMenuBar.add(_myTimelineView.timelineMenu());
         _myFrame.setJMenuBar(_myMenuBar);
         
         // Display the window.
@@ -154,7 +190,8 @@ public class CCControlApp  {
 		}
 	}
 
-	public CCControlApp(Object theRootObject, CCAnimator theAnimator, Class<?> thePrefClass) {
+	public CCControlApp(Object theRootObject, CCAnimator theAnimator, Class<?> thePrefClass, boolean theShowUI) {
+		_myShowUI = theShowUI;
         preferences = Preferences.userNodeForPackage(thePrefClass).node(thePrefClass.getSimpleName());
        
 		init(theAnimator);
@@ -162,23 +199,24 @@ public class CCControlApp  {
 		ExceptionHandler.registerExceptionHandler();
 	}
 	
-	public CCControlApp(Object theRootObject, CCTimelineSynch theSynch, Class<?> thePrefClass) {
+	public CCControlApp(Object theRootObject, CCTimelineSynch theSynch, Class<?> thePrefClass, boolean theShowUI) {
+		_myShowUI = theShowUI;
         preferences = Preferences.userNodeForPackage(thePrefClass).node(thePrefClass.getSimpleName());
         
 		init(theSynch.animator());
-		theSynch.timeline(_myControlComponent.timeline());
+		theSynch.timeline(_myTimelineContainer);
 	}
 	
-	public CCControlApp(Object theRootObject, Class<?> thePrefClass) {
-		this(theRootObject, new CCAnimator(), thePrefClass);
+	public CCControlApp(Object theRootObject, Class<?> thePrefClass, boolean theShowUI) {
+		this(theRootObject, new CCAnimator(), thePrefClass, theShowUI);
 		_myAnimator.start();
 	}
 	
 	public void update(double theDeltaTime){
 		if(!_cUpdate)return;
 		try{
-			_myControlComponent.timeline().update(theDeltaTime);
-			_myControlComponent.propertyMap().rootHandle().update(theDeltaTime);
+			_myTimelineContainer.update(theDeltaTime);
+			_myPropertyMap.rootHandle().update(theDeltaTime);
 		}catch(Exception e){
 			
 		}
@@ -186,19 +224,21 @@ public class CCControlApp  {
 	
 	public void time(double theTime){
 		try{
-			_myControlComponent.timeline().time(theTime);
-			_myControlComponent.propertyMap().rootHandle().update(0);
+			_myTimelineContainer.time(theTime);
+			_myPropertyMap.rootHandle().update(0);
 		}catch(Exception e){
 			
 		}
 	}
 	
 	public void setData(Object theData, String thePresetPath){
-		_myControlComponent.setData(theData, thePresetPath);
+		_myPropertyMap.setData(theData, thePresetPath);
+		if(_myShowUI)_myControlComponent.setData(_myPropertyMap);
+		_myPropertyMap.rootHandle().preset(0);	
 	}
 	
 	public TimelineContainer timeline(){
-		return _myControlComponent.timeline();
+		return _myTimelineContainer;
 	}
 	
 	public CCAnimatorAdapter animatorListener(){
@@ -206,7 +246,7 @@ public class CCControlApp  {
 	}
 
 	public CCPropertyMap propertyMap(){
-		return _myControlComponent.propertyMap();
+		return _myPropertyMap;
 	}
 	
 	public JMenuItem addCustomCommand(final String theMenu, final String theCommand, final ActionListener theActionListener, int theMnemonicKey, int theAccelerator) {
