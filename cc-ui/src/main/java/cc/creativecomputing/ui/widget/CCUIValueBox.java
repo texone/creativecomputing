@@ -56,16 +56,16 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 		_myMin = theMin;
 		_myMax = theMax;
 		_myDigits = theDigits;
-		value(theValue);
+		value(theValue, true);
 		
 		_myTextField.align(CCTextAlign.RIGHT);
 		
 		super.changeEvents.add(text ->{
 			double myValue = _myValue;
 			try {
-				value(new ExpressionBuilder(_myTextField.text()).build().evaluate());
+				value(new ExpressionBuilder(_myTextField.text()).build().evaluate(), true);
 			} catch (Exception e) {
-				value(myValue);
+				value(myValue, true);
 			}
 		});
 		
@@ -137,7 +137,7 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 			_myLastY += myChange;
 //		
 			double myVal = _myValue;
-			value(_myValue + myChange * _myFactor);
+			value(_myValue + myChange * _myFactor, true);
 		});
 
 		_myIcon = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_LEFT);
@@ -172,10 +172,10 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 	
 	private void changeby(double theChange) {
 		updateCaret();
-		value(_myValue + theChange * _myFactor);
+		value(_myValue + theChange * _myFactor, true);
 	}
 	
-	public void value(double theValue) {
+	public void value(double theValue, boolean theSendEvents) {
 		if (theValue == _myValue) {
 			_myTextField.text(CCFormatUtil.nd(_myValue, _myDigits));
 			return;
@@ -184,7 +184,7 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 		// _myValue = CCMath.quantize(theValue, _myStepSize);
 		_myValue = CCMath.constrain(theValue, _myMin, _myMax);
 
-		changeEvents.proxy().event(_myValue);
+		if(theSendEvents)changeEvents.proxy().event(_myValue);
 
 		_myTextField.text(CCFormatUtil.nd(_myValue, _myDigits));
 	}
@@ -200,6 +200,8 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 		_myIcon.text().fontSize(_myTextField.fontSize());
 		_myIcon.text().position().set(width() - _myIcon.width(), -_myIcon.height()   , 0);
 		_myIcon.text().draw(g);
+		
+//		g.triangle(width() - height() / 4 - _myInset, -height() / 2, width() - _myInset, -height() * 0.25, width() - _myInset, -height() * 0.75);
 		
 	}
 }

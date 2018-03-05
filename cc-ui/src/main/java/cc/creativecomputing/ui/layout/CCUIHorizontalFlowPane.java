@@ -35,13 +35,26 @@ public class CCUIHorizontalFlowPane extends CCUIPane{
 		super.addChild(widget);
 		
 		double myX = _myInset;
-		double myY = -_myInset;
 		double myMaxHeight = 0;
 		for(CCUIWidget myWidget:children()) {
+			myMaxHeight = CCMath.max(myMaxHeight, myWidget.height());
+		}
+		for(CCUIWidget myWidget:children()) {
+			double myY = 0;
+			switch(myWidget.verticalAlignment()) {
+			case TOP:
+				myY = -_myInset;
+				break;
+			case CENTER:
+				myY = -_myInset - myMaxHeight / 2 + myWidget.height() / 2;
+				break;
+			case BOTTOM:
+				myY = -_myInset-myMaxHeight+myWidget.height();
+				break;
+			}
 			myWidget.translation().set(myX, myY);
 			myX += myWidget.width();
 			myX += _cHorizontalSpace;
-			myMaxHeight = CCMath.max(myMaxHeight, myWidget.height());
 		}
 		_myMinSize = new CCVector2(myX - _cHorizontalSpace + _myInset, 2 * _myInset + myMaxHeight);
 

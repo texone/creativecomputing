@@ -33,6 +33,12 @@ public class CCUIIconWidget extends CCUILabelWidget{
 		_myIcon = theIcon;
 	}
 	
+	public void size(double theSize) {
+		_myTextField.fontSize(theSize);
+		_myWidth = theSize;
+		_myHeight = theSize;
+	}
+	
 	public boolean active() {
 		return _myIsActive;
 	}

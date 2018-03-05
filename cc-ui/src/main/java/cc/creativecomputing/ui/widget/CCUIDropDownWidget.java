@@ -203,4 +203,9 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	public void removeAllItems() {
 		_myMenue.removeAll();
 	}
+
+	public void editable(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 }
