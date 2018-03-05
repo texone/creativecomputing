@@ -280,7 +280,7 @@ public class CCTextField {
 	public void draw(CCGraphics g){
 		_myFont.beginText(g);
 		for (CCPlacedTextChar myChar:_myCharGrid) {
-        	myChar.charObject.drawVertices(g, _myPosition.x + myChar.x, _myPosition.y + myChar.y, _myPosition.z, _myDrawCorrectionScale);
+			myChar.charObject.drawVertices(g, _myPosition.x + myChar.x, _myPosition.y + myChar.y, _myPosition.z, _myDrawCorrectionScale);
         }
 		_myFont.endText(g);
 	}
