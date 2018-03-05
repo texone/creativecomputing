@@ -106,36 +106,20 @@ public class CCGL2Application {
 			@Override
 			public void init(CCGraphics theG) {
 				_myAdapter.init(theG, _myAnimator);
-				if(_myUseUI){
-					_myControlApp.setData(CCGL2Application.this, presetPath);
-					theGLAdapter.controlApp(_myControlApp);
-					_myControlApp.update(0);
-					_myAdapter.setupControls(_myControlApp);
-				}else{
-					CCPropertyMap myProps = new CCPropertyMap();
-					CCLog.info(presetPath);
-					myProps.setData(CCGL2Application.this, presetPath);
-					
-					Path myPresetsPath = myProps.rootHandle().presetPath();
-					CCNIOUtil.createDirectories(myPresetsPath);
-					for(Path myPath:CCNIOUtil.list(myPresetsPath, "json")){
-						CCLog.info(myPath.getFileName().toString());
-						myProps.rootHandle().preset(CCNIOUtil.fileName(myPath.getFileName().toString()));
-						break;
-					}
-					myProps.rootHandle().update(0);
-				}
+			
+				_myControlApp.setData(CCGL2Application.this, presetPath);
+				theGLAdapter.controlApp(_myControlApp);
+				_myControlApp.update(0);
+				_myAdapter.setupControls(_myControlApp);
+				
 				_mySynch.animator().start();
 				
 				_myIsInitialized = true;
 			}
 		};
 		
-		
-		if(_myUseUI){
-			_myControlApp = new CCControlApp(myGLAdapter, _mySynch, theGLAdapter.getClass());
-			myGLAdapter.controlApp(_myControlApp);
-		}
+		_myControlApp = new CCControlApp(myGLAdapter, _mySynch, theGLAdapter.getClass(), _myUseUI);
+		myGLAdapter.controlApp(_myControlApp);
 
 		_myGLContext.listener().add(myGLAdapter);
 		_myGLContext.listener().add(
