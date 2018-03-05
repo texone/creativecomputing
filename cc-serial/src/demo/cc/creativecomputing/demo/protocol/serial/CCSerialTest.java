@@ -10,12 +10,11 @@
  */
 package cc.creativecomputing.demo.protocol.serial;
 
-import cc.creativecomputing.app.CCApplication;
 import cc.creativecomputing.app.modules.CCBasicAppListener;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.protocol.serial.CCSerialInput;
 import cc.creativecomputing.protocol.serial.CCSerialListener;
 import cc.creativecomputing.protocol.serial.CCSerialModule;
-import cc.creativecomputing.protocol.serial.CCSerialInput;
 
 public class CCSerialTest implements CCSerialListener, CCBasicAppListener{
 
