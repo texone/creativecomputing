@@ -25,7 +25,7 @@ import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.ui.widget.CCUIMenu;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-public class SwingRulerPopUp extends CCUIMenu {
+public class CCRulerPopUp extends CCUIMenu {
 		
 	/**
 	 * 
@@ -36,7 +36,7 @@ public class SwingRulerPopUp extends CCUIMenu {
 	
 	private CCRulerView _myRulerView;
 
-	public SwingRulerPopUp(CCRulerView theRulerView, CCTimelineController theTimelineController) {
+	public CCRulerPopUp(CCRulerView theRulerView, CCTimelineController theTimelineController) {
 		super(CCUIConstants.DEFAULT_FONT);
 		_myRulerView = theRulerView;
 		_myTimelineController = theTimelineController;

@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
 
-import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
@@ -87,16 +86,17 @@ public class CCControlApp  {
 	private CCUIContext _myContext;
 	
 	private void init(CCGLApp theApp, Object theObject){
-		
+
+		CCLog.info("COSTRUCT");
 		CCUIConstants.DEFAULT_FONT = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
 		CCUIConstants.DEFAULT_FONT_2 = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 40, 2, 2);
-		CCUIConstants.MENUE_FONT = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
+		CCUIConstants.MENUE_FONT = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 30, 2, 2);
 
         // Create and set up the window.
-        _myWindow = theApp.createWindow(400,400,"Creative Computing Controls");
+        _myWindow = theApp.createWindow(1000,400,"Creative Computing Controls");
 		
         setData(theObject);
-		_myTimelineContainer = new CCTimelineContainer(_myRootHandle);
+		_myTimelineContainer = new CCTimelineContainer(this, _myRootHandle);
 
 //        _myControlComponent = new CCControlComponent(_myWindow);
         
@@ -121,12 +121,12 @@ public class CCControlApp  {
 
 		_myTransport = new CCTransportView(_myTimelineContainer);
 		_myContext.widget().addChild(_myTransport);
-//        
-//        // Add content to the window.
-////		_myContext.widget().addChild(_myControlComponent);
-//        
-////        theApp.window().updateEvents.add(timer -> {update(timer.deltaTime());});
-//        
+        
+        // Add content to the window.
+//		_myContext.widget().addChild(_myControlComponent);
+        
+//        theApp.window().updateEvents.add(timer -> {update(timer.deltaTime());});
+        
         _myWindow.drawEvents.add( g -> {
         	g.clearColor(0,0d,0);
         	g.clear();
@@ -136,28 +136,29 @@ public class CCControlApp  {
 //        
         // Display the window.
         _myWindow.show();
-//        
-//        _myWindow.windowSizeEvents.add((window, width, height) -> {
-//			CCControlApp.preferences.put("CCControlApp" + "/width" , width + "");
-//			CCControlApp.preferences.put("CCControlApp" + "/height" , height + "");
-//        });
-//        _myWindow.positionEvents.add((window, x, y) -> {
-//			CCControlApp.preferences.put("CCControlApp" + "/x" , x + "");
-//			CCControlApp.preferences.put("CCControlApp" + "/y" ,y + "");
-//        });
-//        
-//		
-//		if(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1) != -1){
-//			CCLog.info(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), CCControlApp.preferences.getInt("CCControlApp" + "/y", -1));
-//			_myWindow.position(
-//				CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), 
-//				CCControlApp.preferences.getInt("CCControlApp" + "/y", -1)
-//			);
-//			_myWindow.windowSize(
-//				CCControlApp.preferences.getInt("CCControlApp" + "/width", -1), 
-//				CCControlApp.preferences.getInt("CCControlApp" + "/height", -1)
-//			);
-//		}
+        
+        _myWindow.windowSizeEvents.add(size -> {
+			CCControlApp.preferences.put("CCControlApp" + "/width" , size.x + "");
+			CCControlApp.preferences.put("CCControlApp" + "/height" , size.y + "");
+        });
+        _myWindow.positionEvents.add(pos -> {
+			CCControlApp.preferences.put("CCControlApp" + "/x" , pos.x + "");
+			CCControlApp.preferences.put("CCControlApp" + "/y" ,pos.y + "");
+        });
+        
+		
+		if(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1) != -1){
+			CCLog.info(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), CCControlApp.preferences.getInt("CCControlApp" + "/y", -1));
+			_myWindow.position(
+				CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), 
+				CCControlApp.preferences.getInt("CCControlApp" + "/y", -1)
+			);
+			_myWindow.windowSize(
+				CCControlApp.preferences.getInt("CCControlApp" + "/width", -1), 
+				CCControlApp.preferences.getInt("CCControlApp" + "/height", -1)
+			);
+		}
+		CCLog.info("COSTRUCT");
 	}
 
 	public CCControlApp(CCGLApp theApp, Object theRootObject, Class<?> thePrefClass) {
@@ -180,6 +181,10 @@ public class CCControlApp  {
 			_myRootHandle.relink(theObject);
 		}
 		_myRootHandle = new CCObjectPropertyHandle(theObject, "settings");
+	}
+	
+	public CCGLWindow window() {
+		return _myWindow;
 	}
 	
 //	public CCControlApp(CCGLApp theApp, Object theRootObject, CCTimelineSynch theSynch, Class<?> thePrefClass) {

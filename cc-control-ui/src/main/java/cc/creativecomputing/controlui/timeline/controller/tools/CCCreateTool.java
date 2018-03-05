@@ -277,7 +277,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 	}
 
 	@Override
-	public void mouseDragged(CCGLMouseEvent theEvent) {
+	public void mouseDragged(CCVector2 theEvent) {
 		super.mouseDragged(theEvent);
 
 		if (_myDraggedPoints == null) {
@@ -313,7 +313,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 			CCControlPoint myTarget = new CCControlPoint(myStartPoint.time() + _myCurveMovement.time(), CCMath.saturate(myStartPoint.value() + _myCurveMovement.value()));
 			CCControlPoint myDraggedPoint = _myDraggedPoints.get(i);
 
-			dragPoint(myDraggedPoint, myTarget, theEvent.isShiftDown());
+			dragPoint(myDraggedPoint, myTarget, _myIsShiftDown);
 		}
 	}
 

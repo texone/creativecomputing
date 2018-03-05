@@ -18,6 +18,7 @@ package cc.creativecomputing.controlui.timeline.view.track;
 
 import cc.creativecomputing.gl.app.CCGLCursorShape;
 import cc.creativecomputing.gl.app.CCGLWindow;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.layout.CCUIPane;
 
@@ -63,12 +64,12 @@ public abstract class CCAbstractTrackView extends CCUIPane implements CCTrackVie
 		_myDataView.update();
 	}
 	
-	public void render() {
-		_myDataView.render();
+	public void render(CCGraphics g) {
+		_myDataView.renderData(g);
 	}
 
-	public void renderInfo() {
-		_myDataView.renderInfo();
+	public void drawTimelineInfos(CCGraphics g) {
+		_myDataView.drawTimelineInfos(g);
 	}
 	
 	@Override
@@ -82,19 +83,19 @@ public abstract class CCAbstractTrackView extends CCUIPane implements CCTrackVie
     }
     
     public void selectCursor() {
-    	_myMainFrame.cursor(CCGLCursorShape.HAND);
+    		_myMainFrame.cursor(CCGLCursorShape.HAND);
     }
     
     public void resizeCursor(){
-    	_myMainFrame.cursor(CCGLCursorShape.HRESIZE);
+    		_myMainFrame.cursor(CCGLCursorShape.HRESIZE);
     }
     
     public void moveCursor(){
-    	_myMainFrame.cursor(CCGLCursorShape.CROSSHAIR);
+    		_myMainFrame.cursor(CCGLCursorShape.CROSSHAIR);
     }
     
     public void defaultCursor() {
-    	_myMainFrame.cursor(CCGLCursorShape.ARROW);
+    		_myMainFrame.cursor(CCGLCursorShape.ARROW);
     }
 	
 	public void moveRangeCursor() {

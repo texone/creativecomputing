@@ -135,7 +135,7 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 		return _myLineCCColor;
 	}
 
-	public void CCColor(CCColor theCCColor) {
+	public void color(CCColor theCCColor) {
 		_myDotCCColor = theCCColor;
 		_myLineCCColor = theCCColor.brighter(0.5);
 		_myFillCCColor = theCCColor.brighter(0.25);

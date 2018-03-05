@@ -16,22 +16,11 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui;
 
-import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.border.EmptyBorder;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
+import cc.creativecomputing.ui.widget.CCUITreeWidget;
 
 public class CCControlTreeComponent extends JPanel {
 
@@ -40,7 +29,7 @@ public class CCControlTreeComponent extends JPanel {
 	 */
 	private static final long serialVersionUID = -4865190067039581920L;
 
-	private JTree _myTree;
+	private CCUITreeWidget _myTree;
 
 	private DefaultMutableTreeNode _myRootNode;
 	private CCObjectPropertyHandle _myRootHandle;
@@ -114,7 +103,7 @@ public class CCControlTreeComponent extends JPanel {
 		return _myRootHandle;
 	}
 
-	public void setData(Object theObject, String thePresetPath) {
+	public void setData(CCObjectPropertyHandle theRootNode) {
 		_myPropertyMap.setData(theObject, thePresetPath);
 
 		_myRootHandle = _myPropertyMap.rootHandle();
@@ -124,7 +113,7 @@ public class CCControlTreeComponent extends JPanel {
 		_myControlCompoent.showContent(myObjectControl);
 	}
 	
-	private void createTree(CCObjectPropertyHandle theHandle, DefaultMutableTreeNode theParent){
+	private void createTree(CCObjectPropertyHandle theHandle){
 		for(CCPropertyHandle<?> myPropertyHandle:theHandle.children().values()){
 			if(myPropertyHandle instanceof CCObjectPropertyHandle){
 				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;

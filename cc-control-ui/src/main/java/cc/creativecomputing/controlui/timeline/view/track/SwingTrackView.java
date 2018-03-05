@@ -73,4 +73,10 @@ public class SwingTrackView extends CCAbstractTrackView{
 	public void value(String theValue) {
 		_myControlView.value(theValue);
 	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
 }

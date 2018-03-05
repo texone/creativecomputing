@@ -25,6 +25,7 @@ import cc.creativecomputing.control.timeline.point.CCControlPoint.CCHandleType;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 public class CCCurveTool extends CCTimelineTool<CCCurveTrackController>{
 
@@ -69,7 +70,7 @@ public class CCCurveTool extends CCTimelineTool<CCCurveTrackController>{
 	}
     
     @Override
-	public void mouseDragged(CCGLMouseEvent theEvent) {
+	public void mouseDragged(CCVector2 theEvent) {
     		super.mouseDragged(theEvent);
     	
 		if(_myFloorBezier == null)return;

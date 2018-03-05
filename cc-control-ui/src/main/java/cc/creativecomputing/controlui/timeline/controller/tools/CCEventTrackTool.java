@@ -186,7 +186,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 	}
 	
 	@Override
-	public void mouseMoved(CCGLMouseEvent theEvent) {
+	public void mouseMoved(CCVector2 theEvent) {
 		super.mouseMoved(theEvent);
 		_myDragAction = null;
 				
@@ -340,7 +340,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 	}
 	
 	@Override
-	public void mouseDragged(CCGLMouseEvent theEvent) {
+	public void mouseDragged(CCVector2 theEvent) {
 		super.mouseDragged(theEvent);
 		
 		if(_myIsInDrag == false){
@@ -366,7 +366,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 			);
 			CCControlPoint myDraggedPoint = _myDraggedPoints.get(i);
 	
-			dragPoint(myDraggedPoint, myTarget, _myCurveMovement, theEvent.isShiftDown());        
+			dragPoint(myDraggedPoint, myTarget, _myCurveMovement, _myIsShiftDown);        
 		}
 	}
 	

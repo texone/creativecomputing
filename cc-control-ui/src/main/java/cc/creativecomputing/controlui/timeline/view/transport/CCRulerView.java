@@ -44,14 +44,14 @@ public class CCRulerView extends CCAbstractTrackView implements CCChangeValueBox
 	private CCTimelineController _myTimelineController;
 	private CCTransportController _myTransportController;
 	
-	private SwingRulerPopUp _myRulerPopUp;
+	private CCRulerPopUp _myRulerPopUp;
 	
 	public CCRulerView(CCTimelineController theTimelineController) {
 		super();
 		if(theTimelineController != null){
 			_myTimelineController = theTimelineController;
 			_myTransportController = theTimelineController.transportController();
-		    _myRulerPopUp = new SwingRulerPopUp(this, theTimelineController);
+		    _myRulerPopUp = new CCRulerPopUp(this, theTimelineController);
 		}
 	    
 		mouseReleased.add(e -> {
@@ -118,7 +118,7 @@ public class CCRulerView extends CCAbstractTrackView implements CCChangeValueBox
 	public void timelineController(CCTimelineController theTimelineController){
 		_myTimelineController = theTimelineController;
 		_myTransportController = theTimelineController.transportController();
-	    _myRulerPopUp = new SwingRulerPopUp(this, theTimelineController);
+	    _myRulerPopUp = new CCRulerPopUp(this, theTimelineController);
 	}
 	
 	public void changeValue(double theValue) {

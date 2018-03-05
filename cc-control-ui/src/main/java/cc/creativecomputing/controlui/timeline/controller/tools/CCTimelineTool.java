@@ -49,8 +49,34 @@ public class CCTimelineTool<ControllerType extends CCTrackController> {
 	
 	protected CCGLKey _myKeyCode;
 	
+	protected boolean _myIsShiftDown = false;
+	protected boolean _myIsAltDown = false;
+	protected boolean _myIsCTRLDown = false;
+	protected boolean _myIsSuperDown = false;
+	
 	public void keyPressed(CCGLKeyEvent e) {
 		_myKeyCode = e.key;
+		switch (e.key) {
+		case KEY_LEFT_SHIFT:
+		case KEY_RIGHT_SHIFT:
+			_myIsShiftDown = true;
+			break;
+		case KEY_LEFT_ALT:
+		case KEY_RIGHT_ALT:
+			_myIsAltDown = true;
+			break;
+		case KEY_LEFT_CONTROL:
+		case KEY_RIGHT_CONTROL:
+			_myIsCTRLDown = true;
+			break;
+		case KEY_LEFT_SUPER:
+		case KEY_RIGHT_SUPER:
+			_myIsSuperDown = true;
+			break;
+
+		default:
+			break;
+		}
 	}
 	
 	public void keyReleased(CCGLKeyEvent e) {

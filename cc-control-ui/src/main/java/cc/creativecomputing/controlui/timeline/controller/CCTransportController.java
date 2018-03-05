@@ -128,6 +128,7 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	}
 	
 	private CCRulerInterval currentInterval() {
+		if(_myRulerView == null)return _myInterval;
 		int myDevides = (int)(_myRulerView.width() / MIN_SPACE);
 		double myInterval = (_myUpperBound - _myLowerBound) / myDevides;
 		

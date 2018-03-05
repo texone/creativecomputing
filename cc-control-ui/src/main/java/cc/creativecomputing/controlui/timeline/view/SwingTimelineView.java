@@ -17,6 +17,9 @@
 package cc.creativecomputing.controlui.timeline.view;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
@@ -43,6 +46,7 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackCont
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingMultiTrackPanel.MultiTrackMouseAdapter;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackDataView;
+import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingColorTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingEventTrackDataView;
@@ -52,102 +56,64 @@ import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.CCTrackDataRenderer;
 import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
 import cc.creativecomputing.controlui.timeline.view.transport.CCRulerView;
+import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
 
 
-@SuppressWarnings("serial")
-public class SwingTimelineView extends JSplitPane implements ComponentListener {
+public class SwingTimelineView extends CCUIGridPane {
 	
-	private JLayeredPane _myPane;
-	
-	private JScrollPane _myScrollPane;
-	private JScrollBar _myJScrollbar;
-    private JViewport _myViewport;
-	private SwingMultiTrackPanel _myRulerPanel;
-	private SwingMultiTrackPanel _myMultiTrackPanel;
 	private CCRulerView _myRuler;
 	
-	private List<Object> _myTracks = new ArrayList<Object>();
+	private List<CCAbstractTrackView> _myTracks = new ArrayList<>();
 	
 	private CCTimelineController _myTimelineController;
 	
 	private SwingClipTrackObjectDialog _myClipTrackObjectDialog;
 	private SwingGroupTrackObjectDialog _myGroupTrackObjectDialog;
 	
-	private final JFrame _myMainFrame;
+	private final CCGLWindow _myMainFrame;
 
-	public SwingTimelineView(JFrame theMainFrame, CCTimelineContainer theTimelineContainer) {
-		super(JSplitPane.VERTICAL_SPLIT);
+	public SwingTimelineView(CCGLWindow theMainFrame, CCTimelineContainer theTimelineContainer) {
+		
 		
 		_myMainFrame = theMainFrame;
-		_myPane = new JLayeredPane();
-		_myPane.setLayout(new BorderLayout());
-//		_myPane.add(createColoredLabel("TEXONE", Color.RED, new Point(300,100)), 3);
 
 		_myRuler = new CCRulerView(null);
-		Path myRulerPath = Paths.get("ruler");
-		_myRulerPanel = new SwingMultiTrackPanel(_myPane);
-		_myRulerPanel.insertTrackView(new JPanel(), myRulerPath, 0, 30 * CCUIConstants.SCALE, true);
-		_myRulerPanel.insertTrackDataView(_myRuler, myRulerPath, 0);
-		 
-		_myMultiTrackPanel = new SwingMultiTrackPanel(_myPane);
-		MultiTrackMouseAdapter myAdapter = new MultiTrackMouseAdapter(_myMainFrame, _myMultiTrackPanel, _myRulerPanel);
-		_myMultiTrackPanel.addMouseListener(myAdapter);
-		_myMultiTrackPanel.addMouseMotionListener(myAdapter);
 		
-		_myViewport = new JViewport();
-        _myViewport.add(_myMultiTrackPanel);
-        _myViewport.setBounds(0, 0, 300 * CCUIConstants.SCALE, 300 * CCUIConstants.SCALE);
-        
-        _myScrollPane = new JScrollPane(_myMultiTrackPanel);
-        _myScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-		_myScrollPane.getVerticalScrollBar().setUnitIncrement(20);
-		_myScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		CCUITableEntry myEntry = new CCUITableEntry();
+		myEntry.column = 1;
+		addChild(_myRuler, myEntry);
 		
-		_myJScrollbar = new JScrollBar(JScrollBar.HORIZONTAL);
-		_myJScrollbar.setMinimum(0);
-		_myJScrollbar.setMaximum(1000);
-		_myJScrollbar.addAdjustmentListener(e ->{
-			double myValue = e.getValue() / 1000.0;
-			double myLower = _myTimelineController.zoomController().lowerBound();
-			double myUpper = _myTimelineController.zoomController().upperBound();
-			double myMax = Math.max(myUpper, _myTimelineController.maximumTime());
-			myValue *= myMax;
-			double myRange = myUpper - myLower;
-			_myTimelineController.zoomController().setRange(new CCTimeRange(myValue, myValue + myRange));
-		});
-		
-		 _myPane.add(_myJScrollbar, BorderLayout.PAGE_END);
+//		_myJScrollbar = new JScrollBar(JScrollBar.HORIZONTAL);
+//		_myJScrollbar.setMinimum(0);
+//		_myJScrollbar.setMaximum(1000);
+//		_myJScrollbar.addAdjustmentListener(e ->{
+//			double myValue = e.getValue() / 1000.0;
+//			double myLower = _myTimelineController.zoomController().lowerBound();
+//			double myUpper = _myTimelineController.zoomController().upperBound();
+//			double myMax = Math.max(myUpper, _myTimelineController.maximumTime());
+//			myValue *= myMax;
+//			double myRange = myUpper - myLower;
+//			_myTimelineController.zoomController().setRange(new CCTimeRange(myValue, myValue + myRange));
+//		});
+//		
+//		 _myPane.add(_myJScrollbar, BorderLayout.PAGE_END);
 		
 		_myClipTrackObjectDialog = new SwingClipTrackObjectDialog(theTimelineContainer);
 		_myGroupTrackObjectDialog = new SwingGroupTrackObjectDialog();
-		
-		_myPane.add(_myScrollPane, BorderLayout.CENTER);
-		
-		_myPane.addComponentListener(this);
-		
-		CCUIStyler.styleSplitPane(this);
-		setDividerLocation(30 * CCUIConstants.SCALE);
-		setEnabled(false);
-		
-		setTopComponent(_myRulerPanel);
-		setBottomComponent(_myPane);
 	}
 	
 	public void controller(CCTimelineController theController){
 		_myTimelineController = theController;
 		_myTimelineController.zoomController().addZoomable((theLower, theUpper) ->{
-				double myMax = Math.max(theUpper, _myTimelineController.maximumTime());
+			double myMax = Math.max(theUpper, _myTimelineController.maximumTime());
 				
-				int myValue = (int)((theLower) / myMax * 1000);
-				int myExtent = (int)((theUpper - theLower) / myMax * 1000);
-				_myJScrollbar.setValues(myValue, myExtent, 0, 1000);
+			int myValue = (int)((theLower) / myMax * 1000);
+			int myExtent = (int)((theUpper - theLower) / myMax * 1000);
+//			_myJScrollbar.setValues(myValue, myExtent, 0, 1000);
 		});
 		_myRuler.timelineController(_myTimelineController);
-	}
-	
-	public Container container(){
-		return _myPane;
 	}
 	
 	public CCRulerView rulerView() {

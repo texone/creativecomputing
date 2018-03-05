@@ -66,7 +66,7 @@ public class SwingMultiTrackPanel extends JPanel implements Iterable<Component> 
     
         @Override
         public void mouseExited(MouseEvent e) {
-        	_myParent.setCursor(Cursor.getDefaultCursor());
+        		_myParent.setCursor(Cursor.getDefaultCursor());
         }
     
         @Override
