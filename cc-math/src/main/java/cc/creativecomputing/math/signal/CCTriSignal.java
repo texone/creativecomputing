@@ -21,6 +21,9 @@ public class CCTriSignal extends CCSignal{
 	@CCProperty(name = "ratio", min = 0, max = 1)
 	private double _cRatio = 0.5;
 	
+	@CCProperty(name = "break ratio", min = 0, max = 1)
+	private double _cBreakRatio = 0.;
+	
 	public CCTriSignal() {
 		super();
 	}
@@ -35,12 +38,17 @@ public class CCTriSignal extends CCSignal{
 		if(theInput < 0){
 			theInput = 1 + theInput;
 		}
+		if(1.0 - _cBreakRatio < CCMath.FLT_EPSILON)return 0;
+		
+		theInput /= 1. - _cBreakRatio;
 		
 		double myResult = theInput / _cRatio;
 		if(theInput <= _cRatio){
 			myResult = theInput / _cRatio;
-		}else{
+		}else if(theInput <= 1){
 			myResult = 1 - (theInput - _cRatio) / (1 - _cRatio);
+		}else{
+			myResult = 0;
 		}
 		
 		if(!_mySettings.isNormed()){
