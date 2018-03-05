@@ -76,6 +76,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 		_myDefaultValues = new double[theValueNames.length];
 
 		_myEffectBlender = new CCEffectBlender(this);
+		CCMath.randomSeed(4);
 		addRelativeSources(new CCConstantSource(), new CCRandomSource());
 		if(theEffectables.size() < 0) {
 			return;
