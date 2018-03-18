@@ -17,6 +17,7 @@
 package cc.creativecomputing.simulation.particles.forces.springs;
 
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.simulation.particles.forces.CCForce;
 
 /**
  * Adds support of spring forces to the particle system.
@@ -24,26 +25,27 @@ import cc.creativecomputing.graphics.CCGraphics;
  * @author info
  * 
  */
-public class CCDampedSprings extends CCSpringForce {
+public class CCDampedSprings extends CCForce {
 	private String _mySpringDampingParameter;
 	private float _mySpringDamping;
 	
-	public CCDampedSprings(final CCGraphics g, final float theSpringConstant, final float theSpringDamping, final float theRestLength) {
-		this(g, 4,theSpringConstant, theSpringDamping, theRestLength);
+	public CCDampedSprings(final float theSpringConstant, final float theSpringDamping, final float theRestLength) {
+		this(4,theSpringConstant, theSpringDamping, theRestLength);
 	}
 
-	public CCDampedSprings(final CCGraphics g, final int theNumberOfSprings, final float theSpringConstant, final float theSpringDamping, final float theRestLength) {
-		super("DampedSprings", g, theNumberOfSprings,theSpringConstant, theRestLength);
+	public CCDampedSprings(final int theNumberOfSprings, final float theSpringConstant, final float theSpringDamping, final float theRestLength) {
+		super("DampedSprings");//, theNumberOfSprings,theSpringConstant, theRestLength
 		_mySpringDamping = theSpringDamping;
 	}
 
-	public void setupParameter(int theWidth, int theHeight) {
-		super.setupParameter(theWidth, theHeight);
+	@Override
+	public void setSize(final CCGraphics g, int theWidth, int theHeight) {
+		super.setSize(g, theWidth, theHeight);
 		_mySpringDampingParameter = parameter("springDamping");
 		springDamping(_mySpringDamping);
 	}
 
 	public void springDamping(final float theSpringDamping) {
-		_myVelocityShader.parameter(_mySpringDampingParameter, theSpringDamping);
+//		_myVelocityShader.parameter(_mySpringDampingParameter, theSpringDamping);
 	}
 }

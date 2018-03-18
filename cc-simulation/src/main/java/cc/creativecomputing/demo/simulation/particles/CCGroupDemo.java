@@ -21,98 +21,116 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.graphics.camera.CCCameraController;
-import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
-import cc.creativecomputing.graphics.texture.CCTexture2D;
-import cc.creativecomputing.image.CCImageIO;
-import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
-import cc.creativecomputing.simulation.particles.emit.CCParticlesIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.emit.CCParticleCPUGroupEmitter;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCGravity;
-import cc.creativecomputing.simulation.particles.forces.CCTerrainForce;
-import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
-public class CCTerrainForceDemo extends CCGL2Adapter {
+public class CCGroupDemo extends CCGL2Adapter {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
-	private CCParticlesIndexParticleEmitter _myEmitter;
-	
-	@CCProperty(name = "camera")
-	private CCCameraController _cCameraController;
-	
-	private CCTexture2D _myTexture;
-	private CCTerrainForce _myTerrainForce;
+	private CCParticleCPUGroupEmitter _myEmitter;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		final List<CCForce> myForces = new ArrayList<CCForce>();
-		myForces.add(new CCGravity(new CCVector3(0.1,0,0)));
-		myForces.add(new CCViscousDrag(0.3f));
+		final List<CCForce> myForces = new ArrayList<>();
+		myForces.add(new CCGravity(new CCVector3(0,-1,0)));
 		
-		_myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("heightmap.png")), CCTextureTarget.TEXTURE_RECT);
-		_myTerrainForce = new CCTerrainForce(
-			_myTexture,
-			new CCVector3(4f,300,4f), 
-			new CCVector3(200, 00, 100)
-		);
-		myForces.add(_myTerrainForce);
-		
-		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 1000,1000);
-		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
-		
-		_cCameraController = new CCCameraController(this, g, 100);
-	}
-	
-	float angle = 0;
-	
-	double height = 100;
-	
-	@Override
-	public void update(final CCAnimator theAnimator){
-	
-		angle += theAnimator.deltaTime() * 30;
-		for(int i = 0; i < 2000; i++){
-			_myEmitter.emit(
-				new CCVector3(CCMath.random(-400,400), height/2,CCMath.random(-400,400)),
-				new CCVector3().randomize(20),
-				10
+		_myParticles = new CCParticles(g,myForces, new ArrayList<CCConstraint>(),100,100);
+		_myParticles.addEmitter(_myEmitter = new CCParticleCPUGroupEmitter(_myParticles));
+		_myParticles.reset(g);
+		for(int i = 0; i < 3;i++) {
+			_myEmitter.createGroup(
+				(particleGroup, particle) -> {
+					CCColor myColor = CCColor.WHITE;
+					double myX = 0;
+					switch(particleGroup.id) {
+					case 0:
+						myColor = CCColor.WHITE;
+						myX = -300 + CCMath.random(-100, 100);
+						break;
+					case 1:
+						myColor = CCColor.WHITE;
+						myX = CCMath.random(-100, 100);
+						break;
+					case 2:
+						myColor = CCColor.WHITE;
+						myX = 300 + CCMath.random(-100, 100);
+						break;
+					}
+					particle.color().set(myColor);
+					particle.position().set(myX, 300,0);
+				},
+				3000
 			);
 		}
-		_myParticles.update(theAnimator);
+		
+		keyReleased().add(e -> {
+			switch(e.keyCode()) {
+			case VK_0:
+				_myEmitter.killGroup(0);
+				break;
+			case VK_1:
+				_myEmitter.killGroup(1);
+				break;
+			case VK_2:
+				_myEmitter.killGroup(2);
+				break;
+			case VK_3:
+				_myEmitter.killGroup(3);
+				break;
+			case VK_A:
+				_myEmitter.kill();
+				break;
+			default:
+				break;
+			}
+			CCLog.info("KILL");
+		});
 	}
 
+	@Override
+	public void update(CCAnimator theAnimator) {
+		_myParticles.update(theAnimator);
+	}
+	
+	double angle = 0;
+
+	@Override
 	public void display(CCGraphics g) {
 		_myParticles.animate(g);
 		
-		height = g.height();
 		g.noDepthTest();
+		g.clearColor(50);
 		g.clear();
-		g.color(255,50);
-		
+		g.color(255);
 		g.pushMatrix();
-		_cCameraController.camera().draw(g);
+		g.translate(0, 0, -1000);
+		g.rotateY(angle);
 		g.blend(CCBlendMode.ADD);
-		g.color(255,125);
+		g.color(255);
 		_myParticles.display(g);
 		
-
 		g.popMatrix();
 		
+		g.color(255);
+		g.image(_myParticles.groupTexture(), 0,0, 400,400);
 		g.blend();
 	}
-	
+
 	public static void main(String[] args) {
 
-		CCTerrainForceDemo demo = new CCTerrainForceDemo();
+		CCGroupDemo demo = new CCGroupDemo();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1200, 600);
@@ -120,5 +138,4 @@ public class CCTerrainForceDemo extends CCGL2Adapter {
 		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
 	}
-
 }

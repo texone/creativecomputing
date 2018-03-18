@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.demo.simulation.particles;
 
 import java.util.ArrayList;
@@ -10,12 +26,10 @@ import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
-import cc.creativecomputing.graphics.shader.CCShaderBuffer;
-import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
+import cc.creativecomputing.simulation.particles.emit.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.forces.CCDensity;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCForceField;
@@ -61,7 +75,7 @@ public class CCDensityDemo extends CCGL2Adapter {
 			_myEmitter.emit(
 				new CCVector3().randomize(300).multiplyLocal(1, 1, 0),
 				new CCVector3().randomize(20),
-				10, false
+				10
 			);
 		}
 		_myParticles.update(theAnimator);
