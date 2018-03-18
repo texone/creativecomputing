@@ -50,12 +50,28 @@ public class CCTextureMapChar extends CCChar{
 		final double myBlurRadius = _myBlurRadius * theSize;
 		final double myWidth = _myDrawWidth * theSize;
 		final double myHeight = _myDrawHeight * theSize;
-		g.vertex(theX - myBlurRadius + _myXOffset,			 theY + myBlurRadius + _myYOffset,			   _myMin.x, _myMin.y);
-		g.vertex(theX + myBlurRadius + _myXOffset + myWidth, theY + myBlurRadius + _myYOffset,			   _myMax.x, _myMin.y);
-		g.vertex(theX + myBlurRadius + _myXOffset + myWidth, theY - myBlurRadius + _myYOffset - myHeight,  _myMax.x, _myMax.y);
-		g.vertex(theX - myBlurRadius + _myXOffset,			 theY - myBlurRadius + _myYOffset - myHeight,  _myMin.x, _myMax.y);
+		g.vertex(theX - myBlurRadius + _myXOffset,		    theY + myBlurRadius + _myYOffset,			_myMin.x, _myMin.y);
+		g.vertex(theX + myBlurRadius + _myXOffset + myWidth, theY + myBlurRadius + _myYOffset,			    _myMax.x, _myMin.y);
+		g.vertex(theX + myBlurRadius + _myXOffset + myWidth, theY - myBlurRadius + _myYOffset - myHeight, _myMax.x, _myMax.y);
+		g.vertex(theX - myBlurRadius + _myXOffset,		    theY - myBlurRadius + _myYOffset - myHeight, _myMin.x, _myMax.y);
 		
 		return myWidth;
+	}
+	
+	public double xOffset() {
+		return _myXOffset;
+	}
+	
+	public double yOffset() {
+		return _myYOffset;
+	}
+	
+	public double width(double theSize) {
+		return _myDrawWidth * theSize;
+	}
+	
+	public double height(double theSize) {
+		return _myDrawHeight * theSize;
 	}
 	
 	public CCVector2 min(){

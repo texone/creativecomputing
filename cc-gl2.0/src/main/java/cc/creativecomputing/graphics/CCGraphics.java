@@ -1395,8 +1395,6 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		}
 	}
 	
-	private CCMatrixMode _myMatrixMode = CCMatrixMode.MODELVIEW;
-	
 	/**
 	 * Specifies whether the modelview, projection, or texture matrix will be modified, 
 	 * using the argument MODELVIEW, PROJECTION, or TEXTURE for mode. Subsequent 
@@ -1407,7 +1405,6 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * Three values are accepted: MODELVIEW, PROJECTION, and TEXTURE.
 	 */
 	public void matrixMode(final CCMatrixMode theMode){
-		_myMatrixMode = theMode;
 		gl.glMatrixMode(theMode.glID);
 	}
 	
@@ -1434,14 +1431,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * a modeling transformation.
 	 */
 	public void loadIdentity(){
-		switch(_myMatrixMode){
-		case MODELVIEW:
-//			_myModelMatrix.setIdentity();
-			break;
-		}
 		gl.glLoadIdentity();
-		
-		//gl.glTranslatef(0,0,-400.00001f);
 	}
 	
 	private DoubleBuffer _myDoubleBuffer = DoubleBuffer.allocate(16);
@@ -1454,11 +1444,6 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @related matrixMode ( )
 	 */
 	public void loadMatrix(final CCMatrix4x4 theMatrix){
-		switch(_myMatrixMode){
-		case MODELVIEW:
-//			_myModelMatrix.set(theMatrix);
-			break;
-		}
 		gl.glLoadMatrixd(theMatrix.toDoubleBuffer(_myDoubleBuffer));
 	}
 	
@@ -3029,67 +3014,66 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	}
 	
 	public void ellipse(final double theX, double theY, final double theZ, final double theWidth, final double theHeight, boolean theDrawOutline) {
-	    double x = theX;
-	    double y = theY;
-	    double w = theWidth;
-	    double h = theHeight;
+	    double myX = theX;
+	    double myY = theY;
+	    double myWidth = theWidth;
+	    double myHeight = theHeight;
 	    
 	    switch(_myEllipseMode){
 	    	case CORNERS:
-	    		w = theWidth - theX;
-	  	      	h = theHeight - theY;
+	    		myWidth = theWidth - theX;
+	    		myHeight = theHeight - theY;
 	    		break;
 	    	case RADIUS:
-	    		x = theX - theWidth;
-	    		y = theY - theHeight;
-	    		w = theWidth * 2;
-	    		h = theHeight * 2;
+	    		myX = theX - theWidth;
+	    		myY = theY - theHeight;
+	    		myWidth = theWidth * 2;
+	    		myHeight = theHeight * 2;
 	    		break;
 	    	default:
-	    		x = theX - theWidth/2f;
-	    		y = theY - theHeight/2f;
+	    		myX = theX - theWidth/2f;
+	    		myY = theY - theHeight/2f;
 	    }
 	    // undo negative width
-		if (w < 0) { 
-			x += w;
-			w = -w;
+		if (myWidth < 0) { 
+			myX += myWidth;
+			myWidth = -myWidth;
 		}
 
 		// undo negative height
-		if (h < 0) { 
-			y += h;
-			h = -h;
+		if (myHeight < 0) { 
+			myY += myHeight;
+			myHeight = -myHeight;
 		}
 
-		double hradius = w / 2f;
-	    double vradius = h / 2f;
+		myWidth /= 2;
+		myHeight /= 2;
 
-	    double centerX = x + hradius;
-	    double centerY = y + vradius;
+	    myX += myWidth;
+	    myY += myHeight;
 
-	    int accuracy = (int)(4+Math.sqrt(hradius+vradius)*3);
+	    if(theDrawOutline){
+	    		beginShape(CCDrawMode.LINE_LOOP);
+	    } else {
+	    		beginShape(CCDrawMode.TRIANGLE_FAN);
+	    		normal(0, 0, 1);
+	    		vertex(myX, myY,theZ);
+	    }
 	    
+	    int accuracy = (int)(4+Math.sqrt(myWidth+myHeight)*3);
 	    double inc = (double)SINCOS_LENGTH / accuracy;
 
 	    double val = 0;
-
-	    if(theDrawOutline){
-	    	beginShape(CCDrawMode.LINE_LOOP);
-	    } else {
-	    	beginShape(CCDrawMode.TRIANGLE_FAN);
-	    	normal(0, 0, 1);
-	    	vertex(centerX, centerY,theZ);
-	    }
 		for (int i = 0; i < accuracy; i++) {
 			vertex(
-				centerX + cosLUT[(int) val] * hradius, 
-				centerY + sinLUT[(int) val] * vradius,
+				myX + cosLUT[(int) val] * myWidth, 
+				myY + sinLUT[(int) val] * myHeight,
 				theZ
 			);
 			val += inc;
 		}
 		// back to the beginning
-		vertex(centerX + cosLUT[0] * hradius, centerY + sinLUT[0] * vradius,theZ);
+		vertex(myX + cosLUT[0] * myWidth, myY + sinLUT[0] * myHeight,theZ);
 		endShape();
 	}
 	

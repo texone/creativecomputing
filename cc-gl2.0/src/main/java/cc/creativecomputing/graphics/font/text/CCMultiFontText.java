@@ -17,6 +17,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.font.CCChar;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.math.CCAABoundingRectangle;
 import cc.creativecomputing.math.CCColor;
@@ -343,6 +344,10 @@ public class CCMultiFontText {
 			_myTextPart.font().endText(g);
 		}
 		
+		public CCChar charByIndex(int theCharIndex){
+			return _myTextPart.font().chars()[_myFontCharIndices[theCharIndex]];
+		}
+		
 		public void drawChar(CCGraphics g, int theCharIndex) {
 			_myTextPart.font().drawChar(
 				g, _myFontCharIndices[theCharIndex], _myTextPart.size(), 
@@ -429,7 +434,7 @@ public class CCMultiFontText {
 		 * @param theCharIndex
 		 * @return the x position of the letter
 		 */
-		double x(int theCharIndex){
+		public double x(int theCharIndex){
 			return _myX[theCharIndex];
 		}
 		
@@ -437,7 +442,7 @@ public class CCMultiFontText {
 		 * returns the y position of the textline relative to the text position
 		 * @return the y position of the textline
 		 */
-		double y(){
+		public double y(){
 			return _myY;
 		}
 	}

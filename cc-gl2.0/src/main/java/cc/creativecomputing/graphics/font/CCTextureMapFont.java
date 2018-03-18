@@ -206,7 +206,7 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 		return _myChars;
 	}
 	
-	public CCTexture texture(){
+	public CCTexture2D texture(){
 		return _myFontTexture;
 	}
 }
