@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /*
  * Copyright (c) 2013 christianr.
  * All rights reserved. This program and the accompanying materials
@@ -8,7 +24,7 @@
  * Contributors:
  *     christianr - initial API and implementation
  */
-package cc.creativecomputing.demo.simulation.gpuparticles.springs;
+package cc.creativecomputing.demo.simulation.particles.springs;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,78 +33,81 @@ import java.util.List;
 
 import cc.creativecomputing.CCApp;
 import cc.creativecomputing.control.CCControl;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCColor;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3f;
 import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.CCGPUParticles;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCGPUConstraint;
-import cc.creativecomputing.simulation.particles.forces.CCAttractor;
-import cc.creativecomputing.simulation.particles.forces.CCNoiseCurveField;
-import cc.creativecomputing.simulation.particles.forces.CCForce;
-import cc.creativecomputing.simulation.particles.forces.CCForceField;
+import cc.creativecomputing.simulation.particles.forces.CCGPUAttractor;
+import cc.creativecomputing.simulation.particles.forces.CCGPUNoiseCurveField;
+import cc.creativecomputing.simulation.particles.forces.CCGPUForce;
+import cc.creativecomputing.simulation.particles.forces.CCGPUForceField;
+import cc.creativecomputing.simulation.particles.forces.CCGPUGravity;
+import cc.creativecomputing.simulation.particles.forces.CCGPUViscousDrag;
 import cc.creativecomputing.simulation.particles.forces.CCGravity;
-import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
-import cc.creativecomputing.simulation.particles.forces.springs.CCGPUDampedSprings;
-import cc.creativecomputing.simulation.particles.render.CCGPUParticlePointRenderer;
+import cc.creativecomputing.simulation.particles.forces.springs.CCDampedSprings;
+import cc.creativecomputing.simulation.particles.render.CCParticlePointRenderer;
 import cc.creativecomputing.simulation.particles.render.CCGPUSpringRenderer;
 import cc.creativecomputing.util.CCStopWatch;
 
 public class CCNodeNetwork {
 
-	@CCControl(name = "spring strength", min = 0, max = 4f)
+	@CCProperty(name = "spring strength", min = 0, max = 4f)
 	private float _cSpringStrength = 0;
 
-	@CCControl(name = "spring constant", min = 0, max = 4f)
+	@CCProperty(name = "spring constant", min = 0, max = 4f)
 	private float _cSpringConstant = 0;
 
-	@CCControl(name = "spring damping", min = 0, max = 4f)
+	@CCProperty(name = "spring damping", min = 0, max = 4f)
 	private float _cSpringDamping = 0;
 
-	@CCControl(name = "max spring length", min = 0, max = 300f)
+	@CCProperty(name = "max spring length", min = 0, max = 300f)
 	private float _cMaxSpringLength = 0;
 
-	@CCControl(name = "viscous drag", min = 0, max = 4f)
+	@CCProperty(name = "viscous drag", min = 0, max = 4f)
 	private float _cDrag = 0;
 
-	@CCControl(name = "noise strength", min = 0, max = 10)
+	@CCProperty(name = "noise strength", min = 0, max = 10)
 	private float _cFieldStrength = 0;
 
-	@CCControl(name = "attractor strength", min = -10, max = 10)
+	@CCProperty(name = "attractor strength", min = -10, max = 10)
 	private float _cAttractorStrength = 0;
 
-	@CCControl(name = "attractor radius", min = 0, max = 300)
+	@CCProperty(name = "attractor radius", min = 0, max = 300)
 	private float _cAttractorRadius = 0;
 
-	@CCControl(name = "gravity strength", min = 0, max = 1)
+	@CCProperty(name = "gravity strength", min = 0, max = 1)
 	private float _cGravityStrength = 0;
 
-	@CCControl(name = "curve strength", min = 0, max = 10)
+	@CCProperty(name = "curve strength", min = 0, max = 10)
 	private float _cCurveStrength = 0;
 
-	@CCControl(name = "noise speed", min = 0, max = 1)
+	@CCProperty(name = "noise speed", min = 0, max = 1)
 	private float _cCurveSpeed = 0;
 
-	@CCControl(name = "prediction", min = 0, max = 1)
+	@CCProperty(name = "prediction", min = 0, max = 1)
 	private float _cPrediction = 0;
 
-	@CCControl(name = "curveNoiseScale", min = 0, max = 1)
+	@CCProperty(name = "curveNoiseScale", min = 0, max = 1)
 	private float _cCurveNoiseScale = 0;
 
-	@CCControl(name = "curveOutputScale", min = 0, max = 200)
+	@CCProperty(name = "curveOutputScale", min = 0, max = 200)
 	private float _cCurveOuputScale = 0;
 
-	@CCControl(name = "curveRadius", min = 0, max = 400)
+	@CCProperty(name = "curveRadius", min = 0, max = 400)
 	private float _cCurveRadius = 0;
 
-	@CCControl(name = "emit radius", min = 0, max = 400)
+	@CCProperty(name = "emit radius", min = 0, max = 400)
 	private float _cEmitRadius = 0;
 
-	@CCControl(name = "emit amount", min = 1, max = 20)
+	@CCProperty(name = "emit amount", min = 1, max = 20)
 	private int _cEmitAmount = 0;
 
-	@CCControl(name = "life time", min = 0, max = 30)
+	@CCProperty(name = "life time", min = 0, max = 30)
 	private float _cLifeTime = 0;
 
 	class CCNodeDistanceSorter implements Comparator<CCNode> {
@@ -114,15 +133,15 @@ public class CCNodeNetwork {
 	private CCParticles _myParticles;
 	private CCGPUIndexParticleEmitter _myEmitter;
 
-	private CCNoiseCurveField _myCurveField = new CCNoiseCurveField();
-	private CCForceField _myForceField = new CCForceField(0.005f, 1, new CCVector3f(100, 20, 30));
-	private CCGravity _myGravity = new CCGravity(new CCVector3f(10, 0, 0));
-	private CCAttractor _myAttractor = new CCAttractor(new CCVector3f(), 0, 0);
+	private CCGPUNoiseCurveField _myCurveField = new CCGPUNoiseCurveField();
+	private CCGPUForceField _myForceField = new CCGPUForceField(0.005f, 1, new CCVector3f(100, 20, 30));
+	private CCGravity _myGravity = new CCGPUGravity(new CCVector3f(10, 0, 0));
+	private CCGPUAttractor _myAttractor = new CCGPUAttractor(new CCVector3f(), 0, 0);
 
 	private CCGPUSpringRenderer _myRenderer;
-	private CCGPUParticlePointRenderer _myPointRenderer;
-	private CCGPUDampedSprings _mySprings;
-	private CCViscousDrag _myDrag;
+	private CCParticlePointRenderer _myPointRenderer;
+	private CCDampedSprings _mySprings;
+	private CCGPUViscousDrag _myDrag;
 	
 	private float[] _myData;
 
@@ -130,18 +149,18 @@ public class CCNodeNetwork {
 
 		_myApp = theApp;
 
-		final List<CCForce> myForces = new ArrayList<CCForce>();
-		myForces.add(_myDrag = new CCViscousDrag(0.3f));
+		final List<CCGPUForce> myForces = new ArrayList<CCGPUForce>();
+		myForces.add(_myDrag = new CCGPUViscousDrag(0.3f));
 		myForces.add(_myCurveField);
 		myForces.add(_myGravity);
 		myForces.add(_myForceField);
 		myForces.add(_myAttractor);
-		_mySprings = new CCGPUDampedSprings(_myApp.g, 8, 1f, 0.1f, 0.1f);
+		_mySprings = new CCDampedSprings(_myApp.g, 8, 1f, 0.1f, 0.1f);
 		myForces.add(_mySprings);
 
 		_myRenderer = new CCGPUSpringRenderer(_mySprings);
-		_myPointRenderer = new CCGPUParticlePointRenderer();
-		_myParticles = new CCParticles(_myApp.g, _myRenderer, myForces, new ArrayList<CCGPUConstraint>(), 10, 10);
+		_myPointRenderer = new CCParticlePointRenderer();
+		_myParticles = new CCGPUParticles(_myApp.g, _myRenderer, myForces, new ArrayList<CCGPUConstraint>(), 10, 10);
 		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
 
 		_myPointRenderer.setup(_myParticles);
@@ -321,7 +340,7 @@ public class CCNodeNetwork {
 		// g.pointSprite(_mySpriteTexture);
 		// g.smooth();
 		g.blend();
-		_myParticles.draw();
+		_myParticles.draw(g);
 
 		// _myShader.start();
 		// g.color(255);
@@ -336,6 +355,6 @@ public class CCNodeNetwork {
 		// _myShader.end();
 
 		g.color(1f);
-		_myParticles.draw();
+		_myParticles.draw(g);
 	}
 }

@@ -1,93 +1,100 @@
-/*
- * Copyright (c) 2013 christianr.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.html
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
  * 
- * Contributors:
- *     christianr - initial API and implementation
- */
-package cc.creativecomputing.demo.simulation.gpuparticles.springs;
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+package cc.creativecomputing.demo.simulation.particles.springs;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.CCApp;
 import cc.creativecomputing.CCApplicationManager;
-import cc.creativecomputing.control.CCControl;
-import cc.creativecomputing.events.CCKeyEvent;
-import cc.creativecomputing.graphics.CCColor;
+import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.util.CCFormatUtil;
+import cc.creativecomputing.gl.app.events.CCKeyEvent;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.export.CCScreenCapture;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector3f;
+import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.util.CCArcball;
-import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
-import cc.creativecomputing.simulation.particles.CCGPUParticle;
+import cc.creativecomputing.simulation.particles.CCIndexParticleEmitter;
+import cc.creativecomputing.simulation.particles.CCParticle;
 import cc.creativecomputing.simulation.particles.CCParticles;
-import cc.creativecomputing.simulation.particles.constraints.CCGPUConstraint;
+import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCAttractor;
-import cc.creativecomputing.simulation.particles.forces.CCNoiseCurveField;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCForceField;
 import cc.creativecomputing.simulation.particles.forces.CCGravity;
+import cc.creativecomputing.simulation.particles.forces.CCNoiseCurveField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
-import cc.creativecomputing.simulation.particles.forces.springs.CCGPUDampedSprings;
-import cc.creativecomputing.simulation.particles.forces.springs.CCGPUSprings;
-import cc.creativecomputing.simulation.particles.render.CCGPUParticlePointRenderer;
-import cc.creativecomputing.simulation.particles.render.CCGPUSpringRenderer;
-import cc.creativecomputing.util.CCFormatUtil;
+import cc.creativecomputing.simulation.particles.forces.springs.CCDampedSprings;
+import cc.creativecomputing.simulation.particles.forces.springs.CCSprings;
+import cc.creativecomputing.simulation.particles.render.CCParticlePointRenderer;
+import cc.creativecomputing.simulation.particles.render.CCSpringRenderer;
 
-public class CCCurveFlowFieldSpringEmitDemo extends CCApp {
+public class CCCurveFlowFieldSpringEmitDemo extends CCGL2Adapter {
 	
-	@CCControl(name = "spring strength", min = 0, max = 4f)
+	@CCProperty(name = "spring strength", min = 0, max = 4f)
 	private float _cSpringStrength = 0;
 	
-	@CCControl(name = "noise strength", min = 0, max = 10)
+	@CCProperty(name = "noise strength", min = 0, max = 10)
 	private float _cFieldStrength = 0;
 	
-	@CCControl(name = "attractor strength", min = -10, max = 10)
+	@CCProperty(name = "attractor strength", min = -10, max = 10)
 	private float _cAttractorStrength = 0;
 	
-	@CCControl(name = "attractor radius", min = 0, max = 300)
+	@CCProperty(name = "attractor radius", min = 0, max = 300)
 	private float _cAttractorRadius = 0;
 	
-	@CCControl(name = "gravity strength", min = 0, max = 1)
+	@CCProperty(name = "gravity strength", min = 0, max = 1)
 	private float _cGravityStrength = 0;
 	
-	@CCControl(name = "curve strength", min = 0, max = 10)
+	@CCProperty(name = "curve strength", min = 0, max = 10)
 	private float _cCurveStrength = 0;
 	
-	@CCControl(name = "noise speed", min = 0, max = 1)
+	@CCProperty(name = "noise speed", min = 0, max = 1)
 	private float _cCurveSpeed = 0;
 
-	@CCControl(name = "prediction", min = 0, max = 1)
+	@CCProperty(name = "prediction", min = 0, max = 1)
 	private float _cPrediction = 0;
 	
-	@CCControl(name = "curveNoiseScale", min = 0, max = 1)
+	@CCProperty(name = "curveNoiseScale", min = 0, max = 1)
 	private float _cCurveNoiseScale = 0;
 	
-	@CCControl(name = "curveOutputScale", min = 0, max = 200)
+	@CCProperty(name = "curveOutputScale", min = 0, max = 200)
 	private float _cCurveOuputScale = 0;
 	
-	@CCControl(name = "curveRadius", min = 0, max = 400)
+	@CCProperty(name = "curveRadius", min = 0, max = 400)
 	private float _cCurveRadius = 0;
 	
-	@CCControl(name = "emit radius", min = 0, max = 400)
+	@CCProperty(name = "emit radius", min = 0, max = 400)
 	private float _cEmitRadius = 0;
 
 	private CCParticles _myParticles;
-	private CCGPUIndexParticleEmitter _myEmitter;
+	private CCIndexParticleEmitter _myEmitter;
 	private CCArcball _myArcball;
 	
 	private CCNoiseCurveField _myCurveField = new CCNoiseCurveField();
-	private CCForceField _myForceField = new CCForceField(0.005f,1,new CCVector3f(100,20,30));
-	private CCGravity _myGravity = new CCGravity(new CCVector3f(10,0,0));
-	private CCAttractor _myAttractor = new CCAttractor(new CCVector3f(), 0, 0);
+	private CCForceField _myForceField = new CCForceField(0.005f,1,new CCVector3(100,20,30));
+	private CCGravity _myGravity = new CCGravity(new CCVector3(10,0,0));
+	private CCAttractor _myAttractor = new CCAttractor(new CCVector3(), 0, 0);
 	
-	private CCGPUSpringRenderer _myRenderer;
-	private CCGPUParticlePointRenderer _myPointRenderer;
-	private CCGPUSprings _mySprings;
+	private CCSpringRenderer _myRenderer;
+	private CCParticlePointRenderer _myPointRenderer;
+	private CCSprings _mySprings;
 	
 	private int _myNumberOfTrails = 1000;
 	private int _myParticlesPerTrail = 20;
@@ -102,13 +109,13 @@ public class CCCurveFlowFieldSpringEmitDemo extends CCApp {
 		myForces.add(_myGravity);
 		myForces.add(_myForceField);
 		myForces.add(_myAttractor);
-		_mySprings = new CCGPUDampedSprings(g,4,1f,0.1f,0.1f);	
+		_mySprings = new CCDampedSprings(g,4,1f,0.1f,0.1f);	
 		myForces.add(_mySprings);
 		
-		_myRenderer = new CCGPUSpringRenderer(_mySprings);
-		_myPointRenderer = new CCGPUParticlePointRenderer();
-		_myParticles = new CCParticles(g, _myRenderer, myForces, new ArrayList<CCGPUConstraint>(), _myNumberOfTrails,_myParticlesPerTrail * _myRows);
-		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
+		_myRenderer = new CCSpringRenderer(_mySprings);
+		_myPointRenderer = new CCParticlePointRenderer();
+		_myParticles = new CCParticles(g, _myRenderer, myForces, new ArrayList<CCConstraint>(), _myNumberOfTrails,_myParticlesPerTrail * _myRows);
+		_myParticles.addEmitter(_myEmitter = new CCIndexParticleEmitter(_myParticles));
 		
 		_myPointRenderer.setup(_myParticles);
 		
@@ -129,19 +136,19 @@ public class CCCurveFlowFieldSpringEmitDemo extends CCApp {
 			float myY = 0;
 			float myZ = 0;
 			
-			CCGPUParticle myParticle = null;
-			CCGPUParticle myFirstParticle = null;
+			CCParticle myParticle = null;
+			CCParticle myFirstParticle = null;
 			
 			// setup trail
 			for(int i = 0; i < _myParticlesPerTrail; i++){
 				float myAngle = CCMath.map(i, 0, _myParticlesPerTrail - 1, 0, CCMath.TWO_PI);
 				float myAngleY = CCMath.sin(myAngle) * _cEmitRadius;
 				float myAngleZ = CCMath.cos(myAngle) * _cEmitRadius;
-				CCGPUParticle myNewParticle = _myEmitter.emit(
+				CCParticle myNewParticle = _myEmitter.emit(
 					_myParticleID++,
 					CCColor.WHITE,
-					new CCVector3f(myX,myY+myAngleY, myZ + myAngleZ),
-					new CCVector3f(),
+					new CCVector3(myX,myY+myAngleY, myZ + myAngleZ),
+					new CCVector3(),
 					30, false
 				);
 				if(myParticle != null){
@@ -160,7 +167,7 @@ public class CCCurveFlowFieldSpringEmitDemo extends CCApp {
 		_myGravity.strength(_cGravityStrength);
 		
 		_myForceField.strength(_cFieldStrength);
-		_myForceField.noiseOffset(new CCVector3f(0,0,_myTime));
+		_myForceField.noiseOffset(new CCVector3(0,0,_myTime));
 		_myForceField.noiseScale(0.0025f);
 		
 		_myAttractor.strength(_cAttractorStrength);
@@ -182,7 +189,7 @@ public class CCCurveFlowFieldSpringEmitDemo extends CCApp {
 		_myPointRenderer.update(theDeltaTime);
 	}
 
-	public void draw() {
+	public void display(CCGraphics g) {
 		g.clear();
 		g.noDepthTest();
 		g.pushMatrix();
@@ -206,7 +213,7 @@ public class CCCurveFlowFieldSpringEmitDemo extends CCApp {
 	public void keyPressed(CCKeyEvent theEvent) {
 		switch(theEvent.keyCode()){
 		case VK_R:
-			_myParticles.reset();
+			_myParticles.reset(null);
 			break;
 		case VK_S:
 			CCScreenCapture.capture("export/db04/"+CCFormatUtil.nf(i++, 4)+".png", width, height);

@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /*
  * Copyright (c) 2013 christianr.
  * All rights reserved. This program and the accompanying materials
@@ -31,7 +47,7 @@ import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCForceField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 import cc.creativecomputing.simulation.particles.forces.springs.CCGPUAnchoredSprings;
-import cc.creativecomputing.simulation.particles.forces.springs.CCGPUDampedSprings;
+import cc.creativecomputing.simulation.particles.forces.springs.CCDampedSprings;
 import cc.creativecomputing.simulation.particles.forces.springs.CCGPUSprings;
 import cc.creativecomputing.simulation.particles.render.CCGPUParticlePointRenderer;
 
@@ -93,7 +109,7 @@ public class CCTrailsDemo extends CCApp {
 		_myAnchoredSprings.strength(2f);
 		myForces.add(_myAnchoredSprings);
 		
-		_mySprings = new CCGPUDampedSprings(g,2,1f,0.1f,0.1f);	
+		_mySprings = new CCDampedSprings(g,2,1f,0.1f,0.1f);	
 		myForces.add(_mySprings);
 		
 		_myRenderer = new CCGPUParticlePointRenderer();

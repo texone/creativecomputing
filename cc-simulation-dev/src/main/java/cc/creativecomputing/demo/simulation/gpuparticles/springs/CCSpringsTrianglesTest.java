@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /*
  * Copyright (c) 2013 christianr.
  * All rights reserved. This program and the accompanying materials
@@ -8,7 +24,7 @@
  * Contributors:
  *     christianr - initial API and implementation
  */
-package cc.creativecomputing.demo.simulation.gpuparticles.springs;
+package cc.creativecomputing.demo.simulation.particles.springs;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -30,14 +46,14 @@ import cc.creativecomputing.math.CCVector3f;
 import cc.creativecomputing.math.util.CCArcball;
 import cc.creativecomputing.simulation.particles.CCGPUIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCGPUParticle;
-import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCGPUParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCGPUConstraint;
 import cc.creativecomputing.simulation.particles.constraints.CCGPUTerrainConstraint;
-import cc.creativecomputing.simulation.particles.forces.CCForce;
-import cc.creativecomputing.simulation.particles.forces.CCForceField;
-import cc.creativecomputing.simulation.particles.forces.CCGravity;
-import cc.creativecomputing.simulation.particles.forces.springs.CCGPUDampedSprings;
-import cc.creativecomputing.simulation.particles.render.CCGPUParticlePointRenderer;
+import cc.creativecomputing.simulation.particles.forces.CCGPUForce;
+import cc.creativecomputing.simulation.particles.forces.CCGPUForceField;
+import cc.creativecomputing.simulation.particles.forces.CCGPUGravity;
+import cc.creativecomputing.simulation.particles.forces.springs.CCDampedSprings;
+import cc.creativecomputing.simulation.particles.render.CCParticlePointRenderer;
 
 public class CCSpringsTrianglesTest extends CCApp {
 
@@ -99,15 +115,15 @@ public class CCSpringsTrianglesTest extends CCApp {
 		}
 	}
 	
-	private CCGPUParticlePointRenderer _myRenderer;
-	private CCParticles _myParticles;
+	private CCParticlePointRenderer _myRenderer;
+	private CCGPUParticles _myParticles;
 	private CCGPUIndexParticleEmitter _myEmitter;
-	private CCGPUDampedSprings _mySprings;
+	private CCDampedSprings _mySprings;
 
 	private boolean _myPause = false;
 	private float _myScale = 1;
 
-	private CCForceField _myForceField = new CCForceField(0.005f, 1, new CCVector3f(100, 20, 30));
+	private CCGPUForceField _myForceField = new CCGPUForceField(0.005f, 1, new CCVector3f(100, 20, 30));
 
 	private CCArcball _myArcball;
 
@@ -117,8 +133,8 @@ public class CCSpringsTrianglesTest extends CCApp {
 	@Override
 	public void setup() {
 //		fixUpdateTime(1 / 50f);
-		List<CCForce> myForces = new ArrayList<CCForce>();
-		myForces.add(new CCGravity(new CCVector3f(0, -2.7f, 0)));
+		List<CCGPUForce> myForces = new ArrayList<CCGPUForce>();
+		myForces.add(new CCGPUGravity(new CCVector3f(0, -2.7f, 0)));
 		myForces.add(_myForceField);
 		_myForceField.strength(5f);
 
@@ -127,12 +143,12 @@ public class CCSpringsTrianglesTest extends CCApp {
 		_myTerrainConstraint = new CCGPUTerrainConstraint(_myTexture, new CCVector3f(6f, 400, 6f), new CCVector3f(400, -200, 225), 0.8f, 0.1f, 0.01f);
 		myConstraints.add(_myTerrainConstraint);
 
-		_mySprings = new CCGPUDampedSprings(g, 4, 0.2f, 0.01f, 25f);
+		_mySprings = new CCDampedSprings(g, 4, 0.2f, 0.01f, 25f);
 
 		myForces.add(_mySprings);
 
-		_myRenderer = new CCGPUParticlePointRenderer();
-		_myParticles = new CCParticles(g, _myRenderer, myForces, myConstraints, 500, 500);
+		_myRenderer = new CCParticlePointRenderer();
+		_myParticles = new CCGPUParticles(g, _myRenderer, myForces, myConstraints, 500, 500);
 		_myParticles.addEmitter(_myEmitter = new CCGPUIndexParticleEmitter(_myParticles));
 
 		List<Integer> _myIndices = new ArrayList<Integer>();
@@ -200,7 +216,7 @@ public class CCSpringsTrianglesTest extends CCApp {
 	}
 
 	public void reset() {
-		_myParticles.reset();
+		_myParticles.reset(null);
 		for (int i = 0; i < 490 * 490; i += 3) {
 			CCVector3f myPosition = new CCVector3f(CCMath.random(-1800, 1800), 400, 0);
 			// myPosition.y(400);
