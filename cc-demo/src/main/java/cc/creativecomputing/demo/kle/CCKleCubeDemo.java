@@ -82,19 +82,15 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 			g.translate(_myCenter);
 //			g.scale(_myScale);
 //			CCLog.info(_myRotateX+ ":" + _myRotateY + ":" + _myRotateZ);
-			g.rotateX(90);
-			g.rotateY(90);
-			g.rotateZ(90);
+//			g.rotateX(90);
+//			g.rotateY(90);
+//			g.rotateZ(90);
 			
-			g.matrixMode(CCMatrixMode.TEXTURE);
-			g.pushMatrix();
-			g.translate(_myCenter.x / texwidth, _myCenter.y / texheight);
+//			g.translate(_myCenter.x , _myCenter.y );
 			g.scale(_myScale);
 			g.rotate(_myRotation);
 			box(g,12,12,12);
-			g.popMatrix();
 			
-			g.matrixMode(CCMatrixMode.MODELVIEW);
 			g.popMatrix();
 		}
 	}
@@ -116,7 +112,7 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 	@Override
 	public void init( CCGraphics g, CCAnimator theAnimator) {
 		int i = 0;
-		for(int c = 0; c < 9 * 28; c++){
+		for(int c = 0; c < 28; c++){
 			for(int r = 0; r < 16; r++){
 				CCCubeEffectable myCube = new CCCubeEffectable(i, new CCVector2(c * 12 + 6 , r * 12 + 6));
 				myCube.column(c);
@@ -176,7 +172,7 @@ public class CCKleCubeDemo extends CCGL2Adapter{
 		
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(1920, 1080);
+		myAppManager.glcontext().size(1200, 600);
 		myAppManager.animator().framerate = 30;
 		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();

@@ -288,7 +288,7 @@ public class CCReflectionUtil {
 		return myResult;
 	}
 	
-	public static void getFields(final Class<?> theClass, final Class<? extends Annotation>theAnnotation, final List<Field> theFields) {
+	private static void getFields(final Class<?> theClass, final Class<? extends Annotation>theAnnotation, final List<Field> theFields) {
 		if(theClass.getSuperclass() == null) return;
 			
 		getFields(theClass.getSuperclass(), theAnnotation, theFields);
