@@ -1,13 +1,19 @@
-/*
- * Copyright (c) 2013 christianr.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.html
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
  * 
- * Contributors:
- *     christianr - initial API and implementation
- */
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.simulation.particles.render;
 
 import java.nio.file.Path;
@@ -19,14 +25,13 @@ import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.CCVBOMesh;
+import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.simulation.particles.CCParticles;
-import cc.creativecomputing.simulation.particles.forces.CCForce;
 
 /**
  * @author christianriekoff
@@ -36,18 +41,18 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 	
 	@CCProperty(name = "life time alpha")
 	private CCEnvelope _cLifeTimeAlpha = new CCEnvelope();
+	@CCProperty(name = "shader")
+	protected CCGLProgram _myShader;
+	
+	private CCGLWriteDataShader _myWriteDataShader;
+	
+	private CCShaderBuffer _myEvelopeData;
 
-	protected CCVBOMesh _myMesh;
+	protected CCMesh _myMesh;
 	
 	protected CCParticles _myParticles;
 	
-	protected CCGLProgram _myShader;
-	
 	protected float _myPointsize = 1;
-	
-	private CCShaderBuffer _myEvelopeData;
-	
-	private CCGLWriteDataShader _myWriteDataShader;
 	
 	public CCIndexedParticleRenderer(Path theVertexShader, Path theFragmentShader) {
 		_myShader = new CCGLProgram(theVertexShader, theFragmentShader);
@@ -65,7 +70,7 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 	
 	public void setup(CCParticles theParticles) {
 		_myParticles = theParticles;
-		_myMesh = new CCVBOMesh(CCDrawMode.POINTS, _myParticles.size());
+		_myMesh = new CCMesh(CCDrawMode.POINTS, _myParticles.size());
 		_myMesh.prepareVertexData(3);
 		
 		for(int y = 0; y < _myParticles.height();y++) {
@@ -115,13 +120,14 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 		_myShader.uniform1i("lifeTimeBlends", 4);
 		_myShader.uniform1f("pointSize", _myPointsize);
 		_myShader.uniform1f("tanHalfFOV", CCMath.tan(g.camera().fov()) * g.height());
+		g.color(255);
 		_myMesh.draw(g);
 		g.noTexture();
 		_myShader.end();
 		g.gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE) ;
 	}
 	
-	public CCVBOMesh mesh(){
+	public CCMesh mesh(){
 		return _myMesh;
 	}
 	

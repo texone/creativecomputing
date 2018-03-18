@@ -1,13 +1,19 @@
-/*
- * Copyright (c) 2013 christianr.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.html
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
  * 
- * Contributors:
- *     christianr - initial API and implementation
- */
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.simulation.particles.render;
 
 import cc.creativecomputing.core.CCProperty;
@@ -24,13 +30,13 @@ public class CCParticleDataDebugRenderer {
 	private boolean _cDrawPositions = false;
 	
 	@CCProperty(name = "scale positions", min = 0, max = 1000)
-	private float _cScalePositions = 0;
+	private double _cScalePositions = 0;
 	
 	@CCProperty(name = "draw infos")
 	private boolean _cDrawInfos = false;
 	
 	@CCProperty(name = "scale infos", min = 0, max = 100)
-	private float _cScaleInfos = 0;
+	private double _cScaleInfos = 0;
 
 	private CCParticles _myParticles;
 	
@@ -49,10 +55,10 @@ public class CCParticleDataDebugRenderer {
 	
 	public void draw(CCGraphics g){
 		if(_cDrawPositions)drawData(g, _myParticles.dataBuffer().attachment(0), 0, _cScalePositions);
-		if(_cDrawPositions)drawData(g, _myParticles.dataBuffer().attachment(1), _myParticles.width(), _cScaleInfos);
+		if(_cDrawInfos)drawData(g, _myParticles.dataBuffer().attachment(1), _myParticles.width(), _cScaleInfos);
 	}
 	
-	public void drawData(CCGraphics g, CCTexture2D theData, int theX, float theScale){
+	public void drawData(CCGraphics g, CCTexture2D theData, int theX, double theScale){
 		
 		g.pushMatrix();
 		g.translate(-g.width()/2, -g.height()/2);

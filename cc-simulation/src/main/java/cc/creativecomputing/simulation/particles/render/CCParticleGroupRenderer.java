@@ -23,13 +23,12 @@ import com.jogamp.opengl.GL2;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
+import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
-import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.simulation.particles.CCParticles;
@@ -38,70 +37,51 @@ import cc.creativecomputing.simulation.particles.CCParticles;
  * @author christianriekoff
  *
  */
-public class CCParticleTrailRenderer extends CCParticleRenderer{
+public class CCParticleGroupRenderer extends CCParticleRenderer{
 	
-	@CCProperty(name = "life time alpha")
+	@CCProperty(name = "progress alpha")
 	private CCEnvelope _cLifeTimeAlpha = new CCEnvelope();
 
 	protected CCVBOMesh _myMesh;
-	protected CCVBOMesh _myWriteMesh;
 	
 	protected CCParticles _myParticles;
-	
 	@CCProperty(name = "shader")
 	protected CCGLProgram _myShader;
 	
 	protected float _myPointsize = 1;
 	
-	private CCShaderBuffer _myTrailData;
+	private CCShaderBuffer _myEvelopeData;
 	
-	private CCGLProgram _myWriteDataShader;
+	private CCGLWriteDataShader _myWriteDataShader;
 	
-	private final int _myTrailLength;
-	
-	public CCParticleTrailRenderer(Path theVertexShader, Path theFragmentShader, int theTrailLength) {
+	public CCParticleGroupRenderer(Path theVertexShader, Path theFragmentShader) {
 		_myShader = new CCGLProgram(theVertexShader, theFragmentShader);
-		_myTrailLength = theTrailLength;
-		_myWriteDataShader = new CCGLProgram(
-			CCNIOUtil.classPath(CCDisplayShader.class, "write_list_vertex.glsl"),
-			CCNIOUtil.classPath(CCDisplayShader.class, "write_list_fragment.glsl")
-		);
+		
+		_myWriteDataShader = new CCGLWriteDataShader();
+		_myEvelopeData = new CCShaderBuffer(100,1);
 	}
 	
-	public CCParticleTrailRenderer(int theTrailLength) {
+	public CCParticleGroupRenderer() {
 		this(
-			CCNIOUtil.classPath(CCDisplayShader.class, "trails_vertex.glsl"),
-			CCNIOUtil.classPath(CCDisplayShader.class, "trails_fragment.glsl"),
-			theTrailLength
+			CCNIOUtil.classPath(CCDisplayShader.class, "group_display_vertex.glsl"),
+			CCNIOUtil.classPath(CCDisplayShader.class, "group_display_fragment.glsl")
 		);
 	}
 	
 	public void setup(CCParticles theParticles) {
 		_myParticles = theParticles;
-		_myMesh = new CCVBOMesh(CCDrawMode.LINES, _myParticles.size() *( _myTrailLength - 1) * 2);
+		_myMesh = new CCVBOMesh(CCDrawMode.POINTS, _myParticles.size());
 		_myMesh.prepareVertexData(3);
-		_myWriteMesh = new CCVBOMesh(CCDrawMode.POINTS, _myParticles.size());
-		_myWriteMesh.prepareVertexData(3);
 		
 		for(int y = 0; y < _myParticles.height();y++) {
 			for(int x = 0; x < _myParticles.width();x++) {
-				for(int i = 0; i < _myTrailLength - 1;i++){
-					_myMesh.addVertex(x,y,i);
-					_myMesh.addVertex(x,y,i + 1);
-				}
-
-				_myWriteMesh.addVertex(x,y,0);
+				_myMesh.addVertex(x,y,0);
 			}
 		}
-		_myTrailData = new CCShaderBuffer(theParticles.width() * _myTrailLength,theParticles.height());
 	}
 	
 	public void pointSize(float thePointSize){
 		_myPointsize = thePointSize;
-	}
-	
-	public CCTexture2D trailData(){
-		return _myTrailData.attachment(0);
 	}
 	
 	@Override
@@ -110,43 +90,34 @@ public class CCParticleTrailRenderer extends CCParticleRenderer{
 	@Override
 	public void updateData(CCGraphics g) {}
 
-	boolean y0 = true;
-	int i = 0;
 	public void display(CCGraphics g){
-		if(y0){
-			_myTrailData.clear(g);
-			y0 = false;
-		}
-		_myTrailData.beginDraw(g);
-		CCLog.info(_myTrailData.width(), _myTrailData.height());
-//		g.clear();
+		_myEvelopeData.beginDraw(g);
+		g.clear();
 		g.pushAttribute();
 		g.noBlend();
 		g.pointSize(1);
 		_myWriteDataShader.start();
-		g.texture(0, _myParticles.dataBuffer().attachment(0));
-		_myWriteDataShader.uniform1i("positions", 0);
-		_myWriteDataShader.uniform1f("listSize", 20);
-		
-		_myWriteDataShader.uniform1f("listIndex", i % _myTrailLength);
-		CCLog.info(i % _myTrailLength);
-		i++;
-		_myWriteMesh.draw(g);
-		g.noTexture();
+		g.beginShape(CCDrawMode.POINTS);
+		for(int i = 0; i < 100; i++){
+			double myVal = _cLifeTimeAlpha.value(i / 100d);
+			g.textureCoords4D(0, myVal, myVal, myVal, 1d);
+			g.vertex(i + 0.5, 0.5);
+		}
+		g.endShape();
 		_myWriteDataShader.end();
 		g.popAttribute();
-		_myTrailData.endDraw(g);
+		_myEvelopeData.endDraw(g);
 		
 		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
 		_myShader.start();
 		g.texture(0, _myParticles.dataBuffer().attachment(0));
 		g.texture(1, _myParticles.dataBuffer().attachment(1));
 		g.texture(3, _myParticles.dataBuffer().attachment(3));
-		g.texture(4, _myTrailData.attachment(0));
+		g.texture(4, _myEvelopeData.attachment(0));
 		_myShader.uniform1i("positions", 0);
 		_myShader.uniform1i("infos", 1);
 		_myShader.uniform1i("colors", 3);
-		_myShader.uniform1i("trails", 4);
+		_myShader.uniform1i("lifeTimeBlends", 4);
 		_myShader.uniform1f("pointSize", _myPointsize);
 		_myShader.uniform1f("tanHalfFOV", CCMath.tan(g.camera().fov()) * g.height());
 		_myMesh.draw(g);

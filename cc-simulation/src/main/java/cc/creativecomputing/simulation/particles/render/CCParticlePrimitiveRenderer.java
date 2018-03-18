@@ -1,13 +1,19 @@
-/*
- * Copyright (c) 2013 christianr.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.html
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
  * 
- * Contributors:
- *     christianr - initial API and implementation
- */
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.simulation.particles.render;
 
 import java.nio.file.Path;
@@ -17,7 +23,7 @@ import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.CCVBOMesh;
+import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCVector3;
@@ -37,7 +43,7 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 		PYRAMIDE
 	}
 	
-	protected CCVBOMesh _myMesh;
+	protected CCMesh _myMesh;
 	
 	protected CCParticles _myParticles;
 	
@@ -71,7 +77,7 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 		_myParticles = theParticles;
 		switch(_myPrimitive){
 		case LINE:
-			_myMesh = new CCVBOMesh(CCDrawMode.LINES, _myParticles.size() * 2);
+			_myMesh = new CCMesh(CCDrawMode.LINES, _myParticles.size() * 2);
 			_myMesh.prepareVertexData(3);
 			
 			for(int y = 0; y < _myParticles.height();y++) {
@@ -87,7 +93,7 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 			}
 			break;
 		case TRIANGLE:
-			_myMesh = new CCVBOMesh(CCDrawMode.TRIANGLES, _myParticles.size() * 3);
+			_myMesh = new CCMesh(CCDrawMode.TRIANGLES, _myParticles.size() * 3);
 			_myMesh.prepareVertexData(3);
 			
 			for(int y = 0; y < _myParticles.height();y++) {
@@ -107,7 +113,7 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 			}
 			break;
 		case QUAD:
-			_myMesh = new CCVBOMesh(CCDrawMode.QUADS, _myParticles.size() * 4);
+			_myMesh = new CCMesh(CCDrawMode.QUADS, _myParticles.size() * 4);
 			_myMesh.prepareVertexData(3);
 			
 			for(int y = 0; y < _myParticles.height();y++) {
@@ -131,7 +137,7 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 			}
 			break;
 		case PYRAMIDE:
-			_myMesh = new CCVBOMesh(CCDrawMode.TRIANGLES, _myParticles.size() * 12);
+			_myMesh = new CCMesh(CCDrawMode.TRIANGLES, _myParticles.size() * 12);
 			_myMesh.prepareVertexData(3);
 			
 			CCVector3 myNormal01 = CCVector3.normal(
@@ -206,7 +212,7 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 			}
 			break;
 		case BOX:
-			_myMesh = new CCVBOMesh(CCDrawMode.QUADS, _myParticles.size() * 24);
+			_myMesh = new CCMesh(CCDrawMode.QUADS, _myParticles.size() * 24);
 			_myMesh.prepareVertexData(3);
 			
 			for(int y = 0; y < _myParticles.height();y++) {
@@ -317,9 +323,6 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 			}
 			break;
 		}
-		
-		
-		
 	}
 	
 	public void pointSize(float thePointSize){
@@ -348,7 +351,7 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 		_myShader.end();
 	}
 	
-	public CCVBOMesh mesh(){
+	public CCMesh mesh(){
 		return _myMesh;
 	}
 }

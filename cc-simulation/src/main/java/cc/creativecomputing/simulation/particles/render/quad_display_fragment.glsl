@@ -32,5 +32,5 @@ void main(){
 	vec3 base = mix( diffuseColor, specularColor, specular * o );
 	
 	gl_FragColor = gl_Color;
-	gl_FragColor.rgb = base.rgb;
+	gl_FragColor.rgb = vec3(1.);//base.rgb;
 }
