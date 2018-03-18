@@ -1,19 +1,19 @@
 
-uniform	vec3 normal;
-uniform	float constant;
+uniform vec3 planeNormal;
+uniform float planeConstant;
 	
-uniform	float resilience;
-uniform	float friction;
-uniform	float minimalVelocity;
+uniform float resilience;
+uniform float friction;
+uniform float minimalVelocity;
 	
 vec3 function(vec3 theVelocity, vec3 thePosition, vec2 theTexID, float theDeltaTime){
-	float pseudoDistance = dot(normal, thePosition + theVelocity * theDeltaTime) - constant;
+	float pseudoDistance = dot(planeNormal, thePosition + theVelocity * theDeltaTime) - planeConstant;
 	
 	if (pseudoDistance > 0) return theVelocity;
 		
 	return bounceReflection(
 		theVelocity, 
-		normalize(normal), 
+		normalize(planeNormal), 
 		pseudoDistance,
 		resilience, 
 		friction, 
