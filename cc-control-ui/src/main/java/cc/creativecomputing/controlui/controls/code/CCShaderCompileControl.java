@@ -270,12 +270,13 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderSource, CCSha
         _myContainer.add(_myResetButton);
 	}
 	
+	
 	private void saveWindowPosition(){
-		CCControlApp.preferences.put(_myHandle.path().toString() + "/x" , _myEditorFrame.getX() + "");
-		CCControlApp.preferences.put(_myHandle.path().toString() + "/y" , _myEditorFrame.getY() + "");
-		CCControlApp.preferences.put(_myHandle.path().toString() + "/width" , _myEditorFrame.getWidth() + "");
-		CCControlApp.preferences.put(_myHandle.path().toString() + "/height" , _myEditorFrame.getHeight() + "");
-		CCControlApp.preferences.put(_myHandle.path().toString() + "/devider" , _mySplitPane.getDividerLocation() + "");
+//		CCControlApp.preferences.put(_myHandle.path().toString() + "/x" , _myEditorFrame.getX() + "");
+//		CCControlApp.preferences.put(_myHandle.path().toString() + "/y" , _myEditorFrame.getY() + "");
+//		CCControlApp.preferences.put(_myHandle.path().toString() + "/width" , _myEditorFrame.getWidth() + "");
+//		CCControlApp.preferences.put(_myHandle.path().toString() + "/height" , _myEditorFrame.getHeight() + "");
+//		CCControlApp.preferences.put(_myHandle.path().toString() + "/devider" , _mySplitPane.getDividerLocation() + "");
 	}
 	
 	private void saveText(){

@@ -59,7 +59,7 @@ public class CCEnvelopeEditor extends JFrame {
 		_myCurvePanel = new SwingCurvePanel(this);
 	
 		JPanel containerPanel = new JPanel();
-		containerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		containerPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		containerPanel.setLayout(new BorderLayout());
 		// panel to test
 		JPanel testPanel = new JPanel();
