@@ -1,0 +1,1758 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "effects": {
+        "name": "effects",
+        "value": {
+          "brightness scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "brightness scale",
+            "value": 1
+          },
+          "brightness default": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "brightness default",
+            "value": 1
+          },
+          "offset": {
+            "name": "offset",
+            "value": {
+              "min": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "min",
+                "value": -1
+              },
+              "group blends": {
+                "name": "group blends",
+                "value": {
+                  "group_1": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "group_1",
+                    "value": 1
+                  },
+                  "group_0": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "group_0",
+                    "value": 1
+                  },
+                  "group_3": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "group_3",
+                    "value": 1
+                  },
+                  "group_2": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "group_2",
+                    "value": 1
+                  }
+                }
+              },
+              "brightness modulation": {
+                "name": "brightness modulation",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "group_id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group_id",
+                        "value": 0
+                      },
+                      "column": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "column",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      },
+                      "row": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "row",
+                        "value": 0
+                      },
+                      "group": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {
+                      "group_id": {
+                        "name": "group_id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "column": {
+                        "name": "column",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "id": {
+                        "name": "id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "row": {
+                        "name": "row",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "group": {
+                        "name": "group",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "max": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "max",
+                "value": 1
+              },
+              "blend": {
+                "min": 0,
+                "max": 1,
+                "name": "blend",
+                "value": 0
+              },
+              "channelblend": {
+                "min": 0,
+                "max": 1,
+                "name": "channelblend",
+                "value": 0
+              }
+            }
+          },
+          "normalize": {
+            "name": "normalize",
+            "value": false
+          },
+          "end add": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "end add",
+            "value": 0.5
+          },
+          "bypass amount": {
+            "name": "bypass amount",
+            "value": false
+          },
+          "end scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "end scale",
+            "value": 0.5
+          },
+          "global scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "global scale",
+            "value": 1
+          },
+          "animation blender": {
+            "name": "animation blender",
+            "value": {
+              "apply blend": {
+                "min": 0,
+                "max": 1,
+                "name": "apply blend",
+                "value": 0
+              },
+              "modulation": {
+                "name": "modulation",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "group_id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group_id",
+                        "value": 0
+                      },
+                      "column": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "column",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      },
+                      "row": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "row",
+                        "value": 0
+                      },
+                      "group": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {
+                      "group_id": {
+                        "name": "group_id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "column": {
+                        "name": "column",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "id": {
+                        "name": "id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "row": {
+                        "name": "row",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "group": {
+                        "name": "group",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "blend": {
+                "min": 0,
+                "max": 1,
+                "name": "blend",
+                "value": 0
+              },
+              "blend range": {
+                "min": 0,
+                "max": 1,
+                "name": "blend range",
+                "value": 0
+              },
+              "reverse": {
+                "name": "reverse",
+                "value": true
+              }
+            }
+          },
+          "signal": {
+            "name": "signal",
+            "value": {
+              "reset phase": {},
+              "use gradient": {
+                "name": "use gradient",
+                "value": false
+              },
+              "gradient channel": {
+                "min": -2147483648,
+                "max": 2147483647,
+                "name": "gradient channel",
+                "value": 0
+              },
+              "blend": {
+                "min": 0,
+                "max": 1,
+                "name": "blend",
+                "value": 1
+              },
+              "sin scale": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "sin scale",
+                "value": 2
+              },
+              "gradient": {
+                "gradient": [{
+                  "a": 1,
+                  "r": 1,
+                  "b": 1,
+                  "g": 1,
+                  "position": 0.35593220591545105
+                }],
+                "name": "gradient",
+                "value": [{}]
+              },
+              "phase scale": {
+                "min": 1,
+                "max": 10,
+                "name": "phase scale",
+                "value": 1
+              },
+              "brightness phase": {
+                "name": "brightness phase",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "group_id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group_id",
+                        "value": 0
+                      },
+                      "column": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "column",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      },
+                      "row": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "row",
+                        "value": 0
+                      },
+                      "group": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {
+                      "group_id": {
+                        "name": "group_id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "column": {
+                        "name": "column",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "id": {
+                        "name": "id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "row": {
+                        "name": "row",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "group": {
+                        "name": "group",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "sin add": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "sin add",
+                "value": -1
+              },
+              "phase speed": {
+                "min": 0,
+                "max": 50,
+                "name": "phase speed",
+                "value": 1
+              },
+              "brightness amount": {
+                "name": "brightness amount",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 1
+                      },
+                      "group_id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group_id",
+                        "value": 0
+                      },
+                      "column": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "column",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      },
+                      "row": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "row",
+                        "value": 0
+                      },
+                      "group": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {
+                      "group_id": {
+                        "name": "group_id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "column": {
+                        "name": "column",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "id": {
+                        "name": "id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "row": {
+                        "name": "row",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "group": {
+                        "name": "group",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "print": {
+                "name": "print",
+                "value": false
+              },
+              "group blends": {
+                "name": "group blends",
+                "value": {
+                  "group_1": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "group_1",
+                    "value": 1
+                  },
+                  "group_0": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "group_0",
+                    "value": 1
+                  },
+                  "group_3": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "group_3",
+                    "value": 1
+                  },
+                  "group_2": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "group_2",
+                    "value": 1
+                  }
+                }
+              },
+              "brightness frequency": {
+                "name": "brightness frequency",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0.05200004577636719
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "group_id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group_id",
+                        "value": 1
+                      },
+                      "column": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "column",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      },
+                      "row": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "row",
+                        "value": 0
+                      },
+                      "group": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "group",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {
+                      "group_id": {
+                        "name": "group_id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "column": {
+                        "name": "column",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "id": {
+                        "name": "id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "row": {
+                        "name": "row",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "group": {
+                        "name": "group",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "signal": {
+                "name": "signal",
+                "value": {
+                  "square setup": {
+                    "name": "square setup",
+                    "value": {
+                      "octaves": {
+                        "min": 1,
+                        "max": 10,
+                        "name": "octaves",
+                        "value": 1
+                      },
+                      "pulsewidth": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "pulsewidth",
+                        "value": 0.5
+                      },
+                      "scale": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "scale",
+                        "value": 1
+                      },
+                      "lacunarity": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "lacunarity",
+                        "value": 2
+                      },
+                      "gain": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "gain",
+                        "value": 0.5
+                      },
+                      "norm": {
+                        "name": "norm",
+                        "value": true
+                      }
+                    }
+                  },
+                  "worley": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "worley",
+                    "value": 0
+                  },
+                  "amp": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "amp",
+                    "value": 1
+                  },
+                  "sloped tri": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "sloped tri",
+                    "value": 0
+                  },
+                  "saw": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "saw",
+                    "value": 0
+                  },
+                  "simplex": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "simplex",
+                    "value": 1
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "tri": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "tri",
+                    "value": 0
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  },
+                  "norm": {
+                    "name": "norm",
+                    "value": true
+                  },
+                  "octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "square": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "square",
+                    "value": 0
+                  },
+                  "sine": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "sine",
+                    "value": 0
+                  },
+                  "worley setup": {
+                    "name": "worley setup",
+                    "value": {
+                      "octaves": {
+                        "min": 1,
+                        "max": 10,
+                        "name": "octaves",
+                        "value": 1
+                      },
+                      "amp": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "amp",
+                        "value": 1
+                      },
+                      "formular": {
+                        "name": "formular",
+                        "value": "DEFAULT"
+                      },
+                      "scale": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "scale",
+                        "value": 1
+                      },
+                      "lacunarity": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "lacunarity",
+                        "value": 2
+                      },
+                      "gain": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "gain",
+                        "value": 0.5
+                      },
+                      "norm": {
+                        "name": "norm",
+                        "value": true
+                      },
+                      "distance type": {
+                        "name": "distance type",
+                        "value": "EUCLIDEAN"
+                      }
+                    }
+                  },
+                  "tri setup": {
+                    "name": "tri setup",
+                    "value": {
+                      "octaves": {
+                        "min": 1,
+                        "max": 10,
+                        "name": "octaves",
+                        "value": 1
+                      },
+                      "scale": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "scale",
+                        "value": 1
+                      },
+                      "lacunarity": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "lacunarity",
+                        "value": 2
+                      },
+                      "gain": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "gain",
+                        "value": 0.5
+                      },
+                      "norm": {
+                        "name": "norm",
+                        "value": true
+                      },
+                      "ratio": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "ratio",
+                        "value": 0.5
+                      }
+                    }
+                  }
+                }
+              },
+              "channelblend": {
+                "min": 0,
+                "max": 1,
+                "name": "channelblend",
+                "value": 0
+              }
+            }
+          },
+          "modulation sources": {
+            "name": "modulation sources",
+            "value": {}
+          },
+          "combine": {
+            "name": "combine",
+            "value": {}
+          }
+        }
+      },
+      "scale": {
+        "min": 0,
+        "max": 1,
+        "name": "scale",
+        "value": 0.18400000035762787
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.84583729661181
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}
