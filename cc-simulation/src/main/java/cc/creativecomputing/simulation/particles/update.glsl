@@ -6,16 +6,19 @@ uniform float deltaTime;
 
 uniform sampler2DRect colorTexture;
 uniform sampler2DRect staticPositions;
+uniform sampler2DRect staticAges;
 uniform sampler2DRect positionTexture;
 uniform sampler2DRect velocityTexture;
 uniform sampler2DRect infoTexture;
 uniform float staticPositionBlend;
 
 uniform sampler2DRect lifeTimeBlends;
+uniform sampler2DRect groupInfoTexture;
 
-float lifeTimeBlend(vec2 texID, float forceIndex){
-	vec4 infos = texture2DRect (infoTexture, texID);
-	return texture2DRect (lifeTimeBlends, vec2(infos.x / infos.y * 100.0, forceIndex)).x;
+float lifeTimeBlend(vec4 infos, vec4 groupInfos, float forceIndex){
+	float progress = infos.x / infos.y;
+	//if(groupInfos.x >= 0.)progress = groupInfos.x;
+	return texture2DRect (lifeTimeBlends, vec2(progress * 100.0, forceIndex)).x;
 }
 
 // insert forces
@@ -54,10 +57,15 @@ vec3 bounceReflection(
 
 @define constraints
 
+uniform float useAgeBlends;
+
 void main (){
 	vec2 texID = gl_FragCoord.xy;
 	vec3 position = texture2DRect (positionTexture, texID).xyz;
 	vec3 velocity = texture2DRect (velocityTexture, texID).xyz;
+	vec4 infos = texture2DRect (infoTexture, texID);
+	vec4 groupInfos = texture2DRect (groupInfoTexture, infos.zw);
+	if(infos.z < 0)groupInfos = vec4(-1.0);
 	vec4 color = texture2DRect (colorTexture, texID);
 	vec3 acceleration = vec3(0,0,0);
 
@@ -83,16 +91,18 @@ void main (){
 	*/
 	vec4 lastInfo = texture2DRect(infoTexture, texID);
 	float myAge = lastInfo.x;
-	int myStep = int(lastInfo.w);
+	vec2 myGroup = lastInfo.zw;
+
+	float staticAge = texture2DRect (staticAges, texID).x;
 	
 	vec4 info = vec4(
-		lastInfo.x + deltaTime,
+		mix(lastInfo.x + deltaTime, staticAge, useAgeBlends),
 		lastInfo.y,
 		lastInfo.z,
 		lastInfo.w
 	);
 	
-	if(myAge >= lastInfo.y && lastInfo.z == 0.0)position = vec3(1000000,0,0);
+	if(myAge >= lastInfo.y && lastInfo.z < 0.0)position = vec3(1000000,0,0);
 	
 	vec3 staticPosition = texture2DRect (staticPositions, texID).xyz;
 	vec4 newPosition = vec4(mix(position + deltaTime * velocity, staticPosition, staticPositionBlend),1); 

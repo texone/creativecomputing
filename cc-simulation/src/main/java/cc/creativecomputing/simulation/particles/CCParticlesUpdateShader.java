@@ -1,13 +1,19 @@
-/*
- * Copyright (c) 2013 christianr.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.html
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
  * 
- * Contributors:
- *     christianr - initial API and implementation
- */
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.simulation.particles;
 
 import java.nio.file.Path;
@@ -41,15 +47,8 @@ import cc.creativecomputing.simulation.particles.impulses.CCImpulse;
 @SuppressWarnings("unused")
 public class CCParticlesUpdateShader extends CCGLProgram{
 
-	protected String _myVelocityTextureParameter;
-	protected String _myPositionTextureParameter;
-	protected String _myInfoTextureParameter;
-	protected String _myColorTextureParameter;
-	protected String _myStaticPositionTextureParameter;
-	protected String _myNoiseTextureParameter;
 	protected String _myStaticPositionBlendParameter;
 	protected String _myDeltaTimeParameter;
-	protected String _myEnvelopeTextureParameter;
 	
 	protected String _myForcesParameter;
 	protected String _myConstraintsParameter;
@@ -59,10 +58,6 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 	private List<CCConstraint> _myConstraints;
 	
 	private CCTexture2D _myRandomTexture;
-	
-	private CCShaderBuffer _myEvelopeData;
-	
-	private CCGLWriteDataShader _myWriteDataShader;
 	
 	protected CCParticlesUpdateShader(
 		final CCParticles theParticles,
@@ -75,11 +70,6 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		final int theHeight
 	){
 		super();
-		
-		_myWriteDataShader = new CCGLWriteDataShader();
-		
-		_myEnvelopeTextureParameter = "lifeTimeBlends";
-		_myEvelopeData = new CCShaderBuffer(100,theForces.size());
 
 		CCShaderSourceTemplate shaderSource = CCGLShader.buildSourceObject(theShaderFile);
 		
@@ -94,7 +84,11 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 			myForce.setShader(this);
 			myForce.setParticles(theParticles);
 			myForcesBuffer.append(myForce.shaderSource());
-			myForcesApplyBuffer.append("	acceleration = acceleration + " + myForce.parameter("function") + "(position,velocity,texID,deltaTime);\n");
+			myForcesApplyBuffer.append("	acceleration = acceleration + ");
+			myForcesApplyBuffer.append(myForce.parameter("function"));
+			myForcesApplyBuffer.append("(position,velocity,infos,groupInfos,texID,deltaTime) * lifeTimeBlend(infos, groupInfos, ");
+			myForcesApplyBuffer.append(myForce.parameter("index"));
+			myForcesApplyBuffer.append(");\n");
 			
 			myIndex++;
 		}
@@ -129,17 +123,10 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 //			myImpulse.setShader(this, myImpulseIndex++, theWidth, theHeight);
 		}
 		
-		_myPositionTextureParameter = "positionTexture";
-		_myInfoTextureParameter = "infoTexture";
-		_myVelocityTextureParameter = "velocityTexture";
-		_myColorTextureParameter = "colorTexture";
-		_myStaticPositionTextureParameter = "staticPositions";
-		_myNoiseTextureParameter = CCGLShaderUtil.textureUniform;
 		_myStaticPositionBlendParameter = "staticPositionBlend";
 		_myDeltaTimeParameter = "deltaTime";
 		
 		setTextureUniform(CCGLShaderUtil.textureUniform, _myRandomTexture);
-		setTextureUniform(_myEnvelopeTextureParameter, _myEvelopeData.attachment(0));
 	}
 	
 	public CCParticlesUpdateShader(
@@ -184,51 +171,9 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		return _myRandomTexture;
 	}
 	
-	public CCTexture2D envelopeTexture(){
-		return _myEvelopeData.attachment(0);
-	}
-	
-	public void preDisplay(CCGraphics g){
-		for(CCForce myForce:_myForces){
-			myForce.preDisplay(g);
-		}
-		for(CCConstraint myConstraint:_myConstraints){
-			myConstraint.preDisplay(g);
-		}
-		_myEvelopeData.beginDraw(g);
-		g.clear();
-		g.pushAttribute();
-		g.noBlend();
-		g.pointSize(1);
-		_myWriteDataShader.start();
-		g.beginShape(CCDrawMode.POINTS);
-		for(CCForce myForce:_myForces){
-			for(int i = 0; i < 100; i++){
-				double myVal = myForce.lifetimeBlend().value(i / 100d);
-				g.textureCoords4D(0, myVal, myVal, myVal, 1d);
-				g.vertex(i + 0.5, myForce.index() + 1);
-			}
-		}
-		g.endShape();
-		_myWriteDataShader.end();
-		g.popAttribute();
-		_myEvelopeData.endDraw(g);
-	}
-	
 	@Override
 	public void start() {
 		super.start();
-		
-		int myTextureUnit = 0;
-		
-		uniform1i(_myPositionTextureParameter, myTextureUnit++);
-		uniform1i(_myInfoTextureParameter, myTextureUnit++);
-		uniform1i(_myVelocityTextureParameter, myTextureUnit++);
-		uniform1i(_myColorTextureParameter, myTextureUnit++);
-		uniform1i(_myStaticPositionTextureParameter, myTextureUnit++);
-		
-		uniform1i(_myNoiseTextureParameter, myTextureUnit++);
-		uniform1i(_myEnvelopeTextureParameter, myTextureUnit++);
 
 		uniform1f(_myDeltaTimeParameter, _myDeltaTime);
 		uniform1f(_myStaticPositionBlendParameter, _myStaticPositionBlend);

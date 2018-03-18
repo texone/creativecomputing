@@ -10,7 +10,7 @@ uniform float maxForce;
 uniform float nearDistance;
 uniform float nearMaxForce;
 
-vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime){
 	
 	vec4 targetInfos = texture2DRect (targetPositionTexture, theTexID);
 	vec3 target = targetInfos.xyz * scale;
@@ -31,5 +31,5 @@ vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaT
 		return force / distance * maxForce * targetStrength;
 	}
 	
-	return force * lifeTimeBlend(theTexID, index) * strength;// * targetStrength * strength;// / (theDeltaTime * 60);
+	return force * strength;// * targetStrength * strength;// / (theDeltaTime * 60);
 }

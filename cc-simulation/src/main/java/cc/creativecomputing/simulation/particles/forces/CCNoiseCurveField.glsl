@@ -14,7 +14,7 @@ uniform float offset;
 uniform float scale;
 uniform float outputScale;
 	
-vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime){
 	vec3 futurePosition = thePosition + theVelocity * prediction;
 	
 	float y = outputScale * ((octavedNoise(vec3(futurePosition.x * scale + offset,0, 0), octaves, gain, lacunarity)) * 2 - 1);
@@ -32,5 +32,5 @@ vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaT
 		result = result * (1 - blend) + (myCurvePoint-futurePosition) / curveDistance * blend;
 	}
 	
-	return result * lifeTimeBlend(theTexID, index) * strength;
+	return result * strength;
 }

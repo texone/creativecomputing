@@ -1,13 +1,19 @@
-/*
- * Copyright (c) 2013 christianr.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.html
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
  * 
- * Contributors:
- *     christianr - initial API and implementation
- */
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.simulation.particles.forces;
 
 import cc.creativecomputing.core.CCProperty;
@@ -17,9 +23,7 @@ import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.math.CCVector4;
 import cc.creativecomputing.simulation.particles.CCParticle;
-
 
 public class CCTargetForce extends CCForce {
 	private CCShaderBuffer _myTargetBuffer;
@@ -61,7 +65,6 @@ public class CCTargetForce extends CCForce {
 		_myMaxForceParameter = parameter("maxForce");
 		_myNearDistanceParameter = parameter("nearDistance");
 		_myNearMaxForceParameter = parameter("nearMaxForce");
-		
 	}
 	
 	@Override
@@ -140,9 +143,14 @@ public class CCTargetForce extends CCForce {
 		g.beginShape(CCDrawMode.POINTS);
 	}
 	
-	public void addTarget(CCParticle theParticle, CCVector4 theTarget){
-		g.textureCoords4D(0, theTarget);
+	public void addTarget(CCParticle theParticle){
+		g.textureCoords4D(0, theParticle.target());
 		g.vertex(theParticle.x() + 0.5f, theParticle.y() + 0.5f);
+	}
+	
+	public void addTarget(double theX, double theY, double theZ, double theW, int theTexX, int theTexY){
+		g.textureCoords4D(0, theX, theY, theZ, theW);
+		g.vertex(theTexX + 1.5f, theTexY + 1.5f);
 	}
 	
 	public void endSetTargets(CCGraphics g){

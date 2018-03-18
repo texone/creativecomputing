@@ -1,13 +1,19 @@
-/*
- * Copyright (c) 2013 christianr.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.html
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
  * 
- * Contributors:
- *     christianr - initial API and implementation
- */
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.simulation.particles;
 
 import java.nio.FloatBuffer;
@@ -21,6 +27,7 @@ import java.util.Map.Entry;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
@@ -31,7 +38,10 @@ import cc.creativecomputing.graphics.texture.CCGLSwapBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.math.CCVector4;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
+import cc.creativecomputing.simulation.particles.emit.CCIParticleEmitter;
+import cc.creativecomputing.simulation.particles.emit.CCParticleCPUGroupEmitter;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.impulses.CCImpulse;
 import cc.creativecomputing.simulation.particles.render.CCParticlePointRenderer;
@@ -60,7 +70,8 @@ public class CCParticles{
 	protected Map<Integer, CCVector3> _myPositionUpdates = new HashMap<Integer, CCVector3>();
 	protected List<CCParticle> _myLifetimeUpdates = new ArrayList<CCParticle>();
 	
-	private List<CCParticleEmitter> _myEmitter = new ArrayList<CCParticleEmitter>();
+	@CCProperty(name = "emitter", hide = true)
+	private List<CCIParticleEmitter> _myEmitter = new ArrayList<CCIParticleEmitter>();
 	
 	protected List<CCForce> _myForces;
 	protected List<CCConstraint> _myConstraints;
@@ -69,11 +80,15 @@ public class CCParticles{
 	protected final int _myWidth;
 	protected final int _myHeight;
 	
+	@CCProperty(name = "update shader")
 	protected CCParticlesUpdateShader _myUpdateShader;
 	
 	protected CCGLWriteDataShader _mySetDataShader;
 	
 	protected CCGLSwapBuffer _mySwapTexture;
+	
+	protected CCShaderBuffer _myEvelopeData;
+	protected CCShaderBuffer _myGroupData;
 	
 	protected double _myCurrentTime = 0;
 	
@@ -136,16 +151,19 @@ public class CCParticles{
 		
 		for(CCConstraint myContraint:theConstraints) {
 			myContraint.setSize(g, theWidth, theHeight);
-			_myContraintMap.put(myContraint.parameter("contraint"), myContraint);
+			_myContraintMap.put(myContraint.parameter("constraint"), myContraint);
 		}
 		
 		_mySetDataShader = new CCGLWriteDataShader();
 		
-		_mySwapTexture = new CCGLSwapBuffer(g, 32,4,4,_myWidth,_myHeight);
+		_mySwapTexture = new CCGLSwapBuffer(g, 32, 4, 4,_myWidth,_myHeight);
+
+		_myEvelopeData = new CCShaderBuffer(100, _myForces.size() + 1);
+		_myGroupData = new CCShaderBuffer(32, 4, 1, CCParticleCPUGroupEmitter.GROUP_WIDH,CCParticleCPUGroupEmitter.GROUP_WIDH);
 		
 		_myParticleRender = theRender;
 		_myParticleRender.setup(this);
-		_myUpdateShader = new CCParticlesUpdateShader(this, g,theForces, theConstraints, theImpulse,_myWidth,_myHeight);
+		_myUpdateShader = new CCParticlesUpdateShader(this, g, theForces, theConstraints, theImpulse,_myWidth,_myHeight);
 		
 		reset(g);
 		
@@ -154,6 +172,8 @@ public class CCParticles{
 		_myUpdateShader.setTextureUniform("velocityTexture", _mySwapTexture.attachment(2));
 		_myUpdateShader.setTextureUniform("colorTexture", _mySwapTexture.attachment(3));
 		_myUpdateShader.setTextureUniform("staticPositions", null);
+		_myUpdateShader.setTextureUniform("lifeTimeBlends", _myEvelopeData.attachment(0));
+		_myUpdateShader.setTextureUniform("groupInfoTexture", _myGroupData.attachment(0));
 	}
 	
 	public CCParticles(
@@ -178,12 +198,20 @@ public class CCParticles{
 		this(g, theForces, new ArrayList<CCConstraint>());
 	}
 	
-	public void addEmitter(CCParticleEmitter theEmitter) {
+	public void addEmitter(CCIParticleEmitter theEmitter) {
 		_myEmitter.add(theEmitter);
 	}
 	
 	public CCGLProgram initValueShader() {
 		return _mySetDataShader;
+	}
+	
+	public CCTexture2D groupTexture() {
+		return _myGroupData.attachment(0);
+	}
+	
+	public CCShaderBuffer groupData() {
+		return _myGroupData;
 	}
 	
 	public double currentTime() {
@@ -192,7 +220,7 @@ public class CCParticles{
 	
 	public void reset(CCGraphics g){
 
-		for(CCParticleEmitter myEmitter:_myEmitter) {
+		for(CCIParticleEmitter myEmitter:_myEmitter) {
 			myEmitter.reset();
 		}
 		
@@ -239,16 +267,20 @@ public class CCParticles{
 		return _myWidth * _myHeight;
 	}
 	
+	public int x(int theIndex) {
+		return theIndex % _myWidth;
+	}
+	
+	public int y(int theIndex) {
+		return theIndex / _myWidth;
+	}
+	
 	/**
 	 * Returns the texture with the current positions of the particles.
 	 * @return texture containing the positions of the particles
 	 */
 	public CCShaderBuffer dataBuffer() {
 		return _mySwapTexture.currentBuffer();
-	}
-	
-	public CCTexture2D envelopeTexture(){
-		return _myUpdateShader.envelopeTexture();
 	}
 	
 	/**
@@ -327,66 +359,53 @@ public class CCParticles{
 		_myLifetimeUpdates.add(theParticle);
 	}
 	
-	private void initializeNewParticles(CCGraphics g){
-		// Render velocity.
-		
-		// Render current position into texture.
-		for(CCParticleEmitter myEmitter:_myEmitter) {
-			myEmitter.setData(g);
+	private void updateEnvelopeData(CCGraphics g) {
+		_myEvelopeData.beginDraw(g);
+		g.clear();
+		_mySetDataShader.start();
+		g.beginShape(CCDrawMode.POINTS);
+		for(CCForce myForce:_myForces){
+			for(int i = 0; i < 100; i++){
+				double myVal = myForce.lifetimeBlend().value(i / 100d);
+				g.textureCoords4D(0, myVal, myVal, myVal, 1d);
+				g.vertex(i + 0.5, myForce.index() + 1);
+			}
 		}
-		
+		g.endShape();
+		_mySetDataShader.end();
+		_myEvelopeData.endDraw(g);
 	}
 	
-	private void changeStates() {
-//		_myCurrentDataTexture.beginDraw(1);
-//		_myInitValue0Shader.start();
-//		_myGraphics.beginShape(CCDrawMode.POINTS);
-//		for(CCParticleEmitter myEmitter:_myEmitter) {
-//			for (CCParticle myChangedParticle:myEmitter.stateChangedParticles()){
-//				_myGraphics.textureCoords(0, myChangedParticle.age(), myChangedParticle.lifeTime(), myChangedParticle.isPermanent() ? 1 : 0, myChangedParticle.step());
-//				_myGraphics.vertex(myChangedParticle.x(),myChangedParticle.y());
-//			}
-//			myEmitter.stateChangedParticles().clear();
-//		}
-//		_myGraphics.endShape();
-//		
-//		_myInitValue0Shader.end();
-//		_myCurrentDataTexture.endDraw();
-	}
+	
 	
 	protected void beforeUpdate(CCGraphics g) {
-		initializeNewParticles(g);
-		changeStates();
-	}
-	
-	private void cleanUpParticles() {
-//		if(_myActiveParticles.size() <= 0)
-//			return;
-//		
-//		_myCurrentPositionTexture.beginDraw(1);
-//		_myInitValue1Shader.start();
-//		_myGraphics.beginShape(CCDrawMode.POINTS);
-//				
-//		while (_myActiveParticles.peek() != null && _myActiveParticles.peek().timeOfDeath() < _myCurrentTime){
-//			CCParticle myParticle = _myActiveParticles.poll();
-//			if(myParticle.index == -1) continue;
-//			_myAvailableIndices.add(myParticle.index);
-//			_myActiveParticlesArray[myParticle.index].index = -1;
-//			
-//			_myGraphics.textureCoords(0, Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
-//			_myGraphics.textureCoords(1, 0, 0, 1, 0);
-//			_myGraphics.vertex(myParticle.x() + 0.5f, myParticle.y() + 0.5f);
-//		}
-//		
-//		_myGraphics.endShape();
-//		_myInitValue1Shader.end();
-//		_myCurrentPositionTexture.endDraw();
+		_myGroupData.beginDraw(g);
+		g.pushAttribute();
+		g.clearColor(0);
+		g.clear();
+		g.popAttribute();
+		_myGroupData.endDraw(g);
+		for(CCIParticleEmitter myEmitter:_myEmitter) {
+			myEmitter.setData(g);
+		}
+		for(CCForce myForce:_myForces){
+			myForce.preDisplay(g);
+		}
+		for(CCConstraint myConstraint:_myConstraints){
+			myConstraint.preDisplay(g);
+		}
+		
+		g.pushAttribute();
+		g.noBlend();
+		g.pointSize(1);
+
+		updateEnvelopeData(g);
+
+		g.popAttribute();
 	}
 	
 	protected void afterUpdate(CCGraphics g){
 		updateManualPositionChanges(g);
-//		updateManualLifetimeReset();
-		cleanUpParticles();
 	}
 	
 	private CCTexture2D _myStaticPositionTexture = null;
@@ -398,11 +417,9 @@ public class CCParticles{
 	public void update(final CCAnimator theAnimator){
 		if(theAnimator.deltaTime() <= 0)return;
 		
-		for(CCParticleEmitter myEmitter:_myEmitter) {
+		for(CCIParticleEmitter myEmitter:_myEmitter) {
 			myEmitter.update(theAnimator);
 		}
-		
-		
 		
 		for(CCForce myForce:_myForces) {
 			myForce.update(theAnimator);
@@ -435,7 +452,6 @@ public class CCParticles{
 		g.noBlend();
 		beforeUpdate(g);
 
-		_myUpdateShader.preDisplay(g);
 		_myUpdateShader.start();
 		int myTextureUnit = 0;
 		for(CCGLTextureUniform myTextureUniform:_myUpdateShader.textures()){

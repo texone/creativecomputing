@@ -8,7 +8,7 @@ uniform int octaves;
 uniform float gain;
 uniform float lacunarity;
 	
-vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime){
 	vec3 noisePosition = (thePosition + theVelocity) * scale + offset;
 	vec3 result = vec3(
 		octavedNoise(noisePosition, octaves, gain, lacunarity),
@@ -24,5 +24,5 @@ vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaT
 	);
 	*/
 		//result *= 50 * theDeltaTime;
-	return result * lifeTimeBlend(theTexID, index) * strength;
+	return result * strength;
 }

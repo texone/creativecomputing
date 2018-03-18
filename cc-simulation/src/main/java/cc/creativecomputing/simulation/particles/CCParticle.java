@@ -1,37 +1,44 @@
-/*
- * Copyright (c) 2013 christianr.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.html
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
  * 
- * Contributors:
- *     christianr - initial API and implementation
- */
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package cc.creativecomputing.simulation.particles;
 
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.math.CCVector4;
+import cc.creativecomputing.simulation.particles.emit.CCParticleCPUGroupEmitter;
 
 
 public class CCParticle implements Comparable<CCParticle>{
-	private double _myTimeOfDeath;
-	private double _myLifeTime;
-	private boolean _myIsAllocated;
-	private boolean _myIsPermanent;
-	
-	private int _myStep;
+	public double _myTimeOfDeath;
+	public double _myLifeTime;
+	public boolean _myIsAllocated;
 
-	private int _myIndex;
-	private CCColor _myColor;
-	private CCColor _myTargetColor;
-	private CCVector3 _myPosition;
-	private CCVector3 _myVelocity;
-	private CCVector3 _myTarget;
+	public int _myIndex;
+	public CCColor _myColor;
+	public CCColor _myTargetColor;
+	public CCVector3 _myPosition;
+	public CCVector3 _myVelocity;
+	public CCVector4 _myTarget;
+	
+	public int _myGroupIndex = -1;
 	
 	private CCParticles _myParticles;
 	
-	private double _myAge;
+	public double _myAge;
 	
 	public CCParticle(CCParticles theParticles, int theIndex) {
 		_myParticles = theParticles;
@@ -40,23 +47,36 @@ public class CCParticle implements Comparable<CCParticle>{
 		_myTargetColor = new CCColor();
 		_myPosition = new CCVector3();
 		_myVelocity = new CCVector3();
-		_myTarget = new CCVector3();
+		_myTarget = new CCVector4();
 		_myIsAllocated = false;
-		_myStep = 0;
 		_myAge = 0;
-		_myIsPermanent = false;
 	}
 	
-	public void nextStep() {
-		_myStep++;
+	public void reset() {
+		_myColor.set(0);
+		_myTargetColor.set(0);
+		_myPosition.set(0, 0, 0);
+		_myVelocity.set(0,0,0);
+		_myTarget.set(0,0,0,0);
+		_myIsAllocated = false;
+		_myGroupIndex = -1;
+		_myAge = 0;
 	}
 	
-	public void step(int theStep) {
-		_myStep = theStep;
+	public int groupIndex() {
+		return _myGroupIndex;
 	}
 	
-	public int step() {
-		return _myStep;
+	public int groupX() {
+		return _myGroupIndex % CCParticleCPUGroupEmitter.GROUP_WIDH;
+	}
+	
+	public int groupY() {
+		return _myGroupIndex / CCParticleCPUGroupEmitter.GROUP_WIDH;
+	}
+	
+	public void groupIndex(int theGroupIndex) {
+		_myGroupIndex = theGroupIndex;
 	}
 	
 	public void age(double theAge) {
@@ -104,14 +124,6 @@ public class CCParticle implements Comparable<CCParticle>{
 		_myLifeTime = theLifeTime;
 	}
 	
-	public boolean isPermanent() {
-		return _myIsPermanent;
-	}
-	
-	public void isPermanent(final boolean theIsPermanent) {
-		_myIsPermanent = theIsPermanent;
-	}
-	
 	public double timeOfDeath() {
 		return _myTimeOfDeath;
 	}
@@ -136,11 +148,11 @@ public class CCParticle implements Comparable<CCParticle>{
 		return _myIndex / _myParticles.width();
 	}
 	
-	public void target(CCVector3 theTarget){
+	public void target(CCVector4 theTarget){
 		_myTarget.set(theTarget);
 	}
 	
-	public CCVector3 target(){
+	public CCVector4 target(){
 		return _myTarget;
 	}
 	

@@ -8,7 +8,7 @@ uniform float exponent;
 uniform float strength;
 uniform float index;
 
-vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime){
 	
 	vec3 fPosition = thePosition + theVelocity * theDeltaTime;
 		
@@ -17,5 +17,5 @@ vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaT
 			
 	float displacement = fPosition.y - height * scale.y + offset.y + theVelocity.y;
 		
-	return vec3(0,clamp(-displacement,-1,1),0) * lifeTimeBlend(theTexID, index) * strength;
+	return vec3(0,clamp(-displacement,-1,1),0) * strength;
 }

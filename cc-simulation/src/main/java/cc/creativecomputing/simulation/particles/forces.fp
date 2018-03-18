@@ -6,12 +6,6 @@ interface Force{
 	float3 force(float3 thePosition, float3 theVelocity, float2 theTexID, float theDeltaTime);
 };
 
-
-
-
-
-
-
 struct OffsetNoiseForceField : Force{
 	float noiseScale;
 	float strength;
