@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2018 christianr
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /*
  * Copyright (c) 2013 christianr.
  * All rights reserved. This program and the accompanying materials
@@ -13,18 +29,18 @@ package cc.creativecomputing.simulation.particles.forces.springs;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.shader.CCCGShader;
+import cc.creativecomputing.graphics.shader.CCGLProgram;
+import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
-import cc.creativecomputing.io.CCIOUtil;
+import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.simulation.particles.CCGPUParticle;
+import cc.creativecomputing.simulation.particles.CCParticle;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
-
-import com.jogamp.opengl.cg.CGparameter;
-import com.jogamp.opengl.cg.CgGL;
 
 
 /**
@@ -45,16 +61,16 @@ import com.jogamp.opengl.cg.CgGL;
  * @author christian riekoff
  *
  */
-public class CCGPUSprings extends CCForce {
+public class CCSpringForce extends CCForce {
 	
-	private CGparameter _mySpringConstantParameter;
-	private CGparameter _myRestLengthParameter;
+	private String _mySpringConstantParameter;
+	private String _myRestLengthParameter;
 	
-	private CGparameter[] _myIDTextureParameters;
-	private CGparameter[] _myInfoTextureParameters;
+	private String[] _myIDTextureParameters;
+	private String[] _myInfoTextureParameters;
 
-	private CCCGShader _myInitValue01Shader;
-	private CCCGShader _myKillSpringShader;
+	private CCGLProgram _myInitValue01Shader;
+	private CCGLProgram _myKillSpringShader;
 	
 	private CCShaderBuffer[] _myIDTextures;
 	private CCShaderBuffer[] _myKilledIDTextures;
@@ -62,33 +78,26 @@ public class CCGPUSprings extends CCForce {
 	private int _myNumberOfSprings;
 	private int _myNumberOfSpringBuffers;
 	
-	private float _mySpringConstant;
-	private float _myRestLength;
-	
-	private CCGraphics _myGraphics;
+	private double _mySpringConstant;
+	private double _myRestLength;
 	
 	private int _myWidth;
 	private int _myHeight;
 	
 	private int[] _mySprings;
 	private int _mySpringsSize;
-	private float[][] _myRestLengths;
+	private double[][] _myRestLengths;
 	private boolean[][] _myForceRestLengths;
 	private List<Integer> _myChangedSprings = new ArrayList<Integer>();
 
 	protected double _myCurrentTime = 0;
-
-	/**
-	 * Creates a new spring force with the given number of springs per particle, the given 
-	 * spring constant and the given rest length.
-	 * @param g reference to the graphics object
-	 * @param theNumberOfSprings number of springs attached to a particle
-	 * @param theSpringConstant spring constant defining the strength of a spring
-	 * @param theRestLength rest length defining the space between two particles
-	 */
-	public CCGPUSprings(final CCGraphics g, final int theNumberOfSprings, final float theSpringConstant, final float theRestLength) {
-		this("Springs", g, theNumberOfSprings, theSpringConstant, theRestLength);
-	}
+	
+	@CCProperty(name = "spring constant")
+	private double _cSpringConstant;
+	@CCProperty(name = "rest length")
+	private double _cRestLength;
+	
+	private CCParticles _myParticles;
 	
 	/**
 	 * Creates a new spring force with the given 
@@ -99,19 +108,22 @@ public class CCGPUSprings extends CCForce {
 	 * @param theSpringConstant spring constant defining the strength of a spring
 	 * @param theRestLength rest length defining the space between two particles
 	 */
-	public CCGPUSprings(final CCGraphics g, final float theSpringConstant, final float theRestLength) {
-		this("Springs", g, 4, theSpringConstant, theRestLength);
+	public CCSpringForce(final double theSpringConstant, final double theRestLength) {
+		this(4, theSpringConstant, theRestLength);
 	}
 	
-	protected CCGPUSprings(final String theForceName, final CCGraphics g, final int theNumberOfSprings, final float theSpringConstant, final float theRestLength) {
-		super(theForceName);
-		_myInitValue01Shader = new CCCGShader(null, CCIOUtil.classPath(CCParticles.class,"shader/initvalue.fp"));
-		_myInitValue01Shader.load();
+	/**
+	 * Creates a new spring force with the given number of springs per particle, the given 
+	 * spring constant and the given rest length.
+	 * @param g reference to the graphics object
+	 * @param theNumberOfSprings number of springs attached to a particle
+	 * @param theSpringConstant spring constant defining the strength of a spring
+	 * @param theRestLength rest length defining the space between two particles
+	 */
+	public CCSpringForce(final int theNumberOfSprings, final double theSpringConstant, final double theRestLength) {
+		super("Springs");
 		
-		_myKillSpringShader = new CCCGShader(null, CCIOUtil.classPath(CCParticles.class,"shader/spring_kill.fp"));
-		_myKillSpringShader.load();
-		
-		_myGraphics = g;
+		_myKillSpringShader = new CCGLProgram(null, CCNIOUtil.classPath(this,"spring_kill.glsl"));
 		
 		_mySpringConstant = theSpringConstant;
 		_myRestLength = theRestLength;
@@ -121,46 +133,112 @@ public class CCGPUSprings extends CCForce {
 		_myKilledIDTextures = new CCShaderBuffer[_myNumberOfSpringBuffers];
 		_myInfoTextures = new CCShaderBuffer[_myNumberOfSpringBuffers];
 		
+		_mySpringConstantParameter = parameter("springConstant");
+		_myRestLengthParameter = parameter("restLength");
+		
+		_myIDTextureParameters = new String[_myNumberOfSpringBuffers];
+		_myInfoTextureParameters = new String[_myNumberOfSpringBuffers];
+		
+		for(int i = 0; i < _myNumberOfSpringBuffers;i++) {
+			_myIDTextureParameters[i] = parameter("idTextures_"+i);
+			_myInfoTextureParameters[i] = parameter("infoTextures_"+i);
+		}
+		
+		springConstant(_mySpringConstant);
+		restLength(_myRestLength);
+		
+	}
+	
+	public List<String> loadSource() {
+		List<String> myResult = new ArrayList<>();
+		for(int i = 0; i < _myNumberOfSpringBuffers;i++) {
+			myResult.add("uniform sampler2DRect idTextures_" + i + ";");
+		}
+		myResult.add("");
+		for(int i = 0; i < _myNumberOfSpringBuffers;i++) {
+			myResult.add("uniform sampler2DRect infoTextures_" + i + ";");
+		}
+		myResult.add("");
+		myResult.add("uniform float strength;");
+		myResult.add("uniform float index;");
+		myResult.add("");
+		myResult.add("uniform float springConstant;");
+		myResult.add("");
+		myResult.add("vec3 function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){");
+		myResult.add("	");
+		myResult.add("	vec3 force = vec3(0);");
+		myResult.add("	vec4 ids;");
+		myResult.add("	vec3 position1;");
+		myResult.add("	vec3 position2;");
+		myResult.add("	vec4 infos;");
+		myResult.add("	float restLength1;");
+		myResult.add("	float restLength2;");
+		myResult.add("	float forceRestLength1;");
+		myResult.add("	float forceRestLength2;");
+		myResult.add("	");
+		for(int i = 0; i < _myNumberOfSpringBuffers;i++) {
+			myResult.add("	ids = texture2DRect(idTextures_" + i + ", theTexID);");
+			myResult.add("		");
+			myResult.add("	// get positions of neighbouring particles");
+			myResult.add("	position1 = texture2DRect(positionTexture, ids.xy).xyz;");
+			myResult.add("	position2 = texture2DRect(positionTexture, ids.zw).xyz;");
+			myResult.add("			");
+			myResult.add("	infos = texture2DRect(infoTextures_" + i + ", theTexID);");
+			myResult.add("	restLength1 = infos.x;");
+			myResult.add("	restLength2 = infos.y;");
+			myResult.add("	forceRestLength1 = infos.z;");
+			myResult.add("	forceRestLength2 = infos.w;");
+			myResult.add("		");
+			myResult.add("	force += springForce(thePosition, position1, restLength1, forceRestLength1, springConstant) * float(ids.x >= 0);");
+			myResult.add("	force += springForce(thePosition, position2, restLength2, forceRestLength2, springConstant) * float(ids.z >= 0);");
+			myResult.add("	");
+		}
+		myResult.add("	return force * lifeTimeBlend(theTexID, index) * strength;// * targetStrength * strength;// / (theDeltaTime * 60);");
+		myResult.add("}");
+		// TODO Auto-generated method stub
+		return myResult;
 	}
 
-	private void resetTextures() {
+	private void resetTextures(CCGraphics g) {
 		for(int i = 0; i < _myNumberOfSpringBuffers;i++) {
 			CCShaderBuffer myIDTexture = _myIDTextures[i];
-			myIDTexture.beginDraw();
+			myIDTexture.beginDraw(g);
 			_myInitValue01Shader.start();
-			_myGraphics.beginShape(CCDrawMode.QUADS);
-			_myGraphics.textureCoords(0, -1f, -1f, -1f, -1f);
-			_myGraphics.vertex(0,0);
-			_myGraphics.vertex(_myWidth,0);
-			_myGraphics.vertex(_myWidth,_myHeight);
-			_myGraphics.vertex(0,_myHeight);
-			_myGraphics.endShape();
+			g.beginShape(CCDrawMode.QUADS);
+			g.textureCoords4D(0, -1f, -1f, -1f, -1f);
+			g.vertex(0,0);
+			g.vertex(_myWidth,0);
+			g.vertex(_myWidth,_myHeight);
+			g.vertex(0,_myHeight);
+			g.endShape();
 			_myInitValue01Shader.end();
-			myIDTexture.endDraw();
+			myIDTexture.endDraw(g);
 			
 			CCShaderBuffer myInfoTexture = _myInfoTextures[i];
-			myInfoTexture.beginDraw();
+			myInfoTexture.beginDraw(g);
 			_myInitValue01Shader.start();
-			_myGraphics.beginShape(CCDrawMode.QUADS);
-			_myGraphics.textureCoords(0, 0f, 0f, 0f, 0f);
-			_myGraphics.vertex(0,0);
-			_myGraphics.vertex(_myWidth,0);
-			_myGraphics.vertex(_myWidth,_myHeight);
-			_myGraphics.vertex(0,_myHeight);
-			_myGraphics.endShape();
+			g.beginShape(CCDrawMode.QUADS);
+			g.textureCoords4D(0, 0f, 0f, 0f, 0f);
+			g.vertex(0,0);
+			g.vertex(_myWidth,0);
+			g.vertex(_myWidth,_myHeight);
+			g.vertex(0,_myHeight);
+			g.endShape();
 			_myInitValue01Shader.end();
-			myInfoTexture.endDraw();
+			myInfoTexture.endDraw(g);
 		}
 	}
 
-	public void setupParameter(int theWidth, int theHeight) {
-		super.setupParameter(theWidth, theHeight);
+	@Override
+	public void setSize(CCGraphics g, int theWidth, int theHeight) {
 		_myWidth = theWidth;
 		_myHeight = theHeight;
 		
+		_myInitValue01Shader = new CCGLWriteDataShader();
+		
 		_mySprings = new int[_myWidth * _myHeight * _myNumberOfSpringBuffers * 2];
 		_mySpringsSize = _myWidth * _myHeight;
-		_myRestLengths = new float[_myWidth * _myHeight][_myNumberOfSpringBuffers * 2];
+		_myRestLengths = new double[_myWidth * _myHeight][_myNumberOfSpringBuffers * 2];
 		_myForceRestLengths = new boolean[_myWidth * _myHeight][_myNumberOfSpringBuffers * 2];
 		for(int i = 0; i < _mySpringsSize;i++) {
 			for(int j = 0; j < _myNumberOfSpringBuffers * 2;j++) {
@@ -172,40 +250,42 @@ public class CCGPUSprings extends CCForce {
 		
 		for(int i = 0; i < _myNumberOfSpringBuffers;i++) {
 			_myIDTextures[i] = new CCShaderBuffer(16, 4, theWidth, theHeight);
-			_myIDTextures[i].clear();
+			_myIDTextures[i].clear(g);
 			
 			_myKilledIDTextures[i] = new CCShaderBuffer(16, 4, theWidth, theHeight);
-			_myKilledIDTextures[i].clear();
+			_myKilledIDTextures[i].clear(g);
 
 			_myInfoTextures[i] = new CCShaderBuffer(16, 4, theWidth, theHeight);
-			_myInfoTextures[i].clear();
+			_myInfoTextures[i].clear(g);
 		}
 		
-		resetTextures();
+		resetTextures(g);
 		
-		_mySpringConstantParameter = parameter("springConstant");
-		_myRestLengthParameter = parameter("restLength");
 		
-		CGparameter myIdTexturesParameter = parameter("idTextures");
-		CgGL.cgSetArraySize(myIdTexturesParameter, _myNumberOfSpringBuffers);
-		_myIDTextureParameters = new CGparameter[_myNumberOfSpringBuffers];
 		
-		CGparameter myInfoTexturesParameter = parameter("infoTextures");
-		CgGL.cgSetArraySize(myInfoTexturesParameter, _myNumberOfSpringBuffers);
-		_myInfoTextureParameters = new CGparameter[_myNumberOfSpringBuffers];
-		
+		g.noBlend();
+	}
+	
+	@Override
+	public void setShader(CCGLProgram theProgram) {
+		super.setShader(theProgram);
 		for(int i = 0; i < _myNumberOfSpringBuffers;i++) {
-			_myIDTextureParameters[i] = parameter("idTextures["+i+"]");
-			_myVelocityShader.texture(_myIDTextureParameters[i], _myKilledIDTextures[i].attachment(0).id());
-
-			_myInfoTextureParameters[i] = parameter("infoTextures["+i+"]");
-			_myVelocityShader.texture(_myInfoTextureParameters[i], _myInfoTextures[i].attachment(0).id());
+			_myShader.setTextureUniform("idTextures_"+i, _myIDTextures[i].attachment(0));
+			_myShader.setTextureUniform("infoTextures_"+i,_myInfoTextures[i].attachment(0));
 		}
-		
-		springConstant(_mySpringConstant);
-		restLength(_myRestLength);
-		
-		_myGraphics.noBlend();
+	}
+	
+	@Override
+	public void setUniforms() {
+		super.setUniforms();
+		_myShader.uniform1f(_mySpringConstantParameter, _cSpringConstant);
+		_myShader.uniform1f(_myRestLengthParameter, _cRestLength);
+	}
+	
+	@Override
+	public void setParticles(CCParticles theParticles) {
+		super.setParticles(theParticles);
+		_myParticles = theParticles;
 	}
 	
 	/**
@@ -237,11 +317,11 @@ public class CCGPUSprings extends CCForce {
 	 * @param theParticle
 	 * @return
 	 */
-	public boolean hasFreeSpringIndex(final CCGPUParticle theParticle) {
+	public boolean hasFreeSpringIndex(final CCParticle theParticle) {
 		return getFreeSpringIndex(theParticle) >= 0;
 	}
 	
-	private int getFreeSpringIndex(final CCGPUParticle theParticle) {
+	private int getFreeSpringIndex(final CCParticle theParticle) {
 		for(int i = 0; i < _myNumberOfSpringBuffers * 2;i++) {
 			if(_mySprings[theParticle.index() + i * _mySpringsSize] == -1) {
 				return i;
@@ -270,7 +350,7 @@ public class CCGPUSprings extends CCForce {
 	 * @param theForceRestLength if this is <code>true</code> particles are forced to keep the rest length
 	 * @return <code>true</code> if the spring could be created otherwise <code>false</code>
 	 */
-	public boolean addSpring(final CCGPUParticle theA, final CCGPUParticle theB, final float theRestLength, boolean theForceRestLength) {
+	public boolean addSpring(final CCParticle theA, final CCParticle theB, final double theRestLength, boolean theForceRestLength) {
 		if(theA == null || theB == null)return false;
 		
 		int myIndexA = getFreeSpringIndex(theA);
@@ -294,15 +374,15 @@ public class CCGPUSprings extends CCForce {
 		}
 	}
 	
-	public boolean addSpring(final CCGPUParticle theA, final CCGPUParticle theB, final float theRestLength) {
+	public boolean addSpring(final CCParticle theA, final CCParticle theB, final double theRestLength) {
 		return addSpring(theA, theB, theRestLength, true);
 	}
 	
-	public boolean addSpring(final CCGPUParticle theParticleA, final CCGPUParticle theParticleB) {
+	public boolean addSpring(final CCParticle theParticleA, final CCParticle theParticleB) {
 		return addSpring(theParticleA, theParticleB, _myRestLength);
 	}
 	
-	public boolean addOneWaySpring(final CCGPUParticle theA, final CCGPUParticle theB, final float theRestLength, boolean theForceRestLength) {
+	public boolean addOneWaySpring(final CCParticle theA, final CCParticle theB, final double theRestLength, boolean theForceRestLength) {
 		int myIndexB = getFreeSpringIndex(theB);
 		
 		if(myIndexB > -1) {
@@ -316,83 +396,83 @@ public class CCGPUSprings extends CCForce {
 		}
 	}
 	
-	public boolean addOneWaySpring(final CCGPUParticle theA, final CCGPUParticle theB, final float theRestLength) {
+	public boolean addOneWaySpring(final CCParticle theA, final CCParticle theB, final double theRestLength) {
 		return addOneWaySpring(theA, theB, theRestLength, true);
 	}
 	
-	public boolean addOneWaySpring(final CCGPUParticle theA, final CCGPUParticle theB) {
+	public boolean addOneWaySpring(final CCParticle theA, final CCParticle theB) {
 		return addOneWaySpring(theA, theB, _myRestLength, true);
 	}
 	
-	public void springConstant(final float theSpringConstant) {
-		_myVelocityShader.parameter(_mySpringConstantParameter, theSpringConstant);
+	public void springConstant(final double theSpringConstant) {
+		_cSpringConstant = theSpringConstant;
 	}
 	
-	public void restLength(final float theRestLength) {
-		_myVelocityShader.parameter(_myRestLengthParameter, theRestLength);
+	public void restLength(final double theRestLength) {
+		_cRestLength = theRestLength;
 	}
 
-	public void update(final float theDeltaTime) {
-		super.update(theDeltaTime);
-		_myGraphics.noBlend();
+	public void update(final CCAnimator theAnimator) {
+		_myCurrentTime += theAnimator.fixedUpdateTime;
+	}
+	
+	@Override
+	public void preDisplay(CCGraphics g) {
+		g.noBlend();
 		
 		for(int i = 0; i < _myNumberOfSpringBuffers;i++) {
 			CCShaderBuffer myIDTexture = _myIDTextures[i];
-			myIDTexture.beginDraw();
+			myIDTexture.beginDraw(g);
 			_myInitValue01Shader.start();
-			_myGraphics.beginShape(CCDrawMode.POINTS);
+			g.beginShape(CCDrawMode.POINTS);
 			
 			for(int myID:_myChangedSprings) {
 				int myIndex1 = _mySprings[myID + i * 2  * _mySpringsSize];
 
-				float myX1 = myIndex1 == -1 ? -1 : myIndex1 % _myWidth;
-				float myY1 = myIndex1 == -1 ? -1 : myIndex1 / _myWidth;
+				double myX1 = myIndex1 == -1 ? -1 : myIndex1 % _myWidth;
+				double myY1 = myIndex1 == -1 ? -1 : myIndex1 / _myWidth;
 				
 				int myIndex2 = _mySprings[myID + (i * 2 + 1)  * _mySpringsSize];
-				float myX2 = myIndex2 == -1 ? -1 : myIndex2 % _myWidth;
-				float myY2 = myIndex2 == -1 ? -1 : myIndex2 / _myWidth;
+				double myX2 = myIndex2 == -1 ? -1 : myIndex2 % _myWidth;
+				double myY2 = myIndex2 == -1 ? -1 : myIndex2 / _myWidth;
 				
-				_myGraphics.textureCoords(0, myX1, myY1, myX2, myY2);
-				_myGraphics.vertex(myID % _myWidth, myID / _myWidth);
+				g.textureCoords4D(0, myX1, myY1, myX2, myY2);
+				g.vertex(myID % _myWidth, myID / _myWidth);
 			}
 			
-			_myGraphics.endShape();
+			g.endShape();
 			_myInitValue01Shader.end();
-			myIDTexture.endDraw();
+			myIDTexture.endDraw(g);
 			
 			CCShaderBuffer myKilledIDTexture = _myKilledIDTextures[i];
 			_myKillSpringShader.start();
-			_myGraphics.texture(1, myIDTexture.attachment(0));
-			_myGraphics.texture(0, _myParticles.dataBuffer().attachment(1));
-			myKilledIDTexture.draw();
-			_myGraphics.noTexture();
+			g.texture(1, myIDTexture.attachment(0));
+			g.texture(0, _myParticles.dataBuffer().attachment(1));
+			myKilledIDTexture.draw(g);
+			g.noTexture();
 			_myKillSpringShader.end();
 			
 			CCShaderBuffer myInfoTexture = _myInfoTextures[i];
-			myInfoTexture.beginDraw();
+			myInfoTexture.beginDraw(g);
 			_myInitValue01Shader.start();
-			_myGraphics.beginShape(CCDrawMode.POINTS);
+			g.beginShape(CCDrawMode.POINTS);
 			
 			for(int myID:_myChangedSprings) {
-				float myRestLength1 = _myRestLengths[myID][i*2];
-				float myRestLength2 = _myRestLengths[myID][i*2 + 1];
+				double myRestLength1 = _myRestLengths[myID][i*2];
+				double myRestLength2 = _myRestLengths[myID][i*2 + 1];
 				
-				float myForceRestLength1 = _myForceRestLengths[myID][i*2] ? 1 : 0;
-				float myForceRestLength2 = _myForceRestLengths[myID][i*2] ? 1 : 0;
+				double myForceRestLength1 = _myForceRestLengths[myID][i*2] ? 1 : 0;
+				double myForceRestLength2 = _myForceRestLengths[myID][i*2] ? 1 : 0;
 				
-				_myGraphics.textureCoords(0, myRestLength1, myRestLength2, myForceRestLength1, myForceRestLength2);
-				_myGraphics.vertex(myID % _myWidth, myID / _myWidth);
+				g.textureCoords4D(0, myRestLength1, myRestLength2, myForceRestLength1, myForceRestLength2);
+				g.vertex(myID % _myWidth, myID / _myWidth);
 			}
-			_myGraphics.endShape();
+			g.endShape();
 			_myInitValue01Shader.end();
-			myInfoTexture.endDraw();
+			myInfoTexture.endDraw(g);
 		}
 		
-		
-
 		_myChangedSprings.clear();
-
-		_myCurrentTime += theDeltaTime;
 	}
 	
 	public CCShaderBuffer infoTexture(int theIndex) {
@@ -404,8 +484,8 @@ public class CCGPUSprings extends CCForce {
 	}
 	
 	@Override
-	public void reset() {
-		resetTextures();
+	public void reset(CCGraphics g) {
+		resetTextures(g);
 		
 		for(int i = 0; i < _mySpringsSize;i++) {
 			for(int j = 0; j < _myNumberOfSpringBuffers * 2;j++) {
