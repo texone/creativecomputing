@@ -1,0 +1,22 @@
+{
+  "generate mipmaps": {
+    "name": "generate mipmaps",
+    "value": false
+  },
+  "filter": {
+    "name": "filter",
+    "value": "LINEAR"
+  },
+  "path": {
+    "name": "path",
+    "value": "data\\obama\\barack_2983x4000_z_2984x4000_l.JPG"
+  },
+  "mipmap filter": {
+    "name": "mipmap filter",
+    "value": "NEAREST"
+  },
+  "wrap": {
+    "name": "wrap",
+    "value": "CLAMP"
+  }
+}

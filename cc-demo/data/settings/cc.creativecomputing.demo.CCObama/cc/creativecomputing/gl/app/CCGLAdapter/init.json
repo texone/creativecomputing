@@ -1,0 +1,132 @@
+{
+  "histogram": {
+    "name": "histogram",
+    "value": {"histogram bands": {
+      "min": -2147483648,
+      "max": 2147483647,
+      "name": "histogram bands",
+      "value": 500
+    }}
+  },
+  "updateVoronoi": {},
+  "envelope": {
+    "curve": {"points": [
+      {
+        "time": 0,
+        "type": "LINEAR",
+        "value": 0
+      },
+      {
+        "in": {
+          "time": 0.015151515151515152,
+          "type": "HANDLE",
+          "value": 0
+        },
+        "time": 0.015151515151515152,
+        "type": "BEZIER",
+        "value": 0,
+        "out": {
+          "time": 0.11041489774079034,
+          "type": "HANDLE",
+          "value": 0
+        }
+      },
+      {
+        "in": {
+          "time": 0.3228193111717702,
+          "type": "HANDLE",
+          "value": 0.9322429906542056
+        },
+        "time": 0.46590909090909094,
+        "type": "BEZIER",
+        "value": 1,
+        "out": {
+          "time": 0.6089988706464109,
+          "type": "HANDLE",
+          "value": 1.0677570093457942
+        }
+      },
+      {
+        "time": 1,
+        "type": "LINEAR",
+        "value": 1
+      }
+    ]},
+    "name": "envelope",
+    "value": "cc.creativecomputing.control.CCEnvelope@3bb5b692"
+  },
+  "alpha": {
+    "min": 0,
+    "max": 1,
+    "name": "alpha",
+    "value": 0
+  },
+  "length": {
+    "min": 0,
+    "max": 1000,
+    "name": "length",
+    "value": 100
+  },
+  "scale": {
+    "min": 1,
+    "max": 20,
+    "name": "scale",
+    "value": 1.8170000314712524
+  },
+  "number of points": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "number of points",
+    "value": 10000
+  },
+  "texture;": {
+    "name": "texture;",
+    "value": {
+      "generate mipmaps": {
+        "name": "generate mipmaps",
+        "value": false
+      },
+      "filter": {
+        "name": "filter",
+        "value": "LINEAR"
+      },
+      "path": {
+        "name": "path",
+        "value": "data\\obama\\barack_2983x4000_z_2984x4000_l.JPG"
+      },
+      "mipmap filter": {
+        "name": "mipmap filter",
+        "value": "NEAREST"
+      },
+      "wrap": {
+        "name": "wrap",
+        "value": "CLAMP"
+      }
+    }
+  },
+  "point": {
+    "min": 1,
+    "max": 20,
+    "name": "point",
+    "value": 2.9000000953674316
+  },
+  "space": {
+    "min": 0,
+    "max": 30,
+    "name": "space",
+    "value": 5
+  },
+  "histogram 2": {
+    "name": "histogram 2",
+    "value": {"histogram bands": {
+      "min": -2147483648,
+      "max": 2147483647,
+      "name": "histogram bands",
+      "value": 500
+    }}
+  },
+  "draw voronoi": {
+    "name": "draw voronoi",
+    "value": true
+  }
+}
