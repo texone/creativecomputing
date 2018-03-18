@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
 public class CCXYRadialSource extends CCModulationSource {
 
+	@CCProperty(name = "positions")
 	private List<CCVector2> _myPositions = new ArrayList<>();
 
 	public CCXYRadialSource(String theName, CCVector2...thePositions) {
@@ -38,6 +40,11 @@ public class CCXYRadialSource extends CCModulationSource {
 	public void positions(List<CCVector2> thePositions){
 		_myPositions = thePositions;
 		_myIsUpdated = true;
+	}
+
+	@Override
+	public boolean isUpdated() {
+		return true;
 	}
 
 }

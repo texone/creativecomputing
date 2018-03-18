@@ -1,9 +1,12 @@
 package cc.creativecomputing.effects.modulation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.math.CCMath;
@@ -34,9 +37,20 @@ public class CCEffectModulation {
 		public double div = 1;
 		@CCProperty(name = "div amount", min = -1, max = 1)
 		public double divAmount = 0;
+		@CCProperty(name = "random amount", min = -1, max = 1)
+		public double random = 0;
+		
+		public List<Double> randoms = new ArrayList<>();
 		
 		private CCIdSource(String theSource){
 			_mySourceName = theSource;
+		}
+		
+		public double random(int theID) {
+			while(theID >= randoms.size()) {
+				randoms.add(CCMath.random());
+			}
+			return randoms.get(theID);
 		}
 	}
 	
@@ -82,6 +96,7 @@ public class CCEffectModulation {
 		for(CCIdSource mySource:_myIdAmounts.values()){
 			myResult += mySource.divAmount;
 			myResult += mySource.modAmount;
+			myResult += mySource.random;
 		}
 		return myResult;
 	}
@@ -148,18 +163,21 @@ public class CCEffectModulation {
 		
 		for(String myIdSource:_myEffectManager.idSources()){
 			CCIdSource myIdSource2 = _myIdAmounts.get(myIdSource);
-			double myModPhase = _myModBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.mod, myIdSource2.modAmount);
-			double myDivPhase = _myDivBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.div, myIdSource2.divAmount);
-			
-			if(Double.isNaN(myModPhase) || Double.isNaN(myDivPhase))continue;
-			
-			double modBlend = _myModBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.mod, myIdSource2.modAmount); 
+			double modBlend = _myModBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.mod, myIdSource2.modAmount);
 			double divBlend = _myDivBlender.value(theElement, myIdSource2, theMin, theMax, myIdSource2.div, myIdSource2.divAmount);
+			int myID = theElement.idSource(myIdSource2._mySourceName);
+			double myRandomBlend = myIdSource2.random(myID) * myIdSource2.random;
+			
+//			if(myIdSource.equals("row"))CCLog.info(myIdSource2._mySourceName, myID, myIdSource2.random(myID), myIdSource2.random, myIdSource2);
+			
+			if(Double.isNaN(modBlend) || Double.isNaN(divBlend))continue;
 			
 			switch(_myCombiner) {
 			case ADD:
 				myResultPhase += modBlend;
 				myResultPhase += divBlend;
+				myResultPhase += myRandomBlend;
+				
 				break;
 			case MAX:
 				myResultPhase = CCMath.max(myResultPhase, modBlend);

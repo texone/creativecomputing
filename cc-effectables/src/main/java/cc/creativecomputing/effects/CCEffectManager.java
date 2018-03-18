@@ -11,6 +11,7 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.effects.modulation.CCConstantSource;
 import cc.creativecomputing.effects.modulation.CCIDSource;
 import cc.creativecomputing.effects.modulation.CCModulationSource;
@@ -66,6 +67,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	
 	
 	public CCEffectManager(List<Type> theEffectables, String...theValueNames){
+	
 		_myEffectables = theEffectables;
 		_myValueNames = theValueNames;
 		_cScales.put("global scale", 1.0);
@@ -82,6 +84,9 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 			return;
 		}
 		Type myFirstEffectable = theEffectables.get(0);
+		
+		CCReflectionUtil.getFields(myFirstEffectable.getClass(), CCEffectIn.class);
+		
 		for(String myIDSource:myFirstEffectable._myIdBasedSources.keySet()){
 			addIdSources(myIDSource);
 		}

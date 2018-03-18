@@ -6,6 +6,7 @@ import java.util.List;
 
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
