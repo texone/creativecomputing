@@ -1,0 +1,578 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "debug": {
+        "name": "debug",
+        "value": {
+          "scale positions": {
+            "min": 0,
+            "max": 1000,
+            "name": "scale positions",
+            "value": 1000
+          },
+          "scale infos": {
+            "min": 0,
+            "max": 100,
+            "name": "scale infos",
+            "value": 15.80000114440918
+          },
+          "draw positions": {
+            "name": "draw positions",
+            "value": false
+          },
+          "draw infos": {
+            "name": "draw infos",
+            "value": false
+          }
+        }
+      },
+      "_myParticles": {
+        "name": "_myParticles",
+        "value": {
+          "0": {
+            "name": "0",
+            "value": {"emitter": {
+              "name": "emitter",
+              "value": {
+                "ring4_emitter": {
+                  "name": "ring4_emitter",
+                  "value": {
+                    "propability": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "propability",
+                      "value": 0.06499999761581421
+                    },
+                    "center": {
+                      "name": "center",
+                      "value": {
+                        "x": {
+                          "min": -1000,
+                          "max": 1000,
+                          "name": "x",
+                          "value": 0
+                        },
+                        "y": {
+                          "min": -1000,
+                          "max": 1000,
+                          "name": "y",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "radius": {
+                      "min": 0,
+                      "max": 1000,
+                      "name": "radius",
+                      "value": 132
+                    }
+                  }
+                },
+                "ring3_emitter": {
+                  "name": "ring3_emitter",
+                  "value": {
+                    "propability": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "propability",
+                      "value": 0.039000000804662704
+                    },
+                    "center": {
+                      "name": "center",
+                      "value": {
+                        "x": {
+                          "min": -1000,
+                          "max": 1000,
+                          "name": "x",
+                          "value": 0
+                        },
+                        "y": {
+                          "min": -1000,
+                          "max": 1000,
+                          "name": "y",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "radius": {
+                      "min": 0,
+                      "max": 1000,
+                      "name": "radius",
+                      "value": 200
+                    }
+                  }
+                }
+              }
+            }}
+          },
+          "renderer": {
+            "name": "renderer",
+            "value": {
+              "shader": {
+                "name": "shader",
+                "value": {
+                  "fragment": {
+                    "name": "fragment",
+                    "value": {
+                      "auto save": {
+                        "name": "auto save",
+                        "value": true
+                      },
+                      "indexed_display_fragment.glsl": {
+                        "name": "indexed_display_fragment.glsl",
+                        "value": "cc.creativecomputing.control.code.CCShaderFile@33bdf9bf"
+                      },
+                      "uniforms": {
+                        "name": "uniforms",
+                        "value": {}
+                      },
+                      "save in file": {
+                        "name": "save in file",
+                        "value": true
+                      }
+                    }
+                  },
+                  "vertex": {
+                    "name": "vertex",
+                    "value": {
+                      "indexed_display_vertex.glsl": {
+                        "name": "indexed_display_vertex.glsl",
+                        "value": "cc.creativecomputing.control.code.CCShaderFile@53cd785a"
+                      },
+                      "auto save": {
+                        "name": "auto save",
+                        "value": true
+                      },
+                      "uniforms": {
+                        "name": "uniforms",
+                        "value": {}
+                      },
+                      "save in file": {
+                        "name": "save in file",
+                        "value": true
+                      }
+                    }
+                  }
+                }
+              },
+              "life time alpha": {
+                "curve": {"points": [
+                  {
+                    "in": {
+                      "time": 0,
+                      "type": "HANDLE",
+                      "value": 0
+                    },
+                    "time": 0,
+                    "type": "BEZIER",
+                    "value": 0,
+                    "out": {
+                      "time": 0.012437129020690918,
+                      "type": "HANDLE",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 0.07645175986819798,
+                      "type": "HANDLE",
+                      "value": 0.12139917695473257
+                    },
+                    "time": 0.08888888888888889,
+                    "type": "BEZIER",
+                    "value": 0.12139917695473257,
+                    "out": {
+                      "time": 0.43229629198710123,
+                      "type": "HANDLE",
+                      "value": 0.12139917695473257
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 0.9925925925925926,
+                      "type": "HANDLE",
+                      "value": 0.04613168666392199
+                    },
+                    "time": 0.9925925925925926,
+                    "type": "BEZIER",
+                    "value": 0,
+                    "out": {
+                      "time": 0.9925925925925926,
+                      "type": "HANDLE",
+                      "value": 0
+                    }
+                  }
+                ]},
+                "name": "life time alpha",
+                "value": "cc.creativecomputing.control.CCEnvelope@7882849c"
+              }
+            }
+          },
+          "forces": {
+            "name": "forces",
+            "value": {
+              "gravity1_force": {
+                "name": "gravity1_force",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 0.5199999809265137
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "in": {
+                          "time": 0.014814814814814814,
+                          "type": "HANDLE",
+                          "value": 0
+                        },
+                        "time": 0.014814814814814814,
+                        "type": "BEZIER",
+                        "value": 0,
+                        "out": {
+                          "time": 0.35101357245886766,
+                          "type": "HANDLE",
+                          "value": 0
+                        }
+                      },
+                      {
+                        "in": {
+                          "time": 0.6749123534670582,
+                          "type": "HANDLE",
+                          "value": 1
+                        },
+                        "time": 1.011111111111111,
+                        "type": "BEZIER",
+                        "value": 1,
+                        "out": {
+                          "time": 1.011111111111111,
+                          "type": "HANDLE",
+                          "value": 1
+                        }
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@7e29b8b9"
+                  },
+                  "direction": {
+                    "name": "direction",
+                    "value": {
+                      "x": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "x",
+                        "value": 0
+                      },
+                      "y": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "y",
+                        "value": 0
+                      },
+                      "z": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "z",
+                        "value": 1
+                      }
+                    }
+                  }
+                }
+              },
+              "ViscousDrag0_force": {
+                "name": "ViscousDrag0_force",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0.0962962962962963,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@37ef66f9"
+                  },
+                  "drag": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "drag",
+                    "value": 0.20000000298023224
+                  }
+                }
+              },
+              "NoiseForceField2_force": {
+                "name": "NoiseForceField2_force",
+                "value": {
+                  "octaves": {
+                    "min": 0,
+                    "max": 5,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "in": {
+                          "time": 0.011111111111111106,
+                          "type": "HANDLE",
+                          "value": 0
+                        },
+                        "time": 0.011111111111111106,
+                        "type": "BEZIER",
+                        "value": 0,
+                        "out": {
+                          "time": 0.011111111111111106,
+                          "type": "HANDLE",
+                          "value": 0.47999998927116394
+                        }
+                      },
+                      {
+                        "in": {
+                          "time": 0.519555566045973,
+                          "type": "HANDLE",
+                          "value": 1
+                        },
+                        "time": 0.9888888888888889,
+                        "type": "BEZIER",
+                        "value": 1,
+                        "out": {
+                          "time": 0.9888888888888889,
+                          "type": "HANDLE",
+                          "value": 1
+                        }
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@538ce728"
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 2.75
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 4,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "speed": {
+                    "min": 0,
+                    "max": 3,
+                    "name": "speed",
+                    "value": 1.815000057220459
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.66583073299966
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}

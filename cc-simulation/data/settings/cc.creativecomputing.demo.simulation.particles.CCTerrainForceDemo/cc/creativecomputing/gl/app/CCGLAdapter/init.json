@@ -1,0 +1,195 @@
+{
+  "particles": {
+    "name": "particles",
+    "value": {
+      "renderer": {
+        "name": "renderer",
+        "value": {}
+      },
+      "forces": {
+        "name": "forces",
+        "value": {
+          "gravity0_force": {
+            "name": "gravity0_force",
+            "value": {
+              "strength": {
+                "min": 0,
+                "max": 10,
+                "name": "strength",
+                "value": 7.880000114440918
+              },
+              "life time blend": {
+                "curve": {"points": [
+                  {
+                    "time": 0,
+                    "type": "LINEAR",
+                    "value": 0
+                  },
+                  {
+                    "time": 1,
+                    "type": "LINEAR",
+                    "value": 1
+                  }
+                ]},
+                "name": "life time blend",
+                "value": "cc.creativecomputing.control.CCEnvelope@72058724"
+              },
+              "direction": {
+                "name": "direction",
+                "value": {
+                  "x": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x",
+                    "value": 0.156000018119812
+                  },
+                  "y": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y",
+                    "value": -0.343999981880188
+                  },
+                  "z": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          },
+          "terrain2_force": {
+            "name": "terrain2_force",
+            "value": {
+              "strength": {
+                "min": 0,
+                "max": 10,
+                "name": "strength",
+                "value": 10
+              },
+              "life time blend": {
+                "curve": {"points": [
+                  {
+                    "time": 0,
+                    "type": "LINEAR",
+                    "value": 0
+                  },
+                  {
+                    "time": 1,
+                    "type": "LINEAR",
+                    "value": 1
+                  }
+                ]},
+                "name": "life time blend",
+                "value": "cc.creativecomputing.control.CCEnvelope@4a9395f1"
+              },
+              "exponent": {
+                "min": 0,
+                "max": 2,
+                "name": "exponent",
+                "value": 0.026000000536441803
+              }
+            }
+          },
+          "ViscousDrag1_force": {
+            "name": "ViscousDrag1_force",
+            "value": {
+              "strength": {
+                "min": 0,
+                "max": 10,
+                "name": "strength",
+                "value": 0.9200000166893005
+              },
+              "life time blend": {
+                "curve": {"points": [
+                  {
+                    "time": 0,
+                    "type": "LINEAR",
+                    "value": 0
+                  },
+                  {
+                    "time": 1,
+                    "type": "LINEAR",
+                    "value": 1
+                  }
+                ]},
+                "name": "life time blend",
+                "value": "cc.creativecomputing.control.CCEnvelope@3cd6924e"
+              },
+              "drag": {
+                "min": 0,
+                "max": 1,
+                "name": "drag",
+                "value": 0.30000001192092896
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "camera": {
+    "name": "camera",
+    "value": {
+      "distance": {
+        "min": 1,
+        "max": 20000,
+        "name": "distance",
+        "value": 894.6101236482534
+      },
+      "center": {
+        "name": "center",
+        "value": {
+          "x": {
+            "min": -10000,
+            "max": 10000,
+            "name": "x",
+            "value": 0
+          },
+          "y": {
+            "min": -10000,
+            "max": 10000,
+            "name": "y",
+            "value": 0
+          },
+          "z": {
+            "min": -10000,
+            "max": 10000,
+            "name": "z",
+            "value": 0
+          }
+        }
+      },
+      "rotation": {
+        "name": "rotation",
+        "value": {
+          "w": {
+            "min": -1,
+            "max": 1,
+            "name": "w",
+            "value": 0.9832677550714176
+          },
+          "x": {
+            "min": -1,
+            "max": 1,
+            "name": "x",
+            "value": -0.1801138943953068
+          },
+          "y": {
+            "min": -1,
+            "max": 1,
+            "name": "y",
+            "value": -0.012543450815643861
+          },
+          "z": {
+            "min": -1,
+            "max": 1,
+            "name": "z",
+            "value": 0.024210921589396556
+          }
+        }
+      }
+    }
+  }
+}

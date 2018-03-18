@@ -1,0 +1,351 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "particles": {
+        "name": "particles",
+        "value": {
+          "renderer": {
+            "name": "renderer",
+            "value": {}
+          },
+          "forces": {
+            "name": "forces",
+            "value": {
+              "ViscousDrag0_force": {
+                "name": "ViscousDrag0_force",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@54280800"
+                  },
+                  "drag": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "drag",
+                    "value": 0.30000001192092896
+                  }
+                }
+              },
+              "NoiseHeightMap1_force": {
+                "name": "NoiseHeightMap1_force",
+                "value": {
+                  "octaves": {
+                    "min": 0,
+                    "max": 5,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 2.630000114440918
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@5896b725"
+                  },
+                  "noise scale": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "noise scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 4,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  },
+                  "height": {
+                    "min": -1000,
+                    "max": 1000,
+                    "name": "height",
+                    "value": 1000
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "camera": {
+        "name": "camera",
+        "value": {
+          "distance": {
+            "min": 1,
+            "max": 20000,
+            "name": "distance",
+            "value": 918.7918493371446
+          },
+          "center": {
+            "name": "center",
+            "value": {
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "name": "x",
+                "value": 0
+              },
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "name": "y",
+                "value": 0
+              },
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "rotation": {
+            "name": "rotation",
+            "value": {
+              "w": {
+                "min": -1,
+                "max": 1,
+                "name": "w",
+                "value": 0.9007108009313433
+              },
+              "x": {
+                "min": -1,
+                "max": 1,
+                "name": "x",
+                "value": -0.05652321701248581
+              },
+              "y": {
+                "min": -1,
+                "max": 1,
+                "name": "y",
+                "value": 0.42705059287425684
+              },
+              "z": {
+                "min": -1,
+                "max": 1,
+                "name": "z",
+                "value": 0.056151314765737086
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.667730027335548
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}

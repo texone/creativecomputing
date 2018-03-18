@@ -1,0 +1,377 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "particles": {
+        "name": "particles",
+        "value": {
+          "renderer": {
+            "name": "renderer",
+            "value": {}
+          },
+          "forces": {
+            "name": "forces",
+            "value": {
+              "gravity0_force": {
+                "name": "gravity0_force",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@39947ba5"
+                  },
+                  "direction": {
+                    "name": "direction",
+                    "value": {
+                      "x": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "x",
+                        "value": 0.1
+                      },
+                      "y": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "y",
+                        "value": 0
+                      },
+                      "z": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "z",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "terrain2_force": {
+                "name": "terrain2_force",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@248a72bc"
+                  },
+                  "exponent": {
+                    "min": 0,
+                    "max": 2,
+                    "name": "exponent",
+                    "value": 2
+                  }
+                }
+              },
+              "ViscousDrag1_force": {
+                "name": "ViscousDrag1_force",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@366bd3ab"
+                  },
+                  "drag": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "drag",
+                    "value": 0.30000001192092896
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "camera": {
+        "name": "camera",
+        "value": {
+          "distance": {
+            "min": 1,
+            "max": 20000,
+            "name": "distance",
+            "value": 666.6490917068501
+          },
+          "center": {
+            "name": "center",
+            "value": {
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "name": "x",
+                "value": 0
+              },
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "name": "y",
+                "value": 0
+              },
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "rotation": {
+            "name": "rotation",
+            "value": {
+              "w": {
+                "min": -1,
+                "max": 1,
+                "name": "w",
+                "value": 0.605323396283085
+              },
+              "x": {
+                "min": -1,
+                "max": 1,
+                "name": "x",
+                "value": -0.07672297324796962
+              },
+              "y": {
+                "min": -1,
+                "max": 1,
+                "name": "y",
+                "value": 0.7817513754441837
+              },
+              "z": {
+                "min": -1,
+                "max": 1,
+                "name": "z",
+                "value": 0.12869327208298437
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.0279149266125
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}

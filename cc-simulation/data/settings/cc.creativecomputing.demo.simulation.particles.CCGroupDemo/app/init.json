@@ -1,0 +1,333 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {"particles": {
+      "name": "particles",
+      "value": {
+        "0": {
+          "name": "0",
+          "value": {
+            "track free particles": {
+              "name": "track free particles",
+              "value": true
+            },
+            "groups": {
+              "name": "groups",
+              "value": {
+                "0": {
+                  "name": "0",
+                  "value": {
+                    "emit min": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "emit min",
+                      "value": 0
+                    },
+                    "progress": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "progress",
+                      "value": 0.36800000071525574
+                    },
+                    "emit max": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "emit max",
+                      "value": 0
+                    }
+                  }
+                },
+                "1": {
+                  "name": "1",
+                  "value": {
+                    "emit min": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "emit min",
+                      "value": 0
+                    },
+                    "progress": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "progress",
+                      "value": 0.5130000114440918
+                    },
+                    "emit max": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "emit max",
+                      "value": 0
+                    }
+                  }
+                },
+                "2": {
+                  "name": "2",
+                  "value": {
+                    "emit min": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "emit min",
+                      "value": 0
+                    },
+                    "progress": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "progress",
+                      "value": 1
+                    },
+                    "emit max": {
+                      "min": 0,
+                      "max": 1,
+                      "name": "emit max",
+                      "value": 0
+                    }
+                  }
+                }
+              }
+            },
+            "free particles": {
+              "min": -2147483648,
+              "max": 2147483647,
+              "name": "free particles",
+              "value": 9000
+            }
+          }
+        },
+        "renderer": {
+          "name": "renderer",
+          "value": {}
+        },
+        "forces": {
+          "name": "forces",
+          "value": {"gravity0_force": {
+            "name": "gravity0_force",
+            "value": {
+              "strength": {
+                "min": 0,
+                "max": 10,
+                "name": "strength",
+                "value": 0.5199999809265137
+              },
+              "life time blend": {
+                "curve": {"points": [
+                  {
+                    "time": 0.006896551724137931,
+                    "type": "LINEAR",
+                    "value": 0
+                  },
+                  {
+                    "time": 1,
+                    "type": "LINEAR",
+                    "value": 1
+                  }
+                ]},
+                "name": "life time blend",
+                "value": "cc.creativecomputing.control.CCEnvelope@56f95d6c"
+              },
+              "direction": {
+                "name": "direction",
+                "value": {
+                  "x": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "y",
+                    "value": -1
+                  },
+                  "z": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          }}
+        }
+      }
+    }}
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.856132849759522
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}
