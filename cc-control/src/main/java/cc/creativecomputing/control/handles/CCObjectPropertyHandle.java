@@ -3,6 +3,7 @@ package cc.creativecomputing.control.handles;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -566,6 +567,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			String myPresetString = CCNIOUtil.fileName(myPath.getFileName().toString());
 			myResult.add(myPresetString);
 		}
+		Collections.sort(myResult);
 		return myResult;
 	}
 	
