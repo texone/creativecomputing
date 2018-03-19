@@ -345,7 +345,9 @@ public class CCMultiFontText {
 		}
 		
 		public CCChar charByIndex(int theCharIndex){
-			return _myTextPart.font().chars()[_myFontCharIndices[theCharIndex]];
+			int myIndex = _myFontCharIndices[theCharIndex];
+			if(myIndex < 0 || myIndex >= _myTextPart.font().chars().length)return null;
+			return _myTextPart.font().chars()[myIndex];
 		}
 		
 		public void drawChar(CCGraphics g, int theCharIndex) {
