@@ -30,6 +30,17 @@ public class CCText extends CCMultiFontText{
 		breakText();
 	}
 	
+	public void text(final String...theLines) {
+		StringBuilder myBuilder = new StringBuilder();
+		for(int i = 0; i < theLines.length - 1;i++) {
+			myBuilder.append(theLines[i]);
+			myBuilder.append("\n");
+		}
+		myBuilder.append(theLines[theLines.length - 1]);
+		_myTextParts.get(0).text(myBuilder.toString());
+		breakText();
+	}
+	
 	public void text(Number theNumber) {
 		text(theNumber.toString());
 	}
