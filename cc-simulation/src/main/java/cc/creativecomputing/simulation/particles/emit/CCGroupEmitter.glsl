@@ -42,7 +42,7 @@ bool function(
 			
 	newPosition.xyz = groupPosition.xyz;
 	newPosition.xyz += offset;
-	newPosition.xy += randDirection(texID) * randomPosition;
+	newPosition.xy += randDirection(texID) * randomPosition * rand(texID);
 	newPosition.w = 1;
 					
 	newInfo.x = 0;

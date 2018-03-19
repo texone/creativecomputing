@@ -87,7 +87,7 @@ public class CCParticles{
 	
 	protected CCGLSwapBuffer _mySwapTexture;
 	
-	protected CCShaderBuffer _myEvelopeData;
+	protected CCShaderBuffer _myEnvelopeData;
 	protected CCShaderBuffer _myGroupData;
 	
 	protected double _myCurrentTime = 0;
@@ -158,7 +158,7 @@ public class CCParticles{
 		
 		_mySwapTexture = new CCGLSwapBuffer(g, 32, 4, 4,_myWidth,_myHeight);
 
-		_myEvelopeData = new CCShaderBuffer(100, _myForces.size() + 1);
+		_myEnvelopeData = new CCShaderBuffer(100, _myForces.size() + 1);
 		_myGroupData = new CCShaderBuffer(32, 4, 1, CCParticleCPUGroupEmitter.GROUP_WIDH,CCParticleCPUGroupEmitter.GROUP_WIDH);
 		
 		_myParticleRender = theRender;
@@ -172,7 +172,7 @@ public class CCParticles{
 		_myUpdateShader.setTextureUniform("velocityTexture", _mySwapTexture.attachment(2));
 		_myUpdateShader.setTextureUniform("colorTexture", _mySwapTexture.attachment(3));
 		_myUpdateShader.setTextureUniform("staticPositions", null);
-		_myUpdateShader.setTextureUniform("lifeTimeBlends", _myEvelopeData.attachment(0));
+		_myUpdateShader.setTextureUniform("lifeTimeBlends", _myEnvelopeData.attachment(0));
 		_myUpdateShader.setTextureUniform("groupInfoTexture", _myGroupData.attachment(0));
 	}
 	
@@ -212,6 +212,10 @@ public class CCParticles{
 	
 	public CCShaderBuffer groupData() {
 		return _myGroupData;
+	}
+	
+	public CCTexture2D envelopeTexture() {
+		return _myEnvelopeData.attachment(0);
 	}
 	
 	public double currentTime() {
@@ -360,7 +364,7 @@ public class CCParticles{
 	}
 	
 	private void updateEnvelopeData(CCGraphics g) {
-		_myEvelopeData.beginDraw(g);
+		_myEnvelopeData.beginDraw(g);
 		g.clear();
 		_mySetDataShader.start();
 		g.beginShape(CCDrawMode.POINTS);
@@ -373,7 +377,7 @@ public class CCParticles{
 		}
 		g.endShape();
 		_mySetDataShader.end();
-		_myEvelopeData.endDraw(g);
+		_myEnvelopeData.endDraw(g);
 	}
 	
 	
