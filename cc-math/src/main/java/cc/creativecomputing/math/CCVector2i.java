@@ -1,10 +1,6 @@
 package cc.creativecomputing.math;
 
 public class CCVector2i {
-	
-	public static interface CCVector2iEvent {
-		public void event(CCVector2i theVectrs);
-	}
 
 	public int x;
 	public int y;

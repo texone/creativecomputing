@@ -1,6 +1,5 @@
 package cc.creativecomputing.math.time;
 
-import java.util.Date;
 
 public class CCTimeRange {
 

@@ -30,6 +30,9 @@ public class CCCatmulRomSpline extends CCSpline {
 		super(CCSplineType.CATMULL_ROM, theIsClosed);
 		_myCurveTension = theCurveTension;
 	}
+	public CCCatmulRomSpline(){
+		this(0.5,false);
+	}
 
 	public CCCatmulRomSpline(CCVector3[] theControlPoints, double theCurveTension, boolean theIsClosed) {
 		super(CCSplineType.CATMULL_ROM, theControlPoints, theIsClosed);

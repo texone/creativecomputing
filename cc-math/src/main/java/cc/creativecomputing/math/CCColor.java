@@ -32,10 +32,6 @@ import cc.creativecomputing.math.CCMath;
  *
  */
 public class CCColor implements Cloneable, CCBlendable<CCColor>{
-	
-	public static interface CCColorEvent {
-		public void event(CCColor theColor);
-	}
 
 
 	/**
