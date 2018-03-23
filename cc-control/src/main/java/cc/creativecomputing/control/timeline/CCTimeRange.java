@@ -22,56 +22,33 @@ package cc.creativecomputing.control.timeline;
  */
 public class CCTimeRange {
 
-	private double _myStart;
-	private double _myEnd;
+	public double start;
+	public double end;
 	
 	public CCTimeRange(final double theStart, final double theEnd) {
-		
-		if (theStart < theEnd) {
-			_myStart = theStart;
-			_myEnd = theEnd;
-		} else {
-			_myStart = theEnd;
-			_myEnd = theStart;
-		}
+		range(theStart, theEnd);
 	}
 	
 	public CCTimeRange() {
 		this(0,0);
 	}
 	
-	public double start() {
-		return _myStart;
-	}
-	
-	public void start(final double theStart) {
-		_myStart = theStart;
-	}
-	
-	public double end() {
-		return _myEnd;
-	}
-	
-	public void end(double theEnd) {
-		_myEnd = theEnd;
-	}
-	
 	public void range(final double theStart, final double theEnd) {
-		_myStart = theStart;
-		_myEnd = theEnd;
+		start = theStart;
+		end = theEnd;
 		
-		if(_myStart > _myEnd) {
-			double myTemp = _myStart;
-			_myStart = _myEnd;
-			_myEnd = myTemp;
+		if(start > end) {
+			double myTemp = start;
+			start = end;
+			end = myTemp;
 		}
 	}
 	
 	public double length(){
-		return _myEnd - _myStart;
+		return end - start;
 	}
 	
 	public CCTimeRange clone() {
-		return new CCTimeRange(_myStart, _myEnd);
+		return new CCTimeRange(start, end);
 	}
 }

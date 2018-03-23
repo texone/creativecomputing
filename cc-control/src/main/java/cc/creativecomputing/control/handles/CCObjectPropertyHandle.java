@@ -31,10 +31,12 @@ import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.code.CCShaderSource;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
 import cc.creativecomputing.core.CCSelectable;
 import cc.creativecomputing.core.CCSelectionListener;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
@@ -149,7 +151,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		return _myMember != null &&  _myMember.value() != null && _myMember.value() instanceof CCSelectable && ((CCSelectable)_myMember.value()).isSelected();
 	}
 	
-	public void addSelectionListener(CCSelectionListener theListener){
+	public void addSelectionListener(CCEvent<Boolean> theListener){
 		if( _myMember != null &&  _myMember.value() != null && _myMember.value() instanceof CCSelectable){
 			((CCSelectable)_myMember.value()).addListener(theListener);
 		}
@@ -419,7 +421,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			CCPropertyFeedbackObject myFeedBackObject = (CCPropertyFeedbackObject)theObject;
 			for(String myKey:myFeedBackObject.propertyListener().keySet()){
 				if(myResult.containsKey(myKey)){
-					myResult.get(myKey).events().add(myFeedBackObject.propertyListener().get(myKey));
+					myResult.get(myKey).changeEvents.add(myFeedBackObject.propertyListener().get(myKey));
 				}
 			}
 		}

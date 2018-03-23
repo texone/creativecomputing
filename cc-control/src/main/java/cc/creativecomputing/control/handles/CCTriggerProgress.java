@@ -16,7 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.control.handles;
 
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 
 public class CCTriggerProgress {
 	
@@ -30,25 +30,24 @@ public class CCTriggerProgress {
 		void interrupt();
 	}
 	
-	private CCListenerManager<CCTriggerProgressListener> _myEvents = new CCListenerManager<>(CCTriggerProgressListener.class);
-	
-	public CCListenerManager<CCTriggerProgressListener> events(){
-		return _myEvents;
-	}
+	public CCEventManager<?> startEvents = new CCEventManager<>();
+	public CCEventManager<Double> progressEvents = new CCEventManager<>();
+	public CCEventManager<?> endEvents = new CCEventManager<>();
+	public CCEventManager<?> interruptEvents = new CCEventManager<>();
 	
 	public void start(){
-		_myEvents.proxy().start();
+		startEvents.event();
 	}
 
 	public void progress(double theProgress){
-		_myEvents.proxy().progress(theProgress);
+		progressEvents.event(theProgress);
 	}
 
 	public void interrupt(){
-		_myEvents.proxy().interrupt();
+		interruptEvents.event();
 	}
 	
 	public void end(){
-		_myEvents.proxy().end();
+		endEvents.event();
 	}
 }

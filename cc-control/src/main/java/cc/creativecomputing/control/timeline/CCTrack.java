@@ -33,7 +33,7 @@ public class CCTrack extends CCAbstractTrack{
 	
 	public CCTrack(CCPropertyHandle<?> theProperty){
 		super(theProperty);
-		_myTrackData = new CCTrackData(this);
+		_myTrackData = new CCTrackData();
 	}
 	
 	public void extras(Map<String, String> theExtras) {

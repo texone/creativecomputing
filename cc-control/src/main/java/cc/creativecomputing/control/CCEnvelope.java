@@ -24,7 +24,7 @@ public class CCEnvelope {
 	private CCTrackData _myCurrentCurve = null;
 	
 	public CCEnvelope(){
-		_myCurrentCurve = new CCTrackData(null);
+		_myCurrentCurve = new CCTrackData();
 		_myCurrentCurve.add(new CCLinearControlPoint(0, 0));
 		_myCurrentCurve.add(new CCLinearControlPoint(1, 1));
 	}

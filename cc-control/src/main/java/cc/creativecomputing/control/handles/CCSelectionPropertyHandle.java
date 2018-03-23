@@ -17,7 +17,6 @@
 package cc.creativecomputing.control.handles;
 
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.CCSelection.CCSelectionListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
@@ -26,20 +25,8 @@ public class CCSelectionPropertyHandle extends CCPropertyHandle<CCSelection>{
 
 	protected CCSelectionPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
-		value().events().add(new CCSelectionListener() {
-			
-			@Override
-			public void onChangeValues(CCSelection theSelection) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@SuppressWarnings("unchecked")
-			@Override
-			public void onChange(String theValue) {
-				_myEvents.proxy().onChange(value());
-			}
-		});
+		value().changeEvents.add(theValue ->{changeEvents.event(value());});
+		
 	}
 	
 	@Override

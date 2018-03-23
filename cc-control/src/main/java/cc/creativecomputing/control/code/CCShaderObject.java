@@ -26,9 +26,9 @@ import java.util.regex.Pattern;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
 import cc.creativecomputing.io.CCNIOUtil;
 
@@ -71,15 +71,9 @@ public abstract class CCShaderObject {
 		return myBuffer;
 	}
 	
-	public interface CCShaderCompileListener{
-		void onRecompile(CCShaderObject theShader);
-	}
-	
-	public interface CCShaderErrorListener{
-		void onError(CCShaderObject theShader);
-	}
-	private CCListenerManager<CCShaderCompileListener> _myCompileEvents = CCListenerManager.create(CCShaderCompileListener.class);
-	private CCListenerManager<CCShaderErrorListener> _myErrorEvents = CCListenerManager.create(CCShaderErrorListener.class);
+
+	public CCEventManager<CCShaderObject> compileEvents = new CCEventManager<>();
+	public CCEventManager<CCShaderObject> errorEvents = new CCEventManager<>();
 	
 	private Path[] _myPaths;
 	
@@ -109,14 +103,6 @@ public abstract class CCShaderObject {
 		for(int i = 0; i < theSources.length;i++){
 			_myFiles.put("source " + i, new CCShaderSource(this, theSources[i]));
 		}
-	}
-
-	public CCListenerManager<CCShaderCompileListener> onCompile(){
-		return _myCompileEvents;
-	}
-
-	public CCListenerManager<CCShaderErrorListener> onError(){
-		return _myErrorEvents;
 	}
 	
 	public Collection<CCShaderUniform> uniforms(){

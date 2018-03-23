@@ -16,22 +16,15 @@
  ******************************************************************************/
 package cc.creativecomputing.control;
 
-import java.awt.Graphics2D;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.math.CCVector2;
 
-@SuppressWarnings({"rawtypes","unchecked"})
 public abstract class CCAsset <AssetType>{
-	
-	public interface CCAssetListener<AssetType>{
-		void onChange(AssetType theAsset);
-	}
 
 	protected AssetType _myAsset ;
 	
@@ -39,7 +32,7 @@ public abstract class CCAsset <AssetType>{
 	
 	protected Map<Path, AssetType> _myAssetMap = new HashMap<>();
 	
-	protected CCListenerManager<CCAssetListener> _myEvents = CCListenerManager.create(CCAssetListener.class);
+	public CCEventManager<AssetType> changeEvents = new CCEventManager<>();
 	
 	public CCAsset(){
 		
@@ -87,7 +80,7 @@ public abstract class CCAsset <AssetType>{
 		if(thePath == _myAssetPath || (thePath != null && thePath.equals(_myAssetPath)))return;
 		_myAssetPath = thePath;
 		onChangePath(thePath);
-		_myEvents.proxy().onChange(_myAsset);
+		changeEvents.event(_myAsset);
 	}
 	
 	public void mute(boolean theMute){
@@ -96,10 +89,6 @@ public abstract class CCAsset <AssetType>{
 	
 	public String[] extensions(){
 		return null;
-	}
-	
-	public CCListenerManager<CCAssetListener> events(){
-		return _myEvents;
 	}
 	
 	public Path path(){

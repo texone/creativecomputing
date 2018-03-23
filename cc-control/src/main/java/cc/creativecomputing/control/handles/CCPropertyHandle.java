@@ -19,8 +19,8 @@ package cc.creativecomputing.control.handles;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
 
@@ -34,7 +34,7 @@ public abstract class CCPropertyHandle<Type>{
 	
 	protected CCMember<CCProperty> _myMember;
 	
-	protected final CCListenerManager<CCPropertyListener> _myEvents = CCListenerManager.create(CCPropertyListener.class);
+	public final CCEventManager<Type> changeEvents = new CCEventManager<>();
 	
 	protected Type _myValue = null;
 	protected Type _myPresetValue = null;
@@ -60,10 +60,6 @@ public abstract class CCPropertyHandle<Type>{
 	
 	public void mute(boolean theMute){
 		
-	}
-	
-	public CCListenerManager<CCPropertyListener> events(){
-		return _myEvents;
 	}
 	
 	public void path(Path thePath){
@@ -197,7 +193,7 @@ public abstract class CCPropertyHandle<Type>{
 	
 	public void onChange(){
 		try{
-			_myEvents.proxy().onChange(value());
+			changeEvents.event(value());
 		}catch(Exception e){
 			throw new RuntimeException("Problem with property:" + path() + ":" + name()+":" +value()+":" + value().getClass().getName()+":" + _myMember.value()+":" + _myMember.value().getClass().getName(), e);
 		}

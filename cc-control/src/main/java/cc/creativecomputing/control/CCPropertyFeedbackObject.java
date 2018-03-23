@@ -18,9 +18,9 @@ package cc.creativecomputing.control;
 
 import java.util.Map;
 
-import cc.creativecomputing.control.handles.CCPropertyListener;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 
 public interface CCPropertyFeedbackObject {
 
-	Map<String, CCPropertyListener<?>> propertyListener();
+	Map<String, CCEvent<?>> propertyListener();
 }

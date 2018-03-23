@@ -54,12 +54,9 @@ public class CCTrackData extends TreeSet<CCControlPoint>{
 
 	private int _mySize = 0;
 	protected boolean _myDirtyFlag = false;
-	
-	protected CCTrack _myTrack;
 
-	public CCTrackData(CCTrack theTrack) {
+	public CCTrackData() {
 		super(new TimelineComparator());
-		_myTrack = theTrack;
 	}
 	
 	public void accumulate() {
@@ -137,8 +134,18 @@ public class CCTrackData extends TreeSet<CCControlPoint>{
 	 * @param theTime
 	 * @return
 	 */
-	public CCControlPoint getFirstPointAt(double theTime) {
+	public CCControlPoint getFirstPointAfter(double theTime) {
 		return ceiling(new CCControlPoint(theTime, 0));
+	}
+	
+	/**
+	 * Returns the least control point with a time greater than or equal to the 
+	 * given time, or null if there is no control point after the given time. 
+	 * @param theTime
+	 * @return
+	 */
+	public CCControlPoint getLastPointBefore(double theTime) {
+		return floor(new CCControlPoint(theTime, 0));
 	}
 
 	public CCControlPoint getLastOnSamePosition(CCControlPoint thePoint) {
@@ -158,9 +165,9 @@ public class CCTrackData extends TreeSet<CCControlPoint>{
 		}
 	}
 
-	public CCControlPoint getLastPointAt(double theTime) {
-		return getLastOnSamePosition(ceiling(new CCControlPoint(theTime, 0)));
-	}
+//	public CCControlPoint getLastPointAt(double theTime) {
+//		return getLastOnSamePosition(ceiling(new CCControlPoint(theTime, 0)));
+//	}
 
 	public CCControlPoint getLastPoint() {
 		try {
