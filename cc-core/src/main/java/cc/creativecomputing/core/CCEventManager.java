@@ -8,13 +8,9 @@
  * Contributors:
  *     christianr - initial API and implementation
  */
-package cc.creativecomputing.core.events;
+package cc.creativecomputing.core;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,38 +33,22 @@ import java.util.List;
  * }
  * </pre></code>
  * 
- * @param <ListenerType> the type of event listener that is supported by this proxy.
+ * @param <EventType> the type of event listener that is supported by this proxy.
  * 
  * @since 3.0
  * @version $Id: EventListenerSupport.java 978864 2010-07-24 12:49:38Z jcarman $
  */
-public class CCListenerManager<ListenerType> implements Iterable<ListenerType>{
+public class CCEventManager<EventType> {
+	
+	public static interface CCEvent<EventType>{
+		public void event(EventType theParameter);
+	}
 	
 	/**
 	 * The list used to hold the registered listeners. This list is intentionally a thread-safe copy-on-write-array so
 	 * that traversals over the list of listeners will be atomic.
 	 */
-	private final List<ListenerType> _myListeners = new ArrayList<>();
-
-	/**
-	 * The proxy representing the collection of listeners. Calls to this proxy object will sent to all registered
-	 * listeners.
-	 */
-	private ListenerType _myProxy;
-
-	/**
-	 * Creates an EventListenerSupport object which supports the specified listener type.
-	 * 
-	 * @param listenerInterface the type of listener interface that will receive events posted using this class.
-	 * 
-	 * @return an EventListenerSupport object which supports the specified listener type.
-	 * 
-	 * @throws NullPointerException if <code>listenerInterface</code> is <code>null</code>.
-	 * @throws IllegalArgumentException if <code>listenerInterface</code> is not an interface.
-	 */
-	public static <T> CCListenerManager<T> create(Class<T> listenerInterface) {
-		return new CCListenerManager<T>(listenerInterface);
-	}
+	private final List<CCEvent<EventType>> _myListeners = new ArrayList<>();
 
 	/**
 	 * Creates an EventListenerSupport object which supports the provided listener interface.
@@ -78,8 +58,7 @@ public class CCListenerManager<ListenerType> implements Iterable<ListenerType>{
 	 * @throws NullPointerException if <code>listenerInterface</code> is <code>null</code>.
 	 * @throws IllegalArgumentException if <code>listenerInterface</code> is not an interface.
 	 */
-	public CCListenerManager(Class<ListenerType> listenerInterface) {
-		_myProxy = listenerInterface.cast(Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { listenerInterface }, new ProxyInvocationHandler()));
+	public CCEventManager() {
 	}
 
 	/**
@@ -88,8 +67,16 @@ public class CCListenerManager<ListenerType> implements Iterable<ListenerType>{
 	 * 
 	 * @return a proxy object which can be used to call listener methods on all of the registered event listeners
 	 */
-	public ListenerType proxy() {
-		return _myProxy;
+	public void event(EventType theParameter) {
+		for(CCEvent<EventType> myListener:_myListeners){
+			myListener.event(theParameter);
+		}
+	}
+	
+	public void event() {
+		for(CCEvent<EventType> myListener:_myListeners){
+			myListener.event(null);
+		}
 	}
 
 	// **********************************************************************************************************************
@@ -103,7 +90,7 @@ public class CCListenerManager<ListenerType> implements Iterable<ListenerType>{
 	 * 
 	 * @throws NullPointerException if <code>listener</code> is <code>null</code>.
 	 */
-	public void add(ListenerType theListener) {
+	public void add(CCEvent<EventType> theListener) {
 		synchronized (_myListeners) {
 			_myListeners.add(theListener);
 		}
@@ -125,33 +112,9 @@ public class CCListenerManager<ListenerType> implements Iterable<ListenerType>{
 	 * 
 	 * @throws NullPointerException if <code>listener</code> is <code>null</code>.
 	 */
-	public void remove(ListenerType theListener) {
+	public void remove(CCEvent<EventType> theListener) {
 		synchronized (_myListeners) {
 			_myListeners.remove(theListener);
 		}
-	}
-
-	/**
-	 * An invocation handler used to dispatch the event(s) to all the listeners.
-	 */
-	private class ProxyInvocationHandler implements InvocationHandler {
-		/**
-		 * Propagates the method call to all registered listeners in place of the proxy listener object.
-		 * 
-		 * @param proxy the proxy object representing a listener on which the invocation was called.
-		 * @param method the listener method that will be called on all of the listeners.
-		 * @param args event arguments to propogate to the listeners.
-		 */
-		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-			for (ListenerType listener : new ArrayList<ListenerType>(_myListeners)) {
-				method.invoke(listener, args);
-			}
-			return null;
-		}
-	}
-
-	@Override
-	public Iterator<ListenerType> iterator() {
-		return new ArrayList<ListenerType>(_myListeners).iterator();
 	}
 }
