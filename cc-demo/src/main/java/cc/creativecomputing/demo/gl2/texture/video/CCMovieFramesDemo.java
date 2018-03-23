@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.demo.gl2.texture.video;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;
 import cc.creativecomputing.graphics.CCGraphics;

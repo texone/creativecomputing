@@ -3,7 +3,7 @@ package cc.creativecomputing.demo.kle.motorrotationdemo;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.demo.kle.motorrotationdemo.CCTriKiDemo.CCTriangleElement;
 import cc.creativecomputing.math.CCMath;

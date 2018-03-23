@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.demo.gl2.export;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.demo.gl2.camera.CC2CameraControllerDemo;
 import cc.creativecomputing.graphics.CCDrawMode;

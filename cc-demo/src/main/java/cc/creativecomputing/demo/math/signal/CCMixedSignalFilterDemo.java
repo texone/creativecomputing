@@ -3,8 +3,8 @@ package cc.creativecomputing.demo.math.signal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.code.CCCompileObject;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCDrawMode;

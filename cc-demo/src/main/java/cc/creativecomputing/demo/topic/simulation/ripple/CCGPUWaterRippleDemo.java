@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.demo.topic.simulation.ripple;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.demo.gl2.shader.imaging.CCVoronoiseLighted;
 import cc.creativecomputing.graphics.CCGraphics;

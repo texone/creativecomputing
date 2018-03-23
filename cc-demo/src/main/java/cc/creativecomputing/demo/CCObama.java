@@ -3,11 +3,11 @@ package cc.creativecomputing.demo;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.util.CCStopWatch;
 import cc.creativecomputing.control.CCEnvelope;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCStopWatch;
 import cc.creativecomputing.demo.geomtry.CCVoronoiDemo;
 import cc.creativecomputing.geometry.hemesh.CCVoronoi;
 import cc.creativecomputing.graphics.CCDrawMode;

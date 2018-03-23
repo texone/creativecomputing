@@ -3,10 +3,10 @@ package cc.creativecomputing.demo.protocol.serial.dmx;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.controlui.CCControlApp;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCGraphics;

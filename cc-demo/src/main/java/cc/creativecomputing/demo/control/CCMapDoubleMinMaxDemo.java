@@ -3,7 +3,7 @@ package cc.creativecomputing.demo.control;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCGraphics;

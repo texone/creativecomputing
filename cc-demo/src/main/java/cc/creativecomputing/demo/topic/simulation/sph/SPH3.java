@@ -3,7 +3,7 @@ package cc.creativecomputing.demo.topic.simulation.sph;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.events.CCKeyEvent.CCKeyCode;

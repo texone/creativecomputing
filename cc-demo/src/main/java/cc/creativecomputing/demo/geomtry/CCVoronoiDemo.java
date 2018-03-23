@@ -3,9 +3,9 @@ package cc.creativecomputing.demo.geomtry;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.util.CCStopWatch;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.util.CCStopWatch;
 import cc.creativecomputing.geometry.hemesh.CCHEEdge;
 import cc.creativecomputing.geometry.hemesh.CCHEFace;
 import cc.creativecomputing.geometry.hemesh.CCHEMesh;

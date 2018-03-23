@@ -2,7 +2,7 @@ package cc.creativecomputing.demo.gl2.shader.imaging;
 
 import java.nio.FloatBuffer;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;

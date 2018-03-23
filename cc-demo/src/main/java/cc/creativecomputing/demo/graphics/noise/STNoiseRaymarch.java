@@ -2,7 +2,7 @@ package cc.creativecomputing.demo.graphics.noise;
 
 import java.io.File;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.demo.control.CCColorControl;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;

@@ -1,6 +1,6 @@
 package cc.creativecomputing.demo.control;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -19,19 +19,19 @@ public class CCCircularControl  {
 
 	public void init(CCGL2Adapter theApp, CCGraphics g, CCAnimator theAnimator) {
 		theApp.mousePressed().add(e -> {
-			_myStart = new CCVector2(e.x(), e.y());
+			start = new CCVector2(e.x(), e.y());
 			_myLast = new CCVector2(e.x(), e.y());
-			_myEnd = new CCVector2(e.x(), e.y());
+			end = new CCVector2(e.x(), e.y());
 			_myValue = 0;
 		});
 		
 		theApp.mouseReleased().add(e -> {
-			_myStart = null;
-			_myEnd = null;
+			start = null;
+			end = null;
 		});
 		
 		theApp.mouseDragged().add(e ->{
-			_myEnd = new CCVector2(e.x(), e.y()); 
+			end = new CCVector2(e.x(), e.y()); 
 			if(CCMath.abs(_myEnd.y - _myLast.y) < CCMath.abs(_myEnd.x - _myLast.x)){
 				_myDigit = (int)((_myEnd.x - _myStart.x) / 10 * -1);
 				_myDigit = CCMath.constrain(_myDigit, -4, 4);
@@ -41,7 +41,7 @@ public class CCCircularControl  {
 				_myValue += (_myEnd.y - _myLast.y) * myScale;
 				_myValue = CCMath.constrain(_myValue, -9999.9999, 9999.9999);
 			}
-			_myLast = _myEnd;
+			_myLast = end;
 		});
 	}
 	
