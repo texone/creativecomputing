@@ -10,7 +10,9 @@
  */
 package cc.creativecomputing.protocol.midi;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,9 +25,8 @@ import javax.sound.midi.Receiver;
 import javax.sound.midi.Transmitter;
 
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.CCSelection.CCSelectionListener;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.protocol.midi.messages.CCMidiMessage;
 
 public class CCMidiIn implements Receiver{
@@ -37,7 +38,7 @@ public class CCMidiIn implements Receiver{
 		protected final MidiDevice _myMidiDevice;
 		
 		private Transmitter _myInputTransmitter;
-		private final CCListenerManager<Receiver> _myReceiver = CCListenerManager.create(Receiver.class);
+		private final List<Receiver> _myReceiver = new ArrayList<>();
 		
 		private CCMidiTransmitter(Info theInfo){
 			try {
@@ -56,7 +57,9 @@ public class CCMidiIn implements Receiver{
 					
 					@Override
 					public void send(MidiMessage message, long timeStamp) {
-						_myReceiver.proxy().send(message, timeStamp);
+						for(Receiver myReceiver:_myReceiver){
+							myReceiver.send(message, timeStamp);
+						}
 					}
 					
 					@Override
@@ -136,7 +139,7 @@ public class CCMidiIn implements Receiver{
 	@CCProperty(name = "device")
 	private CCSelection _myPortSelection = new CCSelection();
 	
-	private CCListenerManager<CCMidiListener> _myListenerManager = CCListenerManager.create(CCMidiListener.class);
+	public final CCEventManager<CCMidiMessage> events = new CCEventManager<>();
 	private String _myDevice = null;
 
 	/**
@@ -152,23 +155,10 @@ public class CCMidiIn implements Receiver{
 			_myPortSelection.add(myName);
 		}
 		
-		_myPortSelection.events().add(new CCSelectionListener() {
-			
-			@Override
-			public void onChangeValues(CCSelection theSelection) {
-				
-			}
-			
-			@Override
-			public void onChange(String theValue) {
-				transmitterMap.switchDevice(_myDevice, theValue, CCMidiIn.this);
-				_myDevice = theValue;
-			}
+		_myPortSelection.changeEvents.add(theSelection -> {
+			transmitterMap.switchDevice(_myDevice, theSelection.value(), CCMidiIn.this);
+			_myDevice = theSelection.value();
 		});
-	}
-	
-	public CCListenerManager<CCMidiListener> events(){
-		return _myListenerManager;
 	}
 	
 	/**
@@ -191,7 +181,7 @@ public class CCMidiIn implements Receiver{
 //		final int midiData2 = shortMessage.getData2();
 //		CCLog.info(midiCommand + ":" + Integer.toHexString(shortMessage.getData1()) + ":" + Integer.toHexString(shortMessage.getData2()));
 //		myTimeCode.receive();
-		_myListenerManager.proxy().receive(new CCMidiMessage(theMessage));
+		events.event(new CCMidiMessage(theMessage));
 		
 		
 

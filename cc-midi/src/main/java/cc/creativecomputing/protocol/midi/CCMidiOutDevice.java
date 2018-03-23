@@ -21,7 +21,6 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.CCSelection.CCSelectionListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.protocol.midi.messages.CCMidiMessage;
@@ -69,18 +68,8 @@ public class CCMidiOutDevice extends CCMidiDevice{
 			_myPortSelection.add(myName);
 		}
 		
-		_myPortSelection.events().add(new CCSelectionListener() {
-			
-			@Override
-			public void onChangeValues(CCSelection theSelection) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onChange(String theValue) {
-				start(theValue);
-			}
+		_myPortSelection.changeEvents.add(theSelection -> {
+			start(theSelection.value());
 		});
 	}
 	
