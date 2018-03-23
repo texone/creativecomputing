@@ -1,8 +1,5 @@
 package cc.creativecomputing.sound;
 
-import java.awt.Graphics2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -202,61 +199,61 @@ public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 	}
 	
 	
-	@Override
-	public void renderTimedEvent(CCTimedEventPoint theEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
-		if(theEvent.content() == null || theEvent.content().value() == null)return;
-		
-		CCAudioAssetData myAudioData = _myAssetFFT.checkSpectrumData(theEvent);
-		
-		if(myAudioData == null)return;
-		if(myAudioData.data == null)return;
-		
-		
-		double myWidth = theUpper.getX() - theLower.getX();
-		double myHeight = theUpper.getY() - theLower.getY();
-		
-		if(!_myAssetFFT._cUseFFT || myAudioData.image() == null){
-			GeneralPath myPath = new GeneralPath();
-			myPath.moveTo(theLower.getX(), theLower.getY());
-			for (int x = 0; x < myWidth - 1; x++) {
-				double myTime1 = CCMath.map(x, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset();
-				int mySample1 = (int)CCMath.map(myTime1, 0, myAudioData.player.length() / 1000d, 0 ,myAudioData.data.length);
-				double myTime2 = CCMath.map(x + 1, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset();
-				int mySample2 = (int)CCMath.map(myTime2, 0, myAudioData.player.length() / 1000d, 0 ,myAudioData.data.length);
-				
-				float value0 = 0;
-				float value1 = 0;
-				for(int j = mySample1;j<mySample2;j++){
-					if(j >= myAudioData.data.length || j < 0)continue;
-					 value0 = CCMath.max(myAudioData.data[j], value0);
-					 value1 = CCMath.min(myAudioData.data[j], value1);
-				}
-				
-	//			g.line(i / _cScale, 50 - song.getChannel(0)[i] * 50, i / _cScale + 1, 50 - song.getChannel(0)[i + _cScale] * 10);
-				myPath.moveTo(x + theLower.getX(),myHeight / 2 +  value0 * myHeight / 2);
-				myPath.lineTo(x + theLower.getX(),myHeight / 2 +  value1 * myHeight / 2);
-			}
-	        theG2d.draw(myPath);
-		}else{
-			double myTime1 = lowerTime - theEvent.time() - theEvent.contentOffset();
-			double myTime2 = UpperTime - theEvent.time() - theEvent.contentOffset();
-			int sx1 = (int)CCMath.map(myTime1 * 1000, 0, myAudioData.player.length(), 0, myAudioData.image().getWidth());
-			int sx2 = (int)CCMath.map(myTime2 * 1000, 0, myAudioData.player.length(), 0, myAudioData.image().getWidth());
-			theG2d.drawImage(
-				myAudioData.image(), 
-				(int)theLower.getX(), 
-				0, 
-				(int)(theLower.getX() + myWidth), 
-				(int)myHeight, 
-				sx1, 
-				(int)(myAudioData.image().getHeight() * _myAssetFFT._cSpecMin), 
-				sx2, 
-				(int)(myAudioData.image().getHeight() * _myAssetFFT._cSpecMax), 
-				null
-			);
-		}
-		
-	}
+//	@Override
+//	public void renderTimedEvent(CCTimedEventPoint theEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+//		if(theEvent.content() == null || theEvent.content().value() == null)return;
+//		
+//		CCAudioAssetData myAudioData = _myAssetFFT.checkSpectrumData(theEvent);
+//		
+//		if(myAudioData == null)return;
+//		if(myAudioData.data == null)return;
+//		
+//		
+//		double myWidth = theUpper.getX() - theLower.getX();
+//		double myHeight = theUpper.getY() - theLower.getY();
+//		
+//		if(!_myAssetFFT._cUseFFT || myAudioData.image() == null){
+//			GeneralPath myPath = new GeneralPath();
+//			myPath.moveTo(theLower.getX(), theLower.getY());
+//			for (int x = 0; x < myWidth - 1; x++) {
+//				double myTime1 = CCMath.map(x, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset();
+//				int mySample1 = (int)CCMath.map(myTime1, 0, myAudioData.player.length() / 1000d, 0 ,myAudioData.data.length);
+//				double myTime2 = CCMath.map(x + 1, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset();
+//				int mySample2 = (int)CCMath.map(myTime2, 0, myAudioData.player.length() / 1000d, 0 ,myAudioData.data.length);
+//				
+//				float value0 = 0;
+//				float value1 = 0;
+//				for(int j = mySample1;j<mySample2;j++){
+//					if(j >= myAudioData.data.length || j < 0)continue;
+//					 value0 = CCMath.max(myAudioData.data[j], value0);
+//					 value1 = CCMath.min(myAudioData.data[j], value1);
+//				}
+//				
+//	//			g.line(i / _cScale, 50 - song.getChannel(0)[i] * 50, i / _cScale + 1, 50 - song.getChannel(0)[i + _cScale] * 10);
+//				myPath.moveTo(x + theLower.getX(),myHeight / 2 +  value0 * myHeight / 2);
+//				myPath.lineTo(x + theLower.getX(),myHeight / 2 +  value1 * myHeight / 2);
+//			}
+//	        theG2d.draw(myPath);
+//		}else{
+//			double myTime1 = lowerTime - theEvent.time() - theEvent.contentOffset();
+//			double myTime2 = UpperTime - theEvent.time() - theEvent.contentOffset();
+//			int sx1 = (int)CCMath.map(myTime1 * 1000, 0, myAudioData.player.length(), 0, myAudioData.image().getWidth());
+//			int sx2 = (int)CCMath.map(myTime2 * 1000, 0, myAudioData.player.length(), 0, myAudioData.image().getWidth());
+//			theG2d.drawImage(
+//				myAudioData.image(), 
+//				(int)theLower.getX(), 
+//				0, 
+//				(int)(theLower.getX() + myWidth), 
+//				(int)myHeight, 
+//				sx1, 
+//				(int)(myAudioData.image().getHeight() * _myAssetFFT._cSpecMin), 
+//				sx2, 
+//				(int)(myAudioData.image().getHeight() * _myAssetFFT._cSpecMax), 
+//				null
+//			);
+//		}
+//		
+//	}
 	
 	@Override
 	public void out() {
