@@ -13,8 +13,8 @@ package cc.creativecomputing.simulation.steering;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCAnimatorListener;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.CCParticle;
 import cc.creativecomputing.simulation.CCParticleGroup;

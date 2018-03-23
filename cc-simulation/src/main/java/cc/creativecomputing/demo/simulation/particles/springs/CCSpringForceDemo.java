@@ -13,7 +13,7 @@ package cc.creativecomputing.demo.simulation.particles.springs;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.demo.simulation.particles.CCForceFieldDemo;
 import cc.creativecomputing.graphics.CCGraphics;

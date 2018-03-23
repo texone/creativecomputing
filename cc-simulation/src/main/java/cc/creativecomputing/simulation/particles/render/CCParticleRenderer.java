@@ -13,8 +13,8 @@ package cc.creativecomputing.simulation.particles.render;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCEnvelope;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCVBOMesh;

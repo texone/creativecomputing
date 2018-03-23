@@ -3,8 +3,8 @@ package cc.creativecomputing.demo.simulation.particles;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCGradient;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawAttributes;
 import cc.creativecomputing.graphics.CCGraphics;

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;

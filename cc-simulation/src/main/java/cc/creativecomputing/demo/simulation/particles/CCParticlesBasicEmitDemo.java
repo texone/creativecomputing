@@ -2,7 +2,7 @@ package cc.creativecomputing.demo.simulation.particles;
 
 import java.util.ArrayList;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;

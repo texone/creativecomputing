@@ -14,8 +14,8 @@ import java.nio.file.Path;
 
 import com.jogamp.opengl.GL2;
 
-import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCEnvelope;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;

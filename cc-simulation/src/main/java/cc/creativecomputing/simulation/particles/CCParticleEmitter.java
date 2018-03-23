@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.simulation.particles;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.graphics.CCGraphics;
 
 public interface CCParticleEmitter {

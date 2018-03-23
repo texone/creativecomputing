@@ -1,7 +1,7 @@
 package cc.creativecomputing.demo.simulation.fluid;
 
-import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCGradient;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.events.CCMouseSimpleInfo;
 import cc.creativecomputing.graphics.CCDrawMode;
