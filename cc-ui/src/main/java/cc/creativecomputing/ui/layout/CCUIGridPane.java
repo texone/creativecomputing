@@ -76,19 +76,13 @@ public class CCUIGridPane extends CCUIPane{
 	
 	private int _myRows = 0;
 	
-	public void addChild(CCUIWidget theWidget, CCUITableEntry theEntry) {
-		super.addChild(theWidget);
-		
-		CCUITableEntry myTableEntry = new CCUITableEntry();
-		myTableEntry.set(theEntry);
-		myTableEntry.widget = theWidget;
-		_myEntries.add(myTableEntry);
-		
+	public void updateLayout(){
+		_myRows = 0;
 		double myScale = 0;
 		for(double myColumnWidth:_myColumnWidths) {
 			myScale += myColumnWidth;
 		}
-		myScale = (width() - 2 * _myInset - (_myColumnWidths.length - 1) * -_cHorizontalSpace) / myScale;
+		myScale = (width() - 2 * _myInset - (_myColumnWidths.length - 1) * _cHorizontalSpace) / myScale;
 		double myX = _myInset;
 		_myColumnXs = new double[_myColumnWidths.length];
 		for(int i = 0; i < _myColumnWidths.length;i++) {
@@ -101,6 +95,13 @@ public class CCUIGridPane extends CCUIPane{
 		
 		for(CCUITableEntry myEntry:_myEntries) {
 			CCUIWidget myWidget = myEntry.widget;
+			if(myWidget.stretch()){
+				double myWidth = 0;
+				for(int i = myEntry.column; i < myEntry.column + myEntry.columnSpan;i++){
+					myWidth += _myColumnWidths[i] + _cHorizontalSpace;
+				}
+				myWidget.width(myWidth - _cHorizontalSpace);
+			}
 			switch(myWidget.horizontalAlignment()) {
 			case LEFT:
 				myWidget.translation().x = _myColumnXs[myEntry.column];
@@ -131,8 +132,40 @@ public class CCUIGridPane extends CCUIPane{
 		
 		_myMinSize.x = width();
 		_myMinSize.y = myHeight;
+	}
+	
+	public void insertRow(int theRow){
+		for(CCUITableEntry myEntry:_myEntries){
+			if(myEntry.row >= theRow){
+				myEntry.row += 1;
+			}
+		}
+		updateLayout();
+	}
+	
+	public void addChild(CCUIWidget theWidget, CCUITableEntry theEntry) {
+		CCUITableEntry myTableEntry = new CCUITableEntry();
+		myTableEntry.set(theEntry);
+		myTableEntry.widget = theWidget;
+		_myEntries.add(myTableEntry);
 		
-		updateMatrices();
+		super.addChild(theWidget);
+	}
+	
+	public void addChild(CCUIWidget theWidget, int theColumn, int theRow, int theColumnSpan, int theRowSpan) {
+		CCUITableEntry myTableEntry = new CCUITableEntry();
+		myTableEntry.column = theColumn;
+		myTableEntry.row = theRow;
+		myTableEntry.columnSpan = theColumnSpan;
+		myTableEntry.rowSpan = theRowSpan;
+		myTableEntry.widget = theWidget;
+		_myEntries.add(myTableEntry);
+		
+		super.addChild(theWidget);
+	}
+	
+	public void addChild(CCUIWidget theWidget, int theColumn, int theRow) {
+		addChild(theWidget, theColumn, theRow, 1, 1);
 	}
 
 }

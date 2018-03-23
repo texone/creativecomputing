@@ -19,9 +19,8 @@ package cc.creativecomputing.ui.widget;
 import java.util.Collections;
 
 import cc.creativecomputing.control.CCGradient;
-import cc.creativecomputing.control.CCGradient.CCGradientEvent;
 import cc.creativecomputing.control.CCGradientPoint;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -41,7 +40,7 @@ public class CCUIGradientWidget extends CCUIWidget {
 
 	private CCUIColorWheel _myColorWheel;
 	
-	public CCListenerManager<CCGradientEvent> changeEvents = CCListenerManager.create(CCGradientEvent.class);
+	public CCEventManager<CCGradient> changeEvents = new CCEventManager<>();
 
 	boolean myClose = false;
 	/**
@@ -56,12 +55,11 @@ public class CCUIGradientWidget extends CCUIWidget {
 		_myColorWheel.translation().set(-_myColorWheel.width() / 2 + width() / 2, _myColorWheel.height() / 2  - height() / 2);
 
 		_myColorWheel.mouseReleasedOutside.add(event ->{
-			CCLog.info("release", event);
 			_myColorWheel.isActive(false);
 			myClose = true;
 		});
 		_myColorWheel.changeEvents.add(c -> {
-			color(c, true);
+			color(c);
 		});
 		_myColorWheel.mouseClicked.add(e ->{
 			if(!_myColorWheel.isInsideLocal(new CCVector2(e.x,e.y)))
@@ -77,7 +75,6 @@ public class CCUIGradientWidget extends CCUIWidget {
 				myClose = false;
 				return;
 			}
-			CCLog.info("CLICK", _mySelectedPoint, _myColorWheel.isActive());
 //			if (event.clickCount != 1) return;
 			if(_mySelectedPoint != -1){
 				if(event.isShiftDown())delPoint();
@@ -110,7 +107,7 @@ public class CCUIGradientWidget extends CCUIWidget {
 		CCGradientPoint point = new CCGradientPoint(thePosition, CCColor.WHITE.clone());
 		_myGradient.add(point);
 		_mySelectedPoint = _myGradient.indexOf(point);
-		changeEvents.proxy().event(_myGradient);
+		changeEvents.event(_myGradient);
 	}
 	
 
@@ -127,9 +124,10 @@ public class CCUIGradientWidget extends CCUIWidget {
 		_myOverlay.isActive(true);
 	}
 	
-	private void color(CCColor theColor, boolean theSendEvents){
+	private void color(CCColor theColor){
 		if(theColor == null)return;
 		_myGradient.get(_mySelectedPoint).color().set(theColor);
+		changeEvents.event(_myGradient);
 	}
 
 	/**
@@ -196,7 +194,7 @@ public class CCUIGradientWidget extends CCUIWidget {
 
 		_myGradient.get(_mySelectedPoint).position(newPos);
 		Collections.sort(_myGradient);
-		changeEvents.proxy().event(_myGradient);
+		changeEvents.event(_myGradient);
 	}
 
 	@Override

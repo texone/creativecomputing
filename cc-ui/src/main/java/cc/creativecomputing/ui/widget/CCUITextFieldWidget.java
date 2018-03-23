@@ -17,9 +17,8 @@
 
 package cc.creativecomputing.ui.widget;
 
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.events.CCStringEvent;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.graphics.font.CCTextField;
@@ -41,7 +40,7 @@ public class CCUITextFieldWidget extends CCUIWidget{
 	
 	protected CCTextFieldController _myTextController;
 	
-	public CCListenerManager<CCStringEvent> changeEvents = CCListenerManager.create(CCStringEvent.class);
+	public CCEventManager<String> changeEvents = new CCEventManager<>();
 
 	public CCUITextFieldWidget(CCFont<?> theFont, String theText) {
 		_myTextField = new CCTextField(theFont, theText);
@@ -49,15 +48,15 @@ public class CCUITextFieldWidget extends CCUIWidget{
 		
 		_myTextController.changeEvents.add(text -> {
 			_myTextDecorator.showCursor(false);
-			changeEvents.proxy().event(text);
+			changeEvents.event(text);
 		});
 		_myForeground = _myTextDecorator = new CCUITextFieldDrawable(_myTextController);
 		
 		mousePressed.add(_myTextController::mousePress);
 		mouseReleased.add(event -> {});
 		
-		focusLost.add(() ->{_myTextDecorator.showCursor(false);});
-		focusGained.add(() ->{_myTextDecorator.showCursor(true);});
+		focusLost.add(e ->{_myTextDecorator.showCursor(false);});
+		focusGained.add(e ->{_myTextDecorator.showCursor(true);});
 		
 		keyPressed.add(_myTextController::keyPress);
 		keyChar.add(_myTextController::keyChar);
@@ -76,7 +75,7 @@ public class CCUITextFieldWidget extends CCUIWidget{
 	
 	public void text(String theText, boolean theSendEvents) {
 		_myTextField.text(theText);
-		if(theSendEvents)changeEvents.proxy().event(theText);
+		if(theSendEvents)changeEvents.event(theText);
 	}
 	
 	@Override

@@ -1,13 +1,12 @@
 package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCTriangle2;
 import cc.creativecomputing.math.CCVector2;
-import cc.creativecomputing.math.CCColor.CCColorEvent;
 
 public class CCUIColorWheel extends CCUIWidget{
 		
@@ -22,7 +21,7 @@ public class CCUIColorWheel extends CCUIWidget{
 		
 		private boolean _myIsInWheel = false;
 		
-		public CCListenerManager<CCColorEvent> changeEvents = CCListenerManager.create(CCColorEvent.class);
+		public CCEventManager<CCColor> changeEvents = new CCEventManager<>();
 		
 		private CCColor _myColor = new CCColor();
 		
@@ -80,7 +79,7 @@ public class CCUIColorWheel extends CCUIWidget{
 			}
 			
 			_myColor = CCColor.createFromHSB(_myHue, 1 - (_myWhite + _myBlack), 1 - _myBlack);
-			changeEvents.proxy().event(_myColor);
+			changeEvents.event(_myColor);
 		}
 		
 		private CCTriangle2 triangle(){

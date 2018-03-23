@@ -16,8 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.core.events.CCDoubleEvent;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
 
@@ -29,7 +28,7 @@ public class CCUISlider extends CCUIWidget{
 	private double _myMax;
 	private double _myValue;
 	
-	public CCListenerManager<CCDoubleEvent> changeEvents = CCListenerManager.create(CCDoubleEvent.class);
+	public CCEventManager<Double> changeEvents = new CCEventManager<>();
 
 	public CCUISlider(double theWidth, double theHeight, double theMin, double theMax, double theValue){
 		_myWidth = theWidth;
@@ -54,13 +53,13 @@ public class CCUISlider extends CCUIWidget{
 		_mySliderPos = CCMath.clamp(thePosition, _myHeight / 2, _myWidth - _myHeight / 2);
 		_myValue = CCMath.map(_mySliderPos,  _myHeight / 2, _myWidth - _myHeight / 2, _myMin, _myMax);
 		
-		changeEvents.proxy().event(_myValue);
+		changeEvents.event(_myValue);
 	}
 	
 	public void value(double theValue) {
 		_myValue = CCMath.clamp(theValue, _myMin, _myMax);
 		_mySliderPos = CCMath.map(theValue, _myMin, _myMax, _myHeight / 2, _myWidth - _myHeight / 2);
-		changeEvents.proxy().event(_myValue);
+		changeEvents.event(_myValue);
 	}
 	
 	@Override

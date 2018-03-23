@@ -29,11 +29,9 @@ public class CCUIHorizontalFlowPane extends CCUIPane{
 	public CCUIHorizontalFlowPane(double theWidth, double theHeight) {
 		super(theWidth, theHeight);
 	}
-
+	
 	@Override
-	public void addChild(CCUIWidget widget) {
-		super.addChild(widget);
-		
+	public void updateLayout() {
 		double myX = _myInset;
 		double myMaxHeight = 0;
 		for(CCUIWidget myWidget:children()) {
@@ -57,8 +55,6 @@ public class CCUIHorizontalFlowPane extends CCUIPane{
 			myX += _cHorizontalSpace;
 		}
 		_myMinSize = new CCVector2(myX - _cHorizontalSpace + _myInset, 2 * _myInset + myMaxHeight);
-
-		updateMatrices();
 	}
 	
 	

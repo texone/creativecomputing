@@ -16,13 +16,11 @@
  ******************************************************************************/
 package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.events.CCStringEvent;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.draw.CCUIDrawable;
 
@@ -43,7 +41,7 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	
 	private boolean _myShowIcon = true;;
 	
-	public CCListenerManager<CCStringEvent> changeEvents = CCListenerManager.create(CCStringEvent.class);
+	public CCEventManager<String> changeEvents = new CCEventManager<>();
 	
 	public CCUIDropDownWidget(CCFont<?> theFont, String theTitle, CCUIMenu theMenue) {
 		super(theFont, theTitle);
@@ -94,7 +92,7 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 			CCUIWidget myWidget = _myMenue.childAtPosition(new CCVector2(event.x, event.y));
 			CCUIMenuItem mySelectedItem = myWidget instanceof CCUIMenuItem ? (CCUIMenuItem)myWidget : null;
 			if(mySelectedItem != null){
-				mySelectedItem.mouseReleased.proxy().event(event);
+				mySelectedItem.mouseReleased.event(event);
 				if(_myAdjustLabel)text().text(mySelectedItem.text());
 				if(mySelectedItem.checkBox() != null)mySelectedItem.checkBox().isSelected(true, true);
 			}
@@ -169,7 +167,7 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	}
 
 	public void addItem(String theLabel) {
-		_myMenue.addItem(new CCUICheckBox(), theLabel, () -> {});
+		_myMenue.addItem(new CCUICheckBox(), theLabel, e -> {});
 	}
 	
 	public void addSeparator(){
@@ -192,7 +190,7 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 			
 			if(myItem.text().equals(theValue)) {
 				if(myCheckBox.isSelected())continue;
-				if(theSendEvents)changeEvents.proxy().event(theValue);
+				if(theSendEvents)changeEvents.event(theValue);
 			}else {
 				myCheckBox.isSelected(false, theSendEvents);
 			}

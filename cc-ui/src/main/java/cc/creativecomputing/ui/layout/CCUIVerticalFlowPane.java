@@ -21,11 +21,9 @@ import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
 public class CCUIVerticalFlowPane extends CCUIPane {
-
+	
 	@Override
-	public void addChild(CCUIWidget widget) {
-		super.addChild(widget);
-		
+	public void updateLayout() {
 		double myX = _myInset;
 		double myY = -_myInset;
 		double myMaxWidth = 0;
@@ -36,8 +34,6 @@ public class CCUIVerticalFlowPane extends CCUIPane {
 			myMaxWidth = CCMath.max(myMaxWidth,myWidget.width());
 		}
 		_myMinSize = new CCVector2(2 * _myInset + myMaxWidth, -myY - _cVerticalSpace + _myInset);
-		updateMatrices();
 	}
-	
 	
 }

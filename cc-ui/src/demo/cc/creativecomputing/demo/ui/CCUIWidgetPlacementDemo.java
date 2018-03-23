@@ -18,6 +18,7 @@ package cc.creativecomputing.demo.ui;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCCharSet;
@@ -239,13 +240,13 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 	}
 
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
-
+	public void setup() {
+CCLog.info("SETUP");
 		_myFont = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
 		
 		CCUIHorizontalFlowPane myHorizontalPane = new CCUIHorizontalFlowPane();
-		myHorizontalPane.translation().set(-window().framebufferSize().x / 2, window().framebufferSize().y / 2);
-		_myContext = new CCUIContext(_myMainWindow, myHorizontalPane);
+		myHorizontalPane.translation().set(-framebufferSize().x / 2, framebufferSize().y / 2);
+		_myContext = new CCUIContext(this, myHorizontalPane);
 
 		_myTreeWidget = new CCUITreeWidget(_myFont, "app");
 		_myTreeWidget.width(400);
@@ -258,7 +259,7 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 		myVerticalPane.addChild(createPropertyWidget());
 		_myContext.widget().addChild(myVerticalPane);
 
-		_myMainWindow.scrollEvents.add((x,y) -> {CCLog.info(x,y);});
+		scrollEvents.add(pos -> {CCLog.info(pos.x,pos.y);});
 		
 //		_myMainWindow.mouseMoveEvents.add(pos -> {
 //			if(_myWidget.isInside(pos.x - g.width()/2, g.height()/2 - pos.y)){
@@ -271,13 +272,15 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 
 	@Override
 	public void update(final CCGLTimer theTimer) {
-		
+
+CCLog.info("UPDATE");
 		_myContext.widget().update(theTimer);
 		
 	}
 
 	@Override
 	public void display(CCGraphics g) {
+		CCLog.info("DISPLAY");
 		g.clear();
 		g.line(-g.width()/2,100,g.width()/2,100);
 		g.line(0,-g.height()/2,0,g.height()/2);
@@ -287,8 +290,8 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 	}
 
 	public static void main(String[] args) {
-		CCUIWidgetPlacementDemo myDemo = new CCUIWidgetPlacementDemo();
-		myDemo.run();
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(new CCUIWidgetPlacementDemo());
+		myApplicationManager.run();
 	}
 }
 

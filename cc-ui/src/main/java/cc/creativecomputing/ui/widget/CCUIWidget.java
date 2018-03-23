@@ -17,20 +17,16 @@
 
 package cc.creativecomputing.ui.widget;
 
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCCharEvent;
-import cc.creativecomputing.core.events.CCEvent;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.gl.app.CCGLKeyEvent;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.gl.app.CCGLTimer;
-import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWKeyListener;
-import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMouseListener;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCVector1;
 import cc.creativecomputing.math.CCVector2;
-import cc.creativecomputing.math.CCVector2.CCVector2Event;
 import cc.creativecomputing.ui.CCUIEditPolicy;
 import cc.creativecomputing.ui.CCUIHorizontalAlignment;
 import cc.creativecomputing.ui.CCUIVerticalAlignment;
@@ -85,6 +81,8 @@ public class CCUIWidget{
 	
 	protected boolean _myIsActive = true;
 	
+	protected boolean _myDoStretch = false;
+	
 	public CCUIWidget(double theWidth, double theHeight) {
 		_myWidth = theWidth;
 		_myHeight = theHeight;
@@ -92,6 +90,14 @@ public class CCUIWidget{
 	
 	public CCUIWidget() {
 		this(0,0);
+	}
+	
+	public boolean stretch(){
+		return _myDoStretch;
+	}
+	
+	public void stretch(boolean theDoStretch){
+		_myDoStretch = theDoStretch;
 	}
 	
 	public boolean isActive(){
@@ -258,20 +264,20 @@ public class CCUIWidget{
 //		}
 //	}
 	
-	public final CCListenerManager<CCGLFWMouseListener> mouseReleasedOutside = CCListenerManager.create(CCGLFWMouseListener.class);
-	public final CCListenerManager<CCGLFWMouseListener> mouseReleased = CCListenerManager.create(CCGLFWMouseListener.class);
-	public final CCListenerManager<CCGLFWMouseListener> mousePressed = CCListenerManager.create(CCGLFWMouseListener.class);
-	public final CCListenerManager<CCGLFWMouseListener> mouseClicked = CCListenerManager.create(CCGLFWMouseListener.class);
-	public final CCListenerManager<CCVector2Event> mouseMoved = CCListenerManager.create(CCVector2Event.class);
-	public final CCListenerManager<CCVector2Event> mouseDragged = CCListenerManager.create(CCVector2Event.class);
+	public final CCEventManager<CCGLMouseEvent> mouseReleasedOutside = new CCEventManager<>();
+	public final CCEventManager<CCGLMouseEvent> mouseReleased = new CCEventManager<>();
+	public final CCEventManager<CCGLMouseEvent> mousePressed = new CCEventManager<>();
+	public final CCEventManager<CCGLMouseEvent> mouseClicked = new CCEventManager<>();
+	public final CCEventManager<CCVector2> mouseMoved = new CCEventManager<>();
+	public final CCEventManager<CCVector2> mouseDragged = new CCEventManager<>();
 	
-	public final CCListenerManager<CCEvent> focusGained = CCListenerManager.create(CCEvent.class);
-	public final CCListenerManager<CCEvent> focusLost = CCListenerManager.create(CCEvent.class);
+	public final CCEventManager<?> focusGained = new CCEventManager<>();
+	public final CCEventManager<?> focusLost = new CCEventManager<>();
 	
-	public final CCListenerManager<CCGLFWKeyListener> keyReleased = CCListenerManager.create(CCGLFWKeyListener.class);
-	public final CCListenerManager<CCGLFWKeyListener> keyPressed = CCListenerManager.create(CCGLFWKeyListener.class);
-	public final CCListenerManager<CCGLFWKeyListener> keyRepeatEvents = CCListenerManager.create(CCGLFWKeyListener.class);
-	public final CCListenerManager<CCCharEvent> keyChar = CCListenerManager.create(CCCharEvent.class);
+	public final CCEventManager<CCGLKeyEvent> keyReleased = new CCEventManager<>();
+	public final CCEventManager<CCGLKeyEvent> keyPressed = new CCEventManager<>();
+	public final CCEventManager<CCGLKeyEvent> keyRepeatEvents = new CCEventManager<>();
+	public final CCEventManager<Character> keyChar = new CCEventManager<>();
 	
 	public void update(CCGLTimer theTimer) {
 		
@@ -282,32 +288,6 @@ public class CCUIWidget{
 		_myLocalMatrix.translate(_myTranslation);
 		_myLocalMatrix.rotate(CCMath.radians(_myRotation.x));
 		_myLocalMatrix.scale(_myScale.x, _myScale.y);
-		
-		double _myAlignmentX = 0;
-		switch(_myHorizontalAlignment) {
-		case RIGHT:
-			_myAlignmentX = -1;
-			break;
-		case CENTER:
-			_myAlignmentX = -0.5f;
-			break;
-		case LEFT:
-			_myAlignmentX = 0f;
-			break;
-		}
-		double _myAlignmentY = 0;
-		switch(_myVerticalAlignment) {
-		case TOP:
-			_myAlignmentY = -1;
-			break;
-		case CENTER:
-			_myAlignmentY = -0.5f;
-			break;
-		case BOTTOM:
-			_myAlignmentY = -0f;
-			break;
-		}
-//		_myLocalMatrix.translate(_myAlignmentX * _myWidth, _myAlignmentY * _myHeight);
 		
 		_myLocalInverseMatrix = _myLocalMatrix.inverse();
 		
@@ -326,7 +306,6 @@ public class CCUIWidget{
 		_myOverlay._myLocalMatrix.set(_myLocalMatrix);
 		_myOverlay._myLocalMatrix.translate(_myOverlay.translation());
 		_myOverlay._myLocalInverseMatrix = _myOverlay._myLocalMatrix.inverse();
-//		_myMenue._myWorldMatrix.set(_myWorldMatrix);
 		CCMatrix32 myWorldInverse = _myWorldMatrix.clone();
 		myWorldInverse.translate(_myOverlay.translation());
 		_myOverlay._myWorldInverseMatrix.set(myWorldInverse.inverse());
@@ -335,9 +314,7 @@ public class CCUIWidget{
 	public void draw(CCGraphics g) {
 		g.pushMatrix();
 		g.applyMatrix(_myLocalMatrix);
-		
 		drawContent(g);
-		
 		g.popMatrix();
 		
 		if(_myOverlay == null)return;
@@ -363,8 +340,14 @@ public class CCUIWidget{
 //		g.endShape();
 	}
 	
-	public double width() {
+	protected double widthCalc(){
 		return _myWidth + _myInset * 2;
+	}
+	
+	public double width() {
+		double myWidth = widthCalc();
+		if(!_myDoStretch)return myWidth;
+		return _myParent == null ? myWidth : CCMath.max(_myParent.width(), myWidth);
 	}
 	
 	public void width(double theWidth) {

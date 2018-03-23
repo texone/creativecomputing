@@ -3,13 +3,10 @@ package cc.creativecomputing.ui.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.events.CCEvent;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.gl.demo.font.CCEnttypoDemo;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCFont;
-import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.layout.CCUIPane;
 
@@ -61,14 +58,14 @@ public class CCUITreeWidget extends CCUIPane{
 			return ((CCUILabelWidget)_myChildren.get(1)).text().text();
 		}
 		
-		private CCUITreeNode addNode(CCUITreeNode theItem, CCEvent theEvent) {
+		private CCUITreeNode addNode(CCUITreeNode theItem, CCEvent<?> theEvent) {
 			children.add(theItem);
 
 			layout();
 			updateMatrices();
 			if(theEvent == null)return theItem;
 			theItem.mouseReleased.add(event -> {
-				theEvent.event();
+				theEvent.event(null);
 			});
 			return theItem;
 		}

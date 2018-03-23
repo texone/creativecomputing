@@ -16,8 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.core.events.CCDoubleEvent;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
@@ -43,7 +42,7 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 	private int _myCaretPosition;
 	private double _myFactor;
 
-	public CCListenerManager<CCDoubleEvent> changeEvents = CCListenerManager.create(CCDoubleEvent.class);
+	public CCEventManager<Double> changeEvents = new CCEventManager<>();
 	
 	private boolean _myIsShiftDown = false;
 	private boolean _myIsAltDown = false;
@@ -184,7 +183,7 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 		// _myValue = CCMath.quantize(theValue, _myStepSize);
 		_myValue = CCMath.constrain(theValue, _myMin, _myMax);
 
-		if(theSendEvents)changeEvents.proxy().event(_myValue);
+		if(theSendEvents)changeEvents.event(_myValue);
 
 		_myTextField.text(CCFormatUtil.nd(_myValue, _myDigits));
 	}

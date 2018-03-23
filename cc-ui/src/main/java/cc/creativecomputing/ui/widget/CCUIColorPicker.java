@@ -1,14 +1,12 @@
 package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.math.CCColor.CCColorEvent;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
-import cc.creativecomputing.ui.widget.CCUILabelWidget;
 
 public class CCUIColorPicker extends CCUILabelWidget{
 	
@@ -18,7 +16,7 @@ public class CCUIColorPicker extends CCUILabelWidget{
 	
 	private CCUIFillDrawable _myFillDrawable;
 
-	public CCListenerManager<CCColorEvent> changeEvents = CCListenerManager.create(CCColorEvent.class);
+	public CCEventManager<CCColor> changeEvents = new CCEventManager<>();
 
 	public CCUIColorPicker(CCFont<?> theFont, CCColor theColor, double theWidth, double theHeight){
 		super(theFont, theColor.toString());
@@ -40,6 +38,7 @@ public class CCUIColorPicker extends CCUILabelWidget{
 		_myColorWheel.mouseReleasedOutside.add(event ->{
 			_myColorWheel.isActive(false);
 		});
+		_myColorWheel.setFromColor(theColor);
 		
 		mousePressed.add(event -> {
 			_myColorWheel.isActive(true);
@@ -51,7 +50,7 @@ public class CCUIColorPicker extends CCUILabelWidget{
 	public void color(CCColor theColor, boolean theSendValue) {
 		_myFillDrawable.color().set(theColor);
 		text().text(theColor.toString());
-		if(theSendValue)changeEvents.proxy().event(theColor);
+		if(theSendValue)changeEvents.event(theColor);
 
 	}
 	

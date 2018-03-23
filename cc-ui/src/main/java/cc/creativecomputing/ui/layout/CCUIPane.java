@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
@@ -67,7 +66,7 @@ public class CCUIPane extends CCUIWidget implements Iterable<CCUIWidget>{
 	public void addChild(CCUIWidget theWidget) {
 		theWidget.parent(this);
 		_myChildren.add(theWidget);
-		
+		updateLayout();
 		root().updateMatrices();
 	}
 	
@@ -107,8 +106,14 @@ public class CCUIPane extends CCUIWidget implements Iterable<CCUIWidget>{
 	}
 	
 	@Override
-	public double width() {
+	protected double widthCalc(){
 		return CCMath.max(_myWidth, minSize().x);
+	}
+	
+	@Override
+	public void width(double theWidth) {
+		super.width(theWidth);
+		updateLayout();
 	}
 	
 	@Override
@@ -123,6 +128,10 @@ public class CCUIPane extends CCUIWidget implements Iterable<CCUIWidget>{
 		for(CCUIWidget myWidget:_myChildren) {
 			myWidget.update(theTimer);
 		}
+	}
+	
+	public void updateLayout(){
+		
 	}
 	
 	@Override

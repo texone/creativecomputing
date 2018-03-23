@@ -19,7 +19,7 @@ package cc.creativecomputing.ui.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.events.CCEvent;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.math.CCVector2;
@@ -53,12 +53,12 @@ public class CCUIMenu extends CCUIVerticalFlowPane{
 		return null;
 	}
 	
-	private CCUIMenuItem addItem(CCUIMenuItem theItem, CCEvent theEvent) {
+	private CCUIMenuItem addItem(CCUIMenuItem theItem, CCEvent<?> theEvent) {
 		addChild(theItem);
 		_myItems.add(theItem);
 		if(theEvent == null)return theItem;
 		theItem.mouseReleased.add(event -> {
-			theEvent.event();
+			theEvent.event(null);
 		});
 		return theItem;
 	}
@@ -67,15 +67,15 @@ public class CCUIMenu extends CCUIVerticalFlowPane{
 		return addItem(new CCUIMenuItem(_myFont, theLabel), null);
 	}
 	
-	public CCUIMenuItem addItem(String theLabel, CCEvent theEvent) {
+	public CCUIMenuItem addItem(String theLabel, CCEvent<?> theEvent) {
 		return addItem(new CCUIMenuItem(_myFont, theLabel), theEvent);
 	}
 	
-	public CCUIMenuItem addItem(CCEntypoIcon theIcon, String theLabel, CCEvent theEvent) {
+	public CCUIMenuItem addItem(CCEntypoIcon theIcon, String theLabel, CCEvent<?> theEvent) {
 		return addItem(new CCUIMenuItem(theIcon, _myFont, theLabel), theEvent);
 	}
 	
-	public CCUIMenuItem addItem(CCUICheckBox theCheckBox, String theLabel, CCEvent theEvent) {
+	public CCUIMenuItem addItem(CCUICheckBox theCheckBox, String theLabel, CCEvent<?> theEvent) {
 		return addItem(new CCUIMenuItem(theCheckBox, _myFont, theLabel), theEvent);
 	}
 	

@@ -16,24 +16,32 @@
  ******************************************************************************/
 package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.core.events.CCBooleanEvent;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 
 public class CCUICheckBox extends CCUIIconWidget{
 	
 	private boolean _myIsSelected = true;
 	
-	public CCListenerManager<CCBooleanEvent> changeEvents = CCListenerManager.create(CCBooleanEvent.class); 
+	public CCEventManager<Boolean> changeEvents = new CCEventManager<>(); 
+	
+	private CCEntypoIcon _myActiveIcon;
+	private CCEntypoIcon _myInactiveIcon;
 
-	public CCUICheckBox(boolean theIsSelected) {
-		super(CCEntypoIcon.ICON_CHECK);
+	public CCUICheckBox(CCEntypoIcon theactiveIcon, CCEntypoIcon theInactiveIcon, boolean theIsSelected) {
+		super(theactiveIcon);
+		_myActiveIcon = theactiveIcon;
+		_myInactiveIcon = theInactiveIcon;
 		isSelected(theIsSelected, false);
 		mouseReleased.add(event -> {
 			isSelected(!_myIsSelected, true);
 		});
 		
 		inset(2);
+	}
+	
+	public CCUICheckBox(boolean theIsSelected) {
+		this(CCEntypoIcon.ICON_CHECK, CCEntypoIcon.OFF, theIsSelected);
 	}
 	
 	public CCUICheckBox(){
@@ -43,9 +51,9 @@ public class CCUICheckBox extends CCUIIconWidget{
 	public void isSelected(boolean theIsSelected, boolean theSendEvents){
 		if(theIsSelected == _myIsSelected)return;
 		_myIsSelected = theIsSelected;
-		_myTextField.text(_myIsSelected ? CCEntypoIcon.ICON_CHECK.text : "");
+		_myTextField.text(_myIsSelected ? _myActiveIcon.text : _myInactiveIcon.text);
 		
-		if(theSendEvents)changeEvents.proxy().event(theIsSelected);
+		if(theSendEvents)changeEvents.event(theIsSelected);
 	}
 	
 	public boolean isSelected(){
