@@ -2,8 +2,6 @@ package cc.creativecomputing.graphics.font;
 
 import java.util.ArrayList;
 
-import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.text.CCLineBreakMode;
 import cc.creativecomputing.math.CCMath;
@@ -11,18 +9,6 @@ import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 
 public class CCTextField {
-	/**
-	 * Implement this class to react to text changes
-	 * @author christianriekoff
-	 *
-	 */
-	public interface CCTextListener{
-		/**
-		 * This method is called by the text object, every time its text is changed
-		 * @param theText
-		 */
-        void onChangeText(CCTextField theText);
-	}
 	
 	public static class CCPlacedTextChar{
 		public double x;
@@ -56,8 +42,6 @@ public class CCTextField {
 	private CCVector3 _myPosition;
 	
 	protected String _myText;
-
-	private CCListenerManager<CCTextListener> _myTextListeners = CCListenerManager.create(CCTextListener.class);
 	
 	protected CCTextCharGrid _myCharGrid = new CCTextCharGrid();
 	
@@ -100,15 +84,6 @@ public class CCTextField {
 	
 	public double fontSize() {
 		return _myFontSize;
-	}
-	
-
-	/**
-	 * 
-	 * @param theListener
-	 */
-	public CCListenerManager<CCTextListener> events() {
-		return _myTextListeners;
 	}
 	
 	/**

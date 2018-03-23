@@ -10,11 +10,11 @@ import javax.swing.SwingUtilities;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.CCAnimator.CCAnimationMode;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;

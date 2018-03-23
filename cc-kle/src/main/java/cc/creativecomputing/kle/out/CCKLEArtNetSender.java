@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.kle.CCKleChannel;
 import cc.creativecomputing.kle.CCKleEffectable;
 import cc.creativecomputing.math.CCMath;

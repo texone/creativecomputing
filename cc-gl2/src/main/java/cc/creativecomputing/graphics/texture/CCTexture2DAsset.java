@@ -7,8 +7,6 @@ import java.util.Map;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Context;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureMipmapFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;

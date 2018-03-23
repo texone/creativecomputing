@@ -1,8 +1,8 @@
 package cc.creativecomputing.demo.kle.motor1connection1;
 
-import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.effects.CCOffsetEffect;

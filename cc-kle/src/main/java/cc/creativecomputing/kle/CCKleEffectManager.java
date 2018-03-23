@@ -2,12 +2,11 @@ package cc.creativecomputing.kle;
 
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.util.CCArrayUtil;
 import cc.creativecomputing.effects.CCEffectManager;
 
-public class CCKleEffectManager extends CCEffectManager<CCKleEffectable> implements CCAnimatorListener{
+public class CCKleEffectManager extends CCEffectManager<CCKleEffectable>{
 
 	/**
 	 * 

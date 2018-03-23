@@ -12,6 +12,7 @@ import org.lwjgl.opengl.GLCapabilities;
 
 import cc.creativecomputing.gl.app.CCGLApp;
 import cc.creativecomputing.gl.app.CCGLTimer;
+import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCChar;
 import cc.creativecomputing.graphics.font.CCFont;
@@ -48,7 +49,7 @@ public class CCFFontOversampleDemo extends CCGLApp{
     private List<CCTextField> _myTextFields = new ArrayList<>();
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
+	public void setup(CCGraphics g, CCGLTimer t) {
 		CCFont<CCChar> myFont = new CCFont<CCChar>(null,CCNIOUtil.dataPath("fonts/Roboto/Roboto-Bold.ttf"));
         _myFontBitmap = new CCFontImage(1024, 1024);
     	

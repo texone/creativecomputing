@@ -13,8 +13,8 @@ package cc.creativecomputing.graphics.util;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import cc.creativecomputing.app.util.CCStopWatch;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.util.CCStopWatch;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;

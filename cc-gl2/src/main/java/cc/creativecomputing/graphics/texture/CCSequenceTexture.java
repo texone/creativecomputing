@@ -12,8 +12,7 @@ package cc.creativecomputing.graphics.texture;
 
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.image.CCImage;
 
 
@@ -23,7 +22,7 @@ import cc.creativecomputing.image.CCImage;
  * @author Christian Riekoff
  *
  */
-public class CCSequenceTexture extends CCTexture2D implements CCAnimatorListener{
+public class CCSequenceTexture extends CCTexture2D {
 	
 	/**
 	 * frame rate of the sequence
@@ -77,7 +76,6 @@ public class CCSequenceTexture extends CCTexture2D implements CCAnimatorListener
 	/**
 	 * Updates the texture for playback
 	 */
-	@Override
 	public void update(CCAnimator theAnimator) {
 		if (_myIsRunning) {
 			_myTime += theAnimator.deltaTime() * _myRate;
@@ -192,19 +190,4 @@ public class CCSequenceTexture extends CCTexture2D implements CCAnimatorListener
 
 	public void volume(double theVolume) {
 	}
-
-	@Override
-	public void start(CCAnimator theAnimator) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void stop(CCAnimator theAnimator) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
 }

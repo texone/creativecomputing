@@ -13,9 +13,9 @@ package cc.creativecomputing.gl.demo.font.tocheck;
 import java.nio.file.Path;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.util.CCStopWatch;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCStopWatch;
 import cc.creativecomputing.gl.app.CCGLApp;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;

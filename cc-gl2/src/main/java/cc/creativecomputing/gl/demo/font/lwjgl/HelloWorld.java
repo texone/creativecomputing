@@ -4,8 +4,6 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
-import cc.creativecomputing.controlui.CCControlApp;
-
 import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;

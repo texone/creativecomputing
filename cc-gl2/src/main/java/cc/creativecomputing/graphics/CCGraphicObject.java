@@ -1,6 +1,6 @@
 package cc.creativecomputing.graphics;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 
 public class CCGraphicObject {
 

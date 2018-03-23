@@ -16,7 +16,7 @@ public class CCMouseEventDemo extends CCGLApp{
 	private CCVector2 _myExitPosition = new CCVector2();
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
+	public void setup(CCGraphics g, CCGLTimer t) {
 		window().mousePressEvents.add(event -> {_myIsMousePressed = true;});
 		window().mouseReleaseEvents.add(event -> {_myIsMousePressed = false;});
 		

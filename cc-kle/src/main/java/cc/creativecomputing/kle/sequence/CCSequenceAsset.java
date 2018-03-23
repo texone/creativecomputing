@@ -1,8 +1,5 @@
 package cc.creativecomputing.kle.sequence;
 
-import java.awt.Graphics2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -15,7 +12,6 @@ import cc.creativecomputing.kle.CCKleMapping;
 import cc.creativecomputing.kle.formats.CCKleIO;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
-import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.interpolate.CCInterpolators;
 
 public class CCSequenceAsset extends CCAsset<CCSequence>{
@@ -146,65 +142,65 @@ public class CCSequenceAsset extends CCAsset<CCSequence>{
 		theTimedEvent.endTime(myData.length() / _cRate);
 	}
 	
-	@Override
-	public void renderTimedEvent(CCTimedEventPoint theEvent,Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
-		super.renderTimedEvent(theEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
-		
-		if(theEvent.content() == null || theEvent.content().value() == null)return;
-		
-		Path myFilePath = Paths.get(theEvent.content().value().toString());
-		CCSequence myData = checkLoadAsset(myFilePath);
-		
-		if(myData == null){
-			return;
-		}
-		
-		
-		double myWidth = theUpper.getX() - theLower.getX();
-		double myHeight = theUpper.getY() - theLower.getY();
-		GeneralPath myPath = new GeneralPath();
-		myPath.moveTo(theLower.getX(), theLower.getY());
-		
-		double mySequenceLength = myData.length() / _cRate;
-		
-		for (int x = 0; x < myWidth - 1; x++) {
-			double myTime1 = CCMath.floorMod(CCMath.map(x, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset(), mySequenceLength);
-			int mySample1 = (int)CCMath.map(myTime1, 0, mySequenceLength, 0 ,myData.length());
-			double myTime2 = CCMath.floorMod(CCMath.map(x + 1, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset(), mySequenceLength);
-			int mySample2 = (int)CCMath.map(myTime2, 0, mySequenceLength, 0 ,myData.length());
-			
-			double value0 = Double.MAX_VALUE;
-			double value1 = -Double.MAX_VALUE;
-			
-			for(int j = mySample1;j <= mySample2;j++){
-				if(j >= myData.length() || j < 0)continue;
-				CCMatrix2 myFrame = myData.get(j);
-				CCVector2 myMinMax = myFrame.minMax(x % (_myIsCCA ? 2 : 1));
-				 value0 = CCMath.min(myMinMax.x, value0);
-				 value1 = CCMath.max(myMinMax.y, value1);
-			}
-			if(myTime2 < myTime1)theG2d.drawLine(x, 0, x, (int)(myHeight));
-			
-			myPath.moveTo(x + theLower.getX(),myHeight / 2 +  value0 * myHeight / 2);
-			myPath.lineTo(x + theLower.getX(),myHeight / 2 +  value1 * myHeight / 2);
-		}
-
-        theG2d.draw(myPath);
-        
-       
-		
-		
-//		CCLog.info(lowerTime +  ":" + UpperTime +  ":" + theEvent.time() +  ":" + theEvent.endTime() + ":" + myData.player.length() / 1000d + ":" + myWidth );
-//		double myLowerBound = CCMath.max(theEvent.time(), theView.context().lowerBound());
-//    	double myUpperBound = CCMath.min(theEvent.endTime(), theView.context().upperBound());
-    	
-//    	Point2D p1 = theView.controller().curveToViewSpace(new ControlPoint(myLowerBound,_myController.value(0)));
-//    	Point2D p2 = theView.controller().curveToViewSpace(new ControlPoint(myUpperBound,_myController.value(0)));
-//        myPath.moveTo(theLower.getX(), theLower.getY());
-//        myPath.lineTo(theUpper.getX(), theUpper.getY());
-        
-//        g.setColor(theView.fillColor());
-	}
+//	@Override
+//	public void renderTimedEvent(CCTimedEventPoint theEvent,Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+//		super.renderTimedEvent(theEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
+//		
+//		if(theEvent.content() == null || theEvent.content().value() == null)return;
+//		
+//		Path myFilePath = Paths.get(theEvent.content().value().toString());
+//		CCSequence myData = checkLoadAsset(myFilePath);
+//		
+//		if(myData == null){
+//			return;
+//		}
+//		
+//		
+//		double myWidth = theUpper.getX() - theLower.getX();
+//		double myHeight = theUpper.getY() - theLower.getY();
+//		GeneralPath myPath = new GeneralPath();
+//		myPath.moveTo(theLower.getX(), theLower.getY());
+//		
+//		double mySequenceLength = myData.length() / _cRate;
+//		
+//		for (int x = 0; x < myWidth - 1; x++) {
+//			double myTime1 = CCMath.floorMod(CCMath.map(x, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset(), mySequenceLength);
+//			int mySample1 = (int)CCMath.map(myTime1, 0, mySequenceLength, 0 ,myData.length());
+//			double myTime2 = CCMath.floorMod(CCMath.map(x + 1, 0, myWidth, lowerTime, UpperTime) - theEvent.time() - theEvent.contentOffset(), mySequenceLength);
+//			int mySample2 = (int)CCMath.map(myTime2, 0, mySequenceLength, 0 ,myData.length());
+//			
+//			double value0 = Double.MAX_VALUE;
+//			double value1 = -Double.MAX_VALUE;
+//			
+//			for(int j = mySample1;j <= mySample2;j++){
+//				if(j >= myData.length() || j < 0)continue;
+//				CCMatrix2 myFrame = myData.get(j);
+//				CCVector2 myMinMax = myFrame.minMax(x % (_myIsCCA ? 2 : 1));
+//				 value0 = CCMath.min(myMinMax.x, value0);
+//				 value1 = CCMath.max(myMinMax.y, value1);
+//			}
+//			if(myTime2 < myTime1)theG2d.drawLine(x, 0, x, (int)(myHeight));
+//			
+//			myPath.moveTo(x + theLower.getX(),myHeight / 2 +  value0 * myHeight / 2);
+//			myPath.lineTo(x + theLower.getX(),myHeight / 2 +  value1 * myHeight / 2);
+//		}
+//
+//        theG2d.draw(myPath);
+//        
+//       
+//		
+//		
+////		CCLog.info(lowerTime +  ":" + UpperTime +  ":" + theEvent.time() +  ":" + theEvent.endTime() + ":" + myData.player.length() / 1000d + ":" + myWidth );
+////		double myLowerBound = CCMath.max(theEvent.time(), theView.context().lowerBound());
+////    	double myUpperBound = CCMath.min(theEvent.endTime(), theView.context().upperBound());
+//    	
+////    	Point2D p1 = theView.controller().curveToViewSpace(new ControlPoint(myLowerBound,_myController.value(0)));
+////    	Point2D p2 = theView.controller().curveToViewSpace(new ControlPoint(myUpperBound,_myController.value(0)));
+////        myPath.moveTo(theLower.getX(), theLower.getY());
+////        myPath.lineTo(theUpper.getX(), theUpper.getY());
+//        
+////        g.setColor(theView.fillColor());
+//	}
 	
 	@Override
 	public void out() {

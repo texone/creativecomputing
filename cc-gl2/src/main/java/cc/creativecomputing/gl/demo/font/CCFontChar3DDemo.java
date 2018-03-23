@@ -2,6 +2,7 @@ package cc.creativecomputing.gl.demo.font;
 
 import cc.creativecomputing.gl.app.CCGLApp;
 import cc.creativecomputing.gl.app.CCGLTimer;
+import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CC3DChar;
 import cc.creativecomputing.graphics.font.CCFont;
@@ -15,7 +16,7 @@ public class CCFontChar3DDemo extends CCGLApp{
 	private double _myScale;
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
+	public void setup(CCGraphics g, CCGLTimer t) {
 		_myFont = new CCFont(null,CCNIOUtil.dataPath("fonts/Raleway/Raleway-Regular.ttf"));
 		_myChar = _myFont.char3D('t', 20);
 		_myScale = _myFont.scaleForPixelHeight(240);

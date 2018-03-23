@@ -420,13 +420,13 @@ public class CCGLShader extends CCShaderObject{
 			StringBuffer myReplyBuffer = new StringBuffer();
 			myReplyBuffer.append(getInfoLog());
 			_myInfoLog = myReplyBuffer.toString();
-			onError().proxy().onError(this);
+			errorEvents.event(this);
 			if(theThrowException)throw new CCShaderException(_myInfoLog);
 			return false;
 		}else{
 			_myInfoLog = "";
 		}
-		onCompile().proxy().onRecompile(this);
+		compileEvents.event(this);
 		
 		return true;
 	}

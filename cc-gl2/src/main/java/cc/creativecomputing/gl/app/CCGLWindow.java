@@ -1,39 +1,79 @@
 package cc.creativecomputing.gl.app;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_DECORATED;
+import static org.lwjgl.glfw.GLFW.GLFW_FLOATING;
+import static org.lwjgl.glfw.GLFW.GLFW_FOCUSED;
+import static org.lwjgl.glfw.GLFW.GLFW_ICONIFIED;
+import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.GLFW_REPEAT;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
+import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
+import static org.lwjgl.glfw.GLFW.glfwCreateStandardCursor;
+import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwFocusWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetClipboardString;
+import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
+import static org.lwjgl.glfw.GLFW.glfwGetFramebufferSize;
+import static org.lwjgl.glfw.GLFW.glfwGetWindowAttrib;
+import static org.lwjgl.glfw.GLFW.glfwGetWindowPos;
+import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
+import static org.lwjgl.glfw.GLFW.glfwHideWindow;
+import static org.lwjgl.glfw.GLFW.glfwIconifyWindow;
+import static org.lwjgl.glfw.GLFW.glfwMaximizeWindow;
+import static org.lwjgl.glfw.GLFW.glfwSetCharCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetClipboardString;
+import static org.lwjgl.glfw.GLFW.glfwSetCursor;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorEnterCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetDropCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetFramebufferSizeCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetInputMode;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowCloseCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowFocusCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowIconifyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowPosCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowRefreshCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowSize;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowSizeCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 
-import org.lwjgl.glfw.GLFWCharCallback;
 import org.lwjgl.glfw.GLFWDropCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.system.MemoryStack;
 
-import cc.creativecomputing.core.events.CCBooleanEvent;
-import cc.creativecomputing.core.events.CCCharEvent;
-import cc.creativecomputing.core.events.CCEvent;
-import cc.creativecomputing.core.events.CCIntEvent;
-import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCVector2;
-import cc.creativecomputing.math.CCVector2.CCVector2Event;
 import cc.creativecomputing.math.CCVector2i;
-import cc.creativecomputing.math.CCVector2i.CCVector2iEvent;
 
 public class CCGLWindow {
 	
-	private final long _myID;
+	private long _myID;
 	private GLCapabilities _myCapabilities;
-	private CCGraphics _myGraphics;
-	protected CCGLTimer _myTimer = new CCGLTimer();
+	public CCGraphics g;
+	public final CCGLTimer t = new CCGLTimer();
 	
 	/**
 	 * This function creates a window and its associated OpenGL or OpenGL ES
@@ -90,7 +130,7 @@ public class CCGLWindow {
 	 * @param theMonitor The monitor to use for full screen mode, or NULL for windowed mode.
 	 * @param theWindow The window whose context to share resources with, or NULL to not share resources.
 	 */
-	public CCGLWindow(int theWidth, int theHeight, String theTitle, CCGLFWMonitor theMonitor, CCGLWindow theWindow){
+	public void init(int theWidth, int theHeight, String theTitle, CCGLFWMonitor theMonitor, CCGLWindow theWindow){
 		_myID = glfwCreateWindow(
 			theWidth, 
 			theHeight, 
@@ -108,31 +148,16 @@ public class CCGLWindow {
 		
 	}
 	
-	public CCGLWindow(int theWidth, int theHeight, String theTitle){
-		this(theWidth, theHeight, theTitle, null, null);
+	protected CCGLWindow(){
 	}
 	
 	public long id(){
 		return _myID;
 	}
-	
-	public static interface CCGLSetupListener{
-		public void setup(CCGraphics g, CCGLTimer theTimer);
-	}
-	
-	public final CCListenerManager<CCGLSetupListener> setupEvents = CCListenerManager.create(CCGLSetupListener.class);
-	
-	public static interface CCGLUpdateListener{
-		public void update(CCGLTimer theTimer);
-	}
-	
-	public final CCListenerManager<CCGLUpdateListener> updateEvents = CCListenerManager.create(CCGLUpdateListener.class);
-	
-	public static interface CCGLDrawListener{
-		public void draw(CCGraphics g);
-	}
-	
-	public final CCListenerManager<CCGLDrawListener> drawEvents = CCListenerManager.create(CCGLDrawListener.class);
+
+	public final CCEventManager<?> setupEvents = new CCEventManager<>();
+	public final CCEventManager<CCGLTimer> updateEvents = new CCEventManager<>();
+	public final CCEventManager<CCGraphics> drawEvents = new CCEventManager<>();
 	
 	public boolean isPrepared(){
 		return _myCapabilities != null;
@@ -143,61 +168,62 @@ public class CCGLWindow {
 
 		CCVector2i myFrameBufferSize = framebufferSize();
 		
-		_myGraphics = new CCGraphics(myFrameBufferSize.x, myFrameBufferSize.y);
+		g = new CCGraphics(myFrameBufferSize.x, myFrameBufferSize.y);
 		frameBufferSizeEvents.add(size ->{
-			_myGraphics.resize(size.x, size.y);
+			g.resize(size.x, size.y);
 			draw();
 		});
 		
-		setupEvents.proxy().setup(_myGraphics, _myTimer);
+		setupEvents.event(null);
 	}
 	
 	public void draw(){
 		if(_myCapabilities == null)return;
 		GL.setCapabilities(_myCapabilities);
-		_myTimer.calculateDeltaTime();
-		updateEvents.proxy().update(_myTimer);
-		_myGraphics.beginDraw();
-		drawEvents.proxy().draw(_myGraphics);
-		_myGraphics.endDraw();
+		t.calculateDeltaTime();
+		updateEvents.event(t);
+		g.beginDraw();
+		drawEvents.event(g);
+		g.endDraw();
 		
         swapBuffers();
 	}
 	
-	public static interface CCGLFWDropListener{
-		public void drop(String[] theFileNames);
-	}
 	
-	public final CCListenerManager<CCVector2iEvent> windowSizeEvents = CCListenerManager.create(CCVector2iEvent.class);
-	public final CCListenerManager<CCVector2iEvent> frameBufferSizeEvents = CCListenerManager.create(CCVector2iEvent.class);
-	public final CCListenerManager<CCEvent> closeEvents = CCListenerManager.create(CCEvent.class);
-	public final CCListenerManager<CCBooleanEvent> focusEvents = CCListenerManager.create(CCBooleanEvent.class);
-	public final CCListenerManager<CCBooleanEvent> iconifyEvents = CCListenerManager.create(CCBooleanEvent.class);
-	public final CCListenerManager<CCVector2iEvent> positionEvents = CCListenerManager.create(CCVector2iEvent.class);
-	public final CCListenerManager<CCEvent> refreshEvents = CCListenerManager.create(CCEvent.class);
-	public final CCListenerManager<CCGLFWDropListener> dropEvents = CCListenerManager.create(CCGLFWDropListener.class);
+	public final CCEventManager<CCVector2i> windowSizeEvents = new CCEventManager<>();
+	public final CCEventManager<CCVector2i> windowPosEvents = new CCEventManager<>();
+	public final CCEventManager<CCVector2i> frameBufferSizeEvents = new CCEventManager<>();
+	public final CCEventManager<?> closeEvents = new CCEventManager<>();
+	public final CCEventManager<Boolean> focusEvents = new CCEventManager<>();
+	public final CCEventManager<Boolean> iconifyEvents = new CCEventManager<>();
+	public final CCEventManager<CCVector2i> positionEvents = new CCEventManager<>();
+	public final CCEventManager<?> refreshEvents = new CCEventManager<>();
+	public final CCEventManager<String[]> dropEvents = new CCEventManager<>();
 	
 	private void setWindowCallbacks(){
 		glfwSetWindowSizeCallback(_myID, (window, width, height)->{
-			windowSizeEvents.proxy().event(new CCVector2i(width, height));
-		});
-		glfwSetFramebufferSizeCallback(_myID, (window, width, height)->{
-			frameBufferSizeEvents.proxy().event(new CCVector2i(width, height));
-		});
-		glfwSetWindowCloseCallback(_myID, (window)->{
-			closeEvents.proxy().event();
-		});
-		glfwSetWindowFocusCallback(_myID, (window, focus)->{
-			focusEvents.proxy().event(focus);
-		});
-		glfwSetWindowIconifyCallback(_myID, (window, iconify)->{
-			iconifyEvents.proxy().event(iconify);
+			windowSizeEvents.event(new CCVector2i(width, height));
 		});
 		glfwSetWindowPosCallback(_myID, (window, x, y)->{
-			positionEvents.proxy().event(new CCVector2i( x, y));
+			windowPosEvents.event(new CCVector2i(x, y));
+		});
+		glfwSetFramebufferSizeCallback(_myID, (window, width, height)->{
+			frameBufferSizeEvents.event(new CCVector2i(width, height));
+		});
+		glfwSetWindowCloseCallback(_myID, (window)->{
+			closeEvents.event();
+		});
+		glfwSetWindowFocusCallback(_myID, (window, focus)->{
+			focusEvents.event(focus);
+		});
+		glfwSetWindowIconifyCallback(_myID, (window, iconify)->{
+			iconifyEvents.event(iconify);
+		});
+		glfwSetWindowPosCallback(_myID, (window, x, y)->{
+			positionEvents.event(new CCVector2i( x, y));
 		});
 		glfwSetWindowRefreshCallback(_myID, (window)->{
-			refreshEvents.proxy().event();
+			refreshEvents.event();
 		});
 		glfwSetDropCallback(_myID, (long arg0, int count, long names)-> {
 			String[] filenames = new String[count];
@@ -205,33 +231,21 @@ public class CCGLWindow {
 				filenames[i] = GLFWDropCallback.getName(names, i);
 		    }
 
-			dropEvents.proxy().drop(filenames);
+			dropEvents.event(filenames);
 		});
 	}
 	
-	public static interface CCGLFWKeyListener{
-		public void event(CCGLKeyEvent theEvent);
-	}
-	
-	public final CCListenerManager<CCGLFWKeyListener> keyReleaseEvents = CCListenerManager.create(CCGLFWKeyListener.class);
-	public final CCListenerManager<CCGLFWKeyListener> keyPressEvents = CCListenerManager.create(CCGLFWKeyListener.class);
-	public final CCListenerManager<CCGLFWKeyListener> keyRepeatEvents = CCListenerManager.create(CCGLFWKeyListener.class);
-	public final CCListenerManager<CCCharEvent> keyCharEvents = CCListenerManager.create(CCCharEvent.class);
+	public final CCEventManager<CCGLKeyEvent> keyReleaseEvents = new CCEventManager<>();
+	public final CCEventManager<CCGLKeyEvent> keyPressEvents = new CCEventManager<>();
+	public final CCEventManager<CCGLKeyEvent> keyRepeatEvents = new CCEventManager<>();
+	public final CCEventManager<Character> keyCharEvents = new CCEventManager<>();
 	
 	
 	private void setKeyCallbacks(){
 		glfwSetCharCallback(_myID, (window,theChar)->{
-			keyCharEvents.proxy().event((char)theChar);
+			keyCharEvents.event((char)theChar);
 		});
 		
-	}
-	
-	public static interface CCGLFWCursorListener{
-		public void event(boolean enter);
-	}
-	
-	public static interface CCGLFWCursorPosListener{
-		public void event(CCVector2 thePosition);
 	}
 	
 	/**
@@ -239,7 +253,7 @@ public class CCGLWindow {
 	 * window, which is called when the cursor enters or leaves the client area
 	 * of the window.
 	 */
-	public final CCListenerManager<CCGLFWCursorListener> cursorEnterEvents = CCListenerManager.create(CCGLFWCursorListener.class);
+	public final CCEventManager<Boolean> cursorEnterEvents = new CCEventManager<>();;
 	
 	/**
 	 * This function sets the cursor position callback of the specified window,
@@ -247,30 +261,26 @@ public class CCGLWindow {
 	 * the position, in screen coordinates, relative to the upper-left corner of
 	 * the client area of the window.
 	 */
-	public final CCListenerManager<CCGLFWCursorPosListener> cursorPositionEvents = CCListenerManager.create(CCGLFWCursorPosListener.class);
+	public final CCEventManager<CCVector2> cursorPositionEvents = new CCEventManager<>();;
+	
+	public final CCEventManager<CCGLMouseEvent> mouseReleaseEvents = new CCEventManager<>();
+	public final CCEventManager<CCGLMouseEvent> mousePressEvents = new CCEventManager<>();
+	public final CCEventManager<CCVector2> mouseEnterEvents = new CCEventManager<>();
+	public final CCEventManager<CCVector2> mouseExitEvents = new CCEventManager<>();
+	public final CCEventManager<CCVector2> mouseMoveEvents = new CCEventManager<>();
+	public final CCEventManager<CCVector2> mouseDragEvents = new CCEventManager<>();
+	public final CCEventManager<CCGLMouseEvent> mouseClickEvents = new CCEventManager<>();
 
-	public static interface CCGLFWMouseListener{
-		public void event(CCGLMouseEvent theEvent);
-	}
-	
-	public final CCListenerManager<CCGLFWMouseListener> mouseReleaseEvents = CCListenerManager.create(CCGLFWMouseListener.class);
-	public final CCListenerManager<CCGLFWMouseListener> mousePressEvents = CCListenerManager.create(CCGLFWMouseListener.class);
-	public final CCListenerManager<CCVector2Event> mouseEnterEvents = CCListenerManager.create(CCVector2Event.class);
-	public final CCListenerManager<CCVector2Event> mouseExitEvents = CCListenerManager.create(CCVector2Event.class);
-	public final CCListenerManager<CCVector2Event> mouseMoveEvents = CCListenerManager.create(CCVector2Event.class);
-	public final CCListenerManager<CCVector2Event> mouseDragEvents = CCListenerManager.create(CCVector2Event.class);
-	public final CCListenerManager<CCGLFWMouseListener> mouseClickEvents = CCListenerManager.create(CCGLFWMouseListener.class);
-	
-	public static interface CCGLFWScrollListener{
-		public void event(double theX, double theY);
-	}
-	public final CCListenerManager<CCGLFWScrollListener> scrollEvents = CCListenerManager.create(CCGLFWScrollListener.class);
+	public final CCEventManager<CCVector2> scrollEvents = new CCEventManager<>();
 
 	private double _myMouseX;
 	private double _myMouseY;
 	private boolean _myMousePressed;
 	
 	private long _myPressMillis = 0;
+
+	private long _myLastDif = 0;
+	private int _myClicks = 1;
 	
 	private void setMouseCallbacks(){
 		glfwSetCursorEnterCallback(_myID, (window, enter) -> {
@@ -279,11 +289,11 @@ public class CCGLWindow {
 				framebufferSize().y / (double)windowSize().y
 			);
 			if(enter){
-				mouseEnterEvents.proxy().event(myCursorPosition);
+				mouseEnterEvents.event(myCursorPosition);
 			}else{
-				mouseExitEvents.proxy().event(myCursorPosition);
+				mouseExitEvents.event(myCursorPosition);
 			}
-			cursorEnterEvents.proxy().event(enter);
+			cursorEnterEvents.event(enter);
 		});
 		glfwSetCursorPosCallback(_myID, (window, x, y) -> {
 			CCVector2 myCursorPosition = new CCVector2(
@@ -292,48 +302,58 @@ public class CCGLWindow {
 			);
 			_myMouseX = myCursorPosition.x;
 			_myMouseY = myCursorPosition.y;
-			cursorPositionEvents.proxy().event(myCursorPosition);
+			cursorPositionEvents.event(myCursorPosition);
 			
 			if(_myMousePressed){
-				mouseDragEvents.proxy().event(myCursorPosition);
+				mouseDragEvents.event(myCursorPosition);
 			}else{
-				mouseMoveEvents.proxy().event(myCursorPosition);
+				mouseMoveEvents.event(myCursorPosition);
 			}
 		});
 
+		
 		glfwSetMouseButtonCallback(_myID, (window, button, action, mods) -> {
 			CCGLMouseEvent myMouseEvent = new CCGLMouseEvent(button, action, mods,_myMouseX, _myMouseY);
 			switch(action){
 			case GLFW_RELEASE:
-				mouseReleaseEvents.proxy().event(myMouseEvent);
-				
-				if(System.currentTimeMillis() - _myPressMillis < 200){
-					mouseClickEvents.proxy().event(myMouseEvent);
+				mouseReleaseEvents.event(myMouseEvent);
+				long myDif = System.currentTimeMillis() - _myPressMillis;
+
+				if(_myLastDif < 200){
+					_myClicks++;
+					myMouseEvent.clickCount = _myClicks;
+				}else{
+					_myClicks = 1;
+				}
+				if(myDif < 200){
+					mouseClickEvents.event(myMouseEvent);
 				}
 				
 				_myMousePressed = false;
 				break;
 			case GLFW_PRESS:
+				myDif = System.currentTimeMillis() - _myPressMillis;
+				_myLastDif = myDif;
 				_myPressMillis = System.currentTimeMillis();
-				mousePressEvents.proxy().event(myMouseEvent);
+				mousePressEvents.event(myMouseEvent);
 				_myMousePressed = true;
 				break;
 			}
 		});
 		glfwSetScrollCallback(_myID, (w, x, y) -> {
-			scrollEvents.proxy().event(x, y);
+			scrollEvents.event(new CCVector2(x, y));
 		});
 		glfwSetKeyCallback(_myID, (window, key, scancode, action, mods) -> {
 			CCGLKeyEvent myKeyEvent = new CCGLKeyEvent(key, scancode, action, mods);
 			switch(action){
 			case GLFW_RELEASE:
-				keyReleaseEvents.proxy().event(myKeyEvent);
+				keyReleaseEvents.event(myKeyEvent);
 				break;
 			case GLFW_PRESS:
-				keyPressEvents.proxy().event(myKeyEvent);
+				keyPressEvents.event(myKeyEvent);
 				break;
 			case GLFW_REPEAT:
-				keyRepeatEvents.proxy().event(myKeyEvent);
+				keyRepeatEvents.event(myKeyEvent);
 				break;
 			}
 		});

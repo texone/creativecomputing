@@ -1,7 +1,6 @@
 package cc.creativecomputing.graphics.font;
 
-import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.events.CCStringEvent;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
@@ -20,7 +19,7 @@ public class CCTextFieldController {
 	
 	private CCGLWindow _myWindow;
 	
-	public CCListenerManager<CCStringEvent> changeEvents = CCListenerManager.create(CCStringEvent.class);
+	public CCEventManager<String> changeEvents = new CCEventManager<>();
 	
 	public CCTextFieldController(CCTextField theTextField){
 		_myTextField = theTextField;
@@ -81,7 +80,7 @@ public class CCTextFieldController {
 			if(theEvent.isControlDown() || theEvent.isSuperDown())pasteClipboard();
 			break;
 		case KEY_ENTER:
-			changeEvents.proxy().event(_myTextField.text());
+			changeEvents.event(_myTextField.text());
 			break;
 		}
 	}

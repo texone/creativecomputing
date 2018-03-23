@@ -3,9 +3,8 @@ package cc.creativecomputing.kle.analyze;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.control.CCAsset.CCAssetListener;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.CCKleChannelType;
@@ -52,13 +51,10 @@ public class CCKleFileAnalyzer extends CCKleAnalyzer {
 		_myUseHistorySize = false;
 		_mySequence = new CCSequenceAsset(_myMapping, "kle", "bin", "xml");
 		_mySequence.normalize(false);
-		_mySequence.events().add(new CCAssetListener<CCSequence>() {
-			@Override
-			public void onChange(CCSequence theAsset) {
-				CCLog.info(_mySequence.value() == null);
-				CCLog.info(theAsset.length());
-				reset1();
-			}
+		_mySequence.changeEvents.add(theAsset-> {
+			CCLog.info(_mySequence.value() == null);
+			CCLog.info(theAsset.length());
+			reset1();
 		});
 	}
 	

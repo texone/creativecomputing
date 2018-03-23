@@ -1,7 +1,9 @@
 package cc.creativecomputing.gl.demo.font;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
+import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCCharSet;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
@@ -21,7 +23,7 @@ public class CCEnttypoDemo extends CCGLApp{
 	private int _myStartChar = 0;
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
+	public void setup() {
 		
 		_myTextureField = new CCTextField(_myFont = new CCTextureMapFont(CCCharSet.ENTYPO,CCNIOUtil.dataPath("fonts/entypo.ttf"), 40), "")
 			.position(0, -100)
@@ -33,7 +35,7 @@ public class CCEnttypoDemo extends CCGLApp{
 				.align(CCTextAlign.LEFT)
 				.fontSize(20);
 		
-		_myMainWindow.keyReleaseEvents.add(event -> {
+		keyReleaseEvents.add(event -> {
 			switch(event.key){
 			case KEY_LEFT:
 				_myStartChar -= (g.height() - 60) / 50;
@@ -93,6 +95,8 @@ public class CCEnttypoDemo extends CCGLApp{
 		CCEnttypoDemo myDemo = new CCEnttypoDemo();
 		myDemo.width = 1800;
 		myDemo.height = 1000;
-		myDemo.run();
+
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

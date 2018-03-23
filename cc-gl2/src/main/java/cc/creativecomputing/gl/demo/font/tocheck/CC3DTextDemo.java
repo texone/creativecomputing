@@ -13,7 +13,7 @@ package cc.creativecomputing.gl.demo.font.tocheck;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
 import cc.creativecomputing.gl.app.CCGLTimer;

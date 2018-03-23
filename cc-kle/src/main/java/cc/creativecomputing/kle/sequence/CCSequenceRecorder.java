@@ -8,13 +8,13 @@ import java.util.Map;
 
 import javax.swing.JFileChooser;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
+import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCAnimatorAdapter;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;

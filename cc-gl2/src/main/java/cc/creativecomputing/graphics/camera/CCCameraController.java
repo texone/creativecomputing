@@ -18,21 +18,20 @@
  */
 package cc.creativecomputing.graphics.camera;
 
-import cc.creativecomputing.app.modules.CCAnimatorAdapter;
+import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLKeyEvent;
 import cc.creativecomputing.gl.app.CCGLMouseButton;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.gl.app.CCGLWindow;
-import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWKeyListener;
-import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMouseListener;
-import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWMousePosListener;
-import cc.creativecomputing.gl.app.CCGLWindow.CCGLFWScrollListener;
 import cc.creativecomputing.graphics.CCCamera;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCViewport;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCQuaternion;
+import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 
 /**
@@ -62,7 +61,7 @@ public class CCCameraController {
 		void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY);
 	}
 	
-	private abstract class CCDampedAction extends CCAnimatorAdapter{
+	private abstract class CCDampedAction{
 		private double _myVelocity;
 		private final double _myDamping;
 
@@ -132,9 +131,26 @@ public class CCCameraController {
 	private final CCDampedAction _myRotateYAction;
 	private final CCDampedAction _myRotateZAction;
 	
-	private final CCDampedAction _myDampedZoom;
-	private final CCDampedAction _myDampedPanX;
-	private final CCDampedAction _myDampedPanY;
+	private final CCDampedAction _myDampedZoom = new CCDampedAction() {
+		@Override
+		protected void behave(final double theVelocity) {
+			mouseZoom(theVelocity);
+		}
+	};
+	
+	private final CCDampedAction _myDampedPanX = new CCDampedAction() {
+		@Override
+		protected void behave(final double theVelocity) {
+			mousePan(theVelocity, 0);
+		}
+	};
+	
+	private final CCDampedAction _myDampedPanY = new CCDampedAction() {
+		@Override
+		protected void behave(final double theVelocity) {
+			mousePan(0, theVelocity);
+		}
+	};
 
 	@CCProperty(name = "distance", min = 1, max = 20000, readBack = true)
 	private double _myDistance;
@@ -172,18 +188,14 @@ public class CCCameraController {
 		}
 	};
 	private CCCameraMouseDragHandler _myRightDraghandler = _myZoomHandler;
-
-	private final CCGLFWScrollListener _myWheelHandler = new CCGLFWScrollListener() {
-
-		@Override
-		public void event(double theX, double theY) {
-			_myDampedZoom.impulse(_myWheelScale * theY);
-		}
-	};
 	
 	private double _myWheelScale = 1f;
+	
+	private final CCEvent<CCVector2> _myWheelHandler = pos -> {
+		_myDampedZoom.impulse(_myWheelScale * pos.y);
+	};
 
-	private final CCGLFWKeyListener _myKeyListener = (event) -> {
+	private final CCEvent<CCGLKeyEvent> _myKeyListener = (event) -> {
 		if (event.isShiftDown())
 			_myDragConstraint = null;
 	};
@@ -229,14 +241,14 @@ public class CCCameraController {
 			)
 		);
 		
-		_myApp.frameBufferSizeEvents.add((window,width, height) -> {
-			_myCamera = new CCCamera(width, height);
+		_myApp.frameBufferSizeEvents.add(size -> {
+			_myCamera = new CCCamera(size.x, size.y);
 			_myCamera.viewport(
 				new CCViewport(
-					(int)(width * _myRelX), 
-					(int)(height * _myRelY), 
-					(int)(width * _myRelWidth), 
-					(int)(height * _myRelHeight)
+					(int)(size.x * _myRelX), 
+					(int)(size.y * _myRelY), 
+					(int)(size.x * _myRelWidth), 
+					(int)(size.y * _myRelHeight)
 				)
 			);
 			
@@ -269,27 +281,6 @@ public class CCCameraController {
 			@Override
 			protected void behave(final double theVelocity) {
 				_myRotation.multiplyLocal(CCQuaternion.createFromAngleAxis(theVelocity, CCVector3.UNIT_Z));
-			}
-		};
-
-		_myDampedZoom = new CCDampedAction() {
-			@Override
-			protected void behave(final double theVelocity) {
-				mouseZoom(theVelocity);
-			}
-		};
-
-		_myDampedPanX = new CCDampedAction() {
-			@Override
-			protected void behave(final double theVelocity) {
-				mousePan(theVelocity, 0);
-			}
-		};
-
-		_myDampedPanY = new CCDampedAction() {
-			@Override
-			protected void behave(final double theVelocity) {
-				mousePan(0, theVelocity);
 			}
 		};
 
@@ -363,7 +354,7 @@ public class CCCameraController {
 	
 	private CCGLMouseEvent _myMouseEvent = null;
 	
-	private CCGLFWMouseListener mousePressed = event ->{
+	private CCEvent<CCGLMouseEvent> mousePressed = event ->{
 		if(!_myCamera.viewport().pointInside(event.x, event.y)){
 			_myMouseEvent = null;
 			return;
@@ -373,7 +364,7 @@ public class CCCameraController {
 		_myPMouseY = event.y;
 	};
 	
-	private CCGLFWMouseListener mouseReleased = event ->{
+	private CCEvent<CCGLMouseEvent> mouseReleased = event ->{
 		if(!_myCamera.viewport().pointInside(event.x, event.y)){
 			_myMouseEvent = null;
 			return;
@@ -384,7 +375,7 @@ public class CCCameraController {
 		_myPMouseY = event.y;
 	};
 	
-	private CCGLFWMousePosListener mouseDragged = position -> {
+	private CCEvent<CCVector2> mouseDragged = position -> {
 		if(_myMouseEvent == null)return;
 		
 		final double theMoveX = position.x - _myPMouseX;
@@ -610,7 +601,7 @@ public class CCCameraController {
 	}
 
 
-	abstract public class AbstractInterp extends CCAnimatorAdapter{
+	abstract public class AbstractInterp{
 		double _myTime;
 		final double _myDuration;
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffect;
 import cc.creativecomputing.effects.CCEffectable;

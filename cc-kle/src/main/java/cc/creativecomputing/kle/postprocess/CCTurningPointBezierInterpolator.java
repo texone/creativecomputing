@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.control.handles.CCTriggerProgress;
-import cc.creativecomputing.control.timeline.util.CCCubicSolver;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.kle.CCKleMapping;
 import cc.creativecomputing.kle.sequence.CCSequence;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.util.CCCubicSolver;
 
 public class CCTurningPointBezierInterpolator implements CCSequenceProcessor{
 	
