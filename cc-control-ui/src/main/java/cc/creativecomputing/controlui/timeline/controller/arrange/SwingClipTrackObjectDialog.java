@@ -38,19 +38,15 @@ import javax.swing.JPanel;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint.TimedData;
 import cc.creativecomputing.controlui.CCUIConstants;
-import cc.creativecomputing.controlui.controls.CCUIStyler;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer.TimelineChangeListener;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
+import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 
 public class SwingClipTrackObjectDialog extends JDialog implements ActionListener, PropertyChangeListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 139787124989150690L;
 
-	private JComboBox<String> _myTimelines;
+	private CCUIDropDownWidget _myTimelines;
 
 	private final CCTimelineContainer _myTimelineContainer;
 	
@@ -63,21 +59,12 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 		setTitle("Edit Event");
 		
 		_myTimelineContainer = theTimelineContainer;
-		_myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
-
-			@Override
-			public void changeTimeline(CCTimelineController theController) {}
-			
-			@Override
-			public void addTimeline(String theTimeline) {
-				_myTimelines.addItem(theTimeline);
-				_myTimelines.setSelectedItem(_myTimelineContainer.defaultTimelineKey());
-			}
-			
-			@Override
-			public void resetTimelines() {
-				_myTimelines.removeAllItems();
-			}
+		_myTimelineContainer.addEvents.add(theTimeline -> {
+			_myTimelines.addItem(theTimeline);
+			_myTimelines.setSelectedItem(_myTimelineContainer.defaultTimelineKey());
+		});
+		_myTimelineContainer.resetEvents.add(e ->{
+			_myTimelines.removeAllItems();
 		});
 
 		_myPanel = new JPanel();
@@ -88,18 +75,6 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 
 		// Handle window closing correctly.
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
-		
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent we) {
-				
-			}
-		});
-
-		// Ensure the text field always gets the first focus.
-		addComponentListener(new ComponentAdapter() {
-			public void componentShown(ComponentEvent ce) {
-			}
-		});
 
 		pack();
 	}
@@ -139,7 +114,6 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 			}
 		});
 		
-        CCUIStyler.styleTransportComponent(_myTimelines, 120, 20);
         _myPanel.add(_myTimelines);
 	}
 

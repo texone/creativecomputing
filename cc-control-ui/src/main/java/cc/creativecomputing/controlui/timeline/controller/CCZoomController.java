@@ -18,36 +18,29 @@ package cc.creativecomputing.controlui.timeline.controller;
 
 import cc.creativecomputing.control.timeline.CCTimeRange;
 import cc.creativecomputing.controlui.CCUIConstants;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
 
 public class CCZoomController  {
 	
-	private double _myLowerBound;
-	private double _myUpperBound;
+	private CCTimeRange _myRange;
 	private CCVector2 _myDragStart;
 	private double _myLastV;
 	private double _myLastH;
 	
-	private CCListenerManager<CCZoomable> _myZoomables = CCListenerManager.create(CCZoomable.class);
+	public final CCEventManager<CCTimeRange> events = new CCEventManager<>();
 	
 	private double _myMinRange = 0;
 	private double _myMaxRange = Double.MAX_VALUE;
 	
 	public CCZoomController() {
-		_myLowerBound = 0;
-		_myUpperBound = CCUIConstants.DEFAULT_RANGE;
+		_myRange = new CCTimeRange(0,CCUIConstants.DEFAULT_RANGE);
 	}
 	
-	public void addZoomable(CCZoomable theZoomable) {
-		_myZoomables.add(theZoomable);
-		theZoomable.setRange(_myLowerBound, _myUpperBound);
-	}
-	
-	public void removeZoomable(CCZoomable theZoomable) {
-		_myZoomables.remove(theZoomable);
+	public CCTimeRange range(){
+		return _myRange;
 	}
 	
 	public void startDrag( CCVector2 theViewCoords ) {
@@ -74,40 +67,40 @@ public class CCZoomController  {
 			double myVDelta = myVMovement - _myLastV;
 			double myHDelta = myHMovement - _myLastH;
 			
-			myVDelta *= 0.01 * (_myUpperBound - _myLowerBound);
-			myHDelta = myHDelta / theViewWidth * (_myUpperBound - _myLowerBound);
+			myVDelta *= 0.01 * _myRange.length();
+			myHDelta = myHDelta / theViewWidth * _myRange.length();
 			
 			// zooming should occur around the point where you grab the time line
 			double myFixPoint = theViewCoords.x / theViewWidth;
 			
-			_myLowerBound -= myVDelta * myFixPoint;
-			if (_myLowerBound < 0) {
-				_myLowerBound = 0;
+			_myRange.start -= myVDelta * myFixPoint;
+			if (_myRange.start < 0) {
+				_myRange.start = 0;
 			}
-			_myUpperBound += myVDelta * (1-myFixPoint);
-			_myLowerBound -= myHDelta;
-			if (_myLowerBound < 0) {
-				_myLowerBound = 0;
+			_myRange.end += myVDelta * (1-myFixPoint);
+			_myRange.start -= myHDelta;
+			if (_myRange.start < 0) {
+				_myRange.start = 0;
 			} else {
-				_myUpperBound -= myHDelta;
+				_myRange.end -= myHDelta;
 			}
 			
-			if(_myLowerBound >= _myUpperBound) {
-				_myLowerBound = _myUpperBound - 1;
+			if(_myRange.start >= _myRange.end) {
+				_myRange.start = _myRange.end - 1;
 			}
 			
-			double myRange = _myUpperBound - _myLowerBound;
+			double myRange = _myRange.end - _myRange.start;
 			if(myRange < _myMinRange) {
 				double myRangeDif = _myMinRange - myRange;
-				_myLowerBound -= myRangeDif/2;
-				if(_myLowerBound < 0)_myLowerBound = 0;
-				_myUpperBound = _myLowerBound + _myMinRange;
+				_myRange.start -= myRangeDif/2;
+				if(_myRange.start < 0)_myRange.start = 0;
+				_myRange.end = _myRange.start + _myMinRange;
 			} 
 			
 			if(myRange > _myMaxRange) {
 				double myRangeDif = myRange - _myMaxRange;
-				_myLowerBound += myRangeDif / 2;
-				_myUpperBound = _myLowerBound + _myMaxRange;
+				_myRange.start += myRangeDif / 2;
+				_myRange.end = _myRange.start + _myMaxRange;
 			} 
 			
 			_myLastV = myVMovement;
@@ -130,42 +123,42 @@ public class CCZoomController  {
 	}
 	
 	public void setRange(CCTimeRange theRange) {
-		if(theRange.end() <= theRange.start())return;
+		if(theRange.end <= theRange.start)return;
 		
-		_myLowerBound = theRange.start();
-		_myUpperBound = theRange.end();
+		_myRange.start = theRange.start;
+		_myRange.end = theRange.end;
 		updateZoomables();
 	}
 	
 	public void setRange(double theStart, double theEnd) {
 		if(theEnd <= theStart)return;
 		
-		_myLowerBound = theStart;
-		_myUpperBound = theEnd;
+		_myRange.start = theStart;
+		_myRange.end = theEnd;
 		updateZoomables();
 	}
 	
 	public void updateZoomables() {
-		if (_myLowerBound < _myUpperBound) {
-			_myZoomables.proxy().setRange(_myLowerBound, _myUpperBound);
+		if (_myRange.start < _myRange.end) {
+			events.event(_myRange);
 		}		
 	}
 	
 	public void setLowerBound(double theLowerBound) {
-		_myLowerBound = theLowerBound;
+		_myRange.start = theLowerBound;
 		updateZoomables();
 	}
 	
 	public void setUpperBound(double theUpperBound) {
-		_myUpperBound = theUpperBound;
+		_myRange.end = theUpperBound;
 		updateZoomables();
 	}
 	
 	public double lowerBound() {
-		return _myLowerBound;
+		return _myRange.start;
 	}
 	
 	public double upperBound() {
-		return _myUpperBound;
+		return _myRange.end;
 	}
 }

@@ -38,7 +38,7 @@ package cc.creativecomputing.controlui.timeline.view.track;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
 
-public class SwingCurveTrackPopup extends SwingTrackPopup<CCCurveTrackController> {
+public class SwingCurveTrackPopup extends CCTrackMenu<CCCurveTrackController> {
 	
 	/**
 	 * 

@@ -29,25 +29,17 @@ import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.ui.widget.CCUIMenu;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-public abstract class SwingTrackPopup<ControllerType extends CCTrackController> extends CCUIMenu {
+public abstract class CCTrackMenu<ControllerType extends CCTrackController> extends CCUIMenu {
 	
-	static List<SwingTrackPopup<?>> _myPopUps = new ArrayList<>();
-		
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7869280073371142253L;
 	protected CCTrackController _myTrackController;
-	private List<JRadioButtonMenuItem> _myToolGroup = new ArrayList<>();
 	private CCTimelineController _myTimelineController;
 	
 	private static List<CCControlPoint> clipBoard = null;
 	
 	private static CCTrackController controller = null;
 
-	public SwingTrackPopup(ControllerType theTrackController, CCTimelineController theTimelineController) {
+	public CCTrackMenu(ControllerType theTrackController, CCTimelineController theTimelineController) {
 		super(CCUIConstants.DEFAULT_FONT);
-		_myPopUps.add(this);
 		_myTrackController = theTrackController;
 		_myTimelineController = theTimelineController;
 
@@ -121,28 +113,28 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 	}
 	
 	public void addFunctions() {
-		addItem("Insert Time",() -> {
+		addItem("Insert Time",e -> {
 			
-			new CCTextInputDialog(
-				"Insert Time", 
-				"Specify the time to insert in seconds.", 
-				"insert",
-				input ->{
-					double myTime = 0;
-					try {
-						myTime = new ExpressionBuilder(input).build().evaluate();
-					} catch (Exception ex) {}
-					_myTrackController.trackData().insertTime(_myTrackController.viewXToTime(_myMouseEvent.x, true),myTime);
-					_myTrackController.view().render();
-				}
-			)
-			.location(_myMouseEvent.getXOnScreen(), _myMouseEvent.getYOnScreen())
-			.size(400,200)
-			.open();
+//			new CCTextInputDialog(
+//				"Insert Time", 
+//				"Specify the time to insert in seconds.", 
+//				"insert",
+//				input ->{
+//					double myTime = 0;
+//					try {
+//						myTime = new ExpressionBuilder(input).build().evaluate();
+//					} catch (Exception ex) {}
+//					_myTrackController.trackData().insertTime(_myTrackController.viewXToTime(_myMouseEvent.x, true),myTime);
+//					_myTrackController.view().render();
+//				}
+//			)
+//			.location(_myMouseEvent.getXOnScreen(), _myMouseEvent.getYOnScreen())
+//			.size(400,200)
+//			.open();
 			
 		});
 		
-		addItem("Remove Time", () -> {
+		addItem("Remove Time", e -> {
 			double myLowerBound = _myTimelineController.transportController().loopStart();
 			double myUpperBound = _myTimelineController.transportController().loopEnd();
 			double myRange = myUpperBound - myLowerBound;
@@ -151,22 +143,22 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 			_myTrackController.view().render();
 		});
 
-		addItem("Reset Track",() -> {
+		addItem("Reset Track",e -> {
 			if(_myTrackController == null)return;
 			_myTrackController.reset();
 		});
 		
-		addItem("Clear Selection", () -> {
+		addItem("Clear Selection", e -> {
 			if(_myTrackController == null)return;
 			_myTrackController.clearSelection();
 		});
 		
-		addItem("Delete",() -> {
+		addItem("Delete",e -> {
 			if(_myTrackController == null)return;
 			_myTrackController.deleteSelection();
 		});
 		
-		addItem("Copy",() -> {
+		addItem("Copy",e -> {
 			if(_myTrackController == null)return;
 			if(_myTrackController.selectedPoints().size() <= 0) {
 				return;
@@ -175,12 +167,12 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 			clipBoard = _myTrackController.copySelection();
 		});
 		
-		addItem("Cut",() -> {
+		addItem("Cut",e -> {
 			if(_myTrackController == null)return;
 			clipBoard = _myTrackController.cutSelection();
 		});
 		
-		addItem("Paste",() -> {
+		addItem("Paste",e -> {
 			if(_myTrackController == null)return;
 			if(_myTimelineController == null)return;
 			_myTrackController.paste(clipBoard, _myTimelineController.transportController().time());
@@ -190,11 +182,8 @@ public abstract class SwingTrackPopup<ControllerType extends CCTrackController> 
 	public void addTools(){
 		int i = 0;
 		for(CCTimelineTools myTool:_myTrackController.tools()) {
-			
-			JRadioButtonMenuItem myStepItem = new JRadioButtonMenuItem(myTool.name());
-			myStepItem.setFont(CCUIConstants.ARIAL_11);
-			myStepItem.addActionListener(() -> {
-				for(SwingTrackPopup<?> myPopUP:_myPopUps){
+			addItem(myTool.name(),e -> {
+				for(CCTrackMenu<?> myPopUP:_myPopUps){
 					myPopUP.activevateTool(myTool);
 				}
 				

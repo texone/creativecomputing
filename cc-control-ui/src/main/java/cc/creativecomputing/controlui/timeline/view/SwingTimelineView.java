@@ -17,7 +17,6 @@
 package cc.creativecomputing.controlui.timeline.view;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,38 +25,30 @@ import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
-import cc.creativecomputing.control.timeline.CCTimeRange;
-import cc.creativecomputing.control.timeline.point.CCControlPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
-import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.controls.CCClipTrackDataRenderer;
 import cc.creativecomputing.controlui.controls.CCPathTrackDataRenderer;
 import cc.creativecomputing.controlui.controls.CCStringTrackDataRenderer;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
-import cc.creativecomputing.controlui.timeline.controller.arrange.SwingClipTrackObjectDialog;
-import cc.creativecomputing.controlui.timeline.controller.arrange.SwingGroupTrackObjectDialog;
 import cc.creativecomputing.controlui.timeline.controller.track.CCColorTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGradientTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
-import cc.creativecomputing.controlui.timeline.view.SwingMultiTrackPanel.MultiTrackMouseAdapter;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
+import cc.creativecomputing.controlui.timeline.view.track.CCTrackDataRenderer;
 import cc.creativecomputing.controlui.timeline.view.track.SwingColorTrackDataView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
+import cc.creativecomputing.controlui.timeline.view.track.CCCurveTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingEventTrackDataView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingEventTrackDialog;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGradientTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
-import cc.creativecomputing.controlui.timeline.view.track.CCTrackDataRenderer;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
+import cc.creativecomputing.controlui.timeline.view.track.CCTrackView;
 import cc.creativecomputing.controlui.timeline.view.transport.CCRulerView;
 import cc.creativecomputing.gl.app.CCGLWindow;
-import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
 
 
@@ -69,13 +60,10 @@ public class SwingTimelineView extends CCUIGridPane {
 	
 	private CCTimelineController _myTimelineController;
 	
-	private SwingClipTrackObjectDialog _myClipTrackObjectDialog;
-	private SwingGroupTrackObjectDialog _myGroupTrackObjectDialog;
-	
 	private final CCGLWindow _myMainFrame;
 
 	public SwingTimelineView(CCGLWindow theMainFrame, CCTimelineContainer theTimelineContainer) {
-		
+		columnWidths(20,80);
 		
 		_myMainFrame = theMainFrame;
 
@@ -99,18 +87,15 @@ public class SwingTimelineView extends CCUIGridPane {
 //		});
 //		
 //		 _myPane.add(_myJScrollbar, BorderLayout.PAGE_END);
-		
-		_myClipTrackObjectDialog = new SwingClipTrackObjectDialog(theTimelineContainer);
-		_myGroupTrackObjectDialog = new SwingGroupTrackObjectDialog();
 	}
 	
 	public void controller(CCTimelineController theController){
 		_myTimelineController = theController;
-		_myTimelineController.zoomController().addZoomable((theLower, theUpper) ->{
-			double myMax = Math.max(theUpper, _myTimelineController.maximumTime());
+		_myTimelineController.zoomController().events.add(range ->{
+			double myMax = CCMath.max(range.end, _myTimelineController.maximumTime());
 				
-			int myValue = (int)((theLower) / myMax * 1000);
-			int myExtent = (int)((theUpper - theLower) / myMax * 1000);
+			int myValue = (int)((range.start) / myMax * 1000);
+			int myExtent = (int)(range.length() / myMax * 1000);
 //			_myJScrollbar.setValues(myValue, myExtent, 0, 1000);
 		});
 		_myRuler.timelineController(_myTimelineController);
@@ -129,7 +114,7 @@ public class SwingTimelineView extends CCUIGridPane {
 		SwingGroupTrackView myTrackView = new SwingGroupTrackView(
 			_myMainFrame,
 			new SwingEventTrackDataView(null, _myTimelineController, theController),
-			_myMultiTrackPanel,
+			this,
 			_myTimelineController, 
 			theController
 		);
@@ -139,12 +124,6 @@ public class SwingTimelineView extends CCUIGridPane {
 		return myTrackView;
 	}
 	
-	private void insertGroupTrack(int theIndex, SwingGroupTrackView theTrackView, Path thePath){
-		assert (theIndex >= 0);
-		_myMultiTrackPanel.insertTrackView(theTrackView, thePath, theIndex, SwingTableLayout.DEFAULT_GROUP_HEIGHT, true);
-		_myMultiTrackPanel.insertTrackDataView(theTrackView.dataView(), thePath, theIndex);
-		_myPane.updateUI();
-	}
 	
 	private CCStringTrackDataRenderer _myStringDataRenderer = new CCStringTrackDataRenderer();
 	
@@ -153,7 +132,7 @@ public class SwingTimelineView extends CCUIGridPane {
 	 * @param theIndex
 	 * @param theTrack
 	 */
-	public SwingTrackView addTrack(int theIndex, CCTrackController theTrackDataController, CCClipTrackObject theObject) {
+	public CCTrackView addTrack(int theIndex, CCTrackController theTrackDataController, CCClipTrackObject theObject) {
 		assert (theIndex >= 0);
 
 		CCAbstractTrackDataView<?> myDataView = null;
@@ -182,16 +161,15 @@ public class SwingTimelineView extends CCUIGridPane {
 		}else if(theTrackDataController instanceof CCGradientTrackController){
 			myDataView = new SwingGradientTrackDataView(_myTimelineController, (CCGradientTrackController)theTrackDataController);
 		}else if(theTrackDataController instanceof CCCurveTrackController){
-			myDataView = new SwingCurveTrackDataView(_myTimelineController, (CCCurveTrackController)theTrackDataController);
+			myDataView = new CCCurveTrackDataView(_myTimelineController, (CCCurveTrackController)theTrackDataController);
 		}
 		
-		SwingTrackView myTrackView = new SwingTrackView(
+		CCTrackView myTrackView = new CCTrackView(
 			_myMainFrame,
 			myDataView,
 			_myTimelineController,
 			theTrackDataController
 		);
-		myTrackView.dataView().addComponentListener(this);
 
 		insertTrack(theIndex,myTrackView,theTrackDataController.track().path());
 		
@@ -200,15 +178,30 @@ public class SwingTimelineView extends CCUIGridPane {
 		return myTrackView;
 	}
 	
-	private void insertTrack(int theIndex, SwingTrackView theTrackView, Path thePath){
+	private void insertTrack(int theIndex, CCTrackView theTrackView, Path thePath){
 		assert (theIndex >= 0);
-		_myMultiTrackPanel.insertTrackView(theTrackView.controlView(), thePath, theIndex, SwingTableLayout.DEFAULT_ROW_HEIGHT, false);
-		_myMultiTrackPanel.insertTrackDataView(theTrackView.dataView(), thePath, theIndex);
-		_myPane.updateUI();
+		insertRow(theIndex);
+		CCUITableEntry myEntry = new CCUITableEntry();
+		myEntry.row = theIndex;
+		myEntry.column = 0;
+		addChild(theTrackView.controlView(), myEntry);
+		myEntry.column = 1;
+		addChild(theTrackView.dataView(), myEntry);
+	}
+	
+	private void insertGroupTrack(int theIndex, SwingGroupTrackView theTrackView, Path thePath){
+		assert (theIndex >= 0);
+		insertRow(theIndex);
+		CCUITableEntry myEntry = new CCUITableEntry();
+		myEntry.row = theIndex;
+		myEntry.column = 0;
+		addChild(theTrackView, myEntry);
+		myEntry.column = 1;
+		addChild(theTrackView.dataView(), myEntry);
 	}
 
 	public void removeTrack(Path thePath) {
-		_myMultiTrackPanel.removeTrackView(thePath);
+//		_myMultiTrackPanel.removeTrackView(thePath);
 	}
 	
 	public void showUnusedTracks() {
@@ -221,11 +214,11 @@ public class SwingTimelineView extends CCUIGridPane {
 	
 	private void showUnusedTracks(boolean theShowTracks){
 		_myTimelineController.openGroups();
-		_myMultiTrackPanel.clear();
+		removeAll();
 		int i = 0;
 		for(Object myTrack:_myTracks){
-			if(myTrack instanceof SwingTrackView){
-				SwingTrackView myTrackView = (SwingTrackView)myTrack;
+			if(myTrack instanceof CCTrackView){
+				CCTrackView myTrackView = (CCTrackView)myTrack;
 				if(!theShowTracks && myTrackView.dataView().controller().trackData().size() <= 1)continue;
 				
 				insertTrack(i++, myTrackView, myTrackView.dataView().controller().track().path());
@@ -240,27 +233,19 @@ public class SwingTimelineView extends CCUIGridPane {
 			}
 		}_myTimelineController.closeGroups();
 	}
-
-	public CCVector2 getMaximumSize() {
-		int myMaxYSize = 0;
-		for (Component myPanel : _myMultiTrackPanel) {
-			myMaxYSize += myPanel.getMaximumSize().getHeight();
-		}
-		return new CCVector2(6000, myMaxYSize);
-	}
 	
-	private SwingEventTrackDialog _myEventTrackDialog = new SwingEventTrackDialog();
-
-	public void openEventDialog(CCControlPoint thePoint) {
-		_myEventTrackDialog.setVisible(true);
-	}
-
-	public void openClipTrackDialog(CCEventTrackController theController, CCTimedEventPoint thePoint) {
-		_myClipTrackObjectDialog.edit(theController, thePoint);
-	}
-
-	public void openGroupPresetDialog(CCObjectPropertyHandle theHandle, CCEventTrackController theController, CCTimedEventPoint thePoint) {
-		_myGroupTrackObjectDialog.edit(theHandle, theController, thePoint);
-	}
+//	private SwingEventTrackDialog _myEventTrackDialog = new SwingEventTrackDialog();
+//
+//	public void openEventDialog(CCControlPoint thePoint) {
+//		_myEventTrackDialog.setVisible(true);
+//	}
+//
+//	public void openClipTrackDialog(CCEventTrackController theController, CCTimedEventPoint thePoint) {
+//		_myClipTrackObjectDialog.edit(theController, thePoint);
+//	}
+//
+//	public void openGroupPresetDialog(CCObjectPropertyHandle theHandle, CCEventTrackController theController, CCTimedEventPoint thePoint) {
+//		_myGroupTrackObjectDialog.edit(theHandle, theController, thePoint);
+//	}
 
 }

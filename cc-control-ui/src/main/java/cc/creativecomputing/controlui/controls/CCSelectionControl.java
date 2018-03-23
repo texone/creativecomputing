@@ -17,10 +17,10 @@
 package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.CCSelection.CCSelectionListener;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
@@ -34,25 +34,20 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 	
 	private CCSelection _myValue;
 	
-	private CCSelectionListener _mySelectionListener;
+	private CCEvent<CCSelection> _myChangeListener;
+	private CCEvent<CCSelection> _myAddListener;
 
 	public CCSelectionControl(CCSelectionPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		_myHandle.value().events().add(_mySelectionListener = new CCSelectionListener() {
-			
-			@Override
-			public void onChangeValues(CCSelection theSelection) {
-				_myDropDown.removeAllItems();
-				for(String myEnum:_myValue.values()){
-					_myDropDown.addItem(myEnum);
-		        }
-			}
-			
-			@Override
-			public void onChange(String theValue) {
-				_myDropDown.selectedItem(theValue, false);
-			}
+		_myHandle.value().changeEvents.add(_myChangeListener = theSelection -> {
+			_myDropDown.selectedItem(theSelection.value(), false);
+		});
+		_myHandle.value().addEvents.add(_myAddListener = theSelection -> {
+			_myDropDown.removeAllItems();
+			for(String myEnum:_myValue.values()){
+				_myDropDown.addItem(myEnum);
+	        }
 		});
  
 		addListener(theValue -> {
@@ -86,15 +81,14 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 	@Override
 	public void dispose() {
 		super.dispose();
-		_myHandle.value().events().remove(_mySelectionListener);
+		_myHandle.value().changeEvents.remove(_myChangeListener);
+		_myHandle.value().addEvents.remove(_myAddListener);
 	}
 	
 	@Override
 	public CCSelection value() {
 		return _myValue;
 	}
-	
-	
 	
 	@Override
 	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {

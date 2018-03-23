@@ -16,18 +16,66 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
-public interface CCTrackView {
-	double width();
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
+import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
+import cc.creativecomputing.controlui.timeline.view.track.CCTrackControlView;
+import cc.creativecomputing.gl.app.CCGLWindow;
+import cc.creativecomputing.math.CCColor;
+
+
+/**
+ * @author christianriekoff
+ *
+ */
+public class CCTrackView extends CCAbstractTrackView{
 	
-	double height();
+	public static final double PICK_RADIUS = 10;
+    public static final double GRID_INTERVAL = 5; // curve is calculated every GRID_INTERVAL points
 	
-	void render();
+	private CCTrackControlView _myControlView;
+	
+	public CCTrackView(
+		CCGLWindow theMainFrame,
+    	CCAbstractTrackDataView<?> theDataView,
+		CCTimelineController theTimelineController,
+		CCTrackController theController
+	) {
+		super(theMainFrame, theDataView);
+		_myControlView = new CCTrackControlView(theTimelineController, theController);
+		_myControlView.address(theController.property().path().getFileName().toString());
+	}
+	
+	public CCTrackControlView controlView() {
+		return _myControlView;
+	}
 
-	void update();
+	public void color(CCColor theColor) {
+		_myControlView.color(theColor);
+		_myDataView.color(theColor);
+	}
 
-	void value(String theValue);
+	@Override
+	public void mute(boolean theIsMuted) {
+		_myControlView.mute(theIsMuted);
+	}
+	
+	@Override
+	public void min(double theMin) {
+		_myControlView.min(theMin);
+	}
+	
+	@Override
+	public void max(double theMax) {
+		_myControlView.max(theMax);
+	}
 
-	void mute(boolean theIsMuted);
+	@Override
+	public void value(String theValue) {
+		_myControlView.value(theValue);
+	}
 
-	void moveRangeCursor();
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
 }

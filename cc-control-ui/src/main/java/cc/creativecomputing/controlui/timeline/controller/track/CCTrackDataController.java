@@ -26,13 +26,12 @@ import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
 import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
-import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.actions.RemoveControlPointAction;
 import cc.creativecomputing.controlui.timeline.view.CCTimedContentView;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
+import cc.creativecomputing.controlui.timeline.view.track.CCTrackView;
 import cc.creativecomputing.controlui.util.CCControlUndoHistory;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -41,7 +40,7 @@ import cc.creativecomputing.math.CCVector2;
  * @author christianriekoff
  *
  */
-public abstract class CCTrackDataController implements CCZoomable, CCTimedContentView {
+public abstract class CCTrackDataController implements CCTimedContentView {
 
 	protected CCAbstractTrackView _myTrackView;
 
@@ -153,14 +152,13 @@ public abstract class CCTrackDataController implements CCZoomable, CCTimedConten
 
 	public abstract CCControlPoint viewToCurveSpace(CCVector2 thePoint, boolean theGetPos);
 
-	@Override
 	public void setRange(double theLowerBound, double theUpperBound) {
 		if (_myTrackView != null)
 			_myTrackView.render();
 	}
 
 	protected double pickRange() {
-		return SwingTrackView.PICK_RADIUS / _myTrackView.width() * (_myTrackContext.viewTime());
+		return CCTrackView.PICK_RADIUS / _myTrackView.width() * (_myTrackContext.viewTime());
 	}
 
 	// picks the nearest point (could be null) and returns it in view space
@@ -215,7 +213,7 @@ public abstract class CCTrackDataController implements CCZoomable, CCTimedConten
 			case BEZIER:
 				CCHandleControlPoint myInputHandle = ((CCBezierControlPoint) myNextPoint).inHandle();
 
-				if (curveToViewSpace(myInputHandle).distance(theViewCoords) < SwingTrackView.PICK_RADIUS) {
+				if (curveToViewSpace(myInputHandle).distance(theViewCoords) < CCTrackView.PICK_RADIUS) {
 					return myInputHandle;
 				}
 				break;
@@ -226,7 +224,7 @@ public abstract class CCTrackDataController implements CCZoomable, CCTimedConten
 			myNextPoint = trackData().higher(myNextPoint);
 			if (myNextPoint != null && myNextPoint.type() == CCControlPointType.BEZIER) {
 				CCHandleControlPoint myInputHandle = ((CCBezierControlPoint) myNextPoint).inHandle();
-				if (curveToViewSpace(myInputHandle).distance(theViewCoords) < SwingTrackView.PICK_RADIUS) {
+				if (curveToViewSpace(myInputHandle).distance(theViewCoords) < CCTrackView.PICK_RADIUS) {
 					return myInputHandle;
 				}
 			}
@@ -237,14 +235,14 @@ public abstract class CCTrackDataController implements CCZoomable, CCTimedConten
 			case BEZIER:
 				CCHandleControlPoint myOutputHandle = ((CCBezierControlPoint) myPreviousPoint).outHandle();
 
-				if (curveToViewSpace(myOutputHandle).distance(theViewCoords) < SwingTrackView.PICK_RADIUS) {
+				if (curveToViewSpace(myOutputHandle).distance(theViewCoords) < CCTrackView.PICK_RADIUS) {
 					return myOutputHandle;
 				}
 				break;
 			case TIMED_EVENT:
 				CCHandleControlPoint myTimedEnd = ((CCTimedEventPoint) myPreviousPoint).endPoint();
 
-				if (CCMath.abs(curveToViewSpace(myTimedEnd).x - theViewCoords.x) < SwingTrackView.PICK_RADIUS) {
+				if (CCMath.abs(curveToViewSpace(myTimedEnd).x - theViewCoords.x) < CCTrackView.PICK_RADIUS) {
 					return myTimedEnd;
 				}
 				break;
@@ -258,7 +256,7 @@ public abstract class CCTrackDataController implements CCZoomable, CCTimedConten
 			}
 
 			CCHandleControlPoint myOutputHandle = ((CCBezierControlPoint) myPreviousPoint).outHandle();
-			if (curveToViewSpace(myOutputHandle).distance(theViewCoords) < SwingTrackView.PICK_RADIUS) {
+			if (curveToViewSpace(myOutputHandle).distance(theViewCoords) < CCTrackView.PICK_RADIUS) {
 				return myOutputHandle;
 			}
 		}

@@ -16,29 +16,25 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
-
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.CCTrackDataRenderer;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCVector2;
 
 public class CCStringTrackDataRenderer extends CCTrackDataRenderer{
 	
 	@Override
-	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCAbstractTrackDataView<?> theView, Graphics2D theG2d) {
+	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCAbstractTrackDataView<?> theView, CCGraphics g) {
 		if(theTimedEvent.content() == null || theTimedEvent.content().value() == null) {
 			return;
 		}
 		
-		
-		Point2D myPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.time(),1));
-		Point2D myEndPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.endTime(),1));
-		double width = myEndPos.getX() - myPos.getX();
-		theG2d.setColor(new Color(0,0,0,100));
+		CCVector2 myPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.time(),1));
+		CCVector2 myEndPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.endTime(),1));
+		double width = myEndPos.x - myPos.x;
+		g.color(0,0,0,100);
 		
 		FontMetrics myMetrix = theG2d.getFontMetrics();
 		String myString = theTimedEvent.content().value().toString();
@@ -48,7 +44,7 @@ public class CCStringTrackDataRenderer extends CCTrackDataRenderer{
 			myText.insert(0, myString.charAt(myIndex));
 			myIndex--;
 		}
-		theG2d.drawString(myText.toString(), (int) myPos.getX() + 5, (int) myPos.getY() + 15);
+		theG2d.drawString(myText.toString(), (int) myPos.x + 5, (int) myPos.getY() + 15);
 	}
 	
 	

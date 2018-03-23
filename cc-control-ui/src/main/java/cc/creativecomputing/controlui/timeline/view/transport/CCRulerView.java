@@ -24,7 +24,6 @@ import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPoint
 import cc.creativecomputing.control.timeline.point.CCMarkerPoint;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.CCUIConstants;
-import cc.creativecomputing.controlui.CCNumberBox.CCChangeValueBoxListener;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController.CCRulerInterval;
@@ -36,7 +35,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector2;
 
-public class CCRulerView extends CCAbstractTrackView implements CCChangeValueBoxListener{
+public class CCRulerView extends CCAbstractTrackView {
 	
 	public static final int MAX_RULER_LABELS = 10;
 	public static final double MIN_RULER_INTERVAL = 0.25;

@@ -48,36 +48,36 @@ public class CCPropertyPopUp extends CCUIMenu {
 		
 		addSeparator();
 		
-		addItem("Add To Timeline", () -> {_myControlComponent.timeline().addTrack(_myProperty);});
-		addItem("Write To Timeline", () -> {_myControlComponent.timeline().writeValues(_myProperty);});
-		addItem("Restore Default", () -> {_myProperty.restoreDefault();});
-		addItem("Restore Preset", () -> {_myProperty.restorePreset();} );
+//		addItem("Add To Timeline", e -> {_myControlComponent.timeline().addTrack(_myProperty);});
+//		addItem("Write To Timeline", e -> {_myControlComponent.timeline().writeValues(_myProperty);});
+		addItem("Restore Default", e -> {_myProperty.restoreDefault();});
+		addItem("Restore Preset", e -> {_myProperty.restorePreset();} );
 		
 		addSeparator();
 		
-		addItem("copy", () -> {clipboard = _myProperty.data();});
-		addItem("paste", () -> {
+		addItem("copy", e -> {clipboard = _myProperty.data();});
+		addItem("paste", e -> {
 			if(clipboard == null)return;
 			_myProperty.data(clipboard);
 		});
-		addItem("export", () -> {CCDataIO.saveDataObject(_myProperty.data(), CCNIOUtil.selectOutput("export preset", null, "json"));});
-		addItem("import", () -> {_myProperty.data(CCDataIO.createDataObject(CCNIOUtil.selectInput("import preset", null, "json")));});
+		addItem("export", e -> {CCDataIO.saveDataObject(_myProperty.data(), CCNIOUtil.selectOutput("export preset", null, "json"));});
+		addItem("import", e -> {_myProperty.data(CCDataIO.createDataObject(CCNIOUtil.selectInput("import preset", null, "json")));});
 	}
 	
 	public CCPropertyPopUp(CCObjectControl theObjectControl, CCPropertyHandle<?> theProperty, CCControlComponent theControlComponent) {
 		this(theProperty, theControlComponent);
 		
 		addSeparator();
-		addItem("hide unchanged", () -> {theObjectControl.hideUnchanged();});
-		addItem("show unchanged", () -> {theObjectControl.showUnchanged();});
+		addItem("hide unchanged", e -> {theObjectControl.hideUnchanged();});
+		addItem("show unchanged", e -> {theObjectControl.showUnchanged();});
 		addSeparator();
 		_myPresetMenue = new CCUIMenu(CCUIConstants.DEFAULT_FONT);
 	
-		addItem("presets", () -> {
+		addItem("presets", e -> {
 			_myPresetMenue.removeAll();
 			setPresets(theObjectControl.propertyHandle());
 		});
-		addItem("add preset", () -> {
+		addItem("add preset", e -> {
 			String myPreset = CCUIDialog.input(
 				"enter the preset name",
 				"add preset",
@@ -88,7 +88,7 @@ public class CCPropertyPopUp extends CCUIMenu {
 			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
 			myHandle.savePreset(myPreset, CCPresetHandling.RESTORED);
 		});
-		addItem("add preset selfcontained", () -> {
+		addItem("add preset selfcontained", e -> {
 			String myPreset = CCUIDialog.input(
 				"enter the preset name",
 				"add preset",
@@ -100,7 +100,7 @@ public class CCPropertyPopUp extends CCUIMenu {
 			myHandle.savePreset(myPreset, CCPresetHandling.SELFCONTAINED);
 		});
 		
-		addItem("remove current preset", () -> {
+		addItem("remove current preset", e -> {
 			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
 			for(CCUIWidget myWidget:_myPresetMenue) {
 				CCUIMenuItem myItem = (CCUIMenuItem)myWidget;
@@ -112,7 +112,7 @@ public class CCPropertyPopUp extends CCUIMenu {
 			}
 		});
 		
-		addItem("update current preset", () -> {
+		addItem("update current preset", e -> {
 			for(CCUIWidget myWidget:_myPresetMenue) {
 				CCUIMenuItem myItem = (CCUIMenuItem)myWidget;
 				if(myItem.checkBox().isSelected()){
@@ -166,7 +166,7 @@ public class CCPropertyPopUp extends CCUIMenu {
 	public void setPresets(CCObjectPropertyHandle theObjectHandle){
 		for(String myPreset:theObjectHandle.presets()){
 			CCUICheckBox myCheckBox = new CCUICheckBox();
-			_myPresetMenue.addItem(myCheckBox,myPreset, () -> {
+			_myPresetMenue.addItem(myCheckBox,myPreset, e -> {
 				for(CCUIWidget myWidget: _myPresetMenue) {
 					CCUIMenuItem myItem = (CCUIMenuItem)myWidget;
 					myItem.checkBox().isSelected(false, true);

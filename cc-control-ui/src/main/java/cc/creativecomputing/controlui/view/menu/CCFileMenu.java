@@ -65,7 +65,7 @@ public class CCFileMenu extends CCUIMenu{
 		private void addRecentItem(Path thePath){
 			myRecentItem.addItem(
 				thePath.toString(),
-				() ->{
+				e ->{
 					_myFileChooser.setDirectory(thePath.getParent());
 					_myFileManager.loadProject(thePath, _myTimelineContainer);
 				}
@@ -119,7 +119,7 @@ public class CCFileMenu extends CCUIMenu{
 	private void addTimelineFileItems(){
 		addItem(
 			"Load", 
-			() -> {
+			e -> {
 				Path myPath = _myFileChooser.openFile("Load Project");
 				if (myPath == null) return;
 				_myFileManager.loadProject(myPath, _myTimelineContainer);
@@ -129,7 +129,7 @@ public class CCFileMenu extends CCUIMenu{
 		
 		addItem(
 			"NEW",
-			() -> {
+			e -> {
 				_myFileChooser.resetPath();
 				_myTimelineContainer.reset();
 			}
@@ -137,7 +137,7 @@ public class CCFileMenu extends CCUIMenu{
 		
 		addItem(
 			"Save",
-			() -> {
+			e -> {
 				Path myPath = _myFileChooser.saveFile("Save Project");
 				if(myPath == null)return;
 				_myFileManager.saveProject(myPath, _myTimelineContainer);
@@ -165,7 +165,7 @@ public class CCFileMenu extends CCUIMenu{
 //		
 		addItem(
 			"Export Selection",
-			() -> {
+			e -> {
 				Path myPath = _myFileChooser.saveFile("save selection");
 				if (myPath == null)return;
 				_myFileManager.saveTimelineSelection(myPath, _myTimelineContainer.activeTimeline());

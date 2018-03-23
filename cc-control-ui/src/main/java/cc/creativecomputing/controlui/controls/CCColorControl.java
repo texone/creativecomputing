@@ -35,14 +35,14 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 
 	public CCColorControl(CCColorPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
-		
-		_myColorPicker = new CCUIColorPicker(CCUIConstants.DEFAULT_FONT, CCColor.RED, 100, 14);
+
+		_myColor = theHandle.value().clone();
+		_myColorPicker = new CCUIColorPicker(CCUIConstants.DEFAULT_FONT, _myColor, 100, 14);
 		addListener(theValue -> {
 			_myColor = theValue;
 			_myColorPicker.color(_myColor, false);
 		});
 		
-		_myColor = theHandle.value().clone();
  
 		_myColorPicker.changeEvents.add(c -> {
 			_myColor = new CCColor(c);

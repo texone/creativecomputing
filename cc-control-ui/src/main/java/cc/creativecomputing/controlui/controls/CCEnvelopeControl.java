@@ -35,7 +35,7 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 
 	private CCUILabelWidget _myButton;
 	
-	private CCEnvelopeEditor _myCurveFrame;
+	private CCEnvelopeEditor2 _myCurveFrame;
 
 	public CCEnvelopeControl(CCEnvelopeHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
@@ -47,7 +47,7 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 			_myCurveFrame.repaint();
 		});
 		
-		_myCurveFrame = new CCEnvelopeEditor(theHandle.path().toString());
+		_myCurveFrame = new CCEnvelopeEditor2(theHandle.path().toString());
 		_myCurveFrame.setSize(300, 300);
 		_myCurveFrame.addWindowListener(new WindowAdapter() {
 			

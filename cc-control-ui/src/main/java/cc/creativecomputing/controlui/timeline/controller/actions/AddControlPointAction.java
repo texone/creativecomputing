@@ -43,7 +43,7 @@ import cc.creativecomputing.controlui.util.Action;
  * @author christianriekoff
  *
  */
-public class AddControlPointAction implements Action{
+public class AddControlPointAction implements CCUndoAction{
 	
 	private CCTrackDataController _myTrackDataController;
 	private CCControlPoint _myControlPoint;

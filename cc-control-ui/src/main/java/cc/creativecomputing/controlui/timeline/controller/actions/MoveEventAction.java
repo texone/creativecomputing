@@ -45,7 +45,7 @@ import cc.creativecomputing.controlui.util.Action;
  * @author christianriekoff
  *
  */
-public class MoveEventAction implements Action{
+public class MoveEventAction implements CCUndoAction{
 	
 	private CCTrackDataController _myEventTrackController;
 	private CCTimedEventPoint _myEventPoint;

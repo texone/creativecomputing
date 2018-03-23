@@ -16,12 +16,6 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
-
 import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
@@ -32,7 +26,9 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackCont
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackDataView;
 import cc.creativecomputing.controlui.timeline.view.track.CCTrackDataRenderer;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 
 public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
 
@@ -52,14 +48,14 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
         }
         
         boolean myIsBezier = false;
-        Point2D p1 = theView.controller().curveToViewSpace(myFirstPoint, theStartTime);
-        Point2D p2 = theView.controller().curveToViewSpace(mySecondPoint, theStartTime);
-        double myA1X = p1.getX();
-        double myA1Y = p1.getY();
-        double myA2X = p2.getX();
-        double myA2Y = p2.getY();
-        double myX = p2.getX();
-        double myY = p2.getY();
+        CCVector2 p1 = theView.controller().curveToViewSpace(myFirstPoint, theStartTime);
+        CCVector2 p2 = theView.controller().curveToViewSpace(mySecondPoint, theStartTime);
+        double myA1X = p1.x;
+        double myA1Y = p1.y;
+        double myA2X = p2.x;
+        double myA2Y = p2.y;
+        double myX = p2.x;
+        double myY = p2.y;
         
         if(mySecondPoint.type() == CCControlPointType.STEP){
         	thePath.lineTo(myA2X, myA1Y);
@@ -70,17 +66,17 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
         if(mySecondPoint.type() == CCControlPointType.BEZIER){
         	myIsBezier = true;
         	CCBezierControlPoint myBezier2Point = (CCBezierControlPoint)mySecondPoint;
-        	Point2D myHandle = theView.controller().curveToViewSpace(myBezier2Point.inHandle(), theStartTime);
-        	myA2X = myHandle.getX();
-        	myA2Y = myHandle.getY();
+        	CCVector2 myHandle = theView.controller().curveToViewSpace(myBezier2Point.inHandle(), theStartTime);
+        	myA2X = myHandle.x;
+        	myA2Y = myHandle.y;
         	
         }
         if(myFirstPoint.type() == CCControlPointType.BEZIER){
         	myIsBezier = true;
         	CCBezierControlPoint myBezier1Point = (CCBezierControlPoint)myFirstPoint;
-        	Point2D myHandle = theView.controller().curveToViewSpace(myBezier1Point.outHandle(), theStartTime);
-        	myA1X = myHandle.getX();
-        	myA1Y = myHandle.getY();
+        	CCVector2 myHandle = theView.controller().curveToViewSpace(myBezier1Point.outHandle(), theStartTime);
+        	myA1X = myHandle.x;
+        	myA1Y = myHandle.y;
     	}
         if(myIsBezier){
         	thePath.curveTo(myA1X, myA1Y, myA2X, myA2Y, myX, myY);
@@ -94,8 +90,8 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
 
 //        if(mySecondPoint.getType() == ControlPointType.CUBIC && mySecondPoint.hasNext()){
 //        	ControlPoint myNextPoint = mySecondPoint.getNext();
-//        	Point2D myp2 = _myController.curveToViewSpace(myNextPoint);
-//        	thePath.quadTo(myX, myY, myp2.getX(), myp2.getY());
+//        	CCVector2 myp2 = _myController.curveToViewSpace(myNextPoint);
+//        	thePath.quadTo(myX, myY, myp2.x, myp2.y);
 //        	return;
 //        }
         
@@ -106,25 +102,25 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
 //	        for (double step = myStart + myInterval; step < mySecondPoint.time(); step = step + myInterval) {
 //	            double myValue = theController.trackData().value(step);
 //	            p1 = theView.controller().curveToViewSpace(new ControlPoint(step, myValue));
-//	            thePath.lineTo(p1.getX(), p1.getY());
+//	            thePath.lineTo(p1.x, p1.y);
 //	        }
 //        }
         
-        thePath.lineTo(p2.getX(), p2.getY());     
+        thePath.lineTo(p2.x, p2.y);     
     }
 	
-	private void drawCurve(CCCurveTrackController _myController, CCAbstractTrackDataView<?> theView, Graphics2D g, CCTimedEventPoint theEvent) {
+	private void drawCurve(CCCurveTrackController _myController, CCAbstractTrackDataView<?> theView, CCGraphics g, CCTimedEventPoint theEvent) {
     	
         if (_myController.trackData().size() == 0) {
         	double myLowerBound = CCMath.max(theEvent.time(), theView.context().lowerBound());
         	double myUpperBound = CCMath.min(theEvent.endTime(), theView.context().upperBound());
         	GeneralPath myPath = new GeneralPath();
-        	Point2D p1 = theView.controller().curveToViewSpace(new CCControlPoint(myLowerBound,_myController.value(0)));
-        	Point2D p2 = theView.controller().curveToViewSpace(new CCControlPoint(myUpperBound,_myController.value(0)));
-            myPath.moveTo(p1.getX(), p1.getY());
-            myPath.lineTo(p2.getX(), p2.getY());
+        	CCVector2 p1 = theView.controller().curveToViewSpace(new CCControlPoint(myLowerBound,_myController.value(0)));
+        	CCVector2 p2 = theView.controller().curveToViewSpace(new CCControlPoint(myUpperBound,_myController.value(0)));
+            myPath.moveTo(p1.x, p1.y);
+            myPath.lineTo(p2.x, p2.y);
             
-            g.setColor(theView.fillColor());
+            g.color(theView.fillColor());
             g.draw(myPath);
             return;
         }
@@ -133,10 +129,10 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
         	theView.context().lowerBound() - theEvent.time(), 
         	_myController.trackData().value(theView.context().lowerBound() - theEvent.time())
 		);
-        Point2D p1 = theView.controller().curveToViewSpace(new CCControlPoint(myMinPoint.time(), myMinPoint.value()), theEvent.time());
+        CCVector2 p1 = theView.controller().curveToViewSpace(new CCControlPoint(myMinPoint.time(), myMinPoint.value()), theEvent.time());
 
         GeneralPath myPath = new GeneralPath();
-        myPath.moveTo(p1.getX(), p1.getY());
+        myPath.moveTo(p1.x, p1.y);
         CCControlPoint myMaxPoint = _myController.trackData().ceiling(new CCControlPoint(theView.context().upperBound() - theEvent.time() + theEvent.contentOffset(), 0));
 		
 		if(myMaxPoint == null){
@@ -169,7 +165,7 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
     }
 	
 	@Override
-	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCAbstractTrackDataView<?> theView, Graphics2D theG2d) {
+	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCAbstractTrackDataView<?> theView, CCGraphics g) {
 		if(theTimedEvent.content() == null || theTimedEvent.content().value() == null) {
 			return;
 		}
@@ -179,15 +175,15 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
 		if(myTimelineController != null){
 			for(CCTrackController myTrackController:myTimelineController.trackController()){
 				if(myTrackController instanceof CCCurveTrackController){
-					drawCurve((CCCurveTrackController)myTrackController, theView, theG2d, theTimedEvent);
+					drawCurve((CCCurveTrackController)myTrackController, theView, g, theTimedEvent);
 				}
 			}
 		}
 		
-		Point2D myPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.time(),1));
-		Point2D myEndPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.endTime(),1));
-		double width = myEndPos.getX() - myPos.getX();
-		theG2d.setColor(new Color(0,0,0,100));
+		CCVector2 myPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.time(),1));
+		CCVector2 myEndPos = theView.controller().curveToViewSpace(new CCControlPoint(theTimedEvent.endTime(),1));
+		double width = myEndPos.x - myPos.x;
+		g.color(0,0,0,100);
 		
 		FontMetrics myMetrix = theG2d.getFontMetrics();
 		String myString = theTimedEvent.content().value().toString();
@@ -197,7 +193,7 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
 			myText.insert(0, myString.charAt(myIndex));
 			myIndex--;
 		}
-		theG2d.drawString(myText.toString(), (int) myPos.getX() + 5, (int) myPos.getY() + 15);
+		theG2d.drawString(myText.toString(), (int) myPos.x + 5, (int) myPos.y + 15);
 	}
 	
 	

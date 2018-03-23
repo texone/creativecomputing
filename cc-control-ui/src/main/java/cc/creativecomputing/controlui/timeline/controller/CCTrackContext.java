@@ -25,21 +25,13 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataContr
  * @author christianriekoff
  *
  */
-public class CCTrackContext implements CCZoomable{
-    
-    protected double _myLowerBound;
-    protected double _myUpperBound;
+public class CCTrackContext{
 
 	protected CCZoomController _myZoomController;
 
 	
 	public CCTrackContext() {
 		_myZoomController = new CCZoomController();
-		
-		_myZoomController.addZoomable(this);
-
-        _myLowerBound = 0;
-        _myUpperBound = 1;
 	}
 	
 	private CCTrackDataController _myActiveTrack;
@@ -71,15 +63,15 @@ public class CCTrackContext implements CCZoomable{
 	}
     
     public double lowerBound() {
-    	return _myLowerBound;
+    	return _myZoomController.range().start;
     }
     
     public double upperBound() {
-    	return _myUpperBound;
+    	return _myZoomController.range().end;
     }
     
     public double viewTime() {
-    	return _myUpperBound - _myLowerBound;
+    	return _myZoomController.range().length();
     }
 
 	/**
@@ -88,21 +80,5 @@ public class CCTrackContext implements CCZoomable{
 	 */
 	public CCZoomController zoomController() {
 		return _myZoomController;
-	}
-
-	@Override
-	public void setRange(double theLowerBound, double theUpperBound) {
-        if (theLowerBound > theUpperBound) {
-            double tmp = theLowerBound;
-            theLowerBound = theUpperBound;
-            theUpperBound = tmp;
-        }
-        _myLowerBound = theLowerBound;
-        _myUpperBound = theUpperBound;
-	}
-
-	
-	public void renderInfo(){
-		
 	}
 }

@@ -16,188 +16,155 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.geom.GeneralPath;
-
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
+import cc.creativecomputing.gl.app.CCGLKey;
+import cc.creativecomputing.graphics.CCDrawMode;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCBezierSpline;
 import cc.creativecomputing.math.spline.CCCatmulRomSpline;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 import cc.creativecomputing.math.spline.CCSpline;
 
-public class CCSplineEditor extends JFrame {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7258875972598552365L;
-
+public class CCSplineEditor extends CCGLApp {
 
 	private CCSpline _mySpline;
 	
-	
 	private CCVector3 _mySelectedPoint = null;
 	private CCVector3 _myHighlightedPoint = null;
-	CurvePane _myPane;
+	
+	private boolean _myShiftPressed = false;
+	
+	private CCVector2 _myMousePoint = new CCVector2();
 	
 	public CCSplineEditor(String theName) {
-		super(theName);
-		JPanel myPanel = new JPanel(new BorderLayout());
-		_myPane = new CurvePane();
-		myPanel.add(_myPane, "Center");
-
-		_myPane.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				if(_mySpline == null)return;
-				_mySelectedPoint = null;
+		
+		width = 200;
+		height = 200;
+		title = theName;
+		
+		keyPressEvents.add(e -> {
+			if(e.key == CCGLKey.KEY_LEFT_SHIFT || e.key == CCGLKey.KEY_RIGHT_SHIFT){
+				_myShiftPressed = true;
 			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				if(_mySpline == null)return;
-				
-				_mySelectedPoint = selectPoint(e);
-				_myPane.repaint();
+		});
+		keyReleaseEvents.add(e -> {
+			if(e.key == CCGLKey.KEY_LEFT_SHIFT || e.key == CCGLKey.KEY_RIGHT_SHIFT){
+				_myShiftPressed = false;
 			}
+		});
+		
+		mouseReleaseEvents.add(e -> {
+			if(_mySpline == null)return;
+			_mySelectedPoint = null;
+		});
+		mousePressEvents.add(e -> {
+			if(_mySpline == null)return;
 			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+			_mySelectedPoint = selectPoint(e.x, e.y);
+		});
+		mouseClickEvents.add(e -> {
+			if(_mySpline == null)return;
+			
+			if(e.clickCount != 2)return;
+			
+			CCVector3 myPoint = selectPoint(e.x, e.y);
+			if(myPoint == null){
+				_mySpline.beginEditSpline();
+				_mySpline.addPoint(new CCVector3(mouseToRelative(e.x, e.y)));
+				_mySpline.endEditSpline();
+				return;
 			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(_mySpline == null)return;
-				
-				if(e.getClickCount() == 2){
-					CCVector3 myPoint = selectPoint(e);
-					if(myPoint != null){
-						if(_mySpline instanceof CCBezierSpline){
-							int myIndex = _mySpline.points().indexOf(myPoint);
-							switch(myIndex % 3){
-							case 0:
-								if(myIndex > 0){
-									_mySpline.points().remove(myIndex - 1);
-									_mySpline.points().remove(myIndex - 1);
-									_mySpline.points().remove(myIndex - 1);
-								}else{
-									_mySpline.points().remove(0);
-									_mySpline.points().remove(0);
-									_mySpline.points().remove(0);
-								}
-								break;
-							case 1:
-								myPoint.set(_mySpline.points().get(myIndex - 1));
-								break;
-							case 2:
-								myPoint.set(_mySpline.points().get(myIndex + 1));
-								break;
-							}
-						}else{
-							_mySpline.beginEditSpline();
-							_mySpline.points().remove(myPoint);
-							_mySpline.endEditSpline();
-						}
-						_myPane.repaint();
-						return;
+			if(_mySpline instanceof CCBezierSpline){
+				int myIndex = _mySpline.points().indexOf(myPoint);
+				switch(myIndex % 3){
+				case 0:
+					if(myIndex > 0){
+						_mySpline.points().remove(myIndex - 1);
+						_mySpline.points().remove(myIndex - 1);
+						_mySpline.points().remove(myIndex - 1);
+					}else{
+						_mySpline.points().remove(0);
+						_mySpline.points().remove(0);
+						_mySpline.points().remove(0);
 					}
-					
-					_mySpline.beginEditSpline();
-					_mySpline.addPoint(new CCVector3(mouseToRelative(e)));
-					_mySpline.endEditSpline();
-					_myPane.repaint();
+					break;
+				case 1:
+					myPoint.set(_mySpline.points().get(myIndex - 1));
+					break;
+				case 2:
+					myPoint.set(_mySpline.points().get(myIndex + 1));
+					break;
 				}
+			}else{
+				_mySpline.beginEditSpline();
+				_mySpline.points().remove(myPoint);
+				_mySpline.endEditSpline();
 			}
 		});
 
-		_myPane.addMouseMotionListener(new MouseMotionListener() {
+		mouseMoveEvents.add(e ->{
+			if(_mySpline == null)return;
+			_myMousePoint.x = e.x;
+			_myMousePoint.y = e.y;
+			_myHighlightedPoint = selectPoint(e.x, e.y);
+		});
+		
+		mouseDragEvents.add(e -> {
+			if(_mySpline == null)return;
+			if(_mySelectedPoint == null)return;
 			
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				if(_mySpline == null)return;
-				
-				_myHighlightedPoint = selectPoint(e);
-				_myPane.repaint();
-			}
+			CCVector3 myNewPos = mouseToRelative(e.x, e.y);
+			CCVector3 myMotion = myNewPos.subtract(_mySelectedPoint);
+			_mySelectedPoint.set(myNewPos);
 			
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				if(_mySpline == null)return;
-				if(_mySelectedPoint == null)return;
-				
-				CCVector3 myNewPos = mouseToRelative(e);
-				CCVector3 myMotion = myNewPos.subtract(_mySelectedPoint);
-				_mySelectedPoint.set(myNewPos);
-				
-				if(_mySpline instanceof CCBezierSpline){
-					int myIndex = _mySpline.points().indexOf(_mySelectedPoint);
-					switch(myIndex % 3){
-					case 0:
-						if(myIndex > 0){
-							_mySpline.points().get(myIndex - 1).addLocal(myMotion);
-						}
-						if(myIndex < _mySpline.points().size() - 1){
-							_mySpline.points().get(myIndex + 1).addLocal(myMotion);
-						}
-						break;
-					case 1:
-						if(e.isShiftDown() && myIndex > 1){
-							CCVector3 myAnchor = _mySpline.points().get(myIndex - 1);
-							CCVector3 myControl2 = _mySpline.points().get(myIndex - 2);
-							CCVector3 myDifference = _mySelectedPoint.subtract(myAnchor);
-							myControl2.set(myAnchor.subtract(myDifference));
-						}
-						break;
-					case 2:
-						if(e.isShiftDown() && myIndex <  _mySpline.points().size() - 2){
-							CCVector3 myAnchor = _mySpline.points().get(myIndex + 1);
-							CCVector3 myControl2 = _mySpline.points().get(myIndex + 2);
-							CCVector3 myDifference = _mySelectedPoint.subtract(myAnchor);
-							myControl2.set(myAnchor.subtract(myDifference));
-						}
-						break;
+			if(_mySpline instanceof CCBezierSpline){
+				int myIndex = _mySpline.points().indexOf(_mySelectedPoint);
+				switch(myIndex % 3){
+				case 0:
+					if(myIndex > 0){
+						_mySpline.points().get(myIndex - 1).addLocal(myMotion);
 					}
+					if(myIndex < _mySpline.points().size() - 1){
+						_mySpline.points().get(myIndex + 1).addLocal(myMotion);
+					}
+					break;
+				case 1:
+					if(_myShiftPressed && myIndex > 1){
+						CCVector3 myAnchor = _mySpline.points().get(myIndex - 1);
+						CCVector3 myControl2 = _mySpline.points().get(myIndex - 2);
+						CCVector3 myDifference = _mySelectedPoint.subtract(myAnchor);
+						myControl2.set(myAnchor.subtract(myDifference));
+					}
+					break;
+				case 2:
+					if(_myShiftPressed && myIndex <  _mySpline.points().size() - 2){
+						CCVector3 myAnchor = _mySpline.points().get(myIndex + 1);
+						CCVector3 myControl2 = _mySpline.points().get(myIndex + 2);
+						CCVector3 myDifference = _mySelectedPoint.subtract(myAnchor);
+						myControl2.set(myAnchor.subtract(myDifference));
+					}
+					break;
 				}
-				_myPane.repaint();
 			}
 		});
-
-		getContentPane().add(myPanel);
-		setAlwaysOnTop(true);
-		setSize(200, 200);
 	}
 	
-	private CCVector3 mouseToRelative(MouseEvent e){
+	private CCVector3 mouseToRelative(double theX, double theY){
 		return new CCVector3(
-			CCMath.saturate(CCMath.norm(e.getX(), 10, _myPane.getWidth() - 10)),
-			CCMath.saturate(CCMath.norm(e.getY(), 10, _myPane.getHeight() - 10))
+			CCMath.saturate(CCMath.norm(theX, 10, width - 10)),
+			CCMath.saturate(CCMath.norm(theY, 10, height - 10))
 		);
 	}
 	
 	private CCVector3 relativeToMouse(CCVector3 theRelative){
 		return new CCVector3(
-			CCMath.blend(10, _myPane.getWidth() - 10, theRelative.x), 
-			CCMath.blend(10, _myPane.getHeight() - 10, theRelative.y)
+			CCMath.blend(10, width - 10, theRelative.x), 
+			CCMath.blend(10, height - 10, theRelative.y)
 		);
 	}
 	
@@ -205,17 +172,16 @@ public class CCSplineEditor extends JFrame {
 		_mySpline = theSpline;
 	}
 	
-	private CCVector3 selectPoint(MouseEvent e){
+	private CCVector3 selectPoint(double theX, double theY){
 		for(CCVector3 myPoint:_mySpline.points()){
 			CCVector3 myMouseCoord = relativeToMouse(myPoint);
 			double x0 = myMouseCoord.x - CURVE_POINT_SIZE / 2;
 			double y0 = myMouseCoord.y - CURVE_POINT_SIZE / 2;
-			
 			if(
-				e.getX() >= x0 && 
-				e.getX() <= x0 + CURVE_POINT_SIZE && 
-				e.getY() >= y0 && 
-				e.getY() <= y0 + CURVE_POINT_SIZE
+				theX >= x0 && 
+				theX <= x0 + CURVE_POINT_SIZE && 
+				theY >= y0 && 
+				theY <= y0 + CURVE_POINT_SIZE
 			){
 				return myPoint;
 			}
@@ -223,97 +189,85 @@ public class CCSplineEditor extends JFrame {
 		
 		return null;
 	}
-	public static final int CURVE_POINT_SIZE = 5;
+	public static final int CURVE_POINT_SIZE = 10;
+	
+	private CCVector3 mouseSplinePoint(int i){
+		return relativeToMouse(_mySpline.points().get(i));
+	}
+	
+	@Override
+	public void display(CCGraphics g) {
+		if(_mySpline == null)return;
+		if(_mySpline.points().size() <= 0)return;
 
-	@SuppressWarnings("serial")
-	class CurvePane extends JComponent {
-		public CurvePane() {
-			
+		g.clear();
+		g.pushAttribute();
+		g.pushMatrix();
+		g.ortho();
+		if(_mySpline instanceof CCLinearSpline){
+			g.color(CCColor.LIGHT_GRAY);
+			g.beginShape(CCDrawMode.LINE_STRIP);
+			for(int i = 0; i < _mySpline.points().size();i++){
+				CCVector3 myPoint = mouseSplinePoint(i);
+				g.vertex(myPoint.x, myPoint.y);
+			}
+			g.endShape();
+		}else if(_mySpline instanceof CCCatmulRomSpline || _mySpline instanceof CCBezierSpline){
+			g.color(CCColor.LIGHT_GRAY);
+			g.beginShape(CCDrawMode.LINE_STRIP);
+			for(double i = 0; i <= _mySpline.points().size() * 100;i++){
+				double myBlend = i / (_mySpline.points().size() * 100);
+				CCVector3 myPoint = relativeToMouse(_mySpline.interpolate(myBlend));
+				g.vertex(myPoint.x, myPoint.y);
+			}
+			g.endShape();
 		}
 		
-		private void point(Graphics2D g2d, CCVector3 thePoint){
-			CCVector3 mouseCoord = relativeToMouse(thePoint);
-			g2d.fillOval(
-				(int) (mouseCoord.x) - CURVE_POINT_SIZE / 2,
-				(int) (mouseCoord.y) - CURVE_POINT_SIZE / 2, 
-				CURVE_POINT_SIZE, CURVE_POINT_SIZE
-			);
-		}
-		
-		private CCVector3 mouseSplinePoint(int i){
-			return relativeToMouse(_mySpline.points().get(i));
-		}
+		if(_mySpline instanceof CCBezierSpline){
+			g.color(CCColor.GRAY);
+			g.beginShape(CCDrawMode.LINES);
+			for(int i = 1; i < _mySpline.points().size();i+=3){
+				CCVector3 myPoint = mouseSplinePoint(i-1);
+				CCVector3 myPoint1 = mouseSplinePoint(i);
+				CCVector3 myPoint2 = mouseSplinePoint(i + 1);
+				CCVector3 myPoint3 = mouseSplinePoint(i + 2);
 
-		public void paint(Graphics g) {
-			if(_mySpline == null)return;
-			if(_mySpline.points().size() <= 0)return;
-
-			Graphics2D g2d = (Graphics2D)g;
-
-			g2d.setColor(Color.LIGHT_GRAY);
-			
-			GeneralPath myPath = new GeneralPath();
-			GeneralPath myBezierPath = new GeneralPath();
-			CCVector3 myPoint = mouseSplinePoint(0);
-			myPath.moveTo(myPoint.x, myPoint.y);
-
-			if(_mySpline instanceof CCLinearSpline){
-				for(int i = 1; i < _mySpline.points().size();i++){
-					myPoint = mouseSplinePoint(i);
-					myPath.lineTo(myPoint.x, myPoint.y);
-				}
-			}else if(_mySpline instanceof CCCatmulRomSpline){
-				for(double i = 0; i <= _mySpline.points().size() * 100;i++){
-					double myBlend = i / (_mySpline.points().size() * 100);
-					myPoint = relativeToMouse(_mySpline.interpolate(myBlend));
-					myPath.lineTo(myPoint.x, myPoint.y);
-				}
-			}else if(_mySpline instanceof CCBezierSpline){
-				
-				for(int i = 1; i < _mySpline.points().size();i+=3){
-					myPoint = mouseSplinePoint(i);
-					CCVector3 myPoint1 = mouseSplinePoint(i + 1);
-					CCVector3 myPoint2 = mouseSplinePoint(i + 2);
-					myPath.curveTo(
-						myPoint.x, myPoint.y, 
-						myPoint1.x, myPoint1.y, 
-						myPoint2.x, myPoint2.y
-					);
-				}
-				for(int i = 1; i < _mySpline.points().size();i+=3){
-					myPoint = mouseSplinePoint(i-1);
-					CCVector3 myPoint1 = mouseSplinePoint(i);
-					CCVector3 myPoint2 = mouseSplinePoint(i + 1);
-					CCVector3 myPoint3 = mouseSplinePoint(i + 2);
-					myBezierPath.moveTo(myPoint.x, myPoint.y); 
-					myBezierPath.lineTo(myPoint1.x, myPoint1.y);
-					myBezierPath.moveTo(myPoint2.x, myPoint2.y);
-					myBezierPath.lineTo(myPoint3.x, myPoint3.y);
-					
-				}
+				g.vertex(myPoint.x, myPoint.y); 
+				g.vertex(myPoint1.x, myPoint1.y);
+				g.vertex(myPoint2.x, myPoint2.y);
+				g.vertex(myPoint3.x, myPoint3.y);
 			}
-			g2d.setColor(Color.LIGHT_GRAY);
-			g2d.draw(myPath);
-			g2d.setColor(Color.GRAY);
-			g2d.draw(myBezierPath);
-			
-			g2d.setColor(Color.BLACK);
-			
-			for(CCVector3 myPoint0:_mySpline.points()){
-				point(g2d, myPoint0);
-			}
-
-			g2d.setColor(Color.RED);
-			if(_myHighlightedPoint != null)point(g2d, _myHighlightedPoint);
+			g.endShape();
 		}
+			
+		g.pointSize(CURVE_POINT_SIZE);
+		g.beginShape(CCDrawMode.POINTS);
+		g.color(CCColor.WHITE);
+		for(CCVector3 myPoint:_mySpline.points()){
+			CCVector3 mySplinePoint = relativeToMouse(myPoint);
+			g.vertex(mySplinePoint.x, mySplinePoint.y);
+		}
+
+		g.color(CCColor.RED);
+		if(_myHighlightedPoint != null)g.vertex(relativeToMouse(_myHighlightedPoint));
+		g.endShape();
+		g.popMatrix();
+		g.popAttribute();
 	}
 
-	
-
 	public static void main(String[] args) {
-		CCSplineEditor myEditor = new CCSplineEditor("check");
-		myEditor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		myEditor.spline(new CCBezierSpline(false));
-		myEditor.setVisible(true);
+		CCSplineEditor myDemo = new CCSplineEditor("spline editor");
+		myDemo.width = 1800;
+		myDemo.height = 1000;
+		
+		CCBezierSpline mySpline = new CCBezierSpline();
+		mySpline.beginEditSpline();
+		for(int i = 0; i < 10; i++){
+			mySpline.addPoint(new CCVector3(CCMath.random(), CCMath.random()));
+		}
+		mySpline.endEditSpline();
+		myDemo._mySpline = mySpline;
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

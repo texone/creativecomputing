@@ -26,7 +26,7 @@ import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint.TimedData;
 import cc.creativecomputing.controlui.timeline.controller.actions.MoveEventAction;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
+import cc.creativecomputing.controlui.timeline.view.track.CCTrackView;
 import cc.creativecomputing.controlui.util.CCControlUndoHistory;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
@@ -139,7 +139,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 			}else{
 				_myDragAction = EventAction.DRAG_END_OFFSET;
 			}
-		} else if (myControlPoint != null  && Math.abs(_myController.curveToViewSpace(myControlPoint).x - _myPressViewCoords.x) < SwingTrackView.PICK_RADIUS){
+		} else if (myControlPoint != null  && Math.abs(_myController.curveToViewSpace(myControlPoint).x - _myPressViewCoords.x) < CCTrackView.PICK_RADIUS){
 			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myControlPoint);
 			_myEditedEvent = (CCTimedEventPoint)myControlPoint;
@@ -205,7 +205,7 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 			}else{
 				_myDragAction = EventAction.DRAG_END_OFFSET;
 			}
-		} else if (myControlPoint != null  && Math.abs(_myController.curveToViewSpace(myControlPoint).x - _myPressViewCoords.x) < SwingTrackView.PICK_RADIUS){
+		} else if (myControlPoint != null  && Math.abs(_myController.curveToViewSpace(myControlPoint).x - _myPressViewCoords.x) < CCTrackView.PICK_RADIUS){
 			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myControlPoint);
 			if(!mySwitchAction){

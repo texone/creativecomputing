@@ -32,7 +32,6 @@ import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.control.timeline.CCAbstractTrack;
@@ -107,7 +106,7 @@ public class CCTimelineController extends CCTrackContext {
 		_myView = theView;
 		_myView.controller(this);
 		_myTransportController.rulerView(_myView.rulerView());
-		_myZoomController.addZoomable(_myTransportController);
+		_myZoomController.events.add(_myTransportController::setRange);
 	}
 	
 	public CCObjectPropertyHandle rootHandle(){

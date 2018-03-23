@@ -14,146 +14,242 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-/*  
- * Copyright (c) 2012 Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import cc.creativecomputing.control.timeline.CCTrackData;
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
+import cc.creativecomputing.gl.app.CCGLKey;
+import cc.creativecomputing.graphics.CCDrawMode;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.math.spline.CCBezierSpline;
 
-import cc.creativecomputing.control.timeline.CCTrack;
-import cc.creativecomputing.controlui.CCControlApp;
-import cc.creativecomputing.controlui.timeline.view.SwingCurvePanel;
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.gl.app.CCGLWindow;
+public class CCEnvelopeEditor extends CCGLApp {
 
-/**
- * @author christianriekoff
- *
- */
-public class CCEnvelopeEditor extends JFrame {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private SwingCurvePanel _myCurvePanel;
+	private CCTrackData _myTrackData;
 	
-	private void saveWindowPosition(String thePath){
-		CCControlApp.preferences.put(thePath + "/x" , getX() + "");
-		CCControlApp.preferences.put(thePath + "/y" , getY() + "");
-		CCControlApp.preferences.put(thePath + "/width" , getWidth() + "");
-		CCControlApp.preferences.put(thePath + "/height" , getHeight() + "");
+	private CCControlPoint _mySelectedPoint = null;
+	private CCControlPoint _myHighlightedPoint = null;
+	
+	private boolean _myShiftPressed = false;
+	
+	private CCVector2 _myMousePoint = new CCVector2();
+	
+	public CCEnvelopeEditor(String theName) {
+		
+		width = 200;
+		height = 200;
+		title = theName;
+		
+		keyPressEvents.add(e -> {
+			if(e.key == CCGLKey.KEY_LEFT_SHIFT || e.key == CCGLKey.KEY_RIGHT_SHIFT){
+				_myShiftPressed = true;
+			}
+		});
+		keyReleaseEvents.add(e -> {
+			if(e.key == CCGLKey.KEY_LEFT_SHIFT || e.key == CCGLKey.KEY_RIGHT_SHIFT){
+				_myShiftPressed = false;
+			}
+		});
+		
+		mouseReleaseEvents.add(e -> {
+			if(_myTrackData == null)return;
+			_mySelectedPoint = null;
+		});
+		mousePressEvents.add(e -> {
+			if(_myTrackData == null)return;
+			
+			_mySelectedPoint = selectPoint(e.x, e.y);
+		});
+		mouseClickEvents.add(e -> {
+			if(_myTrackData == null)return;
+			
+			if(e.clickCount != 2)return;
+			
+			CCControlPoint myPoint = selectPoint(e.x, e.y);
+			if(myPoint == null){
+				myPoint = mouseToTrack(e.x, e.y);
+				myPoint.type(CCControlPointType.LINEAR);
+				_myTrackData.add(myPoint);
+				return;
+			}
+			
+			_myTrackData.remove(myPoint);
+			_myHighlightedPoint = null;
+		});
+
+		mouseMoveEvents.add(e ->{
+			if(_myTrackData == null)return;
+			_myMousePoint.x = e.x;
+			_myMousePoint.y = e.y;
+			_myHighlightedPoint = selectPoint(e.x, e.y);
+		});
+		
+		mouseDragEvents.add(e -> {
+			if(_myTrackData == null)return;
+			if(_mySelectedPoint == null)return;
+			
+			_myTrackData.move(_mySelectedPoint, mouseToTrack(e.x, e.y));
+		});
 	}
-
-	public CCEnvelopeEditor(String theTitle, CCGLWindow theWindow) {
-		super(theTitle);
-		_myCurvePanel = new SwingCurvePanel(this);
 	
-		JPanel containerPanel = new JPanel();
-		containerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		containerPanel.setLayout(new BorderLayout());
-		// panel to test
-		JPanel testPanel = new JPanel();
-		testPanel.setBackground(Color.blue);
-		containerPanel.add(_myCurvePanel.dataView(), BorderLayout.CENTER);
-
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(containerPanel, BorderLayout.CENTER);
-		
-		theWindow.closeEvents.add(e -> {
-			CCControlApp.preferences.put(theTitle + "/open" , false + "");
-		});
-		theWindow.windowSizeEvents.add(e -> {
-			
-		});
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowOpened(WindowEvent e) {
-				CCControlApp.preferences.put(theTitle + "/open" , true + "");
+	private CCControlPoint selectPoint(double theX, double theY){
+		for(CCControlPoint myPoint:_myTrackData){
+			CCVector2 myMouseCoord = trackToMouse(myPoint);
+			double x0 = myMouseCoord.x - CURVE_POINT_SIZE / 2;
+			double y0 = myMouseCoord.y - CURVE_POINT_SIZE / 2;
+			if(
+				theX >= x0 && 
+				theX <= x0 + CURVE_POINT_SIZE && 
+				theY >= y0 && 
+				theY <= y0 + CURVE_POINT_SIZE
+			){
+				return myPoint;
 			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-			}
-		});
-		
-		addComponentListener(new ComponentAdapter() {
-			
-			@Override
-			public void componentResized(ComponentEvent e) {
-				saveWindowPosition(theTitle);
-			}
-			
-			@Override
-			public void componentMoved(ComponentEvent e) {
-				saveWindowPosition(theTitle);
-			}
-			
-		});
-		
-		if(CCControlApp.preferences.getInt(theTitle + "/x", -1) != -1){
-			CCLog.info(CCControlApp.preferences.getInt(theTitle + "/x", -1), CCControlApp.preferences.getInt(theTitle + "/y", -1));
-			setLocation(
-				CCControlApp.preferences.getInt(theTitle + "/x", -1), 
-				CCControlApp.preferences.getInt(theTitle + "/y", -1)
-			);
-			setSize(
-				CCControlApp.preferences.getInt(theTitle + "/width", -1), 
-				CCControlApp.preferences.getInt(theTitle + "/height", -1)
-			);
 		}
-
-		pack();
+		
+		return null;
 	}
 	
-	public void render(){
-		_myCurvePanel.render();
+	private CCControlPoint mouseToTrack(double theX, double theY){
+		return new CCControlPoint(
+			CCMath.saturate(CCMath.norm(theX, 0, width)),
+			CCMath.saturate(CCMath.norm(theY, 0, height))
+		);
 	}
 	
-	public void update(){
-		_myCurvePanel.update();
+	private CCVector2 trackToMouse(CCControlPoint thePoint){
+		return new CCVector2(
+			CCMath.blend(0, width, thePoint.time()), 
+			CCMath.blend(0, height, thePoint.value())
+		);
 	}
-
-	public CCTrack track() {
-		return _myCurvePanel.track();
+	
+	public void trackData(CCTrackData theData){
+		_myTrackData = theData;
 	}
+	
 
-	public double value(double theIn) {
-		return _myCurvePanel.value(theIn);
-	}
+	public static final int CURVE_POINT_SIZE = 10;
+	
+	@Override
+	public void display(CCGraphics g) {
+		if(_myTrackData == null)return;
+		if(_myTrackData.size() <= 0)return;
 
-	public SwingCurvePanel panel() {
-		return _myCurvePanel;
+		g.clear();
+		g.pushAttribute();
+		g.pushMatrix();
+		g.ortho();
+		g.scale(g.width(), g.height());
+		
+		List<CCControlPoint> myRangeList = _myTrackData.rangeList(0, 1);
+		CCControlPoint myFirstPointOut = _myTrackData.getLastPointBefore(0);
+		CCControlPoint myFirstPointIn = _myTrackData.getFirstPointAfter(0);
+		CCControlPoint myLastPointOut = _myTrackData.getFirstPointAfter(1.);
+		CCControlPoint myLastPointIn = _myTrackData.getLastPointBefore(1.);
+		
+		g.color(1d,0.25);
+		
+		List<CCControlPoint> myPoints = new ArrayList<>(); 
+
+		if(myFirstPointOut != null){
+			myPoints.add(myFirstPointOut);
+		}else if(myFirstPointIn != null){
+			myPoints.add(new CCControlPoint(0, myFirstPointIn.value()));
+		}
+		myPoints.addAll(myRangeList);
+		if(myLastPointOut != null){
+			myPoints.add(myLastPointOut);
+		}else if(myLastPointIn != null){
+			myPoints.add(new CCControlPoint(1, myLastPointIn.value()));
+		}
+		
+		g.beginShape(CCDrawMode.TRIANGLE_STRIP);
+		
+		CCControlPointType myPreviousType = CCControlPointType.LINEAR;
+		for(CCControlPoint myPoint:myPoints){
+			switch(myPreviousType){
+			case STEP:
+				g.vertex(myPoint.time(), myPoint.previous().value());
+				g.vertex(myPoint.time(), 1d);
+				g.vertex(myPoint.time(), myPoint.value());
+				g.vertex(myPoint.time(), 1d);
+				break;
+			case LINEAR:
+				g.vertex(myPoint.time(), myPoint.value());
+				g.vertex(myPoint.time(), 1d);
+				break;
+			}
+			myPreviousType = myPoint.type();
+			
+		}
+		g.endShape();
+		
+
+		g.color(1d,0.5);
+		g.beginShape(CCDrawMode.LINE_STRIP);
+		
+		myPreviousType = CCControlPointType.LINEAR;
+		for(CCControlPoint myPoint:myPoints){
+			switch(myPreviousType){
+			case STEP:
+				g.vertex(myPoint.time(), myPoint.previous().value());
+				g.vertex(myPoint.time(), myPoint.value());
+				break;
+			case LINEAR:
+				g.vertex(myPoint.time(), myPoint.value());
+				break;
+			}
+			myPreviousType = myPoint.type();
+		}
+		g.endShape();
+		
+		g.color(1d);
+		g.pointSize(CURVE_POINT_SIZE);
+		g.beginShape(CCDrawMode.POINTS);
+		for(CCControlPoint myPoint0:myRangeList){
+			g.vertex(myPoint0.time(), myPoint0.value());
+		}
+		
+		g.color(CCColor.RED);
+		if(_myHighlightedPoint != null){
+			g.vertex(_myHighlightedPoint.time(), _myHighlightedPoint.value());
+		}
+		g.endShape();
+		
+		g.popMatrix();
+		g.popAttribute();
 	}
 
 	public static void main(String[] args) {
-		CCEnvelopeEditor myFrame = new CCEnvelopeEditor("check it");
-		myFrame.setVisible(true);
+		CCEnvelopeEditor myDemo = new CCEnvelopeEditor("spline editor");
+		myDemo.width = 1800;
+		myDemo.height = 1000;
+		
+		CCBezierSpline mySpline = new CCBezierSpline();
+		mySpline.beginEditSpline();
+		for(int i = 0; i < 10; i++){
+			mySpline.addPoint(new CCVector3(CCMath.random(), CCMath.random()));
+		}
+		mySpline.endEditSpline();
+		myDemo._myTrackData = new CCTrackData();
+		myDemo._myTrackData.add(new CCControlPoint(-0.1, CCMath.random(), CCControlPointType.LINEAR));
+		for(int i = 0; i < 10;i++){
+			myDemo._myTrackData.add(new CCControlPoint(CCMath.random(), CCMath.random(), CCControlPointType.LINEAR));
+			myDemo._myTrackData.add(new CCControlPoint(CCMath.random(), CCMath.random(), CCControlPointType.STEP));
+		}
+		myDemo._myTrackData.add(new CCControlPoint(1.1, CCMath.random(), CCControlPointType.LINEAR));
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

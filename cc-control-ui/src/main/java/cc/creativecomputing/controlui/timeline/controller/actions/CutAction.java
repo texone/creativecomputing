@@ -47,7 +47,7 @@ import cc.creativecomputing.controlui.util.Action;
  * @author christianriekoff
  *
  */
-public class CutAction implements Action{
+public class CutAction implements CCUndoAction{
 	
 	private CCTrackController _myTrackDataController;
 	private ArrayList<CCControlPoint> _myControlPoints;

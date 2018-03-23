@@ -16,31 +16,27 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.prefs.Preferences;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
-import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.view.transport.CCTransportView;
 import cc.creativecomputing.controlui.view.menu.CCFileMenu;
 import cc.creativecomputing.controlui.view.menu.CCTimelineMenu;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
-import cc.creativecomputing.gl.app.CCGLWindow;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.font.CCCharSet;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
-import cc.creativecomputing.ui.widget.CCUIMenu;
 import cc.creativecomputing.ui.widget.CCUIMenuBar;
 
-public class CCControlApp  {
+public class CCControlApp  extends CCGLApp{
 	
 	public static class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 		  public void uncaughtException(Thread t, Throwable e) {
@@ -61,8 +57,6 @@ public class CCControlApp  {
 		    System.setProperty("sun.awt.exception.handler", ExceptionHandler.class.getName());
 		  }
 		}
-
-	private Map<String, CCCustomMenu> _myCustomMenues = new HashMap<>();
 	
 	private CCObjectPropertyHandle _myRootHandle;
 
@@ -72,11 +66,8 @@ public class CCControlApp  {
 	private CCControlComponent _myControlComponent;
 	
 	private CCTransportView _myTransport;
-	
 
 	private CCUIMenuBar _myMenuBar;
-	
-	private CCGLWindow _myWindow;
 	
 	@CCProperty(name = "update timeline")
 	private boolean _cUpdate = true;
@@ -85,34 +76,29 @@ public class CCControlApp  {
 	
 	private CCUIContext _myContext;
 	
-	private void init(CCGLApp theApp, Object theObject){
-
-		CCLog.info("COSTRUCT");
+	private void init(Object theObject){
+		
 		CCUIConstants.DEFAULT_FONT = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
 		CCUIConstants.DEFAULT_FONT_2 = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 40, 2, 2);
 		CCUIConstants.MENUE_FONT = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 30, 2, 2);
-
-        // Create and set up the window.
-        _myWindow = theApp.createWindow(1000,400,"Creative Computing Controls");
 		
-        setData(theObject);
+		_myRootHandle = new CCObjectPropertyHandle(theObject, "settings");
 		_myTimelineContainer = new CCTimelineContainer(this, _myRootHandle);
-
-//        _myControlComponent = new CCControlComponent(_myWindow);
+        _myControlComponent = new CCControlComponent(this);
+        _myControlComponent.setData(_myRootHandle);
         
         CCUIVerticalFlowPane myVerticalPane = new CCUIVerticalFlowPane();
 		myVerticalPane.inset(5);
 		myVerticalPane.space(5);
-		myVerticalPane.translation().set(-_myWindow.framebufferSize().x / 2, _myWindow.framebufferSize().y / 2);
+		myVerticalPane.translation().set(-framebufferSize().x / 2, framebufferSize().y / 2);
 		myVerticalPane.updateMatrices();
-        _myContext = new CCUIContext(_myWindow, myVerticalPane);
+        _myContext = new CCUIContext(this, myVerticalPane);
         
-        _myWindow.frameBufferSizeEvents.add(size ->{
-        		CCLog.info(size);
-        		_myContext.widget().translation().set(-size.x / 2, size.y / 2);
-        		_myContext.widget().updateMatrices();
+        frameBufferSizeEvents.add(size ->{
+        	_myContext.widget().translation().set(-size.x / 2, size.y / 2);
+        	_myContext.widget().updateMatrices();
         });
-//        
+       
         _myFileManager = new CCFileManager();
         _myMenuBar = new CCUIMenuBar(CCUIConstants.MENUE_FONT);
         _myMenuBar.add("file", new CCFileMenu(CCUIConstants.MENUE_FONT, _myFileManager, _myTimelineContainer));
@@ -123,25 +109,25 @@ public class CCControlApp  {
 		_myContext.widget().addChild(_myTransport);
         
         // Add content to the window.
-//		_myContext.widget().addChild(_myControlComponent);
+		_myContext.widget().addChild(_myControlComponent);
         
 //        theApp.window().updateEvents.add(timer -> {update(timer.deltaTime());});
         
-        _myWindow.drawEvents.add( g -> {
+        drawEvents.add( g -> {
         	g.clearColor(0,0d,0);
         	g.clear();
         	_myContext.widget().draw(g);
         });
-        _myWindow.updateEvents.add( t -> {_myContext.widget().update(t);});
+        updateEvents.add( t -> {_myContext.widget().update(t);});
 //        
         // Display the window.
-        _myWindow.show();
+        show();
         
-        _myWindow.windowSizeEvents.add(size -> {
+        windowSizeEvents.add(size -> {
 			CCControlApp.preferences.put("CCControlApp" + "/width" , size.x + "");
 			CCControlApp.preferences.put("CCControlApp" + "/height" , size.y + "");
         });
-        _myWindow.positionEvents.add(pos -> {
+        positionEvents.add(pos -> {
 			CCControlApp.preferences.put("CCControlApp" + "/x" , pos.x + "");
 			CCControlApp.preferences.put("CCControlApp" + "/y" ,pos.y + "");
         });
@@ -149,42 +135,55 @@ public class CCControlApp  {
 		
 		if(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1) != -1){
 			CCLog.info(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), CCControlApp.preferences.getInt("CCControlApp" + "/y", -1));
-			_myWindow.position(
+			position(
 				CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), 
 				CCControlApp.preferences.getInt("CCControlApp" + "/y", -1)
 			);
-			_myWindow.windowSize(
+			windowSize(
 				CCControlApp.preferences.getInt("CCControlApp" + "/width", -1), 
 				CCControlApp.preferences.getInt("CCControlApp" + "/height", -1)
 			);
 		}
 		CCLog.info("COSTRUCT");
 	}
+	
+	private Object _myRootObject;
 
-	public CCControlApp(CCGLApp theApp, Object theRootObject, Class<?> thePrefClass) {
+	public CCControlApp(CCGLApplicationManager theApp, Object theRootObject, Class<?> thePrefClass) {
+		width = 1000;
+		height = 400;
+		title = "Creative Computing Controls";
+		
+        // Create and set up the window.
+        theApp.add(this);
+        
+		_myRootObject = theRootObject;
         preferences = Preferences.userNodeForPackage(thePrefClass).node(thePrefClass.getSimpleName());
-		init(theApp, theRootObject);
+		
 //		
 //		ExceptionHandler.registerExceptionHandler();
 	}
 	
-	public CCControlApp(CCGLApp theApp, Object theRootObject) {
-        this(theApp, theRootObject, theRootObject.getClass());
+	@Override
+	public void setup() {
+		init(_myRootObject);
 	}
 	
-	public CCControlApp(CCGLApp theApp) {
-        this(theApp, theApp);
+	public static CCGLApplicationManager appManager;
+	
+	public CCControlApp(CCGLApplicationManager theApp, Object theRootObject) {
+        this(theApp, theRootObject, theRootObject.getClass());
+        appManager = theApp;
 	}
+	
+//	public CCControlApp(CCGLApp theApp) {
+//        this(theApp, theApp);
+//	}
 	
 	public void setData(Object theObject) {
 		if(_myRootHandle != null) {
 			_myRootHandle.relink(theObject);
 		}
-		_myRootHandle = new CCObjectPropertyHandle(theObject, "settings");
-	}
-	
-	public CCGLWindow window() {
-		return _myWindow;
 	}
 	
 //	public CCControlApp(CCGLApp theApp, Object theRootObject, CCTimelineSynch theSynch, Class<?> thePrefClass) {
@@ -198,12 +197,12 @@ public class CCControlApp  {
 		return _myRootHandle;
 	}
 
-	
-	public void update(double theDeltaTime){
+	@Override
+	public void update(CCGLTimer theTimer){
 		if(!_cUpdate)return;
 		try{
 //			_myControlComponent.timeline().update(theDeltaTime);
-			_myRootHandle.update(theDeltaTime);
+			_myRootHandle.update(theTimer.deltaTime());
 		}catch(Exception e){
 			
 		}

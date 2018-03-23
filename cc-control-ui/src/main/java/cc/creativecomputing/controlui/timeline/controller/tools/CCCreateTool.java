@@ -30,7 +30,7 @@ import cc.creativecomputing.control.timeline.point.CCStepControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.actions.AddControlPointAction;
 import cc.creativecomputing.controlui.timeline.controller.actions.MoveControlPointAction;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
-import cc.creativecomputing.controlui.timeline.view.track.SwingTrackView;
+import cc.creativecomputing.controlui.timeline.view.track.CCTrackView;
 import cc.creativecomputing.controlui.util.CCControlUndoHistory;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
@@ -147,7 +147,7 @@ public class CCCreateTool extends CCTimelineTool<CCCurveTrackController> {
 		if (myHandle != null) {
 			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myHandle);
-		} else if (myControlPoint != null && _myController.curveToViewSpace(myControlPoint).distance(_myPressViewCoords) < SwingTrackView.PICK_RADIUS) {
+		} else if (myControlPoint != null && _myController.curveToViewSpace(myControlPoint).distance(_myPressViewCoords) < CCTrackView.PICK_RADIUS) {
 			_myDraggedPoints = new ArrayList<CCControlPoint>();
 			_myDraggedPoints.add(myControlPoint);
 		} else {

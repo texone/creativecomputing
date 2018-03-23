@@ -46,7 +46,7 @@ import cc.creativecomputing.controlui.util.Action;
  * @author christianriekoff
  *
  */
-public class MoveControlPointAction implements Action{
+public class MoveControlPointAction implements CCUndoAction{
 	
 	private CCTrackDataController _myTrackDataController;
 	private List<CCControlPoint> _myControlPoints;

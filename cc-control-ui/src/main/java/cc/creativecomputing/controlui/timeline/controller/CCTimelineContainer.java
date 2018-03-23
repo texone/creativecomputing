@@ -23,9 +23,9 @@ import java.util.TreeMap;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlApp;
-import cc.creativecomputing.controlui.timeline.view.CCTimelineContainerView;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 
 
 public class CCTimelineContainer {
@@ -42,7 +42,9 @@ public class CCTimelineContainer {
 	protected Map<String,CCTimelineController> _myTimelineController;
 	protected CCObjectPropertyHandle _myRootHandle;
 	
-	protected CCListenerManager<TimelineChangeListener> _myTimelineChangeListener = CCListenerManager.create(TimelineChangeListener.class);
+	public CCEventManager<CCEvent<?>> resetEvents = new CCEventManager<>();
+	public CCEventManager<CCTimelineController> changeEvents = new CCEventManager<>();
+	public CCEventManager<String> addEvents = new CCEventManager<>();
 
 	protected CCTimelineController _myActiveController;
 	
@@ -58,19 +60,15 @@ public class CCTimelineContainer {
 		_myRootHandle = theRootHandle;
 		_myTimelineController.clear();
 		_myActiveController = new CCTimelineController(this, _myRootHandle);
-		_myActiveController.view(new SwingTimelineView(_myApp.window(), this));
+		_myActiveController.view(new SwingTimelineView(_myApp, this));
 		_myTimelineController.put("default", _myActiveController);
 	}
 	
 	public void reset(){
 		_myTimelineController.clear();
-		_myTimelineChangeListener.proxy().resetTimelines();
+		resetEvents.event();
 		addTimeline("default");
-		_myTimelineChangeListener.proxy().changeTimeline(_myActiveController);
-	}
-	
-	public CCListenerManager<TimelineChangeListener> timelineChangeListener(){
-		return _myTimelineChangeListener;
+		changeEvents.event(_myActiveController);
 	}
 	
 	public Set<String> timelineKeys(){
@@ -92,15 +90,15 @@ public class CCTimelineContainer {
 	public void setActiveTimeline(String theTimeline){
 		if(!_myTimelineController.containsKey(theTimeline))return;
 		_myActiveController = _myTimelineController.get(theTimeline);
-		_myTimelineChangeListener.proxy().changeTimeline(_myActiveController);
+		changeEvents.event(_myActiveController);
 	}
 	
 	public CCTimelineController addTimeline(String theTimeline){
 		if(_myTimelineController.containsKey(theTimeline))return _myTimelineController.get(theTimeline);
 		_myActiveController = new CCTimelineController(this, _myRootHandle);
-		_myActiveController.view(new SwingTimelineView(_myApp.window(), this));
+		_myActiveController.view(new SwingTimelineView(_myApp, this));
 		_myTimelineController.put(theTimeline, _myActiveController);
-		_myTimelineChangeListener.proxy().addTimeline(theTimeline);
+		addEvents.event(theTimeline);
 		return _myActiveController;
 	}
 	

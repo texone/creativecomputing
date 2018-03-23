@@ -31,7 +31,7 @@ public class CCQuantizeMenu extends CCUIMenu {
 		_myTimelineContainer = theTimelineContainer;
 
 		for(CCQuantizeMode myMode:CCQuantizeMode.values()){
-			addItem(myMode.desc(), () -> {_myTimelineContainer.activeTimeline().quantizer(myMode);});
+			addItem(myMode.desc(), e -> {_myTimelineContainer.activeTimeline().quantizer(myMode);});
 		}
 	}
 }

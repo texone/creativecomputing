@@ -20,10 +20,10 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
 import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.gl.app.CCGLMouseButton;
 import cc.creativecomputing.ui.CCUIHorizontalAlignment;
 import cc.creativecomputing.ui.CCUIVerticalAlignment;
@@ -70,14 +70,14 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 		return _myHandle;
 	}
 	
-	private CCPropertyListener<Type> _myListener = null;
+	private CCEvent<Type> _myListener = null;
 	
-	public void addListener(CCPropertyListener<Type> theListener){
-		_myHandle.events().add(_myListener = theListener);
+	public void addListener(CCEvent<Type> theListener){
+		_myHandle.changeEvents.add(_myListener = theListener);
 	}
 	
 	public void dispose() {
-		if(_myListener != null)_myHandle.events().remove(_myListener);
+		if(_myListener != null)_myHandle.changeEvents.remove(_myListener);
 	}
 	
 	

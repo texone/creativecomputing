@@ -47,7 +47,7 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
         _myCheckBox.verticalAlignment(CCUIVerticalAlignment.CENTER);
        
         _myCheckBox.changeEvents.add(e -> {
-        		_myHandle.value(_myCheckBox.isSelected(), true);
+        	_myHandle.value(_myCheckBox.isSelected(), true);
 		});
         _myCheckBox.isSelected(_myValue, false);
 	}

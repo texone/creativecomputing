@@ -14,25 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-/*  
- * Copyright (c) 2012 Christian Riekoff <info@texone.org>  
- *  
- *  This file is free software: you may copy, redistribute and/or modify it  
- *  under the terms of the GNU General Public License as published by the  
- *  Free Software Foundation, either version 2 of the License, or (at your  
- *  option) any later version.  
- *  
- *  This file is distributed in the hope that it will be useful, but  
- *  WITHOUT ANY WARRANTY; without even the implied warranty of  
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  
- *  General Public License for more details.  
- *  
- *  You should have received a copy of the GNU General Public License  
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  
- *  
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
- */
 package cc.creativecomputing.controlui.timeline.view;
 
 import java.awt.Color;
@@ -45,36 +26,33 @@ import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.track.CCDoubleTrackController;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
-import cc.creativecomputing.controlui.timeline.view.track.SwingCurveTrackDataView;
+import cc.creativecomputing.controlui.timeline.view.track.CCCurveTrackDataView;
 import cc.creativecomputing.gl.app.CCGLWindow;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 
 /**
  * @author christianriekoff
  *
  */
-public class SwingCurvePanel extends CCAbstractTrackView implements ComponentListener{
+public class CCCurvePane extends CCAbstractTrackView implements ComponentListener{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1507288020816738412L;
 	private CCTrackContext _myTrackContext;
 	private CCDoubleTrackController _myTrackController;
 	private CCTrack _myTrack;
 	
-	public SwingCurvePanel(CCGLWindow theFrame) {
+	public CCCurvePane(CCGLWindow theFrame) {
 		_myMainFrame = theFrame;
 		_myTrackContext = new CCTrackContext();
 		_myTrack = new CCTrack(null);
 		_myTrackController = new CCDoubleTrackController(_myTrackContext,_myTrack, null);
-		_myDataView = new SwingCurveTrackDataView(null, _myTrackController);
+		_myDataView = new CCCurveTrackDataView(null, _myTrackController);
 		_myDataView.isEnvelope(true);
 		_myTrackController.view(this);
 //		((TrackDataController)_myTrackController).trackDataView(_myTrackDataView);
 		
 		_myDataView.addComponentListener(this);
-		_myTrackContext.zoomController().addZoomable(_myTrackController);
+		_myTrackContext.zoomController().events.add(_myTrackController);
 	}
 	
 	public CCTrack track(){
@@ -102,7 +80,7 @@ public class SwingCurvePanel extends CCAbstractTrackView implements ComponentLis
 	public void componentShown(ComponentEvent theArg0) {
 	}
 	
-	public void updateView(){
+	public void display(CCGraphics g){
 		_myDataView.render();
 	}
 

@@ -16,18 +16,16 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextField;
-
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.CCNumberBox;
-import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
+import cc.creativecomputing.ui.draw.CCUIRoundedFillDrawable;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
+import cc.creativecomputing.ui.widget.CCUISlider;
+import cc.creativecomputing.ui.widget.CCUIValueBox;
 
 public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHandle<Number>>{
 	
@@ -37,21 +35,17 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 	private double _myMax;
 	private double _myValue;
 	
-	private CCNumberBox _myValueField;
-	private JSlider _mySlider;
-	
-	private boolean _myTriggerEvent = true;
+	private CCUIValueBox _myValueField;
+	private CCUISlider _mySlider;
 
 	public CCNumberControl(CCNumberPropertyHandle<Number> theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
  
         //Create the label.
 		addListener(theValue -> {
-			_myTriggerEvent = false;
 			_myValue = theValue.doubleValue();
-			updateSlider(_myValue);
-			_myValueField.setText(theHandle.valueString());
-			_myTriggerEvent = true;
+			_mySlider.value(_myValue);
+			_myValueField.value(theHandle.value().doubleValue(),false);
 		});
  
         //Create the slider.
@@ -61,44 +55,32 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
         if(_myHandle.isNumberBox()){
         		_mySlider = null;
         }else{
-	        _mySlider = new JSlider(JSlider.HORIZONTAL, 0, MAX_SLIDER_VALUE, 0);
-	        _mySlider.addChangeListener(theE -> {
-	        		if(!_myTriggerEvent)return;
-	        		value((float)(_mySlider.getValue() / (float)MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin), true);
+	        _mySlider = new CCUISlider(100,14,_myMin, _myMax,_myValue);
+	        _mySlider.background(new CCUIRoundedFillDrawable(new CCColor(0.3d), 7));
+	        _mySlider.foreground(new CCUIFillDrawable(new CCColor(0.7d)));
+	        _mySlider.verticalAlignment(CCUIVerticalAlignment.CENTER);
+	        _mySlider.changeEvents.add(theE -> {
+	        		value(theE / MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin, true);
 			});
-	 
-	        //Turn on labels at major tick marks.
-	 
-	        _mySlider.setMajorTickSpacing(MAX_SLIDER_VALUE / 10);
-	        _mySlider.setMinorTickSpacing(MAX_SLIDER_VALUE / 20);
-	        
-	        _mySlider.setPaintTicks(false);
-	        _mySlider.setPaintLabels(false);
-	        _mySlider.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-	        _mySlider.putClientProperty( "JComponent.sizeVariant", "mini" );
-	        _mySlider.setPreferredSize(new Dimension(100,14));
         }
         
-        _myValueField = new CCNumberBox(_myValue, _myMin, _myMax, theHandle.digits());
-        _myValueField.changeEvents().add(theValue -> {
+        _myValueField = new CCUIValueBox(CCUIConstants.DEFAULT_FONT, _myValue, _myMin, _myMax, theHandle.digits());
+        _myValueField.background(new CCUIFillDrawable(new CCColor(0.3d)));
+        _myValueField.width(100);
+        _myValueField.inset(4);
+        _myValueField.changeEvents.add(theValue -> {
         		value(theValue, true);
         });
-        CCUIStyler.styleTextField(_myValueField, 100);
-        
-        _myValueField.setHorizontalAlignment(JTextField.LEFT);
         value(_myHandle.value().doubleValue(), true);
 	}
 	
 	@Override
-	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 1, 5));
-		if(_mySlider != null){
-			thePanel.add(_mySlider, constraints(1, theY, GridBagConstraints.PAGE_END,5, 0, 1, 5));
-			_myValueField.setPreferredSize(new Dimension(68, 13));
-			thePanel.add(_myValueField, constraints(2, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
-		}else{
-			thePanel.add(_myValueField, constraints(1, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
-		}
+	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
+		thePane.addChild(_myLabel, 0, theY);
+		thePane.addChild(_myValueField, 1, theY);
+		
+		if(_mySlider == null)return;
+		thePane.addChild(_mySlider, 2, theY);
 	}
 	
 	public Number value(){
@@ -108,12 +90,6 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 	public void value(double theValue, boolean theOverWrite){
 		_myValue = theValue;
 		_myHandle.value(_myValue, theOverWrite);
-	}
-	
-	private void updateSlider(double theValue){
-		if(_mySlider == null)return;
-		double myValue = CCMath.constrain((theValue - _myMin) / (_myMax - _myMin) * MAX_SLIDER_VALUE, 0, MAX_SLIDER_VALUE);
-		_mySlider.setValue((int)myValue);
 	}
 
 }

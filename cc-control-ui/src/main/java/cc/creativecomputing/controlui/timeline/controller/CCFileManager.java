@@ -72,7 +72,7 @@ public class CCFileManager {
 
 		CCDataObject myTrackDataData = theTransportData.getObject(CCTrackData.TRACKDATA_ELEMENT);
 		if (myTrackDataData != null) {
-			CCTrackData myTrackData = new CCTrackData(null);
+			CCTrackData myTrackData = new CCTrackData();
 			myTrackData.data(myTrackDataData);
 			theTransportController.trackData(myTrackData);
 		}

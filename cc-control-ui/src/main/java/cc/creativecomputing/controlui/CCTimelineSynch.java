@@ -16,9 +16,9 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
+import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.protocol.midi.CCMidiIn;
 import cc.creativecomputing.protocol.midi.CCMidiTimeCode;

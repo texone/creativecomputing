@@ -22,7 +22,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.layout.CCUIPane;
 
-public abstract class CCAbstractTrackView extends CCUIPane implements CCTrackView{
+public abstract class CCAbstractTrackView extends CCUIPane {
 	
 	protected CCAbstractTrackDataView<?> _myDataView;
 	
@@ -79,6 +79,7 @@ public abstract class CCAbstractTrackView extends CCUIPane implements CCTrackVie
     
 	@Override
     public double width() {
+    	if(_myDataView == null)return 0;
     	return _myDataView.width();
     }
     

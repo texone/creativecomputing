@@ -37,13 +37,13 @@ package cc.creativecomputing.controlui.timeline.controller.actions;
 
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
-import cc.creativecomputing.controlui.util.Action;
+import cc.creativecomputing.controlui.util.CCControlUndoHistory.CCUndoAction;
 
 /**
  * @author christianriekoff
  *
  */
-public class RemoveControlPointAction implements Action{
+public class RemoveControlPointAction implements CCUndoAction{
 	
 	private CCTrackDataController _myTrackDataController;
 	private CCControlPoint _myControlPoint;

@@ -16,20 +16,19 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.GridBagConstraints;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import cc.creativecomputing.control.handles.CCSplineHandle;
+import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCControlComponent;
+import cc.creativecomputing.graphics.font.CCEntypoIcon;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.spline.CCSpline;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
+import cc.creativecomputing.ui.widget.CCUIIconWidget;
 
 public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 
-	private JButton _myButton;
+	private CCUIIconWidget _myButton;
 	
 	private CCSplineEditor _myCurveFrame;
 
@@ -41,28 +40,30 @@ public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 		});
 		
 		_myCurveFrame = new CCSplineEditor(theHandle.name());
-		_myCurveFrame.setSize(300, 300);
-		_myCurveFrame.addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowClosing(WindowEvent theE) {
-//				value().currentCurve(_myEnvelopeCurve);
-			}
+		_myCurveFrame.width = 300;
+		_myCurveFrame.height = 300;
+		
+		_myButton = new CCUIIconWidget(CCEntypoIcon.ICON_EDIT);
+		_myButton.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		_myButton.inset(2);
+		_myButton.mouseReleased.add(event -> {
+			_myCurveFrame.spline(value());				
+        	CCControlApp.appManager.add(_myCurveFrame);
+        	_myCurveFrame.show();
 		});
         
-        _myButton = new JButton("edit");
-        _myButton.addActionListener(theE -> {
-        	_myCurveFrame.spline(value());				
-        	_myCurveFrame.setVisible(true);
-		});
-        CCUIStyler.styleButton(_myButton, 30, 15);
+//        _myButton = new JButton("edit");
+//        _myButton.addActionListener(theE -> {
+//        	_myCurveFrame.spline(value());				
+//        	_myCurveFrame.setVisible(true);
+//		});
  
 	}
 	
 	@Override
-	public void addToComponent(JPanel thePanel, int theY, int theDepth) {
-		thePanel.add(_myLabel, 	constraints(0, theY, GridBagConstraints.LINE_END, 	5, 5, 1, 5));
-		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 4, 1, 5));
+	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
+		thePane.addChild(_myLabel, 0, theY);
+		thePane.addChild(_myButton, 1, theY);
 	}
 
 	@Override

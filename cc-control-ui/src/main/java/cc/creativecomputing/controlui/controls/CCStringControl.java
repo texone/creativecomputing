@@ -34,7 +34,7 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 	public CCStringControl(CCStringPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		addListener( theValue -> {
+		addListener(theValue -> {
 			try{
 				if(!_myHandle.value().equals(_myTextField.text())){
 					_myTextField.text(_myHandle.value(), false);
@@ -52,8 +52,8 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
         _myTextField.inset(4);
         
         _myTextField.changeEvents.add(text -> {
-        		_myHandle.value(_myTextField.text(), !_myHandle.isInEdit());
-        	});
+        	_myHandle.value(_myTextField.text(), !_myHandle.isInEdit());
+        });
 	}
 	
 	@Override

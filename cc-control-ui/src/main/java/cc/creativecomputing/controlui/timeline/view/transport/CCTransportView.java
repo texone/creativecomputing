@@ -16,12 +16,11 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.transport;
 
+import cc.creativecomputing.control.timeline.CCTimeRange;
 import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
-import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer.TimelineChangeListener;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
-import cc.creativecomputing.controlui.timeline.controller.CCZoomable;
-import cc.creativecomputing.core.events.CCDoubleEvent;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCTextAlign;
@@ -38,7 +37,7 @@ import cc.creativecomputing.ui.widget.CCUILabelWidget;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 import cc.creativecomputing.ui.widget.CCUIValueBox;
 
-public class CCTransportView extends CCUIHorizontalFlowPane implements CCZoomable{
+public class CCTransportView extends CCUIHorizontalFlowPane{
 	
 	private static final int MAX_SLIDER_VALUE = 100;
 	
@@ -90,35 +89,34 @@ public class CCTransportView extends CCUIHorizontalFlowPane implements CCZoomabl
 		space(10);
 		_myTimelineContainer = theTimelineContainer;
 		
-		CCDoubleEvent myTimeEvent = t -> {
+		CCEvent<Double> myTimeEvent = t -> {
 			_myTimeField.text(timeToString(t), true);
 		};
 		
-		_myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
+		CCEvent<CCTimeRange> myZoomEvent = t -> {
+			double myRange = CCMath.pow(t.length() / MAX_RANGE , 1f / CURVE_POW);
+			double myValue = CCMath.constrain(myRange * MAX_SLIDER_VALUE, 0, MAX_SLIDER_VALUE);
+			_myZoomValue.value(myValue, false);
+		};
+		
+		_myTimelineContainer.changeEvents.add(theController -> {
+			_myTimelineController.zoomController().events.remove(myZoomEvent);
+			_myTimelineController.transportController().timeEvents.remove(myTimeEvent);
 			
-			@Override
-			public void changeTimeline(CCTimelineController theController) {
-				_myTimelineController.zoomController().removeZoomable(CCTransportView.this);
-				_myTimelineController.transportController().timeEvents.remove(myTimeEvent);
-				
-				_myTimelineController = theController;
-				
-				_myTimelineController.zoomController().addZoomable(CCTransportView.this);
-				_myTimelineController.transportController().timeEvents.add(myTimeEvent);
-//				zoomFromSlider();
-			}
+			_myTimelineController = theController;
 			
-			@Override
-			public void resetTimelines() {
-//				_myTimelines.removeAllItems();
-			}
-			
-			@Override
-			public void addTimeline(String theTimeline) {
-//				_myTimelines.addItem(theTimeline);
-//				_myTimelines.setSelectedItem(_myTimelineContainer.defaultTimelineKey());
-			}
+			_myTimelineController.zoomController().events.add(myZoomEvent);
+			_myTimelineController.transportController().timeEvents.add(myTimeEvent);
+//			zoomFromSlider();
 		});
+		_myTimelineContainer.resetEvents.add(e -> {
+			_myTimelines.removeAllItems();
+		});
+		_myTimelineContainer.addEvents.add(theTimeline -> {
+			_myTimelines.addItem(theTimeline);
+			_myTimelines.selectedItem(_myTimelineContainer.defaultTimelineKey(), true);
+		});
+		
 		_myTimelineController = _myTimelineContainer.activeTimeline();
 		
 		CCUIGradientDrawable myGradientBack = new CCUIGradientDrawable();
@@ -297,7 +295,7 @@ public class CCTransportView extends CCUIHorizontalFlowPane implements CCZoomabl
 		myTimelineLabel.verticalAlignment(CCUIVerticalAlignment.CENTER);
 		addChild(myTimelineLabel);
 		
-		_myTimelineController.zoomController().addZoomable(this);
+		_myTimelineController.zoomController().events.add(myZoomEvent);
 	}
 
 	public void speed(double theSpeed){
@@ -305,10 +303,5 @@ public class CCTransportView extends CCUIHorizontalFlowPane implements CCZoomabl
 	}
 	
 
-	@Override
-	public void setRange(double theLowerBound, double theUpperBound) {
-		double myRange = CCMath.pow((theUpperBound - theLowerBound) / MAX_RANGE , 1f / CURVE_POW);
-		double myValue = CCMath.constrain(myRange * MAX_SLIDER_VALUE, 0, MAX_SLIDER_VALUE);
-		_myZoomValue.value(myValue, false);
-	}
+	
 }

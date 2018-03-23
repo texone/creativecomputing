@@ -58,12 +58,8 @@ public class CCEventTrackController extends CCTrackController {
 		super(theTimelineController, theTrack, theParent);
 		if(theTrack.property() == null)return;
 		
-		theTrack.property().events().add(new CCPropertyListener() {
-
-			@Override
-			public void onChange(Object theValue) {
-				_myEventTrackTool.editValue(theValue);
-			}
+		theTrack.property().changeEvents.add(theValue ->{
+			_myEventTrackTool.editValue(theValue);
 		});
 		
 		_myActiveTool = _myEventTrackTool = new CCEventTrackTool(this);

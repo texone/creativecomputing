@@ -19,6 +19,7 @@ package cc.creativecomputing.controlui.controls;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 import cc.creativecomputing.ui.widget.CCUIGradientWidget;
@@ -32,7 +33,7 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
 	public CCGradientControl(CCGradientPropertyHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
-		_myHandle.events().add(theValue -> {
+		addListener(theValue -> {
 			_myGradient = ((CCGradient)theValue).clone();
 			_myGradientEditor.gradient(_myGradient);
 		});
@@ -44,6 +45,7 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
 		_myGradientEditor.changeEvents.add(theGradient -> {
 			_myHandle.value(theGradient, false);
 		});
+		_myGradientEditor.verticalAlignment(CCUIVerticalAlignment.CENTER);
 	}
 	
 	@Override

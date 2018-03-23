@@ -67,48 +67,48 @@ public class CCRulerPopUp extends CCUIMenu {
 	}
 	
 	public void addFunctions() {
-		addItem("Insert Time",() -> {
+		addItem("Insert Time",e -> {
 			
-			new CCTextInputDialog(
-				"Insert Time", 
-				"Specify the time to insert in seconds.", 
-				"insert",
-				input ->{
-					double myTime = 0;
-					try {
-						myTime = new ExpressionBuilder(input).build().evaluate();
-					} catch (Exception ex) {}
-					_myTimelineController.insertTime(_myTransportController.time(),myTime);
-				}
-			)
-			.location(_myMouseEvent.getXOnScreen(), _myMouseEvent.getYOnScreen())
-			.size(400,200)
-			.open();
+//			new CCTextInputDialog(
+//				"Insert Time", 
+//				"Specify the time to insert in seconds.", 
+//				"insert",
+//				input ->{
+//					double myTime = 0;
+//					try {
+//						myTime = new ExpressionBuilder(input).build().evaluate();
+//					} catch (Exception ex) {}
+//					_myTimelineController.insertTime(_myTransportController.time(),myTime);
+//				}
+//			)
+//			.location(_myMouseEvent.getXOnScreen(), _myMouseEvent.getYOnScreen())
+//			.size(400,200)
+//			.open();
 			
 		});
 		
-		addItem("Remove Time", () -> {
+		addItem("Remove Time", e -> {
 			_myTimelineController.removeTime();
 		});
 		
-		addItem("Add Marker",() -> {
-			SwingRulerMarkerDialog _myMarkerFrame = new SwingRulerMarkerDialog(_myRulerView, "MARKER");
-		    _myMarkerFrame.setSize( 300, 200 ); 
-			_myMarkerFrame.setLocation(_myMouseEvent.getXOnScreen(), _myMouseEvent.getYOnScreen());
-			_myMarkerFrame.setVisible(true);
+		addItem("Add Marker",e -> {
+//			SwingRulerMarkerDialog _myMarkerFrame = new SwingRulerMarkerDialog(_myRulerView, "MARKER");
+//		    _myMarkerFrame.setSize( 300, 200 ); 
+//			_myMarkerFrame.setLocation(_myMouseEvent.getXOnScreen(), _myMouseEvent.getYOnScreen());
+//			_myMarkerFrame.setVisible(true);
 		});
 		
 		addSeparator();
 		
-		addItem("Reset Zoom", () -> {
+		addItem("Reset Zoom", e -> {
 			_myTimelineController.zoomController().reset();
 		});
 
-		addItem("Zoom to Max", () -> {
+		addItem("Zoom to Max", e -> {
 			_myTimelineController.zoomToMaximum();
 		});
 
-		addItem("Zoom to Loop",() -> {
+		addItem("Zoom to Loop",e -> {
 			_myTimelineController.zoomToLoop();
 		});
 	}

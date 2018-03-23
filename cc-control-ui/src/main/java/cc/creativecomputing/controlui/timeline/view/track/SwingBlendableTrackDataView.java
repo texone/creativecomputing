@@ -148,7 +148,7 @@ public abstract class SwingBlendableTrackDataView<ControllerType extends CCBlend
 		// paint curve points
 		g.strokeWeight(0.5);
 		g.color(_myDotColor);
-		CCControlPoint myCurrentPoint = _myController.trackData().getFirstPointAt(_myTrackContext.lowerBound());
+		CCControlPoint myCurrentPoint = _myController.trackData().getFirstPointAfter(_myTrackContext.lowerBound());
 
 		while (myCurrentPoint != null) {
 			if (myCurrentPoint.time() > _myTrackContext.upperBound()) {

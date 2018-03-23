@@ -70,9 +70,9 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 	
 	@Override
 	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePanel.add(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 1, 5));
-		thePanel.add(_myTextField, constraints(1, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
-		thePanel.add(_myOpenButton, constraints(2, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
+		thePane.addChild(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 1, 5));
+		thePane.add(_myTextField, constraints(1, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
+		thePane.add(_myOpenButton, constraints(2, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
 	}
 
 	@Override

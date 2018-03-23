@@ -60,7 +60,7 @@ public class CCTimelineMenu extends CCUIMenu{
 		addItem(
 			CCEntypoIcon.ICON_SWAP,
 			"Replace",
-			() -> {
+			e -> {
 				Path myPath = _myFileChooser.openFile("open");
 				if (myPath == null) return;
 				
@@ -74,7 +74,7 @@ public class CCTimelineMenu extends CCUIMenu{
 		
 		addItem(
 			"Add",
-			() -> {
+			e -> {
 				Path myPath = _myFileChooser.openFile("open");
 				if (myPath == null)return;
 				_myFileManager.loadTimeline(myPath, _myTimelineContainer.activeTimeline());
@@ -85,7 +85,7 @@ public class CCTimelineMenu extends CCUIMenu{
 		
 		addItem(
 			CCEntypoIcon.ICON_TRASH,
-			"Clear",() -> {
+			"Clear",e -> {
 				_myFileChooser.resetPath();
 				_myTimelineContainer.activeTimeline().resetTracks();
 				CCControlUndoHistory.instance().clear();
@@ -95,7 +95,7 @@ public class CCTimelineMenu extends CCUIMenu{
 		
 		addItem(
 			"Insert at Time",
-			() -> {
+			e -> {
 				Path myPath = _myFileChooser.openFile("open");
 				if (myPath == null)return;
 				_myFileManager.insertTracks(myPath, _myTimelineContainer.activeTimeline());
@@ -108,7 +108,7 @@ public class CCTimelineMenu extends CCUIMenu{
 		addItem(
 			CCEntypoIcon.ICON_EXPORT,
 			"Export",
-			() -> {
+			e -> {
 				Path myPath = _myFileChooser.saveFile("Export Timeline");
 				if(myPath == null)return;
 				_myFileManager.saveTimeline(myPath, _myTimelineContainer.activeTimeline());
@@ -119,7 +119,7 @@ public class CCTimelineMenu extends CCUIMenu{
 		
 		addItem(
 			"Export Selection",
-			() -> {
+			e -> {
 				Path myPath = _myFileChooser.saveFile("save selection");
 				if (myPath == null)return;
 				_myFileManager.saveTimelineSelection(myPath, _myTimelineContainer.activeTimeline());
@@ -133,7 +133,7 @@ public class CCTimelineMenu extends CCUIMenu{
 			addItem(
 				CCEntypoIcon.ICON_REPLY,
 				"Undo",
-				() -> {
+				e -> {
 					CCControlUndoHistory.instance().undo();
 				}
 			);
@@ -141,14 +141,14 @@ public class CCTimelineMenu extends CCUIMenu{
 			addItem(
 				CCEntypoIcon.ICON_FORWARD,
 				"Redo",
-				() -> {
+				e -> {
 					CCControlUndoHistory.instance().redo();
 				}
 			);
 		}
 
 //		CCUIMenuItem myCutMenu = new CCUIMenuItem("Cut");
-//		myCutMenu.addActionListener(() -> {
+//		myCutMenu.addActionListener(e -> {
 //			_myTimelineContainer.activeTimeline().toolController().selectionController().cut();
 //		});
 //		myCutMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.META_MASK));
@@ -156,7 +156,7 @@ public class CCTimelineMenu extends CCUIMenu{
 //		addItem(myCutMenu);
 //
 //		CCUIMenuItem myCopyMenu = new CCUIMenuItem("Copy");
-//		myCopyMenu.addActionListener(() -> {
+//		myCopyMenu.addActionListener(e -> {
 //			_myTimelineContainer.activeTimeline().toolController().selectionController().copy();
 //		});
 //		myCopyMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.META_MASK));
@@ -164,7 +164,7 @@ public class CCTimelineMenu extends CCUIMenu{
 //		addItem(myCopyMenu);
 //
 //		CCUIMenuItem myPasteMenu = new CCUIMenuItem("Paste");
-//		myPasteMenu.addActionListener(() -> {
+//		myPasteMenu.addActionListener(e -> {
 //			_myTimelineContainer.activeTimeline().toolController().selectionController().insert();
 //		});
 //		myPasteMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.META_MASK));
@@ -172,7 +172,7 @@ public class CCTimelineMenu extends CCUIMenu{
 //		addItem(myPasteMenu);
 //
 //		CCUIMenuItem myReplaceMenu = new CCUIMenuItem("Replace");
-//		myReplaceMenu.addActionListener(() -> {
+//		myReplaceMenu.addActionListener(e -> {
 //			_myTimelineContainer.activeTimeline().toolController().selectionController().replace();
 //		});
 //		myReplaceMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.SHIFT_MASK | ActionEvent.META_MASK));
@@ -196,14 +196,14 @@ public class CCTimelineMenu extends CCUIMenu{
 		addItem(
 			CCEntypoIcon.ICON_CYCLE,
 			"Reverse",
-			() -> {
+			e -> {
 				_myTimelineContainer.activeTimeline().reverseTracks();
 			}
 		);
 		
 		addItem(
 			"Create Clip Track",
-			() -> {
+			e -> {
 				_myTimelineContainer.activeTimeline().createClipTrack();
 			}
 		);
@@ -214,7 +214,7 @@ public class CCTimelineMenu extends CCUIMenu{
 		addItem(
 			myCheckBox,
 			"Hide Unused Tracks", 
-			()->{
+			e ->{
 				boolean selected = myCheckBox.isSelected();
 				_myTimelineContainer.activeTimeline().hideUnusedTracks(selected);
 			}

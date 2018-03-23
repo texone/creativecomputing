@@ -16,6 +16,8 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.view.track;
 
+import java.util.List;
+
 import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
@@ -26,7 +28,7 @@ import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController.CCRulerInterval;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.transport.CCRulerView;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.gl.app.CCGLMouseButton;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -42,25 +44,23 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 		void onRender(CCGraphics theG2D);
 	}
 
-	protected CCColor _myLineCCColor = CCUIConstants.LINE_COLOR;
-	protected CCColor _myFillCCColor = CCUIConstants.FILL_COLOR;
-	protected CCColor _myDotCCColor = CCUIConstants.DOT_COLOR;
+	protected CCColor _myLineColor = CCUIConstants.LINE_COLOR;
+	protected CCColor _myFillColor = CCUIConstants.FILL_COLOR;
+	protected CCColor _myDotColor = CCUIConstants.DOT_COLOR;
 
 	protected ControllerType _myController;
 	protected CCTimelineController _myTimelineController;
 	protected CCTrackContext _myTrackContext;
 
-	private CCListenerManager<SwingTrackDataViewListener> _myEvents = CCListenerManager.create(SwingTrackDataViewListener.class);
+	private CCEventManager<CCGraphics> renderEvents = new CCEventManager<>();
 
-	public CCListenerManager<SwingTrackDataViewListener> events() {
-		return _myEvents;
-	}
+
 
 	protected boolean _myIsMousePressed = false;
 
 	protected CCGLMouseEvent _myMouseEvent = null;
 
-	private SwingTrackPopup<ControllerType> _myToolChooserPopup;
+	private CCTrackMenu<ControllerType> _myToolChooserPopup;
 
 	public CCAbstractTrackDataView(CCTimelineController theTimelineController, ControllerType theTrackController) {
 		_myTimelineController = theTimelineController;
@@ -127,23 +127,23 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 		return _myTrackContext;
 	}
 
-	public CCColor fillCCColor() {
-		return _myFillCCColor;
+	public CCColor fillColor() {
+		return _myFillColor;
 	}
 
-	public CCColor lineCCColor() {
-		return _myLineCCColor;
+	public CCColor lineColor() {
+		return _myLineColor;
 	}
 
 	public void color(CCColor theCCColor) {
-		_myDotCCColor = theCCColor;
-		_myLineCCColor = theCCColor.brighter(0.5);
-		_myFillCCColor = theCCColor.brighter(0.25);
-		_myLineCCColor.a = 0.5;
-		_myFillCCColor.a = 0.5;
+		_myDotColor = theCCColor;
+		_myLineColor = theCCColor.brighter(0.5);
+		_myFillColor = theCCColor.brighter(0.25);
+		_myLineColor.a = 0.5;
+		_myFillColor.a = 0.5;
 	}
 
-	public void drawCurvePiece(CCControlPoint myFirstPoint, CCControlPoint mySecondPoint, CCPath2D thePath, boolean theToFirst) {
+	public void drawCurvePiece(CCControlPoint myFirstPoint, CCControlPoint mySecondPoint, List<CCVector2> thePath) {
 		if (myFirstPoint.equals(mySecondPoint)) {
 			return;
 		}
@@ -162,13 +162,9 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 		double myX = p2.x;
 		double myY = p2.y;
 
-		if (theToFirst) {
-			thePath.lineTo(myA1X, myA1Y);
-		}
-
 		if (mySecondPoint.type() == CCControlPointType.STEP) {
-			thePath.lineTo(myA2X, myA1Y);
-			thePath.lineTo(myA2X, myA2Y);
+			thePath.add(new CCVector2(myA2X, myA1Y));
+			thePath.add(new CCVector2(myA2X, myA2Y));
 			return;
 		}
 
@@ -188,12 +184,18 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 			myA1Y = myHandle.y;
 		}
 		if (myIsBezier) {
-			thePath.curveTo(myA1X, myA1Y, myA2X, myA2Y, myX, myY);
+			for(int i = 0; i < 20;i++){
+				double myBlend = CCMath.norm(i, 0, 20);
+				thePath.add(new CCVector2(
+					CCMath.bezierPoint(p1.x, myA1X, myA2X, myX, myBlend),
+					CCMath.bezierPoint(p1.y, myA1Y, myA2Y, myY, myBlend)
+				));
+			}
 			return;
 		}
 
 		if (mySecondPoint.type() == CCControlPointType.LINEAR) {
-			thePath.lineTo(myX, myY);
+			thePath.add(new CCVector2(myX, myY));
 			return;
 		}
 
@@ -206,17 +208,17 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 		// }
 
 		// if(theDrawInterval){
-		double myInterval = SwingTrackView.GRID_INTERVAL / width() * (_myTrackContext.viewTime());
+		double myInterval = CCTrackView.GRID_INTERVAL / width() * (_myTrackContext.viewTime());
 		double myStart = myInterval * Math.floor(myFirstPoint.time() / myInterval);
 
 		for (double step = myStart + myInterval; step < mySecondPoint.time(); step = step + myInterval) {
 			double myValue = _myController.trackData().value(step);
 			p1 = _myController.curveToViewSpace(new CCControlPoint(step, myValue));
-			thePath.lineTo(p1.x, p1.y);
+			thePath.add(new CCVector2(p1.x, p1.y));
 		}
 		// }
 
-		thePath.lineTo(p2.x, p2.y);
+		thePath.add(new CCVector2(p2.x, p2.y));
 	}
 
 	// private void drawGridLines(Graphics g) {
@@ -344,7 +346,7 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 
 		}
 
-		CCControlPoint myCurrentPoint = _myTimelineController.transportController().trackData().getFirstPointAt(_myTrackContext.lowerBound());
+		CCControlPoint myCurrentPoint = _myTimelineController.transportController().trackData().getFirstPointAfter(_myTrackContext.lowerBound());
 
 		while (myCurrentPoint != null) {
 			if (myCurrentPoint.time() > _myTrackContext.upperBound())
@@ -390,8 +392,8 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 		// paint selection
 		if (_myController.selection() != null) {
 
-			CCVector2 myLowerCorner = _myController.curveToViewSpace(new CCControlPoint(_myController.selection().start(), 1));
-			CCVector2 myUpperCorner = _myController.curveToViewSpace(new CCControlPoint(_myController.selection().end(), 0));
+			CCVector2 myLowerCorner = _myController.curveToViewSpace(new CCControlPoint(_myController.selection().start, 1));
+			CCVector2 myUpperCorner = _myController.curveToViewSpace(new CCControlPoint(_myController.selection().end, 0));
 
 			g.color(CCUIConstants.SELECTION_COLOR);
 			g.rect( myLowerCorner.x,  myLowerCorner.y,  myUpperCorner.x -  myLowerCorner.x,  myUpperCorner.y);

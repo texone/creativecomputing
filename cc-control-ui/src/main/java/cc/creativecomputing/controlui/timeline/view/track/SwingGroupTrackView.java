@@ -40,6 +40,7 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackCont
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.controlui.timeline.view.SwingMultiTrackPanel;
 import cc.creativecomputing.controlui.timeline.view.SwingTableLayout;
+import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.gl.app.CCGLWindow;
 
 
@@ -119,14 +120,14 @@ public class SwingGroupTrackView extends CCAbstractTrackView {
 	
 	private SingleGroupTrackControlPopup _myPopUp = new SingleGroupTrackControlPopup();
 	
-	private SwingMultiTrackPanel _myMultiTrackPanel;
+	private SwingTimelineView _myMultiTrackPanel;
 	
 	private boolean _myShowUnusedItems = true;
 	
 	public SwingGroupTrackView(
 		CCGLWindow theMainFrame,
 	    CCAbstractTrackDataView<?> theDataView,
-		SwingMultiTrackPanel theMultiTrackPanel, 
+		SwingTimelineView theMultiTrackPanel, 
 		CCTimelineController theTimelineController, 
 		CCGroupTrackController theGroupController
 	) {
@@ -211,8 +212,8 @@ public class SwingGroupTrackView extends CCAbstractTrackView {
 			if(!_myShowUnusedItems){
 				if(myTrackController.trackData().size() <= 1)continue;
 			}
-			if(myTrackController.view() instanceof SwingTrackView){
-				SwingTrackView myTrackView = (SwingTrackView)myTrackController.view();
+			if(myTrackController.view() instanceof CCTrackView){
+				CCTrackView myTrackView = (CCTrackView)myTrackController.view();
 				
 				Path myPath = myTrackController.track().path();
 				

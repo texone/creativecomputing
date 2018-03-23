@@ -27,8 +27,7 @@ import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCMarkerPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
 import cc.creativecomputing.controlui.timeline.view.transport.CCRulerView;
-import cc.creativecomputing.core.events.CCDoubleEvent;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -38,7 +37,7 @@ import cc.creativecomputing.math.CCVector2;
  * @author christianriekoff
  *
  */
-public class CCTransportController extends CCTrackDataController implements CCZoomable{
+public class CCTransportController extends CCTrackDataController{
 	
 	public static class CCRulerInterval{
 		private double _myMin;
@@ -88,11 +87,11 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	private double _myCurrentTime;
 	private double _mySpeedFactor;
 	
-	public final CCListenerManager<CCDoubleEvent> timeEvents = CCListenerManager.create(CCDoubleEvent.class);
-	public final CCListenerManager<CCDoubleEvent> playEvents = CCListenerManager.create(CCDoubleEvent.class);
-	public final CCListenerManager<CCDoubleEvent> stopEvents = CCListenerManager.create(CCDoubleEvent.class);
+	public final CCEventManager<Double> timeEvents = new CCEventManager<>();
+	public final CCEventManager<Double> playEvents = new CCEventManager<>();
+	public final CCEventManager<Double> stopEvents = new CCEventManager<>();
 	
-	private CCListenerManager<MarkerListener> _myMarkerListener = CCListenerManager.create(MarkerListener.class);
+	public final CCEventManager<CCMarkerPoint> markerEvents = new CCEventManager<>();
 	
 	private boolean _myIsPlaying;
 	
@@ -111,7 +110,7 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	public CCTransportController(CCTimelineController theTimelineController) {
 		super(theTimelineController, null);
 		_myTimelineController = theTimelineController;
-		_myMarkerList = new CCTrackData(null);
+		_myMarkerList = new CCTrackData();
 		
 		_myIsPlaying = false;
 		_myCurrentTime = 0;
@@ -260,22 +259,6 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		if(_myRulerView != null)_myRulerView.render();
 	}
 	
-	/**
-	 * Adds a listener to react on marker events
-	 * @param theMarkerListener
-	 */
-	public void addMarkerListener(MarkerListener theMarkerListener){
-		_myMarkerListener.add(theMarkerListener);
-	}
-	
-	/**
-	 * Removes the given listener
-	 * @param theMarkerListener
-	 */
-	public void removeMarkerListener(MarkerListener theMarkerListener){
-		_myMarkerListener.add(theMarkerListener);
-	}
-	
 	public CCTrackData marker() {
 		return _myMarkerList;
 	}
@@ -318,11 +301,11 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	}
 	
 	public double loopStart() {
-		return _myLoop.start();
+		return _myLoop.start;
 	}
 	
 	public double loopEnd() {
-		return _myLoop.end();
+		return _myLoop.end;
 	}
 	
 	public void loop(final double theLoopStart, final double theLoopEnd) {
@@ -339,9 +322,9 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	
 	private int MIN_SPACE = 150;
 	
-	public void setRange( double theLowerBound, double theUpperBound ) {
-		_myLowerBound = theLowerBound;
-		_myUpperBound = theUpperBound;
+	public void setRange(CCTimeRange theRange) {
+		_myLowerBound = theRange.start;
+		_myUpperBound = theRange.end;
 		_myInterval = currentInterval();
 		if(_myRulerView != null)_myRulerView.render();
 	}
@@ -497,12 +480,12 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		} else {
 			_myIsPlaying = true;
 		}
-		playEvents.proxy().event(_myCurrentTime);
+		playEvents.event(_myCurrentTime);
 	}
 	
 	public void pause() {
 		_myIsPlaying = false;
-		stopEvents.proxy().event(_myCurrentTime);
+		stopEvents.event(_myCurrentTime);
 	}
 	
 	public void stop() {
@@ -510,12 +493,12 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 			rewind();
 		}
 		_myIsPlaying = false;
-		stopEvents.proxy().event(_myCurrentTime);
+		stopEvents.event(_myCurrentTime);
 	}
 	
 	public void rewind() {
 		_myCurrentTime = _myLoopStart;
-		timeEvents.proxy().event(_myCurrentTime);
+		timeEvents.event(_myCurrentTime);
 	}
 	
 	public void loop() {
@@ -528,16 +511,14 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 		
 		_myCurrentTime += theDeltaT * _mySpeedFactor;
 			
-		if(_myIsInLoop && _myCurrentTime > _myLoop.end()) {
-			_myCurrentTime = _myLoop.start() + _myCurrentTime - _myLoop.end();
+		if(_myIsInLoop && _myCurrentTime > _myLoop.end) {
+			_myCurrentTime = _myLoop.start + _myCurrentTime - _myLoop.end;
 		}
-		timeEvents.proxy().event(_myCurrentTime);
+		timeEvents.event(_myCurrentTime);
 			
-		CCMarkerPoint myCurrentMarker = (CCMarkerPoint)_myMarkerList.getFirstPointAt(_myCurrentTime);
+		CCMarkerPoint myCurrentMarker = (CCMarkerPoint)_myMarkerList.getFirstPointAfter(_myCurrentTime);
 		if(myCurrentMarker != _myLastMarker && _myLastMarker != null){
-			for(MarkerListener myListener:_myMarkerListener){
-				myListener.onMarker(_myLastMarker);
-			}
+			markerEvents.event(_myLastMarker);
 		}
 		_myLastMarker = myCurrentMarker;
 	}
@@ -547,7 +528,7 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	public void time(double theTime) {
 		theTime = CCMath.max(0,theTime);
 		_myCurrentTime = theTime;
-		timeEvents.proxy().event(_myCurrentTime);
+		timeEvents.event(_myCurrentTime);
 //		if(theTime < _myLastTime || theTime - _myLastTime > 0.1){
 //			_myLastTime = theTime;
 //			_myLastMarker = null;
