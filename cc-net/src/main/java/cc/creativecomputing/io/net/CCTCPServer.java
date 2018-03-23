@@ -19,16 +19,13 @@ import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.net.codec.CCNetPacketCodec;
 
-public class CCTCPServer<MessageType> extends CCNetServer<ServerSocketChannel, MessageType> implements Runnable, CCNetListener<MessageType> {
+public class CCTCPServer<MessageType> extends CCNetServer<ServerSocketChannel, MessageType> implements Runnable {
 	private final Map<SocketAddress, CCNetIn<SocketChannel, MessageType>> _myInMap = new HashMap<SocketAddress, CCNetIn<SocketChannel, MessageType>>();
 	private final Map<SocketAddress, CCNetOut<SocketChannel, MessageType>> _myOutMap = new HashMap<SocketAddress, CCNetOut<SocketChannel, MessageType>>(); 
 
-	@SuppressWarnings("rawtypes")
-	private final CCListenerManager<CCNetListener> _myListener = CCListenerManager.create(CCNetListener.class);
 	private Thread thread = null;
 	private final Object startStopSync = new Object(); // mutual exclusion startListening / stopListening
 	private final Object threadSync = new Object(); // communication with receiver thread
@@ -47,11 +44,6 @@ public class CCTCPServer<MessageType> extends CCNetServer<ServerSocketChannel, M
 	
 	public CCTCPServer(CCNetPacketCodec<MessageType> theCodec){
 		super(theCodec);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public CCListenerManager<CCNetListener> events(){
-		return _myListener;
 	}
 
 	@Override
@@ -195,7 +187,7 @@ public class CCTCPServer<MessageType> extends CCNetServer<ServerSocketChannel, M
 						myOut.bufferSize(_myBufferSize);
 						// CCLog.error ("put "+mySender );
 						_myOutMap.put(mySender, myOut);
-						myIn.events().add(this);
+						myIn.events.add(theMessage -> {events.event(theMessage);});
 						myIn.connect(_myLocalAddress.getAddress());
 					}
 				} catch (Exception e) { // bye bye, we have to quit
@@ -208,11 +200,6 @@ public class CCTCPServer<MessageType> extends CCNetServer<ServerSocketChannel, M
 				threadSync.notifyAll(); // stopListening() might be waiting
 			}
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public void messageReceived(CCNetMessage<MessageType> theMessage) {
-		_myListener.proxy().messageReceived(theMessage);
 	}
 
 	@Override

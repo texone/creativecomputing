@@ -17,7 +17,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectableChannel;
 
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.net.codec.CCNetPacketCodec;
 
@@ -57,8 +57,7 @@ import cc.creativecomputing.io.net.codec.CCNetPacketCodec;
  *                  must not be carried out in the receiver thread.
  */
 public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType> extends CCNetChannel<ChannelType, MessageType> implements Runnable {
-	@SuppressWarnings("rawtypes")
-	private final CCListenerManager<CCNetListener> _myEvents = CCListenerManager.create(CCNetListener.class);
+	public final CCEventManager<CCNetMessage<MessageType>> events = new CCEventManager<>();
 	protected Thread _myThread = null;
 
 	// private Map map = null;
@@ -68,11 +67,6 @@ public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType
 
 	protected CCNetIn(CCNetPacketCodec<MessageType> theCodec) {
 		super(theCodec);
-	}
-
-	@SuppressWarnings("rawtypes")
-	public CCListenerManager<CCNetListener> events(){
-		return _myEvents;
 	}
 	
 	public abstract ChannelType createChannel(InetSocketAddress theAddress);
@@ -253,9 +247,8 @@ public abstract class CCNetIn<ChannelType extends SelectableChannel, MessageType
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void dispatchMessage(CCNetMessage<MessageType> theMessage) {
-		_myEvents.proxy().messageReceived(theMessage);
+		events.event(theMessage);
 	}
 
 	

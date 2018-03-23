@@ -15,7 +15,7 @@ import java.net.SocketAddress;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SocketChannel;
 
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.io.net.codec.CCNetPacketCodec;
 
 /**
@@ -33,6 +33,8 @@ import cc.creativecomputing.io.net.codec.CCNetPacketCodec;
  */
 public abstract class CCNetServer<ChannelType extends SelectableChannel, MessageType> extends CCNetChannel<ChannelType, MessageType> {
 	
+	public final CCEventManager<CCNetMessage<MessageType>> events = new CCEventManager<>();
+	
 	/**
 	 * @param theAttributes
 	 */
@@ -49,9 +51,6 @@ public abstract class CCNetServer<ChannelType extends SelectableChannel, Message
 	 * @param theTarget the target address to send the packet to
 	 */
 	public abstract void send(MessageType theMessage, SocketAddress theTarget);
-
-	@SuppressWarnings("rawtypes")
-	public abstract CCListenerManager<CCNetListener> events();
 
 	/**
 	 * Starts the server. The server becomes attentive to requests for connections from clients, starts to receive

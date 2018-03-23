@@ -10,13 +10,12 @@
  */
 package cc.creativecomputing.io.net;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectableChannel;
 
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.io.net.codec.CCNetPacketCodec;
 
 /**
@@ -90,9 +89,8 @@ public class CCNetClient<ChannelType extends SelectableChannel, MessageType> ext
 		_myOut.send(theMessage);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public CCListenerManager<CCNetListener> events(){
-		return _myIn.events();
+	public CCEventManager<CCNetMessage<MessageType>> events(){
+		return _myIn.events;
 	}
 
 	/**

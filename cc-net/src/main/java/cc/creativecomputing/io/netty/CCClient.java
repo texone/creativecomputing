@@ -31,7 +31,7 @@ public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 		@Override
 		public void channelRead(ChannelHandlerContext theCtx, Object in) {
 			MessageType myMessage = (MessageType)in;
-			_myEvents.proxy().messageReceived(new CCNetMessage<MessageType>(myMessage, null, System.currentTimeMillis()));
+			events.event(new CCNetMessage<MessageType>(myMessage, null, System.currentTimeMillis()));
 		}
 
 		@Override

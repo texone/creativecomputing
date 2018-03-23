@@ -55,7 +55,7 @@ public class CCOSCSender {
 		private CCOSCProperty(String theAddress, CCNumberPropertyHandle<Double> theProperty){
 			_myAddress = theAddress;
 			_myProperty = theProperty;
-			_myProperty.events().add(theValue ->{
+			_myProperty.changeEvents.add(theValue ->{
 				_myOSCOut.write(new CCOSCMessage(_myAddress, theValue));
 			});
 		}

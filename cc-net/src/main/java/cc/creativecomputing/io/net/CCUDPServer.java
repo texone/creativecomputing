@@ -20,14 +20,12 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.net.codec.CCNetPacketCodec;
 
 public class CCUDPServer<MessageType> extends CCNetServer<DatagramChannel, MessageType> implements Runnable{
 	
-	@SuppressWarnings("rawtypes")
-	private final CCListenerManager<CCNetListener> _myEvents = CCListenerManager.create(CCNetListener.class);
+	
 	
 	private DatagramChannel _myChannel;
 	
@@ -44,11 +42,6 @@ public class CCUDPServer<MessageType> extends CCNetServer<DatagramChannel, Messa
 	
 	public CCUDPServer(CCNetPacketCodec<MessageType> theCodec){
 		super(theCodec);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public CCListenerManager<CCNetListener> events(){
-		return _myEvents;
 	}
 	
 	@Override
@@ -148,9 +141,8 @@ public class CCUDPServer<MessageType> extends CCNetServer<DatagramChannel, Messa
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void dispatchMessage(CCNetMessage<MessageType> theMessage) {
-		_myEvents.proxy().messageReceived(theMessage);
+		events.event(theMessage);
 	}
 	
 	protected void flipDecodeDispatch(SocketAddress sender) {

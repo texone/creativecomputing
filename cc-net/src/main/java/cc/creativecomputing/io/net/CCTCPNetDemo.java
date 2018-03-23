@@ -1,14 +1,12 @@
 package cc.creativecomputing.io.net;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.io.net.codec.CCNetDataObjectCodec;
-import cc.creativecomputing.io.net.codec.CCNetStringCodec;
 
 public class CCTCPNetDemo {
 	static int i = 0;
@@ -16,7 +14,7 @@ public class CCTCPNetDemo {
 	public static void main(String[] args) {
 		CCTCPServer<CCDataObject> myServer = new CCTCPServer<>(new CCNetDataObjectCodec());
 		myServer.connect(new InetSocketAddress( "127.0.0.1", 12345));
-		myServer.events().add(message ->  {
+		myServer.events.add(message ->  {
 				CCLog.info("server receive:" + message.message);
 				CCDataObject myObject = (CCDataObject)message.message;
 				myObject.put("arg" + i , "client");

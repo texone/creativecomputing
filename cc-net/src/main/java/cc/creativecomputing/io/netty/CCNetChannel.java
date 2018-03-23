@@ -12,9 +12,9 @@ package cc.creativecomputing.io.netty;
 
 import java.util.concurrent.TimeUnit;
 
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.io.net.CCNetListener;
+import cc.creativecomputing.io.net.CCNetMessage;
 import cc.creativecomputing.io.netty.codec.CCNetCodec;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -23,8 +23,7 @@ import io.netty.channel.EventLoopGroup;
 
 public abstract class CCNetChannel<MessageType> {
 
-	@SuppressWarnings("rawtypes")
-	protected final CCListenerManager<CCNetListener> _myEvents = CCListenerManager.create(CCNetListener.class);
+	public final CCEventManager<CCNetMessage<MessageType>> events = new CCEventManager<>();
 
 	@CCProperty(name = "ip")
 	protected String _myIP = "127.0.0.1";
@@ -58,11 +57,6 @@ public abstract class CCNetChannel<MessageType> {
 	 */
 	public void reconnectTime(int theReconnectTime){
 		_myReconnectTime = theReconnectTime;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public CCListenerManager<CCNetListener> events(){
-		return _myEvents;
 	}
 	
 	public abstract void write(MessageType theMessage);
