@@ -3,11 +3,11 @@ package cc.creativecomputing.effects;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCSelectable;
-import cc.creativecomputing.core.CCSelectionListener;
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
 
@@ -67,19 +67,19 @@ public abstract class CCEffectable implements CCSelectable{
 		return _cIsSelected;
 	}
 	
-	private CCListenerManager<CCSelectionListener> _myListenerManager;
+	public CCEventManager<Boolean> selectEvents;
 	
 	@Override
-	public void addListener(CCSelectionListener theListener) {
-		if(_myListenerManager == null)_myListenerManager = CCListenerManager.create(CCSelectionListener.class);
-		_myListenerManager.add(theListener);
+	public void addListener(CCEvent<Boolean> theListener) {
+		if(selectEvents == null)selectEvents = new CCEventManager<>();
+		selectEvents.add(theListener);
 	}
 	
 	@Override
 	@CCProperty(name = "selected")
 	public void select(boolean theIsSelected){
 		_cIsSelected = theIsSelected;
-		if(_myListenerManager != null)_myListenerManager.proxy().isSelected(theIsSelected);
+		if(selectEvents != null)selectEvents.event(theIsSelected);
 	}
 	
 	public void addRelativeSource(String theKey, double theValue){

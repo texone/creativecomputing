@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.modulation.CCConstantSource;
 import cc.creativecomputing.effects.modulation.CCIDSource;
@@ -17,7 +16,7 @@ import cc.creativecomputing.effects.modulation.CCRandomSource;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.filter.CCFilter;
 
-public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<String, CCEffect> implements CCAnimatorListener{
+public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<String, CCEffect> {
 
 	/**
 	 * 
@@ -188,7 +187,6 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 		theEffectable.apply(theValues);
 	}
 
-	@Override
 	public void update(CCAnimator theAnimator){
 		
 		for(int i = 0; i < _myValueNames.length;i++){
@@ -277,10 +275,4 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 			apply(myEffectable, myEffectableValues);
 		}
 	}
-	
-	@Override
-	public void start(CCAnimator theAnimator) {}
-	
-	@Override
-	public void stop(CCAnimator theAnimator) {}
 }
