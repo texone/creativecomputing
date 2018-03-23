@@ -31,7 +31,7 @@ import org.gstreamer.elements.RGBDataAppSink;
 import org.gstreamer.interfaces.Property;
 import org.gstreamer.interfaces.PropertyProbe;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCSystem;
 import cc.creativecomputing.core.CCSystem.CCOS;
 import cc.creativecomputing.core.logging.CCLog;

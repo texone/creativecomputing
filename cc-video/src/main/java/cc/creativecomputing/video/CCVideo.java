@@ -10,8 +10,8 @@
  */
 package cc.creativecomputing.video;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCAnimatorListener;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.image.CCImage;
 

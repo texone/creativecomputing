@@ -3,7 +3,7 @@ package cc.creativecomputing.video;
 import java.nio.file.Path;
 import java.util.List;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageIO;

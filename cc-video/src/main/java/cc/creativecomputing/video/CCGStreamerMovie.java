@@ -27,7 +27,7 @@ import org.gstreamer.SeekType;
 import org.gstreamer.elements.PlayBin2;
 import org.gstreamer.elements.RGBDataAppSink;
 
-import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.image.CCImageException;

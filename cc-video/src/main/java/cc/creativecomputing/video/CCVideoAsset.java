@@ -7,9 +7,9 @@ import java.awt.geom.Point2D;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;

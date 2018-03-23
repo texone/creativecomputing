@@ -46,9 +46,9 @@ import org.bytedeco.javacpp.avutil.AVFrame;
 import org.bytedeco.javacpp.avutil.AVRational;
 import org.bytedeco.javacpp.swscale.SwsContext;
 
-import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.util.CCStopWatch;
+import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCStopWatch;
 import cc.creativecomputing.image.CCPixelFormat;
 import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCPixelType;
