@@ -24,31 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import cc.creativecomputing.artnet.CCArtNetServer.CCArtNetServerPacketReceivedListener;
 import cc.creativecomputing.artnet.packets.ArtNetPacket;
 import cc.creativecomputing.artnet.packets.ArtPollPacket;
 import cc.creativecomputing.artnet.packets.ArtPollReplyPacket;
 import cc.creativecomputing.artnet.packets.CCArtNetOpCode;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.logging.CCLog;
 
-public class CCArtNetNodeDiscovery implements CCArtNetServerPacketReceivedListener, Runnable {
-	
-	public interface CCArtNetNewNodeListener{
-		void newNode(ArtNetNode theNode);
-	}
-	
-	public interface CCArtNetNodeDisconnectedListener{
-		void nodeDisconnected(ArtNetNode theNode);
-	}
-	
-	public interface CCArtNetDiscoveryCompletedListener{
-		void discoveryCompleted(List<ArtNetNode> theNodes);
-	}
-	
-	public interface CCArtNetDiscoveryFailedListener{
-		void discoveryFailed(Throwable t);
-	}
+public class CCArtNetNodeDiscovery implements Runnable {
 
 	public static final int POLL_INTERVAL = 10000;
 
@@ -62,30 +45,14 @@ public class CCArtNetNodeDiscovery implements CCArtNetServerPacketReceivedListen
 
 	private Thread _myDiscoveryThread;
 	
-	protected CCListenerManager<CCArtNetNewNodeListener> _myNewNodeEvents = CCListenerManager.create(CCArtNetNewNodeListener.class);
-	protected CCListenerManager<CCArtNetNodeDisconnectedListener> _myNodeDisconnected = CCListenerManager.create(CCArtNetNodeDisconnectedListener.class);
-	protected CCListenerManager<CCArtNetDiscoveryCompletedListener> _myDiscoveryCompleted = CCListenerManager.create(CCArtNetDiscoveryCompletedListener.class);
-	protected CCListenerManager<CCArtNetDiscoveryFailedListener> _myDiscoveryFailed = CCListenerManager.create(CCArtNetDiscoveryFailedListener.class);
+	public final CCEventManager<ArtNetNode> newNodeEvents = new CCEventManager<>();
+	public final CCEventManager<ArtNetNode> nodeDisconnectedEvents = new CCEventManager<>();
+	public final CCEventManager<List<ArtNetNode>> discoveryCompletedEvents = new CCEventManager<>();
+	public final CCEventManager<Throwable> discoveryFailedEvents = new CCEventManager<>();
 
 	public CCArtNetNodeDiscovery(CCArtNet theArtNet) {
 		_myArtNet = theArtNet;
 		setInterval(POLL_INTERVAL);
-	}
-	
-	public CCListenerManager<CCArtNetNewNodeListener> newNodeEvents(){
-		return _myNewNodeEvents;
-	}
-	
-	public CCListenerManager<CCArtNetNodeDisconnectedListener> nodeDisconnectedEvents(){
-		return _myNodeDisconnected;
-	}
-	
-	public CCListenerManager<CCArtNetDiscoveryCompletedListener> discoveryCompletedEvents(){
-		return _myDiscoveryCompleted;
-	}
-	
-	public CCListenerManager<CCArtNetDiscoveryFailedListener> discoveryFailedEvents(){
-		return _myDiscoveryFailed;
 	}
 	
 	private void discoverNode(ArtPollReplyPacket theReply) {
@@ -96,14 +63,13 @@ public class CCArtNetNodeDiscovery implements CCArtNetServerPacketReceivedListen
 			myNode = theReply.getNodeStyle().createNode();
 			myNode.extractConfig(theReply);
 			_myDiscoveredNodes.put(nodeIP, myNode);
-			_myNewNodeEvents.proxy().newNode(myNode);
+			newNodeEvents.event(myNode);
 		} else {
 			myNode.extractConfig(theReply);
 		}
 		_myLastDiscovered.add(myNode);
 	}
 
-	@Override
 	public void artNetPacketReceived(ArtNetPacket thePacket) {
 		CCLog.info(thePacket);
 		if (thePacket.opCode != CCArtNetOpCode.POLL_REPLY) return;
@@ -120,17 +86,17 @@ public class CCArtNetNodeDiscovery implements CCArtNetServerPacketReceivedListen
 				_myArtNet.broadcastPacket(poll);
 				Thread.sleep(CCArtNet.ARTPOLL_REPLY_TIMEOUT);
 				if (_myIsActive) {
-					synchronized (_myNodeDisconnected) {
+					synchronized (nodeDisconnectedEvents) {
 						for (ArtNetNode myNode : _myDiscoveredNodes.values()) {
 							if (!_myLastDiscovered.contains(myNode)) {
 								_myDiscoveredNodes.remove(myNode.getIPAddress());
-								_myNodeDisconnected.proxy().nodeDisconnected(myNode);
+								nodeDisconnectedEvents.event(myNode);
 							}
 						}
 
 					}
-					synchronized(_myDiscoveryCompleted){
-						_myDiscoveryCompleted.proxy().discoveryCompleted(new ArrayList<ArtNetNode>(_myDiscoveredNodes.values()));
+					synchronized(discoveryCompletedEvents){
+						discoveryCompletedEvents.event(new ArrayList<ArtNetNode>(_myDiscoveredNodes.values()));
 					}
 
 					Thread.sleep(_myDiscoveryInterval - CCArtNet.ARTPOLL_REPLY_TIMEOUT);

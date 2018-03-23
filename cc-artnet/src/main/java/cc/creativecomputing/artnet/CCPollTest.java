@@ -36,25 +36,25 @@ public class CCPollTest {
         try {
         	myArtnet.ip("10.0.0.100");
             myArtnet.connect();
-            myArtnet.nodeDiscovery().newNodeEvents().add(myNode -> {
+            myArtnet.nodeDiscovery().newNodeEvents.add(myNode -> {
             	if (_myNode == null) {
                     _myNode = myNode;
                     System.out.println("found net lynx");
                 }
             });
-            myArtnet.nodeDiscovery().nodeDisconnectedEvents().add(myNode -> {
+            myArtnet.nodeDiscovery().nodeDisconnectedEvents.add(myNode -> {
             	 System.out.println("node disconnected: " + myNode);
                  if (myNode == _myNode) {
                      _myNode = null;
                  }
             });
-            myArtnet.nodeDiscovery().discoveryCompletedEvents().add(myNodes -> {
+            myArtnet.nodeDiscovery().discoveryCompletedEvents.add(myNodes -> {
             	System.out.println(myNodes.size() + " nodes found:");
                 for (ArtNetNode n : myNodes) {
                     System.out.println(n);
                 }
             });
-            myArtnet.nodeDiscovery().discoveryFailedEvents().add(t -> {System.out.println("discovery failed");});
+            myArtnet.nodeDiscovery().discoveryFailedEvents.add(t -> {System.out.println("discovery failed");});
             myArtnet.startNodeDiscovery();
             while (true) {
                 if (_myNode != null) {

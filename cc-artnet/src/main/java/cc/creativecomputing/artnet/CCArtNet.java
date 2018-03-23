@@ -54,18 +54,18 @@ public class CCArtNet {
     public CCArtNetNodeDiscovery nodeDiscovery() {
         if (_myDiscovery == null) {
             _myDiscovery = new CCArtNetNodeDiscovery(this);
-            _myServer.packetReceivedEvents().add(_myDiscovery);
+            _myServer.packetReceivedEvents.add(_myDiscovery::artNetPacketReceived);
         }
         return _myDiscovery;
     }
 
     public void init() {
         _myServer = new CCArtNetServer();
-        _myServer.packetReceivedEvents().add(myPacket -> {
+        _myServer.packetReceivedEvents.add(myPacket -> {
         	CCLog.fine("packet received: " + myPacket.opCode);
         });
-        _myServer.serverStartedEvents().add(myServer -> {CCLog.fine("server started callback");});
-        _myServer.serverStoppedEvents().add(myServer -> {CCLog.info("server stopped");});
+        _myServer.serverStartedEvents.add(myServer -> {CCLog.fine("server started callback");});
+        _myServer.serverStoppedEvents.add(myServer -> {CCLog.info("server stopped");});
     }
 
     public void connect() {

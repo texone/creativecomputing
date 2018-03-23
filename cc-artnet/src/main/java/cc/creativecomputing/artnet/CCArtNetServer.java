@@ -26,38 +26,18 @@ import java.net.SocketAddress;
 import cc.creativecomputing.artnet.packets.ArtNetPacket;
 import cc.creativecomputing.artnet.packets.ArtPollPacket;
 import cc.creativecomputing.artnet.packets.CCArtNetOpCode;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.logging.CCLog;
 //import cc.creativecomputing.io.net.CCUDPServer;
 import cc.creativecomputing.io.net.CCUDPServer;
 
 public class CCArtNetServer extends CCUDPServer<ArtNetPacket> {
 	
-	public interface CCArtNetServerPacketBroadcastedListener {
-	    void artNetPacketBroadcasted(ArtNetPacket thePacket);
-	}
-	
-	public interface CCArtNetServerPacketReceivedListener {
-	    void artNetPacketReceived(ArtNetPacket thePacket);
-	}
-	
-	public interface CCArtNetServerPacketUnicastedListener {
-	    void artNetPacketUnicasted(ArtNetPacket thePacket);
-	}
-	
-	public interface CCArtNetServerStartedListener {
-	    void artNetServerStarted(CCArtNetServer theServer);
-	}
-	
-	public interface CCArtNetServerStoppedListener {
-	    void artNetServerStopped(CCArtNetServer theServer);
-	}
-	
-	protected final CCListenerManager<CCArtNetServerPacketBroadcastedListener> _myPacketBroadcastedEvents = CCListenerManager.create(CCArtNetServerPacketBroadcastedListener.class);
-	protected final CCListenerManager<CCArtNetServerPacketReceivedListener> _myPacketReceivedEvents = CCListenerManager.create(CCArtNetServerPacketReceivedListener.class);
-	protected final CCListenerManager<CCArtNetServerPacketUnicastedListener> _myPacketUnicastedEvents = CCListenerManager.create(CCArtNetServerPacketUnicastedListener.class);
-	protected final CCListenerManager<CCArtNetServerStartedListener> _myServerStartedEvents = CCListenerManager.create(CCArtNetServerStartedListener.class);
-	protected final CCListenerManager<CCArtNetServerStoppedListener> _myServerStoppedEvents = CCListenerManager.create(CCArtNetServerStoppedListener.class);
+	public final CCEventManager<ArtNetPacket> packetBroadcastedEvents = new CCEventManager<>();
+	public final CCEventManager<ArtNetPacket> packetReceivedEvents = new CCEventManager<>();
+	public final CCEventManager<ArtNetPacket> packetUnicastedEvents = new CCEventManager<>();
+	public final CCEventManager<CCArtNetServer> serverStartedEvents = new CCEventManager<>();
+	public final CCEventManager<CCArtNetServer> serverStoppedEvents = new CCEventManager<>();
 
 	public static final int DEFAULT_PORT = 0x1936;
 
@@ -71,42 +51,29 @@ public class CCArtNetServer extends CCUDPServer<ArtNetPacket> {
 		_myTargetAddress.port(theTargetPort);
 		
 		bufferSize(2048);
-		events().add(myMessage -> {
+		events.add(myMessage -> {
 			ArtNetPacket myPacket = (ArtNetPacket)myMessage.message;
 			if (myPacket.opCode == CCArtNetOpCode.POLL) {
 				sendArtPollReply(myMessage.address,(ArtPollPacket) myPacket);
 			}
-			_myPacketReceivedEvents.proxy().artNetPacketReceived(myPacket);
+			packetReceivedEvents.event(myPacket);
 		});
 	}
 	
+	private void sendArtPollReply(SocketAddress address, ArtPollPacket myPacket) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public void ip(String theIP){
 		_myLocalAddress.ip(theIP);
 	}
 	
-	public CCListenerManager<CCArtNetServerPacketBroadcastedListener> packetBroadcastedEvents() {
-		return _myPacketBroadcastedEvents;
-	}
-
-	public CCListenerManager<CCArtNetServerPacketReceivedListener> packetReceivedEvents() {
-		return _myPacketReceivedEvents;
-	}
-
-	public CCListenerManager<CCArtNetServerPacketUnicastedListener> packetUnicastedEvents() {
-		return _myPacketUnicastedEvents;
-	}
-
-	public CCListenerManager<CCArtNetServerStartedListener> serverStartedEvents() {
-		return _myServerStartedEvents;
-	}
-
-	public CCListenerManager<CCArtNetServerStoppedListener> serverStoppedEvents() {
-		return _myServerStoppedEvents;
-	}
+	
 
 	public void broadcastPacket(ArtNetPacket thePacket) {
 		send(thePacket, new InetSocketAddress(_myLocalAddress.broadcast(), _myTargetAddress.port()));
-		_myPacketBroadcastedEvents.proxy().artNetPacketBroadcasted(thePacket);
+		packetBroadcastedEvents.event(thePacket);
 	}
 
 	/**
@@ -117,11 +84,7 @@ public class CCArtNetServer extends CCUDPServer<ArtNetPacket> {
 	 */
 	public void unicastPacket(ArtNetPacket thePacket, InetAddress theTargetAdress) {
 		send(thePacket, new InetSocketAddress(theTargetAdress, _myTargetAddress.port()));
-		_myPacketUnicastedEvents.proxy().artNetPacketUnicasted(thePacket);
-	}
-
-	private void sendArtPollReply(SocketAddress inetAddress, ArtPollPacket packet) {
-		// TODO send reply with self description
+		packetUnicastedEvents.event(thePacket);
 	}
 	
 	public void connect() {
@@ -132,12 +95,12 @@ public class CCArtNetServer extends CCUDPServer<ArtNetPacket> {
     @Override
 	public void connect(InetSocketAddress theAddress){
 		super.connect(theAddress);
-		_myServerStartedEvents.proxy().artNetServerStarted(this);
+		serverStartedEvents.event(this);
 	}
 
 	@Override
 	public void disconnect() {
 		super.disconnect();
-		_myServerStoppedEvents.proxy().artNetServerStopped(this);
+		serverStoppedEvents.event(this);
 	}
 }
