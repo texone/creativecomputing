@@ -60,8 +60,8 @@ public class CCHPGL {
 
 	public CCHPGL(CCHPPaperFormat paperType) {
 
-		_mySerial = new CCSerialModule("HPGL", 9600);
-		_mySerial.startEvents().add(input -> {
+		_mySerial = new CCSerialModule(9600);
+		_mySerial.startEvents.add(input -> {
 			// Initialize plotter
 			write("IN;SP1;");
 			CCLog.info("Plotter Initialized");

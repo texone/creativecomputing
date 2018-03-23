@@ -10,12 +10,10 @@
  */
 package cc.creativecomputing.protocol.serial;
 
-import cc.creativecomputing.app.modules.CCAbstractAppModule;
 import cc.creativecomputing.control.CCSelection;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.demo.protocol.serial.CCSerialTest;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
@@ -33,7 +31,7 @@ import jssc.SerialPortList;
  * @author Christian Riekoff
  *
  */
-public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
+public class CCSerialModule{
 
 	private CCSerialInput _myInput;
 	private CCSerialOutput _myOutput;
@@ -57,18 +55,17 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 	@CCProperty(name = "port")
 	private CCSelection _myPortSelection = new CCSelection();
 	
-	private CCListenerManager<CCSerialStartListener> _myStartEvents = CCListenerManager.create(CCSerialStartListener.class);
-	private CCListenerManager<CCSerialStopListener> _myStopEvents = CCListenerManager.create(CCSerialStopListener.class);
+	public final CCEventManager<CCSerialInput> startEvents = new CCEventManager<>();
+	public final CCEventManager<CCSerialInput> stopEvents = new CCEventManager<>();
 	
-	public CCSerialModule(String theName) {
-		super(CCSerialListener.class, theName);
+	public CCSerialModule() {
 		for(String myValue:list()){
 			_myPortSelection.add(myValue);
 		}	
 	}
 	
-	public CCSerialModule(String theName, int theRate){
-		this(theName);
+	public CCSerialModule(int theRate){
+		this();
 		rate = theRate;
 	}
 	
@@ -78,18 +75,6 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 	
 	public CCSerialOutput output(){
 		return _myOutput;
-	}
-
-	public CCSerialModule() {
-		this("serial");
-	}
-	
-	public CCListenerManager<CCSerialStartListener> startEvents(){
-		return _myStartEvents;
-	}
-	
-	public CCListenerManager<CCSerialStopListener> stopEvents(){
-		return _myStopEvents;
 	}
 	
 	/**
@@ -172,16 +157,15 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 			_myPort.openPort();
 			_myPort.setParams(rate, dataBits.id, stopBits.id, parityBit.id);
 					
-			_myInput = new CCSerialInput(_myListeners, _myPort);
+			_myInput = new CCSerialInput(_myPort);
 			_myOutput = new CCSerialOutput(_myPort);
 			
-			_myStartEvents.proxy().start(_myInput);
+			startEvents.event(_myInput);
 		} catch (SerialPortException e) {
 //			throw new RuntimeException("Error opening serial port " + e.getPortName() + ": " + e.getExceptionType(), e);
 		} 
 	}
 	
-	@Override
 	public void start() {
 		try {
 			String[] myPortNames = SerialPortList.getPortNames();
@@ -199,12 +183,11 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 	/**
 	 * Stops data communication on this port. Use to shut the connection when you're finished with the Serial.
 	 */
-	@Override
 	public void stop() {
 		if (_myInput == null)
 			return;
 		
-		_myStopEvents.proxy().stop(_myInput);
+		stopEvents.event(_myInput);
 		_myInput.stop();
 		_myInput = null;
 		_myOutput = null;

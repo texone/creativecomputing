@@ -17,8 +17,6 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCBitUtil;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.protocol.serial.CCSerialInput;
-import cc.creativecomputing.protocol.serial.CCSerialListener;
 import cc.creativecomputing.protocol.serial.CCSerialModule;
 
 /**
@@ -26,7 +24,7 @@ import cc.creativecomputing.protocol.serial.CCSerialModule;
  * <a href="http://www.enttec.com/index.php?main_menu=Products&pn=70304&show=description&name=dmxusbpro">enttec DMX USB PRO</a>.
  * This way you can enable light control. And also visualize dmx data in your application.
  */
-public class CCDMX implements CCSerialListener {
+public class CCDMX {
 
 	private final static int DMX_PRO_MESSAGE_START = 126;
     private final static int DMX_PRO_MESSAGE_END = 231;
@@ -88,8 +86,24 @@ public class CCDMX implements CCSerialListener {
 	 */
 	public CCDMX(int theUniverseSize) {
 		
-		_mySerial = new CCSerialModule("enttec dmx", 115200);
-		_mySerial.listener().add(this);
+		_mySerial = new CCSerialModule( 115200);
+		_mySerial.input().inputEvents.add(theSerial -> {
+			while (theSerial.available() > 0) {
+				int myValue = theSerial.read();
+				CCLog.info(myValue + ":" + DMX_PRO_MESSAGE_END);
+				switch(myValue){
+				case DMX_PRO_MESSAGE_START:
+					_myMessageBuffer.clear();
+					break;
+				case DMX_PRO_MESSAGE_END:
+					readMessage();
+					break;
+				default: 
+					_myMessageBuffer.add(myValue);
+				}
+			}
+		});
+		
 		_myUniverseSize = theUniverseSize;
 		int myDataSize = _myUniverseSize + 1;
 		
@@ -248,23 +262,6 @@ public class CCDMX implements CCSerialListener {
 			myMessage.data[i] = _myMessageBuffer.get(i + 3).byteValue();
 		}
 		handleDMXMessage(myMessage);
-	}
-
-	public void onSerialEvent(final CCSerialInput theSerial) {
-		while (theSerial.available() > 0) {
-			int myValue = theSerial.read();
-			CCLog.info(myValue + ":" + DMX_PRO_MESSAGE_END);
-			switch(myValue){
-			case DMX_PRO_MESSAGE_START:
-				_myMessageBuffer.clear();
-				break;
-			case DMX_PRO_MESSAGE_END:
-				readMessage();
-				break;
-			default: 
-				_myMessageBuffer.add(myValue);
-			}
-		}
 	}
 
 	
