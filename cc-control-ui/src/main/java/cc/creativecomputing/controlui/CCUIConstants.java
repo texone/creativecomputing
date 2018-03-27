@@ -83,5 +83,7 @@ public class CCUIConstants {
     public static final double MIN_RULER_INTERVAL = 0.250;
     public static final double DEFAULT_RANGE = 10;
     
+	public static final double PICK_RADIUS = 10;
+    
     public static final int CURVE_POINT_SIZE = 4;
 }

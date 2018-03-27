@@ -42,17 +42,17 @@ public class CCBlendableTool<Type extends CCBlendable<Type>> extends CCCreateToo
 		default:
 			break;
 		}
-		CCLog.info((Type)_myController.property().value());
-		myControlPoint.blendable((Type)_myController.property().value());
+		CCLog.info((Type)_myDataView.property().value());
+		myControlPoint.blendable((Type)_myDataView.property().value());
 		CCLog.info(myControlPoint.blendable());
-	    _myController.trackData().add(myControlPoint);
-	    _myController.view().render();
+	    _myDataView.trackData().add(myControlPoint);
+	    _myDataView.view().render();
 	    return myControlPoint;
 	}
 	
 	@Override
 	public void onSelection(CCControlPoint thePoint) {
 		if(thePoint.blendable() == null)return;
-		_myController.property().valueCasted(thePoint.blendable() , false);
+		_myDataView.property().valueCasted(thePoint.blendable() , false);
 	}
 }

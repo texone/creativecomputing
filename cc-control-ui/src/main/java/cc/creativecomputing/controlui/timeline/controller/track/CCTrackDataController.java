@@ -28,11 +28,11 @@ import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
-import cc.creativecomputing.controlui.timeline.controller.actions.RemoveControlPointAction;
-import cc.creativecomputing.controlui.timeline.view.CCTimedContentView;
+import cc.creativecomputing.controlui.timeline.controller.actions.CCControlUndoHistory;
+import cc.creativecomputing.controlui.timeline.controller.actions.CCRemoveControlPointCommand;
+import cc.creativecomputing.controlui.timeline.controller.tools.CCTimedContentView;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.CCTrackView;
-import cc.creativecomputing.controlui.util.CCControlUndoHistory;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
@@ -81,40 +81,7 @@ public abstract class CCTrackDataController implements CCTimedContentView {
 		_myTrackView.render();
 	}
 
-	public void clearSelection() {
-		for (CCControlPoint myPoint : _mySelectedPoints) {
-			myPoint.setSelected(false);
-		}
-		_mySelectedPoints.clear();
-		_myTrackView.render();
-	}
-
-	public void deleteSelection() {
-		for (CCControlPoint myPoint : selectedPoints()) {
-			trackData().remove(myPoint);
-		}
-		clearSelection();
-		view().render();
-	}
-
-	public List<CCControlPoint> copySelection() {
-		List<CCControlPoint> clipBoard = new ArrayList<>();
-		for (CCControlPoint myPoint : selectedPoints()) {
-			clipBoard.add(myPoint.clone());
-		}
-		return clipBoard;
-	}
-
-	public List<CCControlPoint> cutSelection() {
-		List<CCControlPoint> clipBoard = new ArrayList<>();
-		for (CCControlPoint myPoint : selectedPoints()) {
-			trackData().remove(myPoint);
-			clipBoard.add(myPoint.clone());
-		}
-		clearSelection();
-		view().render();
-		return clipBoard;
-	}
+	
 
 	public void paste(List<CCControlPoint> thePoints, double theTime) {
 		if (thePoints == null)
@@ -157,112 +124,7 @@ public abstract class CCTrackDataController implements CCTimedContentView {
 			_myTrackView.render();
 	}
 
-	protected double pickRange() {
-		return CCTrackView.PICK_RADIUS / _myTrackView.width() * (_myTrackContext.viewTime());
-	}
-
-	// picks the nearest point (could be null) and returns it in view space
-	public CCControlPoint pickNearestPoint(CCVector2 theViewCoords) {
-		CCControlPoint myPickCoords = viewToCurveSpace(theViewCoords, true);
-		double myPickRange = pickRange();
-
-		if (trackData() == null)
-			return null;
-
-		ArrayList<CCControlPoint> myPoints = trackData().rangeList(myPickCoords.time() - myPickRange,
-				myPickCoords.time() + myPickRange);
-
-		if (myPoints.size() == 0) {
-			return null;
-		}
-
-		CCVector2 myCurrentPoint = curveToViewSpace(myPoints.get(0));
-		CCControlPoint myNearest = myPoints.get(0);
-		double myMinDistance = myCurrentPoint.distance(theViewCoords);
-		for (CCControlPoint myPoint : myPoints) {
-			myCurrentPoint = curveToViewSpace(myPoint);
-			double myDistance = myCurrentPoint.distance(theViewCoords);
-			if (myDistance < myMinDistance) {
-				myNearest = myPoint;
-				myMinDistance = myDistance;
-			}
-		}
-		return myNearest;
-	}
-
-	public void removePoint(CCVector2 theViewCoords) {
-		CCControlPoint myNearestPoint = pickNearestPoint(theViewCoords);
-		if (myNearestPoint == null)
-			return;
-		trackData().remove(myNearestPoint);
-		_myTrackView.render();
-		CCControlUndoHistory.instance().apply(new RemoveControlPointAction(this, myNearestPoint));
-	}
-
-	public CCHandleControlPoint pickHandle(CCVector2 theViewCoords) {
-		CCControlPoint myCurveCoords = viewToCurveSpace(theViewCoords, true);
-
-		if (trackData() == null)
-			return null;
-
-		CCControlPoint myNextPoint = trackData().ceiling(myCurveCoords);
-		CCControlPoint myPreviousPoint = trackData().lower(myCurveCoords);
-
-		if (myNextPoint != null) {
-			switch (myNextPoint.type()) {
-			case BEZIER:
-				CCHandleControlPoint myInputHandle = ((CCBezierControlPoint) myNextPoint).inHandle();
-
-				if (curveToViewSpace(myInputHandle).distance(theViewCoords) < CCTrackView.PICK_RADIUS) {
-					return myInputHandle;
-				}
-				break;
-			default:
-				break;
-			}
-
-			myNextPoint = trackData().higher(myNextPoint);
-			if (myNextPoint != null && myNextPoint.type() == CCControlPointType.BEZIER) {
-				CCHandleControlPoint myInputHandle = ((CCBezierControlPoint) myNextPoint).inHandle();
-				if (curveToViewSpace(myInputHandle).distance(theViewCoords) < CCTrackView.PICK_RADIUS) {
-					return myInputHandle;
-				}
-			}
-		}
-
-		if (myPreviousPoint != null) {
-			switch (myPreviousPoint.type()) {
-			case BEZIER:
-				CCHandleControlPoint myOutputHandle = ((CCBezierControlPoint) myPreviousPoint).outHandle();
-
-				if (curveToViewSpace(myOutputHandle).distance(theViewCoords) < CCTrackView.PICK_RADIUS) {
-					return myOutputHandle;
-				}
-				break;
-			case TIMED_EVENT:
-				CCHandleControlPoint myTimedEnd = ((CCTimedEventPoint) myPreviousPoint).endPoint();
-
-				if (CCMath.abs(curveToViewSpace(myTimedEnd).x - theViewCoords.x) < CCTrackView.PICK_RADIUS) {
-					return myTimedEnd;
-				}
-				break;
-			default:
-				break;
-			}
-
-			myPreviousPoint = trackData().lower(myPreviousPoint);
-			if (myPreviousPoint == null || myPreviousPoint.type() != CCControlPointType.BEZIER) {
-				return null;
-			}
-
-			CCHandleControlPoint myOutputHandle = ((CCBezierControlPoint) myPreviousPoint).outHandle();
-			if (curveToViewSpace(myOutputHandle).distance(theViewCoords) < CCTrackView.PICK_RADIUS) {
-				return myOutputHandle;
-			}
-		}
-
-		return null;
-	}
+	
 
 	protected List<CCControlPoint> _mySelectedPoints = new ArrayList<>();
 
@@ -271,7 +133,6 @@ public abstract class CCTrackDataController implements CCTimedContentView {
 			myPoint.setSelected(false);
 		}
 		_mySelectedPoints.clear();
-		_myTrackView.render();
 	}
 
 	public List<CCControlPoint> selectedPoints() {

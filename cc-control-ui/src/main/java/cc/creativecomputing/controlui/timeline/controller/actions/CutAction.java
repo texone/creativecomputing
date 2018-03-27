@@ -40,14 +40,13 @@ import java.util.ArrayList;
 import cc.creativecomputing.control.timeline.CCTimeRange;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
-import cc.creativecomputing.controlui.util.Action;
 
 
 /**
  * @author christianriekoff
  *
  */
-public class CutAction implements CCUndoAction{
+public class CutAction implements CCUndoCommand{
 	
 	private CCTrackController _myTrackDataController;
 	private ArrayList<CCControlPoint> _myControlPoints;
@@ -64,8 +63,7 @@ public class CutAction implements CCUndoAction{
 	 */
 	@Override
 	public void apply() {
-		_myTrackDataController.trackData().removeAll(_myTimeRange.start(), _myTimeRange.end() );
-		_myTrackDataController.view().render();
+		_myTrackDataController.trackData().removeAll(_myTimeRange.start, _myTimeRange.end );
 	}
 
 	/* (non-Javadoc)
@@ -73,8 +71,7 @@ public class CutAction implements CCUndoAction{
 	 */
 	@Override
 	public void undo() {
-		_myTrackDataController.trackData().insertAll(_myTimeRange.start(), _myTimeRange.length(), _myControlPoints);
-		_myTrackDataController.view().render();
+		_myTrackDataController.trackData().insertAll(_myTimeRange.start, _myTimeRange.length(), _myControlPoints);
 	}
 
 }

@@ -29,7 +29,6 @@ import cc.creativecomputing.math.CCColor;
  */
 public class CCTrackView extends CCAbstractTrackView{
 	
-	public static final double PICK_RADIUS = 10;
     public static final double GRID_INTERVAL = 5; // curve is calculated every GRID_INTERVAL points
 	
 	private CCTrackControlView _myControlView;

@@ -22,7 +22,7 @@ import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
 import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
-import cc.creativecomputing.controlui.util.CCControlUndoHistory;
+import cc.creativecomputing.controlui.timeline.controller.actions.CCControlUndoHistory;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.io.CCFileChooser;

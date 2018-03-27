@@ -14,7 +14,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.controlui.timeline.view;
+package cc.creativecomputing.controlui.timeline.controller.tools;
+
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.math.CCVector2;
 
 /**
  * @author christianriekoff
@@ -23,5 +26,15 @@ package cc.creativecomputing.controlui.timeline.view;
 public interface CCTimedContentView {
 	int timeToViewX(double theTime);
 	
-	double viewXToTime(double theViewX, boolean theGetPos);
+	double viewXToTime(double theViewX);
+	
+	double viewWidthToTime(double theViewWidth);
+
+	CCControlPoint viewToCurveSpace(CCVector2 _myPressViewCoords, boolean b);
+
+	CCVector2 curveToViewSpace(CCControlPoint myControlPoint);
+
+	CCControlPoint quantize(CCControlPoint myTargetPosition);
+
+	double viewTime();
 }

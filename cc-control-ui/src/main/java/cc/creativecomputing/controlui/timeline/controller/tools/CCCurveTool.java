@@ -19,50 +19,49 @@ package cc.creativecomputing.controlui.timeline.controller.tools;
 import cc.creativecomputing.control.timeline.CCTrackData;
 import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
-import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
 import cc.creativecomputing.control.timeline.point.CCControlPoint.CCHandleType;
-import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
+import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
-public class CCCurveTool extends CCTimelineTool<CCCurveTrackController>{
+public class CCCurveTool extends CCTimelineTool{
 
 	protected static float MAX_DRAG_X = 100;
 	
     protected CCBezierControlPoint _myFloorBezier;
     protected CCBezierControlPoint _myCeilBezier;
     
-    public CCCurveTool(CCCurveTrackController theController) {
+    public CCCurveTool(CCTimedContentView theController) {
 		super(false, theController);
 	}
     
 	protected CCBezierControlPoint makeBezier(CCControlPoint thePoint, CCTrackData theData){
-    		if(thePoint.type() == CCControlPointType.BEZIER)return (CCBezierControlPoint)thePoint;
-    	
-	    	theData.remove(thePoint);
+		if(thePoint.type() == CCControlPointType.BEZIER)return (CCBezierControlPoint)thePoint;
+    		
+		theData.remove(thePoint);
 	    	
-	    	CCBezierControlPoint myResult = new CCBezierControlPoint(thePoint.time(), thePoint.value());
-	    	myResult.blendable(thePoint.blendable());
-	    	CCHandleControlPoint myInHandle = new CCHandleControlPoint(myResult,CCHandleType.BEZIER_IN_HANDLE, myResult.time(), myResult.value());
-	    	myResult.inHandle(myInHandle);
-	    	CCHandleControlPoint myOutHandle = new CCHandleControlPoint(myResult,CCHandleType.BEZIER_OUT_HANDLE, myResult.time(), myResult.value());
-	    	myResult.outHandle(myOutHandle);
-	    	theData.add(myResult);
-	    	return myResult;
+		CCBezierControlPoint myResult = new CCBezierControlPoint(thePoint.time(), thePoint.value());
+		myResult.blendable(thePoint.blendable());
+		CCHandleControlPoint myInHandle = new CCHandleControlPoint(myResult,CCHandleType.BEZIER_IN_HANDLE, myResult.time(), myResult.value());
+		myResult.inHandle(myInHandle);
+		CCHandleControlPoint myOutHandle = new CCHandleControlPoint(myResult,CCHandleType.BEZIER_OUT_HANDLE, myResult.time(), myResult.value());
+		myResult.outHandle(myOutHandle);
+		theData.add(myResult);
+		return myResult;
     }
 
     @Override
     public void mousePressed(CCGLMouseEvent theEvent){
 		super.mousePressed(theEvent);
     	
-		CCControlPoint myFloor = _myController.trackData().floor(_myPressCurveCoords);
-		CCControlPoint myCeil = _myController.trackData().ceiling(_myPressCurveCoords);
+		CCControlPoint myFloor = _myTrackData.floor(_myPressCurveCoords);
+		CCControlPoint myCeil = _myTrackData.ceiling(_myPressCurveCoords);
 		
 		if(myFloor != null && myCeil != null){
-			_myFloorBezier = makeBezier(myFloor, _myController.trackData());
-			_myCeilBezier = makeBezier(myCeil, _myController.trackData());
+			_myFloorBezier = makeBezier(myFloor, _myTrackData);
+			_myCeilBezier = makeBezier(myCeil, _myTrackData);
 		}else{
 			_myFloorBezier = null;
 			_myCeilBezier = null;
@@ -71,25 +70,25 @@ public class CCCurveTool extends CCTimelineTool<CCCurveTrackController>{
     
     @Override
 	public void mouseDragged(CCVector2 theEvent) {
-    		super.mouseDragged(theEvent);
+    	super.mouseDragged(theEvent);
     	
 		if(_myFloorBezier == null)return;
 		if(_myCeilBezier == null)return;
     	
 		if(CCMath.abs(_myMovX) > CCMath.abs(_myMovY)){
-	    		double myXBlend = CCMath.saturate(CCMath.norm(CCMath.abs(_myMovX), 0, MAX_DRAG_X));
-	    		if(_myMovX < 0){
-	    			_myFloorBezier.outHandle().value(_myFloorBezier.value());
-	    			_myFloorBezier.outHandle().time(CCMath.blend(_myFloorBezier.time(), _myCeilBezier.time(), myXBlend));
+			double myXBlend = CCMath.saturate(CCMath.norm(CCMath.abs(_myMovX), 0, MAX_DRAG_X));
+			if(_myMovX < 0){
+				_myFloorBezier.outHandle().value(_myFloorBezier.value());
+				_myFloorBezier.outHandle().time(CCMath.blend(_myFloorBezier.time(), _myCeilBezier.time(), myXBlend));
 	
-	    			_myCeilBezier.inHandle().value(CCMath.blend(_myCeilBezier.value(), _myFloorBezier.value(), myXBlend));
-	    			_myCeilBezier.inHandle().time(_myCeilBezier.time());
-	    		}else{
-	    			_myFloorBezier.outHandle().value(CCMath.blend(_myFloorBezier.value(), _myCeilBezier.value(), myXBlend));
-	    			_myFloorBezier.outHandle().time(_myFloorBezier.time());
+				_myCeilBezier.inHandle().value(CCMath.blend(_myCeilBezier.value(), _myFloorBezier.value(), myXBlend));
+				_myCeilBezier.inHandle().time(_myCeilBezier.time());
+			}else{
+				_myFloorBezier.outHandle().value(CCMath.blend(_myFloorBezier.value(), _myCeilBezier.value(), myXBlend));
+				_myFloorBezier.outHandle().time(_myFloorBezier.time());
 	
-	    			_myCeilBezier.inHandle().value(_myCeilBezier.value());
-	    			_myCeilBezier.inHandle().time(CCMath.blend(_myCeilBezier.time(), _myFloorBezier.time(), myXBlend));
+				_myCeilBezier.inHandle().value(_myCeilBezier.value());
+				_myCeilBezier.inHandle().time(CCMath.blend(_myCeilBezier.time(), _myFloorBezier.time(), myXBlend));
 			}
 		}else{
 			float myYBlend = (float)CCMath.saturate(CCMath.norm(CCMath.abs(_myCurveMovement.value()), 0, 0.25));
