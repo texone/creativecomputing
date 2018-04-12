@@ -51,14 +51,14 @@ public class CCSplineHandle extends CCPropertyHandle<CCSpline>{
 		}
 		myResultData.put("closed", mySpline.isClosed());
 		CCDataArray myPointsData = myResultData.createArray("points");
-		for(CCVector3 myPoint:mySpline.points()){
+		for(CCVector3 myPoint:mySpline){
 			CCDataObject myPointData = myPointsData.createObject();
 			myPointData.put("x", myPoint.x);
 			myPointData.put("y", myPoint.y);
 			myPointData.put("z", myPoint.z);
 		}
 
-		CCLog.info("save:" + mySpline.points().size());
+		CCLog.info("save:" + mySpline.size());
 		return myResultData;
 	}
 	
@@ -80,10 +80,10 @@ public class CCSplineHandle extends CCPropertyHandle<CCSpline>{
 		}
 		CCSpline mySpline = value();
 		CCLog.info("load:" + mySpline.points().size());
-		mySpline.points().clear();
-		mySpline.points().addAll(myPoints);
+		mySpline.clear();
+		mySpline.addAll(myPoints);
 		mySpline.endEditSpline();
-		CCLog.info("load:" + myPoints.size() + ":" + mySpline.points().size());
+		CCLog.info("load:" + myPoints.size() + ":" + mySpline.size());
 	}
 	
 	@Override

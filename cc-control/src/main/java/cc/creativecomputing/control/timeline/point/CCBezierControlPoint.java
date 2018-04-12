@@ -19,7 +19,9 @@ package cc.creativecomputing.control.timeline.point;
 import java.util.SortedSet;
 
 import cc.creativecomputing.control.timeline.CCTrackData;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.util.CCCubicSolver;
 
 
@@ -38,6 +40,8 @@ public class CCBezierControlPoint extends CCControlPoint {
 
 	public CCBezierControlPoint(double theTime, double theValue) {
 		super(theTime, theValue, CCControlPointType.BEZIER);
+		_myInHandle = new CCHandleControlPoint(this,CCHandleType.BEZIER_IN_HANDLE, theTime, theValue);
+		_myOutHandle = new CCHandleControlPoint(this,CCHandleType.BEZIER_OUT_HANDLE, theTime, theValue);
 	}
 	
 	public CCBezierControlPoint(CCControlPoint theControlPoint) {
@@ -50,10 +54,6 @@ public class CCBezierControlPoint extends CCControlPoint {
 	}
 
 	public CCHandleControlPoint inHandle() {
-		// TODO make handle adaption work when moving points
-//		if(_myPrevious != null && _myPrevious.time() > _myInHandle.time()) {
-//			return new HandleControlPoint(this, HandleType.BEZIER_IN_HANDLE, _myPrevious.time(), _myInHandle.value());
-//		}
 		return _myInHandle;
 	}
 
@@ -62,9 +62,6 @@ public class CCBezierControlPoint extends CCControlPoint {
 	}
 
 	public CCHandleControlPoint outHandle() {
-//		if(_myNext != null && _myNext.time() < _myOutHandle.time()) {
-//			return new HandleControlPoint(this, HandleType.BEZIER_OUT_HANDLE, _myNext.time(), _myOutHandle.value());
-//		}
 		return _myOutHandle;
 	}
 
@@ -94,23 +91,20 @@ public class CCBezierControlPoint extends CCControlPoint {
 		}
 		return myResult[i];
 	}
-	
-	private double bezierValue(double theValue0, double theValue1, double theValue2, double theValue3, double theBlend) {
-		double a = -theValue0 + 3 * theValue1 - 3 * theValue2 + theValue3;
-		double b = 3 * theValue0 - 6 * theValue1 + 3 * theValue2;
-		double c = -3 * theValue0 + 3 * theValue1;
-		double d = theValue0;
-		
-		return 
-		a * theBlend * theBlend * theBlend + 
-		b * theBlend * theBlend	+ 
-		c * theBlend + 
-		d;
-	}
 
 	public double sampleBezierSegment(CCControlPoint p0, CCControlPoint p1, CCControlPoint p2, CCControlPoint p3, double theTime) {
 		double myBezierBlend = bezierBlend(p0.time(), p1.time(), p2.time(), p3.time(), theTime);
-		return bezierValue(p0.value(), p1.value(), p2.value(), p3.value(), myBezierBlend);
+		return CCMath.bezierPoint(p0.value(), p1.value(), p2.value(), p3.value(), myBezierBlend);
+	}
+	
+	@Override
+	public void fix() {
+		if(_myPrevious != null){
+			_myInHandle.time(CCMath.max(_myInHandle.time(), _myPrevious.time()));
+		}
+		if(_myNext != null){
+			_myOutHandle.time(CCMath.min(_myOutHandle.time(), _myNext.time()));
+		}
 	}
 
 	/*

@@ -190,15 +190,6 @@ public class CCTrackData extends TreeSet<CCControlPoint>{
 		return 0;
 	}
 
-    /**
-     * Returns the accumulated value for the given time
-     * @param theTime
-     * @return
-     */
-    public double getAccumulatedValue(double theTime) {
-    	return value(theTime);
-    }
-
 	public double value(double theTime) {
 		if (size() == 0) {
 			return 0.0;

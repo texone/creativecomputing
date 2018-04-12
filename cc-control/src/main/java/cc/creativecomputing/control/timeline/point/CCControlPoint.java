@@ -170,6 +170,10 @@ public class CCControlPoint {
 		_myTime = theTime;
 	}
 	
+	public void fix(){
+		
+	}
+	
 	public double interpolateValue(double theTime, CCTrackData theData) {
 		return _myValue;
 	}
