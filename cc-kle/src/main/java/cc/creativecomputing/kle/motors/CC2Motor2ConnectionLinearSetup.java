@@ -22,6 +22,12 @@ public class CC2Motor2ConnectionLinearSetup extends CCMotorSetup{
 	
 	private CC2Motor2ConnectionLinearBounds _myBounds;
 	
+	private double _myJoint0X = -77;
+	private double _myJoint0Y = -162.5; 
+	
+	private double _myJoint21Dist = 90;
+	private double _myJoint03Dist = 13;
+	
 	private double _myRotationRadius;
 	
 	public CC2Motor2ConnectionLinearSetup(List<CCMotorChannel> theChannels, CC2Motor2ConnectionLinearBounds theBounds, double theElementRadius){
@@ -31,6 +37,14 @@ public class CC2Motor2ConnectionLinearSetup extends CCMotorSetup{
 		
 		motor0 = _myChannels.get(0);
 		motor1 = _myChannels.get(1);
+		
+		_myJoint0X = motor0.position().x;
+		_myJoint0Y = motor0.position().y;
+		
+		_myJoint21Dist = motor0.connectionPosition().distance(motor1.connectionPosition());
+		_myJoint03Dist = motor0.position().distance(motor1.position());
+		
+		CCLog.info(_myJoint0X, _myJoint0Y, _myJoint21Dist, _myJoint03Dist);
 		
 		_myCentroid = motor0.connectionPosition().add(motor1.connectionPosition()).multiplyLocal(0.5);
 		
@@ -59,11 +73,35 @@ public class CC2Motor2ConnectionLinearSetup extends CCMotorSetup{
 	@Override
 	public void setByRelativePosition(double... theValues) {
 		double myRotation = theValues != null && theValues.length > 0 ? theValues[0] : 0.5f;
-		double myLift = theValues != null && theValues.length > 1 ? theValues[1] : 0.5f;
+		double myLift = theValues != null && theValues.length > 1 ? theValues[1] : 0.5f * _myBounds.maxLift();
+		
+		double myAngle = myRotation * CCMath.radians(_myBounds.maxRotation());
+		
+		double myJoint1X = 0;
+		double myJoint1Y = myLift;
+
+		double myJointY = CCMath.sin(myAngle) * _myJoint21Dist + myJoint1Y;
+		if(myJointY < 0) {
+			myAngle = CCMath.asin(-myJoint1Y / _myJoint21Dist);
+		}
+		
+		if(myJointY > _myBounds.maxLift()) {
+			myAngle = CCMath.asin(-(myJoint1Y - 100) / _myJoint21Dist);
+			CCLog.info(myAngle);
+		}
+		
+		double myJoint2X = CCMath.cos(myAngle) * _myJoint21Dist + myJoint1X;
+		double myJoint2Y = CCMath.sin(myAngle) * _myJoint21Dist + myJoint1Y;
+		
+		double myJoint02Dist = CCMath.dist(_myJoint0X, _myJoint0Y, myJoint2X, myJoint2Y);
+		
+		double myJoint23Dist = CCMath.sqrt(CCMath.sq(myJoint02Dist) - CCMath.sq(_myJoint03Dist));
+		
+		double myAngle1 = CCMath.asin(_myJoint03Dist / myJoint02Dist);
 		
 		_myElementOffset.set(animationPosition(myLift));
 		
-		double myAngle = myRotation * CCMath.radians(_myBounds.maxRotation());
+		double myAngle = 0; //myRotation * CCMath.radians(_myBounds.maxRotation());
 		CCVector2 myRotation0 = CCVector2.circlePoint(myAngle, _myMotorDistance / 2, 0, 0);
 		CCVector2 myRotation1 = CCVector2.circlePoint(-myAngle, _myMotorDistance / 2, 0, 0);
 		

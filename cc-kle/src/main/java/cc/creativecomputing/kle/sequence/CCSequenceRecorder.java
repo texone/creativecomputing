@@ -283,6 +283,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	@Override
 	public void update(CCAnimator theAnimator) {
+		
 		if(!_myIsRecording)return;
 		
 		if(_myCurrentType == null){
@@ -584,6 +585,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		_myProgress = theProgress;
 		_myProgress.start();
 		_myIsRecording = true;
+		CCLog.info("record");
 	}
 	
 	@CCProperty(name = "record frame")

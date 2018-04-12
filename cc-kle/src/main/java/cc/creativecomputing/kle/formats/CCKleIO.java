@@ -46,6 +46,9 @@ public class CCKleIO {
 				case CSV:
 					mySequence = new CCKleCSVFormat().load(thePath, theMapping);
 					break;
+				case BCSV:
+					mySequence = new CCKleCSVBinFormat().load(thePath, theMapping);
+					break;
 				case PNG:
 					mySequence = new CCKlePNGFormat().load(thePath, theMapping);
 					break;

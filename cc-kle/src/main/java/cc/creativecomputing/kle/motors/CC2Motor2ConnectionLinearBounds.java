@@ -6,11 +6,17 @@ import cc.creativecomputing.math.CCVector3;
 
 public class CC2Motor2ConnectionLinearBounds extends CCMotorCalculations<CC2Motor2ConnectionLinearSetup>{
 
-	@CCProperty(name = "max rotation", min = 0, max = 45)
+	@CCProperty(name = "max rotation", min = 0, max = 35)
 	private double _cRotation = 0;
+	@CCProperty(name = "max lift", min = 0, max = 100)
+	private double _cLift = 0;
 	
 	public double maxRotation() {
 		return _cRotation;
+	}
+	
+	public double maxLift() {
+		return _cLift;
 	}
 	
 //	@Override

@@ -16,6 +16,7 @@
 			</motors>
 			<matrix m00="1.0" m01="0.0" m02="0.0" m03="0.0" m10="0.0" m11="1.0" m12="0.0" m13="0.0" m20="0.0" m21="0.0" m22="1.0" m23="0.0" m30="NaN" m31="NaN" m32="NaN" m33="NaN"/>
 			<id_sources/>
+			<relative_sources/>
 		</element>
 	</elements>
 </sculpture>

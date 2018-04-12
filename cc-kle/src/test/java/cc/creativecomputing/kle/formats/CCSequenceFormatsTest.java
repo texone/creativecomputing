@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.logging.CCLog;
@@ -122,7 +123,7 @@ public class CCSequenceFormatsTest {
     	testFormat(CCKleFormats.PNG, "export/png");
     }
     
-//    @Test
+    @Test
     public void testRecordBIN() {
     	testFormat(CCKleFormats.BIN, "export/test_bin");
     }

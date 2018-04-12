@@ -4,7 +4,6 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.effects.CCOffsetEffect;
 import cc.creativecomputing.effects.CCSignalEffect;
@@ -21,9 +20,7 @@ import cc.creativecomputing.kle.CCKleEffectManager;
 import cc.creativecomputing.kle.CCKleEffectable;
 import cc.creativecomputing.kle.CCKleEffectables;
 import cc.creativecomputing.kle.analyze.CCKleRealtimeAnalyzer;
-import cc.creativecomputing.kle.config.CC1Motor1ConnectionConfigCreator;
 import cc.creativecomputing.kle.config.CC2Motor2ConnectionLinearConfigCreator;
-import cc.creativecomputing.kle.motors.CC1Motor1ConnectionBounds;
 import cc.creativecomputing.kle.motors.CC2Motor2ConnectionLinearBounds;
 import cc.creativecomputing.kle.sequence.CCSequenceRecorder;
 
@@ -60,7 +57,7 @@ public class CC2Motor2ConnectionLinearDemo extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		new CC2Motor2ConnectionLinearConfigCreator(70, 50, 20, 0, 30, 5).saveXML("linear/config");
+		new CC2Motor2ConnectionLinearConfigCreator(60, 317, 200, 0, 30, 5).saveXML("linear/config");
 		
 		_myCameraController = new CCCameraController(this, g, 100);
 		
@@ -85,6 +82,8 @@ public class CC2Motor2ConnectionLinearDemo extends CCGL2Adapter {
 		_myLightAnimator.put("gradient1", new CCSimpleGradientEffect());
 
 		_myRecorder = new CCSequenceRecorder(this, _mySequenceElements, theAnimator);
+		_myRecorder.addEffectManager(_myEffectManager, CCKleChannelType.MOTORS);
+		_myRecorder.addEffectManager(_myLightAnimator, CCKleChannelType.LIGHTS);
 
 		_myAnalyzer = new CCKleRealtimeAnalyzer(_mySequenceElements, theAnimator, CCKleChannelType.MOTORS);
 	}
@@ -93,6 +92,7 @@ public class CC2Motor2ConnectionLinearDemo extends CCGL2Adapter {
 	public void update(CCAnimator theAnimator) {
 		_myEffectManager.update(theAnimator);
 		_myLightAnimator.update(theAnimator);
+		_myRecorder.update(theAnimator);
 	}
 	
 	@CCProperty(name = "attributes")
@@ -118,7 +118,7 @@ public class CC2Motor2ConnectionLinearDemo extends CCGL2Adapter {
 //			g.line(mySphere.motorSetup().channels().get(0).connectionPosition(),mySphere.motorSetup().channels().get(1).connectionPosition());
 			
 //			CCLog.info(mySphere.lightSetup().color(), mySphere.lightSetup().channels().get(0).value(), mySphere.lightSetup().channels().get(1).value(), mySphere.lightSetup().channels().get(2).value());
-			g.color(mySphere.lightSetup().color());
+			g.color(255,100);//mySphere.lightSetup().color());
 			g.beginShape(CCDrawMode.QUADS);
 			g.vertex(mySphere.motorSetup().channels().get(0).position());
 			g.vertex(mySphere.motorSetup().channels().get(0).connectionPosition());

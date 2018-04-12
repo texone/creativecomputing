@@ -29,6 +29,7 @@ public enum CCKleFormats {
 	ANIM(new CCKleAnimFormat(), true),
 	BIN(new CCKleBinFormat(), false),
 	CSV(new CCKleCSVFormat(), false),
+	BCSV(new CCKleCSVBinFormat(), false),
 	PNG(new CCKlePNGFormat(), false),
 	TXT(new CCKleTXTFormat(), true),
 	CCA(new CCKleCCAFormat(), true),

@@ -67,7 +67,7 @@
                 "min": 0,
                 "max": 1,
                 "name": "blend",
-                "value": 1
+                "value": 0
               },
               "rotation modulation": {
                 "name": "rotation modulation",
@@ -140,6 +140,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -172,6 +178,12 @@
                             "min": -1,
                             "max": 1,
                             "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
                             "value": 0
                           }
                         }
@@ -206,6 +218,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       }
@@ -233,7 +251,7 @@
                         "min": -1,
                         "max": 1,
                         "name": "constant",
-                        "value": 0.9220000505447388
+                        "value": 0
                       },
                       "column": {
                         "min": -1,
@@ -288,6 +306,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -321,6 +345,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -353,6 +383,12 @@
                             "min": -1,
                             "max": 1,
                             "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
                             "value": 0
                           }
                         }
@@ -497,6 +533,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -530,6 +572,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -562,6 +610,12 @@
                             "min": -1,
                             "max": 1,
                             "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
                             "value": 0
                           }
                         }
@@ -666,6 +720,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -699,6 +759,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -731,6 +797,12 @@
                             "min": -1,
                             "max": 1,
                             "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
                             "value": 0
                           }
                         }
@@ -814,6 +886,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -847,6 +925,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -879,6 +963,12 @@
                             "min": -1,
                             "max": 1,
                             "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
                             "value": 0
                           }
                         }
@@ -916,6 +1006,177 @@
               },
               "rotation amount": {
                 "name": "rotation amount",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "column": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "column",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      },
+                      "row": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "row",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {
+                      "column": {
+                        "name": "column",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "id": {
+                        "name": "id",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
+                          }
+                        }
+                      },
+                      "row": {
+                        "name": "row",
+                        "value": {
+                          "mod flip": {
+                            "name": "mod flip",
+                            "value": false
+                          },
+                          "div": {
+                            "min": 2,
+                            "max": 8,
+                            "name": "div",
+                            "value": 2
+                          },
+                          "mod": {
+                            "min": 2,
+                            "max": 48,
+                            "name": "mod",
+                            "value": 2
+                          },
+                          "div amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "div amount",
+                            "value": 0
+                          },
+                          "mod amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "gradient": {
+                "gradient": [],
+                "name": "gradient",
+                "value": []
+              },
+              "lift phase": {
+                "name": "lift phase",
                 "value": {
                   "amounts": {
                     "name": "amounts",
@@ -985,6 +1246,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -1005,7 +1272,7 @@
                             "min": 2,
                             "max": 48,
                             "name": "mod",
-                            "value": 2
+                            "value": 30
                           },
                           "div amount": {
                             "min": -1,
@@ -1017,6 +1284,12 @@
                             "min": -1,
                             "max": 1,
                             "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
                             "value": 0
                           }
                         }
@@ -1051,158 +1324,11 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "combiner": {
-                    "name": "combiner",
-                    "value": "ADD"
-                  }
-                }
-              },
-              "gradient": {
-                "gradient": [],
-                "name": "gradient",
-                "value": []
-              },
-              "lift phase": {
-                "name": "lift phase",
-                "value": {
-                  "amounts": {
-                    "name": "amounts",
-                    "value": {
-                      "random": {
-                        "min": -1,
-                        "max": 1,
-                        "name": "random",
-                        "value": 0
-                      },
-                      "constant": {
-                        "min": -1,
-                        "max": 1,
-                        "name": "constant",
-                        "value": 0
-                      },
-                      "column": {
-                        "min": -1,
-                        "max": 1,
-                        "name": "column",
-                        "value": 0
-                      },
-                      "id": {
-                        "min": -1,
-                        "max": 1,
-                        "name": "id",
-                        "value": 1
-                      },
-                      "row": {
-                        "min": -1,
-                        "max": 1,
-                        "name": "row",
-                        "value": 0
-                      }
-                    }
-                  },
-                  "id amounts": {
-                    "name": "id amounts",
-                    "value": {
-                      "column": {
-                        "name": "column",
-                        "value": {
-                          "mod flip": {
-                            "name": "mod flip",
-                            "value": false
                           },
-                          "div": {
-                            "min": 2,
-                            "max": 8,
-                            "name": "div",
-                            "value": 2
-                          },
-                          "mod": {
-                            "min": 2,
-                            "max": 48,
-                            "name": "mod",
-                            "value": 2
-                          },
-                          "div amount": {
+                          "random amount": {
                             "min": -1,
                             "max": 1,
-                            "name": "div amount",
-                            "value": 0
-                          },
-                          "mod amount": {
-                            "min": -1,
-                            "max": 1,
-                            "name": "mod amount",
-                            "value": 0
-                          }
-                        }
-                      },
-                      "id": {
-                        "name": "id",
-                        "value": {
-                          "mod flip": {
-                            "name": "mod flip",
-                            "value": false
-                          },
-                          "div": {
-                            "min": 2,
-                            "max": 8,
-                            "name": "div",
-                            "value": 2
-                          },
-                          "mod": {
-                            "min": 2,
-                            "max": 48,
-                            "name": "mod",
-                            "value": 2
-                          },
-                          "div amount": {
-                            "min": -1,
-                            "max": 1,
-                            "name": "div amount",
-                            "value": 0
-                          },
-                          "mod amount": {
-                            "min": -1,
-                            "max": 1,
-                            "name": "mod amount",
-                            "value": 0
-                          }
-                        }
-                      },
-                      "row": {
-                        "name": "row",
-                        "value": {
-                          "mod flip": {
-                            "name": "mod flip",
-                            "value": false
-                          },
-                          "div": {
-                            "min": 2,
-                            "max": 8,
-                            "name": "div",
-                            "value": 2
-                          },
-                          "mod": {
-                            "min": 2,
-                            "max": 48,
-                            "name": "mod",
-                            "value": 2
-                          },
-                          "div amount": {
-                            "min": -1,
-                            "max": 1,
-                            "name": "div amount",
-                            "value": 0
-                          },
-                          "mod amount": {
-                            "min": -1,
-                            "max": 1,
-                            "name": "mod amount",
+                            "name": "random amount",
                             "value": 0
                           }
                         }
@@ -1231,7 +1357,7 @@
                 "min": 0,
                 "max": 50,
                 "name": "phase speed",
-                "value": 0.1
+                "value": 0
               },
               "print": {
                 "name": "print",
@@ -1317,6 +1443,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -1350,6 +1482,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -1382,6 +1520,12 @@
                             "min": -1,
                             "max": 1,
                             "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
                             "value": 0
                           }
                         }
@@ -1568,6 +1712,12 @@
                         "name": "octaves",
                         "value": 1
                       },
+                      "break ratio": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "break ratio",
+                        "value": 0
+                      },
                       "scale": {
                         "min": 0,
                         "max": 10,
@@ -1677,6 +1827,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -1710,6 +1866,12 @@
                             "max": 1,
                             "name": "mod amount",
                             "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
+                            "value": 0
                           }
                         }
                       },
@@ -1742,6 +1904,12 @@
                             "min": -1,
                             "max": 1,
                             "name": "mod amount",
+                            "value": 0
+                          },
+                          "random amount": {
+                            "min": -1,
+                            "max": 1,
+                            "name": "random amount",
                             "value": 0
                           }
                         }
@@ -1780,7 +1948,7 @@
           }
         ]},
         "name": "envelope",
-        "value": "cc.creativecomputing.control.CCEnvelope@8181b86"
+        "value": "cc.creativecomputing.control.CCEnvelope@30e0ed47"
       },
       "analyzer": {
         "name": "analyzer",
@@ -1810,7 +1978,7 @@
                 "min": -1.7976931348623157E308,
                 "max": 1.7976931348623157E308,
                 "name": "max",
-                "value": 10
+                "value": 100
               },
               "historgram steps": {
                 "min": -2147483648,
@@ -1877,7 +2045,7 @@
                 "min": -1.7976931348623157E308,
                 "max": 1.7976931348623157E308,
                 "name": "max",
-                "value": 10
+                "value": 100
               },
               "historgram steps": {
                 "min": -2147483648,
@@ -1954,7 +2122,7 @@
                 "min": -1.7976931348623157E308,
                 "max": 1.7976931348623157E308,
                 "name": "max",
-                "value": 40
+                "value": 100
               },
               "historgram steps": {
                 "min": -2147483648,
@@ -2019,7 +2187,7 @@
                 "min": -1.7976931348623157E308,
                 "max": 1.7976931348623157E308,
                 "name": "max",
-                "value": 10
+                "value": 100
               },
               "historgram steps": {
                 "min": -2147483648,
@@ -2079,6 +2247,37 @@
           "fade ease formular": {
             "name": "fade ease formular",
             "value": "SINE"
+          },
+          "LIGHTS": {
+            "name": "LIGHTS",
+            "value": {
+              "update steps": {
+                "min": 1,
+                "max": 10,
+                "name": "update steps",
+                "value": 5
+              },
+              "use start end channel": {
+                "name": "use start end channel",
+                "value": false
+              },
+              "end channel": {
+                "min": -2147483648,
+                "max": 2147483647,
+                "name": "end channel",
+                "value": 210
+              },
+              "export": {
+                "name": "export",
+                "value": false
+              },
+              "start channel": {
+                "min": -2147483648,
+                "max": 2147483647,
+                "name": "start channel",
+                "value": 0
+              }
+            }
           },
           "fade ease mode": {
             "name": "fade ease mode",
@@ -2173,7 +2372,7 @@
                 "min": 1,
                 "max": 10,
                 "name": "update steps",
-                "value": 5
+                "value": 1
               },
               "use start end channel": {
                 "name": "use start end channel",
@@ -2221,7 +2420,7 @@
             "min": -1.7976931348623157E308,
             "max": 1.7976931348623157E308,
             "name": "max velocity",
-            "value": 10
+            "value": 100
           },
           "max rotation": {
             "min": 0,
@@ -2233,7 +2432,7 @@
             "min": -1.7976931348623157E308,
             "max": 1.7976931348623157E308,
             "name": "max jerk",
-            "value": 10
+            "value": 100
           },
           "apply filter": {
             "name": "apply filter",
@@ -2249,13 +2448,13 @@
             "min": -1.7976931348623157E308,
             "max": 1.7976931348623157E308,
             "name": "max acceleration",
-            "value": 10
+            "value": 100
           },
           "bottom distance": {
             "min": 0,
             "max": 2000,
             "name": "bottom distance",
-            "value": 20
+            "value": 100
           }
         }
       },
@@ -2317,7 +2516,7 @@
             "min": 1,
             "max": 20000,
             "name": "distance",
-            "value": 125.9037887088054
+            "value": 1144.6569971019665
           },
           "center": {
             "name": "center",
@@ -2326,19 +2525,19 @@
                 "min": -10000,
                 "max": 10000,
                 "name": "x",
-                "value": 0
+                "value": -35.678746815741704
               },
               "y": {
                 "min": -10000,
                 "max": 10000,
                 "name": "y",
-                "value": 0
+                "value": -131.22253378900268
               },
               "z": {
                 "min": -10000,
                 "max": 10000,
                 "name": "z",
-                "value": 0
+                "value": 95.79365168971341
               }
             }
           },
@@ -2349,27 +2548,1484 @@
                 "min": -1,
                 "max": 1,
                 "name": "w",
-                "value": 0.9540749444608077
+                "value": 0.9594700030770836
               },
               "x": {
                 "min": -1,
                 "max": 1,
                 "name": "x",
-                "value": -0.21480246481108153
+                "value": -0.2045085315892524
               },
               "y": {
                 "min": -1,
                 "max": 1,
                 "name": "y",
-                "value": -0.20724178564079337
+                "value": -0.1928311138653784
               },
               "z": {
                 "min": -1,
                 "max": 1,
                 "name": "z",
-                "value": -0.025529272367314157
+                "value": -0.020241917594533733
               }
             }
+          }
+        }
+      },
+      "lights": {
+        "name": "lights",
+        "value": {
+          "r default": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "r default",
+            "value": 1
+          },
+          "offset": {
+            "name": "offset",
+            "value": {
+              "r modulation": {
+                "name": "r modulation",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "min": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "min",
+                "value": -1
+              },
+              "group blends": {
+                "name": "group blends",
+                "value": {"group_0": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "group_0",
+                  "value": 1
+                }}
+              },
+              "max": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "max",
+                "value": 1
+              },
+              "blend": {
+                "min": 0,
+                "max": 1,
+                "name": "blend",
+                "value": 0
+              },
+              "b modulation": {
+                "name": "b modulation",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "g modulation": {
+                "name": "g modulation",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "channelblend": {
+                "min": 0,
+                "max": 1,
+                "name": "channelblend",
+                "value": 0
+              }
+            }
+          },
+          "end add": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "end add",
+            "value": 0
+          },
+          "gradient1": {
+            "name": "gradient1",
+            "value": {
+              "h shift": {
+                "min": -1,
+                "max": 1,
+                "name": "h shift",
+                "value": 0
+              },
+              "group blends": {
+                "name": "group blends",
+                "value": {"group_0": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "group_0",
+                  "value": 1
+                }}
+              },
+              "offset 2 amp": {
+                "min": 0,
+                "max": 1,
+                "name": "offset 2 amp",
+                "value": 1
+              },
+              "amp": {
+                "min": 0,
+                "max": 10,
+                "name": "amp",
+                "value": 1
+              },
+              "blend": {
+                "min": 0,
+                "max": 1,
+                "name": "blend",
+                "value": 0
+              },
+              "offset 1 amp": {
+                "min": 0,
+                "max": 1,
+                "name": "offset 1 amp",
+                "value": 1
+              },
+              "gradient": {
+                "gradient": [],
+                "name": "gradient",
+                "value": []
+              },
+              "b shift": {
+                "min": -1,
+                "max": 1,
+                "name": "b shift",
+                "value": 0
+              },
+              "offset add": {
+                "min": -1,
+                "max": 1,
+                "name": "offset add",
+                "value": 0
+              },
+              "s shift": {
+                "min": -1,
+                "max": 1,
+                "name": "s shift",
+                "value": 0
+              },
+              "channelblend": {
+                "min": 0,
+                "max": 1,
+                "name": "channelblend",
+                "value": 0
+              }
+            }
+          },
+          "b default": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "b default",
+            "value": 1
+          },
+          "g default": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "g default",
+            "value": 1
+          },
+          "end scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "end scale",
+            "value": 1
+          },
+          "b scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "b scale",
+            "value": 1
+          },
+          "g scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "g scale",
+            "value": 1
+          },
+          "normalize": {
+            "name": "normalize",
+            "value": false
+          },
+          "bypass amount": {
+            "name": "bypass amount",
+            "value": false
+          },
+          "r scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "r scale",
+            "value": 1
+          },
+          "global scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "global scale",
+            "value": 1
+          },
+          "animation blender": {
+            "name": "animation blender",
+            "value": {
+              "apply blend": {
+                "min": 0,
+                "max": 1,
+                "name": "apply blend",
+                "value": 0
+              },
+              "modulation": {
+                "name": "modulation",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "blend": {
+                "min": 0,
+                "max": 1,
+                "name": "blend",
+                "value": 0
+              },
+              "blend range": {
+                "min": 0,
+                "max": 1,
+                "name": "blend range",
+                "value": 0
+              },
+              "reverse": {
+                "name": "reverse",
+                "value": true
+              }
+            }
+          },
+          "signal": {
+            "name": "signal",
+            "value": {
+              "r amount": {
+                "name": "r amount",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "b amount": {
+                "name": "b amount",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "reset phase": {},
+              "b phase": {
+                "name": "b phase",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "use gradient": {
+                "name": "use gradient",
+                "value": false
+              },
+              "gradient channel": {
+                "min": -2147483648,
+                "max": 2147483647,
+                "name": "gradient channel",
+                "value": 0
+              },
+              "blend": {
+                "min": 0,
+                "max": 1,
+                "name": "blend",
+                "value": 0
+              },
+              "g frequency": {
+                "name": "g frequency",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "sin scale": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "sin scale",
+                "value": 2
+              },
+              "gradient": {
+                "gradient": [],
+                "name": "gradient",
+                "value": []
+              },
+              "phase scale": {
+                "min": 1,
+                "max": 10,
+                "name": "phase scale",
+                "value": 1
+              },
+              "g amount": {
+                "name": "g amount",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "sin add": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "sin add",
+                "value": -1
+              },
+              "b frequency": {
+                "name": "b frequency",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "phase speed": {
+                "min": 0,
+                "max": 50,
+                "name": "phase speed",
+                "value": 0
+              },
+              "r phase": {
+                "name": "r phase",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "print": {
+                "name": "print",
+                "value": false
+              },
+              "group blends": {
+                "name": "group blends",
+                "value": {"group_0": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "group_0",
+                  "value": 1
+                }}
+              },
+              "g phase": {
+                "name": "g phase",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "r frequency": {
+                "name": "r frequency",
+                "value": {
+                  "amounts": {
+                    "name": "amounts",
+                    "value": {
+                      "random": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random",
+                        "value": 0
+                      },
+                      "constant": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "constant",
+                        "value": 0
+                      },
+                      "id": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "id",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id amounts": {
+                    "name": "id amounts",
+                    "value": {"id": {
+                      "name": "id",
+                      "value": {
+                        "mod flip": {
+                          "name": "mod flip",
+                          "value": false
+                        },
+                        "div": {
+                          "min": 2,
+                          "max": 8,
+                          "name": "div",
+                          "value": 2
+                        },
+                        "mod": {
+                          "min": 2,
+                          "max": 48,
+                          "name": "mod",
+                          "value": 2
+                        },
+                        "div amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "div amount",
+                          "value": 0
+                        },
+                        "mod amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "mod amount",
+                          "value": 0
+                        },
+                        "random amount": {
+                          "min": -1,
+                          "max": 1,
+                          "name": "random amount",
+                          "value": 0
+                        }
+                      }
+                    }}
+                  },
+                  "combiner": {
+                    "name": "combiner",
+                    "value": "ADD"
+                  }
+                }
+              },
+              "signal": {
+                "name": "signal",
+                "value": {
+                  "square setup": {
+                    "name": "square setup",
+                    "value": {
+                      "octaves": {
+                        "min": 1,
+                        "max": 10,
+                        "name": "octaves",
+                        "value": 1
+                      },
+                      "pulsewidth": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "pulsewidth",
+                        "value": 0.5
+                      },
+                      "scale": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "scale",
+                        "value": 1
+                      },
+                      "lacunarity": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "lacunarity",
+                        "value": 2
+                      },
+                      "gain": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "gain",
+                        "value": 0.5
+                      },
+                      "norm": {
+                        "name": "norm",
+                        "value": true
+                      }
+                    }
+                  },
+                  "worley": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "worley",
+                    "value": 0
+                  },
+                  "amp": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "amp",
+                    "value": 0
+                  },
+                  "sloped tri": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "sloped tri",
+                    "value": 0
+                  },
+                  "saw": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "saw",
+                    "value": 0
+                  },
+                  "simplex": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "simplex",
+                    "value": 0
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "tri": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "tri",
+                    "value": 0
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  },
+                  "norm": {
+                    "name": "norm",
+                    "value": true
+                  },
+                  "octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "square": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "square",
+                    "value": 0
+                  },
+                  "sine": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "sine",
+                    "value": 0
+                  },
+                  "worley setup": {
+                    "name": "worley setup",
+                    "value": {
+                      "octaves": {
+                        "min": 1,
+                        "max": 10,
+                        "name": "octaves",
+                        "value": 1
+                      },
+                      "amp": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "amp",
+                        "value": 1
+                      },
+                      "formular": {
+                        "name": "formular",
+                        "value": "DEFAULT"
+                      },
+                      "scale": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "scale",
+                        "value": 1
+                      },
+                      "lacunarity": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "lacunarity",
+                        "value": 2
+                      },
+                      "gain": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "gain",
+                        "value": 0.5
+                      },
+                      "norm": {
+                        "name": "norm",
+                        "value": true
+                      },
+                      "distance type": {
+                        "name": "distance type",
+                        "value": "EUCLIDEAN"
+                      }
+                    }
+                  },
+                  "tri setup": {
+                    "name": "tri setup",
+                    "value": {
+                      "octaves": {
+                        "min": 1,
+                        "max": 10,
+                        "name": "octaves",
+                        "value": 1
+                      },
+                      "break ratio": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "break ratio",
+                        "value": 0
+                      },
+                      "scale": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "scale",
+                        "value": 1
+                      },
+                      "lacunarity": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "lacunarity",
+                        "value": 2
+                      },
+                      "gain": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "gain",
+                        "value": 0.5
+                      },
+                      "norm": {
+                        "name": "norm",
+                        "value": true
+                      },
+                      "ratio": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "ratio",
+                        "value": 0.5
+                      }
+                    }
+                  }
+                }
+              },
+              "channelblend": {
+                "min": 0,
+                "max": 1,
+                "name": "channelblend",
+                "value": 0
+              }
+            }
+          },
+          "modulation sources": {
+            "name": "modulation sources",
+            "value": {}
+          },
+          "combine": {
+            "name": "combine",
+            "value": {}
           }
         }
       }
@@ -2496,11 +4152,11 @@
         "min": 0,
         "max": 1,
         "name": "fixed update time",
-        "value": 1
+        "value": 0.03333333333333333
       },
       "fix update time": {
         "name": "fix update time",
-        "value": false
+        "value": true
       },
       "framerate": {
         "min": -2147483648,
@@ -2516,7 +4172,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.24581705852357
+        "value": 0
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

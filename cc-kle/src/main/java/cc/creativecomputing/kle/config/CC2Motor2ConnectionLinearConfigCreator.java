@@ -59,10 +59,10 @@ public class CC2Motor2ConnectionLinearConfigCreator {
 			CCVector2 pos = CCVector2.circlePoint(myAngle, theRadius + theConnectionDistance / 2, 0, 0);
 			List<CCMotorChannel> myMotorChannels = new ArrayList<>();
 			
-			CCVector3 myPulleyPosition0 = new CCVector3(-theConnectionDistance / 2, 0, 0);
-			CCVector3 myPulleyPosition1 = new CCVector3( theConnectionDistance / 2, 0, 0);
-			CCVector3 myConnectionPosition0 = new CCVector3(-theConnectionDistance / 2, top + height / 2, 0);
-			CCVector3 myConnectionPosition1 = new CCVector3( theConnectionDistance / 2, top + height / 2, 0);
+			CCVector3 myConnectionPosition0 = new CCVector3(0, 0, 0);
+			CCVector3 myConnectionPosition1 = new CCVector3(90, 0, 0);
+			CCVector3 myPulleyPosition0 = new CCVector3(0, -162.5, 0);
+			CCVector3 myPulleyPosition1 = new CCVector3(90, -162.5, 0);
 			CCMotorChannel myMotor0 = new CCMotorChannel(i * 2, myPulleyPosition0, myConnectionPosition0);
 			CCMotorChannel myMotor1 = new CCMotorChannel(i * 2 + 1, myPulleyPosition1, myConnectionPosition1);
 			myMotorChannels.add(myMotor0);
@@ -72,7 +72,7 @@ public class CC2Motor2ConnectionLinearConfigCreator {
 			myTransform.applyTranslationPost(new CCVector3(pos.x, 0, pos.y));
 			myTransform.applyRotationY(-myAngle);
 			
-			CCVector3 myCentroid = new CCVector3(0, top + height / 2, 0);
+			CCVector3 myCentroid = new CCVector3(77, -162.5, 0);
 			
 			List<CCLightChannel> myLightChannels = new ArrayList<>();
 			for(int j = 0; j < 3;j++){

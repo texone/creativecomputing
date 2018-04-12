@@ -32,7 +32,6 @@ public class CCLightRGBSetup extends CCLightSetup{
 	
 	@Override
 	public void setByRelativePosition(double... theValues) {
-		CCLog.info(theValues);
 		if(theValues.length == 1){
 			_myLightR.value(theValues[0]);
 			_myLightG.value(theValues[0]);

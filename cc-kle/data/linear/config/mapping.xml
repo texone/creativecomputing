@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <mappings>
-	<mapping name="motors" columns="70" rows="2" depth="1" frameRate="5" bits="16">
+	<mapping name="motors" columns="60" rows="2" depth="1" frameRate="5" bits="16">
 		<channel id="0" column="0" row="0" depth="0" min="0.0" max="30.0"/>
 		<channel id="1" column="0" row="1" depth="0" min="0.0" max="30.0"/>
 		<channel id="2" column="1" row="0" depth="0" min="0.0" max="30.0"/>
@@ -121,28 +121,8 @@
 		<channel id="117" column="58" row="1" depth="0" min="0.0" max="30.0"/>
 		<channel id="118" column="59" row="0" depth="0" min="0.0" max="30.0"/>
 		<channel id="119" column="59" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="120" column="60" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="121" column="60" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="122" column="61" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="123" column="61" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="124" column="62" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="125" column="62" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="126" column="63" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="127" column="63" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="128" column="64" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="129" column="64" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="130" column="65" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="131" column="65" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="132" column="66" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="133" column="66" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="134" column="67" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="135" column="67" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="136" column="68" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="137" column="68" row="1" depth="0" min="0.0" max="30.0"/>
-		<channel id="138" column="69" row="0" depth="0" min="0.0" max="30.0"/>
-		<channel id="139" column="69" row="1" depth="0" min="0.0" max="30.0"/>
 	</mapping>
-	<mapping name="lights" columns="70" rows="1" depth="3" frameRate="20" bits="16">
+	<mapping name="lights" columns="60" rows="1" depth="3" frameRate="20" bits="16">
 		<channel id="0" column="0" row="0" depth="0" min="0" max="1"/>
 		<channel id="1" column="0" row="0" depth="1" min="0" max="1"/>
 		<channel id="2" column="0" row="0" depth="2" min="0" max="1"/>
@@ -323,35 +303,5 @@
 		<channel id="177" column="59" row="0" depth="0" min="0" max="1"/>
 		<channel id="178" column="59" row="0" depth="1" min="0" max="1"/>
 		<channel id="179" column="59" row="0" depth="2" min="0" max="1"/>
-		<channel id="180" column="60" row="0" depth="0" min="0" max="1"/>
-		<channel id="181" column="60" row="0" depth="1" min="0" max="1"/>
-		<channel id="182" column="60" row="0" depth="2" min="0" max="1"/>
-		<channel id="183" column="61" row="0" depth="0" min="0" max="1"/>
-		<channel id="184" column="61" row="0" depth="1" min="0" max="1"/>
-		<channel id="185" column="61" row="0" depth="2" min="0" max="1"/>
-		<channel id="186" column="62" row="0" depth="0" min="0" max="1"/>
-		<channel id="187" column="62" row="0" depth="1" min="0" max="1"/>
-		<channel id="188" column="62" row="0" depth="2" min="0" max="1"/>
-		<channel id="189" column="63" row="0" depth="0" min="0" max="1"/>
-		<channel id="190" column="63" row="0" depth="1" min="0" max="1"/>
-		<channel id="191" column="63" row="0" depth="2" min="0" max="1"/>
-		<channel id="192" column="64" row="0" depth="0" min="0" max="1"/>
-		<channel id="193" column="64" row="0" depth="1" min="0" max="1"/>
-		<channel id="194" column="64" row="0" depth="2" min="0" max="1"/>
-		<channel id="195" column="65" row="0" depth="0" min="0" max="1"/>
-		<channel id="196" column="65" row="0" depth="1" min="0" max="1"/>
-		<channel id="197" column="65" row="0" depth="2" min="0" max="1"/>
-		<channel id="198" column="66" row="0" depth="0" min="0" max="1"/>
-		<channel id="199" column="66" row="0" depth="1" min="0" max="1"/>
-		<channel id="200" column="66" row="0" depth="2" min="0" max="1"/>
-		<channel id="201" column="67" row="0" depth="0" min="0" max="1"/>
-		<channel id="202" column="67" row="0" depth="1" min="0" max="1"/>
-		<channel id="203" column="67" row="0" depth="2" min="0" max="1"/>
-		<channel id="204" column="68" row="0" depth="0" min="0" max="1"/>
-		<channel id="205" column="68" row="0" depth="1" min="0" max="1"/>
-		<channel id="206" column="68" row="0" depth="2" min="0" max="1"/>
-		<channel id="207" column="69" row="0" depth="0" min="0" max="1"/>
-		<channel id="208" column="69" row="0" depth="1" min="0" max="1"/>
-		<channel id="209" column="69" row="0" depth="2" min="0" max="1"/>
 	</mapping>
 </mappings>
