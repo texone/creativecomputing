@@ -21,6 +21,28 @@ float lifeTimeBlend(vec4 infos, vec4 groupInfos, float forceIndex){
 	return texture2DRect (lifeTimeBlends, vec2(progress * 100.0, forceIndex)).x;
 }
 
+float rand(vec2 n){
+  return fract(sin(dot(n, vec2(12.9898,78.233)))* 43758.5453123);
+}
+
+const float PI = 3.1415926535897932384626433832795;
+
+vec2 randDirection2D(vec2 n) {
+	float angle = rand(n + 3000) * 2 * PI;
+	return vec2(cos(angle), sin(angle));
+}
+
+vec3 randDirection3D(vec2 n) {
+	float myTheta = rand(n + 3000) * PI;
+	float myPhi = rand(n + 6000) * 2 * PI;
+	
+	return vec3(
+		sin(myTheta) * cos(myPhi),
+		sin(myTheta) * sin(myPhi),
+		cos(myTheta)
+	);
+}
+
 // insert forces
 @define forces
 

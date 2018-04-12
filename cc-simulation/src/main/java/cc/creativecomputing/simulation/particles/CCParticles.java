@@ -372,7 +372,7 @@ public class CCParticles{
 			for(int i = 0; i < 100; i++){
 				double myVal = myForce.lifetimeBlend().value(i / 100d);
 				g.textureCoords4D(0, myVal, myVal, myVal, 1d);
-				g.vertex(i + 0.5, myForce.index() + 1);
+				g.vertex(i + 0.5, myForce.index() + 0.5);
 			}
 		}
 		g.endShape();

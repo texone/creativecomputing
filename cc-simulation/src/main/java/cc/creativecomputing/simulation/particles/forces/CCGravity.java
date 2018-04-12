@@ -31,14 +31,19 @@ import cc.creativecomputing.math.CCVector3;
 
 public class CCGravity extends CCForce{
 	private String _myDirectionParameter;
+	private String _myRandomAmountParameter;
 	
 	@CCProperty(name = "direction", min = -1, max = 1)
-	private CCVector3 _myDirection;
+	private CCVector3 _cDirection;
+	@CCProperty(name = "random amount", min = 0, max = 1)
+	private CCVector3 _cRandomAmount;
 	
 	public CCGravity(final CCVector3 theGravity) {
-		super("Gravity");
-		_myDirection = new CCVector3(theGravity);
+		super("gravity");
+		_cDirection = new CCVector3(theGravity);
+		_cRandomAmount = new CCVector3();
 		_myDirectionParameter  = parameter("direction");
+		_myRandomAmountParameter  = parameter("randomAmount");
 	}
 	
 	public CCGravity() {
@@ -48,10 +53,11 @@ public class CCGravity extends CCForce{
 	@Override
 	public void setUniforms() {
 		super.setUniforms();
-		_myShader.uniform3f(_myDirectionParameter, _myDirection);
+		_myShader.uniform3f(_myDirectionParameter, _cDirection);
+		_myShader.uniform3f(_myRandomAmountParameter, _cRandomAmount);
 	}
 	
 	public CCVector3 direction() {
-		return _myDirection;
+		return _cDirection;
 	}
 }

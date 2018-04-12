@@ -31,9 +31,9 @@ import cc.creativecomputing.math.CCVector3;
 
 
 public class CCAttractor extends CCForce{
-	@CCProperty(name = "position", min = -1000, max = 1000, readBack = true)
+	@CCProperty(name = "position", min = -2000, max = 2000, readBack = true)
 	private CCVector3 _myPosition;
-	@CCProperty(name = "radius", min = 0, max = 1000, readBack = true)
+	@CCProperty(name = "radius", min = 0, max = 3000, readBack = true)
 	private double _myRadius;
 	@CCProperty(name = "attract")
 	private boolean _cAttract = true;

@@ -52,25 +52,13 @@ float dualfbm(in vec2 p, float amt)
 	return fbm(p*makem2(time*0.2));
 }
 
-@CCProperty(name = "light amount", min = 0, max = 200)
-uniform float lightAmount;
-
 @CCProperty(name = "min light amount", min = 0, max = 1)
 uniform float minLight;
 @CCProperty(name = "max light amount", min = 0, max = 1)
 uniform float maxLight;
 
-@CCProperty(name = "light shape", min = 0, max = 10)
-uniform float lightshape;
 
-float circ(vec2 p) 
-{
-	float r = length(p)* fract(iTime * 0.1);
-	r = log(sqrt(r ));
-	//return abs(mod(r*4.,tau)-3.14)*6.+.2;
-//return (fbm(p* 2.6 + iTime * .5)) * lightAmount;
-return pow(mix(minLight, maxLight, ( sin(p.x * 0.2 + p.y * 0.1 + iTime) + 1.) / 2.) ,lightshape) * lightAmount;
-}
+
 
 @CCProperty(name = "light pow", min = 0, max = 10)
 uniform float lightPow;
@@ -86,12 +74,6 @@ uniform float amplitude;
 @CCProperty(name = "zoom", min = 1, max = 5)
 uniform float zoom; 
 
-@CCProperty(name = "typo glow", min = 0, max = 1)
-uniform float typoGlow; 
-@CCProperty(name = "typo smoke", min = 0, max = 4)
-uniform float typoSmoke; 
-
-uniform sampler2D typo;
 
 void main( )
 {
@@ -100,37 +82,18 @@ void main( )
 	vec2 p = t - 0.5;
 	p.x *= iResolution.x/iResolution.y;
 	p*=zoom;
-	p.y += sin(p.x * frequency + iTime * 0.2) * amplitude  - 0.3;
+	//p.y += sin(p.x * frequency + iTime * 0.2) * amplitude  - 0.3;
 
 	t = vec2(t.x, 1.- t.y);
 	
-	float typoMask = texture2D(typo, t).r;
+    float d = dualfbm(p + vec2(iTime * 0.003), dfbmAmount) ;
+    d += dualfbm(p * 15. + vec2(iTime * 0.003), dfbmAmount *1. ) * rough ;
+   
 	
-    float d = dualfbm(p + vec2(iTime * 0.003), dfbmAmount) * pure;
-    d += dualfbm(p * 15. + vec2(iTime * 0.003), dfbmAmount *1. ) * rough;
-    //d += typoMask * 0.1;
-    float d2 = dualfbm(p * 0.25 + vec2(iTime * 0.003), 0.5) * 1.2;
+	vec3 col = vec3(.3,0.2,0.1)  /  d ;// rz;
 	
-	//rings
-	//p /= exp(mod(time*10.,3.14159));
-	float rz = d * pow(abs(circ(p)-(typoMask) * typoGlow ),lightPow) ;
-	
-	//final color
-	vec3 col = vec3(.3,0.2,0.1) / rz;
-	//col=pow(abs(col),vec3(1.));
-	//float d = dualfbm(p) * 1.5; 
-	//vec3 col2 = mix(vec3(0.4,0.0,0.0), vec3(1.0,1.0,0.), d);
-	
-	
-	float blend = sin(1. - p.y * 1.4 );//1. - abs( - p.y ) ;
-	gl_FragColor = vec4(col,1.) * max(blend, 0.)  + 0.01;// + d2 * 0.3;//
-	d = d2;//blend;//1. -d;
-	vec4 gold = vec4(col,1.) +0.1;
-	//gold *= (1. -d2 * 0.75);
-	gl_FragColor =mix(vec4(d2*0.7 )+d2 * typoMask * typoSmoke , gold,  clamp(blend, 0.,1.0));// * (d2 + 1.) *1.3;
-	//gl_FragColor.rgb = pow(gl_FragColor.rgb, vec3(1. / 1.5));
-	//gl_FragColor += d2 * typoMask * 2.8;
-	//gl_FragColor = vec4(blend,blend,blend,1.);
-//gl_FragColor = vec4(rz,rz,rz,1.0);
-	//gl_FragColor = vec4(gl_FragCoord.xy / iResolution.xy,typoMask,1.);
+	vec4 gold = vec4(col,1.);// + 0.1;
+	gl_FragColor = gold;;
+	//gl_FragColor = vec4(d,d,d,1.);;
+
 }

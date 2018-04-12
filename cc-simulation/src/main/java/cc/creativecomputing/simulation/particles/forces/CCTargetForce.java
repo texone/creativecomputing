@@ -150,7 +150,7 @@ public class CCTargetForce extends CCForce {
 	
 	public void addTarget(double theX, double theY, double theZ, double theW, int theTexX, int theTexY){
 		g.textureCoords4D(0, theX, theY, theZ, theW);
-		g.vertex(theTexX + 1.5f, theTexY + 1.5f);
+		g.vertex(theTexX + 1.5f, theTexY + 0.5f);
 	}
 	
 	public void endSetTargets(CCGraphics g){
