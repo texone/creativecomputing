@@ -51,13 +51,6 @@ public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
         	CCControlApp.appManager.add(_myCurveFrame);
         	_myCurveFrame.show();
 		});
-        
-//        _myButton = new JButton("edit");
-//        _myButton.addActionListener(theE -> {
-//        	_myCurveFrame.spline(value());				
-//        	_myCurveFrame.setVisible(true);
-//		});
- 
 	}
 	
 	@Override

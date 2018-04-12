@@ -51,6 +51,7 @@ import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.spline.CCSpline;
@@ -86,7 +87,7 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 
 		_myControlPane = new CCUIGridPane();
 		_myControlPane.rowHeight(25);
-		_myControlPane.inset(5);
+		_myControlPane.topInset(5);
 		_myControlPane.space(10);
 		_myControlPane.columnWidths(10,10,10);
 		_myControlPane.stretch(true);
@@ -189,20 +190,37 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 	}
 	
 	public void open() {
-		CCLog.info("open");
 		createUI(false);
 		addChild(_myControlPane, entryInfo(1));
-		CCLog.info(_myControlPane.width());
+
+		CCLog.info(this.height(),_myControlPane.height(), _myControlPane.rows(), _myControlPane.rows() * _myControlPane.rowHeight());
+		if(_myParent != null && _myParent instanceof CCUIGridPane){
+			((CCUIGridPane)_myParent).updateLayout();
+			CCLog.info( "update parent", height(), rows());
+		}
+		root().updateMatrices();
 		_myIsSelected = true;
 		CCControlApp.preferences.put(_myProperty.path().toString() + "/open" , true + "");
 	}
 	
+	@Override
+	public void drawContent(CCGraphics g) {
+		super.drawContent(g);
+		
+	}
+	
 	public void close() {
-		CCLog.info("close");
 		for(CCControl myControl:_myControls){
 			myControl.dispose();
 		}
 		removeChild(_myControlPane);
+
+		CCLog.info(this.height(),_myControlPane.height(), _myControlPane.rows(), _myControlPane.rows() * _myControlPane.rowHeight());
+		if(_myParent != null && _myParent instanceof CCUIGridPane){
+			((CCUIGridPane)_myParent).updateLayout();
+			CCLog.info("update parent", height(), rows());
+		}
+		root().updateMatrices();
 		_myIsSelected = false;	
 		CCControlApp.preferences.put(_myProperty.path().toString() + "/open" , false + "");
 	}
@@ -282,9 +300,7 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 			}
 
 			myControl.addToPane(_myControlPane, myY, _myDepth + 1);
-//			_myControlPane.addChild(new CCUILabelWidget(CCUIConstants.DEFAULT_FONT, myPropertyHandle.name()), 0,myY);
-//			CCLog.info(myY);
-//			_myControls.add(myControl);
+			_myControlPane.updateLayout();
 			myY++;
 		}
 	}

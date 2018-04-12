@@ -121,7 +121,7 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
             myPath.lineTo(p2.x, p2.y);
             
             g.color(theView.fillColor());
-            g.draw(myPath);
+            g.drawViewSpace(myPath);
             return;
         }
         
@@ -161,7 +161,7 @@ public class CCClipTrackDataRenderer extends CCTrackDataRenderer{
 //        g2d.fill(myPath);
         
         g.setColor(theView.lineColor());
-        g.draw(myPath);
+        g.drawViewSpace(myPath);
     }
 	
 	@Override

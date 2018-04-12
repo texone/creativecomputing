@@ -16,6 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.demo;
 
+import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
@@ -26,12 +27,14 @@ import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 
 public class CCControlAppDemo extends CCGLApp{
 
-	
+	@CCProperty(name = "vec", min = 0, max = 1000)
+	private CCVector2 _myVec = new CCVector2();
 	
 	@CCProperty(name = "x", min = 0, max = 1000)
 	private double _cX = 0;
@@ -45,6 +48,8 @@ public class CCControlAppDemo extends CCGLApp{
 	private CCGradient _cGradient = new CCGradient();
 	@CCProperty(name = "spline")
 	private CCLinearSpline _cSpline = new CCLinearSpline(false);
+	@CCProperty(name = "envelope")
+	private CCEnvelope _cEnvelope = new CCEnvelope();
 	
 	@Override
 	public void setup() {
@@ -71,6 +76,23 @@ public class CCControlAppDemo extends CCGLApp{
 			g.vertex(x, 30);
 		}
 		g.endShape();
+		
+		g.pushMatrix();
+		g.ortho();
+		g.scale(g.width(), g.height());
+		g.color(255);
+		g.beginShape(CCDrawMode.LINE_STRIP);
+		for(CCVector3 myPoint:_cSpline){
+			g.vertex(myPoint);
+		}
+		g.endShape();
+		
+		g.beginShape(CCDrawMode.LINE_STRIP);
+		for(double i = 0; i <= 100;i++){
+			g.vertex(i / 100, _cEnvelope.value(i / 100));
+		}
+		g.endShape();
+		g.popMatrix();
 	}
 	
 	public static void main(String[] args) {

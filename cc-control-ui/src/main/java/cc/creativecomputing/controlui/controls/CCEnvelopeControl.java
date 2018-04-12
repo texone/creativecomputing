@@ -16,61 +16,41 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
+import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
-import cc.creativecomputing.ui.widget.CCUILabelWidget;
+import cc.creativecomputing.ui.widget.CCUIIconWidget;
 
 public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHandle>{
 
-	private CCUILabelWidget _myButton;
+	private CCUIIconWidget _myButton;
 	
-	private CCEnvelopeEditor2 _myCurveFrame;
+	private CCEnvelopeEditor _myCurveFrame;
 
 	public CCEnvelopeControl(CCEnvelopeHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		addListener(theValue -> {
 			_myHandle.value(theValue, false);
-        	_myCurveFrame.track().trackData(value().curve());
-			_myCurveFrame.render();
-			_myCurveFrame.repaint();
 		});
 		
-		_myCurveFrame = new CCEnvelopeEditor2(theHandle.path().toString());
-		_myCurveFrame.setSize(300, 300);
-		_myCurveFrame.addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowClosing(WindowEvent theE) {
-			}
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				_myCurveFrame.render();
-			}
-		});
-        
-        _myButton = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT, "edit");
-        _myButton.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
-        _myButton.verticalAlignment(CCUIVerticalAlignment.CENTER);
-        _myButton.background(new CCUIFillDrawable(new CCColor(0.3d)));
-        _myButton.width(100);
-        _myButton.inset(4);
-        
-        _myButton.mouseReleased.add(theE -> {
-        	_myCurveFrame.track().trackData(value().curve());				
-        	_myCurveFrame.setVisible(true);
+		_myCurveFrame = new CCEnvelopeEditor(theHandle.path().toString());
+		_myCurveFrame.width = 300;
+		_myCurveFrame.height = 300;
+		
+		_myButton = new CCUIIconWidget(CCEntypoIcon.ICON_EDIT);
+		_myButton.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		_myButton.inset(2);
+		_myButton.mouseReleased.add(event -> {
+			_myCurveFrame.trackData(value().curve());				
+        	CCControlApp.appManager.add(_myCurveFrame);
+        	_myCurveFrame.show();
 		});
  
 	}

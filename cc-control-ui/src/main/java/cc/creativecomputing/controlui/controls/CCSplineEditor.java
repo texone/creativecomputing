@@ -80,29 +80,29 @@ public class CCSplineEditor extends CCGLApp {
 				return;
 			}
 			if(_mySpline instanceof CCBezierSpline){
-				int myIndex = _mySpline.points().indexOf(myPoint);
+				int myIndex = _mySpline.indexOf(myPoint);
 				switch(myIndex % 3){
 				case 0:
 					if(myIndex > 0){
-						_mySpline.points().remove(myIndex - 1);
-						_mySpline.points().remove(myIndex - 1);
-						_mySpline.points().remove(myIndex - 1);
+						_mySpline.remove(myIndex - 1);
+						_mySpline.remove(myIndex - 1);
+						_mySpline.remove(myIndex - 1);
 					}else{
-						_mySpline.points().remove(0);
-						_mySpline.points().remove(0);
-						_mySpline.points().remove(0);
+						_mySpline.remove(0);
+						_mySpline.remove(0);
+						_mySpline.remove(0);
 					}
 					break;
 				case 1:
-					myPoint.set(_mySpline.points().get(myIndex - 1));
+					myPoint.set(_mySpline.get(myIndex - 1));
 					break;
 				case 2:
-					myPoint.set(_mySpline.points().get(myIndex + 1));
+					myPoint.set(_mySpline.get(myIndex + 1));
 					break;
 				}
 			}else{
 				_mySpline.beginEditSpline();
-				_mySpline.points().remove(myPoint);
+				_mySpline.remove(myPoint);
 				_mySpline.endEditSpline();
 			}
 		});
@@ -123,28 +123,28 @@ public class CCSplineEditor extends CCGLApp {
 			_mySelectedPoint.set(myNewPos);
 			
 			if(_mySpline instanceof CCBezierSpline){
-				int myIndex = _mySpline.points().indexOf(_mySelectedPoint);
+				int myIndex = _mySpline.indexOf(_mySelectedPoint);
 				switch(myIndex % 3){
 				case 0:
 					if(myIndex > 0){
-						_mySpline.points().get(myIndex - 1).addLocal(myMotion);
+						_mySpline.get(myIndex - 1).addLocal(myMotion);
 					}
-					if(myIndex < _mySpline.points().size() - 1){
-						_mySpline.points().get(myIndex + 1).addLocal(myMotion);
+					if(myIndex < _mySpline.size() - 1){
+						_mySpline.get(myIndex + 1).addLocal(myMotion);
 					}
 					break;
 				case 1:
 					if(_myShiftPressed && myIndex > 1){
-						CCVector3 myAnchor = _mySpline.points().get(myIndex - 1);
-						CCVector3 myControl2 = _mySpline.points().get(myIndex - 2);
+						CCVector3 myAnchor = _mySpline.get(myIndex - 1);
+						CCVector3 myControl2 = _mySpline.get(myIndex - 2);
 						CCVector3 myDifference = _mySelectedPoint.subtract(myAnchor);
 						myControl2.set(myAnchor.subtract(myDifference));
 					}
 					break;
 				case 2:
-					if(_myShiftPressed && myIndex <  _mySpline.points().size() - 2){
-						CCVector3 myAnchor = _mySpline.points().get(myIndex + 1);
-						CCVector3 myControl2 = _mySpline.points().get(myIndex + 2);
+					if(_myShiftPressed && myIndex <  _mySpline.size() - 2){
+						CCVector3 myAnchor = _mySpline.get(myIndex + 1);
+						CCVector3 myControl2 = _mySpline.get(myIndex + 2);
 						CCVector3 myDifference = _mySelectedPoint.subtract(myAnchor);
 						myControl2.set(myAnchor.subtract(myDifference));
 					}
@@ -173,7 +173,7 @@ public class CCSplineEditor extends CCGLApp {
 	}
 	
 	private CCVector3 selectPoint(double theX, double theY){
-		for(CCVector3 myPoint:_mySpline.points()){
+		for(CCVector3 myPoint:_mySpline){
 			CCVector3 myMouseCoord = relativeToMouse(myPoint);
 			double x0 = myMouseCoord.x - CURVE_POINT_SIZE / 2;
 			double y0 = myMouseCoord.y - CURVE_POINT_SIZE / 2;
@@ -192,13 +192,13 @@ public class CCSplineEditor extends CCGLApp {
 	public static final int CURVE_POINT_SIZE = 10;
 	
 	private CCVector3 mouseSplinePoint(int i){
-		return relativeToMouse(_mySpline.points().get(i));
+		return relativeToMouse(_mySpline.get(i));
 	}
 	
 	@Override
 	public void display(CCGraphics g) {
 		if(_mySpline == null)return;
-		if(_mySpline.points().size() <= 0)return;
+		if(_mySpline.size() <= 0)return;
 
 		g.clear();
 		g.pushAttribute();
@@ -207,7 +207,7 @@ public class CCSplineEditor extends CCGLApp {
 		if(_mySpline instanceof CCLinearSpline){
 			g.color(CCColor.LIGHT_GRAY);
 			g.beginShape(CCDrawMode.LINE_STRIP);
-			for(int i = 0; i < _mySpline.points().size();i++){
+			for(int i = 0; i < _mySpline.size();i++){
 				CCVector3 myPoint = mouseSplinePoint(i);
 				g.vertex(myPoint.x, myPoint.y);
 			}
@@ -215,8 +215,8 @@ public class CCSplineEditor extends CCGLApp {
 		}else if(_mySpline instanceof CCCatmulRomSpline || _mySpline instanceof CCBezierSpline){
 			g.color(CCColor.LIGHT_GRAY);
 			g.beginShape(CCDrawMode.LINE_STRIP);
-			for(double i = 0; i <= _mySpline.points().size() * 100;i++){
-				double myBlend = i / (_mySpline.points().size() * 100);
+			for(double i = 0; i <= _mySpline.size() * 100;i++){
+				double myBlend = i / (_mySpline.size() * 100);
 				CCVector3 myPoint = relativeToMouse(_mySpline.interpolate(myBlend));
 				g.vertex(myPoint.x, myPoint.y);
 			}
@@ -226,7 +226,7 @@ public class CCSplineEditor extends CCGLApp {
 		if(_mySpline instanceof CCBezierSpline){
 			g.color(CCColor.GRAY);
 			g.beginShape(CCDrawMode.LINES);
-			for(int i = 1; i < _mySpline.points().size();i+=3){
+			for(int i = 1; i < _mySpline.size();i+=3){
 				CCVector3 myPoint = mouseSplinePoint(i-1);
 				CCVector3 myPoint1 = mouseSplinePoint(i);
 				CCVector3 myPoint2 = mouseSplinePoint(i + 1);
@@ -243,7 +243,7 @@ public class CCSplineEditor extends CCGLApp {
 		g.pointSize(CURVE_POINT_SIZE);
 		g.beginShape(CCDrawMode.POINTS);
 		g.color(CCColor.WHITE);
-		for(CCVector3 myPoint:_mySpline.points()){
+		for(CCVector3 myPoint:_mySpline){
 			CCVector3 mySplinePoint = relativeToMouse(myPoint);
 			g.vertex(mySplinePoint.x, mySplinePoint.y);
 		}
