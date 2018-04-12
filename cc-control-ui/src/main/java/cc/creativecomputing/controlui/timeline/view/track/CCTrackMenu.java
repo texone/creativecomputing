@@ -22,8 +22,8 @@ import java.util.List;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
+import cc.creativecomputing.controlui.timeline.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.timeline.view.CCTextInputDialog;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.ui.widget.CCUIMenu;
@@ -69,7 +69,7 @@ public abstract class CCTrackMenu<ControllerType extends CCTrackController> exte
 			if(!(e.isControlDown() || e.isMetaDown()))return false;
 			switch(e.getKeyCode()){
 			case KeyEvent.VK_C:
-				if(_myTrackController.selectedPoints().size() <= 0) {
+				if(_myTrackController.selection().size() <= 0) {
 					break;
 				}
 				controller = _myTrackController;
@@ -160,7 +160,7 @@ public abstract class CCTrackMenu<ControllerType extends CCTrackController> exte
 		
 		addItem("Copy",e -> {
 			if(_myTrackController == null)return;
-			if(_myTrackController.selectedPoints().size() <= 0) {
+			if(_myTrackController.selection().size() <= 0) {
 				return;
 			}
 			controller = _myTrackController;

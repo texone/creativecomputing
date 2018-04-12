@@ -17,7 +17,7 @@
 package cc.creativecomputing.controlui.timeline.controller;
 
 import cc.creativecomputing.control.timeline.CCTimeRange;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCTimedContentView;
+import cc.creativecomputing.controlui.timeline.tools.CCTimedContentView;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;

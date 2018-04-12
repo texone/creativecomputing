@@ -35,7 +35,7 @@
  */
 package cc.creativecomputing.controlui;
 
-import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
+import cc.creativecomputing.controlui.timeline.tools.CCTimelineTools;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.math.CCColor;
 

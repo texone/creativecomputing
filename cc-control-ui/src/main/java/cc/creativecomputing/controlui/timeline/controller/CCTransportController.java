@@ -545,6 +545,36 @@ public class CCTransportController extends CCTrackDataController{
 //		}
 //		_myLastMarker = myCurrentMarker;
 	}
+
+	@Override
+	public double timeToViewX(double theTime) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double viewXToTime(double theViewX) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double viewWidthToTime(double theViewWidth) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public CCControlPoint quantize(CCControlPoint myTargetPosition) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double viewTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 }

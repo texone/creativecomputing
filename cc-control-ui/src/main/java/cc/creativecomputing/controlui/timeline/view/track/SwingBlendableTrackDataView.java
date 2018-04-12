@@ -83,7 +83,7 @@ public abstract class SwingBlendableTrackDataView<ControllerType extends CCBlend
 			myPath.lineTo(getWidth(), p1.y / 2);
 
 			g.color(_myFillColor);
-			g.draw(myPath);
+			g.drawViewSpace(myPath);
 			return;
 		}
 
@@ -136,7 +136,7 @@ public abstract class SwingBlendableTrackDataView<ControllerType extends CCBlend
 		g.fill(myPath);
 
 		g.color(_myLineColor);
-		g.draw(myPath);
+		g.drawViewSpace(myPath);
 	}
 
 	@Override

@@ -18,7 +18,7 @@ package cc.creativecomputing.controlui.timeline.controller.track;
 
 import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
+import cc.creativecomputing.controlui.timeline.tools.CCTimelineTools;
 import cc.creativecomputing.math.CCColor;
 
 public class CCColorTrackController extends CCBlendableTrackController<CCColor>{

@@ -30,7 +30,7 @@ import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.controller.actions.CCControlUndoHistory;
 import cc.creativecomputing.controlui.timeline.controller.actions.CCRemoveControlPointCommand;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCTimedContentView;
+import cc.creativecomputing.controlui.timeline.tools.CCTimedContentView;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.CCTrackView;
 import cc.creativecomputing.math.CCMath;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.controlui.timeline.controller.tools;
+package cc.creativecomputing.controlui.timeline.tools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -343,8 +343,8 @@ public class CCEventTrackTool extends CCTimelineTool<CCEventTrackController>{
 		super.mouseDragged(theEvent);
 		
 		if(_myIsInDrag == false){
-			if(_myController.selectedPoints().size() > 0){
-				_myDraggedPoints.addAll(_myController.selectedPoints());
+			if(_myController.selection().size() > 0){
+				_myDraggedPoints.addAll(_myController.selection());
 				_myStartPoints.clear();
 				 for(CCControlPoint myDraggedPoint:_myDraggedPoints){
 					 _myStartPoints.add(myDraggedPoint.clone());

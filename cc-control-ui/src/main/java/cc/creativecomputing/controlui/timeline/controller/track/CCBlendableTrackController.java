@@ -19,8 +19,8 @@ package cc.creativecomputing.controlui.timeline.controller.track;
 import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCBlendableCurveTool;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCBlendableTool;
+import cc.creativecomputing.controlui.timeline.tools.CCBlendableCurveTool;
+import cc.creativecomputing.controlui.timeline.tools.CCBlendableTool;
 import cc.creativecomputing.core.CCBlendable;
 
 @SuppressWarnings({"unchecked"})

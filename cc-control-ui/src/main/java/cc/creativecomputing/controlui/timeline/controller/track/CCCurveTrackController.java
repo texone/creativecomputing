@@ -20,9 +20,9 @@ package cc.creativecomputing.controlui.timeline.controller.track;
 import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCCreateTool;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCCurveTool;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
+import cc.creativecomputing.controlui.timeline.tools.CCCreateTool;
+import cc.creativecomputing.controlui.timeline.tools.CCCurveTool;
+import cc.creativecomputing.controlui.timeline.tools.CCTimelineTools;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCVector2;
 

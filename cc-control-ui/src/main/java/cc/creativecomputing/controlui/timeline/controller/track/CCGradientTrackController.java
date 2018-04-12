@@ -19,7 +19,7 @@ package cc.creativecomputing.controlui.timeline.controller.track;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
+import cc.creativecomputing.controlui.timeline.tools.CCTimelineTools;
 
 public class CCGradientTrackController extends CCBlendableTrackController<CCGradient>{
 

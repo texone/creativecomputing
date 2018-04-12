@@ -74,6 +74,7 @@ public abstract class CCAbstractTrackView extends CCUIPane {
 	
 	@Override
 	public double height() {
+    	if(_myDataView == null)return 0;
         return _myDataView.height();
     }
     

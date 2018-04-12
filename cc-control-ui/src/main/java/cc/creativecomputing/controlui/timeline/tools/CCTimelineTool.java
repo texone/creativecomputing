@@ -14,23 +14,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.controlui.timeline.controller.tools;
+package cc.creativecomputing.controlui.timeline.tools;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cc.creativecomputing.control.timeline.CCTrackData;
 import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
 import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
-import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
 import cc.creativecomputing.controlui.CCUIConstants;
-import cc.creativecomputing.controlui.timeline.controller.actions.CCControlUndoHistory;
-import cc.creativecomputing.controlui.timeline.controller.actions.CCRemoveControlPointCommand;
+import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.gl.app.CCGLKey;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
@@ -54,47 +54,16 @@ public class CCTimelineTool {
     protected CCTimedContentView _myDataView;
     
     protected CCTrackData _myTrackData;
-    
-	protected List<CCControlPoint> _mySelectedPoints = new ArrayList<>();
+	
+	public CCEventManager<CCControlPoint> hoverEvents = new CCEventManager<>();
+	public CCEventManager<CCControlPoint> endHoverEvents = new CCEventManager<>();
 
 	public CCTimelineTool(boolean theSnap, CCTimedContentView theController){
 		_mySnap = theSnap;
 		_myDataView = theController;
 	}
 	
-	/// SELCTION FUNCTIONS ////
 	
-	public void clearSelection() {
-		for (CCControlPoint myPoint : _mySelectedPoints) {
-			myPoint.setSelected(false);
-		}
-		_mySelectedPoints.clear();
-	}
-
-	public void deleteSelection() {
-		for (CCControlPoint myPoint : _mySelectedPoints) {
-			_myTrackData.remove(myPoint);
-		}
-		clearSelection();
-	}
-
-	public List<CCControlPoint> copySelection() {
-		List<CCControlPoint> clipBoard = new ArrayList<>();
-		for (CCControlPoint myPoint : _mySelectedPoints) {
-			clipBoard.add(myPoint.clone());
-		}
-		return clipBoard;
-	}
-
-	public List<CCControlPoint> cutSelection() {
-		List<CCControlPoint> clipBoard = new ArrayList<>();
-		for (CCControlPoint myPoint : _mySelectedPoints) {
-			_myTrackData.remove(myPoint);
-			clipBoard.add(myPoint.clone());
-		}
-		clearSelection();
-		return clipBoard;
-	}
 	
 	/// PICK FUNCTIONS ////
 	
@@ -203,14 +172,36 @@ public class CCTimelineTool {
 		return null;
 	}
 	
+	public void trackData(CCTrackData theTrackData){
+		_myTrackData = theTrackData;
+	}
 
+	public CCTrackData trackData(){
+		return _myTrackData;
+	}
 	
 	protected CCGLKey _myKeyCode;
+	protected char _myKeyChar;
 	
 	protected boolean _myIsShiftDown = false;
 	protected boolean _myIsAltDown = false;
 	protected boolean _myIsCTRLDown = false;
 	protected boolean _myIsSuperDown = false;
+	
+	protected boolean _myIsMousePressed = false;
+	
+	public CCEvent<Character> keyChar = this::keyChar;
+	public void keyChar(char theChar){
+		_myKeyChar = theChar;
+	}
+	
+	public CCEvent<CCGLKeyEvent> keyPressed = this::keyPressed;
+	public CCEvent<CCGLKeyEvent> keyReleased = this::keyReleased;
+
+	public CCEvent<CCGLMouseEvent> mousePressed = this::mousePressed;
+	public CCEvent<CCGLMouseEvent> mouseReleased = this::mouseReleased;
+	public CCEvent<CCVector2> mouseMoved = this::mouseMoved;
+	public CCEvent<CCVector2> mouseDragged = this::mouseDragged;
 	
 	public void keyPressed(CCGLKeyEvent e) {
 		_myKeyCode = e.key;
@@ -239,24 +230,64 @@ public class CCTimelineTool {
 	
 	public void keyReleased(CCGLKeyEvent e) {
 		_myKeyCode = null;
+		_myKeyChar = 0;
+		
+		switch (e.key) {
+		case KEY_LEFT_SHIFT:
+		case KEY_RIGHT_SHIFT:
+			_myIsShiftDown = false;
+			break;
+		case KEY_LEFT_ALT:
+		case KEY_RIGHT_ALT:
+			_myIsAltDown = false;
+			break;
+		case KEY_LEFT_CONTROL:
+		case KEY_RIGHT_CONTROL:
+			_myIsCTRLDown = false;
+			break;
+		case KEY_LEFT_SUPER:
+		case KEY_RIGHT_SUPER:
+			_myIsSuperDown = false;
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public CCVector2 mousePressViewCoords(){
+		return _myPressViewCoords;
+	}
+	
+	public CCVector2 mouseViewCoords(){
+		return _myViewCoords;
+	}
+	
+	public boolean mousePressed(){
+		return _myIsMousePressed;
 	}
 	
 	public void mousePressed(CCGLMouseEvent theEvent){
 		_myPressX = theEvent.x;
 		_myPressY = theEvent.y;
+		_myMovX = 0;
+		_myMovY = 0;
 		
 		_myPressViewCoords = new CCVector2(theEvent.x, theEvent.y);
 		_myPressCurveCoords = _myDataView.viewToCurveSpace(_myPressViewCoords, true);
+		
+		_myIsMousePressed = true;
+		
+		updateMotion(new CCVector2(theEvent.x, theEvent.y));
 	}
 	
 	private void updateMotion(CCVector2 theEvent){
 		_myMovX = _myPressX - theEvent.x;
 		_myMovY = _myPressY - theEvent.y;
 		
-		if(_myKeyCode == CCGLKey.KEY_X) {
+		if(_myKeyChar == 'x') {
 			_myMovY = 0;
 		}
-		if(_myKeyCode == CCGLKey.KEY_Y) {
+		if(_myKeyChar == 'y') {
 			_myMovX = 0;
 		}
 
@@ -265,16 +296,32 @@ public class CCTimelineTool {
 		
 		if(_myMovY > 0){
 			_myCurveMovement = _myDataView.viewToCurveSpace(new CCVector2(-_myMovX, _myMovY), false);
-			_myCurveMovement.value(1 - _myCurveMovement.value());
+			_myCurveMovement.value(-_myCurveMovement.value());
 		}else{
 			_myCurveMovement = _myDataView.viewToCurveSpace(new CCVector2(-_myMovX, -_myMovY), false);
-			_myCurveMovement.value( _myCurveMovement.value() - 1);
+			_myCurveMovement.value( _myCurveMovement.value());
 		}
-	} 
+	}
+	
+	private CCControlPoint _myHoverPoint = null;
 	
 	public void mouseMoved(CCVector2 theEvent){
 		_myViewCoords = new CCVector2(theEvent.x, theEvent.y);
 		_myCurveCoords = _myDataView.viewToCurveSpace(_myViewCoords, true);
+		
+		CCControlPoint myControlPoint = pickNearestPoint(_myViewCoords);
+		if(myControlPoint == null)return;
+		if(isInRange(myControlPoint,_myViewCoords)){
+			if(_myHoverPoint == null){
+				hoverEvents.event(myControlPoint);
+				_myHoverPoint = myControlPoint;
+			}
+		}else{
+			if(_myHoverPoint != null){
+				endHoverEvents.event(myControlPoint);
+				_myHoverPoint = null;
+			}
+		}
 	}
 	
 	public void mouseDragged(CCVector2 theEvent){
@@ -283,5 +330,11 @@ public class CCTimelineTool {
 	
 	public void mouseReleased(CCGLMouseEvent theEvent){
 		_myKeyCode = null;
+		
+		_myIsMousePressed = false;
+	}
+	
+	public void drawViewSpace(CCGraphics g) {
+		
 	}
 }

@@ -20,7 +20,7 @@ import cc.creativecomputing.control.handles.CCEventTriggerHandle;
 import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
-import cc.creativecomputing.controlui.timeline.controller.tools.CCTimelineTools;
+import cc.creativecomputing.controlui.timeline.tools.CCTimelineTools;
 
 public class CCTriggerTrackController extends CCCurveTrackController{
 

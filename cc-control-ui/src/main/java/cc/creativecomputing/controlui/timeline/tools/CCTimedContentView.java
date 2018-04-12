@@ -14,16 +14,29 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.controlui.timeline.controller.tools;
+package cc.creativecomputing.controlui.timeline.tools;
 
-public enum CCTimelineTools {
-	NONE, 
-	TRIGGER_POINT,
-	CREATE_EVENT,
-	STEP_POINT, 
-	LINEAR_POINT, 
-	BEZIER_POINT,
-	CURVE,  
-	SELECT, 
-	MOVE_SEGMENT
+import cc.creativecomputing.control.timeline.point.CCControlPoint;
+import cc.creativecomputing.math.CCVector2;
+
+/**
+ * @author christianriekoff
+ *
+ */
+public interface CCTimedContentView {
+	double timeToViewX(double theTime);
+	
+	double valueToViewY(double theValue);
+	
+	double viewXToTime(double theViewX);
+	
+	double viewWidthToTime(double theViewWidth);
+
+	CCControlPoint viewToCurveSpace(CCVector2 theViewCoords, boolean b);
+
+	CCVector2 curveToViewSpace(CCControlPoint myControlPoint);
+
+	CCControlPoint quantize(CCControlPoint myTargetPosition);
+
+	double viewTime();
 }
