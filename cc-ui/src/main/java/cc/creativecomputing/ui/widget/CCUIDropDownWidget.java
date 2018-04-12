@@ -144,7 +144,7 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	
 	@Override
 	public double width() {
-		return CCMath.max(_myWidth,_myTextField.width()) + _myInset * 2;
+		return CCMath.max(_myWidth,_myTextField.width()) + _myLeftInset + _myRightInset;
 	}
 	
 	@Override

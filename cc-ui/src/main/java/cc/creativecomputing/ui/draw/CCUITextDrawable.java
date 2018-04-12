@@ -43,7 +43,7 @@ public class CCUITextDrawable implements CCUIDrawable{
 		CCTextField _myText = ((CCUILabelWidget)theWidget).text();
 		
 		g.pushMatrix();
-		g.translate(theWidget.inset(), -_myText.ascent() - theWidget.inset() * 2);
+		g.translate(theWidget.leftInset(), -_myText.ascent() - theWidget.topInset() * 2);
 		_myText.draw(g);
 		g.popMatrix();
 		

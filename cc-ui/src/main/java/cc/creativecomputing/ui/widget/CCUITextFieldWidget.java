@@ -80,12 +80,12 @@ public class CCUITextFieldWidget extends CCUIWidget{
 	
 	@Override
 	public double width() {
-		return CCMath.max(_myWidth,_myTextField.width()) + _myInset * 2;
+		return CCMath.max(_myWidth,_myTextField.width()) + _myLeftInset + _myRightInset;
 	}
 	
 	@Override
 	public double height() {
-		return _myTextField.height() + _myInset * 2;
+		return _myTextField.height() + _myTopInset + _myBottomInset;
 	}
 	
 	public void valueText(boolean theIsValueBox) {
@@ -96,13 +96,13 @@ public class CCUITextFieldWidget extends CCUIWidget{
 		double myAdd = 0;
 		switch(_myTextField.align()) {
 		case RIGHT:
-			myAdd = width() - inset() * 2;
+			myAdd = width() - _myLeftInset - _myRightInset;
 			break;
 		case CENTER:
-			myAdd = (width() - inset() * 2) / 2;
+			myAdd = (width() - _myLeftInset - _myRightInset) / 2;
 			break;
 		}
-		return new CCVector2(inset() + myAdd, - _myTextField.ascent() - inset());
+		return new CCVector2(_myLeftInset + myAdd, - _myTextField.ascent() - _myTopInset);
 	}
 	
 	@Override

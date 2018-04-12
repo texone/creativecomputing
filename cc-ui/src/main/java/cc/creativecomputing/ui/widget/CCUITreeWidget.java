@@ -99,7 +99,7 @@ public class CCUITreeWidget extends CCUIPane{
 	
 	private void layout(){
 		removeAll();
-		_myMinSize.y = layout(_myRootNode, _myInset, -_myInset);
+		_myMinSize.y = layout(_myRootNode, _myLeftInset, -_myTopInset);
 		updateMatrices();
 	}
 	

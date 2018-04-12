@@ -69,8 +69,14 @@ public class CCUIWidget{
 	@CCProperty(name = "height")
 	protected double _myHeight = 0;
 	
-	@CCProperty(name = "inset")
-	protected double _myInset = 0;
+	@CCProperty(name = "left inset")
+	protected double _myLeftInset = 0;
+	@CCProperty(name = "right inset")
+	protected double _myRightInset = 0;
+	@CCProperty(name = "top inset")
+	protected double _myTopInset = 0;
+	@CCProperty(name = "bottom inset")
+	protected double _myBottomInset = 0;
 	
 	@CCProperty(name = "edit_policy")
 	protected CCUIEditPolicy _myEditPolicy = CCUIEditPolicy.ADMIN;
@@ -341,7 +347,7 @@ public class CCUIWidget{
 	}
 	
 	protected double widthCalc(){
-		return _myWidth + _myInset * 2;
+		return _myWidth + _myLeftInset + _myRightInset;
 	}
 	
 	public double width() {
@@ -355,19 +361,50 @@ public class CCUIWidget{
 	}
 	
 	public double height() {
-		return _myHeight + _myInset * 2;
+		return _myHeight + _myTopInset + _myBottomInset;
 	}
 	
 	public void height(double theHeight) {
 		_myHeight = theHeight;
 	}
 	
-	public double inset() {
-		return _myInset;
+	public double leftInset() {
+		return _myLeftInset;
+	}
+	
+	public void leftInset(double theInset) {
+		_myLeftInset = theInset;
+	}
+	
+	public double rightInset() {
+		return _myRightInset;
+	}
+	
+	public void rightInset(double theInset) {
+		_myRightInset = theInset;
+	}
+	
+	public double topInset() {
+		return _myTopInset;
+	}
+	
+	public void topInset(double theInset) {
+		_myTopInset = theInset;
+	}
+	
+	public double bottomInset() {
+		return _myBottomInset;
+	}
+	
+	public void bottomInset(double theInset) {
+		_myBottomInset = theInset;
 	}
 	
 	public void inset(double theInset) {
-		_myInset = theInset;
+		_myLeftInset = theInset;
+		_myRightInset = theInset;
+		_myTopInset = theInset;
+		_myBottomInset = theInset;
 	}
 	
 	public double x() {

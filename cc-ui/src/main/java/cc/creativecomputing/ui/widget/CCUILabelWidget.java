@@ -46,18 +46,18 @@ public class CCUILabelWidget extends CCUIWidget{
 	
 	@Override
 	public double width() {
-		return CCMath.max(_myTextField.width(), _myWidth) + _myInset * 2;
+		return CCMath.max(_myTextField.width(), _myWidth) + _myLeftInset + _myRightInset;
 	}
 	
 	@Override
 	public double height() {
-		return CCMath.max(_myTextField.height(), _myHeight) + _myInset * 2;
+		return CCMath.max(_myTextField.height(), _myHeight) + _myTopInset + _myBottomInset;
 	}
 	
 	@Override
 	public void update(CCGLTimer theTimer) {
 		super.update(theTimer);
-		_myTextField.position(0, _myInset);
+		_myTextField.position(0, _myBottomInset);
 	}
 	
 	@Override

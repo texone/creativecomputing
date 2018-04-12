@@ -24,8 +24,8 @@ public class CCUIVerticalFlowPane extends CCUIPane {
 	
 	@Override
 	public void updateLayout() {
-		double myX = _myInset;
-		double myY = -_myInset;
+		double myX = _myLeftInset;
+		double myY = -_myTopInset;
 		double myMaxWidth = 0;
 		for(CCUIWidget myWidget:children()) {
 			myWidget.translation().set(myX, myY);
@@ -33,7 +33,7 @@ public class CCUIVerticalFlowPane extends CCUIPane {
 			myY -= _cVerticalSpace;
 			myMaxWidth = CCMath.max(myMaxWidth,myWidget.width());
 		}
-		_myMinSize = new CCVector2(2 * _myInset + myMaxWidth, -myY - _cVerticalSpace + _myInset);
+		_myMinSize = new CCVector2(_myTopInset + _myBottomInset + myMaxWidth, -myY - _cVerticalSpace + _myBottomInset);
 	}
 	
 }

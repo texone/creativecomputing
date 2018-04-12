@@ -26,7 +26,7 @@ public class CCUIHorizontalSeperator extends CCUIWidget{
 	
 	@Override
 	public double width() {
-		return _myParent.width() - _myParent.inset() * 2;
+		return _myParent.width() - _myParent.leftInset() - _myParent.rightInset();
 	}
 	
 	@Override
