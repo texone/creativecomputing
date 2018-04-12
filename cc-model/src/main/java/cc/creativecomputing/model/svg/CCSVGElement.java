@@ -196,7 +196,7 @@ public abstract class CCSVGElement {
 			if(_myTriangulator == null){
 				_myTriangulator = new CCTriangulator();
 				_myTriangulator.beginPolygon();
-				for(CCVector3 myPoint:theSpline.points()){
+				for(CCVector3 myPoint:theSpline){
 					_myTriangulator.vertex(myPoint);
 				}
 				_myTriangulator.endPolygon();
@@ -209,7 +209,7 @@ public abstract class CCSVGElement {
 		}else{
 			if(theSpline.isClosed())g.beginShape(CCDrawMode.LINE_LOOP);
 			else g.beginShape(CCDrawMode.LINE_STRIP);
-			for(CCVector3 myPoint:theSpline.points()){
+			for(CCVector3 myPoint:theSpline){
 				g.vertex(myPoint);
 			}
 			g.endShape();

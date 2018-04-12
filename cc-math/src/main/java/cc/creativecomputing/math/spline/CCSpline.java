@@ -23,9 +23,7 @@ import cc.creativecomputing.math.CCVector3;
  * </p>
  * <a href="http://en.wikipedia.org/wiki/Spline_(mathematics)">spline at wikipedia</a>
  */
-public abstract class CCSpline{
-	
-	protected List<CCVector3> _myPoints = new ArrayList<>();
+public abstract class CCSpline extends ArrayList<CCVector3>{
 
 	protected boolean _myIsClosed;
 	protected List<Double> _mySegmentsLength;
@@ -79,15 +77,15 @@ public abstract class CCSpline{
 
 	/**
 	 * Use this method to mark the spline as modified, this is only necessary
-	 * if you directly add points using the reference passed by the {@linkplain #points()} method.
+	 * if you directly add points.
 	 */
 	public void beginEditSpline () {
 		if (_myIsModified) return;
 
 		_myIsModified = true;
 
-		if (_myPoints.size() > 2 && _myIsClosed) {
-			_myPoints.remove(_myPoints.size() - 1);
+		if (size() > 2 && _myIsClosed) {
+			remove(size() - 1);
 		}
 
 	}
@@ -99,11 +97,11 @@ public abstract class CCSpline{
 
 		_myIsModified = false;
 
-		if (_myPoints.size() >= 2 && _myIsClosed) {
-			_myPoints.add(_myPoints.get(0));
+		if (size() >= 2 && _myIsClosed) {
+			add(get(0));
 		}
 
-		if (_myPoints.size() > 1) {
+		if (size() > 1) {
 			computeTotalLentgh();
 		}
 	}
@@ -114,7 +112,7 @@ public abstract class CCSpline{
 	 */
 	public void removePoint (CCVector3 controlPoint) {
 		beginEditSpline();
-		_myPoints.remove(controlPoint);
+		remove(controlPoint);
 	}
 
 	/**
@@ -129,7 +127,7 @@ public abstract class CCSpline{
 	 */
 	public void addPoint (CCVector3 theControlPoint) {
 		beginEditSpline();
-		_myPoints.add(theControlPoint);
+		add(theControlPoint);
 	}
 
 	/**
@@ -150,14 +148,6 @@ public abstract class CCSpline{
 		for (CCVector3 myPoint : theControlPoints) {
 			addPoint(myPoint);
 		}
-	}
-	
-	/**
-	 * returns this spline control points
-	 * @return
-	 */
-	public List<CCVector3> points () {
-		return _myPoints;
 	}
 
 	protected abstract void computeTotalLengthImpl ();
@@ -194,9 +184,9 @@ public abstract class CCSpline{
 		double myReachedLength = 0;
 		int myIndex = 0;
 		
-		if(_myPoints.size() == 0)return null;
+		if(size() == 0)return null;
 		if(_mySegmentsLength == null || _mySegmentsLength.size() == 0){
-			return _myPoints.get(0).clone();
+			return get(0).clone();
 		}
 		
 		while(myReachedLength + _mySegmentsLength.get(myIndex) < myLength){
@@ -263,7 +253,7 @@ public abstract class CCSpline{
 	public CCVector3 closestPoint(CCVector3 thePoint){
 		double myMinDistanceSq = Double.MAX_VALUE;
 		CCVector3 myPoint = null;
-		for(CCVector3 myControlPoint:_myPoints){
+		for(CCVector3 myControlPoint:this){
 			double myDistSq = thePoint.distanceSquared(myPoint);
 			if(myDistSq < myMinDistanceSq){
 				myMinDistanceSq = myDistSq;
@@ -277,7 +267,7 @@ public abstract class CCSpline{
 	 * Removes all points from the spline
 	 */
 	public void clear(){
-		_myPoints.clear();
+		clear();
 		if(_mySegmentsLength != null)_mySegmentsLength.clear();
 		_myTotalLength = 0;
 	}
