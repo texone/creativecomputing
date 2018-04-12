@@ -58,7 +58,7 @@ public class CCCylinderDemo extends CCGL2Adapter {
 		g.texture(0, CCGLShaderUtil.randomTexture());
 		_myCylinderShader.start();
 		_myCylinderShader.uniform1f("iTime", animator().time());
-		_myMesh.draw(g);
+		_myMesh.drawViewSpace(g);
 		_myCylinderShader.end();
 		g.noTexture();
 		_myDrawttributes.end(g);

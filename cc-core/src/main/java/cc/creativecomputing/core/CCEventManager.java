@@ -68,13 +68,13 @@ public class CCEventManager<EventType> {
 	 * @return a proxy object which can be used to call listener methods on all of the registered event listeners
 	 */
 	public void event(EventType theParameter) {
-		for(CCEvent<EventType> myListener:_myListeners){
+		for(CCEvent<EventType> myListener:new ArrayList<>(_myListeners)){
 			myListener.event(theParameter);
 		}
 	}
 	
 	public void event() {
-		for(CCEvent<EventType> myListener:_myListeners){
+		for(CCEvent<EventType> myListener:new ArrayList<>(_myListeners)){
 			myListener.event(null);
 		}
 	}
