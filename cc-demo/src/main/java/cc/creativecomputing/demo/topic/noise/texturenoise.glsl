@@ -126,11 +126,11 @@ void main( )
 	gl_FragColor = vec4(col,1.) * max(blend, 0.)  + 0.01;// + d2 * 0.3;//
 	d = d2;//blend;//1. -d;
 	vec4 gold = vec4(col,1.) +0.1;
-	gold *= (1. -d2 * 0.75);
-	gl_FragColor = mix(vec4(d2*0.7 )+d2 * typoMask * typoSmoke , gold,  clamp(blend, 0.,1.0));// * (d2 + 1.) *1.3;
+	//gold *= (1. -d2 * 0.75);
+	gl_FragColor =mix(vec4(d2*0.7 )+d2 * typoMask * typoSmoke , gold,  clamp(blend, 0.,1.0));// * (d2 + 1.) *1.3;
 	//gl_FragColor.rgb = pow(gl_FragColor.rgb, vec3(1. / 1.5));
 	//gl_FragColor += d2 * typoMask * 2.8;
 	//gl_FragColor = vec4(blend,blend,blend,1.);
-
+//gl_FragColor = vec4(rz,rz,rz,1.0);
 	//gl_FragColor = vec4(gl_FragCoord.xy / iResolution.xy,typoMask,1.);
 }

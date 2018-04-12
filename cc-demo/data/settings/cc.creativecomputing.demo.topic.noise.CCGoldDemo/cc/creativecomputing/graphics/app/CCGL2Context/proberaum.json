@@ -1,0 +1,107 @@
+{
+  "device setup": {
+    "name": "device setup",
+    "value": {
+      "devices": {
+        "name": "devices",
+        "value": "Display 69731266"
+      },
+      "configurations": {
+        "name": "configurations",
+        "value": "1920 x 1200"
+      }
+    }
+  },
+  "visible": {
+    "name": "visible",
+    "value": true
+  },
+  "pixelScale": {
+    "name": "pixelScale",
+    "value": "IDENTITY"
+  },
+  "resizable": {
+    "name": "resizable",
+    "value": true
+  },
+  "windowY": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "windowY",
+    "value": 0
+  },
+  "containerType": {
+    "name": "containerType",
+    "value": "NEWT"
+  },
+  "windowX": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "windowX",
+    "value": 1920
+  },
+  "alwaysOnTop": {
+    "name": "alwaysOnTop",
+    "value": false
+  },
+  "assetPaths": {
+    "name": "assetPaths",
+    "value": ""
+  },
+  "title": {
+    "name": "title",
+    "value": "Creative Computing Application"
+  },
+  "antialiasing": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "antialiasing",
+    "value": 8
+  },
+  "displayMode": {
+    "name": "displayMode",
+    "value": "WINDOW"
+  },
+  "undecorated": {
+    "name": "undecorated",
+    "value": false
+  },
+  "fullscreen": {
+    "name": "fullscreen",
+    "value": true
+  },
+  "background": {
+    "a": 1,
+    "r": 0,
+    "b": 0,
+    "g": 0,
+    "name": "background",
+    "value": {
+      "a": 1,
+      "r": 0,
+      "b": 0,
+      "g": 0,
+      "blendable_type": "cc.creativecomputing.math.CCColor"
+    }
+  },
+  "width": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "width",
+    "value": 1920
+  },
+  "inVsync": {
+    "name": "inVsync",
+    "value": false
+  },
+  "closeOperation": {
+    "name": "closeOperation",
+    "value": "HIDE_ON_CLOSE"
+  },
+  "height": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "height",
+    "value": 1080
+  }
+}

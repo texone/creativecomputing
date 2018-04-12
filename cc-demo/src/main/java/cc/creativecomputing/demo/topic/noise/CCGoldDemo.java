@@ -25,6 +25,11 @@ public class CCGoldDemo extends CCGL2Adapter {
 	
 	private CCTexture2D _myTexture;
 	
+	@CCProperty(name = "flow speed", min = 0, max = 1)
+	private double _cFlowSpeed = 0;
+	
+	private double _myFlowTime = 0;
+	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myProgram = new CCGLProgram(null, CCNIOUtil.classPath(this, "gold_flow.glsl"));
@@ -38,6 +43,7 @@ public class CCGoldDemo extends CCGL2Adapter {
 
 	@Override
 	public void update(CCAnimator theAnimator) {
+		_myFlowTime += theAnimator.deltaTime() * _cFlowSpeed;
 	}
 
 	@Override
@@ -50,6 +56,7 @@ public class CCGoldDemo extends CCGL2Adapter {
 		_myProgram.start();
 		_myProgram.uniform2f("iResolution", g.width(), g.height());
 		_myProgram.uniform1f("iTime", animator().time());
+		_myProgram.uniform1f("flowTime", _myFlowTime);
 		_myProgram.uniform1i("randomTexture", 0);
 		_myProgram.uniform1i("iChannel0", 1);
 		g.beginShape(CCDrawMode.QUADS);

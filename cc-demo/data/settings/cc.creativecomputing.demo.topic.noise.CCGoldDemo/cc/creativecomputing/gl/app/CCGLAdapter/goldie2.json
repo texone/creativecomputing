@@ -1,0 +1,272 @@
+{
+  "gold": {
+    "name": "gold",
+    "value": {"fragment": {
+      "name": "fragment",
+      "value": {
+        "auto save": {
+          "name": "auto save",
+          "value": true
+        },
+        "uniforms": {
+          "name": "uniforms",
+          "value": {
+            "range": {
+              "min": 0,
+              "max": 1,
+              "name": "range",
+              "value": 0.20999999344348907
+            },
+            "cold": {
+              "min": 0,
+              "max": 2,
+              "name": "cold",
+              "value": 0.36800000071525574
+            },
+            "bow": {
+              "min": 0,
+              "max": 1,
+              "name": "bow",
+              "value": 0.44600000977516174
+            },
+            "gold": {
+              "min": 0,
+              "max": 1,
+              "name": "gold",
+              "value": 0.7630000114440918
+            },
+            "haze": {
+              "min": 0,
+              "max": 2,
+              "name": "haze",
+              "value": 2
+            },
+            "edge Range": {
+              "min": 0,
+              "max": 1.5,
+              "name": "edge Range",
+              "value": 0.07800000160932541
+            },
+            "rect0 size.y": {
+              "min": 0,
+              "max": 1000,
+              "name": "rect0 size.y",
+              "value": 0
+            },
+            "haze color.x": {
+              "min": 0,
+              "max": 1,
+              "name": "haze color.x",
+              "value": 0.4860000014305115
+            },
+            "haze color.z": {
+              "min": 0,
+              "max": 1,
+              "name": "haze color.z",
+              "value": 0
+            },
+            "haze color.y": {
+              "min": 0,
+              "max": 1,
+              "name": "haze color.y",
+              "value": 0
+            },
+            "rect0 size.x": {
+              "min": 0,
+              "max": 1000,
+              "name": "rect0 size.x",
+              "value": 0
+            },
+            "rect0 blend radius": {
+              "min": 0,
+              "max": 1000,
+              "name": "rect0 blend radius",
+              "value": 132
+            },
+            "edge Noise": {
+              "min": 0,
+              "max": 0.5,
+              "name": "edge Noise",
+              "value": 0.032499998807907104
+            },
+            "rect0 radius": {
+              "min": 0,
+              "max": 1000,
+              "name": "rect0 radius",
+              "value": 132
+            },
+            "circle radius": {
+              "min": 0,
+              "max": 1000,
+              "name": "circle radius",
+              "value": 190.86530707314228
+            },
+            "circle blend radius": {
+              "min": 0,
+              "max": 1000,
+              "name": "circle blend radius",
+              "value": 20
+            },
+            "liquid": {
+              "min": 0,
+              "max": 0.2,
+              "name": "liquid",
+              "value": 0.2
+            },
+            "start glow": {
+              "min": 0,
+              "max": 2,
+              "name": "start glow",
+              "value": 0.20781753579410445
+            },
+            "gold color.x": {
+              "min": 0,
+              "max": 4,
+              "name": "gold color.x",
+              "value": 2.1040000915527344
+            },
+            "background": {
+              "min": 0,
+              "max": 2,
+              "name": "background",
+              "value": 0.07800000160932541
+            },
+            "gold color.y": {
+              "min": 0,
+              "max": 4,
+              "name": "gold color.y",
+              "value": 1.0520000457763672
+            },
+            "circle pos.y": {
+              "min": 0,
+              "max": 3000,
+              "name": "circle pos.y",
+              "value": 540
+            },
+            "gold color.z": {
+              "min": 0,
+              "max": 4,
+              "name": "gold color.z",
+              "value": 0.5239999890327454
+            },
+            "circle pos.x": {
+              "min": 0,
+              "max": 3000,
+              "name": "circle pos.x",
+              "value": 600
+            },
+            "progress": {
+              "min": -1,
+              "max": 5,
+              "name": "progress",
+              "value": 0.6337384673018862
+            },
+            "glow": {
+              "min": 0,
+              "max": 2,
+              "name": "glow",
+              "value": 0.578000009059906
+            },
+            "rect0 pos.y": {
+              "min": 0,
+              "max": 3000,
+              "name": "rect0 pos.y",
+              "value": 315
+            },
+            "rect0 pos.x": {
+              "min": 0,
+              "max": 3000,
+              "name": "rect0 pos.x",
+              "value": 552
+            }
+          }
+        },
+        "gold_flow.glsl": {
+          "name": "gold_flow.glsl",
+          "value": "cc.creativecomputing.control.code.CCShaderFile@489cc30f"
+        },
+        "save in file": {
+          "name": "save in file",
+          "value": true
+        }
+      }
+    }}
+  },
+  "flow speed": {
+    "min": 0,
+    "max": 1,
+    "name": "flow speed",
+    "value": 0.26363636363636367
+  },
+  "screen capture": {
+    "name": "screen capture",
+    "value": {
+      "full window": {},
+      "record key": {
+        "name": "record key",
+        "value": true
+      },
+      "format": {
+        "name": "format",
+        "value": "PNG"
+      },
+      "prepend": {
+        "name": "prepend",
+        "value": "frame_"
+      },
+      "draw bounds": {
+        "name": "draw bounds",
+        "value": false
+      },
+      "quality": {
+        "min": 0,
+        "max": 1,
+        "name": "quality",
+        "value": 1
+      },
+      "seconds": {
+        "min": 1,
+        "max": 1000,
+        "name": "seconds",
+        "value": 100
+      },
+      "record frame": {},
+      "alpha": {
+        "name": "alpha",
+        "value": false
+      },
+      "x": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "x",
+        "value": 0
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 0
+      },
+      "y": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "y",
+        "value": 0
+      },
+      "capture rate": {
+        "min": 1,
+        "max": 60,
+        "name": "capture rate",
+        "value": 1
+      },
+      "record sequence": {},
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 0
+      },
+      "record timeline loop": {}
+    }
+  }
+}
