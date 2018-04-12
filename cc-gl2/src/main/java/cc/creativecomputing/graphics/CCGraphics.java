@@ -2046,8 +2046,6 @@ public class CCGraphics{
 		glVertex2d(theVector.x, theVector.y);
 	}
 	
-	
-	
 	/**
 	 * 
 	 * @param theVector
@@ -2330,7 +2328,9 @@ public class CCGraphics{
 		final double x4, final double y4, final double z4
 	){
 		if(!_myIsAnchorDefined){
-			throw new RuntimeException("You have to define a bezierVertex with two anchorpoints first!");
+			_myLastBezierAnchorX = x2;
+			_myLastBezierAnchorY = y2;
+			_myLastBezierAnchorZ = z2;
 		}
 		bezierVertex(
 			_myLastBezierAnchorX,

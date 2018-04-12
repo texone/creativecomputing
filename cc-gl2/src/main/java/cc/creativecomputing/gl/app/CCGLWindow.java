@@ -59,6 +59,7 @@ import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.glfw.GLFWDropCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.system.MemoryStack;
@@ -316,7 +317,6 @@ public class CCGLWindow {
 			CCGLMouseEvent myMouseEvent = new CCGLMouseEvent(button, action, mods,_myMouseX, _myMouseY);
 			switch(action){
 			case GLFW_RELEASE:
-				mouseReleaseEvents.event(myMouseEvent);
 				long myDif = System.currentTimeMillis() - _myPressMillis;
 
 				if(_myLastDif < 200){
@@ -324,11 +324,13 @@ public class CCGLWindow {
 					myMouseEvent.clickCount = _myClicks;
 				}else{
 					_myClicks = 1;
+					myMouseEvent.clickCount = _myClicks;
 				}
+				mouseReleaseEvents.event(myMouseEvent);
 				if(myDif < 200){
 					mouseClickEvents.event(myMouseEvent);
 				}
-				
+
 				_myMousePressed = false;
 				break;
 			case GLFW_PRESS:
@@ -616,6 +618,10 @@ public class CCGLWindow {
 	public void cursor(CCGLCursorShape theCursor) {
 		long myCursor = theCursor == null ? NULL : glfwCreateStandardCursor(theCursor.id());
 		glfwSetCursor(_myID, myCursor);
+	}
+	
+	public void cursor(){
+		GLFWImage myCursorImage = GLFWImage.create();
 	}
 
 	/**
