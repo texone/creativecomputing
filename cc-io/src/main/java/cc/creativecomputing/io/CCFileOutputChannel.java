@@ -12,6 +12,7 @@ package cc.creativecomputing.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.SeekableByteChannel;
@@ -29,13 +30,24 @@ public class CCFileOutputChannel {
 	
 	private ByteBuffer _my8ByteBuffer = ByteBuffer.allocate(8);
 	private ByteBuffer _my4ByteBuffer = ByteBuffer.allocate(4);
-//	private ByteBuffer _my2ByteBuffer = ByteBuffer.allocate(2);
+	private ByteBuffer _my2ByteBuffer = ByteBuffer.allocate(2);
+	private ByteBuffer _my1ByteBuffer = ByteBuffer.allocate(1);
 	
 	private SeekableByteChannel _myFileChannel;
+	
+	private ByteOrder _myOrder = ByteOrder.BIG_ENDIAN;
 	
 	public CCFileOutputChannel(Path thePath) {
 		_myPath = thePath;
 		open();
+	}
+	
+	public void order(ByteOrder theOrder) {
+		_myOrder = theOrder;
+		_my8ByteBuffer.order(theOrder);
+		_my4ByteBuffer.order(theOrder);
+		_my2ByteBuffer.order(theOrder);
+		_my1ByteBuffer.order(theOrder);
 	}
 	
 	public void open() {
@@ -61,16 +73,18 @@ public class CCFileOutputChannel {
 		}
 	}
 	
-	public void write(byte[] theBytes) {
+	public void write(byte...theBytes) {
 		ByteBuffer myBuffer = ByteBuffer.wrap(theBytes);
+		myBuffer.order(_myOrder);
 		write(myBuffer);
 	}
 	
 	public void write(float[] theData) {
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(theData.length * 4); //4 bytes per float
-		byteBuf.asFloatBuffer().put(theData);
-		byteBuf.position(0);
-		write(byteBuf);
+		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theData.length * 4); //4 bytes per float
+		myBuffer.order(_myOrder);
+		myBuffer.asFloatBuffer().put(theData);
+		myBuffer.position(0);
+		write(myBuffer);
 	}
 	
 	public int read(ByteBuffer theBuffer) {
@@ -147,6 +161,18 @@ public class CCFileOutputChannel {
 		_my8ByteBuffer.position(0);
 		read(_my8ByteBuffer);
 		return _my8ByteBuffer.getLong(0);
+	}
+	
+	public void write(byte theByte) {
+		_my1ByteBuffer.put(0,theByte);
+		_my1ByteBuffer.position(0);
+		write(_my1ByteBuffer);
+	}
+	
+	public void write(short theShort) {
+		_my2ByteBuffer.putShort(0,theShort);
+		_my4ByteBuffer.position(0);
+		write(_my2ByteBuffer);
 	}
 	
 	public void write(int theInt) {
