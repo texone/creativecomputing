@@ -8,6 +8,7 @@ import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.effects.CCOffsetEffect;
 import cc.creativecomputing.effects.CCSignalEffect;
 import cc.creativecomputing.effects.CCSimpleGradientEffect;
+import cc.creativecomputing.effects.modulation.CCTimeSource;
 import cc.creativecomputing.graphics.CCDrawAttributes;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -57,7 +58,7 @@ public class CC2Motor2ConnectionLinearDemo extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		new CC2Motor2ConnectionLinearConfigCreator(60, 317, 200, 0, 30, 5).saveXML("linear/config");
+		new CC2Motor2ConnectionLinearConfigCreator(60, 317, 200, 162.5, 0, 30, 10).saveXML("linear/config");
 		
 		_myCameraController = new CCCameraController(this, g, 100);
 		
@@ -73,6 +74,7 @@ public class CC2Motor2ConnectionLinearDemo extends CCGL2Adapter {
 		
 		_myEffectManager = new CCKleEffectManager(_mySequenceElements, CCKleChannelType.MOTORS, "rotation","lift");
 		_myEffectManager.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
+		_myEffectManager.addRelativeSources(new CCTimeSource("time"));
 		_myEffectManager.put("offset", new CCOffsetEffect());
 		_myEffectManager.put("signal", new CCSignalEffect());
 		
@@ -101,30 +103,54 @@ public class CC2Motor2ConnectionLinearDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
+		g.clearColor(100);
 		g.clear();
 		_myCameraController.camera().draw(g);
 		
-		g.color(255);
-		g.pointSize(2);
+		
 		_cAttributes.start(g);
 		for(CCKleEffectable mySphere:_mySequenceElements){
+//			mySphere.
 			g.pushMatrix();
 			g.applyMatrix(mySphere.matrix());
-//			g.point(mySphere.motorSetup().channels().get(0).connectionPosition());
-//			g.point(mySphere.motorSetup().channels().get(1).connectionPosition());
-//			g.line(mySphere.motorSetup().channels().get(0).position(),mySphere.motorSetup().channels().get(0).connectionPosition());
-//			g.line(mySphere.motorSetup().channels().get(1).position(),mySphere.motorSetup().channels().get(1).connectionPosition());
-//
-//			g.line(mySphere.motorSetup().channels().get(0).connectionPosition(),mySphere.motorSetup().channels().get(1).connectionPosition());
-			
-//			CCLog.info(mySphere.lightSetup().color(), mySphere.lightSetup().channels().get(0).value(), mySphere.lightSetup().channels().get(1).value(), mySphere.lightSetup().channels().get(2).value());
-			g.color(255,100);//mySphere.lightSetup().color());
-			g.beginShape(CCDrawMode.QUADS);
+			g.pointSize(3);
+			g.color(0);
+			g.beginShape(CCDrawMode.POINTS);
+			g.vertex(mySphere.motorSetup().channels().get(0).connectionPosition());
+			g.vertex(mySphere.motorSetup().channels().get(1).connectionPosition());
+			g.vertex(mySphere.motorSetup().channels().get(0).position());
+			g.vertex(mySphere.motorSetup().channels().get(1).position());
+			g.vertex(mySphere.motorSetup().centroid());
+			g.endShape();
+
+			g.beginShape(CCDrawMode.LINE_STRIP);
 			g.vertex(mySphere.motorSetup().channels().get(0).position());
 			g.vertex(mySphere.motorSetup().channels().get(0).connectionPosition());
 			g.vertex(mySphere.motorSetup().channels().get(1).connectionPosition());
 			g.vertex(mySphere.motorSetup().channels().get(1).position());
+			g.vertex(mySphere.motorSetup().centroid());
 			g.endShape();
+			
+			g.color(255,100);
+			g.beginShape(CCDrawMode.LINES);
+			g.vertex(-100,0,0);
+			g.vertex(100,0,0);
+			g.endShape();
+			
+			g.pushMatrix();
+			g.translate(mySphere.motorSetup().channels().get(0).connectionPosition());
+			g.rotate(mySphere.motorSetup().rotateZ());
+			g.rect(-110,-10,220,160);
+			g.popMatrix();
+			
+//			CCLog.info(mySphere.lightSetup().color(), mySphere.lightSetup().channels().get(0).value(), mySphere.lightSetup().channels().get(1).value(), mySphere.lightSetup().channels().get(2).value());
+//			g.color(255,100);//mySphere.lightSetup().color());
+//			g.beginShape(CCDrawMode.QUADS);
+//			g.vertex(mySphere.motorSetup().channels().get(0).position());
+//			g.vertex(mySphere.motorSetup().channels().get(0).connectionPosition());
+//			g.vertex(mySphere.motorSetup().channels().get(1).connectionPosition());
+//			g.vertex(mySphere.motorSetup().channels().get(1).position());
+//			g.endShape();
 			g.popMatrix();
 		}
 		_cAttributes.end(g);

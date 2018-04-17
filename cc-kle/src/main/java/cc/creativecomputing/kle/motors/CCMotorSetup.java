@@ -89,6 +89,10 @@ public class CCMotorSetup extends CCKleChannelSetup<CCMotorChannel>{
 	public void drawRangeBounds(CCGraphics g){
 	}
 	
+	public CCVector3 centroid(){
+		return _myCentroid;
+	}
+	
 	public CCVector3 elementOffset(){
 		return _myElementOffset;
 	}

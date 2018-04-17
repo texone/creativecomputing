@@ -39,6 +39,7 @@ public class CC2Motor2ConnectionSetupDemo extends CCGL2Adapter {
 		
 		double myJoint1X = 0;
 		double myJoint1Y = _cLift;
+		
 
 		double myJointY = CCMath.sin(myAngle) * myJoint21Dist + myJoint1Y;
 		if(myJointY < 0) {
@@ -47,24 +48,24 @@ public class CC2Motor2ConnectionSetupDemo extends CCGL2Adapter {
 		
 		if(myJointY > 100) {
 			myAngle = CCMath.asin(-(myJoint1Y - 100) / myJoint21Dist);
-			CCLog.info(myAngle);
 		}
-		
+
 		double myJoint2X = CCMath.cos(myAngle) * myJoint21Dist + myJoint1X;
 		double myJoint2Y = CCMath.sin(myAngle) * myJoint21Dist + myJoint1Y;
 		
 		double myJoint02Dist = CCMath.dist(myJoint0X, myJoint0Y, myJoint2X, myJoint2Y);
-		
 		double myJoint23Dist = CCMath.sqrt(CCMath.sq(myJoint02Dist) - CCMath.sq(myJoint03Dist));
-		
+
 		double myAngle1 = CCMath.asin(myJoint03Dist / myJoint02Dist);
-		
 		
 		CCVector2 myDirection = new CCVector2(myJoint0X - myJoint2X, myJoint0Y - myJoint2Y).normalizeLocal();
 	
 		CCVector2 myJoint3 = myDirection.rotate(-myAngle1);
 		myJoint3.multiplyLocal(myJoint23Dist);
 		myJoint3.addLocal(myJoint2X, myJoint2Y);
+
+		CCLog.info(myJoint3);
+		
 		g.pointSize(3);
 		g.beginShape(CCDrawMode.POINTS);
 		g.vertex(myJoint0X,myJoint0Y);

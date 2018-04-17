@@ -24,7 +24,7 @@ public class CC2Motor2ConnectionLinearConfigCreator {
 
 	protected List<CCKleEffectable> _myElements = new ArrayList<>();
 	
-	public CC2Motor2ConnectionLinearConfigCreator(int theElements, double theRadius, double theConnectionDistance, double top, double bottom, int frameRate){
+	public CC2Motor2ConnectionLinearConfigCreator(int theElements, double theRadius, double theConnectionDistance, double theOffset, double top, double bottom, int frameRate){
 		
 		_mySculptureXML = new CCDataElement("sculpture");
 		CCDataElement myElementsXML = _mySculptureXML.createChild("elements");
@@ -64,7 +64,9 @@ public class CC2Motor2ConnectionLinearConfigCreator {
 			CCVector3 myPulleyPosition0 = new CCVector3(0, -162.5, 0);
 			CCVector3 myPulleyPosition1 = new CCVector3(90, -162.5, 0);
 			CCMotorChannel myMotor0 = new CCMotorChannel(i * 2, myPulleyPosition0, myConnectionPosition0);
+			myMotor0.valueOffset(theOffset);
 			CCMotorChannel myMotor1 = new CCMotorChannel(i * 2 + 1, myPulleyPosition1, myConnectionPosition1);
+			myMotor1.valueOffset(theOffset);
 			myMotorChannels.add(myMotor0);
 			myMotorChannels.add(myMotor1);
 			

@@ -1,0 +1,890 @@
+{"timelines": {"default": {
+  "lower_bound": 0.6089881075282001,
+  "quantize": "SUBSTEP_8",
+  "timeline": [{
+    "path": "app",
+    "min": 0,
+    "max": 1,
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app/app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [{
+        "path": "app/app/effects",
+        "min": 0,
+        "max": 1,
+        "accumulate": false,
+        "mute": false,
+        "Extras": {},
+        "eventTypes": "new",
+        "open": true,
+        "tracks": [{
+          "path": "app/app/effects/signal",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "Extras": {},
+          "eventTypes": "new",
+          "open": true,
+          "tracks": [
+            {
+              "path": "app/app/effects/signal/lift phase",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [
+                {
+                  "path": "app/app/effects/signal/lift phase/amounts",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "Extras": {},
+                  "eventTypes": "new",
+                  "open": true,
+                  "tracks": [
+                    {
+                      "path": "app/app/effects/signal/lift phase/amounts/constant",
+                      "min": -1,
+                      "max": 1,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 5,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 5,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 5,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 10,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 10,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 10,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 10,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 15,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 15,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 15,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 15,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 20,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 25,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 25,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 30,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 35,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 35,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 40,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 40,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 45,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 45,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 50,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 50,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 55,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 55,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 60,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 60,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 65,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 65,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 70,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 70,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 75,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 75,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 80,
+                          "type": "LINEAR",
+                          "value": 1
+                        }
+                      ]}
+                    },
+                    {
+                      "path": "app/app/effects/signal/lift phase/amounts/id",
+                      "min": -1,
+                      "max": 1,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "in": {
+                            "time": 60,
+                            "type": "HANDLE",
+                            "value": 1
+                          },
+                          "time": 60,
+                          "type": "BEZIER",
+                          "value": 1,
+                          "out": {
+                            "time": 61.81818187236786,
+                            "type": "HANDLE",
+                            "value": 1
+                          }
+                        },
+                        {
+                          "in": {
+                            "time": 68.18181812763214,
+                            "type": "HANDLE",
+                            "value": 0.4999999999999999
+                          },
+                          "time": 70,
+                          "type": "BEZIER",
+                          "value": 0.4999999999999999,
+                          "out": {
+                            "time": 70,
+                            "type": "HANDLE",
+                            "value": 0.4999999999999999
+                          }
+                        }
+                      ]}
+                    }
+                  ],
+                  "TrackData": {"points": []}
+                },
+                {
+                  "path": "app/app/effects/signal/lift phase/id amounts",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "Extras": {},
+                  "eventTypes": "new",
+                  "open": true,
+                  "tracks": [{
+                    "path": "app/app/effects/signal/lift phase/id amounts/id",
+                    "min": 0,
+                    "max": 1,
+                    "accumulate": false,
+                    "mute": false,
+                    "Extras": {},
+                    "eventTypes": "new",
+                    "open": true,
+                    "tracks": [
+                      {
+                        "path": "app/app/effects/signal/lift phase/id amounts/id/mod",
+                        "min": 2,
+                        "max": 48,
+                        "accumulate": false,
+                        "mute": false,
+                        "TrackData": {"points": [
+                          {
+                            "time": 60,
+                            "type": "LINEAR",
+                            "value": 0.6086956521739131
+                          },
+                          {
+                            "time": 75,
+                            "type": "STEP",
+                            "value": 0.2826086956521739
+                          }
+                        ]}
+                      },
+                      {
+                        "path": "app/app/effects/signal/lift phase/id amounts/id/mod amount",
+                        "min": -1,
+                        "max": 1,
+                        "accumulate": false,
+                        "mute": false,
+                        "TrackData": {"points": [
+                          {
+                            "in": {
+                              "time": 60,
+                              "type": "HANDLE",
+                              "value": 0.5
+                            },
+                            "time": 60,
+                            "type": "BEZIER",
+                            "value": 0.5,
+                            "out": {
+                              "time": 61.81818187236786,
+                              "type": "HANDLE",
+                              "value": 0.5
+                            }
+                          },
+                          {
+                            "in": {
+                              "time": 68.18181812763214,
+                              "type": "HANDLE",
+                              "value": 0.75
+                            },
+                            "time": 70,
+                            "type": "BEZIER",
+                            "value": 0.75,
+                            "out": {
+                              "time": 70.90909093618393,
+                              "type": "HANDLE",
+                              "value": 0.75
+                            }
+                          },
+                          {
+                            "in": {
+                              "time": 74.09090906381607,
+                              "type": "HANDLE",
+                              "value": 0.5
+                            },
+                            "time": 75,
+                            "type": "BEZIER",
+                            "value": 0.5,
+                            "out": {
+                              "time": 75.90909093618393,
+                              "type": "HANDLE",
+                              "value": 0.5
+                            }
+                          },
+                          {
+                            "in": {
+                              "time": 79.09090906381607,
+                              "type": "HANDLE",
+                              "value": 0.3754545454545454
+                            },
+                            "time": 80,
+                            "type": "BEZIER",
+                            "value": 0.3754545454545454,
+                            "out": {
+                              "time": 80,
+                              "type": "HANDLE",
+                              "value": 0.3754545454545454
+                            }
+                          }
+                        ]}
+                      }
+                    ],
+                    "TrackData": {"points": []}
+                  }],
+                  "TrackData": {"points": []}
+                }
+              ],
+              "TrackData": {"points": []}
+            },
+            {
+              "path": "app/app/effects/signal/blend",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "TrackData": {"points": [
+                {
+                  "in": {
+                    "time": 0,
+                    "type": "HANDLE",
+                    "value": 0
+                  },
+                  "time": 0,
+                  "type": "BEZIER",
+                  "value": 0,
+                  "out": {
+                    "time": 2.181818187236786,
+                    "type": "HANDLE",
+                    "value": 0
+                  }
+                },
+                {
+                  "in": {
+                    "time": 17.818181812763214,
+                    "type": "HANDLE",
+                    "value": 1
+                  },
+                  "time": 20,
+                  "type": "BEZIER",
+                  "value": 1,
+                  "out": {
+                    "time": 20,
+                    "type": "HANDLE",
+                    "value": 1
+                  }
+                }
+              ]}
+            },
+            {
+              "path": "app/app/effects/signal/rotation phase",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [
+                {
+                  "path": "app/app/effects/signal/rotation phase/amounts",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "Extras": {},
+                  "eventTypes": "new",
+                  "open": true,
+                  "tracks": [
+                    {
+                      "path": "app/app/effects/signal/rotation phase/amounts/constant",
+                      "min": -1,
+                      "max": 1,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 20,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 25,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 25,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 30,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 35,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 35,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 40,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 40,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "in": {
+                            "time": 43.75,
+                            "type": "HANDLE",
+                            "value": 1
+                          },
+                          "time": 45,
+                          "type": "BEZIER",
+                          "value": 1,
+                          "out": {
+                            "time": 46.25,
+                            "type": "HANDLE",
+                            "value": 1
+                          }
+                        },
+                        {
+                          "time": 50,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 50,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 55,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 55,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "in": {
+                            "time": 58.75,
+                            "type": "HANDLE",
+                            "value": 0
+                          },
+                          "time": 60,
+                          "type": "BEZIER",
+                          "value": 0,
+                          "out": {
+                            "time": 61.25,
+                            "type": "HANDLE",
+                            "value": 0
+                          }
+                        },
+                        {
+                          "time": 65,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 65,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 70,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 70,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 75,
+                          "type": "LINEAR",
+                          "value": 1
+                        },
+                        {
+                          "time": 75,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 80,
+                          "type": "LINEAR",
+                          "value": 1
+                        }
+                      ]}
+                    },
+                    {
+                      "path": "app/app/effects/signal/rotation phase/amounts/id",
+                      "min": -1,
+                      "max": 1,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "in": {
+                            "time": 60,
+                            "type": "HANDLE",
+                            "value": 1
+                          },
+                          "time": 60,
+                          "type": "BEZIER",
+                          "value": 1,
+                          "out": {
+                            "time": 61.81818187236786,
+                            "type": "HANDLE",
+                            "value": 1
+                          }
+                        },
+                        {
+                          "in": {
+                            "time": 68.18181812763214,
+                            "type": "HANDLE",
+                            "value": 0.5000000000000001
+                          },
+                          "time": 70,
+                          "type": "BEZIER",
+                          "value": 0.5000000000000001,
+                          "out": {
+                            "time": 70,
+                            "type": "HANDLE",
+                            "value": 0.5000000000000001
+                          }
+                        }
+                      ]}
+                    }
+                  ],
+                  "TrackData": {"points": []}
+                },
+                {
+                  "path": "app/app/effects/signal/rotation phase/id amounts",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "Extras": {},
+                  "eventTypes": "new",
+                  "open": true,
+                  "tracks": [{
+                    "path": "app/app/effects/signal/rotation phase/id amounts/id",
+                    "min": 0,
+                    "max": 1,
+                    "accumulate": false,
+                    "mute": false,
+                    "Extras": {},
+                    "eventTypes": "new",
+                    "open": true,
+                    "tracks": [
+                      {
+                        "path": "app/app/effects/signal/rotation phase/id amounts/id/mod",
+                        "min": 2,
+                        "max": 48,
+                        "accumulate": false,
+                        "mute": false,
+                        "TrackData": {"points": [
+                          {
+                            "time": 60,
+                            "type": "LINEAR",
+                            "value": 0.6086956521739131
+                          },
+                          {
+                            "time": 75,
+                            "type": "STEP",
+                            "value": 0.2826086956521739
+                          }
+                        ]}
+                      },
+                      {
+                        "path": "app/app/effects/signal/rotation phase/id amounts/id/mod amount",
+                        "min": -1,
+                        "max": 1,
+                        "accumulate": false,
+                        "mute": false,
+                        "TrackData": {"points": [
+                          {
+                            "in": {
+                              "time": 60,
+                              "type": "HANDLE",
+                              "value": 0.5
+                            },
+                            "time": 60,
+                            "type": "BEZIER",
+                            "value": 0.5,
+                            "out": {
+                              "time": 61.81818187236786,
+                              "type": "HANDLE",
+                              "value": 0.5
+                            }
+                          },
+                          {
+                            "in": {
+                              "time": 68.18181812763214,
+                              "type": "HANDLE",
+                              "value": 0.25090909090909086
+                            },
+                            "time": 70,
+                            "type": "BEZIER",
+                            "value": 0.25090909090909086,
+                            "out": {
+                              "time": 70.90909093618393,
+                              "type": "HANDLE",
+                              "value": 0.25090909090909086
+                            }
+                          },
+                          {
+                            "in": {
+                              "time": 74.09090906381607,
+                              "type": "HANDLE",
+                              "value": 0.5
+                            },
+                            "time": 75,
+                            "type": "BEZIER",
+                            "value": 0.5,
+                            "out": {
+                              "time": 75.90909093618393,
+                              "type": "HANDLE",
+                              "value": 0.5
+                            }
+                          },
+                          {
+                            "in": {
+                              "time": 79.09090906381607,
+                              "type": "HANDLE",
+                              "value": 0.6254545454545456
+                            },
+                            "time": 80,
+                            "type": "BEZIER",
+                            "value": 0.6254545454545456,
+                            "out": {
+                              "time": 80,
+                              "type": "HANDLE",
+                              "value": 0.6254545454545456
+                            }
+                          }
+                        ]}
+                      }
+                    ],
+                    "TrackData": {"points": []}
+                  }],
+                  "TrackData": {"points": []}
+                }
+              ],
+              "TrackData": {"points": []}
+            },
+            {
+              "path": "app/app/effects/signal/rotation amount",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [{
+                "path": "app/app/effects/signal/rotation amount/amounts",
+                "min": 0,
+                "max": 1,
+                "accumulate": false,
+                "mute": false,
+                "Extras": {},
+                "eventTypes": "new",
+                "open": true,
+                "tracks": [{
+                  "path": "app/app/effects/signal/rotation amount/amounts/constant",
+                  "min": -1,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 20,
+                        "type": "HANDLE",
+                        "value": 0.5
+                      },
+                      "time": 20,
+                      "type": "BEZIER",
+                      "value": 0.5,
+                      "out": {
+                        "time": 22.545454502105713,
+                        "type": "HANDLE",
+                        "value": 0.5
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 27.454545497894287,
+                        "type": "HANDLE",
+                        "value": 0.6636363636363637
+                      },
+                      "time": 30,
+                      "type": "BEZIER",
+                      "value": 0.6636363636363637,
+                      "out": {
+                        "time": 32.54545450210571,
+                        "type": "HANDLE",
+                        "value": 0.6636363636363637
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 37.45454549789429,
+                        "type": "HANDLE",
+                        "value": 1
+                      },
+                      "time": 40,
+                      "type": "BEZIER",
+                      "value": 1,
+                      "out": {
+                        "time": 40,
+                        "type": "HANDLE",
+                        "value": 1
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 60,
+                        "type": "HANDLE",
+                        "value": 1
+                      },
+                      "time": 60,
+                      "type": "BEZIER",
+                      "value": 1,
+                      "out": {
+                        "time": 62.54545450210571,
+                        "type": "HANDLE",
+                        "value": 1
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 67.45454549789429,
+                        "type": "HANDLE",
+                        "value": 0
+                      },
+                      "time": 70,
+                      "type": "BEZIER",
+                      "value": 0,
+                      "out": {
+                        "time": 70,
+                        "type": "HANDLE",
+                        "value": 0
+                      }
+                    }
+                  ]}
+                }],
+                "TrackData": {"points": []}
+              }],
+              "TrackData": {"points": []}
+            }
+          ],
+          "TrackData": {"points": []}
+        }],
+        "TrackData": {"points": []}
+      }],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 86.9976963206334,
+  "Transport": {
+    "loop_end": 40,
+    "loop_active": true,
+    "marker": {"points": []},
+    "loop_start": 20,
+    "speed": 0.3
+  }
+}}}

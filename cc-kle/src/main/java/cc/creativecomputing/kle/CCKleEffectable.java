@@ -98,7 +98,7 @@ public class CCKleEffectable extends CCEffectable{
 		case SETUP_2_MOTOR_2_CONNECTION:
 			return new CC2Motor2ConnectionSetup(this, theMotors, (CC2Motor2ConnectionCalculations)theBounds, theCentroid,  theElementRadius);
 		case SETUP_2_MOTOR_2_CONNECTION_LINEAR:
-			return new CC2Motor2ConnectionLinearSetup(theMotors, (CC2Motor2ConnectionLinearBounds)theBounds,  theElementRadius);
+			return new CC2Motor2ConnectionLinearSetup(theMotors, (CC2Motor2ConnectionLinearBounds)theBounds, theCentroid, theElementRadius);
 		case SETUP_1_MOTOR_1_CONNECTION:
 			return new CC1Motor1ConnectionSetup(theMotors, (CC1Motor1ConnectionBounds)theBounds, theCentroid);
 		case SETUP_2_MOTOR_ROTATION_AXIS:

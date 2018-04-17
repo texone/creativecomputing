@@ -1,0 +1,4087 @@
+{
+  "effects": {
+    "name": "effects",
+    "value": {
+      "lift scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "lift scale",
+        "value": 1
+      },
+      "offset": {
+        "name": "offset",
+        "value": {
+          "min": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "min",
+            "value": -1
+          },
+          "group blends": {
+            "name": "group blends",
+            "value": {"group_0": {
+              "min": 0,
+              "max": 1,
+              "name": "group_0",
+              "value": 1
+            }}
+          },
+          "max": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "max",
+            "value": 1
+          },
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 0
+          },
+          "rotation modulation": {
+            "name": "rotation modulation",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "column": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "column",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  },
+                  "row": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "row",
+                    "value": 0
+                  },
+                  "time": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "time",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {
+                  "column": {
+                    "name": "column",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id": {
+                    "name": "id",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "row": {
+                    "name": "row",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "lift modulation": {
+            "name": "lift modulation",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "column": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "column",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  },
+                  "row": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "row",
+                    "value": 0
+                  },
+                  "time": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "time",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {
+                  "column": {
+                    "name": "column",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id": {
+                    "name": "id",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "row": {
+                    "name": "row",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "channelblend": {
+            "min": 0,
+            "max": 1,
+            "name": "channelblend",
+            "value": 0
+          }
+        }
+      },
+      "end add": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "end add",
+        "value": 0.5
+      },
+      "rotation scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "rotation scale",
+        "value": 1
+      },
+      "end scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "end scale",
+        "value": 0.5
+      },
+      "lift default": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "lift default",
+        "value": 1
+      },
+      "normalize": {
+        "name": "normalize",
+        "value": false
+      },
+      "bypass amount": {
+        "name": "bypass amount",
+        "value": false
+      },
+      "global scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "global scale",
+        "value": 1
+      },
+      "rotation default": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "rotation default",
+        "value": 1
+      },
+      "animation blender": {
+        "name": "animation blender",
+        "value": {
+          "apply blend": {
+            "min": 0,
+            "max": 1,
+            "name": "apply blend",
+            "value": 0
+          },
+          "modulation": {
+            "name": "modulation",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "column": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "column",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  },
+                  "row": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "row",
+                    "value": 0
+                  },
+                  "time": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "time",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {
+                  "column": {
+                    "name": "column",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id": {
+                    "name": "id",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "row": {
+                    "name": "row",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 0
+          },
+          "blend range": {
+            "min": 0,
+            "max": 1,
+            "name": "blend range",
+            "value": 0
+          },
+          "reverse": {
+            "name": "reverse",
+            "value": true
+          }
+        }
+      },
+      "signal": {
+        "name": "signal",
+        "value": {
+          "rotation phase": {
+            "name": "rotation phase",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "column": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "column",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0.5
+                  },
+                  "row": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "row",
+                    "value": 0
+                  },
+                  "time": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "time",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {
+                  "column": {
+                    "name": "column",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id": {
+                    "name": "id",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "row": {
+                    "name": "row",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "lift amount": {
+            "name": "lift amount",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 1
+                  },
+                  "column": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "column",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  },
+                  "row": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "row",
+                    "value": 0
+                  },
+                  "time": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "time",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {
+                  "column": {
+                    "name": "column",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id": {
+                    "name": "id",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "row": {
+                    "name": "row",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "reset phase": {},
+          "use gradient": {
+            "name": "use gradient",
+            "value": false
+          },
+          "gradient channel": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "gradient channel",
+            "value": 0
+          },
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 1
+          },
+          "sin scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "sin scale",
+            "value": 2
+          },
+          "rotation amount": {
+            "name": "rotation amount",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 1
+                  },
+                  "column": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "column",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  },
+                  "row": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "row",
+                    "value": 0
+                  },
+                  "time": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "time",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {
+                  "column": {
+                    "name": "column",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id": {
+                    "name": "id",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "row": {
+                    "name": "row",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "gradient": {
+            "gradient": [],
+            "name": "gradient",
+            "value": []
+          },
+          "lift phase": {
+            "name": "lift phase",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "column": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "column",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  },
+                  "row": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "row",
+                    "value": 0
+                  },
+                  "time": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "time",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {
+                  "column": {
+                    "name": "column",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id": {
+                    "name": "id",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 10
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "row": {
+                    "name": "row",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "phase scale": {
+            "min": 1,
+            "max": 10,
+            "name": "phase scale",
+            "value": 1
+          },
+          "sin add": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "sin add",
+            "value": -1
+          },
+          "phase speed": {
+            "min": 0,
+            "max": 50,
+            "name": "phase speed",
+            "value": 0.1
+          },
+          "print": {
+            "name": "print",
+            "value": false
+          },
+          "group blends": {
+            "name": "group blends",
+            "value": {"group_0": {
+              "min": 0,
+              "max": 1,
+              "name": "group_0",
+              "value": 1
+            }}
+          },
+          "rotation frequency": {
+            "name": "rotation frequency",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 1
+                  },
+                  "column": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "column",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  },
+                  "row": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "row",
+                    "value": 0
+                  },
+                  "time": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "time",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {
+                  "column": {
+                    "name": "column",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id": {
+                    "name": "id",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "row": {
+                    "name": "row",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "signal": {
+            "name": "signal",
+            "value": {
+              "square setup": {
+                "name": "square setup",
+                "value": {
+                  "octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "pulsewidth": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "pulsewidth",
+                    "value": 0.5
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  },
+                  "norm": {
+                    "name": "norm",
+                    "value": true
+                  }
+                }
+              },
+              "worley": {
+                "min": 0,
+                "max": 1,
+                "name": "worley",
+                "value": 0
+              },
+              "amp": {
+                "min": 0,
+                "max": 1,
+                "name": "amp",
+                "value": 1
+              },
+              "sloped tri": {
+                "min": 0,
+                "max": 1,
+                "name": "sloped tri",
+                "value": 0
+              },
+              "saw": {
+                "min": 0,
+                "max": 1,
+                "name": "saw",
+                "value": 0
+              },
+              "simplex": {
+                "min": 0,
+                "max": 1,
+                "name": "simplex",
+                "value": 0
+              },
+              "scale": {
+                "min": 0,
+                "max": 10,
+                "name": "scale",
+                "value": 1.9700000286102295
+              },
+              "tri": {
+                "min": 0,
+                "max": 1,
+                "name": "tri",
+                "value": 0
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 1
+              },
+              "norm": {
+                "name": "norm",
+                "value": true
+              },
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 1
+              },
+              "square": {
+                "min": 0,
+                "max": 1,
+                "name": "square",
+                "value": 0
+              },
+              "sine": {
+                "min": 0,
+                "max": 1,
+                "name": "sine",
+                "value": 1
+              },
+              "worley setup": {
+                "name": "worley setup",
+                "value": {
+                  "octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "amp": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "amp",
+                    "value": 1
+                  },
+                  "formular": {
+                    "name": "formular",
+                    "value": "DEFAULT"
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  },
+                  "norm": {
+                    "name": "norm",
+                    "value": true
+                  },
+                  "distance type": {
+                    "name": "distance type",
+                    "value": "EUCLIDEAN"
+                  }
+                }
+              },
+              "tri setup": {
+                "name": "tri setup",
+                "value": {
+                  "octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "break ratio": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "break ratio",
+                    "value": 0
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  },
+                  "norm": {
+                    "name": "norm",
+                    "value": true
+                  },
+                  "ratio": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "ratio",
+                    "value": 0.06499999761581421
+                  }
+                }
+              }
+            }
+          },
+          "channelblend": {
+            "min": 0,
+            "max": 1,
+            "name": "channelblend",
+            "value": 0
+          },
+          "lift frequency": {
+            "name": "lift frequency",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0.5
+                  },
+                  "column": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "column",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  },
+                  "row": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "row",
+                    "value": 0
+                  },
+                  "time": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "time",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {
+                  "column": {
+                    "name": "column",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "id": {
+                    "name": "id",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "row": {
+                    "name": "row",
+                    "value": {
+                      "mod flip": {
+                        "name": "mod flip",
+                        "value": false
+                      },
+                      "div": {
+                        "min": 2,
+                        "max": 8,
+                        "name": "div",
+                        "value": 2
+                      },
+                      "mod": {
+                        "min": 2,
+                        "max": 48,
+                        "name": "mod",
+                        "value": 2
+                      },
+                      "div amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "div amount",
+                        "value": 0
+                      },
+                      "mod amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "mod amount",
+                        "value": 0
+                      },
+                      "random amount": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "random amount",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          }
+        }
+      },
+      "modulation sources": {
+        "name": "modulation sources",
+        "value": {"time": {
+          "name": "time",
+          "value": {
+            "print": {
+              "name": "print",
+              "value": false
+            },
+            "hour": {
+              "min": 0,
+              "max": 1,
+              "name": "hour",
+              "value": 0
+            },
+            "second": {
+              "min": 0,
+              "max": 1,
+              "name": "second",
+              "value": 0
+            },
+            "minute": {
+              "min": 0,
+              "max": 1,
+              "name": "minute",
+              "value": 1
+            }
+          }
+        }}
+      },
+      "combine": {
+        "name": "combine",
+        "value": {}
+      }
+    }
+  },
+  "envelope": {
+    "curve": {"points": [
+      {
+        "time": 0,
+        "type": "LINEAR",
+        "value": 0
+      },
+      {
+        "time": 1,
+        "type": "LINEAR",
+        "value": 1
+      }
+    ]},
+    "name": "envelope",
+    "value": "cc.creativecomputing.control.CCEnvelope@264738ed"
+  },
+  "analyzer": {
+    "name": "analyzer",
+    "value": {
+      "jerk": {
+        "name": "jerk",
+        "value": {
+          "abs": {
+            "name": "abs",
+            "value": false
+          },
+          "color": {
+            "a": 1,
+            "r": 0,
+            "b": 1,
+            "g": 0.250980406999588,
+            "name": "color",
+            "value": {
+              "a": 1,
+              "r": 0,
+              "b": 1,
+              "g": 0.250980406999588,
+              "blendable_type": "cc.creativecomputing.math.CCColor"
+            }
+          },
+          "max": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "max",
+            "value": 100
+          },
+          "historgram steps": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "historgram steps",
+            "value": 10
+          },
+          "show": {
+            "name": "show",
+            "value": true
+          }
+        }
+      },
+      "update": {
+        "name": "update",
+        "value": true
+      },
+      "draw text": {
+        "name": "draw text",
+        "value": true
+      },
+      "histogram bands": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "histogram bands",
+        "value": 10
+      },
+      "draw turns": {
+        "name": "draw turns",
+        "value": false
+      },
+      "point size": {
+        "min": 1,
+        "max": 20,
+        "name": "point size",
+        "value": 1
+      },
+      "mode": {
+        "name": "mode",
+        "value": "OFF"
+      },
+      "acceleration": {
+        "name": "acceleration",
+        "value": {
+          "abs": {
+            "name": "abs",
+            "value": false
+          },
+          "color": {
+            "a": 1,
+            "r": 0.01568627543747425,
+            "b": 0,
+            "g": 0.9803921580314636,
+            "name": "color",
+            "value": {
+              "a": 1,
+              "r": 0.01568627543747425,
+              "b": 0,
+              "g": 0.9803921580314636,
+              "blendable_type": "cc.creativecomputing.math.CCColor"
+            }
+          },
+          "max": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "max",
+            "value": 100
+          },
+          "historgram steps": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "historgram steps",
+            "value": 10
+          },
+          "show": {
+            "name": "show",
+            "value": true
+          }
+        }
+      },
+      "fade out": {
+        "name": "fade out",
+        "value": false
+      },
+      "show length": {
+        "name": "show length",
+        "value": false
+      },
+      "alpha": {
+        "min": 0,
+        "max": 1,
+        "name": "alpha",
+        "value": 1
+      },
+      "draw violations": {
+        "name": "draw violations",
+        "value": false
+      },
+      "analyze channels": {
+        "name": "analyze channels",
+        "value": true
+      },
+      "history size": {
+        "min": 1,
+        "max": 500,
+        "name": "history size",
+        "value": 288
+      },
+      "time scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time scale",
+        "value": 300
+      },
+      "time based": {
+        "name": "time based",
+        "value": false
+      },
+      "value": {
+        "name": "value",
+        "value": {
+          "abs": {
+            "name": "abs",
+            "value": false
+          },
+          "color": {
+            "a": 1,
+            "r": 0,
+            "b": 0,
+            "g": 0,
+            "name": "color",
+            "value": {
+              "a": 1,
+              "r": 0,
+              "b": 0,
+              "g": 0,
+              "blendable_type": "cc.creativecomputing.math.CCColor"
+            }
+          },
+          "max": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "max",
+            "value": 100
+          },
+          "historgram steps": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "historgram steps",
+            "value": 10
+          },
+          "show": {
+            "name": "show",
+            "value": true
+          }
+        }
+      },
+      "histogram frame": {
+        "name": "histogram frame",
+        "value": false
+      },
+      "element": {
+        "min": 0,
+        "max": 1000,
+        "name": "element",
+        "value": 0
+      },
+      "curve scale": {
+        "min": 0.10000000149011612,
+        "max": 10,
+        "name": "curve scale",
+        "value": 1
+      },
+      "violation point size": {
+        "min": 1,
+        "max": 20,
+        "name": "violation point size",
+        "value": 5
+      },
+      "draw points": {
+        "name": "draw points",
+        "value": false
+      },
+      "velocity": {
+        "name": "velocity",
+        "value": {
+          "abs": {
+            "name": "abs",
+            "value": false
+          },
+          "color": {
+            "a": 1,
+            "r": 1,
+            "b": 0,
+            "g": 0,
+            "name": "color",
+            "value": {
+              "a": 1,
+              "r": 1,
+              "b": 0,
+              "g": 0,
+              "blendable_type": "cc.creativecomputing.math.CCColor"
+            }
+          },
+          "max": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "max",
+            "value": 100
+          },
+          "historgram steps": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "historgram steps",
+            "value": 10
+          },
+          "show": {
+            "name": "show",
+            "value": true
+          }
+        }
+      },
+      "background alpha": {
+        "min": 0,
+        "max": 1,
+        "name": "background alpha",
+        "value": 0.578000009059906
+      },
+      "draw values": {
+        "name": "draw values",
+        "value": true
+      },
+      "number of elements": {
+        "min": 1,
+        "max": 1000,
+        "name": "number of elements",
+        "value": 10
+      },
+      "time offset": {
+        "min": 0,
+        "max": 1800,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "record": {
+    "name": "record",
+    "value": {
+      "record positions": {
+        "name": "record positions",
+        "value": false
+      },
+      "fade seconds": {
+        "min": 0,
+        "max": 100,
+        "name": "fade seconds",
+        "value": 10
+      },
+      "still frames": {
+        "min": 0,
+        "max": 100,
+        "name": "still frames",
+        "value": 10
+      },
+      "fade ease formular": {
+        "name": "fade ease formular",
+        "value": "SINE"
+      },
+      "LIGHTS": {
+        "name": "LIGHTS",
+        "value": {
+          "update steps": {
+            "min": 1,
+            "max": 10,
+            "name": "update steps",
+            "value": 5
+          },
+          "use start end channel": {
+            "name": "use start end channel",
+            "value": false
+          },
+          "end channel": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "end channel",
+            "value": 210
+          },
+          "export": {
+            "name": "export",
+            "value": false
+          },
+          "start channel": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "start channel",
+            "value": 0
+          }
+        }
+      },
+      "fade ease mode": {
+        "name": "fade ease mode",
+        "value": "IN_OUT"
+      },
+      "seconds": {
+        "min": 1,
+        "max": 1000,
+        "name": "seconds",
+        "value": 100
+      },
+      "position recording": {
+        "name": "position recording",
+        "value": {
+          "normalized rope length": {
+            "name": "normalized rope length",
+            "value": false
+          },
+          "record absolute y": {
+            "name": "record absolute y",
+            "value": true
+          },
+          "record absolute x": {
+            "name": "record absolute x",
+            "value": true
+          },
+          "record normalized y": {
+            "name": "record normalized y",
+            "value": false
+          },
+          "record normalized x": {
+            "name": "record normalized x",
+            "value": false
+          },
+          "record ropelength 1": {
+            "name": "record ropelength 1",
+            "value": false
+          },
+          "record rotate z": {
+            "name": "record rotate z",
+            "value": false
+          },
+          "record normalized z": {
+            "name": "record normalized z",
+            "value": false
+          },
+          "record rotate y": {
+            "name": "record rotate y",
+            "value": false
+          },
+          "end element": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "end element",
+            "value": 120
+          },
+          "export": {
+            "name": "export",
+            "value": true
+          },
+          "record absolute z": {
+            "name": "record absolute z",
+            "value": true
+          },
+          "start element": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "start element",
+            "value": 0
+          },
+          "use start end element": {
+            "name": "use start end element",
+            "value": false
+          },
+          "record ropelength 0": {
+            "name": "record ropelength 0",
+            "value": false
+          }
+        }
+      },
+      "output scale": {
+        "min": 0,
+        "max": 20,
+        "name": "output scale",
+        "value": 1
+      },
+      "record frame": {},
+      "MOTORS": {
+        "name": "MOTORS",
+        "value": {
+          "update steps": {
+            "min": 1,
+            "max": 10,
+            "name": "update steps",
+            "value": 1
+          },
+          "use start end channel": {
+            "name": "use start end channel",
+            "value": false
+          },
+          "end channel": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "end channel",
+            "value": 240
+          },
+          "export": {
+            "name": "export",
+            "value": true
+          },
+          "start channel": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "start channel",
+            "value": 0
+          }
+        }
+      },
+      "segment name": {
+        "name": "segment name",
+        "value": ""
+      },
+      "normalize values": {
+        "name": "normalize values",
+        "value": false
+      },
+      "record sequence": {},
+      "record timeline loop": {}
+    }
+  },
+  "gradient": {
+    "gradient": [],
+    "name": "gradient",
+    "value": []
+  },
+  "bounds": {
+    "name": "bounds",
+    "value": {
+      "max lift": {
+        "min": 0,
+        "max": 100,
+        "name": "max lift",
+        "value": 100
+      },
+      "max velocity": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "max velocity",
+        "value": 100
+      },
+      "max rotation": {
+        "min": 0,
+        "max": 35,
+        "name": "max rotation",
+        "value": 35
+      },
+      "max jerk": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "max jerk",
+        "value": 100
+      },
+      "apply filter": {
+        "name": "apply filter",
+        "value": false
+      },
+      "top distance": {
+        "min": 0,
+        "max": 2000,
+        "name": "top distance",
+        "value": 0
+      },
+      "max acceleration": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "max acceleration",
+        "value": 100
+      },
+      "bottom distance": {
+        "min": 0,
+        "max": 2000,
+        "name": "bottom distance",
+        "value": 100
+      }
+    }
+  },
+  "attributes": {
+    "name": "attributes",
+    "value": {
+      "point size": {
+        "min": 0.1,
+        "max": 50,
+        "name": "point size",
+        "value": 1
+      },
+      "stroke weight": {
+        "min": 0.1,
+        "max": 50,
+        "name": "stroke weight",
+        "value": 1
+      },
+      "color": {
+        "a": 0.5490196347236633,
+        "r": 1,
+        "b": 1,
+        "g": 1,
+        "name": "color",
+        "value": {
+          "a": 0.5490196347236633,
+          "r": 1,
+          "b": 1,
+          "g": 1,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "cullface": {
+        "name": "cullface",
+        "value": "NONE"
+      },
+      "polygon mode": {
+        "name": "polygon mode",
+        "value": "FILL"
+      },
+      "depth test": {
+        "name": "depth test",
+        "value": false
+      },
+      "blend mode": {
+        "name": "blend mode",
+        "value": "BLEND"
+      },
+      "depth mask": {
+        "name": "depth mask",
+        "value": true
+      }
+    }
+  },
+  "camera": {
+    "name": "camera",
+    "value": {
+      "distance": {
+        "min": 1,
+        "max": 20000,
+        "name": "distance",
+        "value": 1144.6569971019665
+      },
+      "center": {
+        "name": "center",
+        "value": {
+          "x": {
+            "min": -10000,
+            "max": 10000,
+            "name": "x",
+            "value": -35.678746815741704
+          },
+          "y": {
+            "min": -10000,
+            "max": 10000,
+            "name": "y",
+            "value": -131.22253378900268
+          },
+          "z": {
+            "min": -10000,
+            "max": 10000,
+            "name": "z",
+            "value": 95.79365168971341
+          }
+        }
+      },
+      "rotation": {
+        "name": "rotation",
+        "value": {
+          "w": {
+            "min": -1,
+            "max": 1,
+            "name": "w",
+            "value": 0.5846262538122017
+          },
+          "x": {
+            "min": -1,
+            "max": 1,
+            "name": "x",
+            "value": -0.3478022501509737
+          },
+          "y": {
+            "min": -1,
+            "max": 1,
+            "name": "y",
+            "value": 0.6518916014510598
+          },
+          "z": {
+            "min": -1,
+            "max": 1,
+            "name": "z",
+            "value": 0.33508667252073454
+          }
+        }
+      }
+    }
+  },
+  "lights": {
+    "name": "lights",
+    "value": {
+      "r default": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "r default",
+        "value": 1
+      },
+      "offset": {
+        "name": "offset",
+        "value": {
+          "r modulation": {
+            "name": "r modulation",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "min": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "min",
+            "value": -1
+          },
+          "group blends": {
+            "name": "group blends",
+            "value": {"group_0": {
+              "min": 0,
+              "max": 1,
+              "name": "group_0",
+              "value": 1
+            }}
+          },
+          "max": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "max",
+            "value": 1
+          },
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 0
+          },
+          "b modulation": {
+            "name": "b modulation",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "g modulation": {
+            "name": "g modulation",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "channelblend": {
+            "min": 0,
+            "max": 1,
+            "name": "channelblend",
+            "value": 0
+          }
+        }
+      },
+      "end add": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "end add",
+        "value": 0
+      },
+      "gradient1": {
+        "name": "gradient1",
+        "value": {
+          "h shift": {
+            "min": -1,
+            "max": 1,
+            "name": "h shift",
+            "value": 0
+          },
+          "group blends": {
+            "name": "group blends",
+            "value": {"group_0": {
+              "min": 0,
+              "max": 1,
+              "name": "group_0",
+              "value": 1
+            }}
+          },
+          "offset 2 amp": {
+            "min": 0,
+            "max": 1,
+            "name": "offset 2 amp",
+            "value": 1
+          },
+          "amp": {
+            "min": 0,
+            "max": 10,
+            "name": "amp",
+            "value": 1
+          },
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 0
+          },
+          "offset 1 amp": {
+            "min": 0,
+            "max": 1,
+            "name": "offset 1 amp",
+            "value": 1
+          },
+          "gradient": {
+            "gradient": [],
+            "name": "gradient",
+            "value": []
+          },
+          "b shift": {
+            "min": -1,
+            "max": 1,
+            "name": "b shift",
+            "value": 0
+          },
+          "offset add": {
+            "min": -1,
+            "max": 1,
+            "name": "offset add",
+            "value": 0
+          },
+          "s shift": {
+            "min": -1,
+            "max": 1,
+            "name": "s shift",
+            "value": 0
+          },
+          "channelblend": {
+            "min": 0,
+            "max": 1,
+            "name": "channelblend",
+            "value": 0
+          }
+        }
+      },
+      "b default": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "b default",
+        "value": 1
+      },
+      "g default": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "g default",
+        "value": 1
+      },
+      "end scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "end scale",
+        "value": 1
+      },
+      "b scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "b scale",
+        "value": 1
+      },
+      "g scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "g scale",
+        "value": 1
+      },
+      "normalize": {
+        "name": "normalize",
+        "value": false
+      },
+      "bypass amount": {
+        "name": "bypass amount",
+        "value": false
+      },
+      "r scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "r scale",
+        "value": 1
+      },
+      "global scale": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "global scale",
+        "value": 1
+      },
+      "animation blender": {
+        "name": "animation blender",
+        "value": {
+          "apply blend": {
+            "min": 0,
+            "max": 1,
+            "name": "apply blend",
+            "value": 0
+          },
+          "modulation": {
+            "name": "modulation",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 0
+          },
+          "blend range": {
+            "min": 0,
+            "max": 1,
+            "name": "blend range",
+            "value": 0
+          },
+          "reverse": {
+            "name": "reverse",
+            "value": true
+          }
+        }
+      },
+      "signal": {
+        "name": "signal",
+        "value": {
+          "r amount": {
+            "name": "r amount",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "b amount": {
+            "name": "b amount",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "reset phase": {},
+          "b phase": {
+            "name": "b phase",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "use gradient": {
+            "name": "use gradient",
+            "value": false
+          },
+          "gradient channel": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "gradient channel",
+            "value": 0
+          },
+          "blend": {
+            "min": 0,
+            "max": 1,
+            "name": "blend",
+            "value": 0
+          },
+          "g frequency": {
+            "name": "g frequency",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "sin scale": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "sin scale",
+            "value": 2
+          },
+          "gradient": {
+            "gradient": [],
+            "name": "gradient",
+            "value": []
+          },
+          "phase scale": {
+            "min": 1,
+            "max": 10,
+            "name": "phase scale",
+            "value": 1
+          },
+          "g amount": {
+            "name": "g amount",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "sin add": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "sin add",
+            "value": -1
+          },
+          "b frequency": {
+            "name": "b frequency",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "phase speed": {
+            "min": 0,
+            "max": 50,
+            "name": "phase speed",
+            "value": 0
+          },
+          "r phase": {
+            "name": "r phase",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "print": {
+            "name": "print",
+            "value": false
+          },
+          "group blends": {
+            "name": "group blends",
+            "value": {"group_0": {
+              "min": 0,
+              "max": 1,
+              "name": "group_0",
+              "value": 1
+            }}
+          },
+          "g phase": {
+            "name": "g phase",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "r frequency": {
+            "name": "r frequency",
+            "value": {
+              "amounts": {
+                "name": "amounts",
+                "value": {
+                  "random": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "random",
+                    "value": 0
+                  },
+                  "constant": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "constant",
+                    "value": 0
+                  },
+                  "id": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "id",
+                    "value": 0
+                  }
+                }
+              },
+              "id amounts": {
+                "name": "id amounts",
+                "value": {"id": {
+                  "name": "id",
+                  "value": {
+                    "mod flip": {
+                      "name": "mod flip",
+                      "value": false
+                    },
+                    "div": {
+                      "min": 2,
+                      "max": 8,
+                      "name": "div",
+                      "value": 2
+                    },
+                    "mod": {
+                      "min": 2,
+                      "max": 48,
+                      "name": "mod",
+                      "value": 2
+                    },
+                    "div amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "div amount",
+                      "value": 0
+                    },
+                    "mod amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "mod amount",
+                      "value": 0
+                    },
+                    "random amount": {
+                      "min": -1,
+                      "max": 1,
+                      "name": "random amount",
+                      "value": 0
+                    }
+                  }
+                }}
+              },
+              "combiner": {
+                "name": "combiner",
+                "value": "ADD"
+              }
+            }
+          },
+          "signal": {
+            "name": "signal",
+            "value": {
+              "square setup": {
+                "name": "square setup",
+                "value": {
+                  "octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "pulsewidth": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "pulsewidth",
+                    "value": 0.5
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  },
+                  "norm": {
+                    "name": "norm",
+                    "value": true
+                  }
+                }
+              },
+              "worley": {
+                "min": 0,
+                "max": 1,
+                "name": "worley",
+                "value": 0
+              },
+              "amp": {
+                "min": 0,
+                "max": 1,
+                "name": "amp",
+                "value": 0
+              },
+              "sloped tri": {
+                "min": 0,
+                "max": 1,
+                "name": "sloped tri",
+                "value": 0
+              },
+              "saw": {
+                "min": 0,
+                "max": 1,
+                "name": "saw",
+                "value": 0
+              },
+              "simplex": {
+                "min": 0,
+                "max": 1,
+                "name": "simplex",
+                "value": 0
+              },
+              "scale": {
+                "min": 0,
+                "max": 10,
+                "name": "scale",
+                "value": 1
+              },
+              "tri": {
+                "min": 0,
+                "max": 1,
+                "name": "tri",
+                "value": 0
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 10,
+                "name": "lacunarity",
+                "value": 2
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.5
+              },
+              "norm": {
+                "name": "norm",
+                "value": true
+              },
+              "octaves": {
+                "min": 1,
+                "max": 10,
+                "name": "octaves",
+                "value": 1
+              },
+              "square": {
+                "min": 0,
+                "max": 1,
+                "name": "square",
+                "value": 0
+              },
+              "sine": {
+                "min": 0,
+                "max": 1,
+                "name": "sine",
+                "value": 0
+              },
+              "worley setup": {
+                "name": "worley setup",
+                "value": {
+                  "octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "amp": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "amp",
+                    "value": 1
+                  },
+                  "formular": {
+                    "name": "formular",
+                    "value": "DEFAULT"
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  },
+                  "norm": {
+                    "name": "norm",
+                    "value": true
+                  },
+                  "distance type": {
+                    "name": "distance type",
+                    "value": "EUCLIDEAN"
+                  }
+                }
+              },
+              "tri setup": {
+                "name": "tri setup",
+                "value": {
+                  "octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "break ratio": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "break ratio",
+                    "value": 0
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  },
+                  "norm": {
+                    "name": "norm",
+                    "value": true
+                  },
+                  "ratio": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "ratio",
+                    "value": 0.5
+                  }
+                }
+              }
+            }
+          },
+          "channelblend": {
+            "min": 0,
+            "max": 1,
+            "name": "channelblend",
+            "value": 0
+          }
+        }
+      },
+      "modulation sources": {
+        "name": "modulation sources",
+        "value": {}
+      },
+      "combine": {
+        "name": "combine",
+        "value": {}
+      }
+    }
+  }
+}

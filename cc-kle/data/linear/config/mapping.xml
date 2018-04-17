@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <mappings>
-	<mapping name="motors" columns="60" rows="2" depth="1" frameRate="5" bits="16">
+	<mapping name="motors" columns="60" rows="2" depth="1" frameRate="10" bits="16">
 		<channel id="0" column="0" row="0" depth="0" min="0.0" max="30.0"/>
 		<channel id="1" column="0" row="1" depth="0" min="0.0" max="30.0"/>
 		<channel id="2" column="1" row="0" depth="0" min="0.0" max="30.0"/>

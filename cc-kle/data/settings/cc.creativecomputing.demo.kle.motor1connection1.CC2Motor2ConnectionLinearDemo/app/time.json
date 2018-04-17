@@ -683,7 +683,7 @@
                         "min": -1,
                         "max": 1,
                         "name": "constant",
-                        "value": 0.12339175735193919
+                        "value": 0
                       },
                       "column": {
                         "min": -1,
@@ -695,7 +695,7 @@
                         "min": -1,
                         "max": 1,
                         "name": "id",
-                        "value": 1
+                        "value": 0
                       },
                       "row": {
                         "min": -1,
@@ -770,7 +770,7 @@
                             "min": 2,
                             "max": 48,
                             "name": "mod",
-                            "value": 30
+                            "value": 2
                           },
                           "div amount": {
                             "min": -1,
@@ -1050,7 +1050,7 @@
                         "min": -1,
                         "max": 1,
                         "name": "constant",
-                        "value": 0.9012192990556578
+                        "value": 0
                       },
                       "column": {
                         "min": -1,
@@ -1227,7 +1227,7 @@
                         "min": -1,
                         "max": 1,
                         "name": "constant",
-                        "value": 0.12339175735193919
+                        "value": 0
                       },
                       "column": {
                         "min": -1,
@@ -1251,7 +1251,7 @@
                         "min": -1,
                         "max": 1,
                         "name": "time",
-                        "value": 0
+                        "value": 1
                       }
                     }
                   },
@@ -1662,13 +1662,13 @@
                     "min": 0,
                     "max": 10,
                     "name": "scale",
-                    "value": 0.5
+                    "value": 1
                   },
                   "tri": {
                     "min": 0,
                     "max": 1,
                     "name": "tri",
-                    "value": 0
+                    "value": 1
                   },
                   "lacunarity": {
                     "min": 0,
@@ -1702,7 +1702,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "sine",
-                    "value": 1
+                    "value": 0
                   },
                   "worley setup": {
                     "name": "worley setup",
@@ -1792,7 +1792,7 @@
                         "min": 0,
                         "max": 1,
                         "name": "ratio",
-                        "value": 0.5
+                        "value": 0
                       }
                     }
                   }
@@ -1820,7 +1820,7 @@
                         "min": -1,
                         "max": 1,
                         "name": "constant",
-                        "value": 1
+                        "value": 0.5
                       },
                       "column": {
                         "min": -1,
@@ -1997,7 +1997,7 @@
                   "min": 0,
                   "max": 1,
                   "name": "second",
-                  "value": 0
+                  "value": 1
                 },
                 "minute": {
                   "min": 0,
@@ -2028,7 +2028,7 @@
           }
         ]},
         "name": "envelope",
-        "value": "cc.creativecomputing.control.CCEnvelope@6502a145"
+        "value": "cc.creativecomputing.control.CCEnvelope@36549265"
       },
       "analyzer": {
         "name": "analyzer",
@@ -2098,7 +2098,7 @@
           },
           "mode": {
             "name": "mode",
-            "value": "ANALYZE_CURVES"
+            "value": "OFF"
           },
           "acceleration": {
             "name": "acceleration",
@@ -2155,7 +2155,7 @@
           },
           "draw violations": {
             "name": "draw violations",
-            "value": true
+            "value": false
           },
           "analyze channels": {
             "name": "analyze channels",
@@ -2602,7 +2602,7 @@
             "min": 1,
             "max": 20000,
             "name": "distance",
-            "value": 1122.6523972654225
+            "value": 1144.6569971019665
           },
           "center": {
             "name": "center",
@@ -2634,25 +2634,25 @@
                 "min": -1,
                 "max": 1,
                 "name": "w",
-                "value": 0.9098514702552588
+                "value": 0.7385368889538104
               },
               "x": {
                 "min": -1,
                 "max": 1,
                 "name": "x",
-                "value": -0.36235469568954143
+                "value": -0.29013339661626447
               },
               "y": {
                 "min": -1,
                 "max": 1,
                 "name": "y",
-                "value": -0.20037636420989147
+                "value": -0.5795132352598641
               },
               "z": {
                 "min": -1,
                 "max": 1,
                 "name": "z",
-                "value": -0.026808380259012436
+                "value": 0.18587707223049876
               }
             }
           }
@@ -4238,7 +4238,7 @@
         "min": 0,
         "max": 1,
         "name": "fixed update time",
-        "value": 0.03333333333333333
+        "value": 0.1
       },
       "fix update time": {
         "name": "fix update time",
@@ -4258,7 +4258,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.35629856999598
+        "value": 29.778209217707683
       },
       "exceptionHandling": {
         "name": "exceptionHandling",
