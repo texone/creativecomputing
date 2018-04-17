@@ -271,6 +271,14 @@ public class CCDate {
 		return _myCalendar.get(Calendar.MILLISECOND);
 	}
 	
+	public double secondProgress(){
+		return (milliSeconds() / 1000d);
+	}
+	
+	public double minuteProgress(){
+		return ((seconds() *  1000d + milliSeconds()) / (1000d * 60d));
+	}
+	
 	public double hourProgress(){
 		return (minutes() * 60 + seconds() + milliSeconds() / 1000d) / (60d * 60d);
 	}
