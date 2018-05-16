@@ -111,8 +111,36 @@ public class CCAdsConnection{
 		return Convert.ByteArrToBool(data(theHandle, 1));
 	}
 	
-	public int intData(int theHandle){
+	public int intValue(int theHandle){
 		 return Convert.ByteArrToInt(data(theHandle,Integer.SIZE / Byte.SIZE));
+	}
+	
+	public void intValue(int theHandle, int theValue){
+		data(theHandle, Convert.IntToByteArr(theValue));
+	}
+	
+	public long longValue(int theHandle){
+		 return Convert.ByteArrToLong(data(theHandle,Long.SIZE / Byte.SIZE));
+	}
+	
+	public void longValue(int theHandle, long theValue){
+		data(theHandle, Convert.LongToByteArr(theValue));
+	}
+	
+	public float floatValue(int theHandle){
+		 return Convert.ByteArrToFloat(data(theHandle,Float.SIZE / Byte.SIZE));
+	}
+	
+	public void floatValue(int theHandle, float theValue){
+		data(theHandle, Convert.FloatToByteArr(theValue));
+	}
+	
+	public double doubleValue(int theHandle){
+		 return Convert.ByteArrToDouble(data(theHandle,Double.SIZE / Byte.SIZE));
+	}
+	
+	public void doubleValue(int theHandle, double theValue){
+		data(theHandle, Convert.DoubleToByteArr(theValue));
 	}
 	
 	@Override
