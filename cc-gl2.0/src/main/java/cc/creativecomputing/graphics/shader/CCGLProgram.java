@@ -409,6 +409,10 @@ public class CCGLProgram{
 		GL2 gl = CCGraphics.currentGL();
 		gl.glUseProgram(0);
 	}
+	
+	public boolean isInUse() {
+		return _myIsShaderInUse;
+	}
 
 	String getInfoLog(GL2 gl, int theObject, Path[] theFiles) {
 		IntBuffer iVal = CCBufferUtil.newIntBuffer(1);
@@ -447,7 +451,8 @@ public class CCGLProgram{
 	 */
 	public void finalize(){
 		GL2 gl = CCGraphics.currentGL();
-		gl.glDeleteObjectARB(_myProgram);
+		//TODO check this
+//		gl.glDeleteObjectARB(_myProgram);
 	}
 	
 // SETTINGS FOR GEOMETRY SHADER

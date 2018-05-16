@@ -194,6 +194,7 @@ public class CCCameraController {
 	private double _myRelWidth;
 	private double _myRelHeight;
 	
+	@CCProperty(name = "camera")
 	private CCCamera _myCamera;
 
 	public CCCameraController(final CCGL2Adapter theApp, final CCGraphics theG, final double theDistance) {
@@ -231,6 +232,8 @@ public class CCCameraController {
 				(int)(theG.height() * _myRelHeight)
 			)
 		);
+		
+		
 		
 		_myApp.glContext().listener().add(new CCGLListener<CCGraphics>() {
 

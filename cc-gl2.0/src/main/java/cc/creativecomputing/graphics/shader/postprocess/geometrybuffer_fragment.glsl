@@ -17,5 +17,5 @@ void main(){
 		normal.z * 0.5f + 0.5f, 
 		depth
 	);
-	gl_FragData[2] = gl_Color * texture2D(colorTexture, vec2(gl_TexCoord[0].x, 1.0 - gl_TexCoord[0].y));
+	gl_FragData[2] = gl_Color;// * texture2D(colorTexture, vec2(gl_TexCoord[0].x, 1.0 - gl_TexCoord[0].y));
 }

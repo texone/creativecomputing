@@ -1,11 +1,12 @@
 package cc.creativecomputing.graphics.primitives;
 
 import cc.creativecomputing.graphics.CCDrawMode;
+import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
-public class CCCylinderMesh extends CCVBOMesh {
+public class CCCylinderMesh extends CCMesh {
 
 	public CCCylinderMesh(double theRadius, double theLength, int theRadialResolution, int theLengthResolution) {
 		super(CCDrawMode.TRIANGLES, (theRadialResolution + 1) * (theLengthResolution + 1) * 6);

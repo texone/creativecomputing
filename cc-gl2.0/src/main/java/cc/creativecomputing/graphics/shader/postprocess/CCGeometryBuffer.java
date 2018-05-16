@@ -10,6 +10,8 @@
  */
 package cc.creativecomputing.graphics.shader.postprocess;
 
+import java.nio.file.Path;
+
 import cc.creativecomputing.graphics.CCCamera;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCRenderBuffer;
@@ -27,40 +29,50 @@ import cc.creativecomputing.math.CCMatrix4x4;
  * @author christianriekoff
  *
  */
-public class CCGeometryBuffer {
-
-	public static final int POSITIONS = 0;
-	public static final int NORMALS = 1;
-	public static final int COLORS = 2;
+public class CCGeometryBuffer extends CCGLProgram{
+	
+	public static enum CCGeometryBufferLayer{
+		POSITION,
+		NORMAL,
+		COLOR,
+		DEPTH,
+		OFF
+	}
 	
 	protected CCRenderBuffer _myRenderTexture;
-	protected CCGLProgram _myShader;
 	
 	private CCGraphics _myGraphics;
 	
 	private int _myWidth;
 	private int _myHeight;
 	
-	public CCGeometryBuffer(CCGraphics g, int theWidth, int theHeight) {
+	public CCGeometryBuffer(CCGraphics g, int theWidth, int theHeight, Path theVertexShader, Path theFragmentShader) {
+		super(theVertexShader, theFragmentShader);
 		_myGraphics = g;
 		
 		CCTextureAttributes myTextureAttributes = new CCTextureAttributes();
 		myTextureAttributes.internalFormat(CCPixelInternalFormat.RGBA32F);
-		myTextureAttributes.filter(CCTextureFilter.NEAREST);
+		myTextureAttributes.filter(CCTextureFilter.LINEAR);
 		myTextureAttributes.wrap(CCTextureWrap.CLAMP);
 		
-		CCFrameBufferObjectAttributes myAttributes = new CCFrameBufferObjectAttributes(myTextureAttributes,3);
+		CCFrameBufferObjectAttributes myAttributes = new CCFrameBufferObjectAttributes(myTextureAttributes,4);
 		myAttributes.enableDepthBuffer(true);
+//		myAttributes.samples(8);
 		
 		_myRenderTexture = new CCRenderBuffer( myAttributes, theWidth, theHeight);
 		
-		_myShader = new CCGLProgram(
-			CCNIOUtil.classPath(this, "geometrybuffer_vertex.glsl"),
-			CCNIOUtil.classPath(this, "geometrybuffer_fragment.glsl")
-		);
-		
 		_myWidth = theWidth;
 		_myHeight = theHeight;
+	}
+	
+	public CCGeometryBuffer(CCGraphics g, int theWidth, int theHeight) {
+		this(
+			g, 
+			theWidth, 
+			theHeight, 
+			CCNIOUtil.classPath(CCGeometryBuffer.class, "geometrybuffer_vertex.glsl"), 
+			CCNIOUtil.classPath(CCGeometryBuffer.class, "geometrybuffer_fragment.glsl")
+		);
 	}
 	
 	public CCCamera camera(){
@@ -69,15 +81,20 @@ public class CCGeometryBuffer {
 	
 	public void beginDraw(CCGraphics g) {
 		_myRenderTexture.beginDraw(g);
-		_myShader.start();
-		_myShader.uniform1f( "near", _myGraphics.camera().near());
-		_myShader.uniform1f( "far", _myGraphics.camera().far() );
-		_myShader.uniform1i("colorTexture", 0);
+		
+	}
+	
+	@Override
+	public void start(){
+		super.start();
+		uniform1f( "near", _myGraphics.camera().near());
+		uniform1f( "far", _myGraphics.camera().far() );
+		uniform1i("colorTexture", 0);
 		updateMatrix();
 	}
 	
 	public void updateMatrix(){
-		_myShader.uniformMatrix4f("inverseView", inverseView());
+		uniformMatrix4f("inverseView", inverseView());
 	}
 	
 	public CCMatrix4x4 inverseView(){
@@ -86,7 +103,6 @@ public class CCGeometryBuffer {
 	}
 	
 	public void endDraw(CCGraphics g) {
-		_myShader.end();
 		_myRenderTexture.endDraw(g);
 	}
 
@@ -102,7 +118,7 @@ public class CCGeometryBuffer {
 		return _myHeight;
 	}
 	
-	public CCTexture2D positions(){
+	public CCTexture2D colors(){
 		return _myRenderTexture.attachment(0);
 	}
 	
@@ -110,11 +126,16 @@ public class CCGeometryBuffer {
 		return _myRenderTexture.attachment(1);
 	}
 	
-	public CCTexture2D colors(){
+	public CCTexture2D positions(){
 		return _myRenderTexture.attachment(2);
 	}
 	
 	public CCTexture2D depth(){
-		return _myRenderTexture.depthTexture();
+		return _myRenderTexture.attachment(3);
 	}
+	
+	
+//	public CCTexture2D depth(){
+//		return _myRenderTexture.depthTexture();
+//	}
 }

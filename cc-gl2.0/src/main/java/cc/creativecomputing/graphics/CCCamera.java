@@ -12,6 +12,7 @@ package cc.creativecomputing.graphics;
 
 import java.nio.FloatBuffer;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics.CCMatrixMode;
 import cc.creativecomputing.graphics.util.CCFrustum;
 import cc.creativecomputing.math.CCMath;
@@ -74,6 +75,7 @@ public class CCCamera{
 	/**
 	 * Field of View
 	 */
+	@CCProperty(name = "fov", min = 0, max = CCMath.HALF_PI)
 	private double _myFoV;
 
 	/**
@@ -296,6 +298,7 @@ public class CCCamera{
 		);
 	}
 	
+	@CCProperty(name = "reset")
 	public void reset(CCGraphics g){
 		_myFoV = 60 * CCMath.DEG_TO_RAD; // at least for now
 		_myAspect = (double) g.width() / (double) g.height();
