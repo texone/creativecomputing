@@ -8,6 +8,7 @@ import java.util.Map;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.kle.lights.CCLightBrightnessSetup;
+import cc.creativecomputing.kle.lights.CCLightCalculations;
 import cc.creativecomputing.kle.lights.CCLightChannel;
 import cc.creativecomputing.kle.lights.CCLightRGBSetup;
 import cc.creativecomputing.kle.lights.CCLightRGBWSetup;
@@ -37,12 +38,12 @@ public class CCKleEffectable extends CCEffectable{
 	
 	private Map<String, String> _myAttributes = new HashMap<>();
 	
-	public static CCKleEffectable createMotorElement(int theID, List<CCMotorChannel> theMotorChannels,CCMotorCalculations<?> theBounds, CCVector3 theCentroid, double theElementRadius){
-		return new CCKleEffectable(theID, theMotorChannels, null, theBounds, theCentroid, new CCMatrix4x4(), theElementRadius);
+	public static CCKleEffectable createMotorElement(int theID, List<CCMotorChannel> theMotorChannels,CCMotorCalculations<?> theBounds, CCLightCalculations theCalculations, CCVector3 theCentroid, double theElementRadius){
+		return new CCKleEffectable(theID, theMotorChannels, null, theBounds, theCalculations, theCentroid, new CCMatrix4x4(), theElementRadius);
 	}
 	
 	public static CCKleEffectable createLightElement(int theID, List<CCLightChannel> theLightChannels){
-		return new CCKleEffectable(theID, null, theLightChannels, null, null, new CCMatrix4x4(), 0);
+		return new CCKleEffectable(theID, null, theLightChannels, null, null, null,new CCMatrix4x4(), 0);
 	}
 	
 	public CCKleEffectable(
@@ -51,7 +52,8 @@ public class CCKleEffectable extends CCEffectable{
 		List<CCMotorChannel> theMotors,
 		List<CCLightChannel> theLights,
 		
-		CCMotorCalculations<?> theBounds,
+		CCMotorCalculations<?> theMotorCalculations,
+		CCLightCalculations theCalculations,
 		
 		CCVector3 theCentroid,
 		
@@ -60,8 +62,8 @@ public class CCKleEffectable extends CCEffectable{
 		double theElementRadius
 	){
 		super(theID);
-		_myMotorSetup = setMotors(theMotors, theBounds, theCentroid, theElementRadius);
-		_myLightSetup = setLights(theLights);
+		_myMotorSetup = setMotors(theMotors, theMotorCalculations, theCentroid, theElementRadius);
+		_myLightSetup = setLights(theLights, theCalculations);
 		_myMatrix = theTransform;
 	}
 	
@@ -108,18 +110,18 @@ public class CCKleEffectable extends CCEffectable{
 		}
 	}
 	
-	private CCLightSetup setLights(List<CCLightChannel> theLights){
+	private CCLightSetup setLights(List<CCLightChannel> theLights, CCLightCalculations theCalculations){
 		if(theLights == null)return null;
 			
 		_myChannels.addAll(theLights);
 		
 		switch(theLights.size()){
 		case 1:
-			return new CCLightBrightnessSetup(theLights);
+			return new CCLightBrightnessSetup(theLights, theCalculations);
 		case 3:
-			return new CCLightRGBSetup(theLights);
+			return new CCLightRGBSetup(theLights, theCalculations);
 		case 4:
-			return new CCLightRGBWSetup(theLights);
+			return new CCLightRGBWSetup(theLights, theCalculations);
 		default:
 			return null;
 		}

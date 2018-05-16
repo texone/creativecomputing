@@ -8,6 +8,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.CCKleEffectable;
+import cc.creativecomputing.kle.lights.CCLightCalculations;
 import cc.creativecomputing.kle.motors.CC1Motor1ConnectionBounds;
 import cc.creativecomputing.kle.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
@@ -39,6 +40,8 @@ public class CC1Motor1ConnectionConfigCreator {
 		CC1Motor1ConnectionBounds myBounds = new CC1Motor1ConnectionBounds();
 		myBounds.topDistance(top);
 		myBounds.bottomDistance(bottom);
+
+		CCLightCalculations myLightCalculations = new CCLightCalculations();
 		
 		int id = 0;
 		
@@ -65,6 +68,7 @@ public class CC1Motor1ConnectionConfigCreator {
 					myMotorChannels, 
 					null,
 					myBounds,
+					myLightCalculations,
 					myConnectionPosition,
 					myTransform,
 					1

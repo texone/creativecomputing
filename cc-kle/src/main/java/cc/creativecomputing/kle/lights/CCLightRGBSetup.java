@@ -3,10 +3,7 @@ package cc.creativecomputing.kle.lights;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
-
-
 
 public class CCLightRGBSetup extends CCLightSetup{
 
@@ -14,17 +11,16 @@ public class CCLightRGBSetup extends CCLightSetup{
 	protected final CCLightChannel _myLightG;
 	protected final CCLightChannel _myLightB;
 	
-	
-	public CCLightRGBSetup(List<CCLightChannel> theChannels){
-		super(theChannels);
+	public CCLightRGBSetup(List<CCLightChannel> theChannels, CCLightCalculations theCalculations){
+		super(theChannels, theCalculations);
 		
 		_myLightR = _myChannels.get(0);
 		_myLightG = _myChannels.get(1);
 		_myLightB = _myChannels.get(2);
 	}
 	
-	public CCLightRGBSetup(int theIDR, int theIDG, int theIDB){
-		super(new ArrayList<>());
+	public CCLightRGBSetup(int theIDR, int theIDG, int theIDB, CCLightCalculations theCalculations){
+		super(new ArrayList<>(), theCalculations);
 		_myChannels.add(_myLightR = new CCLightChannel(theIDR));
 		_myChannels.add(_myLightG = new CCLightChannel(theIDG));
 		_myChannels.add(_myLightB = new CCLightChannel(theIDB));
@@ -45,12 +41,17 @@ public class CCLightRGBSetup extends CCLightSetup{
 		double myG = theValues != null && theValues.length > 1 ? theValues[1] : 0.5f;
 		double myB = theValues != null && theValues.length > 2 ? theValues[2] : 0.5f;
 		
-		CCColor myCol = CCColor.createFromHSB(myR, myG, myB);
-		
-		_myLightR.value(myCol.r);
-		_myLightG.value(myCol.g);
-		_myLightB.value(myCol.b);
-		
+		CCColor myCol;
+		if(_myLightCalculations.hsb()) {
+			myCol = CCColor.createFromHSB(myR, myG, myB);
+			
+			_myLightR.value(myCol.r);
+			_myLightG.value(myCol.g);
+			_myLightB.value(myCol.b);
+		}else {
+			myCol = new CCColor(myR, myG, myB);
+		}
+		myCol.a = _myLightCalculations.alpha();
 		_myColor.set(myCol);
 	}
 }

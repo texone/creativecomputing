@@ -9,8 +9,8 @@ public class CCLightBrightnessSetup extends CCLightSetup{
 	protected final CCLightChannel _myLight;
 	
 	
-	public CCLightBrightnessSetup(List<CCLightChannel> theChannels){
-		super(theChannels);
+	public CCLightBrightnessSetup(List<CCLightChannel> theChannels, CCLightCalculations theCalculations){
+		super(theChannels, theCalculations);
 		
 		_myLight = _myChannels.get(0);
 		

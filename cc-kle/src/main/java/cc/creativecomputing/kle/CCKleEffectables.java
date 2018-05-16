@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
+import cc.creativecomputing.kle.lights.CCLightCalculations;
 import cc.creativecomputing.kle.lights.CCLightChannel;
 import cc.creativecomputing.kle.lights.CCLightRGBSetup;
 import cc.creativecomputing.kle.motors.CCMotorCalculations;
@@ -43,10 +45,11 @@ public class CCKleEffectables extends ArrayList<CCKleEffectable>{
 	
 	public static CCKleEffectables createLightMatrix(int theColumns, int theRows){
 		CCKleEffectables myResult = new CCKleEffectables();
+		CCLightCalculations myCalculations = new CCLightCalculations();
 		int i = 0;
 		for(int c = 0; c < theColumns; c++){
 			for(int r = 0; r < theRows; r++){
-				CCKleEffectable myElement = new CCKleEffectable(i, new CCLightRGBSetup(i * 3, i * 3 + 1, i * 3 + 2));
+				CCKleEffectable myElement = new CCKleEffectable(i, new CCLightRGBSetup(i * 3, i * 3 + 1, i * 3 + 2, myCalculations));
 				myElement.column(c);
                 myElement.row(r);
 				myResult.add(myElement);
@@ -58,6 +61,9 @@ public class CCKleEffectables extends ArrayList<CCKleEffectable>{
 	}
 	
 	private Map<CCKleChannelType,CCKleMapping<?>> _myMappings = new HashMap<>();
+	
+	@CCProperty(name = "light setup")
+	private CCLightCalculations _myLightCalculations;
 	
 	public CCKleEffectables(Path theKlePath, CCMotorCalculations<?> theMotorBounds, float theElementRadius){
 		this(
@@ -75,6 +81,8 @@ public class CCKleEffectables extends ArrayList<CCKleEffectable>{
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CCKleEffectables(CCDataElement theMappingsXML, CCDataElement mySculptureXML, CCMotorCalculations theMotorBounds, float theElementRadius){
 		super();
+		_myLightCalculations = new CCLightCalculations();
+		
 		for(CCDataElement myMappingXML:theMappingsXML){
 			_myMappings.put(CCKleChannelType.valueOf(myMappingXML.attribute("name").toUpperCase()), new CCKleMapping(myMappingXML));
 		}
@@ -161,6 +169,7 @@ public class CCKleEffectables extends ArrayList<CCKleEffectable>{
 				myMotorChannels,
 				myLightChannels,
 				theMotorBounds,
+				_myLightCalculations,
 				myCentroid,
 				myMatrix,
 				theElementRadius

@@ -64,7 +64,7 @@ public class CC2Motor2ConnectionSetupDemo extends CCGL2Adapter {
 		myJoint3.multiplyLocal(myJoint23Dist);
 		myJoint3.addLocal(myJoint2X, myJoint2Y);
 
-		CCLog.info(myJoint3);
+		CCLog.info(myJoint23Dist);
 		
 		g.pointSize(3);
 		g.beginShape(CCDrawMode.POINTS);

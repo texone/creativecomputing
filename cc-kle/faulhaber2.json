@@ -1,5 +1,5 @@
 {"timelines": {"default": {
-  "lower_bound": 0.6089881075282001,
+  "lower_bound": 0,
   "quantize": "SUBSTEP_8",
   "timeline": [{
     "path": "app",
@@ -7,8 +7,6 @@
     "max": 1,
     "accumulate": false,
     "mute": false,
-    "Extras": {},
-    "eventTypes": "new",
     "open": true,
     "tracks": [{
       "path": "app/app",
@@ -16,8 +14,6 @@
       "max": 1,
       "accumulate": false,
       "mute": false,
-      "Extras": {},
-      "eventTypes": "new",
       "open": true,
       "tracks": [{
         "path": "app/app/effects",
@@ -25,8 +21,6 @@
         "max": 1,
         "accumulate": false,
         "mute": false,
-        "Extras": {},
-        "eventTypes": "new",
         "open": true,
         "tracks": [{
           "path": "app/app/effects/signal",
@@ -34,8 +28,6 @@
           "max": 1,
           "accumulate": false,
           "mute": false,
-          "Extras": {},
-          "eventTypes": "new",
           "open": true,
           "tracks": [
             {
@@ -44,8 +36,6 @@
               "max": 1,
               "accumulate": false,
               "mute": false,
-              "Extras": {},
-              "eventTypes": "new",
               "open": true,
               "tracks": [
                 {
@@ -54,8 +44,6 @@
                   "max": 1,
                   "accumulate": false,
                   "mute": false,
-                  "Extras": {},
-                  "eventTypes": "new",
                   "open": true,
                   "tracks": [
                     {
@@ -300,8 +288,6 @@
                   "max": 1,
                   "accumulate": false,
                   "mute": false,
-                  "Extras": {},
-                  "eventTypes": "new",
                   "open": true,
                   "tracks": [{
                     "path": "app/app/effects/signal/lift phase/id amounts/id",
@@ -309,8 +295,6 @@
                     "max": 1,
                     "accumulate": false,
                     "mute": false,
-                    "Extras": {},
-                    "eventTypes": "new",
                     "open": true,
                     "tracks": [
                       {
@@ -454,8 +438,6 @@
               "max": 1,
               "accumulate": false,
               "mute": false,
-              "Extras": {},
-              "eventTypes": "new",
               "open": true,
               "tracks": [
                 {
@@ -464,8 +446,6 @@
                   "max": 1,
                   "accumulate": false,
                   "mute": false,
-                  "Extras": {},
-                  "eventTypes": "new",
                   "open": true,
                   "tracks": [
                     {
@@ -655,8 +635,6 @@
                   "max": 1,
                   "accumulate": false,
                   "mute": false,
-                  "Extras": {},
-                  "eventTypes": "new",
                   "open": true,
                   "tracks": [{
                     "path": "app/app/effects/signal/rotation phase/id amounts/id",
@@ -664,8 +642,6 @@
                     "max": 1,
                     "accumulate": false,
                     "mute": false,
-                    "Extras": {},
-                    "eventTypes": "new",
                     "open": true,
                     "tracks": [
                       {
@@ -770,8 +746,6 @@
               "max": 1,
               "accumulate": false,
               "mute": false,
-              "Extras": {},
-              "eventTypes": "new",
               "open": true,
               "tracks": [{
                 "path": "app/app/effects/signal/rotation amount/amounts",
@@ -779,8 +753,6 @@
                 "max": 1,
                 "accumulate": false,
                 "mute": false,
-                "Extras": {},
-                "eventTypes": "new",
                 "open": true,
                 "tracks": [{
                   "path": "app/app/effects/signal/rotation amount/amounts/constant",
@@ -879,7 +851,7 @@
     }],
     "TrackData": {"points": []}
   }],
-  "upper_bound": 86.9976963206334,
+  "upper_bound": 88.01672232491964,
   "Transport": {
     "loop_end": 40,
     "loop_active": true,

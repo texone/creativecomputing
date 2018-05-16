@@ -6,13 +6,13 @@ public class CCLightRGBWSetup extends CCLightRGBSetup{
 
 	protected final CCLightChannel _myLightW;
 	
-	public CCLightRGBWSetup(List<CCLightChannel> theChannels){
-		super(theChannels);
+	public CCLightRGBWSetup(List<CCLightChannel> theChannels, CCLightCalculations theCalculations){
+		super(theChannels, theCalculations);
 		_myLightW = _myChannels.get(3);
 	}
 	
-	public CCLightRGBWSetup(int theIDR, int theIDG, int theIDB, int theIDW){
-		super(theIDR, theIDG, theIDB);
+	public CCLightRGBWSetup(int theIDR, int theIDG, int theIDB, int theIDW, CCLightCalculations theCalculations){
+		super(theIDR, theIDG, theIDB, theCalculations);
 		_myChannels.add(_myLightW = new CCLightChannel(theIDW));
 	}
 	

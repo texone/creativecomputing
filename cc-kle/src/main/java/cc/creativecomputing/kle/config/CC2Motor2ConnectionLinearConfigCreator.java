@@ -1,6 +1,5 @@
 package cc.creativecomputing.kle.config;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +7,8 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.CCKleEffectable;
+import cc.creativecomputing.kle.lights.CCLightCalculations;
 import cc.creativecomputing.kle.lights.CCLightChannel;
-import cc.creativecomputing.kle.motors.CC1Motor1ConnectionBounds;
 import cc.creativecomputing.kle.motors.CC2Motor2ConnectionLinearBounds;
 import cc.creativecomputing.kle.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
@@ -48,6 +47,7 @@ public class CC2Motor2ConnectionLinearConfigCreator {
 		myLightMappingXML.addAttribute("bits", 16);
 		
 		CC2Motor2ConnectionLinearBounds myBounds = new CC2Motor2ConnectionLinearBounds();
+		CCLightCalculations myLights = new CCLightCalculations();
 		myBounds.topDistance(top);
 		myBounds.bottomDistance(bottom);
 		
@@ -86,6 +86,7 @@ public class CC2Motor2ConnectionLinearConfigCreator {
 				myMotorChannels, 
 				myLightChannels,
 				myBounds,
+				myLights,
 				myCentroid,
 				myTransform,
 				1

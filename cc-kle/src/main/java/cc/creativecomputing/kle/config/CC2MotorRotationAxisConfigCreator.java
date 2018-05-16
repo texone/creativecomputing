@@ -8,6 +8,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.kle.CCKleEffectable;
+import cc.creativecomputing.kle.lights.CCLightCalculations;
 import cc.creativecomputing.kle.motors.CC2MotorRotationAxisBounds;
 import cc.creativecomputing.kle.motors.CCMotorChannel;
 import cc.creativecomputing.math.CCMath;
@@ -41,6 +42,8 @@ public class CC2MotorRotationAxisConfigCreator {
 		myBounds.center(center);
 		myBounds.amplitude(amplitude);
 		
+		CCLightCalculations myLightCalculations = new CCLightCalculations();
+		
 		int id = 0;
 		
 		for(int z = 0; z < res; z++){	
@@ -63,6 +66,7 @@ public class CC2MotorRotationAxisConfigCreator {
 				myMotorChannels, 
 				null,
 				myBounds,
+				myLightCalculations,
 				myConnectionPosition,
 				myTransform,
 				1

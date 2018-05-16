@@ -2,8 +2,6 @@ package cc.creativecomputing.kle.motors;
 
 import java.util.List;
 
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -89,6 +87,8 @@ public class CC2Motor2ConnectionLinearSetup extends CCMotorSetup{
 			myAngle = CCMath.asin(-(myJoint1Y - 100) / _myJoint21Dist);
 			//CCLog.info(myAngle);
 		}
+		
+		_myRotateZ = CCMath.degrees(myAngle);
 		
 		double myJoint2X = CCMath.cos(myAngle) * _myJoint21Dist + myJoint1X;
 		double myJoint2Y = CCMath.sin(myAngle) * _myJoint21Dist + myJoint1Y;

@@ -13,9 +13,12 @@ public abstract class CCLightSetup extends CCKleChannelSetup<CCLightChannel>{
 	
 	protected CCVector3 _myPosition = new CCVector3();
 	
-	public CCLightSetup(List<CCLightChannel> theChannels){
+	protected CCLightCalculations _myLightCalculations;
+	
+	public CCLightSetup(List<CCLightChannel> theChannels, CCLightCalculations theCalculations){
 		super(theChannels);
 		_myColor = new CCColor();
+		_myLightCalculations = theCalculations;
 	}
 	
 	public CCColor color(){
