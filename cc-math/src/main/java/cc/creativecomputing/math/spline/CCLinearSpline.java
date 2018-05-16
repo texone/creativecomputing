@@ -23,6 +23,10 @@ public class CCLinearSpline extends CCSpline{
 	public CCLinearSpline(boolean theIsClosed) {
 		super(CCSplineType.LINEAR, theIsClosed);
 	}
+	
+	public CCLinearSpline() {
+		this(false);
+	}
 
 	public CCLinearSpline(CCVector3[] theControlPoints, boolean theIsClosed) {
 		super(CCSplineType.LINEAR, theControlPoints, theIsClosed);

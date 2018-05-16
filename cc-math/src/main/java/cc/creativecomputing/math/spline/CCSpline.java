@@ -16,6 +16,7 @@ import java.util.List;
 
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.math.interpolate.CCInterpolatable;
 
 /**
  * <p>
@@ -24,7 +25,7 @@ import cc.creativecomputing.math.CCVector3;
  * </p>
  * <a href="http://en.wikipedia.org/wiki/Spline_(mathematics)">spline at wikipedia</a>
  */
-public abstract class CCSpline implements Iterable<CCVector3>{
+public abstract class CCSpline implements Iterable<CCVector3>, CCInterpolatable<CCVector3>{
 	
 	protected List<CCVector3> _myPoints = new ArrayList<>();
 
@@ -190,6 +191,7 @@ public abstract class CCSpline implements Iterable<CCVector3>{
 	 */
 	public abstract CCVector3 interpolate (double theBlend, int theControlPointIndex);
 	
+	@Override
 	/**
 	 * Interpolate a position on the spline
 	 * @param theBlend a value from 0 to 1 that represent the position between the first control point and the last one
