@@ -77,6 +77,9 @@ public class CCAnimator extends CCAbstractAppModule<CCAnimatorListener>{
 	@CCProperty(desc = "framerate of the application -1 for as fast as possible")
 	public int framerate = 60;
 	
+	@CCProperty(desc = "pause the application")
+	public boolean pause = false;
+	
 	/**
 	 * animation mode. there are different animation modes focusing on performance or precision.
 	 * <ul>
