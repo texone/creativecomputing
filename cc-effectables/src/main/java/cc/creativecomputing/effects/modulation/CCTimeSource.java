@@ -14,6 +14,8 @@ public class CCTimeSource extends CCModulationSource {
 	private double _cMinute;
 	@CCProperty(name = "hour", min = 0, max = 1)
 	private double _cHour;
+	@CCProperty(name = "day", min = 0, max = 1)
+	private double _cDay;
 	
 	@CCProperty(name = "print")
 	private boolean _cPrint = false;
@@ -25,11 +27,12 @@ public class CCTimeSource extends CCModulationSource {
 		
 		
 		_myModulationImplementation = (effectManager, effectable) -> {
-			CCLog.info(_myDate.minuteProgress());
+			double myIDBlend = effectable.relativeSource("id");
 			return 
-				_myDate.hourProgress() * 2 % 2 * _cHour + 
-				_myDate.minuteProgress() * _cMinute + 
-				_myDate.secondProgress() * _cSecond;
+				((myIDBlend + _myDate.dayProgress() * 2 % 2) % 1) * _cDay + 
+				((myIDBlend + _myDate.hourProgress()) % 1) * _cHour + 
+				((myIDBlend + _myDate.minuteProgress()) % 1) * _cMinute + 
+				((myIDBlend + _myDate.secondProgress()) % 1) * _cSecond;
 		};
 	}
 	
