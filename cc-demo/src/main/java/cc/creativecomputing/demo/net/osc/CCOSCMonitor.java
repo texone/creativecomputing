@@ -17,7 +17,7 @@ public class CCOSCMonitor extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myOSCIN = new CCUDPServer<>(new CCOSCCodec(), "127.0.0.1",50482);
+		_myOSCIN = new CCUDPServer<>(new CCOSCCodec(), "192.168.43.212",12345);
 		_myOSCIN.events().add(message -> {
 			CCLog.info(message.message);
 		});

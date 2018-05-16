@@ -24,6 +24,7 @@ public class CCEarthDemo extends CCGL2Adapter{
 	
 	@CCProperty(name = "texture")
 	private CCTexture2DAsset _myTextureAsset;
+	@CCProperty(name = "shader")
 	private CCGLProgram _myShader;
 	
 	@CCProperty(name = "radius", min = 0, max = 1000)
@@ -105,7 +106,7 @@ public class CCEarthDemo extends CCGL2Adapter{
 		_myTextureAsset = new CCTexture2DAsset(glContext());
 		_myShader = new CCGLProgram(CCNIOUtil.classPath(this, "spheremap_vp.glsl"), CCNIOUtil.classPath(this, "spheremap_fp.glsl"));
 		
-		_mySphere = new CCSphereMesh(100, 100);
+		_mySphere = new CCSphereMesh(500,30);
 		
 		_myCameraController = new CCCameraController(this, g, 100);
 		
@@ -130,74 +131,30 @@ public class CCEarthDemo extends CCGL2Adapter{
 	@Override
 	public void display(CCGraphics g) {
 		_myTexture.textureFilter(_cFilter);
-//		_myShader.reload();
 		g.clear();
 		
-		_myEarthTexture.updateData(_myEarthImage);
-		g.image(_myEarthTexture, -g.width()/2,-g.height()/2, g.width(), g.height());
 		
 		g.clearDepthBuffer();
 
 		_myCameraController.camera().draw(g);
 		
 		
-		
-		
-		
-//		_myShader.start();
-//		_myShader.uniform1i("texture", 0);
-//		if(_myTextureAsset.value() != null)g.texture(_myTextureAsset.value());
 		g.texture(_myTexture);
-//		g.beginShape(CCDrawMode.TRIANGLE_STRIP);
-//		for(int i = 0; i < 180;i++){
-//			double angle0 = CCMath.radians(i);
-//			double x = CCMath.cos(angle0) * _cRadius;
-//			double z = CCMath.sin(angle0) * _cRadius;
-//			
-//			double angle1 = CCMath.HALF_PI - _cANgle;
-//			double xs = CCMath.sin(angle1 + _cRot0) * CCMath.cos(angle0 + _cRot1);
-//			double ys = CCMath.sin(angle1 + _cRot0) * CCMath.sin(angle0 + _cRot1);
-//			double zs = CCMath.cos(angle1 + _cRot0);
-//			
-//			g.textureCoords(0, xs, ys, zs, _myNoise.value(angle0 * _cNoiseScale, _myOffset * _cNoiseScale) * _cNoiseAmount + _cTexOffset);
-//			g.vertex(x, -_cHeight / 2 + _cOffset, z);
-//			
-//			angle1 = CCMath.HALF_PI + _cANgle;
-//			xs = CCMath.sin(angle1 + _cRot0) * CCMath.cos(angle0 + _cRot1);
-//			ys = CCMath.sin(angle1 + _cRot0) * CCMath.sin(angle0 + _cRot1);
-//			zs = CCMath.cos(angle1 + _cRot0);
-//			g.textureCoords(0, xs, ys, zs, _myNoise.value(angle0 * _cNoiseScale, _myOffset * _cNoiseScale) * _cNoiseAmount + _cTexOffset);
-//			g.vertex(x, _cHeight / 2 + _cOffset, z);
-//			
-//		}
 		_myRotation+= _cRotation;
 //		g.endShape();
 		g.pushMatrix();
 		g.rotateZ(_myRotation);
+		g.box(100);
+		g.noDepthMask();
+		_myShader.start();
 		_mySphere.draw(g);
+		_myShader.end();
+		g.depthMask();
 		g.popMatrix();
 //		if(_myTextureAsset.value() != null)g.noTexture();
 		g.noTexture();
 		
-		for(int y = 0; y < g.height() && y < _myEarthImage.height();y++){
-			int myCol = g.get(g.width() / 2, y);
-			CCColor myColor = CCColor.parseFromInteger(myCol);
-			_myEarthImage.setPixel(x % _myEarthImage.width(), y, myColor);
-		}
-		x++;
 		
-//		_myShader.end();
-		
-//		_myLightShader.start();
-//		_myLightShader.uniform1f("amount", _cAmount);
-//		_myLightShader.uniform1f("alpha", _cAlpha);
-//		_myLightShader.uniform3f("lightDir", new CCVector3(_cLightX, _cLightY, _cLightZ).normalize());
-//		_myLightShader.uniform1f("specularPow", _cSpecularPow);
-//		_myLightShader.uniform1f("specularBrightPow", _cSpecularBrightPow);
-//		for(CCColladaScene myScene:_myColladaLoader.scenes()){
-//			myScene.draw(g);
-//		}
-//		_myLightShader.end();
 	}
 	
 	public static void main(String[] args) {

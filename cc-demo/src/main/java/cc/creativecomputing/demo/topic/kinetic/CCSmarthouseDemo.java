@@ -3,6 +3,8 @@ package cc.creativecomputing.demo.topic.kinetic;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCFormatUtil;
+import cc.creativecomputing.demo.protocol.serial.CCSerialDemo;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCShapeMode;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -13,6 +15,8 @@ import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.signal.CCSimplexNoise;
 import cc.creativecomputing.math.signal.CCSinSignal;
+import cc.creativecomputing.protocol.serial.CCSerialInput;
+import cc.creativecomputing.protocol.serial.CCSerialModule;
 
 public class CCSmarthouseDemo extends CCGL2Adapter {
 
@@ -34,17 +38,70 @@ public class CCSmarthouseDemo extends CCGL2Adapter {
 		TATI,
 		TATI_FULL,
 		HAUNTED_HOUSE,
-		FOLLOW
+		FOLLOW,
+		SERIALs
 	}
 	
 	@CCProperty(name = "mode")
 	private static SHModes _cMode = SHModes.TATI;
+
+	@CCProperty()
+	private CCSerialModule _cSerial;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		g.ellipseMode(CCShapeMode.RADIUS);
 
 		_myScreenCapture = new CCScreenCaptureController(this, theAnimator);
+		
+		_cSerial = new CCSerialModule("serial");
+		_cSerial.listener().add(input -> {
+			String myInput = input.readString();
+			handleInput(myInput);
+
+		});
+	}
+	
+	StringBuffer _myReadBuffer = new StringBuffer();
+	
+	private double  _mySerialAngle;
+	private double _mySerialRadius;
+	
+	double MAX_STEPS_A = 60000; 
+	double MAX_STEPS_Z = 40000; 
+	
+	private void handleInput(String theInput) {
+		if(_myReadBuffer.toString().contains("\n")){
+			try {
+				CCLog.info(_myReadBuffer);
+//				_myReadBuffer.deleteCharAt(_myReadBuffer.length() - 1);
+				String[] myData = _myReadBuffer.toString().split(",");
+				_myReadBuffer = new StringBuffer();
+				_myReadBuffer.append(theInput);
+				
+				double myProgress = Double.parseDouble(myData[0]);
+				int myStepsA = Integer.parseInt(myData[5]);
+				int myStepsZ = Integer.parseInt(myData[6]);
+				_mySerialAngle = myStepsA / MAX_STEPS_A * CCMath.radians(175.0 / 2.) ;
+				_mySerialRadius = 1 - myStepsZ / MAX_STEPS_Z;
+				double myX = x(_mySerialAngle, _mySerialRadius);
+				double myY = y(_mySerialAngle, _mySerialRadius);
+				CCLog.info(
+					myProgress+","+
+					CCFormatUtil.nd(myX, 2) +","+ 
+					CCFormatUtil.nd(myY, 2) +","+
+					CCFormatUtil.nd(_mySerialAngle, 2) +","+
+					CCFormatUtil.nd(_mySerialRadius, 2) +","+
+					myStepsA  +","+
+					myStepsZ  );
+//				CCLog.info(_mySerialAngle, _mySerialRadius);
+//				CCLog.info(myStepA, myStepZ);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}else{
+			_myReadBuffer.append(theInput);
+		}
 	}
 	
 	private CCVector2 _myPosition = new CCVector2();
@@ -60,7 +117,7 @@ public class CCSmarthouseDemo extends CCGL2Adapter {
 	}
 	
 	private double angle(double theX, double theY){
-		return CCMath.atan2(theY, theX);
+		return CCMath.atan2(theY, theX) + CCMath.HALF_PI;
 	}
 	
 	private double radius(double theX, double theY){
@@ -151,6 +208,11 @@ public class CCSmarthouseDemo extends CCGL2Adapter {
 		_myProgress += theAnimator.deltaTime();
 	}
 	
+	private void serial(CCAnimator theAnimator) {
+		double myAngle = _mySerialAngle;
+		_myPosition.set(x(myAngle, _mySerialRadius * _cMaxRadius), y(myAngle, _mySerialRadius * _cMaxRadius));
+	}
+	
 	@CCProperty(name = "follow time", min = 0, max = 5)
 	private double _cFollowTime = 2; 
 	@CCProperty(name = "follow break", min = 0, max = 5)
@@ -216,6 +278,9 @@ public class CCSmarthouseDemo extends CCGL2Adapter {
 		case FOLLOW:
 			follow(theAnimator);
 			break;
+		case SERIALs:
+			serial(theAnimator);
+			break;
 		}
 	
 
@@ -225,13 +290,15 @@ public class CCSmarthouseDemo extends CCGL2Adapter {
 	@Override
 	public void display(CCGraphics g) {
 		g.clear();
-
+		g.pushMatrix();
+		g.rotate(-90);
 		g.color(CCColor.WHITE);
 		g.ellipse(0,0, _cMaxRadius + _cEyeRadius);
 		g.color(CCColor.BLACK);
 		g.ellipse(_myPosition, _cEyeRadius);
 		
 		g.color(CCColor.RED);
+		g.popMatrix();
 //		g.line(_myXStart, _myYStart, _myXEnd, _myYEnd);
 	}
 

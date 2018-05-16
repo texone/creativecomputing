@@ -31,7 +31,7 @@ public class CCUDPByteMessageDemo extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		myServer = new CCUDPServer<ByteBuffer>(new CCNetByteCodec());
+		myServer = new CCUDPServer<ByteBuffer>(new CCNetByteCodec(), "192.168.43.212", 12345);
 		myServer.events().add( message -> {
 			CCLog.info(message.message.getClass() + ":" + message.message);
 			ByteBuffer myMessage = (ByteBuffer)message.message;
@@ -41,21 +41,21 @@ public class CCUDPByteMessageDemo extends CCGL2Adapter {
 		});
 		myServer.connect();
 		
-		myClient = new CCUDPClient<ByteBuffer>(new CCNetByteCodec(), "192.168.1.13", 12345);
-		myClient.connect();
-		ByteBuffer myBuffer = ByteBuffer.allocate(20);
-		while(myBuffer.hasRemaining()){
-			byte myByte = (byte)CCMath.random(255);
-			CCLog.info("put:" + myByte);
-			myBuffer.put(myByte);
-		}
-		myBuffer.rewind();
-		myClient.write(myBuffer);
+//		myClient = new CCUDPClient<ByteBuffer>(new CCNetByteCodec(), "192.168.1.13", 12345);
+//		myClient.connect();
+//		ByteBuffer myBuffer = ByteBuffer.allocate(20);
+//		while(myBuffer.hasRemaining()){
+//			byte myByte = (byte)CCMath.random(255);
+//			CCLog.info("put:" + myByte);
+//			myBuffer.put(myByte);
+//		}
+//		myBuffer.rewind();
+//		myClient.write(myBuffer);
 	}
 	
 	private void writeDouble(ByteBuffer theBuffer, double theValue){
 		int my16BitValue = (int)(theValue * 65535);
-		CCLog.info(" : " + my16BitValue);
+//		CCLog.info(" : " + my16BitValue);
 		theBuffer.put((byte)CCBitUtil.bit(my16BitValue, 1));
 		theBuffer.put((byte)CCBitUtil.bit(my16BitValue, 0));
 	}
@@ -75,7 +75,7 @@ public class CCUDPByteMessageDemo extends CCGL2Adapter {
 			writeDouble(myBuffer, _cBright);
 		}
 		myBuffer.rewind();
-		myClient.write(myBuffer);
+//		myClient.write(myBuffer);
 //		ByteBuffer myBuffer = ByteBuffer.allocate(20);
 //		while(myBuffer.hasRemaining()){
 //			byte myByte = (byte)CCMath.random(255);

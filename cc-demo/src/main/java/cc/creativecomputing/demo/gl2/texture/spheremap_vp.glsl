@@ -3,7 +3,9 @@ varying vec2 vN;
 
 void main(){
 	gl_TexCoord[0] = gl_MultiTexCoord0;
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+	vec4 pos = gl_Vertex;
+	pos.xyz = gl_NormalMatrix * pos.xyz;
+	gl_Position = gl_ProjectionMatrix * pos;
 	
 	vec3 n = normalize(gl_Normal );
 

@@ -1,4 +1,4 @@
-#1.4
+#1.5
 
 uniform sampler3D texture;
 
@@ -19,5 +19,5 @@ void main(){
 	float u = atan(gl_TexCoord[0].x, gl_TexCoord[0].y) / (2.0 * 3.1415926) + 0.5;
 	float v = asin(gl_TexCoord[0].z) / 3.1415926 + .5;
 	
-	gl_FragColor = texture3D(texture, vec3(u,v, gl_TexCoord[0].w));
+	gl_FragColor = vec4(gl_TexCoord[0]);
 }
