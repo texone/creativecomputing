@@ -13,15 +13,15 @@ package cc.creativecomputing.model.collada;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCCamera;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
-import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
@@ -56,17 +56,23 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 		NODE
 	}
 	
-	private Map<String, CCColladaSceneNode> _myNodeMap = new HashMap<String, CCColladaSceneNode>();
+	@CCProperty(name = "nodes")
+	private Map<String, CCColladaSceneNode> _myNodeMap = new LinkedHashMap<>();
 	private List<CCColladaSceneNode> _myNodes = new ArrayList<CCColladaSceneNode>();
 	
 	private CCMatrix4x4 _myMatrix;
+	@CCProperty(name = "transform")
 	private CCTransform _myTransform;
 	private CCColladaSceneNodeType _myType;
 	
 	private CCColladaSceneNodeInstanceType _myInstanceType = null;
-	
+	@CCProperty(name = "meshes")
 	private List<CCMesh> _myGeometries = new ArrayList<>();
 	private CCCamera _myCamera;
+	
+	private Map<String, Object> _myAttributes = new HashMap<>();
+	
+	private CCColladaSceneNodeVisitor _myDrawVisitor;
 
 	public CCColladaSceneNode(CCColladaLoader theLoader, CCDataElement theNodeXML) {
 		super(theNodeXML);
@@ -157,18 +163,16 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				if(myGeometry.data().size() == 0)return;
 				CCColladaGeometryData myGeometryData = myGeometry.data().get(0);
 				
-				CCDrawMode _myDrawMode = CCDrawMode.TRIANGLES;
-				switch(myGeometryData.primitiveSize()){
-				case 3:
-					_myDrawMode = CCDrawMode.TRIANGLES;
-					break;
-				}
-				CCMesh myGeometryMesh = new CCMesh(_myDrawMode);
+				CCMesh myGeometryMesh = new CCMesh(myGeometryData.drawMode());
 				
 				myGeometryMesh.vertices(myGeometryData.positions());
 				if(myGeometryData.hasNormals()){
 					myGeometryData.normals().rewind();
 					myGeometryMesh.normals(myGeometryData.normals());
+				}
+				if(myGeometryData.hasTexCoords()) {
+					myGeometryData.texCoords().rewind();
+					myGeometryMesh.textureCoords(myGeometryData.texCoords());
 				}
 				_myGeometries.add(myGeometryMesh);
 				
@@ -185,12 +189,34 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 		
 	}
 	
+	public static interface CCColladaSceneNodeVisitor{
+		public void apply(CCColladaSceneNode theNode);
+	}
+	
+	public void visit(CCColladaSceneNodeVisitor theVisitor){
+		theVisitor.apply(this);
+		for(CCColladaSceneNode myChild:_myNodes){
+			myChild.visit(theVisitor);
+		}
+	}
+	
+	public void drawVisitor(CCColladaSceneNodeVisitor theVisitor){
+		_myDrawVisitor = theVisitor;
+		for(CCColladaSceneNode myChild:_myNodes){
+			myChild.drawVisitor(theVisitor);
+		}
+	}
+	
 	public boolean hasChildren(){
 		return _myNodes != null && _myNodes.size() > 1;
 	}
 	
 	public List<CCColladaSceneNode> children(){
 		return _myNodes;
+	}
+	
+	public Map<String,Object> attributes(){
+		return _myAttributes;
 	}
 	
 	public List<CCMesh> geometries(){
@@ -271,7 +297,13 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	}
 	
 	public void draw(CCGraphics g){
+		if(!_cDraw)return;
 		if(_myInstanceType == null)return;
+		
+		if(_myDrawVisitor!= null){
+			_myDrawVisitor.apply(this);
+		}
+		
 		switch(_myInstanceType){
 		case CAMERA:
 			if(_myCamera == null)return;
@@ -282,7 +314,6 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 //			g.applyMatrix(_myMatrix);
 			break;
 		case GEOMETRY:
-			
 			g.pushMatrix();
 			g.applyMatrix(_myMatrix);
 			g.applyMatrix(_myTransform.toMatrix());

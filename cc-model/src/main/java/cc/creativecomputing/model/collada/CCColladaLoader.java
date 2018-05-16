@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 
@@ -42,6 +43,7 @@ public class CCColladaLoader {
 	private String _myAuthoringTool = "unknown";
 	private int[] _myAuthoringToolVersion = new int[] { 0 };
 	
+	@CCProperty(name = "scenes")
 	private CCColladaScenes _myScenes;
 	private CCColladaGeometries _myGeometries;
 	private CCColladaControllers _myControllers;

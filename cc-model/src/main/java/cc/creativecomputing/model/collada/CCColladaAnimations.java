@@ -25,7 +25,7 @@ public class CCColladaAnimations extends CCColladaLibrary<CCColladaAnimation>{
 	CCColladaAnimations(List<CCDataElement> theAnimationsXML) {
 		for (CCDataElement myAnimationXML : theAnimationsXML) {
 			CCColladaAnimation myAnimation = new CCColladaAnimation(myAnimationXML);
-			_myElementMap.put(myAnimation.id(), myAnimation);
+			put(myAnimation.id(), myAnimation);
 			_myElementList.add(myAnimation);
 		}
 		

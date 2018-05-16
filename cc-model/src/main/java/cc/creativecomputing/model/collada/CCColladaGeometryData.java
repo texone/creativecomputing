@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
@@ -70,8 +72,10 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 	protected int _myPrimitiveSize;
 	
 	protected Map<String, CCColladaGeometryInput> _myInputMap = new HashMap<>();
+	
+	protected CCDrawMode _myDrawMode;
 
-	CCColladaGeometryData(CCDataElement theDataXML, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices, int thePrimitivSize){
+	CCColladaGeometryData(CCDataElement theDataXML, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices, int thePrimitivSize, CCDrawMode theDrawMode){
 		_myDataXML = theDataXML;
 		_myMaterialSymbol = _myDataXML.attribute("material");
 		
@@ -82,9 +86,14 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 		_myNumberOfVertices = myCount * thePrimitivSize;
 		
 		_myPrimitiveSize = thePrimitivSize;
+		_myDrawMode = theDrawMode;
 		
 		List<CCColladaGeometryInput> myInputs = handleInputs(myInputsXML, theSources, theVertices);
 		readInputs(theDataXML, myInputs);
+	}
+	
+	public CCDrawMode drawMode(){
+		return _myDrawMode;
 	}
 	
 	public void readInputs(CCDataElement theDataXML, List<CCColladaGeometryInput> theInputs){
@@ -102,6 +111,7 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 			for(int i = 0; i < _myNumberOfVertices; i++){
 				int myIndex = _myPointIndices[i * _myStride + myInput._myOffset];
 				myInput._myBuffer.put(myPoints[myIndex]);
+				if(_myDrawMode == CCDrawMode.LINE_STRIP)CCLog.info(_myNumberOfVertices, myPoints[myIndex]);
 			}
 			myInput._myBuffer.rewind();
 			_myInputMap.put(myInput._mySemantic, myInput);

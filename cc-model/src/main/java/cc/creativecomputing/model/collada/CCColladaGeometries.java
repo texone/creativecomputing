@@ -27,7 +27,7 @@ public class CCColladaGeometries extends CCColladaLibrary<CCColladaGeometry>{
 	CCColladaGeometries(List<CCDataElement> theGeometriesXML) {
 		for (CCDataElement myGeometryXML : theGeometriesXML) {
 			CCColladaGeometry myGeometry = new CCColladaGeometry(myGeometryXML);
-			_myElementMap.put(myGeometry.id(), myGeometry);
+			put(myGeometry.id(), myGeometry);
 			_myElementList.add(myGeometry);
 		}
 	}
@@ -37,7 +37,7 @@ public class CCColladaGeometries extends CCColladaLibrary<CCColladaGeometry>{
 	 * @return all Geometries that has been found in the xml-File
 	 */
 	Collection<CCColladaGeometry> geometries() {
-		return _myElementMap.values();
+		return values();
 	}
 
 }

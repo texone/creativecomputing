@@ -14,6 +14,7 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.List;
 
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
@@ -34,7 +35,7 @@ public class CCColladaPolyList extends CCColladaGeometryData {
 	
 
 	CCColladaPolyList(CCDataElement triangles, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices) {
-		super(triangles, theSources, theVertices, 3);
+		super(triangles, theSources, theVertices, 3, CCDrawMode.TRIANGLES);
 	}
 
 	@Override

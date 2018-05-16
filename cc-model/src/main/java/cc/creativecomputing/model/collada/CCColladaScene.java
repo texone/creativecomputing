@@ -12,9 +12,11 @@ package cc.creativecomputing.model.collada;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.io.xml.CCDataElement;
@@ -31,7 +33,8 @@ import cc.creativecomputing.io.xml.CCDataElement;
  */
 public class CCColladaScene extends CCColladaElement{
 	
-	private Map<String, CCColladaSceneNode> _myNodeMap = new HashMap<String, CCColladaSceneNode>();
+	@CCProperty(name = "nodes")
+	private Map<String, CCColladaSceneNode> _myNodeMap = new LinkedHashMap<>();
 	
 	private List<CCColladaSceneNode> _myNodes = new ArrayList<>();
 	

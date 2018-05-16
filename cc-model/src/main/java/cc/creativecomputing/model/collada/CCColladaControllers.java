@@ -24,7 +24,7 @@ public class CCColladaControllers extends CCColladaLibrary<CCColladaController>{
 	CCColladaControllers(List<CCDataElement> theControllersXML, CCColladaGeometries theGeometries) {
 		for (CCDataElement myControllerXML : theControllersXML) {
 			CCColladaController myController = new CCColladaController(myControllerXML, theGeometries);
-			_myElementMap.put(myController.id(), myController);
+			put(myController.id(), myController);
 			_myElementList.add(myController);
 		}
 

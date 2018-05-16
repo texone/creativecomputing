@@ -25,7 +25,7 @@ public class CCColladaScenes extends CCColladaLibrary<CCColladaScene>{
 		
 		for (CCDataElement mySceneXML : theScenesXML) {
 			CCColladaScene myScene = new CCColladaScene(theLoader, mySceneXML);
-			_myElementMap.put(myScene.id(), myScene);
+			put(myScene.id(), myScene);
 			_myElementList.add(myScene);
 		}
 	}

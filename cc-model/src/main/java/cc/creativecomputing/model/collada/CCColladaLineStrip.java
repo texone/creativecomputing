@@ -10,7 +10,9 @@
  */
 package cc.creativecomputing.model.collada;
 
+import java.nio.FloatBuffer;
 import java.util.HashMap;
+import java.util.List;
 
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.io.xml.CCDataElement;
@@ -32,13 +34,35 @@ import cc.creativecomputing.io.xml.CCDataElement;
  * @author Markus Zimmermann <a href="http://www.die-seite.ch">http://www.die-seite.ch</a>
  * @version 1.0
  */
-class CCColladaLines extends CCColladaGeometryData {
+class CCColladaLineStrip extends CCColladaGeometryData {
 
-	CCColladaLines(CCDataElement theLinesXML, HashMap<String, CCColladaSource> theSourcesMap, CCColladaVertices theVertices) {
-		super(theLinesXML, theSourcesMap, theVertices, 2, CCDrawMode.LINES);
+	CCColladaLineStrip(CCDataElement theLinesXML, HashMap<String, CCColladaSource> theSourcesMap, CCColladaVertices theVertices) {
+		super(theLinesXML, theSourcesMap, theVertices, 2, CCDrawMode.LINE_STRIP);
+		
 	}
 	
-	
+	@Override
+	public void readInputs(CCDataElement theLinesXML, List<CCColladaGeometryInput> theInputs){
+		String[] myPArray = theLinesXML.child("p").content().split(" ");
+		
+		_myNumberOfVertices = myPArray.length;
+		_myPointIndices = new int[myPArray.length];
+		
+		for (int i = 0; i < myPArray.length;i++) {
+			_myPointIndices[i] = Integer.parseInt(myPArray[i]);
+		}
+		
+		for(CCColladaGeometryInput myInput : theInputs){
+			myInput.buffer(FloatBuffer.allocate(_myNumberOfVertices * myInput.source().stride()));
+			float[][] myPoints = myInput.source().pointMatrix();
+			for(int i = 0; i < _myNumberOfVertices; i++){
+				int myIndex = _myPointIndices[i * _myStride + myInput.offset()];
+				myInput.buffer().put(myPoints[myIndex]);
+			}
+			myInput.buffer().rewind();
+			_myInputMap.put(myInput.semantic(), myInput);
+		}
+	}
 
 //	@Override
 //	public String toString() {

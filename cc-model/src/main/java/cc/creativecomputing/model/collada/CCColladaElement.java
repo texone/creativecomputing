@@ -13,6 +13,7 @@ package cc.creativecomputing.model.collada;
 import java.util.HashMap;
 import java.util.Map;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
@@ -23,9 +24,13 @@ public class CCColladaElement {
 
 	protected String _myID;
 	
+	@CCProperty(name = "name")
 	protected String _myName;
 	
 	protected Map<String, CCColladaSource> _mySourceMap;
+	
+	@CCProperty(name = "draw")
+	protected boolean _cDraw = true;
 	
 	CCColladaElement(CCDataElement theXML){
 		_myID = theXML.attribute("id", "");

@@ -39,7 +39,7 @@ class CCColladaEffects extends CCColladaLibrary<CCColladaEffect>{
 	CCColladaEffects(List<CCDataElement> theEffectsXML, CCColladaImages theImageLib) {
 		for (CCDataElement myEffectXML : theEffectsXML) {
 			CCColladaEffect myEffect = new CCColladaEffect(myEffectXML, theImageLib);
-			_myElementMap.put(myEffect.id(), myEffect);
+			put(myEffect.id(), myEffect);
 		}
 
 	}

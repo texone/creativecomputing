@@ -12,6 +12,7 @@ package cc.creativecomputing.model.collada;
 
 import java.util.HashMap;
 
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.io.xml.CCDataElement;
 
 /**
@@ -32,7 +33,7 @@ public class CCColladaTriangles extends CCColladaGeometryData {
 	
 
 	CCColladaTriangles(CCDataElement triangles, HashMap<String, CCColladaSource> theSources, CCColladaVertices theVertices) {
-		super(triangles, theSources, theVertices, 3);
+		super(triangles, theSources, theVertices, 3, CCDrawMode.TRIANGLES);
 	}
 
 }

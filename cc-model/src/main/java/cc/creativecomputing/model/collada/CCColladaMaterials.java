@@ -37,13 +37,13 @@ class CCColladaMaterials extends CCColladaLibrary<CCColladaMaterial>{
 	CCColladaMaterials(List<CCDataElement> theMaterials, CCColladaEffects theEffectLib) {
 		for (CCDataElement myMaterialXML : theMaterials) {
 			CCColladaMaterial m = new CCColladaMaterial(myMaterialXML, theEffectLib);
-			_myElementMap.put(m.id(), m);
+			put(m.id(), m);
 		}
 	}
 
 	public String toString() {
 		String s = "List of Materials: \n";
-		for (CCColladaMaterial m : _myElementMap.values())
+		for (CCColladaMaterial m : values())
 			s += m + "\n";
 
 		return s;

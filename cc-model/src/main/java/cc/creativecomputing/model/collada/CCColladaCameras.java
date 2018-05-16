@@ -19,7 +19,7 @@ public class CCColladaCameras extends CCColladaLibrary<CCColladaCamera>{
 	CCColladaCameras(List<CCDataElement> theCamerasXML) {
 		for (CCDataElement myCameraXML : theCamerasXML) {
 			CCColladaCamera myCamera = new CCColladaCamera(myCameraXML);
-			_myElementMap.put(myCamera.id(), myCamera);
+			put(myCamera.id(), myCamera);
 			_myElementList.add(myCamera);
 		}
 

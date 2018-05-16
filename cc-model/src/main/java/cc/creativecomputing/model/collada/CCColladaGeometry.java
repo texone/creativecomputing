@@ -47,6 +47,7 @@ public class CCColladaGeometry extends CCColladaElement{
 	private List<CCColladaPolyList> _myPolyList;
 	private List<CCColladaGeometryData> _myDatas = new ArrayList<>();
 	private HashSet<CCColladaLines> _myLinesSet;
+	private HashSet<CCColladaLineStrip> _myLineStripSet;
 
 	CCColladaGeometry(CCDataElement theGeometryXML) {
 		super(theGeometryXML);
@@ -83,10 +84,19 @@ public class CCColladaGeometry extends CCColladaElement{
 		}
 		// dump lines
 		if ((myShapes = myMeshXML.children("lines")).size() != 0) {
-			_myLinesSet = new HashSet<CCColladaLines>();
+			_myLinesSet = new HashSet<>();
 			for (CCDataElement myLineXML : myShapes) {
 				CCColladaLines myLines = new CCColladaLines(myLineXML, mySourceMap, myVertices);
 				_myLinesSet.add(myLines);
+				_myDatas.add(myLines);
+			}
+
+		}
+		if ((myShapes = myMeshXML.children("linestrips")).size() != 0) {
+			_myLineStripSet = new HashSet<>();
+			for (CCDataElement myLineXML : myShapes) {
+				CCColladaLineStrip myLines = new CCColladaLineStrip(myLineXML, mySourceMap, myVertices);
+				_myLineStripSet.add(myLines);
 				_myDatas.add(myLines);
 			}
 
@@ -114,6 +124,14 @@ public class CCColladaGeometry extends CCColladaElement{
 		}
 		if (_myLinesSet != null) {
 			for (CCColladaLines lines : _myLinesSet) {
+				String matSymbol = lines.source();
+				String matID = theBindMap.get(matSymbol);
+				CCColladaMaterial m = theMaterialLib.element(matID);
+				lines.material(m);
+			}
+		}
+		if (_myLineStripSet != null) {
+			for (CCColladaLineStrip lines : _myLineStripSet) {
 				String matSymbol = lines.source();
 				String matID = theBindMap.get(matSymbol);
 				CCColladaMaterial m = theMaterialLib.element(matID);

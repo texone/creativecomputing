@@ -74,6 +74,16 @@ public class CCAABB {
 		_myCenter = new CCVector3(thePosition);
 		extent(new CCVector3(theExtent));
 	}
+	
+	/**
+	 * Creates a new instance from center point and extent
+	 * 
+	 * @param thePosition
+	 * @param theExtent box dimensions (the box will be double the size in each direction)
+	 */
+	public CCAABB(final CCVector3 thePosition) {
+		this(thePosition, new CCVector3());
+	}
 
 	public CCAABB clone() {
 		return new CCAABB(this);
@@ -168,14 +178,14 @@ public class CCAABB {
 	 * @param thePoint the point to check
 	 * @return itself, for method chaining
 	 */
-	public void checkSize(final CCVector3 thePoint) {
-		if(thePoint.x > _myMax.x)_myMax.x = thePoint.x;
-		if(thePoint.y > _myMax.y)_myMax.y = thePoint.y;
-		if(thePoint.z > _myMax.z)_myMax.z = thePoint.z;
+	public void checkSize(final double theX, final double theY, final double theZ) {
+		if(theX > _myMax.x)_myMax.x = theX;
+		if(theY > _myMax.y)_myMax.y = theY;
+		if(theZ > _myMax.z)_myMax.z = theZ;
 		
-		if(thePoint.x < _myMin.x)_myMin.x = thePoint.x;
-		if(thePoint.y < _myMin.y)_myMin.y = thePoint.y;
-		if(thePoint.z < _myMin.z)_myMin.z = thePoint.z;
+		if(theX < _myMin.x)_myMin.x = theX;
+		if(theY < _myMin.y)_myMin.y = theY;
+		if(theZ < _myMin.z)_myMin.z = theZ;
 		
 		_myExtent.x = (_myMax.x - _myMin.x) / 2;
 		_myExtent.y = (_myMax.y - _myMin.y) / 2;
@@ -185,11 +195,15 @@ public class CCAABB {
 		_myCenter.y = _myMax.y - _myExtent.y;
 		_myCenter.z = _myMax.z - _myExtent.z;
 	}
+	
+	public void checkSize(final CCVector3 thePoint) {
+		checkSize(thePoint.x, thePoint.y, thePoint.z);
+	}
 
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("<aabb> pos: ").append(_myCenter).append(" ext: ").append(_myExtent);
+		sb.append("<aabb> min: ").append(_myMin).append(" max: ").append(_myMax);
 		return sb.toString();
 	}
 
