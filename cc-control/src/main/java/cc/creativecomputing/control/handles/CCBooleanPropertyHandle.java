@@ -7,7 +7,7 @@ import cc.creativecomputing.io.data.CCDataObject;
 public class CCBooleanPropertyHandle extends CCPropertyHandle<Boolean>{
 	
 
-	protected CCBooleanPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
+	public CCBooleanPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
 	}
 	

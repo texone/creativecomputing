@@ -13,6 +13,15 @@ public class CCEnvelopeHandle extends CCPropertyHandle<CCEnvelope>{
 	}
 	
 	@Override
+	public void value(CCEnvelope theValue, boolean theOverWrite) {
+		if(theValue == null)return;
+		if(theOverWrite)_myPresetValue = theValue.clone();
+		if(theValue == _myValue)return;
+		_myValue.set(theValue);
+		_myUpdateMember = true;
+	}
+	
+	@Override
 	public CCDataObject data() {
 		CCDataObject myResult = super.data();
 		CCEnvelope myEnvelope = value();

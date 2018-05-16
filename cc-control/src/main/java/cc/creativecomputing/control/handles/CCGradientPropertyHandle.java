@@ -18,7 +18,8 @@ public class CCGradientPropertyHandle extends CCPropertyHandle<CCGradient>{
 	public void value(CCGradient theValue, boolean theOverWrite) {
 		if(theValue == null)return;
 		if(theOverWrite)_myPresetValue = theValue.clone();
-		_myValue = theValue.clone();
+		if(theValue == _myValue)return;
+		_myValue.set(theValue);
 		_myUpdateMember = true;
 	}
 	

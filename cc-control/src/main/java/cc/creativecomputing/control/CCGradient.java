@@ -9,8 +9,9 @@ import java.util.Map;
 import cc.creativecomputing.core.CCBlendable;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.interpolate.CCInterpolatable;
 
-public class CCGradient extends ArrayList<CCGradientPoint> implements CCBlendable<CCGradient>{
+public class CCGradient extends ArrayList<CCGradientPoint> implements CCBlendable<CCGradient>, CCInterpolatable<CCColor>{
 	
 	/**
 	 * 
@@ -34,6 +35,7 @@ public class CCGradient extends ArrayList<CCGradientPoint> implements CCBlendabl
 	}
 	
 	public void set(CCGradient theGradient){
+		if(theGradient == this)return;
 		clear();
 		for(CCGradientPoint myPoint:theGradient){
 			add(myPoint.clone());
@@ -48,11 +50,12 @@ public class CCGradient extends ArrayList<CCGradientPoint> implements CCBlendabl
 	}
 	
 	/**
-	 * Interpolate a position on the spline
+	 * Interpolate a color on the gradient
 	 * @param theBlend a value from 0 to 1 that represent the position between the first control point and the last one
 	 * @return the position
 	 */
-	public CCColor color (double thePosition){
+	@Override
+	public CCColor interpolate (double thePosition){
 		
 		if(size() == 0)return new CCColor();
 		if(size() == 1){
@@ -76,6 +79,16 @@ public class CCGradient extends ArrayList<CCGradientPoint> implements CCBlendabl
 		double myBlend = CCMath.smoothStep(myPos0, myPos1, thePosition);
 		
 		return CCColor.blend(get(myIndex - 1).color(), get(myIndex).color(), myBlend);
+	}
+
+	@Deprecated
+	/**
+	 * Use interpolate instead
+	 * @param theValue
+	 * @return
+	 */
+	public CCColor color(double theValue) {
+		return interpolate(theValue);
 	}
 
 	@Override
