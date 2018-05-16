@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.simulation.particles.emit;
+package cc.creativecomputing.simulation.particles.emit.gpu;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;

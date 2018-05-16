@@ -26,9 +26,11 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
+import cc.creativecomputing.graphics.shader.CCDataBuffer;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
+import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.simulation.particles.CCParticles;
@@ -44,21 +46,19 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 	@CCProperty(name = "shader")
 	protected CCGLProgram _myShader;
 	
-	private CCGLWriteDataShader _myWriteDataShader;
-	
-	private CCShaderBuffer _myEvelopeData;
+	private CCDataBuffer _myEvelopeData;
 
 	protected CCMesh _myMesh;
 	
 	protected CCParticles _myParticles;
 	
-	protected float _myPointsize = 1;
+	@CCProperty(name = "pointsize", min = 0, max = 10)
+	protected float _cPointsize = 1;
 	
 	public CCIndexedParticleRenderer(Path theVertexShader, Path theFragmentShader) {
 		_myShader = new CCGLProgram(theVertexShader, theFragmentShader);
 		
-		_myWriteDataShader = new CCGLWriteDataShader();
-		_myEvelopeData = new CCShaderBuffer(100,1);
+		_myEvelopeData = new CCDataBuffer(100,_cLifeTimeAlpha);
 	}
 	
 	public CCIndexedParticleRenderer() {
@@ -66,6 +66,10 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 			CCNIOUtil.classPath(CCDisplayShader.class, "indexed_display_vertex.glsl"),
 			CCNIOUtil.classPath(CCDisplayShader.class, "indexed_display_fragment.glsl")
 		);
+	}
+	
+	public CCTexture2D envelopeData() {
+		return _myEvelopeData.attachment(0);
 	}
 	
 	public void setup(CCParticles theParticles) {
@@ -81,7 +85,7 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 	}
 	
 	public void pointSize(float thePointSize){
-		_myPointsize = thePointSize;
+		_cPointsize = thePointSize;
 	}
 	
 	@Override
@@ -91,25 +95,11 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 	public void updateData(CCGraphics g) {}
 
 	public void display(CCGraphics g){
-		_myEvelopeData.beginDraw(g);
-		g.clear();
-		g.pushAttribute();
-		g.noBlend();
-		g.pointSize(1);
-		_myWriteDataShader.start();
-		g.beginShape(CCDrawMode.POINTS);
-		for(int i = 0; i < 100; i++){
-			double myVal = _cLifeTimeAlpha.value(i / 100d);
-			g.textureCoords4D(0, myVal, myVal, myVal, 1d);
-			g.vertex(i + 0.5, 0.5);
-		}
-		g.endShape();
-		_myWriteDataShader.end();
-		g.popAttribute();
-		_myEvelopeData.endDraw(g);
+		_myEvelopeData.updateData(g);
 		
 		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
 		_myShader.start();
+		startShaderEvents.proxy().start(_myShader, g);
 		g.texture(0, _myParticles.dataBuffer().attachment(0));
 		g.texture(1, _myParticles.dataBuffer().attachment(1));
 		g.texture(3, _myParticles.dataBuffer().attachment(3));
@@ -118,7 +108,7 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 		_myShader.uniform1i("infos", 1);
 		_myShader.uniform1i("colors", 3);
 		_myShader.uniform1i("lifeTimeBlends", 4);
-		_myShader.uniform1f("pointSize", _myPointsize);
+		_myShader.uniform1f("pointSize", _cPointsize);
 		_myShader.uniform1f("tanHalfFOV", CCMath.tan(g.camera().fov()) * g.height());
 		g.color(255);
 		_myMesh.draw(g);

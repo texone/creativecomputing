@@ -21,9 +21,11 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCEnvelope;
+import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
+import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.simulation.particles.CCParticles;
@@ -41,6 +43,12 @@ public abstract class CCParticleRenderer {
 	protected String _myEnvelopeTextureParameter;
 	 
 	protected List<CCEnvelope> _myEnvelopes = new ArrayList<>();
+	
+	public static interface CCParticleRendererStartEvent{
+		public void start(CCGLProgram theShader, CCGraphics g);
+	}
+	
+	public CCListenerManager<CCParticleRendererStartEvent> startShaderEvents = CCListenerManager.create(CCParticleRendererStartEvent.class);
 	
 	public CCParticleRenderer(){
 
@@ -65,7 +73,7 @@ public abstract class CCParticleRenderer {
 		float y = 0;
 		for(CCEnvelope myEnvelope:_myEnvelopes){
 			for(int i = 0; i < 100; i++){
-				double myVal = myEnvelope.value(i / 100d);
+				double myVal = myEnvelope.interpolate(i / 100d);
 				g.textureCoords4D(0, myVal, myVal, myVal, 1d);
 				g.vertex(i + 0.5, y + 0.5);
 			}

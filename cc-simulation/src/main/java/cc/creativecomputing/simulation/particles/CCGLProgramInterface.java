@@ -36,11 +36,17 @@ public class CCGLProgramInterface {
 	
 	static int id = 0;
 	
-	private final String _myInterfaceAppend;
+	static List<String> _myIDs = new ArrayList<>();
+	
+	private String _myInterfaceAppend;
 	
 	public CCGLProgramInterface(String theFunctionName){
 		_myFunctionName = theFunctionName;
-		_myInterfaceAppend = theFunctionName + id++;
+		_myInterfaceAppend = theFunctionName;
+		while(_myIDs.contains(_myInterfaceAppend)) {
+			_myInterfaceAppend = theFunctionName + id++;
+		}
+		_myIDs.add(_myInterfaceAppend);
 		
 		List<String> mySource = CCNIOUtil.loadStrings(CCNIOUtil.classPath(this, getClass().getSimpleName() + ".glsl"));
 		List<String> myUniforms = new ArrayList<>();
@@ -81,6 +87,10 @@ public class CCGLProgramInterface {
 	
 	public void setUniforms(){
 		
+	}
+	
+	public String append() {
+		return _myInterfaceAppend;
 	}
 	
 	public String parameter(String theUniform){

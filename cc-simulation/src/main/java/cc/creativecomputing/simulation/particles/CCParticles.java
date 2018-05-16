@@ -70,8 +70,8 @@ public class CCParticles{
 	protected Map<Integer, CCVector3> _myPositionUpdates = new HashMap<Integer, CCVector3>();
 	protected List<CCParticle> _myLifetimeUpdates = new ArrayList<CCParticle>();
 	
-	@CCProperty(name = "emitter", hide = true)
-	private List<CCIParticleEmitter> _myEmitter = new ArrayList<CCIParticleEmitter>();
+	@CCProperty(name = "emitter")
+	private List<CCIParticleEmitter> _myEmitter = new ArrayList<>();
 	
 	protected List<CCForce> _myForces;
 	protected List<CCConstraint> _myConstraints;
@@ -146,7 +146,7 @@ public class CCParticles{
 		
 		for(CCForce myForce:theForces) {
 			myForce.setSize(g, theWidth, theHeight);
-			_myForceMap.put(myForce.parameter("force"), myForce);
+			_myForceMap.put(myForce.append(), myForce);
 		}
 		
 		for(CCConstraint myContraint:theConstraints) {

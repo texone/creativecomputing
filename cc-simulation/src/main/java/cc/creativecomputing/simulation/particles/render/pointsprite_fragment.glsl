@@ -4,6 +4,6 @@
 uniform sampler2D pointSprite;
 
 void main(){
-	
-	gl_FragColor = gl_Color * texture2D(pointSprite, gl_TexCoord[0].xy);
+	gl_FragColor = texture2D(pointSprite,gl_TexCoord[0].xy);
+	gl_FragColor.a = gl_Color.a;
 }

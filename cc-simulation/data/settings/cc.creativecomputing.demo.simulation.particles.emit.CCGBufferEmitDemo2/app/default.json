@@ -1,0 +1,626 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "debug": {
+        "name": "debug",
+        "value": {
+          "scale positions": {
+            "min": 0,
+            "max": 1000,
+            "name": "scale positions",
+            "value": 0
+          },
+          "scale infos": {
+            "min": 0,
+            "max": 100,
+            "name": "scale infos",
+            "value": 0
+          },
+          "draw positions": {
+            "name": "draw positions",
+            "value": false
+          },
+          "draw infos": {
+            "name": "draw infos",
+            "value": false
+          }
+        }
+      },
+      "draw gbuffer": {
+        "name": "draw gbuffer",
+        "value": false
+      },
+      "gbuffer": {
+        "name": "gbuffer",
+        "value": {"shader": {
+          "name": "shader",
+          "value": {
+            "fragment": {
+              "name": "fragment",
+              "value": {
+                "auto save": {
+                  "name": "auto save",
+                  "value": true
+                },
+                "geometrybuffer_fragment.glsl": {
+                  "name": "geometrybuffer_fragment.glsl",
+                  "value": "cc.creativecomputing.control.code.CCShaderFile@3ee003e3"
+                },
+                "uniforms": {
+                  "name": "uniforms",
+                  "value": {}
+                },
+                "save in file": {
+                  "name": "save in file",
+                  "value": true
+                }
+              }
+            },
+            "vertex": {
+              "name": "vertex",
+              "value": {
+                "geometrybuffer_vertex.glsl": {
+                  "name": "geometrybuffer_vertex.glsl",
+                  "value": "cc.creativecomputing.control.code.CCShaderFile@64547ac5"
+                },
+                "auto save": {
+                  "name": "auto save",
+                  "value": true
+                },
+                "uniforms": {
+                  "name": "uniforms",
+                  "value": {}
+                },
+                "save in file": {
+                  "name": "save in file",
+                  "value": true
+                }
+              }
+            }
+          }
+        }}
+      },
+      "attributes": {
+        "name": "attributes",
+        "value": {
+          "point size": {
+            "min": 0.1,
+            "max": 50,
+            "name": "point size",
+            "value": 0.10000000149011612
+          },
+          "stroke weight": {
+            "min": 0.1,
+            "max": 50,
+            "name": "stroke weight",
+            "value": 1
+          },
+          "color": {
+            "a": 1,
+            "r": 0,
+            "b": 0,
+            "g": 0,
+            "name": "color",
+            "value": {
+              "a": 1,
+              "r": 0,
+              "b": 0,
+              "g": 0,
+              "blendable_type": "cc.creativecomputing.math.CCColor"
+            }
+          },
+          "cullface": {
+            "name": "cullface",
+            "value": "NONE"
+          },
+          "polygon mode": {
+            "name": "polygon mode",
+            "value": "FILL"
+          },
+          "depth test": {
+            "name": "depth test",
+            "value": false
+          },
+          "blend mode": {
+            "name": "blend mode",
+            "value": "BLEND"
+          },
+          "depth mask": {
+            "name": "depth mask",
+            "value": true
+          }
+        }
+      },
+      "particles": {
+        "name": "particles",
+        "value": {
+          "renderer": {
+            "name": "renderer",
+            "value": {
+              "shader": {
+                "name": "shader",
+                "value": {
+                  "fragment": {
+                    "name": "fragment",
+                    "value": {
+                      "auto save": {
+                        "name": "auto save",
+                        "value": true
+                      },
+                      "indexed_display_fragment.glsl": {
+                        "name": "indexed_display_fragment.glsl",
+                        "value": "cc.creativecomputing.control.code.CCShaderFile@61ba2f69"
+                      },
+                      "uniforms": {
+                        "name": "uniforms",
+                        "value": {}
+                      },
+                      "save in file": {
+                        "name": "save in file",
+                        "value": true
+                      }
+                    }
+                  },
+                  "vertex": {
+                    "name": "vertex",
+                    "value": {
+                      "indexed_display_vertex.glsl": {
+                        "name": "indexed_display_vertex.glsl",
+                        "value": "cc.creativecomputing.control.code.CCShaderFile@26ffeb21"
+                      },
+                      "auto save": {
+                        "name": "auto save",
+                        "value": true
+                      },
+                      "uniforms": {
+                        "name": "uniforms",
+                        "value": {}
+                      },
+                      "save in file": {
+                        "name": "save in file",
+                        "value": true
+                      }
+                    }
+                  }
+                }
+              },
+              "life time alpha": {
+                "curve": {"points": [
+                  {
+                    "time": 0,
+                    "type": "LINEAR",
+                    "value": 0
+                  },
+                  {
+                    "time": 1,
+                    "type": "LINEAR",
+                    "value": 1
+                  }
+                ]},
+                "name": "life time alpha",
+                "value": "cc.creativecomputing.control.CCEnvelope@5c7341a3"
+              },
+              "pointsize": {
+                "min": 0,
+                "max": 10,
+                "name": "pointsize",
+                "value": 0.25
+              }
+            }
+          },
+          "update shader": {
+            "name": "update shader",
+            "value": {"fragment": {
+              "name": "fragment",
+              "value": {
+                "auto save": {
+                  "name": "auto save",
+                  "value": true
+                },
+                "uniforms": {
+                  "name": "uniforms",
+                  "value": {}
+                },
+                "source 0": {
+                  "name": "source 0",
+                  "value": "cc.creativecomputing.control.code.CCShaderSource@1aae7268"
+                },
+                "save in file": {
+                  "name": "save in file",
+                  "value": true
+                }
+              }
+            }}
+          },
+          "forces": {
+            "name": "forces",
+            "value": {
+              "NoiseForceField": {
+                "name": "NoiseForceField",
+                "value": {
+                  "octaves": {
+                    "min": 0,
+                    "max": 5,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 0.12000000476837158
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@12de5612"
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 1
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 4,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "speed": {
+                    "min": 0,
+                    "max": 3,
+                    "name": "speed",
+                    "value": 0.31200000643730164
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  }
+                }
+              },
+              "ViscousDrag": {
+                "name": "ViscousDrag",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@4a5cef4c"
+                  },
+                  "drag": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "drag",
+                    "value": 0.20000000298023224
+                  }
+                }
+              },
+              "Gravity": {
+                "name": "Gravity",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@d5feda9"
+                  },
+                  "direction": {
+                    "name": "direction",
+                    "value": {
+                      "x": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "x",
+                        "value": 0
+                      },
+                      "y": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "y",
+                        "value": 0
+                      },
+                      "z": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "z",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "emitter": {
+            "name": "emitter",
+            "value": {"0": {
+              "name": "0",
+              "value": {
+                "shader": {
+                  "name": "shader",
+                  "value": {"fragment": {
+                    "name": "fragment",
+                    "value": {
+                      "auto save": {
+                        "name": "auto save",
+                        "value": true
+                      },
+                      "uniforms": {
+                        "name": "uniforms",
+                        "value": {}
+                      },
+                      "source 0": {
+                        "name": "source 0",
+                        "value": "cc.creativecomputing.control.code.CCShaderSource@2adfd733"
+                      },
+                      "save in file": {
+                        "name": "save in file",
+                        "value": true
+                      }
+                    }
+                  }}
+                },
+                "emitter": {
+                  "name": "emitter",
+                  "value": {"gBuffer_emitter": {
+                    "name": "gBuffer_emitter",
+                    "value": {
+                      "max lifetime": {
+                        "min": 0,
+                        "max": 30,
+                        "name": "max lifetime",
+                        "value": 7.5
+                      },
+                      "propability": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "propability",
+                        "value": 0.013000000268220901
+                      },
+                      "min lifetime": {
+                        "min": 0,
+                        "max": 30,
+                        "name": "min lifetime",
+                        "value": 1
+                      },
+                      "lifetime spread pow": {
+                        "min": 0,
+                        "max": 10,
+                        "name": "lifetime spread pow",
+                        "value": 1
+                      }
+                    }
+                  }}
+                }
+              }
+            }}
+          }
+        }
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.736442048387673
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      }
+    }
+  }
+}

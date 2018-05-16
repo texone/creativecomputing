@@ -36,7 +36,7 @@ public class CCGravity extends CCForce{
 	private CCVector3 _myDirection;
 	
 	public CCGravity(final CCVector3 theGravity) {
-		super("gravity");
+		super("Gravity");
 		_myDirection = new CCVector3(theGravity);
 		_myDirectionParameter  = parameter("direction");
 	}

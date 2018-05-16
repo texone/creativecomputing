@@ -27,6 +27,6 @@ void main (){
 	vec4 posViewSpace = gl_ModelViewMatrix * myPosition;
 	gl_PointSize = max(tanHalfFOV / -posViewSpace.z * pointSize,1);
 	 
-	gl_FrontColor = vec4(1.);//texture2DRect(colors, gl_Vertex.xy) * gl_Color;
+	gl_FrontColor = texture2DRect(colors, gl_Vertex.xy) * gl_Color;
 	gl_FrontColor.a *=  myAlpha;//pow(myAlpha, 0.1);// * myAlpha;	
 }

@@ -28,9 +28,9 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
-import cc.creativecomputing.simulation.particles.emit.CCEmitter;
-import cc.creativecomputing.simulation.particles.emit.CCParticleGPUEmitter;
-import cc.creativecomputing.simulation.particles.emit.CCRingEmitter;
+import cc.creativecomputing.simulation.particles.emit.gpu.CCEmitter;
+import cc.creativecomputing.simulation.particles.emit.gpu.CCParticleGPUEmitter;
+import cc.creativecomputing.simulation.particles.emit.gpu.CCRingEmitter;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCForceField;
 import cc.creativecomputing.simulation.particles.forces.CCGravity;
@@ -42,7 +42,7 @@ public class CCShaderEmitDemo extends CCGL2Adapter {
 
 	private CCCameraController _myCameraController;
 	
-	@CCProperty(name = "")
+	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
 	
 	@CCProperty(name = "debug")

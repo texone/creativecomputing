@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package cc.creativecomputing.simulation.particles.emit;
+package cc.creativecomputing.simulation.particles.emit.gpu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +94,6 @@ public class CCGroupEmitter extends CCEmitter{
 		_myInitValueShader = new CCGLWriteDataShader();
 		
 		_myNumberOfParticles = theWidth * theHeight;
-		CCLog.info(_myNumberOfParticles);
 		
 		_myGroupActivationBuffer = new CCShaderBuffer(32, 4, 2, _myWidth, _myHeight);
 		_myGroupActivationBuffer.beginDraw(g);

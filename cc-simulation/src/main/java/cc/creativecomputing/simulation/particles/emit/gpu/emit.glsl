@@ -33,15 +33,15 @@ void main (){
 	vec4 info = texture2DRect(infoTexture, texID);
 	vec4 color = texture2DRect(colorTexture, texID);
 	
-//	if(info.x < info.y){
-//		gl_FragData[0] = position;
-//		gl_FragData[1] = info;
-//		gl_FragData[2] = velocity;
-//		gl_FragData[3] = vec4(1.0);
-//		return;
-//	}
-//	
-//	position.xyz = vec3(1000000,0,0);
+	if(info.x < info.y){
+		gl_FragData[0] = position;
+		gl_FragData[1] = info;
+		gl_FragData[2] = velocity;
+		gl_FragData[3] = color;
+		return;
+	}
+	
+	position.xyz = vec3(1000000,0,0);
 
 	vec4 newInfo;
 	vec4 newPosition; 
