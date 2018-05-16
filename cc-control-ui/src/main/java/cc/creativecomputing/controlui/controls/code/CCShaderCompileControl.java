@@ -209,7 +209,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderSource, CCSha
 			);
 			_mySplitPane.setDividerLocation(CCControlApp.preferences.getInt(_myHandle.path().toString() + "/devider", -1));
 		}
-		_myEditorFrame.setVisible(CCControlApp.preferences.getBoolean(_myHandle.path().toString() + "/open" , false));
+//		_myEditorFrame.setVisible(CCControlApp.preferences.getBoolean(_myHandle.path().toString() + "/open" , false));
 		
 		_myEditorFrame.addWindowListener(new WindowAdapter() {
 			@Override

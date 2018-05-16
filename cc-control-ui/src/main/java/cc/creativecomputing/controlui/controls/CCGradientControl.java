@@ -22,17 +22,21 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
 		super(theHandle, theControlComponent);
 		
 		_myHandle.events().add(theValue -> {
-			_myGradient = ((CCGradient)theValue).clone();
+			_myGradient = ((CCGradient)theValue);
 			_myGradientEditor.gradient(_myGradient);
 		});
 		
-		_myGradient = theHandle.value().clone();
+		_myGradient = theHandle.value();
  
         //Create the Button.
 		_myGradientEditor.gradient(_myGradient);
-		_myGradientEditor.events().add(theGradient -> {
-			_myHandle.value(theGradient, false);
-		});
+//		_myGradientEditor.events().add(theGradient -> {
+//			CCLog.info(theGradient.getClass().getName() + "@" + Integer.toHexString(theGradient.hashCode()));
+//			CCLog.info(_myGradient.getClass().getName() + "@" + Integer.toHexString(_myGradient.hashCode()));
+//			_myHandle.value(theGradient, false);
+//			CCLog.info(theGradient.getClass().getName() + "@" + Integer.toHexString(theGradient.hashCode()));
+//			CCLog.info(_myGradient.getClass().getName() + "@" + Integer.toHexString(_myGradient.hashCode()));
+//		});
 	}
 	
 	@Override

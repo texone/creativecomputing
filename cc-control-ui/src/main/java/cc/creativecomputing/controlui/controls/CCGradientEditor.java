@@ -50,9 +50,9 @@ public class CCGradientEditor extends JPanel {
 	    }
 
 	    public void open() {
-	    		try{
-	    			_myLastColor = _myGradient.get(_mySelectedPoint).color().toAWTColor();
-	    			_myColorChooser.setColor(_myLastColor);
+	    	try{
+	    		_myLastColor = _myGradient.get(_mySelectedPoint).color().toAWTColor();
+	    		_myColorChooser.setColor(_myLastColor);
 	        }catch(Exception e){
 	        	
 	        }
@@ -245,7 +245,6 @@ public class CCGradientEditor extends JPanel {
 	/**
 	 * Delete the currently selected point
 	 */
-	@SuppressWarnings("unlikely-arg-type")
 	private void delPoint() {
 		if (!isEnabled()) {
 			return;
@@ -301,7 +300,7 @@ public class CCGradientEditor extends JPanel {
 
 		for(int i = 0; i <= _myWidth;i++){
 			double blend = (double)i / _myWidth;
-			g.setColor(_myGradient.color(blend).toAWTColor());
+			g.setColor(_myGradient.interpolate(blend).toAWTColor());
 			g.drawLine(i + _myX, _myY, i + _myX, _myY + _myHeight - 1);
 		}
 
