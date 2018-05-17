@@ -19,6 +19,7 @@ package cc.creativecomputing.ui.draw;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
@@ -28,7 +29,7 @@ import cc.creativecomputing.ui.widget.CCUIWidget;
  */
 public class CCUITextureDrawable implements CCUIDrawable{
 	
-	private CCUITexture _myTexture;
+	private CCTexture2D _myTexture;
 	
 	@CCProperty(name = "color")
 	private CCColor _myColor = new CCColor(1f);
@@ -38,7 +39,8 @@ public class CCUITextureDrawable implements CCUIDrawable{
 	/**
 	 * @param theID
 	 */
-	public CCUITextureDrawable() {
+	public CCUITextureDrawable(CCTexture2D theTexture) {
+		_myTexture = theTexture;
 	}
 
 	/* (non-Javadoc)
@@ -47,8 +49,7 @@ public class CCUITextureDrawable implements CCUIDrawable{
 	@Override
 	public void draw(CCGraphics g, CCUIWidget theWidget) {
 		g.color(_myColor);
-		_myTexture.dimension(theWidget.width(), theWidget.height());
-		_myTexture.draw(g);
+		g.image(_myTexture, 0, -theWidget.height(), theWidget.width(), theWidget.height());
 	}
 
 }

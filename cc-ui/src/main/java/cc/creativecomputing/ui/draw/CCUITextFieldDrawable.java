@@ -26,6 +26,7 @@ import cc.creativecomputing.graphics.font.CCTextField.CCPlacedTextChar;
 import cc.creativecomputing.graphics.font.CCTextFieldController;
 import cc.creativecomputing.graphics.font.text.CCLineBreakMode;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
@@ -116,7 +117,8 @@ public class CCUITextFieldDrawable implements CCUIDrawable{
 		
 		int myStart = _myController.startIndex() > _myController.endIndex() ? _myController.endIndex() : _myController.startIndex();
 		int myEnd = _myController.startIndex() > _myController.endIndex() ? _myController.startIndex() : _myController.endIndex();
-		
+		myStart = CCMath.clamp(myStart, 0,  _myText.charGrid().size() - 1);
+		myEnd = CCMath.clamp(myEnd, 0,  _myText.charGrid().size() - 1);
 		for(int i = myStart; i < myEnd;i++){
 			CCPlacedTextChar myChar = _myText.charGrid().get(i);
 			g.vertex(myChar.x, myChar.y + _myText.ascent());
@@ -125,8 +127,6 @@ public class CCUITextFieldDrawable implements CCUIDrawable{
 			g.vertex(myChar.x + myChar.width, myChar.y + _myText.ascent());
 		}
 		g.endShape();
-		
-		
 		
 		if(_myShowCursorBlink) {
 			g.strokeWeight(2);

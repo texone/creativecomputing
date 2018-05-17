@@ -19,23 +19,27 @@ package cc.creativecomputing.ui.widget;
 import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
-import cc.creativecomputing.ui.draw.CCUIDrawable;
+import cc.creativecomputing.ui.CCUIContext;
+import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 
 public class CCUIDropDownWidget extends CCUILabelWidget{
 	
+	public static CCUIWidgetStyle createDefaultStyle(){
+		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
+		myResult.font(CCUIContext.FONT_20);
+		myResult.inset(4);
+		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		myResult.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
+		myResult.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		myResult.itemSelectBackground(new CCColor(0.5d));
+		return myResult;
+	}
+	
 	private CCUIMenu _myMenue;
-	
-	private CCUIDrawable _myItemSelectBackground;
-	
-	private CCUIDrawable _myItemBackground;
-	
-	private boolean _myIsInClickMode = false;
-	private boolean _myIsDragged = false;
-	
-	private boolean _myAdjustLabel = true;
 	
 	private CCUIIconWidget _myIcon;
 	
@@ -43,99 +47,59 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	
 	public CCEventManager<String> changeEvents = new CCEventManager<>();
 	
-	public CCUIDropDownWidget(CCFont<?> theFont, String theTitle, CCUIMenu theMenue) {
-		super(theFont, theTitle);
+	private boolean _myAdjustLabel = true;
+	
+	public CCUIDropDownWidget(CCUIWidgetStyle theStyle, String theTitle, CCUIMenu theMenue) {
+		super(theStyle, theTitle);
 		_myOverlay = _myMenue = theMenue;
 		_myMenue.parent(this);
 		
-		_myIcon = new CCUIIconWidget(CCEntypoIcon.ICON_SELECT_ARROWS);
-
-		inset(2);
+		_myMenue.clickItemEvents.add(item -> {
+			if(_myAdjustLabel)textField().text(item.text());
+		});
+		
+		_myIcon = new CCUIIconWidget(new CCUIWidgetStyle(),CCEntypoIcon.ICON_SELECT_ARROWS);
 		
 		mousePressed.add(event -> {
+			_myMenue.translation().set(event.x, event.y);
 			_myMenue.isActive(true);
-			_myIsInClickMode = false;
-			_myIsDragged = false;
+			_myMenue.updateMatrices();
+			_myMenue.reset();
 		});
 		mouseReleased.add(event ->{
 			_myMenue.isActive(false);
 		});
 		mouseReleasedOutside.add(event ->{
 			_myMenue.isActive(false);
-		});
-		
-		_myMenue.mouseClicked.add(event ->{
-			if(!_myIsInClickMode){
-				_myMenue.isActive(true);
-				_myIsInClickMode = true;
-			}else{
-				_myMenue.isActive(false);
-				_myIsInClickMode = false;
-			}
-		});
-		
-		_myMenue.mouseDragged.add(pos ->{
-			handleHover(pos);
-			_myIsDragged = true;
-		});
-		_myMenue.mouseMoved.add(this::handleHover);
-
-		
-		_myMenue.mouseReleased.add(event -> {
-			if(!_myMenue.isActive())return;
-			if(!(_myIsDragged || _myIsInClickMode))return;
-
-			for(CCUIMenuItem myItem:_myMenue.items()){
-				if(myItem.checkBox() != null)myItem.checkBox().isSelected(false, true);
-			}
-			
-			CCUIWidget myWidget = _myMenue.childAtPosition(new CCVector2(event.x, event.y));
-			CCUIMenuItem mySelectedItem = myWidget instanceof CCUIMenuItem ? (CCUIMenuItem)myWidget : null;
-			if(mySelectedItem != null){
-				mySelectedItem.mouseReleased.event(event);
-				if(_myAdjustLabel)text().text(mySelectedItem.text());
-				if(mySelectedItem.checkBox() != null)mySelectedItem.checkBox().isSelected(true, true);
-			}
-			_myMenue.isActive(false);
-		});
-		_myMenue.mouseReleasedOutside.add(event ->{
-			_myMenue.isActive(false);
-		});
+		});	
 	}
 	
-	public void adjustLabelBySelection(boolean theAdjustLabel){
-		_myAdjustLabel = theAdjustLabel;
+	public CCUIDropDownWidget(String theTitle, CCUIMenu theMenue) {
+		this(createDefaultStyle(), theTitle, theMenue);
+	}
+	
+	public CCUIDropDownWidget(CCUIWidgetStyle theStyle, CCUIMenu theMenue) {
+		this(theStyle, "...", theMenue);
+	}
+	
+	public CCUIDropDownWidget(CCUIMenu theMenue){
+		this(createDefaultStyle(), theMenue);
 	}
 	
 	public void showIcon(boolean theShowIcon) {
 		_myShowIcon = theShowIcon;
 	}
 	
-	private void handleHover(CCVector2 pos){
-		for(CCUIMenuItem myItem:_myMenue.items()){
-			myItem.background(_myItemBackground);
-		}
-		CCUIWidget myWidget = _myMenue.childAtPosition(pos);
-		CCUIMenuItem mySelectedItem = myWidget instanceof CCUIMenuItem ? (CCUIMenuItem)myWidget : null;
-		if(mySelectedItem != null){
-			mySelectedItem.background(_myItemSelectBackground);
-		}
+	public CCUIDropDownWidget(CCUIWidgetStyle theMenueStyle){
+		this(theMenueStyle, new CCUIMenu(theMenueStyle));
 	}
 	
-	public CCUIDropDownWidget(CCFont<?> theFont, CCUIMenu theMenue) {
-		this(theFont, "...", theMenue);
+	public CCUIDropDownWidget(){
+		this(createDefaultStyle());
 	}
 	
-	public CCUIDropDownWidget(CCFont<?> theFont){
-		this(theFont, new CCUIMenu(theFont));
-	}
-	
-	public void itemSelectBackground(CCUIDrawable theSelectBackground){
-		_myItemSelectBackground = theSelectBackground;
-	}
-	
-	public void itemBackground(CCUIDrawable theItemBackground){
-		_myItemBackground = theItemBackground;
+	public void adjustLabelBySelection(boolean theAdjustLabel){
+		_myAdjustLabel = theAdjustLabel;
 	}
 	
 	public CCUIMenu menue(){
@@ -144,13 +108,12 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	
 	@Override
 	public double width() {
-		return CCMath.max(_myWidth,_myTextField.width()) + _myLeftInset + _myRightInset;
+		return CCMath.max(_myWidth,_myTextField.width()) + _myStyle.leftInset() + _myStyle.rightInset();
 	}
 	
 	@Override
 	public void width(double theWidth) {
 		super.width(theWidth);
-		
 		_myMenue.width(theWidth);
 	}
 	
@@ -178,8 +141,8 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	public void drawContent(CCGraphics g) {
 		super.drawContent(g);
 		if(!_myShowIcon)return;
-		_myIcon.text().position().set(width() - _myIcon.width(), - _myIcon.height(), 0);
-		_myIcon.text().draw(g);
+		_myIcon.textField().position().set(width() - _myIcon.width(), - _myIcon.height(), 0);
+		_myIcon.textField().draw(g);
 		
 	}
 
@@ -189,6 +152,7 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 			if(myCheckBox == null)continue;
 			
 			if(myItem.text().equals(theValue)) {
+				text(theValue);
 				if(myCheckBox.isSelected())continue;
 				if(theSendEvents)changeEvents.event(theValue);
 			}else {

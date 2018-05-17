@@ -17,9 +17,11 @@
 
 package cc.creativecomputing.ui;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.font.CCCharSet;
+import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCVector2;
@@ -33,17 +35,24 @@ import cc.creativecomputing.ui.widget.CCUIWidget;
 public class CCUIContext{
 	public static CCTextureMapFont ICON_FONT = new CCTextureMapFont(CCCharSet.ENTYPO,CCNIOUtil.dataPath("entypo.ttf"), 20, 2, 2);
 	
+	public static CCFont<?> FONT_20 = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
+	public static CCFont<?> FONT_30 = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 30, 2, 2);
+	public static CCFont<?> FONT_40 = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 40, 2, 2);
+	
 	private CCGLWindow _myApp;
 	
 	public CCUIPane _myPane;
 	
 	private CCUIWidget _myLastPressedWidget = null;
+	private CCUIWidget _myLastHoverWidget = null;
 	
 	private CCUIWidget _myOverlay = null;
 	
 	public CCUIContext(CCGLWindow theApp, CCUIPane thePane) {
 		_myApp = theApp;
 		_myPane = thePane;
+		
+		CCLog.info(FONT_20,FONT_30,FONT_40);
 		
 		_myApp.mousePressEvents.add(this::mousePressed);
 		_myApp.mouseReleaseEvents.add(this::mouseReleased);
@@ -64,13 +73,27 @@ public class CCUIContext{
 		_myApp.keyCharEvents.add(theChar ->{
 			if(_myLastPressedWidget != null)_myLastPressedWidget.keyChar.event(theChar);
 		});
+		
+		_myApp.frameBufferSizeEvents.add(size ->{
+			if(_myPane.stretchWidth())_myPane.width(size.x);
+			if(_myPane.stretchHeight())_myPane.height(size.y);
+			
+			_myPane.translation().set(-size.x / 2, size.y / 2);
+			_myPane.updateMatrices();
+        });
+		
+		_myApp.scrollEvents.add(e ->{
+			CCLog.info(_myLastHoverWidget,e);
+			if(_myLastHoverWidget == null)return;
+			_myLastHoverWidget.scrollEvents.event(e);
+		});
 	}
 	
 	private void mousePressed(CCGLMouseEvent event){
 		if(_myOverlay != null && _myOverlay.isActive()){
 			CCVector2 myLocalPos = _myOverlay.worldInverseTransform().transform(mouseToScreen(event.x, event.y));
 			if(_myOverlay.isInsideLocal(myLocalPos)){
-				CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y);
+				CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y, _myApp.position().x + (int)event.x, _myApp.position().y + (int)event.y);
 				_myOverlay.mousePressed.event(myLocalEvent);
 			}else{
 				_myOverlay.focusLost.event();
@@ -86,12 +109,14 @@ public class CCUIContext{
 			}
 			
 		}
+		CCLog.info(myPressedWidget);
 		if(myPressedWidget != null) {
 			if(myPressedWidget.overlayWidget() != null)myPressedWidget = myPressedWidget.overlayWidget();
 			CCVector2 myLocalPos = myPressedWidget.worldInverseTransform().transform(mouseToScreen(event.x, event.y));
-			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y);
+			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y, _myApp.position().x + (int)event.x, _myApp.position().y + (int)event.y);
 			myPressedWidget.mousePressed.event(myLocalEvent);
 
+			CCLog.info(myPressedWidget.overlayWidget());
 			if(myPressedWidget.overlayWidget() != null){
 				_myOverlay = myPressedWidget = myPressedWidget.overlayWidget();
 			}
@@ -102,7 +127,8 @@ public class CCUIContext{
 	private void mouseReleased(CCGLMouseEvent event){
 		if(_myOverlay != null && _myOverlay.isActive()){
 			CCVector2 myLocalPos = _myOverlay.worldInverseTransform().transform(mouseToScreen(event.x, event.y));
-			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y);
+			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y, _myApp.position().x + (int)event.x, _myApp.position().y + (int)event.y);
+			CCLog.info(myLocalPos.x, myLocalPos.y,_myOverlay.isInsideLocal(myLocalEvent.x, myLocalEvent.y));
 			if(_myOverlay.isInsideLocal(myLocalEvent.x, myLocalEvent.y)){
 				_myOverlay.mouseReleased.event(myLocalEvent);
 			}else{
@@ -115,13 +141,13 @@ public class CCUIContext{
 		CCUIWidget myReleasedWidget = _myPane.childAtPosition(myScreenPos);
 		if(myReleasedWidget != null && myReleasedWidget == _myLastPressedWidget) {
 			CCVector2 myLocalPos = myReleasedWidget.worldInverseTransform().transform(myScreenPos);
-			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y);
+			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y, _myApp.position().x + (int)event.x, _myApp.position().y + (int)event.y);
 			myReleasedWidget.focusGained.event();
 			myReleasedWidget.mouseReleased.event(myLocalEvent);
 		}
 		if(_myLastPressedWidget != null && myReleasedWidget != _myLastPressedWidget) {
 			CCVector2 myLocalPos = _myLastPressedWidget.worldInverseTransform().transform(myScreenPos);
-			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y);
+			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y, _myApp.position().x + (int)event.x, _myApp.position().y + (int)event.y);
 			_myLastPressedWidget.mouseReleasedOutside.event(myLocalEvent);
 		}
 	}
@@ -129,7 +155,7 @@ public class CCUIContext{
 	private void mouseClicked(CCGLMouseEvent event){
 		if(_myOverlay != null && _myOverlay.isActive()){
 			CCVector2 myLocalPos = _myOverlay.worldInverseTransform().transform(mouseToScreen(event.x, event.y));
-			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y);
+			CCGLMouseEvent myLocalEvent = new CCGLMouseEvent( event, myLocalPos.x, myLocalPos.y, _myApp.position().x + (int)event.x, _myApp.position().y + (int)event.y);
 			if(_myOverlay.isInsideLocal(myLocalEvent.x, myLocalEvent.y)){
 				_myOverlay.mouseClicked.event(myLocalEvent);
 			}
@@ -139,7 +165,7 @@ public class CCUIContext{
 		if(_myLastPressedWidget == null) return;
 
 		CCVector2 myLocalPos = _myLastPressedWidget.worldInverseTransform().transform(mouseToScreen(event));
-		CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y);
+		CCGLMouseEvent myLocalEvent = new CCGLMouseEvent(event, myLocalPos.x, myLocalPos.y, _myApp.position().x + (int)event.x, _myApp.position().y + (int)event.y);
 		_myLastPressedWidget.mouseClicked.event(myLocalEvent);
 		
 		if(_myLastPressedWidget.overlayWidget() != null){
@@ -155,8 +181,9 @@ public class CCUIContext{
 			}
 			return;
 		}
-		
+
 		CCUIWidget myMoveWidget = _myPane.childAtPosition(mouseToScreen(pos));
+		_myLastHoverWidget = myMoveWidget;
 		if(myMoveWidget == null)return;
 		CCVector2 myLocalPos = myMoveWidget.worldInverseTransform().transform(mouseToScreen(pos));
 		myMoveWidget.mouseMoved.event(myLocalPos);

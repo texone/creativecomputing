@@ -19,10 +19,11 @@ package cc.creativecomputing.ui.widget;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCGLTimer;
-import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.graphics.font.CCTextField;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.ui.draw.CCUITextDrawable;
+import cc.creativecomputing.ui.CCUIContext;
+import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
 
 /**
  * @author christianriekoff
@@ -30,34 +31,69 @@ import cc.creativecomputing.ui.draw.CCUITextDrawable;
  */
 public class CCUILabelWidget extends CCUIWidget{
 	
-	@CCProperty(name = "textfield")
-	protected CCTextField _myTextField;
-	@CCProperty(name = "text decorator")
-	private CCUITextDrawable _myTextDecorator;
-
-	public CCUILabelWidget(CCFont<?> theFont, String theText) {
-		_myTextField = new CCTextField(theFont, theText);
-		_myForeground = _myTextDecorator = new CCUITextDrawable();
+	public static CCUIWidgetStyle createDefaultStyle(){
+		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
+		myResult.font(CCUIContext.FONT_20);
+		myResult.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
+		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		myResult.inset(4);
+		return myResult;
 	}
 	
-	public CCTextField text() {
+	@CCProperty(name = "textfield")
+	protected CCTextField _myTextField;
+
+	public CCUILabelWidget(CCUIWidgetStyle theStyle, String theText) {
+		super(theStyle);
+		_myTextField = new CCTextField(theStyle.font(), theText);
+		
+		style(theStyle);
+	}
+	
+	public CCUILabelWidget(String theText){
+		this(createDefaultStyle(), theText);
+	}
+	
+	public CCTextField textField() {
 		return _myTextField;
+	}
+	
+	public String text(){
+		return _myTextField.text();
+	}
+	
+	public void text(String theText){
+		_myTextField.text(theText);
 	}
 	
 	@Override
 	public double width() {
-		return CCMath.max(_myTextField.width(), _myWidth) + _myLeftInset + _myRightInset;
+		return CCMath.max(_myTextField.width(), _myWidth) + _myStyle.leftInset() + _myStyle.rightInset();
 	}
 	
 	@Override
 	public double height() {
-		return CCMath.max(_myTextField.height(), _myHeight) + _myTopInset + _myBottomInset;
+		return CCMath.max(_myTextField.height(), _myHeight) + _myStyle.topInset() + _myStyle.bottomInset();
+	}
+	
+	@Override
+	public double minWidth() {
+		return CCMath.max(_myTextField.width(), _myMinWidth) + _myStyle.leftInset() + _myStyle.rightInset();
+	}
+	
+	@Override
+	public double minHeight() {
+		return CCMath.max(_myTextField.height(), _myMinHeight) + _myStyle.topInset() + _myStyle.bottomInset();
 	}
 	
 	@Override
 	public void update(CCGLTimer theTimer) {
 		super.update(theTimer);
-		_myTextField.position(0, _myBottomInset);
+		
+		if(_myStyle != null && _myStyle.font() != _myTextField.font()){
+			_myTextField.font(_myStyle.font());
+		}
+		_myTextField.position(0, _myStyle.bottomInset());
 	}
 	
 	@Override

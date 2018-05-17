@@ -20,13 +20,27 @@ import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.graphics.font.CCTextAlign;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.ui.CCUIContext;
+import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class CCUIValueBox extends CCUITextFieldWidget{
+	
+	public static CCUIWidgetStyle createDefaultStyle(){
+		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
+		myResult.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		myResult.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
+		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		myResult.font(CCUIContext.FONT_20);
+		myResult.inset(4);
+		return myResult;
+	}
 
 	private CCUIIconWidget _myIcon;
 	
@@ -49,8 +63,8 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 	private boolean _myIsSuperDown = false;
 	private boolean _myIsCtrlDown = false;
 	
-	public CCUIValueBox(CCFont<?> theFont, double theValue, double theMin, double theMax, int theDigits) {
-		super(theFont, theValue + "");
+	public CCUIValueBox(CCUIWidgetStyle theStyle, double theValue, double theMin, double theMax, int theDigits) {
+		super(theStyle, theValue + "");
 		
 		_myMin = theMin;
 		_myMax = theMax;
@@ -140,10 +154,19 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 		});
 
 		_myIcon = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_LEFT);
+		_myIcon.style().inset(0);
 	}
 	
-	public CCUIValueBox(CCFont<?> theFont, double theValue) {
-		this(theFont, theValue, -Float.MAX_VALUE, Float.MAX_VALUE, 2);
+	public CCUIValueBox(double theValue, double theMin, double theMax, int theDigits) {
+		this(createDefaultStyle(), theValue, theMin, theMax, theDigits);
+	}
+	
+	public CCUIValueBox(CCUIWidgetStyle theStyle, double theValue) {
+		this(theStyle, theValue, -Float.MAX_VALUE, Float.MAX_VALUE, 2);
+	}
+	
+	public CCUIValueBox(double theValue) {
+		this(createDefaultStyle(), theValue, -Float.MAX_VALUE, Float.MAX_VALUE, 2);
 	}
 	
 	@Override
@@ -196,9 +219,20 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 	public void drawContent(CCGraphics g) {
 		super.drawContent(g);
 		g.color(255);
-		_myIcon.text().fontSize(_myTextField.fontSize());
-		_myIcon.text().position().set(width() - _myIcon.width(), -_myIcon.height()   , 0);
-		_myIcon.text().draw(g);
+		_myIcon.textField().fontSize(_myTextField.fontSize());
+		_myIcon.textField().position().set(width() - _myIcon.width(), -_myIcon.height() * 0.95   , 0);
+		_myIcon.textField().draw(g);
+		
+//		g.rect(width() - _myIcon.width(), -_myIcon.height()   , _myIcon.width(),_myIcon.height(), true);
+//		
+//		g.color(255,0,0);
+//		g.beginShape(CCDrawMode.LINE_LOOP);
+//		g.vertex(0,0);
+//		g.vertex(width(),0);
+//		g.vertex(width(),-height());
+//		g.vertex(0,-height());
+//		g.vertex(width(),0);
+//		g.endShape();
 		
 //		g.triangle(width() - height() / 4 - _myInset, -height() / 2, width() - _myInset, -height() * 0.25, width() - _myInset, -height() * 0.75);
 		

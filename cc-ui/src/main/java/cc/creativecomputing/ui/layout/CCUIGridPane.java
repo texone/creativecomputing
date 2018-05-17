@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public class CCUIGridPane extends CCUIPane{
 	
@@ -30,10 +32,10 @@ public class CCUIGridPane extends CCUIPane{
 		private CCUIWidget widget;
 		
 		public int column;
-		public int columnSpan;
+		public int columnSpan = 1;
 		
 		public int row;
-		public int rowSpan;
+		public int rowSpan = 1;
 		
 		private void set(CCUITableEntry theEntry) {
 			column = theEntry.column;
@@ -52,14 +54,20 @@ public class CCUIGridPane extends CCUIPane{
 	private double[] _myColumnWidths;
 	private double[] _myColumnXs;
 	
+	public CCUIGridPane(CCUIWidgetStyle theStyle) {
+		super(theStyle);
+	}
 	
-	
-	public CCUIGridPane() {
-		super();
+	public CCUIGridPane(){
+		super(new CCUIWidgetStyle());
 	}
 
-	public CCUIGridPane(double theWidth, double theHeight) {
-		super(theWidth, theHeight);
+	public CCUIGridPane(CCUIWidgetStyle theStyle, double theWidth, double theHeight) {
+		super(theStyle, theWidth, theHeight);
+	}
+	
+	public CCUIGridPane(double theWidth, double theHeight){
+		super(new CCUIWidgetStyle(), theWidth, theHeight);
 	}
 	
 	public void columnWidths(double...theWidths) {
@@ -96,11 +104,14 @@ public class CCUIGridPane extends CCUIPane{
 	
 	private void calcColumnWidths(){
 		double myScale = 0;
+
 		for(double myColumnWidth:_myColumnWidths) {
 			myScale += myColumnWidth;
 		}
-		myScale = (width() - _myLeftInset - _myRightInset - (_myColumnWidths.length - 1) * _cHorizontalSpace) / myScale;
-		double myX = _myLeftInset;
+//		CCLog.info(this, myScale, width(),_myParent,_myParent != null ? _myParent.width():"");
+		myScale = (width() - _myStyle.leftInset() - _myStyle.rightInset() - (_myColumnWidths.length - 1) * _cHorizontalSpace) / myScale;
+//		CCLog.info(this, myScale);
+		double myX = _myStyle.leftInset();
 		_myColumnXs = new double[_myColumnWidths.length];
 		for(int i = 0; i < _myColumnWidths.length;i++) {
 			_myColumnWidths[i] = _myColumnWidths[i] * myScale;
@@ -122,24 +133,20 @@ public class CCUIGridPane extends CCUIPane{
 			_myRows =  CCMath.max(myEntry.row + 1,_myRows);
 		}
 		
-		for(CCUITableEntry myEntry:_myEntries){
-			_myRows =  CCMath.max(myEntry.row + 1,_myRows);
-		}
-		
 		_myRowHeights = new double[_myRows];
 		_myRowYs = new double[_myRows];
 		for(int i = 0; i < _myRows;i++){
 			_myRowHeights[i] = _myDefaultRowHeight + _cVerticalSpace;
 		}
 		for(CCUITableEntry myEntry:_myEntries){
-			_myRowHeights[myEntry.row] = CCMath.max(_myRowHeights[myEntry.row], myEntry.widget.height() + _cVerticalSpace);
+			_myRowHeights[myEntry.row] = CCMath.max(_myRowHeights[myEntry.row], myEntry.widget.minHeight() + _cVerticalSpace);
 		}
 		double myY = 0;
 		for(int i = 0; i < _myRows;i++){
 			_myRowYs[i] = myY;
 			myY += _myRowHeights[i];
 		}
-		_myMinSize.y = myY;
+		_myMinHeight = myY;
 	}
 	
 	public void updateLayout(){
@@ -149,15 +156,14 @@ public class CCUIGridPane extends CCUIPane{
 		
 		for(CCUITableEntry myEntry:_myEntries) {
 			CCUIWidget myWidget = myEntry.widget;
-			if(myWidget.stretch()){
+			if(myWidget.stretchWidth()){
 				double myWidth = 0;
 				for(int i = myEntry.column; i < myEntry.column + myEntry.columnSpan;i++){
 					myWidth += _myColumnWidths[i] + _cHorizontalSpace;
 				}
-				CCLog.info(myWidth - _cHorizontalSpace);
 				myWidget.width(myWidth - _cHorizontalSpace);
 			}
-			switch(myWidget.horizontalAlignment()) {
+			switch(myWidget.style().horizontalAlignment()) {
 			case LEFT:
 				myWidget.translation().x = _myColumnXs[myEntry.column];
 				break;
@@ -168,8 +174,8 @@ public class CCUIGridPane extends CCUIPane{
 				myWidget.translation().x = _myColumnXs[myEntry.column] + _myColumnWidths[myEntry.column] / 2 - myWidget.width() / 2;
 				break;
 			}
-			myWidget.translation().y = -_myTopInset - _myRowYs[myEntry.row];
-			switch(myWidget.verticalAlignment()){
+			myWidget.translation().y = -_myStyle.topInset() - _myRowYs[myEntry.row];
+			switch(myWidget.style().verticalAlignment()){
 			case TOP:
 				break;
 			case CENTER:
@@ -181,7 +187,9 @@ public class CCUIGridPane extends CCUIPane{
 			}
 		}
 		
-		_myMinSize.x = width();
+		_myMinWidth = width();
+		
+		super.updateLayout();
 	}
 	
 	public int rows(){
@@ -222,4 +230,11 @@ public class CCUIGridPane extends CCUIPane{
 		addChild(theWidget, theColumn, theRow, 1, 1);
 	}
 
+	@Override
+	public void drawContent(CCGraphics g) {
+		super.drawContent(g);
+		for(CCUIWidget myChild:_myChildren) {
+//			CCLog.info(myChild, myChild.translation());
+		}
+	}
 }

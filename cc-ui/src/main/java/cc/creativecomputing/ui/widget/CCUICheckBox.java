@@ -18,8 +18,22 @@ package cc.creativecomputing.ui.widget;
 
 import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.ui.CCUIContext;
+import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 
 public class CCUICheckBox extends CCUIIconWidget{
+	
+	public static CCUIWidgetStyle createDefaultStyle(){
+		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
+		myResult.font(CCUIContext.ICON_FONT);
+		myResult.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		myResult.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
+		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		return myResult;
+	}
 	
 	private boolean _myIsSelected = true;
 	
@@ -28,24 +42,30 @@ public class CCUICheckBox extends CCUIIconWidget{
 	private CCEntypoIcon _myActiveIcon;
 	private CCEntypoIcon _myInactiveIcon;
 
-	public CCUICheckBox(CCEntypoIcon theactiveIcon, CCEntypoIcon theInactiveIcon, boolean theIsSelected) {
-		super(theactiveIcon);
+	public CCUICheckBox(CCUIWidgetStyle theStyle, CCEntypoIcon theactiveIcon, CCEntypoIcon theInactiveIcon, boolean theIsSelected) {
+		super(theStyle,theactiveIcon);
 		_myActiveIcon = theactiveIcon;
 		_myInactiveIcon = theInactiveIcon;
 		isSelected(theIsSelected, false);
 		mouseReleased.add(event -> {
 			isSelected(!_myIsSelected, true);
 		});
-		
-		inset(2);
+	}
+	
+	public CCUICheckBox(CCUIWidgetStyle theStyle, boolean theIsSelected) {
+		this(theStyle, CCEntypoIcon.ICON_CHECK, CCEntypoIcon.OFF, theIsSelected);
 	}
 	
 	public CCUICheckBox(boolean theIsSelected) {
-		this(CCEntypoIcon.ICON_CHECK, CCEntypoIcon.OFF, theIsSelected);
+		this(createDefaultStyle(), CCEntypoIcon.ICON_CHECK, CCEntypoIcon.OFF, theIsSelected);
+	}
+	
+	public CCUICheckBox(CCUIWidgetStyle theStyle){
+		this(theStyle,false);
 	}
 	
 	public CCUICheckBox(){
-		this(false);
+		this(createDefaultStyle());
 	}
 
 	public void isSelected(boolean theIsSelected, boolean theSendEvents){

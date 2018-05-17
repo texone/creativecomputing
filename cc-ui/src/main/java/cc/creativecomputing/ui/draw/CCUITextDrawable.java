@@ -40,10 +40,10 @@ public class CCUITextDrawable implements CCUIDrawable{
 		g.color(_myColor);
 		if(!(theWidget instanceof CCUILabelWidget))return;
 		
-		CCTextField _myText = ((CCUILabelWidget)theWidget).text();
+		CCTextField _myText = ((CCUILabelWidget)theWidget).textField();
 		
 		g.pushMatrix();
-		g.translate(theWidget.leftInset(), -_myText.ascent() - theWidget.topInset() * 2);
+		g.translate(theWidget.style().leftInset(), -_myText.ascent() - theWidget.style().topInset() * 2);
 		_myText.draw(g);
 		g.popMatrix();
 		

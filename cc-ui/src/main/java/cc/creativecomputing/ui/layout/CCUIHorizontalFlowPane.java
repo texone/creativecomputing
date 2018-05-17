@@ -17,44 +17,57 @@
 package cc.creativecomputing.ui.layout;
 
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public class CCUIHorizontalFlowPane extends CCUIPane{
 
-	public CCUIHorizontalFlowPane() {
-		super();
+	public CCUIHorizontalFlowPane(CCUIWidgetStyle theStyle) {
+		super(theStyle);
+	}
+	
+	public CCUIHorizontalFlowPane(){
+		super(new CCUIWidgetStyle());
 	}
 
-	public CCUIHorizontalFlowPane(double theWidth, double theHeight) {
-		super(theWidth, theHeight);
+	public CCUIHorizontalFlowPane(CCUIWidgetStyle theStyle, double theWidth, double theHeight) {
+		super(theStyle, theWidth, theHeight);
+	}
+	
+	public CCUIHorizontalFlowPane(double theWidth , double theHeight){
+		super(new CCUIWidgetStyle(), theWidth, theHeight);
 	}
 	
 	@Override
 	public void updateLayout() {
-		double myX = _myLeftInset;
+		double myX = _myStyle.leftInset();
 		double myMaxHeight = 0;
 		for(CCUIWidget myWidget:children()) {
 			myMaxHeight = CCMath.max(myMaxHeight, myWidget.height());
 		}
 		for(CCUIWidget myWidget:children()) {
 			double myY = 0;
-			switch(myWidget.verticalAlignment()) {
+			switch(myWidget.style().verticalAlignment()) {
 			case TOP:
-				myY = -_myTopInset;
+				myY = -_myStyle.topInset();
 				break;
 			case CENTER:
-				myY = -_myTopInset - myMaxHeight / 2 + myWidget.height() / 2;
+				myY = -_myStyle.topInset() - myMaxHeight / 2 + myWidget.height() / 2;
 				break;
 			case BOTTOM:
-				myY = -_myTopInset-myMaxHeight+myWidget.height();
+				myY = -_myStyle.topInset() - myMaxHeight+myWidget.height();
 				break;
+			}
+			if(myWidget.stretchHeight()){
+				myWidget.height(_myHeight);
 			}
 			myWidget.translation().set(myX, myY);
 			myX += myWidget.width();
 			myX += _cHorizontalSpace;
 		}
-		_myMinSize = new CCVector2(myX - _cHorizontalSpace + _myRightInset, _myTopInset + _myBottomInset + myMaxHeight);
+		_myMinWidth = myX - _cHorizontalSpace;
+		_myMinHeight = myMaxHeight;
+		super.updateLayout();
 	}
 	
 	

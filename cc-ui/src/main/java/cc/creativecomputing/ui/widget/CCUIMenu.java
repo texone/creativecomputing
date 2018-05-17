@@ -19,27 +19,104 @@ package cc.creativecomputing.ui.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.ui.CCUIContext;
+import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
 
 public class CCUIMenu extends CCUIVerticalFlowPane{
 	
-	protected CCFont<?> _myFont;
+	public static CCUIWidgetStyle createDefaultStyle(){
+		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
+		myResult.font(CCUIContext.FONT_20);
+		myResult.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
+		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		myResult.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		myResult.inset(4);
+		myResult.itemSelectBackground(new CCColor(0.5d));
+		return myResult;
+	}
 	
 	private List<CCUIMenuItem> _myItems = new ArrayList<>();
+	
+	private boolean _myIsInClickMode = false;
+	private boolean _myIsDragged = false;
+	
+	public final CCEventManager<CCUIMenuItem> clickItemEvents = new CCEventManager<>();
 
-	public CCUIMenu(CCFont<?> theFont) {
-		_myFont = theFont;
+	public CCUIMenu(CCUIWidgetStyle theStyle) {
+		super(theStyle);
 		_myIsActive = false;
-		inset(5);
 		space(5);
+		
+		mouseClicked.add(event ->{
+			if(!_myIsInClickMode){
+				isActive(true);
+				_myIsInClickMode = true;
+			}else{
+				isActive(false);
+				_myIsInClickMode = false;
+			}
+		});
+		
+		mouseDragged.add(pos ->{
+			handleHover(pos);
+			_myIsDragged = true;
+		});
+		mouseMoved.add(this::handleHover);
+
+		
+		mouseReleased.add(event -> {
+			if(!isActive())return;
+			if(!(_myIsDragged || _myIsInClickMode))return;
+
+			for(CCUIMenuItem myItem:items()){
+				if(myItem.checkBox() != null)myItem.checkBox().isSelected(false, true);
+			}
+			
+			CCUIWidget myWidget = childAtPosition(new CCVector2(event.x, event.y));
+			CCUIMenuItem mySelectedItem = myWidget instanceof CCUIMenuItem ? (CCUIMenuItem)myWidget : null;
+			if(mySelectedItem != null){
+				mySelectedItem.mouseReleased.event(event);
+				clickItemEvents.event(mySelectedItem);
+				if(mySelectedItem.checkBox() != null)mySelectedItem.checkBox().isSelected(true, true);
+			}
+			isActive(false);
+		});
+		mouseReleasedOutside.add(event ->{
+			isActive(false);
+		});
+	}
+	
+	public CCUIMenu(){
+		this(createDefaultStyle());
+	}
+	
+	public void reset(){
+		_myIsInClickMode = false;
+		_myIsDragged = false;
+	}
+	
+	private void handleHover(CCVector2 pos){
+		for(CCUIMenuItem myItem:items()){
+			myItem.background().color().set(style().itemBackground());
+		}
+		CCUIWidget myWidget = childAtPosition(pos);
+		CCUIMenuItem mySelectedItem = myWidget instanceof CCUIMenuItem ? (CCUIMenuItem)myWidget : null;
+		if(mySelectedItem != null){
+			mySelectedItem.background().color().set(style().itemSelectBackground());
+		}
 	}
 	
 	public void addSeparator(){
-		addChild(new CCUIHorizontalSeperator(10));
+		addChild(new CCUIHorizontalSeperator(style().separatorStyle()));
 	}
 	
 	public CCUIWidget childAtPosition(CCVector2 thePosition) {
@@ -53,30 +130,30 @@ public class CCUIMenu extends CCUIVerticalFlowPane{
 		return null;
 	}
 	
-	private CCUIMenuItem addItem(CCUIMenuItem theItem, CCEvent<?> theEvent) {
+	private CCUIMenuItem addItem(CCUIMenuItem theItem, CCEvent<CCGLMouseEvent> theEvent) {
 		addChild(theItem);
 		_myItems.add(theItem);
 		if(theEvent == null)return theItem;
 		theItem.mouseReleased.add(event -> {
-			theEvent.event(null);
+			theEvent.event(event);
 		});
 		return theItem;
 	}
 	
 	public CCUIMenuItem addItem(String theLabel){
-		return addItem(new CCUIMenuItem(_myFont, theLabel), null);
+		return addItem(new CCUIMenuItem(style(), theLabel), null);
 	}
 	
-	public CCUIMenuItem addItem(String theLabel, CCEvent<?> theEvent) {
-		return addItem(new CCUIMenuItem(_myFont, theLabel), theEvent);
+	public CCUIMenuItem addItem(String theLabel, CCEvent<CCGLMouseEvent> theEvent) {
+		return addItem(new CCUIMenuItem(style(), theLabel), theEvent);
 	}
 	
-	public CCUIMenuItem addItem(CCEntypoIcon theIcon, String theLabel, CCEvent<?> theEvent) {
-		return addItem(new CCUIMenuItem(theIcon, _myFont, theLabel), theEvent);
+	public CCUIMenuItem addItem(CCEntypoIcon theIcon, String theLabel, CCEvent<CCGLMouseEvent> theEvent) {
+		return addItem(new CCUIMenuItem(theIcon, style(), theLabel), theEvent);
 	}
 	
-	public CCUIMenuItem addItem(CCUICheckBox theCheckBox, String theLabel, CCEvent<?> theEvent) {
-		return addItem(new CCUIMenuItem(theCheckBox, _myFont, theLabel), theEvent);
+	public CCUIMenuItem addItem(CCUICheckBox theCheckBox, String theLabel, CCEvent<CCGLMouseEvent> theEvent) {
+		return addItem(new CCUIMenuItem(theCheckBox, style(), theLabel), theEvent);
 	}
 	
 	public void addItem(String theLabel, CCUIMenu myQuantizeMenue) {

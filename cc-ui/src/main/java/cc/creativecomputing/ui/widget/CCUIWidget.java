@@ -28,9 +28,6 @@ import cc.creativecomputing.math.CCMatrix32;
 import cc.creativecomputing.math.CCVector1;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.CCUIEditPolicy;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
-import cc.creativecomputing.ui.draw.CCUIDrawable;
 
 /**
  * @author christianriekoff
@@ -51,35 +48,19 @@ public class CCUIWidget{
 	@CCProperty(name="rotation")
 	private CCVector1 _myRotation = new CCVector1();
 	
-	@CCProperty(name="horizontal_alignment")
-	private CCUIHorizontalAlignment _myHorizontalAlignment = CCUIHorizontalAlignment.LEFT;
-	@CCProperty(name="vertical_alignment")
-	private CCUIVerticalAlignment _myVerticalAlignment = CCUIVerticalAlignment.TOP;
-	
-	@CCProperty(name="background")
-	protected CCUIDrawable _myBackground;
-	@CCProperty(name="border")
-	protected CCUIDrawable _myBorder;
-	@CCProperty(name="foreground")
-	protected CCUIDrawable _myForeground;
-	
 	@CCProperty(name = "width")
 	protected double _myWidth = 0;
 	
 	@CCProperty(name = "height")
 	protected double _myHeight = 0;
 	
-	@CCProperty(name = "left inset")
-	protected double _myLeftInset = 0;
-	@CCProperty(name = "right inset")
-	protected double _myRightInset = 0;
-	@CCProperty(name = "top inset")
-	protected double _myTopInset = 0;
-	@CCProperty(name = "bottom inset")
-	protected double _myBottomInset = 0;
+	protected double _myMinWidth = 0;
+	protected double _myMinHeight = 0;
 	
 	@CCProperty(name = "edit_policy")
 	protected CCUIEditPolicy _myEditPolicy = CCUIEditPolicy.ADMIN;
+
+	protected CCUIWidgetStyle _myStyle;
 	
 	protected CCUIWidget _myParent;
 	
@@ -87,23 +68,41 @@ public class CCUIWidget{
 	
 	protected boolean _myIsActive = true;
 	
-	protected boolean _myDoStretch = false;
+	protected boolean _myDoStretchWidth = false;
+	protected boolean _myDoStretchHeight = false;
 	
-	public CCUIWidget(double theWidth, double theHeight) {
+	public CCUIWidget(CCUIWidgetStyle theStyle, double theWidth, double theHeight) {
+		_myStyle = theStyle;
 		_myWidth = theWidth;
 		_myHeight = theHeight;
 	}
 	
-	public CCUIWidget() {
-		this(0,0);
+	public CCUIWidget(CCUIWidgetStyle theStyle) {
+		this(theStyle,0,0);
 	}
 	
-	public boolean stretch(){
-		return _myDoStretch;
+	public void style(CCUIWidgetStyle theStyle){
+		_myStyle = theStyle;
 	}
 	
-	public void stretch(boolean theDoStretch){
-		_myDoStretch = theDoStretch;
+	public CCUIWidgetStyle style(){
+		return _myStyle;
+	}
+	
+	public boolean stretchWidth(){
+		return _myDoStretchWidth;
+	}
+	
+	public void stretchWidth(boolean theDoStretch){
+		_myDoStretchWidth = theDoStretch;
+	}
+	
+	public boolean stretchHeight(){
+		return _myDoStretchHeight;
+	}
+	
+	public void stretchHeight(boolean theDoStretch){
+		_myDoStretchHeight = theDoStretch;
 	}
 	
 	public boolean isActive(){
@@ -112,6 +111,11 @@ public class CCUIWidget{
 	
 	public void isActive(boolean theIsActive){
 		_myIsActive = theIsActive;
+	}
+	
+
+	public void overlayWidget(CCUIWidget theOverlay){
+		_myOverlay = theOverlay;
 	}
 	
 	public CCUIWidget overlayWidget(){
@@ -131,22 +135,6 @@ public class CCUIWidget{
 	public CCUIWidget root(){
 		if(_myParent == null)return this;
 		else return _myParent.root();
-	}
-	
-	public CCUIHorizontalAlignment horizontalAlignment() {
-		return _myHorizontalAlignment;
-	}
-
-	public void horizontalAlignment(CCUIHorizontalAlignment theHorizontalAlignment) {
-		_myHorizontalAlignment = theHorizontalAlignment;
-	}
-
-	public CCUIVerticalAlignment verticalAlignment() {
-		return _myVerticalAlignment;
-	}
-
-	public void verticalAlignment(CCUIVerticalAlignment theVerticalAlignment) {
-		_myVerticalAlignment = theVerticalAlignment;
 	}
 	
 	public CCMatrix32 localTransform() {
@@ -175,26 +163,6 @@ public class CCUIWidget{
 	
 	public CCVector1 rotation(){
 		return _myRotation;
-	}
-	
-	public void background(CCUIDrawable theBackground) {
-		_myBackground = theBackground;
-	}
-	
-	public void border(CCUIDrawable theBorder) {
-		_myBorder = theBorder;
-	}
-	
-	public CCUIDrawable border() {
-		return _myBorder;
-	}
-	
-	public void foreground(CCUIDrawable theForeground) {
-		_myForeground = theForeground;
-	}
-	
-	public CCUIDrawable foreground() {
-		return _myForeground;
 	}
 	
 	public boolean isInsideLocal(double theX, double theY) {
@@ -276,6 +244,8 @@ public class CCUIWidget{
 	public final CCEventManager<CCGLMouseEvent> mouseClicked = new CCEventManager<>();
 	public final CCEventManager<CCVector2> mouseMoved = new CCEventManager<>();
 	public final CCEventManager<CCVector2> mouseDragged = new CCEventManager<>();
+
+	public final CCEventManager<CCVector2> scrollEvents = new CCEventManager<>();
 	
 	public final CCEventManager<?> focusGained = new CCEventManager<>();
 	public final CCEventManager<?> focusLost = new CCEventManager<>();
@@ -327,33 +297,20 @@ public class CCUIWidget{
 		if(!_myOverlay.isActive())return;
 		
 		g.pushMatrix();
+		g.applyMatrix(_myLocalMatrix);
 		g.translate(0, 0, 1);
 		_myOverlay.draw(g);
 		g.popMatrix();
 	}
 	
 	public void drawContent(CCGraphics g) {
-		if(_myBackground != null)_myBackground.draw(g, this);
-		if(_myBorder != null)_myBorder.draw(g, this);
-		if(_myForeground != null)_myForeground.draw(g, this);
-		
-//		g.color(255,0,0);
-//		g.beginShape(CCDrawMode.LINE_LOOP);
-//		g.vertex(0,0);
-//		g.vertex(width(),0);
-//		g.vertex(width(),-height());
-//		g.vertex(0,-height());
-//		g.endShape();
-	}
-	
-	protected double widthCalc(){
-		return _myWidth + _myLeftInset + _myRightInset;
+//		_myStyle.drawContent(g,this);
+		g.color(255,0,0);
+		g.rect(0, -height(), width(), height(), true);
 	}
 	
 	public double width() {
-		double myWidth = widthCalc();
-		if(!_myDoStretch)return myWidth;
-		return _myParent == null ? myWidth : CCMath.max(_myParent.width(), myWidth);
+		return CCMath.max(_myMinWidth, _myWidth) + _myStyle.leftInset() + _myStyle.rightInset();
 	}
 	
 	public void width(double theWidth) {
@@ -361,50 +318,27 @@ public class CCUIWidget{
 	}
 	
 	public double height() {
-		return _myHeight + _myTopInset + _myBottomInset;
+		return CCMath.max(_myMinHeight, _myHeight) + _myStyle.topInset() + _myStyle.bottomInset();
 	}
 	
 	public void height(double theHeight) {
 		_myHeight = theHeight;
 	}
 	
-	public double leftInset() {
-		return _myLeftInset;
+	public double minWidth() {
+		return _myMinWidth;
 	}
 	
-	public void leftInset(double theInset) {
-		_myLeftInset = theInset;
+	public void minWidth(double theWidth) {
+		_myMinWidth = theWidth;
 	}
 	
-	public double rightInset() {
-		return _myRightInset;
+	public double minHeight() {
+		return _myMinHeight + _myStyle.topInset() + _myStyle.bottomInset();
 	}
 	
-	public void rightInset(double theInset) {
-		_myRightInset = theInset;
-	}
-	
-	public double topInset() {
-		return _myTopInset;
-	}
-	
-	public void topInset(double theInset) {
-		_myTopInset = theInset;
-	}
-	
-	public double bottomInset() {
-		return _myBottomInset;
-	}
-	
-	public void bottomInset(double theInset) {
-		_myBottomInset = theInset;
-	}
-	
-	public void inset(double theInset) {
-		_myLeftInset = theInset;
-		_myRightInset = theInset;
-		_myTopInset = theInset;
-		_myBottomInset = theInset;
+	public void minHeight(double theHeight) {
+		_myMinHeight = theHeight;
 	}
 	
 	public double x() {

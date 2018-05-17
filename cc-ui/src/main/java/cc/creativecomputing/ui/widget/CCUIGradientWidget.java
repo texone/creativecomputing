@@ -48,7 +48,10 @@ public class CCUIGradientWidget extends CCUIWidget {
 	 *
 	 */
 	public CCUIGradientWidget(double theWidth, double theHeight) {
-		super(theWidth, theHeight);
+		super(new CCUIWidgetStyle(), theWidth, theHeight);
+		
+		_myMinWidth = theWidth;
+		_myMinHeight = theHeight;
 
 		_myOverlay = _myColorWheel = new CCUIColorWheel(200);
 		_myColorWheel.isActive(false);
@@ -94,6 +97,10 @@ public class CCUIGradientWidget extends CCUIWidget {
 	public void gradient(CCGradient theGradient){
 		_myGradient = theGradient;
 	}
+	
+	public double width() {
+		return _myWidth - _myStyle.leftInset() - _myStyle.rightInset();
+	}
 
 	private boolean checkPoint(CCGLMouseEvent theE, CCGradientPoint thePoint) {
 		double dx = CCMath.abs((width() * thePoint.position()) - theE.x);
@@ -121,6 +128,10 @@ public class CCUIGradientWidget extends CCUIWidget {
 			return;
 		}
 		_myColorWheel.setFromColor(_myGradient.get(_mySelectedPoint).color());
+		_myColorWheel.translation().set(-_myColorWheel.width() / 2 + width() / 2, _myColorWheel.height() / 2  - height() / 2);
+		_myColorWheel.isActive(true);
+		_myColorWheel.parent(this);
+		_myColorWheel.updateMatrices();
 		_myOverlay.isActive(true);
 	}
 	

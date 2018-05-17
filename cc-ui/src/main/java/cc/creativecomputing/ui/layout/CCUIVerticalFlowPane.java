@@ -16,24 +16,55 @@
  ******************************************************************************/
 package cc.creativecomputing.ui.layout;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public class CCUIVerticalFlowPane extends CCUIPane {
 	
+	public CCUIVerticalFlowPane(CCUIWidgetStyle theStyle){
+		super(theStyle);
+	}
+	
+	public CCUIVerticalFlowPane(){
+		super(new CCUIWidgetStyle());
+	}
+	
 	@Override
 	public void updateLayout() {
-		double myX = _myLeftInset;
-		double myY = -_myTopInset;
+		double myX = _myStyle.leftInset();
+		double myY = -_myStyle.topInset();
 		double myMaxWidth = 0;
+		double myHeight = 0;
+		int myStretch = 0;
+		for(CCUIWidget myWidget:children()) {
+			if(myWidget.stretchHeight()){
+				myHeight += myWidget.minHeight();
+				myStretch++;
+			}else{
+				myHeight += myWidget.height();
+			}
+		}
+//		CCLog.info(getClass().getName(),height(),myHeight);
+		double myStretchHeight = (height() - myHeight - _cVerticalSpace * CCMath.max(children().size() - 1,0)) / myStretch;
 		for(CCUIWidget myWidget:children()) {
 			myWidget.translation().set(myX, myY);
+			if(myWidget.stretchHeight()){
+				myWidget.height(myStretchHeight);
+			}
+			if(myWidget.stretchWidth()){
+				myWidget.width(_myWidth);
+			}
 			myY -= myWidget.height();
 			myY -= _cVerticalSpace;
 			myMaxWidth = CCMath.max(myMaxWidth,myWidget.width());
 		}
-		_myMinSize = new CCVector2(_myTopInset + _myBottomInset + myMaxWidth, -myY - _cVerticalSpace + _myBottomInset);
+		_myMinWidth = myMaxWidth;
+		_myMinHeight = -myY;
+
+		super.updateLayout();
 	}
 	
 }

@@ -6,11 +6,17 @@ import java.util.List;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.layout.CCUIPane;
 
 public class CCUITreeWidget extends CCUIPane{
+	
+	public static CCUIWidgetStyle createDefaultStyle(){
+		CCUIWidgetStyle myResult = CCUILabelWidget.createDefaultStyle();
+		myResult.verticalAlignment(CCUIVerticalAlignment.TOP);
+		return myResult;
+	}
 	
 	public class CCUITreeNode extends CCUIHorizontalFlowPane{
 		
@@ -20,34 +26,33 @@ public class CCUITreeWidget extends CCUIPane{
 		private final CCUILabelWidget _myLabel;
 		
 		private CCUITreeNode(CCUIIconWidget theIcon, CCUILabelWidget theLabel){
-			inset(5);
 			space(5);
 			
 			_myIcon = theIcon;
 			_myIcon.mouseReleased.add(e -> {
-				CCLog.info("YO", _myIcon.icon());
 				isActive(!isActive());
 				
 				layout();
 			});
+			_myIcon.style().background(null);
 			
 			_myLabel = theLabel;
 			_myLabel.mouseReleased.add(e -> {
-				CCLog.info("YO2", _myLabel.text());
+				CCLog.info("YO2", _myLabel.textField());
 			});
 			addChild(_myIcon);
 			addChild(theLabel);
 		}
 		
-		public CCUITreeNode(CCEntypoIcon theIcon, CCFont<?> theFont, String theText){
+		public CCUITreeNode(CCEntypoIcon theIcon, CCUIWidgetStyle theStyle, String theText){
 			this(
 				new CCUIIconWidget(theIcon),
-				new CCUILabelWidget(theFont, theText)
+				new CCUILabelWidget(theStyle, theText)
 			);
 		}
 		
-		public CCUITreeNode(CCFont<?> theFont, String theText){
-			this(CCEntypoIcon.OFF,theFont, theText);
+		public CCUITreeNode(CCUIWidgetStyle theStyle, String theText){
+			this(CCEntypoIcon.OFF, theStyle, theText);
 		}
 		
 		public String name(){
@@ -55,7 +60,7 @@ public class CCUITreeWidget extends CCUIPane{
 		}
 		
 		public String text(){
-			return ((CCUILabelWidget)_myChildren.get(1)).text().text();
+			return ((CCUILabelWidget)_myChildren.get(1)).textField().text();
 		}
 		
 		private CCUITreeNode addNode(CCUITreeNode theItem, CCEvent<?> theEvent) {
@@ -71,35 +76,41 @@ public class CCUITreeWidget extends CCUIPane{
 		}
 		
 		public CCUITreeNode addNode(String theLabel){
-			return addNode(new CCUITreeNode(_myFont, theLabel), null);
+			return addNode(new CCUITreeNode(_myStyle, theLabel), null);
 		}
 		
 		public CCUITreeNode addNode(String theLabel, CCEvent theEvent) {
-			return addNode(new CCUITreeNode(_myFont, theLabel), theEvent);
+			return addNode(new CCUITreeNode(CCUITreeWidget.this._myStyle, theLabel), theEvent);
 		}
 		
 		public CCUITreeNode addNode(CCEntypoIcon theIcon, String theLabel, CCEvent theEvent) {
-			return addNode(new CCUITreeNode(theIcon, _myFont, theLabel), theEvent);
+			return addNode(new CCUITreeNode(theIcon, CCUITreeWidget.this._myStyle, theLabel), theEvent);
 		}
 	}
 	
-	private CCFont<?> _myFont;
-	
 	private CCUITreeNode _myRootNode;
 	
-	public CCUITreeWidget(CCFont<?> theFont, String theRootLabel){
-		_myFont = theFont;
-		_myRootNode = new CCUITreeNode(theFont, theRootLabel);
+	public CCUITreeWidget(CCUIWidgetStyle theStyle, String theRootLabel){
+		super(theStyle);
+		_myRootNode = new CCUITreeNode(_myStyle, theRootLabel);
 		layout();
+	}
+	
+	public CCUITreeWidget(String theRootLabel){
+		this(createDefaultStyle(), theRootLabel);
 	}
 	
 	public CCUITreeNode root(){
 		return _myRootNode;
 	}
 	
+	public double width(){
+		return _myWidth;
+	}
+	
 	private void layout(){
 		removeAll();
-		_myMinSize.y = layout(_myRootNode, _myLeftInset, -_myTopInset);
+		_myMinHeight = layout(_myRootNode, _myStyle.leftInset(), -_myStyle.topInset());
 		updateMatrices();
 	}
 	

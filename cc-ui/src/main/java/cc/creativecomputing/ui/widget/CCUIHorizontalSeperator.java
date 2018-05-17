@@ -19,19 +19,27 @@ package cc.creativecomputing.ui.widget;
 import cc.creativecomputing.graphics.CCGraphics;
 
 public class CCUIHorizontalSeperator extends CCUIWidget{
+	
+	private CCUISeparatorStyle _myStyle;
 
-	public CCUIHorizontalSeperator(double theHeight){
-		_myHeight = theHeight;
+	public CCUIHorizontalSeperator(CCUISeparatorStyle theStyle){
+		super(new CCUIWidgetStyle());
+		_myStyle = theStyle;
 	}
 	
 	@Override
 	public double width() {
-		return _myParent.width() - _myParent.leftInset() - _myParent.rightInset();
+		return _myParent.width() - _myParent.style().leftInset() - _myParent.style().rightInset();
+	}
+	
+	@Override
+	public double height() {
+		return _myStyle.height();
 	}
 	
 	@Override
 	public void drawContent(CCGraphics g) {
-		g.color(255);
-		g.rect(0, -_myHeight / 2 - 2, width(), 4);
+		g.color(_myStyle.color());
+		g.rect(0, -_myStyle.height() / 2 - _myStyle.weight() / 2, width(), _myStyle.weight());
 	}
 }

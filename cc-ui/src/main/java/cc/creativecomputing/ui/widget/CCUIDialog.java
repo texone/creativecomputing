@@ -16,98 +16,89 @@
  ******************************************************************************/
 package cc.creativecomputing.ui.widget;
 
-import static org.lwjgl.util.tinyfd.TinyFileDialogs.tinyfd_beep;
-import static org.lwjgl.util.tinyfd.TinyFileDialogs.tinyfd_inputBox;
-import static org.lwjgl.util.tinyfd.TinyFileDialogs.tinyfd_messageBox;
-import static org.lwjgl.util.tinyfd.TinyFileDialogs.tinyfd_notifyPopup;
+import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
+import cc.creativecomputing.gl.app.CCGLTimer;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.ui.CCUIContext;
+import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
+import cc.creativecomputing.ui.layout.CCUIPane;
 
-public class CCUIDialog {
+public class CCUIDialog<ResultType> extends CCGLApp{
 	
-	public static void beep(){
-		tinyfd_beep();
-	}
-	
-	public static enum CCUIDialogIcon{
-		INFO("info"),
-		WARNING("warning"),
-		ERROR("error"),
-		QUESTION("question");
+	public static CCUIDialog createTextInput(CCGLApplicationManager theApp, String theText, String theInputText, int theX, int theY){
+		CCUIGridPane myDialogPane = new CCUIGridPane(400,200);
+		myDialogPane.style().horizontalAlignment(CCUIHorizontalAlignment.LEFT);
+		myDialogPane.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
+		myDialogPane.style().inset(4);
+		myDialogPane.style().background(new CCUIFillDrawable(CCColor.GRAY.brighter()));
+		myDialogPane.rowHeight(25);
+		myDialogPane.style().inset(25);
+		myDialogPane.space(10);
+		myDialogPane.columnWidths(10,10,10);
+		myDialogPane.stretchWidth(true);
+		myDialogPane.addChild(new CCUILabelWidget(theText), 0, 0, 3, 1);
 		
-		public String text;
+		CCUITextFieldWidget myTextWidget = new CCUITextFieldWidget( theInputText);
+		myTextWidget.width(200);
+		myDialogPane.addChild(myTextWidget, 0, 1, 1, 1);
+		CCUILabelWidget myCancelButton = new CCUILabelWidget( "CANCEL");
+		myCancelButton.style().background(new CCUIFillDrawable(new CCColor(0.5)));
+		myDialogPane.addChild(myCancelButton, 0, 2, 3, 1);
+
+		CCUILabelWidget myOKButton = new CCUILabelWidget( "OK");
+		myOKButton.style().background(new CCUIFillDrawable(new CCColor(0.5)));
+		myDialogPane.addChild(myOKButton, 1, 2, 3, 1);
+		myDialogPane.updateMatrices();
 		
-		private CCUIDialogIcon(String theText){
-			text = theText;
-		}
+		CCUIDialog myDialog = new CCUIDialog(theApp, myDialogPane, "Add Preset", theX, theY);
+		myCancelButton.mouseReleased.add(e -> {myDialog.shouldClose(true);});
+		myOKButton.mouseReleased.add(e -> {
+			myDialog.events.event(myTextWidget.text());
+			myDialog.shouldClose(true);
+		});
+		return myDialog;
 	}
 	
-	/**
-	 * Opens a notification popup
-	 * @param theTitle null or string 
-	 * @param theMessage null or string may contain \n \t
-	 * @param theIcon
-	 */
-	public static void notify(String theTitle, String theMessage, CCUIDialogIcon theIcon){
-		tinyfd_notifyPopup(theTitle, theMessage, theIcon.text);
-	}
+	private CCUIContext _myContext;
 	
-	public static void notify(String theTitle, String theMessage){
-		notify(theTitle, theMessage, CCUIDialogIcon.INFO);
-	}
+	private CCEventManager<ResultType> events = new CCEventManager<>();
 	
-	public static enum CCUIMessageType{
-		OK("ok"),
-		OK_CANCEL("okcancel"),
-		YES_NO("yesno");
-		//YES_NO_CANCEL("yesnocancel");
+	public CCUIDialog(CCGLApplicationManager theApp, CCUIPane theWidget, String theTitle, int theX, int theY) {
+		width = (int)theWidget.width();
+		height = (int)theWidget.height();
 		
-		public String text;
-		
-		private CCUIMessageType(String theText){
-			text = theText;
-		}
+		title = theTitle;
+        _myContext = new CCUIContext(this, theWidget);
+        frameBufferSizeEvents.add(size ->{
+        	_myContext.widget().translation().set(-size.x / 2, size.y / 2);
+        	_myContext.widget().updateMatrices();
+        });
+        
+        theApp.add(this);
+        
+        drawEvents.add( g -> {
+        	g.clear();
+        	_myContext.widget().draw(g);
+        });
+        updateEvents.add( t -> {_myContext.widget().update(t);});
+        
+        position(theX, theY);
+//        
+        // Display the window.
+        show();
 	}
 	
-	/**
-	 * Opens a message dialog
-	 * @param theTitle null or string 
-	 * @param theMessage null or string may contain \n \t
-	 * @param theType
-	 * @param theIcon
-	 * @return <code>true</code> if yes or ok is pressed otherwise <code>false</code>
-	 */
-	public static boolean message(String theTitle, String theMessage, CCUIMessageType theType, CCUIDialogIcon theIcon){
-		return tinyfd_messageBox(theTitle, theMessage, theType.text, theIcon.text, true);
+	@Override
+	public void setup() {
 	}
 	
-	public static boolean message(String theTitle, String theMessage, CCUIMessageType theType){
-		return message(theTitle, theMessage, theType, CCUIDialogIcon.INFO);
-	}
-	
-	/**
-	 * 
-	 * @param theTitle null or string 
-	 * @param theMessage null or string may contain \n \t
-	 * @param theDefault string if null its a password
-	 * @return
-	 */
-	public static String input(String theTitle, String theMessage, String theDefault){
-		return tinyfd_inputBox(theTitle, theMessage, theDefault);
-	}
-	
-	public static String input(String theTitle, String theMessage){
-		return tinyfd_inputBox(theTitle, theMessage, "");
+	@Override
+	public void update(CCGLTimer theTimer){
 	}
 
-//case GLFW_KEY_1:
-//    System.out.println("\nOpening message dialog...");
-//    System.out.println(tinyfd_messageBox("Please read...", "...this message.", "okcancel", "info", true) ? "OK" : "Cancel");
-//    break;
-//case GLFW_KEY_2:
-//    System.out.println("\nOpening input box dialog...");
-//    System.out.println(tinyfd_inputBox("Input Value", "How old are you?", "30"));
-	
-	public static void main(String[] args) {
-//		beep();
-		System.out.println(input("Please read...", "...this message.", ""));
-	}
 }

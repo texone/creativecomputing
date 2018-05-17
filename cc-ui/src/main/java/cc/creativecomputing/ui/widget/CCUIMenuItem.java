@@ -17,35 +17,40 @@
 package cc.creativecomputing.ui.widget;
 
 
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.graphics.font.CCFont;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 
 public class CCUIMenuItem extends CCUIHorizontalFlowPane{
 
 	private String _myToolTip = "";
 	
-	private CCUIMenuItem(){
-		inset(5);
+	private CCUIFillDrawable _myBackground;
+	
+	private CCUIMenuItem(CCUIWidgetStyle theStyle, CCUIWidget theIconWidget, CCUILabelWidget theLabelWidget){
+		super(theStyle);
 		space(5);
+		addChild(theIconWidget);
+		addChild(theLabelWidget);
+		_myBackground = new CCUIFillDrawable(new CCColor(0,0));
 	}
 	
-	public CCUIMenuItem(CCFont<?> theFont, String theText){
-		this();
-		addChild(new CCUIIconWidget(CCEntypoIcon.OFF));
-		addChild(new CCUILabelWidget(theFont, theText));
+	public CCUIMenuItem(CCUIWidgetStyle theStyle, String theText){
+		this(theStyle, new CCUIIconWidget(CCEntypoIcon.OFF), new CCUILabelWidget(theStyle, theText));
 	}
 	
-	public CCUIMenuItem(CCEntypoIcon theIcon, CCFont<?> theFont, String theText){
-		this();
-		addChild(new CCUIIconWidget(theIcon));
-		addChild(new CCUILabelWidget(theFont, theText));
+	public CCUIMenuItem(CCEntypoIcon theIcon, CCUIWidgetStyle theStyle, String theText){
+		this(theStyle, new CCUIIconWidget(theIcon), new CCUILabelWidget(theStyle, theText));
 	}
 	
-	public CCUIMenuItem(CCUICheckBox theCheckBox, CCFont<?> theFont, String theText){
-		this();
-		addChild(theCheckBox);
-		addChild(new CCUILabelWidget(theFont, theText));
+	public CCUIMenuItem(CCUICheckBox theCheckBox, CCUIWidgetStyle theStyle, String theText){
+		this(theStyle,theCheckBox, new CCUILabelWidget(theStyle, theText));
+	}
+	
+	public CCUIFillDrawable background(){
+		return _myBackground;
 	}
 	
 	public CCUICheckBox checkBox(){
@@ -55,7 +60,7 @@ public class CCUIMenuItem extends CCUIHorizontalFlowPane{
 	}
 	
 	public String text(){
-		return ((CCUILabelWidget)_myChildren.get(1)).text().text();
+		return ((CCUILabelWidget)_myChildren.get(1)).textField().text();
 	}
 
 	public void toolTipText(String theToolTip) {
@@ -64,5 +69,21 @@ public class CCUIMenuItem extends CCUIHorizontalFlowPane{
 	
 	public String toolTip(){
 		return _myToolTip;
+	}
+	
+	@Override
+	public void drawContent(CCGraphics g) {
+		if(_myBackground != null)_myBackground.draw(g, this);
+		if(_myStyle.border() != null)_myStyle.border().draw(g, this);
+		if(_myStyle.foreground() != null)_myStyle.foreground().draw(g, this);
+		
+		if(_myChildren == null) return;
+		for(CCUIWidget myChild:_myChildren) {
+			g.pushMatrix();
+			g.applyMatrix(myChild.localTransform());
+			if(_myStyle.border() != null)_myStyle.border().draw(g, myChild);
+			if(_myStyle.foreground() != null)_myStyle.foreground().draw(g, myChild);
+			g.popMatrix();
+		}
 	}
 }
