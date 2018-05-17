@@ -29,10 +29,9 @@ import cc.creativecomputing.image.format.CCImageFormat;
 import cc.creativecomputing.image.format.CCImageIOFormat;
 import cc.creativecomputing.image.format.CCKTXFormat;
 import cc.creativecomputing.image.format.CCPNGFormat;
-import cc.creativecomputing.image.format.CCPNGFormat;
 import cc.creativecomputing.image.format.CCSGIFormat;
+import cc.creativecomputing.image.format.CCSTBFormat;
 import cc.creativecomputing.image.format.CCTGAFormat;
-import cc.creativecomputing.io.CCIOUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.CCWriteMode;
 
@@ -281,7 +280,7 @@ public class CCImageIO {
 	 */
 	public static CCImage newImage(final URL theUrl, String theFileSuffix){
 		if (theFileSuffix == null) {
-			theFileSuffix = CCIOUtil.fileExtension(theUrl.getPath());
+			theFileSuffix = CCNIOUtil.fileExtension(theUrl.getPath());
 		}
 		return newImageImpl(theUrl, null, null, theFileSuffix);
 	}
@@ -484,6 +483,7 @@ public class CCImageIO {
 	}
 	
 	public static CCImageFormat IMAGE_IO_FORMAT = new CCImageIOFormat();
+	public static CCImageFormat STB_FORMAT = new CCSTBFormat();
 	public static CCImageFormat DDS_FORMAT = new CCDDSFormat();
 	public static CCImageFormat SGI_FORMAT = new CCSGIFormat();
 	public static CCImageFormat TGA_FORMAT = new CCTGAFormat();
@@ -493,15 +493,21 @@ public class CCImageIO {
 	static {
 		
 		// ImageIO provider, the fall-back, must be the first one added
-		addImageFormat("jpg", IMAGE_IO_FORMAT);
-		addImageFormat("jpeg", IMAGE_IO_FORMAT);
-		addImageFormat("gif", IMAGE_IO_FORMAT);
+		addImageFormat("jpg", STB_FORMAT);
+		addImageFormat("jpeg", STB_FORMAT);
+		addImageFormat("gif", STB_FORMAT);
+		addImageFormat("bmp", STB_FORMAT);
+		addImageFormat("tga", STB_FORMAT);
+		addImageFormat("psd", STB_FORMAT);
+		addImageFormat("hdr", STB_FORMAT);
+		addImageFormat("pic", STB_FORMAT);
+		addImageFormat("pnm", STB_FORMAT);
 
 		// Other special-case providers
-		addImageFormat("png", IMAGE_IO_FORMAT);
+		addImageFormat("png", STB_FORMAT);
 		addImageFormat("dds", DDS_FORMAT);
 		addImageFormat("sgi", SGI_FORMAT);
-		addImageFormat("tga", TGA_FORMAT);
+//		addImageFormat("tga", TGA_FORMAT);
 		addImageFormat("ktx", KTX_FORMAT);
 	}
 
@@ -573,7 +579,7 @@ public class CCImageIO {
 		}
 		
 		if (theFileSuffix == null) {
-			theFileSuffix = CCIOUtil.fileExtension(theURL.getPath());
+			theFileSuffix = CCNIOUtil.fileExtension(theURL.getPath());
 		}
 
 		theFileSuffix = toLowerCase(theFileSuffix);
@@ -626,4 +632,6 @@ public class CCImageIO {
 		
 		return myImage;
 	}
+	
+	
 }

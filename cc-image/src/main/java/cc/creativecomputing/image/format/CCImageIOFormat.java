@@ -10,12 +10,15 @@
  */
 package cc.creativecomputing.image.format;
 
+import static org.lwjgl.stb.STBImage.stbi_load;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -152,8 +155,14 @@ public class CCImageIOFormat implements CCImageFormat {
 		}
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(ImageIO.getUseCache());
+	public static void main(String[] args) throws IOException {
+		long time = System.nanoTime();
+		for(int i = 0; i < 100;i++){
+			ImageIO.read(Files.newInputStream(CCNIOUtil.dataPath("waltz.jpg")));
+		
+		}
+		time = System.nanoTime() - time;
+		CCLog.info(time / 10e9d);
 	}
 	
 	@Override
