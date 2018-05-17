@@ -79,11 +79,11 @@ public class CCGPUAnchoredSprings extends CCGPUForce {
 		_myGraphics.popAttribute();
 		_myAnchorPositionBuffer.endDraw();
 		
-		_mySpringConstantParameter = parameter("springConstant");
-		_myDampingParameter = parameter("springDamping");
-		_myRestLengthParameter = parameter("restLength");
+		_mySpringConstantParameter = parameteri("springConstant");
+		_myDampingParameter = parameteri("springDamping");
+		_myRestLengthParameter = parameteri("restLength");
 		
-		_myAnchorPositionTextureParameter = parameter("anchorPositionTexture");
+		_myAnchorPositionTextureParameter = parameteri("anchorPositionTexture");
 		
 		springDamping(_myDamping);
 		springConstant(_mySpringConstant);

@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
@@ -395,7 +396,7 @@ public class CCParticles{
 		_myStaticPositionTexture = theStaticPositions;
 	}
 	
-	public void update(final CCAnimator theAnimator){
+	public void update(final CCGLTimer theAnimator){
 		if(theAnimator.deltaTime() <= 0)return;
 		
 		for(CCParticleEmitter myEmitter:_myEmitter) {

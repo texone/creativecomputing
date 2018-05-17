@@ -15,6 +15,7 @@ import java.util.List;
 
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCVBOMesh;
@@ -47,7 +48,7 @@ public abstract class CCParticleRenderer {
 	
 	public abstract void setup(CCParticles theParticles);
 
-	public abstract void update(final CCAnimator theAnimator);
+	public abstract void update(final CCGLTimer theAnimator);
 	
 	public void updateData(CCGraphics g){
 		_myEnvelopeData.beginDraw(g);

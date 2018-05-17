@@ -13,6 +13,7 @@ package cc.creativecomputing.simulation.particles.impulses;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.simulation.particles.CCGLProgramInterface;
 import cc.creativecomputing.simulation.particles.CCParticlesUpdateShader;
 
@@ -60,7 +61,7 @@ public abstract class CCImpulse extends CCGLProgramInterface{
 		return _myTrigger;
 	}
 	
-	public void update(final CCAnimator theAnimator) {
+	public void update(final CCGLTimer theAnimator) {
 		
 	}
 }

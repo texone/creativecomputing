@@ -10,7 +10,7 @@
  */
 package cc.creativecomputing.simulation.particles;
 
-import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 
 public interface CCParticleEmitter {
@@ -19,6 +19,6 @@ public interface CCParticleEmitter {
 	
 	void reset();
 
-	void update(CCAnimator theAnimator);
+	void update(CCGLTimer theAnimator);
 	
 }

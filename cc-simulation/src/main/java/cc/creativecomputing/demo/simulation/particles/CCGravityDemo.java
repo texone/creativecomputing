@@ -3,28 +3,30 @@ package cc.creativecomputing.demo.simulation.particles;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCGravity;
 
-public class CCGravityDemo extends CCGL2Adapter {
+public class CCGravityDemo extends CCGLApp {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
 	private CCParticlesIndexParticleEmitter _myEmitter;
 
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		final List<CCForce> myForces = new ArrayList<>();
 		myForces.add(new CCGravity(new CCVector3(0,-1,0)));
 		
@@ -34,15 +36,16 @@ public class CCGravityDemo extends CCGL2Adapter {
 	}
 
 	@Override
-	public void update(CCAnimator theAnimator) {
-		for(int i = 0; i < 800; i++){
+	public void update(CCGLTimer theTimer) {
+		for(int i = 0; i < 8; i++){
 			_myEmitter.emit(
-				new CCVector3(CCMath.random(-100,100), 100,CCMath.random(-100,100)),
+				new CCVector3(CCMath.random(-400,400), CCMath.random(-400,400), 100),
 				new CCVector3(0,00,0),
 				10, false
 			);
 		}
-		_myParticles.update(theAnimator);
+		_myParticles.update(theTimer);
+		angle += theTimer.deltaTime() * 10;
 	}
 	
 	double angle = 0;
@@ -50,7 +53,6 @@ public class CCGravityDemo extends CCGL2Adapter {
 	@Override
 	public void display(CCGraphics g) {
 		_myParticles.animate(g);
-		
 		g.noDepthTest();
 		g.clear();
 		g.color(255);
@@ -72,10 +74,8 @@ public class CCGravityDemo extends CCGL2Adapter {
 
 		CCGravityDemo demo = new CCGravityDemo();
 
-		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(1200, 600);
-		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
-		myAppManager.start();
+		CCGLApplicationManager myAppManager = new CCGLApplicationManager(demo);
+		CCControlApp _myControls = new CCControlApp(myAppManager, demo);
+		myAppManager.run();
 	}
 }

@@ -17,6 +17,7 @@ import java.util.List;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
@@ -60,7 +61,7 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 		private int _myCurrentWorkedIndex = 0;
 		private List<CCParticle> _myCurrentWaitList = null;
 		
-		private void handleCurrentWaitList(CCAnimator theAnimator){
+		private void handleCurrentWaitList(CCGLTimer theAnimator){
 			if(_myCurrentWaitList == null)return;
 
 			double myFramesPerStep = _myTimeStep / theAnimator.deltaTime();
@@ -77,7 +78,7 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 			}
 		}
 		
-		public void update(CCAnimator theAnimator) {
+		public void update(CCGLTimer theAnimator) {
 			_myStepTime += theAnimator.deltaTime();
 			
 			handleCurrentWaitList(theAnimator);
@@ -350,7 +351,7 @@ public class CCParticlesIndexParticleEmitter implements CCParticleEmitter{
 		return emit(CCColor.WHITE, thePosition, theVelocity, theLifeTime);
 	}
 	
-	public void update(final CCAnimator theAnimator) {
+	public void update(final CCGLTimer theAnimator) {
 		if(_cTrackFreeParticles){
 			_myParticleWaitingList.update(theAnimator);
 			_myFreeParticles = freeParticles();

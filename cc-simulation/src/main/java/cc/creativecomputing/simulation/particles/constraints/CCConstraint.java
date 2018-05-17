@@ -12,6 +12,7 @@ package cc.creativecomputing.simulation.particles.constraints;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.simulation.particles.CCGLProgramInterface;
 import cc.creativecomputing.simulation.particles.CCParticlesUpdateShader;
@@ -59,7 +60,7 @@ public abstract class CCConstraint extends CCGLProgramInterface {
 	
 	public void setSize(CCGraphics theG, int theWidth, int theHeight) {}
 	
-	public void update(final CCAnimator theAnimator) {}
+	public void update(final CCGLTimer theAnimator) {}
 	
 	public void reset() {}
 	
