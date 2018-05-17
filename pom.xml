@@ -29,28 +29,28 @@
     <properties>
         <lwjgl.version>3.1.6</lwjgl.version>
     </properties>
+	
     
     <modules>
         <module>cc-app</module>
         <module>cc-artnet</module>
         <module>cc-control</module>
-        <module>cc-control-ui</module>
         <module>cc-core</module>
         <module>cc-effectables</module>
         <module>cc-geometry</module>
-        <module>cc-gl2</module>
         <module>cc-image</module>
         <module>cc-ies</module>
         <module>cc-io</module>
-        <module>cc-kle</module>
         <module>cc-math</module>
         <module>cc-midi</module>
         <module>cc-minim</module>
         <module>cc-modbus</module>
         <module>cc-model</module>
         <module>cc-net</module>
-        <module>cc-p5</module>
         <module>cc-serial</module>
+        <module>cc-gl2</module>
+        <module>cc-control-ui</module>
+        <module>cc-kle</module>
         <module>cc-simulation</module>
         <module>cc-ui</module>
         <module>cc-video</module>
@@ -129,12 +129,14 @@
                         <tagNameFormat>v@{project.version}</tagNameFormat>
                     </configuration>
                 </plugin>
+				
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.14</version>
                     <configuration>
                         <argLine>-Xmx512m</argLine>
+						<skipTests>true</skipTests>
                     </configuration>
                 </plugin>
             </plugins>
@@ -205,126 +207,71 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
-    <profiles>
-        <!-- profile activated by build machine os -->
-        <profile>
-            <id>linux32.native</id>
-            <activation>
-                <os>
-                    <family>linux</family>
-                    <arch>x86</arch>
-                </os>
-            </activation>
-            <properties>
-                <NATIVE_LIB_CLASSIFIER>linux-i586</NATIVE_LIB_CLASSIFIER>
-            </properties>
-        </profile>
-        <profile>
-            <id>linux64.native</id>
-            <activation>
-                <os>
-                    <family>linux</family>
-                    <arch>amd64</arch>
-                </os>
-            </activation>
-            <properties>
-                <NATIVE_LIB_CLASSIFIER>linux-amd64</NATIVE_LIB_CLASSIFIER>
-            </properties>
-        </profile>
-        <profile>
-            <id>macosx.native</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                </os>
-            </activation>
-            <properties>
-                <NATIVE_LIB_CLASSIFIER>macosx-universal</NATIVE_LIB_CLASSIFIER>
-            </properties>
-        </profile>
-        <profile>
-            <id>win32.native</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                    <arch>x86</arch>
-                </os>
-            </activation>
-            <properties>
-                <NATIVE_LIB_CLASSIFIER>windows-i586</NATIVE_LIB_CLASSIFIER>
-            </properties>
-        </profile>
-        <profile>
-            <id>win64.native</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
-            <properties>
-                <NATIVE_LIB_CLASSIFIER>windows-amd64</NATIVE_LIB_CLASSIFIER>
-            </properties>
-        </profile>
+	
+	<profiles>
+		<profile>
+			<id>lwjgl-natives-linux></id>
+			<activation>
+				<os><family>unix</family></os>
+			</activation>
+			<properties>
+				<lwjgl.natives>natives-linux</lwjgl.natives>
+			</properties>
+		</profile>
+		<profile>
+			<id>lwjgl-natives-macos></id>
+			<activation>
+				<os><family>mac</family></os>
+			</activation>
+			<properties>
+				<lwjgl.natives>natives-macos</lwjgl.natives>
+			</properties>
+		</profile>
+		<profile>
+			<id>lwjgl-natives-windows></id>
+			<activation>
+				<os><family>windows</family></os>
+			</activation>
+			<properties>
+				<lwjgl.natives>natives-windows</lwjgl.natives>
+			</properties>
+		</profile>
+	
         <!-- override profile if -Dbuild.platform is set -->
         <profile>
-            <id>linux32</id>
+            <id>lwjgl-natives-linux.manual</id>
             <activation>
                 <property>
                     <name>build.platform</name>
-                    <value>linux32</value>
+                    <value>unix</value>
                 </property>
             </activation>
             <properties>
-                <NATIVE_LIB_CLASSIFIER>linux-i586</NATIVE_LIB_CLASSIFIER>
+				<lwjgl.natives>natives-linux</lwjgl.natives>
             </properties>
         </profile>
         <profile>
-            <id>linux64</id>
+            <id>lwjgl-natives-macos.manual</id>
             <activation>
                 <property>
                     <name>build.platform</name>
-                    <value>linux64</value>
+                    <value>mac</value>
                 </property>
             </activation>
             <properties>
-                <NATIVE_LIB_CLASSIFIER>linux-amd64</NATIVE_LIB_CLASSIFIER>
+				<lwjgl.natives>natives-macos</lwjgl.natives>
             </properties>
         </profile>
         <profile>
-            <id>MacOSX</id>
+            <id>lwjgl-natives-windows.manual</id>
             <activation>
                 <property>
                     <name>build.platform</name>
-                    <value>macosx</value>
+                    <value>windows</value>
                 </property>
             </activation>
             <properties>
-                <NATIVE_LIB_CLASSIFIER>macosx-universal</NATIVE_LIB_CLASSIFIER>
-            </properties>
-        </profile>
-        <profile>
-            <id>win32</id>
-            <activation>
-                <property>
-                    <name>build.platform</name>
-                    <value>win32</value>
-                </property>
-            </activation>
-            <properties>
-                <NATIVE_LIB_CLASSIFIER>windows-i586</NATIVE_LIB_CLASSIFIER>
-            </properties>
-        </profile>
-        <profile>
-            <id>win64</id>
-            <activation>
-                <property>
-                    <name>build.platform</name>
-                    <value>win64</value>
-                </property>
-            </activation>
-            <properties>
-                <NATIVE_LIB_CLASSIFIER>windows-amd64</NATIVE_LIB_CLASSIFIER>
+				<lwjgl.natives>natives-windows</lwjgl.natives>
             </properties>
         </profile>
     </profiles>
@@ -337,11 +284,5 @@
         </dependency>
     </dependencies>
 
-    <repositories>
-      <repository>
-        <id>jogamp</id>
-        <url>http://jogamp.org/deployment/maven</url>
-      </repository>
-    </repositories>  
     
 </project>
