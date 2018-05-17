@@ -74,7 +74,7 @@ public class CCNurbSpline extends CCSpline{
 		
 		for (int i = 0; i < controlPoints.size(); ++i) {
 			CCVector4 controlPoint = controlPoints.get(i);
-			_myPoints.add(new CCVector3(controlPoint.x,controlPoint.y, controlPoint.z));
+			add(new CCVector3(controlPoint.x,controlPoint.y, controlPoint.z));
 			_myWeights[i] = controlPoint.w;
 		}
 		prepareNurbsKnots(_myKnots, _myBasisFunctionDegree);
@@ -145,14 +145,14 @@ public class CCNurbSpline extends CCSpline{
 
 	@Override
 	public CCVector3 interpolate(double value, int currentControlPoint) {
-		int controlPointAmount = _myPoints.size();
+		int controlPointAmount = size();
 
 		CCVector3 store = new CCVector3();
 		double delimeter = 0;
 		
 		for (int i = 0; i < controlPointAmount; ++i) {
 			double val = _myWeights[i] * computeBaseFunctionValue(i, _myBasisFunctionDegree, value, _myKnots);
-			store.addLocal(_myPoints.get(i).multiply(val));
+			store.addLocal(get(i).multiply(val));
 			delimeter += val;
 		}
 		return store.multiplyLocal(1f/ delimeter);

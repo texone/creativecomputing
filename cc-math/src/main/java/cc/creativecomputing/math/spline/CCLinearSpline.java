@@ -18,6 +18,11 @@ import cc.creativecomputing.math.CCVector3;
 
 public class CCLinearSpline extends CCSpline{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5216877679851991488L;
+	
 	private List<CCLine3> _myLines = new ArrayList<CCLine3>();
 	
 	public CCLinearSpline(boolean theIsClosed) {
@@ -35,9 +40,9 @@ public class CCLinearSpline extends CCSpline{
 	@Override
 	public void computeTotalLengthImpl() {
 		_myLines.clear();
-		if (_myPoints.size() > 1) {
-			for (int i = 0; i < _myPoints.size() - 1; i++) {
-				CCLine3 myLine = new CCLine3(_myPoints.get(i), _myPoints.get(i + 1));
+		if (size() > 1) {
+			for (int i = 0; i < size() - 1; i++) {
+				CCLine3 myLine = new CCLine3(get(i), get(i + 1));
 				double myLength = myLine.length();
 				_mySegmentsLength.add(myLength);
 				_myTotalLength += myLength;
@@ -50,8 +55,8 @@ public class CCLinearSpline extends CCSpline{
 	public CCVector3 interpolate(double value, int currentControlPoint) {
 		endEditSpline();
 		return CCVector3.blend( 
-			_myPoints.get(currentControlPoint), 
-			_myPoints.get(currentControlPoint + 1),
+			get(currentControlPoint), 
+			get(currentControlPoint + 1),
 			value
 		);
 	}

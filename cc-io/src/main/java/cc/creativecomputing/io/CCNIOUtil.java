@@ -322,9 +322,12 @@ public class CCNIOUtil {
 	public static String fileExtension(final Path thePath) {
 		if(thePath == null)return null;
 		if(thePath.getFileName() == null)return null;
-		String myPathString = thePath.getFileName().toString();
-		if(myPathString.lastIndexOf(".") < 0)return null;
-		return myPathString.substring(myPathString.lastIndexOf(".") + 1 , myPathString.length());
+		return fileExtension(thePath.getFileName().toString());
+	}
+	
+	public static String fileExtension(String thePath){
+		if(thePath.lastIndexOf(".") < 0)return null;
+		return thePath.substring(thePath.lastIndexOf(".") + 1 , thePath.length());
 	}
 	
 	public static Path addExtension(Path thePath, String theExtension){

@@ -310,7 +310,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 					float myX = CCMath.map(j, 0, 9, -g.width()/2, g.width()/2);
 					double mySecs = CCMath.map(j, 0, 10, 0, _cTimeScale) + _cTimeOffset;
 					g.line(myX,  -g.height()/2, myX, g.height());
-					g.text(mySecs, myX, 0);
+//					g.text(mySecs, myX, 0);
 				}
 			}
 			g.popAttribute();
@@ -349,7 +349,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 					float myX = CCMath.map(j, 0, 9, -g.width()/2, g.width()/2);
 					double mySecs = CCMath.map(j, 0, 10, 0, _cTimeScale) + _cTimeOffset;
 					g.line(myX,  -g.height()/2, myX, g.height());
-					g.text(mySecs, myX, 0);
+//					g.text(mySecs, myX, 0);
 				}
 			}
 			g.popAttribute();
@@ -388,7 +388,7 @@ public class CCKleAnalyzer extends CCMotionHistoryRenderer{
 					float myX = CCMath.map(j, 0, 9, -g.width()/2, g.width()/2);
 					double mySecs = CCMath.map(j, 0, 10, 0, _cTimeScale) + _cTimeOffset;
 					g.line(myX,  -g.height()/2, myX, g.height());
-					g.text(mySecs, myX, 0);
+//					g.text(mySecs, myX, 0);
 				}
 			}
 			g.popAttribute();

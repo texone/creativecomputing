@@ -14,11 +14,13 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
+
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * This class contains several utility function for java nio buffer objects.
@@ -35,54 +37,38 @@ public class CCBufferUtil {
 	public static final int SIZE_OF_INT = 4;
 	public static final int SIZE_OF_LONG = 8;
 
-	/**
-	 * Creates a FloatBuffer of the given size
-	 * 
-	 * @param theSize
-	 *            size for the buffer
-	 * @return FloatBuffer of the given size
-	 */
-	public static DoubleBuffer newDoubleBuffer(final int theSize) {
-		return DoubleBuffer.allocate(theSize);
-	}
-
 	public static DoubleBuffer newDirectDoubleBuffer(final int theSize) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theSize * SIZE_OF_DOUBLE);
-		myBuffer.order(ByteOrder.nativeOrder());
-		return myBuffer.asDoubleBuffer();
+		return MemoryUtil.memAllocDouble(theSize);
 	}
 
 	public static DoubleBuffer newDirectDoubleBuffer(final double[] theData) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theData.length * SIZE_OF_DOUBLE);
-		myBuffer.order(ByteOrder.nativeOrder());
-		myBuffer.asDoubleBuffer().put(theData);
-		myBuffer.rewind();
-		return myBuffer.asDoubleBuffer();
+		DoubleBuffer myResult = newDirectDoubleBuffer(theData.length);
+		myResult.put(theData, 0, theData.length);
+		return myResult;
 	}
 
 	/**
-	 * Creates a FloatBuffer of the given size
+	 * Fills the given FloatBuffer with the given default value
 	 * 
-	 * @param theSize
-	 *            size for the buffer
-	 * @return FloatBuffer of the given size
+	 * @param theBuffer
+	 *            buffer to be filled
+	 * @param theValue
+	 *            value for the buffer
 	 */
-	public static FloatBuffer newFloatBuffer(final int theSize) {
-		return FloatBuffer.allocate(theSize);
+	public static void fill(DoubleBuffer theBuffer, double theValue) {
+		for (int i = 0; i < theBuffer.limit(); i++) {
+			theBuffer.put(i, theValue);
+		}
 	}
 
 	public static FloatBuffer newDirectFloatBuffer(final int theSize) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theSize * SIZE_OF_FLOAT);
-		myBuffer.order(ByteOrder.nativeOrder());
-		return myBuffer.asFloatBuffer();
+		return MemoryUtil.memAllocFloat(theSize);
 	}
 
 	public static FloatBuffer newDirectFloatBuffer(final float[] theData) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theData.length * SIZE_OF_FLOAT);
-		myBuffer.order(ByteOrder.nativeOrder());
-		myBuffer.asFloatBuffer().put(theData);
-		myBuffer.rewind();
-		return myBuffer.asFloatBuffer();
+		FloatBuffer myResult = newDirectFloatBuffer(theData.length);
+		myResult.put(theData, 0, theData.length);
+		return myResult;
 	}
 
 	/**
@@ -94,33 +80,19 @@ public class CCBufferUtil {
 	 *            value for the buffer
 	 */
 	public static void fill(FloatBuffer theBuffer, float theValue) {
-		theBuffer.rewind();
 		for (int i = 0; i < theBuffer.limit(); i++) {
-			theBuffer.put(theValue);
+			theBuffer.put(i, theValue);
 		}
-		theBuffer.rewind();
-	}
-
-	/**
-	 * @param theLength
-	 * @return
-	 */
-	public static ByteBuffer newByteBuffer(int theSize) {
-		return ByteBuffer.allocate(theSize);
 	}
 
 	public static ByteBuffer newDirectByteBuffer(final int theSize) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theSize * SIZE_OF_BYTE);
-		myBuffer.order(ByteOrder.nativeOrder());
-		return myBuffer;
+		return MemoryUtil.memAlloc(theSize);
 	}
-	
+
 	public static ByteBuffer newDirectByteBuffer(final byte[] theData) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theData.length * SIZE_OF_BYTE);
-		myBuffer.order(ByteOrder.nativeOrder());
-		myBuffer.put(theData);
-		myBuffer.rewind();
-		return myBuffer;
+		ByteBuffer myResult = newDirectByteBuffer(theData.length);
+		myResult.put(theData, 0, theData.length);
+		return myResult;
 	}
 
 	/**
@@ -132,11 +104,9 @@ public class CCBufferUtil {
 	 *            value for the buffer
 	 */
 	public static void fill(ByteBuffer theBuffer, byte theValue) {
-		theBuffer.rewind();
 		for (int i = 0; i < theBuffer.limit(); i++) {
-			theBuffer.put(theValue);
+			theBuffer.put(i, theValue);
 		}
-		theBuffer.rewind();
 	}
 
 	/**
@@ -146,22 +116,14 @@ public class CCBufferUtil {
 	 *            size for the buffer
 	 * @return ShortBuffer of the given size
 	 */
-	public static ShortBuffer newShortBuffer(final int theSize) {
-		return ShortBuffer.allocate(theSize);
-	}
-
 	public static ShortBuffer newDirectShortBuffer(final int theSize) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theSize * SIZE_OF_SHORT);
-		myBuffer.order(ByteOrder.nativeOrder());
-		return myBuffer.asShortBuffer();
+		return MemoryUtil.memAllocShort(theSize);
 	}
 
 	public static ShortBuffer newDirectShortBuffer(final short[] theData) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theData.length * SIZE_OF_SHORT);
-		myBuffer.order(ByteOrder.nativeOrder());
-		myBuffer.asShortBuffer().put(theData);
-		myBuffer.rewind();
-		return myBuffer.asShortBuffer();
+		ShortBuffer myResult = newDirectShortBuffer(theData.length);
+		myResult.put(theData, 0, theData.length);
+		return myResult;
 	}
 
 	/**
@@ -173,33 +135,23 @@ public class CCBufferUtil {
 	 *            value for the buffer
 	 */
 	public static void fill(ShortBuffer theBuffer, short theValue) {
-		theBuffer.rewind();
 		for (int i = 0; i < theBuffer.limit(); i++) {
-			theBuffer.put(theValue);
+			theBuffer.put(i, theValue);
 		}
-		theBuffer.rewind();
 	}
 
 	/**
 	 * @param theI
 	 * @return
 	 */
-	public static IntBuffer newIntBuffer(int theSize) {
-		return IntBuffer.allocate(theSize);
-	}
-
 	public static IntBuffer newDirectIntBuffer(final int theSize) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theSize * SIZE_OF_INT);
-		myBuffer.order(ByteOrder.nativeOrder());
-		return myBuffer.asIntBuffer();
+		return MemoryUtil.memAllocInt(theSize);
 	}
 
 	public static IntBuffer newDirectIntBuffer(final int[] theData) {
-		ByteBuffer myBuffer = ByteBuffer.allocateDirect(theData.length * SIZE_OF_INT);
-		myBuffer.order(ByteOrder.nativeOrder());
-		myBuffer.asIntBuffer().put(theData);
-		myBuffer.rewind();
-		return myBuffer.asIntBuffer();
+		IntBuffer myResult = newDirectIntBuffer(theData.length);
+		myResult.put(theData, 0, theData.length);
+		return myResult;
 	}
 
 	/**
@@ -211,11 +163,37 @@ public class CCBufferUtil {
 	 *            value for the buffer
 	 */
 	public static void fill(IntBuffer theBuffer, int theValue) {
-		theBuffer.rewind();
 		for (int i = 0; i < theBuffer.limit(); i++) {
-			theBuffer.put(theValue);
+			theBuffer.put(i, theValue);
 		}
-		theBuffer.rewind();
+	}
+	
+	/**
+	 * @param theI
+	 * @return
+	 */
+	public static LongBuffer newDirectLongBuffer(final int theSize) {
+		return MemoryUtil.memAllocLong(theSize);
+	}
+
+	public static LongBuffer newDirectLongBuffer(final long[] theData) {
+		LongBuffer myResult = newDirectLongBuffer(theData.length);
+		myResult.put(theData, 0, theData.length);
+		return myResult;
+	}
+
+	/**
+	 * Fills the given IntBuffer with the given default value
+	 * 
+	 * @param theBuffer
+	 *            buffer to be filled
+	 * @param theValue
+	 *            value for the buffer
+	 */
+	public static void fill(LongBuffer theBuffer, long theValue) {
+		for (int i = 0; i < theBuffer.limit(); i++) {
+			theBuffer.put(i, theValue);
+		}
 	}
 
 	private static class BytesRead {

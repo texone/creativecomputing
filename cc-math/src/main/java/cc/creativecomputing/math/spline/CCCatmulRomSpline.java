@@ -49,13 +49,13 @@ public class CCCatmulRomSpline extends CCSpline {
 
 		_myIsModified = true;
 		
-		if(_myPoints.size() < 2)return;
+		if(size() < 2)return;
 		
-		_myPoints.remove(0);
-		_myPoints.remove(_myPoints.size() - 1);
+		remove(0);
+		remove(size() - 1);
 		
 		if (_myIsClosed) {
-			_myPoints.remove(_myPoints.size() - 1);
+			remove(size() - 1);
 		}
 	}
 	
@@ -65,14 +65,14 @@ public class CCCatmulRomSpline extends CCSpline {
 		
 		_myIsModified = false;
 		
-		if(_myPoints.size() < 2)return;
+		if(size() < 2)return;
 		if (_myIsClosed) {
-			_myPoints.add(0,_myPoints.get(_myPoints.size() - 1));
-			_myPoints.add(_myPoints.get(1));
-			_myPoints.add(_myPoints.get(2));
+			add(0,get(size() - 1));
+			add(get(1));
+			add(get(2));
 		}else{
-			_myPoints.add(0,_myPoints.get(0));
-			_myPoints.add(_myPoints.get(_myPoints.size() - 1));
+			add(0,get(0));
+			add(get(size() - 1));
 		}
 		computeTotalLentgh();
 	}
@@ -135,13 +135,13 @@ public class CCCatmulRomSpline extends CCSpline {
 	 * This method computes the Catmull Rom curve length.
 	 */
 	protected void computeTotalLengthImpl() {
-		if (_myPoints.size() > 3) {
-			for (int i = 0; i < _myPoints.size() - 3; i++) {
+		if (size() > 3) {
+			for (int i = 0; i < size() - 3; i++) {
 				double l = catmullRomLength(
-					_myPoints.get(i),
-					_myPoints.get(i + 1), 
-					_myPoints.get(i + 2),
-					_myPoints.get(i + 3), 
+					get(i),
+					get(i + 1), 
+					get(i + 2),
+					get(i + 3), 
 					_myCurveTension
 				);
 				_mySegmentsLength.add(l);
@@ -153,12 +153,12 @@ public class CCCatmulRomSpline extends CCSpline {
 	@Override
 	public CCVector3 interpolate(double value, int currentControlPoint) {
 		endEditSpline();
-		if(currentControlPoint + 3 >= _myPoints.size())return _myPoints.get(currentControlPoint);
+		if(currentControlPoint + 3 >= size())return get(currentControlPoint);
 		return CCVector3.catmulRomPoint(
-			_myPoints.get(currentControlPoint), 
-			_myPoints.get(currentControlPoint + 1), 
-			_myPoints.get(currentControlPoint + 2), 
-			_myPoints.get(currentControlPoint + 3), 
+			get(currentControlPoint), 
+			get(currentControlPoint + 1), 
+			get(currentControlPoint + 2), 
+			get(currentControlPoint + 3), 
 			value, _myCurveTension
 		);
 		
@@ -168,10 +168,10 @@ public class CCCatmulRomSpline extends CCSpline {
 //	public CCVector3 interpolate(double value, int currentControlPoint) {
 //		endEditSpline();
 //		return cubicInterpolate(
-//			_myPoints.get(currentControlPoint), 
-//			_myPoints.get(currentControlPoint + 1), 
-//			_myPoints.get(currentControlPoint + 2), 
-//			_myPoints.get(currentControlPoint + 3), 
+//			get(currentControlPoint), 
+//			get(currentControlPoint + 1), 
+//			get(currentControlPoint + 2), 
+//			get(currentControlPoint + 3), 
 //			value, _myCurveTension
 //		);
 //		
@@ -188,7 +188,7 @@ public class CCCatmulRomSpline extends CCSpline {
 //     }
 	
 	public CCVector3 closestPoint(CCVector3 theClosestPoint, int theStart, int theEnd){
-		if (_myPoints.size() < 4) return null;
+		if (size() < 4) return null;
 		
 		if(theStart > theEnd){
 			int myTemp = theStart;
@@ -216,7 +216,7 @@ public class CCCatmulRomSpline extends CCSpline {
 	
 	@Override
 	public CCVector3 closestPoint(CCVector3 theClosestPoint){
-		return closestPoint(theClosestPoint, 0, _myPoints.size() - 3);
+		return closestPoint(theClosestPoint, 0, size() - 3);
 	}
 	
 	/**
@@ -241,10 +241,9 @@ public class CCCatmulRomSpline extends CCSpline {
 	
 	
 	
-	@Override
 	public List<CCVector3> points() {
-		if(_myPoints.size() < 2)return _myPoints;
-		return _myPoints.subList(1, _myPoints.size() - 1);
+		if(size() < 2)return this;
+		return subList(1, size() - 1);
 	}
 	
 	/**
@@ -255,6 +254,6 @@ public class CCCatmulRomSpline extends CCSpline {
 	 * @return all vertices used to draw the curve
 	 */
 	public List<CCVector3> curvePoints(){
-		return _myPoints;
+		return this;
 	}
 }

@@ -1223,7 +1223,6 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 	 */
 	public FloatBuffer toFloatBuffer(final FloatBuffer theStore, final boolean theRowMajor) {
 		theStore.put(toArray(_myFloatBufferContainer, theRowMajor));
-		theStore.rewind();
 		return theStore;
 	}
 

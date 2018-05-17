@@ -25,6 +25,11 @@ import cc.creativecomputing.math.CCVector3;
  */
 public abstract class CCSpline extends ArrayList<CCVector3>{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3640611551655330160L;
+	
 	protected boolean _myIsClosed;
 	protected List<Double> _mySegmentsLength;
 
@@ -267,7 +272,7 @@ public abstract class CCSpline extends ArrayList<CCVector3>{
 	 * Removes all points from the spline
 	 */
 	public void clear(){
-		clear();
+		super.clear();
 		if(_mySegmentsLength != null)_mySegmentsLength.clear();
 		_myTotalLength = 0;
 	}

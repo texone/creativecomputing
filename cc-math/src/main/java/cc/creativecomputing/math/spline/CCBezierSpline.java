@@ -88,15 +88,15 @@ public class CCBezierSpline extends CCSpline {
 	
 	@Override
 	public void addPoint (CCVector3 theControlPoint) {
-		if(_myPoints.size() == 0){
-			_myPoints.add(theControlPoint);
+		if(size() == 0){
+			add(theControlPoint);
 			return;
 		}
 
-		CCVector3 myLastPoint = _myPoints.get(_myPoints.size() - 1);
-		_myPoints.add(myLastPoint.blend(theControlPoint, 0.25));
-		_myPoints.add(myLastPoint.blend(theControlPoint, 0.75));
-		_myPoints.add(theControlPoint);
+		CCVector3 myLastPoint = get(size() - 1);
+		add(myLastPoint.blend(theControlPoint, 0.25));
+		add(myLastPoint.blend(theControlPoint, 0.75));
+		add(theControlPoint);
 	}
 	
 	/**
@@ -108,17 +108,17 @@ public class CCBezierSpline extends CCSpline {
 	 * @param theControlPoint2 end point of the spline
 	 */
 	public void addControlPoints (CCVector3 theControlPoint1, CCVector3 theControlPoint2) {
-		if(_myPoints.size() > 2){
-			_myPoints.add(
-				_myPoints.get(_myPoints.size() - 1).add(_myPoints.get(_myPoints.size() - 1).subtract (_myPoints.get(_myPoints.size() - 2)))
+		if(size() > 2){
+			add(
+				get(size() - 1).add(get(size() - 1).subtract (get(size() - 2)))
 			);
 		}else{
-			_myPoints.add(theControlPoint2);
+			add(theControlPoint2);
 			return;
 		}
 		
-		_myPoints.add(theControlPoint1);
-		_myPoints.add(theControlPoint2);
+		add(theControlPoint1);
+		add(theControlPoint2);
 	}
 	
 	/**
@@ -131,16 +131,16 @@ public class CCBezierSpline extends CCSpline {
 	 */
 	public void addControlPoints(CCVector3 thePoint1, CCVector3 thePoint2, CCVector3 thePoint3){
 		if(thePoint1 != null){
-			_myPoints.add(thePoint1);
+			add(thePoint1);
 		}else{
-			_myPoints.add(_myPoints.get(_myPoints.size() - 1));
+			add(get(size() - 1));
 		}
 		if(thePoint2 != null){
-			_myPoints.add(thePoint2);
+			add(thePoint2);
 		}else{
-			_myPoints.add(thePoint3);
+			add(thePoint3);
 		}
-		_myPoints.add(thePoint3);
+		add(thePoint3);
 	}
 	
 	/**
@@ -168,13 +168,13 @@ public class CCBezierSpline extends CCSpline {
 	 */
 	@Override
 	public void computeTotalLengthImpl() {
-		if (_myPoints.size() > 1) {
-			for (int i = 0; i < _myPoints.size() - 3; i += 3) {
+		if (size() > 1) {
+			for (int i = 0; i < size() - 3; i += 3) {
 				double l = bezierLength(
-					_myPoints.get(i),
-					_myPoints.get(i + 1), 
-					_myPoints.get(i + 2), 
-					_myPoints.get(i + 3)
+					get(i),
+					get(i + 1), 
+					get(i + 2), 
+					get(i + 3)
 				);
 				_mySegmentsLength.add(l);
 				_myTotalLength += l;
@@ -184,17 +184,13 @@ public class CCBezierSpline extends CCSpline {
 
 	@Override
 	public CCVector3 interpolate(double value, int currentControlPoint) {
-		if(currentControlPoint + 3 >= _myPoints.size())return _myPoints.get(currentControlPoint);
+		if(currentControlPoint + 3 >= size())return get(currentControlPoint);
 		return CCVector3.bezierPoint(
-			_myPoints.get(currentControlPoint), 
-			_myPoints.get(currentControlPoint + 1), 
-			_myPoints.get(currentControlPoint + 2), 
-			_myPoints.get(currentControlPoint + 3), 
+			get(currentControlPoint), 
+			get(currentControlPoint + 1), 
+			get(currentControlPoint + 2), 
+			get(currentControlPoint + 3), 
 			value
 		);
-	}
-	
-	public List<CCVector3> points(){
-		return _myPoints;
 	}
 }

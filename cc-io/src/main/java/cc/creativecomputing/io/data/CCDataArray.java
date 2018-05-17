@@ -59,9 +59,8 @@ public class CCDataArray extends ArrayList<Object> {
 
 		for (Object myObject : theCollection) {
 			if (myObject instanceof CCDataSerializable) {
-				CCDataObject myObjectData = new CCDataObject();
-				((CCDataSerializable) myObject).data(myObjectData);
-				add (myObject);
+				CCDataObject myObjectData = new CCDataObject(((CCDataSerializable) myObject).data());
+				add (myObjectData);
 			}
 			else {
 				add(CCDataUtil.wrap(myObject));
