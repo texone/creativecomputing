@@ -18,12 +18,11 @@ package cc.creativecomputing.controlui;
 
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.core.CCAnimator;
-import cc.creativecomputing.core.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.protocol.midi.CCMidiIn;
 import cc.creativecomputing.protocol.midi.CCMidiTimeCode;
 
-public class CCTimelineSynch implements CCAnimatorListener{
+public class CCTimelineSynch{
 	
 	public enum CCSynchMode{
 		OFF,
@@ -49,7 +48,7 @@ public class CCTimelineSynch implements CCAnimatorListener{
 	
 	public CCTimelineSynch(CCAnimator theAnimator){
 		_myAnimator = theAnimator;
-		_myAnimator.listener().add(this);
+		_myAnimator.updateEvents.add(this::update);
 	}
 	
 //	public CCTimelineSynch(){
@@ -66,21 +65,12 @@ public class CCTimelineSynch implements CCAnimatorListener{
 		return _myAnimator;
 	}
 	
-	
-
-	@Override
-	public void start(CCAnimator theAnimator) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	@CCProperty(name = "bpm", defaultValue = 120)
 	private void bpm(int theBPM){
 		if(theBPM <= 0)return;
 		_myTimeCode.bpm(theBPM);
 	}
 
-	@Override
 	public void update(CCAnimator theAnimator) {
 		if(_myTimeline == null)return;
 		switch(_mySynchMode){
@@ -93,11 +83,5 @@ public class CCTimelineSynch implements CCAnimatorListener{
 		case MASTER:
 			break;
 		}
-	}
-
-	@Override
-	public void stop(CCAnimator theAnimator) {
-		// TODO Auto-generated method stub
-		
 	}
 }

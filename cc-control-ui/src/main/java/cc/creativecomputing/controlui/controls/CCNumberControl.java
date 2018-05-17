@@ -18,18 +18,11 @@ package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.CCUIConstants;
-import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
-import cc.creativecomputing.ui.draw.CCUIFillDrawable;
-import cc.creativecomputing.ui.draw.CCUIRoundedFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUISlider;
 import cc.creativecomputing.ui.widget.CCUIValueBox;
 
 public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHandle<Number>>{
-	
-	private static final int MAX_SLIDER_VALUE = 1000;
 	
 	private double _myMin;
 	private double _myMax;
@@ -51,25 +44,23 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
         //Create the slider.
         _myMin = _myHandle.min().doubleValue();
         _myMax = _myHandle.max().doubleValue();
+
         _myValue = _myHandle.value().doubleValue();
         if(_myHandle.isNumberBox()){
-        		_mySlider = null;
+        	_mySlider = null;
         }else{
 	        _mySlider = new CCUISlider(100,14,_myMin, _myMax,_myValue);
-	        _mySlider.background(new CCUIRoundedFillDrawable(new CCColor(0.3d), 7));
-	        _mySlider.foreground(new CCUIFillDrawable(new CCColor(0.7d)));
-	        _mySlider.verticalAlignment(CCUIVerticalAlignment.CENTER);
 	        _mySlider.changeEvents.add(theE -> {
-	        		value(theE / MAX_SLIDER_VALUE * (_myMax - _myMin) + _myMin, true);
+	        	value(theE , true);
 			});
+	        _mySlider.stretchWidth(true);
         }
         
-        _myValueField = new CCUIValueBox(CCUIConstants.DEFAULT_FONT, _myValue, _myMin, _myMax, theHandle.digits());
-        _myValueField.background(new CCUIFillDrawable(new CCColor(0.3d)));
+        _myValueField = new CCUIValueBox(_myValue, _myMin, _myMax, theHandle.digits());
         _myValueField.width(100);
-        _myValueField.inset(4);
+        _myValueField.stretchWidth(true);
         _myValueField.changeEvents.add(theValue -> {
-        		value(theValue, true);
+        	value(theValue, true);
         });
         value(_myHandle.value().doubleValue(), true);
 	}

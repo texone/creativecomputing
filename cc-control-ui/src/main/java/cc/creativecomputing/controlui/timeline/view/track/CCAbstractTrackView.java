@@ -21,6 +21,7 @@ import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.layout.CCUIPane;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public abstract class CCAbstractTrackView extends CCUIPane {
 	
@@ -32,17 +33,19 @@ public abstract class CCAbstractTrackView extends CCUIPane {
 		CCGLWindow theMainFrame,
 		CCAbstractTrackDataView<?> theDataView
 	){
+		super(new CCUIWidgetStyle());
 		_myMainFrame = theMainFrame;
 		_myDataView = theDataView;
 	}
 	
 	public CCAbstractTrackView(CCGLWindow theMainFrame){
+		super(new CCUIWidgetStyle());
 		_myMainFrame = theMainFrame;
 		_myDataView = null;
 	}
 	
 	public CCAbstractTrackView(){
-		
+		super(new CCUIWidgetStyle());
 	}
 
 	public abstract void mute(final boolean theMute);

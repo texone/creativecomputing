@@ -17,7 +17,6 @@
 package cc.creativecomputing.controlui.timeline.view.transport;
 
 import cc.creativecomputing.control.timeline.CCTimeRange;
-import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
@@ -26,6 +25,7 @@ import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.graphics.font.CCTextAlign;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.ui.CCUIContext;
 import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.draw.CCUIGradientDrawable;
@@ -85,8 +85,9 @@ public class CCTransportView extends CCUIHorizontalFlowPane{
 	}
 	
 	public CCTransportView(CCTimelineContainer theTimelineContainer) {
-		inset(10);
+		style().inset(10);
 		space(10);
+		stretchWidth(true);
 		_myTimelineContainer = theTimelineContainer;
 		
 		CCEvent<Double> myTimeEvent = t -> {
@@ -122,7 +123,7 @@ public class CCTransportView extends CCUIHorizontalFlowPane{
 		CCUIGradientDrawable myGradientBack = new CCUIGradientDrawable();
 		myGradientBack.gradient().top(new CCColor(CCColor.GRAY));
 		myGradientBack.gradient().bottom(new CCColor(CCColor.GRAY.darker()));
-		background(myGradientBack);
+		style().background(myGradientBack);
 		
 //		addMouseListener(new MouseAdapter() {
 //			
@@ -154,42 +155,43 @@ public class CCTransportView extends CCUIHorizontalFlowPane{
 //		});
 		
 		CCUIIconWidget myFastBackButton = new CCUIIconWidget(CCEntypoIcon.ICON_CONTROLLER_FAST_BACKWARD);
-		myFastBackButton.text().fontSize(40);
+		myFastBackButton.textField().fontSize(40);
 		myFastBackButton.mouseReleased.add(e -> {
 			_myTimelineContainer.activeTimeline().transportController().stop();
 		});
 		addChild(myFastBackButton);
 		
 		CCUIIconWidget myFastForwardButton = new CCUIIconWidget(CCEntypoIcon.ICON_CONTROLLER_FAST_FORWARD);
-		myFastForwardButton.text().fontSize(40);
+		myFastForwardButton.textField().fontSize(40);
 		myFastForwardButton.mouseReleased.add(e -> {
 			_myTimelineContainer.activeTimeline().transportController().stop();
 		});
 		addChild(myFastForwardButton);
 		
 		CCUIIconWidget myStopButton = new CCUIIconWidget(CCEntypoIcon.ICON_CONTROLLER_STOP);
-		myStopButton.text().fontSize(40);
+		myStopButton.textField().fontSize(40);
 		myStopButton.mouseReleased.add(e -> {
 			_myTimelineContainer.activeTimeline().transportController().stop();
 		});
 		addChild(myStopButton);
 		
 		CCUIIconWidget myPlayButton = new CCUIIconWidget(CCEntypoIcon.ICON_CONTROLLER_PLAY);
-		myPlayButton.text().fontSize(40);
+		myPlayButton.textField().fontSize(40);
 		myPlayButton.mouseReleased.add(e -> {
 			_myTimelineContainer.activeTimeline().transportController().play();
 		});
 		addChild(myPlayButton);
 		
 		CCUIIconWidget myLoopButton = new CCUIIconWidget(CCEntypoIcon.ICON_CYCLE);
-		myLoopButton.text().fontSize(40);
+		myLoopButton.textField().fontSize(40);
 		myLoopButton.mouseReleased.add(e -> {
 			_myTimelineContainer.activeTimeline().transportController().loop();
 		});
 		addChild(myLoopButton);
 		
-		_myTimeField = new CCUITextFieldWidget(CCUIConstants.DEFAULT_FONT_2, "00:00:00:0000");
-		_myTimeField.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		_myTimeField = new CCUITextFieldWidget("00:00:00:0000");
+		_myTimeField.style().font(CCUIContext.FONT_40);
+		_myTimeField.style().background(new CCUIFillDrawable(new CCColor(0.3d)));
 		_myTimeField.width(250);
 		_myTimeField.textField().align(CCTextAlign.CENTER);
 		addChild(_myTimeField);
@@ -221,21 +223,22 @@ public class CCTransportView extends CCUIHorizontalFlowPane{
 			
 		});
 		
-		_mySpeedValue = new CCUIValueBox(CCUIConstants.DEFAULT_FONT_2, 1,0.1,10d, 2);
+		_mySpeedValue = new CCUIValueBox(1,0.1,10d, 2);
+		_mySpeedValue.style().font(CCUIContext.FONT_40);
 		_mySpeedValue.width(150);
-		_mySpeedValue.background(new CCUIFillDrawable(new CCColor(0.3d)));
+		_mySpeedValue.style().background(new CCUIFillDrawable(new CCColor(0.3d)));
 		addChild(_mySpeedValue);
 		_mySpeedValue.changeEvents.add(theValue -> {
 			_myTimelineContainer.activeTimeline().transportController().speed(theValue);
 		});
 		
-		CCUILabelWidget mySpeedLabel = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT,"speed");
-		mySpeedLabel.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		CCUILabelWidget mySpeedLabel = new CCUILabelWidget("speed");
+		mySpeedLabel.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
 		addChild(mySpeedLabel);
 		
-		_myBPMValue = new CCUIValueBox(CCUIConstants.DEFAULT_FONT_2, 120,1, 240, 2);
+		_myBPMValue = new CCUIValueBox( 120,1, 240, 2);
+		_myBPMValue.style().font(CCUIContext.FONT_40);
 		_myBPMValue.width(150);
-		_myBPMValue.background(new CCUIFillDrawable(new CCColor(0.3d)));
 		addChild(_myBPMValue);
 		_myBPMValue.changeEvents.add(theValue -> {
 			_myTimelineContainer.activeTimeline().transportController().bpm(theValue);
@@ -245,17 +248,16 @@ public class CCTransportView extends CCUIHorizontalFlowPane{
 		_myShowBPMButton.changeEvents.add(e ->{
 			_myTimelineContainer.activeTimeline().transportController().useBeats(e);
 		});
-		_myShowBPMButton.background(new CCUIFillDrawable(new CCColor(0.3d)));
 		_myShowBPMButton.size(36);
 		addChild(_myShowBPMButton);
 		
-		CCUILabelWidget myBPMLabel = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT,"BPM");
-		myBPMLabel.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		CCUILabelWidget myBPMLabel = new CCUILabelWidget("BPM");
+		myBPMLabel.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
 		addChild(myBPMLabel);
 		
-		_myZoomValue = new CCUIValueBox(CCUIConstants.DEFAULT_FONT_2, 0, 0, MAX_SLIDER_VALUE, 2);
+		_myZoomValue = new CCUIValueBox( 0, 0, MAX_SLIDER_VALUE, 2);
+		_myZoomValue.style().font(CCUIContext.FONT_40);
 		_myZoomValue.width(150);
-		_myZoomValue.background(new CCUIFillDrawable(new CCColor(0.3d)));
 		addChild(_myZoomValue);
 		_myZoomValue.changeEvents.add(theValue -> {
 			double myBlend = CCMath.pow(theValue / MAX_SLIDER_VALUE, CURVE_POW);
@@ -265,20 +267,13 @@ public class CCTransportView extends CCUIHorizontalFlowPane{
 			);
 		});
 		
-		CCUILabelWidget myZoomLabel = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT,"zoom");
-		myZoomLabel.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		CCUILabelWidget myZoomLabel = new CCUILabelWidget("zoom");
+		myZoomLabel.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
 		addChild(myZoomLabel);
 
-		_myTimelines = new CCUIDropDownWidget(CCUIConstants.DEFAULT_FONT_2);
-		_myTimelines.inset(4);
-		_myTimelines.verticalAlignment(CCUIVerticalAlignment.CENTER);
-		CCUIFillDrawable myBackground = new CCUIFillDrawable(new CCColor(0.3d));
-		_myTimelines.background(myBackground);
+		_myTimelines = new CCUIDropDownWidget();
+		_myTimelines.style().font(CCUIContext.FONT_40);
 		_myTimelines.width(250);
-		
-		_myTimelines.menue().background(myBackground);
-		_myTimelines.itemSelectBackground(new CCUIFillDrawable(new CCColor(0.5d)));
-		_myTimelines.itemBackground(new CCUIFillDrawable(new CCColor(0.3d)));
 		
 		for(String myKey:_myTimelineContainer.timelineKeys()){
 			_myTimelines.addItem(myKey);
@@ -291,8 +286,8 @@ public class CCTransportView extends CCUIHorizontalFlowPane{
 		});
 
         addChild(_myTimelines);
-		CCUILabelWidget myTimelineLabel = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT,"timeline");
-		myTimelineLabel.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		CCUILabelWidget myTimelineLabel = new CCUILabelWidget("timeline");
+		myTimelineLabel.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
 		addChild(myTimelineLabel);
 		
 		_myTimelineController.zoomController().events.add(myZoomEvent);

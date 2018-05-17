@@ -1,6 +1,7 @@
 package cc.creativecomputing.gl.demo.font;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCOutlineFont;
@@ -17,7 +18,7 @@ public class CCTextFieldDemo extends CCGLApp{
 	private CCTextField _myTextFieldRight;
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
+	public void setup() {
 		
 		_myTextFieldLeft = new CCTextField(new CCTextureMapFont(null,CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 50, 2, 2), "Align Left")
 				.position(0, -100)
@@ -67,6 +68,8 @@ public class CCTextFieldDemo extends CCGLApp{
 	
 	public static void main(String[] args) {
 		CCTextFieldDemo myDemo = new CCTextFieldDemo();
-		myDemo.run();
+
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

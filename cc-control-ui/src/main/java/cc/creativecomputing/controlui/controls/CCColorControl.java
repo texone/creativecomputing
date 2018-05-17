@@ -18,18 +18,13 @@ package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 import cc.creativecomputing.ui.widget.CCUIColorPicker;
 
 public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandle>{
 	
-
 	private CCUIColorPicker _myColorPicker;
-	
-	private CCColor _myLastColor = new CCColor();
 
     private CCColor _myColor;
 
@@ -37,13 +32,13 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 		super(theHandle, theControlComponent);
 
 		_myColor = theHandle.value().clone();
-		_myColorPicker = new CCUIColorPicker(CCUIConstants.DEFAULT_FONT, _myColor, 100, 14);
+		_myColorPicker = new CCUIColorPicker(_myColor, 100, 14);
+		_myColorPicker.stretchWidth(true);
 		addListener(theValue -> {
 			_myColor = theValue;
 			_myColorPicker.color(_myColor, false);
 		});
 		
- 
 		_myColorPicker.changeEvents.add(c -> {
 			_myColor = new CCColor(c);
 			_myHandle.value(_myColor, _myHandle.isInEdit());
@@ -57,12 +52,7 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	
 	@Override
 	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		CCUITableEntry myEntry = new CCUITableEntry();
-		myEntry.column = 0;
-		myEntry.row = theY;
-		thePane.addChild(_myLabel, myEntry);
-		
-		myEntry.column = 1;
-		thePane.addChild(_myColorPicker, myEntry);
+		thePane.addChild(_myLabel, 0, theY);
+		thePane.addChild(_myColorPicker, 1, theY);
 	}
 }

@@ -225,7 +225,7 @@ public class CCTextField {
 	
 	public CCTextField font(CCFont<?> theFont){
 		_myFont = theFont;
-		breakText();
+		fontSize(theFont.size());
 		return this;
 	}
 	

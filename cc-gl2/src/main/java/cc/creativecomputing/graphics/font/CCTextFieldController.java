@@ -1,7 +1,6 @@
 package cc.creativecomputing.graphics.font;
 
 import cc.creativecomputing.core.CCEventManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.gl.app.CCGLWindow;
@@ -81,6 +80,9 @@ public class CCTextFieldController {
 			break;
 		case KEY_ENTER:
 			changeEvents.event(_myTextField.text());
+			append("\n");
+			break;
+		default:
 			break;
 		}
 	}
@@ -264,17 +266,29 @@ public class CCTextFieldController {
 			g.vertex(myChar.x, myChar.y + _myTextField.ascent());
 			g.vertex(myChar.x, myChar.y + _myTextField.descent());
 		}
-		if(_myStartIndex > 0){
+		if(_myStartIndex > 0 && _myStartIndex < _myTextField.charGrid().size()){
 			g.color(0,255,0);
 			CCPlacedTextChar myChar = _myTextField.charGrid().get(_myStartIndex);
 			g.vertex(myChar.x, myChar.y + _myTextField.ascent());
 			g.vertex(myChar.x, myChar.y + _myTextField.descent());
 		}
-		if(_myEndIndex > 0){
+		if(_myStartIndex == _myTextField.charGrid().size()){
+			g.color(0,255,0);
+			CCPlacedTextChar myChar = _myTextField.charGrid().get(_myStartIndex - 1);
+			g.vertex(myChar.x + myChar.width, myChar.y + _myTextField.ascent());
+			g.vertex(myChar.x + myChar.width, myChar.y + _myTextField.descent());
+		}
+		if(_myEndIndex > 0 && _myEndIndex < _myTextField.charGrid().size()){
 			g.color(255,0,0);
 			CCPlacedTextChar myChar = _myTextField.charGrid().get(_myEndIndex);
 			g.vertex(myChar.x, myChar.y + _myTextField.ascent());
 			g.vertex(myChar.x, myChar.y + _myTextField.descent());
+		}
+		if(_myEndIndex == _myTextField.charGrid().size()){
+			g.color(255,0,0);
+			CCPlacedTextChar myChar = _myTextField.charGrid().get(_myEndIndex - 1);
+			g.vertex(myChar.x + myChar.width, myChar.y + _myTextField.ascent());
+			g.vertex(myChar.x + myChar.width, myChar.y + _myTextField.descent());
 		}
 		g.endShape();
 		g.popMatrix();

@@ -18,13 +18,7 @@ package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.CCUIConstants;
-import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
-import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 
 public class CCStringControl extends CCValueControl<String, CCStringPropertyHandle>{
@@ -43,13 +37,9 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 			
 		});
 
-        String myValue = theHandle.value();
-        _myTextField = new CCUITextFieldWidget(CCUIConstants.DEFAULT_FONT, myValue);
-        _myTextField.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
-        _myTextField.verticalAlignment(CCUIVerticalAlignment.CENTER);
-        _myTextField.background(new CCUIFillDrawable(new CCColor(0.3d)));
+        _myTextField = new CCUITextFieldWidget(theHandle.value());
         _myTextField.width(100);
-        _myTextField.inset(4);
+        _myTextField.stretchWidth(true);
         
         _myTextField.changeEvents.add(text -> {
         	_myHandle.value(_myTextField.text(), !_myHandle.isInEdit());
@@ -63,13 +53,7 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 	
 	@Override
 	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		
-		CCUITableEntry myEntry = new CCUITableEntry();
-		myEntry.column = 0;
-		myEntry.row = theY;
-		thePane.addChild(_myLabel, myEntry);
-		
-		myEntry.column = 1;
-		thePane.addChild(_myTextField, myEntry);
+		thePane.addChild(_myLabel, 0, theY);
+		thePane.addChild(_myTextField, 1, theY);
 	}
 }

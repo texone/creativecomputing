@@ -20,29 +20,38 @@ import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPresetHandling;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCVector2i;
+import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.ui.CCUIVerticalAlignment;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
+import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUICheckBox;
 import cc.creativecomputing.ui.widget.CCUIDialog;
+import cc.creativecomputing.ui.widget.CCUILabelWidget;
 import cc.creativecomputing.ui.widget.CCUIMenu;
 import cc.creativecomputing.ui.widget.CCUIMenuItem;
+import cc.creativecomputing.ui.widget.CCUIPopUpMenu;
+import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
-public class CCPropertyPopUp extends CCUIMenu {
+public class CCPropertyPopUp extends CCUIPopUpMenu {
 	
 	private static CCDataObject clipboard = null;
 	
 	private CCPropertyHandle<?> _myProperty;
 	
-	private CCControlComponent _myControlComponent;
-	
 	private CCUIMenu _myPresetMenue;
 
-	public CCPropertyPopUp(CCPropertyHandle<?> theProperty, CCControlComponent theControlComponent) {
-		super(CCUIConstants.DEFAULT_FONT);
+	public CCPropertyPopUp(CCPropertyHandle<?> theProperty, CCUIWidget theParent, double theX, double theY) {
+		super(theParent, theX, theY);
 		_myProperty = theProperty;
-		_myControlComponent = theControlComponent;
 
 		addItem("Property Actions");
 		
@@ -50,57 +59,63 @@ public class CCPropertyPopUp extends CCUIMenu {
 		
 //		addItem("Add To Timeline", e -> {_myControlComponent.timeline().addTrack(_myProperty);});
 //		addItem("Write To Timeline", e -> {_myControlComponent.timeline().writeValues(_myProperty);});
-		addItem("Restore Default", e -> {_myProperty.restoreDefault();});
-		addItem("Restore Preset", e -> {_myProperty.restorePreset();} );
+		addItem(CCEntypoIcon.ICON_CCW,"Restore Default", e -> {_myProperty.restoreDefault();});
+		addItem(CCEntypoIcon.ICON_CCW,"Restore Preset", e -> {_myProperty.restorePreset();} );
 		
 		addSeparator();
 		
-		addItem("copy", e -> {clipboard = _myProperty.data();});
-		addItem("paste", e -> {
-			if(clipboard == null)return;
-			_myProperty.data(clipboard);
-		});
-		addItem("export", e -> {CCDataIO.saveDataObject(_myProperty.data(), CCNIOUtil.selectOutput("export preset", null, "json"));});
-		addItem("import", e -> {_myProperty.data(CCDataIO.createDataObject(CCNIOUtil.selectInput("import preset", null, "json")));});
+		addItem(CCEntypoIcon.ICON_COPY,"copy", e -> {clipboard = _myProperty.data();CCLog.info("COPY",_myProperty.data());});
+		addItem(CCEntypoIcon.ICON_CLIPBOARD, "paste", e -> {if(clipboard != null)_myProperty.data(clipboard);CCLog.info("PASTE",clipboard);});
+		addItem(CCEntypoIcon.ICON_LOG_OUT,"export", e -> {CCDataIO.saveDataObject(_myProperty.data(), CCNIOUtil.selectOutput("export preset", null, "json"));});
+		addItem(CCEntypoIcon.ICON_LOGIN,"import", e -> {_myProperty.data(CCDataIO.createDataObject(CCNIOUtil.selectInput("import preset", null, "json")));});
+		
+
+		updateMatrices();
 	}
 	
-	public CCPropertyPopUp(CCObjectControl theObjectControl, CCPropertyHandle<?> theProperty, CCControlComponent theControlComponent) {
-		this(theProperty, theControlComponent);
+	private CCVector2i _myWindowPosition = new CCVector2i();
+	
+	public CCPropertyPopUp(CCObjectControl theObjectControl, CCPropertyHandle<?> theProperty, CCUIWidget theParent, double theX, double theY) {
+		this(theProperty, theParent, theX, theY);
 		
 		addSeparator();
-		addItem("hide unchanged", e -> {theObjectControl.hideUnchanged();});
-		addItem("show unchanged", e -> {theObjectControl.showUnchanged();});
+		addItem(CCEntypoIcon.ICON_EYE_WITH_LINE, "hide unchanged", e -> {theObjectControl.hideUnchanged();});
+		addItem(CCEntypoIcon.ICON_EYE, "show unchanged", e -> {theObjectControl.showUnchanged();});
 		addSeparator();
-		_myPresetMenue = new CCUIMenu(CCUIConstants.DEFAULT_FONT);
+		_myPresetMenue = new CCUIMenu(_myStyle);
 	
-		addItem("presets", e -> {
-			_myPresetMenue.removeAll();
+		addItem(CCEntypoIcon.ICON_TEXT, "presets", e -> {
+			_myPresetMenue.removeAll();	
 			setPresets(theObjectControl.propertyHandle());
 		});
-		addItem("add preset", e -> {
-			String myPreset = CCUIDialog.input(
-				"enter the preset name",
-				"add preset",
-				""
-			);
-			if(myPreset == null)return;
-			
-			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
-			myHandle.savePreset(myPreset, CCPresetHandling.RESTORED);
-		});
-		addItem("add preset selfcontained", e -> {
-			String myPreset = CCUIDialog.input(
-				"enter the preset name",
-				"add preset",
-				""
-			);
-			if(myPreset == null)return;
-			
-			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
-			myHandle.savePreset(myPreset, CCPresetHandling.SELFCONTAINED);
+		addItem(CCEntypoIcon.ICON_ADD_TO_LIST, "add preset", e -> {
+			CCLog.info("add");
+			CCUIDialog myDialog = CCUIDialog.createTextInput(CCControlApp.appManager, "Enter the Preset Name", "preset name",e.screenX, e.screenY);
+//			String myPreset = CCUIDialog2.input(
+//				"enter the preset name",
+//				"add preset",
+//				""
+//			);
+//			CCLog.info("add", myPreset);
+//			if(myPreset == null)return;
+//			
+//			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
+//			myHandle.savePreset(myPreset, CCPresetHandling.RESTORED);
 		});
 		
-		addItem("remove current preset", e -> {
+		addItem(CCEntypoIcon.ICON_ADD_TO_LIST, "add preset selfcontained", e -> {
+//			String myPreset = CCUIDialog2.input(
+//				"enter the preset name",
+//				"add preset",
+//				""
+//			);
+//			if(myPreset == null)return;
+//			
+//			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
+//			myHandle.savePreset(myPreset, CCPresetHandling.SELFCONTAINED);
+		});
+		
+		addItem(CCEntypoIcon.ICON_TRASH, "remove current preset", e -> {
 			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
 			for(CCUIWidget myWidget:_myPresetMenue) {
 				CCUIMenuItem myItem = (CCUIMenuItem)myWidget;
@@ -112,7 +127,7 @@ public class CCPropertyPopUp extends CCUIMenu {
 			}
 		});
 		
-		addItem("update current preset", e -> {
+		addItem(CCEntypoIcon.ICON_CW, "update current preset", e -> {
 			for(CCUIWidget myWidget:_myPresetMenue) {
 				CCUIMenuItem myItem = (CCUIMenuItem)myWidget;
 				if(myItem.checkBox().isSelected()){
@@ -123,6 +138,9 @@ public class CCPropertyPopUp extends CCUIMenu {
 				
 			}
 		});
+		
+
+		updateMatrices();
 	}
 	
 //	private void savePreset(String thePreset) {

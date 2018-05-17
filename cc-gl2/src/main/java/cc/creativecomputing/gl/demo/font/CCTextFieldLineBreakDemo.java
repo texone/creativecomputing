@@ -1,6 +1,7 @@
 package cc.creativecomputing.gl.demo.font;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCTextAlign;
@@ -16,7 +17,7 @@ public class CCTextFieldLineBreakDemo extends CCGLApp{
 	private double _myScale;
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
+	public void setup() {
 		_myVectorFont = new CCVectorFont(null,CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 50);
 		_myTextField = new CCTextField(_myVectorFont, "Line 1 \nLine2 Line2\nLine3 Line3 Line3")
 			.position(0,    0)
@@ -53,6 +54,8 @@ public class CCTextFieldLineBreakDemo extends CCGLApp{
 	
 	public static void main(String[] args) {
 		CCTextFieldLineBreakDemo myDemo = new CCTextFieldLineBreakDemo();
-		myDemo.run();
+		
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

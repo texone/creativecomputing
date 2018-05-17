@@ -1,14 +1,12 @@
 package cc.creativecomputing.gl.demo.font;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
-import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.font.CCOutlineFont;
 import cc.creativecomputing.graphics.font.CCTextAlign;
 import cc.creativecomputing.graphics.font.CCTextField;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
-import cc.creativecomputing.graphics.font.CCVectorFont;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCSpecialCharacterDemo extends CCGLApp{
@@ -16,9 +14,9 @@ public class CCSpecialCharacterDemo extends CCGLApp{
 	private CCTextField _myTextFieldLeft;
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer t) {
+	public void setup() {
 		
-		_myTextFieldLeft = new CCTextField(new CCTextureMapFont(null,CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 50, 2, 2), "ÄäÜüÖöß")
+		_myTextFieldLeft = new CCTextField(new CCTextureMapFont(null,CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 50, 2, 2), "���")
 				.position(0, -100)
 				.align(CCTextAlign.LEFT)
 				.fontSize(150);
@@ -54,6 +52,8 @@ public class CCSpecialCharacterDemo extends CCGLApp{
 	
 	public static void main(String[] args) {
 		CCSpecialCharacterDemo myDemo = new CCSpecialCharacterDemo();
-		myDemo.run();
+		
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

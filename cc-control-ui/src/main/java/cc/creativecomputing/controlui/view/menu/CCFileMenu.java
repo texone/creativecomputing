@@ -23,12 +23,12 @@ import java.util.List;
 
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
-import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.actions.CCControlUndoHistory;
 import cc.creativecomputing.io.CCFileChooser;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.ui.widget.CCUIMenu;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public class CCFileMenu extends CCUIMenu{
 	
@@ -98,8 +98,8 @@ public class CCFileMenu extends CCUIMenu{
 	private CCRecentFileHandler _myRecentFileHandler;
 	private CCTimelineContainer _myTimelineContainer;
 
-	public CCFileMenu(CCFont<?> theFont, CCFileManager theFileManager, CCTimelineContainer theTimeline){
-		super(theFont);
+	public CCFileMenu(CCUIWidgetStyle theStyle, CCFileManager theFileManager, CCTimelineContainer theTimeline){
+		super(theStyle);
 		_myFileManager = theFileManager;
 		
 		_myFileChooser = new CCFileChooser("xml", "json");
@@ -146,7 +146,7 @@ public class CCFileMenu extends CCUIMenu{
 			}
 		).toolTipText("Saves the content of all tracks.");
 		
-		myRecentItem = new CCUIMenu(_myFont);
+		myRecentItem = new CCUIMenu(_myStyle);
 		addItem("Recent").toolTipText("Open a recent file.");
 		
 //		JMenuItem mySaveAsItem = new JMenuItem("Save As ...");

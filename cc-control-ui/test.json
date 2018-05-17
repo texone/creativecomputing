@@ -1,0 +1,235 @@
+{
+  "visible": {
+    "name": "visible",
+    "value": true
+  },
+  "color": {
+    "a": 1,
+    "r": 0,
+    "b": 0,
+    "g": 0,
+    "name": "color",
+    "value": {
+      "a": 1,
+      "r": 0,
+      "b": 0,
+      "g": 0,
+      "blendable_type": "cc.creativecomputing.math.CCColor"
+    }
+  },
+  "resizable": {
+    "name": "resizable",
+    "value": true
+  },
+  "draw rect": {
+    "name": "draw rect",
+    "value": true
+  },
+  "alwaysOnTop": {
+    "name": "alwaysOnTop",
+    "value": false
+  },
+  "gradient": {
+    "gradient": [],
+    "name": "gradient",
+    "value": []
+  },
+  "spline": {
+    "name": "spline",
+    "closed": false,
+    "type": "linear",
+    "value": [
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.706206738948822,
+        "y": 0.509286105632782,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.9578278064727783,
+        "y": 0.5258551239967346,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.1914713978767395,
+        "y": 0.02281290292739868,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.12622123956680298,
+        "y": 0.40801411867141724,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.8574702739715576,
+        "y": 0.029496729373931885,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.6990054249763489,
+        "y": 0.9637112617492676,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.7064127922058105,
+        "y": 0.6692127585411072,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.10629010200500488,
+        "y": 0.5374326109886169,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.38993382453918457,
+        "y": 0.09773200750350952,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.41903501749038696,
+        "y": 0.32046210765838623,
+        "z": 0
+      }
+    ],
+    "points": [
+      {
+        "x": 0.706206738948822,
+        "y": 0.509286105632782,
+        "z": 0
+      },
+      {
+        "x": 0.9578278064727783,
+        "y": 0.5258551239967346,
+        "z": 0
+      },
+      {
+        "x": 0.1914713978767395,
+        "y": 0.02281290292739868,
+        "z": 0
+      },
+      {
+        "x": 0.12622123956680298,
+        "y": 0.40801411867141724,
+        "z": 0
+      },
+      {
+        "x": 0.8574702739715576,
+        "y": 0.029496729373931885,
+        "z": 0
+      },
+      {
+        "x": 0.6990054249763489,
+        "y": 0.9637112617492676,
+        "z": 0
+      },
+      {
+        "x": 0.7064127922058105,
+        "y": 0.6692127585411072,
+        "z": 0
+      },
+      {
+        "x": 0.10629010200500488,
+        "y": 0.5374326109886169,
+        "z": 0
+      },
+      {
+        "x": 0.38993382453918457,
+        "y": 0.09773200750350952,
+        "z": 0
+      },
+      {
+        "x": 0.41903501749038696,
+        "y": 0.32046210765838623,
+        "z": 0
+      }
+    ]
+  },
+  "title": {
+    "name": "title",
+    "value": "cc app"
+  },
+  "antialiasing": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "antialiasing",
+    "value": 8
+  },
+  "envelope": {
+    "curve": {"points": [
+      {
+        "time": 0,
+        "type": "LINEAR",
+        "value": 0
+      },
+      {
+        "time": 1,
+        "type": "LINEAR",
+        "value": 1
+      }
+    ]},
+    "name": "envelope",
+    "value": "cc.creativecomputing.control.CCEnvelope@467aecef"
+  },
+  "undecorated": {
+    "name": "undecorated",
+    "value": false
+  },
+  "fullscreen": {
+    "name": "fullscreen",
+    "value": false
+  },
+  "vec": {
+    "name": "vec",
+    "value": {
+      "x": {
+        "min": 0,
+        "max": 1000,
+        "name": "x",
+        "value": 59
+      },
+      "y": {
+        "min": 0,
+        "max": 1000,
+        "name": "y",
+        "value": 0
+      }
+    }
+  },
+  "width": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "width",
+    "value": 800
+  },
+  "x": {
+    "min": 0,
+    "max": 1000,
+    "name": "x",
+    "value": 0
+  },
+  "inVsync": {
+    "name": "inVsync",
+    "value": false
+  },
+  "y": {
+    "min": 0,
+    "max": 1000,
+    "name": "y",
+    "value": 0
+  },
+  "height": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "height",
+    "value": 800
+  }
+}

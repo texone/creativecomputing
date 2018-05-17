@@ -28,7 +28,7 @@ public class CCColorMap {
 
 	private static Map<Path, CCColor> _myColorMap = new HashMap<>();
 	
-	public static int HSB_DEPTH = 3;
+	public static int HSB_DEPTH = 2;
 	
 	private static float _myHue = 0;
 	

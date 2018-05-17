@@ -18,16 +18,16 @@ package cc.creativecomputing.controlui.view.menu;
 
 import java.nio.file.Path;
 
-import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
 import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.actions.CCControlUndoHistory;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.io.CCFileChooser;
 import cc.creativecomputing.ui.widget.CCUICheckBox;
 import cc.creativecomputing.ui.widget.CCUIMenu;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public class CCTimelineMenu extends CCUIMenu{
 	
@@ -35,8 +35,8 @@ public class CCTimelineMenu extends CCUIMenu{
 	private CCFileChooser _myFileChooser;
 	private CCTimelineContainer _myTimelineContainer;
 
-	public CCTimelineMenu(CCFont<?> theFont, CCFileManager theFileManager, CCTimelineContainer theTimeline){
-		super(theFont);
+	public CCTimelineMenu(CCUIWidgetStyle theStyle, CCFileManager theFileManager, CCTimelineContainer theTimeline){
+		super(theStyle);
 		_myFileManager = theFileManager;
 		_myTimelineContainer = theTimeline;
 		

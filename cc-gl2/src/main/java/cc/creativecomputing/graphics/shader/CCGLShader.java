@@ -11,7 +11,6 @@ import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glGetShaderiv;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
 import java.util.List;
@@ -302,7 +301,7 @@ public class CCGLShader extends CCShaderObject{
 	 * @return the value of a parameter.
 	 */
 	public int get(int theParameter){
-		IntBuffer iVal = CCBufferUtil.newIntBuffer(1);
+		IntBuffer iVal = CCBufferUtil.newDirectIntBuffer(1);
 		
 		glGetShaderiv(_myShaderID, theParameter,iVal);
 		return  iVal.get();
@@ -344,31 +343,7 @@ public class CCGLShader extends CCShaderObject{
 	 * @return
 	 */
 	public String getInfoLog() {
-
-		int length = infoLogLength();
-		if (infoLogLength() <= 0) {
-			return null;
-		}
-
-		IntBuffer iVal = CCBufferUtil.newIntBuffer(1);
-		iVal.put(length);
-		iVal.flip();
-		
-		ByteBuffer infoLog = CCBufferUtil.newByteBuffer(length);
-		
-		
-		glGetShaderInfoLog(_myShaderID, iVal, infoLog);
-		byte[] infoBytes = new byte[length];
-		infoLog.get(infoBytes);
-		String myReply = new String(infoBytes);
-		if(myReply.startsWith("WARNING:"))return null;
-		
-		StringBuffer myReplyBuffer = new StringBuffer();
-		myReplyBuffer.append("\n");
-		myReplyBuffer.append("The following Problem occured:\n");
-		myReplyBuffer.append(myReply);
-		myReplyBuffer.append("\n");
-		return myReplyBuffer.toString();
+		return glGetShaderInfoLog(_myShaderID);
 	}
 	
 	/**

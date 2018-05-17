@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -149,7 +150,7 @@ public class CCTextContoursDemo extends CCGLApp{
 	private CCTextContours _myTextContour;
 
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theAnimator) {
+	public void setup() {
 		CCOutlineFont font = new CCOutlineFont(null,CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 150);
 		
 		_myTextContour = new CCTextContours(font, "");
@@ -196,6 +197,8 @@ public class CCTextContoursDemo extends CCGLApp{
 	
 	public static void main(String[] args) {
 		CCTextContoursDemo demo = new CCTextContoursDemo();
-		demo.run();
+
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(demo);
+		myApplicationManager.run();
 	}
 }

@@ -440,39 +440,25 @@ public class CCGraphics{
 	 * defined mask.
 	 */
 	public void beginMask(){
-//		colorMask(false, false, false, false);
-//		glClearStencil(0x1);
-//		glEnable(GL_STENCIL_TEST);
-//        glClear(GL_STENCIL_BUFFER_BIT);
-//        glStencilFunc (GL_ALWAYS, 0x1, 0x1);
-//        glStencilOp (GL_REPLACE, GL_REPLACE, GL_REPLACE);
+        stencilTest();
+        stencilFunc(CCStencilFunction.ALWAYS, 1, 0xFF);
+        stencilOperation(CCStencilOperation.KEEP, CCStencilOperation.KEEP, CCStencilOperation.REPLACE);
+        colorMask(false, false, false, false);
+        noDepthMask();
         
-        glEnable(GL_STENCIL_TEST);
-        glColorMask(false, false, false, false);
-        glStencilFunc(GL_NEVER, 1, 0xFF);
-        glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);  // draw 1s on test fail (always)
-
-        // draw stencil pattern
-        glStencilMask(0xFF);
-        glClear(GL_STENCIL_BUFFER_BIT);
-        
+        clearStencil(0);
+        clearStencilBuffer();
 	}
 
 	/**
 	 * Ends the mask
 	 */
 	public void endMask(){
-//		colorMask(true, true, true, true);
-//		glStencilFunc (GL_NOTEQUAL, 0x1, 0x1);
-//		glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
 		
-		glColorMask(true, true, true, true);
-		glStencilMask(0x00);
-		  // draw where stencil's value is 0
-		glStencilFunc(GL_EQUAL, 0, 0xFF);
-		  /* (nothing to draw) */
-		  // draw only where stencil's value is 1
-		glStencilFunc(GL_EQUAL, 1, 0xFF);
+		colorMask(true, true, true, true);
+		depthMask();
+		stencilFunc(CCStencilFunction.EQUAL, 1, 0xFF);
+		stencilMask(0x00);
 	}
 
 	/**
@@ -709,6 +695,32 @@ public class CCGraphics{
 	 */
 	public void stencilFunc(CCStencilFunction theFunc, int theRef, int theMask){
 		glStencilFunc(theFunc.glID, theRef, theMask);
+	}
+	
+	/**
+	 * control the front and back writing of individual bits in the stencil
+	 * planes
+	 * <p>
+	 * stencilMask controls the writing of individual bits in the stencil
+	 * planes. The least significant n bits of mask, where n is the number of
+	 * bits in the stencil buffer, specify a mask. Where a 1 appears in the
+	 * mask, it's possible to write to the corresponding bit in the stencil
+	 * buffer. Where a 0 appears, the corresponding bit is write-protected.
+	 * Initially, all bits are enabled for writing.
+	 * <p>
+	 * There can be two separate mask writemasks; one affects back-facing
+	 * polygons, and the other affects front-facing polygons as well as other
+	 * non-polygon primitives. glStencilMask sets both front and back stencil
+	 * writemasks to the same values. Use glStencilMaskSeparate to set front and
+	 * back stencil writemasks to different values.
+	 * 
+	 * @param theMask
+	 *            Specifies a bit mask to enable and disable writing of
+	 *            individual bits in the stencil planes. Initially, the mask is
+	 *            all 1's.
+	 */
+	public void stencilMask(int theMask) {
+		glStencilMask(theMask);
 	}
 	
 	/**
@@ -1058,7 +1070,7 @@ public class CCGraphics{
 	/////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////
 	
-	IntBuffer getsetBuffer = CCBufferUtil.newIntBuffer(1);
+	IntBuffer getsetBuffer = CCBufferUtil.newDirectIntBuffer(1);
 
 	//int getset[] = new int[1];
 
@@ -4523,7 +4535,7 @@ public class CCGraphics{
 	public void loadPixels() {
 		if ((pixels == null) || (pixels.length != width() * height())) {
 			pixels = new int[width() * height()];
-			pixelBuffer = CCBufferUtil.newIntBuffer(pixels.length);
+			pixelBuffer = CCBufferUtil.newDirectIntBuffer(pixels.length);
 		}
 
 		glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, pixelBuffer);

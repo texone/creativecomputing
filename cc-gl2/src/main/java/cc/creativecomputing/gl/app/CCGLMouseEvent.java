@@ -18,24 +18,32 @@ public class CCGLMouseEvent {
 	
 	public final double y;
 	
+	public final int screenX;
+	
+	public final int screenY;
+	
 	public int clickCount = 0;
 	
-	public CCGLMouseEvent(int theButton, int theAction, int theMods, double theX, double theY){
+	public CCGLMouseEvent( int theButton, int theAction, int theMods, double theX, double theY, int theScreenX, int theScreenY){
 		button = CCGLMouseButton.button(theButton);
 		action = CCGLAction.action(theAction);
 		_myMod = new CCBitMask(theMods);
 		time = glfwGetTime();
 		x = theX;
 		y = theY;
+		screenX = theScreenX;
+		screenY = theScreenY;
 	}
 	
-	public CCGLMouseEvent(CCGLMouseEvent theEvent, double theX, double theY) {
+	public CCGLMouseEvent(CCGLMouseEvent theEvent, double theX, double theY, int theScreenX, int theScreenY) {
 		button = theEvent.button;
 		action = theEvent.action;
 		_myMod = theEvent._myMod;
 		time = theEvent.time;
 		x = theX;
 		y = theY;
+		screenX = theScreenX;
+		screenY = theScreenY;
 	}
 	
 	public boolean isShiftDown(){

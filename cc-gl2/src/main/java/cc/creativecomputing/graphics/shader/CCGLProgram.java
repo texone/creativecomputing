@@ -60,7 +60,6 @@ import static org.lwjgl.opengl.GL32.GL_MAX_GEOMETRY_OUTPUT_VERTICES;
 import static org.lwjgl.opengl.GL32.GL_TRIANGLES_ADJACENCY;
 import static org.lwjgl.opengl.GL41.glProgramParameteri;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
@@ -70,10 +69,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.system.MemoryStack;
+
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.texture.CCTexture;
-import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMatrix4x4;
@@ -387,10 +387,11 @@ public class CCGLProgram{
 	 * @return the value of a parameter.
 	 */
 	public int get(int theParameter){
-		IntBuffer iVal = CCBufferUtil.newIntBuffer(1);
-		
-		glGetProgramiv(_myProgram, theParameter,iVal);
-		return  iVal.get();
+		try(MemoryStack myStack = MemoryStack.stackPush()){
+			IntBuffer iVal = myStack.mallocInt(1);
+			glGetProgramiv(_myProgram, theParameter,iVal);
+			return  iVal.get(0);
+		}
 	}
 	
 	/**
@@ -454,33 +455,7 @@ public class CCGLProgram{
 	}
 
 	String getInfoLog(int theObject, Path[] theFiles) {
-		IntBuffer iVal = CCBufferUtil.newIntBuffer(1);
-
-		int length = iVal.get();
-		if (length <= 1) {
-			return null;
-		}
-		ByteBuffer infoLog = CCBufferUtil.newByteBuffer(length);
-		iVal.flip();
-		glGetShaderInfoLog(theObject, iVal, infoLog);
-		byte[] infoBytes = new byte[length];
-		infoLog.get(infoBytes);
-		String myReply = new String(infoBytes);
-		if(myReply.startsWith("WARNING:"))return null;
-		
-		StringBuffer myReplyBuffer = new StringBuffer();
-		if(theFiles != null){
-			myReplyBuffer.append("Problem inside the following shader:");
-			for(Path myFile:theFiles) {
-				myReplyBuffer.append("\n");
-				myReplyBuffer.append(myFile);
-			}
-		}
-		myReplyBuffer.append("\n");
-		myReplyBuffer.append("The following Problem occured:\n");
-		myReplyBuffer.append(myReply);
-		myReplyBuffer.append("\n");
-		return myReplyBuffer.toString();
+		return glGetShaderInfoLog(theObject);
 	}
 	
 	@Override

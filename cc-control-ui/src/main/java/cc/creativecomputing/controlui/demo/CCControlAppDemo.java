@@ -16,6 +16,8 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.demo;
 
+import java.nio.file.Path;
+
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.controlui.CCControlApp;
@@ -25,6 +27,9 @@ import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.texture.CCTexture2D;
+import cc.creativecomputing.image.CCImageIO;
+import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -40,6 +45,8 @@ public class CCControlAppDemo extends CCGLApp{
 	private double _cX = 0;
 	@CCProperty(name = "y", min = 0, max = 1000)
 	private double _cY = 0;
+	@CCProperty(name = "z", min = 0, max = 20)
+	private double _cZ = 0;
 	@CCProperty(name = "draw rect")
 	private boolean _cDrawRect = true;
 	@CCProperty(name = "color")
@@ -50,12 +57,19 @@ public class CCControlAppDemo extends CCGLApp{
 	private CCLinearSpline _cSpline = new CCLinearSpline(false);
 	@CCProperty(name = "envelope")
 	private CCEnvelope _cEnvelope = new CCEnvelope();
+	@CCProperty(name = "path")
+	private Path _cPath;
+	
+	@CCProperty(name = "texture")
+	private CCTexture2D _myTexture;
 	
 	@Override
 	public void setup() {
 		for(int i = 0; i < 10; i++){
 			_cSpline.addPoint(new CCVector3(CCMath.random(), CCMath.random()));
 		}
+		g.depthTest();
+		_myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("waltz.jpg")));
 	}
 	
 	@Override
@@ -92,7 +106,9 @@ public class CCControlAppDemo extends CCGLApp{
 			g.vertex(i / 100, _cEnvelope.value(i / 100));
 		}
 		g.endShape();
+		
 		g.popMatrix();
+		g.image(_myTexture, 0,0);
 	}
 	
 	public static void main(String[] args) {

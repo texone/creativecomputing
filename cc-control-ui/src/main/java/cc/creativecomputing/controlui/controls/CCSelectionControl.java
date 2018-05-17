@@ -19,13 +19,8 @@ package cc.creativecomputing.controlui.controls;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
-import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
-import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
 
 public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionPropertyHandle>{
@@ -57,19 +52,12 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 
         _myValue = theHandle.value();
         
-        _myDropDown = new CCUIDropDownWidget(CCUIConstants.DEFAULT_FONT);
-        _myDropDown.inset(4);
+        _myDropDown = new CCUIDropDownWidget();
 		_myDropDown.width(100);
-        _myDropDown.verticalAlignment(CCUIVerticalAlignment.CENTER);
-        
-		CCUIFillDrawable myBackground = new CCUIFillDrawable(new CCColor(0.3d));
-		_myDropDown.background(myBackground);
-		_myDropDown.menue().background(myBackground);
+		_myDropDown.stretch(true);
 		
-		_myDropDown.itemSelectBackground(new CCUIFillDrawable(new CCColor(0.5d)));
-		_myDropDown.itemBackground(new CCUIFillDrawable(new CCColor(0.3d)));
         for(String myEnum:_myValue.values()){
-        		_myDropDown.addItem(myEnum);
+        	_myDropDown.addItem(myEnum);
         }
         _myDropDown.changeEvents.add(e -> {
 			if(e == null)return;
@@ -92,12 +80,7 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 	
 	@Override
 	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		CCUITableEntry myEntry = new CCUITableEntry();
-		myEntry.column = 0;
-		myEntry.row = theY;
-		thePane.addChild(_myLabel, myEntry);
-		
-		myEntry.column = 1;
-		thePane.addChild(_myDropDown, myEntry);
+		thePane.addChild(_myLabel, 0, theY);
+		thePane.addChild(_myDropDown, 1, theY);
 	}
 }

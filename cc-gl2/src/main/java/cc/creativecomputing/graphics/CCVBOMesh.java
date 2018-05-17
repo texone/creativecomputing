@@ -29,6 +29,7 @@ import static org.lwjgl.opengl.GL15.glBindBuffer;
 
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCBufferObject.CCBufferTarget;
 import cc.creativecomputing.graphics.CCBufferObject.CCUsageFrequency;
 import cc.creativecomputing.graphics.CCBufferObject.CCUsageTYPE;
@@ -328,7 +329,7 @@ public class CCVBOMesh extends CCMesh{
     	if(_myHasVertices){
     		if(_myHasUpdatedVertices) {
     			_myVertexBuffer.bind(CCBufferTarget.ARRAY);
-//    			_myVertexBuffer.bufferData();
+    			_myVertexBuffer.bufferData();
     			_myVertexBuffer.unbind();
     			_myHasUpdatedVertices = false;
     		}
@@ -345,15 +346,6 @@ public class CCVBOMesh extends CCMesh{
 //			glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE); 
 //		}
 	}
-	
-	public void drawArray(CCGraphics g){
-    	// Draw All Of The Triangles At Once
-    	if(_myIndices == null){
-    		glDrawArrays(_myDrawMode.glID, 0, _myNumberOfVertices);
-    	}else{
-    		glDrawElements(_myDrawMode.glID, _myIndices);
-    	}
-    }
 	
 	@Override
 	public void disable(){

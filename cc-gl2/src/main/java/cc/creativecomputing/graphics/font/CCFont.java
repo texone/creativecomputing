@@ -42,7 +42,7 @@ public class CCFont<CharType extends CCChar> {
 	
 	protected int _mySize = 1;
 	
-	protected CCFont(CCFont theFont){
+	protected CCFont(CCFont<?> theFont){
 		_myInfo = theFont._myInfo;
 		_myFontData = theFont._myFontData;
 		
@@ -411,6 +411,7 @@ public class CCFont<CharType extends CCChar> {
 		try (MemoryStack stack = stackPush()) {
 			PointerBuffer myVertices = stack.callocPointer(1);
 			int myNumberOfVertices =  stbtt_GetGlyphShape(_myInfo, theGlyph, myVertices);
+			CCLog.info(myNumberOfVertices);
 			STBTTVertex.Buffer myVertexBuffer = STBTTVertex.create(myVertices.get(0),myNumberOfVertices);
 			return myVertexBuffer;
 		}
@@ -550,7 +551,7 @@ public class CCFont<CharType extends CCChar> {
 	}
 	
 	public static void main(String[] args) {
-		CCFont myFont = new CCFont(CCCharSet.REDUCED,CCNIOUtil.dataPath("Roboto-Bold.ttf"));
+		CCFont<?> myFont = new CCFont(CCCharSet.REDUCED,CCNIOUtil.dataPath("Roboto-Bold.ttf"));
 		
 		for(int i = 0; i < myFont.charCount();i++){
 			char c = myFont.charSet().chars()[i];

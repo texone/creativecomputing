@@ -1,9 +1,7 @@
 package cc.creativecomputing.gl.demo.font;
 
-import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
-
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCCharSet;
@@ -11,11 +9,12 @@ import cc.creativecomputing.graphics.font.CCTextAlign;
 import cc.creativecomputing.graphics.font.CCTextArea;
 import cc.creativecomputing.graphics.font.CCTextFieldController;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
+import cc.creativecomputing.graphics.font.util.CCLoremIpsumGenerator;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCTextControllerDemo extends CCGLApp {
 
-	private static String TEXT = "Bitte informieren Sie sich kurz vor Ihrer Reise über möglicheÄnderungenIhrerReisedaten unter www.bahn.de/reiseplan oder mobil über die App DB Navigator. Achten Sie auch auf Informationen und Ansagen im Zug und am Bahnhof. Wir danken Ihnen für Ihre Buchung und wünschen Ihnen eine angenehme Reise!.";
+	private static String TEXT = CCLoremIpsumGenerator.generate(100);
 
 	private CCTextArea _myTextArea;
 	private CCTextureMapFont _myVectorFont;
@@ -25,14 +24,14 @@ public class CCTextControllerDemo extends CCGLApp {
 	private CCTextFieldController _myController;
 
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
+	public void setup() {
 		_myVectorFont = new CCTextureMapFont(CCCharSet.EXTENDED, CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 20);
 		_myTextArea = new CCTextArea(_myVectorFont, TEXT);
 		_myTextArea.position(-400, 400);
-		_myTextArea.dimension(400, 400);
+		_myTextArea.dimension(1200, 400);
 		_myTextArea.align(CCTextAlign.LEFT);
 		_myTextArea.fontSize(50);
-		_myController = new CCTextFieldController(_myTextArea, _myMainWindow);
+		_myController = new CCTextFieldController(_myTextArea, this);
 	}
 
 	private double _myRotation = 0;
@@ -71,7 +70,9 @@ public class CCTextControllerDemo extends CCGLApp {
 		CCTextControllerDemo myDemo = new CCTextControllerDemo();
 		myDemo.width = 1024;
 		myDemo.height = 768;
-		myDemo.run();
+
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 		
 	}
 }

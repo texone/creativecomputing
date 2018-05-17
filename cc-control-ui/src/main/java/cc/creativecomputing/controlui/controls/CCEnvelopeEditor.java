@@ -149,38 +149,6 @@ public class CCEnvelopeEditor extends CCGLApp {
 //		});
 	}
 	
-	private CCControlPoint selectPoint(double theX, double theY){
-		for(CCControlPoint myPoint:_myTrackData){
-			CCVector2 myMouseCoord = trackToMouse(myPoint);
-			double x0 = myMouseCoord.x - CURVE_POINT_SIZE / 2;
-			double y0 = myMouseCoord.y - CURVE_POINT_SIZE / 2;
-			if(
-				theX >= x0 && 
-				theX <= x0 + CURVE_POINT_SIZE && 
-				theY >= y0 && 
-				theY <= y0 + CURVE_POINT_SIZE
-			){
-				return myPoint;
-			}
-		}
-		
-		return null;
-	}
-	
-	private CCControlPoint mouseToTrack(double theX, double theY){
-		return new CCControlPoint(
-			CCMath.saturate(CCMath.norm(theX, 0, width)),
-			CCMath.saturate(CCMath.norm(theY, 0, height))
-		);
-	}
-	
-	private CCVector2 trackToMouse(CCControlPoint thePoint){
-		return new CCVector2(
-			CCMath.blend(0, width, thePoint.time()), 
-			CCMath.blend(0, height, thePoint.value())
-		);
-	}
-	
 	public void trackData(CCTrackData theData){
 		_myTrackData = theData;
 		_myTools.trackData(_myTrackData);
@@ -238,6 +206,8 @@ public class CCEnvelopeEditor extends CCGLApp {
 					if(theDrawFill)g.vertex(myX, 1d);
 				}
 				
+				break;
+			default:
 				break;
 			}
 			myPreviousType = myPoint.type();

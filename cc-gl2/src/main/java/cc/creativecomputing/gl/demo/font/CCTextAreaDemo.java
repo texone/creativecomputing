@@ -1,6 +1,7 @@
 package cc.creativecomputing.gl.demo.font;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -12,7 +13,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCTextAreaDemo extends CCGLApp {
 
-	private static String TEXT = "Bitte informieren Sie sich kurz vor Ihrer Reise über möglicheÄnderungenIhrerReisedaten unter www.bahn.de/reiseplan oder mobil über die App DB Navigator. Achten Sie auch auf Informationen und Ansagen im Zug und am Bahnhof. Wir danken Ihnen für Ihre Buchung und wünschen Ihnen eine angenehme Reise!.";
+	private static String TEXT = "Bitte informieren Sie sich kurz vor Ihrer Reise �ber m�gliche �nderungenIhrerReisedaten unter www.bahn.de/reiseplan oder mobil über die App DB Navigator. Achten Sie auch auf Informationen und Ansagen im Zug und am Bahnhof. Wir danken Ihnen für Ihre Buchung und wünschen Ihnen eine angenehme Reise!.";
 
 	private CCTextArea _myTextArea;
 	private CCVectorFont _myVectorFont;
@@ -20,7 +21,7 @@ public class CCTextAreaDemo extends CCGLApp {
 	private double _myScale;
 
 	@Override
-	public void setup(CCGraphics g, CCGLTimer t) {
+	public void setup() {
 		_myVectorFont = new CCVectorFont(CCCharSet.EXTENDED, CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 20);
 		_myTextArea = new CCTextArea(_myVectorFont, TEXT);
 		_myTextArea.position(-400, 400);
@@ -63,6 +64,7 @@ public class CCTextAreaDemo extends CCGLApp {
 
 	public static void main(String[] args) {
 		CCTextAreaDemo myDemo = new CCTextAreaDemo();
-		myDemo.run();
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

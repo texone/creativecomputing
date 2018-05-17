@@ -13,26 +13,26 @@ package cc.creativecomputing.demo.gl2.mesh;
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.demo.gl2.camera.CC2CameraControllerDemo;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.CCVBOMesh;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCVector3;
 
 
-public class CCMeshTest extends CCGL2Adapter {
+public class CCMeshTest extends CCGLApp {
 	
 	private CCMesh _myMesh;
 	@CCProperty(name = "camera1")
 	private CCCameraController _myCameraController1;
 
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myMesh = new CCVBOMesh(CCDrawMode.TRIANGLES, 12000);
+	public void setup() {
+		_myMesh = new CCMesh(CCDrawMode.TRIANGLES, 12000);
 		
 		for(int i = 0; i < 12000;i++){
 			_myMesh.addVertex(new CCVector3().randomize(100));
@@ -54,10 +54,10 @@ public class CCMeshTest extends CCGL2Adapter {
 	public static void main(String[] args) {
 		CCMeshTest demo = new CCMeshTest();
 		
-		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(800, 300);
-		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
-		myAppManager.start();
+		CCGLApplicationManager myAppManager = new CCGLApplicationManager(demo);
+//		myAppManager.glcontext().size(800, 300);
+//		myAppManager.animator().framerate = 30;
+//		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.run();
 	}
 }

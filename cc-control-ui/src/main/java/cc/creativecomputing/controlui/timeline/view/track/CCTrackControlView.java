@@ -140,7 +140,7 @@ public class CCTrackControlView extends CCUIHorizontalFlowPane{
 	}
 
 	public void address(final String theAddress) {
-		_myAddressField.text().text(theAddress);
+		_myAddressField.textField().text(theAddress);
 	}
 	
 	public void value(final String theValue) {

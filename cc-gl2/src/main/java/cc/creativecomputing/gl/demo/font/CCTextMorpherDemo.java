@@ -11,6 +11,7 @@
 package cc.creativecomputing.gl.demo.font;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCTextAlign;
@@ -47,7 +48,7 @@ public class CCTextMorpherDemo extends CCGLApp {
 	private CCTextField _myTextField;
 
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
+	public void setup() {
 		_myString1 = CCLoremIpsumGenerator.generate(10);
 		_myString2 = CCLoremIpsumGenerator.generate(10);
 		
@@ -76,7 +77,9 @@ public class CCTextMorpherDemo extends CCGLApp {
 
 	public static void main(String[] args) {
 		CCTextMorpherDemo myDemo = new CCTextMorpherDemo();
-		myDemo.run();
+
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }
 

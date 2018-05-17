@@ -19,11 +19,13 @@ package cc.creativecomputing.controlui;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
+import cc.creativecomputing.ui.widget.CCUIScrollWidget;
 import cc.creativecomputing.ui.widget.CCUITreeWidget;
 import cc.creativecomputing.ui.widget.CCUITreeWidget.CCUITreeNode;
 
@@ -34,19 +36,28 @@ public class CCControlComponent extends CCUIHorizontalFlowPane{
 	private CCUIGridPane _myPropertyPane;
 	
 	public CCControlComponent(CCGLWindow theMainFrame){
+		mouseMoved.add(theE ->{
+//			CCLog.info("WHOA");
+		});
+		
+		stretchHeight(true);
+		stretchWidth(true);
 	
-		_myTreeWidget = new CCUITreeWidget(CCUIConstants.DEFAULT_FONT, "app");
+		_myTreeWidget = new CCUITreeWidget("app");
 		_myTreeWidget.width(300);
-		_myTreeWidget.background(new CCUIFillDrawable(new CCColor(0.5d)));
+		_myTreeWidget.style().background(new CCUIFillDrawable(CCColor.BLUE));
 		addChild(_myTreeWidget);
 
-		_myPropertyPane = new CCUIGridPane(400, 400);
-		_myPropertyPane.background(new CCUIFillDrawable(CCColor.RED));
-		_myPropertyPane.inset(0);
+		_myPropertyPane = new CCUIGridPane(600, 400);
+		_myPropertyPane.style().background(new CCUIFillDrawable(CCColor.RED));
 		_myPropertyPane.space(10);
 		_myPropertyPane.columnWidths(10,10,10);
 		_myPropertyPane.rowHeight(25);
-		addChild(_myPropertyPane);
+
+		CCUIScrollWidget myScrollWidget = new CCUIScrollWidget(_myPropertyPane, 614, 800, CCUIScrollWidget.DEFAULT_SLIDER_WIDTH, false, true);
+		myScrollWidget.stretchHeight(true);
+		myScrollWidget.style().background(new CCUIFillDrawable(CCColor.YELLOW));
+		addChild(myScrollWidget);
 		
 		
 //		
@@ -108,11 +119,11 @@ public class CCControlComponent extends CCUIHorizontalFlowPane{
 
 	public void showContent(CCObjectPropertyHandle theHandle){
         if(_myPropertyPane == null) return;
-       
         _myPropertyPane.removeAll();
         int y = 0;
 		CCObjectControl myObjectControl = new CCObjectControl(theHandle, this, 0);
 		myObjectControl.addToPane(_myPropertyPane, y, 0);
+		CCLog.info(myObjectControl,myObjectControl.parent());
 	}
 
 	private void createTree(CCUITreeNode theNode, CCObjectPropertyHandle theHandle){

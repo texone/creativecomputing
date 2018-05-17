@@ -29,12 +29,15 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
 import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
-import cc.creativecomputing.graphics.font.CCCharSet;
-import cc.creativecomputing.graphics.font.CCTextureMapFont;
-import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.texture.CCTexture2D;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIContext;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
+import cc.creativecomputing.ui.widget.CCUIMenu;
 import cc.creativecomputing.ui.widget.CCUIMenuBar;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public class CCControlApp  extends CCGLApp{
 	
@@ -77,32 +80,35 @@ public class CCControlApp  extends CCGLApp{
 	private CCUIContext _myContext;
 	
 	private void init(Object theObject){
-		
-		CCUIConstants.DEFAULT_FONT = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
-		CCUIConstants.DEFAULT_FONT_2 = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 40, 2, 2);
-		CCUIConstants.MENUE_FONT = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 30, 2, 2);
-		
+        
+        CCUIVerticalFlowPane myVerticalPane = new CCUIVerticalFlowPane();
+		myVerticalPane.style().inset(0);
+		myVerticalPane.space(5);
+		myVerticalPane.translation().set(-framebufferSize().x / 2, framebufferSize().y / 2);
+		myVerticalPane.stretchWidth(true);
+		myVerticalPane.stretchHeight(true);
+		myVerticalPane.updateMatrices();
+		myVerticalPane.style().background(new CCUIFillDrawable(CCColor.CYAN));
+
+        _myContext = new CCUIContext(this, myVerticalPane);
+
 		_myRootHandle = new CCObjectPropertyHandle(theObject, "settings");
 		_myTimelineContainer = new CCTimelineContainer(this, _myRootHandle);
         _myControlComponent = new CCControlComponent(this);
         _myControlComponent.setData(_myRootHandle);
         
-        CCUIVerticalFlowPane myVerticalPane = new CCUIVerticalFlowPane();
-		myVerticalPane.inset(5);
-		myVerticalPane.space(5);
-		myVerticalPane.translation().set(-framebufferSize().x / 2, framebufferSize().y / 2);
-		myVerticalPane.updateMatrices();
-        _myContext = new CCUIContext(this, myVerticalPane);
         
-        frameBufferSizeEvents.add(size ->{
-        	_myContext.widget().translation().set(-size.x / 2, size.y / 2);
-        	_myContext.widget().updateMatrices();
-        });
        
         _myFileManager = new CCFileManager();
-        _myMenuBar = new CCUIMenuBar(CCUIConstants.MENUE_FONT);
-        _myMenuBar.add("file", new CCFileMenu(CCUIConstants.MENUE_FONT, _myFileManager, _myTimelineContainer));
-        _myMenuBar.add("timeline", new CCTimelineMenu(CCUIConstants.MENUE_FONT, _myFileManager, _myTimelineContainer));
+        
+        CCUIWidgetStyle myMenuStyle = CCUIMenu.createDefaultStyle();
+		myMenuStyle.font(CCUIContext.FONT_30);
+		myMenuStyle.itemSelectBackground(new CCColor(0.5d));
+		myMenuStyle.background(null);
+		
+        _myMenuBar = new CCUIMenuBar(myMenuStyle);
+        _myMenuBar.add("file", new CCFileMenu(myMenuStyle, _myFileManager, _myTimelineContainer));
+        _myMenuBar.add("timeline", new CCTimelineMenu(myMenuStyle, _myFileManager, _myTimelineContainer));
         _myContext.widget().addChild(_myMenuBar);
 
 		_myTransport = new CCTransportView(_myTimelineContainer);
@@ -111,14 +117,9 @@ public class CCControlApp  extends CCGLApp{
         // Add content to the window.
 		_myContext.widget().addChild(_myControlComponent);
         
-//        theApp.window().updateEvents.add(timer -> {update(timer.deltaTime());});
+////        theApp.window().updateEvents.add(timer -> {update(timer.deltaTime());});
         
-        drawEvents.add( g -> {
-        	g.clearColor(0,0d,0);
-        	g.clear();
-        	_myContext.widget().draw(g);
-        });
-        updateEvents.add( t -> {_myContext.widget().update(t);});
+
 //        
         // Display the window.
         show();
@@ -134,7 +135,6 @@ public class CCControlApp  extends CCGLApp{
         
 		
 		if(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1) != -1){
-			CCLog.info(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), CCControlApp.preferences.getInt("CCControlApp" + "/y", -1));
 			position(
 				CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), 
 				CCControlApp.preferences.getInt("CCControlApp" + "/y", -1)
@@ -144,7 +144,6 @@ public class CCControlApp  extends CCGLApp{
 				CCControlApp.preferences.getInt("CCControlApp" + "/height", -1)
 			);
 		}
-		CCLog.info("COSTRUCT");
 	}
 	
 	private Object _myRootObject;
@@ -163,6 +162,8 @@ public class CCControlApp  extends CCGLApp{
 //		
 //		ExceptionHandler.registerExceptionHandler();
 	}
+	
+	private CCTexture2D _myTex;
 	
 	@Override
 	public void setup() {
@@ -196,16 +197,28 @@ public class CCControlApp  extends CCGLApp{
 	public CCObjectPropertyHandle rootHandle() {
 		return _myRootHandle;
 	}
-
+	
 	@Override
-	public void update(CCGLTimer theTimer){
+	public void update(final CCGLTimer theTimer) {
 		if(!_cUpdate)return;
+		if(_myContext == null)return;
+		_myContext.widget().update(theTimer);
 		try{
 //			_myControlComponent.timeline().update(theDeltaTime);
 			_myRootHandle.update(theTimer.deltaTime());
 		}catch(Exception e){
 			
 		}
+	}
+	
+	@Override
+	public void display(CCGraphics g) {
+		if(_myContext == null)return;
+		g.clearColor(0); 
+		g.clear();
+		g.pushAttribute();
+		_myContext.widget().draw(g);
+		g.popAttribute();
 	}
 	
 	public void time(double theTime){

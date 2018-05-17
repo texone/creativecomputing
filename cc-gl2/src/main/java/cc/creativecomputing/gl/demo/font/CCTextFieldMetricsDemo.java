@@ -1,6 +1,7 @@
 package cc.creativecomputing.gl.demo.font;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCTextAlign;
@@ -14,7 +15,7 @@ public class CCTextFieldMetricsDemo extends CCGLApp{
 	private CCVectorFont _myVectorFont;
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer theTimer) {
+	public void setup() {
 		
 		_myVectorFont = new CCVectorFont(null,CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 50);
 		_myTextField = new CCTextField(_myVectorFont, "Font Metrics")
@@ -55,6 +56,8 @@ public class CCTextFieldMetricsDemo extends CCGLApp{
 	
 	public static void main(String[] args) {
 		CCTextFieldMetricsDemo myDemo = new CCTextFieldMetricsDemo();
-		myDemo.run();
+
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

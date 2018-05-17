@@ -18,12 +18,7 @@ package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
-import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 import cc.creativecomputing.ui.widget.CCUICheckBox;
 
 public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyHandle>{
@@ -42,9 +37,6 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 		}
         boolean _myValue = theHandle.value();
         _myCheckBox = new CCUICheckBox();
-        _myCheckBox.background(new CCUIFillDrawable(new CCColor(0.3d)));
-        _myCheckBox.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
-        _myCheckBox.verticalAlignment(CCUIVerticalAlignment.CENTER);
        
         _myCheckBox.changeEvents.add(e -> {
         	_myHandle.value(_myCheckBox.isSelected(), true);
@@ -59,12 +51,7 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 	
 	@Override
 	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		CCUITableEntry myEntry = new CCUITableEntry();
-		myEntry.column = 0;
-		myEntry.row = theY;
-		thePane.addChild(_myLabel, myEntry);
-		
-		myEntry.column = 1;
-		thePane.addChild(_myCheckBox, myEntry);
+		thePane.addChild(_myLabel, 0, theY);
+		thePane.addChild(_myCheckBox, 1, theY);
 	}
 }

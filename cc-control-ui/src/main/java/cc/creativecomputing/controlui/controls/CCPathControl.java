@@ -16,31 +16,24 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import java.awt.GridBagConstraints;
 import java.nio.file.Path;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
+import cc.creativecomputing.ui.widget.CCUIFileWidget;
 
 public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 	
-	private JTextField _myTextField;
-	
-	private JButton _myOpenButton;
+	private CCUIFileWidget _myFileWidget;
 
 	public CCPathControl(CCPathHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		addListener(theValue -> {
 			try{
-				if(_myHandle.value() == null)_myTextField.setText("");
-				else _myTextField.setText(_myHandle.value().toString());
+//				if(_myHandle.value() == null)_myTextField.text("");
+//				else _myTextField.text(_myHandle.value().toString());
 			}catch(Exception e){
 					
 			}
@@ -48,31 +41,17 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 		});
 
         String _myValue = theHandle.path() == null ? "" : theHandle.path().toString();
-        _myTextField = new JTextField(_myValue);
-        
-        _myOpenButton = new JButton("edit");
-        _myOpenButton.addActionListener(theE -> {
-        	Path myOldPath = _myHandle.value();
-        	Path myPath;
-        	if(myOldPath != null && myOldPath.getParent() != null){
-        		myPath = CCNIOUtil.selectInput("", myOldPath, _myHandle.extensions());
-			}else{
-				myPath = CCNIOUtil.selectInput("", null, _myHandle.extensions());
-			}
-        	if(myPath == null)return;
-        	_myHandle.value(myPath, !_myHandle.isInEdit());
-        	_myTextField.setText(myPath.toString());
-			
-		});
+        _myFileWidget = new CCUIFileWidget();
+        _myFileWidget.width(100);
+        _myFileWidget.stretchWidth(true);
 	}
 	
 	
 	
 	@Override
 	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, constraints(0, theY, GridBagConstraints.LINE_END,5, 5, 1, 5));
-		thePane.add(_myTextField, constraints(1, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
-		thePane.add(_myOpenButton, constraints(2, theY, GridBagConstraints.LINE_START,5, 5, 1, 5));
+		thePane.addChild(_myLabel, 0, theY);
+		thePane.addChild(_myFileWidget, 1, theY, 2, 1);
 	}
 
 	@Override

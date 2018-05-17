@@ -22,9 +22,9 @@ import java.nio.file.Paths;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
-import cc.creativecomputing.math.CCVector2;
 
 public class CCPathHandle extends CCPropertyHandle<Path>{
 	
@@ -32,8 +32,8 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 	
 	protected CCPathHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
-		
-		if(theParent.value() instanceof CCAsset<?>){
+		CCLog.info(theParent, theParent.value());
+		if(theParent.value() != null &&theParent.value() instanceof CCAsset<?>){
 			_myAsset = (CCAsset<?>)theParent.value();
 		}
 	}

@@ -20,9 +20,7 @@ import cc.creativecomputing.control.handles.CCSplineHandle;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.spline.CCSpline;
-import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUIIconWidget;
 
@@ -44,8 +42,6 @@ public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 		_myCurveFrame.height = 300;
 		
 		_myButton = new CCUIIconWidget(CCEntypoIcon.ICON_EDIT);
-		_myButton.background(new CCUIFillDrawable(new CCColor(0.3d)));
-		_myButton.inset(2);
 		_myButton.mouseReleased.add(event -> {
 			_myCurveFrame.spline(value());				
         	CCControlApp.appManager.add(_myCurveFrame);

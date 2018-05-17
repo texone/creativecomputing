@@ -40,7 +40,7 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 		_myFontImage = new CCFontImage(1024, 1024);
 		_myFontImage.packBegin();
 		_myFontImage.oversampling(theHOversample, theVOversample);
-		_myChardata = _myFontImage.packFont(this, theCharSet.chars()[0], theSize);
+		_myChardata = _myFontImage.packFont(this, _myCharSet.chars()[0], theSize);
 		_myFontImage.packEnd();
 		_mySize = theSize;
 		createChars();
@@ -67,6 +67,7 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 			char myChar = _myCharSet.chars()[i];
 			int myGlyphIndex = index(myChar);
 			CCFontQuad myQuad = null;
+			if(_myChardata == null)continue;
 			if((int)myChar - myFirstChar < _myChardata.limit())myQuad = _myFontImage.quad(_myChardata, myChar - myFirstChar);
 			_myChars[myGlyphIndex] = new CCTextureMapChar(
 				myChar, 

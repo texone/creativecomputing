@@ -12,7 +12,7 @@ public class CCGLMultiWindowDemo extends CCGLApp{
 	private CCGLWindow _myWindow2;
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer t) {
+	public void setup() {
 		_myWindow2 = createWindow(400, 400, "bla");
 		_myWindow2.drawEvents.add(gr -> {display(gr);});
 		_myWindow2.show();

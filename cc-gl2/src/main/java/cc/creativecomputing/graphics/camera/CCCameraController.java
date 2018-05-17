@@ -72,7 +72,6 @@ public class CCCameraController {
 		public CCDampedAction(final double theFriction) {
 			_myVelocity = 0;
 			_myDamping = 1.0 - theFriction;
-			_myApp.updateEvents.add(this::update);
 		}
 
 		public void impulse(final double theImpulse) {
@@ -131,26 +130,9 @@ public class CCCameraController {
 	private final CCDampedAction _myRotateYAction;
 	private final CCDampedAction _myRotateZAction;
 	
-	private final CCDampedAction _myDampedZoom = new CCDampedAction() {
-		@Override
-		protected void behave(final double theVelocity) {
-			mouseZoom(theVelocity);
-		}
-	};
-	
-	private final CCDampedAction _myDampedPanX = new CCDampedAction() {
-		@Override
-		protected void behave(final double theVelocity) {
-			mousePan(theVelocity, 0);
-		}
-	};
-	
-	private final CCDampedAction _myDampedPanY = new CCDampedAction() {
-		@Override
-		protected void behave(final double theVelocity) {
-			mousePan(0, theVelocity);
-		}
-	};
+	private final CCDampedAction _myDampedZoom;
+	private final CCDampedAction _myDampedPanX;
+	private final CCDampedAction _myDampedPanY;
 
 	@CCProperty(name = "distance", min = 1, max = 20000, readBack = true)
 	private double _myDistance;
@@ -191,9 +173,7 @@ public class CCCameraController {
 	
 	private double _myWheelScale = 1f;
 	
-	private final CCEvent<CCVector2> _myWheelHandler = pos -> {
-		_myDampedZoom.impulse(_myWheelScale * pos.y);
-	};
+	private final CCEvent<CCVector2> _myWheelHandler;
 
 	private final CCEvent<CCGLKeyEvent> _myKeyListener = (event) -> {
 		if (event.isShiftDown())
@@ -282,6 +262,31 @@ public class CCCameraController {
 			protected void behave(final double theVelocity) {
 				_myRotation.multiplyLocal(CCQuaternion.createFromAngleAxis(theVelocity, CCVector3.UNIT_Z));
 			}
+		};
+		
+		_myDampedZoom = new CCDampedAction() {
+			@Override
+			protected void behave(final double theVelocity) {
+				mouseZoom(theVelocity);
+			}
+		};
+		
+		_myDampedPanX = new CCDampedAction() {
+			@Override
+			protected void behave(final double theVelocity) {
+				mousePan(theVelocity, 0);
+			}
+		};
+		
+		_myDampedPanY = new CCDampedAction() {
+			@Override
+			protected void behave(final double theVelocity) {
+				mousePan(0, theVelocity);
+			}
+		};
+		
+		_myWheelHandler = pos -> {
+			_myDampedZoom.impulse(_myWheelScale * pos.y);
 		};
 
 		setActive(true);

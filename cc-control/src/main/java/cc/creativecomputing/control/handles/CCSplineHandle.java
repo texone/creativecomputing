@@ -79,11 +79,9 @@ public class CCSplineHandle extends CCPropertyHandle<CCSpline>{
 			);
 		}
 		CCSpline mySpline = value();
-		CCLog.info("load:" + mySpline.points().size());
 		mySpline.clear();
 		mySpline.addAll(myPoints);
 		mySpline.endEditSpline();
-		CCLog.info("load:" + myPoints.size() + ":" + mySpline.size());
 	}
 	
 	@Override

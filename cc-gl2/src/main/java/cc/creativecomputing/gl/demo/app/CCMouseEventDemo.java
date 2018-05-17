@@ -1,6 +1,7 @@
 package cc.creativecomputing.gl.demo.app;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -16,17 +17,17 @@ public class CCMouseEventDemo extends CCGLApp{
 	private CCVector2 _myExitPosition = new CCVector2();
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer t) {
-		window().mousePressEvents.add(event -> {_myIsMousePressed = true;});
-		window().mouseReleaseEvents.add(event -> {_myIsMousePressed = false;});
+	public void setup() {
+		mousePressEvents.add(event -> {_myIsMousePressed = true;});
+		mouseReleaseEvents.add(event -> {_myIsMousePressed = false;});
 		
-		window().cursorPositionEvents.add(pos -> {_myCursorPosition = pos;});
+		cursorPositionEvents.add(pos -> {_myCursorPosition = pos;});
 
-		window().mouseMoveEvents.add(pos -> {_myMovePosition = pos;});
-		window().mouseDragEvents.add(pos -> {_myMovePosition = pos;});
+		mouseMoveEvents.add(pos -> {_myMovePosition = pos;});
+		mouseDragEvents.add(pos -> {_myMovePosition = pos;});
 
-		window().mouseEnterEvents.add(pos -> {_myEnterPosition = pos;});
-		window().mouseExitEvents.add(pos -> {_myExitPosition = pos;});
+		mouseEnterEvents.add(pos -> {_myEnterPosition = pos;});
+		mouseExitEvents.add(pos -> {_myExitPosition = pos;});
 	}
 	
 	@Override
@@ -56,6 +57,8 @@ public class CCMouseEventDemo extends CCGLApp{
 	
 	public static void main(String[] args) {
 		CCMouseEventDemo myDemo = new CCMouseEventDemo();
-		myDemo.run();
+
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

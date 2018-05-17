@@ -2,10 +2,10 @@ package cc.creativecomputing.demo.gl2.texture;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.graphics.primitives.CCSphereMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
@@ -20,10 +20,8 @@ import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.signal.CCMixSignal;
 
-public class CCEarthDemo extends CCGL2Adapter{
+public class CCEarthDemo extends CCGLApp{
 	
-	@CCProperty(name = "texture")
-	private CCTexture2DAsset _myTextureAsset;
 	private CCGLProgram _myShader;
 	
 	@CCProperty(name = "radius", min = 0, max = 1000)
@@ -90,7 +88,7 @@ public class CCEarthDemo extends CCGL2Adapter{
 	private CCSphereMesh _mySphere;
 	
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		_myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/gradient.png")));
 		_myTexture.wrap(CCTextureWrap.REPEAT);
 		_myTexture.textureFilter(CCTextureFilter.LINEAR);
@@ -102,7 +100,6 @@ public class CCEarthDemo extends CCGL2Adapter{
 ////			if(i >= 11)break;
 //		}
 		
-		_myTextureAsset = new CCTexture2DAsset(glContext());
 		_myShader = new CCGLProgram(CCNIOUtil.classPath(this, "spheremap_vp.glsl"), CCNIOUtil.classPath(this, "spheremap_fp.glsl"));
 		
 		_mySphere = new CCSphereMesh(100, 100);
@@ -117,7 +114,7 @@ public class CCEarthDemo extends CCGL2Adapter{
 	private float _myOffset = 0;
 	
 	@Override
-	public void update(CCAnimator theAnimator) {
+	public void update(CCGLTimer theAnimator) {
 //		_myOffset += theAnimator.deltaTime() * 0.1f;
 		
 	}
@@ -206,11 +203,7 @@ public class CCEarthDemo extends CCGL2Adapter{
 		CCEarthDemo demo = new CCEarthDemo();
 		
 		
-		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(1000, 500);
-		myAppManager.glcontext().pixelScale = CCPixelScale.IDENTITY;
-		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
-		myAppManager.start();
+		CCGLApplicationManager myAppManager = new CCGLApplicationManager(demo);
+		myAppManager.run();
 	}
 }

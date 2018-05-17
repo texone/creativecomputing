@@ -17,27 +17,20 @@
 package cc.creativecomputing.controlui.timeline.view.transport;
 
 import cc.creativecomputing.controlui.CCUIConstants;
-import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
-import cc.creativecomputing.controlui.timeline.view.CCTextInputDialog;
+import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
-import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.ui.widget.CCUIMenu;
-import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class CCRulerPopUp extends CCUIMenu {
 		
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7869280073371142253L;
 	protected CCTransportController _myTransportController;
 	private CCTimelineController _myTimelineController;
 	
 	private CCRulerView _myRulerView;
 
 	public CCRulerPopUp(CCRulerView theRulerView, CCTimelineController theTimelineController) {
-		super(CCUIConstants.DEFAULT_FONT);
+		super();
 		_myRulerView = theRulerView;
 		_myTimelineController = theTimelineController;
 		_myTransportController = _myTimelineController.transportController();

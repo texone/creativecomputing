@@ -1,38 +1,38 @@
 package cc.creativecomputing.demo.gl2.draw;
 
-import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 
-public class CCMaskDemo extends CCGL2Adapter {
+public class CCMaskDemo extends CCGLApp {
 
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 	}
 
 	@Override
-	public void update(CCAnimator theAnimator) {
+	public void update(CCGLTimer theTimer) {
 	}
 
 	@Override
 	public void display(CCGraphics g) {
 		g.clear();
 		g.beginMask();
-		g.rect(0,0,100,100);
+		g.rect(0,0,200,200);
 		g.endMask();
 		g.color(1d);
 		g.ellipse(0,0, 200);
+		g.noMask();
+		g.color(1d,0d,0d);
+		g.rect(-200,-200,200,200);
 	}
 
 	public static void main(String[] args) {
 
 		CCMaskDemo demo = new CCMaskDemo();
 
-		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(1200, 600);
-		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
-		myAppManager.start();
+		CCGLApplicationManager myAppManager = new CCGLApplicationManager(demo);
+		myAppManager.run();
 	}
 }

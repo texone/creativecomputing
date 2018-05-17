@@ -2,8 +2,8 @@ package cc.creativecomputing.gl.demo.font;
 
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
-import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCFont;
@@ -20,13 +20,13 @@ public class CCFontCharDemo extends CCGLApp{
 	private double _myScale;
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer t) {
+	public void setup() {
 		_myFont = new CCFont(null,CCNIOUtil.dataPath("fonts/Raleway/Raleway-Regular.ttf"));
 		_myFillChar = _myFont.fill('t');
 		_myOutlineChar = _myFont.outline('t');
 		_myScale = _myFont.scaleForPixelHeight(50);
 		
-		_myMainWindow.keyCharEvents.add((c) -> {
+		keyCharEvents.add((c) -> {
 			_myFillChar = _myFont.fill(c);
 			_myOutlineChar = _myFont.outline(c);
 		});
@@ -73,6 +73,8 @@ public class CCFontCharDemo extends CCGLApp{
 	
 	public static void main(String[] args) {
 		CCFontCharDemo myDemo = new CCFontCharDemo();
-		myDemo.run();
+		
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

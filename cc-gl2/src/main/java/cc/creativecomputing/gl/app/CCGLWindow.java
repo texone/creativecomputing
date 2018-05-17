@@ -65,6 +65,7 @@ import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.system.MemoryStack;
 
 import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector2i;
@@ -314,7 +315,7 @@ public class CCGLWindow {
 
 		
 		glfwSetMouseButtonCallback(_myID, (window, button, action, mods) -> {
-			CCGLMouseEvent myMouseEvent = new CCGLMouseEvent(button, action, mods,_myMouseX, _myMouseY);
+			CCGLMouseEvent myMouseEvent = new CCGLMouseEvent(button, action, mods,_myMouseX, _myMouseY, position().x + (int)_myMouseX, position().y + (int)_myMouseY);
 			switch(action){
 			case GLFW_RELEASE:
 				long myDif = System.currentTimeMillis() - _myPressMillis;

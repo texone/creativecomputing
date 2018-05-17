@@ -6,6 +6,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -414,20 +415,11 @@ public class CCReflectionUtil {
 			_myMethod = theMethod;
 			_myParameter = theParameter;
 			_myID = theID;
-//			if(_mySetMethod != null && _myGetMethod != null && )
 		}
 		
 		public void parameters(List<CCMethodParameter<Type>> theParameters){
 			_myParameters = theParameters;
 		}
-		
-//		public Object value(){
-//			try {
-//				return _myField.get(_myParent);
-//			} catch (Exception e) {
-//				throw new CCReflectionException(e);
-//			}
-//		}
 		
 		@Override
 		public String name() {
@@ -439,6 +431,7 @@ public class CCReflectionUtil {
 		
 		@Override
 		public void value(Object theObject){
+			CCLog.info(theObject);
 			_myValue = theObject;
 			try {
 				Object[] myValues = new Object[_myParameters.size()];
@@ -522,25 +515,22 @@ public class CCReflectionUtil {
 		
 		getMethods(theObject.getClass(), theAnnotation, myMethods);
 		
+		Collections.sort(myMethods, (a,b)->{return a.getName().compareTo(b.getName());});
+		
+		
 		for(Method myMethod:myMethods){
 			String myName = myMethod.getName();
+			Method mySetter = myMethod;
 			Method myGetter = null;
-			Method mySetter = null;
-			if(myMethod.getReturnType().equals(Void.TYPE)){
-				mySetter = myMethod;
-			}else{
-				myGetter = myMethod;
-			}
-			for(Method myMethod2:myMethods){
-				if(myMethod == myMethod2)continue;
-				if(myMethod2.getName().equals(myName)){
-					if(myMethod2.getReturnType().equals(Void.TYPE)){
-						mySetter = myMethod2;
-					}else{
-						myGetter = myMethod2;
-					}
+			try {
+				myGetter = theObject.getClass().getMethod(myName);
+				Class<?> myType = mySetter.getParameterTypes()[0];
+				if(myType != myGetter.getReturnType()){
+					myGetter = null;
 				}
-			}
+			} catch (Exception e1) {
+			} 
+			
 			try {
 				myResult.add(new CCMethod<Type>(mySetter,myGetter, theObject, theAnnotation));
 			} catch (IllegalArgumentException e) {

@@ -22,11 +22,9 @@ import java.awt.Insets;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
-import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.gl.app.CCGLMouseButton;
 import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
 
 public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>> implements CCControl{
@@ -35,8 +33,6 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 	
 	protected CCUILabelWidget _myLabel;
 	
-	protected CCPropertyPopUp _myPopUp;
-	
 	protected CCControlComponent _myControlComponent;
 
 	public CCValueControl(Handle theHandle, CCControlComponent theControlComponent){
@@ -44,12 +40,9 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 		_myHandle = theHandle;
 		_myControlComponent = theControlComponent;
 		
-		_myPopUp = new CCPropertyPopUp(theHandle, _myControlComponent);
-		
         //Create the label.
-		_myLabel = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT, _myHandle.name());
-		_myLabel.horizontalAlignment (CCUIHorizontalAlignment.RIGHT);
-		_myLabel.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		_myLabel = new CCUILabelWidget(_myHandle.name());
+		_myLabel.style().horizontalAlignment(CCUIHorizontalAlignment.RIGHT);
 		
 		_myLabel.mousePressed.add(e -> {
 			if(e.isAltDown()){
@@ -61,7 +54,8 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 				return;
 			}
 			if(e.button == CCGLMouseButton.BUTTON_RIGHT){
-				_myPopUp.isActive(true);
+				_myLabel.updateMatrices();
+				new CCPropertyPopUp(_myHandle, _myLabel, e.x, e.y);
 			}
 		});
 	}

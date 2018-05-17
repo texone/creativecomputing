@@ -49,7 +49,6 @@ public abstract class CCAsset <AssetType>{
 			return _myAssetMap.get(theFilePath);
 		}else{
 			try{
-				
 				AssetType myData = loadAsset(theFilePath);
 				_myAssetMap.put(theFilePath, myData);
 				

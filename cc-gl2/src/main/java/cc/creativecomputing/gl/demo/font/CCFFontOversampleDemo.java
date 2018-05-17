@@ -11,8 +11,8 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 
 import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
-import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCChar;
 import cc.creativecomputing.graphics.font.CCFont;
@@ -20,6 +20,7 @@ import cc.creativecomputing.graphics.font.CCFontImage;
 import cc.creativecomputing.graphics.font.CCTextField;
 import cc.creativecomputing.graphics.font.CCTextureMapChar;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
+import cc.creativecomputing.io.CCIOUtil.CCCharSet;
 import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCFFontOversampleDemo extends CCGLApp{
@@ -49,8 +50,8 @@ public class CCFFontOversampleDemo extends CCGLApp{
     private List<CCTextField> _myTextFields = new ArrayList<>();
 	
 	@Override
-	public void setup(CCGraphics g, CCGLTimer t) {
-		CCFont<CCChar> myFont = new CCFont<CCChar>(null,CCNIOUtil.dataPath("fonts/Roboto/Roboto-Bold.ttf"));
+	public void setup() {
+		CCFont<CCChar> myFont = new CCFont<CCChar>(cc.creativecomputing.graphics.font.CCCharSet.EXTENDED,CCNIOUtil.dataPath("fonts/Roboto/Roboto-Bold.ttf"));
         _myFontBitmap = new CCFontImage(1024, 1024);
     	
         _myFontBitmap.packBegin();
@@ -62,10 +63,10 @@ public class CCFFontOversampleDemo extends CCGLApp{
        
         _myFontBitmap.packEnd();
 		
-		_myMainWindow.keyReleaseEvents.add((c) -> {
+		keyReleaseEvents.add((c) -> {
 			switch(c.key){
 			case KEY_ESCAPE:
-				_myMainWindow.shouldClose(true);
+				shouldClose(true);
                 break;
             case KEY_O:
                 font = (font + 1) % 3 + (font / 3) * 3;
@@ -210,6 +211,8 @@ public class CCFFontOversampleDemo extends CCGLApp{
 		CCFFontOversampleDemo myDemo = new CCFFontOversampleDemo();
 		myDemo.width = 1024;
 		myDemo.height = 768;
-		myDemo.run();
+		
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(myDemo);
+		myApplicationManager.run();
 	}
 }

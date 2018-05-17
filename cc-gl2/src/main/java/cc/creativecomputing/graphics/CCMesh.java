@@ -559,7 +559,7 @@ public class CCMesh {
     public void indices(final List<Integer> theIndices){
     	if(theIndices.size() == 0)return;
     	_myNumberOfIndices = theIndices.size();
-    	_myIndices = CCBufferUtil.newIntBuffer(theIndices.size());
+    	_myIndices = CCBufferUtil.newDirectIntBuffer(theIndices.size());
     	for(int myIndex:theIndices){
     		_myIndices.put(myIndex);
     	}
@@ -575,7 +575,7 @@ public class CCMesh {
     	if(theIndices.hasArray()) {
         	_myIndices = theIndices;
     	}else {
-        	_myIndices = CCBufferUtil.newIntBuffer(theIndices.capacity());
+        	_myIndices = CCBufferUtil.newDirectIntBuffer(theIndices.capacity());
         	theIndices.rewind();
         	_myIndices.put(theIndices);
     	}

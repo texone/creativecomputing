@@ -91,6 +91,7 @@ public abstract class CCPropertyHandle<Type>{
 	
 	public Type value(){
 		if(_myValue != null)return _myValue;
+		if(_myMember == null)return null;
 		return (Type)_myMember.value();
 	}
 	
@@ -107,11 +108,10 @@ public abstract class CCPropertyHandle<Type>{
 		if(_myParent.isSelectable() && _myParent.isSelected()){
 			_myParent.valueSiblings(theValue, name());
 		}
-		
-		if(_myValue == theValue)return;
+
+		if(_myValue != null && _myValue.equals(theValue))return;
 		_myValue = theValue;
 		_myUpdateMember = true;
-//		_myMember.value(theValue);
 	}
 	
 	protected void directValue(Type theValue){

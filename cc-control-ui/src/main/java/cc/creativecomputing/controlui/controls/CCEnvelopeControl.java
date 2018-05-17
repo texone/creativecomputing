@@ -21,10 +21,7 @@ import cc.creativecomputing.control.handles.CCEnvelopeHandle;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 import cc.creativecomputing.ui.widget.CCUIIconWidget;
 
 public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHandle>{
@@ -45,8 +42,6 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 		_myCurveFrame.height = 300;
 		
 		_myButton = new CCUIIconWidget(CCEntypoIcon.ICON_EDIT);
-		_myButton.background(new CCUIFillDrawable(new CCColor(0.3d)));
-		_myButton.inset(2);
 		_myButton.mouseReleased.add(event -> {
 			_myCurveFrame.trackData(value().curve());				
         	CCControlApp.appManager.add(_myCurveFrame);
@@ -57,13 +52,8 @@ public class CCEnvelopeControl extends CCValueControl<CCEnvelope, CCEnvelopeHand
 	
 	@Override
 	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		CCUITableEntry myEntry = new CCUITableEntry();
-		myEntry.column = 0;
-		myEntry.row = theY;
-		thePane.addChild(_myLabel, myEntry);
-		
-		myEntry.column = 1;
-		thePane.addChild(_myButton, myEntry);
+		thePane.addChild(_myLabel, 0, theY);
+		thePane.addChild(_myButton, 1, theY);
 	}
 
 	@Override
