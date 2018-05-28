@@ -121,7 +121,7 @@ public class CCPointCurveFieldDemo extends CCGL2Adapter {
 	}
 
 	public void display(CCGraphics g) {
-		_myParticles.animate(g);
+		_myParticles.preDisplay(g);
 		
 		g.clear();
 		g.noDepthTest();

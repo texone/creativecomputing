@@ -44,6 +44,7 @@ import cc.creativecomputing.simulation.particles.emit.CCIParticleEmitter;
 import cc.creativecomputing.simulation.particles.emit.CCParticleCPUGroupEmitter;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.impulses.CCImpulse;
+import cc.creativecomputing.simulation.particles.render.CCIndexedParticleRenderer;
 import cc.creativecomputing.simulation.particles.render.CCParticlePointRenderer;
 import cc.creativecomputing.simulation.particles.render.CCParticleRenderer;
 
@@ -73,9 +74,9 @@ public class CCParticles{
 	@CCProperty(name = "emitter")
 	private List<CCIParticleEmitter> _myEmitter = new ArrayList<>();
 	
-	protected List<CCForce> _myForces;
-	protected List<CCConstraint> _myConstraints;
-	protected List<CCImpulse> _myImpulses;
+	protected List<CCForce> _myForces = new ArrayList<>();
+	protected List<CCConstraint> _myConstraints = new ArrayList<>();
+	protected List<CCImpulse> _myImpulses = new ArrayList<>();
 	
 	protected final int _myWidth;
 	protected final int _myHeight;
@@ -137,33 +138,62 @@ public class CCParticles{
 		final List<CCImpulse> theImpulse, 
 		final int theWidth, final int theHeight
 	){
+		_myWidth = theWidth;
+		_myHeight = theHeight;
+
+		_mySetDataShader = new CCGLWriteDataShader();
+		
+		_mySwapTexture = new CCGLSwapBuffer(g, 32, 4, 4,_myWidth,_myHeight);
+		_myGroupData = new CCShaderBuffer(32, 4, 1, CCParticleCPUGroupEmitter.GROUP_WIDH,CCParticleCPUGroupEmitter.GROUP_WIDH);
+		
 		_myForces = theForces;
 		_myConstraints = theConstraints;
 		_myImpulses = theImpulse;
 		
+		_myParticleRender = theRender;
+		
+		init(g);
+	}
+	
+	public List<CCForce> forces(){
+		return _myForces;
+	}
+	
+	protected interface CCParticleSetup{
+		public void setup(CCParticles theParticles);
+	}
+	
+	protected CCParticles(final CCGraphics g, int theWidth, int theHeight, CCParticleSetup theSetup) {
 		_myWidth = theWidth;
 		_myHeight = theHeight;
-		
-		for(CCForce myForce:theForces) {
-			myForce.setSize(g, theWidth, theHeight);
-			_myForceMap.put(myForce.append(), myForce);
-		}
-		
-		for(CCConstraint myContraint:theConstraints) {
-			myContraint.setSize(g, theWidth, theHeight);
-			_myContraintMap.put(myContraint.parameter("constraint"), myContraint);
-		}
-		
+
 		_mySetDataShader = new CCGLWriteDataShader();
 		
 		_mySwapTexture = new CCGLSwapBuffer(g, 32, 4, 4,_myWidth,_myHeight);
-
-		_myEnvelopeData = new CCShaderBuffer(100, _myForces.size() + 1);
 		_myGroupData = new CCShaderBuffer(32, 4, 1, CCParticleCPUGroupEmitter.GROUP_WIDH,CCParticleCPUGroupEmitter.GROUP_WIDH);
 		
-		_myParticleRender = theRender;
-		_myParticleRender.setup(this);
-		_myUpdateShader = new CCParticlesUpdateShader(this, g, theForces, theConstraints, theImpulse,_myWidth,_myHeight);
+		theSetup.setup(this);
+		
+
+		init(g);
+	}
+	
+	protected void init(CCGraphics g) {
+		for(CCForce myForce:_myForces) {
+			myForce.setSize(g, _myWidth, _myHeight);
+			_myForceMap.put(myForce.append(), myForce);
+		}
+		
+		for(CCConstraint myContraint:_myConstraints) {
+			myContraint.setSize(g, _myWidth, _myHeight);
+			_myContraintMap.put(myContraint.parameter("constraint"), myContraint);
+		}
+		
+
+		_myEnvelopeData = new CCShaderBuffer(100, _myForces.size() + 1);
+		
+		if(_myParticleRender != null)_myParticleRender.setup(this);
+		_myUpdateShader = new CCParticlesUpdateShader(this, g, _myForces, _myConstraints, _myImpulses,_myWidth,_myHeight);
 		
 		reset(g);
 		
@@ -451,7 +481,7 @@ public class CCParticles{
 		_myUpdateShader.setTextureUniform("colorTexture", _mySwapTexture.attachment(3));
 	}
 	
-	public void animate(CCGraphics g){
+	public void preDisplay(CCGraphics g){
 		g.pushAttribute();
 		g.noBlend();
 		beforeUpdate(g);
@@ -463,7 +493,6 @@ public class CCParticles{
 				
 			g.texture(myTextureUnit, myTextureUniform.texture);
 			_myUpdateShader.uniform1i(myTextureUniform.parameter, myTextureUnit);
-//			CCLog.info(myTextureUnit + " : " + myTextureUniform.parameter  + " : " + myTextureUniform.texture);
 			myTextureUnit++;
 		}
 		_mySwapTexture.draw(g);
@@ -488,5 +517,10 @@ public class CCParticles{
 	
 	public CCParticleRenderer renderer() {
 		return _myParticleRender;
+	}
+
+	public void renderer(CCParticleRenderer theRenderer) {
+		_myParticleRender = theRenderer;
+		_myParticleRender.setup(this);
 	}
 }

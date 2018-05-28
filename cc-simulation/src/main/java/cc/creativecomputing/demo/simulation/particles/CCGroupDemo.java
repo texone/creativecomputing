@@ -108,7 +108,7 @@ public class CCGroupDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
-		_myParticles.animate(g);
+		_myParticles.preDisplay(g);
 		
 		g.noDepthTest();
 		g.clearColor(50);

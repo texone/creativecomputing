@@ -99,7 +99,7 @@ public class CCPointSpriteRendererDemo extends CCGL2Adapter {
 			);
 		}
 		
-		_myParticles.animate(g);
+		_myParticles.preDisplay(g);
 		
 		g.clearColor(0);
 		g.clear();

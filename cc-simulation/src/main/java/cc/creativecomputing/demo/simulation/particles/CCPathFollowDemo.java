@@ -128,7 +128,7 @@ public class CCPathFollowDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
-		_myParticles.animate(g);
+		_myParticles.preDisplay(g);
 //		g.polygonMode(CCPolygonMode.LINE);
 		
 		//

@@ -36,7 +36,7 @@ public class CCGBufferEmitter extends CCEmitter{
 	protected String _myMaxLifeTimeParameter;
 	protected String _myLifeTimeSpreadPowParameter;
 	
-	private CCGeometryBuffer _myGBBuffer;
+	protected CCGeometryBuffer _myGBBuffer;
 	
 	private CCMatrix4x4 _myInverseViewMatrix;
 	

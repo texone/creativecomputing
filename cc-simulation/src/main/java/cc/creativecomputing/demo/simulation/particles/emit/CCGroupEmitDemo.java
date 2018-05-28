@@ -96,7 +96,7 @@ public class CCGroupEmitDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
-		_myParticles.animate(g);
+		_myParticles.preDisplay(g);
 		g.clear();
 		g.color(255);
 	

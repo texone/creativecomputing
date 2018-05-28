@@ -120,7 +120,7 @@ public class CCGBufferEmitDemo2 extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
-		_myParticles.animate(g);
+		_myParticles.preDisplay(g);
 		g.clear();
 		
 		_myGBuffer.beginDraw(g);

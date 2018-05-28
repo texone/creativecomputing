@@ -76,6 +76,7 @@ public class CCParticleGPUEmitter implements CCIParticleEmitter{
 		for(CCEmitter myEmitter:_myEmitterMap.values()) {
 			myEmitter.preDisplay(g);
 		}
+		
 		_myEmitShader.start();
 		int myTextureUnit = 0;
 		for(CCGLTextureUniform myTextureUniform:_myEmitShader.textures()){
@@ -89,8 +90,7 @@ public class CCParticleGPUEmitter implements CCIParticleEmitter{
 		_myParticles.destinationDataTexture().draw(g);
 		g.noTexture();
 		_myEmitShader.end();
-//		
-//		
+		
 		_myParticles.swapDataTextures();
 	}
 	

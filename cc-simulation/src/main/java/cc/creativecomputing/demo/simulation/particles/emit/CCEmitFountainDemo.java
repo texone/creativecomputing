@@ -99,7 +99,7 @@ public class CCEmitFountainDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
-		_myParticles.animate(g);
+		_myParticles.preDisplay(g);
 		g.clear();
 		_myCameraController.camera().draw(g);
 		g.noDepthTest();

@@ -129,7 +129,7 @@ public class CCShapeConstraintDemo extends CCGL2Adapter {
 			);
 		}
 		
-		_myParticles.animate(g);
+		_myParticles.preDisplay(g);
 		
 		g.ortho();
 		g.clearColor(0);

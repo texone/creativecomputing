@@ -99,7 +99,7 @@ public class CCForceFieldQuadDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
-		_myParticles.animate(g);
+		_myParticles.preDisplay(g);
 		g.clearColor(_cClearColor);
 		//g.noDepthTest();
 		if(_cClear)g.clear();
