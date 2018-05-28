@@ -36,7 +36,7 @@ public class CCP5Controller extends CCAnimator{
 			
 			_myParent = theApplet;
 			
-			_myApp = new CCControlApp(theApplet, this, theApplet.getClass());
+			_myApp = new CCControlApp(theApplet, this, theApplet.getClass(), true);
 			_myApp.setData(theApplet, presetPath);
 			_myApp.update(0);
 //			_myApp.afterInit();

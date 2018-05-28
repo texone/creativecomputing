@@ -71,6 +71,7 @@ public class CCBrightnessLightConfigCreator {
 					myLightChannels,
 					null,
 					null,
+					null,
 					myTransform,
 					1
 				);

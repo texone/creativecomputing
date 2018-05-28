@@ -42,6 +42,10 @@ public class CCKleEffectable extends CCEffectable{
 		return new CCKleEffectable(theID, theMotorChannels, null, theBounds, theCalculations, theCentroid, new CCMatrix4x4(), theElementRadius);
 	}
 	
+	public static CCKleEffectable createMotorElement(int theID, List<CCMotorChannel> theMotorChannels,CCMotorCalculations<?> theBounds, CCVector3 theCentroid, double theElementRadius){
+		return new CCKleEffectable(theID, theMotorChannels, null, theBounds, null, theCentroid, new CCMatrix4x4(), theElementRadius);
+	}
+	
 	public static CCKleEffectable createLightElement(int theID, List<CCLightChannel> theLightChannels){
 		return new CCKleEffectable(theID, null, theLightChannels, null, null, null,new CCMatrix4x4(), 0);
 	}

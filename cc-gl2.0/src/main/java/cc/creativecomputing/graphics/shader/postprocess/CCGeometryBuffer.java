@@ -23,6 +23,7 @@ import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.graphics.texture.CCTextureAttributes;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCMatrix4x4;
 
 /**
  * @author christianriekoff
@@ -79,7 +80,7 @@ public class CCGeometryBuffer extends CCGLProgram{
 	}
 	
 	public void beginDraw(CCGraphics g) {
-		_myRenderTexture.beginDraw(g);	
+		_myRenderTexture.beginDraw(g);
 	}
 	
 	@Override
@@ -88,7 +89,16 @@ public class CCGeometryBuffer extends CCGLProgram{
 		uniform1f( "near", _myGraphics.camera().near());
 		uniform1f( "far", _myGraphics.camera().far() );
 		uniform1i("colorTexture", 0);
-		uniformMatrix4f("inverseView", _myGraphics.modelviewMatrix().invert());
+		updateMatrix();
+	}
+	
+	public void updateMatrix(){
+		uniformMatrix4f("inverseView", inverseView());
+	}
+	
+	public CCMatrix4x4 inverseView(){
+		_myRenderTexture.camera().updateProjectionInfos();
+		return _myRenderTexture.camera().viewMatrix().invert();
 	}
 	
 	public void endDraw(CCGraphics g) {

@@ -448,7 +448,7 @@ public class CCGLProgram{
 	 * @invisible
 	 */
 	public void finalize(){
-		GL2 gl = CCGraphics.currentGL();
+//		GL2 gl = CCGraphics.currentGL();
 		//TODO check this
 //		gl.glDeleteObjectARB(_myProgram);
 	}

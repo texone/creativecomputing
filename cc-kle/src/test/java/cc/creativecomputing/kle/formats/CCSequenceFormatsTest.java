@@ -123,7 +123,7 @@ public class CCSequenceFormatsTest {
     	testFormat(CCKleFormats.PNG, "export/png");
     }
     
-    @Test
+//    @Test
     public void testRecordBIN() {
     	testFormat(CCKleFormats.BIN, "export/test_bin");
     }
