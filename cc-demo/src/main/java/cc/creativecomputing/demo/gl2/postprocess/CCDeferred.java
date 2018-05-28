@@ -31,6 +31,6 @@ public class CCDeferred {
 		double f = g.camera().far();
 		double n = g.camera().near();
 		CCVector2 projectionParams = new CCVector2(f / (f - n), (-f * n) / (f - n));
-		CCMatrix4x4 projMatrixInverse = g.camera().projectionMatrix().invert();
+		CCMatrix4x4 projMatrixInverse = g.projectionMatrix().invert();
 	}
 }
