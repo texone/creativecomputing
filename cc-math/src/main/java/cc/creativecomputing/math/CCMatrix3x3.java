@@ -1538,7 +1538,7 @@ public class CCMatrix3x3 implements Cloneable, Externalizable{
     }
     
     public CCVector3 applyPost(final CCVector3 vec){
-    	return applyPost(vec, null);
+    		return applyPost(vec, null);
     }
 
     /**
