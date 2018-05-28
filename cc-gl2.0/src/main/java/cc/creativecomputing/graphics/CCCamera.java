@@ -13,6 +13,7 @@ package cc.creativecomputing.graphics;
 import java.nio.FloatBuffer;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics.CCMatrixMode;
 import cc.creativecomputing.graphics.util.CCFrustum;
 import cc.creativecomputing.math.CCMath;
@@ -60,16 +61,19 @@ public class CCCamera{
 	/**
 	 * Camera Position
 	 */
+	@CCProperty(name = "position", readBack = true)
 	private CCVector3 _myPosition;
 
 	/**
 	 * Target Position
 	 */
+	@CCProperty(name = "target", readBack = true)
 	private CCVector3 _myTarget;
 
 	/**
 	 * Up Vector
 	 */
+	@CCProperty(name = "up", readBack = true)
 	private CCVector3 _myUp;
 
 	/**
@@ -81,7 +85,8 @@ public class CCCamera{
 	/**
 	 * Aspect Ratio
 	 */
-	private double _myAspect;
+	@CCProperty(name = "apect ratio", min = 0.1, max = 10)
+	private double _myAspect = 0.75;
 
 	// Clip Planes
 	private double _myNearClip;
@@ -98,6 +103,10 @@ public class CCCamera{
 	private CCVector3 _myDelta;
 	
 	private CCFrustum _myFrustum;
+	
+	private CCCamera() {
+		
+	}
 
 	/**
 	 * Create a camera that sits on the z axis
@@ -387,7 +396,6 @@ public class CCCamera{
 			_myUp.x, _myUp.y, _myUp.z
 		);
 		drawFrustum(g);
-		
 	}
 
 	/**
@@ -812,6 +820,10 @@ public class CCCamera{
 		return _myAspect;
 	}
 	
+	public void aspect(double theAspect){
+		_myAspect = theAspect;
+	}
+	
 	public double near(){
 		return _myNearClip;
 	}
@@ -937,15 +949,7 @@ public class CCCamera{
 	}
 	
 	public CCMatrix4x4 viewMatrix(){
-		CCMatrix4x4 myResult = new CCMatrix4x4();
-		myResult.fromArray(_myViewMatrix, true);
-		return myResult;
-	}
-	
-	public CCMatrix4x4 projectionMatrix(){
-		CCMatrix4x4 myResult = new CCMatrix4x4();
-		myResult.fromArray(_myProjectionMatrix, true);
-		return myResult;
+		return new CCMatrix4x4().fromArray(_myViewMatrix, true);
 	}
 	
 	/**
@@ -1085,5 +1089,27 @@ public class CCCamera{
 		_myStringBuilder.append("target:\n");
 		_myStringBuilder.append("up:\n");
 		return _myStringBuilder.toString();
+	}
+	
+	public CCCamera clone() {
+		CCCamera myResult = new CCCamera();
+		myResult._myAspect = _myAspect;
+		myResult._myDelta = _myDelta.clone();
+		myResult._myFarClip = _myFarClip;
+		myResult._myNearClip = _myNearClip;
+		myResult._myFoV = _myFoV;
+		myResult._myFrustumOffset = _myFrustumOffset;
+		myResult._myPosition = _myPosition.clone();
+		myResult._myShotLength = _myShotLength;
+		myResult._myTarget = _myTarget.clone();
+		myResult._myUp = _myUp.clone();
+		myResult._myViewport = _myViewport == null ? null : _myViewport.clone();
+		myResult._myXrotation = _myXrotation;
+		myResult._myYRotation = _myYRotation;
+		myResult._myZRotation = _myZRotation;
+		
+		myResult._myFrustum = new CCFrustum(myResult);
+		myResult.updateProjectionInfos();
+		return myResult;
 	}
 }

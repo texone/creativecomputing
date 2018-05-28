@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.graphics.texture;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
@@ -64,7 +65,17 @@ public class CCTexture2D extends CCTexture{
 	 */
 	public CCTexture2D(final CCTextureAttributes theTextureAttributes, int theWidth, int theHeight) {
 		super(CCTextureTarget.TEXTURE_2D, theTextureAttributes);
-		allocateData(theWidth, theHeight);
+		allocateData(theWidth, theHeight, null);
+	}
+	
+	/**
+	 * Creates a new 2D texture
+	 * @param theGenerateMipmaps if <code>true</code> textures are automatically
+	 * generated from passed texture data
+	 */
+	public CCTexture2D(final CCTextureAttributes theTextureAttributes, int theWidth, int theHeight, Buffer theBuffer) {
+		super(CCTextureTarget.TEXTURE_2D, theTextureAttributes);
+		allocateData(theWidth, theHeight, theBuffer);
 	}
 	
 	public CCTexture2D(CCTextureTarget theTarget, final CCTextureAttributes theTextureAttributes) {
@@ -109,25 +120,25 @@ public class CCTexture2D extends CCTexture{
 	
 	public CCTexture2D(final int theWidth, final int theHeight) {
 		this();
-		allocateData(theWidth, theHeight);
+		allocateData(theWidth, theHeight,null);
 	}
 	
 	public CCTexture2D(final int theWidth, final int theHeight, final CCTextureAttributes theTextureAttributes) {
 		this(theTextureAttributes);
-		allocateData(theWidth, theHeight);
+		allocateData(theWidth, theHeight,null);
 	}
 	
 	public CCTexture2D(final int theWidth, final int theHeight, CCTextureTarget theTarget) {
 		this(theTarget);
-		allocateData(theWidth, theHeight);
+		allocateData(theWidth, theHeight,null);
 	}
 	
 	public CCTexture2D(final CCTextureTarget theTarget, CCTextureAttributes theAttributes, int theNumberOfTextures, final int theWidth, final int theHeight){
 		super(theTarget, theAttributes, theNumberOfTextures);
-		allocateData(theWidth, theHeight);
+		allocateData(theWidth, theHeight,null);
 	}
 	
-	public void allocateData(final int theWidth, final int theHeight) {
+	public void allocateData(final int theWidth, final int theHeight, Buffer theBuffer) {
 		_myWidth = theWidth;
 		_myHeight = theHeight;
 		
@@ -142,7 +153,7 @@ public class CCTexture2D extends CCTexture{
 			_myWidth, _myHeight, 0, 
 			_myFormat.glID, 
 			_myPixelType.glID, 
-			null
+			theBuffer
 		); 
 		defaultUnpackStorage();
 		}
@@ -429,6 +440,10 @@ public class CCTexture2D extends CCTexture{
 		}else {
 			updateData(theImage,0,0,0,0,theImage.width(), theImage.height(), true);
 		}
+	}
+	
+	public void updateData() {
+		
 	}
 	
 //	public CCImage data() {

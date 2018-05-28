@@ -52,7 +52,7 @@ public class CCDataBuffer extends CCShaderBuffer{
 		_myInterpolatables[theChannel] = theInterpolatable;
 	}
 	
-	public void updateData(CCGraphics g){
+	public void preDisplay(CCGraphics g){
 		beginDraw(g);
 		g.clear();
 		g.pushAttribute();

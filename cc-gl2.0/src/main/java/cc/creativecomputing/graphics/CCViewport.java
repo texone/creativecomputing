@@ -91,6 +91,10 @@ public class CCViewport {
 		g.gl.glViewport(_myX, _myY, _myWidth, _myHeight);
 	}
 	
+	public CCViewport clone() {
+		return new CCViewport(_myX, _myY, _myWidth, _myHeight);
+	}
+	
 	@Override
 	public String toString() {
 		return "[x:" + _myX + ", y:" + _myY + ", w:" + _myWidth + ", h:" + _myHeight + "]";

@@ -144,6 +144,8 @@ public class CCCameraController {
 	private CCVector3 _myCenter;
 	@CCProperty(name = "rotation", min = -1, max = 1, readBack = true)
 	private CCQuaternion _myRotation;
+	@CCProperty(name = "fov", min = 0, max = 90, readBack = true)
+	private double _myFoV = 45;
 
 	private Constraint _myDragConstraint = null;
 	private Constraint _myPermaConstraint = null;
@@ -503,8 +505,8 @@ public class CCCameraController {
 		_myDistanceInterps.startInterpolation(new DistanceInterp(theNewDistance, theAnimationTime));
 	}
 
-	public double[] getLookAt() {
-		return new double[] { _myCenter.x, _myCenter.y, _myCenter.z };
+	public CCVector3 lookAt() {
+		return _myCenter;
 	}
 
 	public void lookAt(final double x, final double y, final double z) {
@@ -538,6 +540,7 @@ public class CCCameraController {
 		_myCamera.position(pos.x, pos.y, pos.z);
 		_myCamera.target(center.x, center.y, center.z);
 		_myCamera.up(rup.x, rup.y, rup.z);
+//		_myCamera.fov(_myFoV * CCMath.DEG_TO_RAD);
 	}
 
 	/**

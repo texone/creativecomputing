@@ -177,7 +177,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		
 		lightModelTwoSide(true);
 		
-		int myTextureUnits = textureUnits();
+		int myTextureUnits = maxTextureUnits();
 		_myTextures = new CCTexture[myTextureUnits];
 	}
 	
@@ -1159,7 +1159,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * Returns the number of texture units that are supported by the graphics card. This allows using multi textures, to
 	 * combine different textures.
 	 */
-	public int textureUnits() {
+	public int maxTextureUnits() {
 		return getInteger(GL2ES2.GL_MAX_TEXTURE_IMAGE_UNITS);
 	}
 

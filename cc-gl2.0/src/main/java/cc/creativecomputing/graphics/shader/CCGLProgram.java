@@ -120,13 +120,11 @@ public class CCGLProgram{
 	
 	public static class CCGLTextureUniform{
 		public CCTexture texture;
-		public int unit;
 		public String parameter;
 		
 		public CCGLTextureUniform(CCTexture theTexture, String theParameter){
 			texture = theTexture;
 			parameter = theParameter;
-			unit = -1;
 		}
 	}
 	
