@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
@@ -35,16 +36,13 @@ public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 	/**
 	 * Keep the listeners for update events
 	 */
-	protected CCVideoTextureDataListener _myListener = null;
+	public CCEventManager<CCImage> initEvents = new CCEventManager<>();
+	public CCEventManager<CCImage> updateEvents = new CCEventManager<>();
 	
 	public CCImageSequenceAsset(CCAnimator theAnimator){
 		_myAsset = null;
 		_myFrame = null;
 		_myAnimator = theAnimator;
-	}
-	
-	public void setListener(CCVideoTextureDataListener theListener) {
-		_myListener = theListener;
 	}
 	
 	@Override
@@ -83,13 +81,11 @@ public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 		_myAsset.time(_myTime);
 		_myFrame = _myAsset.currentImage();
 		
-		if(_myListener == null)return;
-		
 		if(_myIsFirstFrame){
-			_myListener.onInit(_myFrame);
+			initEvents.event(_myFrame);
 			_myIsFirstFrame = false;
 		}else{
-			_myListener.onUpdate(_myFrame);
+			updateEvents.event(_myFrame);
 		}
 	}
 	
@@ -102,19 +98,18 @@ public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 		_myAsset.frameRate(_cRate);
 		_myAsset.time(_myTime);
 		_myFrame = _myAsset.currentImage();
-		if(_myListener == null)return;
 		
 		if(_myIsFirstFrame){
-			_myListener.onInit(_myFrame);
+			initEvents.event(_myFrame);
 			_myIsFirstFrame = false;
 		}else{
-			_myListener.onUpdate(_myFrame);
+			updateEvents.event(_myFrame);
 		}
 	}
 	
-	@Override
+//	@Override
 	public void renderTimedEvent(CCTimedEventPoint theEvent,Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
-		super.renderTimedEvent(theEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
+//		super.renderTimedEvent(theEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
 		
 		if(theEvent.content() == null || theEvent.content().value() == null)return;
 		

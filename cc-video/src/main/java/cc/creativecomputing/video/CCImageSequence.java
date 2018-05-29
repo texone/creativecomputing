@@ -4,7 +4,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 import cc.creativecomputing.core.CCAnimator;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.math.CCMath;
@@ -121,18 +120,10 @@ public class CCImageSequence extends CCVideo {
 		_myCurrentImage = CCImageIO.newImage(currentImagePath());
 		if (_myIsFirstFrame) {
 			_myIsFirstFrame = false;
-			_myListener.proxy().onInit(_myCurrentImage);
+			initEvents.event(_myCurrentImage);
 		} else {
-			_myListener.proxy().onUpdate(_myCurrentImage);
+			updateEvents.event(_myCurrentImage);
 		}
-	}
-	
-	
-	
-	@Override
-	public void addListener(CCVideoTextureDataListener theListener) {
-		_myListener.add(theListener);
-		theListener.onInit(_myCurrentImage);
 	}
 
 	@Override

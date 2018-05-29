@@ -10,8 +10,10 @@ import java.nio.file.Paths;
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.math.CCMath;
 
 public class CCVideoAsset extends CCAsset<CCFFMPGMovie>{
@@ -20,12 +22,9 @@ public class CCVideoAsset extends CCAsset<CCFFMPGMovie>{
 	private float _cMaxTimeOffset = 0.05f;
 	
 	private CCAnimator _myAnimator;
-	
 
-	/**
-	 * Keep the listeners for update events
-	 */
-	protected CCVideoTextureDataListener _myListener = null;
+	public CCEventManager<CCFFMPGMovie> initEvents = new CCEventManager<>();
+	public CCEventManager<CCFFMPGMovie> updateEvents = new CCEventManager<>();
 	
 	public CCVideoAsset(CCAnimator theAnimator){
 		_myAsset = null;
@@ -35,10 +34,6 @@ public class CCVideoAsset extends CCAsset<CCFFMPGMovie>{
 	@Override
 	public CCFFMPGMovie loadAsset(Path thePath) {
 		return new CCFFMPGMovie(_myAnimator, thePath) ;
-	}
-	
-	public void setListener(CCVideoTextureDataListener theListener) {
-		_myListener = theListener;
 	}
 	
 	private double _myPlayTime = 0;
@@ -71,20 +66,18 @@ public class CCVideoAsset extends CCAsset<CCFFMPGMovie>{
 			_myAsset.time(_myPlayTime);
 		}
 		
-		if(_myListener == null)return;
-		
 		if(_myIsFirstFrame){
-			_myListener.onInit(_myAsset);
+			initEvents.event(_myAsset);
 			_myIsFirstFrame = false;
 		}else{
-			_myListener.onUpdate(_myAsset);
+			updateEvents.event(_myAsset);
 		}
 	}
 	
 	
-	@Override
+//	@Override
 	public void renderTimedEvent(CCTimedEventPoint theEvent, Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
-		super.renderTimedEvent(theEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
+//		super.renderTimedEvent(theEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
 		
 		if(theEvent.content() == null || theEvent.content().value() == null)return;
 		

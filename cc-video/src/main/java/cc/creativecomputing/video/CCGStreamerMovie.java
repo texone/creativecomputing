@@ -53,7 +53,7 @@ public class CCGStreamerMovie extends CCMovieData {
 			} else {
 				_myIsRunning = false;
 			}
-			_myMovieEvents.proxy().onEnd();
+			endEvents.event();
 		}
 
 	}
@@ -270,11 +270,10 @@ public class CCGStreamerMovie extends CCMovieData {
 			_myIsDataUpdated = false;
 			if (_myIsFirstFrame) {
 				_myIsFirstFrame = false;
-				_myListener.proxy().onInit(this);
+				initEvents.event(this);
 			} else {
-				_myListener.proxy().onUpdate(this);
-				_myUpdateRate = (0.1f) * 1f / _myUpdateDelta + (0.9f)
-						* _myUpdateRate;
+				updateEvents.event(this);
+				_myUpdateRate = (0.1f) * 1f / _myUpdateDelta + (0.9f) * _myUpdateRate;
 				_myUpdateDelta = 0;
 			}
 		}

@@ -426,9 +426,9 @@ public class CCGStreamerCapture extends CCVideo{
 			_myIsDataUpdated = false;
 			if (_myIsFirstFrame) {
 				_myIsFirstFrame = false;
-				_myListener.proxy().onInit(this);
+				initEvents.event(this);
 			} else {
-				_myListener.proxy().onUpdate(this);
+				updateEvents.event(this);
 			}
 		}
 	}

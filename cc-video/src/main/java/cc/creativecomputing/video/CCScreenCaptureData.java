@@ -32,15 +32,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.image.CCImageUtil;
 import cc.creativecomputing.image.CCPixelFormat;
 import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCPixelType;
 import cc.creativecomputing.math.CCMath;
 
-import com.sun.awt.AWTUtilities;
+//import com.sun.awt.AWTUtilities;
 
 /**
  * @author christianriekoff
@@ -54,12 +54,8 @@ public class CCScreenCaptureData extends CCVideo {
 		 * 
 		 */
 		private static final long serialVersionUID = -8104620285897870152L;
-
-		public interface CCScreenGrabAreaListener{
-			void onChange();
-		}
 		
-		private CCListenerManager<CCScreenGrabAreaListener> _mEvents = new CCListenerManager<CCScreenGrabAreaListener>(CCScreenGrabAreaListener.class);
+		private CCEventManager<Object> events = new CCEventManager<>();
 		
 		
 		private boolean _myIsActive = false;
@@ -81,7 +77,7 @@ public class CCScreenCaptureData extends CCVideo {
 			addMouseListener(this);
 			addMouseMotionListener(this);
 			
-			AWTUtilities.setWindowOpaque(this, false);
+//			AWTUtilities.setWindowOpaque(this, false);
 		}
 		
 		@CCProperty(name = "draw area")
@@ -109,10 +105,6 @@ public class CCScreenCaptureData extends CCVideo {
 			}catch(Exception e) {
 				
 			}
-		}
-		
-		public CCListenerManager<CCScreenGrabAreaListener> events(){
-			return _mEvents;
 		}
 
 		private JPanel createContentPane() {
@@ -170,7 +162,7 @@ public class CCScreenCaptureData extends CCVideo {
 
 		@Override
 		public void mouseReleased(MouseEvent theE) {
-			_mEvents.proxy().onChange();
+			events.event();
 		}
 
 		public void mouseDragged(MouseEvent theEvent) {
@@ -501,9 +493,9 @@ public class CCScreenCaptureData extends CCVideo {
 
 		if (_myIsFirstFrame) {
 			_myIsFirstFrame = false;
-			_myListener.proxy().onInit(this);
+			initEvents.event();
 		} else {
-			_myListener.proxy().onUpdate(this);
+			updateEvents.event();
 		}
 	}
 	

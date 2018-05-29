@@ -11,8 +11,7 @@
 package cc.creativecomputing.video;
 
 import cc.creativecomputing.core.CCAnimator;
-import cc.creativecomputing.core.CCAnimatorListener;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.image.CCImage;
 
 /**
@@ -22,7 +21,7 @@ import cc.creativecomputing.image.CCImage;
  * @author christian riekoff
  *
  */
-public abstract class CCVideo extends CCImage implements CCAnimatorListener{
+public abstract class CCVideo extends CCImage {
 	
 	/**
 	 * indicates a needed update of the data although the movie is not running
@@ -38,7 +37,8 @@ public abstract class CCVideo extends CCImage implements CCAnimatorListener{
 	/**
 	 * Keep the listeners for update events
 	 */
-	protected CCListenerManager<CCVideoTextureDataListener> _myListener = new CCListenerManager<CCVideoTextureDataListener>(CCVideoTextureDataListener.class);
+	public CCEventManager<CCImage> initEvents = new CCEventManager<>();
+	public CCEventManager<CCImage> updateEvents = new CCEventManager<>();
 
 	/**
 	 * Creates a new instance, without setting any parameters.
@@ -47,33 +47,10 @@ public abstract class CCVideo extends CCImage implements CCAnimatorListener{
 	public CCVideo(final CCAnimator theAnimator) {
 		super();
 		_myPixelStorageModes.alignment(1);
-		theAnimator.listener().add(this);
+		theAnimator.updateEvents.add(this::update);
 	}
 	
-	/**
-	 * Adds a listener to react on update events.
-	 * @param theListener the listener 
-	 */
-	public void addListener(final CCVideoTextureDataListener theListener) {
-		_myListener.add(theListener);
+	public void update(CCAnimator theAnimator) {
+		
 	}
-	
-	/**
-	 * Removes a listener to react on update events.
-	 * @param theListener the listener 
-	 */
-	public void removeListener(final CCVideoTextureDataListener theListener) {
-		_myListener.remove(theListener);
-	}
-	
-
-	
-	@Override
-	public void start(CCAnimator theAnimator) {
-	}
-	
-	@Override
-	public void stop(CCAnimator theAnimator) {
-	}
-	
 }

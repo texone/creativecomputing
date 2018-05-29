@@ -275,7 +275,7 @@ public class CCFFMPGMovie extends CCMovieData {
 		if(!_myIsFirstFrame && !_mySeek && !_myIsRunning)return;
 		
 		if (av_read_frame(_myFormatContext, _myPacket) < 0) {
-			_myMovieEvents.proxy().onEnd();
+			endEvents.event();
 			if (_myDoRepeat) {
 				play(true);
 			}
@@ -327,9 +327,9 @@ public class CCFFMPGMovie extends CCMovieData {
 			}
 			if (_myIsFirstFrame) {
 				_myIsFirstFrame = false;
-				_myListener.proxy().onInit(this);
+				initEvents.event(this);
 			} else {
-				_myListener.proxy().onUpdate(this);
+				updateEvents.event(this);
 			}
 		}
 
