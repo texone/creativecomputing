@@ -1,8 +1,5 @@
 package cc.creativecomputing.math.interpolate;
 
-import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.math.CCVector4;
-
 /**
  * Implement this interface for interpolation
  * @author christianr
@@ -17,10 +14,5 @@ public interface CCInterpolatable<ResultType> {
 	 * @return result of interpolation
 	 */
 	public ResultType interpolate(double theValue);
-	
-	public static void main(String[] args) {
-		CCInterpolatable<CCVector4> myCheck = e -> {return new CCVector4();};
-		
-		CCLog.info(myCheck.getClass().getGenericInterfaces());
-	}
+
 }

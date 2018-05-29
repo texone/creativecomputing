@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -53,7 +52,6 @@ public class CCGLProgramInterface {
 		StringBuffer mySourceBuffer = new StringBuffer();
 		for(String myLine:mySource){
 			if(myLine.startsWith("uniform")){
-				CCLog.info(myLine);
 				String[] myParts = myLine.split(Pattern.quote(" "));
 				mySourceBuffer.append("uniform ");
 				mySourceBuffer.append(myParts[1]);
