@@ -1,5 +1,6 @@
 package cc.creativecomputing.graphics.shader;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
@@ -20,6 +21,7 @@ import cc.creativecomputing.math.interpolate.CCInterpolatable;
  */
 public class CCDataBuffer extends CCShaderBuffer{
 
+	@CCProperty(name = "shader")
 	private CCGLWriteDataShader _myWriteDataShader;
 	
 	private CCInterpolatable<?>[] _myInterpolatables;
@@ -71,7 +73,7 @@ public class CCDataBuffer extends CCShaderBuffer{
 					double blend = x / _myResolution;
 					Double myVal = myTypedInterpolatable.interpolate(blend);
 					g.textureCoords4D(0, myVal, myVal, myVal, 1d);
-					g.vertex(x + 0.5, y + 1);
+					g.vertex(x + 0.5, y + 0.5);
 				}
 				continue;
 			}
@@ -82,7 +84,7 @@ public class CCDataBuffer extends CCShaderBuffer{
 					double blend = x / _myResolution;
 					CCVector1 myVal = myTypedInterpolatable.interpolate(blend);
 					g.textureCoords4D(0, myVal.x, myVal.x, myVal.x, 1d);
-					g.vertex(x + 0.5, y + 1);
+					g.vertex(x + 0.5, y + 0.5);
 				}
 				continue;
 			}
@@ -93,7 +95,7 @@ public class CCDataBuffer extends CCShaderBuffer{
 					double blend = x / _myResolution;
 					CCVector2 myVal = myTypedInterpolatable.interpolate(blend);
 					g.textureCoords4D(0, myVal.x, myVal.y, 0d, 1d);
-					g.vertex(x + 0.5, y + 1);
+					g.vertex(x + 0.5, y + 0.5);
 				}
 				continue;
 			}
@@ -104,7 +106,7 @@ public class CCDataBuffer extends CCShaderBuffer{
 					double blend = x / _myResolution;
 					CCVector3 myVal = myTypedInterpolatable.interpolate(blend);
 					g.textureCoords4D(0, myVal.x, myVal.y, myVal.z, 1d);
-					g.vertex(x + 0.5, y + 1);
+					g.vertex(x + 0.5, y + 0.5);
 				}
 				continue;
 			}
@@ -115,7 +117,7 @@ public class CCDataBuffer extends CCShaderBuffer{
 					double blend = x / _myResolution;
 					CCVector4 myVal = myTypedInterpolatable.interpolate(blend);
 					g.textureCoords4D(0, myVal.x, myVal.y, myVal.z, myVal.w);
-					g.vertex(x + 0.5, y + 1);
+					g.vertex(x + 0.5, y + 0.5);
 				}
 				continue;
 			}
@@ -125,7 +127,7 @@ public class CCDataBuffer extends CCShaderBuffer{
 					double blend = x / _myResolution;
 					CCColor myVal = myTypedInterpolatable.interpolate(blend);
 					g.textureCoords4D(0, myVal.r, myVal.g, myVal.b, myVal.a);
-					g.vertex(x + 0.5, y + 1);
+					g.vertex(x + 0.5, y + 0.5);
 				}
 				continue;
 			}
