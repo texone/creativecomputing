@@ -49,7 +49,11 @@ public abstract class CCShaderObject {
 		String[] myBuffer = new String[thePaths.length];
 		int i = 0;
 		for(Path myPath:thePaths) {
-			myBuffer[i] = CCNIOUtil.loadString(myPath);
+			if(!CCNIOUtil.exists(myPath)) {
+				myBuffer[i] =  "void main(){}";
+			}else {
+				myBuffer[i] = CCNIOUtil.loadString(myPath);
+			}
 		}
 		
 		return myBuffer;
