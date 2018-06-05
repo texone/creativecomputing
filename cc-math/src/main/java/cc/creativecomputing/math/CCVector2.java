@@ -90,12 +90,16 @@ public class CCVector2 implements Cloneable, Externalizable {
     	double angleInRadians = CCMath.acos( theCartesian.x / radius );
     	return new CCVector2(angleInRadians, radius);
     }
+
+    public static CCVector2 toCartesian(double theAngle, double theRadius){
+    	return new CCVector2(
+    		CCMath.cos( theAngle ) * theRadius,
+    		CCMath.sin( theAngle ) * theRadius
+    	);
+    }
     
     public static CCVector2 toCartesian(CCVector2 thePolar){
-    	return new CCVector2(
-    		CCMath.cos( thePolar.x ) * thePolar.y,
-    		CCMath.sin( thePolar.x ) * thePolar.y
-    	);
+    	return toCartesian(thePolar.x, thePolar.y);
     }
 
 	@CCProperty(name = "x")

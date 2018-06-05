@@ -8,11 +8,8 @@
  * Contributors:
  *     christianr - initial API and implementation
  */
-package cc.creativecomputing.model.obj;
+package cc.creativecomputing.math;
 
-import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector3;
 
 
 
@@ -123,6 +120,24 @@ public class CCAABB {
 		return _myMin;
 	}
 	
+	public CCVector3 max(CCVector3 theNormal) {
+		CCVector3 myResult = min().clone();
+		if (theNormal.x > 0)myResult.x += _myExtent.x;
+		if (theNormal.y > 0)myResult.y += _myExtent.y;
+		if (theNormal.z > 0)myResult.z += _myExtent.z;
+		return myResult;
+	}
+
+
+
+	public CCVector3 min(CCVector3 theNormal) {
+		CCVector3 myResult = min().clone();
+		if (theNormal.x < 0)myResult.x += _myExtent.x;
+		if (theNormal.y < 0)myResult.y += _myExtent.y;
+		if (theNormal.z < 0)myResult.z += _myExtent.z;
+		return(myResult);
+	}
+	
 	/**
 	 * Checks if the point is inside the given AABB.
 	 * 
@@ -223,10 +238,10 @@ public class CCAABB {
 	}
 	
 	
-	public void draw(CCGraphics g) {
-		g.pushMatrix();
-		g.translate(_myCenter);
-		g.boxGrid(_myExtent.x * 2, _myExtent.y * 2, _myExtent.z * 2);
-		g.popMatrix();
-	}
+//	public void draw(CCGraphics g) {
+//		g.pushMatrix();
+//		g.translate(_myCenter);
+//		g.boxGrid(_myExtent.x * 2, _myExtent.y * 2, _myExtent.z * 2);
+//		g.popMatrix();
+//	}
 }

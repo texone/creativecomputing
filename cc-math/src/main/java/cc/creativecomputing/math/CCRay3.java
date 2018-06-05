@@ -273,7 +273,7 @@ public class CCRay3 extends CCLine3Base {
 	 *            if not null, and this ray intersects the plane, the world
 	 *            location of the point of intersection is stored in this
 	 *            vector.
-	 * @return true if the ray collides with the given Plane
+	 * @return the location of the point of intersection if the ray collides with the given Plane otherwise null
 	 * @throws NullPointerException
 	 *             if the plane is null.
 	 */
