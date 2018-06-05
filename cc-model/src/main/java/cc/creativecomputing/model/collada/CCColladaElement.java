@@ -43,6 +43,10 @@ public class CCColladaElement {
 			_mySourceMap.put(mySource.id(), mySource);
 		}
 	}
+	
+	public boolean draw() {
+		return _cDraw;
+	}
 
 	/**
 	 * 

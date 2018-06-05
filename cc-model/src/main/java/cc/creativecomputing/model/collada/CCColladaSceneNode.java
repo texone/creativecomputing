@@ -158,7 +158,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				_myInstanceType = CCColladaSceneNodeInstanceType.CAMERA;
 				break;
 			case "instance_geometry":
-				String myGeometryURL = myChild.attribute("url").replaceAll("#", "");
+				String myGeometryURL = myChild.attribute("url").replace("#", "");
 				CCColladaGeometry myGeometry = theLoader.geometries().element(myGeometryURL);
 				if(myGeometry.data().size() == 0)return;
 				CCColladaGeometryData myGeometryData = myGeometry.data().get(0);
@@ -233,19 +233,6 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	}
 	
 	/**
-	 * Returns the first child node with the given node name. If there
-	 * is no such child node the method returns null.
-	 * @param theNodeName String
-	 * @return CCXMLElement
-	 */
-	public CCColladaSceneNode node(final String theNodeName){
-		if (theNodeName.indexOf('/') != -1) {
-	      return nodeRecursive(CCStringUtil.split(theNodeName, '/'), 0);
-	    }
-		return _myNodeMap.get(theNodeName);
-	}
-
-	/**
 	 * Internal helper function for {@linkplain #child(String)}
 	 * 
 	 * @param theItems result of splitting the query on slashes
@@ -271,6 +258,54 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 			return myResult.nodeRecursive(theItems, theOffset + 1);
 		}
 	}
+	
+	/**
+	 * Returns the first child node with the given node id. If there
+	 * is no such child node the method returns null.
+	 * @param theNodeID String
+	 * @return the scene node with the given id
+	 */
+	public CCColladaSceneNode node(final String theNodeID){
+		if (theNodeID.indexOf('/') != -1) {
+	      return nodeRecursive(CCStringUtil.split(theNodeID, '/'), 0);
+	    }
+		return _myNodeMap.get(theNodeID);
+	}
+	
+	/**
+	 * Internal helper function for {@linkplain #child(String)}
+	 * 
+	 * @param theItems result of splitting the query on slashes
+	 * @param theOffset where in the items[] array we're currently looking
+	 * @return matching element or null if no match
+	 */
+	protected CCColladaSceneNode nodeNameRecursive(String[] theItems, int theOffset) {
+		CCColladaSceneNode myResult = nodeByName(theItems[theOffset]);
+
+		if (theOffset == theItems.length - 1) {
+			return myResult;
+		} else {
+			return myResult.nodeNameRecursive(theItems, theOffset + 1);
+		}
+	}
+	
+	/**
+	 * Returns the first child node with the given node name. If there
+	 * is no such child node the method returns null.
+	 * @param theNodeName the name of the node to look for
+	 * @return the scene node with the given name
+	 */
+	public CCColladaSceneNode nodeByName(final String theNodeName){
+		if (theNodeName.indexOf('/') != -1) {
+	      return nodeNameRecursive(CCStringUtil.split(theNodeName, '/'), 0);
+	    }
+		for(CCColladaSceneNode myNode:children()) {
+			if(myNode.name().equals(theNodeName))return myNode;
+		}
+		return null;
+	}
+
+	
 	
 	public CCMatrix4x4 matrix() {
 		return _myMatrix;

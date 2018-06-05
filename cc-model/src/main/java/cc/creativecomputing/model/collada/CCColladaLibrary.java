@@ -11,6 +11,7 @@
 package cc.creativecomputing.model.collada;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,9 +23,9 @@ import java.util.List;
  * @author christianriekoff
  *
  */
-public class CCColladaLibrary <ElementType extends CCColladaElement> extends LinkedHashMap<String, ElementType> implements Iterable<ElementType>{
+public class CCColladaLibrary <ElementType extends CCColladaElement> extends HashMap<String, ElementType> implements Iterable<ElementType>{
 
-	protected List<ElementType> _myElementList = new ArrayList<ElementType>();
+	protected List<ElementType> _myElementList = new ArrayList<>();
 	
 	public ElementType element(String theID) {
 		return get(theID);

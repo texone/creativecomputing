@@ -64,6 +64,19 @@ public class CCColladaScene extends CCColladaElement{
 		return _myNodeMap.get(theID);
 	}
 	
+	/**
+	 * Returns the first child node with the given node name. If there
+	 * is no such child node the method returns null.
+	 * @param theNodeName the name of the node to look for
+	 * @return the scene node with the given name
+	 */
+	public CCColladaSceneNode nodeByName(final String theNodeName){
+		for(CCColladaSceneNode myNode:_myNodeMap.values()) {
+			if(myNode.name().equals(theNodeName))return myNode;
+		}
+		return null;
+	}
+	
 	public List<CCColladaSceneNode> nodes(){
 		return _myNodes;
 	}
