@@ -473,6 +473,7 @@ public class CCCamera{
 	
 	public void viewport(final CCViewport theViewport){
 		_myViewport = theViewport;
+		if(_myViewport == null)return;
 		// init perspective projection based on new dimensions
 		double cameraFOV = _myFoV; // at least for now
 		double cameraAspect = (double) theViewport.width() / (double) theViewport.height();

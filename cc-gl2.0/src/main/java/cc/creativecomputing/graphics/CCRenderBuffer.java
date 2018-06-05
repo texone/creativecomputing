@@ -14,6 +14,7 @@ import cc.creativecomputing.graphics.CCGraphics.CCMatrixMode;
 import cc.creativecomputing.graphics.texture.CCFrameBufferObject;
 import cc.creativecomputing.graphics.texture.CCFrameBufferObjectAttributes;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
+import cc.creativecomputing.math.CCMath;
 
 
 public class CCRenderBuffer extends CCFrameBufferObject{
