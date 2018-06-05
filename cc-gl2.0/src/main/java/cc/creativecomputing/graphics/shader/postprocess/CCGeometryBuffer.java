@@ -134,6 +134,7 @@ public class CCGeometryBuffer extends CCGLProgram{
 	}
 	
 	
+	
 //	public CCTexture2D depth(){
 //		return _myRenderTexture.depthTexture();
 //	}

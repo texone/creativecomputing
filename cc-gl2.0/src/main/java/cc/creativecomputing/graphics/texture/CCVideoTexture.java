@@ -86,7 +86,7 @@ public class CCVideoTexture extends CCTexture2D implements CCVideoTextureDataLis
 	@Override
 	public void display(CCGraphics theContext) {
 		if(_myInitVideo != null){
-			allocateData(_myInitVideo.width(), _myInitVideo.height());
+			allocateData(_myInitVideo.width(), _myInitVideo.height(), null);
 			data(_myInitVideo);
 			_myInitVideo = null;
 		}
