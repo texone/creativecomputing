@@ -33,6 +33,7 @@ public class CCParticle extends CCLocalSpace{
 	@CCProperty(name = "max speed")
 	public double maxSpeed;
 
+	@CCProperty(name = "max force")
 	public double maxForce;
 	
 	protected double _myAge;
