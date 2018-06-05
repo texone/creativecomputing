@@ -114,12 +114,14 @@ public class CCNIOUtil {
 	 */
 	static public Path classPath(Class<?> theClass, String thePath) {
 		
-		URL myResult = theClass.getResource(thePath);
+//		URL myResult = theClass.getResource(thePath);
+		URL myResult = theClass.getResource("");
 		if(myResult == null) {
 			throw new CCIOException("The given Resource is not available:" + theClass.getResource("") + thePath);
 		}
 		String myPath = myResult.getPath();
 		myPath = myPath.replaceAll("file:", "");
+		myPath = myPath + "/" + thePath;
 		if(CCSystem.os == CCOS.WINDOWS)if(myPath.startsWith("/"))myPath = myPath.substring(1);
 		
 		if(myPath.contains(".jar!")){

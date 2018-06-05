@@ -12,6 +12,8 @@ package cc.creativecomputing.io.xml;
 
 import java.util.*;
 
+import cc.creativecomputing.core.logging.CCLog;
+
 
 /**
  * Object for parsing a valid XML Document to convert its String 
@@ -102,7 +104,7 @@ public class CCXMLTree extends CCAbstractXMLTool{
     public void handleCDATASection(final String theCDATASection){
 		final CCDataElement myCDATASection = new CCDataElement(theCDATASection);
 		myCDATASection.cdata = true;
-		myCDATASection._myIsPCData = true;
+		myCDATASection._myIsText = true;
 		_myActualElement.addChild(myCDATASection);
 	}
 

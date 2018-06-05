@@ -55,7 +55,7 @@ public class CCDataElement implements Iterable<CCDataElement>{
 	/**
 	 * true if this element is a PCDATA section
 	 */
-	boolean _myIsPCData;
+	boolean _myIsText;
 
 	boolean cdata = false;
 
@@ -87,7 +87,7 @@ public class CCDataElement implements Iterable<CCDataElement>{
 		_myName = theName;
 		_myAttributes = theAttributes;
 		_myChildren = theChildren;
-		_myIsPCData = theIsPCData;
+		_myIsText = theIsPCData;
 	}
 	
 	/**
@@ -170,7 +170,7 @@ public class CCDataElement implements Iterable<CCDataElement>{
 	 * @see #text()
 	 */
 	public boolean isTextElement(){
-		return _myIsPCData;
+		return _myIsText;
 	}
 	
 	/**
