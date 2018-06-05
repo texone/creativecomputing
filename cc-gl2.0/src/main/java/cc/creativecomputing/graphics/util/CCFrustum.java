@@ -13,17 +13,36 @@ package cc.creativecomputing.graphics.util;
 import cc.creativecomputing.graphics.CCCamera;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCAABB;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCPlane;
+import cc.creativecomputing.math.CCRay3;
 import cc.creativecomputing.math.CCVector3;
 
 public class CCFrustum {
 	private enum CCFrustumPlane {
-		TOP, BOTTOM, LEFT, RIGHT, NEARP, FARP
+		TOP, BOTTOM, LEFT, RIGHT, NEAR, FAR
 	}
 
+	/**
+	 * Describes the relations of an object to a frustum.
+	 * Can either be inside, outside or intersecting
+	 * @author christian riekoff
+	 *
+	 */
     public enum CCFrustumRelation {
-		OUTSIDE, INTERSECT, INSIDE
+    	/**
+    	 * enum for an object outside of the frustum
+    	 */
+		OUTSIDE, 
+		/**
+    	 * enum for an object intersecting the frustum
+    	 */
+		INTERSECT, 
+		/**
+    	 * enum for an object inside the frustum
+    	 */
+		INSIDE
 	}
 
     private CCPlane[] _myFrustumPlanes = new CCPlane[6];
@@ -53,6 +72,10 @@ public class CCFrustum {
 		updateFromCamera();
 		setCamDef(_myCamera.position(), _myCamera.target(), _myCamera.up());
 	}
+	
+	public CCPlane[] frustumPlanes() {
+		return _myFrustumPlanes;
+	}
 
 	public void updateFromCamera() {
 
@@ -68,10 +91,10 @@ public class CCFrustum {
 		_myFarWidth = _myFarHeight * _myAspect;
 		
 		CCVector3 myZ = _myCamera.position().subtract(_myCamera.target());
-		myZ.normalize();
+		myZ.normalizeLocal();
 
 		CCVector3 myX = _myCamera.up().cross(myZ);
-		myX.normalize();
+		myX.normalizeLocal();
 
 		CCVector3 myY = myZ.cross(myX);
 
@@ -98,8 +121,24 @@ public class CCFrustum {
 		_myFrustumPlanes[CCFrustumPlane.BOTTOM.ordinal()] = new CCPlane(_myNearBottomLeft, _myNearBottomRight, _myFarBottomRight);
 		_myFrustumPlanes[CCFrustumPlane.LEFT.ordinal()] = new CCPlane(_myNearTopLeft, _myNearBottomLeft, _myFarBottomLeft);
 		_myFrustumPlanes[CCFrustumPlane.RIGHT.ordinal()] = new CCPlane(_myNearBottomRight, _myNearTopRight, _myFarBottomRight);
-		_myFrustumPlanes[CCFrustumPlane.NEARP.ordinal()] = new CCPlane(_myNearTopLeft, _myNearTopRight, _myNearBottomRight);
-		_myFrustumPlanes[CCFrustumPlane.FARP.ordinal()] = new CCPlane(_myFarTopRight, _myFarTopLeft, _myFarBottomLeft);
+		_myFrustumPlanes[CCFrustumPlane.NEAR.ordinal()] = new CCPlane(_myNearTopLeft, _myNearTopRight, _myNearBottomRight);
+		_myFrustumPlanes[CCFrustumPlane.FAR.ordinal()] = new CCPlane(_myFarTopRight, _myFarTopLeft, _myFarBottomLeft);
+	}
+	
+	public CCVector3 closestIntersection(CCVector3 thePosition, CCVector3 theDirection) {
+		CCRay3 myRay = new CCRay3(thePosition, theDirection);
+		double myClosestDistance = Double.MAX_VALUE;
+		CCVector3 myResult = null;
+		for(CCPlane myFrustumPlane:frustumPlanes()) {
+			CCVector3 myIntersection = myRay.intersectsPlane(myFrustumPlane);
+			if(myIntersection == null)continue;
+			double myDistance = thePosition.distance(myIntersection);
+			if(myDistance < myClosestDistance) {
+				myResult = myIntersection;
+				myClosestDistance = myDistance;
+			}
+		}
+		return myResult;
 	}
 
 	public void setCamDef(final CCVector3 thePo, CCVector3 theTa, CCVector3 theU) {
@@ -107,39 +146,129 @@ public class CCFrustum {
 		
 	}
 
-	public CCFrustumRelation isInFrustum(final CCVector3 thePoint) {
-		CCFrustumRelation result = CCFrustumRelation.INSIDE;
-		for (int i = 0; i < 6; i++) {
-			if (_myFrustumPlanes[i].distance(thePoint) < 0)
-				return CCFrustumRelation.OUTSIDE;
+	private boolean isInFrustum(final CCVector3 thePoint, int thePlanes) {
+		for (int i = 0; i < thePlanes; i++) {
+			if (_myFrustumPlanes[i].pseudoDistance(thePoint) < 0)
+				return false;
 		}
-		return (result);
+		return true;
+	}
+	
+	/**
+	 * Checks if the given Point is in the frustum.
+	 * {@linkplain CCFrustumRelation#INSIDE},{@linkplain CCFrustumRelation#INTERSECT}
+	 * or {@linkplain CCFrustumRelation#OUTSIDE}
+	 * 
+	 * @param thePoint
+	 *            the point to check
+	 * @return <code>true</code> if the point is in the frustum <code>false</code>
+	 *         otherwise
+	 */
+	public boolean isInFrustum(final CCVector3 thePoint) {
+		return isInFrustum(thePoint, 6);
+	}
+	
+	/**
+	 * Checks if the given Point is in the frustum, but only checks for the top,
+	 * bottom, left and right plane of the frustum.
+	 * {@linkplain CCFrustumRelation#INSIDE},{@linkplain CCFrustumRelation#INTERSECT}
+	 * or {@linkplain CCFrustumRelation#OUTSIDE}
+	 * 
+	 * @param thePoint
+	 *            the point to check
+	 * @return <code>true</code> if the point is in the frustum <code>false</code>
+	 *         otherwise
+	 */
+	public boolean isInFrustumTBLR(final CCVector3 thePoint) {
+		return isInFrustum(thePoint, 4);
 	}
 
-	public CCFrustumRelation isInFrustum(CCVector3 p, double raio) {
+	private CCFrustumRelation isInFrustum(CCVector3 thePosition, double theRadius, int thePlanes) {
 		CCFrustumRelation result = CCFrustumRelation.INSIDE;
 		double distance;
 
-		for (int i = 0; i < 6; i++) {
-			distance = _myFrustumPlanes[i].distance(p);
-			if (distance < -raio)
+		for (int i = 0; i < thePlanes; i++) {
+			distance = _myFrustumPlanes[i].pseudoDistance(thePosition);
+			if (distance < -theRadius)
 				return CCFrustumRelation.OUTSIDE;
-			else if (distance < raio)
+			else if (distance < theRadius)
 				result = CCFrustumRelation.INTERSECT;
 		}
 		return (result);
 	}
+	
+	/**
+	 * Checks if the given bounding sphere is in the frustum. This method does not
+	 * only return true or false but the relation to the frustum which might be
+	 * {@linkplain CCFrustumRelation#INSIDE},{@linkplain CCFrustumRelation#INTERSECT}
+	 * or {@linkplain CCFrustumRelation#OUTSIDE}
+	 * 
+	 * @param thePoint
+	 *            the center of the bounding sphere to check
+	 * @param theRadius
+	 *            the radius of the bounding sphere to check
+	 * @return the relation of the point to the frustum
+	 */
+	public CCFrustumRelation isInFrustum(CCVector3 thePoint, double theRadius) {
+		return isInFrustum(thePoint, theRadius, 6);
+	}
+	
+	/**
+	 * Checks if the given bounding sphere is in the frustum, but only checks for
+	 * the top, bottom, left and right plane of the frustum. This method does not
+	 * only return true or false but the relation to the frustum which might be
+	 * {@linkplain CCFrustumRelation#INSIDE},{@linkplain CCFrustumRelation#INTERSECT}
+	 * or {@linkplain CCFrustumRelation#OUTSIDE}
+	 * 
+	 * @param thePoint
+	 *            the center of the bounding sphere to check
+	 * @param theRadius
+	 *            the radius of the bounding sphere to check
+	 * @return the relation of the point to the frustum
+	 */
+	public CCFrustumRelation isInFrustumTBLR(CCVector3 thePoint, double theRadius) {
+		return isInFrustum(thePoint, theRadius, 4);
+	}
 
-	// public CCFrustumRelation boxInFrustum(final CCAABB theBoundingBox) {
-	// CCFrustumRelation result = CCFrustumRelation.INSIDE;
-	// for(int i=0; i < 6; i++) {
-	// if (pl[i].distance(b.getVertexP(pl[i].normal())) < 0)
-	// return CCFrustumRelation.OUTSIDE;
-	// else if (pl[i].distance(b.getVertexN(pl[i].normal())) < 0)
-	// result = CCFrustumRelation.INTERSECT;
-	// }
-	// return(result);
-	// }
+	private CCFrustumRelation isInFrustum(final CCAABB theBoundingBox, int thePlanes) {
+		CCFrustumRelation result = CCFrustumRelation.INSIDE;
+		for(int i=0; i < thePlanes; i++) {
+			if (_myFrustumPlanes[i].pseudoDistance(theBoundingBox.max(_myFrustumPlanes[i].normal())) < 0)
+				return CCFrustumRelation.OUTSIDE;
+			else if (_myFrustumPlanes[i].pseudoDistance(theBoundingBox.min(_myFrustumPlanes[i].normal())) < 0)
+				result = CCFrustumRelation.INTERSECT;
+		}
+		return(result);
+	}
+	
+	/**
+	 * Checks if the given bounding box is in the frustum. This method does not
+	 * only return true or false but the relation to the frustum which might be
+	 * {@linkplain CCFrustumRelation#INSIDE},{@linkplain CCFrustumRelation#INTERSECT}
+	 * or {@linkplain CCFrustumRelation#OUTSIDE}
+	 * 
+	 * @param theBoundingBox
+	 *            the bounding box to check
+	 * @return the relation of the point to the frustum
+	 */
+	public CCFrustumRelation isInFrustum(CCAABB theBoundingBox) {
+		return isInFrustum(theBoundingBox, 6);
+	}
+	
+	/**
+	 * Checks if the given bounding box is in the frustum, but only checks for
+	 * the top, bottom, left and right plane of the frustum. This method does not
+	 * only return true or false but the relation to the frustum which might be
+	 * {@linkplain CCFrustumRelation#INSIDE},{@linkplain CCFrustumRelation#INTERSECT}
+	 * or {@linkplain CCFrustumRelation#OUTSIDE}
+	 *
+	 * @param theBoundingBox
+	 *            the bounding box to check
+	 * @return the relation of the point to the frustum
+	 */
+	public CCFrustumRelation isInFrustumTBLR(CCAABB theBoundingBox) {
+		return isInFrustum(theBoundingBox, 4);
+	}
 
 	public void drawPoints(CCGraphics g) {
 		g.beginShape(CCDrawMode.POINTS);
@@ -258,13 +387,13 @@ public class CCFrustum {
 
 		// near
 		a = CCVector3.add(_myNearTopRight, _myNearTopLeft, _myNearBottomRight, _myNearBottomLeft).multiplyLocal(0.25f);
-		b = a.add(_myFrustumPlanes[CCFrustumPlane.NEARP.ordinal()].normal().multiply(100));
+		b = a.add(_myFrustumPlanes[CCFrustumPlane.NEAR.ordinal()].normal().multiply(100));
 		g.vertex(a);
 		g.vertex(b);
 
 		// far
 		a = CCVector3.add(_myFarTopRight, _myFarTopLeft, _myFarBottomRight, _myFarBottomLeft).multiplyLocal(0.25f);
-		b = a.add(_myFrustumPlanes[CCFrustumPlane.FARP.ordinal()].normal().multiply(100));
+		b = a.add(_myFrustumPlanes[CCFrustumPlane.FAR.ordinal()].normal().multiply(100));
 		g.vertex(a);
 		g.vertex(b);
 
