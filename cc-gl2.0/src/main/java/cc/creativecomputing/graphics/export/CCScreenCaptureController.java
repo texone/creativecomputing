@@ -20,6 +20,7 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.gl.app.events.CCKeyAdapter;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;
+import cc.creativecomputing.gl.app.events.CCKeyEvent.CCKeyCode;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -28,6 +29,7 @@ import cc.creativecomputing.image.CCImageIO.CCImageFormats;
 import cc.creativecomputing.image.format.CCImageIOFormat;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.time.CCDate;
 
 public class CCScreenCaptureController extends CCGL2Adapter{
 	
@@ -89,7 +91,15 @@ public class CCScreenCaptureController extends CCGL2Adapter{
 		_myGLAdapter.keyListener().add(new CCKeyAdapter() {
 			@Override
 			public void keyReleased(CCKeyEvent theKeyEvent) {
-//				recordFrame();
+				
+				if(!(theKeyEvent.isAltDown() && theKeyEvent.keyCode() == CCKeyCode.VK_S))return;
+				
+				_myRecordPath = CCNIOUtil.appPath("export/screencaps/"+new CCDate().toString("yyyy-MM-dd'T'HH-mm-ss-SSS")+".png");
+				if(_myRecordPath == null)return;
+				_myRecordTimeline = false;
+				_myProgress = null;
+				startRecord();
+				_mySequenceSteps = 1;
 			}
 		});
 		_myCaptureRate = 1;
