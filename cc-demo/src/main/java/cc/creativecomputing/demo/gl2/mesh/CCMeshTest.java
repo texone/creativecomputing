@@ -43,6 +43,7 @@ public class CCMeshTest extends CCGL2Adapter {
 	}
 
 	public void display(CCGraphics g) {
+		g.debug();
 		_myCameraController1.camera().draw(g);
 		g.clear();
 		g.noDepthTest();
