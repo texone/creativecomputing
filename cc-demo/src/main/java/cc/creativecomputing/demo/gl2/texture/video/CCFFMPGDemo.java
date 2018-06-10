@@ -10,17 +10,15 @@
  */
 package cc.creativecomputing.demo.gl2.texture.video;
 
-import java.nio.file.Paths;
-
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.video.CCFFMPGMovie;
+import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCFFMPGDemo extends CCGL2Adapter {
 	

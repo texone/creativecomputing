@@ -15,9 +15,9 @@ import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.video.CCGStreamerMovie;
+import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCMovieLoopDemo extends CCGL2Adapter {
 	

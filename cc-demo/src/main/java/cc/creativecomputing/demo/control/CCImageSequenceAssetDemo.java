@@ -8,8 +8,8 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTextureAttributes;
-import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.video.CCImageSequenceAsset;
+import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCImageSequenceAssetDemo extends CCGL2Adapter{
 	

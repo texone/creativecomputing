@@ -8,11 +8,13 @@
  * Contributors:
  *     christianr - initial API and implementation
  */
-package cc.creativecomputing.graphics.texture;
+package cc.creativecomputing.video;
 
 import cc.creativecomputing.gl.app.CCGLListener;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
+import cc.creativecomputing.graphics.texture.CCTexture2D;
+import cc.creativecomputing.graphics.texture.CCTextureAttributes;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.video.CCVideo;
 import cc.creativecomputing.video.CCVideoTextureDataListener;

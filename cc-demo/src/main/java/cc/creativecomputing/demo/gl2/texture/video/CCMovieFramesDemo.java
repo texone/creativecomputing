@@ -18,9 +18,9 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.font.text.CCText;
-import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.video.CCGStreamerMovie;
+import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCMovieFramesDemo extends CCGL2Adapter {
 

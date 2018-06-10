@@ -19,9 +19,9 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTextureAttributes;
-import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.video.CCImageSequence;
+import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCImageSequenceTest extends CCGL2Adapter {
 	

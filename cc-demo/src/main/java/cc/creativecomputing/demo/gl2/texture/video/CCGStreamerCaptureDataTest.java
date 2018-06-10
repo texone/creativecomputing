@@ -18,10 +18,10 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
-import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.math.signal.CCSimplexNoise;
 import cc.creativecomputing.video.CCGStreamerCapture;
 import cc.creativecomputing.video.CCGStreamerCapture.CCGStreamerCaptureResolution;
+import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCGStreamerCaptureDataTest extends CCGL2Adapter {
 	

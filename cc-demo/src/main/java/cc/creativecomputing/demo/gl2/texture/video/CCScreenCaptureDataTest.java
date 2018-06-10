@@ -19,8 +19,8 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTextureAttributes;
-import cc.creativecomputing.graphics.texture.CCVideoTexture;
 import cc.creativecomputing.video.CCScreenCaptureData;
+import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCScreenCaptureDataTest extends CCGL2Adapter {
 	
