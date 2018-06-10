@@ -19,6 +19,10 @@ public class CCSignalSettings{
 		return _myScale;
 	}
 	
+	public void scale(double theScale){
+		_myScale = theScale;
+	}
+	
 	/**
 	 * The minimum value is one. You can also set floating numbers to blend
 	 * between the result of 2 or three bands.
