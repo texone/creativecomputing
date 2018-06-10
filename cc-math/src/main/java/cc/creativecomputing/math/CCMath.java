@@ -461,22 +461,53 @@ public class CCMath {
 	}
 	
 	/**
+	 * Performs smooth Hermite interpolation between 0 and 1 when edge0 < x < edge1. 
+	 * This is useful in cases where a threshold function with a smooth transition is desired.
+	 * <p>
 	 * For values of x between min and max, returns a smoothly varying value 
 	 * that ranges from 0 at x = min to 1 at x = max. x is clamped to the 
 	 * range [min, max] and then the interpolation formula is evaluated:
 	 * -2*((x-min)/(max-min))3 + 3*((x-min)/(max-min))2
-	 * @param theA
-	 * @param theB
-	 * @param theValue
+	 * @param theEdge0 Specifies the value of the lower edge of the Hermite function.
+	 * @param theEdge1 Specifies the value of the upper edge of the Hermite function.
+	 * @param theValue Specifies the source value for interpolation.
 	 * @return
 	 */
-	static public final double smoothStep(final double theMin, final double theMax, final double theValue) {
-		if (theValue <= theMin)
+	static public final double smoothStep(final double theEdge0, final double theEdge1, final double theValue) {
+		if (theValue <= theEdge0)
 			return 0;
-		if (theValue >= theMax)
+		if (theValue >= theEdge1)
 			return 1;
 		
-		return 3 * pow((theValue-theMin)/(theMax-theMin), 2) - 2 * pow((theValue-theMin)/(theMax-theMin), 3);
+		return 3 * pow((theValue-theEdge0)/(theEdge1-theEdge0), 2) - 2 * pow((theValue-theEdge0)/(theEdge1-theEdge0), 3);
+	}
+	
+	/**
+	 * Performs smooth linear interpolation between 0 and 1 when edge0 < x < edge1. 
+	 * This is useful in cases where a threshold function with a smooth transition is desired.
+	 * @param theEdge0 Specifies the value of the lower edge of the linear function.
+	 * @param theEdge1 Specifies the value of the upper edge of the linear function.
+	 * @param theValue Specifies the source value for interpolation.
+	 * @return
+	 */
+	static public final double linearStep(final double theEdge0, final double theEdge1, final double theValue) {
+		if (theValue <= theEdge0)
+			return 0;
+		if (theValue >= theEdge1)
+			return 1;
+		
+		return map(theValue, theEdge0, theEdge1, 0, 1);
+	}
+	
+	/**
+	 * Generates a step function by comparing x to edge.
+	 * 0.0 is returned if x < edge, and 1.0 is returned otherwise.
+	 * @param theEdge specifies the location of the edge of the step function.
+	 * @param theValue specify the value to be used to generate the step function.
+	 * @return
+	 */
+	static public final double step(double theEdge, double theValue) {
+		return theValue < theEdge ? 0 : 1;
 	}
 
 	/**
