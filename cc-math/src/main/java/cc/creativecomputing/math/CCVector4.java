@@ -976,4 +976,8 @@ public class CCVector4 implements Cloneable, Externalizable {
 		theOutput.writeDouble(z);
 		theOutput.writeDouble(w);
 	}
+
+	public CCVector3 xyz() {
+		return new CCVector3(x,y,z);
+	}
 }
