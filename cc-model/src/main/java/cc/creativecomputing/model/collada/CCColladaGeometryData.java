@@ -111,7 +111,6 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 			for(int i = 0; i < _myNumberOfVertices; i++){
 				int myIndex = _myPointIndices[i * _myStride + myInput._myOffset];
 				myInput._myBuffer.put(myPoints[myIndex]);
-				if(_myDrawMode == CCDrawMode.LINE_STRIP)CCLog.info(_myNumberOfVertices, myPoints[myIndex]);
 			}
 			myInput._myBuffer.rewind();
 			_myInputMap.put(myInput._mySemantic, myInput);

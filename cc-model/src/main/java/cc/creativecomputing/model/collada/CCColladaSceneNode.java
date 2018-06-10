@@ -22,7 +22,9 @@ import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCCamera;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
+import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.io.xml.CCDataElement;
+import cc.creativecomputing.math.CCAABB;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCTransform;
@@ -72,11 +74,16 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	
 	private Map<String, Object> _myAttributes = new HashMap<>();
 	
+	private CCAABB _myBoundingBox = null;
+	
 	private CCColladaSceneNodeVisitor _myDrawVisitor;
+	
+	private CCColladaSceneNode _myParent;
 
-	public CCColladaSceneNode(CCColladaLoader theLoader, CCDataElement theNodeXML) {
+	public CCColladaSceneNode(CCColladaLoader theLoader, CCColladaSceneNode theParent, CCDataElement theNodeXML) {
 		super(theNodeXML);
 		
+		_myParent = theParent;
 		_myType = CCColladaSceneNodeType.valueOf(theNodeXML.attribute("type", "NODE"));
 		
 		_myMatrix = new CCMatrix4x4();
@@ -163,7 +170,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				if(myGeometry.data().size() == 0)return;
 				CCColladaGeometryData myGeometryData = myGeometry.data().get(0);
 				
-				CCMesh myGeometryMesh = new CCMesh(myGeometryData.drawMode());
+				CCMesh myGeometryMesh = new CCVBOMesh(myGeometryData.drawMode());
 				
 				myGeometryMesh.vertices(myGeometryData.positions());
 				if(myGeometryData.hasNormals()){
@@ -180,15 +187,13 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				break;
 			case "node":
 				if(_myInstanceType == null)_myInstanceType = CCColladaSceneNodeInstanceType.NODE;
-				CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, myChild);
+				CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, this, myChild);
 				_myNodeMap.put(myNode.id(), myNode);
 				_myNodes.add(myNode);
 				break;
 			}
 		}
-		
 	}
-	
 	public static interface CCColladaSceneNodeVisitor{
 		public void apply(CCColladaSceneNode theNode);
 	}

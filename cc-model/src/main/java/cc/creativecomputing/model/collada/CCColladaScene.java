@@ -45,7 +45,7 @@ public class CCColladaScene extends CCColladaElement{
 		super(theSceneXML);
 		
 		for(CCDataElement myNodeXML:theSceneXML.children("node")) {
-			CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, myNodeXML);
+			CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, null, myNodeXML);
 			_myNodeMap.put(myNode.id(), myNode);
 			_myNodes.add(myNode);
 		}
