@@ -378,6 +378,6 @@ public class CCBufferObject {
 	
 	@Override
 	protected void finalize() {
-		CCGraphics.currentGL().glDeleteBuffers(1, _myBufferID, 0);
+		//CCGraphics.currentGL().glDeleteBuffers(1, _myBufferID, 0);
 	}
 }

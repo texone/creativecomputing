@@ -279,7 +279,7 @@ public class CCVBOMesh extends CCMesh {
 			if (_myHasTextureCoords[i]) {
 				if (_myHasUpdatedTextureCoords[i]) {
 					_myTextureCoordBuffers[i].bind(CCBufferTarget.ARRAY);
-					// _myTextureCoordBuffers[i].bufferData();
+					 _myTextureCoordBuffers[i].bufferData();
 					_myTextureCoordBuffers[i].unbind();
 					_myHasUpdatedTextureCoords[i] = false;
 				}
@@ -292,7 +292,7 @@ public class CCVBOMesh extends CCMesh {
 		if (_myHasColors) {
 			if (_myHasUpdatedColors) {
 				_myColorBuffer.bind(CCBufferTarget.ARRAY);
-				// _myColorBuffer.bufferData();
+				 _myColorBuffer.bufferData();
 				_myColorBuffer.unbind();
 				_myHasUpdatedColors = false;
 			}
@@ -303,7 +303,7 @@ public class CCVBOMesh extends CCMesh {
 		if (_myHasNormals) {
 			if (_myHasUpdatedNormals) {
 				_myNormalBuffer.bind(CCBufferTarget.ARRAY);
-				// _myNormalBuffer.bufferData();
+				 _myNormalBuffer.bufferData();
 				_myNormalBuffer.unbind();
 				_myHasUpdatedNormals = false;
 			}
@@ -312,10 +312,9 @@ public class CCVBOMesh extends CCMesh {
 			g.gl.glNormalPointer(GL2.GL_FLOAT, 0, 0);
 		}
 		if (_myHasVertices) {
-			CCLog.info("YOYOYOY", _myVertices);
 			if (_myHasUpdatedVertices) {
 				_myVertexBuffer.bind(CCBufferTarget.ARRAY);
-//				 _myVertexBuffer.bufferData();
+				 _myVertexBuffer.bufferData();
 				_myVertexBuffer.unbind();
 				_myHasUpdatedVertices = false;
 			}

@@ -96,7 +96,6 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 			if(!debug)return GLU.getCurrentGL().getGL2();
 			else return new DebugGL2(GLU.getCurrentGL().getGL2());
 		}catch(Exception e){
-			e.printStackTrace();
 			return null;
 		}
 	}

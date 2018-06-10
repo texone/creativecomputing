@@ -89,16 +89,11 @@ public class CCGeometryBuffer extends CCGLProgram{
 		uniform1f( "near", _myGraphics.camera().near());
 		uniform1f( "far", _myGraphics.camera().far() );
 		uniform1i("colorTexture", 0);
-		updateMatrix();
+//		updateMatrix();
 	}
 	
 	public void updateMatrix(){
-		uniformMatrix4f("inverseView", inverseView());
-	}
-	
-	public CCMatrix4x4 inverseView(){
-		_myRenderTexture.camera().updateProjectionInfos();
-		return _myRenderTexture.camera().viewMatrix().invert();
+//		uniformMatrix4f("inverseView", inverseView());
 	}
 	
 	public void endDraw(CCGraphics g) {

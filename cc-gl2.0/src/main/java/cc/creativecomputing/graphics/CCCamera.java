@@ -10,20 +10,12 @@
  */
 package cc.creativecomputing.graphics;
 
-import java.nio.FloatBuffer;
-
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics.CCMatrixMode;
 import cc.creativecomputing.graphics.util.CCFrustum;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 
 
 /**
@@ -242,7 +234,6 @@ public class CCCamera{
 		if(theWidth > 0 && theHeight > 0)_myViewport = new CCViewport(0,0,theWidth,theHeight);
 
 		updateUp();
-		updateProjectionInfos();
 		
 		_myFrustum = new CCFrustum(this);
 	}
@@ -386,8 +377,6 @@ public class CCCamera{
 	 */
 	public void draw(CCGraphics g) {
 		if(_myViewport != null)_myViewport.draw(g);
-		
-		updateProjectionInfos();
 
 		g.gl.glLoadIdentity();
 		g.glu.gluLookAt(
@@ -926,150 +915,9 @@ public class CCCamera{
 			_myUp.z = _myUp.z * myCosRoll + myDirection.z * mySinRoll;
 		}
 	}
-	
-	//////////////////////////////////////////////////////////
-	//
-	// Calculations
-	//
-	//////////////////////////////////////////////////////////
-	private final int viewport[] = new int[4];
-	private final double[] _myProjectionMatrix = new double[16];
-	private final double[] _myViewMatrix = new double[16];
-	private final double[] myResultArray = new double[4];
-	
-	public void updateProjectionInfos(){
-		GL2 gl = CCGraphics.currentGL();
-		// get viewport
-		gl.glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
 
-		// get projection matrix
-		gl.glGetDoublev(GLMatrixFunc.GL_PROJECTION_MATRIX, _myProjectionMatrix, 0);
 
-		// get modelview matrix
-		gl.glGetDoublev(GLMatrixFunc.GL_MODELVIEW_MATRIX, _myViewMatrix, 0);
-	}
-	
-	public CCMatrix4x4 viewMatrix(){
-		return new CCMatrix4x4().fromArray(_myViewMatrix, true);
-	}
-	
-	/**
-	 * project transforms the specified object coordinates into
-	 * window coordinates using model, proj and view. The result
-	 * is stored in the returned vector
-	 */
-	public CCVector3 modelToScreen(final CCVector3 theObjectVector) {
-		return modelToScreen(theObjectVector.x,theObjectVector.y,theObjectVector.z);
-	}
-	
-	public CCVector3 modelToScreen(final double theX, final double theY, final double theZ){
-		CCGraphics.currentGLU().gluProject(
-			theX, 
-			theY, 
-			theZ, 
-			_myViewMatrix, 0, 
-			_myProjectionMatrix, 0, 
-			viewport, 0,
-			myResultArray, 0
-		);
-		return new CCVector3(myResultArray[0], myResultArray[1], myResultArray[2]);
-	}
-	
-	/**
-	 * Screen to model will map the given window coordinates to model coordinates. The depth of
-	 * the model coordinates is read from the depth buffer. Optionally you can pass a depth value
-	 * to this function that must be in the range 0 to 1.
-	 * @shortdesc Calculates the model coordinates corresponding to the given screen coordinates.
-	 * @param theX
-	 * @param theY
-	 * @param theDepth
-	 * @return
-	 */
-	public CCVector3 screenToModel(final double theX, final double theY, final double theDepth) {
-		//For the viewport matrix... not sure what all the values are, I think
-		// the first two are width and height, and all Matrices in GL seem to
-		// be 4 or 16...
-		
-		CCGraphics.currentGLU().gluUnProject(
-			theX, 
-			theY,
-			theDepth, 
-			_myViewMatrix, 0, 
-			_myProjectionMatrix, 0, 
-			viewport, 0,
-			myResultArray, 0
-		);
-		return new CCVector3(myResultArray[0], myResultArray[1], myResultArray[2]);
-	}
 
-	/**
-	 * @param theWindowVector
-	 * @return
-	 */
-	public CCVector3 screenToModel(final CCVector3 theWindowVector) {
-		return screenToModel(theWindowVector.x,theWindowVector.y,theWindowVector.z);
-	}
-
-	/**
-	 * @param theWindowVector
-	 * @return
-	 */
-	public CCVector3 screenToModel(final CCVector2 theWindowVector) {
-		return screenToModel(theWindowVector.x, theWindowVector.y, 0);
-	}
-	
-	/**
-	 * @param theMouseX
-	 * @param theMouseY
-	 * @return the model coordinates for the given screen position
-	 */
-	public CCVector3 screenToModel(final int theMouseX, final int theMouseY) {
-		// set up a floatbuffer to get the depth buffer value of the mouse
-		final FloatBuffer myFloatBuffer = FloatBuffer.allocate(1);
-		
-		// Get the depth buffer value at the mouse position. have to do
-		// height-mouseY, as GL puts 0,0 in the bottom left, not top left.
-		CCGraphics.currentGL().glReadPixels(theMouseX, theMouseY, 1, 1, GL2.GL_DEPTH_COMPONENT, GL.GL_FLOAT, myFloatBuffer);
-
-		myFloatBuffer.rewind();
-		
-		double myDepth = myFloatBuffer.get();
-		// the result x,y,z will be put in this.. 4th value will be 1, but I
-		// think it's "scale" in GL terms, but I think it'll always be 1.
-
-		return  screenToModel(theMouseX,  theMouseY,myDepth);
-	}
-	
-	/**
-	 * Use this method to calculate the vector perpendicular to the screen. At the
-	 * given position. The resulting vector is normalized and facing forward away
-	 * from the screen.
-	 * @param thePosition
-	 * @return
-	 */
-	public CCVector3 screenOrthogonal(CCVector3 thePosition){
-		CCVector3 myScreenCoords = modelToScreen(thePosition);
-		CCVector3 myModelCoords = screenToModel(myScreenCoords.x,myScreenCoords.y,0);
-		
-		CCVector3 myResult = myModelCoords.subtract(thePosition);
-		myResult.normalizeLocal();
-		return myResult;
-	}
-	
-	public CCVector3 screenOrthogonal(final double theX, final double theY, final double theZ){
-		return screenOrthogonal(new CCVector3(theX,theY,theZ));
-	}
-	
-	public CCVector3 screenOrthogonal(final double theX, final double theY) {
-		CCVector3 myVec1 = screenToModel(theX, theY,0);
-		CCVector3 myVec2 = screenToModel(theX, theY,1);
-		
-		return myVec1.subtract(myVec2).normalizeLocal();
-	}
-	
-	public CCVector3 screenOrthogonal(final CCVector2 theVector) {
-		return screenOrthogonal(theVector.x, theVector.y);
-	}
 	
 	/**
 	 * Returns the dimension of the screen at the given z value
@@ -1110,7 +958,6 @@ public class CCCamera{
 		myResult._myZRotation = _myZRotation;
 		
 		myResult._myFrustum = new CCFrustum(myResult);
-		myResult.updateProjectionInfos();
 		return myResult;
 	}
 }
