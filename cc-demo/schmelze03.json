@@ -1,0 +1,455 @@
+{"timelines": {"default": {
+  "lower_bound": 0,
+  "quantize": "SUBSTEP_8",
+  "timeline": [{
+    "path": "app",
+    "min": 0,
+    "max": 1,
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app/app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [
+        {
+          "path": "app/app/gold",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "Extras": {},
+          "eventTypes": "new",
+          "open": true,
+          "tracks": [{
+            "path": "app/app/gold/fragment",
+            "min": 0,
+            "max": 1,
+            "accumulate": false,
+            "mute": false,
+            "Extras": {},
+            "eventTypes": "new",
+            "open": true,
+            "tracks": [{
+              "path": "app/app/gold/fragment/uniforms",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [
+                {
+                  "path": "app/app/gold/fragment/uniforms/gold blend",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 0,
+                        "type": "HANDLE",
+                        "value": 0
+                      },
+                      "time": 0,
+                      "type": "BEZIER",
+                      "value": 0,
+                      "out": {
+                        "time": 1.8181818723678589,
+                        "type": "HANDLE",
+                        "value": 0
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 8.181818127632141,
+                        "type": "HANDLE",
+                        "value": 1
+                      },
+                      "time": 10,
+                      "type": "BEZIER",
+                      "value": 1,
+                      "out": {
+                        "time": 10,
+                        "type": "HANDLE",
+                        "value": 1
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 49.99697993794918,
+                        "type": "HANDLE",
+                        "value": 0.990909090909091
+                      },
+                      "time": 49.99697993794918,
+                      "type": "BEZIER",
+                      "value": 0.990909090909091,
+                      "out": {
+                        "time": 52.543203183109284,
+                        "type": "HANDLE",
+                        "value": 0.990909090909091
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 57.45377675483989,
+                        "type": "HANDLE",
+                        "value": 0
+                      },
+                      "time": 60,
+                      "type": "BEZIER",
+                      "value": 0,
+                      "out": {
+                        "time": 63.27272713184357,
+                        "type": "HANDLE",
+                        "value": 0
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 66.72727286815643,
+                        "type": "HANDLE",
+                        "value": 1
+                      },
+                      "time": 70,
+                      "type": "BEZIER",
+                      "value": 1,
+                      "out": {
+                        "time": 73.27272713184357,
+                        "type": "HANDLE",
+                        "value": 1
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 76.72727286815643,
+                        "type": "HANDLE",
+                        "value": 0
+                      },
+                      "time": 80,
+                      "type": "BEZIER",
+                      "value": 0,
+                      "out": {
+                        "time": 80,
+                        "type": "HANDLE",
+                        "value": 0
+                      }
+                    }
+                  ]}
+                },
+                {
+                  "path": "app/app/gold/fragment/uniforms/start progress",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 15,
+                      "type": "LINEAR",
+                      "value": 0.011727273531935478
+                    },
+                    {
+                      "time": 20,
+                      "type": "LINEAR",
+                      "value": 0.3090909090909091
+                    },
+                    {
+                      "time": 40,
+                      "type": "LINEAR",
+                      "value": 1
+                    },
+                    {
+                      "time": 70,
+                      "type": "LINEAR",
+                      "value": 1
+                    },
+                    {
+                      "time": 70,
+                      "type": "LINEAR",
+                      "value": 0
+                    }
+                  ]}
+                },
+                {
+                  "path": "app/app/gold/fragment/uniforms/heat",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 0,
+                        "type": "HANDLE",
+                        "value": 0.2727272727272727
+                      },
+                      "time": 0,
+                      "type": "BEZIER",
+                      "value": 0.2727272727272727,
+                      "out": {
+                        "time": 2.17131153530641,
+                        "type": "HANDLE",
+                        "value": 0.2727272727272727
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 17.828688464693588,
+                        "type": "HANDLE",
+                        "value": 0.5454545454545454
+                      },
+                      "time": 20,
+                      "type": "BEZIER",
+                      "value": 0.5454545454545454,
+                      "out": {
+                        "time": 20,
+                        "type": "HANDLE",
+                        "value": 0.5454545454545454
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 40.147031444739085,
+                        "type": "HANDLE",
+                        "value": 0.5545454545454546
+                      },
+                      "time": 40.147031444739085,
+                      "type": "BEZIER",
+                      "value": 0.5545454545454546,
+                      "out": {
+                        "time": 42.2887005017478,
+                        "type": "HANDLE",
+                        "value": 0.5545454545454546
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 57.637328694887046,
+                        "type": "HANDLE",
+                        "value": 0.3727272727272727
+                      },
+                      "time": 59.77899775189576,
+                      "type": "BEZIER",
+                      "value": 0.3727272727272727,
+                      "out": {
+                        "time": 59.77899775189576,
+                        "type": "HANDLE",
+                        "value": 0.3727272727272727
+                      }
+                    },
+                    {
+                      "time": 70,
+                      "type": "LINEAR",
+                      "value": 0
+                    }
+                  ]}
+                },
+                {
+                  "path": "app/app/gold/fragment/uniforms/circle radius",
+                  "min": 0,
+                  "max": 1000,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 20,
+                        "type": "HANDLE",
+                        "value": 0.276
+                      },
+                      "time": 20,
+                      "type": "BEZIER",
+                      "value": 0.276,
+                      "out": {
+                        "time": 23.181818276643753,
+                        "type": "HANDLE",
+                        "value": 0.276
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 31.818181723356247,
+                        "type": "HANDLE",
+                        "value": 0
+                      },
+                      "time": 35,
+                      "type": "BEZIER",
+                      "value": 0,
+                      "out": {
+                        "time": 43.909090757369995,
+                        "type": "HANDLE",
+                        "value": 0
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 61.090909242630005,
+                        "type": "HANDLE",
+                        "value": 0
+                      },
+                      "time": 70,
+                      "type": "BEZIER",
+                      "value": 0,
+                      "out": {
+                        "time": 70,
+                        "type": "HANDLE",
+                        "value": 0
+                      }
+                    },
+                    {
+                      "time": 70,
+                      "type": "LINEAR",
+                      "value": 0.276
+                    }
+                  ]}
+                },
+                {
+                  "path": "app/app/gold/fragment/uniforms/end progress",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 25,
+                        "type": "HANDLE",
+                        "value": 0.07272727272727275
+                      },
+                      "time": 25,
+                      "type": "BEZIER",
+                      "value": 0.07272727272727275,
+                      "out": {
+                        "time": 28.460594610598566,
+                        "type": "HANDLE",
+                        "value": 0.07272727272727275
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 41.53940538940144,
+                        "type": "HANDLE",
+                        "value": 0.8090909090909092
+                      },
+                      "time": 45,
+                      "type": "BEZIER",
+                      "value": 0.8090909090909092,
+                      "out": {
+                        "time": 45,
+                        "type": "HANDLE",
+                        "value": 0.8090909090909092
+                      }
+                    },
+                    {
+                      "time": 70,
+                      "type": "LINEAR",
+                      "value": 0.7272727272727273
+                    },
+                    {
+                      "time": 80,
+                      "type": "LINEAR",
+                      "value": 0.08181818181818179
+                    }
+                  ]}
+                }
+              ],
+              "TrackData": {"points": []}
+            }],
+            "TrackData": {"points": []}
+          }],
+          "TrackData": {"points": []}
+        },
+        {
+          "path": "app/app/flow speed",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "TrackData": {"points": [
+            {
+              "in": {
+                "time": 0,
+                "type": "HANDLE",
+                "value": 0
+              },
+              "time": 0,
+              "type": "BEZIER",
+              "value": 0,
+              "out": {
+                "time": 3.6065016247452535,
+                "type": "HANDLE",
+                "value": 0
+              }
+            },
+            {
+              "in": {
+                "time": 16.229256720201978,
+                "type": "HANDLE",
+                "value": 0.09999999999999998
+              },
+              "time": 19.83575834494723,
+              "type": "BEZIER",
+              "value": 0.09999999999999998,
+              "out": {
+                "time": 19.83575834494723,
+                "type": "HANDLE",
+                "value": 0.09999999999999998
+              }
+            },
+            {
+              "in": {
+                "time": 40,
+                "type": "HANDLE",
+                "value": 0.09090909090909094
+              },
+              "time": 40,
+              "type": "BEZIER",
+              "value": 0.09090909090909094,
+              "out": {
+                "time": 42.695654314838684,
+                "type": "HANDLE",
+                "value": 0.09090909090909094
+              }
+            },
+            {
+              "in": {
+                "time": 57.304345685161316,
+                "type": "HANDLE",
+                "value": 0
+              },
+              "time": 60,
+              "type": "BEZIER",
+              "value": 0,
+              "out": {
+                "time": 60,
+                "type": "HANDLE",
+                "value": 0
+              }
+            }
+          ]}
+        }
+      ],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 101.81164124889433,
+  "Transport": {
+    "loop_end": 80,
+    "loop_active": true,
+    "marker": {"points": []},
+    "loop_start": 0,
+    "speed": 1
+  }
+}}}
