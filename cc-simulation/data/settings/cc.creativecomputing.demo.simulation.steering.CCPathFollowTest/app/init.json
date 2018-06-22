@@ -1,0 +1,326 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "collision avoidance": {
+        "name": "collision avoidance",
+        "value": {
+          "strength": {
+            "min": 0,
+            "max": 5,
+            "name": "strength",
+            "value": 1.840000033378601
+          },
+          "collsion radius": {
+            "min": 0,
+            "max": 100,
+            "name": "collsion radius",
+            "value": 15.80000114440918
+          }
+        }
+      },
+      "max force": {
+        "min": 0.1,
+        "max": 5,
+        "name": "max force",
+        "value": 0.3548000156879425
+      },
+      "wander": {
+        "name": "wander",
+        "value": {
+          "strength": {
+            "min": 0,
+            "max": 5,
+            "name": "strength",
+            "value": 0
+          },
+          "wander rate": {
+            "min": 0.1,
+            "max": 15,
+            "name": "wander rate",
+            "value": 0.8748000264167786
+          },
+          "wander strength": {
+            "min": 0,
+            "max": 5,
+            "name": "wander strength",
+            "value": 1.7100000381469727
+          }
+        }
+      },
+      "path follow 1": {
+        "name": "path follow 1",
+        "value": {
+          "strength": {
+            "min": 0,
+            "max": 5,
+            "name": "strength",
+            "value": 2.1649999618530273
+          },
+          "predict range": {
+            "min": 0.1,
+            "max": 15,
+            "name": "predict range",
+            "value": 10
+          },
+          "direction strength": {
+            "min": 0,
+            "max": 5,
+            "name": "direction strength",
+            "value": 5
+          }
+        }
+      },
+      "enforce penetration": {
+        "name": "enforce penetration",
+        "value": false
+      },
+      "path follow 2": {
+        "name": "path follow 2",
+        "value": {
+          "strength": {
+            "min": 0,
+            "max": 5,
+            "name": "strength",
+            "value": 2.370000123977661
+          },
+          "predict range": {
+            "min": 0.1,
+            "max": 15,
+            "name": "predict range",
+            "value": 10
+          },
+          "direction strength": {
+            "min": 0,
+            "max": 5,
+            "name": "direction strength",
+            "value": 5
+          }
+        }
+      },
+      "spline": {
+        "name": "spline",
+        "closed": false,
+        "type": "linear",
+        "value": "cc.creativecomputing.math.spline.CCLinearSpline@3524c2a9",
+        "points": [
+          {
+            "x": 0.02500000037252903,
+            "y": 0.5155038833618164,
+            "z": 0
+          },
+          {
+            "x": 0.9714285731315613,
+            "y": 0.5038759708404541,
+            "z": 0
+          }
+        ]
+      },
+      "max speed": {
+        "min": 0.1,
+        "max": 5,
+        "name": "max speed",
+        "value": 0.8742000460624695
+      },
+      "spline2": {
+        "name": "spline2",
+        "closed": false,
+        "type": "linear",
+        "value": "cc.creativecomputing.math.spline.CCLinearSpline@20e09f9f",
+        "points": [
+          {
+            "x": 0.44285714626312256,
+            "y": 0.9922480583190918,
+            "z": 0
+          },
+          {
+            "x": 0.4571428596973419,
+            "y": 0.01550387591123581,
+            "z": 0
+          }
+        ]
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.220739279444036
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}
