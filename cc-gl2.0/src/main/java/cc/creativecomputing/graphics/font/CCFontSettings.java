@@ -33,6 +33,10 @@ public class CCFontSettings{
 	
 	private double _myDepth;
 	
+	private boolean _myDoSDF = false;
+	
+	private double _mySDFSpread = 1;
+	
 	public CCFontSettings(String theName, double theSize,  boolean theIsSmooth, final CCCharSet theCharset) {
 		_myName = theName;
 		_mySize = theSize;
@@ -40,6 +44,22 @@ public class CCFontSettings{
 		_myCharSet = theCharset;
 		_myBlurRadius = 0;
 		createFont();
+	}
+	
+	public boolean doSDF() {
+		return _myDoSDF;
+	}
+	
+	public void doSDF(boolean theDOSDF) {
+		_myDoSDF = theDOSDF;
+	}
+	
+	public double sdfSpread() {
+		return _mySDFSpread;
+	}
+	
+	public void sdfSpread(double theSDFSpread) {
+		_mySDFSpread = theSDFSpread;
 	}
 	
 	public CCFontSettings(String theName, double theSize) {

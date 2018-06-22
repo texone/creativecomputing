@@ -17,14 +17,23 @@ import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.font.util.CCDistanceFieldGenerator;
+import cc.creativecomputing.graphics.font.util.CCLoremIpsumGenerator;
 import cc.creativecomputing.graphics.texture.CCTexture;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
+import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.image.filter.CCGaussianBlur;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
@@ -32,6 +41,7 @@ import cc.creativecomputing.math.CCVector2;
 public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 	
 	protected CCTexture2D _myFontTexture;
+	protected CCImage _myFontImage;
 	
 	
 	CCTextureMapFont(CCFontSettings theFontSettings) {
@@ -48,7 +58,10 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 
 	@Override
 	protected void createChars(BufferedImage theCharImage, Graphics2D theGraphics) {
-		double myBlurRadius = _mySettings == null ? 0 : _mySettings.blurRadius();
+		double myBlurRadius = 0;
+		if(_mySettings != null ) {
+			myBlurRadius = CCMath.max(_mySettings.blurRadius(), _mySettings.sdfSpread());
+		}
 		
 		int myCharsPerRow = (int)(CCMath.sqrt(_myCharCount)*1.5f);
 		int index = 0;
@@ -164,10 +177,12 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 			counter++;
 		}
 		
-		if(myBlurRadius > 0) {
+		if(myBlurRadius > 0 && (_mySettings != null && !_mySettings.doSDF())) {
 			CCGaussianBlur myBlur = new CCGaussianBlur(myBlurRadius);
 			myCharImage = myBlur.filter(myCharImage);
 		}
+		
+		
 		
 		_myCharCount = index;
 		
@@ -180,7 +195,44 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 		_myNormalizedDescent = _myDescent / _mySize;
 		
 		try{
-			_myFontTexture = new CCTexture2D(CCImageIO.newImage(myCharImage));
+			CCImage myFontImage = CCImageIO.newImage(myCharImage);
+			if(_mySettings != null && _mySettings.doSDF()) {
+//				CCDistanceFieldGenerator myGenerator = new CCDistanceFieldGenerator();
+//				myGenerator.spread(_mySettings.sdfSpread());
+//				
+//				
+//				
+//				myFontImage = myGenerator.generateDistanceField(myFontImage);
+				
+				double[][] myImage = new double[myFontImage.width()][myFontImage.height()];
+				for(int x = 0; x < myFontImage.width();x++) {
+					for(int y = 0; y < myFontImage.height();y++) {
+//						if(x % 40 > 20 && y % 40 > 20)_myImage.setPixel(x, y, new CCColor(1d,1d));
+//						else _myImage.setPixel(x, y, new CCColor(1d,0d));
+						myImage[x][y] = myFontImage.getPixel(x, y).r;
+//		;				_myImage.setPixel(x, y, new CCColor(_myFontImage.getPixel(x, y).r));
+					}
+				}
+				CCSignedDistanceField mySDF = new CCSignedDistanceField();
+				double[][] myOut = new double[myFontImage.width()][myFontImage.height()];
+				mySDF.buildDistanceField(myOut, _mySettings.sdfSpread(), myImage, myFontImage.width(), myFontImage.height());
+				CCImage myNewFontImage = new CCImage(myFontImage.width(), myFontImage.height());
+				for(int x = 0; x < myFontImage.width();x++) {
+					for(int y = 0; y < myFontImage.height();y++) {
+//						if(x % 40 > 20 && y % 40 > 20)_myImage.setPixel(x, y, new CCColor(1d,1d));
+//						else _myImage.setPixel(x, y, new CCColor(1d,0d));
+						
+						myNewFontImage.setPixel(x, y, new CCColor(1d, myOut[x][y]));
+		//;				_myImage.setPixel(x, y, );
+					}
+				}
+				_myFontImage = myNewFontImage;
+				_myFontTexture = new CCTexture2D(myNewFontImage);
+			}else {
+				_myFontImage = myFontImage;
+				_myFontTexture = new CCTexture2D(myFontImage);
+				
+			}
 			_myFontTexture.textureFilter(CCTextureFilter.LINEAR);
 		}catch (Exception theException){
 			// TODO Auto-generated catch block
@@ -188,6 +240,16 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 			throw new RuntimeException(theException);
 		}
 
+	}
+	
+	public static void main(String[] args) {
+		String myFont = "DeuBaUnivers-Regular";
+		float mySize = 30;
+		
+		String myLorem = CCLoremIpsumGenerator.generate(40);
+		
+		CCFontSettings mySettings = new CCFontSettings(myFont, mySize);
+		CCFontIO.createTextureMapFont(mySettings);
 	}
 	
 	@Override
@@ -208,5 +270,9 @@ public class CCTextureMapFont extends CCFont<CCTextureMapChar>{
 	
 	public CCTexture2D texture(){
 		return _myFontTexture;
+	}
+	
+	public CCImage image(){
+		return _myFontImage;
 	}
 }

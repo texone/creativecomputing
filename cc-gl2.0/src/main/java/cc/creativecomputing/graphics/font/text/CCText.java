@@ -86,9 +86,10 @@ public class CCText extends CCMultiFontText{
 		_myTextParts.get(0).font(theFont, theSize);
 	}
 
-	@CCProperty(name = "leading", min = 0, max = 100)
+	@CCProperty(name = "leading", min = 0, max = 100, defaultValue = 1)
 	public void leading(double theTextLeading) {
 		_myTextParts.get(0).leading(theTextLeading);
+		breakText();
 	}
 
 	public double ascent() {
@@ -99,9 +100,10 @@ public class CCText extends CCMultiFontText{
 		return _myTextParts.get(0).descent();
 	}
 
-	@CCProperty(name = "spacing", min = 0, max = 100)
+	@CCProperty(name = "spacing", min = 0, max = 100, defaultValue = 1)
 	public void spacing(double theSpacing) {
 		_myTextParts.get(0).spacing(theSpacing);
+		breakText();
 	}
 	
 }
