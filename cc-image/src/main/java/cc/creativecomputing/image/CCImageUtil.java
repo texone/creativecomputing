@@ -104,6 +104,7 @@ public class CCImageUtil {
 	 * @return
 	 */
 	private static BufferedImage createFromCustom(final BufferedImage theImage) {
+		
 		int myWidth = theImage.getWidth();
 		int myHeight = theImage.getHeight();
 
@@ -236,6 +237,7 @@ public class CCImageUtil {
 		case BufferedImage.TYPE_4BYTE_ABGR:
 			theBufferedImage = createFromCustom(theBufferedImage);
 		}
+		CCLog.info(theBufferedImage);
 		theImage.mustFlipVertically(true);
 
 		theImage.width(theBufferedImage.getWidth());
@@ -265,6 +267,8 @@ public class CCImageUtil {
 //		boolean myExpectingGL12 = false;
 //		boolean myExpectingEXTABGR = false;
 //		CCPixelType _myPixelType = null; // Determine from image
+		
+		
 		switch (theBufferedImage.getType()) {
 		case BufferedImage.TYPE_INT_RGB:
 			if(CCImageIO.DEBUG)CCLog.info("TYPE_INT_RGB");

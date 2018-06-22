@@ -814,37 +814,37 @@ public class CCImage {
 	 * @return
 	 */
 	public void setPixel(final int theX, int theY, final CCColor theColor) {
-		if(theX >= _myWidth || theY >= _myHeight || _myBuffer == null){
+		if (theX >= _myWidth || theY >= _myHeight || _myBuffer == null) {
 			return;
 		}
-		
-        // Calculate The Position In The Texture, Careful Not To Overflow
-        int myIndex = indexFromPixelPos(theX, theY);
-        
-        _myBuffer[0].rewind();
-        
-        if(_myBuffer[0] instanceof ByteBuffer) {
-        	colorToBuffer(theColor, (ByteBuffer)_myBuffer[0], myIndex);
-        	return;
-        }else if(_myBuffer[0] instanceof ShortBuffer) {
-        	colorToBuffer(theColor, (ShortBuffer)_myBuffer[0], myIndex);
-        	return;
-        }else if(_myBuffer[0] instanceof IntBuffer) {
-        	colorToBuffer(theColor, (IntBuffer)_myBuffer[0], myIndex);
-        	return;
-        }else if(_myBuffer[0] instanceof LongBuffer) {
-        	colorToBuffer(theColor, (LongBuffer)_myBuffer[0], myIndex);
-        	return;
-        }else if(_myBuffer[0] instanceof FloatBuffer) {
-        	colorToBuffer(theColor, (FloatBuffer)_myBuffer[0], myIndex);
-        	return;
-        }else if(_myBuffer[0] instanceof DoubleBuffer) {
-        	colorToBuffer(theColor, (DoubleBuffer)_myBuffer[0], myIndex);
-        	return;
-        }
-       
+
+		// Calculate The Position In The Texture, Careful Not To Overflow
+		int myIndex = indexFromPixelPos(theX, theY);
+
+		_myBuffer[0].rewind();
+
+		if (_myBuffer[0] instanceof ByteBuffer) {
+			colorToBuffer(theColor, (ByteBuffer) _myBuffer[0], myIndex);
+			return;
+		} else if (_myBuffer[0] instanceof ShortBuffer) {
+			colorToBuffer(theColor, (ShortBuffer) _myBuffer[0], myIndex);
+			return;
+		} else if (_myBuffer[0] instanceof IntBuffer) {
+			colorToBuffer(theColor, (IntBuffer) _myBuffer[0], myIndex);
+			return;
+		} else if (_myBuffer[0] instanceof LongBuffer) {
+			colorToBuffer(theColor, (LongBuffer) _myBuffer[0], myIndex);
+			return;
+		} else if (_myBuffer[0] instanceof FloatBuffer) {
+			colorToBuffer(theColor, (FloatBuffer) _myBuffer[0], myIndex);
+			return;
+		} else if (_myBuffer[0] instanceof DoubleBuffer) {
+			colorToBuffer(theColor, (DoubleBuffer) _myBuffer[0], myIndex);
+			return;
+		}
+
 		throw new RuntimeException("Unexpected buffer type " + _myBuffer[0].getClass().getName());
-    }
+	}
 	
 	/**
 	 * Copies an area from the the source data.
