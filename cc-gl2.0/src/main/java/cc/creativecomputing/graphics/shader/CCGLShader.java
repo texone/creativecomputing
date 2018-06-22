@@ -260,13 +260,17 @@ public class CCGLShader extends CCShaderObject{
 	
 	@Override
 	public Path[] templates() {
-		Path myTemplatePath = CCNIOUtil.classPath(CCGLShader.class, "templates");
-		List<Path> myTemplates = CCNIOUtil.list(myTemplatePath, true, "glsl");
-		Path[] myResult = new Path[myTemplates.size()];
-		for(int i = 0; i < myTemplates.size();i++){
-			myResult[i] = myTemplatePath.relativize(myTemplates.get(i));
+		try {
+			Path myTemplatePath = CCNIOUtil.classPath(CCGLShader.class, "templates");
+			List<Path> myTemplates = CCNIOUtil.list(myTemplatePath, true, "glsl");
+			Path[] myResult = new Path[myTemplates.size()];
+			for(int i = 0; i < myTemplates.size();i++){
+				myResult[i] = myTemplatePath.relativize(myTemplates.get(i));
+			}
+			return myResult;
+		}catch(Exception e) {
+			return new Path[0];
 		}
-		return myResult;
 	}
 	
 	@Override
