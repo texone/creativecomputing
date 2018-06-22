@@ -15,7 +15,6 @@ import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.demo.protocol.serial.CCSerialTest;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import jssc.SerialPortList;
