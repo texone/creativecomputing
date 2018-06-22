@@ -12,10 +12,8 @@ package cc.creativecomputing.demo.simulation.steering;
 
 import java.util.List;
 
-import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCAABB;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.model.obj.CCAABB;
 import cc.creativecomputing.simulation.steering.CCAgent;
 
 public class CCTestAgent extends CCAgent {
