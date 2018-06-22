@@ -1,0 +1,551 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "gold": {
+        "name": "gold",
+        "value": {"fragment": {
+          "name": "fragment",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {
+                "heat": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "heat",
+                  "value": 0
+                },
+                "gold blend": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "gold blend",
+                  "value": 0
+                },
+                "typo heat noise": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "typo heat noise",
+                  "value": 0.14399999380111694
+                },
+                "progress typo": {
+                  "min": -0.5,
+                  "max": 0.5,
+                  "name": "progress typo",
+                  "value": 0.19700002670288086
+                },
+                "rect1 pos.x": {
+                  "min": 0,
+                  "max": 3000,
+                  "name": "rect1 pos.x",
+                  "value": 1146
+                },
+                "rect1 pos.y": {
+                  "min": 0,
+                  "max": 3000,
+                  "name": "rect1 pos.y",
+                  "value": 200
+                },
+                "rect0 size.y": {
+                  "min": 0,
+                  "max": 1000,
+                  "name": "rect0 size.y",
+                  "value": 145
+                },
+                "rect1 size.x": {
+                  "min": 0,
+                  "max": 1000,
+                  "name": "rect1 size.x",
+                  "value": 447
+                },
+                "rect1 size.y": {
+                  "min": 0,
+                  "max": 1000,
+                  "name": "rect1 size.y",
+                  "value": 220
+                },
+                "rect0 size.x": {
+                  "min": 0,
+                  "max": 1000,
+                  "name": "rect0 size.x",
+                  "value": 684
+                },
+                "blend radius": {
+                  "min": 0,
+                  "max": 100,
+                  "name": "blend radius",
+                  "value": 17.100000381469727
+                },
+                "typo heat smooth": {
+                  "min": 0,
+                  "max": 0.5,
+                  "name": "typo heat smooth",
+                  "value": 0.19050000607967377
+                },
+                "edge Noise": {
+                  "min": 0,
+                  "max": 0.5,
+                  "name": "edge Noise",
+                  "value": 0.5
+                },
+                "typo progress smooth": {
+                  "min": 0,
+                  "max": 0.5,
+                  "name": "typo progress smooth",
+                  "value": 0.3084999918937683
+                },
+                "typo uv distortion": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "typo uv distortion",
+                  "value": 0.07900000363588333
+                },
+                "circle radius": {
+                  "min": 0,
+                  "max": 1000,
+                  "name": "circle radius",
+                  "value": 276
+                },
+                "liquid": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "liquid",
+                  "value": 0.5260000228881836
+                },
+                "gold color.x": {
+                  "min": 0,
+                  "max": 4,
+                  "name": "gold color.x",
+                  "value": 2.1040000915527344
+                },
+                "typo progress noise": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "typo progress noise",
+                  "value": 0.9070000052452087
+                },
+                "gold color.y": {
+                  "min": 0,
+                  "max": 4,
+                  "name": "gold color.y",
+                  "value": 1.0520000457763672
+                },
+                "circle pos.y": {
+                  "min": 0,
+                  "max": 3000,
+                  "name": "circle pos.y",
+                  "value": 300
+                },
+                "gold color.z": {
+                  "min": 0,
+                  "max": 4,
+                  "name": "gold color.z",
+                  "value": 0.5239999890327454
+                },
+                "circle pos.x": {
+                  "min": 0,
+                  "max": 3000,
+                  "name": "circle pos.x",
+                  "value": 600
+                },
+                "progress noise": {
+                  "min": 0,
+                  "max": 0.1,
+                  "name": "progress noise",
+                  "value": 0.0551999993622303
+                },
+                "start progress": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "start progress",
+                  "value": 0
+                },
+                "progress bow": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "progress bow",
+                  "value": 0.18400000035762787
+                },
+                "progress smooth": {
+                  "min": 0,
+                  "max": 0.1,
+                  "name": "progress smooth",
+                  "value": 0.04600000008940697
+                },
+                "rect0 pos.y": {
+                  "min": 0,
+                  "max": 3000,
+                  "name": "rect0 pos.y",
+                  "value": 237.00001525878906
+                },
+                "rect0 pos.x": {
+                  "min": 0,
+                  "max": 3000,
+                  "name": "rect0 pos.x",
+                  "value": 513
+                },
+                "end progress": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "end progress",
+                  "value": 0.08181818181818179
+                },
+                "heat typo": {
+                  "min": -0.5,
+                  "max": 0.5,
+                  "name": "heat typo",
+                  "value": -0.5
+                }
+              }
+            },
+            "gold_flow.glsl": {
+              "name": "gold_flow.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@16e0454e"
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        }}
+      },
+      "typo y": {
+        "min": 0,
+        "max": 2000,
+        "name": "typo y",
+        "value": 260
+      },
+      "typo x": {
+        "min": 0,
+        "max": 2000,
+        "name": "typo x",
+        "value": 632
+      },
+      "flow speed": {
+        "min": 0,
+        "max": 1,
+        "name": "flow speed",
+        "value": 0
+      },
+      "typo alpha": {
+        "min": 0,
+        "max": 1,
+        "name": "typo alpha",
+        "value": 0
+      },
+      "screen capture": {
+        "name": "screen capture",
+        "value": {
+          "full window": {},
+          "record key": {
+            "name": "record key",
+            "value": true
+          },
+          "format": {
+            "name": "format",
+            "value": "JPEG"
+          },
+          "prepend": {
+            "name": "prepend",
+            "value": "frame_"
+          },
+          "draw bounds": {
+            "name": "draw bounds",
+            "value": false
+          },
+          "quality": {
+            "min": 0,
+            "max": 1,
+            "name": "quality",
+            "value": 0.9
+          },
+          "seconds": {
+            "min": 1,
+            "max": 1000,
+            "name": "seconds",
+            "value": 100
+          },
+          "record frame": {},
+          "alpha": {
+            "name": "alpha",
+            "value": false
+          },
+          "x": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "x",
+            "value": 0
+          },
+          "width": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "width",
+            "value": 1680
+          },
+          "y": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "y",
+            "value": 0
+          },
+          "capture rate": {
+            "min": 1,
+            "max": 60,
+            "name": "capture rate",
+            "value": 30
+          },
+          "record sequence": {},
+          "height": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "height",
+            "value": 600
+          },
+          "record timeline loop": {}
+        }
+      },
+      "text": {
+        "name": "text",
+        "value": {
+          "spacing": {
+            "min": 0,
+            "max": 100,
+            "name": "spacing",
+            "value": 1.26
+          },
+          "size": {
+            "min": 0,
+            "max": 100,
+            "name": "size",
+            "value": 32
+          },
+          "leading": {
+            "min": 0,
+            "max": 100,
+            "name": "leading",
+            "value": 7.90000057220459
+          },
+          "position": {
+            "name": "position",
+            "value": {
+              "x": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "x",
+                "value": 0
+              },
+              "y": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "y",
+                "value": 0
+              },
+              "z": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "text": {
+            "name": "text",
+            "value": "GOLD"
+          },
+          "align": {"name": "align"}
+        }
+      },
+      "typo scale": {
+        "min": 0,
+        "max": 10,
+        "name": "typo scale",
+        "value": 4.610000133514404
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "Display 69731266"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "1920 x 1200"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1680
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.857461077963027
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}
