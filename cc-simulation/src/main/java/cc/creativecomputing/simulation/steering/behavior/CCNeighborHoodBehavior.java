@@ -19,6 +19,7 @@ package cc.creativecomputing.simulation.steering.behavior;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.CCParticle;
@@ -35,6 +36,7 @@ public abstract class CCNeighborHoodBehavior extends CCForce{
 	/**
 	 * Distance in which neighbors have to be to be included into calculations
 	 */
+	@CCProperty(name = "near radius", min = 0, max = 300)
 	protected double _myNearAreaRadius;
 	
 	/**

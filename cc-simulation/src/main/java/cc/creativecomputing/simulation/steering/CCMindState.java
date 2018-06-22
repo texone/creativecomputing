@@ -120,7 +120,7 @@ public class CCMindState {
 			_mySteering.set(0,0,0);
 			myBehavior.apply(theAgent, _mySteering, theDeltaTime);
 			_mySteering.normalizeLocal();
-			_mySteering.multiplyLocal(myBehavior.weight());
+			_mySteering.multiplyLocal(myBehavior.strength());
 			
 			_mySteering.multiplyLocal(theDeltaTime * CCSimulation.TARGET_FRAMERATE);
 			theAgent.applyForce(_mySteering);

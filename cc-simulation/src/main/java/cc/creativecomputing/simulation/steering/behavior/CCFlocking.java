@@ -41,8 +41,8 @@ public class CCFlocking extends CCNeighborHoodBehavior{
 	*/
 	public CCFlocking(final double theDistance, final double theAngle){
 		super(theDistance, theAngle);
-		_myFlee.weight(1f);
-		_mySeek.weight(1f);
+		_myFlee.strength(1f);
+		_mySeek.strength(1f);
 	}
 	
 	@Override
@@ -85,7 +85,7 @@ public class CCFlocking extends CCNeighborHoodBehavior{
 		_myFlee.target(myTarget);
 		_myFlee.apply(theAgent, myTempForce, 0);
 		myTempForce.normalizeLocal();
-		myTempForce.multiplyLocal(_myFlee.weight());
+		myTempForce.multiplyLocal(_myFlee.strength());
 		theForce.addLocal(myTempForce);
 		
 		myTarget = new CCVector3();
@@ -106,7 +106,7 @@ public class CCFlocking extends CCNeighborHoodBehavior{
 		_mySeek.target(myTarget);
 		_mySeek.apply(theAgent, myTempForce, 0);
 		myTempForce.normalizeLocal();
-		myTempForce.multiplyLocal(_mySeek.weight());
+		myTempForce.multiplyLocal(_mySeek.strength());
 		theForce.addLocal(myTempForce);
 		
 		/* apply alignment */

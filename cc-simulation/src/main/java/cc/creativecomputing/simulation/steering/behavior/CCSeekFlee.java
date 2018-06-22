@@ -40,7 +40,7 @@ import cc.creativecomputing.simulation.CCParticle;
 public class CCSeekFlee extends CCTargetBehavior{
 	
 	
-	private double _myStrength = 1;
+	protected double _myStrength = 1;
 	
 	/**
 	 * Initializes a new seek directing the agent to the given target.
@@ -48,6 +48,10 @@ public class CCSeekFlee extends CCTargetBehavior{
 	 */
 	public CCSeekFlee(final CCVector3 theTarget){
 		super(theTarget);
+	}
+	
+	public CCSeekFlee(){
+		super(new CCVector3());
 	}
 	
 	public void strength(double theStrength) {

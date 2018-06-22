@@ -129,7 +129,7 @@ public class CCGBufferEmitDemo2 extends CCGL2Adapter {
 		g.pushMatrix();
 		_myCameraController.camera().draw(g);
 //		_myInverseView = _myGBuffer.inverseView();
-		_myGBuffer.updateMatrix();
+//		_myGBuffer.updateMatrix();
 		g.color(255);
 		g.depthTest();
 		for(Box myBox:_myBoxes) {

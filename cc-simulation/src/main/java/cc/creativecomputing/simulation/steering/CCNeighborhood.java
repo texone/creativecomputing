@@ -21,6 +21,7 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorListener;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.CCParticle;
 import cc.creativecomputing.simulation.CCParticleGroup;
@@ -183,13 +184,12 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 	 * @return Array of vehicles
 	 */
 	public List<AgentType> getNearAgents(final CCParticle theAgent, final double theDistance) {
-		final List<AgentType> _myResult = new ArrayList<AgentType>();
+		final List<AgentType> _myResult = new ArrayList<>();
 
 		// get the index of the vehicle
 		final int myVehicleIndex = indexOf(theAgent);
 		
 		if(myVehicleIndex == -1)return _myResult;
-
 		// quadratic distance
 		final double distSquared = theDistance * theDistance;
 
@@ -197,7 +197,7 @@ public class CCNeighborhood<AgentType extends CCAgent> extends CCParticleGroup<A
 		
 		// query distance matrix and put near vehicles in the result list
 		for (int i = 0; i < _myNumberOfElements; i++) {
-			if ((i != myVehicleIndex) && (_myDistanceMatrix[myVehicleIndex][i] <= distSquared)){
+			if (i != myVehicleIndex && (_myDistanceMatrix[myVehicleIndex][i] <= distSquared)){
 				_myResult.add(get(i));
 			}
 		}

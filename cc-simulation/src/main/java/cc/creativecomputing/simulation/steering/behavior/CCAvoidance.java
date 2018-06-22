@@ -16,6 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.simulation.steering.behavior;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.CCParticle;
 import cc.creativecomputing.simulation.domain.CCDomain;
@@ -38,10 +39,15 @@ import cc.creativecomputing.simulation.force.CCDomainForce;
  * @author info
  *
  */
-public class CCAvoidance extends CCDomainForce{
+public class CCAvoidance extends CCDomainForce{	
+    
+ // how many time units ahead to look
+    @CCProperty (name = "avoidance look ahead", min = 0f, max = 200f)
+	private double _myLookAhead = 100;
 	
-	private double _myLookAhead;	// how many time units ahead to look
-    private double _myEpsilon;		// add to r^2 for softening
+ // add to r^2 for softening
+	@CCProperty (name = "avoidance epsilon", min = 0f, max = 200f)
+	private double _myEpsilon = 100;
 	
     /**
      * Creates a new avoidance,
@@ -56,6 +62,10 @@ public class CCAvoidance extends CCDomainForce{
 	public CCAvoidance(final double theLookAhead, final double theEpsilon){
 		_myLookAhead = theLookAhead;
 		_myEpsilon = theEpsilon;
+	}
+	
+	public CCAvoidance() {
+		
 	}
 	
 	public double lookAhead(){

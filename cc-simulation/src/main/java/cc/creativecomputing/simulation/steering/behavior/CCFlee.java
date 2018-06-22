@@ -30,6 +30,10 @@ public class CCFlee extends CCTargetBehavior{
 	public CCFlee(final CCVector3 theTarget){
 		super(theTarget);
 	}
+	
+	public CCFlee() {
+		super(new CCVector3());
+	}
 
 	public boolean apply(final CCParticle theAgent, final CCVector3 theForce, double theDeltaTime){
 		double goalLength = 1.1F * theAgent.velocity().length();

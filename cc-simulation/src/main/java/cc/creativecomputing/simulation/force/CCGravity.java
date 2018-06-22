@@ -27,6 +27,10 @@ public class CCGravity extends CCForce{
 		_myGravity = theGravity;
 	}
 	
+	public CCGravity(){
+		_myGravity = new CCVector3();
+	}
+	
 	public CCGravity(final double theX, final double theY, final double theZ){
 		_myGravity = new CCVector3(theX, theY, theZ);
 	}

@@ -16,6 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.simulation.steering.behavior;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.CCParticle;
 import cc.creativecomputing.simulation.force.CCForce;
@@ -24,10 +25,12 @@ import cc.creativecomputing.simulation.force.CCForce;
 public abstract class CCTargetBehavior extends CCForce{
 
 	protected final CCVector3 _myTarget;
-	protected double _myMaxActiveDistance = Float.MAX_VALUE;
-	protected double _myMaxActiveDistanceSq = Float.MAX_VALUE;
+	
+	@CCProperty (name = "min distance", min = 0, max = 1000)
 	protected double _myMinActiveDistance = 0;
-	protected double _myMinActiveDistanceSq = 0;
+	
+	@CCProperty (name = "max distance", min = 0, max = 1000)
+	protected double _myMaxActiveDistance = Float.MAX_VALUE;
 	
 	public CCTargetBehavior(final CCVector3 theTarget){
 		_myTarget = theTarget;
@@ -62,7 +65,6 @@ public abstract class CCTargetBehavior extends CCForce{
 	 */
 	public void maxActiveDistance(final double theActiveDistance){
 		_myMaxActiveDistance = theActiveDistance;
-		_myMaxActiveDistanceSq = theActiveDistance * theActiveDistance;
 	}
 	
 	/**
@@ -80,13 +82,12 @@ public abstract class CCTargetBehavior extends CCForce{
 	 */
 	public void minActiveDistance(final double theActiveDistance){
 		_myMinActiveDistance = theActiveDistance;
-		_myMinActiveDistanceSq = theActiveDistance * theActiveDistance;
 	}
 	
 	@Override
 	public boolean isActive(final CCParticle theVehicle){
-		double mySquaredDistance = theVehicle.position.distanceSquared(_myTarget);
-		return mySquaredDistance < _myMaxActiveDistanceSq && mySquaredDistance > _myMinActiveDistanceSq;
+		double myDistance = theVehicle.position.distance(_myTarget);
+		return myDistance < _myMaxActiveDistance && myDistance > _myMinActiveDistance;
 	}
 
 }

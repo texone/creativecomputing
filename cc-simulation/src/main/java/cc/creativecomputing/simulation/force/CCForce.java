@@ -16,15 +16,15 @@
  ******************************************************************************/
 package cc.creativecomputing.simulation.force;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.CCParticle;
 
 
 public abstract class CCForce{
 	
-	protected double weight = 1;
-	
-	protected static double sqrt2 = (double) Math.sqrt(2D);
+	@CCProperty (name = "strength", min = 0.f, max = 5f)
+	protected double _cStrength = 1;
 	
 	public CCForce(){
 	}
@@ -37,17 +37,17 @@ public abstract class CCForce{
 		return true;
 	}
 	
-	public double weight(){
-		return weight;
+	public double strength(){
+		return _cStrength;
 	}
 	
 	/**
 	 * Sets the weight this behavior is applied with
 	 * can range from 0 to 1 exceeding values are truncated
-	 * @param theWeight
+	 * @param theStrength
 	 */
-	public void weight(final double theWeight){
-		weight = Math.max(theWeight,0);
+	public void strength(final double theStrength){
+		_cStrength = theStrength;
 	}
 
 	

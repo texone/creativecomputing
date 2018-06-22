@@ -16,6 +16,10 @@
  ******************************************************************************/
 package cc.creativecomputing.simulation.steering.behavior;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.CCParticle;
@@ -48,103 +52,49 @@ public class CCWander extends CCForce{
 	 * The radius of the sphere projected before the agent, determining 
 	 * the maximum wander strength
 	 */
-	private double _myWanderStrength;
-
+	@CCProperty (name = "wander strength", min = 0.f, max = 5f)
+	private float _cWanderStrength = 1;
 	/**
 	 * The maximum random displacement added to the direction
 	 */
-	private double _myWanderRate;
-
-	/**
-	 * direction of the wander that is displaced on every time step
-	 */
-	private final CCVector3 _myWanderDirection;
+	@CCProperty (name = "wander rate", min = 0.1f, max = 15f)
+	private float _cWanderRate = 0.6f;
 	
 	/**
 	 * Initializes a new CCWanderer using the giving strength and rate.
-	 * @param i_wanderStrength, int or double: The radius of the sphere projected before the agent, 
+	 * @param theWanderStrength, int or double: The radius of the sphere projected before the agent, 
 	 * 			determining the maximum wander strength
-	 * @param i_wanderRate, int or double: The maximum random displacement added to the direction
-	 */
-	public CCWander(
-		final double theWanderStrength,
-		final double theWanderRate
-	){
-		_myWanderStrength = theWanderStrength;
-		_myWanderRate = theWanderRate;
-		_myWanderDirection = new CCVector3();
-	}
-	
-	/**
-	 * Initializes a new CCWanderer using default values.
-	 *
+	 * @param theWanderRate, int or double: The maximum random displacement added to the direction
 	 */
 	public CCWander(){
-		this(1f,0.6f);
 	}
+	
+	private Map<CCParticle, CCVector3> _myDirectionMap = new HashMap<>();
 	
 	/**
 	 * Applies the behavior to its agent
 	 */
 	public synchronized boolean apply(final CCParticle theAgent,final CCVector3 theForce, double theDeltaTime){
-		double x = (CCMath.random() * 2 - 1) * _myWanderRate;
-		double y = (CCMath.random() * 2 - 1) * _myWanderRate;
-		double z = (CCMath.random() * 2 - 1) * _myWanderRate;
+		double x = (CCMath.random() * 2 - 1) * _cWanderRate;
+		double y = (CCMath.random() * 2 - 1) * _cWanderRate;
+		double z = (CCMath.random() * 2 - 1) * _cWanderRate;
 
+		if(!_myDirectionMap.containsKey(theAgent)) {
+			_myDirectionMap.put(theAgent, new CCVector3());
+		}
+		CCVector3 _myWanderDirection = _myDirectionMap.get(theAgent);
 		_myWanderDirection.addLocal(x,y,z);
 		//_myWanderDirection().x(0.0F);
 		_myWanderDirection.normalizeLocal();
 
-		CCVector3 wanderGlobal = theAgent.globalizeDirection(wanderDirection());
+		CCVector3 wanderGlobal = theAgent.globalizeDirection(_myWanderDirection);
 
 		theForce.set(
-			theAgent.forward.x * sqrt2 + wanderGlobal.x * _myWanderStrength,
-			theAgent.forward.y * sqrt2 + wanderGlobal.y * _myWanderStrength,
-			theAgent.forward.z * sqrt2 + wanderGlobal.z * _myWanderStrength
+			theAgent.forward.x * CCMath.SQRT2 + wanderGlobal.x * _cWanderStrength,
+			theAgent.forward.y * CCMath.SQRT2 + wanderGlobal.y * _cWanderStrength,
+			theAgent.forward.z * CCMath.SQRT2 + wanderGlobal.z * _cWanderStrength
 		);
 		return true;
-	}
-
-	/**
-	 * Sets the maximum strength of the wander.
-	 * @param theWanderStrength The _myWanderStrength to set.
-	 */
-	public void wanderStrength(final double theWanderStrength){
-		_myWanderStrength = theWanderStrength;
-	}
-
-	/**
-	 * Returns the maximum strength of the wanderer.
-	 * @return Returns the _myWanderStrength.
-	 */
-	public double wanderStrength(){
-		return _myWanderStrength;
-	}
-
-	/**
-	 * Sets the maximum displacement added each time step to 
-	 * the direction of the wanderer.
-	 * @param theWanderRate The _myWanderRate to set.
-	 */
-	public void wanderRate(final double theWanderRate){
-		_myWanderRate = theWanderRate;
-	}
-
-	/**
-	 * Returns the maximum displacement added each time step to 
-	 * the direction of the wanderer.
-	 * @return Returns the _myWanderRate.
-	 */
-	public double wanderRate(){
-		return _myWanderRate;
-	}
-
-	/**
-	 * Returns the current direction of the wanderer
-	 * @return CCVector3: the current direction of the wanderer
-	 */
-	public CCVector3 wanderDirection(){
-		return _myWanderDirection;
 	}
 
 }
