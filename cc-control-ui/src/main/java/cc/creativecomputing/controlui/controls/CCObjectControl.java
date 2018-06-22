@@ -51,7 +51,9 @@ import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
 import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.spline.CCSpline;
 
 public class CCObjectControl extends JPanel implements CCControl{
 	
@@ -241,7 +243,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 		creatorMap.put(String.class, (myHandle, myInfoPanel) -> {return new CCStringControl((CCStringPropertyHandle)myHandle, myInfoPanel);});
 		creatorMap.put(CCControlMatrix.class, (myHandle, myInfoPanel) -> {return new CCControlMatrixControl((CCControlMatrixHandle)myHandle, myInfoPanel);});
 		creatorMap.put(CCEnvelope.class, (myHandle, myInfoPanel) -> {return new CCEnvelopeControl((CCEnvelopeHandle)myHandle, myInfoPanel);});
-		creatorMap.put(CCSplineHandle.class, (myHandle, myInfoPanel) -> {return new CCSplineControl((CCSplineHandle)myHandle, myInfoPanel);});
+		creatorMap.put(CCSpline.class, (myHandle, myInfoPanel) -> {return new CCSplineControl((CCSplineHandle)myHandle, myInfoPanel);});
 		creatorMap.put(Path.class, (myHandle, myInfoPanel) -> {return new CCPathControl((CCPathHandle)myHandle, myInfoPanel);});
 		creatorMap.put(CCShaderSource.class, (myHandle, myInfoPanel) -> {return new CCShaderCompileControl((CCShaderSourceHandle)myHandle, myInfoPanel);});
 	}
@@ -266,7 +268,6 @@ public class CCObjectControl extends JPanel implements CCControl{
 			Class<?> myClass = myPropertyHandle.type();
 			
 			CCControl myControl;
-			
 			CCControlCreator myCreator = handleCreator(myClass);
 			if(myCreator != null){
 				myControl = myCreator.create(myPropertyHandle, _myControlComponent);
@@ -275,6 +276,7 @@ public class CCObjectControl extends JPanel implements CCControl{
 			}else  if(myClass.isEnum()){
 				myControl = new CCEnumControl((CCEnumPropertyHandle)myPropertyHandle, _myControlComponent);
 			}else{
+				CCLog.info(myClass.getName());
 				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;
 				CCObjectControl myObjectControl = new CCObjectControl(myObjectHandle, _myControlComponent, _myDepth + 1);
 				myControl = myObjectControl;
