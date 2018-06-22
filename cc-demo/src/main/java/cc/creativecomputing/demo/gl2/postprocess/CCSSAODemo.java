@@ -106,7 +106,7 @@ public class CCSSAODemo extends CCGL2Adapter {
 		g.clear();
 		
 		_myCameraController.camera().draw(g);
-		_myPostProcess.geometryBuffer().updateMatrix();
+//		_myPostProcess.geometryBuffer().updateMatrix();
 		for(Box myBox:_myBoxes) {
 			myBox.display(g);
 		}
