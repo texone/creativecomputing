@@ -1,34 +1,49 @@
-//  Blackbody Lava, based on fizzer's Flowing Lava - https://www.shadertoy.com/view/4djSzR
-//  
-//  ~bj.2014
-
-#define NEW_LAVA 0
-#define TEMPERATURE 2200.0
-
-float fbm(vec2 p);
 
 float hash(float n){
     n=mod(n,1024.0);
     return fract(sin(n)*43758.5453);
 }
 
-float noise(vec2 p){
-    return hash(p.x + p.y*57.0);
+float noise(vec3 p){
+    return hash(p.x + p.y * 57.0 + p.z * 213.);
 }
 
-float smoothNoise2(vec2 p){
-	vec2 p0 = floor(p + vec2(0.0, 0.0));
-	vec2 p1 = floor(p + vec2(1.0, 0.0));
-	vec2 p2 = floor(p + vec2(0.0, 1.0));
-	vec2 p3 = floor(p + vec2(1.0, 1.0));
-	vec2 pf = fract(p);
+float smoothNoise2(vec3 p){
+	vec3 p000 = floor(p + vec3(0.0, 0.0, 0.0));
+	vec3 p100 = floor(p + vec3(1.0, 0.0, 0.0));
+	vec3 p010 = floor(p + vec3(0.0, 1.0, 0.0));
+	vec3 p110 = floor(p + vec3(1.0, 1.0, 0.0));
+	
+	vec3 p001 = floor(p + vec3(0.0, 0.0, 1.0));
+	vec3 p101 = floor(p + vec3(1.0, 0.0, 1.0));
+	vec3 p011 = floor(p + vec3(0.0, 1.0, 1.0));
+	vec3 p111 = floor(p + vec3(1.0, 1.0, 1.0));
+
+	
+	vec3 pf = fract(p);
 	
 	return mix(
-		mix(noise(p0), noise(p1), pf.x),
-		mix(noise(p2), noise(p3), pf.x), 
-		pf.y
+		mix(
+			mix(noise(p000), noise(p100), pf.x),
+			mix(noise(p010), noise(p110), pf.x), 
+			pf.y
+		),
+		mix(
+			mix(noise(p001), noise(p101), pf.x),
+			mix(noise(p011), noise(p111), pf.x), 
+			pf.y
+		),
+		pf.z
 	);
 }
+
+float fbm(vec3 p){
+    float f=0.0;
+    for(int i=0;i<5;i+=1)
+        f+=smoothNoise2(p * exp2(float(i)))/exp2(float(i+1));
+    return f;
+}
+
 
 vec2 hash( vec2 x ){
     const vec2 k = vec2( 0.3183099, 0.3678794 );
@@ -49,110 +64,19 @@ float gnoise( in vec2 p ){
 }
 
 
-uniform sampler2D iChannel0;
-
-uniform float iTime;
-uniform vec2 iResolution;
-
-
-
-float moveSpeed=0.75;
-float time;
-
-float cubic(float x){
-    return (3.0 * x - 2.0 * x * x) * x;
-}
-
-
-@CCProperty(name = "edge Noise", min = 0, max = 0.5)
-uniform float edgeNoise;
-@CCProperty(name = "edge Range", min = 0, max = 1.5)
-uniform float edgeRange;
-@CCProperty(name = "range", min = 0, max = 1.)
-uniform float range;
-
-
-float heightField(vec2 p){
-	float range = abs(p.x);
-	float result = (1. - cos(range * edgeRange));
-	result += smoothstep(0.0,0.7,1.0-smoothstep(0.0,.9,smoothNoise2(p))) * edgeNoise;
-	return result* step(0.,range);
-}
-
-
-float fbm(vec2 p){
-    float f=0.0;
-    for(int i=0;i<5;i+=1)
-        f+=smoothNoise2(p * exp2(float(i)))/exp2(float(i+1));
-    return f;
-}
-
-float bumpHeight(vec2 p){
-    float f=0.0;
-    p*=4.0;
-    for(int i=0;i<5;i+=1)
-        f+=smoothNoise2(p*exp2(float(i)))/exp2(float(i+1));
-    return f*0.15;
-}
-
-vec3 bumpNormal(vec2 p){
-    vec2 eps=vec2(1e-5,0.0);
-    float bumpScale=10.0;
-    float c=bumpHeight(p);
-    float d0=(bumpHeight(p+eps.xy))-c;
-    float d1=(bumpHeight(p+eps.yx))-c;
-    return normalize(cross(vec3(eps.y,d1,eps.x),vec3(eps.x,d0,eps.y)));
-}
-
-vec3 heightFieldNormal(vec2 p){
-    vec2 eps=vec2(1e-1,0.0);
-    float bumpScale=10.0;
-    float c=heightField(p);
-    float d0=(heightField(p+eps.xy))-c;
-    float d1=(heightField(p+eps.yx))-c;
-    vec3 n0 = normalize(cross(vec3(eps.y,d1,eps.x),vec3(eps.x,d0,eps.y)));
-    vec3 bn = bumpNormal(p);
-    return normalize(n0+(bn-n0*dot(n0,bn))*0.2);
-}
 
 vec3 tonemap(vec3 c){
     return c/(c+vec3(0.6));
 }
 
-@CCProperty(name = "progress", min = -1, max = 5)
-uniform float progress;
-@CCProperty(name = "bow", min = 0, max = 1)
-uniform float bow;
-@CCProperty(name = "start glow", min = 0, max = 2)
-uniform float startGlow;
-
-float progress(float x){
-	return sin(x + 1.6) * bow + progress;
-}
-
-@CCProperty(name = "gold", min = 0, max = 1)
-uniform float gold;
-@CCProperty(name = "liquid", min = 0, max = 0.2)
-uniform float liquid;
-
-@CCProperty(name = "cold", min = 0, max = 2)
-uniform float cold;
-@CCProperty(name = "glow", min = 0, max = 2)
-uniform float glow;
-@CCProperty(name = "haze", min = 0, max = 2)
-uniform float haze;
-@CCProperty(name = "background", min = 0, max = 2)
-uniform float background;
-
-@CCProperty(name = "haze color", min = 0, max = 1)
-uniform vec3 hazeColor;
 @CCProperty(name = "gold color", min = 0, max = 4)
 uniform vec3 goldColor;
 
+#define TEMPERATURE 2200.0
 vec3 blackbody(float t){
     t *= TEMPERATURE;
     
-    float u = ( 0.860117757 + 1.54118254e-4 * t + 1.28641212e-7 * t*t ) 
+    float u = ( 0.860117757 + 1.54118254e-4 * t + 1.28641212e-7 * t * t ) 
             / ( 2.1 + 8.42420235e-4 * t + 7.08145163e-7 * t*t );
     
     float v = ( 0.317398726 + 4.22806245e-5 * t + 4.20481691e-8 * t*t ) 
@@ -170,49 +94,64 @@ vec3 blackbody(float t){
                         -0.9692660,  1.8760108,  0.0415560,
                          0.0556434, -0.2040259,  1.0572252);
 
-    return max(vec3(0.0), (vec3(X,Y,Z) * XYZtoRGB) * pow(t * 0.0004, 4.0));
+	vec3 myResult = max(vec3(0.0), (vec3(X,Y,Z) * XYZtoRGB) * pow(t * 0.0004, 4.0));
+	myResult = tonemap(myResult) * 1.2;
+    	return myResult;
+}
+
+
+
+vec3 gold(float d){
+	d -= 0.25;
+	d *= 2.;
+	//d = 1. - d;
+	//d = smoothstep(0.0,1.0,d);
+	d = clamp(d,0.0,1.0);
+	vec3 col = vec3(.3,0.2,0.07)  /  d ;
+	col = smoothstep(0.0,1.0,col);
+	//col -= 0.1;
+	//col *= 1.1;
+	col = clamp(col,0.0,1.0);
+	return col;
+	return vec3(d);
 }
 
 #define PI 3.1415926535897932384626433832795
 
-vec3 sample(vec2 coord, float mask){
-	float lavaHeight = 0.24;
+@CCProperty(name = "heat", min = 0, max = 1)
+uniform float heat;
+@CCProperty(name = "liquid", min = 0, max = 1.)
+uniform float liquid;
 
-	// Base colour for the rocks.
-	float f0 = sqrt(fbm(coord*0.5));
-	float blend = -cos(coord.y * PI * 4.);
-	blend = clamp(blend, 0.0,1.0);
-	if(abs(coord.y) > 0.2){
-		blend = 1.;
-	}
-	vec3 diffuse= vec3(1.0,0.8,0.6) * background * mix(0.9,0.,blend) * mix(0.2,.7,fbm(coord * 15.0));
+@CCProperty(name = "gold blend", min = 0, max = 1)
+uniform float goldBlend;
 
-	float myProgress = progress + cos(coord.y * 4.) * bow;
+uniform sampler2D typo;
+uniform sampler2D iChannel0;
+
+vec3 sample(vec2 coord, float noiseVal,float mask, float heat){
+
+	vec2 uv = coord + noiseVal * 1. * mask;
+	
+	
+	float tex = texture2D(iChannel0, uv * vec2(1.,mix(0.01,.1,mask))).x;
+	float mtex = heat * 0.5 + 0.5 - tex * liquid ;
     
-	vec2 uv = coord + (fbm(coord * 6.1 + iTime * 0.1) * 2. - 1.) * 1. * mask;
-	//uv.x -= mask * lavaHeight + p.y;
-	float texDeform = max(0.,cos(abs(coord.y) * 15.)) * 2.;
-	float tex = gold - texture2D(iChannel0, uv * vec2(1.0,mix(0.01,0.1,1. - texDeform))).x * liquid ;
-    
-	float cold = cold + smoothstep( myProgress - .1,myProgress-1.5-.1,coord.x) * startGlow;
-	float glow =  0.;//max(0.0, (1.0-mask)*4.0 * (0.1 - (abs(coord.y) - lavaHeight) * (f0 * 1.5 - 0.5) * f0)) * glow;
-	float haze = 1. * 0.025 * cold * haze;
-    
-	float temp = (2.8 * tex - cold) * tex;
-	temp = mix(glow * 1.2, smoothstep(0.0, 1.5, temp) * 2.0, mask);
+	float temp = 2. * mtex * mtex *  mask;
+	temp = smoothstep(0.0, 1.5, temp) * 3.0 ;
 
-    return diffuse * (1.0-mask) 
-                   + blackbody(temp)// * vec3(0.8, 0.8, 0.5)  
-                   + haze * hazeColor;
-
+	vec3 gold = gold(tex ) ;
+	vec3 melt = blackbody(temp);
+    	//return vec3(d,d,d);
+    	return mix(gold, melt, goldBlend)* mask;
 }
 
+@CCProperty(name = "blend radius", min = 0, max = 100)
+uniform float blendRadius;
 @CCProperty(name = "circle pos", min = 0, max = 3000)
 uniform vec2 circlePos;
 @CCProperty(name = "circle radius", min = 0, max = 1000)
 uniform float circleRadius;
-@CCProperty(name = "circle blend radius", min = 0, max = 1000)
-uniform float circleBlendRadius;
 
 float circle(vec2 uv, vec2 pos, float rad, float blend) {
 	float d = length(vec2(pos.x - rad,pos.y) - uv) - gnoise(uv * 0.03) * 10.2;
@@ -227,51 +166,117 @@ float circle(vec2 uv, vec2 pos, float rad, float blend) {
 uniform vec2 rect0Pos;
 @CCProperty(name = "rect0 size", min = 0, max = 1000)
 uniform vec2 rect0Size;
-@CCProperty(name = "rect0 radius", min = 0, max = 1000)
-uniform float rect0Radius;
-@CCProperty(name = "rect0 blend radius", min = 0, max = 1000)
-uniform float rect0BlendRadius;
+@CCProperty(name = "rect1 pos", min = 0, max = 3000)
+uniform vec2 rect1Pos;
+@CCProperty(name = "rect1 size", min = 0, max = 1000)
+uniform vec2 rect1Size;
 
-float roundRect(vec2 uv, vec2 pos, in vec2 halfSize, float rad, float blend){
-	//length(max(abs(uv - pos) - (halfSize - rad), vec2(0.0))) - rad
-	return 1.0 - smoothstep( 0., 1., length(max(abs(uv - pos) - (halfSize), vec2(0.0))));
+float rect (vec2 uv, vec2 pos, vec2 size, float blend){
+	vec2 min = uv - pos - gnoise(uv * 0.03) * 10.2;
+	return 
+		smoothstep(0.,blend,min.x) * 
+		smoothstep(size.x,size.x - blend ,min.x) *
+		smoothstep(0.,blend,min.y) *
+		smoothstep(size.y,size.y - blend ,min.y);
 }
 
+@CCProperty(name = "edge Noise", min = 0, max = 0.5)
+uniform float edgeNoise;
 
+@CCProperty(name = "start progress", min = 0, max = 1)
+uniform float startProgress;
+@CCProperty(name = "end progress", min = 0, max = 1)
+uniform float endProgress;
+@CCProperty(name = "progress smooth", min = 0, max = 0.1)
+uniform float progressSmooth;
+@CCProperty(name = "progress bow", min = 0, max = 1)
+uniform float progressBow;
+@CCProperty(name = "progress noise", min = 0, max = 0.1)
+uniform float progressNoise;
+@CCProperty(name = "progress typo", min = -0.5, max = 0.5)
+uniform float progressTypo;
+
+
+
+
+
+
+float progress(float x, vec2 uv, float progress, float tex, float smooth){
+	//uv.x -=  
+	float myProgress = x;
+	myProgress += (1. - (cos(uv.y * 4.) + 1.) / 2.) * progressBow;
+	myProgress += gnoise(uv * 10.3) * progressNoise;
+	myProgress += tex * progressTypo;
+	return smoothstep(progress, progress + smooth, myProgress / (1. + progressSmooth + progressBow));;
+}
+
+uniform float flowTime;
+uniform vec2 iResolution;
+
+@CCProperty(name = "typo uv distortion", min = 0, max = 1)
+uniform float typoUVDistortion;
+@CCProperty(name = "typo progress smooth", min = 0, max = 0.5)
+uniform float typoProgressSmooth;
+@CCProperty(name = "typo progress noise", min = 0, max = 1)
+uniform float typoProgressNoise;
+
+@CCProperty(name = "typo heat smooth", min = 0, max = 0.5)
+uniform float typoHeatSmooth;
+@CCProperty(name = "typo heat noise", min = 0, max = 1)
+uniform float typoHeatNoise;
+@CCProperty(name = "heat typo", min = -0.5, max = 0.5)
+uniform float heatTypo;
 
 void main(){
 	// Sample the scene, with a distorted coordinate to simulate heat haze.
-    	vec2 uv = gl_FragCoord.xy / iResolution.xy;
-    	uv = (uv - vec2(0.5)) * 2.0;
-    	uv.x *= iResolution.x / iResolution.y;
+    	
+    	vec2 fragNormed = gl_FragCoord.xy / iResolution.xy;
+    	vec2 uv = (fragNormed - vec2(0.5)) * 2.0;
+    	uv.x *= iResolution.x / iResolution.y; 
     	
     	
-	float shape = circle(gl_FragCoord.xy, circlePos, circleRadius,circleBlendRadius);
-	//shape = max(shape,roundRect(gl_FragCoord.xy,rect0Pos,rect0Size / 2.0, rect0Radius, rect0BlendRadius));
-
-	float myProgress = progress + (cos(uv.y * 4.) * bow + fbm(vec2(uv.x ,uv.y * 3.5)) * 0.2 ) ;
-	float min = range - edgeRange;
-	vec2 coord = uv;
-	coord.y += (fbm(vec2(coord * 10.5)) * 2. - 1.) * edgeNoise;
-	shape = max(shape,
-		smoothstep(-range,-min,coord.y) * 
-		smoothstep( range, min,coord.y) *  
-		float(coord.x > -0.9) *
-		smoothstep( myProgress,myProgress-0.1,coord.x)
-	);
+	float shape = 0.;//circle(gl_FragCoord.xy, circlePos, circleRadius, blendRadius);
 	
-    	time=iTime;
-    	
-    	gl_FragColor.rgb = sample(uv, shape);//+vec2(cos(smoothNoise2(vec2(-time * 10.0 + uv.y * 10.0,uv.x))) * 0.01,0.0));
-    	gl_FragColor.rgb = tonemap(gl_FragColor.rgb) * 1.2;
+	shape = max(shape, rect(gl_FragCoord.xy, rect0Pos, rect0Size, blendRadius));
+
+	vec2 coord = uv;
+    	float noiseVal = fbm(vec3(uv * 4.1 ,flowTime)) * 2. - 1.;
+
+	vec2 tuv = coord + noiseVal * typoUVDistortion;
+
+	vec4 col = texture2D(typo, vec2(tuv.x / 6. + 0.5, 1. - tuv.y / 2. - 0.5));
+	float typoDistance = col.x;
+	float edge = 0.5 + noiseVal * typoProgressNoise;// * myColor.a;
+    	float dTypoProgress = smoothstep(edge - typoProgressSmooth, edge + typoProgressSmooth, typoDistance);
+	
+	//float myProgress = progress + (cos(uv.y * 4.) * bow + fbm(vec3(uv.x ,uv.y * 3.5,0.0)) * 0.2 ) ;
+	shape = min(shape, progress(fragNormed.x,uv, endProgress, -dTypoProgress, progressSmooth));
+	shape = max(shape, rect(gl_FragCoord.xy, rect1Pos, rect1Size, blendRadius));
+	shape = min(shape, progress(fragNormed.x,uv, startProgress, dTypoProgress,-progressSmooth));
+	shape = max(shape, circle(gl_FragCoord.xy, circlePos, circleRadius, blendRadius));
+
+	float d = 1. - progress(fragNormed.x,uv, startProgress, dTypoProgress,-0.5);
+	edge = 0.5 + noiseVal * typoHeatNoise;// * myColor.a;
+    	float dTypoHeat = smoothstep(edge - typoHeatSmooth, edge + typoHeatSmooth, typoDistance);
+
+    	float myHeat = heat;
+    	myHeat += dTypoHeat * heatTypo;
+    	myHeat += d * 0.3;
+    	gl_FragColor.rgb = sample(uv, noiseVal,shape, myHeat);
+    	//gl_FragColor.rgb = tonemap(gl_FragColor.rgb) * 1.2;
     	gl_FragColor.a = 1.;
 
+	//float dp = progress(fragNormed.x,uv);
+	//gl_FragColor = vec4(dp);
     	
    	float blend = float(uv.y < 0.5 && uv.y > -0.5) * (cos(uv.y * 2. * PI ) + 1.) / 2.;
    	
-	vec3 diffuse= vec3(1.0,0.8,0.6) * .4 * shape * mix(0.2,.7,fbm(uv * 10.0 * vec2(1.0)));
+	vec3 diffuse= vec3(1.0,0.8,0.6) * .4 * shape * mix(0.2,.7,fbm(vec3(uv * 10.0 * vec2(1.0),0.0)));
 
+	
+	//gl_FragColor = vec4(d,d,d,1.);
+	//gl_FragColor = col;
 	//gl_FragColor.rgb = diffuse;
-    	//gl_FragColor = vec4(shape);
+    //	gl_FragColor = vec4(shape);
 }
 

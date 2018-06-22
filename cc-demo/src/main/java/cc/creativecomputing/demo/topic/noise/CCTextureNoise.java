@@ -12,6 +12,7 @@ import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCMath;
 
 public class CCTextureNoise extends CCGL2Adapter {
 
