@@ -45,7 +45,7 @@ public class CC2Motor2ConnectionDemo extends CCGL2Adapter{
 			myMotorChannels.add(new CCMotorChannel(i * 2 + 1, new CCVector3( 200, 0, i * 20), new CCVector3( 100, 400, i * 20)));
 			
 			
-			_mySequenceElements.add(CCKleEffectable.createMotorElement(i, myMotorChannels,_cBounds, new CCVector3(0, 500, i * 20), 100));
+			_mySequenceElements.add(CCKleEffectable.createMotorElement(i, myMotorChannels,_cBounds, null, new CCVector3(0, 500, i * 20), 100));
 		}
 		_cBounds.setElements(_mySequenceElements);
 		
