@@ -280,7 +280,7 @@ public class CCSoundIO {
 	 */
 	static public CCAudioOutput getAudioOutput(int type, int bufferSize, float sampleRate, int bitDepth) {
 		if (bitDepth != 8 && bitDepth != 16) {
-			throw new IllegalArgumentException("Unsupported bit depth, use either 8 or 16.");
+			throw new IllegalArgumentException("Unsupported bit depth " + bitDepth + " , use either 8 or 16.");
 		}
 		AudioFormat format = new AudioFormat(sampleRate, bitDepth, type, true, false);
 		SourceDataLine sdl = getSourceDataLine(format, bufferSize);

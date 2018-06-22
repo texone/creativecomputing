@@ -26,6 +26,7 @@ import javax.sound.sampled.Control;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 
 /**
@@ -275,6 +276,7 @@ public class CCAudioController {
 	 * @see #volume()
 	 * @see #shiftVolume(float, float, int)
 	 */
+	@CCProperty(name = "volume", min = 0, max = 1, defaultValue = 1)
 	public void volume(float value) {
 		value(VOLUME, value);
 	}
@@ -328,6 +330,7 @@ public class CCAudioController {
 	 * @see #gain()
 	 * @see #shiftGain ()
 	 */
+	@CCProperty(name = "gain", min = -60, max = 6, defaultValue = 0)
 	public void gain(float value) {
 		value(GAIN, value);
 	}
@@ -375,6 +378,7 @@ public class CCAudioController {
 	 * @see #balance()
 	 * @see #shiftBalance(float, float, int)
 	 */
+	@CCProperty(name = "balance", min = -1, max = 1, defaultValue = 0)
 	public void balance(float value) {
 		value(BALANCE, value);
 	}

@@ -41,7 +41,7 @@ public class CCDrawWaveDemo extends CCGL2Adapter {
 		minim = new CCSoundIO();
 		
 		song = CCSoundIO.loadSample(CCNIOUtil.dataPath("sound/fair1939.wav"));
-		
+	
 		// loop the file
 		
 		
