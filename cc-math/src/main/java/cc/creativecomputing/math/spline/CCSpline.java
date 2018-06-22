@@ -281,6 +281,19 @@ public abstract class CCSpline implements Iterable<CCVector3>, CCInterpolatable<
 		return myPoint;
 	}
 	
+	public void closestPointAndDirection(CCVector3 thePoint, CCVector3 theClosestPoint, CCVector3 theDirection) {
+		double myMinDistanceSq = Double.MAX_VALUE;
+		CCVector3 myPoint = null;
+		for(CCVector3 myControlPoint:_myPoints){
+			double myDistSq = thePoint.distanceSquared(myPoint);
+			if(myDistSq < myMinDistanceSq){
+				myMinDistanceSq = myDistSq;
+				myPoint = myControlPoint;
+			}
+		}
+		if(myPoint != null)theClosestPoint.set(myPoint);
+	}
+	
 	/**
 	 * Removes all points from the spline
 	 */

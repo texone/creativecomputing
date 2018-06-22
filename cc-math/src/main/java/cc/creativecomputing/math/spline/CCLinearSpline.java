@@ -106,6 +106,32 @@ public class CCLinearSpline extends CCSpline{
 		
 		return myClosestPoint;
 	}
+	
+	@Override
+	public void closestPointAndDirection(CCVector3 thePoint, CCVector3 theClosestPoint, CCVector3 theDirection) {
+		CCVector3 myClosestPoint = null;
+		CCVector3 myDirection = null;
+		
+		double myMinDistSq = Float.MAX_VALUE;
+		
+		for(int i = 0; i < _myLines.size();i++){
+			CCLine3 myLine = _myLines.get(i % _myLines.size());
+			CCVector3 myPoint = myLine.closestPoint(thePoint);
+			double myDistSq = myPoint.distanceSquared(thePoint);
+			if(myDistSq < myMinDistSq){
+				myClosestPoint = myPoint;
+				myDirection = myLine.end().subtract(myLine.start());
+				myMinDistSq = myDistSq;
+			}
+		}
+		
+		if(myClosestPoint != null)theClosestPoint.set(myClosestPoint);
+		if(myDirection != null) {
+			myDirection.normalizeLocal();
+			theDirection.set(myDirection);
+		}
+	}
+	
 	@Override
 	public void clear () {
 		super.clear();
