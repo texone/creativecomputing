@@ -277,8 +277,8 @@ public class CCAudioController {
 	 * @see #shiftVolume(float, float, int)
 	 */
 	@CCProperty(name = "volume", min = 0, max = 1, defaultValue = 1)
-	public void volume(float value) {
-		value(VOLUME, value);
+	public void volume(double value) {
+		value(VOLUME, (float)value);
 	}
 
 	/**
