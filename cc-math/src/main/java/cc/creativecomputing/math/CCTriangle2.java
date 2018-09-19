@@ -16,21 +16,22 @@ package cc.creativecomputing.math;
  */
 public class CCTriangle2 {
 
-	protected CCVector2[] _myPoints;
+	public CCVector2 a;
+	public CCVector2 b;
+	public CCVector2 c;
 	
-	protected CCVector2 _myCenter;
+	public CCVector2 center;
 	
 	public CCTriangle2(final CCVector2 thePointA, final CCVector2 thePointB, final CCVector2 thePointC) {
-		_myPoints = new CCVector2[3];
-		_myPoints[0] = thePointA;
-		_myPoints[1] = thePointB;
-		_myPoints[2] = thePointC;
+		a = thePointA;
+		b = thePointB;
+		c = thePointC;
 		
-		_myCenter = new CCVector2();
-		_myCenter.addLocal(_myPoints[0]);
-		_myCenter.addLocal(_myPoints[1]);
-		_myCenter.addLocal(_myPoints[2]);
-		_myCenter.multiplyLocal(1f/3);
+		center = new CCVector2();
+		center.addLocal(a);
+		center.addLocal(b);
+		center.addLocal(c);
+		center.multiplyLocal(1d/3);
 	}
 	
 	public CCTriangle2(double theAX, double theAY, double theBX, double theBY, double theCX, double theCY){
@@ -42,23 +43,19 @@ public class CCTriangle2 {
 	}
 	
 	public CCVector2 a() {
-		return _myPoints[0];
+		return a;
 	}
 	
 	public CCVector2 b() {
-		return _myPoints[1];
+		return b;
 	}
 	
 	public CCVector2 c() {
-		return _myPoints[2];
+		return c;
 	}
 	
 	public CCVector2 center() {
-		return _myCenter;
-	}
-	
-	public CCVector2[] points(){
-		return _myPoints;
+		return center;
 	}
 	
 	/**
@@ -73,9 +70,9 @@ public class CCTriangle2 {
 	 */
 	public CCVector2 toBarycentricCoordinates(final CCVector2 thePoint){
 		// Compute vectors        
-		CCVector2 v0 = c().subtract(a());
-		CCVector2 v1 = b().subtract(a());
-		CCVector2 v2 = thePoint.subtract(a());
+		CCVector2 v0 = c.subtract(a);
+		CCVector2 v1 = b.subtract(a);
+		CCVector2 v2 = thePoint.subtract(a);
 
 		// Compute dot products
 		double dot00 = v0.dot(v0);
@@ -94,10 +91,10 @@ public class CCTriangle2 {
 	
 	public CCVector2 toTriangleCoordinates(final CCVector2 thePoint){
 		// Compute vectors        
-		CCVector2 v0 = c().subtract(a());
-		CCVector2 v1 = b().subtract(a());
+		CCVector2 v0 = c.subtract(a);
+		CCVector2 v1 = b.subtract(a);
 		
-		CCVector2 myResult = a().clone();
+		CCVector2 myResult = a.clone();
 		myResult.add(v0.multiplyLocal(thePoint.x));
 		myResult.add(v1.multiplyLocal(thePoint.y));
 		return myResult;
@@ -137,6 +134,6 @@ public class CCTriangle2 {
 	
 	@Override
 	public String toString(){
-		return "CCTriangle2d["+a()+","+b()+","+c()+","+"]";
+		return "CCTriangle2d["+a+","+b+","+c+","+"]";
 	}
 }
