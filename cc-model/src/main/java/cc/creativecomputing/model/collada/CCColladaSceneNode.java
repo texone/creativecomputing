@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
@@ -314,13 +315,13 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	 * @param theOffset where in the items[] array we're currently looking
 	 * @return matching element or null if no match
 	 */
-	protected CCColladaSceneNode nodeNameRecursive(String[] theItems, int theOffset) {
-		CCColladaSceneNode myResult = nodeByName(theItems[theOffset]);
+	protected Optional<CCColladaSceneNode> nodeNameRecursive(String[] theItems, int theOffset) {
+		Optional<CCColladaSceneNode> myResult = nodeByName(theItems[theOffset]);
 
 		if (theOffset == theItems.length - 1) {
 			return myResult;
 		} else {
-			return myResult.nodeNameRecursive(theItems, theOffset + 1);
+			return myResult.get().nodeNameRecursive(theItems, theOffset + 1);
 		}
 	}
 	
@@ -330,14 +331,14 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	 * @param theNodeName the name of the node to look for
 	 * @return the scene node with the given name
 	 */
-	public CCColladaSceneNode nodeByName(final String theNodeName){
+	public Optional<CCColladaSceneNode> nodeByName(final String theNodeName){
 		if (theNodeName.indexOf('/') != -1) {
 	      return nodeNameRecursive(CCStringUtil.split(theNodeName, '/'), 0);
 	    }
 		for(CCColladaSceneNode myNode:children()) {
-			if(myNode.name().equals(theNodeName))return myNode;
+			if(myNode.name().equals(theNodeName))return Optional.of(myNode);
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	

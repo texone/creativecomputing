@@ -47,6 +47,10 @@ public class CCColladaElement {
 	public boolean draw() {
 		return _cDraw;
 	}
+	
+	public void draw(boolean theDraw) {
+		_cDraw = theDraw;
+	}
 
 	/**
 	 * 
