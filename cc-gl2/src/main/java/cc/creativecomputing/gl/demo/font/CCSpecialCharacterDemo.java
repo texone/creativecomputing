@@ -16,7 +16,7 @@ public class CCSpecialCharacterDemo extends CCGLApp{
 	@Override
 	public void setup() {
 		
-		_myTextFieldLeft = new CCTextField(new CCTextureMapFont(null,CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 50, 2, 2), "ÄÖÜ")
+		_myTextFieldLeft = new CCTextField(new CCTextureMapFont(null,CCNIOUtil.dataPath("fonts/Lato/Lato-Regular.ttf"), 50, 2, 2), "")
 				.position(0, -100)
 				.align(CCTextAlign.LEFT)
 				.fontSize(150);

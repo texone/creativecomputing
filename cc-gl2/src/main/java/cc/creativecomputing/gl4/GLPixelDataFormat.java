@@ -1,28 +1,32 @@
 package cc.creativecomputing.gl4;
 
-import static org.lwjgl.opengl.GL11.GL_BLUE;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_COMPONENT;
-import static org.lwjgl.opengl.GL11.GL_GREEN;
-import static org.lwjgl.opengl.GL11.GL_RED;
-import static org.lwjgl.opengl.GL11.GL_RGB;
-import static org.lwjgl.opengl.GL11.GL_RGBA;
-import static org.lwjgl.opengl.GL11.GL_STENCIL_INDEX;
-import static org.lwjgl.opengl.GL12.GL_BGR;
-import static org.lwjgl.opengl.GL12.GL_BGRA;
-import static org.lwjgl.opengl.GL30.GL_BGRA_INTEGER;
-import static org.lwjgl.opengl.GL30.GL_BGR_INTEGER;
-import static org.lwjgl.opengl.GL30.GL_BLUE_INTEGER;
-import static org.lwjgl.opengl.GL30.GL_DEPTH_STENCIL;
-import static org.lwjgl.opengl.GL30.GL_GREEN_INTEGER;
-import static org.lwjgl.opengl.GL30.GL_RED_INTEGER;
-import static org.lwjgl.opengl.GL30.GL_RG;
-import static org.lwjgl.opengl.GL30.GL_RGBA_INTEGER;
-import static org.lwjgl.opengl.GL30.GL_RGB_INTEGER;
-import static org.lwjgl.opengl.GL30.GL_RG_INTEGER;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL14.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL33.*;
+import static org.lwjgl.opengl.GL32.*;
+import static org.lwjgl.opengl.GL31.*;
+
+import static org.lwjgl.opengl.GL43.*;
+import static org.lwjgl.opengl.GL42.*;
+import static org.lwjgl.opengl.GL41.*;
+import static org.lwjgl.opengl.GL40.*;
+import static org.lwjgl.opengl.GL44.*;
+import static org.lwjgl.opengl.GL45.*;
+
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL21.*;
+import static org.lwjgl.opengl.EXTTextureCompressionS3TC.*;
 
 import cc.creativecomputing.image.CCPixelFormat;
 
 public enum GLPixelDataFormat {
+	ALPHA(GL_ALPHA),
+	LUMINANCE(GL_LUMINANCE),
+	LUMINANCE_ALPHA(GL_LUMINANCE_ALPHA),
 	DEPTH_COMPONENT(GL_DEPTH_COMPONENT),
 	DEPTH_STENCIL(GL_DEPTH_STENCIL),
 	STENCIL_INDEX(GL_STENCIL_INDEX),
@@ -41,16 +45,16 @@ public enum GLPixelDataFormat {
 	RGB_INTEGER(GL_RGB_INTEGER),
 	RGBA_INTEGER(GL_RGBA_INTEGER),
 	BGR_INTEGER(GL_BGR_INTEGER),
+	COMPRESSED_RGB_S3TC_DXT1_EXT(GL_COMPRESSED_RGB_S3TC_DXT1_EXT),
+	COMPRESSED_RGBA_S3TC_DXT1_EXT(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT),
+	COMPRESSED_RGBA_S3TC_DXT3_EXT(GL_COMPRESSED_RGBA_S3TC_DXT3_EXT),
+	COMPRESSED_RGBA_S3TC_DXT5_EXT(GL_COMPRESSED_RGBA_S3TC_DXT5_EXT),
 	BGRA_INTEGER(GL_BGRA_INTEGER);
 	
-	private int _myGLID;
+	public final int glID;
 	
 	GLPixelDataFormat(int theGLID){
-		_myGLID = theGLID;
-	}
-	
-	public int glID(){
-		return _myGLID;
+		glID = theGLID;
 	}
 	
 	public static GLPixelDataFormat fromCC(CCPixelFormat theFormat){

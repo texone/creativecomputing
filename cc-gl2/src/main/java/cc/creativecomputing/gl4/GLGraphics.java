@@ -1053,7 +1053,7 @@ public class GLGraphics {
 	}
 	
 	public void bindImageTexture(int theUnit, CCTexture2D theTexture, int theLevel, boolean theIsLayered, int theLayer, GLAccesMode theAccesMode, GLPixelDataInternalFormat theFormat){
-		glBindImageTexture(theUnit, theTexture.id(), theLevel, theIsLayered, theLayer, theAccesMode.glID(), theFormat.glID());
+		glBindImageTexture(theUnit, theTexture.id(), theLevel, theIsLayered, theLayer, theAccesMode.glID(), theFormat.glID);
 	}
 
 	public void beginDraw() {

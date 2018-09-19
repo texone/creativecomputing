@@ -1,111 +1,79 @@
 package cc.creativecomputing.gl4;
 
-import static org.lwjgl.opengl.GL11.GL_DEPTH_COMPONENT;
-import static org.lwjgl.opengl.GL11.GL_R3_G3_B2;
-import static org.lwjgl.opengl.GL11.GL_RED;
-import static org.lwjgl.opengl.GL11.GL_RGB;
-import static org.lwjgl.opengl.GL11.GL_RGB10;
-import static org.lwjgl.opengl.GL11.GL_RGB10_A2;
-import static org.lwjgl.opengl.GL11.GL_RGB12;
-import static org.lwjgl.opengl.GL11.GL_RGB16;
-import static org.lwjgl.opengl.GL11.GL_RGB4;
-import static org.lwjgl.opengl.GL11.GL_RGB5;
-import static org.lwjgl.opengl.GL11.GL_RGB5_A1;
-import static org.lwjgl.opengl.GL11.GL_RGB8;
-import static org.lwjgl.opengl.GL11.GL_RGBA;
-import static org.lwjgl.opengl.GL11.GL_RGBA12;
-import static org.lwjgl.opengl.GL11.GL_RGBA16;
-import static org.lwjgl.opengl.GL11.GL_RGBA2;
-import static org.lwjgl.opengl.GL11.GL_RGBA4;
-import static org.lwjgl.opengl.GL11.GL_RGBA8;
-import static org.lwjgl.opengl.GL13.GL_COMPRESSED_RGB;
-import static org.lwjgl.opengl.GL13.GL_COMPRESSED_RGBA;
-import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT16;
-import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT24;
-import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
-import static org.lwjgl.opengl.GL21.GL_COMPRESSED_SRGB;
-import static org.lwjgl.opengl.GL21.GL_COMPRESSED_SRGB_ALPHA;
-import static org.lwjgl.opengl.GL21.GL_SRGB;
-import static org.lwjgl.opengl.GL21.GL_SRGB8;
-import static org.lwjgl.opengl.GL21.GL_SRGB8_ALPHA8;
-import static org.lwjgl.opengl.GL21.GL_SRGB_ALPHA;
-import static org.lwjgl.opengl.GL30.GL_COMPRESSED_RED;
-import static org.lwjgl.opengl.GL30.GL_COMPRESSED_RED_RGTC1;
-import static org.lwjgl.opengl.GL30.GL_COMPRESSED_RG;
-import static org.lwjgl.opengl.GL30.GL_COMPRESSED_RG_RGTC2;
-import static org.lwjgl.opengl.GL30.GL_COMPRESSED_SIGNED_RED_RGTC1;
-import static org.lwjgl.opengl.GL30.GL_COMPRESSED_SIGNED_RG_RGTC2;
-import static org.lwjgl.opengl.GL30.GL_DEPTH24_STENCIL8;
-import static org.lwjgl.opengl.GL30.GL_DEPTH32F_STENCIL8;
-import static org.lwjgl.opengl.GL30.GL_DEPTH_COMPONENT32F;
-import static org.lwjgl.opengl.GL30.GL_DEPTH_STENCIL;
-import static org.lwjgl.opengl.GL30.GL_R11F_G11F_B10F;
-import static org.lwjgl.opengl.GL30.GL_R16;
-import static org.lwjgl.opengl.GL30.GL_R16F;
-import static org.lwjgl.opengl.GL30.GL_R16I;
-import static org.lwjgl.opengl.GL30.GL_R16UI;
-import static org.lwjgl.opengl.GL30.GL_R32F;
-import static org.lwjgl.opengl.GL30.GL_R32I;
-import static org.lwjgl.opengl.GL30.GL_R32UI;
-import static org.lwjgl.opengl.GL30.GL_R8;
-import static org.lwjgl.opengl.GL30.GL_R8I;
-import static org.lwjgl.opengl.GL30.GL_R8UI;
-import static org.lwjgl.opengl.GL30.GL_RG;
-import static org.lwjgl.opengl.GL30.GL_RG16;
-import static org.lwjgl.opengl.GL30.GL_RG16F;
-import static org.lwjgl.opengl.GL30.GL_RG16I;
-import static org.lwjgl.opengl.GL30.GL_RG16UI;
-import static org.lwjgl.opengl.GL30.GL_RG32F;
-import static org.lwjgl.opengl.GL30.GL_RG32I;
-import static org.lwjgl.opengl.GL30.GL_RG32UI;
-import static org.lwjgl.opengl.GL30.GL_RG8;
-import static org.lwjgl.opengl.GL30.GL_RG8I;
-import static org.lwjgl.opengl.GL30.GL_RG8UI;
-import static org.lwjgl.opengl.GL30.GL_RGB16F;
-import static org.lwjgl.opengl.GL30.GL_RGB16I;
-import static org.lwjgl.opengl.GL30.GL_RGB16UI;
-import static org.lwjgl.opengl.GL30.GL_RGB32F;
-import static org.lwjgl.opengl.GL30.GL_RGB32I;
-import static org.lwjgl.opengl.GL30.GL_RGB32UI;
-import static org.lwjgl.opengl.GL30.GL_RGB8I;
-import static org.lwjgl.opengl.GL30.GL_RGB8UI;
-import static org.lwjgl.opengl.GL30.GL_RGB9_E5;
-import static org.lwjgl.opengl.GL30.GL_RGBA16F;
-import static org.lwjgl.opengl.GL30.GL_RGBA16I;
-import static org.lwjgl.opengl.GL30.GL_RGBA16UI;
-import static org.lwjgl.opengl.GL30.GL_RGBA32F;
-import static org.lwjgl.opengl.GL30.GL_RGBA32I;
-import static org.lwjgl.opengl.GL30.GL_RGBA32UI;
-import static org.lwjgl.opengl.GL30.GL_RGBA8I;
-import static org.lwjgl.opengl.GL30.GL_RGBA8UI;
-import static org.lwjgl.opengl.GL30.GL_STENCIL_INDEX8;
-import static org.lwjgl.opengl.GL31.GL_R16_SNORM;
-import static org.lwjgl.opengl.GL31.GL_R8_SNORM;
-import static org.lwjgl.opengl.GL31.GL_RG16_SNORM;
-import static org.lwjgl.opengl.GL31.GL_RG8_SNORM;
-import static org.lwjgl.opengl.GL31.GL_RGB16_SNORM;
-import static org.lwjgl.opengl.GL31.GL_RGB8_SNORM;
-import static org.lwjgl.opengl.GL31.GL_RGBA16_SNORM;
-import static org.lwjgl.opengl.GL31.GL_RGBA8_SNORM;
-import static org.lwjgl.opengl.GL33.GL_RGB10_A2UI;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_R11_EAC;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_RG11_EAC;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_RGB8_ETC2;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_RGBA8_ETC2_EAC;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_SIGNED_R11_EAC;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_SIGNED_RG11_EAC;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_SRGB8_ETC2;
-import static org.lwjgl.opengl.GL43.GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;
+import static org.lwjgl.opengl.EXTTextureCompressionS3TC.GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+import static org.lwjgl.opengl.EXTTextureCompressionS3TC.GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+import static org.lwjgl.opengl.EXTTextureCompressionS3TC.GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+import static org.lwjgl.opengl.EXTTextureCompressionS3TC.GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL14.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL33.*;
+import static org.lwjgl.opengl.GL32.*;
+import static org.lwjgl.opengl.GL31.*;
+
+import static org.lwjgl.opengl.GL43.*;
+import static org.lwjgl.opengl.GL42.*;
+import static org.lwjgl.opengl.GL41.*;
+import static org.lwjgl.opengl.GL40.*;
+import static org.lwjgl.opengl.GL44.*;
+import static org.lwjgl.opengl.GL45.*;
+
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL21.*;
+
+import static org.lwjgl.opengl.NVFloatBuffer.*;
 
 import cc.creativecomputing.image.CCPixelInternalFormat;
 
 public enum GLPixelDataInternalFormat {
+	ALPHA(GL_ALPHA),
+	ALPHA4(GL_ALPHA4),
+	ALPHA8(GL_ALPHA8),
+	ALPHA12(GL_ALPHA12),
+	ALPHA16(GL_ALPHA16),
+	COMPRESSED_ALPHA(GL_COMPRESSED_ALPHA),
+	
+	LUMINANCE(GL_LUMINANCE),
+	LUMINANCE4(GL_LUMINANCE4),
+	LUMINANCE8(GL_LUMINANCE8),
+	LUMINANCE12(GL_LUMINANCE12),
+	LUMINANCE16(GL_LUMINANCE16),
+	COMPRESSED_LUMINANCE(GL_COMPRESSED_LUMINANCE),
+	
+	SLUMINANCE(GL_SLUMINANCE),
+	SLUMINANCE8(GL_SLUMINANCE8),
+	SLUMINANCE_ALPHA(GL_SLUMINANCE_ALPHA),
+	SLUMINANCE8_ALPHA8(GL_SLUMINANCE8_ALPHA8),
+	
+	LUMINANCE_ALPHA(GL_LUMINANCE_ALPHA),
+	LUMINANCE4_ALPHA4(GL_LUMINANCE4_ALPHA4),
+	LUMINANCE6_ALPHA2(GL_LUMINANCE6_ALPHA2),
+	LUMINANCE8_ALPHA8(GL_LUMINANCE8_ALPHA8),
+	LUMINANCE12_ALPHA4(GL_LUMINANCE12_ALPHA4),
+	LUMINANCE12_ALPHA12(GL_LUMINANCE12_ALPHA12),
+	LUMINANCE16_ALPHA16(GL_LUMINANCE16_ALPHA16),
+	COMPRESSED_LUMINANCE_ALPHA(GL_COMPRESSED_LUMINANCE_ALPHA),
+	
+	INTENSITY(GL_INTENSITY),
+	INTENSITY4(GL_INTENSITY4),
+	INTENSITY8(GL_INTENSITY8),
+	INTENSITY12(GL_INTENSITY12),
+	INTENSITY16(GL_INTENSITY16),
+	COMPRESSED_INTENSITY(GL_COMPRESSED_INTENSITY),
+	
 	DEPTH_COMPONENT(GL_DEPTH_COMPONENT),
 	DEPTH_STENCIL(GL_DEPTH_STENCIL),
+	
+	STENCIL_INDEX(GL_STENCIL_INDEX),
 	STENCIL_INDEX8(GL_STENCIL_INDEX8),
+	
 	RED(GL_RED),
+	BLUE(GL_BLUE),
+	GREEN(GL_GREEN),
+	
 	RG(GL_RG),
 	RGB(GL_RGB),
 	RGBA(GL_RGBA),
@@ -140,6 +108,19 @@ public enum GLPixelDataInternalFormat {
 	SRGB(GL_SRGB),
 	SRGB8_ALPHA8(GL_SRGB8_ALPHA8),
 	SRGB_ALPHA(GL_SRGB_ALPHA),
+	
+	BGR(GL_BGR),
+	BGRA(GL_BGRA),
+	
+	FLOAT_R16_NV(GL_FLOAT_R16_NV),
+	FLOAT_RG16_NV(GL_FLOAT_RG16_NV),
+	FLOAT_RGB16_NV(GL_FLOAT_RGB16_NV),
+	FLOAT_RGBA16_NV(GL_FLOAT_RGBA16_NV),
+	FLOAT_R32_NV(GL_FLOAT_R32_NV),
+	FLOAT_RG32_NV(GL_FLOAT_RG32_NV),
+	FLOAT_RGB32_NV(GL_FLOAT_RG32_NV),
+	FLOAT_RGBA32_NV(GL_FLOAT_RGBA32_NV),
+	
 	R16F(GL_R16F),
 	RG16F(GL_RG16F),
 	RGB16F(GL_RGB16F),
@@ -185,6 +166,7 @@ public enum GLPixelDataInternalFormat {
 	COMPRESSED_RG(GL_COMPRESSED_RG),
 	COMPRESSED_RGB(GL_COMPRESSED_RGB),
 	COMPRESSED_RGBA(GL_COMPRESSED_RGBA),
+	
 	COMPRESSED_SRGB(GL_COMPRESSED_SRGB),
 	COMPRESSED_SRGB_ALPHA(GL_COMPRESSED_SRGB_ALPHA),
 	
@@ -203,16 +185,17 @@ public enum GLPixelDataInternalFormat {
 	COMPRESSED_R11_EAC(GL_COMPRESSED_R11_EAC),
 	COMPRESSED_SIGNED_R11_EAC(GL_COMPRESSED_SIGNED_R11_EAC),
 	COMPRESSED_RG11_EAC(GL_COMPRESSED_RG11_EAC),
-	COMPRESSED_SIGNED_RG11_EAC(GL_COMPRESSED_SIGNED_RG11_EAC);
+	COMPRESSED_SIGNED_RG11_EAC(GL_COMPRESSED_SIGNED_RG11_EAC),
+
+	COMPRESSED_RGB_S3TC_DXT1_EXT(GL_COMPRESSED_RGB_S3TC_DXT1_EXT),
+	COMPRESSED_RGBA_S3TC_DXT1_EXT(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT),
+	COMPRESSED_RGBA_S3TC_DXT3_EXT(GL_COMPRESSED_RGBA_S3TC_DXT3_EXT),
+	COMPRESSED_RGBA_S3TC_DXT5_EXT(GL_COMPRESSED_RGBA_S3TC_DXT5_EXT);
 	
-	private int _myGLID;
+	public final int glID;
 	
 	GLPixelDataInternalFormat(int theGLID){
-		_myGLID = theGLID;
-	}
-	
-	public int glID(){
-		return _myGLID;
+		glID = theGLID;
 	}
 	
 	public static GLPixelDataInternalFormat fromCC(CCPixelInternalFormat theFormat){

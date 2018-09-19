@@ -363,7 +363,7 @@ public class CCCamera{
 
 		g.frustum(
 			xmin + _myFrustumOffset.x, xmax + _myFrustumOffset.x, 
-			ymin + _myFrustumOffset.y, ymax + _myFrustumOffset.y, 
+			ymax + _myFrustumOffset.y, ymin + _myFrustumOffset.y, 
 			_myNearClip, _myFarClip
 		);
 	}
@@ -396,7 +396,6 @@ public class CCCamera{
 		updateProjectionInfos();
 
 		glLoadIdentity();
-		
 		g.applyMatrix(CCMatrix4x4.createLookAt(_myPosition, _myTarget, _myUp));
 		drawFrustum(g);
 		

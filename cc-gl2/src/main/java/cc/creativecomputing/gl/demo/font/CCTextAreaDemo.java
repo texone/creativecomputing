@@ -13,7 +13,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCTextAreaDemo extends CCGLApp {
 
-	private static String TEXT = "Bitte informieren Sie sich kurz vor Ihrer Reise �ber m�gliche �nderungenIhrerReisedaten unter www.bahn.de/reiseplan oder mobil über die App DB Navigator. Achten Sie auch auf Informationen und Ansagen im Zug und am Bahnhof. Wir danken Ihnen für Ihre Buchung und wünschen Ihnen eine angenehme Reise!.";
+	private static String TEXT = "Bitte informieren Sie sich kurz vor Ihrer Reise über mögliche ÄnderungenIhrerReisedaten unter www.bahn.de/reiseplan oder mobil über die App DB Navigator. Achten Sie auch auf Informationen und Ansagen im Zug und am Bahnhof. Wir danken Ihnen für Ihre Buchung und wünschen Ihnen eine angenehme Reise!.";
 
 	private CCTextArea _myTextArea;
 	private CCVectorFont _myVectorFont;

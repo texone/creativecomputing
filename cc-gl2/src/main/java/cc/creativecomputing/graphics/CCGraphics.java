@@ -61,11 +61,14 @@ import cc.creativecomputing.core.CCSystem;
 import cc.creativecomputing.core.CCSystem.CCEndianess;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
+import cc.creativecomputing.graphics.font.CCCharSet;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.graphics.font.CCTextField;
+import cc.creativecomputing.graphics.font.CCTextureMapFont;
 import cc.creativecomputing.graphics.texture.CCTexture;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.io.CCBufferUtil;
+import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
@@ -4658,13 +4661,16 @@ public class CCGraphics{
 		endBlend();
 	}
 	
-	private CCTextField _myTextField;
+	private CCTextField _myTextField = null;
 
 	public void textFont(CCFont<?> theFont) {
 		_myTextField = new CCTextField(theFont, "");
 	}
 
 	public void text(String theText, double theX, double theY) {
+		if(_myTextField == null) {
+			_myTextField = new CCTextField(new CCTextureMapFont(null,CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2), "");
+		}
 		_myTextField.text(theText);
 		_myTextField.position(theX, theY);
 		_myTextField.draw(this);

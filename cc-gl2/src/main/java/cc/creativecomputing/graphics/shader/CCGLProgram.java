@@ -241,11 +241,10 @@ public class CCGLProgram{
 		link();
 	}
 	
-	private CCGLShader attachShader(final Path[] theShaderPaths, CCShaderObjectType theType){
+	protected CCGLShader attachShader(final Path[] theShaderPaths, CCShaderObjectType theType){
 		if(theShaderPaths == null || theShaderPaths[0] == null)return null;
 		
 		CCGLShader myShader = new CCGLShader(theType, theShaderPaths);
-		_myShaderList.add(myShader);
 		attach(myShader);
 		
 		return myShader;
@@ -268,6 +267,13 @@ public class CCGLProgram{
 		attach(myShader);
 		
 		return myShader;
+	}
+	
+	public boolean isUpdated() {
+		for(CCGLShader myShader:_myShaderList) {
+			if(myShader.isUpdated())return true;
+		}
+		return false;
 	}
 	
 	public void reload() {
@@ -296,7 +302,7 @@ public class CCGLProgram{
 	 * @param theShader the shader object that is to be attached.
 	 */
 	public void attach(CCGLShader theShader){
-		
+		_myShaderList.add(theShader);
 		glAttachShader(_myProgram, theShader._myShaderID);
 	}
 	
@@ -309,7 +315,7 @@ public class CCGLProgram{
 	 * @param theShader the shader object to be detached.
 	 */
 	public void detach(CCGLShader theShader){
-		
+		_myShaderList.add(theShader);
 		glDetachShader(_myProgram, theShader._myShaderID);
 	}
 	
@@ -434,12 +440,19 @@ public class CCGLProgram{
 	
 
 	public void start() {
-		
+		if(isUpdated()) {
+			CCLog.info(isUpdated());
+			reload();
+			link();
+		}
 		boolean myRelink = false;
 		for(CCGLShader myShader:_myShaderList){
 			myRelink = myRelink || myShader.checkReloadSource();
 		}
-		if(myRelink)link();
+		if(myRelink) {
+			CCLog.info("RELINK");
+			link();
+		}
 		
 		glUseProgram(_myProgram);
 		for(CCGLShader myShader:_myShaderList){

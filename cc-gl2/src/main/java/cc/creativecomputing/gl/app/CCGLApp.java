@@ -40,6 +40,11 @@ public class CCGLApp extends CCGLWindow implements CCPropertyFeedbackObject{
 		windowSizeEvents.add(e -> {width = e.x; height = e.y;});
 	}
 	
+	public void size(int theWidth, int theHeight) {
+		width = theWidth;
+		height = theHeight;
+	}
+	
 	public void setup(){
 		
 	}

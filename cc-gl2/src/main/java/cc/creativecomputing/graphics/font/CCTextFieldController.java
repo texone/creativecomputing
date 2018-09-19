@@ -1,6 +1,7 @@
 package cc.creativecomputing.graphics.font;
 
 import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.gl.app.CCGLWindow;
@@ -42,6 +43,12 @@ public class CCTextFieldController {
 		});
 	}
 	
+	public void mouseClicked(CCGLMouseEvent theEvent) {
+		if(theEvent.clickCount == 2) {
+			selectWord(theEvent);
+		}
+	}
+	
 	public void mousePress(CCGLMouseEvent theEvent) {
 		int cursorIndex = cursorIndex(mouseCoords(theEvent.x, theEvent.y));
 		moveCursorTo(cursorIndex, theEvent.isShiftDown());
@@ -53,6 +60,7 @@ public class CCTextFieldController {
 	}
 	
 	public void keyPress(CCGLKeyEvent theEvent){
+		CCLog.info(theEvent);
 		switch(theEvent.key){
 		case KEY_LEFT:
 			moveCursorLeft(theEvent.isShiftDown());
@@ -64,6 +72,10 @@ public class CCTextFieldController {
 		case KEY_DELETE:
 		case KEY_BACKSPACE:
 			delete();
+			break;
+			
+		case KEY_A:
+			if(theEvent.isControlDown() || theEvent.isSuperDown())selectAll();
 			break;
 			
 		case KEY_C:
@@ -206,8 +218,8 @@ public class CCTextFieldController {
 			CCPlacedTextChar myChar = _myTextField.charGrid().get(i);
 			CCPlacedTextChar myNextChar = i < _myTextField.charGrid().size() - 1 ? _myTextField.charGrid().get(i + 1) : null;
 			if(
-				thePosition.y > myChar.y + _myTextField.descent() && 
-				thePosition.y < myChar.y + _myTextField.ascent()
+				thePosition.y > myChar.y - _myTextField.descent() && 
+				thePosition.y > myChar.y - _myTextField.ascent()
 			){
 				if(
 					thePosition.x > myChar.x && 
@@ -307,35 +319,7 @@ public class CCTextFieldController {
 	
 	public void keyEvent(CCGLKeyEvent theKeyEvent) {
 //		if(_myCursorIndex < 0) return;
-//		
-//		if(theKeyEvent.action == CCGLAction.PRESS && (theKeyEvent.isControlDown())) {
-//			switch(theKeyEvent.key) {
-//			case KEY_C:
-//				copySelectionToClipboard();
-//				break;
-//			case KEY_X:
-//				copySelectionToClipboard();
-//				removeSelection();
-//				break;
-//			case KEY_V:
-//				copySelectionFromClipboard();
-//				break;
-//			default:
-//			}
-//			return;
-//		}
-//		
-//		switch(theKeyEvent.key) {
-//		case KEY_LEFT_SHIFT:
-//		case KEY_RIGHT_SHIFT:
-//			if(theKeyEvent.action == CCGLAction.PRESS) {
-//				_myIsShiftPressed = true;
-//				startSelection();
-//			}
-//			if(theKeyEvent.action == CCGLAction.RELEASE)_myIsShiftPressed = false;
-//			break;
-//		default:
-//		}
+
 //		
 //		if(theKeyEvent.action != CCGLAction.PRESS)return;
 //			
@@ -349,10 +333,6 @@ public class CCTextFieldController {
 //			if(!_myIsShiftPressed)endSelection();
 //			moveCursorDown();
 //			break;
-//		case KEY_BACKSPACE:
-//		case KEY_DELETE:
-//			delete();
-//			break;
 //			
 //		}
 	}
@@ -365,5 +345,24 @@ public class CCTextFieldController {
 		return _myEndIndex;
 	}
 	
+	public void selectAll() {
+		_myStartIndex = 0;
+		_myEndIndex = _myTextField.charGrid().size();
+	}
 	
+	public void selectWord(CCGLMouseEvent theEvent) {
+		selectWord(mouseCoords(theEvent.x, theEvent.y));
+	}
+	
+	public void selectWord(CCVector2 thePosition) {
+		int cursorIndex = cursorIndex(thePosition);
+		int myStart = _myTextField.text().lastIndexOf(" ", cursorIndex);
+		int myEnd = _myTextField.text().indexOf(" ", cursorIndex);
+		CCLog.info(cursorIndex, myStart, myEnd);
+		_myStartIndex = myStart == -1 ? 0 : myStart + 1;
+		_myEndIndex = myEnd == -1 ? _myTextField.text().length() : myEnd;
+		
+		
+		
+	}
 }

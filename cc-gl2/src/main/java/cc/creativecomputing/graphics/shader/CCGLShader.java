@@ -13,9 +13,13 @@ import static org.lwjgl.opengl.GL20.glShaderSource;
 
 import java.nio.IntBuffer;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cc.creativecomputing.control.code.CCShaderObject;
+import cc.creativecomputing.control.code.CCShaderObject.CCShaderInsert;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -213,46 +217,38 @@ public class CCGLShader extends CCShaderObject{
 		"shadow2DProjLod"
 	};
 	
-	public static CCShaderSourceTemplate buildSourceObject(final Path...thePaths) {
-		CCShaderSourceTemplate mySource = new CCShaderSourceTemplate();
-		
-		for(Path myPath:thePaths) {
-			for(String myLine:CCNIOUtil.loadStrings(myPath)){
-				mySource.addLine(myLine);
-			}
-		}
-		
-		return mySource;
-	}
-	
 	protected CCShaderObjectType _myType;
-	protected Path[] _myFiles;
 	
 	private boolean _myReloadSource = false;
 	
 	
-	CCGLShader(CCShaderObjectType theType, Path...theFiles){
-		super(theFiles);
+	public CCGLShader(CCShaderObjectType theType, Map<String, CCShaderInsert> theInsertMap, Path...theFiles){
+		super(theInsertMap, theFiles);
 		_myType = theType;
-		_myFiles = theFiles;
-		
-		
 		_myShaderID = glCreateShader(_myType.glID);
 		
 		try{
 			loadShader();
 		}catch(Exception e){
-			
+			e.printStackTrace();
 		}
 	}
+	CCGLShader(CCShaderObjectType theType, Path...theFiles){
+		this(theType, new HashMap<>(), theFiles);
+	}
 	
-	CCGLShader(CCShaderObjectType theType, String...theSource){
-		super(theSource);
+	CCGLShader(CCShaderObjectType theType, Map<String, CCShaderInsert> theInsertMap, String...theSource){
+		super(theInsertMap, theSource);
 		_myType = theType;
 		
 		_myShaderID = glCreateShader(_myType.glID);
 
 		loadShader(true);
+	}
+	
+
+	CCGLShader(CCShaderObjectType theType, String...theSource){
+		this(theType, new HashMap<>(), theSource);
 	}
 	
 	@Override
@@ -384,33 +380,47 @@ public class CCGLShader extends CCShaderObject{
 	 * To determine whether an object has been flagged for deletion, call {@linkplain #deleteStatus()}
 	 */
 	public void delete(){
-		
 		glDeleteShader(_myShaderID);
 	}
 	
+	private String errorSource() {
+		switch(_myType) {
+		case FRAGMENT:
+			return "void main(){gl_FragColor = vec4(1,0,1,1);}";
+		case VERTEX:
+			return "void main(){gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;}";
+		}
+		return "void main(){}";
+	}
+	
 	private boolean loadShader(boolean theThrowException){
-		source(preprocessSources());
+		String mySource = preprocessSources();
+		source(mySource);
 		compile();
 		if(!compileStatus()){
-			StringBuffer myReplyBuffer = new StringBuffer();
-			myReplyBuffer.append(getInfoLog());
-			_myInfoLog = myReplyBuffer.toString();
+			_myInfoLog = getInfoLog();
+			CCLog.info(_myInfoLog);
+			CCLog.info(mySource);
 			errorEvents.event(this);
 			if(theThrowException)throw new CCShaderException(_myInfoLog);
+			source(errorSource());
+			compile();
 			return false;
 		}else{
-			_myInfoLog = "";
+			_myInfoLog = getInfoLog();
+			CCLog.info(_myInfoLog);
 		}
 		compileEvents.event(this);
-		
+
 		return true;
 	}
 	
-	private boolean loadShader() {
-		return loadShader(true);
+	public boolean loadShader() {
+		return loadShader(false);
 	}
 	
-	private String _myInfoLog;
+	@CCProperty(name = "info", readBack = true)
+	private String _myInfoLog = "";
 	
 	int _myShaderID = -1;
 	

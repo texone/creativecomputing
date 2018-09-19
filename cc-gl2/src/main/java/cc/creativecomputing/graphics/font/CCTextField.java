@@ -3,7 +3,6 @@ package cc.creativecomputing.graphics.font;
 import java.util.ArrayList;
 
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.font.text.CCLineBreakMode;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
@@ -161,7 +160,7 @@ public class CCTextField {
 				myWidth = myX;
 				_myWidth = CCMath.max(myWidth, _myWidth);
 				myX = 0;
-				myY -= _myFont.verticalAdvance() * _myBreakCorrectionScale;
+				myY += _myFont.verticalAdvance() * _myBreakCorrectionScale;
 				_myHeight += _myFont.verticalAdvance() * _myBreakCorrectionScale;
 				for(int i = myLineStartIndex; i < myLineEndIndex;i++){
 					_myCharGrid.get(i).x += alignCorrection(myWidth);
@@ -231,16 +230,6 @@ public class CCTextField {
 	
 	public CCFont<?> font(){
 		return _myFont;
-	}
-	
-	public void lineBreak(CCLineBreakMode _myLineBreakMode) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public CCLineBreakMode lineBreak() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	public CCTextField position(double theX, double theY){

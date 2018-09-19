@@ -44,6 +44,7 @@ public class CCGLMouseEvent {
 		y = theY;
 		screenX = theScreenX;
 		screenY = theScreenY;
+		clickCount = theEvent.clickCount;
 	}
 	
 	public boolean isShiftDown(){

@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_INT;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL20.GL_ACTIVE_ATTRIBUTES;
 import static org.lwjgl.opengl.GL20.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH;
 import static org.lwjgl.opengl.GL20.GL_ACTIVE_UNIFORMS;
@@ -172,6 +174,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,7 +191,7 @@ import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.CCVector4;
 
-public class GLShaderProgram{
+public class GLProgram{
 	
 	/**
 	 * Use this function to simplify creation of basic shaders. This function is looking in the filenames 
@@ -205,7 +208,7 @@ public class GLShaderProgram{
 	 * @param thepass path to the shader to load without the shader type suffix
 	 * @return shader program with the shader types provided
 	 */
-	public static GLShaderProgram createShaderProgram(String theName){
+	public static GLProgram createShaderProgram(String theName){
 		GLShaderObject[] myObjects = new GLShaderObject[GLShaderType.values().length];
 		
 		for(GLShaderType myType:GLShaderType.values()){
@@ -217,14 +220,14 @@ public class GLShaderProgram{
 			}
 		}
 		
-		return new GLShaderProgram(myObjects);
+		return new GLProgram(myObjects);
 	}
 	
-	public static class CCGLShaderProgramPipeline{
+	public static class GLProgramPipeline{
 		
 		private int _myID;
 		
-		public CCGLShaderProgramPipeline(){
+		public GLProgramPipeline(){
 			_myID = glGenProgramPipelines();
 		}
 		
@@ -235,6 +238,33 @@ public class GLShaderProgram{
 		public void finalize(){
 			glDeleteProgram(_myID);
 		}
+	}
+	
+
+	public static class GLTextureUniform{
+		public GLTexture texture;
+		public int unit;
+		public String parameter;
+		
+		public GLTextureUniform(GLTexture theTexture, String theParameter){
+			texture = theTexture;
+			parameter = theParameter;
+			unit = -1;
+		}
+	}
+	
+	protected Map<String, GLTextureUniform> _myTextures = new HashMap<>();
+	
+	public void uniformTexture(String theParameter, GLTexture theTexture){
+		if(_myTextures.containsKey(theParameter)){
+			_myTextures.get(theParameter).texture = theTexture;
+			return;
+		}
+		_myTextures.put(theParameter, new GLTextureUniform(theTexture, theParameter));
+	}
+	
+	public Collection<GLTextureUniform> textures(){
+		return _myTextures.values();
 	}
 	
 	private Map<String, GLUniformBlock> _myUniformBlockMap = new HashMap<>();
@@ -250,7 +280,7 @@ public class GLShaderProgram{
 	 * In case of a linkage error an exception is thrown
 	 * @param theObjects
 	 */
-	public GLShaderProgram(GLShaderObject...theObjects){
+	public GLProgram(GLShaderObject...theObjects){
 		
 		_myID = glCreateProgram();
 		
@@ -1521,6 +1551,16 @@ public class GLShaderProgram{
 	 */
 	public void use(){
 		glUseProgram(_myID);
+		int myTextureUnit = 0;
+		for(GLTextureUniform myTextureUniform:textures()){
+			if(myTextureUniform.texture == null)continue;
+				
+			glActiveTexture(GL_TEXTURE0 + myTextureUnit);
+			myTextureUniform.texture.bind();
+			uniform1i(myTextureUniform.parameter, myTextureUnit);
+//			CCLog.info(myTextureUnit + " : " + myTextureUniform.parameter  + " : " + myTextureUniform.texture);
+			myTextureUnit++;
+		}
 	}
 
 	/**

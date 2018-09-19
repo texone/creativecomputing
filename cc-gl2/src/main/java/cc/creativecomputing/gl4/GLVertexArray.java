@@ -3,6 +3,7 @@ package cc.creativecomputing.gl4;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL11.glGetInteger;
 import static org.lwjgl.opengl.GL14.glMultiDrawArrays;
 import static org.lwjgl.opengl.GL14.glMultiDrawElements;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
@@ -28,6 +29,7 @@ import static org.lwjgl.opengl.GL41.glVertexAttribL2d;
 import static org.lwjgl.opengl.GL41.glVertexAttribL3d;
 import static org.lwjgl.opengl.GL41.glVertexAttribL4d;
 import static org.lwjgl.opengl.GL41.glVertexAttribLPointer;
+import static org.lwjgl.opengl.GL20.*;
 
 import java.nio.Buffer;
 import java.nio.IntBuffer;
@@ -37,6 +39,15 @@ import org.lwjgl.PointerBuffer;
 import cc.creativecomputing.gl4.GLBuffer.GLBufferTarget;
 
 public class GLVertexArray {
+	
+	/**
+	 * Returns the maximum number of 4-component generic vertex attributes 
+	 * accessible to a vertex shader. The value must be at least 16.
+	 * @return maximum number of 4-component generic vertex attributes
+	 */
+	public static int maxVertexAttribs() {
+		return glGetInteger(GL_MAX_VERTEX_ATTRIBS);
+	}
 
 	private int _myID;
 

@@ -25,12 +25,15 @@ import static org.lwjgl.opengl.GL46.*;
 public enum GLPixelDataType {
 	UNSIGNED_BYTE(GL_UNSIGNED_BYTE),
 	BYTE(GL_BYTE),
+	BITMAP(GL_BITMAP),
 	UNSIGNED_SHORT(GL_UNSIGNED_SHORT),
 	SHORT(GL_SHORT),
 	UNSIGNED_INT(GL_UNSIGNED_INT),
 	INT(GL_INT),
+	FIXED(GL_FIXED),
 	HALF_FLOAT(GL_HALF_FLOAT),
 	FLOAT(GL_FLOAT),
+	DOUBLE(GL_DOUBLE),
 	UNSIGNED_BYTE_3_3_2(GL_UNSIGNED_BYTE_3_3_2),
 	UNSIGNED_BYTE_2_3_3_REV(GL_UNSIGNED_BYTE_2_3_3_REV),
 	UNSIGNED_SHORT_5_6_5(GL_UNSIGNED_SHORT_5_6_5),
@@ -48,14 +51,10 @@ public enum GLPixelDataType {
 	UNSIGNED_INT_5_9_9_9_REV(GL_UNSIGNED_INT_5_9_9_9_REV),
 	FLOAT_32_UNSIGNED_INT_24_8_REV(GL_FLOAT_32_UNSIGNED_INT_24_8_REV);
 	
-	private int _myGLID;
+	public final int glID;
 	
 	GLPixelDataType(int theGLID){
-		_myGLID = theGLID;
-	}
-	
-	public int glID(){
-		return _myGLID;
+		glID = theGLID;
 	}
 	
 	public static GLPixelDataType fromCC(CCPixelType theType){

@@ -18,7 +18,8 @@
  */
 package cc.creativecomputing.graphics.camera;
 
-import cc.creativecomputing.core.CCEventManager;
+import java.util.Optional;
+
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCGLKeyEvent;
@@ -61,17 +62,20 @@ public class CCCameraController {
 		void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY);
 	}
 	
-	private abstract class CCDampedAction{
+	private static class CCDampedAction{
 		private double _myVelocity;
 		private final double _myDamping;
+		private CCEvent<Double> _myBehavior;
 
-		public CCDampedAction() {
-			this(0.16);
+		public CCDampedAction(final CCGLWindow theApp, final CCEvent<Double> theBehavior) {
+			this(theApp, theBehavior, 0.16);
 		}
 
-		public CCDampedAction(final double theFriction) {
+		public CCDampedAction(final CCGLWindow theApp, final CCEvent<Double> theBehavior, final double theFriction) {
+			theApp.updateEvents.add(this::update);
 			_myVelocity = 0;
 			_myDamping = 1.0 - theFriction;
+			_myBehavior = theBehavior;
 		}
 
 		public void impulse(final double theImpulse) {
@@ -82,8 +86,7 @@ public class CCCameraController {
 			if (_myVelocity == 0) {
 				return;
 			}
-			behave(_myVelocity);
-//			feed();
+			_myBehavior.event(_myVelocity);
 			_myVelocity *= _myDamping;
 			if (CCMath.abs(_myVelocity) < .001f) {
 				_myVelocity = 0;
@@ -93,8 +96,6 @@ public class CCCameraController {
 		public void stop() {
 			_myVelocity = 0;
 		}
-
-		abstract protected void behave(final double theVelocity);
 	}
 	
 	public static class CCCameraState  {
@@ -107,7 +108,6 @@ public class CCCameraController {
 			_myCenter = theCenter;
 			_myDistance = theDistance;
 		}
-
 	}
 	
 	private static final CCVector3 LOOK = CCVector3.UNIT_Z;
@@ -243,53 +243,18 @@ public class CCCameraController {
 
 		feed();
 
-		_myRotateXAction = new CCDampedAction() {
-			@Override
-			protected void behave(final double theVelocity) {
-				_myRotation.multiplyLocal(CCQuaternion.createFromAngleAxis(theVelocity, CCVector3.UNIT_X ));
-			}
-		};
+		_myRotateXAction = new CCDampedAction(_myApp, v -> _myRotation.multiplyLocal(CCQuaternion.createFromAngleAxis(v, CCVector3.UNIT_X)));
+		_myRotateYAction = new CCDampedAction(_myApp, v -> _myRotation.multiplyLocal(CCQuaternion.createFromAngleAxis(v, CCVector3.UNIT_Y)));
+		_myRotateZAction = new CCDampedAction(_myApp, v -> _myRotation.multiplyLocal(CCQuaternion.createFromAngleAxis(v, CCVector3.UNIT_Z)));
+		
+		_myDampedZoom = new CCDampedAction(_myApp, v -> mouseZoom(v));
+		
+		_myDampedPanX = new CCDampedAction(_myApp, v -> mousePan(v, 0));
+		_myDampedPanY = new CCDampedAction(_myApp, v -> mousePan(0, v));
+		
+		_myWheelHandler = pos -> _myDampedZoom.impulse(_myWheelScale * pos.y);
 
-		_myRotateYAction = new CCDampedAction() {
-			@Override
-			protected void behave(final double theVelocity) {
-				_myRotation.multiplyLocal(CCQuaternion.createFromAngleAxis(theVelocity, CCVector3.UNIT_Y));
-			}
-		};
-
-		_myRotateZAction = new CCDampedAction() {
-			@Override
-			protected void behave(final double theVelocity) {
-				_myRotation.multiplyLocal(CCQuaternion.createFromAngleAxis(theVelocity, CCVector3.UNIT_Z));
-			}
-		};
-		
-		_myDampedZoom = new CCDampedAction() {
-			@Override
-			protected void behave(final double theVelocity) {
-				mouseZoom(theVelocity);
-			}
-		};
-		
-		_myDampedPanX = new CCDampedAction() {
-			@Override
-			protected void behave(final double theVelocity) {
-				mousePan(theVelocity, 0);
-			}
-		};
-		
-		_myDampedPanY = new CCDampedAction() {
-			@Override
-			protected void behave(final double theVelocity) {
-				mousePan(0, theVelocity);
-			}
-		};
-		
-		_myWheelHandler = pos -> {
-			_myDampedZoom.impulse(_myWheelScale * pos.y);
-		};
-
-		setActive(true);
+		active(true);
 	}
 	
 	public CCCamera camera(){
@@ -297,32 +262,16 @@ public class CCCameraController {
 	}
 
 	/**
-	 * <_myApp>
 	 * Turn on or off default mouse-handling behavior:
+	 * <ul>
+	 * <li><b>left-drag</b> rotate camera around look-at point
+	 * <li><b>center-drag</b> pan camera (change look-at point)
+	 * <li>right-drag</b> zoom
+	 * <li><b>wheel</b> zoom
 	 * 
-	 * <_myApp>
-	 * <table>
-	 * <tr>
-	 * <td><b>left-drag</b></td>
-	 * <td>rotate camera around look-at point</td>
-	 * <tr>
-	 * <tr>
-	 * <td><b>center-drag</b></td>
-	 * <td>pan camera (change look-at point)</td>
-	 * <tr>
-	 * <tr>
-	 * <td><b>right-drag</b></td>
-	 * <td>zoom</td>
-	 * <tr>
-	 * <tr>
-	 * <td><b>wheel</b></td>
-	 * <td>zoom</td>
-	 * <tr>
-	 * </table>
-	 * 
-	 * @param isMouseControlled
+	 * @param theIsActive
 	 */
-	public void setActive(final boolean theIsActive) {
+	public void active(final boolean theIsActive) {
 		if (theIsActive == _myIsActive) {
 			return;
 		}
@@ -357,55 +306,56 @@ public class CCCameraController {
 	private double _myPMouseX;
 	private double _myPMouseY;
 	
-	private CCGLMouseEvent _myMouseEvent = null;
+	private Optional<CCGLMouseEvent> _myMouseEvent = Optional.empty();
 	
 	private CCEvent<CCGLMouseEvent> mousePressed = event ->{
 		if(!_myCamera.viewport().pointInside(event.x, event.y)){
-			_myMouseEvent = null;
+			_myMouseEvent = Optional.empty();
 			return;
 		}
-		_myMouseEvent = event;
+		_myMouseEvent = Optional.of(event);
 		_myPMouseX = event.x;
 		_myPMouseY = event.y;
 	};
 	
 	private CCEvent<CCGLMouseEvent> mouseReleased = event ->{
 		if(!_myCamera.viewport().pointInside(event.x, event.y)){
-			_myMouseEvent = null;
+			_myMouseEvent = Optional.empty();
 			return;
 		}
 
-		_myMouseEvent = event;
+		_myMouseEvent = Optional.of(event);
 		_myPMouseX = event.x;
 		_myPMouseY = event.y;
 	};
 	
 	private CCEvent<CCVector2> mouseDragged = position -> {
-		if(_myMouseEvent == null)return;
+		_myMouseEvent.ifPresent(me -> {
 		
-		final double theMoveX = position.x - _myPMouseX;
-		final double theMoveY = _myPMouseY - position.y;
-		_myPMouseX = position.x;
-		_myPMouseY = position.y;
-
-		if (_myMouseEvent.isShiftDown()) {
-			if (_myDragConstraint == null && Math.abs(theMoveX - theMoveY) > 1) {
-				_myDragConstraint = Math.abs(theMoveX) > Math.abs(theMoveY) ? Constraint.YAW : Constraint.PITCH;
+			final double theMoveX = position.x - _myPMouseX;
+			final double theMoveY = _myPMouseY - position.y;
+			_myPMouseX = position.x;
+			_myPMouseY = position.y;
+	
+			if (me.isShiftDown()) {
+				if (_myDragConstraint == null && CCMath.abs(theMoveX - theMoveY) > 1) {
+					_myDragConstraint = CCMath.abs(theMoveX) > CCMath.abs(theMoveY) ? Constraint.YAW : Constraint.PITCH;
+				}
+			} else if (_myPermaConstraint != null) {
+				_myDragConstraint = _myPermaConstraint;
+			} else {
+				_myDragConstraint = null;
 			}
-		} else if (_myPermaConstraint != null) {
-			_myDragConstraint = _myPermaConstraint;
-		} else {
-			_myDragConstraint = null;
-		}
-
-		final CCGLMouseButton b = _myMouseEvent.button;
-		if (_myCenterDragHandler != null && (b == CCGLMouseButton.BUTTON_MIDDLE || (b == CCGLMouseButton.BUTTON_LEFT && _myMouseEvent.isControlDown()))) {
-			_myCenterDragHandler.handleDrag(theMoveX, theMoveY, position.x, position.y);
-		} else if (_myLeftDragHandler != null && b == CCGLMouseButton.BUTTON_LEFT) {
-			_myLeftDragHandler.handleDrag(theMoveX, theMoveY, position.x, position.y);
-		} else if (_myRightDraghandler != null && b == CCGLMouseButton.BUTTON_RIGHT) {
-			_myRightDraghandler.handleDrag(theMoveX, theMoveY, position.x, position.y);
-		}
+	
+			final CCGLMouseButton b = me.button;
+			if (_myCenterDragHandler != null && (b == CCGLMouseButton.BUTTON_MIDDLE || (b == CCGLMouseButton.BUTTON_LEFT && me.isControlDown()))) {
+				_myCenterDragHandler.handleDrag(theMoveX, theMoveY, position.x, position.y);
+			} else if (_myLeftDragHandler != null && b == CCGLMouseButton.BUTTON_LEFT) {
+				_myLeftDragHandler.handleDrag(theMoveX, theMoveY, position.x, position.y);
+			} else if (_myRightDraghandler != null && b == CCGLMouseButton.BUTTON_RIGHT) {
+				_myRightDraghandler.handleDrag(theMoveX, theMoveY, position.x, position.y);
+			}
+		});
 	};	
 
 	private void mouseZoom(final double delta) {
@@ -613,9 +563,7 @@ public class CCCameraController {
 		protected AbstractInterp(final double theDuration) {
 			_myDuration = theDuration;
 		}
-		
-
-
+	
 		protected double smooth(final double a, final double b, final double t) {
 			final double smooth = (t * t * (3 - 2 * t));
 			return (b * smooth) + (a * (1 - smooth));
@@ -644,7 +592,7 @@ public class CCCameraController {
 			final double t = _myTime / _myDuration;
 			if (t > .99) {
 				cancel();
-				setEndState();
+				interp(1);
 			} else {
 				interp(t);
 			}
@@ -652,8 +600,6 @@ public class CCCameraController {
 		}
 
 		protected abstract void interp(double t);
-
-		protected abstract void setEndState();
 	}
 
 	class DistanceInterp extends AbstractInterp {
@@ -668,11 +614,6 @@ public class CCCameraController {
 		@Override
 		protected void interp(final double t) {
 			_myDistance = smooth(_myStartDistance, _myEndDistance, t);
-		}
-
-		@Override
-		protected void setEndState() {
-			_myDistance = _myEndDistance;
 		}
 	}
 
@@ -689,11 +630,6 @@ public class CCCameraController {
 		@Override
 		protected void interp(final double t) {
 			_myCenter.set(smooth(startCenter, endCenter, t));
-		}
-
-		@Override
-		protected void setEndState() {
-			_myCenter.set(endCenter);
 		}
 	}
 
@@ -747,11 +683,6 @@ public class CCCameraController {
 		@Override
 		protected void interp(final double t) {
 			_myRotation.set(slerp(_myStartRotation, _myEndRotation, t));
-		}
-
-		@Override
-		protected void setEndState() {
-			_myRotation.set(_myEndRotation);
 		}
 	}
 }

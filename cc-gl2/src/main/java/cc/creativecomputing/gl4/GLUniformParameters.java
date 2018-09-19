@@ -8,8 +8,8 @@ import java.util.List;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCField;
-import cc.creativecomputing.gl4.GLShaderProgram.GLUniformInfo;
-import cc.creativecomputing.gl4.GLShaderProgram.GLUniformType;
+import cc.creativecomputing.gl4.GLProgram.GLUniformInfo;
+import cc.creativecomputing.gl4.GLProgram.GLUniformType;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMatrix3x3;
@@ -34,7 +34,7 @@ public class GLUniformParameters {
 			CCLog.error("parameter class: " + _myField.value().getClass().getName() + " does not fit uniform type " + _myInfo.type());
 		}
 		
-		public abstract void apply(GLShaderProgram theProgram);
+		public abstract void apply(GLProgram theProgram);
 	}
 	
 	private static class GLUniformColorParameter extends GLUniformParameter{
@@ -45,7 +45,7 @@ public class GLUniformParameters {
 		}
 
 		@Override
-		public void apply(GLShaderProgram theProgram) {
+		public void apply(GLProgram theProgram) {
 			CCColor myColor = (CCColor)_myField.value();
 			switch(_myInfo.type()){
 			case FLOAT_VEC3:
@@ -68,7 +68,7 @@ public class GLUniformParameters {
 		}
 
 		@Override
-		public void apply(GLShaderProgram theProgram) {
+		public void apply(GLProgram theProgram) {
 			CCVector4 myVector = (CCVector4)_myField.value();
 			switch(_myInfo.type()){
 			case FLOAT_VEC3:
@@ -91,7 +91,7 @@ public class GLUniformParameters {
 		}
 
 		@Override
-		public void apply(GLShaderProgram theProgram) {
+		public void apply(GLProgram theProgram) {
 			theProgram.uniform1f(_myInfo.location(), (Float)_myField.value());
 		}
 		
@@ -105,7 +105,7 @@ public class GLUniformParameters {
 		}
 
 		@Override
-		public void apply(GLShaderProgram theProgram) {
+		public void apply(GLProgram theProgram) {
 			theProgram.uniform1i(_myInfo.location(), (Integer)_myField.value());
 		}
 		
@@ -119,7 +119,7 @@ public class GLUniformParameters {
 		}
 
 		@Override
-		public void apply(GLShaderProgram theProgram) {
+		public void apply(GLProgram theProgram) {
 			theProgram.uniformMatrix3f(_myInfo.location(), (CCMatrix3x3)_myField.value());
 		}
 		
@@ -133,7 +133,7 @@ public class GLUniformParameters {
 		}
 
 		@Override
-		public void apply(GLShaderProgram theProgram) {
+		public void apply(GLProgram theProgram) {
 			theProgram.uniformMatrix4f(_myInfo.location(), (CCMatrix4x4)_myField.value());
 		}
 		
@@ -146,7 +146,7 @@ public class GLUniformParameters {
 		}
 
 		@Override
-		public void apply(GLShaderProgram theProgram) {
+		public void apply(GLProgram theProgram) {
 			CCTexture2D myTexture = (CCTexture2D)_myField.value();
 			glActiveTexture(_myField.annotation().binding());
 			myTexture.bind();
@@ -159,17 +159,17 @@ public class GLUniformParameters {
 	private Object _myParentObject;
 
 	
-	protected GLUniformParameters(GLShaderProgram theProgram, Object theParent){
+	protected GLUniformParameters(GLProgram theProgram, Object theParent){
 		_myParentObject = theParent;
 		link(theProgram);
 	}
 	
-	protected GLUniformParameters(GLShaderProgram theProgram){
+	protected GLUniformParameters(GLProgram theProgram){
 		_myParentObject = this;
 		link(theProgram);
 	}
 	
-	private void link(GLShaderProgram theProgram){
+	private void link(GLProgram theProgram){
 		List<CCField<GLUniform>> myFields = CCReflectionUtil.getFields(_myParentObject, GLUniform.class);
 		for(CCField<GLUniform> myField:myFields){
 			GLUniformInfo myUniformInfo = theProgram.uniform(myField.annotation().name());
@@ -196,7 +196,7 @@ public class GLUniformParameters {
 		}
 	}
 	
-	public void apply(GLShaderProgram theProgram){
+	public void apply(GLProgram theProgram){
 		for(GLUniformParameter myParameter:_myParameters){
 			myParameter.apply(theProgram);
 		}

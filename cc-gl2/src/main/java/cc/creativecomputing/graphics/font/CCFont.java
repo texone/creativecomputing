@@ -412,6 +412,7 @@ public class CCFont<CharType extends CCChar> {
 			PointerBuffer myVertices = stack.callocPointer(1);
 			int myNumberOfVertices =  stbtt_GetGlyphShape(_myInfo, theGlyph, myVertices);
 			CCLog.info(myNumberOfVertices);
+			if(myNumberOfVertices == 0)return null;
 			STBTTVertex.Buffer myVertexBuffer = STBTTVertex.create(myVertices.get(0),myNumberOfVertices);
 			return myVertexBuffer;
 		}

@@ -32,7 +32,7 @@ public class GLUniformBlock {
 	}
 
 	private int _myID;
-	private GLShaderProgram _myProgram;
+	private GLProgram _myProgram;
 	private GLBuffer _myUniformBuffer;
 	
 	private int _myNumberOfUniforms;
@@ -41,7 +41,7 @@ public class GLUniformBlock {
 	
 	private ByteBuffer _myData;
 	
-	GLUniformBlock(int theID, GLShaderProgram theProgram, String...theUniformNames){
+	GLUniformBlock(int theID, GLProgram theProgram, String...theUniformNames){
 		_myID = theID;
 		_myProgram = theProgram;
 		

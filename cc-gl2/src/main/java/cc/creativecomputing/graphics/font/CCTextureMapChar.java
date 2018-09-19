@@ -49,7 +49,10 @@ public class CCTextureMapChar extends CCChar{
 		if(_myALignedQuad == null)return (_myAdvanceWidth) * theScale;
 		drawBoxTC(
 			g,
-			_myALignedQuad.x0 * theScale + theX, theY - _myALignedQuad.y0 * theScale, _myALignedQuad.x1 * theScale + theX, theY - _myALignedQuad.y1 * theScale,
+			_myALignedQuad.x0 * theScale + theX, 
+			_myALignedQuad.y0 * theScale + theY, 
+			_myALignedQuad.x1 * theScale + theX, 
+			_myALignedQuad.y1 * theScale + theY,
 			_myALignedQuad.s0, _myALignedQuad.t0, _myALignedQuad.s1, _myALignedQuad.t1
 		);
 		

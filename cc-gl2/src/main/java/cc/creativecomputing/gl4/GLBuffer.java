@@ -64,7 +64,7 @@ public class GLBuffer {
 	 * @author christianr
 	 *
 	 */
-	public enum GLBufferTarget{
+	public static enum GLBufferTarget{
 		/**
 		 * target that is used to set vertex array data pointers
 		 * using vertex arrays. this is the target that you will 
@@ -138,7 +138,7 @@ public class GLBuffer {
 	 * @author christianr
 	 *
 	 */
-	public enum GLDataAccesFrequency{
+	public static enum GLDataAccesFrequency{
 		/**
 		 * The data store contents will be modified once and used at most a few times.
 		 */
@@ -158,7 +158,7 @@ public class GLBuffer {
 	 * @author christianr
 	 *
 	 */
-	public enum GLDataAccesNature{
+	public static enum GLDataAccesNature{
 		/**
 		 * The data store contents are modified by the application, and used as the source for GL drawing and image specification commands.
 		 */

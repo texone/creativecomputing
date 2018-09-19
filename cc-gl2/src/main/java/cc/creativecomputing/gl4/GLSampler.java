@@ -21,6 +21,9 @@ import static org.lwjgl.opengl.GL33.glDeleteSamplers;
 import static org.lwjgl.opengl.GL33.glGenSamplers;
 import static org.lwjgl.opengl.GL33.glSamplerParameteri;
 
+import cc.creativecomputing.gl4.GLTextureAttributes.GLTextureWrap;
+import cc.creativecomputing.gl4.GLTextureAttributes.GLTextureWrapCoord;
+
 /**
  * When a sampler object is bound to a texture unit, its state supersedes that
  * of the texture object bound to that texture unit. If the sampler name zero is
@@ -158,15 +161,15 @@ public class GLSampler {
 	 * use mipmaps.
 	 * <p>
 	 * A mipmap is an ordered set of arrays representing the same image at
-	 * progressively lower resolutions. If the texture has dimensions 2n×2m,
+	 * progressively lower resolutions. If the texture has dimensions 2n x 2m,
 	 * there are max(n,m)+1 mipmaps. The first mipmap is the original texture,
-	 * with dimensions 2n×2m. Each subsequent mipmap has dimensions 2k-1×2l-1,
-	 * where 2k×2l are the dimensions of the previous mipmap, until either k=0
-	 * or l=0. At that point, subsequent mipmaps have dimension 1×2l-1 or 2k-1×1
-	 * until the final mipmap, which has dimension 1×1. To define the mipmaps,
+	 * with dimensions 2n x 2m. Each subsequent mipmap has dimensions 2k-1 x 2l-1,
+	 * where 2k x 2l are the dimensions of the previous mipmap, until either k=0
+	 * or l=0. At that point, subsequent mipmaps have dimension 1 x 2l-1 or 2k-1 x 1
+	 * until the final mipmap, which has dimension 1 x 1. To define the mipmaps,
 	 * call glTexImage1D, glTexImage2D, glTexImage3D, glCopyTexImage1D, or
 	 * glCopyTexImage2D with the level argument indicating the order of the
-	 * mipmaps. Level 0 is the original texture; level max(n,m) is the final 1×1
+	 * mipmaps. Level 0 is the original texture; level max(n,m) is the final 1 x 1
 	 * mipmap.
 	 * <p>
 	 * 
@@ -229,74 +232,24 @@ public class GLSampler {
 		parameter(GL_TEXTURE_MAG_FILTER, theMagFilter._myGLID);
 	}
 	
-	public enum GLTextureWrap {
-		CLAMP_TO_EDGE(GL_CLAMP_TO_EDGE),
-		REPEAT(GL_REPEAT),
-		CLAMP_TO_BORDER(GL_CLAMP_TO_BORDER),
-		MIRRORED_REPEAT(GL_MIRRORED_REPEAT);
-		
-		private int _myGLID;
-		
-		GLTextureWrap(int theGLID){
-			_myGLID = theGLID;
-		}
-		
-		public int glID(){
-			return _myGLID;
-		}
-		
-		public static GLTextureWrap fromGLID(int theGLID){
-			switch(theGLID){
-			case GL_CLAMP_TO_EDGE:return CLAMP_TO_EDGE;
-			case GL_REPEAT:return REPEAT;
-			case GL_CLAMP_TO_BORDER:return CLAMP_TO_BORDER;
-			case GL_MIRRORED_REPEAT:return MIRRORED_REPEAT;
-			}
-			return null;
-		}
-	}
 	
-	public enum GLTextureWrapCoord {
-		TEXTURE_WRAP_S(GL_TEXTURE_WRAP_S),
-		TEXTURE_WRAP_T(GL_TEXTURE_WRAP_T),
-		TEXTURE_WRAP_R(GL_TEXTURE_WRAP_R);
-		
-		private int _myGLID;
-		
-		GLTextureWrapCoord(int theGLID){
-			_myGLID = theGLID;
-		}
-		
-		public int glID(){
-			return _myGLID;
-		}
-		
-		public static GLTextureWrapCoord fromGLID(int theGLID){
-			switch(theGLID){
-			case GL_TEXTURE_WRAP_S:return TEXTURE_WRAP_S;
-			case GL_TEXTURE_WRAP_T:return TEXTURE_WRAP_T;
-			case GL_TEXTURE_WRAP_R:return TEXTURE_WRAP_R;
-			}
-			return null;
-		}
-	}
 	
 	public void wrapR(GLTextureWrap theWrap){
-		parameter(GLTextureWrapCoord.TEXTURE_WRAP_R.glID(), theWrap.glID());
+		parameter(GLTextureWrapCoord.TEXTURE_WRAP_R.glID(), theWrap.glID);
 	}
 	
 	public void wrapS(GLTextureWrap theWrap){
-		parameter(GLTextureWrapCoord.TEXTURE_WRAP_S.glID(), theWrap.glID());
+		parameter(GLTextureWrapCoord.TEXTURE_WRAP_S.glID(), theWrap.glID);
 	}
 	
 	public void wrapT(GLTextureWrap theWrap){
-		parameter(GLTextureWrapCoord.TEXTURE_WRAP_T.glID(), theWrap.glID());
+		parameter(GLTextureWrapCoord.TEXTURE_WRAP_T.glID(), theWrap.glID);
 	}
 	
 	public void wrap(GLTextureWrap theWrap){
-		parameter(GLTextureWrapCoord.TEXTURE_WRAP_R.glID(), theWrap.glID());
-		parameter(GLTextureWrapCoord.TEXTURE_WRAP_S.glID(), theWrap.glID());
-		parameter(GLTextureWrapCoord.TEXTURE_WRAP_T.glID(), theWrap.glID());
+		parameter(GLTextureWrapCoord.TEXTURE_WRAP_R.glID(), theWrap.glID);
+		parameter(GLTextureWrapCoord.TEXTURE_WRAP_S.glID(), theWrap.glID);
+		parameter(GLTextureWrapCoord.TEXTURE_WRAP_T.glID(), theWrap.glID);
 	}
 
 	@Override
