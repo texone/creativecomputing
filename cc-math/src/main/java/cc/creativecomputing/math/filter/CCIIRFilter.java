@@ -93,6 +93,7 @@ public abstract class CCIIRFilter extends CCFilter{
 		// make sure our coefficients are up-to-date
 		if (_myFrequency != _myPreviousFrequency) {
 			calcCoeff();
+			initArrays();
 			_myPreviousFrequency = _myFrequency;
 		}
 
