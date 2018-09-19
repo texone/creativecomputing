@@ -10,6 +10,8 @@
  */
 package cc.creativecomputing.math;
 
+import cc.creativecomputing.math.interpolate.CCInterpolator;
+import cc.creativecomputing.math.interpolate.CCInterpolators;
 import cc.creativecomputing.math.random.CCFastRandom;
 import cc.creativecomputing.math.random.CCRandom;
 
@@ -100,6 +102,34 @@ public class CCMath {
 	public static double random(final double theMin, final double theMax) {
 		return RANDOM.random(theMin, theMax);
 	}
+	
+	/**
+	 * Returns random values using the given interpolator to change the distribution of random values
+	 * @param theInterpolator the interpolator to change distribution
+	 * @return random value 
+	 */
+	public static double random(CCInterpolator theInterpolator) {
+		return RANDOM.random(theInterpolator);
+	}
+	
+	public static double random(CCInterpolators theInterpolator) {
+		return RANDOM.random(theInterpolator);
+	}
+	
+	/**
+	 * Returns random values using the given interpolator to change the distribution of random values
+	 * @param theMin the min random value
+	 * @param theMax the max random value
+	 * @param theInterpolator the interpolator to change distribution
+	 * @return random value 
+	 */
+	public static double random(double theMin, double theMax, CCInterpolator theInterpolator) {
+		return RANDOM.random(theMin, theMax, theInterpolator);
+	}
+	
+	public static double random(double theMin, double theMax, CCInterpolators theInterpolator) {
+		return RANDOM.random(theMin, theMax, theInterpolator);
+	}
 
 	public static double gaussianRandom() {
 		return FAST_RANDOM.gaussianRandom();
@@ -116,6 +146,10 @@ public class CCMath {
 	public static void randomSeed(final long theSeed) {
 		FAST_RANDOM.randomSeed((int)theSeed);
 		RANDOM.randomSeed(theSeed);
+	}
+	
+	public static boolean chance(double c){
+		return random()<=c;
 	}
 
 	/**

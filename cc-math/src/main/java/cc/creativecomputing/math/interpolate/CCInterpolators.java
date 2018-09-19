@@ -6,7 +6,12 @@ public enum CCInterpolators {
 	CUBIC(new CCCubicInterpolator()),
 	HERMITE(new CCHermiteInterpolator()),
 	SMOOTH_CUBIC(new CCSmoothCubicInterpolator()),
-	CATMULLROM(new CCCatmullroomInterpolator());
+	CATMULLROM(new CCCatmullroomInterpolator()),
+	POW(new CCPowInterpolator()),
+	QUADRATIC_POW(new CCPowInterpolator(2)),
+	CUBIC_POW(new CCPowInterpolator(3)),
+	QUARTIC_POW(new CCPowInterpolator(4)),
+	QUINTIC_POW(new CCPowInterpolator(5));
 
 	private final CCInterpolator _myInterpolator;
 	

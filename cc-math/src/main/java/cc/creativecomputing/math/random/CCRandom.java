@@ -13,6 +13,8 @@ package cc.creativecomputing.math.random;
 import java.util.Random;
 
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.interpolate.CCInterpolator;
+import cc.creativecomputing.math.interpolate.CCInterpolators;
 
 /**
  * An instance of this class is used to generate a stream of 
@@ -136,7 +138,34 @@ public class CCRandom extends Random{
 	}
 	
 	/**
-	 * @shortdesc Returns the next pseudorandom, Gaussian ("normally") distributed double value
+	 * Returns random values using the given interpolator to change the distribution of random values
+	 * @param theInterpolator the interpolator to change distribution
+	 * @return random value 
+	 */
+	public double random(CCInterpolator theInterpolator) {
+		return theInterpolator.interpolate(0, 0, 1, 1, random());
+	}
+	
+	public double random(CCInterpolators theInterpolator) {
+		return random(theInterpolator.interpolator());
+	}
+	
+	/**
+	 * Returns random values using the given interpolator to change the distribution of random values
+	 * @param theMin the min random value
+	 * @param theMax the max random value
+	 * @param theInterpolator the interpolator to change distribution
+	 * @return random value 
+	 */
+	public double random(double theMin, double theMax, CCInterpolator theInterpolator) {
+		return theMin + random(theInterpolator) * (theMax - theMin);
+	}
+	
+	public double random(double theMin, double theMax, CCInterpolators theInterpolator) {
+		return random(theMin, theMax, theInterpolator.interpolator());
+	}
+	
+	/**
 	 * Returns the next pseudorandom, Gaussian ("normally") distributed double value with mean 
 	 * 0.0 and standard deviation 1.0 from this random number generator's sequence. The general 
 	 * contract of nextGaussian is that one double value, chosen from (approximately) the usual 
