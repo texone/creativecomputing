@@ -29,6 +29,10 @@ public class CCArrayUtil{
 	// ////////////////////////////////////////////////////////////
 
 	// ARRAY UTILITIES
+	
+	static public<Type> Type[] create(Type...theTypes) {
+		return theTypes;
+	}
 
 	/**
 	 * Calls System.arraycopy(), included here so that we can avoid people
