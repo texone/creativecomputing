@@ -1118,11 +1118,11 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	}
 	
 	public void clearColor(final int theRed, final int theGreen, final int theBlue){
-		clearColor((double)theRed/255, (double)theGreen/255, (double)theBlue/255);
+		clearColor((float)theRed/255, (float)theGreen/255, (float)theBlue/255);
 	}
 	
 	public void clearColor(final int theRed, final int theGreen, final int theBlue, final int theAlpha){
-		clearColor((double)theRed/255, (double)theGreen/255, (double)theBlue/255, (double)theAlpha/255);
+		clearColor((float)theRed/255, (float)theGreen/255, (float)theBlue/255, (float)theAlpha/255);
 	}
 	
 	public void clearColor(){
@@ -2767,7 +2767,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	}
 	
 	public void pointDistanceAttenuation(final double theConstant, final double theLinear, final double theQuadratic){
-		float quadratic[] =  { (float)theConstant, (float)theLinear, (float)theQuadratic };
+		float[] quadratic =  { (float)theConstant, (float)theLinear, (float)theQuadratic };
 		gl.glPointParameterfv( GL2.GL_POINT_DISTANCE_ATTENUATION, quadratic ,0);
 	}
 	
@@ -3876,6 +3876,132 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	
 	public void cameraTarget(final CCVector3 theCenter){
 		cameraTarget(theCenter.x, theCenter.y, theCenter.z);
+	}
+	
+	/**
+	 * project transforms the specified object coordinates into
+	 * window coordinates using model, proj and view. The result
+	 * is stored in the returned vector
+	 */
+	public CCVector2 modelToScreen(final CCVector3 theObjectVector) {
+		return modelToScreen(theObjectVector.x,theObjectVector.y,theObjectVector.z);
+	}
+	
+	public CCVector2 modelToScreen(final double theX, final double theY, final double theZ){
+		CCMatrix4x4 myModelViewProjectionMatrix =  modelviewMatrix().multiply(projectionMatrix());
+		
+		CCVector4 myPosition = myModelViewProjectionMatrix.applyPost(new CCVector4(theX, theY, theZ,1));
+		CCVector2 myScreenCoord = new CCVector2(myPosition.x, myPosition.y).divideLocal(myPosition.w);
+		myScreenCoord.multiplyLocal(0.5);
+		myScreenCoord.addLocal( 0.5,0.5);
+		myScreenCoord.multiplyLocal(width(), height());
+		
+		return myScreenCoord;
+	}
+	
+	/**
+	 * Screen to model will map the given window coordinates to model
+	 * coordinates. The depth of the model coordinates is read from the depth
+	 * buffer. Optionally you can pass a depth value to this function that must
+	 * be in the range 0 to 1.
+	 * 
+	 * @param theX
+	 * @param theY
+	 * @param theDepth
+	 * @return
+	 */
+	public CCVector3 screenToModel(final double theX, final double theY, final double theDepth) {
+
+		/* transform to normalized coordinates in the range [-1, 1] */
+		CCVector2 myScreenCoord = new CCVector2(theX, theY);
+		myScreenCoord.divideLocal(width(), height());
+		myScreenCoord.subtractLocal(0.5, 0.5);
+		myScreenCoord.multiplyLocal(2);
+
+		CCVector4 myPosition = new CCVector4(myScreenCoord.x, myScreenCoord.y, theDepth * 2 - 1, 1);
+
+		/* find the inverse modelview-projection-matrix */
+		CCMatrix4x4 myInverseModelViewProjectionMatrix = modelviewMatrix().multiply(projectionMatrix()).invert();
+
+		/* find the object's coordinates */
+		myPosition = myInverseModelViewProjectionMatrix.applyPost(myPosition);
+		if (myPosition.w != 0.0f)
+			myPosition.w = 1.0f / myPosition.w;
+
+		/* calculate output */
+		return new CCVector3(myPosition.x * myPosition.w, myPosition.y * myPosition.w, myPosition.z * myPosition.w);
+	}
+
+	/**
+	 * @param theWindowVector
+	 * @return
+	 */
+	public CCVector3 screenToModel(final CCVector3 theWindowVector) {
+		return screenToModel(theWindowVector.x,theWindowVector.y,theWindowVector.z);
+	}
+	public CCVector3 screenToModel(final double theX, final double theY) {
+		return screenToModel(theX, theY, 0);
+	}
+
+	/**
+	 * @param theWindowVector
+	 * @return
+	 */
+	public CCVector3 screenToModel(final CCVector2 theWindowVector) {
+		return screenToModel(theWindowVector.x, theWindowVector.y, 0);
+	}
+	
+	/**
+	 * @param theMouseX
+	 * @param theMouseY
+	 * @return the model coordinates for the given screen position
+	 */
+	public CCVector3 screenToModel(final int theMouseX, final int theMouseY) {
+		// set up a floatbuffer to get the depth buffer value of the mouse
+		final FloatBuffer myFloatBuffer = FloatBuffer.allocate(1);
+		
+		// Get the depth buffer value at the mouse position. have to do
+		// height-mouseY, as GL puts 0,0 in the bottom left, not top left.
+		gl.glReadPixels(theMouseX, height() - theMouseY, 1, 1, GL2.GL_DEPTH_COMPONENT, GL.GL_FLOAT, myFloatBuffer);
+
+		myFloatBuffer.rewind();
+		
+		double myDepth = myFloatBuffer.get();
+		// the result x,y,z will be put in this.. 4th value will be 1, but I
+		// think it's "scale" in GL terms, but I think it'll always be 1.
+
+		return  screenToModel(theMouseX,height() - theMouseY,myDepth);
+	}
+	
+	/**
+	 * Use this method to calculate the vector perpendicular to the screen. At the
+	 * given position. The resulting vector is normalized and facing forward away
+	 * from the screen.
+	 * @param thePosition
+	 * @return
+	 */
+	public CCVector3 screenOrthogonal(CCVector3 thePosition){
+		CCVector2 myScreenCoords = modelToScreen(thePosition);
+		CCVector3 myModelCoords = screenToModel(myScreenCoords.x,myScreenCoords.y,0);
+		
+		CCVector3 myResult = myModelCoords.subtract(thePosition);
+		myResult.normalize();
+		return myResult;
+	}
+	
+	public CCVector3 screenOrthogonal(final double theX, final double theY, final double theZ){
+		return screenOrthogonal(new CCVector3(theX,theY,theZ));
+	}
+	
+	public CCVector3 screenOrthogonal(final double theX, final double theY) {
+		CCVector3 myVec1 = screenToModel(theX, theY,0);
+		CCVector3 myVec2 = screenToModel(theX, theY,1);
+		
+		return myVec1.subtract(myVec2).normalize();
+	}
+	
+	public CCVector3 screenOrthogonal(final CCVector2 theVector) {
+		return screenOrthogonal(theVector.x, theVector.y);
 	}
 
 
