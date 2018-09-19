@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderException;
@@ -39,6 +40,7 @@ public class CCGPUConvolutionShader extends CCGLProgram{
 				CCNIOUtil.classPath(CCGPUConvolutionShader.class,"convolution_fragment_rect.glsl") :
 				CCNIOUtil.classPath(CCGPUConvolutionShader.class,"convolution_fragment.glsl") 
 		);
+		CCLog.info(CCNIOUtil.classPath(CCGPUConvolutionShader.class,"convolution_vertex.glsl"));
 	}
 	
 	public CCGPUConvolutionShader() {

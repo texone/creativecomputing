@@ -13,6 +13,7 @@ package cc.creativecomputing.graphics.shader.imaging;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCRenderBuffer;
 import cc.creativecomputing.graphics.texture.CCFrameBufferObjectAttributes;
@@ -57,6 +58,11 @@ public class CCGPUSeperateGaussianBlur extends CCGPUConvolutionShader{
 		
 		setKernel(calculateKernel(theMaximumRadius), _myRows, 1);
 		
+		CCFrameBufferObjectAttributes myAtts = new CCFrameBufferObjectAttributes();
+//			myAtts.samples(8);
+		_myTexture1 = new CCRenderBuffer(myAtts, _myWidth, _myHeight);
+		_myTexture2 = new CCRenderBuffer(myAtts, _myWidth, _myHeight);
+		texture(_myTexture1.attachment(0));
 	}
 	
 	public CCGPUSeperateGaussianBlur(double theMaximumRadius, final int theWidth, final int theHeight) {
@@ -99,17 +105,18 @@ public class CCGPUSeperateGaussianBlur extends CCGPUConvolutionShader{
 		
 		for (int i = 0; i < _myRows; i++) 
 			myKernel.add(_myMatrix[i] / total);
-		
+
 		return myKernel;
 	}
 
 	/**
 	 * Changes the blur radius. The radius is clamped to the maximum blur value
 	 * passed to the constructor. Be aware you have to define a maximum radius because
-	 * the size of the array holding the kernel on the shaderside can not be changed
+	 * the size of the array holding the kernel on the shader side can not be changed
 	 * at runtime. For a smaller radius kernel cells not needed will be filled with 0.
 	 * @param theRadius
 	 */
+	@CCProperty(name = "radius", min = 0, max = 100)
 	public void radius(final double theRadius){
 		updateKernel(calculateKernel(theRadius));
 	}
@@ -120,13 +127,7 @@ public class CCGPUSeperateGaussianBlur extends CCGPUConvolutionShader{
 	 * will be blurred. 
 	 */
 	public void beginDraw(CCGraphics g){
-		if(_myTexture1 == null){
-			CCFrameBufferObjectAttributes myAtts = new CCFrameBufferObjectAttributes();
-			myAtts.samples(8);
- 			_myTexture1 = new CCRenderBuffer(myAtts, _myWidth, _myHeight);
-			_myTexture2 = new CCRenderBuffer(myAtts, _myWidth, _myHeight);
-			texture(_myTexture1.attachment(0));
-		}
+		
 		_myTexture1.beginDraw(g);
 		g.clear();
 		g.pushMatrix();

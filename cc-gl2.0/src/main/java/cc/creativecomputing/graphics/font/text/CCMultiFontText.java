@@ -625,7 +625,7 @@ public class CCMultiFontText {
 	
 	public void breakText() {
 		try{
-		_myLineBreaking.breakText(this);
+			_myLineBreaking.breakText(this);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -775,7 +775,7 @@ public class CCMultiFontText {
 	 */
 	public CCAABoundingRectangle boundingBox(){
 		_myBoundingRectangle.min().x = _myPosition.x;
-		_myBoundingRectangle.min().y = _myPosition.y - _myHeight;
+		_myBoundingRectangle.min().y = _myPosition.y;
 		_myBoundingRectangle.width(_myWidth);
 		_myBoundingRectangle.height(_myHeight);
 		return _myBoundingRectangle;
