@@ -17,9 +17,9 @@ public class CCSerialInput implements SerialPortEventListener{
 	 private int bufferUntilSize = 1;
 	 private byte bufferUntilByte = 0;
 	
-	private CCListenerManager<CCSerialListener> _myListeners;
+	private CCListenerManager<CCSerialEvent> _myListeners;
 	
-	CCSerialInput(CCListenerManager<CCSerialListener> theListeners, SerialPort thePort) {
+	CCSerialInput(CCListenerManager<CCSerialEvent> theListeners, SerialPort thePort) {
 		_myListeners = theListeners;
 		_myPort = thePort;
 		try {
@@ -29,7 +29,7 @@ public class CCSerialInput implements SerialPortEventListener{
 		}
 	}
 	
-	public CCListenerManager<CCSerialListener> inputEvents(){
+	public CCListenerManager<CCSerialEvent> inputEvents(){
 		return _myListeners;
 	}
 	
@@ -77,7 +77,7 @@ public class CCSerialInput implements SerialPortEventListener{
 						// thread-safety issues since it's being invoked
 						// during pre in the context
 						// of the Processing applet
-						_myListeners.proxy().onSerialEvent(this);
+						_myListeners.proxy().event(this);
 					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}

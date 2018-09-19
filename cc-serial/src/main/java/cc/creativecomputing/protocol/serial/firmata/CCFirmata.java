@@ -1,5 +1,7 @@
 package cc.creativecomputing.protocol.serial.firmata;
 
+import cc.creativecomputing.core.logging.CCLog;
+
 /**
  * Internal class used by the Arduino class to parse the Firmata protocol.
  */
@@ -137,6 +139,7 @@ public class CCFirmata {
 	}
 
 	public void init() {
+		CCLog.info("INIT");
 		// enable all ports; firmware should ignore non-existent ones
 		for (int i = 0; i < 16; i++) {
 			out.write(REPORT_DIGITAL | i);
@@ -310,7 +313,7 @@ public class CCFirmata {
 	public void processInput(int inputData) {
 		int command;
 
-		// System.out.print(">" + inputData + " ");
+		CCLog.info(">" + inputData + " ");
 
 		if (parsingSysex) {
 			if (inputData == END_SYSEX) {

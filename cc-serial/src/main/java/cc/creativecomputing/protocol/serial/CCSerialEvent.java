@@ -19,7 +19,7 @@ package cc.creativecomputing.protocol.serial;
  * @author christian riekoff
  * 
  */
-public interface CCSerialListener {
+public interface CCSerialEvent {
 
 	/**
 	 * Implement this method and pass an object of the class to the CCSerial to listen serial events. This is called
@@ -31,7 +31,7 @@ public interface CCSerialListener {
 	 * 
 	 * @param theSerial the serial port that received data
 	 */
-    void onSerialEvent(final CCSerialInput theSerialPort);
+    void event(final CCSerialInput theSerialPort);
 	
 
 }

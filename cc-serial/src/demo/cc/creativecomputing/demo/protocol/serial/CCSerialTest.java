@@ -10,13 +10,14 @@
  */
 package cc.creativecomputing.demo.protocol.serial;
 
+import cc.creativecomputing.app.CCApplication;
 import cc.creativecomputing.app.modules.CCBasicAppListener;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.protocol.serial.CCSerialInput;
-import cc.creativecomputing.protocol.serial.CCSerialListener;
+import cc.creativecomputing.protocol.serial.CCSerialEvent;
 import cc.creativecomputing.protocol.serial.CCSerialModule;
 
-public class CCSerialTest implements CCSerialListener, CCBasicAppListener{
+public class CCSerialTest implements CCSerialEvent, CCBasicAppListener{
 
 	@Override
 	public void start() {
@@ -34,7 +35,7 @@ public class CCSerialTest implements CCSerialListener, CCBasicAppListener{
 	private StringBuffer _myMessageBuffer = new StringBuffer();
 	
 	@Override
-	public void onSerialEvent(CCSerialInput theSerialPort) {
+	public void event(CCSerialInput theSerialPort) {
 		char myChar = theSerialPort.readChar();
 		if(myChar == '\n'){
 			CCLog.info(_myMessageBuffer.toString().trim());

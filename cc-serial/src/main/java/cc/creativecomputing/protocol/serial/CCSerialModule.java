@@ -32,7 +32,7 @@ import jssc.SerialPortList;
  * @author Christian Riekoff
  *
  */
-public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
+public class CCSerialModule extends CCAbstractAppModule<CCSerialEvent>{
 
 	private CCSerialInput _myInput;
 	private CCSerialOutput _myOutput;
@@ -56,11 +56,11 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 	@CCProperty(name = "port")
 	private CCSelection _myPortSelection = new CCSelection();
 	
-	private CCListenerManager<CCSerialStartListener> _myStartEvents = CCListenerManager.create(CCSerialStartListener.class);
-	private CCListenerManager<CCSerialStopListener> _myStopEvents = CCListenerManager.create(CCSerialStopListener.class);
+	public CCListenerManager<CCSerialEvent> startEvents = CCListenerManager.create(CCSerialEvent.class);
+	public CCListenerManager<CCSerialEvent> stopEvents = CCListenerManager.create(CCSerialEvent.class);
 	
 	public CCSerialModule(String theName) {
-		super(CCSerialListener.class, theName);
+		super(CCSerialEvent.class, theName);
 		for(String myValue:list()){
 			_myPortSelection.add(myValue);
 		}	
@@ -81,14 +81,6 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 
 	public CCSerialModule() {
 		this("serial");
-	}
-	
-	public CCListenerManager<CCSerialStartListener> startEvents(){
-		return _myStartEvents;
-	}
-	
-	public CCListenerManager<CCSerialStopListener> stopEvents(){
-		return _myStopEvents;
 	}
 	
 	/**
@@ -149,10 +141,16 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 		}
 	}
 	
+	private boolean _myIsConnected = false;
+	
 	@CCProperty(name = "connect")
 	public void connect(boolean theConnect){
 		if(theConnect)start(_myPortSelection.value());
 		else stop();
+	}
+	
+	public boolean isConnected() {
+		return _myIsConnected;
 	}
 	
 	@CCProperty(name = "refresh port list")
@@ -173,9 +171,12 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 					
 			_myInput = new CCSerialInput(_myListeners, _myPort);
 			_myOutput = new CCSerialOutput(_myPort);
+
+			_myIsConnected = true;
+			startEvents.proxy().event(_myInput);
 			
-			_myStartEvents.proxy().start(_myInput);
 		} catch (SerialPortException e) {
+			e.printStackTrace();
 //			throw new RuntimeException("Error opening serial port " + e.getPortName() + ": " + e.getExceptionType(), e);
 		} 
 	}
@@ -203,7 +204,7 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 		if (_myInput == null)
 			return;
 		
-		_myStopEvents.proxy().stop(_myInput);
+		stopEvents.proxy().event(_myInput);
 		_myInput.stop();
 		_myInput = null;
 		_myOutput = null;
@@ -214,6 +215,9 @@ public class CCSerialModule extends CCAbstractAppModule<CCSerialListener>{
 			} catch (SerialPortException e) {
 				throw new RuntimeException(e);
 			}
+		
+
+		_myIsConnected = false;
 	}
 
 	/**

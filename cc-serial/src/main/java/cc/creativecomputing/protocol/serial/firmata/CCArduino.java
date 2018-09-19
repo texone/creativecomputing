@@ -83,6 +83,7 @@ public class CCArduino {
 		        throw new RuntimeException("Error inside Arduino.serialEvent()");
 		      }
 		});
+		_mySerial.startEvents.add(serial -> _myFirmata.init());
 
 		_myFirmata = new CCFirmata(val -> _mySerial.output().write(val));
 
@@ -91,7 +92,6 @@ public class CCArduino {
 		} catch (InterruptedException e) {
 		}
 
-		_myFirmata.init();
 	}
 
 	/**
@@ -100,6 +100,10 @@ public class CCArduino {
 	 */
 	public CCArduino() {
 		this(57600);
+	}
+	
+	public boolean isConnected(){
+		return _mySerial.isConnected();
 	}
 
 	/**
