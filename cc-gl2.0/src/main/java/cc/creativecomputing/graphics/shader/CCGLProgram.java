@@ -27,6 +27,7 @@ import cc.creativecomputing.graphics.texture.CCTexture;
 import cc.creativecomputing.io.CCBufferUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMatrix3x3;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector1;
 import cc.creativecomputing.math.CCVector2;
@@ -772,6 +773,17 @@ public class CCGLProgram{
 	
 	public void uniformMatrix4f(final String theName, CCMatrix4x4 theMatrix) {
 		uniformMatrix4f(uniformLocation(theName), theMatrix);
+	}
+	
+	public void uniformMatrix3f(final int theLocation, CCMatrix3x3 theMatrix) { 
+		GL2 gl = CCGraphics.currentGL();
+		FloatBuffer myData =  theMatrix.toFloatBuffer();
+		myData.rewind();
+		gl.glUniformMatrix3fv(theLocation, 1, false, myData);
+	}
+	
+	public void uniformMatrix3f(final String theName, CCMatrix3x3 theMatrix) {
+		uniformMatrix3f(uniformLocation(theName), theMatrix);
 	}
 	
 	public void uniformMatrix4fv(final int theLocation, final List<CCMatrix4x4> theMatrices){
