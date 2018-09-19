@@ -12,13 +12,13 @@ void main(){
 	
 	//vec4 color0 = texture2DLod(textureSampler0, gl_TexCoord[0].st,4.0);
 	//vec4 color1 = texture2DLod(textureSampler1, gl_TexCoord[0].st,4.0);
-	vec4 color0 = texture2D(textureSampler0, gl_TexCoord[0].st);
-	vec4 color1 = texture2D(textureSampler1, gl_TexCoord[0].st);
+	vec4 color0 = texture2D(textureSampler0, gl_TexCoord[0].st);//vec4(0.0,0.0,0.0,1.0);//
+	vec4 color1 = texture2D(textureSampler1, gl_TexCoord[0].st);//vec4(1.0,1.0,1.0,1.0);//
 	vec4 color = mix(color0, color1, gl_Color.a);
 	
-	vec4 color2 = texture2D(modSampler, gl_TexCoord[1].st);
+	//vec4 color2 = texture2D(modSampler, gl_TexCoord[1].st);
 	//color.xyz *= (gl_Color.b * 2.0 - 1.0) * saturation + 1.0;
-	color.xyz *= (color2.r * 2.0 - 1.0) * saturation + 1.0;
+	//color.xyz *= (color2.r * 2.0 - 1.0) * saturation + 1.0;
 	//color.a = 0.99;//gl_Color.a;
-	gl_FragData[0] = vec4(gl_TexCoord[0].st, gl_TexCoord[0].z, 1.0);//color;
+	gl_FragData[0] = vec4( gl_TexCoord[0].st,0,1);
 }

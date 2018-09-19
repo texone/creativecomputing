@@ -68,7 +68,6 @@ public class CCSmarthouseDemo extends CCGL2Adapter {
 	private double _mySerialRadius;
 	
 	double MAX_STEPS_A = 60000; 
-	double MAX_STEPS_Z = 40000; 
 	
 	private void handleInput(String theInput) {
 		if(_myReadBuffer.toString().contains("\n")){
@@ -83,7 +82,6 @@ public class CCSmarthouseDemo extends CCGL2Adapter {
 				int myStepsA = Integer.parseInt(myData[5]);
 				int myStepsZ = Integer.parseInt(myData[6]);
 				_mySerialAngle = myStepsA / MAX_STEPS_A * CCMath.radians(175.0 / 2.) ;
-				_mySerialRadius = 1 - myStepsZ / MAX_STEPS_Z;
 				double myX = x(_mySerialAngle, _mySerialRadius);
 				double myY = y(_mySerialAngle, _mySerialRadius);
 				CCLog.info(

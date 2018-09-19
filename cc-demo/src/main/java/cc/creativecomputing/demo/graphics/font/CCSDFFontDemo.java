@@ -20,7 +20,6 @@ import cc.creativecomputing.graphics.font.CCCharSet;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.font.CCFontSettings;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
-import cc.creativecomputing.graphics.font.text.CCLineBreakMode;
 import cc.creativecomputing.graphics.font.text.CCText;
 import cc.creativecomputing.graphics.font.util.CCLoremIpsumGenerator;
 import cc.creativecomputing.graphics.shader.CCGLProgram;

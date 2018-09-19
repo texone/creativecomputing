@@ -27,6 +27,9 @@ uniform float levelRandomness;
 uniform float levelRandomBlend;
 uniform float alphaRandomness;
 
+vec2 levels(int i){
+	return vec2(12);
+}
 
 void main(){
 	vec2[7] levels;
@@ -56,11 +59,11 @@ void main(){
 	vec3 myRandomer;
 	float myLevelFloor = floor(levelRandomness * maxLevel);
 	while (c < myLevelFloor){
-		myRandomer = texture2DRect(randomTexture,levels[int(maxLevel - c - 1)]).xyz;
+		myRandomer = texture2DRect(randomTexture,levels(int(maxLevel - c - 1))).xyz;
 		c++;
 		leveler += mix(myRandomer.x, myRandomer.y, levelRandomBlend);
 	}
-	myRandomer = texture2DRect(randomTexture,levels[int(min(maxLevel - 1,maxLevel - c - 1))]).xyz;
+	myRandomer = texture2DRect(randomTexture,levels(int(min(maxLevel - 1,maxLevel - c - 1)))).xyz;
 	float leveler2 = leveler + myRandomer.x;
 	float myLevelRandomBlend = levelRandomness * maxLevel - myLevelFloor;
 	leveler2 = mix(leveler,leveler2,myLevelRandomBlend);
@@ -72,23 +75,23 @@ void main(){
 	
 	float blend = myLevel - level1;
 	
-	vec3 myRandom1 = texture2DRect(randomTexture,levels[level1]).xyz;
-	vec3 myRandom2 = texture2DRect(randomTexture,levels[level2]).xyz;
+	vec3 myRandom1 = texture2DRect(randomTexture,levels(level1)).xyz;
+	vec3 myRandom2 = texture2DRect(randomTexture,levels(level2)).xyz;
 	vec3 myRandom = mix(myRandom1, myRandom2, blend);
 	
-	vec2 myTexCoordsCenter1 = texture2DRect(centerTextureCoordsTexture,levels[level1]).st / textureSize;
-	vec2 myTexCoordsCenter2 = texture2DRect(centerTextureCoordsTexture,levels[level2]).st / textureSize;
+	vec2 myTexCoordsCenter1 = texture2DRect(centerTextureCoordsTexture,levels(level1)).st / textureSize;
+	vec2 myTexCoordsCenter2 = texture2DRect(centerTextureCoordsTexture,levels(level2)).st / textureSize;
 	vec2 myTexCoordsCenter = mix(myTexCoordsCenter1, myTexCoordsCenter2, blend);
 	
 	vec4 blendColor2 = texture2DRect(blendTexture,myTexCoordsCenter * blendTextureSize);
 	float myAlpha = clamp((blendColor2.g + alpha) * (1 + alphaRandomness) + myRandom.z * alphaRandomness - alphaRandomness,0,1);
 	float myTextureRandom = (blendColor2.b + textureRandomAdd) * textureRandom * useTextureRandom;
 	
-	gl_TexCoord[0] = vec4(mix(myTexCoords,myTexCoordsCenter,textureCenter) + myRandom.xy * myTextureRandom, alpha, 1);
+	gl_TexCoord[0] = vec4(levels[4].xy,0,1);//vec4(mix(myTexCoords,myTexCoordsCenter,textureCenter) + myRandom.xy * myTextureRandom, 0, 1);
 	gl_TexCoord[1] = vec4(mix(myTexCoords,myTexCoordsCenter,textureCenter) + myRandom.xy * saturationRandom, 0, 1);
 	gl_FrontColor = vec4(myLevel, 1, myRandom.x, myAlpha);
 	//gl_TexCoord[0] = vec4(myTexCoordsCenter, 0, 1);;
 	
 	float myPositionRandom = blendColor2.b * positionRandom * (1 - useTextureRandom);
-	gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex + vec4(myRandom.xy * myPositionRandom,0,0);
+	gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
 }

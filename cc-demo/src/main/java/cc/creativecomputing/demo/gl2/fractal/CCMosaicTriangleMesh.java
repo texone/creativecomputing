@@ -16,6 +16,7 @@ import java.util.List;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
@@ -37,9 +38,6 @@ public class CCMosaicTriangleMesh{
 	
 	@CCProperty(name = "texture random add", min = 0, max = 1)
 	private double _cTextureRandomAdd = 0;
-	
-	@CCProperty(name = "position random", min = 0, max = 10000)
-	private double _cPositionRandom = 0;
 		
 	@CCProperty(name = "use texture random")
 	private boolean _cUseTextureRandom = true;
@@ -68,7 +66,7 @@ public class CCMosaicTriangleMesh{
 	@CCProperty(name = "saturation", min = 0, max = 1)
 	private double _cSaturation = 1;
 	
-	private CCVBOMesh _myMesh;
+	private CCMesh _myMesh;
 	
 	private CCShaderBuffer _myTargetsBuffer;
 	private CCTexture2D _myModulationTexture;
@@ -87,6 +85,7 @@ public class CCMosaicTriangleMesh{
 	
 	private List<CCTriangle2> _myTriangles = new ArrayList<CCTriangle2>();
 
+	@CCProperty(name = "fractal shader")
 	private CCGLProgram _myTriangleFractalShader;
 
 	public CCMosaicTriangleMesh(final CCGraphics g, final List<CCTriangle2> theTriangles, final int theSubdivisions) {
@@ -121,7 +120,7 @@ public class CCMosaicTriangleMesh{
 			myIndices.add(i * 3 + 2);
 		}
 		
-		_myMesh = new CCVBOMesh(CCDrawMode.TRIANGLES,  myNumberOfTriangles * 3);
+		_myMesh = new CCMesh(CCDrawMode.TRIANGLES,  myNumberOfTriangles * 3);
 		_myMesh.prepareVertexData(3);
 		_myMesh.prepareTextureCoordData(0, 4);
 		_myMesh.prepareTextureCoordData(1, 4);
@@ -283,7 +282,6 @@ public class CCMosaicTriangleMesh{
 		_myTriangleFractalShader.uniform1i("modSampler", 6);
 		_myTriangleFractalShader.uniform1f("textureRandom", _cTextureRandom);
 		_myTriangleFractalShader.uniform1f("textureRandomAdd", _cTextureRandomAdd);
-		_myTriangleFractalShader.uniform1f("positionRandom", _cPositionRandom);
 		_myTriangleFractalShader.uniform1f("useTextureRandom", _cUseTextureRandom ? 1 : 0);
 		_myTriangleFractalShader.uniform1f("textureCenter", textureCenter);
 		_myTriangleFractalShader.uniform1f("level", _cLevel / 6);

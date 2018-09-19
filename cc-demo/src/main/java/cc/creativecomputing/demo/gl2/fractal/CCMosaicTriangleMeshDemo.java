@@ -52,9 +52,9 @@ public class CCMosaicTriangleMeshDemo extends CCGL2Adapter {
 		
 		List<CCTriangle2> myTriangles = new ArrayList<CCTriangle2>();
 		
-		int myRows = CCMath.ceil(g.height() / myTriangleHeight);
+		int myRows = 1;//CCMath.ceil(g.height() / myTriangleHeight);
 		
-		for(int myColumn = 0; myColumn < 10; myColumn++) {
+		for(int myColumn = 0; myColumn < 20; myColumn++) {
 			for(int myRow = 0; myRow < myRows;myRow++) {
 				CCVector2 myOrigin0;
 				CCVector2 myOrigin1;
@@ -92,7 +92,7 @@ public class CCMosaicTriangleMeshDemo extends CCGL2Adapter {
 			}
 		}
 		
-		_myParticleTriangleMesh = new CCMosaicTriangleMesh(g, myTriangles, 6);
+		_myParticleTriangleMesh = new CCMosaicTriangleMesh(g, myTriangles, 5);
 		_myParticleTriangleMesh.textureSize(g.width(), g.height());
 
 		_myParticleTriangleMesh.texture0(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/09_FlightInfo_b.png"))));

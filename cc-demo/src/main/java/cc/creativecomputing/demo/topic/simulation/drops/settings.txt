@@ -1,0 +1,78 @@
+let defaultWeather={
+    fg:textureRainFg,
+    bg:textureRainBg,
+    flashFg:null,
+    flashBg:null,
+    flashChance:0,
+  };
+
+rain
+	raining:true,
+    minR:20,
+    maxR:50,
+	rainChance:0.35,
+    rainLimit:6,
+	dropletsRate:50,
+	dropletsSize:[3,5.5],
+    trailRate:1, // trailRate:2.5,
+    trailScaleRange:[0.25,0.35],
+    collisionRadiusIncrease:0.0002
+	fg:textureRainFg,
+	bg:textureRainBg
+
+
+storm
+	raining:true,
+    minR:20,
+	maxR:55,
+	rainChance:0.4,
+    rainLimit:6,
+	dropletsRate:80,
+	dropletsSize:[3,5.5],
+	trailRate:2.5,
+	trailScaleRange:[0.25,0.4],
+    collisionRadiusIncrease:0.0002
+	fg:textureRainFg,
+	bg:textureRainBg
+
+fallout
+    raining:true,
+	minR:30,
+	maxR:60,
+	rainChance:0.35,
+    rainLimit:6,
+	dropletsRate:20,
+	dropletsSize:[3,5.5],
+	trailRate:4,
+    trailScaleRange:[0.25,0.35],
+	fg:textureFalloutFg,
+	bg:textureFalloutBg,
+      collisionRadiusIncrease:0
+
+drizzle
+    raining:true,
+	minR:10,
+	maxR:40,
+	rainChance:0.15,
+	rainLimit:2,
+	dropletsRate:10,
+	dropletsSize:[3.5,6],
+    trailRate:1,
+    trailScaleRange:[0.25,0.35],
+    collisionRadiusIncrease:0.0002
+	fg:textureDrizzleFg,
+	bg:textureDrizzleBg
+
+sunny
+    raining:false,
+    maxR:20,
+    maxR:50,
+	rainChance:0,
+	rainLimit:0,
+    dropletsRate:0,
+	dropletsSize:[3,5.5],
+    trailRate:1,
+    trailScaleRange:[0.25,0.35],
+    collisionRadiusIncrease:0.0002
+	fg:textureSunFg,
+	bg:textureSunBg
