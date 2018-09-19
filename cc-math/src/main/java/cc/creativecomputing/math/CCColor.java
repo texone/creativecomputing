@@ -546,6 +546,11 @@ public class CCColor implements Cloneable, CCBlendable<CCColor>{
 		set(theColor);
 	}
 	
+	public CCColor(final CCColor theColor, double theAlpha){
+		this(theColor);
+		a = theAlpha;
+	}
+	
 	public CCColor(Color theColor){
 		this();
 		set(
