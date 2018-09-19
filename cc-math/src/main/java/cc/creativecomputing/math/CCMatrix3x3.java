@@ -789,7 +789,11 @@ public class CCMatrix3x3 implements Cloneable, Externalizable{
         return result;
     }
 
-    
+
+	
+	public FloatBuffer toFloatBuffer(){
+		return toBuffer(FloatBuffer.allocate(9));
+	}
 
     /**
      * @param store
