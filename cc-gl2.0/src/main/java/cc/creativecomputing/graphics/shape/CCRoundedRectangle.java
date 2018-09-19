@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.graphics.shape;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCAABoundingRectangle;
@@ -62,8 +63,6 @@ public class CCRoundedRectangle extends CCAbstractShape{
 		_myBoundingRectangle = new CCAABoundingRectangle(_myX, _myY, _myX + _myWidth, _myY + _myHeight);
 	}
 	
-	
-	
 	public void translate(final double theX, final double theY){
 		_myX += theX;
 		_myY += theY;
@@ -84,6 +83,7 @@ public class CCRoundedRectangle extends CCAbstractShape{
 			);
 		}
 	}
+	
 	private void drawArcStroke(CCGraphics g, final double theCenterX, final double theCenterY, final int theStart, final int theEnd){
 		for(int i = theStart; i < theEnd;i++){
 			g.color(_myColor);
@@ -278,8 +278,120 @@ public class CCRoundedRectangle extends CCAbstractShape{
 		
 		g.endShape();
 	}
+	
+	private void texVertex(CCGraphics g, double theX, double theY, double theWidth, double theHeight) {
+		g.textureCoords2D(theX / theWidth, theY / theHeight);
+		g.vertex(theX, theY);
+	}
+	
+	private void drawArcTexture(CCGraphics g, final double theCenterX, final double theCenterY, final int theStart, final int theEnd, double theWidth, double theHeight){
+		for(int i = theStart; i < theEnd;i++){
+			texVertex(g,theCenterX, theCenterY, theWidth, theHeight);
+			texVertex(g,
+				theCenterX + CCMath.sin(CCMath.radians(i)) * _myRadius * _myScale, 
+				theCenterY + CCMath.cos(CCMath.radians(i)) * _myRadius * _myScale, 
+				theWidth, 
+				theHeight
+			);
+			texVertex(g,
+				theCenterX + CCMath.sin(CCMath.radians(i + 1)) * _myRadius * _myScale,
+				theCenterY + CCMath.cos(CCMath.radians(i + 1)) * _myRadius * _myScale,
+				theWidth, 
+				theHeight
+			);
+		}
+	}
 
+	public void drawTexture(CCGraphics g, double theWidth, double theHeight){
+		if(!_myIsVisible)return;
+		double myX1 = _myX;
+		double myX2 = _myX + _myRadius * _myScale;
+		double myX3 = _myX + (_myWidth - _myRadius) * _myScale;
+		double myX4 = _myX + _myWidth * _myScale;
 
+		double myY1 = _myY;
+		double myY2 = _myY + _myRadius * _myScale;
+		double myY3 = _myY + (_myHeight - _myRadius) * _myScale;
+		double myY4 = _myY + _myHeight * _myScale;
+		
+		switch(_myShapeMode){
+		case CENTER:
+			myX1 -= _myWidth * _myScale / 2;
+			myX2 -= _myWidth * _myScale / 2;
+			myX3 -= _myWidth * _myScale / 2;
+			myX4 -= _myWidth * _myScale / 2;
+
+			myY1 -= _myHeight * _myScale / 2;
+			myY2 -= _myHeight * _myScale / 2;
+			myY3 -= _myHeight * _myScale / 2;
+			myY4 -= _myHeight * _myScale / 2;
+			break;
+		default:
+			break;
+		}
+		
+		if(_myRadius <= 0) {
+			g.beginShape(CCDrawMode.TRIANGLES);
+			texVertex(g,myX2, myY2, theWidth, theHeight);
+			texVertex(g,myX3, myY2, theWidth, theHeight);
+			texVertex(g,myX3, myY3, theWidth, theHeight);
+
+			texVertex(g,myX2, myY2, theWidth, theHeight);
+			texVertex(g,myX3, myY3, theWidth, theHeight);
+			texVertex(g,myX2, myY3, theWidth, theHeight);
+			
+			g.endShape();
+			return;
+		}
+		
+		g.beginShape(CCDrawMode.TRIANGLES);
+		drawArc(g, myX3, myY3, 0, 90);
+		drawArc(g, myX3, myY2, 90, 180);
+		drawArc(g, myX2, myY2, 180, 270);
+		drawArc(g, myX2, myY3, 270, 360);
+
+		texVertex(g,myX2, myY1, theWidth, theHeight);
+		texVertex(g,myX3, myY1, theWidth, theHeight);
+		texVertex(g,myX3, myY2, theWidth, theHeight);
+
+		texVertex(g,myX2, myY1, theWidth, theHeight);
+		texVertex(g,myX3, myY2, theWidth, theHeight);
+		texVertex(g,myX2, myY2, theWidth, theHeight);
+
+		texVertex(g,myX2, myY3, theWidth, theHeight);
+		texVertex(g,myX3, myY3, theWidth, theHeight);
+		texVertex(g,myX3, myY4, theWidth, theHeight);
+
+		texVertex(g,myX2, myY3, theWidth, theHeight);
+		texVertex(g,myX3, myY4, theWidth, theHeight);
+		texVertex(g,myX2, myY4, theWidth, theHeight);
+
+		texVertex(g,myX1, myY2, theWidth, theHeight);
+		texVertex(g,myX2, myY2, theWidth, theHeight);
+		texVertex(g,myX2, myY3, theWidth, theHeight);
+
+		texVertex(g,myX1, myY2, theWidth, theHeight);
+		texVertex(g,myX2, myY3, theWidth, theHeight);
+		texVertex(g,myX1, myY3, theWidth, theHeight);
+
+		texVertex(g,myX3, myY2, theWidth, theHeight);
+		texVertex(g,myX4, myY2, theWidth, theHeight);
+		texVertex(g,myX4, myY3, theWidth, theHeight);
+
+		texVertex(g,myX3, myY2, theWidth, theHeight);
+		texVertex(g,myX4, myY3, theWidth, theHeight);
+		texVertex(g,myX3, myY3, theWidth, theHeight);
+
+		texVertex(g,myX2, myY2, theWidth, theHeight);
+		texVertex(g,myX3, myY2, theWidth, theHeight);
+		texVertex(g,myX3, myY3, theWidth, theHeight);
+
+		texVertex(g,myX2, myY2, theWidth, theHeight);
+		texVertex(g,myX3, myY3, theWidth, theHeight);
+		texVertex(g,myX2, myY3, theWidth, theHeight);
+		
+		g.endShape();
+	}
 
 	@Override
 	public void position(double theX, double theY) {
