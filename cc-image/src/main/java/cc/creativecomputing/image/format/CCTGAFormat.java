@@ -10,7 +10,6 @@
  */
 package cc.creativecomputing.image.format;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -21,35 +20,19 @@ import cc.creativecomputing.image.CCImageException;
 import cc.creativecomputing.image.CCPixelFormat;
 import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCPixelType;
-import cc.creativecomputing.image.CCImageIO.CCImageFormats;
-import cc.creativecomputing.io.CCIOUtil;
 
 public class CCTGAFormat extends CCStreamBasedTextureFormat {
 
 	@Override
-	public CCImage createImage(
-		final InputStream theStream, 
-		CCPixelInternalFormat theInternalFormat, 
-		CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	) throws CCImageException {
-		if (CCImageFormats.TGA.fileExtension.equals(theFileSuffix)) {
-			CCTGAImage image = CCTGAImage.read(theStream);
-			if (thePixelFormat == null) {
-				thePixelFormat = image.pixelFormat();
-			}
-			if (theInternalFormat == null) {
-				theInternalFormat = CCPixelInternalFormat.RGBA8;
-			}
-			return new CCImage(
-				image.getWidth(), image.getHeight(), 0, 
-				theInternalFormat, thePixelFormat, CCPixelType.UNSIGNED_BYTE, 
-				false, false, 
-				image.getData(), null
-			);
-		}
-
-		return null;
+	public CCImage createImage(final InputStream theStream) throws CCImageException {
+		CCTGAImage image = CCTGAImage.read(theStream);
+		
+		return new CCImage(
+			image.getWidth(), image.getHeight(), 0, 
+			CCPixelInternalFormat.RGBA8, image.pixelFormat(), CCPixelType.UNSIGNED_BYTE, 
+			false, false, 
+			image.getData(), null
+		);
 	}
 
 	@Override

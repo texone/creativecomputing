@@ -12,7 +12,6 @@ package cc.creativecomputing.image;
 
 import java.awt.Image;
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.Buffer;
@@ -26,7 +25,6 @@ import java.util.Map;
 
 import cc.creativecomputing.image.format.CCDDSFormat;
 import cc.creativecomputing.image.format.CCImageFormat;
-import cc.creativecomputing.image.format.CCImageIOFormat;
 import cc.creativecomputing.image.format.CCKTXFormat;
 import cc.creativecomputing.image.format.CCPNGFormat;
 import cc.creativecomputing.image.format.CCSGIFormat;
@@ -216,26 +214,6 @@ public class CCImageIO {
 	//
 	////////////////////////////////////////////////////
 	
-//	/**
-//	 * Creates a CCImage from the given resource.
-//	 * @param theImagePath
-//	 * 			the resource from which to read the texture data
-//	 * @throws CCImageException
-//	 * @return the texture data from the resource, or null if none of the registered texture providers could read the file
-//	 */
-//	public static CCImage newImage(final String theImagePath) {
-//		String myLowerFileTyp = theImagePath.toLowerCase();
-//		final int myIndex = theImagePath.lastIndexOf('.') + 1;
-//		myLowerFileTyp = myLowerFileTyp.substring(myIndex, myLowerFileTyp.length());
-//
-//		final InputStream myInputStream = CCIOUtil.openStream(theImagePath);
-//		if (myInputStream == null) {
-//			throw new CCImageException("The Image you tried to load is not availabe!:" + CCIOUtil.dataPath(theImagePath));
-//		}
-//		
-//		return newImage(CCIOUtil.openStream(theImagePath), myLowerFileTyp);
-//	}
-	
 	/**
 	 * Creates a CCImage from the given resource.
 	 * @param thePath
@@ -246,12 +224,22 @@ public class CCImageIO {
 	 * 			should be auto-detected (some texture providers do not support this)
 	 * @return the texture data from the resource, or null if none of the registered texture providers could read the file
 	 */
-	public static CCImage newImage(final Path thePath, final String theFileSuffix){
-		return newImageImpl(thePath, null, null, theFileSuffix);
+	public static CCImage newImage(final Path thePath, boolean theFlipVertically){
+		if (thePath == null) {
+			throw new CCImageException("Path was null");
+		}
+		
+		String myFileSuffix = toLowerCase(CCNIOUtil.fileExtension(thePath));
+		
+		CCImageFormat myFormat = textureFormats.get(myFileSuffix);
+		
+		if(myFormat == null)throw new CCImageException("The Image format:" + myFileSuffix + " is not supported.");
+		
+		return myFormat.createImage(thePath, theFlipVertically);
 	}
 	
-	public static CCImage newImage(final Path thePath){
-		return newImageImpl(thePath, null, null, null);
+	public static CCImage newImage(final Path thePath) {
+		return newImage(thePath, false);
 	}
 	
 	/**
@@ -264,8 +252,23 @@ public class CCImageIO {
 	 * 			should be auto-detected (some texture providers do not support this)
 	 * @return the texture data from the stream, or null if none of the registered texture providers could read the file
 	 */
-	public static CCImage newImage(final InputStream theStream, final String theFileSuffix){
-		return newImageImpl(theStream, null, null, theFileSuffix);
+	public static CCImage newImage(InputStream theStream, String theFileSuffix){
+		if (theStream == null) {
+			throw new CCImageException("Stream was null");
+		}
+
+		theFileSuffix = toLowerCase(theFileSuffix);
+
+		// Note: use of BufferedInputStream works around 4764639/4892246
+		if (!(theStream instanceof BufferedInputStream)) {
+			theStream = new BufferedInputStream(theStream);
+		}
+		
+		CCImageFormat myFormat = textureFormats.get(theFileSuffix);
+		
+		if(myFormat == null)throw new CCImageException("The Image format:" + theFileSuffix + " is not supported.");
+		
+		return myFormat.createImage(theStream);
 	}
 	
 	/**
@@ -282,7 +285,21 @@ public class CCImageIO {
 		if (theFileSuffix == null) {
 			theFileSuffix = CCNIOUtil.fileExtension(theUrl.getPath());
 		}
-		return newImageImpl(theUrl, null, null, theFileSuffix);
+		if (theUrl == null) {
+			throw new CCImageException("URL was null");
+		}
+		
+		if (theFileSuffix == null) {
+			theFileSuffix = CCNIOUtil.fileExtension(theUrl.getPath());
+		}
+
+		theFileSuffix = toLowerCase(theFileSuffix);
+
+		CCImageFormat myFormat = textureFormats.get(theFileSuffix);
+		
+		if(myFormat == null)throw new CCImageException("The Image format:" + theFileSuffix + " is not supported.");
+		
+		return myFormat.createImage(theUrl);
 	}
 	
 	/**
@@ -292,98 +309,9 @@ public class CCImageIO {
 	 * @return the texture data from the buffered image, or null if none of the registered texture providers could read the file
 	 */
 	public static CCImage newImage(final Image theImage) {
-		return newImageImpl(theImage, null, null);
+		return newImage(theImage, null, null);
 	}
 
-	//----------------------------------------------------------------------
-	// These methods make no assumption about the OpenGL internal format
-	// or pixel format of the texture; they must be specified by the
-	// user. It is not allowed to supply 0 (indicating no preference)
-	// for either the internalFormat or the pixelFormat;
-	// IllegalArgumentException will be thrown in this case.
-
-	/**
-	 * Creates a Image from the given file, using the specified OpenGL internal format and pixel format for the
-	 * texture which will eventually result. The internalFormat and pixelFormat must be specified and may not be zero;
-	 * to use default values, use the variant of this method which does not take these arguments. Does no OpenGL work.
-	 * 
-	 * @param thePath the file from which to read the texture data
-	 * @param theInternalFormat the OpenGL internal format of the texture which will eventually result from the Image
-	 * @param thePixelFormat the OpenGL pixel format of the texture which will eventually result from the Image
-	 * @param theFileSuffix the suffix of the file name to be used as a hint of the file format to the underlying texture
-	 *        provider, or null if none and should be auto-detected (some texture providers do not support this)
-	 * @return the texture data from the file, or null if none of the registered texture providers could read the file
-	 * @throws IllegalArgumentException if either internalFormat or pixelFormat was 0
-	 * @throws IOException if an error occurred while reading the file
-	 * @invisible
-	 */
-	public static CCImage newImage(
-		final Path thePath, 
-		final CCPixelInternalFormat theInternalFormat,
-		final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	){
-		if ((theInternalFormat == null) || (thePixelFormat == null)) {
-			throw new CCImageException("internalFormat and pixelFormat must be non-zero");
-		}
-
-		return newImageImpl(thePath, theInternalFormat, thePixelFormat,theFileSuffix);
-	}
-
-	/**
-	 * Creates a Image from the given stream, using the specified OpenGL internal format and pixel format for the
-	 * texture which will eventually result. The internalFormat and pixelFormat must be specified and may not be zero;
-	 * to use default values, use the variant of this method which does not take these arguments. Does no OpenGL work.
-	 * 
-	 * @param theStream the stream from which to read the texture data
-	 * @param theInternalFormat the OpenGL internal format of the texture which will eventually result from the Image
-	 * @param thePixelFormat the OpenGL pixel format of the texture which will eventually result from the Image
-	 * @param theFileSuffix the suffix of the file name to be used as a hint of the file format to the underlying texture
-	 *        provider, or null if none and should be auto-detected (some texture providers do not support this)
-	 * @return the texture data from the stream, or null if none of the registered texture providers could read the
-	 *         stream
-	 * @throws IllegalArgumentException if either internalFormat or pixelFormat was 0
-	 * @throws IOException if an error occurred while reading the stream
-	 */
-	public static CCImage newImage(
-		final InputStream theStream,
-		final CCPixelInternalFormat theInternalFormat, 
-		final CCPixelFormat thePixelFormat,
-		final String theFileSuffix
-	){
-		if ((theInternalFormat == null) || (thePixelFormat == null)) {
-			throw new CCImageException("internalFormat and pixelFormat must be non-zero");
-		}
-
-		return newImageImpl(theStream, theInternalFormat, thePixelFormat,theFileSuffix);
-	}
-
-	/**
-	 * Creates a Image from the given URL, using the specified OpenGL internal format and pixel format for the
-	 * texture which will eventually result. The internalFormat and pixelFormat must be specified and may not be zero;
-	 * to use default values, use the variant of this method which does not take these arguments. Does no OpenGL work.
-	 * 
-	 * @param theUrl the URL from which to read the texture data
-	 * @param theInternalFormat the OpenGL internal format of the texture which will eventually result from the Image
-	 * @param thePixelFormat the OpenGL pixel format of the texture which will eventually result from the Image
-	 * @param theFileSuffix the suffix of the file name to be used as a hint of the file format to the underlying texture
-	 *        provider, or null if none and should be auto-detected (some texture providers do not support this)
-	 * @return the texture data from the URL, or null if none of the registered texture providers could read the URL
-	 * @throws IllegalArgumentException if either internalFormat or pixelFormat was 0
-	 * @throws IOException if an error occurred while reading the URL
-	 */
-	public static CCImage newImage(
-		final URL theUrl, 
-		final CCPixelInternalFormat theInternalFormat,
-		final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	)throws IllegalArgumentException {
-		if ((theInternalFormat == null) || (thePixelFormat == null)) {
-			throw new IllegalArgumentException("internalFormat and pixelFormat must be non-zero");
-		}
-
-		return newImageImpl(theUrl, theInternalFormat, thePixelFormat,theFileSuffix);
-	}
 
 	/**
 	 * Creates a Image from the given BufferedImage, using the specified OpenGL internal format and pixel format
@@ -406,7 +334,11 @@ public class CCImageIO {
 			throw new IllegalArgumentException("internalFormat and pixelFormat must be non-zero");
 		}
 
-		return newImageImpl(theImage, theInternalFormat, thePixelFormat);
+		CCImage myImage = new CCImage();
+		myImage.internalFormat(theInternalFormat);
+		myImage.pixelFormat(thePixelFormat);
+		
+		return CCImageUtil.toImage(theImage, myImage);
 	}
 	
 	/**
@@ -482,7 +414,6 @@ public class CCImageIO {
 		textureFormats.put(theExtension, theFormat);
 	}
 	
-	public static CCImageFormat IMAGE_IO_FORMAT = new CCImageIOFormat();
 	public static CCImageFormat STB_FORMAT = new CCSTBFormat();
 	public static CCImageFormat DDS_FORMAT = new CCDDSFormat();
 	public static CCImageFormat SGI_FORMAT = new CCSGIFormat();
@@ -511,109 +442,7 @@ public class CCImageIO {
 		addImageFormat("ktx", KTX_FORMAT);
 	}
 
-	private static CCImage newImageImpl(
-		final Path thePath,
-		final CCPixelInternalFormat theInternalFormat, 
-		final CCPixelFormat thePixelFormat,
-		String theFileSuffix
-	) {
-		if (thePath == null) {
-			throw new CCImageException("File was null");
-		}
 
-		if (theFileSuffix == null) {
-			theFileSuffix = CCNIOUtil.fileExtension(thePath);
-		}
-		
-		theFileSuffix = toLowerCase(theFileSuffix);
-		
-		CCImageFormat myFormat = textureFormats.get(theFileSuffix);
-		
-		if(myFormat == null)throw new CCImageException("The Image format:" + theFileSuffix + " is not supported.");
-		
-		CCImage data = myFormat.createImage(thePath, theInternalFormat, thePixelFormat, theFileSuffix);
-		if (data != null) {
-			return data;
-		}
-		
-		throw new CCImageException("The given image could not be loaded.");
-	}
-
-	private static CCImage newImageImpl(
-		InputStream theInputStream,
-		final CCPixelInternalFormat theInternalFormat,
-		final CCPixelFormat thePixelFormat,
-		String theFileSuffix
-	){
-		if (theInputStream == null) {
-			throw new CCImageException("Stream was null");
-		}
-
-		theFileSuffix = toLowerCase(theFileSuffix);
-
-		// Note: use of BufferedInputStream works around 4764639/4892246
-		if (!(theInputStream instanceof BufferedInputStream)) {
-			theInputStream = new BufferedInputStream(theInputStream);
-		}
-		
-		CCImageFormat myFormat = textureFormats.get(theFileSuffix);
-		
-		if(myFormat == null)throw new CCImageException("The Image format:" + theFileSuffix + " is not supported.");
-		
-		CCImage data = myFormat.createImage(theInputStream, theInternalFormat, thePixelFormat, theFileSuffix);
-		if (data != null) {
-			return data;
-		}
-		
-		throw new CCImageException("The given image could not be loaded.");
-	}
-
-	private static CCImage newImageImpl(
-		final URL theURL,
-		final CCPixelInternalFormat theInternalFormat, 
-		final CCPixelFormat thePixelFormat,
-		String theFileSuffix
-	){
-		if (theURL == null) {
-			throw new CCImageException("URL was null");
-		}
-		
-		if (theFileSuffix == null) {
-			theFileSuffix = CCNIOUtil.fileExtension(theURL.getPath());
-		}
-
-		theFileSuffix = toLowerCase(theFileSuffix);
-
-		CCImageFormat myFormat = textureFormats.get(theFileSuffix);
-		
-		if(myFormat == null)throw new CCImageException("The Image format:" + theFileSuffix + " is not supported.");
-		
-		CCImage data = myFormat.createImage(theURL, theInternalFormat, thePixelFormat, theFileSuffix);
-		if (data != null) {
-			return data;
-		}
-		
-		throw new CCImageException("The given image could not be loaded.");
-	}
-
-	/**
-	 * 
-	 * @param theImage
-	 * @param theInternalFormat
-	 * @param thePixelFormat
-	 * @return
-	 */
-	private static CCImage newImageImpl(
-		final Image theImage,
-		final CCPixelInternalFormat theInternalFormat, 
-		final CCPixelFormat thePixelFormat
-	) {
-		CCImage myImage = new CCImage();
-		myImage.internalFormat(theInternalFormat);
-		myImage.pixelFormat(thePixelFormat);
-		
-		return CCImageUtil.toImage(theImage, myImage);
-	}
 	
 	public static CCImage loadCubeMapData(
 		final Path thePositiveX, final Path theNegativeX,

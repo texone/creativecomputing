@@ -25,33 +25,21 @@ import cc.creativecomputing.io.CCNIOUtil;
 public class CCSGIFormat extends CCStreamBasedTextureFormat {
 	
 	@Override
-	public CCImage createImage(
-		final InputStream theStream, 
-		CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	) throws CCImageException {
+	public CCImage createImage(final InputStream theStream) throws CCImageException {
 		
-		if (
-			CCImageFormats.SGI.fileExtension.equals(theFileSuffix) || 
-			CCImageFormats.SGI_RGB.fileExtension.equals(theFileSuffix) || 
-			CCSGIImage.isSGIImage(theStream)
-		) {
-			CCSGIImage image = CCSGIImage.read(theStream);
-			if (thePixelFormat == null) {
-				thePixelFormat = image.getFormat();
-			}
-			if (theInternalFormat == null) {
-				theInternalFormat = image.getInternalFormat();
-			}
-			return new CCImage(
-				image.width(), image.getHeight(), 0,
-				theInternalFormat, thePixelFormat, CCPixelType.UNSIGNED_BYTE, 
-				false, false, 
-				ByteBuffer.wrap(image.getData()), null
-			);
-		}
+		if (!CCSGIImage.isSGIImage(theStream)) throw new CCImageException("NO SGI image");
+		
+		CCSGIImage image = CCSGIImage.read(theStream);
 
-		return null;
+		CCPixelInternalFormat theInternalFormat = image.getInternalFormat();
+		CCPixelFormat thePixelFormat  = image.getFormat();
+
+		return new CCImage(
+			image.width(), image.getHeight(), 0,
+			theInternalFormat, thePixelFormat, CCPixelType.UNSIGNED_BYTE, 
+			false, false, 
+			ByteBuffer.wrap(image.getData()), null
+		);
 	}
 	
 	@Override

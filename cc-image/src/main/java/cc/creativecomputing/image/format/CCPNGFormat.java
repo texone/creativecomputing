@@ -10,7 +10,6 @@ import ar.com.hjg.pngj.IImageLineSet;
 import ar.com.hjg.pngj.ImageInfo;
 import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.PngReader;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageException;
 import cc.creativecomputing.image.CCPixelFormat;
@@ -20,10 +19,8 @@ import cc.creativecomputing.io.CCBufferUtil;
 
 public class CCPNGFormat extends CCStreamBasedTextureFormat{
 	
-	
-
 	@Override
-	public CCImage createImage(InputStream theStream, CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat, String theFileSuffix) throws CCImageException {
+	public CCImage createImage(InputStream theStream) throws CCImageException {
 		PngReader myPngReader = new PngReader(theStream);
 		ImageInfo myInfo = myPngReader.imgInfo;
 		
@@ -87,10 +84,8 @@ public class CCPNGFormat extends CCStreamBasedTextureFormat{
 	}
 
 	@Override
-	public CCImage createImage(URL theUrl, CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat,
-			String theFileSuffix) throws CCImageException {
-		// TODO Auto-generated method stub
-		return null;
+	public CCImage createImage(URL theUrl) throws CCImageException {
+		throw new CCImageException("png from url ist not supported");
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import cc.creativecomputing.image.CCImageException;
 import cc.creativecomputing.image.CCPixelFormat;
 import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCPixelType;
-import cc.creativecomputing.image.CCImageIO.CCImageFormats;
 import cc.creativecomputing.io.CCBufferUtil;
 
 
@@ -31,78 +30,57 @@ import cc.creativecomputing.io.CCBufferUtil;
 public class CCDDSFormat implements CCImageFormat {
 	
 	@Override
-	public CCImage createImage(
-		final Path theFile, 
-		final CCPixelInternalFormat theInternalFormat, final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	){
+	public CCImage createImage(final Path theFile, boolean theFlipVertically){
 		
 		CCDDSImage image = CCDDSImage.read(theFile);
-		return createImage(image, theInternalFormat, thePixelFormat);
+		return createImage(image);
 	}
 
 	@Override
-	public CCImage createImage(
-		final InputStream theStream, 
-		final CCPixelInternalFormat theInternalFormat, final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	){
-		if (
-			CCImageFormats.DDS.fileExtension.equals(theFileSuffix) || 
-			CCDDSImage.isDDSImage(theStream)
-		) {
+	public CCImage createImage(final InputStream theStream){
 			
-			CCDDSImage image;
-			try {
-				ByteBuffer buf = CCBufferUtil.readAll2Buffer(theStream);
-				image = CCDDSImage.read(buf);
-				theStream.close();
-			} catch (IOException e) {
-				throw new CCImageException(e);
-			}
-			
-			return createImage(image, theInternalFormat, thePixelFormat);
+		CCDDSImage image;
+		try {
+			ByteBuffer buf = CCBufferUtil.readAll2Buffer(theStream);
+			image = CCDDSImage.read(buf);
+			theStream.close();
+		} catch (IOException e) {
+			throw new CCImageException(e);
 		}
-
-		return null;
+			
+		return createImage(image);
 	}
 
 	@Override
-	public CCImage createImage(
-		final URL theUrl, 
-		final CCPixelInternalFormat theInternalFormat, final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	){
+	public CCImage createImage(final URL theUrl){
 		try {
 			final InputStream theStream = new BufferedInputStream(theUrl.openStream());
 			
-			return createImage(theStream, theInternalFormat, thePixelFormat, theFileSuffix);
+			return createImage(theStream);
 		} catch (IOException e) {
 			throw new CCImageException(e);
 		}
 	}
 
-	private CCImage createImage(
-		final CCDDSImage theImage, 
-		CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat
-	) {
+	private CCImage createImage(final CCDDSImage theImage) {
 		CCDDSImage.ImageInfo info = theImage.getMipMap(0);
 		
-		if (thePixelFormat == null) {
-			switch (theImage.getPixelFormat()) {
-			case CCDDSImage.D3DFMT_R8G8B8:
-				thePixelFormat = CCPixelFormat.RGB;
-				theInternalFormat = CCPixelInternalFormat.RGB8;
-				break;
-			case CCDDSImage.D3DFMT_B8G8R8:
-				thePixelFormat = CCPixelFormat.BGR;
-				theInternalFormat = CCPixelInternalFormat.RGB8;
-				break;
-			default:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.RGBA8;
-				break;
-			}
+		CCPixelFormat thePixelFormat;
+		CCPixelInternalFormat theInternalFormat;
+		
+		switch (theImage.getPixelFormat()) {
+		case CCDDSImage.D3DFMT_R8G8B8:
+			thePixelFormat = CCPixelFormat.RGB;
+			theInternalFormat = CCPixelInternalFormat.RGB8;
+			break;
+		case CCDDSImage.D3DFMT_B8G8R8:
+			thePixelFormat = CCPixelFormat.BGR;
+			theInternalFormat = CCPixelInternalFormat.RGB8;
+			break;
+		default:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.RGBA8;
+			break;
 		}
 
 		if (info.isCompressed()) {
@@ -118,17 +96,6 @@ public class CCDDSFormat implements CCImageFormat {
 				break;
 			default:
 				throw new CCImageException("Unsupported DDS compression format \"" + CCDDSImage.getCompressionFormatName(info.getCompressionFormat()) + "\"");
-			}
-		}
-		
-		if (theInternalFormat == null) {
-			switch (theImage.getPixelFormat()) {
-			case CCDDSImage.D3DFMT_R8G8B8:
-				thePixelFormat = CCPixelFormat.RGB;
-				break;
-			default:
-				thePixelFormat = CCPixelFormat.RGBA;
-				break;
 			}
 		}
 		

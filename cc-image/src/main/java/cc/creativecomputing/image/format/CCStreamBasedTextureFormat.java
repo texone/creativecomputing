@@ -19,38 +19,27 @@ import java.nio.file.Path;
 
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageException;
-import cc.creativecomputing.image.CCPixelFormat;
-import cc.creativecomputing.image.CCPixelInternalFormat;
-import cc.creativecomputing.io.CCNIOUtil;
 
 public abstract class CCStreamBasedTextureFormat implements CCImageFormat {
 	
 	@Override
-	public CCImage createImage(
-		final Path theFile, 
-		final CCPixelInternalFormat theInternalFormat, final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	) throws CCImageException {
+	public CCImage createImage(final Path theFile, boolean theFlipVertically) throws CCImageException {
 		try {
 			InputStream myInputStream = new BufferedInputStream(new FileInputStream(theFile.toFile()));
 			// The SGIImage and TGAImage implementations use InputStreams
 			// anyway so there isn't much point in having a separate code
 			// path for files
-			return createImage(myInputStream, theInternalFormat, thePixelFormat, ((theFileSuffix != null) ? theFileSuffix : CCNIOUtil.fileExtension(theFile)));
+			return createImage(myInputStream);
 		}catch (IOException myE) {
 			throw new CCImageException(myE);
 		}
 	}
 
 	@Override
-	public CCImage createImage(
-		final URL theUrl, 
-		final CCPixelInternalFormat theInternalFormat, final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	) throws CCImageException {
+	public CCImage createImage(final URL theUrl) throws CCImageException {
 		try {
 			InputStream myInputStream = new BufferedInputStream(theUrl.openStream());
-			return createImage(myInputStream, theInternalFormat, thePixelFormat, theFileSuffix);
+			return createImage(myInputStream);
 		}catch (IOException myE) {
 			throw new CCImageException(myE);
 		}

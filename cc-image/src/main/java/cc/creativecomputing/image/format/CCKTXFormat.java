@@ -10,46 +10,28 @@ import java.nio.file.Path;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageException;
-import cc.creativecomputing.image.CCImageIO.CCImageFormats;
 import cc.creativecomputing.image.CCPixelFormat;
 import cc.creativecomputing.image.CCPixelInternalFormat;
 import cc.creativecomputing.image.CCPixelType;
 import cc.creativecomputing.image.format.ktx.GLConstants;
 import cc.creativecomputing.image.format.ktx.CCKTXImage;
-import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCKTXFormat implements CCImageFormat{
 	
 	@Override
-	public CCImage createImage(
-		final Path theFile, 
-		final CCPixelInternalFormat theInternalFormat, final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	){
-		if (
-			CCImageFormats.KTX.fileExtension.equals(theFileSuffix) || 
-			CCImageFormats.KTX.fileExtension.equals(CCNIOUtil.fileExtension(theFile))
-		) {
-			CCKTXImage image = new CCKTXImage();
-			try {
-				image.read(theFile);
-			} catch (Exception e) {
-				throw new CCImageException(e);
-			}
-			return createImage(image, theInternalFormat, thePixelFormat);
+	public CCImage createImage(final Path theFile, boolean theFlipVertically){	
+		CCKTXImage image = new CCKTXImage();
+		try {
+			image.read(theFile);
+		} catch (Exception e) {
+			throw new CCImageException(e);
 		}
-
-		return null;
+		return createImage(image);
+		
 	}
 
 	@Override
-	public CCImage createImage(
-		final InputStream theStream, 
-		final CCPixelInternalFormat theInternalFormat, final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	){
-		if (!CCImageFormats.KTX.fileExtension.equals(theFileSuffix)) return null;
-			
+	public CCImage createImage(final InputStream theStream){	
 		CCKTXImage image = new CCKTXImage();
 		try {
 			image.read(theStream);
@@ -58,101 +40,92 @@ public class CCKTXFormat implements CCImageFormat{
 			throw new CCImageException(e);
 		}
 			
-		return createImage(image, theInternalFormat, thePixelFormat);
+		return createImage(image);
 		
 	}
 
 	@Override
-	public CCImage createImage(
-		final URL theUrl, 
-		final CCPixelInternalFormat theInternalFormat, final CCPixelFormat thePixelFormat, 
-		final String theFileSuffix
-	){
+	public CCImage createImage(final URL theUrl){
 		try {
 			final InputStream theStream = new BufferedInputStream(theUrl.openStream());
 			
-			return createImage(theStream, theInternalFormat, thePixelFormat, theFileSuffix);
+			return createImage(theStream);
 		} catch (IOException e) {
 			throw new CCImageException(e);
 		}
 	}
 
-	private CCImage createImage(
-		final CCKTXImage theImage, 
-		CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat
-	) {
+	private CCImage createImage(final CCKTXImage theImage) {
 		
 		boolean myIsCompressed = false;
 		
-		CCLog.info("thePixelFormat:" + thePixelFormat + " : " + Integer.toHexString(theImage.getHeader().glInternalFormat()));
-		
-		if (thePixelFormat == null) {
+		CCPixelInternalFormat theInternalFormat = null;
+		CCPixelFormat thePixelFormat = null;
 			
-			switch (theImage.getHeader().glInternalFormat()) {
-			case GLConstants.GL_RED:
-				thePixelFormat = CCPixelFormat.RED;
-				theInternalFormat = CCPixelInternalFormat.RED;
-				break;
-			case GLConstants.GL_RG:
-				thePixelFormat = CCPixelFormat.RG;
-				theInternalFormat = CCPixelInternalFormat.RG;
-				break;
-			case GLConstants.GL_RGB:
-				thePixelFormat = CCPixelFormat.RGB;
-				theInternalFormat = CCPixelInternalFormat.RGB;
-				break;
-			case GLConstants.GL_RGBA:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.RGBA;
-				break;
-			case GLConstants.GL_RGB8:
-				thePixelFormat = CCPixelFormat.RGB;
-				theInternalFormat = CCPixelInternalFormat.RGB8;
-				break;
-			case GLConstants.GL_RGBA8:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.RGBA8;
-				break;
-			case GLConstants.GL_RGBA32F:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.RGBA32F;
-				break;
-			case GLConstants.GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
-				thePixelFormat = CCPixelFormat.RGB;
-				theInternalFormat = CCPixelInternalFormat.COMPRESSED_RGB_S3TC_DXT1_EXT;
-				myIsCompressed = true;
-				break;
-			case GLConstants.GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.COMPRESSED_RGBA_S3TC_DXT1_EXT;
-				myIsCompressed = true;
-				break;
-			case GLConstants.GL_COMPRESSED_RGBA_S3TC_DXT3_EXT:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.COMPRESSED_RGBA_S3TC_DXT3_EXT;
-				myIsCompressed = true;
-				break;
-			case GLConstants.GL_COMPRESSED_RGBA_S3TC_DXT5_EXT:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.COMPRESSED_RGBA_S3TC_DXT5_EXT;
-				myIsCompressed = true;
-				break;
-			case GLConstants.GL_ATC_RGBA_EXPLICIT_ALPHA_AMD:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.ATC_RGBA_EXPLICIT_ALPHA_AMD;
-				myIsCompressed = true;
-				break;
-			case GLConstants.GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.ATC_RGBA_INTERPOLATED_ALPHA_AMD;
-				myIsCompressed = true;
-				break;
-			case GLConstants.GL_ETC1_RGB8_OES:
-				thePixelFormat = CCPixelFormat.RGBA;
-				theInternalFormat = CCPixelInternalFormat.ETC1_RGB8_OES;
-				myIsCompressed = true;
-				break;
-			}
+		switch (theImage.getHeader().glInternalFormat()) {
+		case GLConstants.GL_RED:
+			thePixelFormat = CCPixelFormat.RED;
+			theInternalFormat = CCPixelInternalFormat.RED;
+			break;
+		case GLConstants.GL_RG:
+			thePixelFormat = CCPixelFormat.RG;
+			theInternalFormat = CCPixelInternalFormat.RG;
+			break;
+		case GLConstants.GL_RGB:
+			thePixelFormat = CCPixelFormat.RGB;
+			theInternalFormat = CCPixelInternalFormat.RGB;
+			break;
+		case GLConstants.GL_RGBA:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.RGBA;
+			break;
+		case GLConstants.GL_RGB8:
+			thePixelFormat = CCPixelFormat.RGB;
+			theInternalFormat = CCPixelInternalFormat.RGB8;
+			break;
+		case GLConstants.GL_RGBA8:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.RGBA8;
+			break;
+		case GLConstants.GL_RGBA32F:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.RGBA32F;
+			break;
+		case GLConstants.GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
+			thePixelFormat = CCPixelFormat.RGB;
+			theInternalFormat = CCPixelInternalFormat.COMPRESSED_RGB_S3TC_DXT1_EXT;
+			myIsCompressed = true;
+			break;
+		case GLConstants.GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.COMPRESSED_RGBA_S3TC_DXT1_EXT;
+			myIsCompressed = true;
+			break;
+		case GLConstants.GL_COMPRESSED_RGBA_S3TC_DXT3_EXT:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.COMPRESSED_RGBA_S3TC_DXT3_EXT;
+			myIsCompressed = true;
+			break;
+		case GLConstants.GL_COMPRESSED_RGBA_S3TC_DXT5_EXT:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+			myIsCompressed = true;
+			break;
+		case GLConstants.GL_ATC_RGBA_EXPLICIT_ALPHA_AMD:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.ATC_RGBA_EXPLICIT_ALPHA_AMD;
+			myIsCompressed = true;
+			break;
+		case GLConstants.GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.ATC_RGBA_INTERPOLATED_ALPHA_AMD;
+			myIsCompressed = true;
+			break;
+		case GLConstants.GL_ETC1_RGB8_OES:
+			thePixelFormat = CCPixelFormat.RGBA;
+			theInternalFormat = CCPixelInternalFormat.ETC1_RGB8_OES;
+			myIsCompressed = true;
+			break;
 		}
 		
 		if (theInternalFormat == null) {

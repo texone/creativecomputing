@@ -316,4 +316,6 @@ public class CCPixelStorageModes {
 		myResult._mySkipImages = _mySkipImages;
 		return myResult;
 	}
+	
+	
 }
