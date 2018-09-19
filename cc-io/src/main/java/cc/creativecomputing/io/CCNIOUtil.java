@@ -33,10 +33,12 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import cc.creativecomputing.core.CCSystem;
 import cc.creativecomputing.core.CCSystem.CCOS;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.io.CCFileChooser.CCFileHandler;
 
 /**
  * @author christianriekoff
@@ -55,7 +57,9 @@ public class CCNIOUtil {
 	public static void addAssetPaths(List<String> thePaths){
 		optionalAssetPaths.addAll(thePaths);
 	}
-	
+
+
+
 	/**
 	 * Return a full path to an item in the data folder as a Path object. 
 	 * See the {@linkplain #dataPath(String)} method for more information.
@@ -83,6 +87,45 @@ public class CCNIOUtil {
 		
 		// Windows, Linux, or when not using a Mac OS X .app file
 		return Paths.get("data", thePath);
+	}
+
+	/**
+	 * Returns the path to a resource based on the given class, this looks for files in the package
+	 * of the given class and allows to place files that are needed to work with the code for example
+	 * shaders to placed with the source code. This is still experimental and need to be checked if things
+	 * are put together in jar for example.
+	 * @param theClass class to look for a resource
+	 * @param thePath path inside the class folder
+	 * @return path based on the given class
+	 */
+	static public Path dataPath(Class<?> theClass, String thePath) {
+
+		URL myResult = theClass.getResource(thePath);
+		if(myResult == null) {
+			throw new CCIOException("The given Resource is not available:" + theClass.getResource("") + thePath);
+		}
+		String myPath = myResult.getPath();
+		myPath = myPath.replaceAll("file:", "");
+		if(CCSystem.os == CCOS.WINDOWS)if(myPath.startsWith("/"))myPath = myPath.substring(1);
+
+		if(myPath.contains(".jar!")){
+			Path myJarPath = Paths.get(myPath.substring(0, myPath.indexOf(".jar!")+4));
+			String myFilePart = myPath.substring(myPath.indexOf(".jar!")+5);
+
+			try {
+				Path path = File.createTempFile(myFilePart, "tmp").toPath();
+				Files.copy(theClass.getResourceAsStream(thePath), path, StandardCopyOption.REPLACE_EXISTING);
+				return path;
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		}
+
+		myPath = myPath.replaceAll("%20", " ");
+		return Paths.get(myPath);
+
 	}
 	
 	/**
@@ -223,7 +266,10 @@ public class CCNIOUtil {
 	                    ;
 	                }
 	            }
-	        } 
+	        }
+	        if(buffer == null){
+	        	throw new CCIOException("File Not Found:" + thePath.toAbsolutePath().toString());
+			}
 	        buffer.flip();
 	        return buffer.slice();
 		}catch(Exception e){
@@ -415,7 +461,7 @@ public class CCNIOUtil {
 	 * Returns an array of files in the given folder
 	 * 
 	 * @param theFolder
-	 * @param theExtension
+	 * @param theFilter
 	 * @return
 	 */
 	static public List<Path> list(final Path theFolder, final DirectoryStream.Filter<Path> theFilter){
@@ -450,24 +496,41 @@ public class CCNIOUtil {
 	// ////////////////////////////////////////////////////////////
 	// FILE/FOLDER SELECTION
 
-	private static Path selectedPath;
-
-	static {
-		System.setProperty("apple.awt.fileDialogForDirectories", "true");
+	private static Optional<Path> selectedFolder = Optional.empty();
+	
+	private static void setSelectedPath(Path thePath) {
+		if(thePath == null)return;
+		CCLog.info(thePath);
+		if(!CCNIOUtil.exists(thePath) || !thePath.toFile().isDirectory()){
+			thePath = thePath.getParent();
+		}
+		if(thePath == null ||!CCNIOUtil.exists(thePath)){
+			return;
+		}
+		selectedFolder = Optional.of(thePath);
+	}
+	
+	static public Optional<Path[]> selectPaths(String theMessage, final Path theFolder, CCFileHandler theHandler, String ... theExtensions) {
+		CCFileChooser fileChooser = new CCFileChooser(theExtensions);
+		if (theFolder != null)
+			fileChooser.setDirectory(theFolder);
+		else if(selectedFolder.isPresent()){
+			fileChooser.setDirectory(selectedFolder.get());
+		}
+	
+		Optional<Path[]> myResult = fileChooser.handleFiles(theMessage, theHandler);
+		myResult.ifPresent(path -> {
+			if(path.length > 0)setSelectedPath(path[0]);
+		});
+		return myResult;
 	}
 
-	/**
-	 * Open a platform-specific file chooser dialog to select a file for input.
-	 * 
-	 * @return full path to the selected file, or null if no selection.
-	 * 
-	 * @see #selectOutput()
-	 * @see #selectFolder()
-	 */
-	static public Path selectInput() {
-		return selectInput("Select a file...");
+	static public Optional<Path> selectInput(String theMessage, Path theFolder,String... theExtensions) {
+		Optional<Path[]> myResult = selectPaths(theMessage, theFolder, CCFileChooser.OPEN_FILE);
+		if(!myResult.isPresent() || myResult.get().length < 1)return Optional.empty();
+		return Optional.of(myResult.get()[0]);
 	}
-
+	
 	/**
 	 * Opens a platform-specific file chooser dialog to select a file for input.
 	 * This function returns the full path to the selected file as a
@@ -479,28 +542,24 @@ public class CCNIOUtil {
 	 * @see #selectOutput(String)
 	 * @see #selectFolder(String)
 	 */
-	static public Path selectInput(String theMessage) {
+	static public Optional<Path> selectInput(String theMessage) {
 		return selectInput(theMessage, null);
 	}
-
-	static public Path selectInput(String theMessage, Path theFolder,String... theExtensions) {
-		CCFileChooser fileChooser = new CCFileChooser(theExtensions);
-		
-		
-		if (theFolder != null) {
-			fileChooser.setDirectory(theFolder);
-		}else if(selectedPath != null){
-
-			Path myChosenPath = selectedPath;
-			if(!CCNIOUtil.exists(selectedPath)){
-				myChosenPath = selectedPath.getParent();
-			}
-			fileChooser.setDirectory(myChosenPath);
-		}
-
-		selectedPath = fileChooser.openFile(theMessage);
-
-		return selectedPath;
+	
+	static public Optional<Path> selectInput(Path theFolder) {
+		return selectInput("Select a file...", null);
+	}
+	
+	/**
+	 * Open a platform-specific file chooser dialog to select a file for input.
+	 * 
+	 * @return full path to the selected file, or null if no selection.
+	 * 
+	 * @see #selectOutput()
+	 * @see #selectFolder()
+	 */
+	static public Optional<Path> selectInput() {
+		return selectInput("Select a file...", null);
 	}
 
 	/**
@@ -515,8 +574,14 @@ public class CCNIOUtil {
 	 * @see #selectOutput(String)
 	 * @see #selectFolder(String)
 	 */
-	static public Path selectFilteredInput(String... theExtensions) {
+	static public Optional<Path> selectFilteredInput(String... theExtensions) {
 		return selectInput("Select a file...", null, theExtensions);
+	}
+
+	static public Optional<Path> selectOutput(String theMessage, final Path theFolder, String ... theExtensions) {
+		Optional<Path[]> myResult = selectPaths(theMessage, theFolder, CCFileChooser.SAVE_FILE);
+		if(!myResult.isPresent() || myResult.get().length < 1)return Optional.empty();
+		return Optional.of(myResult.get()[0]);
 	}
 
 	/**
@@ -524,8 +589,8 @@ public class CCNIOUtil {
 	 * 
 	 * @return full path to the file entered, or null if canceled.
 	 */
-	static public Path selectOutput() {
-		return selectOutput("Save as...");
+	static public Optional<Path> selectOutput() {
+		return selectOutput("Save as...", null);
 	}
 
 	/**
@@ -538,33 +603,21 @@ public class CCNIOUtil {
 	 * @param theMessage message you want the user to see in the file chooser
 	 * @return full path to the file entered, or null if canceled.
 	 * 
-	 * @webref input:files
 	 * @see #selectInput(String)
 	 * @see #selectFolder(String)
 	 */
-	static public Path selectOutput(String theMessage) {
+	static public Optional<Path> selectOutput(String theMessage) {
 		return selectOutput(theMessage, null);
 	}
-
-	static public Path selectOutput(String theMessage, final Path theFolder, String ... theExtensions) {
-		CCFileChooser fileChooser = new CCFileChooser(theExtensions);
-		if (theFolder != null)
-			fileChooser.setDirectory(theFolder);
-		else if(selectedPath != null){
-
-			Path myChosenPath = selectedPath;
-			if(!CCNIOUtil.exists(selectedPath)){
-				myChosenPath = selectedPath.getParent();
-			}
-			fileChooser.setDirectory(myChosenPath);
-		}
 	
-		selectedPath = fileChooser.saveFile(theMessage);
-		return selectedPath;
+	static public Optional<Path> selectOutput(final Path theFolder) {
+		return selectOutput("Save as...", theFolder);
 	}
 
-	static public Path selectFolder() {
-		return selectFolder("Select a folder...");
+	static public Optional<Path> selectFolder(final String theMessage, Path theFolder) {
+		Optional<Path[]> myResult = selectPaths(theMessage, theFolder, CCFileChooser.SELECT_FOLDER);
+		if(!myResult.isPresent() || myResult.get().length < 1)return Optional.empty();
+		return Optional.of(myResult.get()[0]);
 	}
 
 	/**
@@ -578,25 +631,16 @@ public class CCNIOUtil {
 	 * @see #selectOutput(CCApp, String)
 	 * @see #selectFolder(CCApp, String)
 	 */
-	static public Path selectFolder(final String theMessage) {
+	static public Optional<Path> selectFolder(final String theMessage) {
 		return selectFolder(theMessage, null);
 	}
+	
+	static public Optional<Path> selectFolder(final Path theFolder) {
+		return selectFolder("Select a folder...", theFolder);
+	}
 
-	static public Path selectFolder(final String theMessage, Path theFolder) {
-		CCFileChooser fileChooser = new CCFileChooser();
-		if (theFolder != null)
-			fileChooser.setDirectory(theFolder);
-		else if(selectedPath != null){
-
-			Path myChosenPath = selectedPath;
-			if(!CCNIOUtil.exists(selectedPath)){
-				myChosenPath = selectedPath.getParent();
-			}
-			fileChooser.setDirectory(myChosenPath);
-		}
-		
-		selectedPath = fileChooser.selectFolder(theMessage);
-		return selectedPath;
+	static public Optional<Path> selectFolder() {
+		return selectFolder("Select a folder...", null);
 	}
 
 	

@@ -2,6 +2,7 @@ package cc.creativecomputing.io;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.lwjgl.PointerBuffer;
@@ -14,15 +15,9 @@ public class CCFileChooser {
 	
 	private String[] _myExtensions = new String[0];
 	
-	public CCFileChooser(){
-		super();
-		_myCurrentDirectory = Paths.get(".");
-	}
-	
 	public CCFileChooser(String...theExtensions){
-		this();
+		_myCurrentDirectory = Paths.get(".");
 		_myExtensions = theExtensions;
-		
 	}
 
 	private Path _myCurrentDirectory;
@@ -35,19 +30,19 @@ public class CCFileChooser {
 		_myCurrentDirectory = thePath;
 	}
 	
-	private static interface CCFileHandler{
+	public static interface CCFileHandler{
 		public String handleFile(String theTitle, String thePath, PointerBuffer thePattern, String theFilterDesc);
 	}
 	
-	private static CCFileHandler openFiles = (theTitle, thePath, thePattern, theFilterDesc) -> {return tinyfd_openFileDialog(theTitle, thePath, thePattern, theFilterDesc, true);};
+	public static CCFileHandler OPEN_FILES = (theTitle, thePath, thePattern, theFilterDesc) -> {return tinyfd_openFileDialog(theTitle, thePath, thePattern, theFilterDesc, true);};
 	
-	private static CCFileHandler openFile = (theTitle, thePath, thePattern, theFilterDesc) -> {return tinyfd_openFileDialog(theTitle, thePath, thePattern, theFilterDesc, false);};
+	public static CCFileHandler OPEN_FILE = (theTitle, thePath, thePattern, theFilterDesc) -> {return tinyfd_openFileDialog(theTitle, thePath, thePattern, theFilterDesc, false);};
 	
-	private static CCFileHandler saveFile = (theTitle, thePath, thePattern, theFilterDesc) -> {return tinyfd_saveFileDialog(theTitle, thePath, thePattern, theFilterDesc);};
+	public static CCFileHandler SAVE_FILE = (theTitle, thePath, thePattern, theFilterDesc) -> {return tinyfd_saveFileDialog(theTitle, thePath, thePattern, theFilterDesc);};
 	
-	private static CCFileHandler selectFolder = (theTitle, thePath, thePattern, theFilterDesc) -> {return tinyfd_selectFolderDialog(theTitle, thePath);};
+	public static CCFileHandler SELECT_FOLDER = (theTitle, thePath, thePattern, theFilterDesc) -> {return tinyfd_selectFolderDialog(theTitle, thePath);};
 	
-	private Path[] handleFiles(final String theText, CCFileHandler theHandler) {
+	public Optional<Path[]> handleFiles(final String theText, CCFileHandler theHandler) {
 		try (MemoryStack stack = stackPush()) {
             PointerBuffer myFilterPatterns = stack.mallocPointer(_myExtensions.length);
             
@@ -62,7 +57,7 @@ public class CCFileChooser {
             myFilterPatterns.flip();
             String myFile = theHandler.handleFile(theText, _myCurrentDirectory.toAbsolutePath().toString() + "/", myFilterPatterns, myFilterDesc.toString());
             if(myFile == null){
-            	return null;
+            	return Optional.empty();
             }
             String[] myFiles = myFile.split(Pattern.quote("|"));
             
@@ -75,27 +70,30 @@ public class CCFileChooser {
             		myResult[i] = CCNIOUtil.applicationPath.relativize(myResult[i]);
 				}
             }
-            return myResult;
+            return Optional.of(myResult);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return Optional.empty();
 		}
 	}
 	
-	public Path[] openFiles(final String theText) {
-		return handleFiles(theText, openFiles);
+	public Optional<Path[]> openFiles(final String theText) {
+		return handleFiles(theText, OPEN_FILES);
 	}
 	
-	public Path openFile(final String theText){
-		Path[] myPaths = handleFiles(theText, openFile);
-		return myPaths == null || myPaths.length < 1 ? null : myPaths[0];
+	public Optional<Path> openFile(final String theText){
+		Optional<Path[]> myPaths = handleFiles(theText, OPEN_FILE);
+		return !myPaths.isPresent() || myPaths.get().length < 1 ? Optional.empty() : Optional.of(myPaths.get()[0]);
 	}
 	
-	public Path saveFile(final String theText){
-		Path[] myPaths = handleFiles(theText, saveFile);
-		return myPaths == null || myPaths.length < 1 ? null : myPaths[0];
+	public Optional<Path> saveFile(final String theText){
+		Optional<Path[]> myPaths = handleFiles(theText, SAVE_FILE);
+		return !myPaths.isPresent() || myPaths.get().length < 1 ? Optional.empty() : Optional.of(myPaths.get()[0]);
 	}
 	
-	public Path selectFolder(final String theText){
-		Path[] myPaths = handleFiles(theText, selectFolder);
-		return myPaths == null || myPaths.length < 1 ? null : myPaths[0];
+	public Optional<Path> selectFolder(final String theText){
+		Optional<Path[]> myPaths = handleFiles(theText, SELECT_FOLDER);
+		return !myPaths.isPresent() || myPaths.get().length < 1 ? Optional.empty() : Optional.of(myPaths.get()[0]);
 	}
 
 	public void resetPath() {
