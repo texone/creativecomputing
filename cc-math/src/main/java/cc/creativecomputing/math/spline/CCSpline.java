@@ -11,6 +11,7 @@
 package cc.creativecomputing.math.spline;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -160,6 +161,13 @@ public abstract class CCSpline implements Iterable<CCVector3>, CCInterpolatable<
 	 */
 	public List<CCVector3> points () {
 		return _myPoints;
+	}
+	
+	public void reverse() {
+		Collections.reverse(_myPoints);
+		if (_myPoints.size() > 1) {
+			computeTotalLentgh();
+		}
 	}
 	
 	@Override
