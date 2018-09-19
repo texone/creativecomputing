@@ -117,10 +117,6 @@ public class CCCameraController {
 	private static final CCVector3 LOOK = CCVector3.UNIT_Z;
 	private static final CCVector3 UP = CCVector3.UNIT_Y;
 
-	private enum Constraint {
-		YAW, PITCH, ROLL, SUPPRESS_ROLL
-	}
-
 	private final CCGraphics g;
 	private final CCGL2Adapter _myApp;
 
@@ -147,8 +143,34 @@ public class CCCameraController {
 	@CCProperty(name = "fov", min = 0, max = 90, readBack = true)
 	private double _myFoV = 45;
 
-	private Constraint _myDragConstraint = null;
-	private Constraint _myPermaConstraint = null;
+	private CCCameraRotationMode _myDragConstraint = CCCameraRotationMode.FREE;
+	
+
+	public static enum CCCameraRotationMode {
+		/**
+		 * Permit arbitrary rotation. (Default mode.)
+		 */
+		FREE, 
+		/**
+		 * Only permit yaw.
+		 */
+		YAW, 
+		/**
+		 * Only permit pitch.
+		 */
+		PITCH, 
+		/**
+		 * Only permit roll.
+		 */
+		ROLL, 
+		/**
+		 * Only suppress roll.
+		 */
+		SUPPRESS_ROLL
+	}
+	
+	@CCProperty(name = "rotation mode")
+	private CCCameraRotationMode _cRotationMode = CCCameraRotationMode.FREE;
 
 	private final InterpolationManager _myRotationInterpolation = new InterpolationManager();
 	private final InterpolationManager _myCenterInterpolation = new InterpolationManager();
@@ -417,12 +439,12 @@ public class CCCameraController {
 
 			if (theEvent.isShiftDown()) {
 				if (_myDragConstraint == null && Math.abs(theMoveX - theMoveY) > 1) {
-					_myDragConstraint = Math.abs(theMoveX) > Math.abs(theMoveY) ? Constraint.YAW : Constraint.PITCH;
+					_myDragConstraint = Math.abs(theMoveX) > Math.abs(theMoveY) ? CCCameraRotationMode.YAW : CCCameraRotationMode.PITCH;
 				}
-			} else if (_myPermaConstraint != null) {
-				_myDragConstraint = _myPermaConstraint;
+			} else if (_cRotationMode != CCCameraRotationMode.FREE) {
+				_myDragConstraint = _cRotationMode;
 			} else {
-				_myDragConstraint = null;
+				_myDragConstraint = CCCameraRotationMode.FREE;
 			}
 
 			final CCMouseButton b = theEvent.button();
@@ -453,8 +475,8 @@ public class CCCameraController {
 	private void mousePan(final double dxMouse, final double dyMouse) {
 		final double panScale = CCMath.sqrt(CCMath.abs(_myDistance) * .005);
 		pan(
-			_myDragConstraint == Constraint.PITCH ? 0 : -dxMouse * panScale,
-			_myDragConstraint == Constraint.YAW ? 0 : dyMouse * panScale
+			_myDragConstraint == CCCameraRotationMode.PITCH ? 0 : -dxMouse * panScale,
+			_myDragConstraint == CCCameraRotationMode.YAW ? 0 : dyMouse * panScale
 		);
 	}
 
@@ -469,17 +491,28 @@ public class CCCameraController {
 		final double eccentricity = CCMath.abs((_myCamera.viewport().height() / 2f) - mouseY) / (_myCamera.viewport().height() / 2f);
 		final double rho = CCMath.abs((_myCamera.viewport().width() / 2f) - mouseX) / (_myCamera.viewport().width() / 2f);
 
-		if (_myDragConstraint == null || _myDragConstraint == Constraint.YAW || _myDragConstraint == Constraint.SUPPRESS_ROLL) {
+		if (
+			_myDragConstraint == CCCameraRotationMode.FREE || 
+			_myDragConstraint == CCCameraRotationMode.YAW || 
+			_myDragConstraint == CCCameraRotationMode.SUPPRESS_ROLL
+		) {
 			final double adx = Math.abs(theMoveX) * (1 - eccentricity);
 			final CCVector3 vx = u.add(new CCVector3(adx, 0, 0));
 			_myRotateYAction.impulse(CCVector3.angle(u, vx) * xSign * 0.1);
 		}
-		if (_myDragConstraint == null || _myDragConstraint == Constraint.PITCH || _myDragConstraint == Constraint.SUPPRESS_ROLL) {
+		if (
+			_myDragConstraint == CCCameraRotationMode.FREE || 
+			_myDragConstraint == CCCameraRotationMode.PITCH || 
+			_myDragConstraint == CCCameraRotationMode.SUPPRESS_ROLL
+		) {
 			final double ady = Math.abs(theMoveY) * (1 - rho);
 			final CCVector3 vy = u.add(new CCVector3(0, ady, 0));
 			_myRotateXAction.impulse(CCVector3.angle(u, vy) * ySign * 0.1);
 		}
-		if (_myDragConstraint == null || _myDragConstraint == Constraint.ROLL) {
+		if (
+			_myDragConstraint == CCCameraRotationMode.FREE || 
+			_myDragConstraint == CCCameraRotationMode.PITCH
+		) {
 			{
 				final double adz = Math.abs(theMoveY) * rho;
 				final CCVector3 vz = u.add(new CCVector3(0, adz, 0));
@@ -579,41 +612,6 @@ public class CCCameraController {
 
 	public CCCameraState getState() {
 		return new CCCameraState(_myRotation, _myCenter, _myDistance);
-	}
-
-	/**
-	 * Permit arbitrary rotation. (Default mode.)
-	 */
-	public void setFreeRotationMode() {
-		_myPermaConstraint = null;
-	}
-
-	/**
-	 * Only permit yaw.
-	 */
-	public void setYawRotationMode() {
-		_myPermaConstraint = Constraint.YAW;
-	}
-
-	/**
-	 * Only permit pitch.
-	 */
-	public void setPitchRotationMode() {
-		_myPermaConstraint = Constraint.PITCH;
-	}
-
-	/**
-	 * Only permit roll.
-	 */
-	public void setRollRotationMode() {
-		_myPermaConstraint = Constraint.ROLL;
-	}
-
-	/**
-	 * Only suppress roll.
-	 */
-	public void setSuppressRollRotationMode() {
-		_myPermaConstraint = Constraint.SUPPRESS_ROLL;
 	}
 
 	public void setMaximumDistance(final double maximumDistance) {
