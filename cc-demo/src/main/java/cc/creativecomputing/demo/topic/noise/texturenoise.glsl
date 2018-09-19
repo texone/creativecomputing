@@ -82,7 +82,7 @@ void main( )
 	vec2 p = t - 0.5;
 	p.x *= iResolution.x/iResolution.y;
 	p*=zoom;
-	//p.y += sin(p.x * frequency + iTime * 0.2) * amplitude  - 0.3;
+	p.y += sin(p.x * frequency + iTime * 0.2) * amplitude  - 0.3;
 
 	t = vec2(t.x, 1.- t.y);
 	
@@ -95,5 +95,11 @@ void main( )
 	vec4 gold = vec4(col,1.);// + 0.1;
 	gl_FragColor = gold;;
 	//gl_FragColor = vec4(d,d,d,1.);;
+	float r = (t.y * 2 - 1) * mix(1,d,0.2);
+	float a = asin(r * 2);
+	r *= float(r > -1);
+	r *= float(r < 0.5);
+	float z = cos(a);
+	gl_FragColor = vec4(z,r,0,1);
 
 }

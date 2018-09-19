@@ -1,4 +1,4 @@
-package cc.creativecomputing.demo.net.osc;
+package cc.creativecomputing.demo.protocol.serial.firmata;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
@@ -6,26 +6,20 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.io.netty.CCUDPServer;
-import cc.creativecomputing.io.netty.codec.osc.CCOSCCodec;
-import cc.creativecomputing.io.netty.codec.osc.CCOSCPacket;
+import cc.creativecomputing.protocol.serial.firmata.CCArduino;
 
-public class CCOSCMonitor extends CCGL2Adapter {
-	
-//	@CCProperty(name = "CCUDPIn")
-	private CCUDPServer<CCOSCPacket> _myOSCIN;
+public class CCFirmataDemo extends CCGL2Adapter {
+	@CCProperty(name = "arduino")
+	private CCArduino _cArduino;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myOSCIN = new CCUDPServer<>(new CCOSCCodec(), "127.0.0.1",4444);
-		_myOSCIN.events().add(message -> {
-			CCLog.info(message.message);
-		});
-		_myOSCIN.connect();
+		_cArduino = new CCArduino();
 	}
 
 	@Override
 	public void update(CCAnimator theAnimator) {
+		if(_cArduino.isConnected())CCLog.info(_cArduino.analogRead(0));
 	}
 
 	@Override
@@ -34,7 +28,7 @@ public class CCOSCMonitor extends CCGL2Adapter {
 
 	public static void main(String[] args) {
 
-		CCOSCMonitor demo = new CCOSCMonitor();
+		CCFirmataDemo demo = new CCFirmataDemo();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1200, 600);
@@ -43,4 +37,3 @@ public class CCOSCMonitor extends CCGL2Adapter {
 		myAppManager.start();
 	}
 }
-

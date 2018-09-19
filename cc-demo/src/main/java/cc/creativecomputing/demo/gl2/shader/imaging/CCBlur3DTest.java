@@ -24,7 +24,7 @@ public class CCBlur3DTest extends CCGL2Adapter {
 	
 	@CCProperty(name = "blur radius", min = 0, max = MAXIMUM_BLUR_RADIUS)
 	private float _cBlurRadius = MAXIMUM_BLUR_RADIUS;
-	
+	@CCProperty(name = "shader")
 	private CCGPUSeperateGaussianBlur _myBlur;
 	
 	@CCProperty(name = "camera controller")
@@ -37,8 +37,10 @@ public class CCBlur3DTest extends CCGL2Adapter {
 		_myCameraController = new CCCameraController(this, g, 100);
 	}
 	float _myTime = 0;
-	public void update(final float theTime){
-		_myTime += theTime;
+	
+	@Override
+	public void update(final CCAnimator theAnimator){
+		_myTime += theAnimator.deltaTime();
 		_myBlur.radius(_cBlurRadius);
 	}
 
