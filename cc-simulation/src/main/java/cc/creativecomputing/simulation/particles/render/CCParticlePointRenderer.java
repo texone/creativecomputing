@@ -50,7 +50,7 @@ public class CCParticlePointRenderer extends CCParticleRenderer{
 	}
 	
 	@Override
-	public void updateData(CCGraphics g) {
+	public void preDisplay(CCGraphics g) {
 		_myMesh.colors(_myParticles.dataBuffer(),3);
 		_myMesh.vertices(_myParticles.dataBuffer(),0);
 	}

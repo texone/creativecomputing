@@ -91,11 +91,13 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 	@Override
 	public void update(CCAnimator theAnimator) {}
 	
-	@Override
-	public void updateData(CCGraphics g) {}
 
-	public void display(CCGraphics g){
+	@Override
+	public void preDisplay(CCGraphics g) {
 		_myEvelopeData.preDisplay(g);
+	}
+	
+	public void display(CCGraphics g){
 		
 		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
 		_myShader.start();

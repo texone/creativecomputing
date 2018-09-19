@@ -62,7 +62,7 @@ public abstract class CCParticleRenderer {
 
 	public abstract void update(final CCAnimator theAnimator);
 	
-	public void updateData(CCGraphics g){
+	public void preDisplay(CCGraphics g){
 		_myEnvelopeData.beginDraw(g);
 		g.clear();
 		g.pushAttribute();

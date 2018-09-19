@@ -88,7 +88,7 @@ public class CCParticleGroupRenderer extends CCParticleRenderer{
 	public void update(CCAnimator theAnimator) {}
 	
 	@Override
-	public void updateData(CCGraphics g) {}
+	public void preDisplay(CCGraphics g) {}
 
 	public void display(CCGraphics g){
 		_myEvelopeData.beginDraw(g);

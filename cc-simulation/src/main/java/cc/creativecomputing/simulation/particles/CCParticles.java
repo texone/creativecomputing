@@ -504,7 +504,7 @@ public class CCParticles{
 		afterUpdate(g);
 		g.popAttribute();
 		
-		_myParticleRender.updateData(g);
+		_myParticleRender.preDisplay(g);
 	}
 	
 	public void display(CCGraphics g) {

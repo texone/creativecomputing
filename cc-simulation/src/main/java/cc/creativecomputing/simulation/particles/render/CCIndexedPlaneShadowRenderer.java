@@ -92,7 +92,7 @@ public class CCIndexedPlaneShadowRenderer extends CCParticleRenderer{
 	public void update(CCAnimator theAnimator) {}
 	
 	@Override
-	public void updateData(CCGraphics g) {}
+	public void preDisplay(CCGraphics g) {}
 
 	public void display(CCGraphics g){
 		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);

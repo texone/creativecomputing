@@ -108,7 +108,7 @@ public class CCParticleTrailRenderer extends CCParticleRenderer{
 	public void update(CCAnimator theAnimator) {}
 	
 	@Override
-	public void updateData(CCGraphics g) {}
+	public void preDisplay(CCGraphics g) {}
 
 	boolean y0 = true;
 	int i = 0;
