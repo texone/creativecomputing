@@ -237,7 +237,6 @@ public class CCImageUtil {
 		case BufferedImage.TYPE_4BYTE_ABGR:
 			theBufferedImage = createFromCustom(theBufferedImage);
 		}
-		CCLog.info(theBufferedImage);
 		theImage.mustFlipVertically(true);
 
 		theImage.width(theBufferedImage.getWidth());
