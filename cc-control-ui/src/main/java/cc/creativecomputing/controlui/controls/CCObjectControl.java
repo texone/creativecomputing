@@ -51,7 +51,6 @@ import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
 import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
 import cc.creativecomputing.controlui.timeline.view.SwingGuiConstants;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.spline.CCSpline;
 
@@ -276,7 +275,6 @@ public class CCObjectControl extends JPanel implements CCControl{
 			}else  if(myClass.isEnum()){
 				myControl = new CCEnumControl((CCEnumPropertyHandle)myPropertyHandle, _myControlComponent);
 			}else{
-				CCLog.info(myClass.getName());
 				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;
 				CCObjectControl myObjectControl = new CCObjectControl(myObjectHandle, _myControlComponent, _myDepth + 1);
 				myControl = myObjectControl;

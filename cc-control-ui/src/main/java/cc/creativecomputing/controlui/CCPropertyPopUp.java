@@ -106,17 +106,17 @@ public class CCPropertyPopUp extends JPopupMenu {
 			savePreset(myPreset);
 		});
 		
-		addItem("remove current preset", action -> {
-			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
-			for(int i = 0; i < _myPresetMenue.getItemCount();i++) {
-				JMenuItem myItem = _myPresetMenue.getItem(i);
-				if(myItem.isSelected()) {
-					myHandle.deletePreset(myItem.getText());
-					myHandle.preset(null);
-					setPresets(myHandle);
-				}
-			}
-		});
+//		addItem("remove current preset", action -> {
+//			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
+//			for(int i = 0; i < _myPresetMenue.getItemCount();i++) {
+//				JMenuItem myItem = _myPresetMenue.getItem(i);
+//				if(myItem.isSelected()) {
+//					myHandle.deletePreset(myItem.getText());
+//					myHandle.preset(null);
+//					setPresets(myHandle);
+//				}
+//			}
+//		});
 		
 		addItem("update current preset", action -> {
 			for(int i = 0; i < _myPresetMenue.getItemCount();i++) {

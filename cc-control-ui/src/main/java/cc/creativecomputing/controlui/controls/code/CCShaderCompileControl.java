@@ -154,7 +154,7 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderSource, CCSha
 		});
 		_myTextArea.addParser(new CCRealtimeCompileParser());
 		
-	 	setFont(_myTextArea, new Font("Monaco", Font.PLAIN, 11));
+	 	setFont(_myTextArea, new Font("Courier New", Font.PLAIN, 18));
 		
 		addTemplates();
 		

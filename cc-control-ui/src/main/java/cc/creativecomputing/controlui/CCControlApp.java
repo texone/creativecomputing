@@ -178,7 +178,6 @@ public class CCControlApp  {
 		});
 		
 		if(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1) != -1){
-			CCLog.info(CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), CCControlApp.preferences.getInt("CCControlApp" + "/y", -1));
 			_myFrame.setLocation(
 				CCControlApp.preferences.getInt("CCControlApp" + "/x", -1), 
 				CCControlApp.preferences.getInt("CCControlApp" + "/y", -1)
