@@ -46,9 +46,11 @@ public class CCColladaLoader {
 	@CCProperty(name = "scenes")
 	private CCColladaScenes _myScenes;
 	private CCColladaGeometries _myGeometries;
+	private CCColladaNodes _myNodes;
 	private CCColladaControllers _myControllers;
 	private CCColladaAnimations _myAnimations;
 	private CCColladaCameras _myCameras;
+	
 
 	public CCColladaLoader(Path thePath) throws CCColladaLoaderException {
 		super();
@@ -98,6 +100,11 @@ public class CCColladaLoader {
 		
 		_myCameras = new CCColladaCameras(myRoot.children("library_cameras/camera"));
 		_myGeometries = new CCColladaGeometries(myRoot.children("library_geometries/geometry"));
+		_myNodes = new CCColladaNodes(this,myRoot.children("library_nodes/node"));
+		
+		for(CCColladaSceneNode myNode:_myNodes.elements()) {
+			myNode.resolveMissingNodes(this);
+		}
 		_myScenes = new CCColladaScenes(this, myRoot.children("library_visual_scenes/visual_scene"));
 		_myControllers = new CCColladaControllers(myRoot.children("library_controllers/controller"), _myGeometries);
 		_myAnimations = new CCColladaAnimations(myRoot.children("library_animations/animation"));
@@ -111,6 +118,16 @@ public class CCColladaLoader {
 	 */
 	public CCColladaGeometries geometries() {
 		return _myGeometries;
+	}
+	
+	/**
+	 * Returns the library of nodes.
+	 * @see CCColladaGeometries
+	 * @see CCColladaGeometry
+	 * @return
+	 */
+	public CCColladaNodes nodes() {
+		return _myNodes;
 	}
 	
 	/**

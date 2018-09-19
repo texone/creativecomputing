@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCCamera;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -185,6 +186,20 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				
 				_myInstanceType = CCColladaSceneNodeInstanceType.GEOMETRY;
 				break;
+			case "instance_node":
+				_myInstanceType = CCColladaSceneNodeInstanceType.NODE;
+				String myNodeURL = myChild.attribute("url").replace("#", "");
+				CCLog.info(myNodeURL);
+				if(theLoader.nodes() == null) {
+					_myNodeMap.put(myNodeURL, null);
+				}else {
+					CCColladaSceneNode myInstanceNode = theLoader.nodes().element(myNodeURL);
+					_myNodeMap.put(myNodeURL, myInstanceNode);
+					if(myInstanceNode != null) {
+						_myNodes.add(myInstanceNode);
+					}
+				}
+				break;
 			case "node":
 				if(_myInstanceType == null)_myInstanceType = CCColladaSceneNodeInstanceType.NODE;
 				CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, this, myChild);
@@ -194,6 +209,21 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 			}
 		}
 	}
+	
+	public void resolveMissingNodes(CCColladaLoader theLoader) {
+		for(String myKey:_myNodeMap.keySet()) {
+			if(_myNodeMap.get(myKey) == null) {
+				CCColladaSceneNode myInstanceNode = theLoader.nodes().element(myKey);
+				_myNodeMap.put(myKey, myInstanceNode);
+				_myNodes.add(myInstanceNode);
+				CCLog.info(myKey, myInstanceNode);
+			}
+		}
+		for(CCColladaSceneNode myChild:_myNodes) {
+			myChild.resolveMissingNodes(theLoader);
+		}
+	}
+	
 	public static interface CCColladaSceneNodeVisitor{
 		public void apply(CCColladaSceneNode theNode);
 	}
