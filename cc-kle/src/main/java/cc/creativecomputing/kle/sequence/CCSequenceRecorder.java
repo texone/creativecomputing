@@ -6,21 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JFileChooser;
-
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
 import cc.creativecomputing.core.CCAnimator;
-import cc.creativecomputing.core.CCAnimatorAdapter;
+import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.gl.app.CCGLAdapter;
-import cc.creativecomputing.io.CCFileChooser;
-import cc.creativecomputing.io.CCFileFilter;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCKleChannel;
 import cc.creativecomputing.kle.CCKleChannelType;
@@ -37,13 +34,7 @@ import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.easing.CCEasing.CCEaseFormular;
 import cc.creativecomputing.math.easing.CCEasing.CCEaseMode;
 
-public class CCSequenceRecorder extends CCAnimatorAdapter{
-	
-	public interface CCSequenceRecorderListener{
-		void start();
-		
-		void end();
-	}
+public class CCSequenceRecorder{
 	
 	public class CCSequenceChannelRecording extends CCSequence{
 		/**
@@ -201,7 +192,8 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		}
 	}
 	
-	private CCListenerManager<CCSequenceRecorderListener> _myRecordListeners = CCListenerManager.create(CCSequenceRecorderListener.class);
+	public CCEventManager<CCEvent<Object>> startEvents = new CCEventManager<>();
+	public CCEventManager<CCEvent<Object>> endEvents = new CCEventManager<>();
 
 	@CCProperty(name = "seconds", min = 1, max = 1000)
 	private int _mySeconds = 100;
@@ -237,8 +229,6 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	private final CCAnimator _myAnimator;
 	
-	private CCGLAdapter<?,?> _myGLAdapter;
-	
 	private final CCKleEffectables _myElements;
 	
 	private CCSequenceExporter _myExporter;
@@ -263,8 +253,10 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	
 	private CCRecordMode _myRecordMode = CCRecordMode.SEQUENCE;
 	
-	public CCSequenceRecorder(CCGLAdapter<?, ?> theGLAdapter, CCKleEffectables theElements, CCAnimator theAnimator){
-		_myGLAdapter = theGLAdapter;
+	private CCTimelineContainer _myTimeline;
+	
+	public CCSequenceRecorder(CCTimelineContainer theTimeline, CCKleEffectables theElements, CCAnimator theAnimator){
+		_myTimeline = theTimeline;
 		_myElements = theElements;
 		for(CCKleChannelType myKey:theElements.mappings().keySet()){
 			CCKleMapping<?> myMapping = theElements.mappings().get(myKey);
@@ -281,8 +273,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		_myEffectManagers.put(theType, theEffectManager);
 	}
 	
-	@Override
-	public void update(CCAnimator theAnimator) {
+	public void update(CCGLTimer theAnimator) {
 		if(!_myIsRecording)return;
 		
 		if(_myCurrentType == null){
@@ -367,10 +358,6 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		return (CCSequenceChannelRecording)_myRecordings.get(theKey.id());
 	}
 	
-	public CCListenerManager<CCSequenceRecorderListener> events(){
-		return _myRecordListeners;
-	}
-	
 	private CCAnimator.CCAnimationMode _myAnimationMode;
 	private boolean _myFixUpdateTime = false;
 	private double _myFixedUpdateTime = 0;
@@ -396,7 +383,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		_myStep = 0;
 		switch(_myRecordMode){
 		case TIMELINE:
-			_myTransportController = _myGLAdapter.timeline().activeTimeline().transportController();
+			_myTransportController = _myTimeline.activeTimeline().transportController();
 			_myTransportController.stop();
 			_myTimelineTime = _myTransportController.loopStart();
 			_myTransportController.time(_myTransportController.loopStart());
@@ -429,100 +416,100 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 		
 		
 		_myIsRecording = true;
-		_myRecordListeners.proxy().start();
+		startEvents.event();
 	}
 	
 	private Path _myRecordPath = null;
 	
-	public static void main(String[] args) {
-		CCFileChooser _myFileChooser = new CCFileChooser();
-		_myFileChooser.setAcceptAllFileFilterUsed(false);
-		_myFileChooser.addChoosableFileFilter(new CCFileFilter("KLE_1"));
-		_myFileChooser.addChoosableFileFilter(new CCFileFilter("KLE_2"));
-		for(CCKleFormats myFormat:CCKleFormats.values()){
-			_myFileChooser.addChoosableFileFilter(new CCFileFilter(myFormat.name()));
-		}
-		
-		int myRetVal = _myFileChooser.save("");
-		if (myRetVal == JFileChooser.APPROVE_OPTION) {
-			try {
-				Path myChoosenPath = _myFileChooser.path();
-				String myExtension = _myFileChooser.extension();
-				
-				CCLog.info(myChoosenPath);
-				
-				switch(myExtension){
-				case "KLE_1":
-					myChoosenPath = CCNIOUtil.addExtension(myChoosenPath, "kle");
-//					Path myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-//					
-//					if(myPath == null)return;bla
+//	public static void main(String[] args) {
+//		CCFileChooser _myFileChooser = new CCFileChooser();
+//		_myFileChooser.setAcceptAllFileFilterUsed(false);
+//		_myFileChooser.addChoosableFileFilter(new CCFileFilter("KLE_1"));
+//		_myFileChooser.addChoosableFileFilter(new CCFileFilter("KLE_2"));
+//		for(CCKleFormats myFormat:CCKleFormats.values()){
+//			_myFileChooser.addChoosableFileFilter(new CCFileFilter(myFormat.name()));
+//		}
 //		
-//					CCSequenceKLE1Container myKLE1Container = new CCSequenceKLE1Container();
-//					CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get("motors");
-//					if(myRecording != null){
-//						myKLE1Container.useStartEndChannels(myRecording._cUseStartEndChannel);
-//						myKLE1Container.startChannel(myRecording._cStartChannel);
-//						myKLE1Container.endChannel(myRecording._cEndChannel);
+//		int myRetVal = _myFileChooser.save("");
+//		if (myRetVal == JFileChooser.APPROVE_OPTION) {
+//			try {
+//				Path myChoosenPath = _myFileChooser.path();
+//				String myExtension = _myFileChooser.extension();
+//				
+//				CCLog.info(myChoosenPath);
+//				
+//				switch(myExtension){
+//				case "KLE_1":
+//					myChoosenPath = CCNIOUtil.addExtension(myChoosenPath, "kle");
+////					Path myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
+////					
+////					if(myPath == null)return;bla
+////		
+////					CCSequenceKLE1Container myKLE1Container = new CCSequenceKLE1Container();
+////					CCSequenceChannelRecording myRecording = (CCSequenceChannelRecording)_myRecordings.get("motors");
+////					if(myRecording != null){
+////						myKLE1Container.useStartEndChannels(myRecording._cUseStartEndChannel);
+////						myKLE1Container.startChannel(myRecording._cStartChannel);
+////						myKLE1Container.endChannel(myRecording._cEndChannel);
+////					}
+////					myKLE1Container.save(myPath, _myElements, _myRecordings);
+//					break;
+//				case "KLE_2":
+//					myChoosenPath = CCNIOUtil.addExtension(myChoosenPath, "kle");
+////					myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
+////					if(myPath == null)return;
+////		
+////					CCSequenceKLE2Container myKLEContainer = new CCSequenceKLE2Container();
+////					myKLEContainer.save(myPath, _myElements, _myRecordings);
+//					break;
+//				default:
+//					CCKleFormats myFormat = CCKleFormats.valueOf(myExtension);
+////					String myEnteredExtension = CCNIOUtil.fileExtension(myChoosenPath);
+//					if(!myFormat.isFolder()){
+//						myChoosenPath = CCNIOUtil.addExtension(myChoosenPath, myFormat.extension());
 //					}
-//					myKLE1Container.save(myPath, _myElements, _myRecordings);
-					break;
-				case "KLE_2":
-					myChoosenPath = CCNIOUtil.addExtension(myChoosenPath, "kle");
-//					myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-//					if(myPath == null)return;
-//		
-//					CCSequenceKLE2Container myKLEContainer = new CCSequenceKLE2Container();
-//					myKLEContainer.save(myPath, _myElements, _myRecordings);
-					break;
-				default:
-					CCKleFormats myFormat = CCKleFormats.valueOf(myExtension);
-//					String myEnteredExtension = CCNIOUtil.fileExtension(myChoosenPath);
-					if(!myFormat.isFolder()){
-						myChoosenPath = CCNIOUtil.addExtension(myChoosenPath, myFormat.extension());
-					}
-//					if(_myFormat == CCSequenceFormats.NONE)return;
-//					if(!myFormat.savePosition()){
-//						for(String myKey:_myRecordings.keySet()){
-//							myRecording = (CCSequenceChannelRecording)_myRecordings.get(myKey);
-//							if(!myRecording.export)continue;
-//							if(myFormat.isFolder()){
-//								myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-//							}else{
-//								myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-//							}
-//							if(myPath == null)return;
-//							myRecording.save(myPath);
-//						}
-//					}else{
-//						if(myFormat.isFolder()){
-//							myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-//						}else{
-//							myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
-//						}
-//						if(myPath == null)return;
-//						_myElementRecording.save(myPath);
-//					}
-//					
-				}
-				CCLog.info(myChoosenPath);
-				
-				
-			} catch (RuntimeException ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
+////					if(_myFormat == CCSequenceFormats.NONE)return;
+////					if(!myFormat.savePosition()){
+////						for(String myKey:_myRecordings.keySet()){
+////							myRecording = (CCSequenceChannelRecording)_myRecordings.get(myKey);
+////							if(!myRecording.export)continue;
+////							if(myFormat.isFolder()){
+////								myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
+////							}else{
+////								myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
+////							}
+////							if(myPath == null)return;
+////							myRecording.save(myPath);
+////						}
+////					}else{
+////						if(myFormat.isFolder()){
+////							myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
+////						}else{
+////							myPath = theRecordPath == null ? myChoosenPath : theRecordPath;
+////						}
+////						if(myPath == null)return;
+////						_myElementRecording.save(myPath);
+////					}
+////					
+//				}
+//				CCLog.info(myChoosenPath);
+//				
+//				
+//			} catch (RuntimeException ex) {
+//				ex.printStackTrace();
+//			}
+//		}
+//	}
 	
 	private List<CCKleSegment> getSegments(){
 		
-		for(CCTrackController myTrack:_myGLAdapter.timeline().activeTimeline().trackController()){
+		for(CCTrackController myTrack:_myTimeline.activeTimeline().trackController()){
 			if(myTrack.property().path().toString().endsWith("/record/segment name")){
 
 				CCLog.info(myTrack.property().path().toString());
 				List<CCKleSegment> myResult = new ArrayList<>();
 				for(CCControlPoint myPoint:myTrack.trackData()){
-					CCTimedEventPoint myEventPoint = (CCTimedEventPoint)myPoint;
+					CCEventPoint myEventPoint = (CCEventPoint)myPoint;
 					CCLog.info(myEventPoint.content().value() + ":" + myEventPoint.time() + ":" + myEventPoint.endTime());
 					CCKleSegment mySegment = new CCKleSegment(
 						myEventPoint.content().value().toString(), 
@@ -538,7 +525,7 @@ public class CCSequenceRecorder extends CCAnimatorAdapter{
 	}
 	
 	public void save(Path theRecordPath){
-		_myRecordListeners.proxy().end();
+		endEvents.event();
 		_myAnimator.fixedUpdateTime = _myFixedUpdateTime;
 		_myAnimator.fixUpdateTime = _myFixUpdateTime;
 		_myAnimator.animationMode = _myAnimationMode;
