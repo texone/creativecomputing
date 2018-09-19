@@ -39,7 +39,7 @@ public abstract class CCTrackMenu<ControllerType extends CCTrackController> exte
 	private static CCTrackController controller = null;
 
 	public CCTrackMenu(ControllerType theTrackController, CCTimelineController theTimelineController) {
-		super(CCUIConstants.DEFAULT_FONT);
+		super();
 		_myTrackController = theTrackController;
 		_myTimelineController = theTimelineController;
 
@@ -59,34 +59,34 @@ public abstract class CCTrackMenu<ControllerType extends CCTrackController> exte
 	}
 	
 	public void addShortCuts(){
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e-> {
-			if(e.getID() != KeyEvent.KEY_PRESSED)return false;
-			switch(e.getKeyCode()){
-			case KeyEvent.VK_BACK_SPACE:
-				_myTrackController.deleteSelection();
-				break;
-			}
-			if(!(e.isControlDown() || e.isMetaDown()))return false;
-			switch(e.getKeyCode()){
-			case KeyEvent.VK_C:
-				if(_myTrackController.selection().size() <= 0) {
-					break;
-				}
-				controller = _myTrackController;
-				clipBoard = _myTrackController.copySelection();
-				break;
-			case KeyEvent.VK_X:
-				controller = _myTrackController;
-				clipBoard = _myTrackController.cutSelection();
-				break;
-			case KeyEvent.VK_V:
-				if(_myTimelineController == null)return false;
-				if(_myTrackController != controller)return false;
-				_myTrackController.paste(clipBoard, _myTimelineController.transportController().time());
-				break;
-			}
-			return false;  
-		});
+//		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e-> {
+//			if(e.getID() != KeyEvent.KEY_PRESSED)return false;
+//			switch(e.getKeyCode()){
+//			case KeyEvent.VK_BACK_SPACE:
+//				_myTrackController.deleteSelection();
+//				break;
+//			}
+//			if(!(e.isControlDown() || e.isMetaDown()))return false;
+//			switch(e.getKeyCode()){
+//			case KeyEvent.VK_C:
+//				if(_myTrackController.selection().size() <= 0) {
+//					break;
+//				}
+//				controller = _myTrackController;
+//				clipBoard = _myTrackController.copySelection();
+//				break;
+//			case KeyEvent.VK_X:
+//				controller = _myTrackController;
+//				clipBoard = _myTrackController.cutSelection();
+//				break;
+//			case KeyEvent.VK_V:
+//				if(_myTimelineController == null)return false;
+//				if(_myTrackController != controller)return false;
+//				_myTrackController.paste(clipBoard, _myTimelineController.transportController().time());
+//				break;
+//			}
+//			return false;  
+//		});
 	}
 	
 	protected double _myClickedTime = 0;
@@ -140,7 +140,6 @@ public abstract class CCTrackMenu<ControllerType extends CCTrackController> exte
 			double myRange = myUpperBound - myLowerBound;
 
 			_myTrackController.trackData().cutRangeAndTime(myLowerBound, myRange);
-			_myTrackController.view().render();
 		});
 
 		addItem("Reset Track",e -> {

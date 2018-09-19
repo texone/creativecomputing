@@ -20,7 +20,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
 
@@ -117,7 +117,7 @@ public abstract class CCAsset <AssetType>{
 //		theG2d.drawString(myText.toString(), (int) myPos.getX() + 5, (int) myPos.getY() + 15);
 //	}
 	
-	public void reset(CCTimedEventPoint theTimedEvent){
+	public void reset(CCEventPoint theTimedEvent){
 		theTimedEvent.contentOffset(0);
 	}
 	

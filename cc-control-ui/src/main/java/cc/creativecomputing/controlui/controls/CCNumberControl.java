@@ -18,9 +18,10 @@ package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUISlider;
 import cc.creativecomputing.ui.widget.CCUIValueBox;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHandle<Number>>{
 	
@@ -49,29 +50,28 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
         if(_myHandle.isNumberBox()){
         	_mySlider = null;
         }else{
-	        _mySlider = new CCUISlider(100,14,_myMin, _myMax,_myValue);
+	        _mySlider = new CCUISlider(14,_myMin, _myMax,_myValue);
+	        _mySlider.flex(1);
+	        _mySlider.margin(CCYogaEdge.LEFT, 10);
 	        _mySlider.changeEvents.add(theE -> {
 	        	value(theE , true);
 			});
-	        _mySlider.stretchWidth(true);
         }
         
         _myValueField = new CCUIValueBox(_myValue, _myMin, _myMax, theHandle.digits());
-        _myValueField.width(100);
-        _myValueField.stretchWidth(true);
+        _myValueField.maxWidth(120);
+        _myValueField.flex(1);
+        _myValueField.padding(CCYogaEdge.ALL, 4);
         _myValueField.changeEvents.add(theValue -> {
         	value(theValue, true);
         });
         value(_myHandle.value().doubleValue(), true);
 	}
-	
+
 	@Override
-	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, 0, theY);
-		thePane.addChild(_myValueField, 1, theY);
-		
-		if(_mySlider == null)return;
-		thePane.addChild(_mySlider, 2, theY);
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myValueField);
+		if(_mySlider != null)thePane.addChild(_mySlider);
 	}
 	
 	public Number value(){

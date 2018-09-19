@@ -23,9 +23,15 @@ import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCPropertyPopUp;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLMouseButton;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
+import cc.creativecomputing.graphics.font.CCTextAlign;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaAlign;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaFlexDirection;
 
 public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>> implements CCControl{
 	
@@ -34,6 +40,15 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 	protected CCUILabelWidget _myLabel;
 	
 	protected CCControlComponent _myControlComponent;
+	
+	private boolean _myIsOver;
+	
+	private int _myIndex = 0;
+	
+	private double _myTimer = 0;
+	
+	private static int MAX_LABEL_LENGTH = 11;
+	private static int KEEP_LABEL_LENGTH = 3;
 
 	public CCValueControl(Handle theHandle, CCControlComponent theControlComponent){
 		
@@ -41,8 +56,31 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 		_myControlComponent = theControlComponent;
 		
         //Create the label.
-		_myLabel = new CCUILabelWidget(_myHandle.name());
-		_myLabel.style().horizontalAlignment(CCUIHorizontalAlignment.RIGHT);
+		_myLabel = new CCUILabelWidget(_myHandle.name().substring(0, CCMath.min(_myHandle.name().length(), MAX_LABEL_LENGTH)));
+		_myLabel.onOver.add(o ->{
+			_myIsOver = true;
+			_myTimer = 0;
+			_myIndex = 0;
+		});
+		_myLabel.onOut.add(o ->{
+			_myIsOver = false;
+			_myIndex = 0;
+		});
+		
+		_myLabel.updateEvents.add(t -> {
+			if(!_myIsOver)return;
+			if(_myHandle.name().length() < MAX_LABEL_LENGTH) {
+				_myIndex = 0;
+				_myLabel.text(_myHandle.name());
+				return;
+			}
+			_myTimer += t.deltaTime() * 3;
+			_myIndex = (int)_myTimer;
+			_myIndex %= _myHandle.name().length() - MAX_LABEL_LENGTH + KEEP_LABEL_LENGTH * 2;
+			_myIndex -= KEEP_LABEL_LENGTH;
+			_myIndex = CCMath.constrain(_myIndex, 0, _myHandle.name().length() - MAX_LABEL_LENGTH);
+			_myLabel.text(_myHandle.name().substring(_myIndex, _myIndex + CCMath.min(_myHandle.name().length(), MAX_LABEL_LENGTH)));
+		});
 		
 		_myLabel.mousePressed.add(e -> {
 			if(e.isAltDown()){
@@ -90,5 +128,26 @@ public abstract class CCValueControl<Type, Handle extends CCPropertyHandle<Type>
 	}
 	
 	public abstract Type value();
+	
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		
+	}
+	
+	@Override
+	public void addToPane(CCUIWidget thePane, int theY, int theDepth) {
+		CCUIWidget myUIPane = new CCUIWidget();
+		myUIPane.flexDirection(CCYogaFlexDirection.ROW);
+		myUIPane.alignItems(CCYogaAlign.CENTER);
+		myUIPane.margin(CCYogaEdge.VERTICAL, 5);
+		myUIPane.padding(CCYogaEdge.RIGHT,10);
+		_myLabel.width(100);
+		_myLabel.textField().align(CCTextAlign.RIGHT);
+		_myLabel.minWidth(120);
+		_myLabel.padding(CCYogaEdge.ALL, 4);
+		_myLabel.margin(CCYogaEdge.RIGHT, 10);
+		myUIPane.addChild(_myLabel);
+		addToHorizontalPane(myUIPane);
+		thePane.addChild(myUIPane);
+	}
 	
 }

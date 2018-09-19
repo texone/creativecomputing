@@ -18,7 +18,6 @@ package cc.creativecomputing.controlui.timeline.view.track;
 
 import java.text.DecimalFormat;
 
-import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCBooleanTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCCurveTrackController;
@@ -27,15 +26,15 @@ import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
-import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.widget.CCUICheckBox;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
 import cc.creativecomputing.ui.widget.CCUIMenu;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 import cc.creativecomputing.ui.widget.CCUIValueBox;
+import cc.creativecomputing.ui.widget.CCUIWidget;
 
 
-public class CCTrackControlView extends CCUIHorizontalFlowPane{
+public class CCTrackControlView extends CCUIWidget{
 	
 	static final CCVector2 SMALL_BUTTON_SIZE = new CCVector2(20,15);
 	static final int RESIZE_HANDLE_HEIGHT = 5;
@@ -51,7 +50,7 @@ public class CCTrackControlView extends CCUIHorizontalFlowPane{
 	private class CCSingleTrackControlPopup extends CCUIMenu{
 
 		public CCSingleTrackControlPopup() {
-			super(CCUIConstants.DEFAULT_FONT);
+			super();
 			
 			addItem("Track Edit Funtions");
 			addSeparator();
@@ -75,6 +74,7 @@ public class CCTrackControlView extends CCUIHorizontalFlowPane{
 		CCTimelineController theTimelineController,
 		CCTrackController theTrackController
 	) {
+		flexDirection(CCYogaFlexDirection.ROW);
 		width(150);
 		height(50);
 		_myTimelineController = theTimelineController;
@@ -92,23 +92,23 @@ public class CCTrackControlView extends CCUIHorizontalFlowPane{
 			theTrackController instanceof CCCurveTrackController && 
 			!(theTrackController instanceof CCBooleanTrackController)
 		) {
-			_myMinField = new CCUIValueBox(CCUIConstants.DEFAULT_FONT, _myTrackController.track().min(), -Float.MAX_VALUE, Float.MAX_VALUE, 2);
+			_myMinField = new CCUIValueBox( _myTrackController.track().min(), -Float.MAX_VALUE, Float.MAX_VALUE, 2);
 			_myMinField.changeEvents.add(theValue -> {
 				_myTrackController.min(theValue);
 			});
 			addChild(_myMinField);
 			
-			_myMaxField = new CCUIValueBox(CCUIConstants.DEFAULT_FONT, _myTrackController.track().max(), -Float.MAX_VALUE, Float.MAX_VALUE, 2);
+			_myMaxField = new CCUIValueBox( _myTrackController.track().max(), -Float.MAX_VALUE, Float.MAX_VALUE, 2);
 			_myMaxField.changeEvents.add(theValue -> {
 				_myTrackController.max(theValue);
 			});
 			addChild(_myMaxField);
 			
-			_myValueField = new CCUITextFieldWidget(CCUIConstants.DEFAULT_FONT, "");
+			_myValueField = new CCUITextFieldWidget("");
 			_myValueField.text(_myTrackController.property().valueString(), false);
 		}
 		
-		_myAddressField = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT, "");
+		_myAddressField = new CCUILabelWidget( "");
 		addChild(_myAddressField);
 		
 //		setBorder(BorderFactory.createLineBorder(Color.gray));
@@ -124,7 +124,7 @@ public class CCTrackControlView extends CCUIHorizontalFlowPane{
 	}
 	
 	public void color(CCColor theColor) {
-		background(new CCUIFillDrawable(theColor));
+		style().background(new CCUIFillDrawable(theColor));
 	}
 	
 	public void mute(final boolean theMute) {

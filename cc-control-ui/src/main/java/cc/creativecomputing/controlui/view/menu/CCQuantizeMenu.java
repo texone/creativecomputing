@@ -18,15 +18,15 @@ package cc.creativecomputing.controlui.view.menu;
 
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuantizeMode;
-import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.ui.widget.CCUIMenu;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public class CCQuantizeMenu extends CCUIMenu {
 	
 	private CCTimelineContainer _myTimelineContainer;
 	
-	public CCQuantizeMenu(CCFont<?> theFont, CCTimelineContainer theTimelineContainer) {
-		super(theFont);
+	public CCQuantizeMenu(CCUIWidgetStyle theStyle, CCTimelineContainer theTimelineContainer) {
+		super(theStyle);
 
 		_myTimelineContainer = theTimelineContainer;
 

@@ -17,7 +17,6 @@
 package cc.creativecomputing.controlui.timeline.controller;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,15 +39,11 @@ import cc.creativecomputing.control.timeline.CCTimeRange;
 import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.control.timeline.CCTrackData;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.CCColorMap;
-import cc.creativecomputing.controlui.timeline.controller.arrange.CCClipTrackObject;
-import cc.creativecomputing.controlui.timeline.controller.arrange.CCPresetTrackObject;
 import cc.creativecomputing.controlui.timeline.controller.quantize.CCQuantizeMode;
 import cc.creativecomputing.controlui.timeline.controller.track.CCBooleanTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCColorTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCDoubleTrackController;
-import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackAdapter;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGradientTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGroupTrackController;
@@ -59,10 +54,8 @@ import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
 import cc.creativecomputing.controlui.timeline.view.track.SwingGroupTrackView;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
-import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
 
 
 /**
@@ -212,14 +205,12 @@ public class CCTimelineController extends CCTrackContext {
 		_myTransportController.trackData().insertTime(myLowerBound, myRange);
 		for (CCTrackController myController : _myTrackControllerMap.values()) {
 			myController.trackData().insertTime(myLowerBound, myRange);
-			myController.view().render();
 		}
 	}
 	
 	public void insertTime(double theInsertTime, double theTime){
 		for (CCTrackController myController : _myTrackControllerMap.values()) {
 			myController.trackData().insertTime(theInsertTime, theTime);
-			myController.view().render();
 		}
 	}
 	
@@ -231,7 +222,6 @@ public class CCTimelineController extends CCTrackContext {
 		_myTransportController.trackData().cutRangeAndTime(myLowerBound, myRange);
 		for (CCTrackController myController : _myTrackControllerMap.values()) {
 			myController.trackData().cutRangeAndTime(myLowerBound, myRange);
-			myController.view().render();
 		}
 	}
 	
@@ -275,13 +265,6 @@ public class CCTimelineController extends CCTrackContext {
 		myGroupTrack.isOpen(true);
 		
 		myResult = new CCGroupTrackController(this, myGroupTrack);
-		myResult.events().add(new CCEventTrackAdapter() {
-			@Override
-			public void onProperties(CCEventTrackController theController, CCTimedEventPoint thePoint) {
-				_myView.openGroupPresetDialog(theProperty, theController, thePoint);
-			}
-		});
-		myResult.events().add(new CCPresetTrackObject(theProperty));
 		_myGrouptrackControllerMap.put(theProperty.path(), myResult);
 		_myGroupOrder.add(theProperty.path());
 		_myTrackController.add(myResult);
@@ -307,27 +290,12 @@ public class CCTimelineController extends CCTrackContext {
 			_myRootController = myResult;
 		}
 
-		_myZoomController.addZoomable(myResult);
+		_myZoomController.events.add(myResult::setRange);
 		return myResult;
 	}
 	
 	public CCGroupTrackController createGroupController(Path thePath){
 		return createGroupController((CCObjectPropertyHandle)_myRootHandle.property(thePath));
-	}
-	
-	private static class TrackRenderAction implements CCPropertyListener<Object>{
-		
-		private CCTrackController _myTrackController;
-		
-		public TrackRenderAction(CCTrackController theCurveTrackController){
-			_myTrackController = theCurveTrackController;
-		}
-
-		@Override
-		public void onChange(Object theValue) {
-			if(_myTrackController.trackData().size() == 0)_myTrackController.view().render();
-		}
-		
 	}
 	
 	private int _myArrangeCounter = 0;
@@ -358,54 +326,11 @@ public class CCTimelineController extends CCTrackContext {
 		
 		_myTrackCount++;
 
-		_myZoomController.addZoomable(myResult);
+		_myZoomController.events.add(myResult::setRange);
 		return myResult;
 	}
 	
-	public CCTrackController createClipTrack(Path thePath){
-		if(_myClipController == null)_myClipController = createClipGroup(Paths.get("clip arrange"));
-		
-		CCClipTrackObject myClipTrackObject = new CCClipTrackObject(_myTimelineContainer);
-		CCObjectPropertyHandle myParent = new CCObjectPropertyHandle(myClipTrackObject, "cliptrack");
-		myParent.path(Paths.get("clip arrange"));
-		
-		CCPropertyHandle<?> myProperty = myParent.property("trackID");
-		_myClipTrackHandles.add(myProperty);
-		myProperty.path(thePath);
-		CCEventTrackController myEventController = (CCEventTrackController)createController(myProperty, myClipTrackObject);
-		myEventController.splitDrag(true);
-		myEventController.events().add(myClipTrackObject);
-		myEventController.events().add(new CCEventTrackAdapter() {
-			@Override
-			public void onProperties(CCEventTrackController theController, CCTimedEventPoint thePoint) {
-				_myView.openClipTrackDialog(theController, thePoint);
-			}
-			
-			@Override
-			public void onTime(double theTime, CCEventTrackController theController, CCTimedEventPoint thePoint) {
-				// TODO Auto-generated method stub
-				super.onTime(theTime, theController, thePoint);
-			}
-		});
-		_myClipController.addTrack(myEventController);
-		return myEventController;
-	}
-	
-	public void resetClipTracks(){
-		for(CCPropertyHandle<?> _myClipTrackProperty:new ArrayList<>(_myClipTrackHandles)){
-			removeTrack(_myClipTrackProperty.path());
-		}
-	}
-	
-	public CCTrackController createClipTrack(){
-		Path myPath = Paths.get("clip arrange","track " + _myArrangeCounter++);
-		while(_myTrackControllerMap.containsKey(myPath)){
-			myPath = Paths.get("clip arrange","track " + _myArrangeCounter++);
-		}
-		return createClipTrack(myPath);
-	}
-	
-	public CCTrackController createController(CCPropertyHandle<?> theProperty, CCClipTrackObject theObject){
+	public CCTrackController createController(CCPropertyHandle<?> theProperty){
 
 		Path myPath = theProperty.path();
 		if(_myTrackControllerMap.containsKey(myPath))return _myTrackControllerMap.get(myPath);
@@ -449,23 +374,8 @@ public class CCTimelineController extends CCTrackContext {
 			myTrack.extras(myExtraMap);
 		}else if(theProperty instanceof CCPathHandle){
 			CCEventTrackController myEventController = new CCEventTrackController(this, myTrack, myGroup);
-			myEventController.events().add(new CCEventTrackAdapter() {
-				
-				@Override
-				public void onTime(double theTime, CCEventTrackController theController, CCTimedEventPoint thePoint) {
-					((CCPathHandle)theProperty).time(theTime, theTime - thePoint.time(), thePoint.contentOffset());
-				}
-				
-				@Override
-				public void onOut() {
-					((CCPathHandle)theProperty).out();
-				}
-				
-				@Override
-				public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double UpperTime, CCGraphics theG2d) {
-//					((CCPathHandle)theProperty).renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
-				}
-			});
+			myEventController.outEvents.add(o -> ((CCPathHandle)theProperty).out());
+			myEventController.timeEvents.add(e -> ((CCPathHandle)theProperty).time(e.time, e.time - e.point.time(), e.point.contentOffset()));
 			myEventController.splitDrag(true);
 			_myTransportController.playEvents.add(t -> {((CCPathHandle)theProperty).play();});
 			_myTransportController.stopEvents.add(t -> {((CCPathHandle)theProperty).stop();});
@@ -481,20 +391,17 @@ public class CCTimelineController extends CCTrackContext {
 		_myTrackController.add(myTrackController);
 		
 		if(_myView != null){
-			CCAbstractTrackView myTrackView = _myView.addTrack(_myTrackCount, myTrackController,  theObject);
+			CCAbstractTrackView myTrackView = _myView.addTrack(_myTrackCount, myTrackController);
 			myTrackController.view(myTrackView);
 			myTrackController.view().color(myTrack.color());
 		}
 		myTrackController.mute(myTrack.mute());
 		
-		_myZoomController.addZoomable(myTrackController);
-		
+		_myZoomController.events.add(myTrackController.zoomEvent);
 		
 		if(myGroup != null) {
 			myGroup.addTrack(myTrackController);
 		}
-		
-		theProperty.events().add(new TrackRenderAction(myTrackController));
 		
 		_myTrackCount++;
 		
@@ -502,10 +409,7 @@ public class CCTimelineController extends CCTrackContext {
 	}
 	
 	public CCTrackController createController(Path thePath){
-		if(thePath.startsWith("clip arrange")){
-			return createClipTrack();
-		}
-		return createController(_myRootHandle.property(thePath), null);
+		return createController(_myRootHandle.property(thePath));
 	}
 	
 	public void removeTrack(Path thePath){
@@ -523,7 +427,7 @@ public class CCTimelineController extends CCTrackContext {
 		}else if(_myTrackControllerMap.containsKey(thePath)){
 			CCTrackController myController = _myTrackControllerMap.remove(thePath);
 			myRemoveController = myController;
-			_myZoomController.removeZoomable(myController);
+			_myZoomController.events.remove(myController.zoomEvent);
 			_myTrackController.remove(myController);
 			_myClipTrackHandles.remove(myController.property());
 			_myTrackCount--;
@@ -542,25 +446,6 @@ public class CCTimelineController extends CCTrackContext {
 		if(_myRootController == null)return;
 		_myTrackCount = 0;
 		removeTrack(_myRootController.property().path());
-	}
-	
-	public void render(){
-		for (CCTrackController myController : _myTrackControllerMap.values()) {
-			if(myController.view() != null)myController.view().render();
-		}
-		for (CCTrackController myController : _myGrouptrackControllerMap.values()) {
-			if(myController.view() != null)myController.view().render();
-		}
-	}
-
-	@Override
-	public void renderInfo() {
-		for (CCTrackController myController : _myTrackControllerMap.values()) {
-			if(myController.view() != null)myController.view().renderInfo();
-		}
-		for (CCTrackController myController : _myGrouptrackControllerMap.values()) {
-			if(myController.view() != null)myController.view().renderInfo();
-		}
 	}
 	
 	@SuppressWarnings("unused")
@@ -647,7 +532,6 @@ public class CCTimelineController extends CCTrackContext {
 		for(CCTrackController myTrackController:_myTrackControllerMap.values()){
 			myTrackController.track().trackData().reverse(0, myMaximumTime);
 		}
-		render();
 	}
 	
 	public void hideUnusedTracks(boolean theHideUnusedTracks){
@@ -693,6 +577,5 @@ public class CCTimelineController extends CCTrackContext {
 //			}
 		}
 		if(_myRootController != null)_myRootController.time(theTime);
-		renderInfo();
 	}
 }

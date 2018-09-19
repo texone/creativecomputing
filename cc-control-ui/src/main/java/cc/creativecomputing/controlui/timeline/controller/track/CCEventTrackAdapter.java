@@ -16,34 +16,34 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.track;
 
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCVector2;
 
 public abstract class CCEventTrackAdapter implements CCEventTrackListener{
 
 	@Override
-	public void onCreate(CCEventTrackController theController, CCTimedEventPoint thePoint) {}
+	public void onCreate(CCEventTrackController theController, CCEventPoint thePoint) {}
 
 	@Override
-	public void onChange(CCEventTrackController theController, CCTimedEventPoint thePoint) {}
+	public void onChange(CCEventTrackController theController, CCEventPoint thePoint) {}
 
 	@Override
-	public void onDelete(CCEventTrackController theController, CCTimedEventPoint thePoint) {}
+	public void onDelete(CCEventTrackController theController, CCEventPoint thePoint) {}
 
 	@Override
-	public void onProperties(CCEventTrackController theController, CCTimedEventPoint thePoint) {}
+	public void onProperties(CCEventTrackController theController, CCEventPoint thePoint) {}
 
 	@Override
-	public void onClick(CCEventTrackController theController, CCTimedEventPoint thePoint) {}
+	public void onClick(CCEventTrackController theController, CCEventPoint thePoint) {}
 
 	@Override
-	public void onTime(double theTime, CCEventTrackController theController, CCTimedEventPoint thePoint) {}
+	public void onTime(double theTime, CCEventTrackController theController, CCEventPoint thePoint) {}
 	
 	@Override
-	public void onTimeChange(double theTime, double theOffset, CCEventTrackController theController, CCTimedEventPoint thePoint) {}
+	public void onTimeChange(double theTime, double theOffset, CCEventTrackController theController, CCEventPoint thePoint) {}
 	
-	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double UpperTime, CCGraphics theG2d) {}
+	public void renderTimedEvent(CCEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double UpperTime, CCGraphics theG2d) {}
 	
 	@Override
 	public void onOut() {}

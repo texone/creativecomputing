@@ -20,19 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.control.handles.CCPropertyHandle;
+import cc.creativecomputing.control.timeline.CCTimeRange;
 import cc.creativecomputing.control.timeline.CCTrackData;
-import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
-import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
-import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
-import cc.creativecomputing.controlui.timeline.controller.actions.CCControlUndoHistory;
-import cc.creativecomputing.controlui.timeline.controller.actions.CCRemoveControlPointCommand;
 import cc.creativecomputing.controlui.timeline.tools.CCTimedContentView;
 import cc.creativecomputing.controlui.timeline.view.track.CCAbstractTrackView;
-import cc.creativecomputing.controlui.timeline.view.track.CCTrackView;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
@@ -78,7 +73,6 @@ public abstract class CCTrackDataController implements CCTimedContentView {
 	public void reset() {
 		_mySelectedPoints.clear();
 		trackData().clear();
-		_myTrackView.render();
 	}
 
 	
@@ -94,21 +88,29 @@ public abstract class CCTrackDataController implements CCTimedContentView {
 			myCopy.time(myCopy.time() - myFirstPoint.time() + theTime);
 			trackData().add(myCopy);
 		}
-		view().render();
 	}
 
 	@Override
-	public double viewXToTime(double theViewX, boolean theGetPos) {
+	public double viewXToTime(double theViewX) {
 		try {
-			return theViewX / (double) _myTrackView.width() * (_myTrackContext.viewTime()) + (theGetPos ? _myTrackContext.lowerBound() : 0);
+			return viewWidthToTime(theViewX) + _myTrackContext.lowerBound();
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+	
+	@Override
+	public double viewWidthToTime(double theViewWidth) {
+		try {
+			return theViewWidth / (double) _myTrackView.width() * (_myTrackContext.viewTime());
 		} catch (Exception e) {
 			return 0;
 		}
 	}
 
 	@Override
-	public int timeToViewX(double theCurveX) {
-		return (int) ((theCurveX - _myTrackContext.lowerBound()) / (_myTrackContext.viewTime()) * _myTrackView.width());
+	public double timeToViewX(double theCurveX) {
+		return  (theCurveX - _myTrackContext.lowerBound()) / (_myTrackContext.viewTime()) * _myTrackView.width();
 	}
 
 	// public abstract double viewXToTime(int theViewX);
@@ -119,12 +121,10 @@ public abstract class CCTrackDataController implements CCTimedContentView {
 
 	public abstract CCControlPoint viewToCurveSpace(CCVector2 thePoint, boolean theGetPos);
 
-	public void setRange(double theLowerBound, double theUpperBound) {
-		if (_myTrackView != null)
-			_myTrackView.render();
+	public void setRange(CCTimeRange theRange) {
 	}
 
-	
+	public CCEvent<CCTimeRange> zoomEvent = this::setRange;
 
 	protected List<CCControlPoint> _mySelectedPoints = new ArrayList<>();
 

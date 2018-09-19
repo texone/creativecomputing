@@ -36,16 +36,7 @@
 package cc.creativecomputing.controlui;
 
 import cc.creativecomputing.controlui.timeline.tools.CCTimelineTools;
-import cc.creativecomputing.graphics.font.CCCharSet;
-import cc.creativecomputing.graphics.font.CCFont;
-import cc.creativecomputing.graphics.font.CCTextureMapFont;
-import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
-import cc.creativecomputing.ui.draw.CCUIFillDrawable;
-import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 /**
  * @author christianriekoff

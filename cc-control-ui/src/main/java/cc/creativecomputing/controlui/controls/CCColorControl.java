@@ -19,8 +19,9 @@ package cc.creativecomputing.controlui.controls;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUIColorPicker;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandle>{
 	
@@ -32,8 +33,8 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 		super(theHandle, theControlComponent);
 
 		_myColor = theHandle.value().clone();
-		_myColorPicker = new CCUIColorPicker(_myColor, 100, 14);
-		_myColorPicker.stretchWidth(true);
+		_myColorPicker = new CCUIColorPicker();
+		_myColorPicker.padding(CCYogaEdge.ALL, 4);
 		addListener(theValue -> {
 			_myColor = theValue;
 			_myColorPicker.color(_myColor, false);
@@ -49,10 +50,9 @@ public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandl
 	public CCColor value() {
 		return _myColor;
 	}
-	
+
 	@Override
-	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, 0, theY);
-		thePane.addChild(_myColorPicker, 1, theY);
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myColorPicker);
 	}
 }

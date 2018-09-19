@@ -30,12 +30,10 @@ import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.code.CCShaderSource;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
 import cc.creativecomputing.core.CCSelectable;
-import cc.creativecomputing.core.CCSelectionListener;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil;
 import cc.creativecomputing.core.util.CCStringUtil;
@@ -86,7 +84,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		creatorMap.put(CCSpline.class, (theParent, theMember) -> {return new CCSplineHandle(theParent, theMember);});
 		creatorMap.put(Path.class, (theParent, theMember) -> {return new CCPathHandle(theParent, theMember);});
 		creatorMap.put(CCSelection.class, (theParent, theMember) -> {return new CCSelectionPropertyHandle(theParent, theMember);});
-		creatorMap.put(CCShaderSource.class, (theParent, theMember) -> {return new CCShaderSourceHandle(theParent, theMember);});
 	}
 	
 	private static CCHandleCreator handleCreator(Class<?> theClass){
@@ -477,6 +474,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	public void savePreset(String thePreset, CCPresetHandling theHandling) {
 		
 		Path myPresetPath = presetPath().resolve(thePreset + ".json");
+		CCLog.info(myPresetPath);
 		CCDataObject myResult = new CCDataObject();
 		myResult.put("value", myResult);
 		CCDataIO.saveDataObject(presetData(theHandling), myPresetPath, CCDataFormats.JSON);
@@ -625,6 +623,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 //			_myOriginalValue = theValue;
 //		}
 		_myValue = theValue;
+		CCLog.info(_myMember);
 		_myMember.value(theValue);
 		onChange();
 	}

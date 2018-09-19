@@ -20,7 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import cc.creativecomputing.control.CCAsset;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
@@ -83,7 +83,7 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 //		_myAsset.renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
 //	}
 	
-	public void reset(CCTimedEventPoint theTimedEvent){
+	public void reset(CCEventPoint theTimedEvent){
 		_myAsset.reset(theTimedEvent);
 	}
 	

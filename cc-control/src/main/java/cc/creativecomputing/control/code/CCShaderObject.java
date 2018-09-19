@@ -17,10 +17,14 @@
 package cc.creativecomputing.control.code;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import cc.creativecomputing.control.CCPropertyMap;
@@ -29,8 +33,8 @@ import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
-import cc.creativecomputing.io.CCNIOUtil;
 
 public abstract class CCShaderObject {
 	
@@ -51,34 +55,13 @@ public abstract class CCShaderObject {
 		public CCNumberPropertyHandle<Double>[] properties(){
 			return _myProperties;
 		}
-		
 	}
-	
-	/**
-	 * Takes the given files and merges them to one String. 
-	 * This method is used to combine the different shader sources and get rid of the includes
-	 * inside the shader files.
-	 * @param thePaths
-	 * @return
-	 */
-	public static String[] buildSource(final Path...thePaths) {
-		String[] myBuffer = new String[thePaths.length];
-		int i = 0;
-		for(Path myPath:thePaths) {
-			myBuffer[i] = CCNIOUtil.loadString(myPath);
-		}
-		
-		return myBuffer;
-	}
-	
 
 	public CCEventManager<CCShaderObject> compileEvents = new CCEventManager<>();
 	public CCEventManager<CCShaderObject> errorEvents = new CCEventManager<>();
 	
-	private Path[] _myPaths;
-	
 	@CCProperty(name = "shaders", hide = true)
-	private Map<String, CCShaderSource> _myFiles = new LinkedHashMap<>();
+	private Map<String, CCShaderSource> _myCodeSources = new LinkedHashMap<>();
 	@CCProperty(name = "save in file")
 	private boolean _cSaveInFile = true;
 	@CCProperty(name = "auto save")
@@ -89,27 +72,39 @@ public abstract class CCShaderObject {
 	private CCObjectPropertyHandle _myUniformHandles = new CCObjectPropertyHandle(new CCDirectMember( new CCPropertyObject("uniforms", 0, 0)));
 
 	private Map<String,CCShaderUniform> _myUniforms = new HashMap<>();
+
 	
-	public CCShaderObject(Path[] theFiles){
-		_myPaths = theFiles;
-		String[] mySources = buildSource(theFiles);
-		for(int i = 0; i < _myPaths.length;i++){
-			_myFiles.put(_myPaths[i].getFileName().toString(), new CCShaderFile(this, _myPaths[i], mySources[i]));
+	public static interface CCShaderInsert{
+		public String source();
+	}
+	
+	private Map<String, CCShaderInsert> _myInsertMap;
+	
+	public CCShaderObject(Map<String, CCShaderInsert> theInsertMap, Path...theFiles){
+		_myInsertMap = theInsertMap;
+		for(Path myPath:theFiles){
+			_myCodeSources.put(myPath.getFileName().toString(), new CCShaderFile(this, myPath));
 		}
 	}
 	
-	public CCShaderObject(String[] theSources){
-		_myPaths = null;
+	public CCShaderObject(Map<String, CCShaderInsert> theInsertMap, String...theSources){
+		_myInsertMap = theInsertMap;
 		for(int i = 0; i < theSources.length;i++){
-			_myFiles.put("source " + i, new CCShaderSource(this, theSources[i]));
+			_myCodeSources.put("source " + i, new CCShaderString(this, theSources[i]));
 		}
+	}
+	
+	public boolean isUpdated() {
+		for(CCShaderSource mySource:_myCodeSources.values()) {
+			if(mySource.isUpdated())return true;
+		}
+		return false;
 	}
 	
 	public Collection<CCShaderUniform> uniforms(){
 		return _myUniforms.values();
 	}
 	
-
 	private CCNumberPropertyHandle<Double> createHandle(String theName, double theMin, double theMax){
 		CCNumberPropertyHandle<Double> myResult = new CCNumberPropertyHandle<Double>(
 			_myUniformHandles, 
@@ -226,42 +221,59 @@ public abstract class CCShaderObject {
 		}
 	}
 	
-	public String preprocessSources(){
-		Map<String,CCShaderUniform> myUniforms = new HashMap<>();
-		_myUniformHandles.children().clear();
-		
-		String[] myCleanedSources = new String[sourceCode().size()];
-		int mySourceID = 0;
+	private String readInsert(String theLine) {
+		theLine = theLine.trim();
+		String myInsert = theLine.split(" ")[1];
+		return _myInsertMap.get(myInsert).source();
+	}
+	
+	public String preprocessInserts() {
 		StringBuffer mySourceBuffer = new StringBuffer();
-		for(CCShaderSource mySource:sourceCode().values()){
+		for(CCShaderSource mySource:codeSources().values()){
 			String[] myLines = mySource.sourceCode().split(Pattern.quote("\n"));
-			String myPropertyLine = null;
-			
 			
 			for(int i = 0; i < myLines.length; i++){
 				String myLine = myLines[i];
-				myLine = myLine.trim();
-				if(myLine.length() == 0){
-					mySourceBuffer.append("\n");
+				if(myLine.startsWith("@CCInsert")){
+					mySourceBuffer.append(readInsert(myLine));
+					readInsert(myLine);
 					continue;
-				}else if(myLine.startsWith("@CCProperty")){
-					mySourceBuffer.append("\n");
-					myPropertyLine = myLine;
-				}else if(myLine.startsWith("@")){
-					mySourceBuffer.append("\n");
-					continue;
-				}else if(myLine.startsWith("uniform")){
-					mySourceBuffer.append(myLine + "\n");
-					if(myPropertyLine != null)readProperty(myPropertyLine, myLine,myUniforms);
-					myPropertyLine = null;
 				}else{
-					myPropertyLine = null;
 					mySourceBuffer.append(myLine + "\n");
 				}
 			}
 			
-			myCleanedSources[mySourceID++] = mySource.toString();
 		}
+		return mySourceBuffer.toString();
+	}
+	
+	public String preprocessSources(){
+		Map<String,CCShaderUniform> myUniforms = new HashMap<>();
+		_myUniformHandles.children().clear();
+		
+		String[] myLines = preprocessInserts().split("\\r?\\n");
+		
+		StringBuffer mySourceBuffer = new StringBuffer();
+		String myPropertyLine = null;
+			
+		for(String myLine:myLines){
+			myLine = myLine.trim();
+			if(myLine.length() == 0){
+				mySourceBuffer.append("\n");
+				continue;
+			}else if(myLine.startsWith("@CCProperty")){
+				mySourceBuffer.append("\n");
+				myPropertyLine = myLine;
+			}else if(myLine.startsWith("uniform")){
+				mySourceBuffer.append(myLine + "\n");
+				if(myPropertyLine != null)readProperty(myPropertyLine, myLine,myUniforms);
+				myPropertyLine = null;
+			}else{
+				myPropertyLine = null;
+				mySourceBuffer.append(myLine + "\n");
+			}
+		}
+			
 		_myUniforms = myUniforms;
 		_myUniformHandles.forceChange();
 		
@@ -286,12 +298,8 @@ public abstract class CCShaderObject {
 		return new Path[]{};
 	}
 	
-	public Path[] paths(){
-		return _myPaths;
-	}
-	
-	public Map<String, CCShaderSource> sourceCode(){
-		return _myFiles;
+	public Map<String, CCShaderSource> codeSources(){
+		return _myCodeSources;
 	}
 	
 	public abstract String errorLog();

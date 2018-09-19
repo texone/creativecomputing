@@ -1,0 +1,299 @@
+{
+  "visible": {
+    "name": "visible",
+    "value": true
+  },
+  "color": {
+    "a": 1,
+    "r": 0,
+    "b": 0,
+    "g": 0,
+    "name": "color",
+    "value": {
+      "a": 1,
+      "r": 0,
+      "b": 0,
+      "g": 0,
+      "blendable_type": "cc.creativecomputing.math.CCColor"
+    }
+  },
+  "resizable": {
+    "name": "resizable",
+    "value": true
+  },
+  "draw rect": {
+    "name": "draw rect",
+    "value": true
+  },
+  "texture": {
+    "name": "texture",
+    "value": {
+      "generate mipmaps": {
+        "name": "generate mipmaps",
+        "value": false
+      },
+      "environment mode": {
+        "name": "environment mode",
+        "value": "MODULATE"
+      },
+      "filter": {
+        "name": "filter",
+        "value": "LINEAR"
+      },
+      "must flip vertically": {
+        "name": "must flip vertically",
+        "value": true
+      },
+      "anisotropic filtering": {
+        "min": 0,
+        "max": 1,
+        "name": "anisotropic filtering",
+        "value": 1
+      },
+      "wrap r": {
+        "name": "wrap r",
+        "value": "REPEAT"
+      },
+      "wrap s": {
+        "name": "wrap s",
+        "value": "REPEAT"
+      },
+      "mip map filter": {
+        "name": "mip map filter",
+        "value": "LINEAR"
+      },
+      "wrap t": {
+        "name": "wrap t",
+        "value": "REPEAT"
+      },
+      "blend color": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "blend color",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      }
+    }
+  },
+  "alwaysOnTop": {
+    "name": "alwaysOnTop",
+    "value": false
+  },
+  "gradient": {
+    "gradient": [],
+    "name": "gradient",
+    "value": []
+  },
+  "spline": {
+    "name": "spline",
+    "closed": false,
+    "type": "linear",
+    "value": [
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.23893845081329346,
+        "y": 0.7200665473937988,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.401606023311615,
+        "y": 0.5844796895980835,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.07120084762573242,
+        "y": 0.7612156271934509,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.07324004173278809,
+        "y": 0.07756996154785156,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.5794558525085449,
+        "y": 0.7077317833900452,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.6489801406860352,
+        "y": 0.32778626680374146,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.01162177324295044,
+        "y": 0.0693172812461853,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.45711082220077515,
+        "y": 0.7747534513473511,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.9414498209953308,
+        "y": 0.5845828652381897,
+        "z": 0
+      },
+      {
+        "blendable_type": "cc.creativecomputing.math.CCVector3",
+        "x": 0.20672130584716797,
+        "y": 0.13597732782363892,
+        "z": 0
+      }
+    ],
+    "points": [
+      {
+        "x": 0.23893845081329346,
+        "y": 0.7200665473937988,
+        "z": 0
+      },
+      {
+        "x": 0.401606023311615,
+        "y": 0.5844796895980835,
+        "z": 0
+      },
+      {
+        "x": 0.07120084762573242,
+        "y": 0.7612156271934509,
+        "z": 0
+      },
+      {
+        "x": 0.07324004173278809,
+        "y": 0.07756996154785156,
+        "z": 0
+      },
+      {
+        "x": 0.5794558525085449,
+        "y": 0.7077317833900452,
+        "z": 0
+      },
+      {
+        "x": 0.6489801406860352,
+        "y": 0.32778626680374146,
+        "z": 0
+      },
+      {
+        "x": 0.01162177324295044,
+        "y": 0.0693172812461853,
+        "z": 0
+      },
+      {
+        "x": 0.45711082220077515,
+        "y": 0.7747534513473511,
+        "z": 0
+      },
+      {
+        "x": 0.9414498209953308,
+        "y": 0.5845828652381897,
+        "z": 0
+      },
+      {
+        "x": 0.20672130584716797,
+        "y": 0.13597732782363892,
+        "z": 0
+      }
+    ]
+  },
+  "title": {
+    "name": "title",
+    "value": "cc app"
+  },
+  "antialiasing": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "antialiasing",
+    "value": 8
+  },
+  "path": {"name": "path"},
+  "envelope": {
+    "curve": {"points": [
+      {
+        "time": 0,
+        "type": "LINEAR",
+        "value": 0
+      },
+      {
+        "time": 1,
+        "type": "LINEAR",
+        "value": 1
+      }
+    ]},
+    "name": "envelope",
+    "value": "cc.creativecomputing.control.CCEnvelope@ed9d034"
+  },
+  "undecorated": {
+    "name": "undecorated",
+    "value": false
+  },
+  "fullscreen": {
+    "name": "fullscreen",
+    "value": false
+  },
+  "vec": {
+    "name": "vec",
+    "value": {
+      "x": {
+        "min": 0,
+        "max": 1000,
+        "name": "x",
+        "value": 0
+      },
+      "y": {
+        "min": 0,
+        "max": 1000,
+        "name": "y",
+        "value": 0
+      }
+    }
+  },
+  "width": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "width",
+    "value": 800
+  },
+  "x": {
+    "min": 0,
+    "max": 1000,
+    "name": "x",
+    "value": 0
+  },
+  "inVsync": {
+    "name": "inVsync",
+    "value": false
+  },
+  "y": {
+    "min": 0,
+    "max": 1000,
+    "name": "y",
+    "value": 0
+  },
+  "z": {
+    "min": 0,
+    "max": 20,
+    "name": "z",
+    "value": 0
+  },
+  "height": {
+    "min": -2147483648,
+    "max": 2147483647,
+    "name": "height",
+    "value": 800
+  }
+}

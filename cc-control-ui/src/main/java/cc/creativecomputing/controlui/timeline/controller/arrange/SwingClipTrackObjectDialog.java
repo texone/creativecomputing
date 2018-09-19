@@ -35,8 +35,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint.TimedData;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint.TimedData;
 import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer.TimelineChangeListener;
@@ -79,10 +79,10 @@ public class SwingClipTrackObjectDialog extends JDialog implements ActionListene
 		pack();
 	}
 	
-	private CCTimedEventPoint _myEventPoint;
+	private CCEventPoint _myEventPoint;
 	private CCEventTrackController _myController;
 	
-	public void edit(CCEventTrackController theController, CCTimedEventPoint theEventPoint){
+	public void edit(CCEventTrackController theController, CCEventPoint theEventPoint){
 		_myEventPoint = theEventPoint;
 		_myController = theController;
 		Point myLoc = MouseInfo.getPointerInfo().getLocation();

@@ -16,10 +16,8 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.view.menu;
 
-import java.nio.file.Path;
-
 import cc.creativecomputing.controlui.CCUIConstants;
-import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
+import cc.creativecomputing.controlui.timeline.controller.CCTimelineFileManager;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.actions.CCControlUndoHistory;
@@ -31,11 +29,11 @@ import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public class CCTimelineMenu extends CCUIMenu{
 	
-	private CCFileManager _myFileManager;
+	private CCTimelineFileManager _myFileManager;
 	private CCFileChooser _myFileChooser;
 	private CCTimelineContainer _myTimelineContainer;
 
-	public CCTimelineMenu(CCUIWidgetStyle theStyle, CCFileManager theFileManager, CCTimelineContainer theTimeline){
+	public CCTimelineMenu(CCUIWidgetStyle theStyle, CCTimelineFileManager theFileManager, CCTimelineContainer theTimeline){
 		super(theStyle);
 		_myFileManager = theFileManager;
 		_myTimelineContainer = theTimeline;
@@ -61,25 +59,27 @@ public class CCTimelineMenu extends CCUIMenu{
 			CCEntypoIcon.ICON_SWAP,
 			"Replace",
 			e -> {
-				Path myPath = _myFileChooser.openFile("open");
-				if (myPath == null) return;
+				_myFileChooser.openFile("open").ifPresent(path -> {
+					CCTimelineController myController = _myTimelineContainer.activeTimeline();
+					myController.removeAll();
+					_myFileManager.loadTimeline(path, myController);
+					myController.render();
+					CCControlUndoHistory.instance().clear();
+				});
 				
-				CCTimelineController myController = _myTimelineContainer.activeTimeline();
-				myController.removeAll();
-				_myFileManager.loadTimeline(myPath, myController);
-				myController.render();
-				CCControlUndoHistory.instance().clear();
+				
 			}
 		).toolTipText("Replaces the current active timeline.");
 		
 		addItem(
 			"Add",
 			e -> {
-				Path myPath = _myFileChooser.openFile("open");
-				if (myPath == null)return;
-				_myFileManager.loadTimeline(myPath, _myTimelineContainer.activeTimeline());
-				_myTimelineContainer.activeTimeline().render();
-				CCControlUndoHistory.instance().clear();
+				_myFileChooser.openFile("open").ifPresent(path -> {
+					_myFileManager.loadTimeline(path, _myTimelineContainer.activeTimeline());
+					_myTimelineContainer.activeTimeline().render();
+					CCControlUndoHistory.instance().clear();
+				});
+				
 			}
 		).toolTipText("Loads the tracks from the file and adds them to the current timeline.");
 		
@@ -96,11 +96,11 @@ public class CCTimelineMenu extends CCUIMenu{
 		addItem(
 			"Insert at Time",
 			e -> {
-				Path myPath = _myFileChooser.openFile("open");
-				if (myPath == null)return;
-				_myFileManager.insertTracks(myPath, _myTimelineContainer.activeTimeline());
-				_myTimelineContainer.activeTimeline().render();
-				CCControlUndoHistory.instance().clear();
+				_myFileChooser.openFile("open").ifPresent(path -> {
+					_myFileManager.insertTracks(path, _myTimelineContainer.activeTimeline());
+					_myTimelineContainer.activeTimeline().render();
+					CCControlUndoHistory.instance().clear();
+				});
 			}
 		).toolTipText("Inserts the data for in the file and the timeline.");
 		
@@ -109,10 +109,10 @@ public class CCTimelineMenu extends CCUIMenu{
 			CCEntypoIcon.ICON_EXPORT,
 			"Export",
 			e -> {
-				Path myPath = _myFileChooser.saveFile("Export Timeline");
-				if(myPath == null)return;
-				_myFileManager.saveTimeline(myPath, _myTimelineContainer.activeTimeline());
-				CCControlUndoHistory.instance().clear();
+				_myFileChooser.saveFile("Export Timeline").ifPresent(path ->{
+					_myFileManager.saveTimeline(path, _myTimelineContainer.activeTimeline());
+					CCControlUndoHistory.instance().clear();
+				});
 			}
 		).toolTipText("Saves the content of all tracks.");
 		
@@ -120,10 +120,11 @@ public class CCTimelineMenu extends CCUIMenu{
 		addItem(
 			"Export Selection",
 			e -> {
-				Path myPath = _myFileChooser.saveFile("save selection");
-				if (myPath == null)return;
-				_myFileManager.saveTimelineSelection(myPath, _myTimelineContainer.activeTimeline());
-				CCControlUndoHistory.instance().clear();
+				_myFileChooser.saveFile("save selection").ifPresent(path -> {
+					_myFileManager.saveTimelineSelection(path, _myTimelineContainer.activeTimeline());
+					CCControlUndoHistory.instance().clear();
+				});
+				
 			}
 		).toolTipText("Saves the content of all tracks.");
 	}

@@ -32,7 +32,6 @@ import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.gl.app.CCGLMouseButton;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.shape.CCPath2D;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
@@ -328,7 +327,7 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 
 		for (double step = myStart; step <= myTransportController.upperBound(); step = step + ri.interval()) {
 
-			int myX = myTransportController.timeToViewX(step);
+			double myX = myTransportController.timeToViewX(step);
 			if (myX < 0)
 				continue;
 
@@ -361,7 +360,7 @@ public abstract class CCAbstractTrackDataView<ControllerType extends CCTrackCont
 		}
 	}
 
-	public void drawContent(CCGraphics g) {
+	public void displayContent(CCGraphics g) {
 
 		drawTimelineBack(g);
 

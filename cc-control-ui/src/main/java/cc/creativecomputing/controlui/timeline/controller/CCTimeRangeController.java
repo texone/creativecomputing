@@ -62,17 +62,17 @@ public class CCTimeRangeController {
 	}
 	
 	public void mousePressed(CCGLMouseEvent e) {
-		double myCurveX = _myTransportView.viewXToTime(e.x, true);
+		double myCurveX = _myTransportView.viewXToTime(e.x);
 			
-		int myLoopStart = _myTransportView.timeToViewX(_myTimeRange.start());
-		int myLoopEnd = _myTransportView.timeToViewX(_myTimeRange.end());
+		double myLoopStart = _myTransportView.timeToViewX(_myTimeRange.start);
+		double myLoopEnd = _myTransportView.timeToViewX(_myTimeRange.end);
 		_myLoopAction = CCTimeRangeEditFunction.ON_OFF;
 			
 		if(CCMath.abs(myLoopStart - e.x) < 5) {
 			_myLoopAction = CCTimeRangeEditFunction.MOVE_START;
 		}else if(CCMath.abs(myLoopEnd - e.x) < 5) {
 			_myLoopAction = CCTimeRangeEditFunction.MOVE_END;
-		}else if(myCurveX > _myTimeRange.start() && myCurveX < _myTimeRange.end()){
+		}else if(myCurveX > _myTimeRange.start && myCurveX < _myTimeRange.end){
 			_myLoopAction = CCTimeRangeEditFunction.MOVE_BOTH;
 		}
 			
@@ -80,20 +80,20 @@ public class CCTimeRangeController {
 		_myStartTime = myCurveX;
 		_myLastTime = myCurveX;
 		
-		_myLoopStart = _myTimeRange.start();
-		_myLoopEnd = _myTimeRange.end();
+		_myLoopStart = _myTimeRange.start;
+		_myLoopEnd = _myTimeRange.end;
 	}
 	
 	public CCTimeRangeEditFunction action(CCVector2 e) {
-		double myCurveX = _myTransportView.viewXToTime(e.x, true);
-		int myLoopStart = _myTransportView.timeToViewX(_myTimeRange.start());
-		int myLoopEnd = _myTransportView.timeToViewX(_myTimeRange.end());
+		double myCurveX = _myTransportView.viewXToTime(e.x);
+		double myLoopStart = _myTransportView.timeToViewX(_myTimeRange.start);
+		double myLoopEnd = _myTransportView.timeToViewX(_myTimeRange.end);
 		
 		if(CCMath.abs(myLoopStart - e.x) < 5) {
 			return CCTimeRangeEditFunction.MOVE_START;
 		}else if(CCMath.abs(myLoopEnd - e.x) < 5) {
 			return CCTimeRangeEditFunction.MOVE_END;
-		}else if(myCurveX > _myTimeRange.start() && myCurveX < _myTimeRange.end()){
+		}else if(myCurveX > _myTimeRange.start && myCurveX < _myTimeRange.end){
 			return CCTimeRangeEditFunction.MOVE_BOTH;
 		}
 		return CCTimeRangeEditFunction.ON_OFF;
@@ -104,7 +104,7 @@ public class CCTimeRangeController {
 	}
 	
 	public void mouseDragged(CCVector2 e) {
-		double myCurveX = _myTransportView.viewXToTime(e.x, true);
+		double myCurveX = _myTransportView.viewXToTime(e.x);
 //		myCurveX = _myTimelineController.snapToRaster(myCurveX);
 
 		switch (_myLoopAction) {
@@ -116,11 +116,11 @@ public class CCTimeRangeController {
 		case MOVE_START:
 			double myCurveMoveStart = myCurveX;
 			_myNewLoopStart = _myTrackContext.quantize(myCurveMoveStart);
-			_myNewLoopEnd = _myTimeRange.end();
+			_myNewLoopEnd = _myTimeRange.end;
 			break;
 		case MOVE_END:
 			double myCurveMoveEnd = myCurveX;
-			_myNewLoopStart = _myTimeRange.start();
+			_myNewLoopStart = _myTimeRange.start;
 			_myNewLoopEnd = _myTrackContext.quantize(myCurveMoveEnd);
 			break;
 		default:
@@ -135,8 +135,6 @@ public class CCTimeRangeController {
 		}
 
 		_myTimeRange.range(_myNewLoopStart, _myNewLoopEnd);
-		
-		_myTrackContext.renderInfo();
 	}
 	
 	public void mouseReleased(CCGLMouseEvent e) {

@@ -20,10 +20,10 @@ import cc.creativecomputing.gl.app.CCGLCursorShape;
 import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.layout.CCUIPane;
+import cc.creativecomputing.ui.widget.CCUIWidget;
 import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
-public abstract class CCAbstractTrackView extends CCUIPane {
+public abstract class CCAbstractTrackView extends CCUIWidget {
 	
 	protected CCAbstractTrackDataView<?> _myDataView;
 	

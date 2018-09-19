@@ -49,7 +49,7 @@ public class CCRulerPopUp extends CCUIMenu {
 	protected double _myClickedTime = 0;
 	
 	public void show( double x, double y) {
-		_myClickedTime = _myTransportController.viewXToTime(x, true);
+		_myClickedTime = _myTransportController.viewXToTime(x);
 	}
 	
 	private CCGLMouseEvent _myMouseEvent;

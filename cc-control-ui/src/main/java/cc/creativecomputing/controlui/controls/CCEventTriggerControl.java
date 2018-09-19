@@ -17,13 +17,10 @@
 package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.handles.CCEventTriggerHandle;
-import cc.creativecomputing.control.handles.CCTriggerProgress.CCTriggerProgressListener;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCProgressWindow;
-import cc.creativecomputing.controlui.CCUIConstants;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
-import cc.creativecomputing.uinano.CCUILabel;
+import cc.creativecomputing.ui.widget.CCUIWidget;
 
 public class CCEventTriggerControl extends CCValueControl<Object, CCEventTriggerHandle>{
 	
@@ -31,43 +28,25 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
 	
 	private CCProgressWindow _myProgressWindow;
 	
-	private CCTriggerProgressListener _myProgressListener;
-	
 	public CCEventTriggerControl(CCEventTriggerHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
  
         //Create the Button.
 
-        _myButton = new CCUILabelWidget(CCUIConstants.DEFAULT_FONT, "bang");
+        _myButton = new CCUILabelWidget("bang");
         _myButton.mouseReleased.add(theE -> {
 			_myHandle.trigger();
 		});
         
-        _myHandle.progress().events().add(_myProgressListener = new CCTriggerProgressListener() {
-    		@Override
-    		public void start() {
-    			_myProgressWindow = new CCProgressWindow();
-    		}
-    		
-    		@Override
-    		public void progress(double theProgress) {
-    			_myProgressWindow.progress(theProgress);
-    		}
-    		
-    		@Override
-    		public void end() {
-    			_myProgressWindow.setVisible(false);
-    		}
-    		
-    		@Override
-    		public void interrupt() {}
-    	});
+        _myHandle.progress().startEvents.add((o)->_myProgressWindow = new CCProgressWindow());
+        _myHandle.progress().startEvents.add((o)->_myProgressWindow = new CCProgressWindow());
+        _myHandle.progress().progressEvents.add(p -> _myProgressWindow.progress(p));
+        _myHandle.progress().endEvents.add((o)->_myProgressWindow.setVisible(false));
 	}
 	
 	@Override
 	public void dispose() {
 		super.dispose();
-		_myHandle.progress().events().remove(_myProgressListener);
 	}
 	
 	@Override
@@ -75,11 +54,8 @@ public class CCEventTriggerControl extends CCValueControl<Object, CCEventTrigger
 		return null;
 	}
 	
-	
-	
 	@Override
-	public void addToPane(CCUIGridPane thePanel, int theY, int theDepth) {
-		thePanel.add(_myLabel, 	constraints(0, theY, GridBagConstraints.LINE_END, 	5, 5, 1, 5));
-		thePanel.add(_myButton, constraints(1, theY, GridBagConstraints.LINE_START, 5, 4, 1, 5));
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myButton);
 	}
 }

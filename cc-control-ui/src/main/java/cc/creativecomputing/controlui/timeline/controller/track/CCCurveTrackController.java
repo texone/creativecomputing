@@ -58,7 +58,7 @@ public abstract class CCCurveTrackController extends CCTrackController{
 		_myActiveTool = _myCreateTool;
 		if(theTrack.property() == null)return;
 		
-		theTrack.property().events().add(theValue -> {
+		theTrack.property().changeEvents.add(theValue -> {
 			if(_mySelectedPoints == null || _mySelectedPoints.size() == 0)return;
 			if(_myCreateTool.isInDrag())return;
 			if(_myTimelineController != null && _myTimelineController.transportController().isPlaying())return;
@@ -69,14 +69,12 @@ public abstract class CCCurveTrackController extends CCTrackController{
 			for(CCControlPoint myPoint:_mySelectedPoints){
 				applyValue(myPoint, null);
 			}
-			_myTrackView.render();
 		});
 	}
 	
 	@Override
 	public void setTool(CCTimelineTools theTool) {
 		_myActiveToolEnum = theTool;
-		_myTrackView.render();
 		switch(theTool){
 		case BEZIER_POINT:
 		case LINEAR_POINT:

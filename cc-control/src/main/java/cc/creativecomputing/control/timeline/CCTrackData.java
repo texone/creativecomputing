@@ -31,7 +31,7 @@ import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.control.timeline.point.CCLinearControlPoint;
 import cc.creativecomputing.control.timeline.point.CCMarkerPoint;
 import cc.creativecomputing.control.timeline.point.CCStepControlPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.math.CCMath;
 
 public class CCTrackData extends TreeSet<CCControlPoint>{
@@ -571,7 +571,7 @@ public class CCTrackData extends TreeSet<CCControlPoint>{
 			myPoint = new CCMarkerPoint();
 			break;
 		case TIMED_EVENT:
-			myPoint = new CCTimedEventPoint();
+			myPoint = new CCEventPoint();
 			break;
 		default:
 			myPoint = new CCLinearControlPoint();

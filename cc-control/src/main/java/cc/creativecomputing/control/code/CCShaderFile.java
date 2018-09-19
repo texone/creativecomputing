@@ -25,11 +25,14 @@ import cc.creativecomputing.io.CCNIOUtil;
 public class CCShaderFile extends CCShaderSource{
 
 	private Path _myFile;
+	private long _myLastModified;
 	
-	public CCShaderFile(CCShaderObject theShaderObject, Path theFile, String theSource){
-		super(theShaderObject, theSource);
+	public CCShaderFile(CCShaderObject theShaderObject, Path theFile){
+		super(theShaderObject);
 		_myFile = theFile;
+		_myLastModified = _myFile.toFile().lastModified();
 	}
+	
 	public void save(){
 		Path myFixedPath = Paths.get("/");
 		
@@ -42,7 +45,18 @@ public class CCShaderFile extends CCShaderSource{
 			myFixedPath = myFixedPath.resolve(myName);
 			
 		}
-		CCNIOUtil.saveString(myFixedPath, _mySourceCode);
+		CCNIOUtil.saveString(myFixedPath, sourceCode());
+	}
+	
+	@Override
+	public boolean isUpdated() {
+		return _myFile.toFile().lastModified() > _myLastModified;
+	}
+	
+	@Override
+	public String sourceCode() {
+		_myLastModified = _myFile.toFile().lastModified();
+		return CCNIOUtil.loadString(_myFile);
 	}
 	
 	public static void main(String[] args) {

@@ -22,8 +22,7 @@ import java.text.DecimalFormat;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
 import cc.creativecomputing.control.timeline.point.CCMarkerPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
-import cc.creativecomputing.controlui.CCUIConstants;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController.CCRulerInterval;
@@ -33,6 +32,7 @@ import cc.creativecomputing.gl.app.CCGLMouseButton;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 
 public class CCRulerView extends CCAbstractTrackView {
@@ -141,7 +141,7 @@ public class CCRulerView extends CCAbstractTrackView {
 	public static final CCColor SUB_STEP_COLOR = new CCColor(0.9f, 0.9f, 0.9f);
 	
 	@Override
-	public void drawContent(CCGraphics g) {
+	public void displayContent(CCGraphics g) {
 		g.translate(0, 0);
 		g.color(1d);
 		g.rect(0, 0, width(), height() );
@@ -158,7 +158,7 @@ public class CCRulerView extends CCAbstractTrackView {
 		
 		for (double step = myStart; step <= _myTransportController.upperBound(); step = step + ri.interval()) {
 			
-	        int myX = _myTransportController.timeToViewX(step);
+	        double myX = _myTransportController.timeToViewX(step);
 	        if(myX < 0)continue;
 
 			g.strokeWeight(THICK_STROKE);
@@ -167,7 +167,7 @@ public class CCRulerView extends CCAbstractTrackView {
 			g.color(STEP_COLOR);
 			g.line(myX, 0, myX, height());
 			
-			int myTimeX = myX;
+			double myTimeX = myX;
 			
 			g.color(SUB_STEP_COLOR);
 			g.strokeWeight(THIN_STROKE);
@@ -180,9 +180,9 @@ public class CCRulerView extends CCAbstractTrackView {
 			
 			String myTimeString = _myTransportController.timeToString(step);
 			
-			g.textFont(CCUIConstants.DEFAULT_FONT);
-	        g.color(TEXT_COLOR);
-			g.text(myTimeString, myTimeX + 5, 11 * CCUIConstants.SCALE);
+//			g.textFont(CCUIConstants.DEFAULT_FONT);
+//	        g.color(TEXT_COLOR);
+//			g.text(myTimeString, myTimeX + 5, 11 * CCUIConstants.SCALE);
 		}
 		CCControlPoint myCurrentPoint = _myTransportController.trackData().ceiling(new CCControlPoint(_myTransportController.lowerBound(),0));
 //		if(myCurrentPoint == null) {
@@ -214,7 +214,7 @@ public class CCRulerView extends CCAbstractTrackView {
             	g.strokeWeight(0.5);
             	g.color(new CCColor(100,100,255,50));
             	
-            	CCTimedEventPoint myPoint = (CCTimedEventPoint) myCurrentPoint;
+            	CCEventPoint myPoint = (CCEventPoint) myCurrentPoint;
         		CCVector2 myLowerCorner = _myTransportController.curveToViewSpace(new CCControlPoint(myCurrentPoint.time(), 1));
         		CCVector2 myUpperCorner = _myTransportController.curveToViewSpace(new CCControlPoint(myPoint.endPoint().time(),0));
 
@@ -231,7 +231,7 @@ public class CCRulerView extends CCAbstractTrackView {
             myCurrentPoint = myCurrentPoint.next();
         }
 		
-		int myTransportX = Math.max(0, _myTransportController.timeToViewX(_myTransportController.time()));
+		double myTransportX = CCMath.max(0, _myTransportController.timeToViewX(_myTransportController.time()));
 
 		g.color(0.6f);
 		g.beginShape(CCDrawMode.POLYGON);
@@ -245,8 +245,8 @@ public class CCRulerView extends CCAbstractTrackView {
 		g.color(new CCColor(0.8f, 0.8f, 0.8f));
 		g.line(myTransportX, height()/2, myTransportX, height());
 		
-		int myLoopStartX = Math.max(0,_myTransportController.timeToViewX(_myTransportController.loopStart()));
-		int myLoopEndX = Math.max(0,_myTransportController.timeToViewX(_myTransportController.loopEnd()));
+		double myLoopStartX = CCMath.max(0,_myTransportController.timeToViewX(_myTransportController.loopStart()));
+		double myLoopEndX = CCMath.max(0,_myTransportController.timeToViewX(_myTransportController.loopEnd()));
 		
 		if(myLoopStartX == myLoopEndX)return;
 

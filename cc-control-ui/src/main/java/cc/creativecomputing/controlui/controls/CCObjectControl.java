@@ -26,7 +26,6 @@ import cc.creativecomputing.control.CCControlMatrix;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.code.CCShaderSource;
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.control.handles.CCColorPropertyHandle;
 import cc.creativecomputing.control.handles.CCControlMatrixHandle;
@@ -39,32 +38,30 @@ import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
-import cc.creativecomputing.control.handles.CCShaderSourceHandle;
 import cc.creativecomputing.control.handles.CCSplineHandle;
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.controlui.CCColorMap;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.controlui.CCPropertyPopUp;
-import cc.creativecomputing.controlui.controls.code.CCShaderCompileControl;
+import cc.creativecomputing.controlui.CCObjectPropertyPopUp;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
-import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.spline.CCSpline;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.draw.CCUIGradientDrawable;
 import cc.creativecomputing.ui.draw.CCUIStrokeDrawable;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.widget.CCUIIconWidget;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
-public class CCObjectControl extends CCUIGridPane implements CCControl{
+public class CCObjectControl extends CCUIWidget implements CCControl{
 	
 	private CCControlComponent _myInfoPanel;
-	public CCUIGridPane _myControlPane = null;
+	public CCUIWidget _myControlPane = null;
 	
 	private boolean _myIsSelected = false;
 	
@@ -72,26 +69,18 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 	
 	protected CCObjectPropertyHandle _myProperty;
 	
-	private CCUIHorizontalFlowPane myBarWidget;
+	private CCUIWidget myBarWidget;
 	
 	private CCEvent<Object> _myListener;
 
 	public CCObjectControl(CCObjectPropertyHandle thePropertyHandle, CCControlComponent theInfoPanel, int theDepth){
-		stretchWidth(true);
-		columnWidths(10,10,10);
-		width(200);
-		rowHeight(25);
+		flexDirection(CCYogaFlexDirection.COLUMN);
+		
 		_myProperty = thePropertyHandle;
 
-		_myControlPane = new CCUIGridPane();
-		_myControlPane.rowHeight(25);
-		_myControlPane.style().topInset(5);
-		_myControlPane.style().bottomInset(15);
-		_myControlPane.style().rightInset(5);
-		_myControlPane.verticalSpace(10);
-		_myControlPane.horizontalSpace(20);
-		_myControlPane.columnWidths(10,10,10);
-		_myControlPane.stretchWidth(true);
+		_myControlPane = new CCUIWidget();
+		_myControlPane.flexDirection(CCYogaFlexDirection.COLUMN);
+		_myControlPane.padding(CCYogaEdge.VERTICAL, 5);
 		_myControlPane.style().background(new CCUIFillDrawable(CCColorMap.getColor(_myProperty.path()).brighter()));
 		_myProperty.changeEvents.add(_myListener = theValue ->{
 			try{
@@ -100,11 +89,7 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 				}
 				createUI(false);
 				if(_myIsSelected){
-					CCUITableEntry myConstraints = new CCUITableEntry();
-					myConstraints.column = 0;
-					myConstraints.row = 1;
-					myConstraints.columnSpan = 3;
-					addChild(_myControlPane, myConstraints);
+					addChild(_myControlPane);
 					
 				}
 			}catch(Exception e){
@@ -112,11 +97,11 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 			}
 		});
 		
-		myBarWidget = new CCUIHorizontalFlowPane(0, 0);
-		myBarWidget.translation().set(0,0);
-		myBarWidget.style().inset(5);
-		myBarWidget.space(5);
-		myBarWidget.stretchWidth(true);
+		myBarWidget = new CCUIWidget();
+		myBarWidget.flexDirection(CCYogaFlexDirection.ROW);
+		myBarWidget.alignItems(CCYogaAlign.CENTER);
+		myBarWidget.debugInfo("BAR", CCColor.YELLOW);
+		myBarWidget.padding(CCYogaEdge.ALL, 5);
 		
 		CCUIGradientDrawable myGradientBack = new CCUIGradientDrawable();
 		CCColor myColor = CCColorMap.getColor(_myProperty.path());
@@ -125,7 +110,8 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 		myBarWidget.style().background(myGradientBack);
 
 		CCUIIconWidget myIconWidget = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_DOWN);
-		myIconWidget.style().background(null);
+		myIconWidget.padding(CCYogaEdge.ALL, 2);
+		myIconWidget.style().background(CCUIWidgetStyle.OFF);
 		myIconWidget.mouseReleased.add(event -> {
 			switch(event.button){
 			case BUTTON_LEFT:
@@ -146,9 +132,10 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 		
 		CCUILabelWidget myLabel = new CCUILabelWidget(_myProperty.name());
 		myLabel.mousePressed.add(event -> {
+			CCLog.info("LABEL");
 			switch(event.button){
 			case BUTTON_RIGHT:
-				new CCPropertyPopUp(CCObjectControl.this, _myProperty, myLabel, event.x, event.y);
+				new CCObjectPropertyPopUp(CCObjectControl.this, _myProperty, myLabel, event.x, event.y);
 				break;
 			default:
 				break;
@@ -156,9 +143,6 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 			
 		});
 		myBarWidget.addChild(myLabel);
-		CCUITableEntry myTableEntry = new CCUITableEntry();
-		myTableEntry.column = 0;
-		myTableEntry.columnSpan = 3;
 		addChild(myBarWidget);
 		
 		_myDepth = theDepth;
@@ -178,14 +162,6 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 		}
 	}
 	
-	private CCUITableEntry entryInfo(int theRow){
-		CCUITableEntry myConstraints = new CCUITableEntry();
-		myConstraints.column = 0;
-		myConstraints.row = theRow;
-		myConstraints.columnSpan = 3;
-		return myConstraints;
-	}
-	
 	@Override
 	public void dispose() {
 		_myProperty.changeEvents.remove(_myListener);
@@ -196,14 +172,11 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 	
 	public void open() {
 		createUI(false);
-		addChild(_myControlPane, entryInfo(1));
+		addChild(_myControlPane);
+		CCLog.info(this,parent());
+		root().calculateLayout();
 		_myIsSelected = true;
 		CCControlApp.preferences.put(_myProperty.path().toString() + "/open" , true + "");
-	}
-	
-	@Override
-	public void drawContent(CCGraphics g) {
-		super.drawContent(g);
 	}
 	
 	public void close() {
@@ -211,11 +184,12 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 			myControl.dispose();
 		}
 		removeChild(_myControlPane);
+		root().calculateLayout();
 		_myIsSelected = false;	
 		CCControlApp.preferences.put(_myProperty.path().toString() + "/open" , false + "");
 	}
 	
-	public CCUIGridPane controlComponent(){
+	public CCUIWidget controlComponent(){
 		return _myControlPane;
 	}
 	
@@ -246,11 +220,9 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 		creatorMap.put(CCColor.class, (myHandle, myInfoPanel) -> {return new CCColorControl((CCColorPropertyHandle)myHandle, myInfoPanel);});
 		creatorMap.put(CCGradient.class, (myHandle, myInfoPanel) -> {return new CCGradientControl((CCGradientPropertyHandle)myHandle, myInfoPanel);});
 		creatorMap.put(String.class, (myHandle, myInfoPanel) -> {return new CCStringControl((CCStringPropertyHandle)myHandle, myInfoPanel);});
-		creatorMap.put(CCControlMatrix.class, (myHandle, myInfoPanel) -> {return new CCControlMatrixControl((CCControlMatrixHandle)myHandle, myInfoPanel);});
 		creatorMap.put(CCEnvelope.class, (myHandle, myInfoPanel) -> {return new CCEnvelopeControl((CCEnvelopeHandle)myHandle, myInfoPanel);});
 		creatorMap.put(CCSpline.class, (myHandle, myInfoPanel) -> {return new CCSplineControl((CCSplineHandle)myHandle, myInfoPanel);});
 		creatorMap.put(Path.class, (myHandle, myInfoPanel) -> {return new CCPathControl((CCPathHandle)myHandle, myInfoPanel);});
-		creatorMap.put(CCShaderSource.class, (myHandle, myInfoPanel) -> {return new CCShaderCompileControl((CCShaderSourceHandle)myHandle, myInfoPanel);});
 	}
 	
 	private static CCControlCreator handleCreator(Class<?> theClass){
@@ -265,7 +237,7 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 	}
 	
 	private void createUI(boolean theHideUnchanged){
-		_myControlPane.removeAll();
+		_myControlPane.removeAllChildren();
 		int myY = 0;
 		
 		for(CCPropertyHandle<?> myPropertyHandle:_myProperty.children().values()){
@@ -288,7 +260,6 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 			}
 
 			myControl.addToPane(_myControlPane, myY, _myDepth + 1);
-			_myControlPane.updateLayout();
 			myY++;
 		}
 	}
@@ -311,7 +282,7 @@ public class CCObjectControl extends CCUIGridPane implements CCControl{
 	}
 
 	@Override
-	public void addToPane(CCUIGridPane thePanel, int theY, int theDepth) {
-		thePanel.addChild(this, entryInfo(theY));
+	public void addToPane(CCUIWidget thePanel, int theY, int theDepth) {
+		thePanel.addChild(this);
 	}
 }

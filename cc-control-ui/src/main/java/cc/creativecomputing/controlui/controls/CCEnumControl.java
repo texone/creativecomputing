@@ -18,9 +18,9 @@ package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
 import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>{
 	
@@ -34,8 +34,7 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
 		});
         
         _myDropDown = new CCUIDropDownWidget();
-		_myDropDown.width(100);
-		_myDropDown.stretchWidth(true);
+        _myDropDown.padding(CCYogaEdge.ALL, 4);
 		
         for(Enum<?> myEnum:_myHandle.enumConstants()){
         	_myDropDown.addItem(myEnum.name());
@@ -54,10 +53,9 @@ public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>
 	public Enum<?> value() {
 		return _myHandle.value();
 	}
-	
+
 	@Override
-	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, 0, theY);
-		thePane.addChild(_myDropDown, 1, theY);
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myDropDown);
 	}
 }

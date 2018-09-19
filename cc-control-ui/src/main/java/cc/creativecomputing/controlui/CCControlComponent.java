@@ -22,45 +22,45 @@ import cc.creativecomputing.controlui.controls.CCObjectControl;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLWindow;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.widget.CCUIScrollWidget;
 import cc.creativecomputing.ui.widget.CCUITreeWidget;
 import cc.creativecomputing.ui.widget.CCUITreeWidget.CCUITreeNode;
+import cc.creativecomputing.yoga.CCYogaNode;
+import cc.creativecomputing.ui.widget.CCUIWidget;
 
-public class CCControlComponent extends CCUIHorizontalFlowPane{
+public class CCControlComponent extends CCUIWidget{
 
 	private CCUITreeWidget _myTreeWidget;
 
-	private CCUIGridPane _myPropertyPane;
+	private CCUIWidget _myPropertyPane;
 	
 	public CCControlComponent(CCGLWindow theMainFrame){
+		flexDirection(CCYogaFlexDirection.ROW);
+		flex(1);
 		mouseMoved.add(theE ->{
 //			CCLog.info("WHOA");
 		});
-		
-		stretchHeight(true);
-		stretchWidth(true);
+		style().background(new CCUIFillDrawable(CCColor.MAGENTA));
 	
 		_myTreeWidget = new CCUITreeWidget("app");
 		_myTreeWidget.width(300);
 		_myTreeWidget.style().background(new CCUIFillDrawable(CCColor.BLUE));
 		addChild(_myTreeWidget);
 
-		_myPropertyPane = new CCUIGridPane(600, 400);
+		_myPropertyPane = new CCUIWidget();
+		_myPropertyPane.flexDirection(CCYogaFlexDirection.COLUMN);
+		_myPropertyPane.widthPercent(100);
+//		_myPropertyPane.flex(1);
 		_myPropertyPane.style().background(new CCUIFillDrawable(CCColor.RED));
-		_myPropertyPane.space(10);
-		_myPropertyPane.columnWidths(10,10,10);
-		_myPropertyPane.rowHeight(25);
 
-		CCUIScrollWidget myScrollWidget = new CCUIScrollWidget(_myPropertyPane, 614, 800, CCUIScrollWidget.DEFAULT_SLIDER_WIDTH, false, true);
-		myScrollWidget.stretchHeight(true);
-		myScrollWidget.style().background(new CCUIFillDrawable(CCColor.YELLOW));
+		CCUIScrollWidget myScrollWidget = new CCUIScrollWidget(_myPropertyPane, CCUIScrollWidget.DEFAULT_SLIDER_WIDTH, false, true);
+		myScrollWidget.width(600);
 		addChild(myScrollWidget);
 		
 		
-//		
+		
 //		_myTimelineView = new CCTimelineContainerView(theMainFrame);
 //		_myTimelineContainer = new CCTimelineContainer(_myTreeComponent.propertyMap());
 //		_myTimelineContainer.timelineChangeListener().add(new TimelineChangeListener() {
@@ -118,12 +118,13 @@ public class CCControlComponent extends CCUIHorizontalFlowPane{
 	}
 
 	public void showContent(CCObjectPropertyHandle theHandle){
+		CCLog.info("show content");
         if(_myPropertyPane == null) return;
-        _myPropertyPane.removeAll();
+        _myPropertyPane.removeAllChildren();
         int y = 0;
 		CCObjectControl myObjectControl = new CCObjectControl(theHandle, this, 0);
 		myObjectControl.addToPane(_myPropertyPane, y, 0);
-		CCLog.info(myObjectControl,myObjectControl.parent());
+		CCLog.info(myObjectControl,myObjectControl.parent().get());
 	}
 
 	private void createTree(CCUITreeNode theNode, CCObjectPropertyHandle theHandle){

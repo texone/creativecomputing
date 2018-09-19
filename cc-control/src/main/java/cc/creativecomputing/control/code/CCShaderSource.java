@@ -16,28 +16,22 @@
  ******************************************************************************/
 package cc.creativecomputing.control.code;
 
-public class CCShaderSource {
-
-	protected String _mySourceCode;
+public abstract class CCShaderSource {
 	
 	protected CCShaderObject _myShaderObject;
 	
-	public CCShaderSource(CCShaderObject theShaderObject, String theSourceCode){
+	public CCShaderSource(CCShaderObject theShaderObject){
 		_myShaderObject = theShaderObject;
-		_mySourceCode = theSourceCode;
 	}
 	
 	public CCShaderObject object(){
 		return _myShaderObject;
 	}
 	
-	public String sourceCode(){
-		return _mySourceCode;
-	}
+	public abstract String sourceCode();
 	
-	public void sourceCode(String theSourceCode){
-		_mySourceCode = theSourceCode;
-		_myShaderObject.update();
+	public boolean isUpdated() {
+		return false;
 	}
 
 	public String errorLog() {
@@ -45,8 +39,5 @@ public class CCShaderSource {
 	}
 	
 	public void save(){
-	}
-	
-	public static void main(String[] args) {
 	}
 }

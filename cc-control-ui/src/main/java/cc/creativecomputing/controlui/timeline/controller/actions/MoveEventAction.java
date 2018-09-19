@@ -36,10 +36,9 @@
 package cc.creativecomputing.controlui.timeline.controller.actions;
 
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackDataController;
-import cc.creativecomputing.controlui.util.Action;
 
 /**
  * @author christianriekoff
@@ -48,7 +47,7 @@ import cc.creativecomputing.controlui.util.Action;
 public class MoveEventAction implements CCUndoCommand{
 	
 	private CCTrackDataController _myEventTrackController;
-	private CCTimedEventPoint _myEventPoint;
+	private CCEventPoint _myEventPoint;
 	private CCControlPoint _myEndControlPoint;
 	private CCControlPoint _myStartControlPoint;
 	private double _myEventStartEnd;
@@ -56,7 +55,7 @@ public class MoveEventAction implements CCUndoCommand{
 	
 	public MoveEventAction(
 		CCEventTrackController theEventTrackController, 
-		CCTimedEventPoint theEventPoint, 
+		CCEventPoint theEventPoint, 
 		CCControlPoint theStartControlPoint, 
 		CCControlPoint theEndControlPoint,
 		double theEventStartEnd,
@@ -74,14 +73,12 @@ public class MoveEventAction implements CCUndoCommand{
 	public void apply() {
 		_myEventTrackController.trackData().move(_myEventPoint, _myEndControlPoint);
 		_myEventPoint.endTime(_myEventEndEnd);
-		_myEventTrackController.view().render();
 	}
 
 	@Override
 	public void undo() {
 		_myEventTrackController.trackData().move(_myEventPoint, _myStartControlPoint);
 		_myEventPoint.endTime(_myEventStartEnd);
-		_myEventTrackController.view().render();
 	}
 
 }

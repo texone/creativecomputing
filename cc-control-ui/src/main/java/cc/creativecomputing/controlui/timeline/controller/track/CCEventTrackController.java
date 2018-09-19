@@ -19,17 +19,18 @@ package cc.creativecomputing.controlui.timeline.controller.track;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.actions.CCAddControlPointCommand;
 import cc.creativecomputing.controlui.timeline.controller.actions.CCControlUndoHistory;
 import cc.creativecomputing.controlui.timeline.tools.CCEventTrackTool;
 import cc.creativecomputing.controlui.timeline.tools.CCTimelineTools;
 import cc.creativecomputing.controlui.timeline.tools.CCEventTrackTool.EventAction;
-import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.gl.app.CCGLMouseEvent;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCVector2;
@@ -40,7 +41,33 @@ import cc.creativecomputing.math.CCVector2;
  */
 public class CCEventTrackController extends CCTrackController {
 	
-	private CCListenerManager<CCEventTrackListener> _myEventTrackListener = CCListenerManager.create(CCEventTrackListener.class);
+	public CCEventManager<CCEventPoint> createEvents = new CCEventManager<>();
+	
+	public CCEventManager<CCEventPoint> changeEvents = new CCEventManager<>();
+	
+	public CCEventManager<CCEventPoint> deleteEvents = new CCEventManager<>();
+	
+	public CCEventManager<CCEventPoint> propertyEvents = new CCEventManager<>();
+	
+	public CCEventManager<CCEventPoint> clickEvents = new CCEventManager<>();
+	
+	public static class CCEventTrackTimeEvent{
+		public final double time;
+		public final CCEventPoint point;
+		
+		private CCEventTrackTimeEvent(double theTime, CCEventPoint thePoint) {
+			time = theTime;
+			point = thePoint;
+		}
+	}
+	public CCEventManager<CCEventTrackTimeEvent> timeEvents = new CCEventManager<>();
+//	void onTime(double theTime, CCEventTrackController theController, CCEventPoint thePoint);
+//	
+//	void onTimeChange(double theTime, double theOffset, CCEventTrackController theController, CCEventPoint thePoint);
+	
+	public CCEventManager<Object> outEvents = new CCEventManager<>();
+	
+//	void renderTimedEvent(CCEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double UpperTime, CCGraphics theG2d);
 	
 	public CCEventTrackTool _myEventTrackTool;
 
@@ -89,10 +116,6 @@ public class CCEventTrackController extends CCTrackController {
 		return null;
 	}
 	
-	public CCListenerManager<CCEventTrackListener> events(){
-		return _myEventTrackListener;
-	}
-	
 	public static final String EVENT_TYPES = "eventTypes";
 	
 	public List<String> eventTypes(){
@@ -104,25 +127,25 @@ public class CCEventTrackController extends CCTrackController {
 		return myResult;
 	}
 	
-	public void delete(CCTimedEventPoint theEvent) {
+	public void delete(CCEventPoint theEvent) {
 		trackData().remove(theEvent);
-		_myEventTrackListener.proxy().onDelete(this, theEvent);
+		deleteEvents.event(theEvent);
 	}
 	
-	public void properties(CCTimedEventPoint theEvent) {
-		_myEventTrackListener.proxy().onProperties(this, theEvent);
+	public void properties(CCEventPoint theEvent) {
+		propertyEvents.event(theEvent);
 	}
 	
-	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double upperTime, CCGraphics theG2d){
+	public void renderTimedEvent(CCEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double upperTime, CCGraphics theG2d){
 		_myEventTrackListener.proxy().renderTimedEvent(theTimedEvent, theLower, theUpper, lowerTime, upperTime, theG2d);
 	}
 	
 	public void createPoint(CCGLMouseEvent theEvent, String theEventType) {
 		CCVector2 myViewCoords = new CCVector2(theEvent.x, theEvent.y);
-		CCTimedEventPoint myPoint = _myEventTrackTool.createPoint(myViewCoords);
+		CCEventPoint myPoint = _myEventTrackTool.createPoint(myViewCoords);
 		myPoint.eventType(theEventType);
-		_myEventTrackListener.proxy().onCreate(this, myPoint);
-		CCControlUndoHistory.instance().apply(new CCAddControlPointCommand(this, myPoint));
+		createEvents.event(myPoint);
+		CCControlUndoHistory.instance().apply(new CCAddControlPointCommand(_myTrack.trackData(), myPoint));
 	}
 	
 	
@@ -138,9 +161,9 @@ public class CCEventTrackController extends CCTrackController {
 	 */
 	
 	
-	private CCTimedEventPoint pointAt(double theTime) {
+	private CCEventPoint pointAt(double theTime) {
 		CCControlPoint myCurveCoords = new CCControlPoint(theTime, 0);
-		CCTimedEventPoint myLower = (CCTimedEventPoint)trackData().lower(myCurveCoords);
+		CCEventPoint myLower = (CCEventPoint)trackData().lower(myCurveCoords);
 		if(myLower == null) return null;
 		CCControlPoint myUpper = myLower.endPoint();
 		if(myUpper == null) return null;
@@ -150,38 +173,28 @@ public class CCEventTrackController extends CCTrackController {
 		return null;
 	}
 	
-	public CCTimedEventPoint clickedPoint(CCGLMouseEvent e) {
+	public CCEventPoint clickedPoint(CCGLMouseEvent e) {
 		CCVector2 myViewCoords = new CCVector2(e.x, e.y);
 		CCControlPoint myCurveCoords = viewToCurveSpace(myViewCoords, true);
 		return pointAt(myCurveCoords.time());
 	}
 	
-	public CCTimedEventPoint editedEvent(){
+	public CCEventPoint editedEvent(){
 		return _myEventTrackTool.editedEvent();
 	}
 
 	@Override
 	public void timeImplementation(double theTime, double theValue) {
-		CCTimedEventPoint myEventPoint = pointAt(theTime);
+		CCEventPoint myEventPoint = pointAt(theTime);
 		
-	    	if(myEventPoint == null || myEventPoint.content() == null || myEventPoint.content().value() == null){
-	    		_myTrack.property().restorePreset();
-	    		_myEventTrackListener.proxy().onOut();
-	    		return;
-	    	}
+		if(myEventPoint == null || myEventPoint.content() == null || myEventPoint.content().value() == null){
+			_myTrack.property().restorePreset();
+			outEvents.event();
+			return;
+		}
 	
-	    	_myTrack.property().valueCasted(myEventPoint.content().value(), false);
-	    	_myEventTrackListener.proxy().onTime(theTime, this, myEventPoint);
-
-//    	for (TimelineListener myListener : _myTimelineListener) {
-//			TimedEvent myEvent = new TimedEvent(
-//				myEventPoint,
-//				theTime, 
-//				myController.track().property().path().toString(), 
-//				TrackType.TIMED_DATA
-//			);
-//			myListener.onTimedEvent(myEvent);
-//		}
+		_myTrack.property().valueCasted(myEventPoint.content().value(), false);
+		timeEvents.event(new CCEventTrackTimeEvent(theTime, myEventPoint));
 	}
 	
 	

@@ -16,7 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.arrange;
 
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackAdapter;
@@ -53,7 +53,7 @@ public class CCClipTrackObject extends CCEventTrackAdapter{
 	}
 	
 	@Override
-	public void onTime(double theTime, CCEventTrackController theController, CCTimedEventPoint thePoint) {
+	public void onTime(double theTime, CCEventTrackController theController, CCEventPoint thePoint) {
 		if(_myTimelineController == null)return;
 		_myTimelineController.time(theTime - thePoint.time() - thePoint.contentOffset());
 	}

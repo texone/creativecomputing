@@ -16,26 +16,26 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.track;
 
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCVector2;
 
 public interface CCEventTrackListener{
-	void onCreate(CCEventTrackController theController, CCTimedEventPoint thePoint);
+	void onCreate(CCEventTrackController theController, CCEventPoint thePoint);
 	
-	void onChange(CCEventTrackController theController, CCTimedEventPoint thePoint);
+	void onChange(CCEventTrackController theController, CCEventPoint thePoint);
 	
-	void onDelete(CCEventTrackController theController, CCTimedEventPoint thePoint);
+	void onDelete(CCEventTrackController theController, CCEventPoint thePoint);
 	
-	void onProperties(CCEventTrackController theController, CCTimedEventPoint thePoint);
+	void onProperties(CCEventTrackController theController, CCEventPoint thePoint);
 	
-	void onClick(CCEventTrackController theController, CCTimedEventPoint thePoint);
+	void onClick(CCEventTrackController theController, CCEventPoint thePoint);
 	
-	void onTime(double theTime, CCEventTrackController theController, CCTimedEventPoint thePoint);
+	void onTime(double theTime, CCEventTrackController theController, CCEventPoint thePoint);
 	
-	void onTimeChange(double theTime, double theOffset, CCEventTrackController theController, CCTimedEventPoint thePoint);
+	void onTimeChange(double theTime, double theOffset, CCEventTrackController theController, CCEventPoint thePoint);
 	
 	void onOut();
 	
-	void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double UpperTime, CCGraphics theG2d);
+	void renderTimedEvent(CCEventPoint theTimedEvent, CCVector2 theLower, CCVector2 theUpper, double lowerTime, double UpperTime, CCGraphics theG2d);
 }

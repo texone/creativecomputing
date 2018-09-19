@@ -25,8 +25,11 @@ import cc.creativecomputing.core.logging.CCLog;
 
 public class CCBlendableTool<Type extends CCBlendable<Type>> extends CCCreateTool{
 	
-    public CCBlendableTool(CCBlendableTrackController<Type> theController) {
-		super(theController);
+	private CCBlendableTrackController<Type> _myController;
+	
+    public CCBlendableTool(CCBlendableTrackController<Type> theController, CCSelectTool theSelectTool) {
+		super(theController, theSelectTool);
+		_myController = theController;
 		_myTool = CCTimelineTools.LINEAR_POINT;
 	}
     
@@ -42,17 +45,16 @@ public class CCBlendableTool<Type extends CCBlendable<Type>> extends CCCreateToo
 		default:
 			break;
 		}
-		CCLog.info((Type)_myDataView.property().value());
-		myControlPoint.blendable((Type)_myDataView.property().value());
+		CCLog.info((Type)_myController.property().value());
+		myControlPoint.blendable((Type)_myController.property().value());
 		CCLog.info(myControlPoint.blendable());
-	    _myDataView.trackData().add(myControlPoint);
-	    _myDataView.view().render();
+		_myController.trackData().add(myControlPoint);
 	    return myControlPoint;
 	}
 	
 	@Override
 	public void onSelection(CCControlPoint thePoint) {
 		if(thePoint.blendable() == null)return;
-		_myDataView.property().valueCasted(thePoint.blendable() , false);
+		_myController.property().valueCasted(thePoint.blendable() , false);
 	}
 }

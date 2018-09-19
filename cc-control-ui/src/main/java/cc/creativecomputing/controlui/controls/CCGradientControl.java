@@ -19,9 +19,8 @@ package cc.creativecomputing.controlui.controls;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUIGradientWidget;
+import cc.creativecomputing.ui.widget.CCUIWidget;
 
 public class CCGradientControl extends CCValueControl<CCGradient, CCGradientPropertyHandle>{
 	
@@ -41,21 +40,18 @@ public class CCGradientControl extends CCValueControl<CCGradient, CCGradientProp
  
         //Create the Button.
 		_myGradientEditor.gradient(_myGradient);
-		_myGradientEditor.stretchWidth(true);
 		_myGradientEditor.changeEvents.add(theGradient -> {
 			_myHandle.value(theGradient, false);
 		});
-		_myGradientEditor.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
 	}
 	
 	@Override
 	public CCGradient value() {
 		return _myGradient;
 	}
-	
+
 	@Override
-	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, 0, theY);
-		thePane.addChild(_myGradientEditor, 1, theY, 2, 1);
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myGradientEditor);
 	}
 }

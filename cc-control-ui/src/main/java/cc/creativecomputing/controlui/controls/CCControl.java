@@ -16,11 +16,11 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import cc.creativecomputing.ui.layout.CCUIGridPane;
+import cc.creativecomputing.ui.widget.CCUIWidget;
 
 public interface CCControl {
 	
-	void addToPane(CCUIGridPane thePanel, int theY, int theDepth);
+	void addToPane(CCUIWidget thePanel, int theY, int theDepth);
 	
 	void dispose();
 }

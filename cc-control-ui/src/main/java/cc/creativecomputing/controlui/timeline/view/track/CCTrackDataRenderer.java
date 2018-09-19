@@ -17,7 +17,7 @@
 
 package cc.creativecomputing.controlui.timeline.view.track;
 
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.graphics.CCGraphics;
 
 /**
@@ -26,7 +26,7 @@ import cc.creativecomputing.graphics.CCGraphics;
  */
 public class CCTrackDataRenderer {
 
-	public void renderTimedEvent(CCTimedEventPoint theTimedEvent, CCAbstractTrackDataView<?> theView, CCGraphics g) {
+	public void renderTimedEvent(CCEventPoint theTimedEvent, CCAbstractTrackDataView<?> theView, CCGraphics g) {
 		
 	}
 }

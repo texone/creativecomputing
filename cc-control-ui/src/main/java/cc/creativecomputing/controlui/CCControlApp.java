@@ -19,11 +19,6 @@ package cc.creativecomputing.controlui;
 import java.util.prefs.Preferences;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
-import cc.creativecomputing.controlui.timeline.controller.CCFileManager;
-import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
-import cc.creativecomputing.controlui.timeline.view.transport.CCTransportView;
-import cc.creativecomputing.controlui.view.menu.CCFileMenu;
-import cc.creativecomputing.controlui.view.menu.CCTimelineMenu;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
@@ -33,13 +28,13 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.draw.CCUIFillDrawable;
-import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
 import cc.creativecomputing.ui.widget.CCUIMenu;
 import cc.creativecomputing.ui.widget.CCUIMenuBar;
 import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaFlexDirection;
 
-public class CCControlApp  extends CCGLApp{
+public class CCControlApp extends CCGLApp{
 	
 	public static class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 		  public void uncaughtException(Thread t, Throwable e) {
@@ -62,13 +57,8 @@ public class CCControlApp  extends CCGLApp{
 		}
 	
 	private CCObjectPropertyHandle _myRootHandle;
-
-	protected CCFileManager _myFileManager;
-	private CCTimelineContainer _myTimelineContainer;
 	
 	private CCControlComponent _myControlComponent;
-	
-	private CCTransportView _myTransport;
 
 	private CCUIMenuBar _myMenuBar;
 	
@@ -80,42 +70,28 @@ public class CCControlApp  extends CCGLApp{
 	private CCUIContext _myContext;
 	
 	private void init(Object theObject){
-        
-        CCUIVerticalFlowPane myVerticalPane = new CCUIVerticalFlowPane();
-		myVerticalPane.style().inset(0);
-		myVerticalPane.space(5);
-		myVerticalPane.translation().set(-framebufferSize().x / 2, framebufferSize().y / 2);
-		myVerticalPane.stretchWidth(true);
-		myVerticalPane.stretchHeight(true);
-		myVerticalPane.updateMatrices();
-		myVerticalPane.style().background(new CCUIFillDrawable(CCColor.CYAN));
-
-        _myContext = new CCUIContext(this, myVerticalPane);
+        _myContext = new CCUIContext(this, CCYogaFlexDirection.COLUMN);
 
 		_myRootHandle = new CCObjectPropertyHandle(theObject, "settings");
-		_myTimelineContainer = new CCTimelineContainer(this, _myRootHandle);
         _myControlComponent = new CCControlComponent(this);
         _myControlComponent.setData(_myRootHandle);
-        
-        
-       
-        _myFileManager = new CCFileManager();
         
         CCUIWidgetStyle myMenuStyle = CCUIMenu.createDefaultStyle();
 		myMenuStyle.font(CCUIContext.FONT_30);
 		myMenuStyle.itemSelectBackground(new CCColor(0.5d));
-		myMenuStyle.background(null);
+		myMenuStyle.backgroundFill(new CCColor(0.2d));
 		
         _myMenuBar = new CCUIMenuBar(myMenuStyle);
-        _myMenuBar.add("file", new CCFileMenu(myMenuStyle, _myFileManager, _myTimelineContainer));
-        _myMenuBar.add("timeline", new CCTimelineMenu(myMenuStyle, _myFileManager, _myTimelineContainer));
-        _myContext.widget().addChild(_myMenuBar);
+        _myMenuBar.padding(CCYogaEdge.ALL, 10);
+//        _myMenuBar.add("file", new CCFileMenu(myMenuStyle, _myFileManager, _myTimelineContainer));
+//        _myMenuBar.add("timeline", new CCTimelineMenu(myMenuStyle, _myFileManager, _myTimelineContainer));
+        _myMenuBar.margin(CCYogaEdge.BOTTOM, 4);
+        _myContext.addChild(_myMenuBar);
 
-		_myTransport = new CCTransportView(_myTimelineContainer);
-		_myContext.widget().addChild(_myTransport);
+		
         
         // Add content to the window.
-		_myContext.widget().addChild(_myControlComponent);
+		_myContext.addChild(_myControlComponent);
         
 ////        theApp.window().updateEvents.add(timer -> {update(timer.deltaTime());});
         
@@ -202,7 +178,7 @@ public class CCControlApp  extends CCGLApp{
 	public void update(final CCGLTimer theTimer) {
 		if(!_cUpdate)return;
 		if(_myContext == null)return;
-		_myContext.widget().update(theTimer);
+		_myContext.update(theTimer);
 		try{
 //			_myControlComponent.timeline().update(theDeltaTime);
 			_myRootHandle.update(theTimer.deltaTime());
@@ -213,11 +189,13 @@ public class CCControlApp  extends CCGLApp{
 	
 	@Override
 	public void display(CCGraphics g) {
+
+//		g.debug();
 		if(_myContext == null)return;
-		g.clearColor(0); 
+		g.ortho();
 		g.clear();
 		g.pushAttribute();
-		_myContext.widget().draw(g);
+		_myContext.display(g);
 		g.popAttribute();
 	}
 	

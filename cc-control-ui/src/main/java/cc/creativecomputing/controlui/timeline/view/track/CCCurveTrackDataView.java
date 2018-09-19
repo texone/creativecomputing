@@ -147,7 +147,7 @@ public class CCCurveTrackDataView extends CCAbstractTrackDataView<CCCurveTrackCo
 	public void drawTimelineInfos(CCGraphics g) {
 		
 		double myTime = _myTimelineController.transportController().time();
-		int myViewX = _myController.timeToViewX(myTime) ;
+		double myViewX = _myController.timeToViewX(myTime) ;
 
 		if (myViewX >= 0 && myViewX <= width()) {
 			

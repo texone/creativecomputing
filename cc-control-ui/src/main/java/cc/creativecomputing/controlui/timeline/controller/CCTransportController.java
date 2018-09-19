@@ -245,7 +245,7 @@ public class CCTransportController extends CCTrackDataController{
 	
 	public void addMarkerFromMouse(final String theName, final int theMouseX){
 		if(_myRulerView == null)return;
-		double myClickedTime = viewXToTime(theMouseX, true);
+		double myClickedTime = viewXToTime(theMouseX);
 		addMarker(theName, myClickedTime);
 	}
 	
@@ -339,7 +339,7 @@ public class CCTransportController extends CCTrackDataController{
 	
 	private void moveTransport(final double theMouseX, boolean theQuantize) {
 		if(_myRulerView == null)return;
-		double myClickedTime = viewXToTime(theMouseX, true);
+		double myClickedTime = viewXToTime(theMouseX);
 		if(theQuantize)myClickedTime = _myTimelineController.quantize(myClickedTime);
 		time(myClickedTime);
 	}
@@ -372,7 +372,7 @@ public class CCTransportController extends CCTrackDataController{
 	@Override
     public CCControlPoint viewToCurveSpace(CCVector2 thePoint, boolean theGetPos) {
         CCControlPoint myResult = new CCControlPoint();
-        myResult.time(viewXToTime((int) thePoint.x, theGetPos));
+        myResult.time(theGetPos ? viewXToTime(thePoint.x) : viewWidthToTime(thePoint.x) );
         myResult.value(0);
         
         return myResult;

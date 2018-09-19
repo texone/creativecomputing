@@ -39,7 +39,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import cc.creativecomputing.control.handles.CCPathHandle;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
@@ -54,7 +54,7 @@ public  class SwingEventPopup extends JPopupMenu {
 	 */
 	private static final long serialVersionUID = -7869280073371142253L;
 	private CCEventTrackController _myEventTrackController;
-	private CCTimedEventPoint _myEvent;
+	private CCEventPoint _myEvent;
 
 	public SwingEventPopup(CCEventTrackController theEventTrackController) {
 		_myEventTrackController = theEventTrackController;
@@ -139,7 +139,7 @@ public  class SwingEventPopup extends JPopupMenu {
 		add(myPropertyItem);
 	}
 	
-	public void event(CCTimedEventPoint theEvent) {
+	public void event(CCEventPoint theEvent) {
 		_myEvent = theEvent;
 	}
 }

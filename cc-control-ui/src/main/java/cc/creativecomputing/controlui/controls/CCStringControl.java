@@ -18,8 +18,9 @@ package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.handles.CCStringPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 public class CCStringControl extends CCValueControl<String, CCStringPropertyHandle>{
 	
@@ -38,8 +39,8 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 		});
 
         _myTextField = new CCUITextFieldWidget(theHandle.value());
-        _myTextField.width(100);
-        _myTextField.stretchWidth(true);
+        _myTextField.padding(CCYogaEdge.ALL, 4);
+        _myTextField.flex(1);
         
         _myTextField.changeEvents.add(text -> {
         	_myHandle.value(_myTextField.text(), !_myHandle.isInEdit());
@@ -50,10 +51,9 @@ public class CCStringControl extends CCValueControl<String, CCStringPropertyHand
 	public String value() {
 		return _myTextField.textField().text();
 	}
-	
+
 	@Override
-	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, 0, theY);
-		thePane.addChild(_myTextField, 1, theY);
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myTextField);
 	}
 }

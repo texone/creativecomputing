@@ -23,7 +23,7 @@ import cc.creativecomputing.control.timeline.point.CCBezierControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCControlPoint.CCControlPointType;
 import cc.creativecomputing.control.timeline.point.CCHandleControlPoint;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.CCUIConstants;
 import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
@@ -148,7 +148,7 @@ public class CCTimelineTool {
 				}
 				break;
 			case TIMED_EVENT:
-				CCHandleControlPoint myTimedEnd = ((CCTimedEventPoint) myPreviousPoint).endPoint();
+				CCHandleControlPoint myTimedEnd = ((CCEventPoint) myPreviousPoint).endPoint();
 
 				if (isInRangeX(myTimedEnd, theViewCoords)) {
 					return myTimedEnd;

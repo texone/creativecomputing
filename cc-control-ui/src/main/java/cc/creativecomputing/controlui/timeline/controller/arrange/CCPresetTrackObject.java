@@ -19,7 +19,7 @@ package cc.creativecomputing.controlui.timeline.controller.arrange;
 import java.nio.file.Paths;
 
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackAdapter;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
 import cc.creativecomputing.io.data.CCDataIO;
@@ -37,7 +37,7 @@ public class CCPresetTrackObject extends CCEventTrackAdapter{
 	private CCDataObject _myPresetObject = null;
 	
 	@Override
-	public void onTime(double theTime, CCEventTrackController theController, CCTimedEventPoint thePoint) {
+	public void onTime(double theTime, CCEventTrackController theController, CCEventPoint thePoint) {
 		_myRestore = true;
 		String myPreset = thePoint.content().value() == null ? null : (String)thePoint.content().value();
 		

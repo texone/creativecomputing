@@ -28,7 +28,7 @@ import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCGradientTrackController;
 import cc.creativecomputing.core.logging.CCLog;
 
-public class SwingGradientTrackDataView extends SwingBlendableTrackDataView<CCGradientTrackController> {
+public class SwingGradientTrackDataView extends CCBlendableTrackDataView<CCGradientTrackController> {
 
 	/**
 	 * 

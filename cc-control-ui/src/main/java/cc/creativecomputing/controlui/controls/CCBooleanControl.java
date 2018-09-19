@@ -18,8 +18,9 @@ package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUICheckBox;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyHandle>{
 	
@@ -37,6 +38,7 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 		}
         boolean _myValue = theHandle.value();
         _myCheckBox = new CCUICheckBox();
+        _myCheckBox.padding(CCYogaEdge.ALL, 2);
        
         _myCheckBox.changeEvents.add(e -> {
         	_myHandle.value(_myCheckBox.isSelected(), true);
@@ -50,8 +52,7 @@ public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyH
 	}
 	
 	@Override
-	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, 0, theY);
-		thePane.addChild(_myCheckBox, 1, theY);
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myCheckBox);
 	}
 }

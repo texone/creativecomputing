@@ -20,16 +20,6 @@ import cc.creativecomputing.core.CCEventManager;
 
 public class CCTriggerProgress {
 	
-	public interface CCTriggerProgressListener{
-		void start();
-		
-		void progress(double theProgress);
-		
-		void end();
-		
-		void interrupt();
-	}
-	
 	public CCEventManager<?> startEvents = new CCEventManager<>();
 	public CCEventManager<Double> progressEvents = new CCEventManager<>();
 	public CCEventManager<?> endEvents = new CCEventManager<>();

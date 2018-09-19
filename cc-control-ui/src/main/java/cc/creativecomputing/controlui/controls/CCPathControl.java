@@ -20,8 +20,9 @@ import java.nio.file.Path;
 
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUIFileWidget;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 	
@@ -42,16 +43,13 @@ public class CCPathControl extends CCValueControl<Path, CCPathHandle>{
 
         String _myValue = theHandle.path() == null ? "" : theHandle.path().toString();
         _myFileWidget = new CCUIFileWidget();
-        _myFileWidget.width(100);
-        _myFileWidget.stretchWidth(true);
+        _myFileWidget.flex(1);
+        _myFileWidget.padding(CCYogaEdge.ALL, 4);
 	}
-	
-	
-	
+
 	@Override
-	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, 0, theY);
-		thePane.addChild(_myFileWidget, 1, theY, 2, 1);
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myFileWidget);
 	}
 
 	@Override

@@ -21,8 +21,9 @@ import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.spline.CCSpline;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUIIconWidget;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 
@@ -42,17 +43,17 @@ public class CCSplineControl extends CCValueControl<CCSpline, CCSplineHandle>{
 		_myCurveFrame.height = 300;
 		
 		_myButton = new CCUIIconWidget(CCEntypoIcon.ICON_EDIT);
+		_myButton.padding(CCYogaEdge.ALL, 2);
 		_myButton.mouseReleased.add(event -> {
 			_myCurveFrame.spline(value());				
         	CCControlApp.appManager.add(_myCurveFrame);
         	_myCurveFrame.show();
 		});
 	}
-	
+
 	@Override
-	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, 0, theY);
-		thePane.addChild(_myButton, 1, theY);
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myButton);
 	}
 
 	@Override

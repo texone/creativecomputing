@@ -20,8 +20,9 @@ import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
 import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
+import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionPropertyHandle>{
 	
@@ -53,8 +54,7 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
         _myValue = theHandle.value();
         
         _myDropDown = new CCUIDropDownWidget();
-		_myDropDown.width(100);
-		_myDropDown.stretch(true);
+        _myDropDown.padding(CCYogaEdge.ALL, 4);
 		
         for(String myEnum:_myValue.values()){
         	_myDropDown.addItem(myEnum);
@@ -77,10 +77,9 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 	public CCSelection value() {
 		return _myValue;
 	}
-	
+
 	@Override
-	public void addToPane(CCUIGridPane thePane, int theY, int theDepth) {
-		thePane.addChild(_myLabel, 0, theY);
-		thePane.addChild(_myDropDown, 1, theY);
+	public void addToHorizontalPane(CCUIWidget thePane) {
+		thePane.addChild(_myDropDown);
 	}
 }

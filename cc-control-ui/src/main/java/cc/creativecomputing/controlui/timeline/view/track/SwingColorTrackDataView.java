@@ -22,9 +22,11 @@ import java.awt.geom.Point2D;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCColorTrackController;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCVector2;
 
-public class SwingColorTrackDataView extends SwingBlendableTrackDataView<CCColorTrackController> {
+public class SwingColorTrackDataView extends CCBlendableTrackDataView<CCColorTrackController> {
 
 	/**
 	 * 
@@ -36,7 +38,7 @@ public class SwingColorTrackDataView extends SwingBlendableTrackDataView<CCColor
 	}
 
 	@Override
-	public void renderBlendData(Graphics2D g2d, CCControlPoint myFirstPoint, CCControlPoint mySecondPoint) {
+	public void renderBlendData(CCGraphics g2d, CCControlPoint myFirstPoint, CCControlPoint mySecondPoint) {
 		if (myFirstPoint.equals(mySecondPoint)) {
 			return;
 		}
@@ -45,8 +47,8 @@ public class SwingColorTrackDataView extends SwingBlendableTrackDataView<CCColor
 			mySecondPoint = new CCControlPoint(_myTrackContext.upperBound(), myFirstPoint.value());
 		}
 
-		Point2D p1 = _myController.curveToViewSpace(myFirstPoint);
-		Point2D p2 = _myController.curveToViewSpace(mySecondPoint);
+		CCVector2 p1 = _myController.curveToViewSpace(myFirstPoint);
+		CCVector2 p2 = _myController.curveToViewSpace(mySecondPoint);
 
 		CCColorTrackController myColorTrackController = _myController;
 
