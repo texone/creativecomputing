@@ -1,22 +1,67 @@
 package cc.creativecomputing.yoga;
 
-import static org.lwjgl.util.yoga.Yoga.YGFlexDirectionColumn;
-import static org.lwjgl.util.yoga.Yoga.YGFlexDirectionColumnReverse;
-import static org.lwjgl.util.yoga.Yoga.YGFlexDirectionRow;
-import static org.lwjgl.util.yoga.Yoga.YGFlexDirectionRowReverse;
-import static org.lwjgl.util.yoga.Yoga.YGNodeNew;
+import static org.lwjgl.util.yoga.Yoga.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 import org.lwjgl.util.yoga.YGNode;
 import org.lwjgl.util.yoga.YGValue;
 
-import static org.lwjgl.util.yoga.Yoga.*;
+import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.gl.app.CCGLKeyEvent;
+import cc.creativecomputing.gl.app.CCGLMouseEvent;
+import cc.creativecomputing.gl.app.CCGLTimer;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.math.CCMatrix32;
+import cc.creativecomputing.math.CCVector2;
 
-public class CCYogaNode {
-	
+public class CCYogaNode implements Iterable<CCYogaNode>{
+
 	public final long id;
-	
+
 	private YGNode _myNode;
+
+	public final CCEventManager<CCGLMouseEvent> mouseReleasedOutside = new CCEventManager<>();
+	public final CCEventManager<CCGLMouseEvent> mouseReleased = new CCEventManager<>();
+	public final CCEventManager<CCGLMouseEvent> mousePressed = new CCEventManager<>();
+	public final CCEventManager<CCGLMouseEvent> mouseClicked = new CCEventManager<>();
+	public final CCEventManager<CCVector2> mouseMoved = new CCEventManager<>();
+	public final CCEventManager<CCVector2> mouseDragged = new CCEventManager<>();
+	public final CCEventManager<Object> onOver = new CCEventManager<>();
+	public final CCEventManager<Object> onOut = new CCEventManager<>();
+
+	public final CCEventManager<CCVector2> scrollEvents = new CCEventManager<>();
 	
+	public final CCEventManager<?> focusGained = new CCEventManager<>();
+	public final CCEventManager<?> focusLost = new CCEventManager<>();
+	
+	public final CCEventManager<CCGLKeyEvent> keyReleased = new CCEventManager<>();
+	public final CCEventManager<CCGLKeyEvent> keyPressed = new CCEventManager<>();
+	public final CCEventManager<CCGLKeyEvent> keyRepeatEvents = new CCEventManager<>();
+	public final CCEventManager<Character> keyChar = new CCEventManager<>();
+
+	public CCEventManager<CCGLTimer> updateEvents = new CCEventManager<>();
+
+	protected CCMatrix32 _myLocalMatrix = new CCMatrix32();
+	protected CCMatrix32 _myLocalInverseMatrix = new CCMatrix32();
+
+	protected CCMatrix32 _myWorldMatrix = new CCMatrix32();
+	protected CCMatrix32 _myWorldInverseMatrix = new CCMatrix32();
+	
+	private Optional<CCYogaNode> _myParent = Optional.empty();
+	private List<CCYogaNode> _myChildren = new ArrayList<>();
+	
+	public String _myDebugName = "NODE";
+	private CCColor _myDebugColor = CCColor.RED;
+	
+	protected Optional<CCYogaNode> _myOverlay = Optional.empty();
+	
+	protected boolean _myIsActive = true;
+
 	private CCYogaNode(long theID) {
 		id = theID;
 		_myNode = YGNode.create(id);
@@ -26,68 +71,288 @@ public class CCYogaNode {
 		this(YGNodeNew());
 	}
 	
+	public CCYogaNode debugInfo(String theName, CCColor theColor) {
+		_myDebugName = theName;
+		_myDebugColor = theColor;
+		return this;
+	}
+	
+	public boolean isActive(){
+		return _myIsActive;
+	}
+	
+	public void isActive(boolean theIsActive){
+		_myIsActive = theIsActive;
+	}
+	protected boolean _myIsOverlay = false;
+	
+	public void isOverlay(boolean theIsOverlay) {
+		_myIsOverlay = theIsOverlay;
+	}
+	
+	public void overlay(CCYogaNode theOverlay){
+		theOverlay._myIsOverlay = true;
+		_myOverlay = Optional.of(theOverlay);
+	}
+	
+	public Optional<CCYogaNode> overlay(){
+		return _myOverlay;
+	}
+
+	public void update(CCGLTimer theTimer) {
+		updateEvents.event(theTimer);
+		for(CCYogaNode myNode:_myChildren) {
+			myNode.update(theTimer);
+		}
+	}
+	
+	public void updateMatrices(){
+		_myLocalMatrix.reset();
+		_myLocalMatrix.translate(left(), top());
+		
+		_myLocalInverseMatrix = _myLocalMatrix.inverse();
+		
+		if(_myParent.isPresent()){
+			_myWorldMatrix = _myParent.get()._myWorldMatrix.clone();
+			_myWorldMatrix.preApply(_myLocalMatrix);
+			
+			_myWorldInverseMatrix = _myWorldMatrix.inverse();
+		}else{
+			_myWorldMatrix = _myLocalMatrix;
+			_myWorldInverseMatrix = _myLocalInverseMatrix;
+		}
+		
+		for(CCYogaNode myWidget:this) {
+			myWidget.updateMatrices();
+		}
+		
+		_myOverlay.ifPresent(o ->{
+			o._myLocalMatrix.set(_myLocalMatrix);
+			o._myLocalMatrix.translate(o.left(),o.top());
+			o._myLocalInverseMatrix = o._myLocalMatrix.inverse();
+			CCMatrix32 myWorldInverse = _myWorldMatrix.clone();
+			myWorldInverse.translate(o.left(),o.top());
+			o._myWorldInverseMatrix.set(myWorldInverse.inverse());
+		});
+	}
+	
+	public void displayDebug(CCGraphics g) {
+		g.pushMatrix();
+	    g.translate(left(), top());
+
+	    g.color(_myDebugColor);
+		g.rect(0,0,width(),height());
+
+        g.color(0, 0, 0);
+		g.text(_myDebugName, 18, 18);
+		
+		for(CCYogaNode myChild:this) {
+			myChild.displayDebug(g);
+		}
+	    g.popMatrix();
+	}
+
+	public void display(CCGraphics g) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void parent(CCYogaNode theParent) {
+		_myParent = Optional.ofNullable(theParent);
+	}
+	
+	public Optional<CCYogaNode> parent() {
+		return _myParent;
+	}
+	
+	public CCYogaNode root(){
+		if(!_myParent.isPresent())return this;
+		else return _myParent.get().root();
+	}
+
+	public int childCount() {
+		return _myChildren.size();
+	}
+
+	public CCYogaNode childAt(int i) {
+		return _myChildren.get(i);
+	}
+
+	public void insertChild(CCYogaNode theNode, int i) {
+		YGNodeInsertChild(id, theNode.id, i);
+		theNode.parent(this);
+		_myChildren.add(i, theNode);
+	}
+	
+	public void addChild(CCYogaNode theNode) {
+		if(_myChildren.contains(theNode))return;
+		YGNodeInsertChild(id, theNode.id, _myChildren.size());
+		theNode.parent(this);
+		_myChildren.add(theNode);
+	}
+
+	public void removeChild(CCYogaNode theNode) {
+		_myChildren.remove(theNode);
+		theNode.parent(null);
+		YGNodeRemoveChild(id, theNode.id);
+	}
+	
+	public void removeAllChildren() {
+		for(CCYogaNode myChild:new ArrayList<>(_myChildren)) {
+			removeChild(myChild);
+		}
+	}
+
+	public CCYogaNode removeChildAt(int i) {
+		long childID = YGNodeGetChild(id, i);
+		YGNodeRemoveChild(id, childID);
+		CCYogaNode myResult = _myChildren.remove(i);
+		myResult.parent(null);
+		return myResult;
+	}
+	
+	@Override
+	public Iterator<CCYogaNode> iterator() {
+		return _myChildren.iterator();
+	}
+	
+	public CCMatrix32 localTransform() {
+		return _myLocalMatrix;
+	}
+	
+	public CCMatrix32 localInverseTransform() {
+		return _myLocalInverseMatrix;
+	}
+	
+	public CCMatrix32 worldTransform() {
+		return _myWorldMatrix;
+	}
+	
+	public CCMatrix32 worldInverseTransform() {
+		return _myWorldInverseMatrix;
+	}
+	
+	public boolean isInsideLocal(double theX, double theY) {
+		return 
+			theX >= 0 && 
+			theX <= width() &&
+			theY >= 0 && 
+			theY <= height();
+	}
+	
+	public boolean isInsideLocal(CCVector2 theVector) {
+		return isInsideLocal(theVector.x, theVector.y);
+	}
+	
+	public boolean isInside(CCVector2 theVector) {
+		CCVector2 myLocalPos = _myWorldInverseMatrix.transform(theVector);
+		return isInsideLocal(myLocalPos);
+	}
+	
+	public boolean isInside(double theX, double theY) {
+		return isInside(new CCVector2(theX, theY));
+	}
+	
+	public boolean isEndNode() {
+		return false;
+	}
+	
+	public CCYogaNode childAtPosition(CCVector2 thePosition) {
+		
+		for(CCYogaNode myNode:_myChildren) {
+			if(!myNode.isInside(thePosition)) {
+				continue;
+			}
+			if(myNode.childCount() > 0 && !myNode.isEndNode()) {
+				CCYogaNode myResult = myNode.childAtPosition(thePosition);
+				if(myResult != null){
+					return myResult;
+				}else{
+					return myNode;
+				}
+			}else {
+				return myNode;
+			}
+			
+		}
+		return null;
+	}
+
 	/**
 	 * Specifies the height of the element's content area.
 	 */
 	public void heightAuto() {
 		YGNodeStyleSetHeightAuto(id);
 	}
-	
+
 	/**
-	 * Specifies the height of the element's content area in absolute pixels. 
-	 * Depending on other properties set on the Yoga node this may or may not be the final dimension of the node.
-	 * @param theHeight height of the element's content area in absolute pixels. 
+	 * Specifies the height of the element's content area in absolute pixels.
+	 * Depending on other properties set on the Yoga node this may or may not be the
+	 * final dimension of the node.
+	 * 
+	 * @param theHeight
+	 *            height of the element's content area in absolute pixels.
 	 */
-	public void height(double theHeight) {
-		YGNodeStyleSetHeight(id, (float)theHeight);
+	public CCYogaNode height(double theHeight) {
+		YGNodeStyleSetHeight(id, (float) theHeight);
+		return this;
 	}
-	
+
 	/**
-	 * Specifies the height of the element's content area in percentage of its parent's height.
-	 * @param theHeight height of the element's content area in percentage of its parent's height
+	 * Specifies the height of the element's content area in percentage of its
+	 * parent's height.
+	 * 
+	 * @param theHeight
+	 *            height of the element's content area in percentage of its parent's
+	 *            height
 	 */
 	public void heightPercent(double theHeight) {
-		YGNodeStyleSetHeightPercent(id, (float)theHeight);
+		YGNodeStyleSetHeightPercent(id, (float) theHeight);
 	}
-	
+
 	public double styleHeight() {
 		YGValue myValue = YGValue.create();
-		YGNodeStyleGetHeight(id,myValue);
+		YGNodeStyleGetHeight(id, myValue);
 		return myValue.value();
 	}
 
-	
 	/**
 	 * Specifies the width of the element's content area.
 	 */
 	public void widthtAuto() {
 		YGNodeStyleSetHeightAuto(id);
 	}
-	
+
 	/**
-	 * Specifies the width of the element's content area in absolute pixels. 
-	 * Depending on other properties set on the Yoga node this may or may not be the final dimension of the node.
-	 * @param theWidth width of the element's content area in absolute pixels. 
+	 * Specifies the width of the element's content area in absolute pixels.
+	 * Depending on other properties set on the Yoga node this may or may not be the
+	 * final dimension of the node.
+	 * 
+	 * @param theWidth
+	 *            width of the element's content area in absolute pixels.
 	 */
 	public void width(double theWidth) {
-		YGNodeStyleSetHeight(id, (float)theWidth);
+		YGNodeStyleSetWidth(id, (float) theWidth);
 	}
-	
+
 	/**
-	 * Specifies the width of the element's content area in percentage of its parent's width.
-	 * @param theWidth width of the element's content area in percentage of its parent's width
+	 * Specifies the width of the element's content area in percentage of its
+	 * parent's width.
+	 * 
+	 * @param theWidth
+	 *            width of the element's content area in percentage of its parent's
+	 *            width
 	 */
 	public void widthPercent(double theWidth) {
-		YGNodeStyleSetHeightPercent(id, (float)theWidth);
+		YGNodeStyleSetWidthPercent(id, (float) theWidth);
 	}
 
 	public double styleWidth() {
 		YGValue myValue = YGValue.create();
-		YGNodeStyleGetWidth(id,myValue);
+		YGNodeStyleGetWidth(id, myValue);
 		return myValue.value();
 	}
 
-	
 	/**
 	 * Flex direction controls the direction in which children of a node are laid
 	 * out. This is also referred to as the main axis. The main axis is the
@@ -125,39 +390,43 @@ public class CCYogaNode {
 		private CCYogaFlexDirection(int theID) {
 			id = theID;
 		}
-		
+
 		public static CCYogaFlexDirection fromInt(int value) {
 			switch (value) {
-			case YGFlexDirectionColumn: return COLUMN;
-			case YGFlexDirectionColumnReverse: return COLUMN_REVERSE;
-			case YGFlexDirectionRow: return ROW;
-			case YGFlexDirectionRowReverse: return ROW_REVERSE;
-			default: throw new IllegalArgumentException("Unknown enum value: " + value);
-		    }
+			case YGFlexDirectionColumn:
+				return COLUMN;
+			case YGFlexDirectionColumnReverse:
+				return COLUMN_REVERSE;
+			case YGFlexDirectionRow:
+				return ROW;
+			case YGFlexDirectionRowReverse:
+				return ROW_REVERSE;
+			default:
+				throw new IllegalArgumentException("Unknown enum value: " + value);
+			}
 		}
 	}
-	
+
 	/**
-	 * Controls the direction in which children of a node are laid
-	 * out.
-	 * @param theDirection the direction in which children of a node are laid
-	 * out
+	 * Controls the direction in which children of a node are laid out.
+	 * 
+	 * @param theDirection
+	 *            the direction in which children of a node are laid out
 	 * @see CCYogaFlexDirection
 	 */
 	public void flexDirection(CCYogaFlexDirection theDirection) {
 		YGNodeStyleSetFlexDirection(id, theDirection.id);
 	}
-	
+
 	/**
-	 * Returns the direction in which children of a node are laid
-	 * out.
-	 * @return the direction in which children of a node are laid
-	 * out.
+	 * Returns the direction in which children of a node are laid out.
+	 * 
+	 * @return the direction in which children of a node are laid out.
 	 */
 	public CCYogaFlexDirection flexDirection() {
 		return CCYogaFlexDirection.fromInt(YGNodeStyleGetFlexDirection(id));
 	}
-	
+
 	/**
 	 * The position type of an element defines how it is positioned within its
 	 * parent.
@@ -185,28 +454,37 @@ public class CCYogaNode {
 		private CCYogaPositionType(int theID) {
 			id = theID;
 		}
-		
-		 public static CCYogaPositionType fromInt(int value) {
-			 switch (value) {
-			 case YGPositionTypeRelative: return RELATIVE;
-			 case YGPositionTypeAbsolute: return ABSOLUTE;
-			 default: throw new IllegalArgumentException("Unknown enum value: " + value);
-			 }
-		 }
+
+		public static CCYogaPositionType fromInt(int value) {
+			switch (value) {
+			case YGPositionTypeRelative:
+				return RELATIVE;
+			case YGPositionTypeAbsolute:
+				return ABSOLUTE;
+			default:
+				throw new IllegalArgumentException("Unknown enum value: " + value);
+			}
+		}
 	}
-	
+
 	/**
-	 * The position type of an element defines how it is positioned within its parent.
-	 * @param thePositionType position type of an element
+	 * The position type of an element defines how it is positioned within its
+	 * parent.
+	 * 
+	 * @param thePositionType
+	 *            position type of an element
 	 * @see CCYogaPositionType
 	 */
 	public void positionType(CCYogaPositionType thePositionType) {
 		YGNodeStyleSetPositionType(id, thePositionType.id);
 	}
-	
+
 	/**
-	 * Returns the position type of an element defines how it is positioned within its parent.
-	 * @return the position type of an element defines how it is positioned within its parent.
+	 * Returns the position type of an element defines how it is positioned within
+	 * its parent.
+	 * 
+	 * @return the position type of an element defines how it is positioned within
+	 *         its parent.
 	 */
 	public CCYogaPositionType positionType() {
 		return CCYogaPositionType.fromInt(YGNodeStyleGetPositionType(id));
@@ -221,7 +499,7 @@ public class CCYogaNode {
 		END(YGEdgeEnd), 
 		HORIZONTAL(YGEdgeHorizontal), 
 		VERTICAL(YGEdgeVertical), 
-		ALL(YGEdgeAll );
+		ALL(YGEdgeAll);
 
 		public final int id;
 
@@ -231,20 +509,30 @@ public class CCYogaNode {
 
 		public static CCYogaEdge fromInt(int value) {
 			switch (value) {
-			case YGEdgeLeft:return LEFT;
-			case YGEdgeTop:return TOP;
-			case YGEdgeRight:return RIGHT;
-			case YGEdgeBottom:return BOTTOM;
-			case YGEdgeStart:return START;
-			case YGEdgeEnd:return END;
-			case YGEdgeHorizontal:return HORIZONTAL;
-			case YGEdgeVertical:return VERTICAL;
-			case YGEdgeAll :return ALL;
-			default:throw new IllegalArgumentException("Unknown enum value: " + value);
+			case YGEdgeLeft:
+				return LEFT;
+			case YGEdgeTop:
+				return TOP;
+			case YGEdgeRight:
+				return RIGHT;
+			case YGEdgeBottom:
+				return BOTTOM;
+			case YGEdgeStart:
+				return START;
+			case YGEdgeEnd:
+				return END;
+			case YGEdgeHorizontal:
+				return HORIZONTAL;
+			case YGEdgeVertical:
+				return VERTICAL;
+			case YGEdgeAll:
+				return ALL;
+			default:
+				throw new IllegalArgumentException("Unknown enum value: " + value);
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the position of an element. The position values top, right, bottom, and
 	 * left behave differently depending on the position type of the element. For a
@@ -252,19 +540,21 @@ public class CCYogaNode {
 	 * specified. For absolute element though these properties specify the offset of
 	 * the element's side from the same side on the parent.
 	 * 
-	 * @param theEdge edge for which you want to change the position
-	 * @param thePosition position value
+	 * @param theEdge
+	 *            edge for which you want to change the position
+	 * @param thePosition
+	 *            position value
 	 */
 	public void position(CCYogaEdge theEdge, double thePosition) {
 		YGNodeStyleSetPosition(id, theEdge.id, (float) thePosition);
 	}
-	
+
 	public double position(CCYogaEdge theEdge) {
 		YGValue myValue = YGValue.create();
 		YGNodeStyleGetPosition(id, theEdge.id, myValue);
 		return myValue.value();
 	}
-	
+
 	@Override
 	protected void finalize() throws Throwable {
 		try {
@@ -274,542 +564,889 @@ public class CCYogaNode {
 		}
 	}
 
-	  private native void YGNodeReset(long nativePointer);
+	private native void YGNodeReset(long nativePointer);
+
 	public void reset() {
-	    YGNodeReset(id);
-	  }
+		YGNodeReset(id);
+	}
 
-	  public int childCount() {
-	    return YGNodeGetChildCount(id);
-	  }
+	@Override
+	public CCYogaNode clone() {
+		return new CCYogaNode(YGNodeClone(id));
+	}
 
-	  public CCYogaNode childAt(int i) {
-		  return new CCYogaNode(YGNodeGetChild(id, i));
-	  }
-	  
-	  public void insertChild(CCYogaNode child, int i) {
-	    YGNodeInsertChild(id, child.id, i);
-	  }
+	// public CCYogaNode cloneWithNewChildren() {
+	// try {
+	// YogaNode clonedYogaNode = (YogaNode) super.clone();
+	// long clonedNativePointer = YGNodeClone(id, clonedYogaNode);
+	// clonedYogaNode.mOwner = null;
+	// clonedYogaNode.id = clonedNativePointer;
+	// clonedYogaNode.clearChildren();
+	// return clonedYogaNode;
+	// } catch (CloneNotSupportedException ex) {
+	// // This class implements Cloneable, this should not happen
+	// throw new RuntimeException(ex);
+	// }
+	// }
+	//
+	// private void clearChildren() {
+	// YGNode(id);
+	// }
 
-	  private native void YGNodeInsertSharedChild(long nativePointer, long childPointer, int index);
+	private double _myWidth;
+	private double _myHeight;
+	private CCYogaFlexDirection _myDirection;
 
-	  public void addSharedChildAt(CCYogaNode child, int i) {
-	    YGNodeInsertSharedChild(id, child.id, i);
-	  }
+	public void calculateLayout(double width, double height, CCYogaFlexDirection theDirection) {
+		_myWidth = width;
+		_myHeight = height;
+		_myDirection = theDirection;
+		YGNodeCalculateLayout(id, (float)width, (float)height, theDirection.id);
+		updateMatrices();
+	}
+	
+	public void calculateLayout() {
+		if(_myDirection == null)return;
+		YGNodeCalculateLayout(id, (float)_myWidth, (float)_myHeight, _myDirection.id);
+		updateMatrices();
+	}
 
-	  @Override
-	  public CCYogaNode clone() {
-		  return new CCYogaNode(YGNodeClone(id));
-	  }
+	public void dirty() {
+		YGNodeMarkDirty(id);
+	}
 
-//	  public CCYogaNode cloneWithNewChildren() {
-//	    try {
-//	      YogaNode clonedYogaNode = (YogaNode) super.clone();
-//	      long clonedNativePointer = YGNodeClone(id, clonedYogaNode);
-//	      clonedYogaNode.mOwner = null;
-//	      clonedYogaNode.id = clonedNativePointer;
-//	      clonedYogaNode.clearChildren();
-//	      return clonedYogaNode;
-//	    } catch (CloneNotSupportedException ex) {
-//	      // This class implements Cloneable, this should not happen
-//	      throw new RuntimeException(ex);
-//	    }
-//	  }
-//
-//	  private void clearChildren() {
-//	    YGNode(id);
-//	  }
+	// public void dirtyAllDescendants() {
+	// YGNodeMarkDirtyAndPropogateToDescendants(id);
+	// }
 
-	  public void removeChild(CCYogaNode theChild) {
-		  YGNodeRemoveChild(id, theChild.id);
-	  }
-	  public CCYogaNode removeChildAt(int i) {
-		  CCYogaNode myChild = new CCYogaNode(YGNodeGetChild(id, i));
-		  removeChild(myChild);
-		  return myChild;
-	  }
+	public boolean isDirty() {
+		return YGNodeIsDirty(id);
+	}
 
-	  public CCYogaNode parent() {
-	    return new CCYogaNode(YGNodeGetParent(id));
-	  }
+	public void copyStyle(CCYogaNode srcNode) {
+		YGNodeCopyStyle(id, srcNode.id);
+	}
 
-	  public void calculateLayout(float width, float height, CCYogaFlexDirection theDirection) {
-	    YGNodeCalculateLayout(id, width, height, theDirection.id);
-	  }
+	/**
+	 * Layout direction specifies the direction in which children and text 
+	 * in a hierarchy should be laid out. Layout direction also effects what 
+	 * edge start and end refer to. By default Yoga lays out with LTR layout 
+	 * direction. In this mode start refers to left and end refers to right. 
+	 * When localizing your apps for markets with RTL languages you should 
+	 * customize this by either by passing a direction to the CalculateLayout 
+	 * call or by setting the direction on the root node.
+	 * @author christian riekoff
+	 *
+	 */
+	public static enum CCYogaDirection {
+		INHERIT(YGDirectionInherit), 
+		/**
+		 * Text and children and laid our from left to right. 
+		 * Margin and padding applied the start of an element are applied on the left side.
+		 */
+		LTR(YGDirectionLTR), 
+		/**
+		 *  Text and children and laid our from right to left. 
+		 *  Margin and padding applied the start of an element are applied on the right side.
+		 */
+		RTL(YGDirectionRTL);
 
+		public final int id;
 
-	  public void dirty() {
-	    YGNodeMarkDirty(id);
-	  }
-
-//	  public void dirtyAllDescendants() {
-//	    YGNodeMarkDirtyAndPropogateToDescendants(id);
-//	  }
-
-	  public boolean isDirty() {
-	    return YGNodeIsDirty(id);
-	  }
-
-	  public void copyStyle(CCYogaNode srcNode) {
-	    YGNodeCopyStyle(id, srcNode.id);
-	  }
-
-	  public static enum CCYogaDirection {
-		  INHERIT(	YGDirectionInherit ),
-		  LTR(YGDirectionLTR ),
-		  RTL(YGDirectionRTL);
-
-		  public final int id;
-
-		  CCYogaDirection(int theID) {
-		    id = theID;
-		  }
-
-		  public static CCYogaDirection fromInt(int theID) {
-		    switch (theID) {
-		      case 	YGDirectionInherit : return INHERIT;
-		      case YGDirectionLTR : return LTR;
-		      case YGDirectionRTL: return RTL;
-		      default: throw new IllegalArgumentException("Unknown enum value: " + theID);
-		    }
-		  }
+		CCYogaDirection(int theID) {
+			id = theID;
 		}
 
-	  public CCYogaDirection direction() {
-	    return CCYogaDirection.fromInt(YGNodeStyleGetDirection(id));
-	  }
+		public static CCYogaDirection fromInt(int theID) {
+			switch (theID) {
+			case YGDirectionInherit:
+				return INHERIT;
+			case YGDirectionLTR:
+				return LTR;
+			case YGDirectionRTL:
+				return RTL;
+			default:
+				throw new IllegalArgumentException("Unknown enum value: " + theID);
+			}
+		}
+	}
 
-	  public void direction(CCYogaDirection direction) {
-		  YGNodeStyleSetDirection(id, direction.id);
-	  }
+	public CCYogaDirection direction() {
+		return CCYogaDirection.fromInt(YGNodeStyleGetDirection(id));
+	}
 
-	  public static enum CCYogaJustify {
-		  FLEX_START(YGJustifyFlexStart ),
-		  CENTER(YGJustifyCenter ),
-		  FLEX_END(YGJustifyFlexEnd ),
-		  SPACE_BETWEEN(YGJustifySpaceBetween ),
-		  SPACE_AROUND(YGJustifySpaceAround ),
-		  SPACE_EVENLY(YGJustifySpaceEvenly);
+	public void direction(CCYogaDirection direction) {
+		YGNodeStyleSetDirection(id, direction.id);
+	}
 
-		  public final int id;
+	/**
+	 * Justify content describes how to align children within the main axis of their container. 
+	 * For example, you can use this property to center a child horizontally within a container 
+	 * with flex direction set to row or vertically within a container with flex direction set to column.
+	 * @author christian riekoff
+	 *
+	 */
+	public static enum CCYogaJustify {
+		/**
+		 * Align children of a container to the start of the container's main axis.
+		 */
+		FLEX_START(YGJustifyFlexStart), 
+		/**
+		 * Align children of a container in the center of the container's main axis.
+		 */
+		CENTER(YGJustifyCenter), 
+		/**
+		 * Align children of a container to the end of the container's main axis.
+		 */
+		FLEX_END(YGJustifyFlexEnd), 
+		/**
+		 * Evenly space of children across the container's main axis, distributing remaining space between the children.
+		 */
+		SPACE_BETWEEN(YGJustifySpaceBetween), 
+		/**
+		 * Evenly space of children across the container's main axis, distributing remaining space around the children. 
+		 * Compared to space between using Space around will result in space being distributed to the beginning of the first child and end of the last child.
+		 */
+		SPACE_AROUND(YGJustifySpaceAround), 
+		SPACE_EVENLY(YGJustifySpaceEvenly);
 
-		  CCYogaJustify(int theID) {
-		    id = theID;
-		  }
+		public final int id;
 
-
-		  public static CCYogaJustify fromInt(int theID) {
-		    switch (theID) {
-		      case YGJustifyFlexStart : return FLEX_START;
-		      case YGJustifyCenter : return CENTER;
-		      case YGJustifyFlexEnd : return FLEX_END;
-		      case YGJustifySpaceBetween : return SPACE_BETWEEN;
-		      case YGJustifySpaceAround : return SPACE_AROUND;
-		      case YGJustifySpaceEvenly:
-		        return SPACE_EVENLY;
-		      default: throw new IllegalArgumentException("Unknown enum value: " + theID);
-		    }
-		  }
+		CCYogaJustify(int theID) {
+			id = theID;
 		}
 
-	  public CCYogaJustify justifyContent() {
-	    return CCYogaJustify.fromInt(YGNodeStyleGetJustifyContent(id));
-	  }
+		public static CCYogaJustify fromInt(int theID) {
+			switch (theID) {
+			case YGJustifyFlexStart:
+				return FLEX_START;
+			case YGJustifyCenter:
+				return CENTER;
+			case YGJustifyFlexEnd:
+				return FLEX_END;
+			case YGJustifySpaceBetween:
+				return SPACE_BETWEEN;
+			case YGJustifySpaceAround:
+				return SPACE_AROUND;
+			case YGJustifySpaceEvenly:
+				return SPACE_EVENLY;
+			default:
+				throw new IllegalArgumentException("Unknown enum value: " + theID);
+			}
+		}
+	}
 
-	  public void justifyContent(CCYogaJustify justifyContent) {
-	    YGNodeStyleSetJustifyContent(id, justifyContent.id);
-	  }
-	  
-	  public static enum CCYogaAlign {
-		  AUTO(YGAlignAuto ),
-		  FLEX_START(YGAlignFlexStart ),
-		  CENTER(YGAlignCenter ),
-		  FLEX_END(YGAlignFlexEnd ),
-		  STRETCH(YGAlignStretch),
-		  BASELINE(YGAlignBaseline ),
-		  SPACE_BETWEEN(YGAlignSpaceBetween ),
-		  SPACE_AROUND(YGAlignSpaceAround );
+	/**
+	 * @see #justifyContent(CCYogaJustify)
+	 * @return
+	 */
+	public CCYogaJustify justifyContent() {
+		return CCYogaJustify.fromInt(YGNodeStyleGetJustifyContent(id));
+	}
 
-		  public final int id;
+	/**
+	 * Justify content describes how to align children within the main axis of their container. 
+	 * For example, you can use this property to center a child horizontally within a container 
+	 * with flex direction set to row or vertically within a container with flex direction set to column.
+	 * @param justifyContent
+	 */
+	public void justifyContent(CCYogaJustify justifyContent) {
+		YGNodeStyleSetJustifyContent(id, justifyContent.id);
+	}
 
-		  CCYogaAlign(int theID) {
-		    id = theID;
-		  }
+	/**
+	 * Align content defines the distribution of lines along the cross-axis. 
+	 * This only has effect when items are wrapped to multiple lines using flex wrap.
+	 * @author christian riekoff
+	 *
+	 */
+	public static enum CCYogaAlign {
+		AUTO(YGAlignAuto), 
+		/**
+		 * Align wrapped lines to the start of the container's cross axis.
+		 */
+		FLEX_START(YGAlignFlexStart), 
+		/**
+		 * Align wrapped lines in the center of the container's cross axis.
+		 */
+		CENTER(YGAlignCenter), 
+		/**
+		 * Align wrapped lines to the end of the container's cross axis.
+		 */
+		FLEX_END(YGAlignFlexEnd), 
+		/**
+		 * Stretch wrapped lines to match the height of the container's cross axis.
+		 */
+		STRETCH(YGAlignStretch), 
+		BASELINE(YGAlignBaseline), 
+		/**
+		 * Evenly space wrapped lines across the container's main axis, 
+		 * distributing remaining space between the lines.
+		 */
+		SPACE_BETWEEN(YGAlignSpaceBetween), 
+		/**
+		 * Evenly space wrapped lines across the container's main axis, 
+		 * distributing remaining space around the lines. Compared to space 
+		 * between using space around will result in space being distributed 
+		 * to the begining of the first lines and end of the last line.
+		 */
+		SPACE_AROUND(YGAlignSpaceAround);
 
+		public final int id;
 
-		  public static CCYogaAlign fromInt(int theID) {
-		    switch (theID) {
-		      case YGAlignAuto : return AUTO;
-		      case YGAlignFlexStart : return FLEX_START;
-		      case YGAlignCenter : return CENTER;
-		      case YGAlignFlexEnd : return FLEX_END;
-		      case YGAlignStretch: return STRETCH;
-		      case YGAlignBaseline : return BASELINE;
-		      case YGAlignSpaceBetween : return SPACE_BETWEEN;
-		      case YGAlignSpaceAround : return SPACE_AROUND;
-		      default: throw new IllegalArgumentException("Unknown enum value: " + theID);
-		    }
-		  }
+		CCYogaAlign(int theID) {
+			id = theID;
 		}
 
-	  public CCYogaAlign alignItems() {
-	    return CCYogaAlign.fromInt(YGNodeStyleGetAlignItems(id));
-	  }
+		public static CCYogaAlign fromInt(int theID) {
+			switch (theID) {
+			case YGAlignAuto:
+				return AUTO;
+			case YGAlignFlexStart:
+				return FLEX_START;
+			case YGAlignCenter:
+				return CENTER;
+			case YGAlignFlexEnd:
+				return FLEX_END;
+			case YGAlignStretch:
+				return STRETCH;
+			case YGAlignBaseline:
+				return BASELINE;
+			case YGAlignSpaceBetween:
+				return SPACE_BETWEEN;
+			case YGAlignSpaceAround:
+				return SPACE_AROUND;
+			default:
+				throw new IllegalArgumentException("Unknown enum value: " + theID);
+			}
+		}
+	}
 
-	  public void alignItems(CCYogaAlign alignItems) {
-	    YGNodeStyleSetAlignItems(id, alignItems.id);
-	  }
+	/**
+	 * @see #alignItems(CCYogaAlign)
+	 * @return
+	 */
+	public CCYogaAlign alignItems() {
+		return CCYogaAlign.fromInt(YGNodeStyleGetAlignItems(id));
+	}
 
-	  public CCYogaAlign alignSelf() {
-	    return CCYogaAlign.fromInt(YGNodeStyleGetAlignSelf(id));
-	  }
+	/**
+	 * Align items describes how to align children along the cross axis of their container. 
+	 * Align items is very similar to justify content but instead of applying to the main axis, 
+	 * align items applies to the cross axis.
+	 * @param alignItems alignment of the children along the cross axis of their container
+	 */
+	public void alignItems(CCYogaAlign alignItems) {
+		YGNodeStyleSetAlignItems(id, alignItems.id);
+	}
 
-	  public void alignSelf(CCYogaAlign alignSelf) {
-	    YGNodeStyleSetAlignSelf(id, alignSelf.id);
-	  }
+	/**
+	 * @see #alignSelf(CCYogaAlign)
+	 * @return
+	 */
+	public CCYogaAlign alignSelf() {
+		return CCYogaAlign.fromInt(YGNodeStyleGetAlignSelf(id));
+	}
 
-	  public CCYogaAlign alignContent() {
-	    return CCYogaAlign.fromInt(YGNodeStyleGetAlignContent(id));
-	  }
+	/**
+	 * Align self has the same options and effect as align items but instead of 
+	 * affecting the children within a container, you can apply this property to a 
+	 * single child to change its alignment within its parent. 
+	 * align self overrides any option set by the parent with align items.
+	 * @param alignSelf
+	 */
+	public void alignSelf(CCYogaAlign alignSelf) {
+		YGNodeStyleSetAlignSelf(id, alignSelf.id);
+	}
 
-	  public void alignContent(CCYogaAlign alignContent) {
-	    YGNodeStyleSetAlignContent(id, alignContent.id);
-	  }
-	  
-	  public static enum CCYogaWrap {
-		  NO_WRAP(YGWrapNoWrap ),
-		  WRAP(YGWrapWrap),
-		  WRAP_REVERSE(YGWrapReverse );
+	/**
+	 * Returns the distribution of lines along the cross-axis. 
+	 * @return distribution of lines along the cross-axis
+	 */
+	public CCYogaAlign alignContent() {
+		return CCYogaAlign.fromInt(YGNodeStyleGetAlignContent(id));
+	}
 
-		  public final int id;
+	/**
+	 * Align content defines the distribution of lines along the cross-axis. 
+	 * This only has effect when items are wrapped to multiple lines using flex wrap.
+	 * @param alignContent distribution of lines along the cross-axis
+	 */
+	public void alignContent(CCYogaAlign alignContent) {
+		YGNodeStyleSetAlignContent(id, alignContent.id);
+	}
 
-		  CCYogaWrap(int theID) {
-		    id = theID;
-		  }
+	public static enum CCYogaOverflow {
+		VISIBLE(YGOverflowVisible), HIDDEN(YGOverflowHidden), SCROLL(YGOverflowScroll);
 
-		  public static CCYogaWrap fromInt(int theID) {
-		    switch (theID) {
-		      case YGWrapNoWrap : return NO_WRAP;
-		      case YGWrapWrap: return WRAP;
-		      case YGWrapReverse : return WRAP_REVERSE;
-		      default: throw new IllegalArgumentException("Unknown enum value: " + theID);
-		    }
-		  }
+		public final int id;
+
+		CCYogaOverflow(int theID) {
+			id = theID;
 		}
 
-	  public void wrap(CCYogaWrap flexWrap) {
-	    YGNodeStyleSetFlexWrap(id, flexWrap.id);
-	  }
-
-	  public static enum CCYogaOverflow {
-		  VISIBLE(YGOverflowVisible),
-		  HIDDEN(	YGOverflowHidden ),
-		  SCROLL(YGOverflowScroll );
-
-		  public final int id;
-
-		  CCYogaOverflow(int theID) {
-		    id = theID;
-		  }
-
-
-		  public static CCYogaOverflow fromInt(int theID) {
-		    switch (theID) {
-		      case YGOverflowVisible: return VISIBLE;
-		      case YGOverflowHidden: return HIDDEN;
-		      case YGOverflowScroll : return SCROLL;
-		      default: throw new IllegalArgumentException("Unknown enum value: " + theID);
-		    }
-		  }
+		public static CCYogaOverflow fromInt(int theID) {
+			switch (theID) {
+			case YGOverflowVisible:
+				return VISIBLE;
+			case YGOverflowHidden:
+				return HIDDEN;
+			case YGOverflowScroll:
+				return SCROLL;
+			default:
+				throw new IllegalArgumentException("Unknown enum value: " + theID);
+			}
 		}
-	  
-	  public CCYogaOverflow overflow() {
-	    return CCYogaOverflow.fromInt(YGNodeStyleGetOverflow(id));
-	  }
+	}
 
-	  public void overflow(CCYogaOverflow overflow) {
-	    YGNodeStyleSetOverflow(id, overflow.id);
-	  }
-	  
-	  public enum CCYogaDisplay {
-		  FLEX(YGDisplayFlex ),
-		  NONE(YGDisplayNone);
+	public CCYogaOverflow overflow() {
+		return CCYogaOverflow.fromInt(YGNodeStyleGetOverflow(id));
+	}
 
-		  public final int id;
+	public void overflow(CCYogaOverflow overflow) {
+		YGNodeStyleSetOverflow(id, overflow.id);
+	}
 
-		  CCYogaDisplay(int intValue) {
-		    id = intValue;
-		  }
+	public enum CCYogaDisplay {
+		FLEX(YGDisplayFlex), NONE(YGDisplayNone);
 
-		  public int intValue() {
-		    return id;
-		  }
+		public final int id;
 
-		  public static CCYogaDisplay fromInt(int value) {
-		    switch (value) {
-		      case YGDisplayFlex : return FLEX;
-		      case YGDisplayNone: return NONE;
-		      default: throw new IllegalArgumentException("Unknown enum value: " + value);
-		    }
-		  }
+		CCYogaDisplay(int intValue) {
+			id = intValue;
 		}
 
-	  public CCYogaDisplay display() {
-	    return CCYogaDisplay.fromInt(YGNodeStyleGetDisplay(id));
-	  }
+		public int intValue() {
+			return id;
+		}
 
-	  public void display(CCYogaDisplay display) {
-	    YGNodeStyleSetDisplay(id, display.id);
-	  }
+		public static CCYogaDisplay fromInt(int value) {
+			switch (value) {
+			case YGDisplayFlex:
+				return FLEX;
+			case YGDisplayNone:
+				return NONE;
+			default:
+				throw new IllegalArgumentException("Unknown enum value: " + value);
+			}
+		}
+	}
 
-	  public void flex(double flex) {
-	    YGNodeStyleSetFlex(id, (float)flex);
-	  }
+	public CCYogaDisplay display() {
+		return CCYogaDisplay.fromInt(YGNodeStyleGetDisplay(id));
+	}
 
-	  public double flexGrow() {
-	    return YGNodeStyleGetFlexGrow(id);
-	  }
+	public void display(CCYogaDisplay display) {
+		YGNodeStyleSetDisplay(id, display.id);
+	}
 
-	  public void flexGrow(double flexGrow) {
-	    YGNodeStyleSetFlexGrow(id, (float)flexGrow);
-	  }
+	public void flex(double flex) {
+		YGNodeStyleSetFlex(id, (float) flex);
+	}
 
-	  public double flexShrink() {
-	    return YGNodeStyleGetFlexShrink(id);
-	  }
+	/**
+	 * @see #flexGrow(float)
+	 * @return
+	 */
+	public double flexGrow() {
+		return YGNodeStyleGetFlexGrow(id);
+	}
 
-	  public void flexShrink(double flexShrink) {
-	    YGNodeStyleSetFlexShrink(id, (float)flexShrink);
-	  }
+	/**
+	 * Describes how any space within a container should be 
+	 * distributed among its children along the main axis. After laying 
+	 * out its children, a container will distribute any remaining space 
+	 * according to the flex grow values specified by its children.
+	 * <p>
+	 * Flex grow accepts any floating point value >= 0, with 0 being the 
+	 * default value. A container will distribute any remaining space 
+	 * among its children weighted by the child's flex grow value.
+	 * @param flexGrow
+	 */
+	public void flexGrow(double flexGrow) {
+		YGNodeStyleSetFlexGrow(id, (float) flexGrow);
+	}
 
-	  public double flexBasis() {
-		  YGValue myValue = YGValue.create();
-	    YGNodeStyleGetFlexBasis(id,myValue);
-	    return myValue.value();
-	  }
+	/**
+	 * @see #flexShrink(float)
+	 * @return
+	 */
+	public double flexShrink() {
+		return YGNodeStyleGetFlexShrink(id);
+	}
 
-	  public void flexBasis(double flexBasis) {
-	    YGNodeStyleSetFlexBasis(id, (float)flexBasis);
-	  }
+	/**
+	 * Describes how to shrink children along the main axis in the 
+	 * case that the total size of the children overflow the size 
+	 * of the container on the main axis. flex shrink is very similar 
+	 * to flex grow and can be thought of in the same way if any 
+	 * overflowing size is considered to be negative remaining space. 
+	 * These two properties also work well together by allowing 
+	 * children to grow and shrink as needed.
+	 * <p>
+	 * Flex shrink accepts any floating point value >= 0, with 1 being 
+	 * the default value. A container will shrink its children 
+	 * weighted by the child�s flex shrink value.
+	 * @param flexShrink
+	 */
+	public void flexShrink(double flexShrink) {
+		YGNodeStyleSetFlexShrink(id, (float) flexShrink);
+	}
 
-	  public void flexBasisPercent(double percent) {
-	    YGNodeStyleSetFlexBasisPercent(id, (float)percent);
-	  }
+	public double flexBasis() {
+		YGValue myValue = YGValue.create();
+		YGNodeStyleGetFlexBasis(id, myValue);
+		return myValue.value();
+	}
 
-	  public void flexBasisAuto() {
-	    YGNodeStyleSetFlexBasisAuto(id);
-	  }
+	/**
+	 * FLEX BASIS is an axis-independent way of providing the default size of an 
+	 * item along the main axis. Setting the flex basis of a child is similar to 
+	 * setting the width of that child if its parent is a container with 
+	 * flex direction: row or setting the height of a child if its parent is a 
+	 * container with flex direction: column. The flex basis of an item is the 
+	 * default size of that item, the size of the item before any flex grow and 
+	 * flex shrink calculations are performed.
+	 * @param flexBasis
+	 */
+	public void flexBasis(double flexBasis) {
+		YGNodeStyleSetFlexBasis(id, (float) flexBasis);
+	}
 
-	  public double margin(CCYogaEdge edge) {
-		  YGValue myValue = YGValue.create();
-		  YGNodeStyleGetMargin(id,edge.id,myValue);
-		    return myValue.value();
-	  }
-
-	  public void margin(CCYogaEdge edge, double margin) {
-	    YGNodeStyleSetMargin(id, edge.id, (float)margin);
-	  }
-
-	  public void marginPercent(CCYogaEdge edge, double percent) {
-	    YGNodeStyleSetMarginPercent(id, edge.id, (float)percent);
-	  }
-
-	  public void marginAuto(CCYogaEdge edge) {
-	    YGNodeStyleSetMarginAuto(id, edge.id);
-	  }
-
-	  public double padding(CCYogaEdge edge) {
-		  YGValue myValue = YGValue.create();
-		  YGNodeStyleGetPadding(id,edge.id,myValue);
-		    return myValue.value();
-	  }
-
-	  public void padding(CCYogaEdge edge, double padding) {
-	    YGNodeStyleSetPadding(id, edge.id, (float)padding);
-	  }
-
-	  public void paddingPercent(CCYogaEdge edge, double percent) {
-	    YGNodeStyleSetPaddingPercent(id, edge.id, (float)percent);
-	  }
-
-	  public double border(CCYogaEdge edge) {
-	    return YGNodeStyleGetBorder(id, edge.id);
-	  }
-
-	  public void border(CCYogaEdge edge, double border) {
-	    YGNodeStyleSetBorder(id, edge.id, (float)border);
-	  }
-
-
-	  public void positionPercent(CCYogaEdge edge, double percent) {
-	    YGNodeStyleSetPositionPercent(id, edge.id, (float)percent);
-	  }
-
-	  public double minWidth() {
-		  YGValue myValue = YGValue.create();
-		  YGNodeStyleGetMinWidth(id,myValue);
-		    return myValue.value();
-	  }
-
-	  public void minWidth(double minWidth) {
-	    YGNodeStyleSetMinWidth(id, (float)minWidth);
-	  }
-
-	  public void minWidthPercent(double percent) {
-	    YGNodeStyleSetMinWidthPercent(id, (float)percent);
-	  }
-
-	  public double minHeight() {
-		  YGValue myValue = YGValue.create();
-		  YGNodeStyleGetMinHeight(id,myValue);
-		    return myValue.value();
-	  }
-
-	  public void minHeight(double minHeight) {
-	    YGNodeStyleSetMinHeight(id, (float)minHeight);
-	  }
-
-	  public void minHeightPercent(double percent) {
-	    YGNodeStyleSetMinHeightPercent(id, (float)percent);
-	  }
-
-	  public double maxWidth() {
-		  YGValue myValue = YGValue.create();
-		  YGNodeStyleGetMaxWidth(id,myValue);
-		    return myValue.value();
-	  }
-
-	  public void maxWidth(double maxWidth) {
-	    YGNodeStyleSetMaxWidth(id, (float)maxWidth);
-	  }
-
-	  public void maxWidthPercent(double percent) {
-	    YGNodeStyleSetMaxWidthPercent(id, (float)percent);
-	  }
-
-	  public double maxHeight() {
-		  YGValue myValue = YGValue.create();
-		  YGNodeStyleGetMaxHeight(id,myValue);
-		    return myValue.value();
-	  }
-
-	  public void maxHeight(double maxheight) {
-	    YGNodeStyleSetMaxHeight(id, (float)maxheight);
-	  }
-
-	  public void maxHeightPercent(double percent) {
-	    YGNodeStyleSetMaxHeightPercent(id, (float)percent);
-	  }
-
-	  public double aspectRatio() {
-	    return YGNodeStyleGetAspectRatio(id);
-	  }
-
-	  public void aspectRatio(double theAspectRatio) {
-		  YGNodeStyleSetAspectRatio(id, (float)theAspectRatio);
-	  }
-
-	  public double left() {
-		  return YGNodeLayoutGetLeft(id);
-	  }
-
-	  public double top() {
-	    return YGNodeLayoutGetTop(id);
-	  }
-
-	  public double width() {
-	    return YGNodeLayoutGetWidth(id);
-	  }
-
-	  public double height() {
-		    return YGNodeLayoutGetHeight(id);
-	  }
-
-//	  public boolean doesLegacyStretchFlagAffectsLayout() {
-//	    return mDoesLegacyStretchFlagAffectsLayout;
-//	  }
-
-	  public double layoutMargin(CCYogaEdge edge) {
-		  return YGNodeLayoutGetMargin(id, edge.id);
-	  }
-
-	  public double layoutPadding(CCYogaEdge edge) {
-		  return YGNodeLayoutGetPadding(id, edge.id);
-	  }
-
-	  public double layoutBorder(CCYogaEdge edge) {
-		  return YGNodeLayoutGetBorder(id, edge.id);
-	  }
-
-	  public CCYogaDirection layoutDirection() {
-	    return CCYogaDirection.fromInt(YGNodeLayoutGetDirection(id));
-	  }
-	  
-//	  public void measureFunction(YogaMeasureFunction measureFunction) {
-//	    mMeasureFunction = measureFunction;
-//	    YGNodeSetHasMeasureFunc(id, measureFunction != null);
-//	  }
-//
-//	  // Implementation Note: Why this method needs to stay final
-//	  //
-//	  // We cache the jmethodid for this method in Yoga code. This means that even if a subclass
-//	  // were to override measure, we'd still call this implementation from layout code since the
-//	  // overriding method will have a different jmethodid. This is final to prevent that mistake.
-//	  @DoNotStrip
-//	  public final long measure(double width, int widthMode, double height, int heightMode) {
-//	    if (!isMeasureDefined()) {
-//	      throw new RuntimeException("Measure function isn't defined!");
-//	    }
-//
-//	    return mMeasureFunction.measure(
-//	        this,
-//	        width,
-//	        YogaMeasureMode.fromInt(widthMode),
-//	        height,
-//	        YogaMeasureMode.fromInt(heightMode));
-//	  }
-//
-//	  private native void YGNodeSetHasBaselineFunc(long nativePointer, boolean hasMeasureFunc);
-//	  
-//	  public void baselineFunction(YogaBaselineFunction baselineFunction) {
-//	    YGNodeSetHasBaselineFunc(id, baselineFunction != null);
-//	  }
-//
-//	  @DoNotStrip
-//	  public final double baseline(double width, double height) {
-//	    return mBaselineFunction.baseline(this, width, height);
-//	  }
-//
-//	  public boolean isMeasureDefined() {
-//	    return mMeasureFunction != null;
-//	  }
-
+	/**
+	 * @see #flexBasis(float)
+	 * @param percent
+	 */
+	public void flexBasisPercent(double percent) {
+		YGNodeStyleSetFlexBasisPercent(id, (float) percent);
+	}
+	/**
+	 * @see #flexBasis(float)
+	 * @param percent
+	 */
+	public void flexBasisAuto() {
+		YGNodeStyleSetFlexBasisAuto(id);
+	}
 	
 
+	/**
+	 * The flex wrap property is set on containers and controls what happens when 
+	 * children overflow the size of the container along the main axis. 
+	 * @author christian riekoff
+	 *
+	 */
+	public static enum CCYogaFlexWrap {
+		/**
+		 * children are forced into a single line (which can shrink elements).
+		 */
+		NO_WRAP(YGWrapNoWrap), 
+		/**
+		 * items are wrapped into multiple lines along the main axis
+		 */
+		WRAP(YGWrapWrap), 
+		/**
+		 * behaves like wrap, but the order of the lines is reversed.
+		 */
+		WRAP_REVERSE(YGWrapReverse);
 
-	  /**
-	   * Use the set logger (defaults to adb log) to print out the styles, children, and computed
-	   * layout of the tree rooted at this node.
-	   */
-	  public void print() {
-//		  YGNodePrint(id);
-	  }
+		public final int id;
 
-//	  /**
-//	   * This method replaces the child at childIndex position with the newNode received by parameter.
-//	   * This is different than calling removeChildAt and addChildAt because this method ONLY replaces
-//	   * the child in the mChildren datastructure. @DoNotStrip: called from JNI
-//	   *
-//	   * @return the nativePointer of the newNode {@linl YogaNode}
-//	   */
-//	  @DoNotStrip
-//	  private final long replaceChild(YogaNode newNode, int childIndex) {
-//	    if (mChildren == null) {
-//	      throw new IllegalStateException("Cannot replace child. YogaNode does not have children");
-//	    }
-//	    mChildren.remove(childIndex);
-//	    mChildren.add(childIndex, newNode);
-//	    newNode.mOwner = this;
-//	    return newNode.id;
-//	  }
+		CCYogaFlexWrap(int theID) {
+			id = theID;
+		}
+
+		public static CCYogaFlexWrap fromInt(int theID) {
+			switch (theID) {
+			case YGWrapNoWrap:
+				return NO_WRAP;
+			case YGWrapWrap:
+				return WRAP;
+			case YGWrapReverse:
+				return WRAP_REVERSE;
+			default:
+				throw new IllegalArgumentException("Unknown enum value: " + theID);
+			}
+		}
+	}
+
+	/**
+	 * The flex wrap property is set on containers and controls what happens when 
+	 * children overflow the size of the container along the main axis. 
+	 * By default children are forced into a single line (which can shrink elements).
+	 * <p>
+	 * If wrapping is allowed items are wrapped into multiple lines along the main axis 
+	 * if needed. wrap reverse behaves the same, but the order of the lines is reversed.
+	 * @param flexWrap
+	 */
+	public void flexWrap(CCYogaFlexWrap flexWrap) {
+		YGNodeStyleSetFlexWrap(id, flexWrap.id);
+	}
+	
+	/**
+	 * @see #flexWrap(CCYogaFlexWrap)
+	 * @return
+	 */
+	public CCYogaFlexWrap flexWrap() {
+		return CCYogaFlexWrap.fromInt(YGNodeStyleGetFlexWrap(id));
+	}
+
+	public double margin(CCYogaEdge theEdge) {
+		YGValue myValue = YGValue.create();
+		YGNodeStyleGetMargin(id, theEdge.id, myValue);
+		return myValue.value();
+	}
+	
+	/**
+	 * Return the margin value for layout purposes considering different values etc for all vertical left etc
+	 * @param theEdge
+	 * @return the margin for layout purposes
+	 */
+	public double layoutMargin(CCYogaEdge theEdge) {
+		return YGNodeLayoutGetMargin(id, theEdge.id);
+	}
+
+	/**
+	 * MARGIN effects the spacing around the outside of a node. 
+	 * A node with margin will offset itself from the bounds of its parent 
+	 * but also offset the location of any siblings. The margin of a node 
+	 * contributes to the total size of its parent if the parent is auto sized.
+	 * @param theEdge
+	 * @param theMargin
+	 */
+	public void margin(CCYogaEdge theEdge, double theMargin) {
+		YGNodeStyleSetMargin(id, theEdge.id, (float) theMargin);
+	}
+
+	public void marginPercent(CCYogaEdge theEdge, double percent) {
+		YGNodeStyleSetMarginPercent(id, theEdge.id, (float) percent);
+	}
+
+	public void marginAuto(CCYogaEdge theEdge) {
+		YGNodeStyleSetMarginAuto(id, theEdge.id);
+	}
+
+	public double padding(CCYogaEdge theEdge) {
+		YGValue myValue = YGValue.create();
+		YGNodeStyleGetPadding(id, theEdge.id, myValue);
+		return Float.isNaN(myValue.value()) ? 0 : myValue.value();
+	}
+
+
+	/**
+	 * Return the padding value for layout purposes considering different values etc for all vertical left etc
+	 * @param theEdge
+	 * @return the padding for layout purposes
+	 */
+	public double layoutPadding(CCYogaEdge theEdge) {
+		return YGNodeLayoutGetPadding(id, theEdge.id);
+	}
+
+	/**
+	 * PADDING affects the size of the node it is applied to. 
+	 * Padding in Yoga acts as if box-sizing: border-box; was set. 
+	 * That is padding will not add to the total size of an element 
+	 * if it has an explicit size set. For auto sized nodes padding 
+	 * will increase the size of the node as well as offset the location 
+	 * of any children.
+	 * @param theEdge
+	 * @param thePadding
+	 */
+	public void padding(CCYogaEdge theEdge, double thePadding) {
+		YGNodeStyleSetPadding(id, theEdge.id, (float) thePadding);
+	}
+
+	/**
+	 * Same like {@linkplain #padding(CCYogaEdge, double)} but in percent of the parents width.
+	 * @param theEdge
+	 * @param percent
+	 */
+	public void paddingPercent(CCYogaEdge theEdge, double percent) {
+		YGNodeStyleSetPaddingPercent(id, theEdge.id, (float) percent);
+	}
+
+	/**
+	 * Returns the border value set for the given edge.
+	 * @see #border(CCYogaEdge, double)
+	 * @param theEdge 
+	 * @return
+	 */
+	public double border(CCYogaEdge theEdge) {
+		return YGNodeStyleGetBorder(id, theEdge.id);
+	}
+
+	/**
+	 * Return the border value for layout purposes considering different values for all vertical left etc
+	 * @param theEdge
+	 * @return the border for layout purposes
+	 */
+	public double layoutBorder(CCYogaEdge theEdge) {
+		return YGNodeLayoutGetBorder(id, theEdge.id);
+	}
+
+	/**
+	 * BORDER in Yoga acts exactly like padding and only exists as a 
+	 * separate property so that higher level frameworks get a hint 
+	 * as to how thick to draw a border. Yoga however does not do any 
+	 * drawing so just uses this information during layout where 
+	 * border acts exactly like padding.
+	 * @param theEdge
+	 * @param border
+	 */
+	public void border(CCYogaEdge theEdge, double border) {
+		YGNodeStyleSetBorder(id, theEdge.id, (float) border);
+	}
+
+	public void positionPercent(CCYogaEdge theEdge, double percent) {
+		YGNodeStyleSetPositionPercent(id, theEdge.id, (float) percent);
+	}
+
+	/**
+	 * Return the minimum width of an element in absolute pixels.
+	 * @return min width of the node in pixels
+	 */
+	public double minWidth() {
+		YGValue myValue = YGValue.create();
+		YGNodeStyleGetMinWidth(id, myValue);
+		return myValue.value();
+	}
+
+	/**
+	 * Sets the minimum width of an element in absolute pixels.
+	 * This property has higher priority than all other properties 
+	 * and will always be respected.
+	 * @param theMinWidth min width of the node in pixels
+	 */
+	public void minWidth(double theMinWidth) {
+		YGNodeStyleSetMinWidth(id, (float) theMinWidth);
+	}
+
+	/**
+	 * Sets the minimum width of an element in percentages of its parent's size.
+	 * This property has higher priority than all other properties 
+	 * and will always be respected.
+	 * @param theMinWidth min width of the node in percentages of its parent's size
+	 */
+	public void minWidthPercent(double theMinWidth) {
+		YGNodeStyleSetMinWidthPercent(id, (float) theMinWidth);
+	}
+
+	/**
+	 * Return the minimum height of an element in absolute pixels.
+	 * @return min height of the node in pixels
+	 */
+	public double minHeight() {
+		YGValue myValue = YGValue.create();
+		YGNodeStyleGetMinHeight(id, myValue);
+		return myValue.value();
+	}
+
+	/**
+	 * Sets the minimum height of an element in absolute pixels.
+	 * This property has higher priority than all other properties 
+	 * and will always be respected.
+	 * @param theMinHeight min height of the node in pixels
+	 */
+	public void minHeight(double theMinHeight) {
+		YGNodeStyleSetMinHeight(id, (float) theMinHeight);
+	}
+
+	/**
+	 * Sets the minimum height of an element in percentages of its parent's size.
+	 * This property has higher priority than all other properties 
+	 * and will always be respected.
+	 * @param theMinWidth min height of the node in percentages of its parent's size
+	 */
+	public void minHeightPercent(double theMinheight) {
+		YGNodeStyleSetMinHeightPercent(id, (float) theMinheight);
+	}
+	
+	/**
+	 * Return the maximum width of an element in absolute pixels.
+	 * @return max width of the node in pixels
+	 */
+	public double maxWidth() {
+		YGValue myValue = YGValue.create();
+		YGNodeStyleGetMaxWidth(id, myValue);
+		return myValue.value();
+	}
+
+	/**
+	 * Sets the maximum width of an element in absolute pixels.
+	 * This property has higher priority than all other properties 
+	 * and will always be respected.
+	 * @param theMaxWidth max width of the node in pixels
+	 */
+	public void maxWidth(double theMaxWidth) {
+		YGNodeStyleSetMaxWidth(id, (float) theMaxWidth);
+	}
+
+	/**
+	 * Sets the maximum width of an element in percentages of its parent's size.
+	 * This property has higher priority than all other properties 
+	 * and will always be respected.
+	 * @param theMaxWidth max width of the node in percentages of its parent's size
+	 */
+	public void maxWidthPercent(double theMaxWidth) {
+		YGNodeStyleSetMaxWidthPercent(id, (float) theMaxWidth);
+	}
+
+	/**
+	 * Return the maximum height of an element in absolute pixels.
+	 * @return max height of the node in pixels
+	 */
+	public double maxHeight() {
+		YGValue myValue = YGValue.create();
+		YGNodeStyleGetMaxHeight(id, myValue);
+		return myValue.value();
+	}
+
+	/**
+	 * Sets the maximum height of an element in absolute pixels.
+	 * This property has higher priority than all other properties 
+	 * and will always be respected.
+	 * @param theMaxHeight max height of the node in pixels
+	 */
+	public void maxHeight(double theMaxHeight) {
+		YGNodeStyleSetMaxHeight(id, (float) theMaxHeight);
+	}
+
+	/**
+	 * Sets the maximum height of an element in percentages of its parent's size.
+	 * This property has higher priority than all other properties 
+	 * and will always be respected.
+	 * @param theMaxHeight max height of the node in percentages of its parent's size
+	 */
+	public void maxHeightPercent(double theMaxHeight) {
+		YGNodeStyleSetMaxHeightPercent(id, (float) theMaxHeight);
+	}
+
+	/**
+	 * @see #aspectRatio()
+	 * @return
+	 */
+	public double aspectRatio() {
+		return YGNodeStyleGetAspectRatio(id);
+	}
+
+	/**
+	 * AspectRatio is a property introduced by Yoga and is not present as a
+	 * settable property in the css flexbox specification. Flexbox does has 
+	 * the notion of aspect ratio though for things with intrinsic aspect ratio such as images.
+	 * <p>
+	 * The aspect ratio property in Yoga has the following properties:
+	 * <ul>
+	 * <li>Accepts any floating point value > 0, the default is undefined.
+	 * <li>Defined as the ratio between the width and the height of a node e.g. if a node has an aspect ratio of 2 then its width is twice the size of its height.
+	 * <li>Respects the min and max dimensions of an item.
+	 * <li>Has higher priority than flex grow
+	 * <li>If aspect ratio, width, and height are set then the cross axis dimension is overridden.
+	 * </ul>
+
+	 * @param theAspectRatio
+	 */
+	public void aspectRatio(double theAspectRatio) {
+		YGNodeStyleSetAspectRatio(id, (float) theAspectRatio);
+	}
+
+	public double left() {
+		return YGNodeLayoutGetLeft(id);
+	}
+	
+	public double right() {
+		return YGNodeLayoutGetRight(id);
+	}
+
+	public double top() {
+		return YGNodeLayoutGetTop(id);
+	}
+
+	public double bottom() {
+		return YGNodeLayoutGetBottom(id);
+	}
+
+	public double width() {
+		return YGNodeLayoutGetWidth(id);
+	}
+
+	public double height() {
+		return YGNodeLayoutGetHeight(id);
+	}
+
+	public CCYogaDirection layoutDirection() {
+		return CCYogaDirection.fromInt(YGNodeLayoutGetDirection(id));
+	}
+	
+
+	// public void measureFunction(YogaMeasureFunction measureFunction) {
+	// mMeasureFunction = measureFunction;
+	// YGNodeSetHasMeasureFunc(id, measureFunction != null);
+	// }
+	//
+	// // Implementation Note: Why this method needs to stay final
+	// //
+	// // We cache the jmethodid for this method in Yoga code. This means that even
+	// if a subclass
+	// // were to override measure, we'd still call this implementation from layout
+	// code since the
+	// // overriding method will have a different jmethodid. This is final to
+	// prevent that mistake.
+	// @DoNotStrip
+	// public final long measure(double width, int widthMode, double height, int
+	// heightMode) {
+	// if (!isMeasureDefined()) {
+	// throw new RuntimeException("Measure function isn't defined!");
+	// }
+	//
+	// return mMeasureFunction.measure(
+	// this,
+	// width,
+	// YogaMeasureMode.fromInt(widthMode),
+	// height,
+	// YogaMeasureMode.fromInt(heightMode));
+	// }
+	//
+	// private native void YGNodeSetHasBaselineFunc(long nativePointer, boolean
+	// hasMeasureFunc);
+	//
+	// public void baselineFunction(YogaBaselineFunction baselineFunction) {
+	// YGNodeSetHasBaselineFunc(id, baselineFunction != null);
+	// }
+	//
+	// @DoNotStrip
+	// public final double baseline(double width, double height) {
+	// return mBaselineFunction.baseline(this, width, height);
+	// }
+	//
+	// public boolean isMeasureDefined() {
+	// return mMeasureFunction != null;
+	// }
+
+	/**
+	 * Use the set logger (defaults to adb log) to print out the styles, children,
+	 * and computed layout of the tree rooted at this node.
+	 */
+	public void print() {
+		// YGNodePrint(id);
+	}
+
+	// /**
+	// * This method replaces the child at childIndex position with the newNode
+	// received by parameter.
+	// * This is different than calling removeChildAt and addChildAt because this
+	// method ONLY replaces
+	// * the child in the mChildren datastructure. @DoNotStrip: called from JNI
+	// *
+	// * @return the nativePointer of the newNode {@linl YogaNode}
+	// */
+	// @DoNotStrip
+	// private final long replaceChild(YogaNode newNode, int childIndex) {
+	// if (mChildren == null) {
+	// throw new IllegalStateException("Cannot replace child. YogaNode does not have
+	// children");
+	// }
+	// mChildren.remove(childIndex);
+	// mChildren.add(childIndex, newNode);
+	// newNode.mOwner = this;
+	// return newNode.id;
+	// }
 }

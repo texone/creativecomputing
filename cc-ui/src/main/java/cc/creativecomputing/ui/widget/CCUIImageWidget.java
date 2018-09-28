@@ -16,9 +16,7 @@ public class CCUIImageWidget extends CCUIWidget{
 	
 	
 	public CCUIImageWidget(CCTexture2D theTexture) {
-		super(createDefaultStyle(theTexture), theTexture.width(), theTexture.height());
-		_myMinWidth = theTexture.width();
-		_myMinHeight = theTexture.height();
+		super(createDefaultStyle(theTexture));
 	}
 
 }

@@ -1,6 +1,7 @@
 package cc.creativecomputing.ui.widget;
 
 import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.gl.app.CCGLMouseButton;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
@@ -18,37 +19,51 @@ public class CCUIColorPicker extends CCUILabelWidget{
 
 	public CCEventManager<CCColor> changeEvents = new CCEventManager<>();
 
-	public CCUIColorPicker(CCUIWidgetStyle theStyle, CCColor theColor, double theWidth, double theHeight){
+	public CCUIColorPicker(CCUIWidgetStyle theStyle, CCColor theColor){
 		super(theStyle, theColor.toString());
-		_myMinWidth = theWidth;
-		_myMinHeight = theHeight;
-		width(theWidth);
-		height(theHeight);
+		debugInfo("color picker", theColor);
 		_myFillDrawable = new CCUIFillDrawable(theColor);
 		
-		_myOverlay = _myColorWheel = new CCUIColorWheel(200);
+		_myColorWheel = new CCUIColorWheel(200);
 		_myColorWheel.changeEvents.add(c -> {
 			color(c, true);
 		});
 		_myColorWheel.isActive(false);
+		
+		overlay(_myColorWheel);
 
 		_myColorWheel.mouseReleasedOutside.add(event ->{
 			_myColorWheel.isActive(false);
+			removeChild(_myColorWheel);
 		});
 		_myColorWheel.setFromColor(theColor);
 		
 		mousePressed.add(event -> {
-			_myColorWheel.translation().set(-_myColorWheel.width() / 2 + width() / 2, _myColorWheel.height() / 2  - height() / 2);
+			if(event.button != CCGLMouseButton.BUTTON_RIGHT)return;
+//			_myColorWheel.translation().set(-_myColorWheel.width() / 2 + width() / 2, _myColorWheel.height() / 2  - height() / 2);
+			_myColorWheel.positionType(CCYogaPositionType.ABSOLUTE);
+			_myColorWheel.position(CCYogaEdge.LEFT, -_myColorWheel.width() / 2 + width() / 2);
+			_myColorWheel.position(CCYogaEdge.TOP,  -_myColorWheel.height() / 2 + height() / 2 );
 			_myColorWheel.isActive(true);
-			_myColorWheel.parent(this);
+			addChild(_myColorWheel);
+			root().calculateLayout();
 			_myColorWheel.updateMatrices();
 		});
 		
 		color(theColor, false);
 	}
 	
-	public CCUIColorPicker(CCColor theColor, double theWidth, double theHeight){
-		this(createDefaultStyle(), theColor, theWidth, theHeight); 
+	@Override
+	public boolean isEndNode() {
+		return !_myColorWheel.isActive();
+	}
+	
+	public CCUIColorPicker(CCColor theColor) {
+		this(createDefaultStyle(), theColor);
+	}
+	
+	public CCUIColorPicker() {
+		this(CCColor.RED);
 	}
 	
 	public void color(CCColor theColor, boolean theSendValue) {
@@ -58,15 +73,15 @@ public class CCUIColorPicker extends CCUILabelWidget{
 
 	}
 	
-	@Override
-	public CCUIWidget overlayWidget() {
-		return _myColorWheel.isActive() ? _myColorWheel : null;
-	}
+//	@Override
+//	public CCUIWidget overlayWidget() {
+//		return _myColorWheel.isActive() ? _myColorWheel : null;
+//	}
 	
 	@Override
-	public void drawContent(CCGraphics g) {
+	public void displayContent(CCGraphics g) {
 		_myFillDrawable.draw(g, this);
-		super.drawContent(g);
+		super.displayContent(g);
 		
 	}
 }

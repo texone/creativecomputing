@@ -18,7 +18,7 @@
 package cc.creativecomputing.ui.draw;
 
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode;
 
 /**
  * @author christianriekoff
@@ -26,6 +26,6 @@ import cc.creativecomputing.ui.widget.CCUIWidget;
  */
 public interface CCUIDrawable{
 	
-	public void draw(CCGraphics g, CCUIWidget theWidget);
+	public void draw(CCGraphics g, CCYogaNode theWidget);
 	
 }

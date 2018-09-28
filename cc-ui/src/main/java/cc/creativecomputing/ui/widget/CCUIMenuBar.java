@@ -17,9 +17,8 @@
 package cc.creativecomputing.ui.widget;
 
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 
-public class CCUIMenuBar extends CCUIHorizontalFlowPane{
+public class CCUIMenuBar extends CCUIWidget{
 	
 	public CCColor background = new CCColor(50);
 	public CCColor selectBackground = new CCColor(100);
@@ -32,7 +31,7 @@ public class CCUIMenuBar extends CCUIHorizontalFlowPane{
 	
 	public CCUIMenuBar(CCUIWidgetStyle theMenueStyle){
 		super(theMenueStyle);
-		space(30);
+		flexDirection(CCYogaFlexDirection.ROW);
 	}
 	
 	public CCUIMenuBar(){
@@ -43,7 +42,9 @@ public class CCUIMenuBar extends CCUIHorizontalFlowPane{
 		CCUIDropDownWidget myDropDown = new CCUIDropDownWidget(style(), theTitle, theMenue);
 		myDropDown.adjustLabelBySelection(false);
 		myDropDown.showIcon(false);
+		myDropDown.flex(0.);
+		myDropDown.margin(CCYogaEdge.RIGHT, 10);
 		addChild(myDropDown);
-		theMenue.translation().set(0, -height());
+//		theMenue.translation().set(0, -height());
 	}
 }

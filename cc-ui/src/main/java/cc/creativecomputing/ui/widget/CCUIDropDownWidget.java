@@ -17,13 +17,11 @@
 package cc.creativecomputing.ui.widget;
 
 import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 
 public class CCUIDropDownWidget extends CCUILabelWidget{
@@ -31,11 +29,8 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	public static CCUIWidgetStyle createDefaultStyle(){
 		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
 		myResult.font(CCUIContext.FONT_20);
-		myResult.inset(4);
-		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
-		myResult.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
-		myResult.background(new CCUIFillDrawable(new CCColor(0.3d)));
-		myResult.itemSelectBackground(new CCColor(0.5d));
+		myResult.background(new CCUIFillDrawable(new CCColor(0.2d)));
+		myResult.itemSelectBackground(new CCColor(0.4d));
 		return myResult;
 	}
 	
@@ -51,8 +46,8 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	
 	public CCUIDropDownWidget(CCUIWidgetStyle theStyle, String theTitle, CCUIMenu theMenue) {
 		super(theStyle, theTitle);
-		_myOverlay = _myMenue = theMenue;
-		_myMenue.parent(this);
+		_myMenue = theMenue;
+		overlay(_myMenue);
 		
 		_myMenue.clickItemEvents.add(item -> {
 			if(_myAdjustLabel)textField().text(item.text());
@@ -61,17 +56,42 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 		_myIcon = new CCUIIconWidget(new CCUIWidgetStyle(),CCEntypoIcon.ICON_SELECT_ARROWS);
 		
 		mousePressed.add(event -> {
-			_myMenue.translation().set(event.x, event.y);
-			_myMenue.isActive(true);
-			_myMenue.updateMatrices();
-			_myMenue.reset();
+			openMenu();
 		});
+//		mouseClicked.add(event -> {
+//			CCLog.info("mouse clicked");
+//			openMenu();
+//		});
 		mouseReleased.add(event ->{
 			_myMenue.isActive(false);
+			removeChild(_myMenue);
 		});
 		mouseReleasedOutside.add(event ->{
 			_myMenue.isActive(false);
+			removeChild(_myMenue);
 		});	
+		_myTextFieldNode.flex(1);
+		
+
+		minWidth(_myTextField.width());
+		minHeight(_myTextField.height());
+		
+		flex(1);
+		addChild(_myIcon);
+		justifyContent(CCYogaJustify.FLEX_END);
+	}
+	
+	private void openMenu() {
+		_myMenue.isActive(true);
+		_myMenue.positionType(CCYogaPositionType.ABSOLUTE);
+		_myMenue.position(CCYogaEdge.LEFT, 0);
+		_myMenue.position(CCYogaEdge.TOP,  height());
+		_myMenue.minWidth(width());
+		_myMenue.flex(1);
+		_myMenue.reset();
+		addChild(_myMenue);
+		root().calculateLayout();
+		_myMenue.updateMatrices();
 	}
 	
 	public CCUIDropDownWidget(String theTitle, CCUIMenu theMenue) {
@@ -88,6 +108,11 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 	
 	public void showIcon(boolean theShowIcon) {
 		_myShowIcon = theShowIcon;
+		if(_myShowIcon) {
+			addChild(_myIcon);
+		}else {
+			removeChild(_myIcon);
+		}
 	}
 	
 	public CCUIDropDownWidget(CCUIWidgetStyle theMenueStyle){
@@ -106,15 +131,15 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 		return _myMenue;
 	}
 	
-	@Override
-	public double width() {
-		return CCMath.max(_myWidth,_myTextField.width()) + _myStyle.leftInset() + _myStyle.rightInset();
-	}
+//	@Override
+//	public double width() {
+//		return CCMath.max(_myWidth,_myTextField.width()) + _myStyle.leftInset() + _myStyle.rightInset();
+//	}
 	
 	@Override
 	public void width(double theWidth) {
 		super.width(theWidth);
-		_myMenue.width(theWidth);
+		if(_myMenue != null)_myMenue.width(theWidth);
 	}
 	
 	@Override
@@ -133,17 +158,8 @@ public class CCUIDropDownWidget extends CCUILabelWidget{
 		_myMenue.addItem(new CCUICheckBox(), theLabel, e -> {});
 	}
 	
-	public void addSeparator(){
-		_myMenue.addSeparator();
-	}
-	
-	@Override
-	public void drawContent(CCGraphics g) {
-		super.drawContent(g);
-		if(!_myShowIcon)return;
-		_myIcon.textField().position().set(width() - _myIcon.width(), - _myIcon.height(), 0);
-		_myIcon.textField().draw(g);
-		
+	public CCUIHorizontalSeperator addSeparator(){
+		return _myMenue.addSeparator();
 	}
 
 	public void selectedItem(String theValue, boolean theSendEvents) {

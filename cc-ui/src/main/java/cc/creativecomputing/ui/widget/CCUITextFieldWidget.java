@@ -18,39 +18,29 @@
 package cc.creativecomputing.ui.widget;
 
 import cc.creativecomputing.core.CCEventManager;
-import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCTextField;
 import cc.creativecomputing.graphics.font.CCTextFieldController;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.draw.CCUITextFieldDrawable;
-import cc.creativecomputing.ui.layout.CCUIPane;
 
 /**
  * @author christianriekoff
  *
  */
-public class CCUITextFieldWidget extends CCUIWidget{
+public class CCUITextFieldWidget extends CCUILabelWidget{
 	
 	public static CCUIWidgetStyle createDefaultStyle(){
 		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
 		myResult.font(CCUIContext.FONT_20);
-		myResult.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
-		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
-		myResult.background(new CCUIFillDrawable(new CCColor(0.3d)));
-		myResult.inset(4);
+		myResult.background(new CCUIFillDrawable(new CCColor(0.2d)));
 		return myResult;
 	}
-	
-	@CCProperty(name = "textfield")
-	protected CCTextField _myTextField;
 	
 	private CCUITextFieldDrawable _myTextDecorator;
 	
@@ -59,8 +49,7 @@ public class CCUITextFieldWidget extends CCUIWidget{
 	public CCEventManager<String> changeEvents = new CCEventManager<>();
 
 	public CCUITextFieldWidget(CCUIWidgetStyle theStyle, String theText) {
-		super(theStyle);
-		_myTextField = new CCTextField(theStyle.font(), theText);
+		super(theStyle,theText);
 		_myTextController = new CCTextFieldController(_myTextField);
 		
 		_myTextController.changeEvents.add(text -> {
@@ -69,19 +58,22 @@ public class CCUITextFieldWidget extends CCUIWidget{
 		});
 		
 //		if(theStyle.foreground() != null && theStyle.foreground() instanceof CCUITextFieldDrawable){
-			_myTextDecorator = new CCUITextFieldDrawable(_myTextController);
+			_myTextDecorator = new CCUITextFieldDrawable(this, _myTextController);
 //		}
 		//_myForeground = 
 		
-		mousePressed.add(_myTextController::mousePress);
-		mouseReleased.add(event -> {});
+//		mousePressed.add(_myTextController::mousePress);
+//		mouseReleased.add(event -> {});
+//		
+//		focusLost.add(e -> _myTextDecorator.showCursor(false));
+//		focusGained.add(e -> _myTextDecorator.showCursor(true));
+//		
+//		keyPressed.add(_myTextController::keyPress);
+//		keyChar.add(_myTextController::keyChar);
+//		keyChar.add(theChar -> {});
 		
-		focusLost.add(e ->{_myTextDecorator.showCursor(false);});
-		focusGained.add(e ->{_myTextDecorator.showCursor(true);});
-		
-		keyPressed.add(_myTextController::keyPress);
-		keyChar.add(_myTextController::keyChar);
-		keyChar.add(theChar -> {});
+		minWidth(_myTextField.width());
+		minHeight(_myTextField.height());
 		
 		style(theStyle);
 	}
@@ -103,26 +95,6 @@ public class CCUITextFieldWidget extends CCUIWidget{
 		if(theSendEvents)changeEvents.event(theText);
 	}
 	
-	@Override
-	public double width() {
-		return CCMath.max(_myWidth,_myTextField.width()) + _myStyle.leftInset() + _myStyle.rightInset();
-	}
-	
-	@Override
-	public double height() {
-		return _myTextField.height() + _myStyle.topInset() + _myStyle.bottomInset();
-	}
-	
-	@Override
-	public double minWidth() {
-		return CCMath.max(_myMinWidth,_myTextField.width()) + _myStyle.leftInset() + _myStyle.rightInset();
-	}
-	
-	@Override
-	public double minHeight() {
-		return CCMath.max(_myMinHeight, _myTextField.height()) + _myStyle.topInset() + _myStyle.bottomInset();
-	}
-	
 	public void valueText(boolean theIsValueBox) {
 //		_myTextController.valueText(theIsValueBox);
 	}
@@ -131,45 +103,33 @@ public class CCUITextFieldWidget extends CCUIWidget{
 		double myAdd = 0;
 		switch(_myTextField.align()) {
 		case RIGHT:
-			myAdd = width() - _myStyle.leftInset() - _myStyle.rightInset();
+			myAdd = width();
 			break;
 		case CENTER:
-			myAdd = (width() - _myStyle.leftInset() - _myStyle.rightInset()) / 2;
+			myAdd = width() / 2;
 			break;
 		default:
 			break;
 		}
-		return new CCVector2(_myStyle.leftInset() + myAdd, - _myTextField.ascent() - _myStyle.topInset());
+		return new CCVector2(myAdd, _myTextField.ascent());
 	}
 	
 	@Override
 	public void update(CCGLTimer theTimer) {
 		super.update(theTimer);
-		
-		if(_myTextField.font() != _myStyle.font()){
-			_myTextField.font(_myStyle.font());
-			if(parent() instanceof CCUIPane){
-				((CCUIPane)parent()).updateLayout();
-			}
-			root().updateMatrices();
-		}
-		
+//		
+//		if(_myTextField.font() != _myStyle.font()){
+//			_myTextField.font(_myStyle.font());
+//			root().updateMatrices();
+//		}
+//		
 		_myTextDecorator.update(theTimer);
-		_myTextField.position().set(textPosition());
+//		_myTextField.position().set(textPosition());
 	}
 
 	@Override
-	public void drawContent(CCGraphics g) {
-		super.drawContent(g);
+	public void displayContent(CCGraphics g) {
+		super.displayContent(g);
 		_myTextDecorator.draw(g, this);
-		
-//		g.color(255,0,0);
-//		g.beginShape(CCDrawMode.LINE_LOOP);
-//		g.vertex(0,0);
-//		g.vertex(width(),0);
-//		g.vertex(width(),-height());
-//		g.vertex(0,-height());
-//		g.vertex(width(),0);
-//		g.endShape();
 	}
 }

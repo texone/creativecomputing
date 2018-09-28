@@ -48,32 +48,40 @@ public class CCUIGradientWidget extends CCUIWidget {
 	 *
 	 */
 	public CCUIGradientWidget(double theWidth, double theHeight) {
-		super(new CCUIWidgetStyle(), theWidth, theHeight);
+		super(new CCUIWidgetStyle());
 		
-		_myMinWidth = theWidth;
-		_myMinHeight = theHeight;
+		flex(1);
 
-		_myOverlay = _myColorWheel = new CCUIColorWheel(200);
+		maxHeight(theHeight);
+		minHeight(theHeight);
+
+		_myColorWheel = new CCUIColorWheel(200);
 		_myColorWheel.isActive(false);
-		_myColorWheel.translation().set(-_myColorWheel.width() / 2 + width() / 2, _myColorWheel.height() / 2  - height() / 2);
 
 		_myColorWheel.mouseReleasedOutside.add(event ->{
 			_myColorWheel.isActive(false);
+			removeChild(_myColorWheel);
 			myClose = true;
 		});
 		_myColorWheel.changeEvents.add(c -> {
 			color(c);
 		});
 		_myColorWheel.mouseClicked.add(e ->{
-			if(!_myColorWheel.isInsideLocal(new CCVector2(e.x,e.y)))
+			if(!_myColorWheel.isInsideLocal(new CCVector2(e.x,e.y))) {
 				_myColorWheel.isActive(false);
+				removeChild(_myColorWheel);
+			}
 		});
+
+		overlay(_myColorWheel);
 		
 		mousePressed.add(event -> {
 			selectPoint(event);
+			CCLog.info(_myGradient.size(),_mySelectedPoint);
 		});
 		
 		mouseClicked.add(event -> {
+			CCLog.info("mouseClicked");
 			if(myClose) {
 				myClose = false;
 				return;
@@ -93,18 +101,18 @@ public class CCUIGradientWidget extends CCUIWidget {
 			movePoint(pos);
 		});
 	}
+	@Override
+	public boolean isEndNode() {
+		return !_myColorWheel.isActive();
+	}
 	
 	public void gradient(CCGradient theGradient){
 		_myGradient = theGradient;
 	}
-	
-	public double width() {
-		return _myWidth - _myStyle.leftInset() - _myStyle.rightInset();
-	}
 
 	private boolean checkPoint(CCGLMouseEvent theE, CCGradientPoint thePoint) {
 		double dx = CCMath.abs((width() * thePoint.position()) - theE.x);
-        return (dx < X_SELECT_RANGE) && theE.y  < 0 && theE.y > -height();
+        return (dx < X_SELECT_RANGE) && theE.y  > 0 && theE.y < height();
     }
 
 	/**
@@ -128,11 +136,14 @@ public class CCUIGradientWidget extends CCUIWidget {
 			return;
 		}
 		_myColorWheel.setFromColor(_myGradient.get(_mySelectedPoint).color());
-		_myColorWheel.translation().set(-_myColorWheel.width() / 2 + width() / 2, _myColorWheel.height() / 2  - height() / 2);
+		_myColorWheel.positionType(CCYogaPositionType.ABSOLUTE);
+		_myColorWheel.position(CCYogaEdge.LEFT, -100 + width() / 2);
+		_myColorWheel.position(CCYogaEdge.TOP,  -100 + height() / 2 );
 		_myColorWheel.isActive(true);
-		_myColorWheel.parent(this);
+
+		addChild(_myColorWheel);
+		root().calculateLayout();
 		_myColorWheel.updateMatrices();
-		_myOverlay.isActive(true);
 	}
 	
 	private void color(CCColor theColor){
@@ -209,27 +220,36 @@ public class CCUIGradientWidget extends CCUIWidget {
 	}
 
 	@Override
-	public void drawContent(CCGraphics g) {
+	public void displayContent(CCGraphics g) {
 //		width() = getWidth() - 25;
 
+		int myStart = (int)(height()/2);
+		int myEnd = (int)(width() - height()/2);
+		
 		g.beginShape(CCDrawMode.LINES);
-		for(int i = 0; i <= width();i++){
+		for(int i = myStart; i <= myEnd;i++){
 			double blend = (double)i / width();
 			g.color(_myGradient.color(blend));
 			g.vertex(i, 0);
-			g.vertex(i, -height() - 1);
+			g.vertex(i, height());
 		}
 		g.endShape();
 
 		g.color(CCColor.DARK_GRAY);
 		
+		CCColor myStartColor = _myGradient.size() > 0 ? _myGradient.get(0).color() : CCColor.BLACK;
+		CCColor myEndColor = _myGradient.size() > 0 ? _myGradient.get(_myGradient.size() - 1).color() : CCColor.BLACK;
+		
+		g.color(myStartColor);
+		g.ellipse(myStart, height()/2, height()/2, height()/2);
+		g.color(myEndColor);
+		g.ellipse(myEnd, height()/2, height()/2, height()/2);
 		for (int i = 0; i < _myGradient.size(); i++) {
 			CCGradientPoint pt =  _myGradient.get(i);
-
 			g.color(pt.color());
-			g.ellipse((width() * pt.position()), -height() / 2, POINT_RADIUS);
+			g.ellipse((width() * pt.position()), height() / 2, POINT_RADIUS);
 			g.color(0);
-			g.ellipse((width() * pt.position()), -height() / 2, 0, POINT_RADIUS, POINT_RADIUS,  true);
+			g.ellipse((width() * pt.position()), height() / 2, 0, POINT_RADIUS, POINT_RADIUS,  true);
 			
 //			if (i == _mySelectedPoint) {
 //				g.line(-4, 10, 4, 10);

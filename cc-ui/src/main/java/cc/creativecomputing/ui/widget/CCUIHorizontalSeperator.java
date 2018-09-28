@@ -16,30 +16,21 @@
  ******************************************************************************/
 package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCColor;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 
 public class CCUIHorizontalSeperator extends CCUIWidget{
 	
-	private CCUISeparatorStyle _myStyle;
-
-	public CCUIHorizontalSeperator(CCUISeparatorStyle theStyle){
-		super(new CCUIWidgetStyle());
-		_myStyle = theStyle;
+	public static CCUIWidgetStyle createDefaultStyle() {
+		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
+		myResult.background(new CCUIFillDrawable(CCColor.WHITE));
+		return myResult;
 	}
 	
-	@Override
-	public double width() {
-		return _myParent.width() - _myParent.style().leftInset() - _myParent.style().rightInset();
+	public CCUIHorizontalSeperator(){
+		super(createDefaultStyle());
+		minHeight(2);
+		margin(CCYogaEdge.VERTICAL, 4);
 	}
 	
-	@Override
-	public double height() {
-		return _myStyle.height();
-	}
-	
-	@Override
-	public void drawContent(CCGraphics g) {
-		g.color(_myStyle.color());
-		g.rect(0, -_myStyle.height() / 2 - _myStyle.weight() / 2, width(), _myStyle.weight());
-	}
 }

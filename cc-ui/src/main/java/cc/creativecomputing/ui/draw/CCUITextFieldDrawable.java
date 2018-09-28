@@ -18,37 +18,32 @@
 package cc.creativecomputing.ui.draw;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCTextField;
 import cc.creativecomputing.graphics.font.CCTextField.CCPlacedTextChar;
 import cc.creativecomputing.graphics.font.CCTextFieldController;
-import cc.creativecomputing.graphics.font.text.CCLineBreakMode;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 /**
  * @author christianriekoff
  */
 public class CCUITextFieldDrawable implements CCUIDrawable{
-	
-	
-	
+
 	@CCProperty(name = "color")
 	private CCColor _myColor = new CCColor(1f);
 	
 	@CCProperty(name = "background_color")
-	private CCColor _myBackgroundColor = new CCColor(0.1f);
-	
-	@CCProperty(name="linebreak")
-	private CCLineBreakMode _myLineBreakMode = CCLineBreakMode.NONE;
-	
-	
-	
-	
+	private CCColor _myBackgroundColor = new CCColor(0.5f);
+
 	private boolean _myShowCursor = false;
 	private boolean _myIsInSelection = false;
 	
@@ -57,8 +52,20 @@ public class CCUITextFieldDrawable implements CCUIDrawable{
 	
 	private CCTextFieldController _myController;
 	
-	public CCUITextFieldDrawable(CCTextFieldController theController) {
+	public CCUITextFieldDrawable(CCUIWidget theWidget, CCTextFieldController theController) {
 		_myController = theController;
+		
+		theWidget.mousePressed.add(_myController::mousePress);
+		theWidget.mouseReleased.add(event -> {});
+		theWidget.mouseClicked.add(_myController::mouseClicked);
+		theWidget.mouseDragged.add(_myController::mouseDrag);
+		
+		theWidget.focusLost.add(e -> showCursor(false));
+		theWidget.focusGained.add(e -> showCursor(true));
+		
+		theWidget.keyPressed.add(_myController::keyPress);
+		theWidget.keyChar.add(_myController::keyChar);
+		theWidget.keyChar.add(theChar -> {});
 	}
 	
 	public boolean showCursor() {
@@ -104,27 +111,36 @@ public class CCUITextFieldDrawable implements CCUIDrawable{
 	}
 	
 	@Override
-	public void draw(CCGraphics g, CCUIWidget theWidget) {
+	public void draw(CCGraphics g, CCYogaNode theWidget) {
 	
 		if(!(theWidget instanceof CCUITextFieldWidget))return;
 
-		CCTextField _myText = ((CCUITextFieldWidget)theWidget).textField();
+		CCTextField myText = ((CCUITextFieldWidget)theWidget).textField();
 		g.pushMatrix();
-		g.translate(_myText.position());
+		double myTX = 0;
+		switch(myText.align()) {
+		case RIGHT:
+			myTX = theWidget.width() - theWidget.layoutPadding(CCYogaEdge.RIGHT);
+			break;
+		case LEFT:
+			myTX = theWidget.layoutPadding(CCYogaEdge.LEFT);
+			break;
+		}
+		g.translate(myTX,theWidget.layoutPadding(CCYogaEdge.TOP) + myText.ascent());
 		
 		g.color(_myBackgroundColor);
 		g.beginShape(CCDrawMode.QUADS);
 		
 		int myStart = _myController.startIndex() > _myController.endIndex() ? _myController.endIndex() : _myController.startIndex();
 		int myEnd = _myController.startIndex() > _myController.endIndex() ? _myController.startIndex() : _myController.endIndex();
-		myStart = CCMath.clamp(myStart, 0,  _myText.charGrid().size() - 1);
-		myEnd = CCMath.clamp(myEnd, 0,  _myText.charGrid().size() - 1);
+		myStart = CCMath.clamp(myStart, 0,  myText.charGrid().size());
+		myEnd = CCMath.clamp(myEnd, 0,  myText.charGrid().size());
 		for(int i = myStart; i < myEnd;i++){
-			CCPlacedTextChar myChar = _myText.charGrid().get(i);
-			g.vertex(myChar.x, myChar.y + _myText.ascent());
-			g.vertex(myChar.x, myChar.y + _myText.descent());
-			g.vertex(myChar.x + myChar.width, myChar.y + _myText.descent());
-			g.vertex(myChar.x + myChar.width, myChar.y + _myText.ascent());
+			CCPlacedTextChar myChar = myText.charGrid().get(i);
+			g.vertex(myChar.x, myChar.y - myText.ascent());
+			g.vertex(myChar.x, myChar.y - myText.descent());
+			g.vertex(myChar.x + myChar.width, myChar.y - myText.descent());
+			g.vertex(myChar.x + myChar.width, myChar.y - myText.ascent());
 		}
 		g.endShape();
 		
@@ -134,31 +150,31 @@ public class CCUITextFieldDrawable implements CCUIDrawable{
 			double myX = 0;
 			double myY = 0;
 			g.beginShape(CCDrawMode.LINES);
-			if(_myText.charGrid().size() == 0) {
+			if(myText.charGrid().size() == 0) {
 				
 			}else {
 				if(_myController.startIndex() >= 0){
-					if(_myController.startIndex() > 0 && _myController.startIndex() >= _myText.charGrid().size()) {
-						CCPlacedTextChar myChar = _myText.charGrid().get(_myController.startIndex() - 1);
+					if(_myController.startIndex() > 0 && _myController.startIndex() >= myText.charGrid().size()) {
+						CCPlacedTextChar myChar = myText.charGrid().get(_myController.startIndex() - 1);
 						myX = myChar.x + myChar.width;
 						myY = myChar.y;
 					}else {
-						CCPlacedTextChar myChar = _myText.charGrid().get(_myController.startIndex());
+						CCPlacedTextChar myChar = myText.charGrid().get(_myController.startIndex());
 						myX = myChar.x;
 						myY = myChar.y;
 					}
 				}
 			}
-			g.vertex(myX, myY + _myText.ascent());
-			g.vertex(myX, myY + _myText.descent());
+			g.vertex(myX, myY - myText.ascent());
+			g.vertex(myX, myY - myText.descent());
 
 			g.endShape();
 		}
 
-		
-		g.popMatrix();
+
 		g.color(_myColor);
-		_myText.draw(g);
+		myText.draw(g);
+		g.popMatrix();
 	}
 
 }

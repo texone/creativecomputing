@@ -6,19 +6,15 @@ import java.util.List;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
-import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
-import cc.creativecomputing.ui.layout.CCUIPane;
 
-public class CCUITreeWidget extends CCUIPane{
+public class CCUITreeWidget extends CCUIWidget{
 	
 	public static CCUIWidgetStyle createDefaultStyle(){
 		CCUIWidgetStyle myResult = CCUILabelWidget.createDefaultStyle();
-		myResult.verticalAlignment(CCUIVerticalAlignment.TOP);
 		return myResult;
 	}
 	
-	public class CCUITreeNode extends CCUIHorizontalFlowPane{
+	public class CCUITreeNode extends CCUIWidget{
 		
 		private List<CCUITreeNode> children = new ArrayList<>();
 		
@@ -26,13 +22,13 @@ public class CCUITreeWidget extends CCUIPane{
 		private final CCUILabelWidget _myLabel;
 		
 		private CCUITreeNode(CCUIIconWidget theIcon, CCUILabelWidget theLabel){
-			space(5);
+			CCUITreeWidget.this.padding(CCYogaEdge.ALL, 5);
 			
 			_myIcon = theIcon;
 			_myIcon.mouseReleased.add(e -> {
 				isActive(!isActive());
 				
-				layout();
+				//layout();
 			});
 			_myIcon.style().background(null);
 			
@@ -60,13 +56,13 @@ public class CCUITreeWidget extends CCUIPane{
 		}
 		
 		public String text(){
-			return ((CCUILabelWidget)_myChildren.get(1)).textField().text();
+			return ((CCUILabelWidget)childAt(1)).textField().text();
 		}
 		
 		private CCUITreeNode addNode(CCUITreeNode theItem, CCEvent<?> theEvent) {
 			children.add(theItem);
 
-			layout();
+			//layout();
 			updateMatrices();
 			if(theEvent == null)return theItem;
 			theItem.mouseReleased.add(event -> {
@@ -93,7 +89,7 @@ public class CCUITreeWidget extends CCUIPane{
 	public CCUITreeWidget(CCUIWidgetStyle theStyle, String theRootLabel){
 		super(theStyle);
 		_myRootNode = new CCUITreeNode(_myStyle, theRootLabel);
-		layout();
+		//layout();
 	}
 	
 	public CCUITreeWidget(String theRootLabel){
@@ -103,11 +99,7 @@ public class CCUITreeWidget extends CCUIPane{
 	public CCUITreeNode root(){
 		return _myRootNode;
 	}
-	
-	public double width(){
-		return _myWidth;
-	}
-	
+	/*
 	private void layout(){
 		removeAll();
 		_myMinHeight = layout(_myRootNode, _myStyle.leftInset(), -_myStyle.topInset());
@@ -137,7 +129,7 @@ public class CCUITreeWidget extends CCUIPane{
 		}
 		return myY;
 	}
-	
+	*/
 //	@Override
 //	public void updateMatrices() {
 //

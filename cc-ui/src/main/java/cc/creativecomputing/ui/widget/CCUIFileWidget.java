@@ -19,7 +19,6 @@ package cc.creativecomputing.ui.widget;
 import java.nio.file.Path;
 
 import cc.creativecomputing.core.CCEventManager;
-import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.io.CCFileChooser;
 
@@ -29,27 +28,32 @@ public class CCUIFileWidget extends CCUILabelWidget{
 		return CCUITextFieldWidget.createDefaultStyle();
 	}
 	
-	private CCUIIconWidget _myChevron;
+	private CCUIIconWidget _myIcon;
 	
 	public CCEventManager<Path> changeEvents = new CCEventManager<>();
 	
 	public CCUIFileWidget(CCUIWidgetStyle theStyle, String theTitle, CCUIMenu theMenue) {
 		super(theStyle, theTitle);
 		
-		_myChevron = new CCUIIconWidget(CCEntypoIcon.ICON_FOLDER);
+		_myIcon = new CCUIIconWidget(CCEntypoIcon.ICON_FOLDER);
 		
 		mousePressed.add(event -> {
 		});
 		mouseReleased.add(event ->{
-			Path myResult = new CCFileChooser("xml", "json").openFile("YO");
-			if(myResult == null){
-				return;
-			}
-			text(myResult.toString());
-			changeEvents.event(myResult);
+			new CCFileChooser("xml", "json").openFile("YO").ifPresent(p -> {
+				text(p.toString());
+				changeEvents.event(p);
+			});
 		});
 		mouseReleasedOutside.add(event ->{
 		});
+		
+		minWidth(_myTextField.width());
+		minHeight(_myTextField.height());
+		
+		flex(1);
+		addChild(_myIcon);
+		justifyContent(CCYogaJustify.FLEX_END);
 	}
 	
 	
@@ -59,30 +63,5 @@ public class CCUIFileWidget extends CCUILabelWidget{
 	
 	public CCUIFileWidget(){
 		this(createDefaultStyle());
-	}
-	
-	@Override
-	public double width() {
-		return _myWidth;
-	}
-	
-	@Override
-	public void updateMatrices() {
-		super.updateMatrices();
-//		_myOverlay._myLocalMatrix.set(_myLocalMatrix);
-//		_myOverlay._myLocalMatrix.translate(_myOverlay.translation());
-//		_myOverlay._myLocalInverseMatrix = _myOverlay._myLocalMatrix.inverse();
-////		_myMenue._myWorldMatrix.set(_myWorldMatrix);
-//		CCMatrix32 myWorldInverse = _myWorldMatrix.clone();
-//		myWorldInverse.translate(_myOverlay.translation());
-//		_myOverlay._myWorldInverseMatrix.set(myWorldInverse.inverse());
-	}
-	
-	@Override
-	public void drawContent(CCGraphics g) {
-		super.drawContent(g);
-		_myChevron.textField().position().set(width() - _myChevron.width() , - _myChevron.height() + 4, 0);
-		_myChevron.textField().draw(g);
-		
 	}
 }

@@ -17,11 +17,10 @@
 package cc.creativecomputing.ui.widget;
 
 import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 
 public class CCUICheckBox extends CCUIIconWidget{
@@ -29,9 +28,7 @@ public class CCUICheckBox extends CCUIIconWidget{
 	public static CCUIWidgetStyle createDefaultStyle(){
 		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
 		myResult.font(CCUIContext.ICON_FONT);
-		myResult.background(new CCUIFillDrawable(new CCColor(0.3d)));
-		myResult.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
-		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		myResult.background(new CCUIFillDrawable(new CCColor(0.2d)));
 		return myResult;
 	}
 	
@@ -50,6 +47,10 @@ public class CCUICheckBox extends CCUIIconWidget{
 		mouseReleased.add(event -> {
 			isSelected(!_myIsSelected, true);
 		});
+	}
+	
+	public CCUICheckBox(CCEntypoIcon theactiveIcon, CCEntypoIcon theInactiveIcon, boolean theIsSelected) {
+		this(createDefaultStyle(), theactiveIcon, theactiveIcon, theIsSelected);
 	}
 	
 	public CCUICheckBox(CCUIWidgetStyle theStyle, boolean theIsSelected) {

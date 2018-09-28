@@ -20,7 +20,7 @@ package cc.creativecomputing.ui.draw;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode;
 
 /**
  * @author christianriekoff
@@ -46,16 +46,16 @@ public class CCUIGradientDrawable implements CCUIDrawable{
 	 * @see cc.creativecomputing.newui.decorator.CCUIDecorator#draw(cc.creativecomputing.graphics.CCGraphics, cc.creativecomputing.newui.widget.CCUIWidget)
 	 */
 	@Override
-	public void draw(CCGraphics g, CCUIWidget theWidget) {
+	public void draw(CCGraphics g, CCYogaNode theWidget) {
 		g.beginShape(CCDrawMode.QUADS);
 		g.color(_myGradient.leftTop());
 		g.vertex(0,0);
 		g.color(_myGradient.rightTop());
 		g.vertex(theWidget.width(), 0);
 		g.color(_myGradient.rightBottom());
-		g.vertex(theWidget.width(), -theWidget.height());
+		g.vertex(theWidget.width(), theWidget.height()+1);
 		g.color(_myGradient.leftBottom());
-		g.vertex(0, -theWidget.height());
+		g.vertex(0, theWidget.height()+1);
 		g.endShape();
 	}
 

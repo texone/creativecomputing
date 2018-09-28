@@ -19,9 +19,8 @@ package cc.creativecomputing.ui.draw;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.shape.CCRectangle;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode;
 
 /**
  * @author christianriekoff
@@ -29,13 +28,10 @@ import cc.creativecomputing.ui.widget.CCUIWidget;
  */
 public class CCUIFillDrawable implements CCUIDrawable{
 	
-	private CCRectangle _myRectangle;
-	
 	@CCProperty(name = "color")
 	private CCColor _myColor = new CCColor(1f);
 
 	public CCUIFillDrawable() {
-		_myRectangle = new CCRectangle();
 	}
 	
 	public CCUIFillDrawable(CCColor theColor) {
@@ -47,11 +43,9 @@ public class CCUIFillDrawable implements CCUIDrawable{
 	 * @see cc.creativecomputing.newui.decorator.CCUIDecorator#draw(cc.creativecomputing.graphics.CCGraphics, cc.creativecomputing.newui.widget.CCUIWidget)
 	 */
 	@Override
-	public void draw(CCGraphics g, CCUIWidget theWidget) {
-		_myRectangle.color().set(_myColor);
-		_myRectangle.position(0, -theWidget.height());
-		_myRectangle.size(theWidget.width(), theWidget.height());
-		_myRectangle.draw(g);
+	public void draw(CCGraphics g, CCYogaNode theWidget) {
+		g.color(_myColor);
+		g.rect(0, 0, theWidget.width(), theWidget.height());
 	}
 
 	public CCColor color() {

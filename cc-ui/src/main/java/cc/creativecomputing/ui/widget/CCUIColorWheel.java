@@ -26,22 +26,24 @@ public class CCUIColorWheel extends CCUIWidget{
 	private CCColor _myColor = new CCColor();
 		
 	public CCUIColorWheel(double theSize){
-		super(new CCUIWidgetStyle(), theSize, theSize);
+		super(new CCUIWidgetStyle());
 		
-		_myMinWidth = theSize;
-		_myMinHeight = theSize;
+		minWidth(theSize);
+		minHeight(theSize);
 		
-		_myWheelPos = new CCVector2(width() - _myColorWheelWidth / 2, -height() / 2);
+		_myWheelPos = new CCVector2(width() - _myColorWheelWidth / 2, height() / 2);
 			
 		mousePressed.add(event -> {
 			CCVector2 pos = new CCVector2(event.x, event.y);
-			double myDist = pos.distance(new CCVector2(width() /2, -height() / 2));
+			double myDist = pos.distance(new CCVector2(width() /2, height() / 2));
 			_myIsInWheel = myDist > width() /2 - _myColorWheelWidth;
 			updateState(pos);
 		});
 		mouseDragged.add(pos ->{
 			updateState(pos);
 		});
+		
+		calculateLayout(theSize, theSize, CCYogaFlexDirection.COLUMN);
 	}
 		
 	public void setFromColor(CCColor theColor) {
@@ -52,19 +54,19 @@ public class CCUIColorWheel extends CCUIWidget{
 		_myWhite = 1 - _myBlack - hsb[1];
 			
 		_myAngle = (1 - _myHue) * CCMath.TWO_PI;
-		_myWheelPos = CCVector2.circlePoint(_myAngle, width() /2 - _myColorWheelWidth / 2, width() /2, -height() / 2);
+		_myWheelPos = CCVector2.circlePoint(_myAngle, width() /2 - _myColorWheelWidth / 2, width() /2, height() / 2);
 		
 		_myTrianglePos.set(_myBlack, _myWhite);		
 	}
 		
 	private void updateState(CCVector2 pos){
 		if(_myIsInWheel){
-			_myWheelPos = new CCVector2(pos.x - width() /2, -(pos.y + height() / 2));
+			_myWheelPos = new CCVector2(pos.x - width() /2, pos.y - height() / 2);
 			_myWheelPos.normalizeLocal();
 			_myAngle = CCMath.atan2(-_myWheelPos.y, _myWheelPos.x);
 			_myWheelPos.multiplyLocal(width() /2 - _myColorWheelWidth / 2);
-			_myWheelPos.y *= -1;
-			_myWheelPos.addLocal(width() /2, -height() / 2);
+			_myWheelPos.y *= 1;
+			_myWheelPos.addLocal(width() /2, height() / 2);
 			_myHue = 1 - _myAngle / CCMath.TWO_PI;
 		}else{
 			_myTrianglePos = triangle().toBarycentricCoordinates(pos);
@@ -86,14 +88,14 @@ public class CCUIColorWheel extends CCUIWidget{
 		
 	private CCTriangle2 triangle(){
 		double myRadius = width() / 2 - _myColorWheelWidth;
-		CCVector2 myV0 = CCVector2.circlePoint(_myAngle, myRadius, width() / 2, - height() / 2);
-		CCVector2 myV1 = CCVector2.circlePoint(_myAngle - CCMath.TWO_PI / 3, myRadius, width() / 2, - height() / 2);
-		CCVector2 myV2 = CCVector2.circlePoint(_myAngle + CCMath.TWO_PI / 3, myRadius, width() / 2, - height() / 2);
+		CCVector2 myV0 = CCVector2.circlePoint(-_myAngle, myRadius, width() / 2, height() / 2);
+		CCVector2 myV1 = CCVector2.circlePoint(-_myAngle - CCMath.TWO_PI / 3, myRadius, width() / 2, height() / 2);
+		CCVector2 myV2 = CCVector2.circlePoint(-_myAngle + CCMath.TWO_PI / 3, myRadius, width() / 2, height() / 2);
 		return new CCTriangle2(myV0, myV1, myV2);
 	}
 		
 	@Override
-	public void drawContent(CCGraphics g) {
+	public void displayContent(CCGraphics g) {
 		
 		g.beginShape(CCDrawMode.QUAD_STRIP);
 		for(double i = 0; i <= 360;i++){
@@ -102,11 +104,11 @@ public class CCUIColorWheel extends CCUIWidget{
 			CCVector2 myPoint = CCVector2.circlePoint(myAngle, 1, 0, 0);
 			g.vertex(
 				myPoint.x * width() / 2 + width() / 2, 
-				myPoint.y * -height() / 2 - height() / 2
+				myPoint.y * height() / 2 + height() / 2
 			);
 			g.vertex(
 				myPoint.x * (width() / 2 - _myColorWheelWidth) + width() / 2, 
-				myPoint.y * (- height() / 2 + _myColorWheelWidth) - height() / 2
+				myPoint.y * (height() / 2 - _myColorWheelWidth) + height() / 2
 			);
 		}
 		g.endShape();

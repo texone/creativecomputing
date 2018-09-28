@@ -23,9 +23,10 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shape.CCRoundedRectangle;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
+import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.draw.CCUIDrawable;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
+import cc.creativecomputing.yoga.CCYogaNode;
 
 public class CCUISlider extends CCUIWidget{
 	
@@ -56,11 +57,11 @@ public class CCUISlider extends CCUIWidget{
 		 * @see cc.creativecomputing.newui.decorator.CCUIDecorator#draw(cc.creativecomputing.graphics.CCGraphics, cc.creativecomputing.newui.widget.CCUIWidget)
 		 */
 		@Override
-		public void draw(CCGraphics g, CCUIWidget theWidget) {
+		public void draw(CCGraphics g, CCYogaNode theWidget) {
 			_myRoundedRectangle.color().set(_myColor);
 			_myRoundedRectangle.gradientColor().set(_myColor);
 			_myRoundedRectangle.radius(_myCornerRadius);
-			_myRoundedRectangle.position(theWidget.style().leftInset(), -theWidget.height());
+//			_myRoundedRectangle.position(theWidget.style().leftInset(), -theWidget.height());
 			_myRoundedRectangle.size(theWidget.width(), theWidget.height());
 			_myRoundedRectangle.draw(g);
 		}
@@ -71,9 +72,9 @@ public class CCUISlider extends CCUIWidget{
 		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
 //		myResult.leftInset(15);
 //		myResult.rightInset(15);
-		myResult.background(new CCUISliderDrawable(new CCColor(0.3d), 7));
+		myResult.background(new CCUISliderDrawable(new CCColor(0.2d), 7));
 		myResult.foreground(new CCUIFillDrawable(new CCColor(0.7d)));
-		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
+//		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
 		return myResult;
 	}
 	
@@ -87,13 +88,21 @@ public class CCUISlider extends CCUIWidget{
 	
 	private boolean _myIsHorizontal;
 
-	public CCUISlider(CCUIWidgetStyle theStyle, double theWidth, double theHeight, double theMin, double theMax, double theValue, boolean theIsHorizontal){
+	public CCUISlider(CCUIWidgetStyle theStyle, double theSize, double theMin, double theMax, double theValue, boolean theIsHorizontal){
 		super(theStyle);
-		_myWidth = theWidth;
-		_myHeight = theHeight;
+//		_myWidth = theWidth;
+//		_myHeight = theHeight;
+//		
+//		_myMinWidth = theWidth;
+//		_myMinHeight = theHeight;
 		
-		_myMinWidth = theWidth;
-		_myMinHeight = theHeight;
+		if(theIsHorizontal) {
+			maxHeight(theSize);
+			minHeight(theSize);
+		}else {
+			maxWidth(theSize);
+			minWidth(theSize);
+		}
 		
 		_myMin = theMin;
 		_myMax = theMax;
@@ -120,71 +129,44 @@ public class CCUISlider extends CCUIWidget{
 		});
 	}
 	
-	public CCUISlider(double theWidth, double theHeight, double theMin, double theMax, double theValue, boolean theIsHorizontal){
-		this(createDefaultStyle(), theWidth, theHeight, theMin, theMax, theValue, theIsHorizontal);
+	public CCUISlider(double theSize, double theMin, double theMax, double theValue, boolean theIsHorizontal){
+		this(createDefaultStyle(), theSize, theMin, theMax, theValue, theIsHorizontal);
 	}
 
-	public CCUISlider(CCUIWidgetStyle theStyle, double theWidth, double theHeight, double theMin, double theMax, double theValue){
-		this(theStyle, theWidth, theHeight, theMin, theMax, theValue, true);
+	public CCUISlider(CCUIWidgetStyle theStyle, double theSize, double theMin, double theMax, double theValue){
+		this(theStyle, theSize, theMin, theMax, theValue, true);
 	}
 	
-	public CCUISlider(double theWidth, double theHeight, double theMin, double theMax, double theValue){
-		this(createDefaultStyle(), theWidth, theHeight, theMin, theMax, theValue, true);
+	public CCUISlider(double theSize, double theMin, double theMax, double theValue){
+		this(createDefaultStyle(), theSize, theMin, theMax, theValue, true);
 	}
 	
 	private double longSide(){
 		if(_myIsHorizontal){
 			return width();
 		}else{
-			return _myHeight;
+			return height();
 		}
 	}
 	
 	private double shortSide(){
 		if(_myIsHorizontal){
-			return _myHeight;
+			return height();
 		}else{
 			return width();
 		}
 	}
 	
-	private double longOffset(){
-		if(_myIsHorizontal){
-			return style().leftInset();
-		}else{
-			return style().topInset();
-		}
-	}
-	
-	private double shortOffset(){
-		if(_myIsHorizontal){
-			return style().topInset();
-		}else{
-			return style().leftInset();
-		}
-	}
-	
-	public double width() {
-		return _myWidth - _myStyle.leftInset() - _myStyle.rightInset();
-	}
-	
 	private void sliderPos(double thePosition) {
-		if(_myIsHorizontal){
-			_mySliderPos = CCMath.clamp(thePosition, longOffset() + shortSide() / 2, longOffset() + longSide() - shortSide() / 2);
-			_myValue = CCMath.map(_mySliderPos,  longOffset() + shortSide() / 2, longOffset() + longSide() - shortSide() / 2, _myMin, _myMax);
-			CCLog.info(thePosition,_mySliderPos,_myValue);
-		}else{
-			_mySliderPos = CCMath.clamp(thePosition, -style().topInset() - height() + width() / 2, -style().topInset() - width() / 2);
-			_myValue = CCMath.map(_mySliderPos, -style().topInset() - height() + width() / 2, -style().topInset() - width() / 2,_myMax, _myMin );
-			CCLog.info(thePosition,_mySliderPos,_myValue);
-		}
+		_mySliderPos = CCMath.clamp(thePosition, shortSide() / 2,longSide() - shortSide() / 2);
+		_myValue = CCMath.map(_mySliderPos,  shortSide() / 2,  longSide() - shortSide() / 2, _myMin, _myMax);
 		
 		changeEvents.event(_myValue);
 	}
 	
 	public void value(double theValue) {
 		_myValue = CCMath.clamp(theValue, _myMin, _myMax);
-		_mySliderPos = CCMath.map(theValue, _myMin, _myMax, longOffset() + shortSide() / 2, longOffset() +  longSide() - shortSide() / 2);
+		_mySliderPos = CCMath.map(theValue, _myMin, _myMax, shortSide() / 2, longSide() - shortSide() / 2);
 
 		changeEvents.event(_myValue);
 	}
@@ -194,15 +176,21 @@ public class CCUISlider extends CCUIWidget{
 	}
 	
 	@Override
-	public void drawContent(CCGraphics g) {
-		if(_myStyle.background() != null)_myStyle.background().draw(g, this);
-		if(_myStyle.border() != null)_myStyle.border().draw(g, this);
+	public void displayContent(CCGraphics g) {
+		_myStyle.background().draw(g, this);
+		_myStyle.border().draw(g, this);
 		g.color(255);
-		_mySliderPos = CCMath.map(_myValue, _myMin, _myMax, longOffset() + shortSide() / 2, longOffset() +  longSide() - shortSide() / 2);
+		_mySliderPos = CCMath.map(_myValue, _myMin, _myMax, shortSide() / 2, longSide() - shortSide() / 2);
 		if(_myIsHorizontal){
-			g.ellipse(_mySliderPos, -_myHeight / 2, _myHeight / 2 - 2);
+			g.ellipse(_mySliderPos, height() / 2, height() / 2 - 2);
 		}else{
-			g.ellipse(_myWidth / 2, -_mySliderPos, _myWidth / 2 - 2);
+			g.ellipse(width() / 2, _mySliderPos, width() / 2 - 2);
 		}
+	}
+	
+	@Override
+	public CCYogaNode childAtPosition(CCVector2 thePosition) {
+		CCLog.info(thePosition);
+		return super.childAtPosition(thePosition);
 	}
 }

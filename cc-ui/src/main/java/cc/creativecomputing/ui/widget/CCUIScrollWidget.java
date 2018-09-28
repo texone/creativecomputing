@@ -1,119 +1,160 @@
 package cc.creativecomputing.ui.widget;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector2;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIPane;
+import cc.creativecomputing.ui.draw.CCUIFillDrawable;
+import cc.creativecomputing.yoga.CCYogaNode;
 
-public class CCUIScrollWidget extends CCUIGridPane{
+public class CCUIScrollWidget extends CCUIWidget{
 	
-	
-	private class CUIMaskWidget extends CCUIPane{
+	private class CUIMaskWidget extends CCUIWidget{
 
 		private CCUIWidget _myWidget;
 		
-		public CUIMaskWidget(CCUIWidget theWidget, int theWidth, int theHeight){
-			super(new CCUIWidgetStyle(), theWidth, theHeight);
+		private CCVector2 _myTranslation;
+		
+		public CUIMaskWidget(CCUIWidget theWidget){
+			super(new CCUIWidgetStyle());
+			style().background(new CCUIFillDrawable(CCColor.YELLOW));
 			addChild(_myWidget = theWidget);
-		}
-	
-		@Override
-		public CCUIWidget childAtPosition(CCVector2 thePosition) {
-			thePosition = _myLocalInverseMatrix.transform(thePosition);
 			
-			if(
-				thePosition.x >= 0 && 
-				thePosition.x <= width() &&
-				thePosition.y <= 0 && 
-				thePosition.y >= -height()
-			){
-				if(_myWidget instanceof CCUIPane){
-					return ((CCUIPane)_myWidget).childAtPosition(thePosition);
-				}
-				return _myWidget;	
+			_myWidget.positionType(CCYogaPositionType.ABSOLUTE);
+			_myTranslation = new CCVector2(0,0);
+		}
+		
+		@Override
+		public double left() {
+			return _myTranslation.x;
+		}
+		
+		@Override
+		public double top() {
+			return _myTranslation.y;
+		}
+		
+		public void position(double theX, double theY) {
+			_myTranslation.x = -theX * (_myWidget.width() - width() + _mySliderWidth);
+			_myTranslation.y = -theY * (_myWidget.height() - height() + _mySliderWidth);
+			
+			updateMatrices();
+		}
+		
+		@Override
+		public void updateMatrices() {
+			if(_myWidget.width() < width()) {
+				_myTranslation.x = 0;
 			}
 			
-			return null;
+			if(_myWidget.height() < height()) {
+				_myTranslation.y = 0;
+			}
+			super.updateMatrices();
 		}
 		
-//		public void draw(CCGraphics g){
-//			updateMatrices();
-//			g.pushAttribute();
-//			g.color(1d);
-//			//CCLog.info(_myWorldMatrix.transform(new CCVector2()));
-//			g.scissor(400,10,1000, 1000);
-//			g.popAttribute();
-//		}
+		public void position(CCVector2 thePosition) {
+			position(thePosition.x, thePosition.y);
+		}
 		
 		@Override
-		public void drawContent(CCGraphics g) {
+		public void display(CCGraphics g) {
+			g.pushMatrix();
+			g.applyMatrix(_myLocalMatrix);
+			if(_myIsOverlay)g.translate(0,0,1);
 			g.beginMask();
-			g.rect(0,-_myHeight, _myWidth, _myHeight);
+			g.pushMatrix();
+			g.translate(_myTranslation.negate());
+			g.rect(0,0, width(), height());
+			g.popMatrix();
 			g.endMask();
-			super.drawContent(g);
+			for(CCYogaNode myChild:this) {
+				myChild.display(g);
+			}
 			g.noMask();
+			g.popMatrix();
 		}
 		
 		@Override
-		public void updateLayout() {
-			_myWidget.width(_myWidth);
+		public void displayContent(CCGraphics g) {
+		
+//			g.beginMask();
+//			g.rect(0,0, width(), height());
+//			g.endMask();
+//			super.displayContent(g);
+//			g.noMask();
 		}
+		
+//		@Override
+//		public void updateLayout() {
+//			_myWidget.width(_myWidth);
+//		}
 	}
 	
 	public static final int DEFAULT_SLIDER_WIDTH = 14;
 	
 	private CUIMaskWidget _myMaskWidget;
-	private CCUIWidget _myWidget;
 	private CCUISlider _myHSlider;
 	private CCUISlider _myVSlider;
 	
 	private CCVector2 sliderTranslation(){
 		return new CCVector2(
-			_myHSlider == null ? 0 : -_myHSlider.value() * (_myWidget.width() - _myWidth + _mySliderWidth),
-			_myVSlider == null ? 0 : _myVSlider.value() * (_myWidget.height() - _myHeight + _mySliderWidth)
+			_myHSlider == null ? 0 : _myHSlider.value(),
+			_myVSlider == null ? 0 : _myVSlider.value()
 		);
 	}
 	
 	private int _mySliderWidth;
 	
-	private int _myXSliderWidth;
-	private int _myYSliderWidth;
 
-	public CCUIScrollWidget(CCUIWidget theWidget, int theWidth, int theHeight, int theSliderWidth, boolean theUseHorizontalSlider, boolean theUseVerticalSlider){
-		super(theWidth, theHeight);
-		_myWidget = theWidget;
+	public CCUIScrollWidget(CCUIWidget theWidget, int theSliderWidth, boolean theUseHorizontalSlider, boolean theUseVerticalSlider){
+		_myMaskWidget = new CUIMaskWidget(theWidget);
+		_myMaskWidget.flexDirection(CCYogaFlexDirection.COLUMN);
+		_myMaskWidget.flex(1);
 		
-		_mySliderWidth = theSliderWidth;
-		_myXSliderWidth = theUseVerticalSlider ? _mySliderWidth : 0;
-		_myYSliderWidth = theUseHorizontalSlider ? _mySliderWidth : 0;
-		
-		columnWidths(_myWidth - _myXSliderWidth, _myXSliderWidth);
-		
-		_myMaskWidget = new CUIMaskWidget(
-			theWidget, 
-			theWidth - _myXSliderWidth, 
-			theHeight - _myYSliderWidth
-		);
-		addChild(_myMaskWidget, 0,0 );
+		if(theUseHorizontalSlider && theUseVerticalSlider) {
+			flexDirection(CCYogaFlexDirection.COLUMN);
+			
+			_myVSlider = createSlider(false);
+			
+			CCUIWidget myTopWidget = new CCUIWidget();
+			myTopWidget.flexDirection(CCYogaFlexDirection.ROW);
+			myTopWidget.flex(1);
+			
+			myTopWidget.addChild(_myMaskWidget);
+			myTopWidget.addChild(_myVSlider);
+			addChild(myTopWidget);
+			
+			_myHSlider = createSlider(true);
+			_myHSlider.flex(1);
+			
+			CCUIWidget myCornerWidget = new CCUIWidget();
+			myCornerWidget.minHeight(theSliderWidth);
+			myCornerWidget.minWidth(theSliderWidth);
 
-		if(theUseHorizontalSlider){
-			_myHSlider = new CCUISlider(theWidth - _myXSliderWidth, _mySliderWidth, 0, 1, 0, true);
-			_myHSlider.changeEvents.add(e ->{
-				theWidget.translation().set(sliderTranslation());
-				theWidget.updateMatrices();
-			});
-			addChild(_myHSlider, 0,1 );
+			CCUIWidget myBottomWidget = new CCUIWidget();
+			myBottomWidget.flexDirection(CCYogaFlexDirection.ROW);
+			myBottomWidget.addChild(_myHSlider);
+			myBottomWidget.addChild(myCornerWidget);
+			addChild(myBottomWidget);
+			
+			
+		}else if(theUseHorizontalSlider) {
+			flexDirection(CCYogaFlexDirection.COLUMN);
+			
+			addChild(_myMaskWidget);
+			
+			_myHSlider = createSlider(true);
+			_myHSlider.flex(1);
+			addChild(_myHSlider);
+		}else {
+			flexDirection(CCYogaFlexDirection.ROW);
+			
+			addChild(_myMaskWidget);
+			_myVSlider = createSlider(false);
+			addChild(_myVSlider);
 		}
 		
-		if(theUseVerticalSlider){
-			_myVSlider = new CCUISlider(_mySliderWidth, theHeight - _myYSliderWidth, 0, 1, 0, false);
-			_myVSlider.changeEvents.add(e ->{
-				theWidget.translation().set(sliderTranslation());
-				theWidget.updateMatrices();
-			});
-			addChild(_myVSlider, 1,0 );
-		}
+		style().background(new CCUIFillDrawable(CCColor.CYAN));;
 		
 		theWidget.scrollEvents.add(e ->{
 			if(theUseHorizontalSlider)_myHSlider.value(_myHSlider.value() + e.x);
@@ -121,19 +162,18 @@ public class CCUIScrollWidget extends CCUIGridPane{
 		});
 	}
 	
-	public CCUIScrollWidget(CCUIWidget theWidget, int theWidth, int theHeight){
-		this(theWidget, theWidth, theHeight, DEFAULT_SLIDER_WIDTH, true, true);
+	private CCUISlider createSlider(boolean theIsHorizontal) {
+		CCUISlider myHorizontalSlider = new CCUISlider(14,0,1,0, theIsHorizontal);
+		myHorizontalSlider.changeEvents.add(e -> _myMaskWidget.position(sliderTranslation()));
+		return myHorizontalSlider;
+	}
+	
+	public CCUIScrollWidget(CCUIWidget theWidget){
+		this(theWidget, DEFAULT_SLIDER_WIDTH, true, true);
 	}
 	
 	@Override
-	public void height(double theHeight){
-		_myMaskWidget.height(theHeight - _myYSliderWidth);
-		if(_myVSlider != null)_myVSlider.height(theHeight - _myYSliderWidth);
-		super.height(theHeight);
-	}
-	
-	@Override
-	public void drawContent(CCGraphics g) {
-		super.drawContent(g);
+	public void displayContent(CCGraphics g) {
+		super.displayContent(g);
 	}
 }

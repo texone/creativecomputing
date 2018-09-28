@@ -21,7 +21,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shape.CCRoundedRectangleOutline;
 import cc.creativecomputing.math.CCColor;
-import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode;
 
 /**
  * @author christianriekoff
@@ -58,7 +58,7 @@ public class CCUIStrokeDrawable implements CCUIDrawable{
 	 * @see cc.creativecomputing.ui.decorator.CCUIDecorator#draw(cc.creativecomputing.graphics.CCGraphics, cc.creativecomputing.ui.widget.CCUIWidget)
 	 */
 	@Override
-	public void draw(CCGraphics g, CCUIWidget theWidget) {
+	public void draw(CCGraphics g, CCYogaNode theWidget) {
 		g.strokeWeight(weight);
 		_myRoundedRectangle.color().set(color);
 		_myRoundedRectangle.radius(cornerRadius);

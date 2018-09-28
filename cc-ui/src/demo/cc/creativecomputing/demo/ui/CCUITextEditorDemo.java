@@ -11,9 +11,10 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.ui.CCUIContext;
 import cc.creativecomputing.ui.widget.CCUIImageWidget;
 import cc.creativecomputing.ui.widget.CCUIScrollWidget;
+import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 import cc.creativecomputing.yoga.CCYogaNode;
 
-public class CCUIScrollWidgetDemo extends CCGLApp {
+public class CCUITextEditorDemo extends CCGLApp {
 	
 	private CCUIContext _myContext;
 	@Override
@@ -22,12 +23,11 @@ public class CCUIScrollWidgetDemo extends CCGLApp {
 //		myHorizontalPane.translation().set(-framebufferSize().x / 2, framebufferSize().y / 2);
 		_myContext = new CCUIContext(this, CCYogaNode.CCYogaFlexDirection.COLUMN);
 		CCTexture2D myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("waltz.jpg")));
-		CCUIImageWidget myImage = new CCUIImageWidget(myTexture);
-		myImage.width(myTexture.width()* 2);
-		myImage.height(myTexture.height() * 2);
+		CCUITextFieldWidget myImage = new CCUITextFieldWidget("texone");
+		myImage.flex(1);
 		myImage.mouseDragged.add(e -> {CCLog.info(e);});
-		CCUIScrollWidget myScrollWidget = new CCUIScrollWidget(myImage, 14, true, true);
-		_myContext.addChild(myScrollWidget);
+		CCUIScrollWidget myScrollWidget = new CCUIScrollWidget(myImage, 14, false, true);
+		_myContext.addChild(myImage);
 		_myContext.calculateLayout();
 		
 //		_myMainWindow.mouseMoveEvents.add(pos -> {
@@ -55,7 +55,7 @@ public class CCUIScrollWidgetDemo extends CCGLApp {
 	}
 
 	public static void main(String[] args) {
-		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(new CCUIScrollWidgetDemo());
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(new CCUITextEditorDemo());
 		myApplicationManager.run();
 	}
 }

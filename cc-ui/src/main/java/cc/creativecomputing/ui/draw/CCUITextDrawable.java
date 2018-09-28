@@ -22,7 +22,8 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCTextField;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
-import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.yoga.CCYogaNode;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
 /**
  * @author christianriekoff
@@ -36,15 +37,24 @@ public class CCUITextDrawable implements CCUIDrawable{
 	 * @see cc.creativecomputing.newui.decorator.CCUIDecorator#draw(cc.creativecomputing.graphics.CCGraphics, cc.creativecomputing.newui.widget.CCUIWidget)
 	 */
 	@Override
-	public void draw(CCGraphics g, CCUIWidget theWidget) {
+	public void draw(CCGraphics g, CCYogaNode theWidget) {
 		g.color(_myColor);
 		if(!(theWidget instanceof CCUILabelWidget))return;
 		
-		CCTextField _myText = ((CCUILabelWidget)theWidget).textField();
-		
+		CCUILabelWidget myLabel = (CCUILabelWidget)theWidget;
+		CCTextField myText = myLabel.textField();
+		double myTX = 0;
+		switch(myText.align()) {
+		case RIGHT:
+			myTX = theWidget.width() - theWidget.layoutPadding(CCYogaEdge.RIGHT);
+			break;
+		case LEFT:
+			myTX = theWidget.layoutPadding(CCYogaEdge.LEFT);
+			break;
+		}
 		g.pushMatrix();
-		g.translate(theWidget.style().leftInset(), -_myText.ascent() - theWidget.style().topInset() * 2);
-		_myText.draw(g);
+		g.translate(myTX, myLabel.layoutPadding(CCYogaEdge.TOP) + myText.ascent() );
+		myText.draw(g);
 		g.popMatrix();
 		
 	}

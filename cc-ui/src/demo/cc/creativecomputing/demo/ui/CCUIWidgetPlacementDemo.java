@@ -23,19 +23,13 @@ import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCCharSet;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
+import cc.creativecomputing.graphics.font.CCTextAlign;
 import cc.creativecomputing.graphics.font.CCTextureMapFont;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import cc.creativecomputing.ui.draw.CCUIGradientDrawable;
-import cc.creativecomputing.ui.draw.CCUIRoundedFillDrawable;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIGridPane.CCUITableEntry;
-import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
-import cc.creativecomputing.ui.layout.CCUIVerticalFlowPane;
 import cc.creativecomputing.ui.widget.CCUICheckBox;
 import cc.creativecomputing.ui.widget.CCUIColorPicker;
 import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
@@ -43,185 +37,142 @@ import cc.creativecomputing.ui.widget.CCUIFileWidget;
 import cc.creativecomputing.ui.widget.CCUIGradientWidget;
 import cc.creativecomputing.ui.widget.CCUIIconWidget;
 import cc.creativecomputing.ui.widget.CCUILabelWidget;
-import cc.creativecomputing.ui.widget.CCUIScrollWidget;
 import cc.creativecomputing.ui.widget.CCUISlider;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
-import cc.creativecomputing.ui.widget.CCUITreeWidget;
-import cc.creativecomputing.ui.widget.CCUITreeWidget.CCUITreeNode;
 import cc.creativecomputing.ui.widget.CCUIValueBox;
 import cc.creativecomputing.ui.widget.CCUIWidget;
+import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaAlign;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaFlexDirection;
 
 public class CCUIWidgetPlacementDemo extends CCGLApp {
 	
-//	public CCUIWidget createObjectBarWidget() {
-//		CCUIHorizontalFlowPane myBarWidget = new CCUIHorizontalFlowPane(400, 0);
-//		myBarWidget.translation().set(0,0);
-//		myBarWidget.style().inset(5);
-//		myBarWidget.space(5);
-//		
-//		CCUIGradientDrawable myGradientBack = new CCUIGradientDrawable();
-//		myGradientBack.gradient().top(new CCColor(CCColor.GREEN));
-//		myGradientBack.gradient().bottom(new CCColor(CCColor.GREEN.darker()));
-//		myBarWidget.style().background(myGradientBack);
-//
-//		CCUIIconWidget myIconWidget = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_DOWN);
-//		myIconWidget.mouseReleased.add(event -> {
-//			myIconWidget.active(!myIconWidget.active());
-//			myIconWidget.text(myIconWidget.active() ? CCEntypoIcon.ICON_TRIANGLE_DOWN.text : CCEntypoIcon.ICON_TRIANGLE_RIGHT.text);
-//		});
-//		myBarWidget.addChild(myIconWidget);
-//		
-//		CCUILabelWidget myLabel = new CCUILabelWidget("TEXONE");
-//		myBarWidget.addChild(myLabel);
-//		return myBarWidget;
-//	}
-//	
-//	public CCUICheckBox createCheckBox() {
-//		CCUICheckBox myCheckBox = new CCUICheckBox();
-//		myCheckBox.style().background(new CCUIFillDrawable(new CCColor(0.3d)));
-//		myCheckBox.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
-//		return myCheckBox;
-//	}
-//	
-//	public CCUITextFieldWidget createTextField() {
-//		CCUITextFieldWidget myTextField = new CCUITextFieldWidget("TEXONE");
-//		myTextField.style().background(new CCUIFillDrawable(new CCColor(0.3d)));
-//		myTextField.width(100);
-//		myTextField.style().inset(4);
-//		myTextField.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
-//		return myTextField;
-//	}
-//	
-//	public CCUIDropDownWidget createDropDown() {
-//		CCUIDropDownWidget myDropDown = new CCUIDropDownWidget();
-//		myDropDown.style().inset(4);
-//		myDropDown.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
-//		CCUIFillDrawable myBackground = new CCUIFillDrawable(new CCColor(0.3d));
-//		myDropDown.style().background(myBackground);
-//		myDropDown.width(100);
-//		
-//		myDropDown.menue().style().background(myBackground);
-//		myDropDown.style().itemSelectBackground(new CCUIFillDrawable(new CCColor(0.5d)));
-//		myDropDown.style().itemBackground(new CCUIFillDrawable(new CCColor(0.3d)));
-//		
-//		myDropDown.addItem("Item 1");
-//		myDropDown.addItem("item 2");
-//		myDropDown.addItem("item 3");
-//		myDropDown.addSeparator();
-//		myDropDown.addItem("item 4");
-//		return myDropDown;
-//	}
-//	
-//	public CCUITextFieldWidget createValueBox() {
-//		CCUIValueBox myTextField = new CCUIValueBox(_myFont, 0);
-//		myTextField.background(new CCUIFillDrawable(new CCColor(0.3d)));
-//		myTextField.width(100);
-//		myTextField.inset(4);
-//		myTextField.verticalAlignment(CCUIVerticalAlignment.CENTER);
-//		return myTextField;
-//	}
-//	
-//	public CCUISlider createSlider() {
-//		CCUISlider mySlider = new CCUISlider(100,14, 0, 100, 50);
-//		mySlider.background(new CCUIRoundedFillDrawable(new CCColor(0.3d), 7));
-//		mySlider.foreground(new CCUIFillDrawable(new CCColor(0.7d)));
-//		mySlider.verticalAlignment(CCUIVerticalAlignment.CENTER);
-//		return mySlider;
-//	}
-//	
-//	public CCUIWidget createColorPicker(){
-//		CCUIColorPicker myWidget = new CCUIColorPicker(_myFont,CCColor.RED, 100, 14);
-//		myWidget.inset(4);
-//		return myWidget;
-//	}
+	public CCUIWidget createObjectBarWidget() {
+		CCUIWidget myBarWidget = new CCUIWidget();
+		myBarWidget.flexDirection(CCYogaFlexDirection.ROW);
+		myBarWidget.alignItems(CCYogaAlign.CENTER);
+		myBarWidget.debugInfo("BAR", CCColor.YELLOW);
+		myBarWidget.padding(CCYogaEdge.ALL, 5);
+		
+		CCUIGradientDrawable myGradientBack = new CCUIGradientDrawable();
+		myGradientBack.gradient().top(new CCColor(CCColor.GREEN));
+		myGradientBack.gradient().bottom(new CCColor(CCColor.GREEN.darker()));
+		myBarWidget.style().background(myGradientBack);
+
+		CCUIIconWidget myIconWidget = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_DOWN);
+		myIconWidget.padding(CCYogaEdge.ALL, 2);
+		myIconWidget.style().background(CCUIWidgetStyle.OFF);
+		myIconWidget.mouseReleased.add(event -> {
+			myIconWidget.active(!myIconWidget.active());
+			myIconWidget.text(myIconWidget.active() ? CCEntypoIcon.ICON_TRIANGLE_DOWN.text : CCEntypoIcon.ICON_TRIANGLE_RIGHT.text);
+		});
+		myBarWidget.addChild(myIconWidget);
+		
+		CCUILabelWidget myLabel = new CCUILabelWidget("TEXONE");
+		myLabel.margin(CCYogaEdge.LEFT, 10);
+		myBarWidget.addChild(myLabel);
+		return myBarWidget;
+	}
+
+	
+	public CCUIDropDownWidget createDropDown() {
+		CCUIDropDownWidget myDropDown = new CCUIDropDownWidget();
+		myDropDown.padding(CCYogaEdge.ALL, 4);
+		myDropDown.addItem("Item 1");
+		myDropDown.addItem("item 2");
+		myDropDown.addItem("item 3");
+		myDropDown.addSeparator();
+		myDropDown.addItem("item 4");
+		return myDropDown;
+	}
+
 //	
 //	public CCUIWidget createGradient(){
 //		CCUIGradientWidget myWidget = new CCUIGradientWidget(220,14);
-//		myWidget.inset(4);
 //		return myWidget;
 //	}
 //	
 //	public CCUIFileWidget createFile() {
-//		CCUIFileWidget myDropDown = new CCUIFileWidget(_myFont);
-//		myDropDown.inset(4);
-//		myDropDown.verticalAlignment(CCUIVerticalAlignment.CENTER);
-//		CCUIFillDrawable myBackground = new CCUIFillDrawable(new CCColor(0.3d));
-//		myDropDown.background(myBackground);
-//		myDropDown.width(220);
-//		
-//		myDropDown.menue().background(myBackground);
-//		myDropDown.itemSelectBackground(new CCUIFillDrawable(new CCColor(0.5d)));
-//		myDropDown.itemBackground(new CCUIFillDrawable(new CCColor(0.3d)));
-//		
-//		myDropDown.addItem("Item 1");
-//		myDropDown.addItem("item 2");
-//		myDropDown.addItem("item 3");
-//		myDropDown.addSeparator();
-//		myDropDown.addItem("item 4");
+//		CCUIFileWidget myDropDown = new CCUIFileWidget();
 //		return myDropDown;
 //	}
-//	
-//	public CCUIWidget createPropertyWidget() {
-//		CCUIGridPane myPropertyWidget = new CCUIGridPane(400,0);
-//		myPropertyWidget.inset(5);
-//		myPropertyWidget.space(10);
-//		myPropertyWidget.columnWidths(10,10,10);
-//		myPropertyWidget.rowHeight(25);
-//		
-//		for(int i = 0; i < 50;i++) {
-//			CCUITableEntry myEntry = new CCUITableEntry();
-//			myEntry.column = 0;
-//			myEntry.row = i;
-//			CCUILabelWidget myLabel = new CCUILabelWidget(_myFont, "prop" + i);
-//			myLabel.horizontalAlignment (CCUIHorizontalAlignment.RIGHT);
-//			myLabel.verticalAlignment(CCUIVerticalAlignment.CENTER);
-//			myPropertyWidget.addChild(myLabel, myEntry);
-//			myEntry.column = 1;
-//			
-//			switch(i % 8) {
-//			case 0:
-//				myPropertyWidget.addChild(createCheckBox(), myEntry);
-//				break;
-//			case 1:
-//				myPropertyWidget.addChild(createTextField(), myEntry);
-//				break;
-//			case 2:
-//				myPropertyWidget.addChild(createDropDown(), myEntry);
-//				break;
-//			case 3:
-//				myEntry.column = 2;
-//				myPropertyWidget.addChild(createSlider(), myEntry);
-//				myEntry.column = 1;
-//				myPropertyWidget.addChild(createValueBox(), myEntry);
-//				break;
-//			case 4:
-//				myPropertyWidget.addChild(createValueBox(), myEntry);
-//				break;
-//			case 5:
-//				myPropertyWidget.addChild(createColorPicker(), myEntry);
-//				break;
-//			case 6:
-//				myEntry.columnSpan = 2;
-//				myPropertyWidget.addChild(createGradient(), myEntry);
-//				myEntry.columnSpan = 1;
-//				break;
-//			case 7:
-//				myEntry.columnSpan = 2;
-//				myPropertyWidget.addChild(createFile(), myEntry);
-//				myEntry.columnSpan = 1;
-//				break;
-//			}
-//		}
-//		
-//		return myPropertyWidget;
-//	}
+	
+	public CCUIWidget createPropertyWidget() {
+		CCUIWidget myPropertyWidget = new CCUIWidget();
+		myPropertyWidget.flexDirection(CCYogaFlexDirection.COLUMN);
+		myPropertyWidget.padding(CCYogaEdge.ALL, 10);
+		myPropertyWidget.style().background(new CCUIFillDrawable(new CCColor(125)));
+		
+		for(int i = 0; i < 50;i++) {
+			CCUIWidget myEntry = new CCUIWidget();
+			myPropertyWidget.addChild(myEntry);
+			myEntry.flexDirection(CCYogaFlexDirection.ROW);
+			myEntry.alignItems(CCYogaAlign.CENTER);
+			myEntry.margin(CCYogaEdge.BOTTOM, 10);
+			CCUILabelWidget myLabel = new CCUILabelWidget("prop" + i);
+			myLabel.textField().align(CCTextAlign.RIGHT);
+			myLabel.minWidth(120);
+			myLabel.padding(CCYogaEdge.ALL, 4);
+			myLabel.margin(CCYogaEdge.RIGHT, 10);
+			myEntry.addChild(myLabel);
+			
+			switch(i % 8) {
+			case 0:
+				CCUICheckBox myCheckBox = new CCUICheckBox();
+				myCheckBox.padding(CCYogaEdge.ALL, 2);
+				myEntry.addChild(myCheckBox);
+				break;
+			case 1:
+				CCUITextFieldWidget myTextField = new CCUITextFieldWidget("TEXONE");
+				myTextField.flex(1);
+				myTextField.padding(CCYogaEdge.ALL, 4);
+				myEntry.addChild(myTextField);
+				break;
+			case 2:
+				myEntry.addChild(createDropDown());
+				break;
+			case 3:
+				CCUIValueBox myValueBox = new CCUIValueBox(0);
+				myValueBox.maxWidth(120);
+				myValueBox.padding(CCYogaEdge.ALL, 4);
+				myEntry.addChild(myValueBox);
+				CCUISlider mySlider = new CCUISlider(14, 0, 100, 50);
+				mySlider.flex(1);
+				mySlider.margin(CCYogaEdge.LEFT, 10);
+				myEntry.addChild(mySlider);
+				break;
+			case 4:
+				CCUIValueBox myValueBox2 = new CCUIValueBox(0);
+				myValueBox2.maxWidth(120);
+				myValueBox2.padding(CCYogaEdge.ALL, 4);
+				myEntry.addChild(myValueBox2);
+				break;
+			case 5:
+				CCUIColorPicker myPicker = new CCUIColorPicker(CCColor.RED);
+				myPicker.minWidth(120);
+				myPicker.padding(CCYogaEdge.ALL, 4);
+				myEntry.addChild(myPicker);
+				break;
+			case 6:
+				myEntry.addChild(new CCUIGradientWidget(220,14));
+				break;
+			case 7:
+				CCUIFileWidget myFileWidget = new CCUIFileWidget();
+				myFileWidget.padding(CCYogaEdge.ALL, 4);
+				myEntry.addChild(myFileWidget);
+				break;
+			}
+		}
+		
+		return myPropertyWidget;
+	}
 //	
 //	private CCUIWidget _myObjectWidget;
 //	private CCUIWidget _myPropertyWidget;
 //	
-//	private CCTextureMapFont _myFont;
+
 //	
-//	private CCUIContext _myContext;
 //	
 //	private CCUITreeWidget _myTreeWidget;
 //	
@@ -239,58 +190,60 @@ public class CCUIWidgetPlacementDemo extends CCGLApp {
 //		addNodes(myResult.root(),3);
 //		return myResult;
 //	}
-//
-//	@Override
-//	public void setup() {
-//		_myFont = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
-//		
-//		CCUIHorizontalFlowPane myHorizontalPane = new CCUIHorizontalFlowPane();
-//		myHorizontalPane.translation().set(-framebufferSize().x / 2, framebufferSize().y / 2);
-//		_myContext = new CCUIContext(this, myHorizontalPane);
-//
+
+	private CCTextureMapFont _myFont;
+	private CCUIContext _myContext;
+	
+	@Override
+	public void setup() {
+		_myFont = new CCTextureMapFont(CCCharSet.REDUCED, CCNIOUtil.dataPath("Lato/Lato-Regular.ttf"), 20, 2, 2);
+		
+		_myContext = new CCUIContext(this, CCYogaFlexDirection.COLUMN);
+		_myContext.debugInfo("", CCColor.CYAN);
+
 //		_myTreeWidget = new CCUITreeWidget(_myFont, "app");
 //		_myTreeWidget.width(400);
 //		_myContext.widget().addChild(createTreeWidget());
-//		
-//		CCUIVerticalFlowPane myVerticalPane = new CCUIVerticalFlowPane();
-//		myVerticalPane.inset(5);
-//		myVerticalPane.space(5);
-//		myVerticalPane.addChild(createObjectBarWidget());
-//		myVerticalPane.addChild(createPropertyWidget());
-//
+		
+		CCUIWidget myVerticalPane = new CCUIWidget();
+		myVerticalPane.flexDirection(CCYogaFlexDirection.COLUMN);
+		myVerticalPane.debugInfo("", CCColor.MAGENTA);
+		myVerticalPane.flex(1);
+		myVerticalPane.addChild(createObjectBarWidget());
+		myVerticalPane.addChild(createPropertyWidget());
+
 //		CCUIScrollWidget myScrollPane = new CCUIScrollWidget(myVerticalPane, 400, 400);
-//		_myContext.widget().addChild(myVerticalPane);
-//
-//		scrollEvents.add(pos -> {CCLog.info(pos.x,pos.y);});
-//		
-////		_myMainWindow.mouseMoveEvents.add(pos -> {
-////			if(_myWidget.isInside(pos.x - g.width()/2, g.height()/2 - pos.y)){
-////				_myWidget.border(new CCUILineBorderDecorator(CCColor.RED.clone(), 2, 30));
-////			}else{
-////				_myWidget.border(new CCUILineBorderDecorator(CCColor.WHITE.clone(), 2, 30));
-////			}
-////		});
-//	}
-//
-//	@Override
-//	public void update(final CCGLTimer theTimer) {
+		_myContext.addChild(myVerticalPane);
+		_myContext.calculateLayout();
+		scrollEvents.add(pos -> {CCLog.info(pos.x,pos.y);});
+		
+//		_myMainWindow.mouseMoveEvents.add(pos -> {
+//			if(_myWidget.isInside(pos.x - g.width()/2, g.height()/2 - pos.y)){
+//				_myWidget.border(new CCUILineBorderDecorator(CCColor.RED.clone(), 2, 30));
+//			}else{
+//				_myWidget.border(new CCUILineBorderDecorator(CCColor.WHITE.clone(), 2, 30));
+//			}
+//		});
+	}
+
+	@Override
+	public void update(final CCGLTimer theTimer) {
 //		_myContext.widget().update(theTimer);
-//		
-//	}
-//
-//	@Override
-//	public void display(CCGraphics g) {
-//		g.clear();
-//		g.line(-g.width()/2,100,g.width()/2,100);
-//		g.line(0,-g.height()/2,0,g.height()/2);
-//		g.pushAttribute();
-//		_myContext.widget().draw(g);
-//		g.popAttribute();
-//	}
-//
-//	public static void main(String[] args) {
-//		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(new CCUIWidgetPlacementDemo());
-//		myApplicationManager.run();
-//	}
+		
+	}
+
+	@Override
+	public void display(CCGraphics g) {
+		g.ortho();
+		g.clear();
+		g.pushAttribute();
+		_myContext.display(g);
+		g.popAttribute();
+	}
+
+	public static void main(String[] args) {
+		CCGLApplicationManager myApplicationManager = new CCGLApplicationManager(new CCUIWidgetPlacementDemo());
+		myApplicationManager.run();
+	}
 }
 

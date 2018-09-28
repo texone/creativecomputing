@@ -22,40 +22,57 @@ import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
-import cc.creativecomputing.ui.layout.CCUIGridPane;
-import cc.creativecomputing.ui.layout.CCUIPane;
+import cc.creativecomputing.yoga.CCYogaNode;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
+import cc.creativecomputing.yoga.CCYogaNode.CCYogaFlexDirection;
 
 public class CCUIDialog<ResultType> extends CCGLApp{
 	
-	public static CCUIDialog createTextInput(CCGLApplicationManager theApp, String theText, String theInputText, int theX, int theY){
-		CCUIGridPane myDialogPane = new CCUIGridPane(400,200);
-		myDialogPane.style().horizontalAlignment(CCUIHorizontalAlignment.LEFT);
-		myDialogPane.style().verticalAlignment(CCUIVerticalAlignment.CENTER);
-		myDialogPane.style().inset(4);
+	public static CCUIDialog<String> createTextInput(
+		CCGLApplicationManager theApp, 
+		String theText, 
+		String theInputText, 
+		int theX, 
+		int theY
+	){
+		CCUIWidget myDialogPane = new CCUIWidget();
+		myDialogPane.flexDirection(CCYogaFlexDirection.COLUMN);
+		myDialogPane.flex(1);
+		myDialogPane.padding(CCYogaEdge.ALL, 25);
 		myDialogPane.style().background(new CCUIFillDrawable(CCColor.GRAY.brighter()));
-		myDialogPane.rowHeight(25);
-		myDialogPane.style().inset(25);
-		myDialogPane.space(10);
-		myDialogPane.columnWidths(10,10,10);
-		myDialogPane.stretchWidth(true);
-		myDialogPane.addChild(new CCUILabelWidget(theText), 0, 0, 3, 1);
+		
+		CCUILabelWidget myTextLabel = new CCUILabelWidget(theText);
+		myTextLabel.margin(CCYogaEdge.BOTTOM, 10);
+		myDialogPane.addChild(myTextLabel);
 		
 		CCUITextFieldWidget myTextWidget = new CCUITextFieldWidget( theInputText);
-		myTextWidget.width(200);
-		myDialogPane.addChild(myTextWidget, 0, 1, 1, 1);
-		CCUILabelWidget myCancelButton = new CCUILabelWidget( "CANCEL");
-		myCancelButton.style().background(new CCUIFillDrawable(new CCColor(0.5)));
-		myDialogPane.addChild(myCancelButton, 0, 2, 3, 1);
+		myTextWidget.margin(CCYogaEdge.BOTTOM, 10);
+		myTextWidget.padding(CCYogaEdge.ALL, 4);
+		myDialogPane.addChild(myTextWidget);
+		
+		CCUIWidget myButtonsWidget = new CCUIWidget();
+		myButtonsWidget.flexDirection(CCYogaFlexDirection.ROW_REVERSE);
+//		myButtonsWidget.flex(1);
 
 		CCUILabelWidget myOKButton = new CCUILabelWidget( "OK");
 		myOKButton.style().background(new CCUIFillDrawable(new CCColor(0.5)));
-		myDialogPane.addChild(myOKButton, 1, 2, 3, 1);
-		myDialogPane.updateMatrices();
+		myOKButton.margin(CCYogaEdge.LEFT, 10);
+		myOKButton.padding(CCYogaEdge.ALL, 4);
+		myButtonsWidget.addChild(myOKButton);
 		
-		CCUIDialog myDialog = new CCUIDialog(theApp, myDialogPane, "Add Preset", theX, theY);
+		CCUILabelWidget myCancelButton = new CCUILabelWidget( "CANCEL");
+		myCancelButton.style().background(new CCUIFillDrawable(new CCColor(0.5)));
+		myCancelButton.padding(CCYogaEdge.ALL, 4);
+		myButtonsWidget.addChild(myCancelButton);
+		
+		myDialogPane.addChild(myButtonsWidget);
+		
+		CCUIWidget mySpacer = new CCUIWidget();
+		mySpacer.flex(1);
+		myDialogPane.addChild(mySpacer);
+		
+		CCUIDialog<String> myDialog = new CCUIDialog<String>(theApp, myDialogPane, "Add Preset", theX, theY);
 		myCancelButton.mouseReleased.add(e -> {myDialog.shouldClose(true);});
 		myOKButton.mouseReleased.add(e -> {
 			myDialog.events.event(myTextWidget.text());
@@ -66,31 +83,36 @@ public class CCUIDialog<ResultType> extends CCGLApp{
 	
 	private CCUIContext _myContext;
 	
-	private CCEventManager<ResultType> events = new CCEventManager<>();
+	public CCEventManager<ResultType> events = new CCEventManager<>();
 	
-	public CCUIDialog(CCGLApplicationManager theApp, CCUIPane theWidget, String theTitle, int theX, int theY) {
-		width = (int)theWidget.width();
-		height = (int)theWidget.height();
+	public CCUIDialog(CCGLApplicationManager theApp, CCUIWidget theWidget, String theTitle, int theX, int theY) {
+		width = 400;
+		height = 400;
 		
 		title = theTitle;
-        _myContext = new CCUIContext(this, theWidget);
-        frameBufferSizeEvents.add(size ->{
-        	_myContext.widget().translation().set(-size.x / 2, size.y / 2);
-        	_myContext.widget().updateMatrices();
-        });
+
         
         theApp.add(this);
         
         drawEvents.add( g -> {
+    		g.ortho();
         	g.clear();
-        	_myContext.widget().draw(g);
+        	_myContext.display(g);
         });
-        updateEvents.add( t -> {_myContext.widget().update(t);});
+        updateEvents.add( t -> {_myContext.update(t);});
         
         position(theX, theY);
 //        
         // Display the window.
         show();
+        _myContext = new CCUIContext(this, CCYogaNode.CCYogaFlexDirection.COLUMN); //, theWidget
+        frameBufferSizeEvents.add(size ->{
+//        	_myContext.widget().translation().set(-size.x / 2, size.y / 2);
+        	_myContext.updateMatrices();
+        });
+        _myContext.addChild(theWidget);
+        _myContext.calculateLayout();
+        _myContext.updateMatrices();
 	}
 	
 	@Override

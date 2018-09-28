@@ -21,9 +21,9 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
-import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
+import cc.creativecomputing.yoga.CCYogaNode;
 
-public class CCUIMenuItem extends CCUIHorizontalFlowPane{
+public class CCUIMenuItem extends CCUIWidget{
 
 	private String _myToolTip = "";
 	
@@ -31,8 +31,14 @@ public class CCUIMenuItem extends CCUIHorizontalFlowPane{
 	
 	private CCUIMenuItem(CCUIWidgetStyle theStyle, CCUIWidget theIconWidget, CCUILabelWidget theLabelWidget){
 		super(theStyle);
-		space(5);
+		flexDirection(CCYogaFlexDirection.ROW);
+		alignItems(CCYogaAlign.CENTER);
+		padding(CCYogaEdge.ALL, 4);
+		theIconWidget.margin(CCYogaEdge.LEFT, 10);
+		theIconWidget.style().background(CCUIWidgetStyle.OFF);
 		addChild(theIconWidget);
+		theLabelWidget.margin(CCYogaEdge.LEFT, 10);
+		theLabelWidget.style().background(CCUIWidgetStyle.OFF);
 		addChild(theLabelWidget);
 		_myBackground = new CCUIFillDrawable(new CCColor(0,0));
 	}
@@ -49,18 +55,25 @@ public class CCUIMenuItem extends CCUIHorizontalFlowPane{
 		this(theStyle,theCheckBox, new CCUILabelWidget(theStyle, theText));
 	}
 	
+	public CCUIMenuItem(CCUIMenu theMenue, CCUIWidgetStyle theStyle, String theLabel) {
+		this(theStyle, theLabel);
+		mousePressed.add(e->{
+			addChild(theMenue);
+		});
+	}
+
 	public CCUIFillDrawable background(){
 		return _myBackground;
 	}
 	
 	public CCUICheckBox checkBox(){
-		CCUIWidget myWidget = _myChildren.get(0);
+		CCYogaNode myWidget = childAt(0);
 		if(myWidget instanceof CCUICheckBox)return (CCUICheckBox)myWidget;
 		return null;
 	}
 	
 	public String text(){
-		return ((CCUILabelWidget)_myChildren.get(1)).textField().text();
+		return ((CCUILabelWidget)childAt(1)).textField().text();
 	}
 
 	public void toolTipText(String theToolTip) {
@@ -72,13 +85,13 @@ public class CCUIMenuItem extends CCUIHorizontalFlowPane{
 	}
 	
 	@Override
-	public void drawContent(CCGraphics g) {
+	public void displayContent(CCGraphics g) {
 		if(_myBackground != null)_myBackground.draw(g, this);
 		if(_myStyle.border() != null)_myStyle.border().draw(g, this);
 		if(_myStyle.foreground() != null)_myStyle.foreground().draw(g, this);
 		
-		if(_myChildren == null) return;
-		for(CCUIWidget myChild:_myChildren) {
+		if(childCount() == 0) return;
+		for(CCYogaNode myChild:this) {
 			g.pushMatrix();
 			g.applyMatrix(myChild.localTransform());
 			if(_myStyle.border() != null)_myStyle.border().draw(g, myChild);

@@ -9,19 +9,20 @@ import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.layout.CCUIHorizontalFlowPane;
 import cc.creativecomputing.ui.widget.CCUIImageWidget;
+import cc.creativecomputing.yoga.CCYogaNode;
 
 public class CCUIImageWidgetDemo extends CCGLApp {
 	
 	private CCUIContext _myContext;
 	@Override
 	public void setup() {
-		
-		CCUIHorizontalFlowPane myHorizontalPane = new CCUIHorizontalFlowPane();
-		myHorizontalPane.translation().set(-framebufferSize().x / 2, framebufferSize().y / 2);
-		_myContext = new CCUIContext(this, myHorizontalPane);		
-		_myContext.widget().addChild(new CCUIImageWidget(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("waltz.jpg")))));
+
+		_myContext = new CCUIContext(this, CCYogaNode.CCYogaFlexDirection.COLUMN);
+		CCUIImageWidget myImageWIdget = new CCUIImageWidget(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("waltz.jpg")))); 
+		myImageWIdget.flex(1);
+		_myContext.addChild(myImageWIdget);
+		_myContext.calculateLayout();
 		
 	
 
@@ -38,17 +39,16 @@ public class CCUIImageWidgetDemo extends CCGLApp {
 
 	@Override
 	public void update(final CCGLTimer theTimer) {
-		_myContext.widget().update(theTimer);
+		_myContext.update(theTimer);
 		
 	}
 
 	@Override
 	public void display(CCGraphics g) {
+		g.ortho();
 		g.clear();
-		g.line(-g.width()/2,100,g.width()/2,100);
-		g.line(0,-g.height()/2,0,g.height()/2);
 		g.pushAttribute();
-		_myContext.widget().draw(g);
+		_myContext.display(g);
 		g.popAttribute();
 	}
 

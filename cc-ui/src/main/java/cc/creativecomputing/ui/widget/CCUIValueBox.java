@@ -20,13 +20,10 @@ import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
-import cc.creativecomputing.graphics.font.CCTextAlign;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.CCUIHorizontalAlignment;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
@@ -34,11 +31,8 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 	
 	public static CCUIWidgetStyle createDefaultStyle(){
 		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
-		myResult.background(new CCUIFillDrawable(new CCColor(0.3d)));
-		myResult.horizontalAlignment(CCUIHorizontalAlignment.LEFT);
-		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
+		myResult.background(new CCUIFillDrawable(new CCColor(0.2d)));
 		myResult.font(CCUIContext.FONT_20);
-		myResult.inset(4);
 		return myResult;
 	}
 
@@ -70,8 +64,6 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 		_myMax = theMax;
 		_myDigits = theDigits;
 		value(theValue, true);
-		
-		_myTextField.align(CCTextAlign.RIGHT);
 		
 		super.changeEvents.add(text ->{
 			double myValue = _myValue;
@@ -150,11 +142,13 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 			_myLastY += myChange;
 //		
 			double myVal = _myValue;
-			value(_myValue + myChange * _myFactor, true);
+			value(_myValue - myChange * _myFactor, true);
 		});
 
 		_myIcon = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_LEFT);
-		_myIcon.style().inset(0);
+		_myIcon.style().background(CCUIWidgetStyle.OFF);
+		addChild(_myIcon);
+		justifyContent(CCYogaJustify.FLEX_END);
 	}
 	
 	public CCUIValueBox(double theValue, double theMin, double theMax, int theDigits) {
@@ -216,22 +210,21 @@ public class CCUIValueBox extends CCUITextFieldWidget{
 	}
 
 	@Override
-	public void drawContent(CCGraphics g) {
-		super.drawContent(g);
+	public void displayContent(CCGraphics g) {
+		super.displayContent(g);
 		g.color(255);
-		_myIcon.textField().fontSize(_myTextField.fontSize());
-		_myIcon.textField().position().set(width() - _myIcon.width(), -_myIcon.height() * 0.95   , 0);
-		_myIcon.textField().draw(g);
+//		_myIcon.textField().fontSize(_myTextField.fontSize());
+//		_myIcon.textField().position().set(_myIcon.left() + layoutPadding(CCYogaEdge.LEFT), _myIcon.top()  + layoutPadding(CCYogaEdge.TOP) , 0);
+//		_myIcon.textField().draw(g);
 		
 //		g.rect(width() - _myIcon.width(), -_myIcon.height()   , _myIcon.width(),_myIcon.height(), true);
 //		
 //		g.color(255,0,0);
 //		g.beginShape(CCDrawMode.LINE_LOOP);
-//		g.vertex(0,0);
-//		g.vertex(width(),0);
-//		g.vertex(width(),-height());
-//		g.vertex(0,-height());
-//		g.vertex(width(),0);
+//		g.vertex(layoutPadding(CCYogaEdge.LEFT), layoutPadding(CCYogaEdge.TOP));
+//		g.vertex(layoutPadding(CCYogaEdge.LEFT) + _myIcon.width(),layoutPadding(CCYogaEdge.TOP));
+//		g.vertex(layoutPadding(CCYogaEdge.LEFT) + _myIcon.width(),layoutPadding(CCYogaEdge.TOP) + _myIcon.height());
+//		g.vertex(layoutPadding(CCYogaEdge.LEFT),layoutPadding(CCYogaEdge.TOP) +_myIcon.height());
 //		g.endShape();
 		
 //		g.triangle(width() - height() / 4 - _myInset, -height() / 2, width() - _myInset, -height() * 0.25, width() - _myInset, -height() * 0.75);

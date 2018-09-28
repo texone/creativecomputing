@@ -19,23 +19,20 @@ package cc.creativecomputing.ui.widget;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.CCUIContext;
-import cc.creativecomputing.ui.CCUIVerticalAlignment;
 import cc.creativecomputing.ui.draw.CCUIFillDrawable;
 
 public class CCUIIconWidget extends CCUILabelWidget{
 	
 	public static CCUIWidgetStyle createDefaultStyle(){
 		CCUIWidgetStyle myResult = new CCUIWidgetStyle();
-		myResult.verticalAlignment(CCUIVerticalAlignment.CENTER);
 		myResult.font(CCUIContext.ICON_FONT);
-		myResult.background(new CCUIFillDrawable(new CCColor(0.3d)));
-		myResult.inset(2);
+		myResult.background(new CCUIFillDrawable(new CCColor(0.2d)));
 		return myResult;
 	}
 
 	private CCEntypoIcon _myIcon;
 	
-	private boolean _myIsActive = true;
+	private boolean _myIsActive = false;
 	
 	private static CCUIWidgetStyle checkFont(CCUIWidgetStyle theStyle){
 		theStyle.font(CCUIContext.ICON_FONT);
@@ -44,8 +41,8 @@ public class CCUIIconWidget extends CCUILabelWidget{
 	
 	public CCUIIconWidget(CCUIWidgetStyle theStyle, CCEntypoIcon theIcon) {
 		super(checkFont(theStyle), theIcon.text);
-		_myMinWidth = _myWidth = CCUIContext.ICON_FONT.size();
-		_myMinHeight = _myHeight = CCUIContext.ICON_FONT.size();
+		minWidth(CCUIContext.ICON_FONT.size());
+		minHeight(CCUIContext.ICON_FONT.size());
 		
 		_myIcon = theIcon;
 	}
@@ -54,10 +51,13 @@ public class CCUIIconWidget extends CCUILabelWidget{
 		this(createDefaultStyle(), theIcon);
 	}
 	
+	@Override
+	public boolean isEndNode() {
+		return true;
+	}
+	
 	public void size(double theSize) {
 		_myTextField.fontSize(theSize);
-		_myWidth = theSize;
-		_myHeight = theSize;
 	}
 	
 	public boolean active() {
