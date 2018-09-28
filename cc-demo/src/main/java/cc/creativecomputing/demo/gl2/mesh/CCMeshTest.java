@@ -12,7 +12,6 @@ package cc.creativecomputing.demo.gl2.mesh;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.demo.gl2.camera.CC2CameraControllerDemo;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
@@ -38,7 +37,6 @@ public class CCMeshTest extends CCGL2Adapter {
 			_myMesh.addVertex(new CCVector3().randomize(100));
 //			_myMesh.addColor(CCMath.random(), CCMath.random(), CCMath.random());
 		}
-
 		_myCameraController1 = new CCCameraController(this, g, 100);
 	}
 
