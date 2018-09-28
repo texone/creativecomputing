@@ -5,15 +5,20 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 
 public class CCRainDropDemo extends CCGL2Adapter {
 	
 	@CCProperty(name = "drops")
-	private CCRainDrops _cRainDrops;
+	private CCRainDropSimulation _cRainDrops;
+	
+	@CCProperty(name = "screencapture")
+	private CCScreenCaptureController _cScreenCapture;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_cRainDrops = new CCRainDrops(g.width(), g.height());
+		_cRainDrops = new CCRainDropSimulation(g.width(), g.height());
+		_cScreenCapture = new CCScreenCaptureController(this);
 	}
 
 	@Override
@@ -32,7 +37,7 @@ public class CCRainDropDemo extends CCGL2Adapter {
 		CCRainDropDemo demo = new CCRainDropDemo();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(1200, 600);
+		myAppManager.glcontext().size(1080, 1920);
 		myAppManager.animator().framerate = 30;
 		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();

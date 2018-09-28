@@ -17,7 +17,7 @@ public class CCRainDropsRenderer {
 	private double width = 0;
 	private double height = 0;
 	
-	public CCRainDropsRenderer(CCRainDrops theRaindrops) {
+	public CCRainDropsRenderer(CCRainDropSimulation theRaindrops) {
 		
 		
 	}
