@@ -7,9 +7,9 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.effects.CCOffsetEffect;
 import cc.creativecomputing.effects.CCSignalEffect;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.CCKleChannelType;
@@ -21,7 +21,7 @@ import cc.creativecomputing.kle.config.CC1Motor1ConnectionConfigCreator;
 import cc.creativecomputing.kle.motors.CC1Motor1ConnectionBounds;
 import cc.creativecomputing.kle.sequence.CCSequenceRecorder;
 
-public class CC1Motor1ConnectionDemo extends CCGL2Adapter {
+public class CC1Motor1ConnectionDemo extends CCGLApp {
 	
 	@CCProperty(name = "camera")
 	private CCCameraController _myCameraController;
@@ -49,7 +49,7 @@ public class CC1Motor1ConnectionDemo extends CCGL2Adapter {
 	
 
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		new CC1Motor1ConnectionConfigCreator(12, 14, 18, 0, 380).saveXML();
 		
 		_myCameraController = new CCCameraController(this, g, 100);
@@ -69,14 +69,14 @@ public class CC1Motor1ConnectionDemo extends CCGL2Adapter {
 		_myEffectManager.put("offset", new CCOffsetEffect());
 		_myEffectManager.put("signal", new CCSignalEffect());
 
-		_myRecorder = new CCSequenceRecorder(this, _mySequenceElements, theAnimator);
+		_myRecorder = new CCSequenceRecorder(this, _mySequenceElements, t);
 
-		_myAnalyzer = new CCKleRealtimeAnalyzer(_mySequenceElements, theAnimator, CCKleChannelType.MOTORS);
+		_myAnalyzer = new CCKleRealtimeAnalyzer(_mySequenceElements, t, CCKleChannelType.MOTORS);
 	}
 
 	@Override
-	public void update(CCAnimator theAnimator) {
-		_myEffectManager.update(theAnimator);
+	public void update(CCGLTimer theTimer) {
+		_myEffectManager.update(theTimer);
 	}
 
 	@Override

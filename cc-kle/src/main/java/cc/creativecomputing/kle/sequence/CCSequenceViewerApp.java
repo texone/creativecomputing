@@ -1,17 +1,16 @@
 package cc.creativecomputing.kle.sequence;
 
-import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.CCAnimator.CCAnimationMode;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.kle.sequence.CCSequenceViewer.CCSequenceDrawMode;
 import cc.creativecomputing.kle.sequence.CCSequenceViewer.CCSequenceDrawStyle;
 import cc.creativecomputing.math.CCMath;
 
-public class CCSequenceViewerApp extends CCGL2Adapter{
+public class CCSequenceViewerApp extends CCGLApp{
 	
 	private CCSequenceViewer _myViewer;
 	
@@ -32,16 +31,9 @@ public class CCSequenceViewerApp extends CCGL2Adapter{
 	
 	
 	@Override
-	public void start(CCAnimator theAnimator) {
-	}
-	
-	@Override
-	public void init(CCGraphics g) {
+	public void setup() {
 		_myViewer = new CCSequenceViewer(g, CCNIOUtil.dataPath("manila_setup_V2.xml"));
 		_myViewer.load(CCNIOUtil.dataPath("dragon.bin"));
-
-		
-//		addControls("app", "app", this);
 	}
 	
 	@Override
@@ -78,11 +70,12 @@ public class CCSequenceViewerApp extends CCGL2Adapter{
 //	}
 
 	public static void main(String[] args) {
-		CCGL2Application myAppManager = new CCGL2Application(new CCSequenceViewerApp());
-		myAppManager.glcontext().size(1800, 900);
-		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimationMode.FRAMERATE_PRECISE;
-		myAppManager.start();
+		
+		CCSequenceViewerApp demo = new CCSequenceViewerApp();
+		
+		CCGLApplicationManager myAppManager = new CCGLApplicationManager(demo);
+		CCControlApp _myControls = new CCControlApp(myAppManager, demo);
+		myAppManager.run();
 	}
 	
 }

@@ -12,7 +12,6 @@ import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
 import cc.creativecomputing.controlui.timeline.controller.CCTransportController;
 import cc.creativecomputing.controlui.timeline.controller.track.CCTrackController;
-import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
@@ -227,7 +226,7 @@ public class CCSequenceRecorder{
 	@CCProperty(name = "normalize values")
 	private boolean _cNormalizeValues = false;
 	
-	private final CCAnimator _myAnimator;
+	private final CCGLTimer _myAnimator;
 	
 	private final CCKleEffectables _myElements;
 	
@@ -255,7 +254,7 @@ public class CCSequenceRecorder{
 	
 	private CCTimelineContainer _myTimeline;
 	
-	public CCSequenceRecorder(CCTimelineContainer theTimeline, CCKleEffectables theElements, CCAnimator theAnimator){
+	public CCSequenceRecorder(CCTimelineContainer theTimeline, CCKleEffectables theElements, CCGLTimer theAnimator){
 		_myTimeline = theTimeline;
 		_myElements = theElements;
 		for(CCKleChannelType myKey:theElements.mappings().keySet()){
@@ -358,7 +357,6 @@ public class CCSequenceRecorder{
 		return (CCSequenceChannelRecording)_myRecordings.get(theKey.id());
 	}
 	
-	private CCAnimator.CCAnimationMode _myAnimationMode;
 	private boolean _myFixUpdateTime = false;
 	private double _myFixedUpdateTime = 0;
 	
@@ -376,7 +374,6 @@ public class CCSequenceRecorder{
 		
 		_myPositionRecording.start();
 
-		_myAnimationMode = _myAnimator.animationMode;
 		_myFixedUpdateTime = _myAnimator.fixedUpdateTime;
 		_myFixUpdateTime = _myAnimator.fixUpdateTime;
 		
@@ -392,7 +389,6 @@ public class CCSequenceRecorder{
 			
 			_mySequenceSteps = CCMath.ceil(_myTransportController.loopRange().length() / _myTransportController.speed())  * myMapping.frameRate();
 			_myFadeSteps = _myFadeSeconds * myMapping.frameRate();
-			_myAnimator.animationMode = CCAnimator.CCAnimationMode.AS_FAST_AS_POSSIBLE;
 			_myAnimator.fixedUpdateTime = (1f / (myMapping.frameRate())) * _myTransportController.speed();
 			_myAnimator.fixUpdateTime = true;
 			if(_myFadeSteps > 0)_myAnimator.fixedUpdateTime = 0;
@@ -400,7 +396,6 @@ public class CCSequenceRecorder{
 		case SEQUENCE:
 			_mySequenceSteps = (_mySeconds + 2 * _myFadeSeconds)  * myMapping.frameRate();
 			_myFadeSteps = _myFadeSeconds * myMapping.frameRate();
-			_myAnimator.animationMode = CCAnimator.CCAnimationMode.AS_FAST_AS_POSSIBLE;
 			_myAnimator.fixedUpdateTime = 1f / (myMapping.frameRate());
 			_myAnimator.fixUpdateTime = true;
 			if(_myFadeSteps > 0)_myAnimator.fixedUpdateTime = 0;
@@ -408,7 +403,6 @@ public class CCSequenceRecorder{
 		case FRAME:
 			_mySequenceSteps = _cStillFrames;
 			_myFadeSteps = 0;
-			_myAnimator.animationMode = CCAnimator.CCAnimationMode.AS_FAST_AS_POSSIBLE;
 			_myAnimator.fixedUpdateTime = 0;
 			_myAnimator.fixUpdateTime = true;
 			break;
@@ -528,7 +522,6 @@ public class CCSequenceRecorder{
 		endEvents.event();
 		_myAnimator.fixedUpdateTime = _myFixedUpdateTime;
 		_myAnimator.fixUpdateTime = _myFixUpdateTime;
-		_myAnimator.animationMode = _myAnimationMode;
 		
 		if(_myProgress != null)_myProgress.end();
 		_myIsRecording = false;

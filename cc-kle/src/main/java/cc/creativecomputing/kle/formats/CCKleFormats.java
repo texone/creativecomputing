@@ -67,4 +67,15 @@ public enum CCKleFormats {
 	public String extension(){
 		return _myFormat.extension();
 	}
+	
+	public static String[] extensions() {
+		String[] myResult = new String[values().length - 1];
+		int i = 0;
+		for(CCKleFormats myFormat:values()) {
+			if(myFormat == CCKleFormats.NONE)continue;
+			myResult[i] = myFormat.extension();
+			i++;
+		}
+		return myResult;
+	}
 }

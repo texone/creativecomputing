@@ -2,9 +2,10 @@ package cc.creativecomputing.kle;
 
 import java.util.List;
 
-import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCTimer;
 import cc.creativecomputing.core.util.CCArrayUtil;
 import cc.creativecomputing.effects.CCEffectManager;
+import cc.creativecomputing.gl.app.CCGLTimer;
 
 public class CCKleEffectManager extends CCEffectManager<CCKleEffectable>{
 
@@ -28,12 +29,12 @@ public class CCKleEffectManager extends CCEffectManager<CCKleEffectable>{
 	public boolean isInRecord = false;
 	
 	@Override
-	public void update(CCAnimator theAnimator) {
+	public void update(CCTimer theAnimator) {
 		if(isInRecord)return;
 		super.update(theAnimator);
 	}
 	
-	public void updateRecord(CCAnimator theAnimator) {
+	public void updateRecord(CCGLTimer theAnimator) {
 		super.update(theAnimator);
 	}
 	
