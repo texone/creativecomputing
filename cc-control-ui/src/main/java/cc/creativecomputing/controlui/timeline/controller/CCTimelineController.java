@@ -22,17 +22,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
-import cc.creativecomputing.control.handles.CCColorPropertyHandle;
-import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
+import cc.creativecomputing.control.handles.CCBooleanHandle;
+import cc.creativecomputing.control.handles.CCColorHandle;
+import cc.creativecomputing.control.handles.CCEnumHandle;
 import cc.creativecomputing.control.handles.CCEventTriggerHandle;
-import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
-import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCGradientHandle;
+import cc.creativecomputing.control.handles.CCNumberHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
-import cc.creativecomputing.control.handles.CCStringPropertyHandle;
+import cc.creativecomputing.control.handles.CCSelectionHandle;
+import cc.creativecomputing.control.handles.CCStringHandle;
 import cc.creativecomputing.control.timeline.CCAbstractTrack;
 import cc.creativecomputing.control.timeline.CCGroupTrack;
 import cc.creativecomputing.control.timeline.CCTimeRange;
@@ -75,13 +75,13 @@ public class CCTimelineController extends CCTrackContext {
 	private Map<Path, CCTrackController> _myTrackControllerMap;
 	private List<CCTrackController> _myTrackController;
 	
-	private final CCObjectPropertyHandle _myRootHandle;
+	private final CCObjectHandle _myRootHandle;
 	
 	private final CCTimelineContainer _myTimelineContainer;
 
 	protected CCQuantizeMode _myQuantizeMode;
 	
-	public CCTimelineController(CCTimelineContainer theTimelineContainer, CCObjectPropertyHandle theRootHandle) {
+	public CCTimelineController(CCTimelineContainer theTimelineContainer, CCObjectHandle theRootHandle) {
 		super();
 		_myTimelineContainer = theTimelineContainer;
 		_myTransportController = new CCTransportController(this);
@@ -102,7 +102,7 @@ public class CCTimelineController extends CCTrackContext {
 		_myZoomController.events.add(_myTransportController::setRange);
 	}
 	
-	public CCObjectPropertyHandle rootHandle(){
+	public CCObjectHandle rootHandle(){
 		return _myRootHandle;
 	}
 	
@@ -249,7 +249,7 @@ public class CCTimelineController extends CCTrackContext {
 		return _myTrackControllerMap.get(thePath);
 	}
 	
-	public CCGroupTrackController createGroupController(CCObjectPropertyHandle theProperty) {
+	public CCGroupTrackController createGroupController(CCObjectHandle theProperty) {
 		if(theProperty.parent() != null){
 			createGroupController(theProperty.parent());
 		}
@@ -295,7 +295,7 @@ public class CCTimelineController extends CCTrackContext {
 	}
 	
 	public CCGroupTrackController createGroupController(Path thePath){
-		return createGroupController((CCObjectPropertyHandle)_myRootHandle.property(thePath));
+		return createGroupController((CCObjectHandle)_myRootHandle.property(thePath));
 	}
 	
 	private int _myArrangeCounter = 0;
@@ -340,12 +340,12 @@ public class CCTimelineController extends CCTrackContext {
 		myTrack.color(CCColorMap.getColor(theProperty.path()));
 		
 		CCTrackController myTrackController = null;
-		if(theProperty instanceof CCBooleanPropertyHandle){
+		if(theProperty instanceof CCBooleanHandle){
 			myTrackController = new CCBooleanTrackController(this, myTrack, myGroup);
 		}else if(theProperty instanceof CCEventTriggerHandle){
 			myTrackController = new CCTriggerTrackController(this, myTrack, myGroup);
-		}else if(theProperty instanceof CCNumberPropertyHandle<?>){
-			CCNumberPropertyHandle<?> myNumberProperty = (CCNumberPropertyHandle<?>)theProperty;
+		}else if(theProperty instanceof CCNumberHandle<?>){
+			CCNumberHandle<?> myNumberProperty = (CCNumberHandle<?>)theProperty;
 			if(myNumberProperty.max() instanceof Integer){
 				myTrackController = new CCIntegerTrackController(this, myTrack, myGroup);
 			}else if(myNumberProperty.max() instanceof Float){
@@ -353,21 +353,21 @@ public class CCTimelineController extends CCTrackContext {
 			}else if(myNumberProperty.max() instanceof Double){
 				myTrackController = new CCDoubleTrackController(this, myTrack, myGroup);
 			}
-		}else if(theProperty instanceof CCColorPropertyHandle){
+		}else if(theProperty instanceof CCColorHandle){
 			myTrackController = new CCColorTrackController(this, myTrack, myGroup);
-		}else if(theProperty instanceof CCGradientPropertyHandle){
+		}else if(theProperty instanceof CCGradientHandle){
 			myTrackController = new CCGradientTrackController(this, myTrack, myGroup);
-		}else if(theProperty instanceof CCStringPropertyHandle){
+		}else if(theProperty instanceof CCStringHandle){
 			myTrackController = new CCEventTrackController(this, myTrack, myGroup);
 			Map<String, String> myExtraMap = new HashMap<>();
 			myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 			myTrack.extras(myExtraMap);
-		}else if(theProperty instanceof CCEnumPropertyHandle){
+		}else if(theProperty instanceof CCEnumHandle){
 			myTrackController = new CCEventTrackController(this, myTrack, myGroup);
 			Map<String, String> myExtraMap = new HashMap<>();
 			myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");
 			myTrack.extras(myExtraMap);
-		}else if(theProperty instanceof CCSelectionPropertyHandle){
+		}else if(theProperty instanceof CCSelectionHandle){
 			myTrackController = new CCEventTrackController(this, myTrack, myGroup);
 			Map<String, String> myExtraMap = new HashMap<>();
 			myExtraMap.put(CCEventTrackController.EVENT_TYPES,"new");

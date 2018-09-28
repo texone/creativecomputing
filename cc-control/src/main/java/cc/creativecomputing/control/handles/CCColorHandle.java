@@ -16,37 +16,50 @@
  ******************************************************************************/
 package cc.creativecomputing.control.handles;
 
-import cc.creativecomputing.control.CCEnvelope;
-import cc.creativecomputing.control.timeline.CCTrackData;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.math.CCColor;
 
-public class CCEnvelopeHandle extends CCPropertyHandle<CCEnvelope>{
+public class CCColorHandle extends CCPropertyHandle<CCColor>{
 	
-	protected CCEnvelopeHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
+	protected CCColorHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
+	}
+	
+	@Override
+	public void value(CCColor theValue, boolean theOverWrite) {
+		if(theValue == null)return;
+		if(theOverWrite)_myPresetValue = theValue.clone();
+		_myValue = theValue.clone();
+		_myUpdateMember = true;
+	}
+	
+	@Override
+	public void restorePreset() {
+		if(_myValue != null && _myPresetValue != null)
+			_myValue.set(_myPresetValue);
 	}
 	
 	@Override
 	public CCDataObject data() {
 		CCDataObject myResult = super.data();
-		CCEnvelope myEnvelope = value();
-		CCTrackData myCurve = myEnvelope.curve();
-		myResult.put("curve", myCurve.data());
+		CCColor myColor = value();
+		myResult.put("r", myColor.r);
+		myResult.put("g", myColor.g);
+		myResult.put("b", myColor.b);
+		myResult.put("a", myColor.a);
 		return myResult;
 	}
 	
 	@Override
 	public void data(CCDataObject theData) {
-		CCEnvelope myEnvelope = new CCEnvelope();
-		myEnvelope.curve().clear();
-		myEnvelope.curve().data(theData.getObject("curve"));
-		value(myEnvelope, true);
-	}
-
-	@Override
-	public String valueString() {
-		return "";
+		CCColor myColor = new CCColor(
+			theData.getDouble("r",0),
+			theData.getDouble("g",0),
+			theData.getDouble("b",0),
+			theData.getDouble("a",0)
+		);
+		value(myColor, true);
 	}
 }

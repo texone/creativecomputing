@@ -16,17 +16,17 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
+import cc.creativecomputing.control.handles.CCEnumHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
-public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumPropertyHandle>{
+public class CCEnumControl extends CCValueControl<Enum<?>, CCEnumHandle>{
 	
 	private CCUIDropDownWidget _myDropDown;
 
-	public CCEnumControl(CCEnumPropertyHandle theHandle, CCControlComponent theControlComponent){
+	public CCEnumControl(CCEnumHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
  
 		addListener( theValue -> {

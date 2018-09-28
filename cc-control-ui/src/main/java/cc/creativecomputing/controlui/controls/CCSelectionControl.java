@@ -17,14 +17,14 @@
 package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
+import cc.creativecomputing.control.handles.CCSelectionHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.ui.widget.CCUIDropDownWidget;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
-public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionPropertyHandle>{
+public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionHandle>{
 	
 	private CCUIDropDownWidget _myDropDown;
 	
@@ -33,7 +33,7 @@ public class CCSelectionControl extends CCValueControl<CCSelection, CCSelectionP
 	private CCEvent<CCSelection> _myChangeListener;
 	private CCEvent<CCSelection> _myAddListener;
 
-	public CCSelectionControl(CCSelectionPropertyHandle theHandle, CCControlComponent theControlComponent){
+	public CCSelectionControl(CCSelectionHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		_myHandle.value().changeEvents.add(_myChangeListener = theSelection -> {

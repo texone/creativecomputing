@@ -23,7 +23,7 @@ import cc.creativecomputing.io.data.CCDataObject;
 
 public class CCControlMatrixHandle extends CCPropertyHandle<CCControlMatrix>{
 	
-	protected CCControlMatrixHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
+	protected CCControlMatrixHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
 	}
 	

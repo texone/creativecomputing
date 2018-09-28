@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.view.SwingTimelineView;
@@ -40,7 +40,7 @@ public class CCTimelineContainer {
 	}
 	
 	protected Map<String,CCTimelineController> _myTimelineController;
-	protected CCObjectPropertyHandle _myRootHandle;
+	protected CCObjectHandle _myRootHandle;
 	
 	public CCEventManager<CCEvent<?>> resetEvents = new CCEventManager<>();
 	public CCEventManager<CCTimelineController> changeEvents = new CCEventManager<>();
@@ -50,13 +50,13 @@ public class CCTimelineContainer {
 	
 	private CCControlApp _myApp;
 
-	public CCTimelineContainer(CCControlApp theApp, CCObjectPropertyHandle theRootHandle){
+	public CCTimelineContainer(CCControlApp theApp, CCObjectHandle theRootHandle){
 		_myTimelineController = new TreeMap<>();
 		_myApp = theApp;
 		rootProperty(theRootHandle);
 	}
 	
-	public void rootProperty(CCObjectPropertyHandle theRootHandle) {
+	public void rootProperty(CCObjectHandle theRootHandle) {
 		_myRootHandle = theRootHandle;
 		_myTimelineController.clear();
 		_myActiveController = new CCTimelineController(this, _myRootHandle);
@@ -115,8 +115,8 @@ public class CCTimelineContainer {
 	public void addTrack(CCPropertyHandle<?> thePropertyHandle){
 		if(_myActiveController == null)return;
 		if(thePropertyHandle.parent() != null)addTrack(thePropertyHandle.parent());
-		if(thePropertyHandle instanceof CCObjectPropertyHandle){
-			_myActiveController.createGroupController((CCObjectPropertyHandle)thePropertyHandle);
+		if(thePropertyHandle instanceof CCObjectHandle){
+			_myActiveController.createGroupController((CCObjectHandle)thePropertyHandle);
 		}else {
 			_myActiveController.createController(thePropertyHandle, null);
 		}
@@ -124,8 +124,8 @@ public class CCTimelineContainer {
 	
 	public void writeValues(CCPropertyHandle<?> thePropertyHandle){
 		addTrack(thePropertyHandle);
-		if(thePropertyHandle instanceof CCObjectPropertyHandle){
-			for(CCPropertyHandle<?> myChild:((CCObjectPropertyHandle)thePropertyHandle).children().values()){
+		if(thePropertyHandle instanceof CCObjectHandle){
+			for(CCPropertyHandle<?> myChild:((CCObjectHandle)thePropertyHandle).children().values()){
 				writeValues(myChild);
 			}
 		}else {

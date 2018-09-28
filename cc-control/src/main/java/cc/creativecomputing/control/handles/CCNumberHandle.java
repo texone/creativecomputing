@@ -16,30 +16,27 @@
  ******************************************************************************/
 package cc.creativecomputing.control.handles;
 
-import cc.creativecomputing.control.CCPropertyMap.CCDoubleConverter;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCMath;
 
-public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandle<Number>{
+public abstract class CCNumberHandle<Type extends Number> extends CCPropertyHandle<Type>{
 	
 	private Type _myMin;
 	private Type _myMax;
 	
-	private CCDoubleConverter<Type> _myToType;
-	
 	private boolean _myIsNumberBox = false;
 
-	public CCNumberPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember, CCDoubleConverter<Type> theToType) {
+	public CCNumberHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
-		_myToType = theToType;
 		minMax(
-			_myMember.annotation() == null ? _myToType.toType(-1) : _myToType.toType(_myMember.annotation().min()), 
-			_myMember.annotation() == null ? _myToType.toType(-1) : _myToType.toType(_myMember.annotation().max())
+			_myMember.annotation() == null ? toType(-1) : toType(_myMember.annotation().min()), 
+			_myMember.annotation() == null ? toType(-1) : toType(_myMember.annotation().max())
 		);
 	}
+	
+	public abstract Type toType(double theValue);
 	
 	public int digits(){
 		if(_myMember == null || _myMember.annotation() == null)return 2;
@@ -65,11 +62,11 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 			);
 		
 		if(myUseParentMinMax){
-			_myMin = _myToType.toType(_myParent._myMember.annotation().min());
-			_myMax = _myToType.toType(_myParent._myMember.annotation().max());
+			_myMin = toType(_myParent._myMember.annotation().min());
+			_myMax = toType(_myParent._myMember.annotation().max());
 		}else if(myIsNumberBox){
-			_myMin = _myToType.min();
-			_myMax = _myToType.max();
+			_myMin = typeMin();
+			_myMax = typeMax();
 			_myIsNumberBox = true;
 		}
 	}
@@ -82,19 +79,23 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 		return _myMax;
 	}
 	
+	public abstract Type typeMin();
+	
+	public abstract Type typeMax();
+	
 	@Override
-	public Number value() {
+	public Type value() {
 		if(_myMember.value() == null){
 			if(_myMember.annotation() == null || _myMember.annotation().defaultValue() == Double.NaN)return _myMin;
-			return CCMath.constrain(_myMember.annotation().defaultValue(), _myMin.doubleValue(), _myMax.doubleValue());
+			return toType(CCMath.constrain(_myMember.annotation().defaultValue(), _myMin.doubleValue(), _myMax.doubleValue()));
 		}
-		return CCMath.constrain(super.value().doubleValue(), _myMin.doubleValue(), _myMax.doubleValue());
+		return toType(CCMath.constrain(super.value().doubleValue(), _myMin.doubleValue(), _myMax.doubleValue()));
 	}
 	
 	@Override
 	public void value(Number theValue, boolean theOverWrite) {
 		if(theValue == null)return;
-		super.value(_myToType.toType(theValue.doubleValue()), theOverWrite);
+		super.value(toType(theValue.doubleValue()), theOverWrite);
 	}
 	
 	@Override
@@ -117,7 +118,7 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 
 //	@Override
 //	public Number convertDoubleValue(double theValue) {
-//		return _myToType.toType(CCMath.blend(_myMin.doubleValue(), _myMax.doubleValue(), theValue));
+//		return toType(CCMath.blend(_myMin.doubleValue(), _myMax.doubleValue(), theValue));
 //	}
 	
 	@Override
@@ -126,20 +127,11 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	}
 
 	@Override
-	public String valueString() {
-		if(numberType() == Integer.class){
-			return (int)_myValue + "";
-		}
-		if(numberType() == Float.class){
-			return CCFormatUtil.nd((float)_myValue, digits());
-		}
-		return CCFormatUtil.nd((double)_myValue, digits());
-			
-	}
+	public abstract String valueString();
 	
-	public Class<?> numberType(){
-		return _myToType.type();
-	}
+//	public Class<?> numberType(){
+//		return _myToType.type();
+//	}
 	
 	@Override
 	public CCDataObject data() {
@@ -151,9 +143,9 @@ public class CCNumberPropertyHandle<Type extends Number> extends CCPropertyHandl
 	
 	@Override
 	public void data(CCDataObject theData) {
-//		_myMin = _myToType.toType(theData.getDouble("min", 0.0));
-//		_myMax = _myToType.toType(theData.getDouble("max", 1.0));
-		value(_myToType.toType(theData.getDouble("value", 0.0)), true);
+//		_myMin = toType(theData.getDouble("min", 0.0));
+//		_myMax = toType(theData.getDouble("max", 1.0));
+		value(toType(theData.getDouble("value", 0.0)), true);
 		super.data(theData);
 	}
 }

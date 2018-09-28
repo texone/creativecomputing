@@ -16,17 +16,17 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
+import cc.creativecomputing.control.handles.CCBooleanHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.ui.widget.CCUICheckBox;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
-public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanPropertyHandle>{
+public class CCBooleanControl extends CCValueControl<Boolean, CCBooleanHandle>{
 	
 	private CCUICheckBox _myCheckBox;
 	
-	public CCBooleanControl(CCBooleanPropertyHandle theHandle, CCControlComponent theControlComponent){
+	public CCBooleanControl(CCBooleanHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		addListener(theValue ->{

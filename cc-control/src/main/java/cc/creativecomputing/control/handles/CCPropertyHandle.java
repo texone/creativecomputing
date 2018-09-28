@@ -40,7 +40,7 @@ public abstract class CCPropertyHandle<Type>{
 	protected Type _myPresetValue = null;
 	protected Type _myDefaultValue = null;
 	
-	protected CCObjectPropertyHandle _myParent;
+	protected CCObjectHandle _myParent;
 	
 	protected boolean _myUpdateMember = false;
 	
@@ -48,7 +48,7 @@ public abstract class CCPropertyHandle<Type>{
 	
 	private boolean _myReadBack;
 	
-	protected CCPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember){
+	protected CCPropertyHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember){
 		_myParent = theParent;
 		_myMember = theMember;
 		if(_myMember == null)return;
@@ -162,7 +162,7 @@ public abstract class CCPropertyHandle<Type>{
 		return value();
 	}
 	
-	public CCObjectPropertyHandle parent(){
+	public CCObjectHandle parent(){
 		return _myParent;
 	}
 	
@@ -174,9 +174,13 @@ public abstract class CCPropertyHandle<Type>{
 		return theValue;
 	}
 	
-	public abstract double normalizedValue();
+	public double normalizedValue() {
+		return 0;
+	}
 	
-	public abstract String valueString();
+	public String valueString() {
+		return _myValue.toString();
+	}
 	
 	public void restorePreset(){
 		value(_myPresetValue, true);
@@ -216,7 +220,6 @@ public abstract class CCPropertyHandle<Type>{
 	public CCDataObject data(){
 		try{
 			CCDataObject myResult = new CCDataObject();
-			myResult.put("name", name());
 			myResult.put("value", dataObject());
 			return myResult;
 		}catch(Exception e){

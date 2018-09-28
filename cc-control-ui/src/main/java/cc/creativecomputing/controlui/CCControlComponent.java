@@ -16,7 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui;
 
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
 import cc.creativecomputing.core.logging.CCLog;
@@ -117,20 +117,20 @@ public class CCControlComponent extends CCUIWidget{
 //        addChild(myTreeControlsTimelinePane);
 	}
 
-	public void showContent(CCObjectPropertyHandle theHandle){
+	public void showContent(CCObjectHandle theHandle){
 		CCLog.info("show content");
         if(_myPropertyPane == null) return;
         _myPropertyPane.removeAllChildren();
         int y = 0;
-		CCObjectControl myObjectControl = new CCObjectControl(theHandle, this, 0);
+		CCObjectControl myObjectControl = new CCObjectControl(theHandle, this);
 		myObjectControl.addToPane(_myPropertyPane, y, 0);
 		CCLog.info(myObjectControl,myObjectControl.parent().get());
 	}
 
-	private void createTree(CCUITreeNode theNode, CCObjectPropertyHandle theHandle){
+	private void createTree(CCUITreeNode theNode, CCObjectHandle theHandle){
 		for(CCPropertyHandle<?> myPropertyHandle:theHandle.children().values()){
-			if(myPropertyHandle instanceof CCObjectPropertyHandle){
-				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;
+			if(myPropertyHandle instanceof CCObjectHandle){
+				CCObjectHandle myObjectHandle = (CCObjectHandle)myPropertyHandle;
 				CCUITreeNode myNode = theNode.addNode(myObjectHandle.name(), e -> {
 					showContent(myObjectHandle);
 				});
@@ -139,7 +139,7 @@ public class CCControlComponent extends CCUIWidget{
 		}
 	}
 	
-	public void setData(CCObjectPropertyHandle theRootHandle){
+	public void setData(CCObjectHandle theRootHandle){
 		createTree(_myTreeWidget.root(), theRootHandle);
 		showContent(theRootHandle);	
 	}

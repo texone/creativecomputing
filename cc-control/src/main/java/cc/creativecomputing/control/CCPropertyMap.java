@@ -18,19 +18,18 @@ package cc.creativecomputing.control;
 
 import java.nio.file.Path;
 
-import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
-import cc.creativecomputing.control.handles.CCColorPropertyHandle;
+import cc.creativecomputing.control.handles.CCBooleanHandle;
+import cc.creativecomputing.control.handles.CCColorHandle;
 import cc.creativecomputing.control.handles.CCControlMatrixHandle;
-import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
+import cc.creativecomputing.control.handles.CCEnumHandle;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
-import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
-import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCGradientHandle;
+import cc.creativecomputing.control.handles.CCNumberHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCStringPropertyHandle;
+import cc.creativecomputing.control.handles.CCStringHandle;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.io.data.CCDataIO;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.io.data.CCDataIO.CCDataFormats;
@@ -40,160 +39,69 @@ public class CCPropertyMap {
 	
 	public interface CCPropertyMapVisitor{
 		
-		void onRoot(CCObjectPropertyHandle theRoot);
+		void onRoot(CCObjectHandle theRoot);
 		
-		void onFloat(CCNumberPropertyHandle<Float> theHandle);
+		void onFloat(CCNumberHandle<Float> theHandle);
 		
-		void onInt(CCNumberPropertyHandle<Integer> theHandle);
+		void onInt(CCNumberHandle<Integer> theHandle);
 		
-		void onBoolean(CCBooleanPropertyHandle theHandle);
+		void onBoolean(CCBooleanHandle theHandle);
 		
-		void onString(CCStringPropertyHandle theHandle);
+		void onString(CCStringHandle theHandle);
 		
-		void onEnum(CCEnumPropertyHandle theHandle);
+		void onEnum(CCEnumHandle theHandle);
 		
-		void onColor(CCColorPropertyHandle theHandle);
+		void onColor(CCColorHandle theHandle);
 		
-		void onGradient(CCGradientPropertyHandle theHandle);
+		void onGradient(CCGradientHandle theHandle);
 		
 		void onEnvelope(CCEnvelopeHandle theHandle);
 		
 		void onControlMatrix(CCControlMatrixHandle theHandle);
 		
-		void onObject(CCObjectPropertyHandle theHandle);
+		void onObject(CCObjectHandle theHandle);
 	}
 	
 	public void visit(CCPropertyMapVisitor theVisitor){
 		
-		CCObjectPropertyHandle myRootHandle = rootHandle();
+		CCObjectHandle myRootHandle = rootHandle();
 		
 		theVisitor.onRoot(myRootHandle);
 		visit(theVisitor, myRootHandle);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void visit(CCPropertyMapVisitor theVisitor, CCObjectPropertyHandle theObjectHandle){
+	private void visit(CCPropertyMapVisitor theVisitor, CCObjectHandle theObjectHandle){
 		for(CCPropertyHandle<?> myPropertyHandle:theObjectHandle.children().values()){
 			Class<?> myClass = myPropertyHandle.type();
 			
 			if(myClass == Float.class || myClass == Float.TYPE){
-				theVisitor.onFloat((CCNumberPropertyHandle<Float>)myPropertyHandle);
+				theVisitor.onFloat((CCNumberHandle<Float>)myPropertyHandle);
 			}else  if(myClass == Integer.class || myClass == Integer.TYPE){
-				theVisitor.onInt((CCNumberPropertyHandle<Integer>)myPropertyHandle);
+				theVisitor.onInt((CCNumberHandle<Integer>)myPropertyHandle);
 			}else  if(myClass == Boolean.class || myClass == Boolean.TYPE){
-				theVisitor.onBoolean((CCBooleanPropertyHandle)myPropertyHandle);
+				theVisitor.onBoolean((CCBooleanHandle)myPropertyHandle);
 			}else  if(myClass == String.class){
-				theVisitor.onString((CCStringPropertyHandle)myPropertyHandle);
+				theVisitor.onString((CCStringHandle)myPropertyHandle);
 			}else  if(myClass.isEnum()){
-				theVisitor.onEnum((CCEnumPropertyHandle)myPropertyHandle);
+				theVisitor.onEnum((CCEnumHandle)myPropertyHandle);
 			}else  if(myClass == CCColor.class){
-				theVisitor.onColor((CCColorPropertyHandle)myPropertyHandle);
+				theVisitor.onColor((CCColorHandle)myPropertyHandle);
 			}else  if(myClass == CCGradient.class){
-				theVisitor.onGradient((CCGradientPropertyHandle)myPropertyHandle);
+				theVisitor.onGradient((CCGradientHandle)myPropertyHandle);
 			}else  if(myClass == CCEnvelope.class){
 				theVisitor.onEnvelope((CCEnvelopeHandle)myPropertyHandle);
 			}else  if(myClass == CCControlMatrix.class){
 				theVisitor.onControlMatrix((CCControlMatrixHandle)myPropertyHandle);
 			}else{
-				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;
+				CCObjectHandle myObjectHandle = (CCObjectHandle)myPropertyHandle;
 				theVisitor.onObject(myObjectHandle);
 				visit(theVisitor, myObjectHandle);
 			}
 		}
 	}
 	
-	public interface CCDoubleConverter<Type extends Number>{
-		Type toType(double theValue);
-		
-		Type min();
-		
-		Type max();
-		
-		String toString(Number theValue);
-		
-		Class<Type> type();
-	}
-	
-	public static CCDoubleConverter<Float> floatConverter = new CCDoubleConverter<Float>(){
-		@Override
-		public Float toType(double theValue) {return (float)theValue;}
-
-		@Override
-		public Float min() {
-			return -Float.MAX_VALUE;
-		}
-
-		@Override
-		public Float max() {
-			return Float.MAX_VALUE;
-		}
-
-		@Override
-		public String toString(Number theValue) {
-			return CCFormatUtil.nd(theValue.doubleValue(), 4);
-		}
-
-		@Override
-		public Class<Float> type() {
-			return Float.class;
-		}
-	};
-	
-	public static CCDoubleConverter<Double> doubleConverter = new CCDoubleConverter<Double>(){
-		@Override
-		public Double toType(double theValue) {return theValue;}
-
-		@Override
-		public Double min() {
-			return -Double.MAX_VALUE;
-		}
-
-		@Override
-		public Double max() {
-			return Double.MAX_VALUE;
-		}
-
-		@Override
-		public String toString(Number theValue) {
-			return CCFormatUtil.nd(theValue.doubleValue(), 4);
-		}
-
-		@Override
-		public Class<Double> type() {
-			return Double.class;
-		}
-	};
-	
-	public static CCDoubleConverter<Integer> intConverter = new CCDoubleConverter<Integer>(){
-		@Override
-		public Integer toType(double theValue) {
-			return (int)theValue;
-		}
-
-		@Override
-		public Integer min() {
-			return Integer.MIN_VALUE;
-		}
-
-		@Override
-		public Integer max() {
-			return Integer.MAX_VALUE;
-		}
-
-		@Override
-		public String toString(Number theValue) {
-			return theValue.intValue() + "";
-		}
-
-		@Override
-		public Class<Integer> type() {
-			return Integer.class;
-		}
-	};
-	
-	
-	
-	private CCObjectPropertyHandle _myRootHandle;
+	private CCObjectHandle _myRootHandle;
 
 	public CCPropertyMap(){
 	}
@@ -203,10 +111,10 @@ public class CCPropertyMap {
 			_myRootHandle.relink(theRootObject);
 			return;
 		}
-		_myRootHandle = new CCObjectPropertyHandle(theRootObject, thePresetPath);
+		_myRootHandle = new CCObjectHandle(theRootObject, thePresetPath);
 	}
 	
-	public CCObjectPropertyHandle rootHandle(){
+	public CCObjectHandle rootHandle(){
 		return _myRootHandle;
 	}
 	

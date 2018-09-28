@@ -1,6 +1,6 @@
 package cc.creativecomputing.controlui;
 
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.handles.CCPresetHandling;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.controls.CCObjectControl;
@@ -44,14 +44,16 @@ public class CCObjectPropertyPopUp extends CCPropertyPopUp{
 			setPresets(_myObjectControl.propertyHandle());
 			_myPresetMenue.positionType(CCYogaPositionType.ABSOLUTE);
 			_myPresetMenue.position(CCYogaEdge.LEFT, myPresetItem.width());
-			_myPresetMenue.position(CCYogaEdge.TOP, 0);
-			myPresetItem.addChild(_myPresetMenue);
+			_myPresetMenue.position(CCYogaEdge.TOP, myPresetItem.top());
+			addChild(_myPresetMenue);
+			subMenue(_myPresetMenue);
 			root().calculateLayout();
-			CCLog.info("YO");
+			CCLog.info("YO1");
 			updateMatrices();
 		});
 		myPresetItem.onOut.add((o)->{
-			myPresetItem.removeChild(_myPresetMenue);
+			removeChild(_myPresetMenue);
+			subMenue(null);
 		});
 		addItem(CCEntypoIcon.ICON_ADD_TO_LIST, "add preset", e -> {
 			CCLog.info("add");
@@ -64,7 +66,7 @@ public class CCObjectPropertyPopUp extends CCPropertyPopUp{
 			);
 			
 			myDialog.events.add(myPreset -> {
-				CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
+				CCObjectHandle myHandle = (CCObjectHandle)_myProperty;
 				myHandle.savePreset(myPreset, CCPresetHandling.RESTORED);
 			});
 			
@@ -83,7 +85,7 @@ public class CCObjectPropertyPopUp extends CCPropertyPopUp{
 		});
 		
 		addItem(CCEntypoIcon.ICON_TRASH, "remove current preset", e -> {
-			CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
+			CCObjectHandle myHandle = (CCObjectHandle)_myProperty;
 			for(CCYogaNode myWidget:_myPresetMenue) {
 				CCUIMenuItem myItem = (CCUIMenuItem)myWidget;
 				if(myItem.checkBox().isSelected()) {
@@ -98,7 +100,7 @@ public class CCObjectPropertyPopUp extends CCPropertyPopUp{
 			for(CCYogaNode myWidget:_myPresetMenue) {
 				CCUIMenuItem myItem = (CCUIMenuItem)myWidget;
 				if(myItem.checkBox().isSelected()){
-					CCObjectPropertyHandle myHandle = (CCObjectPropertyHandle)_myProperty;
+					CCObjectHandle myHandle = (CCObjectHandle)_myProperty;
 					myHandle.savePreset(myItem.text(), CCPresetHandling.UPDATED);
 					return;
 				}
@@ -107,7 +109,7 @@ public class CCObjectPropertyPopUp extends CCPropertyPopUp{
 		});
 	}
 	
-	public void setPresets(CCObjectPropertyHandle theObjectHandle){
+	public void setPresets(CCObjectHandle theObjectHandle){
 		for(String myPreset:theObjectHandle.presets()){
 			CCUICheckBox myCheckBox = new CCUICheckBox();
 			_myPresetMenue.addItem(myCheckBox,myPreset, e -> {
@@ -117,7 +119,7 @@ public class CCObjectPropertyPopUp extends CCPropertyPopUp{
 					myItem.checkBox().isSelected(false, true);
 				}
 				myCheckBox.isSelected(true, true);
-				((CCObjectPropertyHandle)_myProperty).preset(myPreset);
+				((CCObjectHandle)_myProperty).preset(myPreset);
 			});
 		}
 	}

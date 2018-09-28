@@ -16,47 +16,69 @@
  ******************************************************************************/
 package cc.creativecomputing.control.handles;
 
-import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
+import cc.creativecomputing.math.CCMath;
 
-public class CCSelectionPropertyHandle extends CCPropertyHandle<CCSelection>{
+public class CCEnumHandle extends CCPropertyHandle<Enum<?>>{
+	
+	private final int _myNumberOfConstants;
 
-	protected CCSelectionPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
+	protected CCEnumHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
-		value().changeEvents.add(theValue ->{changeEvents.event(value());});
-		
+	
+		_myNumberOfConstants = theMember.type().getEnumConstants().length;
+	}
+	
+	public Enum<?>[] enumConstants(){
+		 return (Enum<?>[])_myMember.type().getEnumConstants();
 	}
 	
 	@Override
-	public double normalizedValue() {
-		return 0;
+	public double formatDoubleValue(double theValue) {
+		theValue = CCMath.round(theValue * _myNumberOfConstants);
+		theValue /= _myNumberOfConstants;
+		return theValue;
+	}
+	
+	@Override
+	public void fromDoubleValue(double theValue, boolean theOverWrite) {
+		return;
 	}
 
 	@Override
 	public String valueString() {
-		return value().value();
+		return value().name();
+	}
+	
+	private Enum<?> enumForString(String theEnumString){
+		for(Enum<?> myEnumConstant :value().getDeclaringClass().getEnumConstants()){
+			if(myEnumConstant.name().equals(theEnumString)){
+				return myEnumConstant;
+			}
+		}
+		return null;
 	}
 	
 	@Override
-	public Object dataObject() {
-		return value().value();
-	}
-	
-	@Override
-	public CCDataObject data() {
-		CCDataObject myResult = super.data();
-		return myResult;
+	public void valueCasted(Object theValue, boolean theOverWrite) {
+		if(theValue instanceof String){
+			value(enumForString((String)theValue), theOverWrite);
+		}else{
+			super.valueCasted(theValue, theOverWrite);
+		}
 	}
 	
 	@Override
 	public void data(CCDataObject theData) {
 		String myName = theData.getString("value");
-		value().value(myName);
-		
+		for(Enum<?> myEnumConstant :enumConstants()){
+			if(myEnumConstant.name().equals(myName)){
+				value(myEnumConstant, true);
+				return;
+			}
+		}
 	}
 	
-	
-
 }

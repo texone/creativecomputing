@@ -26,7 +26,7 @@ public class CCEventTriggerHandle extends CCPropertyHandle<Object>{
 	
 	private CCTriggerProgress _myProgress;
 	
-	protected CCEventTriggerHandle(CCObjectPropertyHandle theParent, CCMethod<CCProperty> theMethod) {
+	protected CCEventTriggerHandle(CCObjectHandle theParent, CCMethod<CCProperty> theMethod) {
 		super(theParent, theMethod);
 		_myMethod = theMethod;
 		_myProgress = new CCTriggerProgress();
@@ -34,11 +34,6 @@ public class CCEventTriggerHandle extends CCPropertyHandle<Object>{
 	
 	public CCTriggerProgress progress(){
 		return _myProgress;
-	}
-
-	@Override
-	public double normalizedValue() {
-		return 0;
 	}
 
 	@Override
@@ -68,12 +63,6 @@ public class CCEventTriggerHandle extends CCPropertyHandle<Object>{
 			_myMethod.trigger();
 		}
 		_myDoTrigger = false;
-	}
-
-	@Override
-	public CCDataObject data(){
-		CCDataObject myResult = new CCDataObject();
-		return myResult;
 	}
 	
 	@Override

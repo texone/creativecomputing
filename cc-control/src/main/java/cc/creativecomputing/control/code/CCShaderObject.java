@@ -17,33 +17,28 @@
 package cc.creativecomputing.control.code;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
-import cc.creativecomputing.control.CCPropertyMap;
-import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCDoubleHandle;
+import cc.creativecomputing.control.handles.CCNumberHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCDirectMember;
 
 public abstract class CCShaderObject {
 	
 	public static class CCShaderUniform{
 		String _myUniformName;
-		CCNumberPropertyHandle<Double>[] _myProperties;
+		CCNumberHandle<Double>[] _myProperties;
 		
 		@SafeVarargs
-		private CCShaderUniform(String theUniformName, CCNumberPropertyHandle<Double>...theProperties){
+		private CCShaderUniform(String theUniformName, CCNumberHandle<Double>...theProperties){
 			_myUniformName = theUniformName;
 			_myProperties = theProperties;
 		}
@@ -52,7 +47,7 @@ public abstract class CCShaderObject {
 			return _myUniformName;
 		}
 		
-		public CCNumberPropertyHandle<Double>[] properties(){
+		public CCNumberHandle<Double>[] properties(){
 			return _myProperties;
 		}
 	}
@@ -62,14 +57,10 @@ public abstract class CCShaderObject {
 	
 	@CCProperty(name = "shaders", hide = true)
 	private Map<String, CCShaderSource> _myCodeSources = new LinkedHashMap<>();
-	@CCProperty(name = "save in file")
-	private boolean _cSaveInFile = true;
-	@CCProperty(name = "auto save")
-	private boolean _cAutoSave = true;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@CCProperty(name = "uniforms", hide = true)
-	private CCObjectPropertyHandle _myUniformHandles = new CCObjectPropertyHandle(new CCDirectMember( new CCPropertyObject("uniforms", 0, 0)));
+	private CCObjectHandle _myUniformHandles = new CCObjectHandle(new CCDirectMember( new CCPropertyObject("uniforms", 0, 0)));
 
 	private Map<String,CCShaderUniform> _myUniforms = new HashMap<>();
 
@@ -105,11 +96,10 @@ public abstract class CCShaderObject {
 		return _myUniforms.values();
 	}
 	
-	private CCNumberPropertyHandle<Double> createHandle(String theName, double theMin, double theMax){
-		CCNumberPropertyHandle<Double> myResult = new CCNumberPropertyHandle<Double>(
+	private CCDoubleHandle createHandle(String theName, double theMin, double theMax){
+		CCDoubleHandle myResult = new CCDoubleHandle(
 			_myUniformHandles, 
-			new CCDirectMember<CCProperty>(new Double(0), new CCPropertyObject(theName, theMin, theMax)),
-			CCPropertyMap.doubleConverter
+			new CCDirectMember<CCProperty>(0d, new CCPropertyObject(theName, theMin, theMax))
 		);
 		_myUniformHandles.children().put(theName, myResult);
 		return myResult;
@@ -164,7 +154,7 @@ public abstract class CCShaderObject {
 			String myKey = myType + ":" + myUniformName + ":" + myName;
 			if(_myUniforms.containsKey(myKey)){
 				theUniforms.put(myKey, _myUniforms.get(myKey));
-				for(CCNumberPropertyHandle<Double> myUniform:_myUniforms.get(myKey)._myProperties){
+				for(CCNumberHandle<Double> myUniform:_myUniforms.get(myKey)._myProperties){
 					myUniform.minMax(myMin, myMax);
 					_myUniformHandles.children().put(myUniform.name(), myUniform);
 				}
@@ -278,14 +268,6 @@ public abstract class CCShaderObject {
 		_myUniformHandles.forceChange();
 		
 		return mySourceBuffer.toString();
-	}
-	
-	public boolean saveInFile(){
-		return _cSaveInFile;
-	}
-	
-	public boolean autoSave(){
-		return _cAutoSave;
 	}
 	
 	public abstract void update();

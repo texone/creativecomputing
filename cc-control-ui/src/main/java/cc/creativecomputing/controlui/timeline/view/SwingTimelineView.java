@@ -20,11 +20,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCEnumHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
-import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
-import cc.creativecomputing.control.handles.CCStringPropertyHandle;
+import cc.creativecomputing.control.handles.CCSelectionHandle;
+import cc.creativecomputing.control.handles.CCStringHandle;
 import cc.creativecomputing.control.timeline.point.CCControlPoint;
 import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.CCTimelineContainer;
@@ -141,10 +141,10 @@ public class SwingTimelineView extends CCUIWidget {
 		if(theTrackDataController instanceof CCEventTrackController){
 			CCTrackDataRenderer myTrackDataRenderer = null;
 			if(
-				theTrackDataController.track().property() instanceof CCStringPropertyHandle || 
-				theTrackDataController.track().property() instanceof CCEnumPropertyHandle || 
-				theTrackDataController.track().property() instanceof CCObjectPropertyHandle || 
-				theTrackDataController.track().property() instanceof CCSelectionPropertyHandle
+				theTrackDataController.track().property() instanceof CCStringHandle || 
+				theTrackDataController.track().property() instanceof CCEnumHandle || 
+				theTrackDataController.track().property() instanceof CCObjectHandle || 
+				theTrackDataController.track().property() instanceof CCSelectionHandle
 			){
 				myTrackDataRenderer = _myStringDataRenderer;
 			}

@@ -33,7 +33,7 @@ import cc.creativecomputing.math.spline.CCSpline;
 public class CCSplineHandle extends CCPropertyHandle<CCSpline>{
 	
 	
-	protected CCSplineHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
+	protected CCSplineHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
 	}
 	
@@ -83,14 +83,9 @@ public class CCSplineHandle extends CCPropertyHandle<CCSpline>{
 		mySpline.addAll(myPoints);
 		mySpline.endEditSpline();
 	}
-	
-	@Override
-	public double normalizedValue() {
-		return 0;
-	}
 
 	@Override
 	public String valueString() {
-		return null;
+		return "";
 	}
 }

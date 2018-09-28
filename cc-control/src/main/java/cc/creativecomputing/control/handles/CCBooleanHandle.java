@@ -16,37 +16,29 @@
  ******************************************************************************/
 package cc.creativecomputing.control.handles;
 
-import cc.creativecomputing.control.CCEnvelope;
-import cc.creativecomputing.control.timeline.CCTrackData;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
-import cc.creativecomputing.io.data.CCDataObject;
 
-public class CCEnvelopeHandle extends CCPropertyHandle<CCEnvelope>{
+public class CCBooleanHandle extends CCPropertyHandle<Boolean>{
 	
-	protected CCEnvelopeHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
+
+	public CCBooleanHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
 	}
 	
 	@Override
-	public CCDataObject data() {
-		CCDataObject myResult = super.data();
-		CCEnvelope myEnvelope = value();
-		CCTrackData myCurve = myEnvelope.curve();
-		myResult.put("curve", myCurve.data());
-		return myResult;
+	public double formatDoubleValue(double theValue) {
+		return theValue >= 0.5 ? 1 : 0;
 	}
 	
 	@Override
-	public void data(CCDataObject theData) {
-		CCEnvelope myEnvelope = new CCEnvelope();
-		myEnvelope.curve().clear();
-		myEnvelope.curve().data(theData.getObject("curve"));
-		value(myEnvelope, true);
+	public void fromDoubleValue(double theValue, boolean theOverWrite) {
+		value(theValue >= 0.5, theOverWrite);
+	}
+	
+	@Override
+	public double normalizedValue() {
+		return value() ? 1 : 0;
 	}
 
-	@Override
-	public String valueString() {
-		return "";
-	}
 }

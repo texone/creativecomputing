@@ -17,18 +17,18 @@
 package cc.creativecomputing.controlui.controls;
 
 import cc.creativecomputing.control.CCGradient;
-import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
+import cc.creativecomputing.control.handles.CCGradientHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.ui.widget.CCUIGradientWidget;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 
-public class CCGradientControl extends CCValueControl<CCGradient, CCGradientPropertyHandle>{
+public class CCGradientControl extends CCValueControl<CCGradient, CCGradientHandle>{
 	
 	private CCUIGradientWidget _myGradientEditor = new CCUIGradientWidget(240,14);
 	
 	private CCGradient _myGradient;
 
-	public CCGradientControl(CCGradientPropertyHandle theHandle, CCControlComponent theControlComponent){
+	public CCGradientControl(CCGradientHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		addListener(theValue -> {

@@ -18,7 +18,7 @@ package cc.creativecomputing.controlui;
 
 import java.util.prefs.Preferences;
 
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLApp;
@@ -56,7 +56,7 @@ public class CCControlApp extends CCGLApp{
 		  }
 		}
 	
-	private CCObjectPropertyHandle _myRootHandle;
+	private CCObjectHandle _myRootHandle;
 	
 	private CCControlComponent _myControlComponent;
 
@@ -72,7 +72,7 @@ public class CCControlApp extends CCGLApp{
 	private void init(Object theObject){
         _myContext = new CCUIContext(this, CCYogaFlexDirection.COLUMN);
 
-		_myRootHandle = new CCObjectPropertyHandle(theObject, "settings");
+		_myRootHandle = new CCObjectHandle(theObject, "settings");
         _myControlComponent = new CCControlComponent(this);
         _myControlComponent.setData(_myRootHandle);
         
@@ -170,7 +170,7 @@ public class CCControlApp extends CCGLApp{
 //		theSynch.timeline(_myControlComponent.timeline());
 //	}
 
-	public CCObjectPropertyHandle rootHandle() {
+	public CCObjectHandle rootHandle() {
 		return _myRootHandle;
 	}
 	

@@ -16,18 +16,18 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.timeline.controller.track;
 
-import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
+import cc.creativecomputing.control.handles.CCBooleanHandle;
 import cc.creativecomputing.control.timeline.CCTrack;
 import cc.creativecomputing.controlui.timeline.controller.CCTrackContext;
 import cc.creativecomputing.controlui.timeline.tools.CCTimelineTools;
 
 public class CCBooleanTrackController extends CCCurveTrackController{
 
-	private CCBooleanPropertyHandle _myBooleanHandle;
+	private CCBooleanHandle _myBooleanHandle;
 	
 	public CCBooleanTrackController(CCTrackContext theTrackContext, CCTrack theTrack, CCGroupTrackController theParent) {
 		super(theTrackContext, theTrack, theParent);
-		_myBooleanHandle = (CCBooleanPropertyHandle)theTrack.property();
+		_myBooleanHandle = (CCBooleanHandle)theTrack.property();
 	}
 	
 	@Override

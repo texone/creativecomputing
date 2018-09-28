@@ -18,7 +18,7 @@ package cc.creativecomputing.controlui.timeline.controller.arrange;
 
 import java.nio.file.Paths;
 
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackAdapter;
 import cc.creativecomputing.controlui.timeline.controller.track.CCEventTrackController;
@@ -27,9 +27,9 @@ import cc.creativecomputing.io.data.CCDataObject;
 
 public class CCPresetTrackObject extends CCEventTrackAdapter{
 	
-	private CCObjectPropertyHandle _myPropertyHandle;
+	private CCObjectHandle _myPropertyHandle;
 	
-	public CCPresetTrackObject(CCObjectPropertyHandle theObjectPropertyHandle){
+	public CCPresetTrackObject(CCObjectHandle theObjectPropertyHandle){
 		_myPropertyHandle = theObjectPropertyHandle;
 	}
 	

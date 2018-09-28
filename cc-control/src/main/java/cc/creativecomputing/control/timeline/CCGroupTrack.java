@@ -20,7 +20,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataObject;
 
@@ -29,7 +29,7 @@ public class CCGroupTrack extends CCTrack{
 	private List<CCTrack> _myTracks;
 	private boolean _myIsOpen;
 
-	public CCGroupTrack(CCObjectPropertyHandle theObjectPropertyHandle) {
+	public CCGroupTrack(CCObjectHandle theObjectPropertyHandle) {
 		super(theObjectPropertyHandle);
 		_myTracks = new ArrayList<CCTrack>();
 		_myIsOpen = true;

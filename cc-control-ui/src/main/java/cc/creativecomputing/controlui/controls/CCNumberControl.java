@@ -16,23 +16,23 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
+import cc.creativecomputing.control.handles.CCNumberHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.ui.widget.CCUISlider;
 import cc.creativecomputing.ui.widget.CCUIValueBox;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
-public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHandle<Number>>{
+public abstract class CCNumberControl<Type extends Number> extends CCValueControl<Type, CCNumberHandle<Type>>{
 	
 	private double _myMin;
 	private double _myMax;
-	private double _myValue;
+	protected double _myValue;
 	
 	private CCUIValueBox _myValueField;
 	private CCUISlider _mySlider;
 
-	public CCNumberControl(CCNumberPropertyHandle<Number> theHandle, CCControlComponent theControlComponent){
+	public CCNumberControl(CCNumberHandle<Type> theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
  
         //Create the label.
@@ -74,9 +74,7 @@ public class CCNumberControl extends CCValueControl<Number, CCNumberPropertyHand
 		if(_mySlider != null)thePane.addChild(_mySlider);
 	}
 	
-	public Number value(){
-		return _myValue;
-	}
+	public abstract Type value();
 	
 	public void value(double theValue, boolean theOverWrite){
 		_myValue = theValue;

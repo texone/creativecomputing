@@ -16,20 +16,20 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import cc.creativecomputing.control.handles.CCColorPropertyHandle;
+import cc.creativecomputing.control.handles.CCColorHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.ui.widget.CCUIColorPicker;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
-public class CCColorControl extends CCValueControl<CCColor, CCColorPropertyHandle>{
+public class CCColorControl extends CCValueControl<CCColor, CCColorHandle>{
 	
 	private CCUIColorPicker _myColorPicker;
 
     private CCColor _myColor;
 
-	public CCColorControl(CCColorPropertyHandle theHandle, CCControlComponent theControlComponent){
+	public CCColorControl(CCColorHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 
 		_myColor = theHandle.value().clone();

@@ -16,30 +16,32 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
+import java.lang.reflect.Constructor;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.creativecomputing.control.CCControlMatrix;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCSelection;
-import cc.creativecomputing.control.handles.CCBooleanPropertyHandle;
-import cc.creativecomputing.control.handles.CCColorPropertyHandle;
-import cc.creativecomputing.control.handles.CCControlMatrixHandle;
-import cc.creativecomputing.control.handles.CCEnumPropertyHandle;
+import cc.creativecomputing.control.handles.CCBooleanHandle;
+import cc.creativecomputing.control.handles.CCColorHandle;
+import cc.creativecomputing.control.handles.CCDoubleHandle;
+import cc.creativecomputing.control.handles.CCEnumHandle;
 import cc.creativecomputing.control.handles.CCEnvelopeHandle;
 import cc.creativecomputing.control.handles.CCEventTriggerHandle;
-import cc.creativecomputing.control.handles.CCGradientPropertyHandle;
-import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCFloatHandle;
+import cc.creativecomputing.control.handles.CCGradientHandle;
+import cc.creativecomputing.control.handles.CCIntHandle;
+import cc.creativecomputing.control.handles.CCNumberHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.handles.CCPathHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
-import cc.creativecomputing.control.handles.CCSelectionPropertyHandle;
+import cc.creativecomputing.control.handles.CCSelectionHandle;
 import cc.creativecomputing.control.handles.CCSplineHandle;
-import cc.creativecomputing.control.handles.CCStringPropertyHandle;
+import cc.creativecomputing.control.handles.CCStringHandle;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
 import cc.creativecomputing.controlui.CCColorMap;
 import cc.creativecomputing.controlui.CCControlApp;
@@ -47,6 +49,7 @@ import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.controlui.CCObjectPropertyPopUp;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.graphics.font.CCEntypoIcon;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.spline.CCSpline;
@@ -60,27 +63,79 @@ import cc.creativecomputing.ui.widget.CCUIWidgetStyle;
 
 public class CCObjectControl extends CCUIWidget implements CCControl{
 	
+	private interface CCControlCreator{
+		CCControl create(CCPropertyHandle<?> thePropertyHandle, CCControlComponent theInfoPanel);
+	}
+	
+	public static Map<Class<?>, Class<?>> typeMappings = new HashMap<>();
+	static{
+		typeMappings.put(CCEventTriggerHandle.class, CCEventTriggerControl.class);
+		typeMappings.put(CCFloatHandle.class, CCFloatControl.class);
+		typeMappings.put(CCDoubleHandle.class, CCDoubleControl.class);
+		typeMappings.put(CCIntHandle.class, CCIntControl.class);
+		typeMappings.put(CCBooleanHandle.class, CCBooleanControl.class);
+		
+		typeMappings.put(CCEnumHandle.class, CCEnumControl.class);
+		typeMappings.put(CCStringHandle.class, CCStringControl.class);
+		typeMappings.put(CCPathHandle.class, CCPathControl.class);
+		typeMappings.put(CCSelectionHandle.class, CCSelectionControl.class);
+		typeMappings.put(CCColorHandle.class, CCColorControl.class);
+		typeMappings.put(CCGradientHandle.class, CCGradientControl.class);
+		typeMappings.put(CCEnvelopeHandle.class, CCEnvelopeControl.class);
+		typeMappings.put(CCSplineHandle.class, CCSplineControl.class);
+
+		typeMappings.put(CCObjectHandle.class, CCObjectControl.class);
+	}
+	
+	private static CCControl createControl(CCPropertyHandle<?> theHandle, CCControlComponent theInfoPanel){
+		
+		Class<?> myCreatorClass = typeMappings.get(theHandle.getClass());
+		
+		
+		if(myCreatorClass == null) {
+			return null;
+		}
+		
+		try {
+			Constructor<?> myConstructor = myCreatorClass.getConstructor(theHandle.getClass(), CCControlComponent.class);
+			return (CCControl)myConstructor.newInstance(theHandle, theInfoPanel);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+//	private static CCControlCreator handleCreator(Class<?> theClass){
+//		if(theClass == null)return null;
+//		CCControlCreator myCreator = null;
+//		Class<?> myClass = theClass;
+//		do{
+//			myCreator = typeMappings.get(myClass);
+//			myClass = myClass.getSuperclass();
+//		}while(myClass != null && myCreator == null && myClass != Object.class);
+//		return myCreator;
+//	}
+	
 	private CCControlComponent _myInfoPanel;
 	public CCUIWidget _myControlPane = null;
 	
 	private boolean _myIsSelected = false;
 	
-	private int _myDepth;
-	
-	protected CCObjectPropertyHandle _myProperty;
+	protected CCObjectHandle _myProperty;
 	
 	private CCUIWidget myBarWidget;
 	
 	private CCEvent<Object> _myListener;
 
-	public CCObjectControl(CCObjectPropertyHandle thePropertyHandle, CCControlComponent theInfoPanel, int theDepth){
+	public CCObjectControl(CCObjectHandle thePropertyHandle, CCControlComponent theInfoPanel){
 		flexDirection(CCYogaFlexDirection.COLUMN);
 		
 		_myProperty = thePropertyHandle;
 
 		_myControlPane = new CCUIWidget();
 		_myControlPane.flexDirection(CCYogaFlexDirection.COLUMN);
-		_myControlPane.padding(CCYogaEdge.VERTICAL, 5);
+//		_myControlPane.padding(CCYogaEdge.VERTICAL, 5);
 		_myControlPane.style().background(new CCUIFillDrawable(CCColorMap.getColor(_myProperty.path()).brighter()));
 		_myProperty.changeEvents.add(_myListener = theValue ->{
 			try{
@@ -109,14 +164,14 @@ public class CCObjectControl extends CCUIWidget implements CCControl{
 		myGradientBack.gradient().bottom(myColor.darker());
 		myBarWidget.style().background(myGradientBack);
 
-		CCUIIconWidget myIconWidget = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_DOWN);
+		CCUIIconWidget myIconWidget = new CCUIIconWidget(CCEntypoIcon.ICON_TRIANGLE_RIGHT);
 		myIconWidget.padding(CCYogaEdge.ALL, 2);
 		myIconWidget.style().background(CCUIWidgetStyle.OFF);
 		myIconWidget.mouseReleased.add(event -> {
 			switch(event.button){
 			case BUTTON_LEFT:
 				myIconWidget.active(!myIconWidget.active());
-				myIconWidget.textField().text(myIconWidget.active() ? CCEntypoIcon.ICON_TRIANGLE_DOWN.text : CCEntypoIcon.ICON_TRIANGLE_RIGHT.text);
+				myIconWidget.icon(myIconWidget.active() ? CCEntypoIcon.ICON_TRIANGLE_DOWN : CCEntypoIcon.ICON_TRIANGLE_RIGHT);
 				if(myIconWidget.active()){
 					open();
 				}else{
@@ -145,8 +200,6 @@ public class CCObjectControl extends CCUIWidget implements CCControl{
 		myBarWidget.addChild(myLabel);
 		addChild(myBarWidget);
 		
-		_myDepth = theDepth;
-		
 		_myInfoPanel = theInfoPanel;
 	
 		thePropertyHandle.addSelectionListener(isSelected -> {
@@ -159,6 +212,8 @@ public class CCObjectControl extends CCUIWidget implements CCControl{
 		
 		if(CCControlApp.preferences.getBoolean(_myProperty.path().toString() + "/open" , false)){
 			open();
+			myIconWidget.active(true);
+			myIconWidget.icon(myIconWidget.active() ? CCEntypoIcon.ICON_TRIANGLE_DOWN : CCEntypoIcon.ICON_TRIANGLE_RIGHT);
 		}
 	}
 	
@@ -195,71 +250,19 @@ public class CCObjectControl extends CCUIWidget implements CCControl{
 	
 	private List<CCControl> _myControls = new ArrayList<>();
 	
-	private interface CCControlCreator{
-		CCControl create(CCPropertyHandle<?> thePropertyHandle, CCControlComponent theInfoPanel);
-	}
-	
-	private static Map<Class<?>, CCControlCreator> creatorMap = new HashMap<>();
-	static{
-		creatorMap.put(CCTriggerProgress.class, (myHandle, myInfoPanel) -> {return new CCEventTriggerControl((CCEventTriggerHandle)myHandle, myInfoPanel);});
-		
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		CCControlCreator myNumberCreator = (myHandle, myInfoPanel) -> {return new CCNumberControl((CCNumberPropertyHandle)myHandle, myInfoPanel);};
-		creatorMap.put(Float.class, myNumberCreator);
-		creatorMap.put(Float.TYPE, myNumberCreator);
-		creatorMap.put(Double.class, myNumberCreator);
-		creatorMap.put(Double.TYPE, myNumberCreator);
-		creatorMap.put(Integer.class, myNumberCreator);
-		creatorMap.put(Integer.TYPE, myNumberCreator);
-		
-		CCControlCreator myBooleanCreator = (myHandle, myInfoPanel) -> {return new CCBooleanControl((CCBooleanPropertyHandle)myHandle, myInfoPanel);};
-		creatorMap.put(Boolean.class, myBooleanCreator);
-		creatorMap.put(Boolean.TYPE, myBooleanCreator);
-
-		creatorMap.put(CCSelection.class, (myHandle, myInfoPanel) -> {return new CCSelectionControl((CCSelectionPropertyHandle)myHandle, myInfoPanel);});
-		creatorMap.put(CCColor.class, (myHandle, myInfoPanel) -> {return new CCColorControl((CCColorPropertyHandle)myHandle, myInfoPanel);});
-		creatorMap.put(CCGradient.class, (myHandle, myInfoPanel) -> {return new CCGradientControl((CCGradientPropertyHandle)myHandle, myInfoPanel);});
-		creatorMap.put(String.class, (myHandle, myInfoPanel) -> {return new CCStringControl((CCStringPropertyHandle)myHandle, myInfoPanel);});
-		creatorMap.put(CCEnvelope.class, (myHandle, myInfoPanel) -> {return new CCEnvelopeControl((CCEnvelopeHandle)myHandle, myInfoPanel);});
-		creatorMap.put(CCSpline.class, (myHandle, myInfoPanel) -> {return new CCSplineControl((CCSplineHandle)myHandle, myInfoPanel);});
-		creatorMap.put(Path.class, (myHandle, myInfoPanel) -> {return new CCPathControl((CCPathHandle)myHandle, myInfoPanel);});
-	}
-	
-	private static CCControlCreator handleCreator(Class<?> theClass){
-		if(theClass == null)return null;
-		CCControlCreator myCreator = null;
-		Class<?> myClass = theClass;
-		do{
-			myCreator = creatorMap.get(myClass);
-			myClass = myClass.getSuperclass();
-		}while(myClass != null && myCreator == null && myClass != Object.class);
-		return myCreator;
-	}
-	
 	private void createUI(boolean theHideUnchanged){
 		_myControlPane.removeAllChildren();
 		int myY = 0;
-		
+		int myDepth = 0;
 		for(CCPropertyHandle<?> myPropertyHandle:_myProperty.children().values()){
 			if(theHideUnchanged && !myPropertyHandle.isChanged())continue;
-			Class<?> myClass = myPropertyHandle.type();
 			
-			CCControl myControl;
-			
-			CCControlCreator myCreator = handleCreator(myClass);
-			if(myCreator != null){
-				myControl = myCreator.create(myPropertyHandle, _myInfoPanel);
-			}else if(myClass == null){
-				myControl = new CCEventTriggerControl((CCEventTriggerHandle)myPropertyHandle, _myInfoPanel);
-			}else  if(myClass.isEnum()){
-				myControl = new CCEnumControl((CCEnumPropertyHandle)myPropertyHandle, _myInfoPanel);
-			}else{
-				CCObjectPropertyHandle myObjectHandle = (CCObjectPropertyHandle)myPropertyHandle;
-				CCObjectControl myObjectControl = new CCObjectControl(myObjectHandle, _myInfoPanel, _myDepth + 1);
-				myControl = myObjectControl;
+			CCControl myControl = createControl(myPropertyHandle, _myInfoPanel);
+			if(myControl == null) {
+				CCLog.info(myPropertyHandle.name());
+				continue;
 			}
-
-			myControl.addToPane(_myControlPane, myY, _myDepth + 1);
+			myControl.addToPane(_myControlPane, myY, myDepth);
 			myY++;
 		}
 	}
@@ -272,7 +275,7 @@ public class CCObjectControl extends CCUIWidget implements CCControl{
 		createUI(false);
 	}
 	
-	public CCObjectPropertyHandle propertyHandle(){
+	public CCObjectHandle propertyHandle(){
 		return _myProperty;
 	}
 	

@@ -16,31 +16,33 @@
  ******************************************************************************/
 package cc.creativecomputing.control.handles;
 
+import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCReflectionUtil.CCMember;
 import cc.creativecomputing.io.data.CCDataObject;
 
-public class CCStringPropertyHandle extends CCPropertyHandle<String>{
-	
+public class CCSelectionHandle extends CCPropertyHandle<CCSelection>{
 
-	public CCStringPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
+	protected CCSelectionHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
-	}
-	
-	@Override
-	public CCDataObject data() {
-		CCDataObject myResult = super.data();
-		return myResult;
-	}
-	
-	@Override
-	public double normalizedValue() {
-		return 0;
+		value().changeEvents.add(theValue ->{changeEvents.event(value());});
+		
 	}
 
 	@Override
 	public String valueString() {
-		return _myValue;
+		return value().value();
 	}
-
+	
+	@Override
+	public Object dataObject() {
+		return value().value();
+	}
+	
+	@Override
+	public void data(CCDataObject theData) {
+		String myName = theData.getString("value");
+		value().value(myName);
+		
+	}
 }

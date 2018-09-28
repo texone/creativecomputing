@@ -16,6 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.control.handles;
 
+import java.lang.reflect.Constructor;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ import cc.creativecomputing.control.CCControlMatrix;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.control.CCPropertyFeedbackObject;
-import cc.creativecomputing.control.CCPropertyMap;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
@@ -52,49 +52,61 @@ import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.spline.CCSpline;
 
 @SuppressWarnings({"rawtypes","unchecked"})
-public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
+public class CCObjectHandle extends CCPropertyHandle<Object>{
 	
-	private interface CCHandleCreator{
-		CCPropertyHandle create(CCObjectPropertyHandle theParent, CCMember theMember);
-	}
-	
-	private static Map<Class<?>, CCHandleCreator> creatorMap = new HashMap<>();
+	public static Map<Class<?>, Class<?>> typeMappings = new HashMap<>();
 	static{
-		CCHandleCreator myFloatCreator = (theParent, theMember) -> {return new CCNumberPropertyHandle<Float>(theParent, theMember, CCPropertyMap.floatConverter);};
-		creatorMap.put(Float.class, myFloatCreator);
-		creatorMap.put(Float.TYPE, myFloatCreator);
+		typeMappings.put(Float.class, CCFloatHandle.class);
+		typeMappings.put(Float.TYPE, CCFloatHandle.class);
 
-		CCHandleCreator myDoubleCreator = (theParent, theMember) -> {return new CCNumberPropertyHandle<Double>(theParent, theMember, CCPropertyMap.doubleConverter);};
-		creatorMap.put(Double.class, myDoubleCreator);
-		creatorMap.put(Double.TYPE, myDoubleCreator);
+		typeMappings.put(Double.class, CCDoubleHandle.class);
+		typeMappings.put(Double.TYPE, CCDoubleHandle.class);
 
-		CCHandleCreator myIntegerCreator = (theParent, theMember) -> {return new CCNumberPropertyHandle<Integer>(theParent, theMember, CCPropertyMap.intConverter);};
-		creatorMap.put(Integer.class, myIntegerCreator);
-		creatorMap.put(Integer.TYPE, myIntegerCreator);
+		typeMappings.put(Integer.class, CCIntHandle.class);
+		typeMappings.put(Integer.TYPE, CCIntHandle.class);
 
-		CCHandleCreator myBooleanCreator = (theParent, theMember) -> {return new CCBooleanPropertyHandle(theParent, theMember);};
-		creatorMap.put(Boolean.class, myBooleanCreator);
-		creatorMap.put(Boolean.TYPE, myBooleanCreator);
+		typeMappings.put(Boolean.class, CCBooleanHandle.class);
+		typeMappings.put(Boolean.TYPE, CCBooleanHandle.class);
 		
-		creatorMap.put(CCColor.class, (theParent, theMember) -> {return new CCColorPropertyHandle(theParent, theMember);});
-		creatorMap.put(CCGradient.class, (theParent, theMember) -> {return new CCGradientPropertyHandle(theParent, theMember);});
-		creatorMap.put(String.class, (theParent, theMember) -> {return new CCStringPropertyHandle(theParent, theMember);});
-		creatorMap.put(CCEnvelope.class, (theParent, theMember) -> {return new CCEnvelopeHandle(theParent, theMember);});
-		creatorMap.put(CCControlMatrix.class, (theParent, theMember) -> {return new CCControlMatrixHandle(theParent, theMember);});
-		creatorMap.put(CCSpline.class, (theParent, theMember) -> {return new CCSplineHandle(theParent, theMember);});
-		creatorMap.put(Path.class, (theParent, theMember) -> {return new CCPathHandle(theParent, theMember);});
-		creatorMap.put(CCSelection.class, (theParent, theMember) -> {return new CCSelectionPropertyHandle(theParent, theMember);});
+		typeMappings.put(String.class, CCStringHandle.class);
+		typeMappings.put(Path.class, CCPathHandle.class);
+		
+		typeMappings.put(CCColor.class, CCColorHandle.class);
+		typeMappings.put(CCGradient.class, CCGradientHandle.class);
+		typeMappings.put(CCEnvelope.class, CCEnvelopeHandle.class);
+		typeMappings.put(CCControlMatrix.class, CCControlMatrixHandle.class);
+		typeMappings.put(CCSpline.class, CCSplineHandle.class);
+		typeMappings.put(CCSelection.class, CCSelectionHandle.class);
 	}
 	
-	private static CCHandleCreator handleCreator(Class<?> theClass){
+	private static CCPropertyHandle<?> createHandle(Class<?> theClass, CCObjectHandle theParent, CCMember theMember, String theSettingsPath){
 		if(theClass == null)return null;
-		CCHandleCreator myCreator = null;
+		
+		if(theClass.isEnum()){
+			return new CCEnumHandle(theParent, theMember);
+		}
+		
+		Class<?> myCreatorClass = null;
 		Class<?> myClass = theClass;
 		do{
-			myCreator = creatorMap.get(myClass);
+			myCreatorClass = typeMappings.get(myClass);
 			myClass = myClass.getSuperclass();
-		}while(myClass != null && myCreator == null && myClass != Object.class);
-		return myCreator;
+		}while(myClass != null && myCreatorClass == null && myClass != Object.class);
+		
+		if(myCreatorClass == null) {
+			if(theMember.value() == null)return null;
+			
+			return new CCObjectHandle(theParent, theMember, theSettingsPath);
+		}
+		
+		try {
+			Constructor<?> myConstructor = myCreatorClass.getConstructor(CCObjectHandle.class, CCMember.class);
+			return (CCPropertyHandle)myConstructor.newInstance(theParent, theMember);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	public static void main(String[] args) {
@@ -110,7 +122,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	
 	private String _mySettingsPath = "";
 
-	protected CCObjectPropertyHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember, String theSettingsPath) {
+	protected CCObjectHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember, String theSettingsPath) {
 		super(theParent, theMember);
 		_mySettingsPath = theSettingsPath;
 		if(theMember instanceof CCMethod){
@@ -126,7 +138,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	
 	private boolean _myIsSelectable = true;
 
-	public CCObjectPropertyHandle(Object theObject, String theSettingsPath){
+	public CCObjectHandle(Object theObject, String theSettingsPath){
 		super(null, null);
 		_mySettingsPath = theSettingsPath;
 		_myRootObject = theObject;
@@ -135,7 +147,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		_myPresetPath = createPresetPath();
 	}
 	
-	public CCObjectPropertyHandle(CCMember<CCProperty> theMember){
+	public CCObjectHandle(CCMember<CCProperty> theMember){
 		super(null, theMember);
 		theMember.value(this);
 	}
@@ -166,33 +178,33 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			return myProperty;
 		}
 		
-		if(!(myProperty instanceof CCObjectPropertyHandle)){
+		if(!(myProperty instanceof CCObjectHandle)){
 			return null;
 		}
 		
-		CCObjectPropertyHandle myChild = (CCObjectPropertyHandle)myProperty;
+		CCObjectHandle myChild = (CCObjectHandle)myProperty;
 		return myChild.property(thePath, theStart + 1);
 	}
 	
 	public CCPropertyHandle<?> createProperty(Path thePath, Class<?> theClass, CCPropertyObject thePropertyObject){
-		CCObjectPropertyHandle myPropertyParent = this;
+		CCObjectHandle myPropertyParent = this;
 		for(int i = 0; i < thePath.getNameCount() - 1;i++){
 			String myName = thePath.getName(i).toString();
 			if(myPropertyParent._myChildHandles.containsKey(myName)){
 				CCPropertyHandle<?> myProperty =  myPropertyParent._myChildHandles.get(myName);
-				if(myProperty instanceof CCObjectPropertyHandle){
-					myPropertyParent = (CCObjectPropertyHandle)myProperty;
+				if(myProperty instanceof CCObjectHandle){
+					myPropertyParent = (CCObjectHandle)myProperty;
 					continue;
 				}else{
 					throw new RuntimeException(thePath + " can not be created " + myName + " is not an object property");
 				}
 			}else{
-				CCObjectPropertyHandle myProperty = new CCObjectPropertyHandle(myPropertyParent, new CCDirectMember(new Object(), new CCPropertyObject(myName)), _mySettingsPath);
+				CCObjectHandle myProperty = new CCObjectHandle(myPropertyParent, new CCDirectMember(new Object(), new CCPropertyObject(myName)), _mySettingsPath);
 				myPropertyParent._myChildHandles.put(myName, myProperty);
 				myPropertyParent = myProperty;
 			}
 		}
-		CCPropertyHandle<?>myProperty = handleCreator(theClass).create(myPropertyParent, new CCDirectMember(new Double(0), thePropertyObject));
+		CCPropertyHandle<?>myProperty = createHandle(theClass,myPropertyParent, new CCDirectMember(0d, thePropertyObject), _mySettingsPath);
 		myPropertyParent._myChildHandles.put(thePath.getFileName().toString(), myProperty);
 		return myProperty;
 	}
@@ -227,7 +239,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		if (theOffset == theItems.length - 1 || myResult == null) {
 			return myResult;
 		} else {
-			return ((CCObjectPropertyHandle)myResult).propertyRecursive(theItems, theOffset + 1);
+			return ((CCObjectHandle)myResult).propertyRecursive(theItems, theOffset + 1);
 		}
 	}
 	
@@ -257,7 +269,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			Path myPresetPath = dataPath.resolve(_mySettingsPath);
 			myPresetPath = myPresetPath.resolve(name());
 			return myPresetPath;
-		}else if(_myMember.type() ==  CCObjectPropertyHandle.class){
+		}else if(_myMember.type() ==  CCObjectHandle.class){
 			Path myPresetPath = _myParent.presetPath();
 			myPresetPath = myPresetPath.resolve(name());
 			return myPresetPath;
@@ -282,17 +294,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(Object myParameter:theObject.parameter()){
 			CCMethodParameter<CCProperty> myMethodParameter = (CCMethodParameter<CCProperty>)myParameter;
 			Class<?> myClass = myMethodParameter.type();
-			CCPropertyHandle myProperty;
-			
-			CCHandleCreator myCreator = handleCreator(myClass);
-			if(myCreator != null){
-				myProperty = myCreator.create(this, myMethodParameter);
-			}else  if(myClass.isEnum()){
-				myProperty = new CCEnumPropertyHandle(this, myMethodParameter);
-			}else{
-				if(myMethodParameter.value() == null)continue;
-				myProperty = new CCObjectPropertyHandle(this, myMethodParameter, _mySettingsPath);
-			}
+			CCPropertyHandle myProperty = createHandle(myClass, this, myMethodParameter, _mySettingsPath);
 			myResult.put(myProperty.name(), myProperty);
 		}
 		return myResult;
@@ -312,9 +314,9 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			if(_myChildHandles.containsKey(myName)){
 				CCPropertyHandle myProperty = _myChildHandles.get(myName);
 				myProperty.member(myField);
-				if(myProperty instanceof CCObjectPropertyHandle){
+				if(myProperty instanceof CCObjectHandle){
 
-					CCObjectPropertyHandle myObjectPropertyHandle = (CCObjectPropertyHandle)myProperty;
+					CCObjectHandle myObjectPropertyHandle = (CCObjectHandle)myProperty;
 					myObjectPropertyHandle.relink(myField.value());
 				}
 				if(myProperty.type() == myField.type()){
@@ -322,35 +324,24 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 					continue;
 				}
 			}
-			
-			Class<?> myClass = myField.type();
 			CCPropertyHandle myProperty = null;
-			
-			CCHandleCreator myCreator = handleCreator(myClass);
-			if(myCreator != null){
-				myProperty = myCreator.create(this, myField);
-			}else  if(myClass.isEnum()){
-				myProperty = new CCEnumPropertyHandle(this, myField);
-			}else if(myField.value() instanceof CCObjectPropertyHandle){
-				CCObjectPropertyHandle myObjectPropertyHandle = (CCObjectPropertyHandle)myField.value();
+				
+			if(myField.value() instanceof CCObjectHandle){
+				CCObjectHandle myObjectPropertyHandle = (CCObjectHandle)myField.value();
 				myObjectPropertyHandle._mySettingsPath = _mySettingsPath;
 				myObjectPropertyHandle._myParent = this;
 				myProperty = myObjectPropertyHandle;
-				
-			}else{
-				if(myField.value() == null){
-					continue;
-				}else if(myField.value() instanceof Map && ((Map)myField.value()).size() <= 0){
-					continue;
-				}else if(myField.annotation().hide()){
-					Map<String,CCPropertyHandle> myHandles = link(myField.value());
-					for(String myKey:myHandles.keySet()){
-						myResult.put(myKey, myHandles.get(myKey));
-					}
-				}else{
-					myProperty = new CCObjectPropertyHandle(this, myField, _mySettingsPath);
+			}else if(myField.value() instanceof Map && ((Map)myField.value()).size() <= 0){
+				continue;
+			}else if(myField.annotation().hide()){
+				Map<String,CCPropertyHandle> myHandles = link(myField.value());
+				for(String myKey:myHandles.keySet()){
+					myResult.put(myKey, myHandles.get(myKey));
 				}
+			}else {
+				myProperty = createHandle(myField.type(), this, myField, _mySettingsPath);
 			}
+			
 			if(myProperty != null)myResult.put(myProperty.name(), myProperty);
 		}
 		
@@ -358,42 +349,29 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(CCMethod<CCProperty> myMethod:myMethods){
 
 			CCPropertyHandle myProperty = null;
+			Class<?> myClass = myMethod.type();
+			
 			if(myMethod.method().getParameterCount() > 1){
-				myProperty = new CCObjectPropertyHandle(this, myMethod, _mySettingsPath);
+				myProperty = new CCObjectHandle(this, myMethod, _mySettingsPath);
+			}else if(myClass == null || myClass == CCTriggerProgress.class){
+				myProperty = new CCEventTriggerHandle(this, myMethod);
 			}else{
-				Class<?> myClass = myMethod.type();
-				
-				CCHandleCreator myCreator = handleCreator(myClass);
-				if(myCreator != null){
-					myProperty = myCreator.create(this, myMethod);
-				}else if((myClass == null) || myClass == CCTriggerProgress.class){
-					myProperty = new CCEventTriggerHandle(this, myMethod);
-				}else  if(myClass.isEnum()){
-					myProperty = new CCEnumPropertyHandle(this, myMethod);
-				}else{
-	//				if(myField.value() == null)continue;
-	//				myProperty = new CCObjectPropertyHandle(this, myField);
-				}
+				myProperty = createHandle(myMethod.type(), this, myMethod, _mySettingsPath);
 			}
+			
 			if(myProperty != null)myResult.put(myProperty.name(), myProperty);
 		}
 		
-		if((theObject instanceof Map)){
+		if(theObject instanceof Map){
 			Map<Object,Object> myMap = (Map<Object, Object>)theObject;
 			for(Object myKey:myMap.keySet()){
 				CCMapEntry myEntry = new CCMapEntry(myMap, myKey);
+				if(CCReflectionUtil.getFields(myEntry.value(), CCProperty.class).size() <= 0)continue;
+				
 				Class<?> myClass = myEntry.type();
-				CCPropertyHandle myProperty;
-				CCHandleCreator myCreator = handleCreator(myClass);
-				if(myCreator != null){
-					myProperty = myCreator.create(this, myEntry);
-				}else  if(myClass.isEnum()){
-					myProperty = new CCEnumPropertyHandle(this, myEntry);
-				}else{
-					if(CCReflectionUtil.getFields(myEntry.value(), CCProperty.class).size() <= 0)continue;
-					myProperty = new CCObjectPropertyHandle(this, myEntry, _mySettingsPath);
-				}
-				myResult.put(myProperty.name(), myProperty);
+				CCPropertyHandle myProperty = createHandle(myClass, this, myEntry, _mySettingsPath);
+				
+				if(myProperty != null)myResult.put(myProperty.name(), myProperty);
 			}
 		}
 		
@@ -402,16 +380,9 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			for(int i = 0; i < myList.size();i++){
 				CCListEntry myEntry = new CCListEntry(myList, i);
 				Class<?> myClass = myEntry.type();
-				CCPropertyHandle myProperty;
-				CCHandleCreator myCreator = handleCreator(myClass);
-				if(myCreator != null){
-					myProperty = myCreator.create(this, myEntry);
-				}else  if(myClass.isEnum()){
-					myProperty = new CCEnumPropertyHandle(this, myEntry);
-				}else{
-					myProperty = new CCObjectPropertyHandle(this, myEntry, _mySettingsPath);
-				}
-				myResult.put(myProperty.name(), myProperty);
+				CCPropertyHandle myProperty = createHandle(myClass, this, myEntry, _mySettingsPath);
+				
+				if(myProperty != null)myResult.put(myProperty.name(), myProperty);
 			}
 		}
 		if(theObject instanceof CCPropertyFeedbackObject){
@@ -460,8 +431,8 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 			CCDataObject myData = new CCDataObject();
 			for(String myKey:_myChildHandles.keySet()){
 				CCPropertyHandle myHandle = _myChildHandles.get(myKey);
-				if(myHandle instanceof CCObjectPropertyHandle) {
-					myData.put(myHandle.name(), ((CCObjectPropertyHandle)myHandle).presetData(theHandling));
+				if(myHandle instanceof CCObjectHandle) {
+					myData.put(myHandle.name(), ((CCObjectHandle)myHandle).presetData(theHandling));
 				}else {
 					myData.put(myHandle.name(), myHandle.data());
 				}
@@ -508,7 +479,6 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 	
 	@Override
 	public void data(CCDataObject theData) {
-	
 		if(theData == null){
 			return;
 		}
@@ -530,8 +500,7 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		for(String myKey:theData.keySet()){
 			CCDataObject myData = theData.getObject(myKey);
 			if(myData == null)return;
-			String myName = myData.getString("name");
-			CCPropertyHandle myHandle = _myChildHandles.get(myName);
+			CCPropertyHandle myHandle = _myChildHandles.get(myKey);
 
 			if(myHandle == null){
 				continue;
@@ -634,10 +603,10 @@ public class CCObjectPropertyHandle extends CCPropertyHandle<Object>{
 		
 		for(CCPropertyHandle myChild:parent().children().values()){
 
-			if(!(myChild instanceof CCObjectPropertyHandle))continue;
+			if(!(myChild instanceof CCObjectHandle))continue;
 			
 			
-			CCObjectPropertyHandle myChildObject =  (CCObjectPropertyHandle)myChild;
+			CCObjectHandle myChildObject =  (CCObjectHandle)myChild;
 			if(myChildObject.isSelected()){
 				myChildObject.children().get(theName).directValue(theValue);
 			}

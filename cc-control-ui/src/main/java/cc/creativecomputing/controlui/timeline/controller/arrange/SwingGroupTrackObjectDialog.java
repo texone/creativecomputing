@@ -34,7 +34,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.control.timeline.point.CCEventPoint.TimedData;
 import cc.creativecomputing.controlui.CCUIConstants;
@@ -89,14 +89,14 @@ public class SwingGroupTrackObjectDialog extends JDialog implements ActionListen
 	private CCEventPoint _myEventPoint;
 	private CCEventTrackController _myController;
 	
-	public void edit(CCObjectPropertyHandle theObject, CCEventTrackController theController, CCEventPoint theEventPoint){
+	public void edit(CCObjectHandle theObject, CCEventTrackController theController, CCEventPoint theEventPoint){
 		setPresets(theObject);
 		_myEventPoint = theEventPoint;
 		_myController = theController;
 		setVisible(true);
 	}
 	
-	public void setPresets(CCObjectPropertyHandle theObjectHandle){
+	public void setPresets(CCObjectHandle theObjectHandle){
 		_myPresetsPath = theObjectHandle.presetPath();
 		CCNIOUtil.createDirectories(_myPresetsPath);
 		_myPresetList.removeAllItems();

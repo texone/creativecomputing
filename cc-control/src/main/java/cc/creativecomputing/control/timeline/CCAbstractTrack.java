@@ -16,7 +16,7 @@
  ******************************************************************************/
 package cc.creativecomputing.control.timeline;
 
-import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
+import cc.creativecomputing.control.handles.CCNumberHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.math.CCColor;
 
@@ -36,8 +36,8 @@ public abstract class CCAbstractTrack {
 	public CCAbstractTrack(CCPropertyHandle<?> theProperty) {
 		_myMuteFlag = false;
 		_myProperty = theProperty;
-		if(_myProperty instanceof CCNumberPropertyHandle<?>) {
-			CCNumberPropertyHandle<?> myNumberHandle = (CCNumberPropertyHandle<?>)_myProperty;
+		if(_myProperty instanceof CCNumberHandle<?>) {
+			CCNumberHandle<?> myNumberHandle = (CCNumberHandle<?>)_myProperty;
 			if(!myNumberHandle.isNumberBox()) {
 				_myMin = myNumberHandle.min().doubleValue();
 				_myMax = myNumberHandle.max().doubleValue();

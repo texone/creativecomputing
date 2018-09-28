@@ -30,7 +30,7 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 	
 	private CCAsset<?> _myAsset;
 	
-	protected CCPathHandle(CCObjectPropertyHandle theParent, CCMember<CCProperty> theMember) {
+	protected CCPathHandle(CCObjectHandle theParent, CCMember<CCProperty> theMember) {
 		super(theParent, theMember);
 		CCLog.info(theParent, theParent.value());
 		if(theParent.value() != null &&theParent.value() instanceof CCAsset<?>){
@@ -55,11 +55,6 @@ public class CCPathHandle extends CCPropertyHandle<Path>{
 	public String[] extensions(){
 		if(_myAsset == null)return null;
 		return _myAsset.extensions();
-	}
-	
-	@Override
-	public double normalizedValue() {
-		return 0;
 	}
 
 	@Override

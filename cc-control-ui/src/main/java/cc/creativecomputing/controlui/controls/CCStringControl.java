@@ -16,17 +16,17 @@
  ******************************************************************************/
 package cc.creativecomputing.controlui.controls;
 
-import cc.creativecomputing.control.handles.CCStringPropertyHandle;
+import cc.creativecomputing.control.handles.CCStringHandle;
 import cc.creativecomputing.controlui.CCControlComponent;
 import cc.creativecomputing.ui.widget.CCUITextFieldWidget;
 import cc.creativecomputing.ui.widget.CCUIWidget;
 import cc.creativecomputing.yoga.CCYogaNode.CCYogaEdge;
 
-public class CCStringControl extends CCValueControl<String, CCStringPropertyHandle>{
+public class CCStringControl extends CCValueControl<String, CCStringHandle>{
 	
 	private CCUITextFieldWidget _myTextField;
 
-	public CCStringControl(CCStringPropertyHandle theHandle, CCControlComponent theControlComponent){
+	public CCStringControl(CCStringHandle theHandle, CCControlComponent theControlComponent){
 		super(theHandle, theControlComponent);
 		
 		addListener(theValue -> {
