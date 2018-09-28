@@ -15,10 +15,10 @@ import java.util.List;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.image.CCImageIO;
@@ -26,14 +26,14 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCTextureForceField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
-public class CCTextureForceFieldDemo extends CCGL2Adapter {
+public class CCTextureForceFieldDemo extends CCGLApp {
 
 	@CCProperty(name = "scale x", min = 0.1f, max = 10)
 	private float scaleX = 0;
@@ -57,7 +57,7 @@ public class CCTextureForceFieldDemo extends CCGL2Adapter {
 	private CCTexture2D _myForceFieldTexture;
 
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		_myForceFieldTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("world_stream_map.png")), CCTextureTarget.TEXTURE_RECT);
 		_myForceField = new CCTextureForceField(_myForceFieldTexture, new CCVector2(1, -1), new CCVector2(450, 225));
 		final List<CCForce> myForces = new ArrayList<CCForce>();
@@ -69,7 +69,7 @@ public class CCTextureForceFieldDemo extends CCGL2Adapter {
 	}
 
 	@Override
-	public void update(final CCAnimator theAnimator) {
+	public void update(CCGLTimer theTimer) {
 		for (int i = 0; i < 10000; i++) {
 			_myEmitter.emit(new CCVector3(CCMath.random(-450, 450), CCMath.random(-200, 200), 0), new CCVector3(), 5);
 		}

@@ -12,9 +12,7 @@ package cc.creativecomputing.simulation.particles.render;
 
 import java.nio.file.Path;
 
-import com.jogamp.opengl.GL2;
-
-import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCVBOMesh;
@@ -83,13 +81,13 @@ public class CCIndexedPlaneShadowRenderer extends CCParticleRenderer{
 	}
 	
 	@Override
-	public void update(CCAnimator theAnimator) {}
+	public void update(CCGLTimer theAnimator) {}
 	
 	@Override
 	public void updateData(CCGraphics g) {}
 
 	public void display(CCGraphics g){
-		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
+		g.programPointSize();
 		_myShader.start();
 		g.texture(0, _myParticles.dataBuffer().attachment(0));
 		g.texture(1, _myParticles.dataBuffer().attachment(1));
@@ -99,7 +97,7 @@ public class CCIndexedPlaneShadowRenderer extends CCParticleRenderer{
 		_myMesh.draw(g);
 		g.noTexture();
 		_myShader.end();
-		g.gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE) ;
+		g.noProgramPointSize();
 	}
 	
 	public CCVBOMesh mesh(){

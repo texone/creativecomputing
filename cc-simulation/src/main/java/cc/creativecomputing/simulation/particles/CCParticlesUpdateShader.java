@@ -11,8 +11,11 @@
 package cc.creativecomputing.simulation.particles;
 
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cc.creativecomputing.control.code.CCShaderObject.CCShaderInsert;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -21,7 +24,7 @@ import cc.creativecomputing.graphics.shader.CCGLShader;
 import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
-import cc.creativecomputing.graphics.shader.CCShaderSourceTemplate;
+import cc.creativecomputing.graphics.shader.CCShaderObjectType;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
@@ -34,11 +37,9 @@ import cc.creativecomputing.simulation.particles.impulses.CCImpulse;
 
 
 /**
- * @invisible
- * @author info
+ * @author Christian Riekoff
  *
  */
-@SuppressWarnings("unused")
 public class CCParticlesUpdateShader extends CCGLProgram{
 
 	protected String _myVelocityTextureParameter;
@@ -64,61 +65,76 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 	
 	private CCGLWriteDataShader _myWriteDataShader;
 	
+	private Map<String, CCShaderInsert> createInserts(){
+		Map<String, CCShaderInsert> myInserts = new HashMap<>();
+		myInserts.put("defineNoise", () -> CCGLShaderUtil.source);
+		
+		myInserts.put("defineForces", () -> {
+			StringBuffer myBuffer = new StringBuffer();
+			for(CCForce myForce:_myForces){
+				myBuffer.append(myForce.shaderSource());
+			}
+			return myBuffer.toString();
+		});
+		
+		myInserts.put("defineConstraints", () -> {
+			StringBuffer myBuffer = new StringBuffer();
+			for(CCConstraint myConstraint:_myConstraints){
+				myBuffer.append(myConstraint.shaderSource());
+			}
+			return myBuffer.toString();
+		});
+		
+		myInserts.put("applyForces", () -> {
+			StringBuffer myBuffer = new StringBuffer();
+			for(CCForce myForce:_myForces){
+				myBuffer.append("	acceleration = acceleration + " + myForce.parameter("function") + "(position,velocity,texID,deltaTime);\n");
+			}
+			return myBuffer.toString();
+		});
+		
+		myInserts.put("applyConstraints", () -> {
+			StringBuffer myBuffer = new StringBuffer();
+			for(CCConstraint myConstraint:_myConstraints){
+				myBuffer.append("	velocity = " + myConstraint.parameter("function") + "(velocity, position,texID, deltaTime);");
+			}
+			return myBuffer.toString();
+		});
+		return myInserts;
+	}
+	
 	protected CCParticlesUpdateShader(
 		final CCParticles theParticles,
 		final CCGraphics theGraphics, 
 		final List<CCForce> theForces , 
 		final List<CCConstraint> theConstraints,
 		final List<CCImpulse> theImpulses,
-		final Path[] theShaderFile,
+		final Path[] theShaderFiles,
 		final int theWidth,
 		final int theHeight
 	){
 		super();
+		_myForces = theForces;
+		_myConstraints = theConstraints;
 		
+		_myFragmentShader = new CCGLShader(CCShaderObjectType.FRAGMENT, createInserts(), theShaderFiles);
+		attach(_myFragmentShader);
+		link();
 		_myWriteDataShader = new CCGLWriteDataShader();
 		
 		_myEnvelopeTextureParameter = "lifeTimeBlends";
 		_myEvelopeData = new CCShaderBuffer(100,theForces.size());
 
-		CCShaderSourceTemplate shaderSource = CCGLShader.buildSourceObject(theShaderFile);
-		
 		int myIndex = 0;
-		
-		StringBuffer myForcesBuffer = new StringBuffer();
-		StringBuffer myForcesApplyBuffer = new StringBuffer();
-		
-		_myForces = theForces;
 		for(CCForce myForce:_myForces){
-			myForce.index(myIndex);
+			myForce.index(myIndex++);
 			myForce.setShader(this);
 			myForce.setParticles(theParticles);
-			myForcesBuffer.append(myForce.shaderSource());
-			myForcesApplyBuffer.append("	acceleration = acceleration + " + myForce.parameter("function") + "(position,velocity,texID,deltaTime);\n");
-			
-			myIndex++;
 		}
-		shaderSource.setDefine("noise", CCGLShaderUtil.source);
-		shaderSource.setDefine("forces", myForcesBuffer.toString());
-		shaderSource.setApply("forces", myForcesApplyBuffer.toString());
-		
-		StringBuffer myConstraintBuffer = new StringBuffer();
-		StringBuffer myConstraintApplyBuffer = new StringBuffer();
-		
-		_myConstraints = theConstraints;
 		for(CCConstraint myConstraint:_myConstraints){
 			myConstraint.setShader(this);
 			myConstraint.setParticles(theParticles);
-			myConstraintBuffer.append(myConstraint.shaderSource());
-			myConstraintApplyBuffer.append("	velocity = " + myConstraint.parameter("function") + "(velocity, position,texID, deltaTime);");
 		}
-		
-		shaderSource.setDefine("constraints", myConstraintBuffer.toString());
-		shaderSource.setApply("constraints", myConstraintApplyBuffer.toString());
-		
-		CCLog.info(shaderSource.source());
-		init(null, null, shaderSource.source());
-		
 		
 		_myRandomTexture = new CCTexture2D(CCGLShaderUtil.randomRGBAData);
 		_myRandomTexture.textureFilter(CCTextureFilter.LINEAR);
@@ -166,6 +182,19 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 			},
 			theWidth, theHeight
 		);
+	}
+	
+	@Override
+	public boolean isUpdated() {
+		if(super.isUpdated())return true;
+		
+		for(CCForce myForce:_myForces) {
+			if(myForce.isUpdated())return true;
+		}
+		for(CCConstraint myConstraint:_myConstraints) {
+			if(myConstraint.isUpdated())return true;
+		}
+		return false;
 	}
 	
 	private double _myStaticPositionBlend = 0;

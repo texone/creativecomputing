@@ -1,6 +1,6 @@
 #version 120 
 
-@define noise
+@CCInsert defineNoise
 
 uniform float deltaTime;
 
@@ -19,7 +19,7 @@ float lifeTimeBlend(vec2 texID, float forceIndex){
 }
 
 // insert forces
-@define forces
+@CCInsert defineForces
 
 // insert constraints
 
@@ -52,7 +52,7 @@ vec3 bounceReflection(
 	return vTangent * theFriction - vNormal * theResilience;
 }
 
-@define constraints
+@CCInsert defineConstraints
 
 void main (){
 	vec2 texID = gl_FragCoord.xy;
@@ -62,14 +62,14 @@ void main (){
 	vec3 acceleration = vec3(0,0,0);
 
 // apply forces
-@apply forces
+@CCInsert applyForces
 
 	velocity = velocity + acceleration * (deltaTime * 60);
 
 // apply constraints
 
 
-@apply constraints
+@CCInsert applyConstraints
 	
 	
 	/*
@@ -93,9 +93,8 @@ void main (){
 	);
 	
 	if(myAge >= lastInfo.y && lastInfo.z == 0.0)position = vec3(1000000,0,0);
-	
 	vec3 staticPosition = texture2DRect (staticPositions, texID).xyz;
-	vec4 newPosition = vec4(mix(position + deltaTime * velocity, staticPosition, staticPositionBlend),1); 
+	vec4 newPosition = vec4(mix(position + vec3(1,0,0) + deltaTime * velocity, staticPosition, staticPositionBlend),1);
 	
 	gl_FragData[0] = newPosition;
 	gl_FragData[1] = info;

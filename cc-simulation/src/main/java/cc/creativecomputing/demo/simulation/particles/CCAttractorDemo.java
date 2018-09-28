@@ -3,23 +3,25 @@ package cc.creativecomputing.demo.simulation.particles;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.CCGraphics.CCPolygonMode;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCAttractor;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
-public class CCAttractorDemo extends CCGL2Adapter {
+public class CCAttractorDemo extends CCGLApp {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
@@ -34,7 +36,7 @@ public class CCAttractorDemo extends CCGL2Adapter {
 	private CCCameraController _cCameraController;
 	
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 //		myForces.add(new CCGravity(new CCVector3(0,-1,0)));
 		myForces.add(new CCViscousDrag(0.3f));
@@ -56,7 +58,7 @@ public class CCAttractorDemo extends CCGL2Adapter {
 	}
 
 	@Override
-	public void update(CCAnimator theAnimator) {
+	public void update(CCGLTimer theTimer) {
 		for(int i = 0; i < 1600; i++){
 			_myEmitter.emit(
 				new CCVector3().randomize(1000),
@@ -64,7 +66,7 @@ public class CCAttractorDemo extends CCGL2Adapter {
 				10, false
 			);
 		}
-		_myParticles.update(theAnimator);
+		_myParticles.update(theTimer);
 	}
 
 	@Override
@@ -86,7 +88,7 @@ public class CCAttractorDemo extends CCGL2Adapter {
 			for(CCAttractor myAttractor:_myAttractors){
 				g.pushMatrix();
 				g.translate(myAttractor.position());
-				g.sphere(myAttractor.radius()/2);
+				g.box(myAttractor.radius()/2);
 				g.popMatrix();
 			}
 			g.polygonMode(CCPolygonMode.FILL);
@@ -100,11 +102,9 @@ public class CCAttractorDemo extends CCGL2Adapter {
 	public static void main(String[] args) {
 
 		CCAttractorDemo demo = new CCAttractorDemo();
-
-		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(1200, 600);
-		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
-		myAppManager.start();
+		demo.size(1200, 600);
+		CCGLApplicationManager myAppManager = new CCGLApplicationManager(demo);
+		CCControlApp _myControls = new CCControlApp(myAppManager, demo);
+		myAppManager.run();
 	}
 }

@@ -14,9 +14,10 @@ package cc.creativecomputing.simulation;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.creativecomputing.core.CCAnimator;
-import cc.creativecomputing.core.CCAnimatorListener;
+import cc.creativecomputing.core.CCEventManager;
+import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.simulation.force.CCForce;
 import cc.creativecomputing.simulation.steering.CCAgent;
 
@@ -28,7 +29,7 @@ public class CCSimulation{
 	
 	private CCSimulationThread[] _mySimulationThreads = new CCSimulationThread[10];
 	
-	private List<CCAnimatorListener> _myPreListeners = new ArrayList<CCAnimatorListener>();
+	private CCEventManager<CCGLTimer> _myPreListeners = new CCEventManager<>();
 	private CCParticleGroup<CCParticle> _myDefaultParticleGroup;
 	private CCParticleGroup<CCAgent> _myDefaultAgentGroup;
 	
@@ -73,14 +74,12 @@ public class CCSimulation{
 		return _myDefaultAgentGroup;
 	}
 	
-	public void addPreListener(final CCAnimatorListener theListener){
+	public void addPreListener(final CCEvent<CCGLTimer> theListener){
 		_myPreListeners.add(theListener);
 	}
 
-	public void update(CCAnimator theAnimator) {
-		for(CCAnimatorListener myPreListener:_myPreListeners){
-			myPreListener.update(theAnimator);
-		}
+	public void update(CCGLTimer theAnimator) {
+		_myPreListeners.event(theAnimator);
 		for(CCParticleGroup<?> myParticleGroup:_myParticleGroups){
 			myParticleGroup.update(theAnimator.deltaTime() * _cSpeed);
 		}

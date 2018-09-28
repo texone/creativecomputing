@@ -3,25 +3,25 @@ package cc.creativecomputing.demo.simulation.particles;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLApplicationManager;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
-import cc.creativecomputing.graphics.shader.CCShaderBuffer;
-import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCDensity;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCForceField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
-public class CCDensityDemo extends CCGL2Adapter {
+public class CCDensityDemo extends CCGLApp {
 	
 	private enum CCDensityShow{
 		PARTICLES, DENSITY, FORCE
@@ -42,7 +42,7 @@ public class CCDensityDemo extends CCGL2Adapter {
 	private CCDensity _myDensity;
 	
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 		myForces.add(new CCViscousDrag(0.3f));
 		myForces.add(_myForceField = new CCForceField());
@@ -55,8 +55,8 @@ public class CCDensityDemo extends CCGL2Adapter {
 	}
 
 	@Override
-	public void update(CCAnimator theAnimator) {
-		_myForceField.offset().set(0,0,theAnimator.time());
+	public void update(CCGLTimer theTimer) {
+		_myForceField.offset().set(0,0,theTimer.time());
 		for(int i = 0; i < 160; i++){
 			_myEmitter.emit(
 				new CCVector3().randomize(300).multiplyLocal(1, 1, 0),
@@ -64,7 +64,7 @@ public class CCDensityDemo extends CCGL2Adapter {
 				10, false
 			);
 		}
-		_myParticles.update(theAnimator);
+		_myParticles.update(theTimer);
 	}
 
 	@Override
@@ -100,10 +100,9 @@ public class CCDensityDemo extends CCGL2Adapter {
 
 		CCDensityDemo demo = new CCDensityDemo();
 
-		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(1200, 600);
-		myAppManager.animator().framerate = 30;
-		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
-		myAppManager.start();
+		demo.size(1200, 600);
+		CCGLApplicationManager myAppManager = new CCGLApplicationManager(demo);
+		CCControlApp _myControls = new CCControlApp(myAppManager, demo);
+		myAppManager.run();
 	}
 }

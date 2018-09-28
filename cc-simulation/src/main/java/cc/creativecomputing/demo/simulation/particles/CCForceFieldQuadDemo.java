@@ -6,16 +6,16 @@ import java.util.List;
 import cc.creativecomputing.control.CCGradient;
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawAttributes;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCForceField;
@@ -23,7 +23,7 @@ import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 import cc.creativecomputing.simulation.particles.render.CCParticlePrimitiveRenderer;
 import cc.creativecomputing.simulation.particles.render.CCParticlePrimitiveRenderer.CCParticlePrimitive;
 
-public class CCForceFieldQuadDemo extends CCGL2Adapter {
+public class CCForceFieldQuadDemo extends CCGLApp {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
@@ -54,7 +54,7 @@ public class CCForceFieldQuadDemo extends CCGL2Adapter {
 	private boolean _cClear = true;
 	
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 		myForces.add(new CCViscousDrag(0.3f));
 		myForces.add(_myForceField = new CCForceField());
@@ -64,21 +64,21 @@ public class CCForceFieldQuadDemo extends CCGL2Adapter {
 		
 		_cCameraController = new CCCameraController(this, g, 100);
 		
-		_cScreenCapture = new CCScreenCaptureController(this, theAnimator);
+		_cScreenCapture = new CCScreenCaptureController(this);
 	}
 
 	@Override
-	public void update(CCAnimator theAnimator) {
-		_myForceField.offset().set(0,0,theAnimator.time());
-		for(int i = 0; i < _cEmitAmount * theAnimator.deltaTime(); i++){
+	public void update(CCGLTimer theTimer) {
+		_myForceField.offset().set(0,0,theTimer.time());
+		for(int i = 0; i < _cEmitAmount * theTimer.deltaTime(); i++){
 			_myEmitter.emit(
-				_myGradient.color(theAnimator.time() / 2 % 1),
+				_myGradient.color(theTimer.time() / 2 % 1),
 				new CCVector3().randomize().normalizeLocal().multiplyLocal(_cRadius),
 				new CCVector3().randomize(20),
 				_cLifeTime, false
 			);
 		}
-		_myParticles.update(theAnimator);
+		_myParticles.update(theTimer);
 	}
 
 	@Override

@@ -15,26 +15,26 @@ import java.util.List;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.CCGraphics.CCPolygonMode;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.signal.CCSignal;
 import cc.creativecomputing.math.signal.CCSimplexNoise;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCPathFollow;
 import cc.creativecomputing.simulation.particles.forces.CCPathFollow.CCPathFollowPath;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
-public class CCPathFollowDemo extends CCGL2Adapter {
+public class CCPathFollowDemo extends CCGLApp {
 	
 	@CCProperty(name = "texture alpha", min = 0, max = 1)
 	private float _cTextureAlpha = 0;
@@ -70,7 +70,7 @@ public class CCPathFollowDemo extends CCGL2Adapter {
 	private CCPathFollowPath _myPath2;
 
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 
 
 		_myNoise = new CCSimplexNoise();
@@ -105,8 +105,8 @@ public class CCPathFollowDemo extends CCGL2Adapter {
 	}
 
 	@Override
-	public void update(final CCAnimator theAnimator) {
-		_myTime += theAnimator.deltaTime() * _cNoiseSpeed;
+	public void update(CCGLTimer theTimer) {
+		_myTime += theTimer.deltaTime() * _cNoiseSpeed;
 		for (int i = 0; i < 300; i++) {
 			_myEmitter.emit(
 				new CCVector3(-300, CCMath.random(-200,200), 0), 
@@ -116,7 +116,7 @@ public class CCPathFollowDemo extends CCGL2Adapter {
 		updatePath(_myPath1, 300);
 		updatePath(_myPath2, 100);
 		_myPathFollow.strength(_cForceScale);
-		_myParticles.update(theAnimator);
+		_myParticles.update(theTimer);
 		
 	}
 

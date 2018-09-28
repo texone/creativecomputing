@@ -15,16 +15,16 @@ import java.util.List;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.signal.CCSimplexNoise;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCAttractor;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
@@ -33,7 +33,7 @@ import cc.creativecomputing.simulation.particles.forces.CCGravity;
 import cc.creativecomputing.simulation.particles.forces.CCPointCurveField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
-public class CCPointCurveFieldDemo extends CCGL2Adapter {
+public class CCPointCurveFieldDemo extends CCGLApp {
 	
 	@CCProperty(name = "noise speed", min = 0, max = 1)
 	private float _cCurveSpeed = 0;
@@ -59,7 +59,7 @@ public class CCPointCurveFieldDemo extends CCGL2Adapter {
 	private int width = 100;
 	
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 		myForces.add(new CCViscousDrag(0.3f));
@@ -86,7 +86,7 @@ public class CCPointCurveFieldDemo extends CCGL2Adapter {
 	private float _myTime = 0;
 	
 	@Override
-	public void update(final CCAnimator theAnimator){
+	public void update(CCGLTimer theTimer) {
 		_myTime += 1/30f * 0.5f;
 		for(int i = 0; i < 2000; i++){
 			double myX = CCMath.random(-width/2, width/2);
@@ -100,7 +100,7 @@ public class CCPointCurveFieldDemo extends CCGL2Adapter {
 				10, false
 			);
 		}
-		_myParticles.update(theAnimator);
+		_myParticles.update(theTimer);
 		
 		_myForceField.offset(new CCVector3(0,0,_myTime));
 	

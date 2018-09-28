@@ -11,7 +11,6 @@
 package cc.creativecomputing.simulation.particles.forces;
 
 import cc.creativecomputing.control.CCEnvelope;
-import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;

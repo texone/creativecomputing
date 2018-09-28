@@ -10,8 +10,8 @@
  */
 package cc.creativecomputing.simulation.particles.forces;
 
-import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
@@ -209,7 +209,7 @@ public class CCDensity extends CCForce{
 		_mySobelFilter.display(g);
 	}
 	
-	public void update (CCAnimator theAnimator) {
+	public void update (CCGLTimer theAnimator) {
 		_myDefaultRenderer.update(theAnimator);
 	}
 }

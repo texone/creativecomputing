@@ -10,8 +10,8 @@
  */
 package cc.creativecomputing.simulation.particles.forces;
 
-import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLTimer;
 
 public class CCNoiseCurveField extends CCForce{
 	
@@ -96,7 +96,7 @@ public class CCNoiseCurveField extends CCForce{
 	}
 
 	@Override
-	public void update(final CCAnimator theAnimator) {
+	public void update(final CCGLTimer theAnimator) {
 		_myOffset += theAnimator.deltaTime() * _mySpeed;	
 	}
 	

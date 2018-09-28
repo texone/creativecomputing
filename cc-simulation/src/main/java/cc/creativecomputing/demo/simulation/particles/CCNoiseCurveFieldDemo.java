@@ -5,17 +5,18 @@ import java.util.List;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.gl.app.events.CCMouseAdapter;
 import cc.creativecomputing.gl.app.events.CCMouseEvent;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCAttractor;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
@@ -24,7 +25,7 @@ import cc.creativecomputing.simulation.particles.forces.CCGravity;
 import cc.creativecomputing.simulation.particles.forces.CCNoiseCurveField;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
-public class CCNoiseCurveFieldDemo extends CCGL2Adapter {
+public class CCNoiseCurveFieldDemo extends CCGLApp {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
@@ -39,7 +40,7 @@ public class CCNoiseCurveFieldDemo extends CCGL2Adapter {
 	private CCCameraController _cCameraController;
 	
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 		
 		
@@ -72,7 +73,7 @@ public class CCNoiseCurveFieldDemo extends CCGL2Adapter {
 	
 
 	@Override
-	public void update(CCAnimator theAnimator) {
+	public void update(CCGLTimer theTimer) {
 		for(int i = 0; i < 4000; i++){
 			_myEmitter.emit(
 				new CCVector3(CCMath.random(-1000,1000),CCMath.random(-_cEmitRadius, _cEmitRadius),CCMath.random(-50, 50)),
@@ -80,10 +81,10 @@ public class CCNoiseCurveFieldDemo extends CCGL2Adapter {
 				10, false
 			);
 		}
-		_myParticles.update(theAnimator);
+		_myParticles.update(theTimer);
 		
 		
-		_myForceField.offset().set(0,0,theAnimator.time() / 3);
+		_myForceField.offset().set(0,0,theTimer.time() / 3);
 		
 		
 	}

@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCVBOMesh;
@@ -327,7 +328,7 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 	}
 	
 	@Override
-	public void update(CCAnimator theAnimator) {}
+	public void update(CCGLTimer theAnimator) {}
 
 	public void display(CCGraphics g){
 		_myShader.start();

@@ -2,7 +2,6 @@ package cc.creativecomputing.simulation.fluid;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.gl.app.events.CCMouseSimpleInfo;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
@@ -412,19 +411,7 @@ public class CCFluidSolver {
 		addTemperature(g, thePosition, theTemperature, _cTemperatureRadius);
 	}
 
-	public void addForces(CCGraphics g, CCMouseSimpleInfo mouse) {
-		CCVector2 point = new CCVector2();
-		CCVector3 force = new CCVector3();
-	     
-		CCVector2 motion = mouse.motion;
-
-		point.set(mouse.position.x, _myWindowSize.y - mouse.position.y);
-		// normalize to [0, 1] and scale to grid size
-		point.x *= _myGrid.size.x / _myWindowSize.x;
-		point.y *= _myGrid.size.y / _myWindowSize.y;
-
-		force.set(motion.x, -motion.y, 0);
-	     
+	public void addForces(CCGraphics g, CCVector2 point, CCVector3 force) {
 		splat(g, _myVelocityData, force, point, colorRadius);	
 		splat(g, _myDensityData, source, point, velocityRadius);
 	}

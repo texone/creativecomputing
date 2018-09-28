@@ -1,31 +1,31 @@
-#version 120 
+#version 120
 
 uniform sampler2D randomTexture;
 
 float noise( in vec3 x ){
-    vec3 p = floor(x);
-    vec3 f = fract(x);
-	f = f * f * (3.0 - 2.0 * f);
-	
-	vec2 uv = (p.xy + vec2(37.0, 17.0) * p.z) + f.xy;
-	vec2 rg = texture2D( randomTexture, (uv+ 0.5) / 256.0 ).yx;//, -100.0
-	return mix( rg.x, rg.y, f.z );
+vec3 p = floor(x);
+vec3 f = fract(x);
+f = f * f * (3.0 - 2.0 * f);
+
+vec2 uv = (p.xy + vec2(37.0, 17.0) * p.z) + f.xy;
+vec2 rg = texture2D( randomTexture, (uv+ 0.5) / 256.0 ).yx;//, -100.0
+return mix( rg.x, rg.y, f.z );
 }
 
 float octavedNoise(in vec3 p, int octaves, float gain, float lacunarity){
-	float result = 0.0;
-	float myFallOff = gain;
-	float myAmp = 0.0;
-	
-	vec3 q = p;
-	for(int i = 0; i < octaves; i++){
-		myAmp += myFallOff;
-		result += myFallOff * noise( q ); 
-		q = q * lacunarity;
-		myFallOff *= gain;
-	}
-	
-	return result / myAmp;
+float result = 0.0;
+float myFallOff = gain;
+float myAmp = 0.0;
+
+vec3 q = p;
+for(int i = 0; i < octaves; i++){
+myAmp += myFallOff;
+result += myFallOff * noise( q );
+q = q * lacunarity;
+myFallOff *= gain;
+}
+
+return result / myAmp;
 }
 
 uniform float deltaTime;
@@ -37,118 +37,280 @@ uniform sampler2DRect velocityTexture;
 uniform sampler2DRect infoTexture;
 uniform float staticPositionBlend;
 
-// insert forces
-uniform vec3 gravity0_direction;
-uniform float gravity0_strength;
+uniform sampler2DRect lifeTimeBlends;
 
-vec3 gravity0_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
-	return gravity0_direction * gravity0_strength; 
+float lifeTimeBlend(vec2 texID, float forceIndex){
+vec4 infos = texture2DRect (infoTexture, texID);
+return texture2DRect (lifeTimeBlends, vec2(infos.x / infos.y * 100.0, forceIndex)).x;
+}
+
+// insert forces
+uniform float ViscousDrag0_drag;
+
+uniform float ViscousDrag0_strength;
+uniform float ViscousDrag0_index;
+
+vec3 ViscousDrag0_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+return theVelocity * theDeltaTime * -ViscousDrag0_drag * lifeTimeBlend(theTexID, ViscousDrag0_index) * ViscousDrag0_strength;
+}
+
+
+uniform float attractor1_strength;
+uniform float attractor1_index;
+
+uniform vec3 attractor1_position;
+uniform float attractor1_radius;
+
+vec3 attractor1_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 force = attractor1_position - thePosition;
+float dist = length(force);
+
+if(dist >= attractor1_radius)return vec3(0.0);
+
+float myFallOff = 1.0 - dist / attractor1_radius;
+float myForce = myFallOff * myFallOff;
+force = force * myForce / dist;
+return force * lifeTimeBlend(theTexID, attractor1_index) * attractor1_strength;
+}
+
+
+uniform float attractor2_strength;
+uniform float attractor2_index;
+
+uniform vec3 attractor2_position;
+uniform float attractor2_radius;
+
+vec3 attractor2_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 force = attractor2_position - thePosition;
+float dist = length(force);
+
+if(dist >= attractor2_radius)return vec3(0.0);
+
+float myFallOff = 1.0 - dist / attractor2_radius;
+float myForce = myFallOff * myFallOff;
+force = force * myForce / dist;
+return force * lifeTimeBlend(theTexID, attractor2_index) * attractor2_strength;
+}
+
+
+uniform float attractor3_strength;
+uniform float attractor3_index;
+
+uniform vec3 attractor3_position;
+uniform float attractor3_radius;
+
+vec3 attractor3_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 force = attractor3_position - thePosition;
+float dist = length(force);
+
+if(dist >= attractor3_radius)return vec3(0.0);
+
+float myFallOff = 1.0 - dist / attractor3_radius;
+float myForce = myFallOff * myFallOff;
+force = force * myForce / dist;
+return force * lifeTimeBlend(theTexID, attractor3_index) * attractor3_strength;
+}
+
+
+uniform float attractor4_strength;
+uniform float attractor4_index;
+
+uniform vec3 attractor4_position;
+uniform float attractor4_radius;
+
+vec3 attractor4_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 force = attractor4_position - thePosition;
+float dist = length(force);
+
+if(dist >= attractor4_radius)return vec3(0.0);
+
+float myFallOff = 1.0 - dist / attractor4_radius;
+float myForce = myFallOff * myFallOff;
+force = force * myForce / dist;
+return force * lifeTimeBlend(theTexID, attractor4_index) * attractor4_strength;
+}
+
+
+uniform float attractor5_strength;
+uniform float attractor5_index;
+
+uniform vec3 attractor5_position;
+uniform float attractor5_radius;
+
+vec3 attractor5_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 force = attractor5_position - thePosition;
+float dist = length(force);
+
+if(dist >= attractor5_radius)return vec3(0.0);
+
+float myFallOff = 1.0 - dist / attractor5_radius;
+float myForce = myFallOff * myFallOff;
+force = force * myForce / dist;
+return force * lifeTimeBlend(theTexID, attractor5_index) * attractor5_strength;
+}
+
+
+uniform float attractor6_strength;
+uniform float attractor6_index;
+
+uniform vec3 attractor6_position;
+uniform float attractor6_radius;
+
+vec3 attractor6_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 force = attractor6_position - thePosition;
+float dist = length(force);
+
+if(dist >= attractor6_radius)return vec3(0.0);
+
+float myFallOff = 1.0 - dist / attractor6_radius;
+float myForce = myFallOff * myFallOff;
+force = force * myForce / dist;
+return force * lifeTimeBlend(theTexID, attractor6_index) * attractor6_strength;
+}
+
+
+uniform float attractor7_strength;
+uniform float attractor7_index;
+
+uniform vec3 attractor7_position;
+uniform float attractor7_radius;
+
+vec3 attractor7_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 force = attractor7_position - thePosition;
+float dist = length(force);
+
+if(dist >= attractor7_radius)return vec3(0.0);
+
+float myFallOff = 1.0 - dist / attractor7_radius;
+float myForce = myFallOff * myFallOff;
+force = force * myForce / dist;
+return force * lifeTimeBlend(theTexID, attractor7_index) * attractor7_strength;
+}
+
+
+uniform float attractor8_strength;
+uniform float attractor8_index;
+
+uniform vec3 attractor8_position;
+uniform float attractor8_radius;
+
+vec3 attractor8_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 force = attractor8_position - thePosition;
+float dist = length(force);
+
+if(dist >= attractor8_radius)return vec3(0.0);
+
+float myFallOff = 1.0 - dist / attractor8_radius;
+float myForce = myFallOff * myFallOff;
+force = force * myForce / dist;
+return force * lifeTimeBlend(theTexID, attractor8_index) * attractor8_strength;
+}
+
+
+uniform float attractor9_strength;
+uniform float attractor9_index;
+
+uniform vec3 attractor9_position;
+uniform float attractor9_radius;
+
+vec3 attractor9_function(vec3 thePosition, vec3 theVelocity, vec2 theTexID, float theDeltaTime){
+vec3 force = attractor9_position - thePosition;
+float dist = length(force);
+
+if(dist >= attractor9_radius)return vec3(0.0);
+
+float myFallOff = 1.0 - dist / attractor9_radius;
+float myForce = myFallOff * myFallOff;
+force = force * myForce / dist;
+return force * lifeTimeBlend(theTexID, attractor9_index) * attractor9_strength;
 }
 
 
 // insert constraints
 
 vec3 bounceReflection(
-	vec3 theVelocity, vec3 theNormal, float thePlacement,
-	float theResilience, float theFriction, float theMinimalVelocity
+vec3 theVelocity, vec3 theNormal, float thePlacement,
+float theResilience, float theFriction, float theMinimalVelocity
 ){
-	// Distibute velocity to normal and tangential contributions.
-	float normalContribution = dot(theVelocity, theNormal);
-	vec3 vNormal = normalContribution * theNormal;
-	vec3 vTangent = theVelocity - vNormal;
-	
-	if (thePlacement < 0){
-		// Get particle outside the collider as quickly as possible,
-		// either with original or reflected velocity.
-		
-		if (normalContribution <= 0.0){
-			return vTangent - vNormal;
-		} else {
-			return theVelocity;
-		}
-	} 
-	
-	// Slow down particle with friction only if slower than minimal velocity.
-	if (length(theVelocity) < theMinimalVelocity)
-		theFriction = 1.0;
+// Distibute velocity to normal and tangential contributions.
+float normalContribution = dot(theVelocity, theNormal);
+vec3 vNormal = normalContribution * theNormal;
+vec3 vTangent = theVelocity - vNormal;
 
-	// Slowdown tangential movement with friction (in theory 1 - friction)
-	// and reflected normal movement via resilience factor.
-	return vTangent * theFriction - vNormal * theResilience;
+if (thePlacement < 0){
+// Get particle outside the collider as quickly as possible,
+// either with original or reflected velocity.
+
+if (normalContribution <= 0.0){
+return vTangent - vNormal;
+} else {
+return theVelocity;
+}
 }
 
+// Slow down particle with friction only if slower than minimal velocity.
+if (length(theVelocity) < theMinimalVelocity)
+theFriction = 1.0;
 
-
-uniform vec3 sphereConstraint1_center;
-uniform float sphereConstraint1_radius;
-	
-uniform float sphereConstraint1_resilience;
-uniform float sphereConstraint1_friction;
-uniform float sphereConstraint1_minimalVelocity;
-
-uniform float sphereConstraint1_inside;
-	
-vec3 sphereConstraint1_function(vec3 theVelocity, vec3 thePosition, vec2 theTexID,float theDeltaTime){
-	vec3 delta = (thePosition + theVelocity * theDeltaTime) - sphereConstraint1_center;
-	float dist = length(delta);
-
-	if ((dist - sphereConstraint1_radius) * sphereConstraint1_inside < 0) return theVelocity;
-		
-	return bounceReflection(
-		theVelocity, 
-		delta / dist,
-		distance(thePosition, sphereConstraint1_center) - sphereConstraint1_radius,
-		sphereConstraint1_resilience, 
-		sphereConstraint1_friction, 
-		sphereConstraint1_minimalVelocity
-	);
+// Slowdown tangential movement with friction (in theory 1 - friction)
+// and reflected normal movement via resilience factor.
+return vTangent * theFriction - vNormal * theResilience;
 }
 
 
 void main (){
-	vec2 texID = gl_FragCoord.xy;
-	vec3 position = texture2DRect (positionTexture, texID).xyz;
-	vec3 velocity = texture2DRect (velocityTexture, texID).xyz;
-	vec4 color = texture2DRect (colorTexture, texID);
-	vec3 acceleration = vec3(0,0,0);
+vec2 texID = gl_FragCoord.xy;
+vec3 position = texture2DRect (positionTexture, texID).xyz;
+vec3 velocity = texture2DRect (velocityTexture, texID).xyz;
+vec4 color = texture2DRect (colorTexture, texID);
+vec3 acceleration = vec3(0,0,0);
 
 // apply forces
-	acceleration = acceleration + gravity0_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + ViscousDrag0_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + attractor1_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + attractor2_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + attractor3_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + attractor4_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + attractor5_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + attractor6_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + attractor7_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + attractor8_function(position,velocity,texID,deltaTime);
+acceleration = acceleration + attractor9_function(position,velocity,texID,deltaTime);
 
-	velocity = velocity + acceleration * (deltaTime * 60);
+acceleration = acceleration + gravity0_function(vec3(0,0,0),vec3(0,0,0),vec2(0,0),0);
+velocity = velocity + acceleration * (deltaTime * 60);
 
 // apply constraints
 
 
-	velocity = sphereConstraint1_function(velocity, position,texID, deltaTime)	
-	
-	/*
-	for(int i = 0; i < constraints.length;i++){
-		velocity = constraints[i].constraint(velocity, position,texID, deltaTime);
-	}
-	
-	for(int i = 0; i < impulses.length;i++){
-		velocity += impulses[i].impulse(position,velocity, texID, deltaTime);
-	}
-	*/
-	vec4 lastInfo = texture2DRect(infoTexture, texID);
-	float myAge = lastInfo.x;
-	int myStep = int(lastInfo.w);
-	
-	vec4 info = vec4(
-		lastInfo.x + deltaTime,
-		lastInfo.y,
-		lastInfo.z,
-		lastInfo.w
-	);
-	
-	if(myAge >= lastInfo.y && lastInfo.z == 0.0)position = vec3(1000000,0,0);
-	
-	vec3 staticPosition = texture2DRect (staticPositions, texID).xyz;
-	vec4 newPosition = vec4(mix(position + deltaTime * velocity, staticPosition, staticPositionBlend),1); 
-	
-	gl_FragData[0] = newPosition;
-	gl_FragData[1] = info;
-	gl_FragData[2] = vec4(velocity, 1.0);
-	gl_FragData[3] = color;
+
+
+/*
+for(int i = 0; i < constraints.length;i++){
+velocity = constraints[i].constraint(velocity, position,texID, deltaTime);
+}
+
+for(int i = 0; i < impulses.length;i++){
+velocity += impulses[i].impulse(position,velocity, texID, deltaTime);
+}
+*/
+vec4 lastInfo = texture2DRect(infoTexture, texID);
+float myAge = lastInfo.x;
+int myStep = int(lastInfo.w);
+
+vec4 info = vec4(
+lastInfo.x + deltaTime,
+lastInfo.y,
+lastInfo.z,
+lastInfo.w
+);
+
+if(myAge >= lastInfo.y && lastInfo.z == 0.0)position = vec3(1000000,0,0);
+vec3 staticPosition = texture2DRect (staticPositions, texID).xyz;
+vec4 newPosition = vec4(mix(position + vec3(1,0,0) + deltaTime * velocity, staticPosition, staticPositionBlend),1);
+
+gl_FragData[0] = newPosition;
+gl_FragData[1] = info;
+gl_FragData[2] = vec4(velocity, 1.0);
+gl_FragData[3] = color;
 }

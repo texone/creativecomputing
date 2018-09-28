@@ -10,8 +10,8 @@
  */
 package cc.creativecomputing.simulation.particles.forces;
 
-import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.math.CCVector3;
 
 public class CCForceField extends CCForce{
@@ -77,7 +77,7 @@ public class CCForceField extends CCForce{
 	}
 	
 	@Override
-	public void update(CCAnimator theAnimator) {
+	public void update(CCGLTimer theAnimator) {
 		if(_cSpeed == 0)return;
 		
 		_myOffset.z += theAnimator.deltaTime() * _cSpeed;

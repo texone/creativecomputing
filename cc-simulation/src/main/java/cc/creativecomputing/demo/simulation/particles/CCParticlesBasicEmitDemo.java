@@ -4,18 +4,19 @@ import java.util.ArrayList;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 
-public class CCParticlesBasicEmitDemo extends CCGL2Adapter {
+public class CCParticlesBasicEmitDemo extends CCGLApp {
 	
 	private CCParticles _myParticles;
 	private CCParticlesIndexParticleEmitter _myEmitter;
@@ -24,7 +25,7 @@ public class CCParticlesBasicEmitDemo extends CCGL2Adapter {
 	private CCCameraController _cCameraController;
 
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		_myParticles = new CCParticles(g,new ArrayList<>(), new ArrayList<CCConstraint>(),600,600);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		_myParticles.reset(g);
@@ -33,7 +34,7 @@ public class CCParticlesBasicEmitDemo extends CCGL2Adapter {
 	}
 
 	@Override
-	public void update(CCAnimator theAnimator) {
+	public void update(CCGLTimer theTimer) {
 		for(int i = 0; i < 800; i++){
 			_myEmitter.emit(
 				new CCVector3(),
@@ -41,7 +42,7 @@ public class CCParticlesBasicEmitDemo extends CCGL2Adapter {
 				10, false
 			);
 		}
-		_myParticles.update(theAnimator);
+		_myParticles.update(theTimer);
 	}
 
 	@Override

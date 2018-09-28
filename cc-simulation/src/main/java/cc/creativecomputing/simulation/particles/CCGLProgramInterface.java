@@ -1,5 +1,6 @@
 package cc.creativecomputing.simulation.particles;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -21,11 +22,21 @@ public class CCGLProgramInterface {
 	
 	private final String _myInterfaceAppend;
 	
+	private Path _mySourcePath;
+	
 	public CCGLProgramInterface(String theFunctionName){
 		_myFunctionName = theFunctionName;
 		_myInterfaceAppend = theFunctionName + id++;
+		_mySourcePath = CCNIOUtil.classPath(this, getClass().getSimpleName() + ".glsl");
+		rebuildSource();
+	}
+	
+	private long _myLastModified = 0;
+	
+	public void rebuildSource() {
+		_myLastModified = _mySourcePath.toFile().lastModified();
+		List<String> mySource = CCNIOUtil.loadStrings(_mySourcePath);
 		
-		List<String> mySource = CCNIOUtil.loadStrings(CCNIOUtil.classPath(this, getClass().getSimpleName() + ".glsl"));
 		List<String> myUniforms = new ArrayList<>();
 		StringBuffer mySourceBuffer = new StringBuffer();
 		for(String myLine:mySource){
@@ -53,6 +64,10 @@ public class CCGLProgramInterface {
 		_mySource = mySourceBuffer.toString();
 	}
 	
+	public boolean isUpdated() {
+		return _mySourcePath.toFile().lastModified() > _myLastModified;
+	}
+	
 	public void setShader(CCGLProgram theProgram){
 		_myShader = theProgram;
 	}
@@ -70,6 +85,7 @@ public class CCGLProgramInterface {
 	}
 	
 	public String shaderSource(){
+		if(isUpdated())rebuildSource();
 		return _mySource;
 	}
 }

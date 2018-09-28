@@ -15,10 +15,10 @@ import java.util.List;
 
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.gl.app.CCGLApp;
+import cc.creativecomputing.gl.app.CCGLTimer;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
-import cc.creativecomputing.graphics.app.CCGL2Adapter;
-import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
@@ -26,15 +26,15 @@ import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
-import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.CCParticles;
+import cc.creativecomputing.simulation.particles.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCGravity;
 import cc.creativecomputing.simulation.particles.forces.CCTerrainForce;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
 
-public class CCTerrainForceDemo extends CCGL2Adapter {
+public class CCTerrainForceDemo extends CCGLApp {
 	
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
@@ -47,7 +47,7 @@ public class CCTerrainForceDemo extends CCGL2Adapter {
 	private CCTerrainForce _myTerrainForce;
 
 	@Override
-	public void init(CCGraphics g, CCAnimator theAnimator) {
+	public void setup() {
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 		myForces.add(new CCGravity(new CCVector3(0.1,0,0)));
 		myForces.add(new CCViscousDrag(0.3f));
@@ -71,9 +71,9 @@ public class CCTerrainForceDemo extends CCGL2Adapter {
 	double height = 100;
 	
 	@Override
-	public void update(final CCAnimator theAnimator){
+	public void update(CCGLTimer theTimer) {
 	
-		angle += theAnimator.deltaTime() * 30;
+		angle += theTimer.deltaTime() * 30;
 		for(int i = 0; i < 100; i++){
 			_myEmitter.emit(
 				new CCVector3(CCMath.random(-400,400), height/2,CCMath.random(-400,400)),
@@ -81,7 +81,7 @@ public class CCTerrainForceDemo extends CCGL2Adapter {
 				10, false
 			);
 		}
-		_myParticles.update(theAnimator);
+		_myParticles.update(theTimer);
 	}
 
 	public void display(CCGraphics g) {
