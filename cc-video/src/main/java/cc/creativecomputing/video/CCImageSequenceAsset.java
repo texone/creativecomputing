@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import cc.creativecomputing.control.CCAsset;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCProperty;
@@ -108,7 +108,7 @@ public class CCImageSequenceAsset extends CCAsset<CCImageSequence>{
 	}
 	
 //	@Override
-	public void renderTimedEvent(CCTimedEventPoint theEvent,Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
+	public void renderTimedEvent(CCEventPoint theEvent,Point2D theLower, Point2D theUpper, double lowerTime, double UpperTime, Graphics2D theG2d) {
 //		super.renderTimedEvent(theEvent, theLower, theUpper, lowerTime, UpperTime, theG2d);
 		
 		if(theEvent.content() == null || theEvent.content().value() == null)return;
