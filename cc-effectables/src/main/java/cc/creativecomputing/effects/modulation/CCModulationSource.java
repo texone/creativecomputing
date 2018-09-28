@@ -1,6 +1,6 @@
 package cc.creativecomputing.effects.modulation;
 
-import cc.creativecomputing.core.CCAnimator;
+import cc.creativecomputing.core.CCTimer;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
 
@@ -38,7 +38,7 @@ public  class CCModulationSource {
 		_myIsUpdated = theIsUpdated;
 	}
 	
-	public void update(CCAnimator theAnimator, CCEffectManager<?> theManager){
+	public void update(CCTimer theAnimator, CCEffectManager<?> theManager){
 		
 	}
 }

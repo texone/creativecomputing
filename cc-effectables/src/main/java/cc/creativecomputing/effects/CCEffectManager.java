@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.CCTimer;
 import cc.creativecomputing.effects.modulation.CCConstantSource;
 import cc.creativecomputing.effects.modulation.CCIDSource;
 import cc.creativecomputing.effects.modulation.CCModulationSource;
@@ -187,7 +187,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 		theEffectable.apply(theValues);
 	}
 
-	public void update(CCAnimator theAnimator){
+	public void update(CCTimer theAnimator){
 		
 		for(int i = 0; i < _myValueNames.length;i++){
 			_myDefaultValues[i] = _cDefaults.get(_myValueNames[i] + " default");

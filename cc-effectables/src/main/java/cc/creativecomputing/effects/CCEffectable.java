@@ -3,11 +3,11 @@ package cc.creativecomputing.effects;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCEventManager;
 import cc.creativecomputing.core.CCEventManager.CCEvent;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCSelectable;
+import cc.creativecomputing.core.CCTimer;
 import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCVector3;
 
@@ -152,7 +152,7 @@ public abstract class CCEffectable implements CCSelectable{
 		return idSource(GROUP_ID_SOURCE);
 	}
 	
-	public void update(CCAnimator theAnimator){
+	public void update(CCTimer theAnimator){
 		
 	}
 	

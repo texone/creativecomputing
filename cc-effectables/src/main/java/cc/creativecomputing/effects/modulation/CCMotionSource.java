@@ -3,8 +3,8 @@ package cc.creativecomputing.effects.modulation;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.core.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.CCTimer;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
@@ -41,10 +41,10 @@ public class CCMotionSource extends CCModulationSource {
 			super(thePosition, theLength, theVelocitiy, theAcceleration, theJerk, theTimeStep);
 		}
 		
-		public void update(CCAnimator theAnimator) {
-			maxVelocity -= _cVelocityReduction * theAnimator.deltaTime();
-			maxAcceleration -= _cAccelerationReduction * theAnimator.deltaTime();
-			maxJerk -= _cJerkReduction * theAnimator.deltaTime();
+		public void update(CCTimer theTimer) {
+			maxVelocity -= _cVelocityReduction * theTimer.deltaTime();
+			maxAcceleration -= _cAccelerationReduction * theTimer.deltaTime();
+			maxJerk -= _cJerkReduction * theTimer.deltaTime();
 			
 			if(_cPrint)CCLog.info(maxVelocity);
 			
@@ -87,24 +87,24 @@ public class CCMotionSource extends CCModulationSource {
 	}
 	
 	@Override
-	public void update(CCAnimator theAnimator, CCEffectManager<?> theManager) {
+	public void update(CCTimer theTimer, CCEffectManager<?> theManager) {
 		for(CCEffectable myEffectable:theManager.effectables()){
 			if(!_myMap.containsKey(myEffectable)){
-				_myMap.put(myEffectable, new CCMotionSourceHistoryPoint(myEffectable.position(), 0, 0, 0, 0, theAnimator.deltaTime()));
+				_myMap.put(myEffectable, new CCMotionSourceHistoryPoint(myEffectable.position(), 0, 0, 0, 0, theTimer.deltaTime()));
 				continue;
 			}
 			CCMotionSourceHistoryPoint myLastData = _myMap.get(myEffectable);
 			
-			double myVelocity = myLastData.position.distance(myEffectable.position()) / theAnimator.deltaTime();
-			double myAcceleration = (myVelocity - myLastData.velocity) / theAnimator.deltaTime();
-			double myJerk = (myAcceleration - myLastData.acceleration) / theAnimator.deltaTime();
+			double myVelocity = myLastData.position.distance(myEffectable.position()) / theTimer.deltaTime();
+			double myAcceleration = (myVelocity - myLastData.velocity) / theTimer.deltaTime();
+			double myJerk = (myAcceleration - myLastData.acceleration) / theTimer.deltaTime();
 
 			myLastData.position.set(myEffectable.position());
 			myLastData.velocity = myVelocity;
 			myLastData.acceleration = myAcceleration;
 			myLastData.jerk = myJerk;
 			
-			myLastData.update(theAnimator);
+			myLastData.update(theTimer);
 		}
 	}
 	
