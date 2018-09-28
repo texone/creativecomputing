@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><templates><template autoinsert="true" context="java" deleted="false" description="" enabled="true" name="cc">package ${enclosing_package};
+
+import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.app.CCGL2Adapter;
+import cc.creativecomputing.graphics.app.CCGL2Application;
+
+public class ${primary_type_name} extends CCGL2Adapter{
+	
+	@Override
+	public void init(CCGraphics g, CCAnimator theAnimator) {
+	}
+	
+	@Override
+	public void update(CCAnimator theAnimator) {
+	}
+	
+	@Override
+	public void display(CCGraphics g) {
+	}
+
+	public static void main(String[] args) {
+		
+		${primary_type_name} demo = new ${primary_type_name}();
+		
+		CCGL2Application myAppManager = new CCGL2Application(demo);
+		myAppManager.glcontext().size(1200, 600);
+		myAppManager.animator().framerate = 30;
+		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
+		myAppManager.start();
+	}
+}
+</template><template autoinsert="true" context="java" deleted="false" description="create camera controller" enabled="true" name="cc_camera_create">${camera:field(CCCameraController)} = new CCCameraController(this, g, 100);</template><template autoinsert="true" context="java" deleted="false" description="insert camera field declaration" enabled="true" name="cc_camera_declare">${:import(cc.creativecomputing.core.CCProperty,cc.creativecomputing.graphics.camera.CCCameraController)}
+@CCProperty(name = "camera")
+private CCCameraController _cCameraController;</template><template autoinsert="true" context="java" deleted="false" description="draw camera controller" enabled="true" name="cc_camera_draw">${camera:field(CCCameraController)}.camera().draw(g);</template><template autoinsert="true" context="java" deleted="false" description="" enabled="true" name="cc_drawattributes">${:import(cc.creativecomputing.core.CCProperty,cc.creativecomputing.graphics.CCDrawAttributes)}&#13;
+@CCProperty(name = "${name}")&#13;
+private CCDrawAttributes _c${name} = new CCDrawAttributes();</template><template autoinsert="true" context="java" deleted="false" description="create shader based on class path" enabled="true" name="cc_shader_class_create">${:import(cc.creativecomputing.io.CCNIOUtil)}
+${shader:field(CCGLProgram)} = new CCGLProgram(
+	CCNIOUtil.classPath(this, "${shader_file}_vertex.glsl"),
+	CCNIOUtil.classPath(this, "${shader_file}_fragment.glsl")
+);</template><template autoinsert="true" context="java" deleted="false" description="declares a shader property" enabled="true" name="cc_shader_declare">${:import(cc.creativecomputing.core.CCProperty,cc.creativecomputing.graphics.shader.CCGLProgram)}
+@CCProperty(name = "${name}")
+private CCGLProgram _c${name};</template><template autoinsert="true" context="java" deleted="false" description="create texture 2d based on data path" enabled="true" name="cc_texture_create">${:import(cc.creativecomputing.io.CCNIOUtil,cc.creativecomputing.image.CCImageIO)}&#13;
+${texture:field(CCTexture2D)} = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("${image_file}")));&#13;
+</template><template autoinsert="true" context="java" deleted="false" description="" enabled="true" name="ccm_draw">${:import(cc.creativecomputing.graphics.CCGraphics)}
+public void draw(CCGraphics g){
+}</template><template autoinsert="true" context="java" deleted="false" description="" enabled="true" name="ccm_update">${:import(cc.creativecomputing.app.modules.CCAnimator)}
+public void update(CCAnimator theAnimator){
+
+}</template><template autoinsert="true" context="java" deleted="false" description="boolean property template" enabled="true" name="ccp_boolean">${:import(cc.creativecomputing.core.CCProperty)}&#13;
+@CCProperty(name = "${name}")&#13;
+private boolean _c${name} = ${defaultv};</template><template autoinsert="true" context="java" deleted="false" description="color property template" enabled="true" name="ccp_color">${:import(cc.creativecomputing.core.CCProperty,cc.creativecomputing.math.CCColor)}
+@CCProperty(name = "${name}")
+private CCColor _c${name} = new CCColor();</template><template autoinsert="true" context="java" deleted="false" description="create envelope " enabled="true" name="ccp_envelope">${:import(cc.creativecomputing.core.CCProperty,cc.creativecomputing.control.CCEnvelope)}
+@CCProperty(name = "${name}")
+private CCEnvelope _c${name} = new CCEnvelope();</template><template autoinsert="true" context="java" deleted="false" description="create a cc number property" enabled="true" name="ccp_number">${:import(cc.creativecomputing.core.CCProperty)}
+@CCProperty(name = "${name}", min = ${min}, max = ${max})
+private double _c${name} = ${defaultv};</template><template autoinsert="true" context="java" deleted="false" description="" enabled="true" name="ccp_vec2">${:import(cc.creativecomputing.core.CCProperty,cc.creativecomputing.math.CCVector2)}
+@CCProperty(name = "${name}", min = ${min}, max = ${max})
+private CCVector2 _c${name} = new CCVector2();</template><template autoinsert="true" context="java" deleted="false" description="" enabled="true" name="ccp_vec3">${:import(cc.creativecomputing.core.CCProperty,cc.creativecomputing.math.CCVector3)}
+@CCProperty(name = "${name}", min = ${min}, max = ${max})
+private CCVector3 _c${name} = new CCVector3();</template></templates>
