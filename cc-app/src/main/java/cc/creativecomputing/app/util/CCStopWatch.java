@@ -10,13 +10,18 @@
  */
 package cc.creativecomputing.app.util;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCFormatUtil;
+import cc.creativecomputing.core.util.CCStringUtil;
 
 /**
  * Use the stop watch class to measure the time of certain part of your application. The Stop watch watch makes it easy
@@ -25,21 +30,17 @@ import cc.creativecomputing.core.util.CCFormatUtil;
  * @author artcom
  * 
  */
-public class CCStopWatch implements CCAnimatorListener {
-
-	@CCProperty(name = "active")
-	protected boolean _cActive = false;
+public class CCStopWatch{
 
 	@CCProperty(name = "samples", min = 50, max = 2000)
 	protected int _cSamples = 200;
-
-	@CCProperty(name = "pause")
-	private boolean _cPause = false;
 	
 	@CCProperty(name = "print")
 	private boolean _cPrint = false;
 
 	public class CCStopWatchItem {
+		@CCProperty(name = "active")
+		protected boolean _cActive = true;
 
 		private long _myNanoTime = 0;
 		private double _myCurrentTime = 0;
@@ -54,6 +55,10 @@ public class CCStopWatch implements CCAnimatorListener {
 			_myHistory = new LinkedList<>();
 		}
 		
+		public boolean active() {
+			return _cActive;
+		}
+		
 		public String name(){
 			return _myName;
 		}
@@ -63,6 +68,7 @@ public class CCStopWatch implements CCAnimatorListener {
 		}
 
 		public double record() {
+			if(!_cActive)return 0;
 			while (_myHistory.size() >= _cSamples) {
 				_myHistory.pollLast();
 			}
@@ -74,10 +80,12 @@ public class CCStopWatch implements CCAnimatorListener {
 		}
 
 		public void start() {
+			if(!_cActive)return;
 			_myNanoTime = System.nanoTime();
 		}
 
 		public double end() {
+			if(!_cActive)return 0;
 			long myDeltaTime = System.nanoTime() - _myNanoTime;
 			double myLastDeltaTime = myDeltaTime * 1e-6;
 			if(_cPrint)System.out.println(_myName + " took " + CCFormatUtil.nd(myLastDeltaTime, 4)+" sec");
@@ -85,18 +93,94 @@ public class CCStopWatch implements CCAnimatorListener {
 			return myLastDeltaTime;
 		}
 	}
+	
+	public class CCStopWatchBlock{
+		@CCProperty(name = "active")
+		protected boolean _cActive = true;
+		
+		@CCProperty(name = "blocks")
+		public Map<String, CCStopWatchBlock> blocks = new LinkedHashMap<>();
 
-	protected HashMap<String, HashMap<String, CCStopWatchItem>> _myBlocks;
+		@CCProperty(name = "items")
+		public Map<String, CCStopWatchItem> items = new LinkedHashMap<>();
+		
+		private Optional<CCStopWatchItem> item(String theWatchName, boolean theCreate) {
+			if (theWatchName.indexOf('/') != -1) {
+				return itemRecursive(CCStringUtil.split(theWatchName, '/'), 0, theCreate);
+			}
+			
+			CCStopWatchItem myResult = items.get(theWatchName);
+			if(theCreate && myResult == null) {
+				items.put(theWatchName, myResult = new CCStopWatchItem(theWatchName));
+			}
+			return Optional.ofNullable(myResult);
+		}
+		
+		protected Optional<CCStopWatchItem> itemRecursive(String[] theItems, int theOffset, boolean theCreate) {
+			if (theOffset == theItems.length - 1) {
+				CCStopWatchItem myResult = items.get(theItems[theOffset]);
+				if(theCreate && myResult == null) {
+					items.put(theItems[theOffset], myResult = new CCStopWatchItem(theItems[theOffset]));
+				}
+				return Optional.ofNullable(items.get(theItems[theOffset]));
+			} else {
+				CCStopWatchBlock myResult = blocks.get(theItems[theOffset]);
+				if(theCreate && myResult == null) {
+					blocks.put(theItems[theOffset], myResult = new CCStopWatchBlock());
+				}
+				return myResult.itemRecursive(theItems, theOffset + 1, theCreate);
+			}
+		}
+		
+		public void start(String theWatchName) {
+			if(!_cActive)return;
+			item(theWatchName, true).ifPresent(i -> i.start());
+		}
+		
+		public double end(String theWatchName) {
+			if(!_cActive)return 0;
+			double myResult = 0;
+			Optional<CCStopWatchItem> myItem = item(theWatchName, false);
+			if(myItem.isPresent()) {
+				myResult = myItem.get().end();
+			}
+			return myResult;
+		}
+		
+		public double record() {
+			if(!_cActive)return 0;
+			double mySum = 0;
+			for (CCStopWatchBlock myBlock : blocks.values()) {
+				mySum += myBlock.record();
+			}
+			for (CCStopWatchItem myItem : items.values()) {
+				mySum += myItem.record();
+			}
+			return mySum;
+		}
+		
+		public List<CCStopWatchItem> items(){
+			if(!_cActive)return new ArrayList<>();
+			List<CCStopWatchItem> myResult = new ArrayList<>(items.values());
+			for (CCStopWatchBlock myBlock : blocks.values()) {
+				myResult.addAll(myBlock.items());
+			}
+			return myResult;
+		}
+	}
+
+	@CCProperty(name = "main block", hide = true)
+	protected CCStopWatchBlock _myMainBlock = new CCStopWatchBlock();
+	
 	private LinkedList<Double> _myHistorySum = new LinkedList<>();
-	protected double _myMax = 0;
-	private String _myCurrentBlock = "default";
+	
+//	protected double _myMax = 0;
+//	private String _myCurrentBlock = "default";
 	private String _myCurrentItemName = null;
 
 	private static CCStopWatch _myInstance = null;
 
 	public CCStopWatch() {
-		_myBlocks = new HashMap<String, HashMap<String, CCStopWatchItem>>();
-		startBlock("default");
 	}
 
 	public static CCStopWatch instance() {
@@ -105,24 +189,9 @@ public class CCStopWatch implements CCAnimatorListener {
 		}
 		return _myInstance;
 	}
-
-	private boolean breakExecution() {
-		return _cPause || !_cActive;
-	}
 	
 	public void print(boolean theDoPrint){
 		_cPrint = theDoPrint;
-	}
-
-	public void startBlock(String theBlockName) {
-		if (breakExecution())
-			return;
-
-		_myCurrentBlock = theBlockName;
-
-		if (!_myBlocks.containsKey(_myCurrentBlock)) {
-			_myBlocks.put(_myCurrentBlock, new HashMap<String, CCStopWatchItem>());
-		}
 	}
 
 	public void endLastAndStartWatch(String theName) {
@@ -131,55 +200,32 @@ public class CCStopWatch implements CCAnimatorListener {
 	}
 
 	public void endLast() {
-		if (breakExecution())
-			return;
 		endWatch(_myCurrentItemName);
 	}
-
+	
 	public void startWatch(String theName) {
-		if (breakExecution())
-			return;
-
 		_myCurrentItemName = theName;
-
-		if (!_myBlocks.get(_myCurrentBlock).containsKey(theName)) {
-			_myBlocks.get(_myCurrentBlock).put(theName, new CCStopWatchItem(theName));
-		}
-		_myBlocks.get(_myCurrentBlock).get(theName).start();
+		
+		_myMainBlock.start(theName);
 	}
 
 	public double endWatch(String theName) {
-		if (breakExecution())
-			return 0;
-
-		CCStopWatchItem myCurrentItem = _myBlocks.get(_myCurrentBlock).get(theName);
-		if(myCurrentItem == null)throw new RuntimeException("You end a watch with the name: +\"" + theName +"\" that does not have been started.");
-		return myCurrentItem.end();
+		return _myMainBlock.end(theName);
 	}
 
-	@Override
 	public void update(CCAnimator theAnimator) {
-		if (breakExecution())
-			return;
-		
 		while (_myHistorySum.size() >= _cSamples) {
 			_myHistorySum.pollLast();
 		}
-		double mySum = 0;
-		
-		for (HashMap<String, CCStopWatchItem> myItems : _myBlocks.values()) {
-			for (CCStopWatchItem myItem : myItems.values()) {
-				mySum += myItem.record();
-			}
-		}
-		_myHistorySum.push(mySum);
-	}
-
-	@Override
-	public void start(CCAnimator theAnimator) {}
-
-	@Override
-	public void stop(CCAnimator theAnimator) {}
-
 	
+		_myHistorySum.push(_myMainBlock.record());
+	}
+	
+	public boolean active() {
+		return _myMainBlock._cActive;
+	}
+	
+	public List<CCStopWatchItem> items(){
+		return _myMainBlock.items();
+	}
 }
