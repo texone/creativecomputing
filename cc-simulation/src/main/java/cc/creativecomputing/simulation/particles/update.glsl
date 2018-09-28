@@ -81,6 +81,8 @@ vec3 bounceReflection(
 
 uniform float useAgeBlends;
 
+uniform vec3 moveAll;
+
 void main (){
 	vec2 texID = gl_FragCoord.xy;
 	vec3 position = texture2DRect (positionTexture, texID).xyz;
@@ -127,7 +129,8 @@ void main (){
 	if(myAge >= lastInfo.y && lastInfo.z < 0.0)position = vec3(1000000,0,0);
 	
 	vec3 staticPosition = texture2DRect (staticPositions, texID).xyz;
-	vec4 newPosition = vec4(mix(position + deltaTime * velocity, staticPosition, staticPositionBlend),1); 
+	vec4 newPosition = vec4(mix(position + deltaTime * velocity, staticPosition, staticPositionBlend),1);
+	newPosition.xyz += moveAll;
 	
 	gl_FragData[0] = newPosition;
 	gl_FragData[1] = info;

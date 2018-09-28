@@ -448,6 +448,10 @@ public class CCParticles{
 		_myStaticPositionTexture = theStaticPositions;
 	}
 	
+	public void moveAll(CCVector3 theMoveAll) {
+		_myUpdateShader.moveAll(theMoveAll);
+	}
+	
 	public void update(final CCAnimator theAnimator){
 		if(theAnimator.deltaTime() <= 0)return;
 		

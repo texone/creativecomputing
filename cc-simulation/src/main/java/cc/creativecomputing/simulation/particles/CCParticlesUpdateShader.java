@@ -33,6 +33,7 @@ import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.impulses.CCImpulse;
@@ -47,8 +48,6 @@ import cc.creativecomputing.simulation.particles.impulses.CCImpulse;
 @SuppressWarnings("unused")
 public class CCParticlesUpdateShader extends CCGLProgram{
 
-	protected String _myStaticPositionBlendParameter;
-	protected String _myDeltaTimeParameter;
 	
 	protected String _myForcesParameter;
 	protected String _myConstraintsParameter;
@@ -123,9 +122,6 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 //			myImpulse.setShader(this, myImpulseIndex++, theWidth, theHeight);
 		}
 		
-		_myStaticPositionBlendParameter = "staticPositionBlend";
-		_myDeltaTimeParameter = "deltaTime";
-		
 		setTextureUniform(CCGLShaderUtil.textureUniform, _myRandomTexture);
 	}
 	
@@ -171,12 +167,20 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		return _myRandomTexture;
 	}
 	
+	private CCVector3 _myMoveAll = new CCVector3();
+	
+	public void moveAll(CCVector3 theMove) {
+		_myMoveAll.set(theMove);
+	}
+	
 	@Override
 	public void start() {
 		super.start();
 
-		uniform1f(_myDeltaTimeParameter, _myDeltaTime);
-		uniform1f(_myStaticPositionBlendParameter, _myStaticPositionBlend);
+		uniform1f("deltaTime", _myDeltaTime);
+		uniform1f("staticPositionBlend", _myStaticPositionBlend);
+		uniform3f("moveAll", _myMoveAll);
+		_myMoveAll.set(0,0,0);
 		
 		for(CCForce myForce:_myForces){
 			myForce.setUniforms();
