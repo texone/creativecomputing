@@ -11,10 +11,10 @@
 package cc.creativecomputing.graphics.util;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import cc.creativecomputing.app.util.CCStopWatch;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
@@ -119,7 +119,8 @@ public class CCStopWatchGraph extends CCStopWatch{
 	}
 
 	public void draw(CCGraphics g) {
-		if (!_cActive) {
+	//	CCLog.info(_cActive, _cSamples);
+		if (!active()) {
 			return;
 		}
 
@@ -133,11 +134,9 @@ public class CCStopWatchGraph extends CCStopWatch{
 
 		g.beginOrtho2D();
 
-		for (HashMap<String, CCStopWatchItem> myItems : _myBlocks.values()) {
-			for (CCStopWatchItem myItem : myItems.values()) {
+			for (CCStopWatchItem myItem : items()) {
 				drawItem(g, myItem);
 			}
-		}
 
 		// draw frame and grid
 		g.color(1.0f);
