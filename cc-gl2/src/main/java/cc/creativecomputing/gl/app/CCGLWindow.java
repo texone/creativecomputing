@@ -65,7 +65,6 @@ import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.system.MemoryStack;
 
 import cc.creativecomputing.core.CCEventManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector2i;

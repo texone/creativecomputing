@@ -21,6 +21,8 @@ public class CCTextFieldController {
 	
 	public CCEventManager<String> changeEvents = new CCEventManager<>();
 	
+	public boolean _myIsTextArea = false;
+	
 	public CCTextFieldController(CCTextField theTextField){
 		_myTextField = theTextField;
 	}
@@ -41,6 +43,10 @@ public class CCTextFieldController {
 		_myWindow.drawEvents.add((gr)->{
 			if(g == null)g = gr;
 		});
+	}
+	
+	public void isTextArea(boolean theIsTextArea) {
+		_myIsTextArea = true;
 	}
 	
 	public void mouseClicked(CCGLMouseEvent theEvent) {
@@ -92,7 +98,7 @@ public class CCTextFieldController {
 			break;
 		case KEY_ENTER:
 			changeEvents.event(_myTextField.text());
-			append("\n");
+			if(_myIsTextArea)append("\n");
 			break;
 		default:
 			break;
