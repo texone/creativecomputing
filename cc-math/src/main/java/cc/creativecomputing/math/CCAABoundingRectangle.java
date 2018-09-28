@@ -29,7 +29,6 @@ public class CCAABoundingRectangle{
 	
 	/**
 	 * Creates a new rectangle using the given color and coordinates.
-	 * @param theColor
 	 * @param theX1
 	 * @param theY1
 	 * @param theX2
@@ -48,7 +47,6 @@ public class CCAABoundingRectangle{
 	
 	/**
 	 * Creates a new rectangle using the given coordinates.
-	 * @param theColor
 	 * @param theMinCorner
 	 * @param theMaxCorner
 	 */
@@ -141,8 +139,7 @@ public class CCAABoundingRectangle{
 	
 	/**
 	 * Moves the rectangle to the given position
-	 * @param theX 
-	 * @param theY
+	 * @param thePosition 
 	 */
 	public void position(final CCVector2 thePosition) {
 		position(thePosition.x, thePosition.y);

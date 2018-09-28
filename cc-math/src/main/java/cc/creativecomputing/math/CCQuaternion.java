@@ -648,9 +648,6 @@ public class CCQuaternion implements Cloneable, Externalizable {
 
     /**
      * Creates a new quaternion that is the conjugate <code>[-x, -y, -z, w]</code> of this quaternion.
-     * 
-     * @param store
-     *            the <code>Quaternion</code> to store the result in. If <code>null</code>, a new one is created.
      * @return the conjugate to this quaternion.
      */
     public CCQuaternion conjugate() {

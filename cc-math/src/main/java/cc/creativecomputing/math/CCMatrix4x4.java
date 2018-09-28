@@ -1919,8 +1919,7 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 	/**
 	 * @return this matrix, modified to represent its adjugate, or classical
 	 *         adjoint
-	 * @see <a
-	 *      href="http://en.wikipedia.org/wiki/Adjugate_matrix">wikipedia.org-Adjugate_matrix</a>
+	 * @see <a href="http://en.wikipedia.org/wiki/Adjugate_matrix">wikipedia.org-Adjugate_matrix</a>
 	 */
 	public CCMatrix4x4 adjugateLocal() {
 		return adjugate(this);

@@ -60,7 +60,6 @@ public class CCRandom extends Random{
 	}
 	
 	/**
-	 * @shortdesc Generates random numbers. 
 	 * Generates random numbers. Each time the random() function is called, it returns an 
 	 * unexpected value within the specified range. If one parameter is passed to the function 
 	 * it will return a float between zero and the value of the high parameter. The function 

@@ -3,3 +3,6 @@
 /*.classpath
 /*.project
 *.iml
+/doc/
+/docs/
+*.jar

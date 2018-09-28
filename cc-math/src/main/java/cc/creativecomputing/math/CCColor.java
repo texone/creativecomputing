@@ -444,7 +444,6 @@ public class CCColor implements Cloneable, CCBlendable<CCColor>{
 	
 	/**
 	 * @param theGrey int, grey value for the color
-	 * @param theAlpha int, alpha value for the color
 	 */
 	public CCColor(final int theGrey) {
 		this(theGrey, theGrey, theGrey, 255);

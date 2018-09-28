@@ -10,7 +10,6 @@
  */
 package cc.creativecomputing.math;
 
-import cc.creativecomputing.math.random.CCFastRandom;
 import cc.creativecomputing.math.random.CCRandom;
 
 /**
@@ -56,7 +55,6 @@ public class CCMath {
 	public static final double RAD_TO_DEG = 180.0f / PI;
 
 	public static final CCRandom RANDOM = new CCRandom();
-	public static final CCFastRandom FAST_RANDOM = new CCFastRandom();
 	
 	 /**
      * Returns true if the number is a power of 2 (2,4,8,16...)
@@ -82,11 +80,11 @@ public class CCMath {
     }
 	
 	public static double random(){
-		return FAST_RANDOM.random();
+		return RANDOM.random();
 	}
 
 	public static float random(final float theMax) {
-		return FAST_RANDOM.random(theMax);
+		return RANDOM.random(theMax);
 	}
 
 	public static double random(final double theMax) {
@@ -94,7 +92,7 @@ public class CCMath {
 	}
 
 	public static float random(final float theMin, final float theMax) {
-		return FAST_RANDOM.random(theMin, theMax);
+		return RANDOM.random(theMin, theMax);
 	}
 
 	public static double random(final double theMin, final double theMax) {
@@ -102,19 +100,18 @@ public class CCMath {
 	}
 
 	public static double gaussianRandom() {
-		return FAST_RANDOM.gaussianRandom();
+		return RANDOM.gaussianRandom();
 	}
 	
 	public static float gaussianRandom(final float theMax) {
-		return FAST_RANDOM.gaussianRandom(theMax);
+		return RANDOM.gaussianRandom(theMax);
 	}
 	
 	public static float gaussianRandom(final float theMin, final float theMax) {
-		return FAST_RANDOM.gaussianRandom(theMin, theMax);
+		return RANDOM.gaussianRandom(theMin, theMax);
 	}
 	
 	public static void randomSeed(final long theSeed) {
-		FAST_RANDOM.randomSeed((int)theSeed);
 		RANDOM.randomSeed(theSeed);
 	}
 
