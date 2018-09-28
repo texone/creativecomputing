@@ -5,8 +5,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
-import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
+import cc.creativecomputing.control.handles.CCNumberHandle;
+import cc.creativecomputing.control.handles.CCObjectHandle;
 import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.CCPropertyObject;
@@ -44,15 +44,15 @@ public class CCOSCSender {
 	}
 
 	@CCProperty(name = "osc handles", readBack = true)
-	private CCObjectPropertyHandle _myOSCHandles = new CCObjectPropertyHandle(new CCDirectMember( new CCPropertyObject("osc handles", 0, 0)));
+	private CCObjectHandle _myOSCHandles = new CCObjectHandle(new CCDirectMember( new CCPropertyObject("osc handles", 0, 0)));
 	
 	
 	
 	public class CCOSCProperty{
 		String _myAddress;
-		CCNumberPropertyHandle<Double> _myProperty;
+		CCNumberHandle<Double> _myProperty;
 		
-		private CCOSCProperty(String theAddress, CCNumberPropertyHandle<Double> theProperty){
+		private CCOSCProperty(String theAddress, CCNumberHandle<Double> theProperty){
 			_myAddress = theAddress;
 			_myProperty = theProperty;
 			_myProperty.changeEvents.add(theValue ->{
@@ -83,7 +83,7 @@ public class CCOSCSender {
 		}
 //		_myOSCHandles.property(myPath, 1);
 		
-		CCNumberPropertyHandle<Double> myProperty = (CCNumberPropertyHandle<Double>)_myOSCHandles.createProperty(myPath, Double.class, new CCPropertyObject(myPath.getFileName().toString(), _myMin, _myMax));
+		CCNumberHandle<Double> myProperty = (CCNumberHandle<Double>)_myOSCHandles.createProperty(myPath, Double.class, new CCPropertyObject(myPath.getFileName().toString(), _myMin, _myMax));
 		
 		_myHandles.put(_myAddressPattern, new CCOSCProperty(_myAddressPattern, myProperty));
 		_myOSCHandles.forceChange();
