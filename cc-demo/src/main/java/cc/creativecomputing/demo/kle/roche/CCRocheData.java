@@ -3,8 +3,6 @@ package cc.creativecomputing.demo.kle.roche;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.org.omg.SendingContext._CodeBaseImplBase;
-
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
