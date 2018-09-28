@@ -23,6 +23,9 @@ public class CCShaderDemo extends CCGLApp {
 	
 	@CCProperty(name = "shader")
 	private CCGLProgram _cProgram;
+	
+	@CCProperty(name = "lines")
+	private CCDrawMode _cDrawMode = CCDrawMode.LINES;
 
 	@Override
 	public void setup() {

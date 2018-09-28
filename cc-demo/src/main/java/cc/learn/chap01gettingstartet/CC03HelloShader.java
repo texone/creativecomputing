@@ -50,6 +50,7 @@ public class CC03HelloShader extends CCGLApp {
 
 	GLProgram shaderProgram;
 	CCGLMesh _myMesh;
+	
 	@Override
 	public void setup() {
 		
