@@ -1,0 +1,188 @@
+{"timelines": {"default": {
+  "lower_bound": 0,
+  "quantize": "OFF",
+  "timeline": [{
+    "path": "app",
+    "min": 0,
+    "max": 1,
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app\\app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [{
+        "path": "app\\app\\drops",
+        "min": 0,
+        "max": 1,
+        "accumulate": false,
+        "mute": false,
+        "Extras": {},
+        "eventTypes": "new",
+        "open": true,
+        "tracks": [{
+          "path": "app\\app\\drops\\font shader",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "Extras": {},
+          "eventTypes": "new",
+          "open": true,
+          "tracks": [{
+            "path": "app\\app\\drops\\font shader\\fragment",
+            "min": 0,
+            "max": 1,
+            "accumulate": false,
+            "mute": false,
+            "Extras": {},
+            "eventTypes": "new",
+            "open": true,
+            "tracks": [{
+              "path": "app\\app\\drops\\font shader\\fragment\\uniforms",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [
+                {
+                  "path": "app\\app\\drops\\font shader\\fragment\\uniforms\\noise",
+                  "min": 0,
+                  "max": 4,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 0.2982962516046339,
+                        "type": "HANDLE",
+                        "value": 1
+                      },
+                      "time": 0.2982962516046339,
+                      "type": "BEZIER",
+                      "value": 1,
+                      "out": {
+                        "time": 2.1517945513624657,
+                        "type": "HANDLE",
+                        "value": 1
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 4.108265222684422,
+                        "type": "HANDLE",
+                        "value": 0.13636363636363635
+                      },
+                      "time": 5.961763522442254,
+                      "type": "BEZIER",
+                      "value": 0.13636363636363635,
+                      "out": {
+                        "time": 7.628485492759187,
+                        "type": "HANDLE",
+                        "value": 0.13636363636363635
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 8.461846415827422,
+                        "type": "HANDLE",
+                        "value": 1
+                      },
+                      "time": 10.128568386144355,
+                      "type": "BEZIER",
+                      "value": 1,
+                      "out": {
+                        "time": 10.128568386144355,
+                        "type": "HANDLE",
+                        "value": 1
+                      }
+                    }
+                  ]}
+                },
+                {
+                  "path": "app\\app\\drops\\font shader\\fragment\\uniforms\\alpha amp",
+                  "min": 0,
+                  "max": 4,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 0.16741435348998934,
+                        "type": "HANDLE",
+                        "value": 0
+                      },
+                      "time": 0.16741435348998934,
+                      "type": "BEZIER",
+                      "value": 0,
+                      "out": {
+                        "time": 0.3810959397237187,
+                        "type": "HANDLE",
+                        "value": 0
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 5.813235139405887,
+                        "type": "HANDLE",
+                        "value": 0.2090909090909091
+                      },
+                      "time": 6.026916725639617,
+                      "type": "BEZIER",
+                      "value": 0.2090909090909091,
+                      "out": {
+                        "time": 6.494459357638269,
+                        "type": "HANDLE",
+                        "value": 0.2090909090909091
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 9.86192297833369,
+                        "type": "HANDLE",
+                        "value": 0
+                      },
+                      "time": 10.329465610332342,
+                      "type": "BEZIER",
+                      "value": 0,
+                      "out": {
+                        "time": 10.329465610332342,
+                        "type": "HANDLE",
+                        "value": 0
+                      }
+                    }
+                  ]}
+                }
+              ],
+              "TrackData": {"points": []}
+            }],
+            "TrackData": {"points": []}
+          }],
+          "TrackData": {"points": []}
+        }],
+        "TrackData": {"points": []}
+      }],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 16.607503866206944,
+  "Transport": {
+    "loop_end": 10.329465610332342,
+    "loop_active": true,
+    "marker": {"points": []},
+    "loop_start": 0.19886416773642263,
+    "speed": 1
+  }
+}}}

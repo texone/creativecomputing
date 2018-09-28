@@ -1,0 +1,128 @@
+{"timelines": {"default": {
+  "lower_bound": 0,
+  "quantize": "SUBSTEP_4",
+  "timeline": [{
+    "path": "app",
+    "min": 0,
+    "max": 1,
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app\\app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [{
+        "path": "app\\app\\drops",
+        "min": 0,
+        "max": 1,
+        "accumulate": false,
+        "mute": false,
+        "Extras": {},
+        "eventTypes": "new",
+        "open": true,
+        "tracks": [{
+          "path": "app\\app\\drops\\text",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "Extras": {},
+          "eventTypes": "new",
+          "open": true,
+          "tracks": [{
+            "path": "app\\app\\drops\\text\\effects",
+            "min": 0,
+            "max": 1,
+            "accumulate": false,
+            "mute": false,
+            "Extras": {},
+            "eventTypes": "new",
+            "open": true,
+            "tracks": [{
+              "path": "app\\app\\drops\\text\\effects\\animation blender",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [
+                {
+                  "path": "app\\app\\drops\\text\\effects\\animation blender\\blend",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 0,
+                      "type": "LINEAR",
+                      "value": 0
+                    },
+                    {
+                      "time": 5,
+                      "type": "LINEAR",
+                      "value": 1
+                    },
+                    {
+                      "time": 7.5,
+                      "type": "LINEAR",
+                      "value": 1
+                    },
+                    {
+                      "time": 12.5,
+                      "type": "LINEAR",
+                      "value": 0
+                    }
+                  ]}
+                },
+                {
+                  "path": "app\\app\\drops\\text\\effects\\animation blender\\reverse",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 2.5,
+                      "type": "LINEAR",
+                      "value": 1
+                    },
+                    {
+                      "time": 7.5,
+                      "type": "STEP",
+                      "value": 0
+                    }
+                  ]}
+                }
+              ],
+              "TrackData": {"points": []}
+            }],
+            "TrackData": {"points": []}
+          }],
+          "TrackData": {"points": []}
+        }],
+        "TrackData": {"points": []}
+      }],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 73.82118238600577,
+  "Transport": {
+    "loop_end": 12.5,
+    "loop_active": true,
+    "marker": {"points": []},
+    "loop_start": 0,
+    "speed": 1
+  }
+}}}
