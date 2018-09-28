@@ -49,7 +49,7 @@ public class CCSDFFontDemo extends CCGL2Adapter {
 		);
 		
 		
-		String myFont = "Times";
+		String myFont = "Tahoma Bold";
 		float mySize = 32;
 		
 		String myLorem = CCLoremIpsumGenerator.generate(40);

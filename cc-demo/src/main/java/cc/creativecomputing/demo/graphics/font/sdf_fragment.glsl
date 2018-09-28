@@ -1,8 +1,6 @@
 uniform sampler2D fontTexture;
 
-const float smoothing = 0.1;
-const float shadowSmoothing = 0.1; // Between 0 and 0.5
-const vec4 shadowColor = vec4(0,0,0,1);
+
 
 // The MIT License
 // Copyright © 2013 Inigo Quilez
@@ -84,19 +82,58 @@ float octavedNoise(in vec2 s){
 @CCProperty(name = "noise", min = 0, max = 4)
 uniform float noiseAmt;
 
+@CCProperty(name = "smoothing", min = 0, max = 0.1)
+uniform float smoothing = 0.1;
+
+
+@CCProperty(name = "shadow smoothing", min = 0, max = 0.5)
+uniform float shadowSmoothing = 0.1; // Between 0 and 0.5
+const vec4 shadowColor = vec4(0,0,0,1);
+
+@CCProperty(name = "depth scale", min = 0, max = 1)
+uniform float depthScale;
+
+const vec2 size = vec2(0.01,0.0); 
+const vec3 sign = vec3(1.0,0.0,-1.0);
+
+float depth(vec2 pos, vec2 fragOffset){
+	vec4 myColor = texture2D(fontTexture, pos);
+	float noise = octavedNoise((gl_FragCoord.xy + fragOffset * 10) * 0.04);
+
+	float distance = mod(myColor.a * 1.,1.) + noise * noiseAmt * myColor.a ;
+	return distance;
+
+}
+
+vec3 normal(vec2 pos, vec2 theOffset){
+	float s01 = depth(pos + theOffset * sign.xy, sign.xy).x;
+	float s21 = depth(pos + theOffset * sign.zy, sign.zy).x;
+	float s10 = depth(pos + theOffset * sign.yx, sign.yx).x;
+	float s12 = depth(pos + theOffset * sign.yz, sign.yz).x;
+	
+	vec3 va = normalize(vec3(sign.xy * depthScale, s21-s01));
+	vec3 vb = normalize(vec3(sign.yx * depthScale, s12-s10));
+	return cross(va,vb); 
+}
+
+
 void main() {
 	vec4 myColor = texture2D(fontTexture, gl_TexCoord[0].xy);
-	float distance = mod(myColor.a * 1.,1.);
 	float noise = octavedNoise(gl_FragCoord.xy * 0.04);
-   float edge = 0.5 + noise * noiseAmt * myColor.a;
-    float alpha = smoothstep(edge - smoothing, edge + smoothing, distance);
-    vec4 text = vec4(1.0,1.0,1.0,alpha);
 
-    
+	float distance = mod(myColor.a * 1.,1.)+ noise * noiseAmt * myColor.a;
+	float edge = 0.5;
+	float alpha = smoothstep(edge - smoothing, edge + smoothing, distance);
+	vec4 text = vec4(1.0,1.0,1.0,alpha);
+
+    distance -= edge;
+    distance *= 1;
+
+    vec3 myNormal = normal(gl_TexCoord[0].xy, vec2(0.0001,0.0001)) * 0.5 + 0.5;
 
     float shadowDistance = texture2D(fontTexture, gl_TexCoord[0].xy - vec2(-0.00)).a;
     float shadowAlpha = smoothstep(0.5 - shadowSmoothing, 0.5 + shadowSmoothing, shadowDistance);
     vec4 shadow = vec4(shadowColor.rgb, shadowColor.a * shadowAlpha * 0.5);
 
-    gl_FragColor = mix(shadow, text, text.a);
+    gl_FragColor = vec4(distance,distance,distance,alpha);//mix(shadow, text, text.a);
 }

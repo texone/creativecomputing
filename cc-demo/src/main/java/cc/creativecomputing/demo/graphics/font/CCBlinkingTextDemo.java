@@ -70,17 +70,17 @@ public class CCBlinkingTextDemo extends CCGL2Adapter {
 		
 		@Override
 		public void draw(CCGraphics g) {
-			_myFont.beginText(g);
 			int myLine = 0;
 			for(CCTextGridLinePart myGridLines:_myTextGrid.gridLines()) {
 				for(int i = 0; i < myGridLines.myNumberOfChars();i++) {
 					double myAlpha = CCMath.sin(_myAngles[myLine][i]) / 2f + 0.5f;
 					g.color(1f,CCMath.blend(0.3f, 1f, myAlpha));
+					_myFont.beginText(g);
 					myGridLines.drawChar(g, i);	
+					_myFont.endText(g);
 				}
 				myLine++;
 			}
-			_myFont.endText(g);
 		}
 	}
 	
