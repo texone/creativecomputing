@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 
 import cc.creativecomputing.control.CCAsset;
 import cc.creativecomputing.control.handles.CCTriggerProgress;
-import cc.creativecomputing.control.timeline.point.CCTimedEventPoint;
+import cc.creativecomputing.control.timeline.point.CCEventPoint;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix2;
@@ -108,7 +108,7 @@ public class CCAudioAsset extends CCAsset<CCAudioAssetData>{
 			return CCMath.pow(_myAsset.spectrum(CCMath.blend(_cSpecMin, _cSpecMax, theOffset), _myPlayTimeMillis), _cPow) * _cAmp;
 		}
 
-		public CCAudioAssetData checkSpectrumData(CCTimedEventPoint theEvent) {
+		public CCAudioAssetData checkSpectrumData(CCEventPoint theEvent) {
 			CCAudioAssetData myAudioData = null;
 			Path myFilePath = Paths.get(theEvent.content().value().toString());
 			
