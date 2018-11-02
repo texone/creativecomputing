@@ -25,6 +25,7 @@ import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.container.GLContainer;
 import cc.creativecomputing.gl.app.container.GLContainerType;
 import cc.creativecomputing.gl.app.container.GLJavaComponentContainer;
@@ -346,7 +347,6 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 			createListener();
 			
 			GLProfile myProfile = createProfile();
-			
 			_myCapabilities = new GLCapabilities(myProfile);
 			_myCapabilities.setSampleBuffers(antialiasing > 0);
 			_myCapabilities.setNumSamples(antialiasing);

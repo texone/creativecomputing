@@ -52,8 +52,8 @@ public abstract class CCGLGraphics <GLType extends GL>{
 	 * Returns the aspect ratio of the gl context
 	 * @return aspect ratio of the gl context
 	 */
-	public float aspectRatio(){
-		return (float)_myWidth / (float)_myHeight;
+	public double aspectRatio(){
+		return (double)_myWidth / (double)_myHeight;
 	}
 	
 	public void viewport(final int theX, final int theY, final int theWidth, final int theHeight) {
