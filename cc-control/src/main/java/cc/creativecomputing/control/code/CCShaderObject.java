@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import cc.creativecomputing.control.CCPropertyMap;
+import cc.creativecomputing.control.code.CCShaderObject.CCShaderObjectType;
 import cc.creativecomputing.control.handles.CCNumberPropertyHandle;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
 import cc.creativecomputing.core.CCProperty;
@@ -38,6 +39,8 @@ public abstract class CCShaderObject {
 		
 	}
 	
+	public abstract String createDefault();
+	
 	/**
 	 * Takes the given files and merges them to one String. 
 	 * This method is used to combine the different shader sources and get rid of the includes
@@ -45,12 +48,12 @@ public abstract class CCShaderObject {
 	 * @param thePaths
 	 * @return
 	 */
-	public static String[] buildSource(final Path...thePaths) {
+	public String[] buildSource(final Path...thePaths) {
 		String[] myBuffer = new String[thePaths.length];
 		int i = 0;
 		for(Path myPath:thePaths) {
 			if(!CCNIOUtil.exists(myPath)) {
-				myBuffer[i] =  "void main(){}";
+				myBuffer[i] = createDefault();
 			}else {
 				myBuffer[i] = CCNIOUtil.loadString(myPath);
 			}
@@ -84,7 +87,24 @@ public abstract class CCShaderObject {
 
 	private Map<String,CCShaderUniform> _myUniforms = new HashMap<>();
 	
-	public CCShaderObject(Path[] theFiles){
+	public static enum CCShaderObjectType{
+		
+		VERTEX("vertex"),
+		FRAGMENT("fragment"),
+		GEOMETRY("geometry"),
+		COMPUTE("compute");
+		
+		public String typeString;
+		
+		CCShaderObjectType(String theTypeString) {
+			typeString = theTypeString;
+		}
+	}
+	
+	protected final CCShaderObjectType _myType;
+	
+	public CCShaderObject(CCShaderObjectType theType, Path[] theFiles){
+		_myType = theType;
 		_myPaths = theFiles;
 		String[] mySources = buildSource(theFiles);
 		for(int i = 0; i < _myPaths.length;i++){
@@ -92,7 +112,8 @@ public abstract class CCShaderObject {
 		}
 	}
 	
-	public CCShaderObject(String[] theSources){
+	public CCShaderObject(CCShaderObjectType theType, String[] theSources){
+		_myType = theType;
 		_myPaths = null;
 		for(int i = 0; i < theSources.length;i++){
 			_myFiles.put("source " + i, new CCShaderSource(this, theSources[i]));
