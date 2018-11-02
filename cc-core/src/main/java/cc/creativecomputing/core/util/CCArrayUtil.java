@@ -13,6 +13,7 @@ package cc.creativecomputing.core.util;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import cc.creativecomputing.core.logging.CCLog;
 
@@ -29,6 +30,10 @@ public class CCArrayUtil{
 	// ////////////////////////////////////////////////////////////
 
 	// ARRAY UTILITIES
+	
+	static public<Type> Type[] create(Type...theArguments) {
+		return theArguments;
+	}
 
 	/**
 	 * Calls System.arraycopy(), included here so that we can avoid people
