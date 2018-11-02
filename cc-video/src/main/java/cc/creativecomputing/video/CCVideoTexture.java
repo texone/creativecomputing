@@ -16,20 +16,26 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.graphics.texture.CCTextureAttributes;
 import cc.creativecomputing.image.CCImage;
+import cc.creativecomputing.image.CCImageEvent;
 import cc.creativecomputing.video.CCVideo;
-import cc.creativecomputing.video.CCVideoTextureDataListener;
 
 /**
  * @author christianriekoff
  *
  */
-public class CCVideoTexture extends CCTexture2D implements CCVideoTextureDataListener, CCGLListener<CCGraphics>{
+public class CCVideoTexture extends CCTexture2D implements CCGLListener<CCGraphics>{
 	
-	private CCVideo _myMovie;
+	private CCVideo _myVideoData;
+
+	private CCImage _myInitVideo = null;
+	private CCImageEvent _myInitEvent = i -> _myInitVideo = i;
 	
-	public CCVideoTexture(CCGL2Adapter theAdapter, CCVideo theData, CCTextureTarget theTarget, final CCTextureAttributes theAttributes) {
+	private CCImage _myUpdateVideo = null;
+	private CCImageEvent _myUpdateEvent = i -> _myUpdateVideo = i;
+	
+	public CCVideoTexture(CCGL2Adapter theAdapter, CCVideo theVideoData, CCTextureTarget theTarget, final CCTextureAttributes theAttributes) {
 		super(theTarget, theAttributes, 1,800,200);
-		video(theData);
+		video(theVideoData);
 		theAdapter.glListener().add(this);
 	}
 	
@@ -38,43 +44,31 @@ public class CCVideoTexture extends CCTexture2D implements CCVideoTextureDataLis
 		theAdapter.glListener().add(this);
 	}
 	
-	public CCVideoTexture(CCGL2Adapter theAdapter,CCVideo theData){
-		this(theData);
+	public CCVideoTexture(CCGL2Adapter theAdapter,CCVideo theVideoData){
+		this(theVideoData);
 		theAdapter.glListener().add(this);
 	}
 	
-	public CCVideoTexture(CCVideo theData){
-		super(theData);
-		video(theData);
+	public CCVideoTexture(CCVideo theVideoData){
+		super(theVideoData);
+		video(theVideoData);
 	}
 	
-	public void video(CCVideo theData){
-		if(_myMovie != null)_myMovie.removeListener(this);
-		_myMovie = theData;
-		_myMovie.addListener(this);
+	public void video(CCVideo theVideoData){
+		if(_myVideoData != null) {
+			_myVideoData.initEvents.remove(_myInitEvent);
+			_myVideoData.updateEvents.remove(_myUpdateEvent);
+		}
+		_myVideoData = theVideoData;
+		_myVideoData.initEvents.add(_myInitEvent);
+		_myVideoData.updateEvents.add(_myUpdateEvent);
 	}
 	
 	public CCVideo video(){
-		return _myMovie;
+		return _myVideoData;
 	}
-	
-	private CCImage _myInitVideo = null;
 
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.texture_new.video.CCVideoTextureData.CCVideoTextureDataListener#onInit(cc.creativecomputing.texture_new.video.CCVideoTextureData)
-	 */
-	public void onInit(CCImage theData) {
-		_myInitVideo = theData;
-	}
 	
-	private CCImage _myUpdateVideo = null;
-
-	/* (non-Javadoc)
-	 * @see cc.creativecomputing.texture_new.video.CCVideoTextureData.CCVideoTextureDataListener#onUpdate(cc.creativecomputing.texture_new.video.CCVideoTextureData)
-	 */
-	public void onUpdate(CCImage theData) {
-		_myUpdateVideo = theData;
-	}
 
 	@Override
 	public void reshape(CCGraphics theContext) {}

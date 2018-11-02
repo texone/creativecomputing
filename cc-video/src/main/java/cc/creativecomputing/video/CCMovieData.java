@@ -22,6 +22,10 @@ import cc.creativecomputing.core.events.CCListenerManager;
  */
 public abstract class CCMovieData extends CCVideo implements CCMovie{
 	
+	public static interface CCMovieEvent{
+		public void event();
+	}
+	
 	/**
 	 * set this true for looping
 	 */
@@ -34,7 +38,10 @@ public abstract class CCMovieData extends CCVideo implements CCMovie{
 	
 	protected boolean _myIsPaused = false;
 	
-	protected CCListenerManager<CCMovieListener> _myMovieEvents = CCListenerManager.create(CCMovieListener.class);
+	public CCListenerManager<CCMovieEvent> playEvents = CCListenerManager.create(CCMovieEvent.class);
+	public CCListenerManager<CCMovieEvent> stopEvents = CCListenerManager.create(CCMovieEvent.class);
+	public CCListenerManager<CCMovieEvent> pauseEvents = CCListenerManager.create(CCMovieEvent.class);
+	public CCListenerManager<CCMovieEvent> endEvents = CCListenerManager.create(CCMovieEvent.class);
 
 	/**
 	 * Creates a new instance, without setting any parameters.
@@ -42,10 +49,6 @@ public abstract class CCMovieData extends CCVideo implements CCMovie{
 	 */
 	public CCMovieData(final CCAnimator theAnimator) {
 		super(theAnimator);
-	}
-	
-	public CCListenerManager<CCMovieListener> events(){
-		return _myMovieEvents;
 	}
 
 	/* (non-Javadoc)
@@ -93,7 +96,7 @@ public abstract class CCMovieData extends CCVideo implements CCMovie{
 
 		if (theDoRestart)
 			goToBeginning();
-		_myMovieEvents.proxy().onPlay();
+		playEvents.proxy().event();
 	}
 
 	public void stop() {
@@ -102,13 +105,13 @@ public abstract class CCMovieData extends CCVideo implements CCMovie{
 			_myIsRunning = false;
 		}
 		_myIsPaused = false;
-		_myMovieEvents.proxy().onStop();
+		stopEvents.proxy().event();
 	}
 	
 	public void pause() {
 		_myIsRunning = false;
 		_myIsPaused = true;
-		_myMovieEvents.proxy().onPause();
+		pauseEvents.proxy().event();
 	}
 
 	/* (non-Javadoc)

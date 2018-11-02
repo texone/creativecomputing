@@ -43,7 +43,7 @@ public interface CCMovie{
 
 	/**
 	 * Returns the current time of the movie in seconds
-	 * @return the time in milliseconds
+	 * @return the time in seconds
 	 */
     double time();
 

@@ -497,9 +497,9 @@ public class CCScreenCaptureData extends CCVideo {
 
 		if (_myIsFirstFrame) {
 			_myIsFirstFrame = false;
-			_myListener.proxy().onInit(this);
+			initEvents.proxy().event(this);
 		} else {
-			_myListener.proxy().onUpdate(this);
+			updateEvents.proxy().event(this);
 		}
 	}
 	

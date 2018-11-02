@@ -11,9 +11,9 @@
 package cc.creativecomputing.video;
 
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.image.CCImage;
+import cc.creativecomputing.image.CCImageEvent;
 
 /**
  * This class is representing dynamic texture data the content of this object
@@ -22,7 +22,7 @@ import cc.creativecomputing.image.CCImage;
  * @author christian riekoff
  *
  */
-public abstract class CCVideo extends CCImage implements CCAnimatorListener{
+public abstract class CCVideo extends CCImage {
 	
 	/**
 	 * indicates a needed update of the data although the movie is not running
@@ -31,14 +31,18 @@ public abstract class CCVideo extends CCImage implements CCAnimatorListener{
 	protected boolean _myForceUpdate = false;
 	
 	/**
-	 * indicates the initialization of the first frame on data update
+	 * Indicates the initialization of the first frame on data update
 	 */
 	protected boolean _myIsFirstFrame;
 	
 	/**
+	 * Keep the listeners for init events
+	 */
+	public CCListenerManager<CCImageEvent> initEvents = new CCListenerManager<>(CCImageEvent.class);
+	/**
 	 * Keep the listeners for update events
 	 */
-	protected CCListenerManager<CCVideoTextureDataListener> _myListener = new CCListenerManager<CCVideoTextureDataListener>(CCVideoTextureDataListener.class);
+	public CCListenerManager<CCImageEvent> updateEvents = new CCListenerManager<>(CCImageEvent.class);
 
 	/**
 	 * Creates a new instance, without setting any parameters.
@@ -47,33 +51,10 @@ public abstract class CCVideo extends CCImage implements CCAnimatorListener{
 	public CCVideo(final CCAnimator theAnimator) {
 		super();
 		_myPixelStorageModes.alignment(1);
-		theAnimator.listener().add(this);
+		theAnimator.updateEvents().add(this::update);
 	}
 	
-	/**
-	 * Adds a listener to react on update events.
-	 * @param theListener the listener 
-	 */
-	public void addListener(final CCVideoTextureDataListener theListener) {
-		_myListener.add(theListener);
-	}
-	
-	/**
-	 * Removes a listener to react on update events.
-	 * @param theListener the listener 
-	 */
-	public void removeListener(final CCVideoTextureDataListener theListener) {
-		_myListener.remove(theListener);
-	}
-	
-
-	
-	@Override
-	public void start(CCAnimator theAnimator) {
-	}
-	
-	@Override
-	public void stop(CCAnimator theAnimator) {
+	public void update(CCAnimator theAnimator) {
 	}
 	
 }
