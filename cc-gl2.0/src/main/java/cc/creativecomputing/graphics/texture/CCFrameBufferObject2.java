@@ -19,7 +19,7 @@ import cc.creativecomputing.math.CCMath;
 import com.jogamp.opengl.GL2;
 
 
-public abstract class CCFrameBufferObject{
+public abstract class CCFrameBufferObject2{
 	
 	static int sMaxSamples = -1;
 
@@ -86,13 +86,12 @@ public abstract class CCFrameBufferObject{
 	protected int _myWidth;
 	protected int _myHeight;
 	
-	public CCFrameBufferObject(final CCTextureTarget theTarget, final CCFrameBufferObjectAttributes theAttributes, final int theWidth, final int theHeight){
+	public CCFrameBufferObject2(final CCTextureTarget theTarget, final CCFrameBufferObjectAttributes theAttributes, final int theWidth, final int theHeight){
 		_myTarget = theTarget;
 		_myWidth = theWidth;
 		_myHeight = theHeight;
 		_myAttributes = theAttributes;
 		_myNumberOfAttachments = theAttributes.numberOfColorBuffers();
-		
 		
 		_myAttachments = new CCTexture2D[_myNumberOfAttachments];
 			
@@ -125,7 +124,7 @@ public abstract class CCFrameBufferObject{
 			checkStatusException(gl);
 		}
 		
-		if( !(_myUseMultisampling) || !initMultisample()) { 
+		if( !(_myUseMultisampling) || !initMultisampling(gl)) { 
 			_myUseMultisampling = false;
 			init(gl);
 		}
@@ -143,15 +142,15 @@ public abstract class CCFrameBufferObject{
 		return _myAttachments[theID];
 	}
 	
-	public CCFrameBufferObject(final CCTextureTarget theTarget, final int theWidth, final int theHeight){
+	public CCFrameBufferObject2(final CCTextureTarget theTarget, final int theWidth, final int theHeight){
 		this(theTarget,new CCFrameBufferObjectAttributes(),theWidth, theHeight);
 	}
 	
-	public CCFrameBufferObject(final int theNumberOfAttachments, final int theWidth, final int theHeight){
+	public CCFrameBufferObject2(final int theNumberOfAttachments, final int theWidth, final int theHeight){
 		this(CCTextureTarget.TEXTURE_2D, new CCFrameBufferObjectAttributes(theNumberOfAttachments), theWidth, theHeight);
 	}
 	
-	public CCFrameBufferObject(final int theWidth, final int theHeight){
+	public CCFrameBufferObject2(final int theWidth, final int theHeight){
 		this(CCTextureTarget.TEXTURE_2D, theWidth, theHeight);
 	}
 
@@ -420,7 +419,7 @@ public abstract class CCFrameBufferObject{
 	
 	public void releaseFBO(){
 		final GL2 gl = CCGraphics.currentGL();
-		CCGraphics.debug();
+		
 		if(_myUseMultisampling) {
 			gl.glBindFramebuffer(GL2.GL_READ_FRAMEBUFFER, _myFrameBuffers[1]);
 			gl.glBindFramebuffer(GL2.GL_DRAW_FRAMEBUFFER, _myFrameBuffers[0]);

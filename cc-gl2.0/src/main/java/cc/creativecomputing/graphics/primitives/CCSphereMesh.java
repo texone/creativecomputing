@@ -15,12 +15,11 @@ import java.util.List;
 
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 
-public class CCSphereMesh extends CCMesh{
+public class CCSphereMesh extends CCVBOMesh{
 	
 	private CCVector3 _myCenter;
 	private double _myRadius;

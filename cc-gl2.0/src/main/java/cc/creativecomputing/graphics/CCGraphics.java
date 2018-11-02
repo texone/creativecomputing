@@ -1161,8 +1161,10 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	public int maxTextureUnits() {
 		return getInteger(GL2ES2.GL_MAX_TEXTURE_IMAGE_UNITS);
 	}
-
-	protected boolean _myDrawTexture = false;
+	
+	public int maxCombinedTextureUnits() {
+		return getInteger(GL2ES2.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS);
+	}
 
 	/**
 	 * Specifies which texture unit to make active. The number of texture units is implementation dependent, but must be
@@ -1173,39 +1175,38 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	public void activeTexture(int theTextureUnit) {
 		gl.glActiveTexture(GL.GL_TEXTURE0 + theTextureUnit);
 	}
-
-	public void texture(final CCTexture theTexture) {
-		_myTextures[0] = theTexture;
-		gl.glEnable(_myTextures[0].target().glID);
-		_myTextures[0].bind();
-		_myDrawTexture = true;
-
-		applyTextureTransformation(0, theTexture);
-	}
-
-	public void texture(final int theTextureUnit, final CCTexture theTexture) {
-		// GL_TEXTURE_RECTANGLE_ARB
+	
+	public void bindTexture(final int theTextureUnit, final CCTexture theTexture) {
 		_myTextures[theTextureUnit] = theTexture;
 		activeTexture(theTextureUnit);
 		gl.glEnable(_myTextures[theTextureUnit].target().glID);
-
 		_myTextures[theTextureUnit].bind();
-		applyTextureTransformation(theTextureUnit, theTexture);
 		activeTexture(0);
-
-		_myDrawTexture = true;
+	}
+	
+	public void unbindTextures() {
+		for (int i = 0; i < _myTextures.length; i++) {
+			if (_myTextures[i] != null) {
+				gl.glActiveTexture(GL.GL_TEXTURE0 + i);
+				gl.glDisable(_myTextures[i].target().glID);
+				_myTextures[i] = null;
+			}
+		}
+		gl.glActiveTexture(GL.GL_TEXTURE0);
+		gl.glDisable(GL.GL_TEXTURE_2D);
 	}
 
-	public void texture(final int theTextureUnit, final CCTexture theTexture, final int theID) {
+	public void texture(final int theTextureUnit, final CCTexture theTexture) {
 		_myTextures[theTextureUnit] = theTexture;
-		gl.glActiveTexture(GL.GL_TEXTURE0 + theTextureUnit);
+		activeTexture(theTextureUnit);
 		gl.glEnable(_myTextures[theTextureUnit].target().glID);
+		_myTextures[theTextureUnit].bind();
+		applyTextureTransformation(theTexture);
+		activeTexture(0);
+	}
 
-		theTexture.bind(theID);
-		applyTextureTransformation(theTextureUnit, theTexture);
-		gl.glActiveTexture(GL.GL_TEXTURE0);
-
-		_myDrawTexture = true;
+	public void texture(final CCTexture theTexture) {
+		texture(0,theTexture);
 	}
 
 	public void noTexture() {
@@ -1219,7 +1220,6 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		}
 		gl.glActiveTexture(GL.GL_TEXTURE0);
 		gl.glDisable(GL.GL_TEXTURE_2D);
-		_myDrawTexture = false;
 	}
 
 	/**
@@ -3365,7 +3365,6 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @param radius
 	 */
 	public void sphere(final double radius){
-		if(_myDrawTexture)glu.gluQuadricTexture(quadratic, _myDrawTexture);
 		glu.gluSphere(quadratic, radius, sphereDetail, sphereDetail);
 	}
 
@@ -3427,7 +3426,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, theMode.glID);
 	}
 	
-	public void applyTextureTransformation(final int theTextureUnit, final CCTexture theTexture) {
+	public void applyTextureTransformation(final CCTexture theTexture) {
 
 		matrixMode(CCMatrixMode.TEXTURE);
 		pushMatrix();

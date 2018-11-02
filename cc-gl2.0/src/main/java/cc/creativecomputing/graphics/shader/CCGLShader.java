@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.util.List;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.GL4;
 
 import cc.creativecomputing.control.code.CCShaderObject;
 import cc.creativecomputing.core.logging.CCLog;
@@ -218,19 +220,31 @@ public class CCGLShader extends CCShaderObject{
 		return mySource;
 	}
 	
-	protected CCShaderObjectType _myType;
 	protected Path[] _myFiles;
 	
 	private boolean _myReloadSource = false;
 	
+	public static int typeToGLID(CCShaderObjectType theType) {
+		switch(theType) {
+		case VERTEX:
+			return GL2.GL_VERTEX_SHADER;
+		case FRAGMENT:
+			return GL2.GL_FRAGMENT_SHADER;
+		case GEOMETRY:
+			return GL3.GL_GEOMETRY_SHADER;
+		case COMPUTE:
+			return GL4.GL_COMPUTE_SHADER;
+		default:
+			return GL2.GL_VERTEX_SHADER;
+		}
+	}
 	
 	CCGLShader(CCShaderObjectType theType, Path...theFiles){
-		super(theFiles);
-		_myType = theType;
+		super(theType, theFiles);
 		_myFiles = theFiles;
 		
 		GL2 gl = CCGraphics.currentGL();
-		_myShaderID = gl.glCreateShader(_myType.glID);
+		_myShaderID = gl.glCreateShader(typeToGLID(_myType));
 		
 		try{
 			loadShader();
@@ -240,12 +254,38 @@ public class CCGLShader extends CCShaderObject{
 	}
 	
 	CCGLShader(CCShaderObjectType theType, String...theSource){
-		super(theSource);
-		_myType = theType;
+		super(theType, theSource);
 		GL2 gl = CCGraphics.currentGL();
-		_myShaderID = gl.glCreateShader(_myType.glID);
+		_myShaderID = gl.glCreateShader(typeToGLID(_myType));
 
 		loadShader(true);
+	}
+	
+	@Override
+	public String createDefault() {
+		switch (_myType) {
+		case VERTEX:
+			return  
+				"void main(){\n" + 
+				"	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;\n"+
+				"}";
+		case GEOMETRY:
+			return
+				"#version 120 \n" + 
+				"#extension GL_EXT_geometry_shader4 : enable\n" +
+				"\n" +
+				"void main(){\n" + 
+				"	gl_Position = gl_PositionIn[0];\n" + 
+				"	EmitVertex();\n" + 
+				"	EndPrimitive();\n"+
+				"}";
+		case FRAGMENT:
+			return 
+				"void main(){\n" + 
+				"	gl_FragColor = vec4(1);\n"+
+				"}";
+		}
+		return  "void main(){}";
 	}
 	
 	@Override
@@ -262,6 +302,7 @@ public class CCGLShader extends CCShaderObject{
 	public Path[] templates() {
 		try {
 			Path myTemplatePath = CCNIOUtil.classPath(CCGLShader.class, "templates");
+			CCLog.info(myTemplatePath);
 			List<Path> myTemplates = CCNIOUtil.list(myTemplatePath, true, "glsl");
 			Path[] myResult = new Path[myTemplates.size()];
 			for(int i = 0; i < myTemplates.size();i++){

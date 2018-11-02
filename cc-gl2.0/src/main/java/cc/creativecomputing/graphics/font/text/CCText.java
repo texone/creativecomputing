@@ -15,6 +15,7 @@ public class CCText extends CCMultiFontText{
 		super();
 	}
 	
+	@CCProperty(name = "text")
 	public String text() {
 		return _myTextParts.get(0).text();
 	}
@@ -26,6 +27,7 @@ public class CCText extends CCMultiFontText{
 	 */
 	@CCProperty(name = "text")
 	public void text(final String theText) {
+		if(theText.equals(text()))return;
 		_myTextParts.get(0).text(theText);
 		breakText();
 	}
@@ -63,6 +65,7 @@ public class CCText extends CCMultiFontText{
 	
 	/**
 	 */
+	@CCProperty(name = "size")
 	public double size() {
 		return _myTextParts.get(0).size();
 	}
@@ -91,6 +94,11 @@ public class CCText extends CCMultiFontText{
 		_myTextParts.get(0).leading(theTextLeading);
 		breakText();
 	}
+	
+	@CCProperty(name = "leading")
+	public double leading() {
+		return _myTextParts.get(0).leading();
+	}
 
 	public double ascent() {
 		return _myTextParts.get(0).ascent();
@@ -104,6 +112,11 @@ public class CCText extends CCMultiFontText{
 	public void spacing(double theSpacing) {
 		_myTextParts.get(0).spacing(theSpacing);
 		breakText();
+	}
+	
+	@CCProperty(name = "spacing")
+	public double spacing() {
+		return _myTextParts.get(0).spacing();
 	}
 	
 }

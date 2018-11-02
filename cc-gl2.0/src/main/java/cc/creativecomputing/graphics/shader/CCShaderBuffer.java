@@ -234,6 +234,10 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 		this(32,3,theWidth,theHeight,theTarget);
 	}
 	
+	public CCShaderBuffer(final int theTextures, final int theWidth, final int theHeight, final CCTextureTarget theTarget){
+		this(32,3,theTextures,theWidth,theHeight,theTarget);
+	}
+	
 	public CCShaderBuffer(
 		final int theNumberOfBits, 
 		final int theNumberOfChannels, 

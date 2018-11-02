@@ -1,5 +1,7 @@
 package cc.creativecomputing.graphics.shader;
 
+import cc.creativecomputing.control.code.CCShaderObject.CCShaderObjectType;
+
 public class CCGLWriteDataShader extends CCGLProgram{
 
 	public CCGLWriteDataShader() {

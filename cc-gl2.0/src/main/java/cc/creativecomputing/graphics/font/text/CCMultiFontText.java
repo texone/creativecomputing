@@ -590,7 +590,7 @@ public class CCMultiFontText {
 	private CCLineBreakMode _myLineBreakMode = CCLineBreakMode.NONE;
 	private CCLineBreaking _myLineBreaking = new CCLineBreaking();
 	
-	private CCListenerManager<CCTextListener> _myTextListeners = CCListenerManager.create(CCTextListener.class);
+	public CCListenerManager<CCTextListener> textEvents = CCListenerManager.create(CCTextListener.class);
 	
 
 	/**
@@ -610,17 +610,9 @@ public class CCMultiFontText {
 	 * 
 	 * @param theListener
 	 */
-	public CCListenerManager<CCTextListener> events() {
-		return _myTextListeners;
-	}
-	
-	/**
-	 * 
-	 * @param theListener
-	 */
 	public void removeListener(CCTextListener theListener) {
-		if(_myTextListeners == null) return;
-		_myTextListeners.remove(theListener);
+		if(textEvents == null) return;
+		textEvents.remove(theListener);
 	}
 	
 	public void breakText() {
@@ -629,7 +621,7 @@ public class CCMultiFontText {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		_myTextListeners.proxy().onChangeText(this);
+		textEvents.proxy().onChangeText(this);
 	}
 	
 	public void addText(String theText, CCFont<?> theFont, int theSize){

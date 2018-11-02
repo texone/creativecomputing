@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cc.creativecomputing.control.code.CCShaderObject.CCShaderObjectType;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -269,6 +270,8 @@ public class CCGLProgram{
 		gl.glDetachShader(_myProgram, theShader._myShaderID);
 	}
 	
+	private String _myInfoLog;
+	
 	/**
 	 * Links the program object specified by program. A shader object of type {@link CCShaderObjectType#VERTEX} 
 	 * attached to program is used to create an executable that will run on the programmable vertex processor. 
@@ -317,11 +320,28 @@ public class CCGLProgram{
 	public void link(){
 		GL2 gl = CCGraphics.currentGL();
 		gl.glLinkProgram(_myProgram);
+		CCLog.info(linkStatus(),getInfoLog());
+		if(!linkStatus()){
+			StringBuffer myReplyBuffer = new StringBuffer();
+			myReplyBuffer.append(getInfoLog());
+			_myInfoLog = myReplyBuffer.toString();
+//			onError().proxy().onError(this);
+//			if(theThrowException)
+//				throw new CCShaderException(_myInfoLog);
+				CCLog.info(_myInfoLog);
+//			return false;
+		}else{
+			_myInfoLog = "";
+		}
 	}
 	
 	public void validate(){
 		GL2 gl = CCGraphics.currentGL();
 		gl.glValidateProgram(_myProgram);
+	}
+
+	public String errorLog() {
+		return _myInfoLog;
 	}
 	
 	/**
@@ -355,6 +375,43 @@ public class CCGLProgram{
 	 */
 	public boolean linkStatus(){
 		return get(GL2.GL_LINK_STATUS) == GL2.GL_TRUE;
+	}
+	
+	/**
+	 * Returns the information log for the specified shader object. The information log 
+	 * for a shader object is modified when the shader is compiled. The string that is 
+	 * returned will be null terminated.
+	 * @param gl
+	 * @param theObject
+	 * @param theFiles
+	 * @return
+	 */
+	public String getInfoLog() {
+
+		int length = infoLogLength();
+		if (infoLogLength() <= 0) {
+			return null;
+		}
+
+		IntBuffer iVal = CCBufferUtil.newIntBuffer(1);
+		iVal.put(length);
+		iVal.flip();
+		
+		ByteBuffer infoLog = CCBufferUtil.newByteBuffer(length);
+		
+		GL2 gl = CCGraphics.currentGL();
+		gl.glGetProgramInfoLog(_myProgram, length, iVal, infoLog);
+		byte[] infoBytes = new byte[length];
+		infoLog.get(infoBytes);
+		String myReply = new String(infoBytes);
+		//if(myReply.startsWith("WARNING:"))return null;
+		
+		StringBuffer myReplyBuffer = new StringBuffer();
+		myReplyBuffer.append("\n");
+		myReplyBuffer.append("The following Problem occured:\n");
+		myReplyBuffer.append(myReply);
+		myReplyBuffer.append("\n");
+		return myReplyBuffer.toString();
 	}
 	
 	/**
