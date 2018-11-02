@@ -55,6 +55,7 @@ public class CCParticleGroupRenderer extends CCParticleRenderer{
 	private CCGLWriteDataShader _myWriteDataShader;
 	
 	public CCParticleGroupRenderer(Path theVertexShader, Path theFragmentShader) {
+		super("points group");
 		_myShader = new CCGLProgram(theVertexShader, theFragmentShader);
 		
 		_myWriteDataShader = new CCGLWriteDataShader();

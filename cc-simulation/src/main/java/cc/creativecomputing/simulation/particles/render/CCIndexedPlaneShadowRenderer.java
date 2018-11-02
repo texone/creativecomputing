@@ -49,6 +49,7 @@ public class CCIndexedPlaneShadowRenderer extends CCParticleRenderer{
 	protected float _myPointsize = 5;
 	
 	public CCIndexedPlaneShadowRenderer(CCGraphics theGraphics, Path theVertexShader, Path theFragmentShader) {
+		super("points indexed shadow");
 		_myShader = new CCGLProgram(theVertexShader, theFragmentShader);
 		g = theGraphics;
 	}
@@ -95,7 +96,9 @@ public class CCIndexedPlaneShadowRenderer extends CCParticleRenderer{
 	public void preDisplay(CCGraphics g) {}
 
 	public void display(CCGraphics g){
-		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
+		if(!_cIsActive)return;
+		_cAttributes.start(g);
+		g.programPointSize();
 		_myShader.start();
 		g.texture(0, _myParticles.dataBuffer().attachment(0));
 		g.texture(1, _myParticles.dataBuffer().attachment(1));
@@ -105,7 +108,7 @@ public class CCIndexedPlaneShadowRenderer extends CCParticleRenderer{
 		_myMesh.draw(g);
 		g.noTexture();
 		_myShader.end();
-		g.gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE) ;
+		g.noProgramPointSize();
 	}
 	
 	public CCVBOMesh mesh(){

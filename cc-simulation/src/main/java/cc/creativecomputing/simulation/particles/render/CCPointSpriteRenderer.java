@@ -32,7 +32,6 @@ import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.simulation.particles.CCParticles;
 
 /**
@@ -76,6 +75,7 @@ public class CCPointSpriteRenderer extends CCParticleRenderer{
 		int theXSplits, 
 		int theYSplits
 	) {
+		super("point sprite");
 		_myShader = new CCGLProgram(theVertexPath,theFragmentPath);
 		
 		_myPointSpriteTexture = thePointSpriteTexture;
@@ -134,6 +134,8 @@ public class CCPointSpriteRenderer extends CCParticleRenderer{
 	}
 
 	public void display(CCGraphics g){
+		if(!_cIsActive)return;
+		_cAttributes.start(g);
 		_myEvelopeData.beginDraw(g);
 		g.clear();
 		g.pushAttribute();
@@ -188,6 +190,7 @@ public class CCPointSpriteRenderer extends CCParticleRenderer{
 		_myMesh.draw(g);
 		g.noTexture();
 		_myShader.end();
+		_cAttributes.end(g);
 	}
 	
 	public CCMesh mesh(){

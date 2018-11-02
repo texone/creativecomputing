@@ -17,6 +17,6 @@ void main (){
 	
 	gl_FrontColor = gl_Color;//min(gl_Color * myPointSize * myPointSize, gl_Color);
 	
-	gl_PointSize = 1;//max(myPointSize, 1);
+	gl_PointSize = 10;//max(myPointSize, 1);
 }
 	           

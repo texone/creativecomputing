@@ -216,7 +216,7 @@ public class CCDensity extends CCForce{
 		g.color(_myBrightness);
 		g.blend(CCBlendMode.ADD);
 
-		_myParticles.renderer().display(g);
+		_myParticles.display(g);
 		g.noPointSprite();
 		g.popMatrix();
 		g.popAttribute();

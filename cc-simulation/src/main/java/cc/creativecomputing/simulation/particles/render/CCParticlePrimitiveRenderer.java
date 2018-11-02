@@ -40,7 +40,8 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 		TRIANGLE,
 		BOX,
 		LINE,
-		PYRAMIDE
+		PYRAMIDE,
+		ICO_SPHERE
 	}
 	
 	protected CCMesh _myMesh;
@@ -59,14 +60,15 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 	private final CCParticlePrimitive _myPrimitive;
 	
 	public CCParticlePrimitiveRenderer(Path theVertexShader, Path theFragmentShader, CCParticlePrimitive thePrimitive) {
+		super("primitive");
 		_myShader = new CCGLProgram(theVertexShader, theFragmentShader);
 		_myPrimitive = thePrimitive;
 	}
 	
 	public CCParticlePrimitiveRenderer(CCParticlePrimitive thePrimitive) {
 		this(
-			CCNIOUtil.classPath(CCDisplayShader.class, "quad_display_vertex.glsl"),
-			CCNIOUtil.classPath(CCDisplayShader.class, "quad_display_fragment.glsl"),
+			CCNIOUtil.classPath(CCDisplayShader.class, "primitive_vertex.glsl"),
+			CCNIOUtil.classPath(CCDisplayShader.class, "primitive_fragment.glsl"),
 			thePrimitive
 		);
 
@@ -333,6 +335,8 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 	public void update(CCAnimator theAnimator) {}
 
 	public void display(CCGraphics g){
+		if(!_cIsActive)return;
+		_cAttributes.start(g);
 		_myShader.start();
 		g.texture(0, _myParticles.dataBuffer().attachment(0));
 		g.texture(1, _myParticles.dataBuffer().attachment(1));
@@ -349,6 +353,7 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 		_myMesh.draw(g);
 		g.noTexture();
 		_myShader.end();
+		_cAttributes.end(g);
 	}
 	
 	public CCMesh mesh(){

@@ -1,19 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2018 christianr
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
 /*
  * Copyright (c) 2013 christianr.
  * All rights reserved. This program and the accompanying materials
@@ -31,6 +15,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
@@ -49,16 +34,19 @@ public class CCAnchoredSprings extends CCForce {
 	
 	private String _myAnchorPositionTextureParameter;
 
-	private CCGLProgram _myWriteDataShader;
+	private CCGLProgram _myInitValue01Shader;
 	private CCShaderBuffer _myAnchorPositionBuffer;
 	
 	private CCVector3[] _myAnchorPositions;
-	private List<Integer> _myChangedSprings = new ArrayList<Integer>();
-	protected PriorityQueue<CCParticle> _myActiveParticles = new PriorityQueue<CCParticle>();
+	private List<Integer> _myChangedSprings = new ArrayList<>();
+	protected PriorityQueue<CCParticle> _myActiveParticles = new PriorityQueue<>();
 	
-	private double _mySpringConstant = 0.1;
-	private double _myDamping = 0;
-	private double _myRestLength = 5;
+	@CCProperty(name = "spring constant", min = 0, max = 1)
+	private double _cSpringConstant = 0.2;
+	@CCProperty(name = "damping", min = 0, max = 0.1)
+	private double _cDamping = 0.01;
+	@CCProperty(name = "rest length", min = 0, max = 100)
+	private double _myRestLength = 20;
 	
 	private int _myWidth = 0;
 	
@@ -66,16 +54,20 @@ public class CCAnchoredSprings extends CCForce {
 
 	public CCAnchoredSprings(final double theSpringConstant, final double theDamping, final double theRestLength) {
 		super("AnchoredSprings");
-		_myWriteDataShader = new CCGLWriteDataShader();
 		
-		_mySpringConstant = theSpringConstant;
-		_myDamping = theDamping;
+		_cSpringConstant = theSpringConstant;
+		_cDamping = theDamping;
 		_myRestLength = theRestLength;
+		
+		_mySpringConstantParameter = parameter("springConstant");
+		_myDampingParameter = parameter("springDamping");
+		_myRestLengthParameter = parameter("restLength");
+		
+		_myAnchorPositionTextureParameter = parameter("anchorPositionTexture");
 	}
 
-	@Override
 	public void setSize(CCGraphics g, int theWidth, int theHeight) {
-		
+		_myInitValue01Shader = new CCGLWriteDataShader();
 		_myWidth = theWidth;
 		
 		_myAnchorPositions = new CCVector3[theWidth * theHeight];
@@ -87,18 +79,13 @@ public class CCAnchoredSprings extends CCForce {
 		g.clear();
 		g.popAttribute();
 		_myAnchorPositionBuffer.endDraw(g);
-		
-		_mySpringConstantParameter = parameter("springConstant");
-		_myDampingParameter = parameter("springDamping");
-		_myRestLengthParameter = parameter("restLength");
-		
-		_myAnchorPositionTextureParameter = parameter("anchorPositionTexture");
-		
-		springDamping(_myDamping);
-		springConstant(_mySpringConstant);
-		restLength(_myRestLength);
-		
-//		_myVelocityShader.texture(_myAnchorPositionTextureParameter, _myAnchorPositionBuffer.attachment(0).id());
+	}
+	
+	@Override
+	public void setShader(CCGLProgram theProgram) {
+		super.setShader(theProgram);
+			
+		_myShader.setTextureUniform(_myAnchorPositionTextureParameter, _myAnchorPositionBuffer.attachment(0));
 	}
 	
 	public void addSpring(final CCParticle theParticle, final CCVector3 theAnchor) {
@@ -114,26 +101,39 @@ public class CCAnchoredSprings extends CCForce {
 		_myAnchorPositions[theParticle.index()] = theAnchor;
 	}
 	
+	@Override
+	public void setUniforms() {
+		super.setUniforms();
+		_myShader.uniform1f(_mySpringConstantParameter, _cSpringConstant);
+		_myShader.uniform1f(_myDampingParameter, _cDamping);
+		_myShader.uniform1f(_myRestLengthParameter, _myRestLength);
+	}
+	
 	public void springConstant(final double theSpringConstant) {
-//		_myVelocityShader.parameter(_mySpringConstantParameter, theSpringConstant);
+		_cSpringConstant = theSpringConstant;
 	}
 	
 	public void springDamping(final double theSpringDamping) {
-//		_myVelocityShader.parameter(_myDampingParameter, theSpringDamping);
+		_cDamping = theSpringDamping;
 	}
 	
 	public void restLength(final double theRestLength) {
-//		_myVelocityShader.parameter(_myRestLengthParameter, theRestLength);
+		_myRestLength = theRestLength;
 	}
 	
+	@Override
+	public void update(CCAnimator theAnimator) {
+		super.update(theAnimator);
+		_myCurrentTime += theAnimator.deltaTime();
+	}
+
 	@Override
 	public void preDisplay(CCGraphics g) {
 		super.preDisplay(g);
 		g.noBlend();
 		
-		
 		_myAnchorPositionBuffer.beginDraw(g);
-		_myWriteDataShader.start();
+		_myInitValue01Shader.start();
 		g.beginShape(CCDrawMode.POINTS);
 		CCVector3 myAnchor;
 		for (int mySpring:_myChangedSprings){
@@ -147,15 +147,10 @@ public class CCAnchoredSprings extends CCForce {
 			g.vertex(myParticle.index() % _myWidth,myParticle.index() / _myWidth);
 		}
 		g.endShape();
-		_myWriteDataShader.end();
+		_myInitValue01Shader.end();
 		_myAnchorPositionBuffer.endDraw(g);
-	}
-
-	public void update(final CCAnimator theDeltaTime) {
-		super.update(theDeltaTime);
 		
 		_myChangedSprings.clear();
-		_myCurrentTime = theDeltaTime.time();
 	}
 	
 	public CCShaderBuffer anchorPositionTexture() {

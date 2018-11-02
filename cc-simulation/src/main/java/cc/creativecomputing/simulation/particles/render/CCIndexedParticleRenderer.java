@@ -26,6 +26,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
+import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.graphics.shader.CCDataBuffer;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
@@ -33,6 +34,7 @@ import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.time.CCDate;
 import cc.creativecomputing.simulation.particles.CCParticles;
 
 /**
@@ -48,7 +50,7 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 	
 	private CCDataBuffer _myEvelopeData;
 
-	protected CCMesh _myMesh;
+	protected CCVBOMesh _myMesh;
 	
 	protected CCParticles _myParticles;
 	
@@ -56,6 +58,7 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 	protected float _cPointsize = 1;
 	
 	public CCIndexedParticleRenderer(Path theVertexShader, Path theFragmentShader) {
+		super("points indexed");
 		_myShader = new CCGLProgram(theVertexShader, theFragmentShader);
 		
 		_myEvelopeData = new CCDataBuffer(100,_cLifeTimeAlpha);
@@ -74,7 +77,7 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 	
 	public void setup(CCParticles theParticles) {
 		_myParticles = theParticles;
-		_myMesh = new CCMesh(CCDrawMode.POINTS, _myParticles.size());
+		_myMesh = new CCVBOMesh(CCDrawMode.POINTS, _myParticles.size());
 		_myMesh.prepareVertexData(3);
 		
 		for(int y = 0; y < _myParticles.height();y++) {
@@ -94,12 +97,14 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 
 	@Override
 	public void preDisplay(CCGraphics g) {
+		if(!_cIsActive)return;
 		_myEvelopeData.preDisplay(g);
 	}
 	
 	public void display(CCGraphics g){
-		
-		g.gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
+		if(!_cIsActive)return;
+		_cAttributes.start(g);
+		g.programPointSize();
 		_myShader.start();
 		startShaderEvents.proxy().start(_myShader, g);
 		g.texture(0, _myParticles.dataBuffer().attachment(0));
@@ -116,7 +121,8 @@ public class CCIndexedParticleRenderer extends CCParticleRenderer{
 		_myMesh.draw(g);
 		g.noTexture();
 		_myShader.end();
-		g.gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE) ;
+		g.noProgramPointSize();
+		_cAttributes.end(g);
 	}
 	
 	public CCMesh mesh(){

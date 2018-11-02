@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCCollectionUtil;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
@@ -73,7 +74,8 @@ public class CCParticles{
 	
 	@CCProperty(name = "emitter")
 	private List<CCIParticleEmitter> _myEmitter = new ArrayList<>();
-	
+
+	protected List<CCParticleRenderer> _myRenderer = new ArrayList<>();
 	protected List<CCForce> _myForces = new ArrayList<>();
 	protected List<CCConstraint> _myConstraints = new ArrayList<>();
 	protected List<CCImpulse> _myImpulses = new ArrayList<>();
@@ -95,13 +97,13 @@ public class CCParticles{
 	
 	protected FloatBuffer _myPositionBuffer;
 	protected FloatBuffer _myVelocityBuffer;
-	
+
+	@CCProperty(name = "renderer")
+	private Map<String,CCParticleRenderer> _myRendererMap = new LinkedHashMap<>();
 	@CCProperty(name = "forces")
 	private Map<String, CCForce> _myForceMap = new LinkedHashMap<>();
 	@CCProperty(name = "contraints")
-	private Map<String, CCConstraint> _myContraintMap = new LinkedHashMap<>();
-	@CCProperty(name = "renderer")
-	private CCParticleRenderer _myParticleRender;
+	private Map<String, CCConstraint> _myConstraintMap = new LinkedHashMap<>();
 	
 	/**
 	 * <p>
@@ -132,7 +134,7 @@ public class CCParticles{
 	 */
 	public CCParticles(
 		final CCGraphics g,
-		final CCParticleRenderer theRender,
+		final List<CCParticleRenderer> theRenderer,
 		final List<CCForce> theForces, 
 		final List<CCConstraint> theConstraints, 
 		final List<CCImpulse> theImpulse, 
@@ -145,12 +147,12 @@ public class CCParticles{
 		
 		_mySwapTexture = new CCGLSwapBuffer(g, 32, 4, 4,_myWidth,_myHeight);
 		_myGroupData = new CCShaderBuffer(32, 4, 1, CCParticleCPUGroupEmitter.GROUP_WIDH,CCParticleCPUGroupEmitter.GROUP_WIDH);
-		
+
+		_myRenderer = theRenderer;
 		_myForces = theForces;
 		_myConstraints = theConstraints;
 		_myImpulses = theImpulse;
 		
-		_myParticleRender = theRender;
 		
 		init(g);
 	}
@@ -179,28 +181,32 @@ public class CCParticles{
 	}
 	
 	protected void init(CCGraphics g) {
+		for(CCParticleRenderer myRenderer:_myRenderer) {
+			myRenderer.setup(this);
+			_myRendererMap.put(myRenderer.name(), myRenderer);
+		}
+		
 		for(CCForce myForce:_myForces) {
 			myForce.setSize(g, _myWidth, _myHeight);
 			_myForceMap.put(myForce.append(), myForce);
 		}
 		
-		for(CCConstraint myContraint:_myConstraints) {
-			myContraint.setSize(g, _myWidth, _myHeight);
-			_myContraintMap.put(myContraint.parameter("constraint"), myContraint);
+		for(CCConstraint myConstraint:_myConstraints) {
+			myConstraint.setSize(g, _myWidth, _myHeight);
+			_myConstraintMap.put(myConstraint.append(), myConstraint);
 		}
 		
 
 		_myEnvelopeData = new CCShaderBuffer(100, _myForces.size() + 1);
 		
-		if(_myParticleRender != null)_myParticleRender.setup(this);
 		_myUpdateShader = new CCParticlesUpdateShader(this, g, _myForces, _myConstraints, _myImpulses,_myWidth,_myHeight);
 		
 		reset(g);
 		
-		_myUpdateShader.setTextureUniform("positionTexture", _mySwapTexture.attachment(0));
-		_myUpdateShader.setTextureUniform("infoTexture", _mySwapTexture.attachment(1));
-		_myUpdateShader.setTextureUniform("velocityTexture", _mySwapTexture.attachment(2));
-		_myUpdateShader.setTextureUniform("colorTexture", _mySwapTexture.attachment(3));
+		_myUpdateShader.setTextureUniform("positionTexture", positionData());
+		_myUpdateShader.setTextureUniform("infoTexture", infoData());
+		_myUpdateShader.setTextureUniform("velocityTexture", velocityData());
+		_myUpdateShader.setTextureUniform("colorTexture", colorData());
 		_myUpdateShader.setTextureUniform("staticPositions", null);
 		_myUpdateShader.setTextureUniform("lifeTimeBlends", _myEnvelopeData.attachment(0));
 		_myUpdateShader.setTextureUniform("groupInfoTexture", _myGroupData.attachment(0));
@@ -208,16 +214,26 @@ public class CCParticles{
 	
 	public CCParticles(
 		final CCGraphics g,
-		CCParticleRenderer theRender, 
+		List<CCParticleRenderer> theRender, 
 		List<CCForce> theForces, 
 		List<CCConstraint> theConstraints, 
 		int theWidth, int theHeight
 	) {
 		this(g, theRender, theForces, theConstraints, new ArrayList<CCImpulse>(), theWidth, theHeight);
 	}
+	
+	public CCParticles(
+			final CCGraphics g,
+			CCParticleRenderer theRender, 
+			List<CCForce> theForces, 
+			List<CCConstraint> theConstraints, 
+			int theWidth, int theHeight
+		) {
+			this(g, CCCollectionUtil.createList(theRender), theForces, theConstraints, new ArrayList<CCImpulse>(), theWidth, theHeight);
+		}
 
 	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCConstraint> theConstraints, int theWidth, int theHeight) {
-		this(g, new CCParticlePointRenderer(), theForces, theConstraints, theWidth, theHeight);
+		this(g, CCCollectionUtil.createList(new CCParticlePointRenderer()), theForces, theConstraints, theWidth, theHeight);
 	}
 
 	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCConstraint> theConstraints) {
@@ -250,6 +266,10 @@ public class CCParticles{
 	
 	public double currentTime() {
 		return _myCurrentTime;
+	}
+	
+	public CCParticlesUpdateShader updateShader() {
+		return _myUpdateShader;
 	}
 	
 	public void reset(CCGraphics g){
@@ -315,6 +335,22 @@ public class CCParticles{
 	 */
 	public CCShaderBuffer dataBuffer() {
 		return _mySwapTexture.currentBuffer();
+	}
+	
+	public CCTexture2D positionData() {
+		return _mySwapTexture.attachment(0);
+	}
+	
+	public CCTexture2D infoData() {
+		return _mySwapTexture.attachment(1);
+	}
+	
+	public CCTexture2D velocityData() {
+		return _mySwapTexture.attachment(2);
+	}
+	
+	public CCTexture2D colorData() {
+		return _mySwapTexture.attachment(3);
 	}
 	
 	/**
@@ -474,57 +510,70 @@ public class CCParticles{
 		_myUpdateShader.deltaTime(theAnimator.deltaTime());
 		
 		_myCurrentTime += theAnimator.deltaTime();
-		_myParticleRender.update(theAnimator);
+		for(CCParticleRenderer myRenderer:_myRenderer) {
+			myRenderer.update(theAnimator);
+		}
 	}
 	
 	public void swapDataTextures(){
 		_mySwapTexture.swap();
-		_myUpdateShader.setTextureUniform("positionTexture", _mySwapTexture.attachment(0));
-		_myUpdateShader.setTextureUniform("infoTexture", _mySwapTexture.attachment(1));
-		_myUpdateShader.setTextureUniform("velocityTexture", _mySwapTexture.attachment(2));
-		_myUpdateShader.setTextureUniform("colorTexture", _mySwapTexture.attachment(3));
+		_myUpdateShader.setTextureUniform("positionTexture", positionData());
+		_myUpdateShader.setTextureUniform("infoTexture", infoData());
+		_myUpdateShader.setTextureUniform("velocityTexture", velocityData());
+		_myUpdateShader.setTextureUniform("colorTexture", colorData());
 	}
 	
 	public void preDisplay(CCGraphics g){
+		g.debug();
 		g.pushAttribute();
 		g.noBlend();
 		beforeUpdate(g);
-
-		_myUpdateShader.start();
 		int myTextureUnit = 0;
 		for(CCGLTextureUniform myTextureUniform:_myUpdateShader.textures()){
-			if(myTextureUniform.texture == null)continue;
-				
+			if(myTextureUniform.texture == null ) continue;
+			
 			g.texture(myTextureUnit, myTextureUniform.texture);
+			myTextureUnit++;
+		}
+		
+		_myUpdateShader.start();
+		myTextureUnit = 0;
+		for(CCGLTextureUniform myTextureUniform:_myUpdateShader.textures()){
+			if(myTextureUniform.texture == null)continue;
 			_myUpdateShader.uniform1i(myTextureUniform.parameter, myTextureUnit);
 			myTextureUnit++;
 		}
 		_mySwapTexture.draw(g);
 		_myUpdateShader.end();
-		g.noTexture();
+		if(myTextureUnit > 0)g.noTexture();
 		
 		swapDataTextures();
 		
 		afterUpdate(g);
 		g.popAttribute();
-		
-		_myParticleRender.preDisplay(g);
+		for(CCParticleRenderer myRenderer:_myRenderer) {
+			myRenderer.preDisplay(g);
+		}
 	}
 	
 	public void display(CCGraphics g) {
-		_myParticleRender.display(g);
+		for(CCParticleRenderer myRenderer:_myRenderer) {
+			myRenderer.display(g);
+		}
 	}
 	
 	public void staticPositionBlend(float theBlend){
 		_myUpdateShader.staticPositionBlend(theBlend);
 	}
 	
-	public CCParticleRenderer renderer() {
-		return _myParticleRender;
+	public List<CCParticleRenderer> renderer() {
+		return _myRenderer;
 	}
 
 	public void renderer(CCParticleRenderer theRenderer) {
-		_myParticleRender = theRenderer;
-		_myParticleRender.setup(this);
+		_myRenderer.clear();
+		theRenderer.setup(this);
+		_myRenderer.add(theRenderer);
+		_myRendererMap.put(theRenderer.name(), theRenderer);
 	}
 }

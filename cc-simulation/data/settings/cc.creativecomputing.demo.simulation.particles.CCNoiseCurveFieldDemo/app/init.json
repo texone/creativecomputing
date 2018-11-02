@@ -34,7 +34,7 @@
         "min": 0,
         "max": 400,
         "name": "emit radius",
-        "value": 15.600000381469727
+        "value": 0
       },
       "particles": {
         "name": "particles",
@@ -43,17 +43,45 @@
             "name": "renderer",
             "value": {}
           },
+          "update shader": {
+            "name": "update shader",
+            "value": {"fragment": {
+              "name": "fragment",
+              "value": {
+                "auto save": {
+                  "name": "auto save",
+                  "value": true
+                },
+                "uniforms": {
+                  "name": "uniforms",
+                  "value": {}
+                },
+                "source 0": {
+                  "name": "source 0",
+                  "value": "cc.creativecomputing.control.code.CCShaderSource@4588e487"
+                },
+                "save in file": {
+                  "name": "save in file",
+                  "value": true
+                }
+              }
+            }}
+          },
           "forces": {
             "name": "forces",
             "value": {
-              "attractor5_force": {
-                "name": "attractor5_force",
+              "attractor": {
+                "name": "attractor",
                 "value": {
                   "strength": {
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 2.75
+                    "value": 1
+                  },
+                  "attract": {
+                    "name": "attract",
+                    "value": true
                   },
                   "life time blend": {
                     "curve": {"points": [
@@ -69,26 +97,26 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@77bd0b49"
+                    "value": "cc.creativecomputing.control.CCEnvelope@3b36c592"
                   },
                   "position": {
                     "name": "position",
                     "value": {
                       "x": {
-                        "min": -1000,
-                        "max": 1000,
+                        "min": -2000,
+                        "max": 2000,
                         "name": "x",
-                        "value": -134
+                        "value": 0
                       },
                       "y": {
-                        "min": -1000,
-                        "max": 1000,
+                        "min": -2000,
+                        "max": 2000,
                         "name": "y",
-                        "value": -27.999996185302734
+                        "value": 0
                       },
                       "z": {
-                        "min": -1000,
-                        "max": 1000,
+                        "min": -2000,
+                        "max": 2000,
                         "name": "z",
                         "value": 0
                       }
@@ -96,20 +124,20 @@
                   },
                   "radius": {
                     "min": 0,
-                    "max": 1000,
+                    "max": 3000,
                     "name": "radius",
-                    "value": 303
+                    "value": 100
                   }
                 }
               },
-              "gravity3_force": {
-                "name": "gravity3_force",
+              "gravity": {
+                "name": "gravity",
                 "value": {
                   "strength": {
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 1.5800000429153442
+                    "value": 0.09999999403953552
                   },
                   "life time blend": {
                     "curve": {"points": [
@@ -125,7 +153,30 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@5a39ac1b"
+                    "value": "cc.creativecomputing.control.CCEnvelope@74434dc7"
+                  },
+                  "random amount": {
+                    "name": "random amount",
+                    "value": {
+                      "x": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "x",
+                        "value": 0
+                      },
+                      "y": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "y",
+                        "value": 0
+                      },
+                      "z": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "z",
+                        "value": 0
+                      }
+                    }
                   },
                   "direction": {
                     "name": "direction",
@@ -134,7 +185,7 @@
                         "min": -1,
                         "max": 1,
                         "name": "x",
-                        "value": 0.3940000534057617
+                        "value": 1
                       },
                       "y": {
                         "min": -1,
@@ -152,41 +203,8 @@
                   }
                 }
               },
-              "ViscousDrag1_force": {
-                "name": "ViscousDrag1_force",
-                "value": {
-                  "strength": {
-                    "min": 0,
-                    "max": 10,
-                    "name": "strength",
-                    "value": 1
-                  },
-                  "life time blend": {
-                    "curve": {"points": [
-                      {
-                        "time": 0,
-                        "type": "LINEAR",
-                        "value": 0
-                      },
-                      {
-                        "time": 1,
-                        "type": "LINEAR",
-                        "value": 1
-                      }
-                    ]},
-                    "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@77ae70fb"
-                  },
-                  "drag": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "drag",
-                    "value": 0.30000001192092896
-                  }
-                }
-              },
-              "NoiseCurveForceFieldFollow2_force": {
-                "name": "NoiseCurveForceFieldFollow2_force",
+              "NoiseForceField0": {
+                "name": "NoiseForceField0",
                 "value": {
                   "octaves": {
                     "min": 0,
@@ -198,7 +216,7 @@
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 2.75
+                    "value": 9.130000114440918
                   },
                   "life time blend": {
                     "curve": {"points": [
@@ -214,88 +232,13 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@2444594f"
-                  },
-                  "prediction": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "prediction",
-                    "value": 0.10400000214576721
-                  },
-                  "scale": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "scale",
-                    "value": 1
-                  },
-                  "radius": {
-                    "min": 0,
-                    "max": 400,
-                    "name": "radius",
-                    "value": 58
-                  },
-                  "lacunarity": {
-                    "min": 0,
-                    "max": 4,
-                    "name": "lacunarity",
-                    "value": 2
-                  },
-                  "curveOutputScale": {
-                    "min": 0,
-                    "max": 200,
-                    "name": "curveOutputScale",
-                    "value": 160.39999389648438
-                  },
-                  "speed": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "speed",
-                    "value": 0.052000001072883606
-                  },
-                  "gain": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "gain",
-                    "value": 0.5
-                  }
-                }
-              },
-              "NoiseForceField4_force": {
-                "name": "NoiseForceField4_force",
-                "value": {
-                  "octaves": {
-                    "min": 0,
-                    "max": 5,
-                    "name": "octaves",
-                    "value": 1
-                  },
-                  "strength": {
-                    "min": 0,
-                    "max": 10,
-                    "name": "strength",
-                    "value": 1
-                  },
-                  "life time blend": {
-                    "curve": {"points": [
-                      {
-                        "time": 0,
-                        "type": "LINEAR",
-                        "value": 0
-                      },
-                      {
-                        "time": 1,
-                        "type": "LINEAR",
-                        "value": 1
-                      }
-                    ]},
-                    "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@3bbcf9cd"
+                    "value": "cc.creativecomputing.control.CCEnvelope@a470d86"
                   },
                   "scale": {
                     "min": 0,
                     "max": 10,
                     "name": "scale",
-                    "value": 1
+                    "value": 4.230000019073486
                   },
                   "lacunarity": {
                     "min": 0,
@@ -316,8 +259,134 @@
                     "value": 0.5
                   }
                 }
+              },
+              "ViscousDrag": {
+                "name": "ViscousDrag",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 4.130000114440918
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@3d7bd279"
+                  },
+                  "drag": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "drag",
+                    "value": 0.30000001192092896
+                  }
+                }
+              },
+              "NoiseCurveForceFieldFollow": {
+                "name": "NoiseCurveForceFieldFollow",
+                "value": {
+                  "octaves": {
+                    "min": 0,
+                    "max": 5,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 5.860000133514404
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@306c8a11"
+                  },
+                  "prediction": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "prediction",
+                    "value": 0
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "scale",
+                    "value": 0.0430000014603138
+                  },
+                  "radius": {
+                    "min": 0,
+                    "max": 400,
+                    "name": "radius",
+                    "value": 0
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 4,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "curveOutputScale": {
+                    "min": 0,
+                    "max": 200,
+                    "name": "curveOutputScale",
+                    "value": 139.1999969482422
+                  },
+                  "speed": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "speed",
+                    "value": 1
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  }
+                }
               }
             }
+          },
+          "emitter": {
+            "name": "emitter",
+            "value": {"0": {
+              "name": "0",
+              "value": {
+                "track free particles": {
+                  "name": "track free particles",
+                  "value": true
+                },
+                "free particles": {
+                  "min": -2147483648,
+                  "max": 2147483647,
+                  "name": "free particles",
+                  "value": 3787
+                }
+              }
+            }}
           }
         }
       },
@@ -329,6 +398,10 @@
             "max": 20000,
             "name": "distance",
             "value": 325.18528322118556
+          },
+          "rotation mode": {
+            "name": "rotation mode",
+            "value": "FREE"
           },
           "center": {
             "name": "center",
@@ -379,6 +452,98 @@
                 "max": 1,
                 "name": "z",
                 "value": -0.010638764539199192
+              }
+            }
+          },
+          "fov": {
+            "min": 0,
+            "max": 90,
+            "name": "fov",
+            "value": 45
+          },
+          "camera": {
+            "name": "camera",
+            "value": {
+              "position": {
+                "name": "position",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 100
+                  }
+                }
+              },
+              "up": {
+                "name": "up",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 1
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              },
+              "fov": {
+                "min": 0,
+                "max": 1.5707963267948966,
+                "name": "fov",
+                "value": 1.0471975511965976
+              },
+              "apect ratio": {
+                "min": 0.1,
+                "max": 10,
+                "name": "apect ratio",
+                "value": 2
+              },
+              "target": {
+                "name": "target",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
               }
             }
           }
@@ -527,11 +692,15 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.28723280781592
+        "value": 28.523698644043268
       },
       "exceptionHandling": {
         "name": "exceptionHandling",
         "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
       }
     }
   }

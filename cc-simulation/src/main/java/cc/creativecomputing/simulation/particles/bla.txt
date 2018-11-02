@@ -1,19 +1,3 @@
-#-------------------------------------------------------------------------------
-# Copyright (C) 2018 christianr
-# 
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-# 
-# You should have received a copy of the GNU Lesser General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#-------------------------------------------------------------------------------
 #version 120 
 
 uniform sampler2D randomTexture;
@@ -59,38 +43,52 @@ uniform sampler2DRect groupInfoTexture;
 
 float lifeTimeBlend(vec4 infos, vec4 groupInfos, float forceIndex){
 	float progress = infos.x / infos.y;
-	if(groupInfos.x >= 0.)progress = groupInfos.x;
+	//if(groupInfos.x >= 0.)progress = groupInfos.x;
 	return texture2DRect (lifeTimeBlends, vec2(progress * 100.0, forceIndex)).x;
 }
 
-// insert forces
-uniform vec3 gravity0_direction;
-uniform float gravity0_strength;
-uniform float gravity0_index;
-
-vec3 gravity0_function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, float theDeltaTime){
-	return gravity0_direction * gravity0_strength; 
+float rand(vec2 n){
+  return fract(sin(dot(n, vec2(12.9898,78.233)))* 43758.5453123);
 }
 
+const float PI = 3.1415926535897932384626433832795;
 
-uniform float NoiseForceField1_scale;
-uniform float NoiseForceField1_strength;
-uniform vec3 NoiseForceField1_offset;
-uniform float NoiseForceField1_index;
+vec2 randDirection2D(vec2 n) {
+	float angle = rand(n + 3000) * 2 * PI;
+	return vec2(cos(angle), sin(angle));
+}
 
-uniform int NoiseForceField1_octaves;
-uniform float NoiseForceField1_gain;
-uniform float NoiseForceField1_lacunarity;
+vec3 randDirection3D(vec2 n) {
+	float myTheta = rand(n + 3000) * PI;
+	float myPhi = rand(n + 6000) * 2 * PI;
 	
-vec3 NoiseForceField1_function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, float theDeltaTime){
-	vec3 noisePosition = (thePosition + theVelocity) * NoiseForceField1_scale + NoiseForceField1_offset;
+	return vec3(
+		sin(myTheta) * cos(myPhi),
+		sin(myTheta) * sin(myPhi),
+		cos(myTheta)
+	);
+}
+
+// insert forces
+
+uniform float NoiseForceField_scale;
+uniform float NoiseForceField_strength;
+uniform vec3 NoiseForceField_offset;
+uniform float NoiseForceField_index;
+
+uniform int NoiseForceField_octaves;
+uniform float NoiseForceField_gain;
+uniform float NoiseForceField_lacunarity;
+	
+vec3 NoiseForceField_function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime){
+	vec3 noisePosition = (thePosition + theVelocity) * NoiseForceField_scale + NoiseForceField_offset;
 	vec3 result = vec3(
-		octavedNoise(noisePosition, NoiseForceField1_octaves, NoiseForceField1_gain, NoiseForceField1_lacunarity),
-		octavedNoise(noisePosition+1000, NoiseForceField1_octaves, NoiseForceField1_gain, NoiseForceField1_lacunarity),
-		octavedNoise(noisePosition+2000, NoiseForceField1_octaves, NoiseForceField1_gain, NoiseForceField1_lacunarity)
+		octavedNoise(noisePosition, NoiseForceField_octaves, NoiseForceField_gain, NoiseForceField_lacunarity),
+		octavedNoise(noisePosition+1000, NoiseForceField_octaves, NoiseForceField_gain, NoiseForceField_lacunarity),
+		octavedNoise(noisePosition+2000, NoiseForceField_octaves, NoiseForceField_gain, NoiseForceField_lacunarity)
 	) *2 - 1;
 	/*
-	noisePosition = (thePosition + theVelocity) * NoiseForceField1_scale + NoiseForceField1_offset.yzx;
+	noisePosition = (thePosition + theVelocity) * NoiseForceField_scale + NoiseForceField_offset.yzx;
 	result += vec3(
 		snoise(noisePosition),
 		snoise(noisePosition+100),
@@ -98,52 +96,90 @@ vec3 NoiseForceField1_function(vec3 thePosition, vec3 theVelocity, vec4 theInfos
 	);
 	*/
 		//result *= 50 * theDeltaTime;
-	return result * NoiseForceField1_strength;
+	return result * NoiseForceField_strength;
 }
 
-uniform float ViscousDrag2_drag;
+/*
+uniform sampler2DRect Springs_targetPositionTexture;
+
+uniform float Springs_strength;
+uniform float Springs_index;
+
+uniform vec3 Springs_center;
+uniform float Springs_scale;
+uniform float Springs_lookAhead;
+uniform float Springs_maxForce;
+uniform float Springs_nearDistance;
+uniform float Springs_nearMaxForce;
+
+vec3 Springs_function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime){
 	
-uniform float ViscousDrag2_strength;
-uniform float ViscousDrag2_index;
-
-vec3 ViscousDrag2_function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, float theDeltaTime){
-	return theVelocity * theDeltaTime * -ViscousDrag2_drag * ViscousDrag2_strength; 
-}
-
-uniform sampler2DRect target3_targetPositionTexture;
-
-uniform float target3_strength;
-uniform float target3_index;
-
-uniform vec3 target3_center;
-uniform float target3_scale;
-uniform float target3_lookAhead;
-uniform float target3_maxForce;
-uniform float target3_nearDistance;
-uniform float target3_nearMaxForce;
-
-vec3 target3_function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, float theDeltaTime){
-	
-	vec4 targetInfos = texture2DRect (target3_targetPositionTexture, theTexID);
-	vec3 target = targetInfos.xyz * target3_scale;
+	vec4 targetInfos = texture2DRect (Springs_targetPositionTexture, theTexID);
+	vec3 target = targetInfos.xyz * Springs_scale;
 	
 	float targetStrength = targetInfos.w;
 		
 	if(target.x == 0.0)return vec3(0.0);
 		
-	target += target3_center;
+	target += Springs_center;
 	//float factor = (-dot(normalize(target - thePosition),normalize(theVelocity)) + 1) / 2;
-	vec3 force = target - (thePosition + theVelocity * theDeltaTime * target3_lookAhead);
+	vec3 force = target - (thePosition + theVelocity * theDeltaTime * Springs_lookAhead);
 		
 	float distance = length(force);
-	if(target3_nearMaxForce > 0 && distance < target3_nearDistance && distance > target3_nearMaxForce){
-		return force / distance * target3_nearMaxForce * targetStrength;
+	if(Springs_nearMaxForce > 0 && distance < Springs_nearDistance && distance > Springs_nearMaxForce){
+		return force / distance * Springs_nearMaxForce * targetStrength;
 	}
-	if(target3_maxForce > 0 && distance > target3_maxForce){
-		return force / distance * target3_maxForce * targetStrength;
+	if(Springs_maxForce > 0 && distance > Springs_maxForce){
+		return force / distance * Springs_maxForce * targetStrength;
 	}
 	
-	return force * target3_strength;// * targetStrength * target3_strength;// / (theDeltaTime * 60);
+	return force * Springs_strength;// * targetStrength * Springs_strength;// / (theDeltaTime * 60);
+}
+*/
+
+uniform sampler2DRect Springs_idTexture;
+uniform sampler2DRect Springs_infoTexture;
+uniform vec2 Springs_textureSize;
+	
+uniform float Springs_springConstant;
+uniform float Springs_strength;
+
+uniform int Springs_numberOfBuffers;
+	
+vec3 springForce(vec3 thePosition1, vec3 thePosition2, float theRestLength, float theForceRestLength){
+	vec3 delta = thePosition2 - thePosition1;
+	float deltalength = length(delta);
+	delta /= max(1,deltalength);
+	float springForce = (deltalength - theRestLength) * Springs_springConstant * 0.1 * float(deltalength > theRestLength || theForceRestLength > 0);
+	return delta * springForce;
+}
+	
+// constrain a particle to be a fixed distance from another particle
+//vec3 force(vec3 thePosition, vec3 theVelocity, float2 theTexID, float theDeltaTime){
+vec3 Springs_function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime){
+	vec3 force = vec3(0);
+		
+	for(int i = 0; i < Springs_numberOfBuffers;i++){
+		vec2 myTexId = theTexID + Springs_textureSize * vec2(i, 0);
+		vec4 ids = texture2DRect(Springs_idTexture, myTexId);
+		vec4 infos = texture2DRect(Springs_infoTexture, myTexId);
+		
+		// get positions of neighbouring particles
+		vec3 position1 = texture2DRect(positionTexture, ids.xy).xyz;
+		vec3 position2 = texture2DRect(positionTexture, ids.zw).xyz;
+			
+		float restLength1 = infos.x;
+		float restLength2 = infos.y;
+		float forceRestLength1 = infos.z;
+		float forceRestLength2 = infos.w;
+		
+		force += springForce(thePosition, position1, restLength1, forceRestLength1) * float(ids.x >= 0);
+		force += springForce(thePosition, position2, restLength2, forceRestLength2) * float(ids.z >= 0);
+			
+			//continue;
+	}
+
+	return force * Springs_Springs_strength;
 }
 
 
@@ -181,6 +217,8 @@ vec3 bounceReflection(
 
 uniform float useAgeBlends;
 
+uniform vec3 moveAll;
+
 void main (){
 	vec2 texID = gl_FragCoord.xy;
 	vec3 position = texture2DRect (positionTexture, texID).xyz;
@@ -192,10 +230,8 @@ void main (){
 	vec3 acceleration = vec3(0,0,0);
 
 // apply forces
-	acceleration = acceleration + gravity0_function(position,velocity,infos,groupInfos,deltaTime) * lifeTimeBlend(infos, groupInfos, gravity0_index);
-	acceleration = acceleration + NoiseForceField1_function(position,velocity,infos,groupInfos,deltaTime) * lifeTimeBlend(infos, groupInfos, NoiseForceField1_index);
-	acceleration = acceleration + ViscousDrag2_function(position,velocity,infos,groupInfos,deltaTime) * lifeTimeBlend(infos, groupInfos, ViscousDrag2_index);
-	acceleration = acceleration + target3_function(position,velocity,infos,groupInfos,deltaTime) * lifeTimeBlend(infos, groupInfos, target3_index);
+	acceleration = acceleration + NoiseForceField_function(position,velocity,infos,groupInfos,texID,deltaTime) * lifeTimeBlend(infos, groupInfos, NoiseForceField_index);
+	acceleration = acceleration + Springs_function(position,velocity,infos,groupInfos,texID,deltaTime) * lifeTimeBlend(infos, groupInfos, Springs_index);
 
 	velocity = velocity + acceleration * (deltaTime * 60);
 
@@ -229,11 +265,11 @@ void main (){
 	if(myAge >= lastInfo.y && lastInfo.z < 0.0)position = vec3(1000000,0,0);
 	
 	vec3 staticPosition = texture2DRect (staticPositions, texID).xyz;
-	vec4 newPosition = vec4(mix(position + deltaTime * velocity, staticPosition, staticPositionBlend),1); 
+	vec4 newPosition = vec4(mix(position + deltaTime * velocity, staticPosition, staticPositionBlend),1);
+	newPosition.xyz += moveAll;
 	
 	gl_FragData[0] = newPosition;
 	gl_FragData[1] = info;
 	gl_FragData[2] = vec4(velocity, 1.0);
 	gl_FragData[3] = color;
 }
-	           

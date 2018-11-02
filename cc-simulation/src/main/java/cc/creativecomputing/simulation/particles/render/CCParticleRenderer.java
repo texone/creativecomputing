@@ -21,7 +21,9 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCEnvelope;
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.graphics.CCDrawAttributes;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
@@ -44,18 +46,31 @@ public abstract class CCParticleRenderer {
 	 
 	protected List<CCEnvelope> _myEnvelopes = new ArrayList<>();
 	
+	@CCProperty(name = "active")
+	protected boolean _cIsActive;
+	@CCProperty(name = "draw attributes")
+	protected CCDrawAttributes _cAttributes = new CCDrawAttributes();
+	
 	public static interface CCParticleRendererStartEvent{
 		public void start(CCGLProgram theShader, CCGraphics g);
 	}
 	
 	public CCListenerManager<CCParticleRendererStartEvent> startShaderEvents = CCListenerManager.create(CCParticleRendererStartEvent.class);
 	
-	public CCParticleRenderer(){
+	private String _myName;
+	
+	public CCParticleRenderer(String theName){
 
 		_myWriteDataShader = new CCGLWriteDataShader();
 		
 		_myEnvelopeTextureParameter = "lifeTimeBlends";
 		_myEnvelopeData = new CCShaderBuffer(100,100);
+		
+		_myName = theName;
+	}
+	
+	public String name() {
+		return _myName;
 	}
 	
 	public abstract void setup(CCParticles theParticles);

@@ -60,6 +60,7 @@ public class CCParticleTrailRenderer extends CCParticleRenderer{
 	private final int _myTrailLength;
 	
 	public CCParticleTrailRenderer(Path theVertexShader, Path theFragmentShader, int theTrailLength) {
+		super("trails");
 		_myShader = new CCGLProgram(theVertexShader, theFragmentShader);
 		_myTrailLength = theTrailLength;
 		_myWriteDataShader = new CCGLProgram(
@@ -113,6 +114,8 @@ public class CCParticleTrailRenderer extends CCParticleRenderer{
 	boolean y0 = true;
 	int i = 0;
 	public void display(CCGraphics g){
+		if(!_cIsActive)return;
+		_cAttributes.start(g);
 		if(y0){
 			_myTrailData.clear(g);
 			y0 = false;
@@ -153,6 +156,7 @@ public class CCParticleTrailRenderer extends CCParticleRenderer{
 		g.noTexture();
 		_myShader.end();
 		g.gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE) ;
+		_cAttributes.end(g);
 	}
 	
 	public CCVBOMesh mesh(){

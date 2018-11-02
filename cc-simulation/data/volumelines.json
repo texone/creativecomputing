@@ -1,0 +1,161 @@
+{
+  "name": "springs lines",
+  "value": {
+    "shader": {
+      "name": "shader",
+      "value": {
+        "fragment": {
+          "name": "fragment",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "spring_lines_volumentric_fragment.glsl": {
+              "name": "spring_lines_volumentric_fragment.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@72d288c0"
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {
+                "z range": {
+                  "min": 0,
+                  "max": 1500,
+                  "name": "z range",
+                  "value": 195
+                },
+                "z fade": {
+                  "min": -500,
+                  "max": 500,
+                  "name": "z fade",
+                  "value": 32.000003814697266
+                },
+                "centerZ": {
+                  "min": -500,
+                  "max": 500,
+                  "name": "centerZ",
+                  "value": 239.00001525878906
+                },
+                "z fade range": {
+                  "min": 0,
+                  "max": 500,
+                  "name": "z fade range",
+                  "value": 130.5
+                },
+                "alpha": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "alpha",
+                  "value": 0.2070000022649765
+                },
+                "col.z": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "col.z",
+                  "value": 1
+                },
+                "col.y": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "col.y",
+                  "value": 0.5540000200271606
+                },
+                "col.x": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "col.x",
+                  "value": 0.39100000262260437
+                }
+              }
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        },
+        "vertex": {
+          "name": "vertex",
+          "value": {
+            "spring_lines_volumentric_vertex.glsl": {
+              "name": "spring_lines_volumentric_vertex.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@85a80be"
+            },
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {"radius": {
+                "min": 0,
+                "max": 10,
+                "name": "radius",
+                "value": 0.64000004529953
+              }}
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        }
+      }
+    },
+    "draw attributes": {
+      "name": "draw attributes",
+      "value": {
+        "point size": {
+          "min": 0.1,
+          "max": 50,
+          "name": "point size",
+          "value": 1
+        },
+        "stroke weight": {
+          "min": 0.1,
+          "max": 50,
+          "name": "stroke weight",
+          "value": 1.7467000484466553
+        },
+        "color": {
+          "a": 0.25882354378700256,
+          "r": 1,
+          "b": 1,
+          "g": 1,
+          "name": "color",
+          "value": {
+            "a": 0.25882354378700256,
+            "r": 1,
+            "b": 1,
+            "g": 1,
+            "blendable_type": "cc.creativecomputing.math.CCColor"
+          }
+        },
+        "cullface": {
+          "name": "cullface",
+          "value": "NONE"
+        },
+        "polygon mode": {
+          "name": "polygon mode",
+          "value": "FILL"
+        },
+        "depth test": {
+          "name": "depth test",
+          "value": false
+        },
+        "blend mode": {
+          "name": "blend mode",
+          "value": "ADD"
+        },
+        "depth mask": {
+          "name": "depth mask",
+          "value": false
+        }
+      }
+    },
+    "active": {
+      "name": "active",
+      "value": true
+    }
+  }
+}
