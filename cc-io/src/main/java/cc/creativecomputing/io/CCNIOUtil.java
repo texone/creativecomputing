@@ -14,7 +14,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.SeekableByteChannel;
@@ -39,6 +41,9 @@ import javax.swing.JFileChooser;
 import cc.creativecomputing.core.CCSystem;
 import cc.creativecomputing.core.CCSystem.CCOS;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCStringUtil;
+import cc.creativecomputing.io.data.CCDataException;
+import cc.creativecomputing.io.data.CCDataObject;
 
 /**
  * @author christianriekoff
@@ -183,10 +188,38 @@ public class CCNIOUtil {
 
 	static public String loadString(Path thePath){
 		try{
+			
 	        return new String(Files.readAllBytes(thePath));
 		}catch (IOException e){
 			throw new RuntimeException("Error inside loadStrings()", e);
 		}
+	}
+	
+	static public String loadString(URL theDocumentURL, String theUser, String theKey) {
+		try {
+
+			URLConnection myUrlConnection = theDocumentURL.openConnection();
+
+			if (theUser != null && theKey != null) {
+				String userpass = theUser + ":" + theKey;
+					String basicAuth = "Basic " + CCStringUtil.printBase64Binary(userpass.getBytes());
+
+					myUrlConnection.setRequestProperty("Authorization", basicAuth);
+				}
+				BufferedReader reader = new BufferedReader(new InputStreamReader(myUrlConnection.getInputStream()));
+				
+				StringBuffer myResult = new StringBuffer();
+				String line = null;
+				while ((line = reader.readLine()) != null){
+					CCLog.info(line);
+					myResult.append(line);
+				}
+				reader.close();
+
+				return myResult.toString();
+			} catch (IOException e) {
+				throw new RuntimeException("Error inside loadStrings()", e);
+			}
 	}
 	
 	static public List<String> loadStrings(Path thePath){

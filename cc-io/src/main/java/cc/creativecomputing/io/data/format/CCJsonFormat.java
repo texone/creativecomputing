@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.core.io.format.CCDataSerializable;
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.data.CCDataArray;
 import cc.creativecomputing.io.data.CCDataException;
@@ -444,8 +446,22 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	protected CCDataObject read(CCDataObject theParent) {
 		char c;
 		String key;
-
-		if (nextClean() != '{') {
+		char nextClean = nextClean();
+		if (nextClean != '{') {
+			StringBuffer myBuffer = new StringBuffer();
+			int ic;
+			try {
+				ic = _myReader.read();
+				while(ic >= 0) {
+					myBuffer.append((char)ic);
+					ic = _myReader.read();
+				}
+				CCLog.info(myBuffer);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			throw syntaxError("A JSONObject text must begin with '{'");
 		}
 		for (;;) {
@@ -495,7 +511,28 @@ public class CCJsonFormat implements CCDataFormat<String> {
 		_myCharacter = 1;
 		_myLine = 1;
 
-		read(theData);
+//		int c;
+//		try {
+//			c = _myReader.read();
+//			while(c!= -1) {
+//				System.out.print((char)c);
+//				c = _myReader.read();
+//			}
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		
+		char next = nextClean();
+		back();
+		CCLog.info(next);
+		if(next == '[') {
+			CCDataArray myArray = new CCDataArray();
+			read(myArray);
+			theData.put("array", myArray);
+		}else {
+			read(theData);
+		}
 
 		try {
 			_myReader.close();
@@ -647,79 +684,7 @@ public class CCJsonFormat implements CCDataFormat<String> {
 		}
 	}
 
-	/**
-	 * <p>
-	 * Converts an array of bytes into a string.
-	 * 
-	 * @param val An array of bytes
-	 * @return A string containing a lexical representation of xsd:base64Binary
-	 * @throws IllegalArgumentException if {@code val} is null.
-	 */
-	public static String printBase64Binary(byte[] val) {
-		return _printBase64Binary(val);
-	}
-
-	public static String _printBase64Binary(byte[] input) {
-		return _printBase64Binary(input, 0, input.length);
-	}
-
-	public static String _printBase64Binary(byte[] input, int offset, int len) {
-		char[] buf = new char[((len + 2) / 3) * 4];
-		int ptr = _printBase64Binary(input, offset, len, buf, 0);
-		assert ptr == buf.length;
-		return new String(buf);
-	}
-
-	private static final char[] encodeMap = initEncodeMap();
-
-	private static char[] initEncodeMap() {
-		char[] map = new char[64];
-		int i;
-		for (i = 0; i < 26; i++) {
-			map[i] = (char) ('A' + i);
-		}
-		for (i = 26; i < 52; i++) {
-			map[i] = (char) ('a' + (i - 26));
-		}
-		for (i = 52; i < 62; i++) {
-			map[i] = (char) ('0' + (i - 52));
-		}
-		map[62] = '+';
-		map[63] = '/';
-
-		return map;
-	}
-
-	public static char encode(int i) {
-		return encodeMap[i & 0x3F];
-	}
-
-	public static int _printBase64Binary(byte[] input, int offset, int len, char[] buf, int ptr) {
-		// encode elements until only 1 or 2 elements are left to encode
-		int remaining = len;
-		int i;
-		for (i = offset; remaining >= 3; remaining -= 3, i += 3) {
-			buf[ptr++] = encode(input[i] >> 2);
-			buf[ptr++] = encode(((input[i] & 0x3) << 4) | ((input[i + 1] >> 4) & 0xF));
-			buf[ptr++] = encode(((input[i + 1] & 0xF) << 2) | ((input[i + 2] >> 6) & 0x3));
-			buf[ptr++] = encode(input[i + 2] & 0x3F);
-		}
-		// encode when exactly 1 element (left) to encode
-		if (remaining == 1) {
-			buf[ptr++] = encode(input[i] >> 2);
-			buf[ptr++] = encode(((input[i]) & 0x3) << 4);
-			buf[ptr++] = '=';
-			buf[ptr++] = '=';
-		}
-		// encode when exactly 2 elements (left) to encode
-		if (remaining == 2) {
-			buf[ptr++] = encode(input[i] >> 2);
-			buf[ptr++] = encode(((input[i] & 0x3) << 4) | ((input[i + 1] >> 4) & 0xF));
-			buf[ptr++] = encode((input[i + 1] & 0xF) << 2);
-			buf[ptr++] = '=';
-		}
-		return ptr;
-	}
+	
 
 	@Override
 	public CCDataObject load(URL theDocumentURL, boolean theIgnoreLineFeed, String theUser, String theKey) {
@@ -730,7 +695,7 @@ public class CCJsonFormat implements CCDataFormat<String> {
 
 			if (theUser != null && theKey != null) {
 				String userpass = theUser + ":" + theKey;
-				String basicAuth = "Basic " + printBase64Binary(userpass.getBytes());
+				String basicAuth = "Basic " + CCStringUtil.printBase64Binary(userpass.getBytes());
 
 				myUrlConnection.setRequestProperty("Authorization", basicAuth);
 			}
