@@ -28,7 +28,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	private static final long serialVersionUID = -785875230663549514L;
 	
 	
-	protected final List<Type> _myEffectables;
+	protected List<Type> _myEffectables;
 	
 	private final String[] _myValueNames;
 
@@ -67,8 +67,8 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	
 	
 	public CCEffectManager(List<Type> theEffectables, String...theValueNames){
-	
-		_myEffectables = theEffectables;
+		effectables(theEffectables);
+		
 		_myValueNames = theValueNames;
 		_cScales.put("global scale", 1.0);
 		for(String myValueName:_myValueNames){
@@ -80,7 +80,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 		_myEffectBlender = new CCEffectBlender(this);
 		CCMath.randomSeed(4);
 		addRelativeSources(new CCConstantSource(), new CCRandomSource());
-		if(theEffectables.size() < 0) {
+		if(theEffectables.size() <= 0) {
 			return;
 		}
 		Type myFirstEffectable = theEffectables.get(0);
@@ -105,6 +105,14 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	
 	public List<Type> effectables(){
 		return _myEffectables;
+	}
+	
+	public void effectables(List<Type> theEffectables) {
+		_myEffectables = theEffectables;
+		updateMaxIds();
+		for(CCModulationSource mySource:_myRelativeSources.values()){
+			mySource.isUpdated(true);
+		}
 	}
 	
 	public int groups(){
@@ -165,6 +173,7 @@ public class CCEffectManager<Type extends CCEffectable> extends LinkedHashMap<St
 	}
 	
 	private void updateMaxIds(){
+		_myMaxIds.clear();
 		for(CCEffectable myEffectable:_myEffectables){
 			updateMaxIds(myEffectable);
 		}
