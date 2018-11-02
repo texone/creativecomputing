@@ -62,9 +62,9 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	private boolean _myUsePrevious;
 
 	/**
-	 * Back up one character. This provides a sort of lookahead capability, so
-	 * that you can test for a digit or letter before attempting to parse the
-	 * next number or identifier.
+	 * Back up one character. This provides a sort of lookahead capability, so that
+	 * you can test for a digit or letter before attempting to parse the next number
+	 * or identifier.
 	 */
 	protected void back() throws CCDataException {
 		if (_myUsePrevious || _myIndex <= 0) {
@@ -79,8 +79,8 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	/**
 	 * Get the hex value of a character (base16).
 	 * 
-	 * @param c A character between '0' and '9' or between 'A' and 'F' or
-	 *            between 'a' and 'f'.
+	 * @param c A character between '0' and '9' or between 'A' and 'F' or between
+	 *          'a' and 'f'.
 	 * @return An int between 0 and 15, or -1 if c was not a hex digit.
 	 */
 	protected int dehexchar(char c) {
@@ -152,8 +152,7 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	}
 
 	/**
-	 * Consume the next character, and check that it matches a specified
-	 * character.
+	 * Consume the next character, and check that it matches a specified character.
 	 * 
 	 * @param c The character to match.
 	 * @return The character.
@@ -172,8 +171,8 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	 *
 	 * @param n The number of characters to take.
 	 * @return A string of n characters.
-	 * @throws CCDataException Substring bounds error if there are not n
-	 *             characters remaining in the source string.
+	 * @throws CCDataException Substring bounds error if there are not n characters
+	 *                         remaining in the source string.
 	 */
 	private String next(int n) throws CCDataException {
 		if (n == 0) {
@@ -210,12 +209,12 @@ public class CCJsonFormat implements CCDataFormat<String> {
 
 	/**
 	 * Return the characters up to the next close quote character. Backslash
-	 * processing is done. The formal JSON format does not allow strings in
-	 * single quotes, but an implementation is allowed to accept them.
+	 * processing is done. The formal JSON format does not allow strings in single
+	 * quotes, but an implementation is allowed to accept them.
 	 * 
-	 * @param quote The quoting character, either
-	 *            <code>"</code>&nbsp;<small>(double quote)</small> or
-	 *            <code>'</code>&nbsp;<small>(single quote)</small>.
+	 * @param quote The quoting character, either <code>"</code>&nbsp;<small>(double
+	 *              quote)</small> or <code>'</code>&nbsp;<small>(single
+	 *              quote)</small>.
 	 * @return A String.
 	 * @throws CCDataException Unterminated string.
 	 */
@@ -270,8 +269,8 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	}
 
 	/**
-	 * Get the text up but not including the specified character or the end of
-	 * line, whichever comes first.
+	 * Get the text up but not including the specified character or the end of line,
+	 * whichever comes first.
 	 * 
 	 * @param delimiter A delimiter character.
 	 * @return A string.
@@ -291,8 +290,8 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	}
 
 	/**
-	 * Get the text up but not including one of the specified delimiter
-	 * characters or the end of line, whichever comes first.
+	 * Get the text up but not including one of the specified delimiter characters
+	 * or the end of line, whichever comes first.
 	 * 
 	 * @param delimiters A set of delimiter characters.
 	 * @return A string, trimmed.
@@ -313,8 +312,8 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	}
 
 	/**
-	 * Get the next value. The value can be a Boolean, Double, Integer,
-	 * JSONArray, JSONObject, Long, or String, or the JSONObject.NULL object.
+	 * Get the next value. The value can be a Boolean, Double, Integer, JSONArray,
+	 * JSONObject, Long, or String, or the JSONObject.NULL object.
 	 * 
 	 * @throws CCDataException If syntax error.
 	 *
@@ -337,12 +336,12 @@ public class CCJsonFormat implements CCDataFormat<String> {
 		}
 
 		/*
-		 * Handle unquoted text. This could be the values true, false, or null,
-		 * or it can be a number. An implementation (such as this one) is
-		 * allowed to also accept non-standard forms.
+		 * Handle unquoted text. This could be the values true, false, or null, or it
+		 * can be a number. An implementation (such as this one) is allowed to also
+		 * accept non-standard forms.
 		 *
-		 * Accumulate characters until we reach the end of the text or a
-		 * formatting character.
+		 * Accumulate characters until we reach the end of the text or a formatting
+		 * character.
 		 */
 
 		StringBuilder sb = new StringBuilder();
@@ -360,12 +359,12 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	}
 
 	/**
-	 * Skip characters until the next character is the requested character. If
-	 * the requested character is not found, no characters are skipped.
+	 * Skip characters until the next character is the requested character. If the
+	 * requested character is not found, no characters are skipped.
 	 * 
 	 * @param to A character to skip to.
-	 * @return The requested character, or zero if the requested character is
-	 *         not found.
+	 * @return The requested character, or zero if the requested character is not
+	 *         found.
 	 */
 	@SuppressWarnings("unused")
 	private char skipTo(char to) throws CCDataException {
@@ -506,14 +505,13 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	}
 
 	/**
-	 * Write the contents of the {@linkplain CCDataArray} as JSON text to a
-	 * writer. For compactness, no whitespace is added.
+	 * Write the contents of the {@linkplain CCDataArray} as JSON text to a writer.
+	 * For compactness, no whitespace is added.
 	 * <p>
 	 * Warning: This method assumes that the data structure is acyclical.
 	 *
-	 * @param indentFactor The number of spaces to add to each level of
-	 *            indentation.
-	 * @param indent The indention of the top level.
+	 * @param indentFactor The number of spaces to add to each level of indentation.
+	 * @param indent       The indention of the top level.
 	 * @return The writer.
 	 * @throws CCDataException
 	 */
@@ -552,7 +550,8 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private final void writeValue(Writer writer, Object value, int indentFactor, int indent) throws CCDataException, IOException {
+	private final void writeValue(Writer writer, Object value, int indentFactor, int indent)
+			throws CCDataException, IOException {
 		if (value == null || value.equals(null)) {
 			writer.write("null");
 		} else if (value instanceof CCDataObject) {
@@ -583,15 +582,16 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	}
 
 	/**
-	 * Write the contents of the {@linkplain CCDataObject} as JSON text to a
-	 * writer. For compactness, no whitespace is added.
+	 * Write the contents of the {@linkplain CCDataObject} as JSON text to a writer.
+	 * For compactness, no whitespace is added.
 	 * <p>
 	 * Warning: This method assumes that the data structure is acyclical.
 	 *
 	 * @return The writer.
 	 * @throws CCDataException
 	 */
-	private void write(Map<String, Object> theObject, Writer theWriter, int indentFactor, int indent) throws CCDataException {
+	private void write(Map<String, Object> theObject, Writer theWriter, int indentFactor, int indent)
+			throws CCDataException {
 		try {
 			boolean commanate = false;
 			final int length = theObject.size();
@@ -647,6 +647,80 @@ public class CCJsonFormat implements CCDataFormat<String> {
 		}
 	}
 
+	/**
+	 * <p>
+	 * Converts an array of bytes into a string.
+	 * 
+	 * @param val An array of bytes
+	 * @return A string containing a lexical representation of xsd:base64Binary
+	 * @throws IllegalArgumentException if {@code val} is null.
+	 */
+	public static String printBase64Binary(byte[] val) {
+		return _printBase64Binary(val);
+	}
+
+	public static String _printBase64Binary(byte[] input) {
+		return _printBase64Binary(input, 0, input.length);
+	}
+
+	public static String _printBase64Binary(byte[] input, int offset, int len) {
+		char[] buf = new char[((len + 2) / 3) * 4];
+		int ptr = _printBase64Binary(input, offset, len, buf, 0);
+		assert ptr == buf.length;
+		return new String(buf);
+	}
+
+	private static final char[] encodeMap = initEncodeMap();
+
+	private static char[] initEncodeMap() {
+		char[] map = new char[64];
+		int i;
+		for (i = 0; i < 26; i++) {
+			map[i] = (char) ('A' + i);
+		}
+		for (i = 26; i < 52; i++) {
+			map[i] = (char) ('a' + (i - 26));
+		}
+		for (i = 52; i < 62; i++) {
+			map[i] = (char) ('0' + (i - 52));
+		}
+		map[62] = '+';
+		map[63] = '/';
+
+		return map;
+	}
+
+	public static char encode(int i) {
+		return encodeMap[i & 0x3F];
+	}
+
+	public static int _printBase64Binary(byte[] input, int offset, int len, char[] buf, int ptr) {
+		// encode elements until only 1 or 2 elements are left to encode
+		int remaining = len;
+		int i;
+		for (i = offset; remaining >= 3; remaining -= 3, i += 3) {
+			buf[ptr++] = encode(input[i] >> 2);
+			buf[ptr++] = encode(((input[i] & 0x3) << 4) | ((input[i + 1] >> 4) & 0xF));
+			buf[ptr++] = encode(((input[i + 1] & 0xF) << 2) | ((input[i + 2] >> 6) & 0x3));
+			buf[ptr++] = encode(input[i + 2] & 0x3F);
+		}
+		// encode when exactly 1 element (left) to encode
+		if (remaining == 1) {
+			buf[ptr++] = encode(input[i] >> 2);
+			buf[ptr++] = encode(((input[i]) & 0x3) << 4);
+			buf[ptr++] = '=';
+			buf[ptr++] = '=';
+		}
+		// encode when exactly 2 elements (left) to encode
+		if (remaining == 2) {
+			buf[ptr++] = encode(input[i] >> 2);
+			buf[ptr++] = encode(((input[i] & 0x3) << 4) | ((input[i + 1] >> 4) & 0xF));
+			buf[ptr++] = encode((input[i + 1] & 0xF) << 2);
+			buf[ptr++] = '=';
+		}
+		return ptr;
+	}
+
 	@Override
 	public CCDataObject load(URL theDocumentURL, boolean theIgnoreLineFeed, String theUser, String theKey) {
 		try {
@@ -656,7 +730,7 @@ public class CCJsonFormat implements CCDataFormat<String> {
 
 			if (theUser != null && theKey != null) {
 				String userpass = theUser + ":" + theKey;
-				String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userpass.getBytes());
+				String basicAuth = "Basic " + printBase64Binary(userpass.getBytes());
 
 				myUrlConnection.setRequestProperty("Authorization", basicAuth);
 			}
@@ -685,10 +759,9 @@ public class CCJsonFormat implements CCDataFormat<String> {
 	 * <p>
 	 * Warning: This method assumes that the data structure is acyclical.
 	 *
-	 * @param indentFactor The number of spaces to add to each level of
-	 *            indentation.
-	 * @return a printable, displayable, portable, transmittable representation
-	 *         of the object, beginning with <code>{</code>&nbsp;<small>(left
+	 * @param indentFactor The number of spaces to add to each level of indentation.
+	 * @return a printable, displayable, portable, transmittable representation of
+	 *         the object, beginning with <code>{</code>&nbsp;<small>(left
 	 *         brace)</small> and ending with <code>}</code>&nbsp;<small>(right
 	 *         brace)</small>.
 	 * @throws CCDataException If the object contains an invalid number.
