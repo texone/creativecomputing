@@ -25,7 +25,7 @@ public class CCImageSequenceAssetDemo extends CCGL2Adapter{
 		_myVideoTexture = new CCVideoTexture(this, CCTextureTarget.TEXTURE_2D, myAttributes);
 		
 		_myAsset = new CCImageSequenceAsset(theAnimator);
-		_myAsset.setListener(_myVideoTexture);
+//		_myAsset.setListener(_myVideoTexture);
 		
 //		for(CCRealtimeGraph myGraph:_myRealTimeGraph.instances()){
 //			CCLog.info(myGraph);

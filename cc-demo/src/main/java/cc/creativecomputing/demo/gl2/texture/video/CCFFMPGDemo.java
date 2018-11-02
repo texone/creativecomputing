@@ -17,51 +17,52 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.video.CCFFMPGMovie;
+//import cc.creativecomputing.video.CCFFMPGMovie;
 import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCFFMPGDemo extends CCGL2Adapter {
 	
-	private CCFFMPGMovie _myData;
+//	private CCFFMPGMovie _myData;
 	private CCVideoTexture _myTexture;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		
 //		_myData = new CCFFMPGMovie(theAnimator, CCNIOUtil.dataPath("videos/kaki.mov"));
+//		_myData = new CCFFMPGMovie(theAnimator, CCNIOUtil.dataPath("videos/sintel_trailer-1080p.mp4"));
 //		_myData = new CCFFMPGMovie(theAnimator, Paths.get("/Users/christianr/dev/artcom/unity/media-wall/media-wall/AssetCache/170214_SAO_PAULO-FullRes.mp4"));
-		_myData = new CCFFMPGMovie(theAnimator, CCNIOUtil.dataPath("videos/sagan.mp4"));
+//		_myData = new CCFFMPGMovie(theAnimator, CCNIOUtil.dataPath("videos/sagan.mp4"));
 //		_myData.loop();
-		_myData.printInfo();
-		_myTexture = new CCVideoTexture(this,_myData);
-		
-		mousePressed().add(theMouseEvent -> {
-			double myTime = theMouseEvent.x() / (double)g.width() * _myData.duration();
-			_myData.time(myTime);
-		});
-		
-		mouseDragged().add(theMouseEvent -> {
-			double myTime = theMouseEvent.x() / (double)g.width() * _myData.duration();
-			_myData.time(myTime);
-		});
-		
-		keyPressed().add(theKeyEvent -> {
-			switch(theKeyEvent.keyCode()){
-			case VK_S:
-				_myData.stop();
-				break;
-			case VK_R:
-				_myData.play();
-				break;
-			case VK_P:
-				_myData.pause();
-				break;
-			case VK_L:
-				_myLoop = !_myLoop;
-				_myData.loop(_myLoop);
-				break;
-			}
-		});
+//		_myData.printInfo();
+//		_myTexture = new CCVideoTexture(this,_myData);
+//		
+//		mousePressed().add(theMouseEvent -> {
+//			double myTime = theMouseEvent.x() / (double)g.width() * _myData.duration();
+//			_myData.time(myTime);
+//		});
+//		
+//		mouseDragged().add(theMouseEvent -> {
+//			double myTime = theMouseEvent.x() / (double)g.width() * _myData.duration();
+//			_myData.time(myTime);
+//		});
+//		
+//		keyPressed().add(theKeyEvent -> {
+//			switch(theKeyEvent.keyCode()){
+//			case VK_S:
+//				_myData.stop();
+//				break;
+//			case VK_R:
+//				_myData.play();
+//				break;
+//			case VK_P:
+//				_myData.pause();
+//				break;
+//			case VK_L:
+//				_myLoop = !_myLoop;
+//				_myData.loop(_myLoop);
+//				break;
+//			}
+//		});
 	}
 
 	@Override
@@ -92,9 +93,9 @@ public class CCFFMPGDemo extends CCGL2Adapter {
 		
 		g.color(255,0,0);
 		g.line(-g.width() / 2, 0, g.width()/2, 0);
-		double myPos = CCMath.map(_myData.time(), 0, _myData.duration(), -g.width() / 2, g.width() / 2);
+//		double myPos = CCMath.map(_myData.time(), 0, _myData.duration(), -g.width() / 2, g.width() / 2);
 		
-		g.line(myPos, -5, myPos, 5);
+//		g.line(myPos, -5, myPos, 5);
 	}
 
 	public static void main(String[] args) {

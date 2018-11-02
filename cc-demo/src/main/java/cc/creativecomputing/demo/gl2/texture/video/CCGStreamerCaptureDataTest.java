@@ -19,33 +19,33 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.math.signal.CCSimplexNoise;
-import cc.creativecomputing.video.CCGStreamerCapture;
-import cc.creativecomputing.video.CCGStreamerCapture.CCGStreamerCaptureResolution;
+//import cc.creativecomputing.video.CCGStreamerCapture;
+//import cc.creativecomputing.video.CCGStreamerCapture.CCGStreamerCaptureResolution;
 import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCGStreamerCaptureDataTest extends CCGL2Adapter {
 	
-	private CCGStreamerCapture _myData;
+//	private CCGStreamerCapture _myData;
 	private CCVideoTexture _myTexture;
 	
 	private CCSimplexNoise _mySimplex = new CCSimplexNoise();
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		for(String myDevice : CCGStreamerCapture.list()) {
-			CCLog.info(myDevice);
-		}
-		
-		_myData = new CCGStreamerCapture(theAnimator, 640, 480, 30);
-		_myData.start();
-		
-		for(CCGStreamerCaptureResolution myResolution:_myData.resolutions()) {
-			CCLog.info("RES");
-			CCLog.info(myResolution.width+":"+myResolution.height);
-			CCLog.info(myResolution.fps);
-		}
-		
-		_myTexture = new CCVideoTexture(_myData);
+//		for(String myDevice : CCGStreamerCapture.list()) {
+//			CCLog.info(myDevice);
+//		}
+//		
+//		_myData = new CCGStreamerCapture(theAnimator, 640, 480, 30);
+//		_myData.start();
+//		
+//		for(CCGStreamerCaptureResolution myResolution:_myData.resolutions()) {
+//			CCLog.info("RES");
+//			CCLog.info(myResolution.width+":"+myResolution.height);
+//			CCLog.info(myResolution.fps);
+//		}
+//		
+//		_myTexture = new CCVideoTexture(_myData);
 	}
 	
 	double _myTime = 0;

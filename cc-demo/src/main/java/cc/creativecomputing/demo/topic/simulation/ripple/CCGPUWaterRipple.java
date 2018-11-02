@@ -191,7 +191,7 @@ public class CCGPUWaterRipple{
 	public void draw(CCGraphics g) {
 
 		applySplashes(g);
-		simulate(g);
+		//simulate(g);
 		//pass water simulation texture
 		
 //		g.texture(0,_myCurrentCellLocationsTexture.attachment(0));

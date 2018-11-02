@@ -8,13 +8,12 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTextureAttributes;
-import cc.creativecomputing.video.CCVideoAsset;
 import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCVideoAssetDemo extends CCGL2Adapter{
 	
-	@CCProperty(name = "video asset")
-	private CCVideoAsset _myAsset;
+//	@CCProperty(name = "video asset")
+//	private CCVideoAsset _myAsset;
 	private CCVideoTexture _myVideoTexture;
 	
 	@Override
@@ -24,8 +23,8 @@ public class CCVideoAssetDemo extends CCGL2Adapter{
 		myAttributes.generateMipmaps(true);
 		_myVideoTexture = new CCVideoTexture(this, CCTextureTarget.TEXTURE_2D, myAttributes);
 		
-		_myAsset = new CCVideoAsset(theAnimator);
-		_myAsset.setListener(_myVideoTexture);
+//		_myAsset = new CCVideoAsset(theAnimator);
+//		_myAsset.setListener(_myVideoTexture);
 		
 //		for(CCRealtimeGraph myGraph:_myRealTimeGraph.instances()){
 //			CCLog.info(myGraph);

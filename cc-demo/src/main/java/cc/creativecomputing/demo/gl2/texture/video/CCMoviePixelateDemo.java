@@ -16,7 +16,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.video.CCGStreamerMovie;
+//import cc.creativecomputing.video.CCGStreamerMovie;
 
 /**
  * @author christianriekoff
@@ -24,14 +24,14 @@ import cc.creativecomputing.video.CCGStreamerMovie;
  */
 public class CCMoviePixelateDemo  extends CCGL2Adapter {
 	
-	private CCGStreamerMovie _myData;
+//	private CCGStreamerMovie _myData;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 //		_myData = new CCGStreamerMovie(this, CCIOUtil.dataPath("videos/120116_spline2_fine2_1356x136_jpg.mov"));
-		_myData = new CCGStreamerMovie(theAnimator, CCNIOUtil.dataPath("videos/station.mov"));
-		_myData.loop();
-		_myData.time(20);
+//		_myData = new CCGStreamerMovie(theAnimator, CCNIOUtil.dataPath("videos/station.mov"));
+//		_myData.loop();
+//		_myData.time(20);
 		
 		g.clearColor(1f);
 		g.clear();

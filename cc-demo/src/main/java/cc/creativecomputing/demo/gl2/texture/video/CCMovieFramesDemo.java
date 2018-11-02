@@ -19,12 +19,12 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.font.text.CCText;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.video.CCGStreamerMovie;
+//import cc.creativecomputing.video.CCGStreamerMovie;
 import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCMovieFramesDemo extends CCGL2Adapter {
 
-	private CCGStreamerMovie _myData;
+//	private CCGStreamerMovie _myData;
 	private CCVideoTexture _myTexture;
 	
 	private int _myNewFrame;
@@ -35,8 +35,8 @@ public class CCMovieFramesDemo extends CCGL2Adapter {
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_myText = new CCText(CCFontIO.createVectorFont("arial", 24));
 		
-		_myData = new CCGStreamerMovie(theAnimator, CCNIOUtil.dataPath("videos/120123_counter_640x64_30fps_anim.mov"));
-		_myTexture = new CCVideoTexture(_myData);
+//		_myData = new CCGStreamerMovie(theAnimator, CCNIOUtil.dataPath("videos/120123_counter_640x64_30fps_anim.mov"));
+//		_myTexture = new CCVideoTexture(_myData);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class CCMovieFramesDemo extends CCGL2Adapter {
 		
 		g.color(240, 20, 30);
 		_myText.position(-g.width() / 2 + 10, -g.height() / 2 + 30);
-		_myText.text(_myData.frame() + " / " + (_myData.numberOfFrames() - 1) + " / " + _myNewFrame);
+//		_myText.text(_myData.frame() + " / " + (_myData.numberOfFrames() - 1) + " / " + _myNewFrame);
 		_myText.draw(g);
 	}
 
@@ -63,17 +63,17 @@ public class CCMovieFramesDemo extends CCGL2Adapter {
 				_myNewFrame--;
 			break;
 		case VK_RIGHT:
-			if (_myNewFrame < _myData.numberOfFrames() * 2 - 1)
-				_myNewFrame++;
+//			if (_myNewFrame < _myData.numberOfFrames() * 2 - 1)
+//				_myNewFrame++;
 			break;
 		default:
 		}
 
-		_myData.frame(_myNewFrame / 2);
+//		_myData.frame(_myNewFrame / 2);
 	}
 
 	public static void main(String[] args) {
-		CCMovieLoopDemo demo = new CCMovieLoopDemo();
+		CCMovieFramesDemo demo = new CCMovieFramesDemo();
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1000, 500);

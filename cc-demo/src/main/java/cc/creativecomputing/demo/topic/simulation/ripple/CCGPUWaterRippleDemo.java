@@ -48,6 +48,7 @@ public class CCGPUWaterRippleDemo extends CCGL2Adapter {
 		_myWaterRipple = new CCGPUWaterRipple(g, null, g.width(), g.height());
 		_myWaterRipple.backgroundTexture(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/waltz.jpg")), CCTextureTarget.TEXTURE_RECT));
 		g.imageMode(CCShapeMode.CENTER);
+		
 	}
 
 	float _myAngle = 0;

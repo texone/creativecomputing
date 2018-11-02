@@ -1,0 +1,336 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "voronoise": {
+        "name": "voronoise",
+        "value": {"fragment": {
+          "name": "fragment",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "noisecontours.glsl": {
+              "name": "noisecontours.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@3ae16dd6"
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {
+                "octaves": {
+                  "min": 1,
+                  "max": 4,
+                  "name": "octaves",
+                  "value": 3.375999927520752
+                },
+                "u": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "u",
+                  "value": 1
+                },
+                "v": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "v",
+                  "value": 0.0430000014603138
+                },
+                "scale": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "scale",
+                  "value": 1
+                },
+                "lacunarity": {
+                  "min": 0,
+                  "max": 4,
+                  "name": "lacunarity",
+                  "value": 2.0399999618530273
+                },
+                "gain": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "gain",
+                  "value": 0.5099999904632568
+                }
+              }
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        }}
+      },
+      "shaper": {
+        "curve": {"points": [
+          {
+            "time": 0,
+            "type": "LINEAR",
+            "value": 0
+          },
+          {
+            "time": 1,
+            "type": "LINEAR",
+            "value": 1
+          }
+        ]},
+        "name": "shaper",
+        "value": "cc.creativecomputing.control.CCEnvelope@3a6919e9"
+      },
+      "screen capture": {
+        "name": "screen capture",
+        "value": {
+          "full window": {},
+          "record key": {
+            "name": "record key",
+            "value": true
+          },
+          "format": {
+            "name": "format",
+            "value": "PNG"
+          },
+          "prepend": {
+            "name": "prepend",
+            "value": "frame_"
+          },
+          "draw bounds": {
+            "name": "draw bounds",
+            "value": false
+          },
+          "quality": {
+            "min": 0,
+            "max": 1,
+            "name": "quality",
+            "value": 1
+          },
+          "seconds": {
+            "min": 1,
+            "max": 1000,
+            "name": "seconds",
+            "value": 100
+          },
+          "record frame": {},
+          "alpha": {
+            "name": "alpha",
+            "value": false
+          },
+          "x": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "x",
+            "value": 0
+          },
+          "width": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "width",
+            "value": 0
+          },
+          "y": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "y",
+            "value": 0
+          },
+          "capture rate": {
+            "min": 1,
+            "max": 60,
+            "name": "capture rate",
+            "value": 1
+          },
+          "record sequence": {},
+          "height": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "height",
+            "value": 0
+          },
+          "record timeline loop": {}
+        }
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "2560 x 1440"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1680
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.489168569406118
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}

@@ -16,22 +16,21 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.video.CCFFMPGMovie;
 import cc.creativecomputing.video.CCVideoTexture;
+import cc.creativecomputing.video.Movie;
 
 public class CCGStreamerDemo extends CCGL2Adapter {
 	
-	private CCFFMPGMovie _myData;
+	private Movie _myData;
 	private CCVideoTexture _myTexture;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		
 //		_myData = new CCGStreamerMovie(this, CCIOUtil.dataPath("videos/120116_spline2_fine2_1356x136_jpg.mov"));
-		_myData = new CCFFMPGMovie(theAnimator, CCNIOUtil.dataPath("videos/sagan.mp4"));//
+		_myData = new Movie(theAnimator, CCNIOUtil.dataPath("videos/sintel_trailer-1080p.mp4"));//
 //		_myData = new CCGStreamerMovie(this, "http://cabspotting.org/movies/lines-sf4hr.mpg");
 		_myData.play();
-		_myData.loop();
 		
 		_myTexture = new CCVideoTexture(this,_myData);
 	}
@@ -58,13 +57,13 @@ public class CCGStreamerDemo extends CCGL2Adapter {
 //		g.endShape();
 //		g.noTexture();
 		
-		for(int x = 0; x < _myData.width();x+=10){
-			for(int y = 0; y < _myData.height();y+=10){
-				g.color(_myData.getPixel(x, y));
-				g.rect(x-_myTexture.width()/2, y-_myTexture.height()/2, 10,10);
-			}
-		}
-//		g.image(_myTexture, -_myTexture.width()/2, -_myTexture.height()/2);
+//		for(int x = 0; x < _myData.width();x+=10){
+//			for(int y = 0; y < _myData.height();y+=10){
+//				g.color(_myData.getPixel(x, y));
+//				g.rect(x-_myTexture.width()/2, y-_myTexture.height()/2, 10,10);
+//			}
+//		}
+		g.image(_myTexture, -_myTexture.width()/2, -_myTexture.height()/2);
 	}
 
 	public static void main(String[] args) {

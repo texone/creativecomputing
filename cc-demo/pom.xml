@@ -98,5 +98,10 @@
 			<artifactId>cc-video</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>cc.creativecomputing</groupId>
+			<artifactId>cc-video-gstreamer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

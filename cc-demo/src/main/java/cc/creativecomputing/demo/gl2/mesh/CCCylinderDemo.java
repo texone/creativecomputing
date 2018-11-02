@@ -12,11 +12,9 @@ package cc.creativecomputing.demo.gl2.mesh;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.demo.gl2.camera.CC2CameraControllerDemo;
 import cc.creativecomputing.graphics.CCDrawAttributes;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
-import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
@@ -24,7 +22,6 @@ import cc.creativecomputing.graphics.primitives.CCCylinderMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLShaderUtil;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.math.CCVector3;
 
 public class CCCylinderDemo extends CCGL2Adapter {
 

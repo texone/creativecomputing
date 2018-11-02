@@ -16,22 +16,22 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.io.CCNIOUtil;
-import cc.creativecomputing.video.CCGStreamerMovie;
+//import cc.creativecomputing.video.CCGStreamerMovie;
 import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCMovieLoopDemo extends CCGL2Adapter {
 	
-	private CCGStreamerMovie _myMovie;
+//	private CCGStreamerMovie _myMovie;
 	private CCVideoTexture _myTexture;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 //		_myData = new CCGStreamerMovie(this, CCIOUtil.dataPath("videos/120116_spline2_fine2_1356x136_jpg.mov"));
-		_myMovie = new CCGStreamerMovie(theAnimator, CCNIOUtil.dataPath("videos/station.mov"));
-		_myMovie.loop();
-		_myMovie.time(20);
-		
-		_myTexture = new CCVideoTexture(_myMovie);
+//		_myMovie = new CCGStreamerMovie(theAnimator, CCNIOUtil.dataPath("videos/sintel_trailer-1080p.mp4"));
+//		_myMovie.loop();
+//		_myMovie.time(20);
+//		
+//		_myTexture = new CCVideoTexture(_myMovie);
 		g.clearColor(1f);
 		g.clear();
 	}

@@ -161,9 +161,12 @@ public class CCRainText {
 		_myText.size(mySize);
 		_myText.width(300);
 //		_myText.lineBreak(CCLineBreakMode.BLOCK);
-		_myText.text("WATER AQUA");
 		_myText.text("Weniger als 1% des Wassers auf \nder Erde kann als Trinkwasser \ngenutzt werden.");
 		_myText.position(100,100);
+		_myText.textEvents.add(t -> {
+			_myEffectManager.effectables(_myText._myChars);
+			CCLog.info("bla");
+		});
 		
 		_myEffectManager = new CCEffectManager<>(_myText._myChars, "a");
 		_myEffectManager.addIdSources(CCEffectable.COLUMN_SOURCE, CCEffectable.ROW_SOURCE);
@@ -194,6 +197,7 @@ public class CCRainText {
 	
 	
 	public void update(CCAnimator theAnimator) {
+		_myText.text("WATER AQUA 2");
 		_myEffectManager.update(theAnimator);
 	}
 	
