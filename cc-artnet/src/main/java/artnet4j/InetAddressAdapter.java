@@ -21,16 +21,15 @@ package artnet4j;
 
 import java.net.InetAddress;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class InetAddressAdapter extends XmlAdapter<String, InetAddress> {
+public class InetAddressAdapter{// extends XmlAdapter<String, InetAddress> {
 
-	@Override
+//	@Override
 	public String marshal(InetAddress adr) {
 		return adr.getHostAddress();
 	}
 
-	@Override
+//	@Override
 	public InetAddress unmarshal(String adr) throws Exception {
 		return InetAddress.getByName(adr);
 	}

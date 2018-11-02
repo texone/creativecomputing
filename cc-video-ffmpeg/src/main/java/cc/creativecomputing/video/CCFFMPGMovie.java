@@ -277,7 +277,7 @@ public class CCFFMPGMovie extends CCMovieData {
 		if(!_myIsFirstFrame && !_mySeek && !_myIsRunning)return;
 		
 		if (av_read_frame(_myFormatContext, _myPacket) < 0) {
-			_myMovieEvents.proxy().onEnd();
+			endEvents.proxy().event();
 			if (_myDoRepeat) {
 				play(true);
 			}

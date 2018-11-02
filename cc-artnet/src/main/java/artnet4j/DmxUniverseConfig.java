@@ -21,28 +21,25 @@ package artnet4j;
 
 import java.net.InetAddress;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 public class DmxUniverseConfig {
 
-    @XmlAttribute
     public String id;
 
-    @XmlAttribute
-    @XmlJavaTypeAdapter(InetAddressAdapter.class)
+//    @XmlAttribute
+//    @XmlJavaTypeAdapter(InetAddressAdapter.class)
     public InetAddress ip;
 
-    @XmlAttribute(name = "universe")
+//    @XmlAttribute(name = "universe")
     public int universeID;
 
-    @XmlAttribute(name = "numchannels")
+//    @XmlAttribute(name = "numchannels")
     public int numDmxChannels;
 
-    @XmlAttribute(name = "port")
+//    @XmlAttribute(name = "port")
     public int serverPort;
 
-    @XmlAttribute
+//    @XmlAttribute
     public boolean ignoreNumChannels;
 
     @Override
