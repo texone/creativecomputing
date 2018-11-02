@@ -1,0 +1,1039 @@
+{"timelines": {"default": {
+  "lower_bound": 0,
+  "quantize": "SUBSTEP_4",
+  "timeline": [{
+    "path": "app",
+    "min": 0,
+    "max": 1,
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app\\app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [
+        {
+          "path": "app\\app\\camera",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "Extras": {},
+          "eventTypes": "new",
+          "open": true,
+          "tracks": [
+            {
+              "path": "app\\app\\camera\\distance",
+              "min": 1,
+              "max": 20000,
+              "accumulate": false,
+              "mute": false,
+              "TrackData": {"points": [
+                {
+                  "in": {
+                    "time": 0,
+                    "type": "HANDLE",
+                    "value": 0.03239842176154834
+                  },
+                  "time": 0,
+                  "type": "BEZIER",
+                  "value": 0.03239842176154834,
+                  "out": {
+                    "time": 1.0858538539633658,
+                    "type": "HANDLE",
+                    "value": 0.03239842176154834
+                  }
+                },
+                {
+                  "in": {
+                    "time": 8.86780644931397,
+                    "type": "HANDLE",
+                    "value": 0.01951714383624942
+                  },
+                  "time": 9.953660303277337,
+                  "type": "BEZIER",
+                  "value": 0.01951714383624942,
+                  "out": {
+                    "time": 11.79516688954634,
+                    "type": "HANDLE",
+                    "value": 0.01951714383624942
+                  }
+                },
+                {
+                  "in": {
+                    "time": 18.240439639641412,
+                    "type": "HANDLE",
+                    "value": 0.006881293335938761
+                  },
+                  "time": 20.081946225910414,
+                  "type": "BEZIER",
+                  "value": 0.006881293335938761,
+                  "out": {
+                    "time": 21.885228784032346,
+                    "type": "HANDLE",
+                    "value": 0.006881293335938761
+                  }
+                },
+                {
+                  "in": {
+                    "time": 28.196717441878068,
+                    "type": "HANDLE",
+                    "value": 0.06855610697266715
+                  },
+                  "time": 30,
+                  "type": "BEZIER",
+                  "value": 0.06855610697266715,
+                  "out": {
+                    "time": 30,
+                    "type": "HANDLE",
+                    "value": 0.06855610697266715
+                  }
+                }
+              ]}
+            },
+            {
+              "path": "app\\app\\camera\\center",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": false,
+              "tracks": [
+                {
+                  "path": "app\\app\\camera\\center\\x",
+                  "min": -10000,
+                  "max": 10000,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 0,
+                      "type": "LINEAR",
+                      "value": 0.5019436855039671
+                    },
+                    {
+                      "time": 9.953660303277337,
+                      "type": "LINEAR",
+                      "value": 0.5019436855039671
+                    },
+                    {
+                      "time": 20.081946225910414,
+                      "type": "LINEAR",
+                      "value": 0.5019436855039671
+                    },
+                    {
+                      "time": 30.122919338865625,
+                      "type": "LINEAR",
+                      "value": 0.49941928163430366
+                    }
+                  ]}
+                },
+                {
+                  "path": "app\\app\\camera\\center\\y",
+                  "min": -10000,
+                  "max": 10000,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 0,
+                      "type": "LINEAR",
+                      "value": 0.4999612375515479
+                    },
+                    {
+                      "time": 9.953660303277337,
+                      "type": "LINEAR",
+                      "value": 0.4999612375515479
+                    },
+                    {
+                      "time": 20.081946225910414,
+                      "type": "LINEAR",
+                      "value": 0.4999612375515479
+                    },
+                    {
+                      "time": 30.122919338865625,
+                      "type": "LINEAR",
+                      "value": 0.4994856606302026
+                    }
+                  ]}
+                },
+                {
+                  "path": "app\\app\\camera\\center\\z",
+                  "min": -10000,
+                  "max": 10000,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 0,
+                      "type": "LINEAR",
+                      "value": 0.49575611595128677
+                    },
+                    {
+                      "time": 9.953660303277337,
+                      "type": "LINEAR",
+                      "value": 0.49575611595128677
+                    },
+                    {
+                      "time": 20.081946225910414,
+                      "type": "LINEAR",
+                      "value": 0.49575611595128677
+                    },
+                    {
+                      "time": 30.122919338865625,
+                      "type": "LINEAR",
+                      "value": 0.49854637344351294
+                    }
+                  ]}
+                }
+              ],
+              "TrackData": {"points": []}
+            },
+            {
+              "path": "app\\app\\camera\\rotation",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [
+                {
+                  "path": "app\\app\\camera\\rotation\\x",
+                  "min": -1,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 0,
+                        "type": "HANDLE",
+                        "value": 0.46695662436170343
+                      },
+                      "time": 0,
+                      "type": "BEZIER",
+                      "value": 0.46695662436170343,
+                      "out": {
+                        "time": 2.5336589431408214,
+                        "type": "HANDLE",
+                        "value": 0.46695662436170343
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 7.420001360136515,
+                        "type": "HANDLE",
+                        "value": 0.4731656096340189
+                      },
+                      "time": 9.953660303277337,
+                      "type": "BEZIER",
+                      "value": 0.4731656096340189,
+                      "out": {
+                        "time": 10.321961597892654,
+                        "type": "HANDLE",
+                        "value": 0.4731656096340189
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 19.713644931295097,
+                        "type": "HANDLE",
+                        "value": 0.42814658052682697
+                      },
+                      "time": 20.081946225910414,
+                      "type": "BEZIER",
+                      "value": 0.42814658052682697,
+                      "out": {
+                        "time": 22.63783024749984,
+                        "type": "HANDLE",
+                        "value": 0.42814658052682697
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 27.5670353172762,
+                        "type": "HANDLE",
+                        "value": 0.2812798792447642
+                      },
+                      "time": 30.122919338865625,
+                      "type": "BEZIER",
+                      "value": 0.2812798792447642,
+                      "out": {
+                        "time": 30.122919338865625,
+                        "type": "HANDLE",
+                        "value": 0.2812798792447642
+                      }
+                    }
+                  ]}
+                },
+                {
+                  "path": "app\\app\\camera\\rotation\\y",
+                  "min": -1,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 0,
+                        "type": "HANDLE",
+                        "value": 0.49338537959321344
+                      },
+                      "time": 0,
+                      "type": "BEZIER",
+                      "value": 0.49338537959321344,
+                      "out": {
+                        "time": 2.5336589431408214,
+                        "type": "HANDLE",
+                        "value": 0.49338537959321344
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 7.420001360136515,
+                        "type": "HANDLE",
+                        "value": 0.4188684502224327
+                      },
+                      "time": 9.953660303277337,
+                      "type": "BEZIER",
+                      "value": 0.4188684502224327,
+                      "out": {
+                        "time": 11.058564224854095,
+                        "type": "HANDLE",
+                        "value": 0.4188684502224327
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 18.977042304333658,
+                        "type": "HANDLE",
+                        "value": 0.4727290496196013
+                      },
+                      "time": 20.081946225910414,
+                      "type": "BEZIER",
+                      "value": 0.4727290496196013,
+                      "out": {
+                        "time": 22.63783024749984,
+                        "type": "HANDLE",
+                        "value": 0.4727290496196013
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 27.5670353172762,
+                        "type": "HANDLE",
+                        "value": 0.3572145990277326
+                      },
+                      "time": 30.122919338865625,
+                      "type": "BEZIER",
+                      "value": 0.3572145990277326,
+                      "out": {
+                        "time": 30.122919338865625,
+                        "type": "HANDLE",
+                        "value": 0.3572145990277326
+                      }
+                    }
+                  ]}
+                },
+                {
+                  "path": "app\\app\\camera\\rotation\\z",
+                  "min": -1,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 0,
+                        "type": "HANDLE",
+                        "value": 0.4510003732248226
+                      },
+                      "time": 0,
+                      "type": "BEZIER",
+                      "value": 0.4510003732248226,
+                      "out": {
+                        "time": 1.8097564727126418,
+                        "type": "HANDLE",
+                        "value": 0.4510003732248226
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 8.143903830564694,
+                        "type": "HANDLE",
+                        "value": 0.4463419374208327
+                      },
+                      "time": 9.953660303277337,
+                      "type": "BEZIER",
+                      "value": 0.4463419374208327,
+                      "out": {
+                        "time": 11.058564224854095,
+                        "type": "HANDLE",
+                        "value": 0.4463419374208327
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 18.977042304333658,
+                        "type": "HANDLE",
+                        "value": 0.45593965255837976
+                      },
+                      "time": 20.081946225910414,
+                      "type": "BEZIER",
+                      "value": 0.45593965255837976,
+                      "out": {
+                        "time": 21.177325113680478,
+                        "type": "HANDLE",
+                        "value": 0.45593965255837976
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 29.02754045109556,
+                        "type": "HANDLE",
+                        "value": 0.41750401752941907
+                      },
+                      "time": 30.122919338865625,
+                      "type": "BEZIER",
+                      "value": 0.41750401752941907,
+                      "out": {
+                        "time": 30.122919338865625,
+                        "type": "HANDLE",
+                        "value": 0.41750401752941907
+                      }
+                    }
+                  ]}
+                },
+                {
+                  "path": "app\\app\\camera\\rotation\\w",
+                  "min": -1,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "in": {
+                        "time": 0,
+                        "type": "HANDLE",
+                        "value": 0.003549177965028072
+                      },
+                      "time": 0,
+                      "type": "BEZIER",
+                      "value": 0.003549177965028072,
+                      "out": {
+                        "time": 3.2575614135690008,
+                        "type": "HANDLE",
+                        "value": 0.003549177965028072
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 6.696098889708336,
+                        "type": "HANDLE",
+                        "value": 0.010287431808584435
+                      },
+                      "time": 9.953660303277337,
+                      "type": "BEZIER",
+                      "value": 0.010287431808584435,
+                      "out": {
+                        "time": 11.058564224854095,
+                        "type": "HANDLE",
+                        "value": 0.010287431808584435
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 18.977042304333658,
+                        "type": "HANDLE",
+                        "value": 0.007910508993850707
+                      },
+                      "time": 20.081946225910414,
+                      "type": "BEZIER",
+                      "value": 0.007910508993850707,
+                      "out": {
+                        "time": 21.90757775540124,
+                        "type": "HANDLE",
+                        "value": 0.007910508993850707
+                      }
+                    },
+                    {
+                      "in": {
+                        "time": 28.2972878093748,
+                        "type": "HANDLE",
+                        "value": 0.08170793586033348
+                      },
+                      "time": 30.122919338865625,
+                      "type": "BEZIER",
+                      "value": 0.08170793586033348,
+                      "out": {
+                        "time": 30.122919338865625,
+                        "type": "HANDLE",
+                        "value": 0.08170793586033348
+                      }
+                    }
+                  ]}
+                }
+              ],
+              "TrackData": {"points": []}
+            },
+            {
+              "path": "app\\app\\camera\\fov",
+              "min": 0,
+              "max": 90,
+              "accumulate": false,
+              "mute": false,
+              "TrackData": {"points": [
+                {
+                  "time": 0,
+                  "type": "LINEAR",
+                  "value": 0.5
+                },
+                {
+                  "time": 9.953660303277337,
+                  "type": "LINEAR",
+                  "value": 0.5
+                },
+                {
+                  "time": 20.081946225910414,
+                  "type": "LINEAR",
+                  "value": 0.5
+                },
+                {
+                  "time": 30.122919338865625,
+                  "type": "LINEAR",
+                  "value": 0.5
+                }
+              ]}
+            },
+            {
+              "path": "app\\app\\camera\\rotation mode",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "TrackData": {"points": [
+                {
+                  "end": {
+                    "time": 0.9863662719726562,
+                    "type": "HANDLE",
+                    "value": 1
+                  },
+                  "time": 0,
+                  "id": 1540553209450,
+                  "type": "TIMED_EVENT",
+                  "value": 0,
+                  "content": {"value": "FREE"}
+                },
+                {
+                  "end": {
+                    "time": 14.026802874750036,
+                    "type": "HANDLE",
+                    "value": 1
+                  },
+                  "time": 9.953660303277337,
+                  "id": 1540553229457,
+                  "type": "TIMED_EVENT",
+                  "value": 0,
+                  "content": {"value": "FREE"}
+                },
+                {
+                  "end": {
+                    "time": 24.155088797383115,
+                    "type": "HANDLE",
+                    "value": 1
+                  },
+                  "time": 20.081946225910414,
+                  "id": 1540553249731,
+                  "type": "TIMED_EVENT",
+                  "value": 0,
+                  "content": {"value": "FREE"}
+                },
+                {
+                  "end": {
+                    "time": 34.19606191033832,
+                    "type": "HANDLE",
+                    "value": 1
+                  },
+                  "time": 30.122919338865625,
+                  "id": 1540553267272,
+                  "type": "TIMED_EVENT",
+                  "value": 0,
+                  "content": {"value": "FREE"}
+                }
+              ]}
+            },
+            {
+              "path": "app\\app\\camera\\camera",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [
+                {
+                  "path": "app\\app\\camera\\camera\\position",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "Extras": {},
+                  "eventTypes": "new",
+                  "open": true,
+                  "tracks": [
+                    {
+                      "path": "app\\app\\camera\\camera\\position\\x",
+                      "min": -10,
+                      "max": 10,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 9.953660303277337,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20.081946225910414,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30.122919338865625,
+                          "type": "LINEAR",
+                          "value": 0
+                        }
+                      ]}
+                    },
+                    {
+                      "path": "app\\app\\camera\\camera\\position\\y",
+                      "min": -10,
+                      "max": 10,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 9.953660303277337,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20.081946225910414,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30.122919338865625,
+                          "type": "LINEAR",
+                          "value": 0
+                        }
+                      ]}
+                    },
+                    {
+                      "path": "app\\app\\camera\\camera\\position\\z",
+                      "min": 90,
+                      "max": 110,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 9.953660303277337,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20.081946225910414,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30.122919338865625,
+                          "type": "LINEAR",
+                          "value": 0
+                        }
+                      ]}
+                    }
+                  ],
+                  "TrackData": {"points": []}
+                },
+                {
+                  "path": "app\\app\\camera\\camera\\target",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "Extras": {},
+                  "eventTypes": "new",
+                  "open": true,
+                  "tracks": [
+                    {
+                      "path": "app\\app\\camera\\camera\\target\\x",
+                      "min": -10,
+                      "max": 10,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 9.953660303277337,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20.081946225910414,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30.122919338865625,
+                          "type": "LINEAR",
+                          "value": 0
+                        }
+                      ]}
+                    },
+                    {
+                      "path": "app\\app\\camera\\camera\\target\\y",
+                      "min": -10,
+                      "max": 10,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 9.953660303277337,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20.081946225910414,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30.122919338865625,
+                          "type": "LINEAR",
+                          "value": 0
+                        }
+                      ]}
+                    },
+                    {
+                      "path": "app\\app\\camera\\camera\\target\\z",
+                      "min": -10,
+                      "max": 10,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 9.953660303277337,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20.081946225910414,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30.122919338865625,
+                          "type": "LINEAR",
+                          "value": 0
+                        }
+                      ]}
+                    }
+                  ],
+                  "TrackData": {"points": []}
+                },
+                {
+                  "path": "app\\app\\camera\\camera\\up",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "Extras": {},
+                  "eventTypes": "new",
+                  "open": true,
+                  "tracks": [
+                    {
+                      "path": "app\\app\\camera\\camera\\up\\x",
+                      "min": -10,
+                      "max": 10,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 9.953660303277337,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20.081946225910414,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30.122919338865625,
+                          "type": "LINEAR",
+                          "value": 0
+                        }
+                      ]}
+                    },
+                    {
+                      "path": "app\\app\\camera\\camera\\up\\y",
+                      "min": -9,
+                      "max": 11,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 9.953660303277337,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20.081946225910414,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30.122919338865625,
+                          "type": "LINEAR",
+                          "value": 0
+                        }
+                      ]}
+                    },
+                    {
+                      "path": "app\\app\\camera\\camera\\up\\z",
+                      "min": -10,
+                      "max": 10,
+                      "accumulate": false,
+                      "mute": false,
+                      "TrackData": {"points": [
+                        {
+                          "time": 0,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 9.953660303277337,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 20.081946225910414,
+                          "type": "LINEAR",
+                          "value": 0
+                        },
+                        {
+                          "time": 30.122919338865625,
+                          "type": "LINEAR",
+                          "value": 0
+                        }
+                      ]}
+                    }
+                  ],
+                  "TrackData": {"points": []}
+                },
+                {
+                  "path": "app\\app\\camera\\camera\\fov",
+                  "min": 0,
+                  "max": 1.5707963267948966,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 0,
+                      "type": "LINEAR",
+                      "value": 0.6666666666666666
+                    },
+                    {
+                      "time": 9.953660303277337,
+                      "type": "LINEAR",
+                      "value": 0.6666666666666666
+                    },
+                    {
+                      "time": 20.081946225910414,
+                      "type": "LINEAR",
+                      "value": 0.6666666666666666
+                    },
+                    {
+                      "time": 30.122919338865625,
+                      "type": "LINEAR",
+                      "value": 0.6666666666666666
+                    }
+                  ]}
+                },
+                {
+                  "path": "app\\app\\camera\\camera\\apect ratio",
+                  "min": 0.1,
+                  "max": 10,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 0,
+                      "type": "LINEAR",
+                      "value": 0.09090909090909091
+                    },
+                    {
+                      "time": 9.953660303277337,
+                      "type": "LINEAR",
+                      "value": 0.09090909090909091
+                    },
+                    {
+                      "time": 20.081946225910414,
+                      "type": "LINEAR",
+                      "value": 0.09090909090909091
+                    },
+                    {
+                      "time": 30.122919338865625,
+                      "type": "LINEAR",
+                      "value": 0.09090909090909091
+                    }
+                  ]}
+                }
+              ],
+              "TrackData": {"points": []}
+            }
+          ],
+          "TrackData": {"points": []}
+        },
+        {
+          "path": "app\\app\\particles",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "Extras": {},
+          "eventTypes": "new",
+          "open": true,
+          "tracks": [{
+            "path": "app\\app\\particles\\forces",
+            "min": 0,
+            "max": 1,
+            "accumulate": false,
+            "mute": false,
+            "Extras": {},
+            "eventTypes": "new",
+            "open": true,
+            "tracks": [{
+              "path": "app\\app\\particles\\forces\\attractor",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [
+                {
+                  "path": "app\\app\\particles\\forces\\attractor\\radius",
+                  "min": 0,
+                  "max": 3000,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 20.081946225910414,
+                      "type": "LINEAR",
+                      "value": 0.13636363636363635
+                    },
+                    {
+                      "time": 22.5,
+                      "type": "LINEAR",
+                      "value": 0.4636363636363636
+                    }
+                  ]}
+                },
+                {
+                  "path": "app\\app\\particles\\forces\\attractor\\strength",
+                  "min": 0,
+                  "max": 10,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 19.907320606554674,
+                      "type": "LINEAR",
+                      "value": 0.13636363636363635
+                    },
+                    {
+                      "time": 22.5,
+                      "type": "LINEAR",
+                      "value": 0.6090909090909091
+                    }
+                  ]}
+                }
+              ],
+              "TrackData": {"points": []}
+            }],
+            "TrackData": {"points": []}
+          }],
+          "TrackData": {"points": []}
+        }
+      ],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 40.731425714726996,
+  "Transport": {
+    "loop_end": 30,
+    "loop_active": true,
+    "marker": {"points": []},
+    "loop_start": 0,
+    "speed": 1
+  }
+}}}

@@ -1,0 +1,1099 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "debug": {
+        "name": "debug",
+        "value": true
+      },
+      "alpha": {
+        "min": 0,
+        "max": 1,
+        "name": "alpha",
+        "value": 0
+      },
+      "debugger": {
+        "name": "debugger",
+        "value": {
+          "shader": {
+            "name": "shader",
+            "value": {
+              "fragment": {
+                "name": "fragment",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "buffer_debug_fragment.glsl": {
+                    "name": "buffer_debug_fragment.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@7d1eabe5"
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              },
+              "vertex": {
+                "name": "vertex",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "buffer_debug_vertex.glsl": {
+                    "name": "buffer_debug_vertex.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@4d12a801"
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "X": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "X",
+            "value": 0
+          },
+          "active": {
+            "name": "active",
+            "value": false
+          },
+          "Y": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "Y",
+            "value": 0
+          }
+        }
+      },
+      "particles": {
+        "name": "particles",
+        "value": {
+          "renderer": {
+            "name": "renderer",
+            "value": {
+              "quad": {
+                "name": "quad",
+                "value": {
+                  "point size": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "point size",
+                    "value": 0.320000022649765
+                  },
+                  "shader": {
+                    "name": "shader",
+                    "value": {
+                      "fragment": {
+                        "name": "fragment",
+                        "value": {
+                          "quad_fragment.glsl": {
+                            "name": "quad_fragment.glsl",
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@64ed7588"
+                          },
+                          "auto save": {
+                            "name": "auto save",
+                            "value": true
+                          },
+                          "uniforms": {
+                            "name": "uniforms",
+                            "value": {
+                              "z range": {
+                                "min": 0,
+                                "max": 1500,
+                                "name": "z range",
+                                "value": 391.5
+                              },
+                              "z fade": {
+                                "min": -500,
+                                "max": 500,
+                                "name": "z fade",
+                                "value": 32.000003814697266
+                              },
+                              "centerZ": {
+                                "min": -500,
+                                "max": 500,
+                                "name": "centerZ",
+                                "value": 239.00001525878906
+                              },
+                              "z fade range": {
+                                "min": 0,
+                                "max": 500,
+                                "name": "z fade range",
+                                "value": 130.5
+                              },
+                              "alpha2": {
+                                "min": 0,
+                                "max": 1,
+                                "name": "alpha2",
+                                "value": 0.2720000147819519
+                              },
+                              "col.z": {
+                                "min": 0,
+                                "max": 1,
+                                "name": "col.z",
+                                "value": 0.3790000081062317
+                              },
+                              "col.y": {
+                                "min": 0,
+                                "max": 1,
+                                "name": "col.y",
+                                "value": 0.6520000100135803
+                              },
+                              "col.x": {
+                                "min": 0,
+                                "max": 1,
+                                "name": "col.x",
+                                "value": 1
+                              }
+                            }
+                          },
+                          "save in file": {
+                            "name": "save in file",
+                            "value": true
+                          }
+                        }
+                      },
+                      "vertex": {
+                        "name": "vertex",
+                        "value": {
+                          "auto save": {
+                            "name": "auto save",
+                            "value": true
+                          },
+                          "quad_vertex.glsl": {
+                            "name": "quad_vertex.glsl",
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@13e4e0b1"
+                          },
+                          "uniforms": {
+                            "name": "uniforms",
+                            "value": {"max height": {
+                              "min": 0,
+                              "max": 500,
+                              "name": "max height",
+                              "value": 0
+                            }}
+                          },
+                          "save in file": {
+                            "name": "save in file",
+                            "value": true
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "life time alpha": {
+                    "curve": {"points": [
+                      {
+                        "time": 0.125,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time alpha",
+                    "value": "cc.creativecomputing.control.CCEnvelope@5c2a2d29"
+                  },
+                  "draw attributes": {
+                    "name": "draw attributes",
+                    "value": {
+                      "point size": {
+                        "min": 0.1,
+                        "max": 50,
+                        "name": "point size",
+                        "value": 1
+                      },
+                      "stroke weight": {
+                        "min": 0.1,
+                        "max": 50,
+                        "name": "stroke weight",
+                        "value": 1
+                      },
+                      "color": {
+                        "a": 1,
+                        "r": 0,
+                        "b": 0,
+                        "g": 0,
+                        "name": "color",
+                        "value": {
+                          "a": 1,
+                          "r": 0,
+                          "b": 0,
+                          "g": 0,
+                          "blendable_type": "cc.creativecomputing.math.CCColor"
+                        }
+                      },
+                      "cullface": {
+                        "name": "cullface",
+                        "value": "NONE"
+                      },
+                      "polygon mode": {
+                        "name": "polygon mode",
+                        "value": "FILL"
+                      },
+                      "depth test": {
+                        "name": "depth test",
+                        "value": false
+                      },
+                      "blend mode": {
+                        "name": "blend mode",
+                        "value": "ADD"
+                      },
+                      "depth mask": {
+                        "name": "depth mask",
+                        "value": false
+                      }
+                    }
+                  },
+                  "gradient": {
+                    "gradient": [],
+                    "name": "gradient",
+                    "value": []
+                  },
+                  "active": {
+                    "name": "active",
+                    "value": true
+                  }
+                }
+              },
+              "springs volumetric lines": {
+                "name": "springs volumetric lines",
+                "value": {
+                  "shader": {
+                    "name": "shader",
+                    "value": {
+                      "fragment": {
+                        "name": "fragment",
+                        "value": {
+                          "auto save": {
+                            "name": "auto save",
+                            "value": true
+                          },
+                          "spring_lines_volumentric_fragment.glsl": {
+                            "name": "spring_lines_volumentric_fragment.glsl",
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@6fb319bc"
+                          },
+                          "uniforms": {
+                            "name": "uniforms",
+                            "value": {
+                              "z range": {
+                                "min": 0,
+                                "max": 1500,
+                                "name": "z range",
+                                "value": 195
+                              },
+                              "z fade": {
+                                "min": -500,
+                                "max": 500,
+                                "name": "z fade",
+                                "value": 32.000003814697266
+                              },
+                              "centerZ": {
+                                "min": -500,
+                                "max": 500,
+                                "name": "centerZ",
+                                "value": 239.00001525878906
+                              },
+                              "z fade range": {
+                                "min": 0,
+                                "max": 500,
+                                "name": "z fade range",
+                                "value": 130.5
+                              },
+                              "alpha": {
+                                "min": 0,
+                                "max": 1,
+                                "name": "alpha",
+                                "value": 0.2070000022649765
+                              },
+                              "col.z": {
+                                "min": 0,
+                                "max": 1,
+                                "name": "col.z",
+                                "value": 1
+                              },
+                              "col.y": {
+                                "min": 0,
+                                "max": 1,
+                                "name": "col.y",
+                                "value": 0.5540000200271606
+                              },
+                              "col.x": {
+                                "min": 0,
+                                "max": 1,
+                                "name": "col.x",
+                                "value": 0.39100000262260437
+                              }
+                            }
+                          },
+                          "save in file": {
+                            "name": "save in file",
+                            "value": true
+                          }
+                        }
+                      },
+                      "vertex": {
+                        "name": "vertex",
+                        "value": {
+                          "spring_lines_volumentric_vertex.glsl": {
+                            "name": "spring_lines_volumentric_vertex.glsl",
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@3d6f462"
+                          },
+                          "auto save": {
+                            "name": "auto save",
+                            "value": true
+                          },
+                          "uniforms": {
+                            "name": "uniforms",
+                            "value": {"radius": {
+                              "min": 0,
+                              "max": 10,
+                              "name": "radius",
+                              "value": 0.64000004529953
+                            }}
+                          },
+                          "save in file": {
+                            "name": "save in file",
+                            "value": true
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "draw attributes": {
+                    "name": "draw attributes",
+                    "value": {
+                      "point size": {
+                        "min": 0.1,
+                        "max": 50,
+                        "name": "point size",
+                        "value": 1
+                      },
+                      "stroke weight": {
+                        "min": 0.1,
+                        "max": 50,
+                        "name": "stroke weight",
+                        "value": 1.7467000484466553
+                      },
+                      "color": {
+                        "a": 0.25882354378700256,
+                        "r": 1,
+                        "b": 1,
+                        "g": 1,
+                        "name": "color",
+                        "value": {
+                          "a": 0.25882354378700256,
+                          "r": 1,
+                          "b": 1,
+                          "g": 1,
+                          "blendable_type": "cc.creativecomputing.math.CCColor"
+                        }
+                      },
+                      "cullface": {
+                        "name": "cullface",
+                        "value": "NONE"
+                      },
+                      "polygon mode": {
+                        "name": "polygon mode",
+                        "value": "FILL"
+                      },
+                      "depth test": {
+                        "name": "depth test",
+                        "value": false
+                      },
+                      "blend mode": {
+                        "name": "blend mode",
+                        "value": "ADD"
+                      },
+                      "depth mask": {
+                        "name": "depth mask",
+                        "value": false
+                      }
+                    }
+                  },
+                  "active": {
+                    "name": "active",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "update shader": {
+            "name": "update shader",
+            "value": {"fragment": {
+              "name": "fragment",
+              "value": {
+                "auto save": {
+                  "name": "auto save",
+                  "value": true
+                },
+                "uniforms": {
+                  "name": "uniforms",
+                  "value": {}
+                },
+                "source 0": {
+                  "name": "source 0",
+                  "value": "cc.creativecomputing.control.code.CCShaderSource@465a0a84"
+                },
+                "save in file": {
+                  "name": "save in file",
+                  "value": true
+                }
+              }
+            }}
+          },
+          "forces": {
+            "name": "forces",
+            "value": {
+              "attractor": {
+                "name": "attractor",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "attract": {
+                    "name": "attract",
+                    "value": false
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0.078125,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 0.984375,
+                        "type": "LINEAR",
+                        "value": 0
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@40642763"
+                  },
+                  "position": {
+                    "name": "position",
+                    "value": {
+                      "x": {
+                        "min": -2000,
+                        "max": 2000,
+                        "name": "x",
+                        "value": 0
+                      },
+                      "y": {
+                        "min": -2000,
+                        "max": 2000,
+                        "name": "y",
+                        "value": 0
+                      },
+                      "z": {
+                        "min": -2000,
+                        "max": 2000,
+                        "name": "z",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "radius": {
+                    "min": 0,
+                    "max": 3000,
+                    "name": "radius",
+                    "value": 489
+                  }
+                }
+              },
+              "NoiseForceField": {
+                "name": "NoiseForceField",
+                "value": {
+                  "octaves": {
+                    "min": 0,
+                    "max": 5,
+                    "name": "octaves",
+                    "value": 1
+                  },
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1.2899999618530273
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0.015625,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 0.97265625,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@28aaad9"
+                  },
+                  "scale": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "scale",
+                    "value": 4.769999980926514
+                  },
+                  "lacunarity": {
+                    "min": 0,
+                    "max": 4,
+                    "name": "lacunarity",
+                    "value": 2
+                  },
+                  "speed": {
+                    "min": 0,
+                    "max": 3,
+                    "name": "speed",
+                    "value": 0.09600000083446503
+                  },
+                  "gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "gain",
+                    "value": 0.5
+                  }
+                }
+              },
+              "ViscousDrag": {
+                "name": "ViscousDrag",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1.4100000858306885
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0.07421875,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@5c278f6d"
+                  },
+                  "drag": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "drag",
+                    "value": 0.9769999980926514
+                  }
+                }
+              },
+              "Springs": {
+                "name": "Springs",
+                "value": {
+                  "spring constant": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "spring constant",
+                    "value": 1
+                  },
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1.5099999904632568
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0.01953125,
+                        "type": "LINEAR",
+                        "value": 0.17324561403508776
+                      },
+                      {
+                        "time": 0.25,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 0.74609375,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@51e9b2a5"
+                  },
+                  "damping": {
+                    "min": 0,
+                    "max": 0.1,
+                    "name": "damping",
+                    "value": 0.08900000154972076
+                  },
+                  "rest length": {
+                    "min": 0,
+                    "max": 100,
+                    "name": "rest length",
+                    "value": 5
+                  }
+                }
+              }
+            }
+          },
+          "emitter": {
+            "name": "emitter",
+            "value": {"0": {
+              "name": "0",
+              "value": {
+                "track free particles": {
+                  "name": "track free particles",
+                  "value": true
+                },
+                "free particles": {
+                  "min": -2147483648,
+                  "max": 2147483647,
+                  "name": "free particles",
+                  "value": 155260
+                }
+              }
+            }}
+          }
+        }
+      },
+      "camera": {
+        "name": "camera",
+        "value": {
+          "distance": {
+            "min": 1,
+            "max": 20000,
+            "name": "distance",
+            "value": 444.7731214476673
+          },
+          "rotation mode": {
+            "name": "rotation mode",
+            "value": "FREE"
+          },
+          "center": {
+            "name": "center",
+            "value": {
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "name": "x",
+                "value": 38.873710079340995
+              },
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "name": "y",
+                "value": -0.7752489690408535
+              },
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "name": "z",
+                "value": -84.8776809742648
+              }
+            }
+          },
+          "rotation": {
+            "name": "rotation",
+            "value": {
+              "w": {
+                "min": -1,
+                "max": 1,
+                "name": "w",
+                "value": -0.9930589533982925
+              },
+              "x": {
+                "min": -1,
+                "max": 1,
+                "name": "x",
+                "value": -0.0680634100493062
+              },
+              "y": {
+                "min": -1,
+                "max": 1,
+                "name": "y",
+                "value": 0.015004673416709392
+              },
+              "z": {
+                "min": -1,
+                "max": 1,
+                "name": "z",
+                "value": -0.09474253038434446
+              }
+            }
+          },
+          "fov": {
+            "min": 0,
+            "max": 90,
+            "name": "fov",
+            "value": 45
+          },
+          "camera": {
+            "name": "camera",
+            "value": {
+              "position": {
+                "name": "position",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 100
+                  }
+                }
+              },
+              "up": {
+                "name": "up",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 1
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              },
+              "fov": {
+                "min": 0,
+                "max": 1.5707963267948966,
+                "name": "fov",
+                "value": 1.0471975511965976
+              },
+              "apect ratio": {
+                "min": 0.1,
+                "max": 10,
+                "name": "apect ratio",
+                "value": 1
+              },
+              "target": {
+                "name": "target",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "particle debugger": {
+        "name": "particle debugger",
+        "value": {
+          "shader": {
+            "name": "shader",
+            "value": {
+              "fragment": {
+                "name": "fragment",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "buffer_debug_fragment.glsl": {
+                    "name": "buffer_debug_fragment.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@7dbe101f"
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              },
+              "vertex": {
+                "name": "vertex",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "buffer_debug_vertex.glsl": {
+                    "name": "buffer_debug_vertex.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@64ff5c60"
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "X": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "X",
+            "value": 500
+          },
+          "active": {
+            "name": "active",
+            "value": false
+          },
+          "Y": {
+            "min": -1.7976931348623157E308,
+            "max": 1.7976931348623157E308,
+            "name": "Y",
+            "value": 0
+          }
+        }
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "2560 x 1440"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 3600
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 1200
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "AS_FAST_AS_POSSIBLE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 50.43734473809123
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}
