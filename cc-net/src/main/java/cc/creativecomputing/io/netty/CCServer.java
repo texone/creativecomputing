@@ -100,7 +100,7 @@ public abstract class CCServer<MessageType> extends CCNetChannel<MessageType>{
 	
 	@Override
 	public void write(MessageType theMessage){
-		if(!_myIsConnected)return;
+		if(!isConnected())return;
 		for(Channel myChannel:new ArrayList<>(_myConnectedChannels)){
 			myChannel.writeAndFlush(theMessage);
 		}

@@ -53,8 +53,6 @@ public class CCTCPServer<MessageType> extends CCServer<MessageType>{
 		});
 		_myFuture = myBootStrap.bind();
 		_myFuture.sync();
-		
-		_myIsConnected = true;
 			
 		_myFuture.channel().closeFuture().await();
 	}

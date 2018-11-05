@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.io.netty;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.io.net.CCNetMessage;
 import cc.creativecomputing.io.netty.codec.CCNetCodec;
@@ -94,7 +95,8 @@ public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 	
 	@Override
 	public void write(MessageType theMessage){
-		if(!_myIsConnected)return;
+		if(!isConnected())return;
+		CCLog.info(_myFuture.channel().isActive(),_myFuture.channel().isOpen(),_myFuture.channel().isRegistered());
 		_myFuture.channel().writeAndFlush(theMessage);
 	}
 	

@@ -51,7 +51,6 @@ public class CCTCPClient<MessageType> extends CCClient<MessageType>{
 			scheduleReconnect();
 			
 			_myFuture.sync();
-			_myIsConnected = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

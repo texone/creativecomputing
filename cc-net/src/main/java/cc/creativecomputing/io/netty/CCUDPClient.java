@@ -12,8 +12,10 @@ package cc.creativecomputing.io.netty;
 
 import java.net.InetSocketAddress;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.netty.codec.CCNetCodec;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
@@ -35,32 +37,42 @@ public class CCUDPClient<MessageType> extends CCClient<MessageType> {
 	@Override
 	public void createBootstrap() {
 		try {
-		Bootstrap myBootstrap = new Bootstrap();
-		_myGroup = new NioEventLoopGroup();
-		myBootstrap.group(_myGroup);
-		myBootstrap.channel(NioDatagramChannel.class);
-		myBootstrap.remoteAddress(new InetSocketAddress(_myIP, _myPort));
-		myBootstrap.handler(new ChannelInitializer<DatagramChannel>() {
-
-			@Override
-			public void initChannel(DatagramChannel ch) {
-				ch.pipeline().addLast(_myCodec.decoder());
-				ch.pipeline().addLast(_myCodec.encoder(), new CCClientHandler());
-			}
-		});
-		
-		_myFuture = myBootstrap.connect();
-
-		scheduleReconnect();
+			Bootstrap myBootstrap = new Bootstrap();
+			_myGroup = new NioEventLoopGroup();
+			myBootstrap.group(_myGroup);
+			myBootstrap.channel(NioDatagramChannel.class);
+			myBootstrap.remoteAddress(new InetSocketAddress(_myIP, _myPort));
+			myBootstrap.handler(new ChannelInitializer<DatagramChannel>() {
+	
+				@Override
+				public void initChannel(DatagramChannel ch) {
+					ch.pipeline().addLast(_myCodec.decoder());
+					ch.pipeline().addLast(_myCodec.encoder(), new CCClientHandler());
+				}
+				
+				
+				
+				@Override
+				public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+					CCLog.info("YO");
+					cause.printStackTrace();
+				}
+			});
 			
-		_myFuture.sync();
-		_myIsConnected = true;
-			// Broadcast the QOTM request to port 8080.
-//			_myFuture.channel().writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("QOTM?", CharsetUtil.UTF_8),
-//					new InetSocketAddress("255.255.255.255", _myPort))).sync();
+			_myFuture = myBootstrap.connect();
+	
+			scheduleReconnect();
+				
+			_myFuture.sync();
+			
+			CCLog.info("YOYOYO");
+				// Broadcast the QOTM request to port 8080.
+	//			_myFuture.channel().writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("QOTM?", CharsetUtil.UTF_8),
+	//					new InetSocketAddress("255.255.255.255", _myPort))).sync();
 
 			
 		}catch(Exception e){
+			CCLog.info("YOYO");
 			e.printStackTrace();
 		}
 	}

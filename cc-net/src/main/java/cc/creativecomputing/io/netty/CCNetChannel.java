@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.net.CCNetListener;
 import cc.creativecomputing.io.netty.codec.CCNetCodec;
 import io.netty.bootstrap.Bootstrap;
@@ -38,8 +39,6 @@ public abstract class CCNetChannel<MessageType> {
 	protected ChannelFuture _myFuture;
 	protected Bootstrap _myBootstrap;
 	protected EventLoopGroup _myGroup;
-
-	protected boolean _myIsConnected;
 	
 	public CCNetChannel(CCNetCodec<MessageType> theCodec, String theIP, int thePort){
 		_myCodec = theCodec;
@@ -70,7 +69,10 @@ public abstract class CCNetChannel<MessageType> {
 	public abstract void createBootstrap() throws Exception;
 	
 	public boolean isConnected() {
-		return _myIsConnected;
+		if(_myFuture == null)return false;
+		if(_myFuture.channel() == null)return false;
+		if(!_myFuture.channel().isActive())return false;
+		return true;
 	}
 	
 	public abstract void connect();
@@ -83,7 +85,6 @@ public abstract class CCNetChannel<MessageType> {
 	
 	public void scheduleReconnect(EventLoop theLoop){
 		if(_myReconnectTime <= 0)return;
-		
 		_myFuture.addListener((channelFuture) -> {
 			if (_myFuture.isSuccess())return;
 		
@@ -104,6 +105,5 @@ public abstract class CCNetChannel<MessageType> {
 	public void close(){
 		_myFuture.channel().close();
 		_myGroup.shutdownGracefully();
-		_myIsConnected = false;
 	}
 }
