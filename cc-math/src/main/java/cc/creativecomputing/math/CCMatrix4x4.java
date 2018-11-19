@@ -1994,6 +1994,20 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 	public CCVector4 applyPre(final CCVector4 theVector){
 		return applyPre(theVector, null);
 	}
+	
+	public CCVector3 applyPrePoint(final CCVector3 thePoint, CCVector3 theStore) {
+		if(theStore == null) theStore = new CCVector3();
+
+		final double x = thePoint.x;
+		final double y = thePoint.y;
+		final double z = thePoint.z;
+		
+		theStore.x = m00 * x + m01 * y + m02 * z + m03;
+		theStore.y = m10 * x + m11 * y + m12 * z + m13;
+		theStore.z = m20 * x + m21 * y + m22 * z + m23;
+
+		return theStore;
+	}
 
 	/**
 	 * Multiplies the given vector by this matrix (M * v). If supplied, the
