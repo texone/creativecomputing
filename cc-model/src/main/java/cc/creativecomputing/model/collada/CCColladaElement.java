@@ -32,6 +32,12 @@ public class CCColladaElement {
 	@CCProperty(name = "draw")
 	protected boolean _cDraw = true;
 	
+	@CCProperty(name = "draw bounds")
+	protected boolean _cDrawBounds = true;
+	
+	@CCProperty(name = "check bounds")
+	protected boolean _cCheckBounds = true;
+	
 	CCColladaElement(CCDataElement theXML){
 		_myID = theXML.attribute("id", "");
 		_myName = theXML.attribute("name", "");

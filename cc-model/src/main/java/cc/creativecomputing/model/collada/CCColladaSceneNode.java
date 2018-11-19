@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.model.collada;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,12 +20,14 @@ import java.util.Map;
 import java.util.Optional;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCCamera;
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.CCVBOMesh;
+import cc.creativecomputing.graphics.util.CCFrustum;
+import cc.creativecomputing.graphics.util.CCFrustum.CCFrustumRelation;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCAABB;
 import cc.creativecomputing.math.CCMath;
@@ -78,7 +81,11 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	
 	private CCAABB _myBoundingBox = null;
 	
-	private CCColladaSceneNodeVisitor _myDrawVisitor;
+	private CCColladaSceneNodeDisplayVisitor _myDrawVisitor;
+	
+	private CCColladaSceneNodeMaterial _myMaterial;
+	
+	
 	
 	private CCColladaSceneNode _myParent;
 
@@ -173,7 +180,6 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				CCColladaGeometryData myGeometryData = myGeometry.data().get(0);
 				
 				CCMesh myGeometryMesh = new CCVBOMesh(myGeometryData.drawMode());
-				
 				myGeometryMesh.vertices(myGeometryData.positions());
 				if(myGeometryData.hasNormals()){
 					myGeometryData.normals().rewind();
@@ -190,7 +196,6 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 			case "instance_node":
 				_myInstanceType = CCColladaSceneNodeInstanceType.NODE;
 				String myNodeURL = myChild.attribute("url").replace("#", "");
-				CCLog.info(myNodeURL);
 				if(theLoader.nodes() == null) {
 					_myNodeMap.put(myNodeURL, null);
 				}else {
@@ -209,6 +214,49 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				break;
 			}
 		}
+		
+		if(instanceType() == CCColladaSceneNodeInstanceType.GEOMETRY){
+			CCMatrix4x4 myStack = new CCMatrix4x4();
+			matrixStack(myStack);
+			
+			_myBoundingBox = null;
+			for(CCMesh myMesh:geometries()){
+				FloatBuffer myVertices = myMesh.vertices();
+				myVertices.rewind();
+				CCVector3 myVertex = new CCVector3(myVertices.get(),myVertices.get(),myVertices.get());
+				myStack.applyPostPoint(myVertex, myVertex);
+				if(_myBoundingBox == null){
+					_myBoundingBox = new CCAABB(myVertex);
+				}
+				while(myVertices.hasRemaining()){
+					myVertex = new CCVector3(myVertices.get(),myVertices.get(),myVertices.get());
+					myStack.applyPostPoint(myVertex, myVertex);
+					_myBoundingBox.checkSize(myVertex);
+				}
+				myVertices.rewind();
+			}
+		}
+	}
+	
+	public CCAABB bounds() {
+		if(_myBoundingBox == null) {
+			for(CCColladaSceneNode myNode:children()) {
+				if(myNode.bounds() == null)continue;
+				if(_myBoundingBox == null) {
+					_myBoundingBox = new CCAABB(myNode.bounds().min());
+				}
+				_myBoundingBox.checkSize(myNode.bounds());
+			}
+		}
+		return _myBoundingBox;
+	}
+	
+	public void matrixStack(CCMatrix4x4 theMatrix) {
+		theMatrix.multiply(matrix(), theMatrix);
+		theMatrix.multiply(transform().toMatrix(), theMatrix);
+		
+		if(_myParent != null)_myParent.matrixStack(theMatrix);
+		
 	}
 	
 	public void resolveMissingNodes(CCColladaLoader theLoader) {
@@ -217,7 +265,6 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				CCColladaSceneNode myInstanceNode = theLoader.nodes().element(myKey);
 				_myNodeMap.put(myKey, myInstanceNode);
 				_myNodes.add(myInstanceNode);
-				CCLog.info(myKey, myInstanceNode);
 			}
 		}
 		for(CCColladaSceneNode myChild:_myNodes) {
@@ -229,6 +276,15 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 		public void apply(CCColladaSceneNode theNode);
 	}
 	
+	public static interface CCColladaSceneNodeDisplayVisitor{
+		public void apply(CCColladaSceneNode theNode, CCGraphics g);
+	}
+	
+	public static interface CCColladaSceneNodeMaterial{
+		public void start(CCColladaSceneNode theNode, CCGraphics g);
+		public void end(CCColladaSceneNode theNode, CCGraphics g);
+	}
+	
 	public void visit(CCColladaSceneNodeVisitor theVisitor){
 		theVisitor.apply(this);
 		for(CCColladaSceneNode myChild:_myNodes){
@@ -236,11 +292,15 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 		}
 	}
 	
-	public void drawVisitor(CCColladaSceneNodeVisitor theVisitor){
+	public void drawVisitor(CCColladaSceneNodeDisplayVisitor theVisitor){
 		_myDrawVisitor = theVisitor;
 		for(CCColladaSceneNode myChild:_myNodes){
 			myChild.drawVisitor(theVisitor);
 		}
+	}
+	
+	public void material(CCColladaSceneNodeMaterial theMaterial) {
+		_myMaterial = theMaterial;
 	}
 	
 	public boolean hasChildren(){
@@ -367,13 +427,80 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 		return _myCamera;
 	}
 	
-	public void draw(CCGraphics g){
-		if(!_cDraw)return;
+	public void drawBounds(CCGraphics g) {
+		if(!_cDrawBounds)return;
 		if(_myInstanceType == null)return;
 		
-		if(_myDrawVisitor!= null){
-			_myDrawVisitor.apply(this);
+		switch(_myInstanceType){
+		case GEOMETRY:
+			g.pushMatrix();
+			
+			
+			g.beginShape(CCDrawMode.LINE_LOOP);
+			g.vertex(_myBoundingBox.min().x, _myBoundingBox.min().y, _myBoundingBox.min().z);
+			g.vertex(_myBoundingBox.max().x, _myBoundingBox.min().y, _myBoundingBox.min().z);
+			g.vertex(_myBoundingBox.max().x, _myBoundingBox.min().y, _myBoundingBox.max().z);
+			g.vertex(_myBoundingBox.min().x, _myBoundingBox.min().y, _myBoundingBox.max().z);
+			g.endShape();
+
+			g.beginShape(CCDrawMode.LINE_LOOP);
+			g.vertex(_myBoundingBox.min().x, _myBoundingBox.max().y, _myBoundingBox.min().z);
+			g.vertex(_myBoundingBox.max().x, _myBoundingBox.max().y, _myBoundingBox.min().z);
+			g.vertex(_myBoundingBox.max().x, _myBoundingBox.max().y, _myBoundingBox.max().z);
+			g.vertex(_myBoundingBox.min().x, _myBoundingBox.max().y, _myBoundingBox.max().z);
+			g.endShape();
+			
+			g.beginShape(CCDrawMode.LINES);
+			g.vertex(_myBoundingBox.min().x, _myBoundingBox.min().y, _myBoundingBox.min().z);
+			g.vertex(_myBoundingBox.min().x, _myBoundingBox.max().y, _myBoundingBox.min().z);
+			
+			g.vertex(_myBoundingBox.max().x, _myBoundingBox.min().y, _myBoundingBox.min().z);
+			g.vertex(_myBoundingBox.max().x, _myBoundingBox.max().y, _myBoundingBox.min().z);
+			
+			g.vertex(_myBoundingBox.max().x, _myBoundingBox.min().y, _myBoundingBox.max().z);
+			g.vertex(_myBoundingBox.max().x, _myBoundingBox.max().y, _myBoundingBox.max().z);
+			
+			g.vertex(_myBoundingBox.min().x, _myBoundingBox.min().y, _myBoundingBox.max().z);
+			g.vertex(_myBoundingBox.min().x, _myBoundingBox.max().y, _myBoundingBox.max().z);
+			g.endShape();
+			g.popMatrix();
+			break;
+		case NODE:
+			for(CCColladaSceneNode myNode:_myNodes){
+				myNode.drawBounds(g);
+			}
+			break;
+		default:
+			break;
 		}
+	}
+	
+	public void draw(CCGraphics g){
+		draw(g, null);
+	}
+	
+	public static int skip = 0;
+	public static int count = 0;
+	
+	public void draw(CCGraphics g, CCFrustum theFrustum){
+		if(!_cDraw)return;
+		if(_myInstanceType == null)return;
+		count++;
+		if(theFrustum != null && _myBoundingBox != null && _cCheckBounds) {
+			CCVector3 myCenter = _myBoundingBox.center();
+			double myRadius = CCMath.max(_myBoundingBox.extent().x, _myBoundingBox.extent().y, _myBoundingBox.extent().z);
+			if(theFrustum.isInFrustum(myCenter, myRadius) == CCFrustumRelation.OUTSIDE) {
+//				CCLog.info("skip", name());
+				skip++;
+				return;
+			}
+		}
+		
+		if(_myDrawVisitor!= null){
+			_myDrawVisitor.apply(this, g);
+		}
+		
+		if(_myMaterial != null)_myMaterial.start(this, g);
 		
 		switch(_myInstanceType){
 		case CAMERA:
@@ -398,7 +525,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 			g.applyMatrix(_myMatrix);
 			g.applyMatrix(_myTransform.toMatrix());
 			for(CCColladaSceneNode myNode:_myNodes){
-				myNode.draw(g);
+				myNode.draw(g, theFrustum);
 			}
 			g.popMatrix();
 			break;
@@ -409,6 +536,8 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 		default:
 			break;
 		}
+
+		if(_myMaterial != null)_myMaterial.end(this, g);
 	}
 
 	@Override
