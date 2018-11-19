@@ -26,6 +26,12 @@ public class CCUDPIn<MessageType> extends CCNetIn <DatagramChannel, MessageType>
 	public CCUDPIn(CCNetPacketCodec<MessageType> theCodec){
 		super(theCodec);
 	}
+	
+	public CCUDPIn(CCNetPacketCodec<MessageType> theCodec, String theLocalAdress, int theLocalPort){
+		super(theCodec);
+		_myLocalAddress.ip(theLocalAdress);
+		_myLocalAddress.port(theLocalPort);
+	}
 
 	@Override
 	protected void setChannel(DatagramChannel theChannel) {
@@ -71,7 +77,7 @@ public class CCUDPIn<MessageType> extends CCNetIn <DatagramChannel, MessageType>
 
 		try {
 			listen: while (_myIsConnected) {
-				System.out.println("LISTENS");
+				CCLog.info("LISTENS");
 				try {
 					_myByteBuffer.clear();
 					sender = _myChannel.receive(_myByteBuffer);

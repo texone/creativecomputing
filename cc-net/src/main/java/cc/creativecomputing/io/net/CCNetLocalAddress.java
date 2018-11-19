@@ -9,6 +9,7 @@ import java.util.List;
 
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 
 public class CCNetLocalAddress extends CCNetAddress{
 	
@@ -26,7 +27,7 @@ public class CCNetLocalAddress extends CCNetAddress{
 			        InetAddress i = myAddresses.nextElement();
 			        if(i.getHostAddress().contains(":"))continue;
 			        ips.add(i.getHostAddress());
-			        System.out.println(i.getHostName() + " " + i.getHostAddress());
+			        CCLog.info(i.getHostName() + " " + i.getHostAddress());
 			    }
 			}
 		} catch (SocketException e) {

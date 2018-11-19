@@ -44,6 +44,14 @@ public abstract class CCNetChannel<ChannelType extends SelectableChannel, Messag
 		}
 	}
 	
+	public CCNetLocalAddress localAddress() {
+		return _myLocalAddress;
+	}
+	
+	public CCNetTargetAddress targetAddress() {
+		return _myTargetAddress;
+	}
+	
 	void local(CCNetLocalAddress theLocalAddress){
 		_myLocalAddress = theLocalAddress;
 	}

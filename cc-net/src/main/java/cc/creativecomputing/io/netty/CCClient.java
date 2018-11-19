@@ -83,9 +83,12 @@ public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 	public CCClient(CCNetCodec<MessageType> theCodec){
 		super(theCodec);
 	}
+	
+	private boolean _myShouldConnect = false;
 
 	@Override
 	public void connect(){
+		_myShouldConnect = true;
 		try {
 			createBootstrap();
 		} catch (Exception e) {
@@ -93,10 +96,14 @@ public abstract class CCClient<MessageType>extends CCNetChannel<MessageType> {
 		}
 	}
 	
+	public boolean lostConnection() {
+		return _myShouldConnect && !isConnected();
+	}
+	
 	@Override
 	public void write(MessageType theMessage){
 		if(!isConnected())return;
-		CCLog.info(_myFuture.channel().isActive(),_myFuture.channel().isOpen(),_myFuture.channel().isRegistered());
+		CCLog.info(_myFuture.channel().isActive(),_myFuture.channel().isOpen(),_myFuture.channel().isRegistered(),_myFuture.channel().isWritable());
 		_myFuture.channel().writeAndFlush(theMessage);
 	}
 	
