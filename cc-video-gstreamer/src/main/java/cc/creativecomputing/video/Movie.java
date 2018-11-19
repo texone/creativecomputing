@@ -168,7 +168,6 @@ public class Movie extends CCMovieData {
 		_myPlaybin = null;
 
 		File myFile = theFilename.toFile();
-		CCLog.info(theFilename.toAbsolutePath());
 		GStreamerLibrary.getInstance().init();
 
 		// first check to see if this can be read locally from a file.
@@ -211,7 +210,6 @@ public class Movie extends CCMovieData {
 			
 			@Override
 			public FlowReturn newPreroll(AppSink arg0) {
-				CCLog.info("YO");
 				return null;
 			}
 		});
@@ -239,7 +237,6 @@ public class Movie extends CCMovieData {
 		bus.connect(new Bus.EOS() {
 
 			public void endOfStream(GstObject arg0) {
-				CCLog.info(_myPlaybin.isPlaying(), _myDoRepeat);
 				if (_myDoRepeat) {
 					if (0 < rate) {
 						// Playing forward, so we return to the beginning
@@ -434,9 +431,7 @@ public class Movie extends CCMovieData {
 
 		
 		_myIsSeeking = true;
-		CCLog.info(_myPlaybin.isPlaying(), _myDoRepeat);
-		//_myPlaybin.getState();
-		CCLog.info(_myPlaybin.isPlaying(), _myDoRepeat);
+		_myPlaybin.getState();
 		_myIsSeeking = false;
 		
 	}
@@ -533,8 +528,6 @@ public class Movie extends CCMovieData {
 	 */
 	@Override
 	public void stop() {
-
-		CCLog.info(_myIsSeeking);
 		if (_myIsSeeking)
 			return;
 
