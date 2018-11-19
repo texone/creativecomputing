@@ -27,6 +27,7 @@ import cc.creativecomputing.graphics.font.text.CCTextAlign;
 import cc.creativecomputing.graphics.texture.CCTexture;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.io.CCBufferUtil;
+import cc.creativecomputing.math.CCAABB;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCMatrix32;
@@ -3219,6 +3220,37 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	//
 	//////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////
+	
+	public void draw(CCAABB theBound) {
+		if(theBound == null)return;
+		beginShape(CCDrawMode.LINE_LOOP);
+		vertex(theBound.min().x, theBound.min().y, theBound.min().z);
+		vertex(theBound.max().x, theBound.min().y, theBound.min().z);
+		vertex(theBound.max().x, theBound.min().y, theBound.max().z);
+		vertex(theBound.min().x, theBound.min().y, theBound.max().z);
+		endShape();
+
+		beginShape(CCDrawMode.LINE_LOOP);
+		vertex(theBound.min().x, theBound.max().y, theBound.min().z);
+		vertex(theBound.max().x, theBound.max().y, theBound.min().z);
+		vertex(theBound.max().x, theBound.max().y, theBound.max().z);
+		vertex(theBound.min().x, theBound.max().y, theBound.max().z);
+		endShape();
+		
+		beginShape(CCDrawMode.LINES);
+		vertex(theBound.min().x, theBound.min().y, theBound.min().z);
+		vertex(theBound.min().x, theBound.max().y, theBound.min().z);
+		
+		vertex(theBound.max().x, theBound.min().y, theBound.min().z);
+		vertex(theBound.max().x, theBound.max().y, theBound.min().z);
+		
+		vertex(theBound.max().x, theBound.min().y, theBound.max().z);
+		vertex(theBound.max().x, theBound.max().y, theBound.max().z);
+		
+		vertex(theBound.min().x, theBound.min().y, theBound.max().z);
+		vertex(theBound.min().x, theBound.max().y, theBound.max().z);
+		endShape();
+	}
 
 	public void box(final double size){
 		box(size, size, size);
@@ -4397,7 +4429,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	//////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////
 	
-	private CCText _myText = new CCText(CCFontIO.createGlutFont(CCGlutFontType.BITMAP_HELVETICA_10));
+	private CCText _myText = new CCText(CCFontIO.createGlutFont(CCGlutFontType.BITMAP_HELVETICA_18));
 	
 	public void textAlign(final CCTextAlign theTextAlign){
 		_myText.align(theTextAlign);
