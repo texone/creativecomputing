@@ -16,13 +16,13 @@ public class CCColorMap {
 	
 	private static float _myHue = 0;
 	
-	private static float FACTOR = 1.1f;
+	private static float FACTOR = 1.f;
 	
 	public static Color getColor(Path thePath) {
 		if(thePath.getNameCount() < HSB_DEPTH)return Color.GRAY;
 		
 		if(!_myColorMap.containsKey(thePath.getName(HSB_DEPTH - 1))) {
-			_myColorMap.put(thePath.getName(HSB_DEPTH - 1), Color.getHSBColor(_myHue, 0.5f, 0.5f));
+			_myColorMap.put(thePath.getName(HSB_DEPTH - 1), Color.getHSBColor(_myHue, 0.5f, 0.25f));
 			_myHue += 0.1f;
 		}
 		Color myResult = _myColorMap.get(thePath.getName(HSB_DEPTH - 1));
