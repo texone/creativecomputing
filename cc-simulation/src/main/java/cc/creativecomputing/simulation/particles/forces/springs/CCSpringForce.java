@@ -72,8 +72,6 @@ public class CCSpringForce extends CCForce {
 	private double _cSpringConstant = 0.2;
 	@CCProperty(name = "damping", min = 0, max = 0.1)
 	private double _cDamping = 0.01;
-	@CCProperty(name = "rest length", min = 0, max = 100)
-	private double _myRestLength = 20;
 	
 	private int _myWidth;
 	private int _myHeight;
@@ -109,8 +107,8 @@ public class CCSpringForce extends CCForce {
 	 * @param theSpringConstant spring constant defining the strength of a spring
 	 * @param theRestLength rest length defining the space between two particles
 	 */
-	public CCSpringForce(final int theNumberOfSprings, final double theSpringConstant, final double theRestLength) {
-		this("Springs", theNumberOfSprings, theSpringConstant, theRestLength);
+	public CCSpringForce(final int theNumberOfSprings, final double theSpringConstant) {
+		this("Springs", theNumberOfSprings, theSpringConstant);
 	}
 	
 	/**
@@ -122,15 +120,14 @@ public class CCSpringForce extends CCForce {
 	 * @param theSpringConstant spring constant defining the strength of a spring
 	 * @param theRestLength rest length defining the space between two particles
 	 */
-	public CCSpringForce(final double theSpringConstant, final double theRestLength) {
-		this("Springs", 4, theSpringConstant, theRestLength);
+	public CCSpringForce(final double theSpringConstant) {
+		this("Springs", 4, theSpringConstant);
 	}
 	
-	protected CCSpringForce(final String theForceName, final int theNumberOfSprings, final double theSpringConstant, final double theRestLength) {
+	protected CCSpringForce(final String theForceName, final int theNumberOfSprings, final double theSpringConstant) {
 		super(theForceName);
 		
 		_cSpringConstant = theSpringConstant;
-		_myRestLength = theRestLength;
 		
 		_myNumberOfSpringBuffers = theNumberOfSprings;
 
@@ -281,7 +278,7 @@ public class CCSpringForce extends CCForce {
 	}
 	
 	public boolean addSpring(final CCParticle theParticleA, final CCParticle theParticleB) {
-		return addSpring(theParticleA, theParticleB, _myRestLength);
+		return addSpring(theParticleA, theParticleB, theParticleA.position().distance(theParticleB.position()));
 	}
 	
 	public boolean addOneWaySpring(final CCParticle theA, final CCParticle theB, final double theRestLength) {
@@ -293,16 +290,8 @@ public class CCSpringForce extends CCForce {
 		return true;
 	}
 	
-	public boolean addOneWaySpring(final CCParticle theA, final CCParticle theB) {
-		return addOneWaySpring(theA, theB, _myRestLength);
-	}
-	
 	public void springConstant(final double theSpringConstant) {
 		_cSpringConstant = theSpringConstant;
-	}
-	
-	public void restLength(final double theRestLength) {
-		_myRestLength = theRestLength;
 	}
 
 	public void update(final CCAnimator theAnimator) {

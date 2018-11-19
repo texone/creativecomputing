@@ -35,6 +35,7 @@ public class CCParticle implements Comparable<CCParticle>{
 	public CCVector4 _myTarget;
 	
 	public int _myGroupIndex = -1;
+	public int _mySprings = 0;
 	
 	private CCParticles _myParticles;
 	

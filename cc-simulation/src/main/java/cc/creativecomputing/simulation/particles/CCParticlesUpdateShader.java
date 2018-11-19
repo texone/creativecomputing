@@ -79,7 +79,6 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		
 		_myForces = theForces;
 		for(CCForce myForce:_myForces){
-			myForce.index(myIndex);
 			myForce.setShader(this);
 			myForce.setParticles(theParticles);
 			myForcesBuffer.append(myForce.shaderSource());

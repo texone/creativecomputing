@@ -42,6 +42,9 @@ public class CCQuadRenderer extends CCParticleRenderer{
 
 	@CCProperty(name = "life time alpha")
 	private CCEnvelope _cLifeTimeAlpha = new CCEnvelope();
+	
+	private int _myLifeTimeAlphaIndex;
+	
 	@CCProperty(name = "gradient")
 	private CCGradient _cGradient = new CCGradient();
 
@@ -54,11 +57,6 @@ public class CCQuadRenderer extends CCParticleRenderer{
 	@CCProperty(name = "shader")
 	private CCGLProgram _myShader;
 	
-	private CCGLWriteDataShader _myWriteDataShader;
-	
-	private CCShaderBuffer _myEvelopeData;
-	private CCShaderBuffer _myGradientData;
-	
 	@CCProperty(name = "point size", min = 0, max = 10)
 	private double _cPointSize = 5;
 	
@@ -70,10 +68,6 @@ public class CCQuadRenderer extends CCParticleRenderer{
 	) {
 		super("quad");
 		_myShader = new CCGLProgram(theVertexPath,theFragmentPath);
-		
-		_myWriteDataShader = new CCGLWriteDataShader();
-		_myEvelopeData = new CCShaderBuffer(100,1);
-		_myGradientData = new CCShaderBuffer(100,1);
 	}
 	
 	public CCQuadRenderer() {
@@ -83,6 +77,8 @@ public class CCQuadRenderer extends CCParticleRenderer{
 		);
 	}
 	public void setup(CCParticles theParticles) {
+		_myLifeTimeAlphaIndex = theParticles.envelopeData().add(_cLifeTimeAlpha);
+		
 		_myParticles = theParticles;
 		_myMesh = new CCMesh(CCDrawMode.QUADS, _myParticles.size() * 4);
 		_myMesh.prepareVertexData(4);
@@ -116,52 +112,18 @@ public class CCQuadRenderer extends CCParticleRenderer{
 	public void display(CCGraphics g){
 		if(!_cIsActive)return;
 		_cAttributes.start(g);
-		_myEvelopeData.beginDraw(g);
-		g.clear();
-		g.pushAttribute();
-		g.noBlend();
-		g.pointSize(1);
-		_myWriteDataShader.start();
-		g.beginShape(CCDrawMode.POINTS);
-		for(int i = 0; i < 100; i++){
-			double myVal = _cLifeTimeAlpha.value(i / 100d);
-			g.textureCoords4D(0, myVal, myVal, myVal, 1d);
-			g.vertex(i + 0.5, 0.5);
-		}
-		g.endShape();
-		_myWriteDataShader.end();
-		g.popAttribute();
-		_myEvelopeData.endDraw(g);
-		
-		_myGradientData.beginDraw(g);
-		g.clear();
-		g.pushAttribute();
-		g.noBlend();
-		g.pointSize(1);
-		_myWriteDataShader.start();
-		g.beginShape(CCDrawMode.POINTS);
-		for(int i = 0; i < 100; i++){
-			CCColor myVal = _cGradient.color(i / 100d);
-			g.textureCoords4D(0, myVal.r, myVal.g, myVal.b, 1d);
-			g.vertex(i + 0.5, 0.5);
-		}
-		g.endShape();
-		_myWriteDataShader.end();
-		g.popAttribute();
-		_myGradientData.endDraw(g);
 		
 		_myShader.start();
 		g.texture(0, _myParticles.dataBuffer().attachment(0));
 		g.texture(1, _myParticles.dataBuffer().attachment(1));
 		g.texture(3, _myParticles.dataBuffer().attachment(3));
-		g.texture(4, _myEvelopeData.attachment(0));
-		g.texture(5, _myGradientData.attachment(0));
+		g.texture(4, _myParticles.envelopeTexture());
 		_myShader.uniform1i("positions", 0);
 		_myShader.uniform1i("infos", 1);
 		_myShader.uniform1i("pointSprite", 2);
 		_myShader.uniform1i("colors", 3);
 		_myShader.uniform1i("lifeTimeBlends", 4);
-		_myShader.uniform1i("gradient", 5);
+		_myShader.uniform1f("lifeTimeID", _myLifeTimeAlphaIndex);
 		_myShader.uniform1f("tanHalfFOV", CCMath.tan(g.camera().fov()) * g.height());
 		_myShader.uniform1f("pointSize", _cPointSize);
 		_myShader.uniform1f("aspectRatio", g.width() / (float)g.height());

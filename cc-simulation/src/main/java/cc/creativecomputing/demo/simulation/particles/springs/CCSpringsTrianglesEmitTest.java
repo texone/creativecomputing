@@ -129,7 +129,7 @@ public class CCSpringsTrianglesEmitTest extends CCGL2Adapter {
 
 		List<CCConstraint> myConstraints = new ArrayList<CCConstraint>();
 
-		_mySprings = new CCSpringForce(4, 0.2f,25f);
+		_mySprings = new CCSpringForce(4, 0.2f);
 
 		myForces.add(_mySprings);
 

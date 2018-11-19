@@ -68,7 +68,7 @@ public class CCParticlesSpringsDemo extends CCGL2Adapter {
 		myForces.add(new CCViscousDrag());
 		myForces.add(new CCAttractor());
 		
-		mySprings = new CCSpringForce(4,4f,5f);
+		mySprings = new CCSpringForce(4,4f);
 		myForces.add(mySprings);
 		
 		List<CCParticleRenderer> myRenderer = new ArrayList<>();

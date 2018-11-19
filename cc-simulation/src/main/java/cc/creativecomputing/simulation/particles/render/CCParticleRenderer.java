@@ -16,20 +16,13 @@
  ******************************************************************************/
 package cc.creativecomputing.simulation.particles.render;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.graphics.CCDrawAttributes;
-import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
-import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
-import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.simulation.particles.CCParticles;
 
 /**
@@ -38,13 +31,7 @@ import cc.creativecomputing.simulation.particles.CCParticles;
  */
 public abstract class CCParticleRenderer {
 	
-	protected CCShaderBuffer _myEnvelopeData;
-	
-	private CCGLWriteDataShader _myWriteDataShader;
-	
 	protected String _myEnvelopeTextureParameter;
-	 
-	protected List<CCEnvelope> _myEnvelopes = new ArrayList<>();
 	
 	@CCProperty(name = "active")
 	protected boolean _cIsActive;
@@ -60,11 +47,7 @@ public abstract class CCParticleRenderer {
 	private String _myName;
 	
 	public CCParticleRenderer(String theName){
-
-		_myWriteDataShader = new CCGLWriteDataShader();
-		
 		_myEnvelopeTextureParameter = "lifeTimeBlends";
-		_myEnvelopeData = new CCShaderBuffer(100,100);
 		
 		_myName = theName;
 	}
@@ -78,26 +61,6 @@ public abstract class CCParticleRenderer {
 	public abstract void update(final CCAnimator theAnimator);
 	
 	public void preDisplay(CCGraphics g){
-		_myEnvelopeData.beginDraw(g);
-		g.clear();
-		g.pushAttribute();
-		g.noBlend();
-		g.pointSize(1);
-		_myWriteDataShader.start();
-		g.beginShape(CCDrawMode.POINTS);
-		float y = 0;
-		for(CCEnvelope myEnvelope:_myEnvelopes){
-			for(int i = 0; i < 100; i++){
-				double myVal = myEnvelope.interpolate(i / 100d);
-				g.textureCoords4D(0, myVal, myVal, myVal, 1d);
-				g.vertex(i + 0.5, y + 0.5);
-			}
-			y++;
-		}
-		g.endShape();
-		_myWriteDataShader.end();
-		g.popAttribute();
-		_myEnvelopeData.endDraw(g);
 	}
 	
 	public abstract void display(CCGraphics g);

@@ -57,6 +57,8 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 	@CCProperty(name = "scale")
 	protected CCEnvelope _myScaleEnvelope = new CCEnvelope();
 	
+	private int _myScaleEnvelopeID;
+	
 	private final CCParticlePrimitive _myPrimitive;
 	
 	public CCParticlePrimitiveRenderer(Path theVertexShader, Path theFragmentShader, CCParticlePrimitive thePrimitive) {
@@ -71,12 +73,13 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 			CCNIOUtil.classPath(CCDisplayShader.class, "primitive_fragment.glsl"),
 			thePrimitive
 		);
-
-		_myEnvelopes.add(_myScaleEnvelope);
 	}
 	
 	public void setup(CCParticles theParticles) {
 		_myParticles = theParticles;
+		
+		_myScaleEnvelopeID = theParticles.envelopeData().add(_myScaleEnvelope);
+				
 		switch(_myPrimitive){
 		case LINE:
 			_myMesh = new CCMesh(CCDrawMode.LINES, _myParticles.size() * 2);
@@ -342,13 +345,14 @@ public class CCParticlePrimitiveRenderer extends CCParticleRenderer{
 		g.texture(1, _myParticles.dataBuffer().attachment(1));
 		g.texture(2, _myParticles.dataBuffer().attachment(2));
 		g.texture(3, _myParticles.dataBuffer().attachment(3));
-		g.texture(4, _myEnvelopeData.attachment(0));
+		g.texture(4, _myParticles.envelopeTexture());
 		_myShader.uniform1i("positions", 0);
 		_myShader.uniform1i("infos", 1);
 		_myShader.uniform1i("velocities", 2);
 		_myShader.uniform1i("colors", 3);
 		_myShader.uniform1i("lifeTimeBlends", 4);
 		_myShader.uniform1f("pointSize", _myPointsize);
+		_myShader.uniform1f("scaleEnvID", _myScaleEnvelopeID);
 		_myShader.uniform3f("cameraPosition", g.camera().position());
 		_myMesh.draw(g);
 		g.noTexture();

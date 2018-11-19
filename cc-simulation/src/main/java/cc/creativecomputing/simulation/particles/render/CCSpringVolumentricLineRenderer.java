@@ -11,6 +11,7 @@
 package cc.creativecomputing.simulation.particles.render;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.control.CCEnvelope;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -33,6 +34,11 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 	protected CCVBOMesh _myMesh;
 	
 	private boolean _myIncludeCaps;
+	
+	@CCProperty(name = "life time alpha")
+	private CCEnvelope _cLifeTimeAlpha = new CCEnvelope();
+	
+	private int _myLifeTimeAlphaIndex;
 
 	public CCSpringVolumentricLineRenderer(CCSpringForce theSprings, boolean theIncludeCaps){
 		super("springs volumetric lines");
@@ -47,6 +53,7 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 
 	@Override
 	public void setup(CCParticles theParticles) {
+		_myLifeTimeAlphaIndex = theParticles.envelopeData().add(_cLifeTimeAlpha);
 		_myParticles = theParticles;
 		_myMesh = new CCVBOMesh(CCDrawMode.QUADS, _myParticles.size() * (_myIncludeCaps ? 12 : 4));
 		
@@ -126,10 +133,13 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 			g.texture(1, _myParticles.dataBuffer().attachment(1));
 			g.texture(2, _myParticles.dataBuffer().attachment(3));
 			g.texture(3, _mySprings.idBuffer().attachment(0));
+			g.texture(4, _myParticles.envelopeTexture());
 			_myShader.uniform1i("positions", 0);
 			_myShader.uniform1i("infos", 1);
 			_myShader.uniform1i("colors", 2);
 			_myShader.uniform1i("springs", 3);
+			_myShader.uniform1i("lifeTimeBlends", 4);
+			_myShader.uniform1f("lifeTimeID", _myLifeTimeAlphaIndex);
 			_myShader.uniform1f("tanHalfFOV", CCMath.tan(g.camera().fov()) * g.height());
 			_myShader.uniform1f("time", _myTime);
 			_myShader.uniform1f("aspectRatio", g.aspectRatio());

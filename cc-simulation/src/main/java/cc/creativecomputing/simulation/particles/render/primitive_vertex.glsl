@@ -15,6 +15,7 @@ uniform sampler2DRect positions;
 uniform sampler2DRect infos;
 uniform sampler2DRect colors;
 
+uniform float scaleEnvID;
 uniform sampler2DRect lifeTimeBlends;
 
 float lifeTimeBlend(float blend, float envelopeIndex){
@@ -39,7 +40,7 @@ void main (){
 	vec4 myValues = texture2DRect(infos, gl_Vertex.xy);
 	vec4 myColors = texture2DRect(colors, gl_Vertex.xy);
 	float myAlpha = clamp(1 - myValues.x / myValues.y * (1 - myValues.z),0,1);
-	myAlpha = lifeTimeBlend(myValues.x / myValues.y * (1 - myValues.z),0.);
+	myAlpha = lifeTimeBlend(myValues.x / myValues.y * (1 - myValues.z),scaleEnvID);
 	mat4 localRotation = mat4( calcLookAtMatrix(myPosition.xyz, myPosition.xyz + myVelocity, 0. ) );
 	myPosition += localRotation * vec4(gl_MultiTexCoord0.xyz * vec3(boxXscale, boxYscale, boxZscale) * myAlpha,0.);
 	gl_Position = gl_ModelViewProjectionMatrix * myPosition;

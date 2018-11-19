@@ -14,12 +14,16 @@ uniform vec2 offset;
 uniform float radius;
 uniform float aspectRatio;
 
+uniform sampler2DRect lifeTimeBlends;
+uniform float lifeTimeID;
+
 void main (){
 	vec4 offsets = gl_MultiTexCoord1;
 	gl_TexCoord[0].xy = offsets.zw;
 	vec4 myIndex = texture2DRect(springs, gl_Vertex.xy + offset);
 	vec4 myValues = texture2DRect(infos, gl_Vertex.xy);
-	float myAlpha = clamp(1 - myValues.x / myValues.y,0,1);
+	
+	float myAlpha = texture2DRect (lifeTimeBlends, vec2(myValues.x / myValues.y * (1 - myValues.z) * 100.0, lifeTimeID)).x;
 
 	//compute vertices position in clip space
 	vec4 p1 = gl_ModelViewProjectionMatrix * texture2DRect(positions, myIndex.xy);

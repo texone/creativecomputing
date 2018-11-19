@@ -90,7 +90,7 @@ public class CCParticles{
 	
 	protected CCGLSwapBuffer _mySwapTexture;
 	
-	protected CCShaderBuffer _myEnvelopeData;
+	protected CCParticleEnvelopeData _myEnvelopeData;
 	protected CCShaderBuffer _myGroupData;
 	
 	protected double _myCurrentTime = 0;
@@ -144,7 +144,7 @@ public class CCParticles{
 		_myHeight = theHeight;
 
 		_mySetDataShader = new CCGLWriteDataShader();
-		
+		_myEnvelopeData = new CCParticleEnvelopeData(100, 100);
 		_mySwapTexture = new CCGLSwapBuffer(g, 32, 4, 4,_myWidth,_myHeight);
 		_myGroupData = new CCShaderBuffer(32, 4, 1, CCParticleCPUGroupEmitter.GROUP_WIDH,CCParticleCPUGroupEmitter.GROUP_WIDH);
 
@@ -161,22 +161,29 @@ public class CCParticles{
 		return _myForces;
 	}
 	
-	protected interface CCParticleSetup{
+	public interface CCParticleSetup{
 		public void setup(CCParticles theParticles);
 	}
 	
-	protected CCParticles(final CCGraphics g, int theWidth, int theHeight, CCParticleSetup theSetup) {
+	public CCParticles(final CCGraphics g, int theWidth, int theHeight, CCParticleSetup theSetup) {
+		
+		this(g, theWidth, theHeight);
+		setup(g,theSetup);
+	}
+	
+	protected CCParticles(final CCGraphics g, int theWidth, int theHeight) {
 		_myWidth = theWidth;
 		_myHeight = theHeight;
 
 		_mySetDataShader = new CCGLWriteDataShader();
+		_myEnvelopeData = new CCParticleEnvelopeData(100, 100);
 		
 		_mySwapTexture = new CCGLSwapBuffer(g, 32, 4, 4,_myWidth,_myHeight);
 		_myGroupData = new CCShaderBuffer(32, 4, 1, CCParticleCPUGroupEmitter.GROUP_WIDH,CCParticleCPUGroupEmitter.GROUP_WIDH);
-		
+	}
+	
+	protected void setup(final CCGraphics g, CCParticleSetup theSetup) {
 		theSetup.setup(this);
-		
-
 		init(g);
 	}
 	
@@ -187,6 +194,7 @@ public class CCParticles{
 		}
 		
 		for(CCForce myForce:_myForces) {
+			myForce.index(_myEnvelopeData.add(myForce.lifetimeBlend()));
 			myForce.setSize(g, _myWidth, _myHeight);
 			_myForceMap.put(myForce.append(), myForce);
 		}
@@ -195,9 +203,6 @@ public class CCParticles{
 			myConstraint.setSize(g, _myWidth, _myHeight);
 			_myConstraintMap.put(myConstraint.append(), myConstraint);
 		}
-		
-
-		_myEnvelopeData = new CCShaderBuffer(100, _myForces.size() + 1);
 		
 		_myUpdateShader = new CCParticlesUpdateShader(this, g, _myForces, _myConstraints, _myImpulses,_myWidth,_myHeight);
 		
@@ -208,7 +213,7 @@ public class CCParticles{
 		_myUpdateShader.setTextureUniform("velocityTexture", velocityData());
 		_myUpdateShader.setTextureUniform("colorTexture", colorData());
 		_myUpdateShader.setTextureUniform("staticPositions", null);
-		_myUpdateShader.setTextureUniform("lifeTimeBlends", _myEnvelopeData.attachment(0));
+		_myUpdateShader.setTextureUniform("lifeTimeBlends", _myEnvelopeData.texture());
 		_myUpdateShader.setTextureUniform("groupInfoTexture", _myGroupData.attachment(0));
 	}
 	
@@ -261,7 +266,11 @@ public class CCParticles{
 	}
 	
 	public CCTexture2D envelopeTexture() {
-		return _myEnvelopeData.attachment(0);
+		return _myEnvelopeData.texture();
+	}
+	
+	public CCParticleEnvelopeData envelopeData() {
+		return _myEnvelopeData;
 	}
 	
 	public double currentTime() {
@@ -429,22 +438,7 @@ public class CCParticles{
 		_myLifetimeUpdates.add(theParticle);
 	}
 	
-	private void updateEnvelopeData(CCGraphics g) {
-		_myEnvelopeData.beginDraw(g);
-		g.clear();
-		_mySetDataShader.start();
-		g.beginShape(CCDrawMode.POINTS);
-		for(CCForce myForce:_myForces){
-			for(int i = 0; i < 100; i++){
-				double myVal = myForce.lifetimeBlend().value(i / 100d);
-				g.textureCoords4D(0, myVal, myVal, myVal, 1d);
-				g.vertex(i + 0.5, myForce.index() + 0.5);
-			}
-		}
-		g.endShape();
-		_mySetDataShader.end();
-		_myEnvelopeData.endDraw(g);
-	}
+	
 	
 	
 	
@@ -469,7 +463,7 @@ public class CCParticles{
 		g.noBlend();
 		g.pointSize(1);
 
-		updateEnvelopeData(g);
+		_myEnvelopeData.preDisplay(g);
 
 		g.popAttribute();
 	}
@@ -524,7 +518,6 @@ public class CCParticles{
 	}
 	
 	public void preDisplay(CCGraphics g){
-		g.debug();
 		g.pushAttribute();
 		g.noBlend();
 		beforeUpdate(g);
