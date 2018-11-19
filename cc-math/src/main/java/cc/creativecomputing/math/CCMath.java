@@ -102,6 +102,10 @@ public class CCMath {
 	public static double random(final double theMin, final double theMax) {
 		return RANDOM.random(theMin, theMax);
 	}
+
+	public static int random(final int theMin, final int theMax) {
+		return CCMath.round(RANDOM.random(theMin, theMax));
+	}
 	
 	/**
 	 * Returns random values using the given interpolator to change the distribution of random values
