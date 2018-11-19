@@ -46,6 +46,8 @@ public class CCFrustum {
 	}
 
     private CCPlane[] _myFrustumPlanes = new CCPlane[6];
+    
+    private CCVector3[] _myFrustumPoints = new CCVector3[8];
 
 	private CCVector3 _myNearTopLeft;
 	private CCVector3 _myNearTopRight;
@@ -117,6 +119,16 @@ public class CCFrustum {
 		_myFarBottomLeft   = myFarCenter.subtract( myY.multiply(_myFarHeight  - myFarFrustumOffsetY)).subtract( myX.multiply(_myFarWidth  - myFarFrustumOffsetX));
 		_myFarBottomRight  = myFarCenter.subtract( myY.multiply(_myFarHeight  - myFarFrustumOffsetY)).add(      myX.multiply(_myFarWidth  + myFarFrustumOffsetX));
 
+		_myFrustumPoints[0] = _myNearTopLeft;
+		_myFrustumPoints[1] = _myNearTopRight;
+		_myFrustumPoints[2] = _myNearBottomLeft;
+		_myFrustumPoints[3] = _myNearBottomRight;
+		
+		_myFrustumPoints[4] = _myFarTopLeft;
+		_myFrustumPoints[5] = _myFarTopRight;
+		_myFrustumPoints[6] = _myFarBottomLeft;
+		_myFrustumPoints[7] = _myFarBottomRight;
+		
 		_myFrustumPlanes[CCFrustumPlane.TOP.ordinal()] = new CCPlane(_myNearTopRight, _myNearTopLeft, _myFarTopLeft);
 		_myFrustumPlanes[CCFrustumPlane.BOTTOM.ordinal()] = new CCPlane(_myNearBottomLeft, _myNearBottomRight, _myFarBottomRight);
 		_myFrustumPlanes[CCFrustumPlane.LEFT.ordinal()] = new CCPlane(_myNearTopLeft, _myNearBottomLeft, _myFarBottomLeft);
@@ -239,6 +251,33 @@ public class CCFrustum {
 				result = CCFrustumRelation.INTERSECT;
 		}
 		return(result);
+		
+		
+		// check box outside/inside of frustum
+//		for( int i=0; i<6; i++ ){
+//			int out = 0;
+//			out +=  _myFrustumPlanes[i].normal().dot(theBoundingBox.min().x, theBoundingBox.min().y, theBoundingBox.min().z) < 0.0 ? 1 : 0;
+//			out +=  _myFrustumPlanes[i].normal().dot(theBoundingBox.max().x, theBoundingBox.min().y, theBoundingBox.min().z) < 0.0 ? 1 : 0;
+//			out +=  _myFrustumPlanes[i].normal().dot(theBoundingBox.min().x, theBoundingBox.max().y, theBoundingBox.min().z) < 0.0 ? 1 : 0;
+//			out +=  _myFrustumPlanes[i].normal().dot(theBoundingBox.max().x, theBoundingBox.max().y, theBoundingBox.min().z) < 0.0 ? 1 : 0;
+//			out +=  _myFrustumPlanes[i].normal().dot(theBoundingBox.min().x, theBoundingBox.min().y, theBoundingBox.max().z) < 0.0 ? 1 : 0;
+//			out +=  _myFrustumPlanes[i].normal().dot(theBoundingBox.max().x, theBoundingBox.min().y, theBoundingBox.max().z) < 0.0 ? 1 : 0;
+//			out +=  _myFrustumPlanes[i].normal().dot(theBoundingBox.min().x, theBoundingBox.max().y, theBoundingBox.max().z) < 0.0 ? 1 : 0;
+//			out +=  _myFrustumPlanes[i].normal().dot(theBoundingBox.max().x, theBoundingBox.max().y, theBoundingBox.max().z) < 0.0 ? 1 : 0;
+//			if( out==8 ) return CCFrustumRelation.OUTSIDE;
+//		}
+
+		// check frustum outside/inside box
+		
+//		    int out;
+//		    out=0; for( int i=0; i<8; i++ ) out += ((_myFrustumPoints[i].x > theBoundingBox.max().x)?1:0); if( out==8 ) return CCFrustumRelation.OUTSIDE;
+//		    out=0; for( int i=0; i<8; i++ ) out += ((_myFrustumPoints[i].x < theBoundingBox.min().x)?1:0); if( out==8 ) return CCFrustumRelation.OUTSIDE;
+//		    out=0; for( int i=0; i<8; i++ ) out += ((_myFrustumPoints[i].y > theBoundingBox.max().y)?1:0); if( out==8 ) return CCFrustumRelation.OUTSIDE;
+//		    out=0; for( int i=0; i<8; i++ ) out += ((_myFrustumPoints[i].y < theBoundingBox.min().y)?1:0); if( out==8 ) return CCFrustumRelation.OUTSIDE;
+//		    out=0; for( int i=0; i<8; i++ ) out += ((_myFrustumPoints[i].z > theBoundingBox.max().z)?1:0); if( out==8 ) return CCFrustumRelation.OUTSIDE;
+//		    out=0; for( int i=0; i<8; i++ ) out += ((_myFrustumPoints[i].z < theBoundingBox.min().z)?1:0); if( out==8 ) return CCFrustumRelation.OUTSIDE;
+
+//		    return CCFrustumRelation.INSIDE;
 	}
 	
 	/**

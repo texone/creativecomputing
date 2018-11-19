@@ -102,16 +102,36 @@ public class CCCameraController {
 	}
 	
 	public static class CCCameraState  {
-		final CCQuaternion _myRotation;
-		final CCVector3 _myCenter;
-		final double _myDistance;
+		@CCProperty(name = "rotation", readBack = true)
+		private CCQuaternion _myRotation;
+		@CCProperty(name = "center", readBack = true)
+		private CCVector3 _myCenter;
+		@CCProperty(name = "distance", readBack = true)
+		private double _myDistance;
 
 		public CCCameraState(final CCQuaternion theRotation, final CCVector3 theCenter, final double theDistance) {
 			_myRotation = theRotation;
 			_myCenter = theCenter;
 			_myDistance = theDistance;
 		}
+		
+		public CCCameraState() {
+			_myCenter = new CCVector3();
+			_myDistance = 100;
+			_myRotation = new CCQuaternion();
+		}
+		
+		public void set(CCCameraState theState) {
+			_myRotation.set(theState._myRotation);
+			_myCenter.set(theState._myCenter);
+			_myDistance = theState._myDistance;
+		}
 
+		public void set(CCCameraController theCameraController) {
+			_myRotation.set(theCameraController._myRotation);
+			_myCenter.set(theCameraController._myCenter);
+			_myDistance = theCameraController._myDistance;
+		}
 	}
 	
 	private static final CCVector3 LOOK = CCVector3.UNIT_Z;
@@ -585,6 +605,7 @@ public class CCCameraController {
 		return _myRotation.apply(LOOK).multiply(_myDistance).add(_myCenter);
 	}
 
+	@CCProperty(name = "reset")
 	public void reset() {
 		reset(0.3);
 	}
@@ -627,11 +648,11 @@ public class CCCameraController {
 		setState(state, 0.3f);
 	}
 
-	public void setState(final CCCameraState state, final double animationTimeMillis) {
-		if (animationTimeMillis > 0) {
-			_myRotationInterpolation.startInterpolation(new RotationInterp(state._myRotation, animationTimeMillis));
-			_myCenterInterpolation.startInterpolation(new CenterInterp(state._myCenter, animationTimeMillis));
-			_myDistanceInterps.startInterpolation(new DistanceInterp(state._myDistance, animationTimeMillis));
+	public void setState(final CCCameraState state, final double theTime) {
+		if (theTime > 0) {
+			_myRotationInterpolation.startInterpolation(new RotationInterp(state._myRotation, theTime));
+			_myCenterInterpolation.startInterpolation(new CenterInterp(state._myCenter, theTime));
+			_myDistanceInterps.startInterpolation(new DistanceInterp(state._myDistance, theTime));
 		} else {
 			_myRotation = state._myRotation;
 			_myCenter.set(state._myCenter);
@@ -649,20 +670,10 @@ public class CCCameraController {
 			_myDuration = theDuration;
 		}
 		
-
-
 		protected double smooth(final double a, final double b, final double t) {
 			final double smooth = (t * t * (3 - 2 * t));
 			return (b * smooth) + (a * (1 - smooth));
 
-		}
-
-		protected CCVector3 smooth(final CCVector3 a, final CCVector3 b, final double t) {
-			return new CCVector3(
-				smooth(a.x, b.x, t), 
-				smooth(a.y, b.y, t), 
-				smooth(a.z, b.z, t)
-			);
 		}
 
 		void start() {
@@ -720,6 +731,14 @@ public class CCCameraController {
 			startCenter = new CCVector3(_myCenter);
 			endCenter = theEndCenter;
 		}
+		
+		protected CCVector3 smooth(final CCVector3 a, final CCVector3 b, final double t) {
+			return new CCVector3(
+				smooth(a.x, b.x, t), 
+				smooth(a.y, b.y, t), 
+				smooth(a.z, b.z, t)
+			);
+		}
 
 		@Override
 		protected void interp(final double t) {
@@ -741,35 +760,6 @@ public class CCCameraController {
 			_myStartRotation = new CCQuaternion(_myRotation);
 			_myEndRotation = endRotation;
 		}
-		
-		// Thanks to Michael Kaufmann <mail@michael-kaufmann.ch> for improvements to this function.
-		private CCQuaternion slerp(final CCQuaternion a, final CCQuaternion b, final double t) {
-			final double a0 = a.w, a1 = a.x, a2 = a.y, a3 = a.z;
-			double b0 = b.w, b1 = b.x, b2 = b.y, b3 = b.z;
-
-			double cosTheta = a0 * b0 + a1 * b1 + a2 * b2 + a3 * b3;
-			if (cosTheta < 0) {
-				b0 = -b0;
-				b1 = -b1;
-				b2 = -b2;
-				b3 = -b3;
-				cosTheta = -cosTheta;
-			}
-
-			final double theta = CCMath.acos(cosTheta);
-			final double sinTheta = CCMath.sqrt(1.0f - cosTheta * cosTheta);
-
-			double w1, w2;
-			if (sinTheta > 0.001f) {
-				w1 = CCMath.sin((1.0f - t) * theta) / sinTheta;
-				w2 = CCMath.sin(t * theta) / sinTheta;
-			} else {
-				w1 = 1.0f - t;
-				w2 = t;
-			}
-			return new CCQuaternion(w1 * a1 + w2 * b1, w1 * a2 + w2 * b2, w1
-					* a3 + w2 * b3, w1 * a0 + w2 * b0).normalizeLocal();
-		}
 
 		@Override
 		void start() {
@@ -781,7 +771,7 @@ public class CCCameraController {
 
 		@Override
 		protected void interp(final double t) {
-			_myRotation.set(slerp(_myStartRotation, _myEndRotation, t));
+			_myRotation.set(CCQuaternion.slerp(_myStartRotation, _myEndRotation, t));
 		}
 
 		@Override
