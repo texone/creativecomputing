@@ -82,9 +82,7 @@ public class CCRandom extends Random{
 	 * @param theMax
 	 */
 	public float random(float theMax){
-		if (theMax == 0)
-			return 0;
-		return nextFloat() * theMax;
+		return random() * theMax;
 	}
 	
 	/**
@@ -92,15 +90,7 @@ public class CCRandom extends Random{
 	 * @param theMax
 	 */
 	public double random(double theMax){
-		if (theMax == 0)
-			return 0;
-
-		double value = 0;
-		do{
-			value = nextDouble() * theMax;
-		}while (value == theMax);
-		
-		return value;
+		return random() * theMax;
 	}
 	
 	/**
@@ -110,14 +100,7 @@ public class CCRandom extends Random{
 	 * @return random value
 	 */
 	public float random(float theMin, float theMax){
-		if (theMin >= theMax){
-			float tmp = theMin;
-			theMin = theMax;
-			theMax = tmp;
-		}
-			
-		float diff = theMax - theMin;
-		return random(diff) + theMin;
+		return CCMath.blend(theMin, theMax, random());
 	}
 	
 	/**
@@ -127,14 +110,7 @@ public class CCRandom extends Random{
 	 * @return random value
 	 */
 	public double random(double theMin, double theMax){
-		if (theMin >= theMax){
-			double tmp = theMin;
-			theMin = theMax;
-			theMax = tmp;
-		}
-		
-		double diff = theMax - theMin;
-		return random(diff) + theMin;
+		return CCMath.blend(theMin, theMax, random());
 	}
 	
 	/**
