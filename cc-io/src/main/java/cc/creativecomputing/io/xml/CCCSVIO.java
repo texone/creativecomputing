@@ -40,6 +40,9 @@ public class CCCSVIO {
 			for(int j = 0; j < myValues.length;j++){
 				if(j >= myAttributes.length)continue;
 				if(myAttributes[j] == null)continue;
+				if(myValues[j].startsWith("\"")){
+					myValues[j] = myValues[j].substring(1, myValues[j].length() - 1);
+				}
 				myEntryData.addAttribute(myAttributes[j], myValues[j]);
 			}
 		}
@@ -60,13 +63,19 @@ public class CCCSVIO {
 			
 			CCNIOUtil.createDirectories(thePath);
 			PrintStream myWriter = new PrintStream(Files.newOutputStream(thePath), true, theEncoding);
+			boolean first = true;
 			for(String myAttribute:myFirstElement.attributes()){
-				myWriter.print(myAttribute + ";");
+				if(!first)myWriter.print(";");
+				first = false;
+				myWriter.print(myAttribute);
 			}
 			myWriter.println();
 			for(CCDataElement myEntry:theDataElement){
+				first = true;
 				for(String myAttribute:myFirstElement.attributes()){
-					myWriter.print(myEntry.attribute(myAttribute, "") + ";");
+					if(!first)myWriter.print(";");
+					first = false;
+					myWriter.print(myEntry.attribute(myAttribute, ""));
 				}
 				myWriter.println();
 			}
