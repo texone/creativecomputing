@@ -214,6 +214,11 @@ public class CCAABB {
 	public void checkSize(final CCVector3 thePoint) {
 		checkSize(thePoint.x, thePoint.y, thePoint.z);
 	}
+	
+	public void checkSize(final CCAABB theBound) {
+		checkSize(theBound.min());
+		checkSize(theBound.max());
+	}
 
 	@Override
 	public String toString() {
