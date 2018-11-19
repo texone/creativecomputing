@@ -60,7 +60,8 @@ public class CCColladaPolyList extends CCColladaGeometryData {
 			int myLength = 0;
 			for(int myVCount:myCountArray){
 				if(myVCount == 3)myLength += 3;
-				if(myVCount == 4)myLength += 6;
+				else if(myVCount == 4)myLength += 6;
+				else myLength += myVCount;
 			}
 			myInput.buffer(FloatBuffer.allocate(myLength * myInput.source().stride()));
 			float[][] myPoints = myInput.source().pointMatrix();
@@ -76,8 +77,7 @@ public class CCColladaPolyList extends CCColladaGeometryData {
 					myInput.buffer().put(myPoints[myIndex0]);
 					myInput.buffer().put(myPoints[myIndex1]);
 					myInput.buffer().put(myPoints[myIndex2]);
-				}
-				if(myVCount == 4){
+				}else if(myVCount == 4){
 					int myIndex0 = _myPointIndices[i * _myStride + myInput.offset()];
 					i++;
 					int myIndex1 = _myPointIndices[i * _myStride + myInput.offset()];
@@ -94,6 +94,12 @@ public class CCColladaPolyList extends CCColladaGeometryData {
 					myInput.buffer().put(myPoints[myIndex0]);
 					myInput.buffer().put(myPoints[myIndex2]);
 					myInput.buffer().put(myPoints[myIndex3]);
+				}else {
+					for(int j = 0; j < myVCount;j++) {
+						int myIndex0 = _myPointIndices[i * _myStride + myInput.offset()];
+						i++;
+						myInput.buffer().put(myPoints[myIndex0]);
+					}
 				}
 			}
 			
