@@ -41,40 +41,46 @@
             },
             "texturenoise.glsl": {
               "name": "texturenoise.glsl",
-              "value": "cc.creativecomputing.control.code.CCShaderFile@10cace2d"
+              "value": "cc.creativecomputing.control.code.CCShaderFile@7eabc21f"
             },
             "uniforms": {
               "name": "uniforms",
               "value": {
-                "light amount": {
+                "octaves": {
+                  "min": 1,
+                  "max": 10,
+                  "name": "octaves",
+                  "value": 2.944000005722046
+                },
+                "amplitude": {
                   "min": 0,
-                  "max": 200,
-                  "name": "light amount",
-                  "value": 18.19999885559082
+                  "max": 1,
+                  "name": "amplitude",
+                  "value": 0
                 },
                 "rough": {
                   "min": 0,
                   "max": 1,
                   "name": "rough",
-                  "value": 0.013000000268220901
+                  "value": 0.609000027179718
                 },
                 "max light amount": {
                   "min": 0,
                   "max": 1,
                   "name": "max light amount",
-                  "value": 0.289000004529953
-                },
-                "light shape": {
-                  "min": 0,
-                  "max": 10,
-                  "name": "light shape",
-                  "value": 1.9700000286102295
+                  "value": 0.25
                 },
                 "light pow": {
                   "min": 0,
                   "max": 10,
                   "name": "light pow",
-                  "value": 5.130000114440918
+                  "value": 4.339999675750732
+                },
+                "min light amount": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "min light amount",
+                  "value": 0.3700000047683716
                 },
                 "zoom": {
                   "min": 1,
@@ -82,65 +88,35 @@
                   "name": "zoom",
                   "value": 5
                 },
-                "typo smoke": {
-                  "min": 0,
-                  "max": 4,
-                  "name": "typo smoke",
-                  "value": 1.4000000000000004
-                },
                 "dfbmAmount": {
                   "min": 0,
                   "max": 100,
                   "name": "dfbmAmount",
-                  "value": 39.0909090909091
+                  "value": 6.5
                 },
                 "pure": {
                   "min": 0,
                   "max": 1,
                   "name": "pure",
-                  "value": 0.10400000214576721
+                  "value": 0.19499999284744263
                 },
                 "lacunarity": {
                   "min": 0,
                   "max": 4,
                   "name": "lacunarity",
-                  "value": 2.6545454545454548
-                },
-                "typo glow": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "typo glow",
-                  "value": 0.20909090909090933
+                  "value": 2.299999952316284
                 },
                 "gain": {
                   "min": 0,
                   "max": 1,
                   "name": "gain",
-                  "value": 0.5636363636363636
+                  "value": 0.7919999957084656
                 },
                 "frequency": {
                   "min": 0,
                   "max": 1,
                   "name": "frequency",
-                  "value": 0.39500001072883606
-                },
-                "octaves": {
-                  "min": 1,
-                  "max": 10,
-                  "name": "octaves",
-                  "value": 2.6470000743865967
-                },
-                "amplitude": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "amplitude",
-                  "value": 0.6050000190734863
-                },
-                "min light amount": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "min light amount",
-                  "value": 0.328000009059906
+                  "value": 0
                 }
               }
             },
@@ -365,11 +341,15 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 42.492075227969984
+        "value": 74.39202559145194
       },
       "exceptionHandling": {
         "name": "exceptionHandling",
         "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
       }
     }
   }

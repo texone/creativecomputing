@@ -167,11 +167,8 @@ uniform vec4 fBlends;
 
 uniform sampler2D shaper;
 
-void main(){
-	vec2 uv = gl_FragCoord.xy / iResolution.xx;
-	vec2 texUV = gl_FragCoord.xy / iResolution.xy;
-	texUV = vec2(texUV.x, 1.0 - texUV.y); 
-    
+float eval(vec2 fracCoord){
+	vec2 uv = fracCoord.xy / iResolution.xx;
 	vec4 fxyzw = octavedNoise( 24.0*uv); 
     
 	float f =  fxyzw.x * fBlends.x;
@@ -179,17 +176,122 @@ void main(){
 	f +=  fxyzw.z * fBlends.z;
 	f +=  fxyzw.w * fBlends.w;
 	f /= (fBlends.x + fBlends.y + fBlends.z + fBlends.w);
-
-	vec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2)));// / iResolution * randomOffset * 20.0;
 	
-	vec2 outputDir = dir * 0.5 + 0.5;
-	vec2 texUVDir = dir / iResolution * randomOffset * 20.0;
-	//texUV += dir;
+	f = texture2D(shaper, vec2(f,0.5)).r;
+	return f;
+}
 
+vec3 normal(vec2 coords){
 
-	 
-    float o = f;//pow(fxyzw.x / pow((1. - fxyzw.y) , .3),1.0);
-    o = texture2D(shaper, vec2(o,0.5)).r;
-    gl_FragData[0] = vec4(o,o,o,1.);
+	vec2 xOffset = vec2(1.0, 0.0);
+	vec2 yOffset = vec2(0.0, 1.0);
+     
+	float s01 = eval(coords.xy - xOffset);
+	float s21 = eval(coords.xy + xOffset);
+	float s10 = eval(coords.xy - yOffset);
+	float s12 = eval(coords.xy + yOffset); 
+    
+	vec3 va = normalize(vec3(0.01,0,(s21-s01)));
+	vec3 vb = normalize(vec3(0,0.01,s12-s10));
+	return cross(va,vb);
+}
+
+/**
+ * Lighting contribution of a single point light source via Phong illumination.
+ * 
+ * The vec3 returned is the RGB color of the light's contribution.
+ *
+ * k_a: Ambient color
+ * k_d: Diffuse color
+ * k_s: Specular color
+ * alpha: Shininess coefficient
+ * p: position of point being lit
+ * eye: the position of the camera
+ * lightPos: the position of the light
+ * lightIntensity: color/intensity of the light
+ *
+ * See https://en.wikipedia.org/wiki/Phong_reflection_model#Description
+ */
+vec3 phongContribForLight(vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 n, vec3 eye,
+                          vec3 lightPos, vec3 lightIntensity) {
+    vec3 N = n;
+    vec3 L = normalize(lightPos - p);
+    vec3 V = normalize(eye - p);
+    vec3 R = normalize(reflect(-L, N));
+    
+    float dotLN = dot(L, N);
+    float dotRV = dot(R, V);
+    
+    if (dotLN < 0.0) {
+        // Light not visible from this point on the surface
+        return vec3(0.0, 0.0, 0.0);
+    } 
+    
+    if (dotRV < 0.0) {
+        // Light reflection in opposite direction as viewer, apply only diffuse
+        // component
+        return lightIntensity * (k_d * dotLN);
+    }
+    return lightIntensity * (k_d * dotLN + k_s * pow(dotRV, alpha));
+}
+
+uniform float iTime;
+/**
+ * Lighting via Phong illumination.
+ * 
+ * The vec3 returned is the RGB color of that point after lighting is applied.
+ * k_a: Ambient color
+ * k_d: Diffuse color
+ * k_s: Specular color
+ * alpha: Shininess coefficient
+ * p: position of point being lit
+ * eye: the position of the camera
+ *
+ * See https://en.wikipedia.org/wiki/Phong_reflection_model#Description
+ */
+vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 n, vec3 eye) {
+    const vec3 ambientLight = 0.5 * vec3(1.0, 1.0, 1.0);
+    vec3 color = ambientLight * k_a;
+    
+    vec3 light1Pos = vec3(4.0 * sin(iTime),
+                          2.0,
+                          4.0 * cos(iTime));
+    vec3 light1Intensity = vec3(0.8, 0.4, 0.4);
+    
+    color += phongContribForLight(k_d, k_s, alpha, p,n, eye,
+                                  light1Pos,
+                                  light1Intensity);
+    
+    vec3 light2Pos = vec3(20.0 * sin(0.37 * iTime),
+                          20.0 * cos(0.37 * iTime),
+                          2.0);
+    vec3 light2Intensity = vec3(0.5);
+    
+    color += phongContribForLight(k_d, k_s, alpha, p,n, eye,
+                                  light2Pos,
+                                  light2Intensity);    
+                                  
+    return color; 
+}
+
+void main(){
+	float f = eval(gl_FragCoord.xy);
+	vec3 norm = normal(gl_FragCoord);
+
+	// The closest point on the surface to the eyepoint along the view ray
+	
+	vec3 eye = vec3(0.0, 0.0, 15.0);
+	vec3 p = vec3(gl_FragCoord.xy * 0.15,f *100);
+	//p += noisef(p * 9. +vec3(xOffset, 0.0,zOffset)) * dir * 0.5; 
+	//p += noisef(p * 200. +vec3(xOffset, 0.0,zOffset)) * dir * 0.1; 
+    
+    	vec3 K_a = vec3(0.0, 0.0, 1.0);
+    	vec3 K_d = vec3(1.5, 0.9, 1.);
+    	vec3 K_s = vec3(1.0, 1.0, 1.0); 
+    	float shininess = 10.0;
+    
+    vec3 color = phongIllumination(K_a, K_d, K_s, shininess, p,norm, eye);
+    
+	gl_FragData[0] = vec4(color ,1.);
  }
 

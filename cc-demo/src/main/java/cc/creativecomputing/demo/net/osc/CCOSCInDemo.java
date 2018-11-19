@@ -6,24 +6,30 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
-import cc.creativecomputing.io.netty.CCClient;
-import cc.creativecomputing.io.netty.CCUDPClient;
-import cc.creativecomputing.io.netty.CCUDPServer;
-import cc.creativecomputing.io.netty.codec.osc.CCOSCMessage;
-import cc.creativecomputing.io.netty.codec.osc.CCOSCPacket;
-import cc.creativecomputing.io.netty.codec.osc.CCOSCCodec;
+import cc.creativecomputing.io.net.CCUDPIn;
+import cc.creativecomputing.io.net.codec.osc.CCOSCPacket;
+import cc.creativecomputing.io.net.codec.osc.CCOSCPacketCodec;
 
 public class CCOSCInDemo extends CCGL2Adapter {
 	
-	@CCProperty(name = "CCUDPIn")
-	private CCUDPServer<CCOSCPacket> _myOSCIN;
+	//@CCProperty(name = "CCUDPIn")
+	private CCUDPIn<CCOSCPacket> _myOSCIN;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myOSCIN = new CCUDPServer<>(new CCOSCCodec());
+		_myOSCIN = new CCUDPIn<>(new CCOSCPacketCodec());
 		_myOSCIN.events().add(message -> {
 			CCLog.info(message.message);
 		});
+		
+		_myOSCIN.localAddress().ip("127.0.0.1");
+		_myOSCIN.localAddress().port(9500);
+		
+
+		_myOSCIN.targetAddress().ip("127.0.0.1");
+		_myOSCIN.targetAddress().port(9000);
+		
+		_myOSCIN.connect(true);
 	}
 
 	@Override

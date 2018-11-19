@@ -1,7 +1,7 @@
 const int MAX_MARCHING_STEPS = 50;
 const float MIN_DIST = 10.0;
 const float MAX_DIST = 50.0;
-const float EPSILON = 0.01;
+const float EPSILON = 0.05;
 
 /**
  * Signed distance function for a sphere centered at the origin with radius r.
@@ -17,7 +17,7 @@ float cylinderSDF( vec3 p, vec3 c ){
 // Created by inigo quilez - iq/2013
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
-#define HIGH_QUALITY_NOISE
+//#define HIGH_QUALITY_NOISE
 
 uniform sampler2D randomTexture;
 
@@ -53,7 +53,7 @@ vec3 hash(vec3 p){
 	return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
 }
 
-float noise( in vec3 p){
+float noisef( in vec3 p){
 	vec3 i = floor( p );
 	vec3 f = fract( p );
 	vec3 u = f*f*(3.0-2.0*f); 
@@ -128,7 +128,7 @@ float octavedNoise(in vec3 s){
 	float myAmp = 0.;
 	
 	for(int i = 0; i < myOctaves;i++){
-		float noiseVal = noise(s * myScale); 
+		float noiseVal = noisef(s * myScale); 
 		myResult += noiseVal * myFallOff;
 		myAmp += myFallOff;
 		myFallOff *= gain;
@@ -136,7 +136,7 @@ float octavedNoise(in vec3 s){
 	}
 	float myBlend = octaves - float(myOctaves);
 	
-	myResult += noise(s * myScale) * myFallOff * myBlend;   
+	myResult += noisef(s * myScale) * myFallOff * myBlend;   
 	myAmp += myFallOff * myBlend;
 	
 	if(myAmp > 0.0){
@@ -155,9 +155,9 @@ float fbm( vec3 p )
 {
 	p += vec3(xOffset, 2.0,zOffset);
     float f;
-    f  = 0.5000*noise( p ); p = p*2.02;
-    f += 0.2500*noise( p ); p = p*2.03;
-    f += 0.1250*noise( p );
+    f  = 0.5000*noisef( p ); p = p*2.02;
+    f += 0.2500*noisef( p ); p = p*2.03;
+    f += 0.1250*noisef( p );
     return f;
 }
 
@@ -168,7 +168,7 @@ uniform float cylinder;
 uniform float noise;
 
 float objectSDF(vec3 samplePoint){
-	return cylinderSDF(samplePoint, vec3(0., 1.5,0.5)) * cylinder + fbm(samplePoint*vec3(1.0, 1., 1.) ) * noise; 
+	return sphereSDF(samplePoint, 1) * cylinder + fbm(samplePoint*vec3(1.0, 1., 1.) ) * noise; 
 } 
  
 float twist( vec3 p ) 
@@ -300,20 +300,20 @@ uniform float iTime;
 vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
     const vec3 ambientLight = 0.5 * vec3(1.0, 1.0, 1.0);
     vec3 color = ambientLight * k_a;
-    /*
+    
     vec3 light1Pos = vec3(4.0 * sin(iTime),
                           2.0,
                           4.0 * cos(iTime));
-    vec3 light1Intensity = vec3(0.4, 0.4, 0.4);
+    vec3 light1Intensity = vec3(0.8, 0.4, 0.4);
     
     color += phongContribForLight(k_d, k_s, alpha, p, eye,
                                   light1Pos,
                                   light1Intensity);
-    */
+    
     vec3 light2Pos = vec3(20.0 * sin(0.37 * iTime),
                           20.0 * cos(0.37 * iTime),
                           2.0);
-    vec3 light2Intensity = vec3(1.);
+    vec3 light2Intensity = vec3(0.5);
     
     color += phongContribForLight(k_d, k_s, alpha, p, eye,
                                   light2Pos,
@@ -323,7 +323,9 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
 }
 
 void main(  ){
-	vec3 dir = rayDirection(45.0, iResolution.xy, gl_FragCoord.xy); 
+	vec2 uv = gl_FragCoord.xy;
+	//uv += hash3(vec3(floor(uv / 120),0))*320;mod(uv, 100);
+	vec3 dir = rayDirection(45.0, iResolution.xy, uv); 
 	vec3 eye = vec3(0.0, 0.0, 15.0);
 	float dist = shortestDistanceToSurface(eye, dir, MIN_DIST, MAX_DIST);
     
@@ -335,15 +337,17 @@ void main(  ){
     
 	// The closest point on the surface to the eyepoint along the view ray
 	vec3 p = eye + dist * dir;
-	p += noise(p * 9. +vec3(xOffset, 0.0,zOffset)) * dir * 0.5; 
-	p += noise(p * 200. +vec3(xOffset, 0.0,zOffset)) * dir * 0.1; 
+	//p += noisef(p * 9. +vec3(xOffset, 0.0,zOffset)) * dir * 0.5; 
+	//p += noisef(p * 200. +vec3(xOffset, 0.0,zOffset)) * dir * 0.1; 
     
-    vec3 K_a = vec3(0.0, 0.0, 0.0);
-    vec3 K_d = vec3(1.5, 0.9, 0.);
+    vec3 K_a = vec3(0.0, 0.0, 1.0);
+    vec3 K_d = vec3(1.5, 0.9, 1.);
     vec3 K_s = vec3(1.0, 1.0, 1.0); 
-    float shininess = 100.0;
+    float shininess = 10.0;
     
     vec3 color = phongIllumination(K_a, K_d, K_s, shininess, p, eye);
     
 	gl_FragColor = vec4(color, 1.0);
+
+	//gl_FragColor = vec4(1);
 }

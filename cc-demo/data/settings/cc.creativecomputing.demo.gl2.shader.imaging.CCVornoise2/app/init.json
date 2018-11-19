@@ -30,6 +30,12 @@
   "app": {
     "name": "app",
     "value": {
+      "blend a refraction": {
+        "min": 0,
+        "max": 1,
+        "name": "blend a refraction",
+        "value": 1
+      },
       "voronoise": {
         "name": "voronoise",
         "value": {"fragment": {
@@ -39,50 +45,13 @@
               "name": "auto save",
               "value": true
             },
-            "noisecontours.glsl": {
-              "name": "noisecontours.glsl",
-              "value": "cc.creativecomputing.control.code.CCShaderFile@1e86e3f3"
+            "voronoise2.fs": {
+              "name": "voronoise2.fs",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@1c727e3f"
             },
             "uniforms": {
               "name": "uniforms",
-              "value": {
-                "octaves": {
-                  "min": 1,
-                  "max": 4,
-                  "name": "octaves",
-                  "value": 2.6620001792907715
-                },
-                "u": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "u",
-                  "value": 1
-                },
-                "v": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "v",
-                  "value": 0.06400000303983688
-                },
-                "scale": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "scale",
-                  "value": 1
-                },
-                "lacunarity": {
-                  "min": 0,
-                  "max": 4,
-                  "name": "lacunarity",
-                  "value": 2.0399999618530273
-                },
-                "gain": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "gain",
-                  "value": 0.4880000054836273
-                }
-              }
+              "value": {}
             },
             "save in file": {
               "name": "save in file",
@@ -91,21 +60,29 @@
           }
         }}
       },
-      "shaper": {
-        "curve": {"points": [
-          {
-            "time": 0,
-            "type": "LINEAR",
-            "value": 0
-          },
-          {
-            "time": 1,
-            "type": "LINEAR",
-            "value": 1
-          }
-        ]},
-        "name": "shaper",
-        "value": "cc.creativecomputing.control.CCEnvelope@68554dc"
+      "f z blend": {
+        "min": 0,
+        "max": 1,
+        "name": "f z blend",
+        "value": 0.34700000286102295
+      },
+      "f x blend": {
+        "min": 0,
+        "max": 1,
+        "name": "f x blend",
+        "value": 0
+      },
+      "scale": {
+        "min": 0,
+        "max": 1,
+        "name": "scale",
+        "value": 0.2280000001192093
+      },
+      "randomness": {
+        "min": 0,
+        "max": 200,
+        "name": "randomness",
+        "value": 10.800000190734863
       },
       "screen capture": {
         "name": "screen capture",
@@ -117,7 +94,7 @@
           },
           "format": {
             "name": "format",
-            "value": "PNG"
+            "value": "JPG"
           },
           "prepend": {
             "name": "prepend",
@@ -154,7 +131,7 @@
             "min": -2147483648,
             "max": 2147483647,
             "name": "width",
-            "value": 0
+            "value": 4320
           },
           "y": {
             "min": -2147483648,
@@ -166,17 +143,133 @@
             "min": 1,
             "max": 60,
             "name": "capture rate",
-            "value": 1
+            "value": 30
           },
           "record sequence": {},
           "height": {
             "min": -2147483648,
             "max": 2147483647,
             "name": "height",
-            "value": 0
+            "value": 337
           },
           "record timeline loop": {}
         }
+      },
+      "f w blend": {
+        "min": 0,
+        "max": 1,
+        "name": "f w blend",
+        "value": 1
+      },
+      "lacunarity": {
+        "min": 0,
+        "max": 2,
+        "name": "lacunarity",
+        "value": 2
+      },
+      "gain": {
+        "min": 0,
+        "max": 1,
+        "name": "gain",
+        "value": 0.6320000290870667
+      },
+      "texture 1": {
+        "name": "texture 1",
+        "value": {
+          "generate mipmaps": {
+            "name": "generate mipmaps",
+            "value": false
+          },
+          "filter": {
+            "name": "filter",
+            "value": "LINEAR"
+          },
+          "path": {
+            "name": "path",
+            "value": "data\\textures\\10_Wolken.jpg"
+          },
+          "mipmap filter": {
+            "name": "mipmap filter",
+            "value": "NEAREST"
+          },
+          "wrap": {
+            "name": "wrap",
+            "value": "MIRRORED_REPEAT"
+          }
+        }
+      },
+      "noise blend y": {
+        "min": 0,
+        "max": 1,
+        "name": "noise blend y",
+        "value": 0
+      },
+      "octaves": {
+        "min": 0,
+        "max": 10,
+        "name": "octaves",
+        "value": 4
+      },
+      "noise blend z": {
+        "min": 0,
+        "max": 1,
+        "name": "noise blend z",
+        "value": 1
+      },
+      "blend b refraction": {
+        "min": 0,
+        "max": 1,
+        "name": "blend b refraction",
+        "value": 1
+      },
+      "texture 0": {
+        "name": "texture 0",
+        "value": {
+          "generate mipmaps": {
+            "name": "generate mipmaps",
+            "value": false
+          },
+          "filter": {
+            "name": "filter",
+            "value": "LINEAR"
+          },
+          "path": {
+            "name": "path",
+            "value": "data\\textures\\09_FlightInfo_b.png"
+          },
+          "mipmap filter": {
+            "name": "mipmap filter",
+            "value": "NEAREST"
+          },
+          "wrap": {
+            "name": "wrap",
+            "value": "MIRRORED_REPEAT"
+          }
+        }
+      },
+      "noise blend x": {
+        "min": 0,
+        "max": 1,
+        "name": "noise blend x",
+        "value": 0
+      },
+      "blend ab": {
+        "min": 0,
+        "max": 1,
+        "name": "blend ab",
+        "value": 1
+      },
+      "f y blend": {
+        "min": 0,
+        "max": 1,
+        "name": "f y blend",
+        "value": 0.3790000081062317
+      },
+      "blend random": {
+        "min": 0,
+        "max": 1,
+        "name": "blend random",
+        "value": 1
       }
     }
   },
@@ -276,7 +369,7 @@
         "min": -2147483648,
         "max": 2147483647,
         "name": "width",
-        "value": 1680
+        "value": 4320
       },
       "inVsync": {
         "name": "inVsync",
@@ -290,7 +383,7 @@
         "min": -2147483648,
         "max": 2147483647,
         "name": "height",
-        "value": 600
+        "value": 337
       }
     }
   },
@@ -321,7 +414,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.109444291393455
+        "value": 29.772629997425263
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

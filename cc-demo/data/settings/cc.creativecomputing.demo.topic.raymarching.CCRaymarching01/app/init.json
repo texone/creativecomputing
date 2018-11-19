@@ -29,156 +29,91 @@
   },
   "app": {
     "name": "app",
-    "value": {
-      "voronoise": {
-        "name": "voronoise",
-        "value": {"fragment": {
-          "name": "fragment",
-          "value": {
-            "auto save": {
-              "name": "auto save",
-              "value": true
-            },
-            "noisecontours.glsl": {
-              "name": "noisecontours.glsl",
-              "value": "cc.creativecomputing.control.code.CCShaderFile@1e86e3f3"
-            },
-            "uniforms": {
-              "name": "uniforms",
-              "value": {
-                "octaves": {
-                  "min": 1,
-                  "max": 4,
-                  "name": "octaves",
-                  "value": 2.6620001792907715
-                },
-                "u": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "u",
-                  "value": 1
-                },
-                "v": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "v",
-                  "value": 0.06400000303983688
-                },
-                "scale": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "scale",
-                  "value": 1
-                },
-                "lacunarity": {
-                  "min": 0,
-                  "max": 4,
-                  "name": "lacunarity",
-                  "value": 2.0399999618530273
-                },
-                "gain": {
-                  "min": 0,
-                  "max": 1,
-                  "name": "gain",
-                  "value": 0.4880000054836273
-                }
-              }
-            },
-            "save in file": {
-              "name": "save in file",
-              "value": true
-            }
-          }
-        }}
-      },
-      "shaper": {
-        "curve": {"points": [
-          {
-            "time": 0,
-            "type": "LINEAR",
-            "value": 0
-          },
-          {
-            "time": 1,
-            "type": "LINEAR",
-            "value": 1
-          }
-        ]},
-        "name": "shaper",
-        "value": "cc.creativecomputing.control.CCEnvelope@68554dc"
-      },
-      "screen capture": {
-        "name": "screen capture",
+    "value": {"raymarch": {
+      "name": "raymarch",
+      "value": {"fragment": {
+        "name": "fragment",
         "value": {
-          "full window": {},
-          "record key": {
-            "name": "record key",
+          "raymarch.glsl": {
+            "name": "raymarch.glsl",
+            "value": "cc.creativecomputing.control.code.CCShaderFile@5cdad935"
+          },
+          "auto save": {
+            "name": "auto save",
             "value": true
           },
-          "format": {
-            "name": "format",
-            "value": "PNG"
+          "uniforms": {
+            "name": "uniforms",
+            "value": {
+              "octaves": {
+                "min": 1,
+                "max": 4,
+                "name": "octaves",
+                "value": 2.4010000228881836
+              },
+              "x offset": {
+                "min": 0,
+                "max": 10,
+                "name": "x offset",
+                "value": 7.81077844518909
+              },
+              "u": {
+                "min": 0,
+                "max": 1,
+                "name": "u",
+                "value": 0.30300000309944153
+              },
+              "v": {
+                "min": 0,
+                "max": 1,
+                "name": "v",
+                "value": 0.42100000381469727
+              },
+              "z offset": {
+                "min": 0,
+                "max": 10,
+                "name": "z offset",
+                "value": 7.797093502095755
+              },
+              "noise": {
+                "min": 0,
+                "max": 1,
+                "name": "noise",
+                "value": 1
+              },
+              "scale": {
+                "min": 0,
+                "max": 1,
+                "name": "scale",
+                "value": 0.7170000076293945
+              },
+              "cylinder": {
+                "min": 0,
+                "max": 1,
+                "name": "cylinder",
+                "value": 0.09700000286102295
+              },
+              "lacunarity": {
+                "min": 0,
+                "max": 4,
+                "name": "lacunarity",
+                "value": 1.4800000190734863
+              },
+              "gain": {
+                "min": 0,
+                "max": 1,
+                "name": "gain",
+                "value": 0.42100000381469727
+              }
+            }
           },
-          "prepend": {
-            "name": "prepend",
-            "value": "frame_"
-          },
-          "draw bounds": {
-            "name": "draw bounds",
-            "value": false
-          },
-          "quality": {
-            "min": 0,
-            "max": 1,
-            "name": "quality",
-            "value": 1
-          },
-          "seconds": {
-            "min": 1,
-            "max": 1000,
-            "name": "seconds",
-            "value": 100
-          },
-          "record frame": {},
-          "alpha": {
-            "name": "alpha",
-            "value": false
-          },
-          "x": {
-            "min": -2147483648,
-            "max": 2147483647,
-            "name": "x",
-            "value": 0
-          },
-          "width": {
-            "min": -2147483648,
-            "max": 2147483647,
-            "name": "width",
-            "value": 0
-          },
-          "y": {
-            "min": -2147483648,
-            "max": 2147483647,
-            "name": "y",
-            "value": 0
-          },
-          "capture rate": {
-            "min": 1,
-            "max": 60,
-            "name": "capture rate",
-            "value": 1
-          },
-          "record sequence": {},
-          "height": {
-            "min": -2147483648,
-            "max": 2147483647,
-            "name": "height",
-            "value": 0
-          },
-          "record timeline loop": {}
+          "save in file": {
+            "name": "save in file",
+            "value": true
+          }
         }
-      }
-    }
+      }}
+    }}
   },
   "real compile": {
     "name": "real compile",
@@ -315,13 +250,13 @@
       },
       "animationMode": {
         "name": "animationMode",
-        "value": "FRAMERATE_PRECISE"
+        "value": "PERFORMANT"
       },
       "show frame rate": {
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.109444291393455
+        "value": 39.94688502379696
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

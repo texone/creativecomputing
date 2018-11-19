@@ -100,6 +100,6 @@ void main( )
 	r *= float(r > -1);
 	r *= float(r < 0.5);
 	float z = cos(a);
-	gl_FragColor = vec4(z,r,0,1);
+	gl_FragColor.a = r + z;//vec4(z,r,0,1);
 
 }

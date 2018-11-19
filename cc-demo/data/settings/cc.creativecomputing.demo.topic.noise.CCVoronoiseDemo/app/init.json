@@ -39,50 +39,86 @@
               "name": "auto save",
               "value": true
             },
-            "noisecontours.glsl": {
-              "name": "noisecontours.glsl",
-              "value": "cc.creativecomputing.control.code.CCShaderFile@1e86e3f3"
-            },
             "uniforms": {
               "name": "uniforms",
               "value": {
                 "octaves": {
                   "min": 1,
-                  "max": 4,
+                  "max": 5,
                   "name": "octaves",
-                  "value": 2.6620001792907715
+                  "value": 5
                 },
-                "u": {
+                "octave random": {
                   "min": 0,
                   "max": 1,
-                  "name": "u",
+                  "name": "octave random",
+                  "value": 0.609000027179718
+                },
+                "bla3.z": {
+                  "min": 0,
+                  "max": 3,
+                  "name": "bla3.z",
+                  "value": 0
+                },
+                "euclidian": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "euclidian",
+                  "value": 0
+                },
+                "manhattan": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "manhattan",
                   "value": 1
                 },
-                "v": {
+                "triangular": {
                   "min": 0,
                   "max": 1,
-                  "name": "v",
-                  "value": 0.06400000303983688
+                  "name": "triangular",
+                  "value": 0
                 },
                 "scale": {
                   "min": 0,
                   "max": 1,
                   "name": "scale",
-                  "value": 1
+                  "value": 0.09700000286102295
+                },
+                "bla3.w": {
+                  "min": 0,
+                  "max": 3,
+                  "name": "bla3.w",
+                  "value": 3
                 },
                 "lacunarity": {
                   "min": 0,
                   "max": 4,
                   "name": "lacunarity",
-                  "value": 2.0399999618530273
+                  "value": 2
+                },
+                "bla3.y": {
+                  "min": 0,
+                  "max": 3,
+                  "name": "bla3.y",
+                  "value": 0
                 },
                 "gain": {
                   "min": 0,
                   "max": 1,
                   "name": "gain",
-                  "value": 0.4880000054836273
+                  "value": 0.5
+                },
+                "bla3.x": {
+                  "min": 0,
+                  "max": 3,
+                  "name": "bla3.x",
+                  "value": 0
                 }
               }
+            },
+            "voronoise.glsl": {
+              "name": "voronoise.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@12d07638"
             },
             "save in file": {
               "name": "save in file",
@@ -94,18 +130,43 @@
       "shaper": {
         "curve": {"points": [
           {
-            "time": 0,
+            "time": 0.08984375,
             "type": "LINEAR",
             "value": 0
           },
           {
-            "time": 1,
+            "time": 0.1953846153846154,
+            "type": "LINEAR",
+            "value": 0.8493723849372385
+          },
+          {
+            "time": 0.3569230769230769,
+            "type": "LINEAR",
+            "value": 0.2343096234309623
+          },
+          {
+            "time": 0.4307692307692308,
+            "type": "LINEAR",
+            "value": 0.9372384937238494
+          },
+          {
+            "time": 0.7837259615384615,
             "type": "LINEAR",
             "value": 1
+          },
+          {
+            "time": 0.9915714395702162,
+            "type": "LINEAR",
+            "value": 0
+          },
+          {
+            "time": 1.01067615658363,
+            "type": "LINEAR",
+            "value": 0
           }
         ]},
         "name": "shaper",
-        "value": "cc.creativecomputing.control.CCEnvelope@68554dc"
+        "value": "cc.creativecomputing.control.CCEnvelope@42a16d2a"
       },
       "screen capture": {
         "name": "screen capture",
@@ -321,7 +382,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.109444291393455
+        "value": 27.36639547845846
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

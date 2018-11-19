@@ -84,7 +84,7 @@ uniform float time;
 
 void main(){
 	float d = octavedNoise(vec3(gl_FragCoord.xy*0.01,time * 0.1));
-	float steps = 20;// * pow(noise(vec3(gl_FragCoord.xy*0.01*0.75,time * 0.1 + 10)),1.);
+	float steps = 20 * pow(noise(vec3(gl_FragCoord.xy*0.01*0.75,time * 0.1 + 10)),1.);
 	float df = fract(d *steps);
 	float lin = step(0.9,df);
 	float f = fwidth(df * 1.1 );
@@ -93,8 +93,8 @@ void main(){
 	o = max(1 -step(0.001,df-f) , step(0.999,df+f));
 	//o = step(0.999,df + f);
 	float fill = smoothstep(0.25,0.75,floor(d * steps) / steps);
-	float line = mix(o, 1, 0.2);
-	o = fill *mix(d,1,0.5) * line;
-	o += (1 - step(0.1, fill)) * (1 - line) * 0.25;
-	gl_FragColor = vec4(line,line,line, 1);	
+	float line = mix(o, 1, 0.);
+	o = mix(fill*mix(d,1,1.),line,smoothstep(600,1200,gl_FragCoord.x)) ;//* line;
+	//o += (1 - step(0.1, fill)) * (1 - line) * 0.25;
+	gl_FragColor = vec4(o,o,o, 1);	
 }

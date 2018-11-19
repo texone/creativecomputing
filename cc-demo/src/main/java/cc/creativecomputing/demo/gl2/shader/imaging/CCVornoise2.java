@@ -119,6 +119,7 @@ public class CCVornoise2 extends CCGL2Adapter {
 		g.noTexture();
 		_myShaderBuffer.endDraw(g);
 		
+		/*
 		CCPNGImage myImage = new CCPNGImage(g.width(), g.height(), 16, false, false);
 		FloatBuffer myBuf = _myShaderBuffer.getData();
 
@@ -129,7 +130,7 @@ public class CCVornoise2 extends CCGL2Adapter {
 		}
 		
 		myImage.write(CCNIOUtil.appPath("export/" + CCFormatUtil.nf(animator().frames(), 4)+".png"));
-		
+		*/
 		g.image(_myShaderBuffer.attachment(0), -g.width()/2, -g.height()/2);
 	}
 
