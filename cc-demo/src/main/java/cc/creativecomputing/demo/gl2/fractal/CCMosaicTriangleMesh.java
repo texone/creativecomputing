@@ -20,6 +20,7 @@ import cc.creativecomputing.graphics.CCMesh;
 import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
+import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
@@ -131,8 +132,8 @@ public class CCMosaicTriangleMesh{
 		allocate(g, _mySubdevisions);
 		
 		_myTriangleFractalShader = new CCGLProgram(
-			CCNIOUtil.classPath(this, "triangles_vertex.glsl"),
-			CCNIOUtil.classPath(this, "triangles_fragment.glsl")
+			CCNIOUtil.classPath(this, "triangles2_vertex.glsl"),
+			CCNIOUtil.classPath(this, "triangles2_fragment.glsl")
 		);
 	}
 	
@@ -142,10 +143,12 @@ public class CCMosaicTriangleMesh{
 	
 	public void texture0(CCTexture2D theTexture) {
 		_myTexture0 = theTexture;
+		_myTexture0.wrap(CCTextureWrap.REPEAT);
 	}
 	
 	public void texture1(CCTexture2D theTexture) {
 		_myTexture1 = theTexture;
+		_myTexture1.wrap(CCTextureWrap.REPEAT);
 	}
 	
 	private int _myIndex = 0;

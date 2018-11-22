@@ -20,6 +20,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
+import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.image.CCImageIO;
 import cc.creativecomputing.io.CCNIOUtil;
@@ -35,10 +36,14 @@ public class CCMosaicTriangleMeshDemo extends CCGL2Adapter {
 	@CCProperty(name = "camera1")
 	private CCCameraController _myCameraController1;
 
+	private CCTexture2D _myTexture;
+	@CCProperty(name = "capture")
+	private CCScreenCaptureController _cScreenCapture;
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 
-		
+		_cScreenCapture = new CCScreenCaptureController(this);
+		_myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("lichtwand freigestellt.png")));
 		_myCameraController1 = new CCCameraController(this, g, 100);
 		g.clearColor(0.2f, 0.2f, 0.2f);
 		
@@ -95,14 +100,17 @@ public class CCMosaicTriangleMeshDemo extends CCGL2Adapter {
 		_myParticleTriangleMesh = new CCMosaicTriangleMesh(g, myTriangles, 5);
 		_myParticleTriangleMesh.textureSize(g.width(), g.height());
 
-		_myParticleTriangleMesh.texture0(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/09_FlightInfo_b.png"))));
-		_myParticleTriangleMesh.texture1(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/10_Wolken.jpg"))));
+		_myParticleTriangleMesh.texture0(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("gradient01.jpg"))));
+		_myParticleTriangleMesh.texture1(new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("font.jpg"))));
 	}
 
 	@Override
 	public void update(CCAnimator theAnimator) {
 		
 	}
+
+	@CCProperty(name = "drawImage")
+	private boolean _cDrawImage = true;
 	
 	@Override
 	public void display(CCGraphics g) {
@@ -121,21 +129,23 @@ public class CCMosaicTriangleMeshDemo extends CCGL2Adapter {
 		g.blend();
 //		_myTriangleManager.draw(g);
 		_myParticleTriangleMesh.draw(g);
-
 		g.popMatrix();
-		g.color(255);
-//		g.image(_myTriangleManager.forceField().texture(), -_myVisual.heightMap().width()/2,-_myVisual.heightMap().height()/2);
-//		g.image(_myParticleTriangleMesh.forceBlendTexture(),0,0);
-		g.blend();
-//		CCScreenCapture.capture("export/disney/fract"+CCFormatUtil.nf(frameCount, 4)+".png",width,height);
-//		g.image(_myTextureVisual.renderTexture(), 0,0);
+
+		g.clearDepthBuffer();
+		if(_cDrawImage) {
+			g.color(1d);
+			g.pushMatrix();
+			g.ortho2D();
+			g.image(_myTexture, 0,0, 1920, 1080);
+			g.popMatrix();
+		}
 	}
 	
 	public static void main(String[] args) {
 		CCMosaicTriangleMeshDemo demo = new CCMosaicTriangleMeshDemo();
 		
 		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(800, 300);
+		myAppManager.glcontext().size(1920, 1080);
 		myAppManager.animator().framerate = 30;
 		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
