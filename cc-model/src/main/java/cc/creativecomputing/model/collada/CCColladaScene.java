@@ -41,11 +41,11 @@ public class CCColladaScene extends CCColladaElement{
 	/**
 	 * @param theXML
 	 */
-	CCColladaScene(CCColladaLoader theLoader, CCDataElement theSceneXML) {
+	CCColladaScene(CCColladaLoader theLoader, CCDataElement theSceneXML, boolean theUseNameKey) {
 		super(theSceneXML);
 		
 		for(CCDataElement myNodeXML:theSceneXML.children("node")) {
-			CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, null, myNodeXML);
+			CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, null, myNodeXML, theUseNameKey);
 			_myNodeMap.put(myNode.id(), myNode);
 			_myNodes.add(myNode);
 		}

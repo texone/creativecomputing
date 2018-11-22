@@ -24,9 +24,9 @@ import cc.creativecomputing.io.xml.CCDataElement;
  */
 public class CCColladaNodes extends CCColladaLibrary<CCColladaSceneNode>{
 
-	CCColladaNodes(CCColladaLoader theLoader, List<CCDataElement> theNodesXML) {
+	CCColladaNodes(CCColladaLoader theLoader, List<CCDataElement> theNodesXML, boolean theUseNameKey) {
 		for (CCDataElement myNodeXML : theNodesXML) {
-			CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, null, myNodeXML);
+			CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, null, myNodeXML, theUseNameKey);
 			put(myNode.id(), myNode);
 			_myElementList.add(myNode);
 		}

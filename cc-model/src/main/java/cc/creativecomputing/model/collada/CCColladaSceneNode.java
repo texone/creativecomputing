@@ -86,10 +86,12 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	private CCColladaSceneNodeMaterial _myMaterial;
 	
 	
+	// fassade
+	
 	
 	private CCColladaSceneNode _myParent;
 
-	public CCColladaSceneNode(CCColladaLoader theLoader, CCColladaSceneNode theParent, CCDataElement theNodeXML) {
+	public CCColladaSceneNode(CCColladaLoader theLoader, CCColladaSceneNode theParent, CCDataElement theNodeXML, boolean theUseNameKey) {
 		super(theNodeXML);
 		
 		_myParent = theParent;
@@ -195,7 +197,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				break;
 			case "instance_node":
 				_myInstanceType = CCColladaSceneNodeInstanceType.NODE;
-				String myNodeURL = myChild.attribute("url").replace("#", "");
+				String myNodeURL = theUseNameKey && !name().equals("") ? name() : myChild.attribute("url").replace("#", "");
 				if(theLoader.nodes() == null) {
 					_myNodeMap.put(myNodeURL, null);
 				}else {
@@ -208,8 +210,9 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				break;
 			case "node":
 				if(_myInstanceType == null)_myInstanceType = CCColladaSceneNodeInstanceType.NODE;
-				CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, this, myChild);
-				_myNodeMap.put(myNode.id(), myNode);
+				CCColladaSceneNode myNode = new CCColladaSceneNode(theLoader, this, myChild, theUseNameKey);
+				myNodeURL = theUseNameKey && !myNode.name().equals("") ? myNode.name() : myNode.id();
+				_myNodeMap.put(myNodeURL, myNode);
 				_myNodes.add(myNode);
 				break;
 			}

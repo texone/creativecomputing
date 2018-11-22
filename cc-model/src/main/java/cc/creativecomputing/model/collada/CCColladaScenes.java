@@ -21,10 +21,10 @@ import cc.creativecomputing.io.xml.CCDataElement;
  */
 public class CCColladaScenes extends CCColladaLibrary<CCColladaScene>{
 
-	CCColladaScenes(CCColladaLoader theLoader, List<CCDataElement> theScenesXML) {
+	CCColladaScenes(CCColladaLoader theLoader, List<CCDataElement> theScenesXML, boolean theUseNameKey) {
 		
 		for (CCDataElement mySceneXML : theScenesXML) {
-			CCColladaScene myScene = new CCColladaScene(theLoader, mySceneXML);
+			CCColladaScene myScene = new CCColladaScene(theLoader, mySceneXML, theUseNameKey);
 			put(myScene.id(), myScene);
 			_myElementList.add(myScene);
 		}

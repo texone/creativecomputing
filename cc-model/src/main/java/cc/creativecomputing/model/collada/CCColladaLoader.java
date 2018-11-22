@@ -52,22 +52,26 @@ public class CCColladaLoader {
 	private CCColladaCameras _myCameras;
 	
 
-	public CCColladaLoader(Path thePath) throws CCColladaLoaderException {
+	public CCColladaLoader(Path thePath, boolean theUseNameKey) throws CCColladaLoaderException {
 		super();
 
 		try {
-			parseXML(thePath);
+			parseXML(thePath, theUseNameKey);
 
 			// Mapping finished. Now make them human readable
 		} catch (RuntimeException e) {
 			throw new CCColladaLoaderException("Couldn't parse COLLADA file. Maybe the authoring tool " + _myAuthoringTool + " isn't supported or the xml format is invalid.", e);
 		}
 	}
+	
+	public CCColladaLoader(Path thePath) {
+		this(thePath, false);
+	}
 
 	/**
 	 * @param args the command line arguments
 	 */
-	private void parseXML(Path thePath) {
+	private void parseXML(Path thePath, boolean theUseNameKey) {
 		CCDataElement myRoot = CCXMLIO.createXMLElement(thePath, false);
 		
 		if(myRoot == null){
@@ -100,12 +104,12 @@ public class CCColladaLoader {
 		
 		_myCameras = new CCColladaCameras(myRoot.children("library_cameras/camera"));
 		_myGeometries = new CCColladaGeometries(myRoot.children("library_geometries/geometry"));
-		_myNodes = new CCColladaNodes(this,myRoot.children("library_nodes/node"));
+		_myNodes = new CCColladaNodes(this,myRoot.children("library_nodes/node"), theUseNameKey);
 		
 		for(CCColladaSceneNode myNode:_myNodes.elements()) {
 			myNode.resolveMissingNodes(this);
 		}
-		_myScenes = new CCColladaScenes(this, myRoot.children("library_visual_scenes/visual_scene"));
+		_myScenes = new CCColladaScenes(this, myRoot.children("library_visual_scenes/visual_scene"), theUseNameKey);
 		_myControllers = new CCColladaControllers(myRoot.children("library_controllers/controller"), _myGeometries);
 		_myAnimations = new CCColladaAnimations(myRoot.children("library_animations/animation"));
 	}

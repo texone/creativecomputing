@@ -97,6 +97,13 @@ public class CCVector4 implements Cloneable, Externalizable {
 		z = theZ;
 		w = theW;
 	}
+	
+	public CCVector4(final double[] theValues) {
+		x = theValues.length > 0 ? theValues[0] : 0;
+		y = theValues.length > 1 ? theValues[1] : 0;
+		z = theValues.length > 2 ? theValues[2] : 0;
+		w = theValues.length > 3 ? theValues[3] : 0;
+	}
 
 	/**
 	 * Constructs a new vector set to the (x, y, z, w) values of the given
