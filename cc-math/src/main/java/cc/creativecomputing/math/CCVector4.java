@@ -228,6 +228,23 @@ public class CCVector4 implements Cloneable, Externalizable {
 	}
 
 	/**
+	 * Sets the value of this vector to (x, y, z, w)
+	 * 
+	 * @param theX
+	 * @param theY
+	 * @param theZ
+	 * @param theW
+	 * @return this vector for chaining
+	 */
+	public CCVector4 set(final CCVector3 theVector, final double theW) {
+		x = theVector.x;
+		y = theVector.y;
+		z = theVector.z;
+		w = theW;
+		return this;
+	}
+
+	/**
 	 * Sets the value of this vector to the (x, y, z, w) values of the provided
 	 * source vector.
 	 * 
@@ -895,7 +912,7 @@ public class CCVector4 implements Cloneable, Externalizable {
 	 */
 	@Override
 	public String toString() {
-		return "com.ardor3d.math.Vector4 [X=" + x + ", Y=" + y + ", Z=" + z + ", W=" + w + "]";
+		return getClass().getName() + " [X=" + x + ", Y=" + y + ", Z=" + z + ", W=" + w + "]";
 	}
 
 	/**
