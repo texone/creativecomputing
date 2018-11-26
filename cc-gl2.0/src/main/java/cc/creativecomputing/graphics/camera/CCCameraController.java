@@ -132,6 +132,10 @@ public class CCCameraController {
 			_myCenter.set(theCameraController._myCenter);
 			_myDistance = theCameraController._myDistance;
 		}
+		
+		public CCVector3 center() {
+			return _myCenter;
+		}
 	}
 	
 	private static final CCVector3 LOOK = CCVector3.UNIT_Z;
