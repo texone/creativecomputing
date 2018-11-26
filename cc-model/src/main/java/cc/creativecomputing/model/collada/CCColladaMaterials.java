@@ -32,11 +32,11 @@ import cc.creativecomputing.io.xml.CCDataElement;
  * @author christianriekoff
  * @version 1.0
  */
-class CCColladaMaterials extends CCColladaLibrary<CCColladaMaterial>{
+public class CCColladaMaterials extends CCColladaLibrary<CCColladaMaterial>{
 
-	CCColladaMaterials(List<CCDataElement> theMaterials, CCColladaEffects theEffectLib) {
+	CCColladaMaterials(List<CCDataElement> theMaterials) {
 		for (CCDataElement myMaterialXML : theMaterials) {
-			CCColladaMaterial m = new CCColladaMaterial(myMaterialXML, theEffectLib);
+			CCColladaMaterial m = new CCColladaMaterial(myMaterialXML);
 			put(m.id(), m);
 		}
 	}

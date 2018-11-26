@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 
@@ -50,6 +51,7 @@ public class CCColladaLoader {
 	private CCColladaControllers _myControllers;
 	private CCColladaAnimations _myAnimations;
 	private CCColladaCameras _myCameras;
+	private CCColladaMaterials _myMaterials;
 	
 
 	public CCColladaLoader(Path thePath, boolean theUseNameKey) throws CCColladaLoaderException {
@@ -73,7 +75,7 @@ public class CCColladaLoader {
 	 */
 	private void parseXML(Path thePath, boolean theUseNameKey) {
 		CCDataElement myRoot = CCXMLIO.createXMLElement(thePath, false);
-		
+		CCLog.info(thePath);
 		if(myRoot == null){
 			throw new CCColladaLoaderException("File " + thePath + " does not exist. Make sure you pass a valid file.");
 		}
@@ -91,17 +93,10 @@ public class CCColladaLoader {
 		}
 
 		// build images
-//		List<CCXMLElement> myImages = myRoot.children("library_images/image");
-//		CCColladaImages myImageLib = new CCColladaImages(myImages);
-
-		// build effects
-//		List<CCXMLElement> myEffects = myRoot.children("library_effects/effect");
-//		CCColladaEffects myEffectLib = new CCColladaEffects(myEffects, myImageLib);
-
-		// build materials
-//		List<CCXMLElement> myMaterials = myRoot.children("library_materials/material");
-//		CCColladaMaterials myMaterialLib = new CCColladaMaterials(myMaterials, myEffectLib);
-		
+//		CCColladaImages myImageLib = new CCColladaImages(myRoot.children("library_images/image"));
+//		CCColladaEffects myEffectLib = new CCColladaEffects(myRoot.children("library_effects/effect"), myImageLib);
+////		
+//		_myMaterials = new CCColladaMaterials(myRoot.children("library_materials/material"), myEffectLib);
 		_myCameras = new CCColladaCameras(myRoot.children("library_cameras/camera"));
 		_myGeometries = new CCColladaGeometries(myRoot.children("library_geometries/geometry"));
 		_myNodes = new CCColladaNodes(this,myRoot.children("library_nodes/node"), theUseNameKey);
@@ -113,6 +108,17 @@ public class CCColladaLoader {
 		_myControllers = new CCColladaControllers(myRoot.children("library_controllers/controller"), _myGeometries);
 		_myAnimations = new CCColladaAnimations(myRoot.children("library_animations/animation"));
 	}
+	
+//	/**
+//	 * Returns the library of materials.
+//	 * @see CCColladaGeometries
+//	 * @see CCColladaGeometry
+//	 * @return
+//	 */
+//	public CCColladaMaterials materials() {
+//		return _myMaterials;
+//	}
+	
 	
 	/**
 	 * Returns the library of geometries.

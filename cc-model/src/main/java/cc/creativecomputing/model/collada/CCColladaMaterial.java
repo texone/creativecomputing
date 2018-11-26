@@ -30,29 +30,29 @@ import cc.creativecomputing.io.xml.CCDataElement;
  * @author christianriekoff
  * @version 1.0
  */
-class CCColladaMaterial extends CCColladaElement{
+public class CCColladaMaterial extends CCColladaElement{
 
-	private CCColladaEffect _myEffect;
+//	private CCColladaEffect _myEffect;
 
-	CCColladaMaterial(CCDataElement theMaterialXML, CCColladaEffects theEffectsLib) {
+	CCColladaMaterial(CCDataElement theMaterialXML) {
 		super(theMaterialXML);
 
 		CCDataElement _myInstanceEffectXML = theMaterialXML.child("instance_effect");
 		String myEffectID = _myInstanceEffectXML.attribute("url").substring(1);
-		_myEffect = theEffectsLib.element(myEffectID);
+//		_myEffect = theEffectsLib.element(myEffectID);
 
 	}
 
-	/**
-	 * 
-	 * @return the Effect that maps to the Material
-	 */
-	CCColladaEffect effect() {
-		return _myEffect;
-	}
+//	/**
+//	 * 
+//	 * @return the Effect that maps to the Material
+//	 */
+//	CCColladaEffect effect() {
+//		return _myEffect;
+//	}
 
 	public String toString() {
-		return "Material ID '" + _myID + "' with " + _myEffect + " ";
+		return "Material ID '" + _myID;// + "' with " + _myEffect + " ";
 	}
 
 }

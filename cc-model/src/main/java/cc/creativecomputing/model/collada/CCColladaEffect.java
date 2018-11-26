@@ -13,6 +13,7 @@ package cc.creativecomputing.model.collada;
 import java.util.HashMap;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.xml.CCDataElement;
 
 
@@ -76,6 +77,7 @@ class CCColladaEffect extends CCColladaElement{
 			System.out.print("Unable to find diffuse value. Try adding support for your chosen effect in the Effect.java");
 
 		// if diffuse is null an error will be thrown here
+		try {
 		if (myDiffuse.children().get(0).name().equals("texture")) {
 			_myHasTexture = true;
 			// read Paramtags
@@ -89,6 +91,10 @@ class CCColladaEffect extends CCColladaElement{
 			String myImageID = myParameterMap.get(myParameterMap.get(myDiffuse.child("texture").attribute("texture")).source()).source();
 			_myImage = theImages.image(myImageID);
 		}
+		}catch(Exception e) {
+			
+		}
+		CCLog.info(myDiffuse);
 		if (myDiffuse.children().get(0).name().equals("color")) {
 			_myHasTexture = false;
 			String[] color = myDiffuse.child("color").content().split(" +");
