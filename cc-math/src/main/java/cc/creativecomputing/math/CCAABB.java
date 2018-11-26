@@ -241,6 +241,10 @@ public class CCAABB {
 		}
 		return this;
 	}
+
+	public CCVector3 size() {
+		return _myMax.subtract(_myMin);
+	}
 	
 	
 //	public void draw(CCGraphics g) {
