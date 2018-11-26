@@ -17,6 +17,7 @@
 package cc.creativecomputing.simulation.particles.forces;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
@@ -95,6 +96,7 @@ public class CCTargetForce extends CCForce {
 		_myShader.uniform3f(_myCenterParameter, _myCenter);
 		_myShader.uniform1f(_myNearDistanceParameter, _myNearDistance);
 		_myShader.uniform1f(_myNearMaxForceParameter, _myNearMaxForce);
+		
 //		_myShader.uniform2f(_myTextureSizeParameter, _myTexture.width(), _myTexture.height());
 //		_myShader.uniform1f(_myExponentParameter, _myExponent);
 	}
@@ -145,7 +147,7 @@ public class CCTargetForce extends CCForce {
 	
 	public void addTarget(CCParticle theParticle){
 		g.textureCoords4D(0, theParticle.target());
-		g.vertex(theParticle.x() + 0.5f, theParticle.y() + 0.5f);
+		g.vertex(theParticle.x(), theParticle.y());
 	}
 	
 	public void addTarget(double theX, double theY, double theZ, double theW, int theTexX, int theTexY){

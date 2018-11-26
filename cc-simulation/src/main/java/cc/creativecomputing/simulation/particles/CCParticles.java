@@ -294,7 +294,7 @@ public class CCParticles{
 		
 		g.beginShape(CCDrawMode.POINTS);
 		for (int i = 0; i < _myWidth * _myHeight; i++){
-			g.textureCoords3D(0, Float.MAX_VALUE,Float.MAX_VALUE,Float.MIN_VALUE);
+			g.textureCoords4D(0, Float.MAX_VALUE,Float.MAX_VALUE,Float.MIN_VALUE,0);
 			g.textureCoords3D(1, 1, 1, 1);
 			g.textureCoords3D(2, 0, 0, 0);
 			g.textureCoords3D(3, 1, 1, 1);
@@ -525,7 +525,7 @@ public class CCParticles{
 		for(CCGLTextureUniform myTextureUniform:_myUpdateShader.textures()){
 			if(myTextureUniform.texture == null ) continue;
 			
-			g.texture(myTextureUnit, myTextureUniform.texture);
+			g.bindTexture(myTextureUnit, myTextureUniform.texture);
 			myTextureUnit++;
 		}
 		
@@ -538,7 +538,7 @@ public class CCParticles{
 		}
 		_mySwapTexture.draw(g);
 		_myUpdateShader.end();
-		if(myTextureUnit > 0)g.noTexture();
+		if(myTextureUnit > 0)g.unbindTextures();
 		
 		swapDataTextures();
 		

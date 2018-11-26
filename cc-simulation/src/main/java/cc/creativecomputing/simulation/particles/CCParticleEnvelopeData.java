@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.control.CCEnvelope;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
@@ -32,12 +31,10 @@ public class CCParticleEnvelopeData {
 	
 	public int add(CCInterpolatable<?> theInterpolatable) {
 		_cInterpolatables.add(theInterpolatable);
-		CCLog.info(_cInterpolatables.size());
 		return _cInterpolatables.size() - 1;
 	}
 	
 	public void preDisplay(CCGraphics g) {
-		CCLog.info(_cInterpolatables.size());
 		_myEnvelopeData.beginDraw(g);
 		g.clear();
 		_mySetDataShader.start();
@@ -45,7 +42,6 @@ public class CCParticleEnvelopeData {
 		int y = 0;
 		for(CCInterpolatable<?> myInterpolatable :_cInterpolatables){
 			if(myInterpolatable instanceof CCEnvelope) {
-				CCLog.info("y",y);
 				CCEnvelope myEnvelope = (CCEnvelope)myInterpolatable;
 				for(int i = 0; i < 100; i++){
 					double myVal = myEnvelope.interpolate(i / 100d);

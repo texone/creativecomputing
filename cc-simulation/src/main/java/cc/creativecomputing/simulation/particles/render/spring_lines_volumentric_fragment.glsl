@@ -21,8 +21,6 @@ uniform float alpha;
 
 void main(){
 	if(gl_Color.a <= 0)discard;
-	gl_FragColor = vec4(1);
-	gl_FragColor.a = 0.25;//
 
 	float z = min(1, abs(gl_TexCoord[0].z - centerZ) / zRange);
 

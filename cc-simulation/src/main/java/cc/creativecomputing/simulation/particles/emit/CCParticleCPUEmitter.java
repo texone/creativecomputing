@@ -48,7 +48,7 @@ public abstract class CCParticleCPUEmitter implements CCIParticleEmitter{
 		_myEmitMesh = new CCMesh(CCDrawMode.POINTS);
 		_myVertexBuffer = CCBufferUtil.newDirectFloatBuffer(1000 * 3);
 		_myColorBuffer = CCBufferUtil.newDirectFloatBuffer(1000 * 4);
-		_myPositionBuffer = CCBufferUtil.newDirectFloatBuffer(1000 * 3);
+		_myPositionBuffer = CCBufferUtil.newDirectFloatBuffer(1000 * 4);
 		_myInfoBuffer = CCBufferUtil.newDirectFloatBuffer(1000 * 4);
 		_myVelocityBuffer = CCBufferUtil.newDirectFloatBuffer(1000 * 3);
 		_myFillArray = new float[1000 * 4];
@@ -69,12 +69,13 @@ public abstract class CCParticleCPUEmitter implements CCIParticleEmitter{
 	public void fillPositionData(FloatBuffer theBuffer, List<CCParticle> theParticles){
 		int i = 0;
 		for (CCParticle myParticle:theParticles){
-			_myFillArray[i * 3 + 0] = (float)myParticle.position().x;
-			_myFillArray[i * 3 + 1] = (float)myParticle.position().y;
-			_myFillArray[i * 3 + 2] = (float)myParticle.position().z;
+			_myFillArray[i * 4 + 0] = (float)myParticle.position().x;
+			_myFillArray[i * 4 + 1] = (float)myParticle.position().y;
+			_myFillArray[i * 4 + 2] = (float)myParticle.position().z;
+			_myFillArray[i * 4 + 3] = 0;
 			i++;
 		}
-		theBuffer.put(_myFillArray, 0, theParticles.size() * 3);
+		theBuffer.put(_myFillArray, 0, theParticles.size() * 4);
 	}
 	
 	public void fillInfoData(FloatBuffer theBuffer, List<CCParticle> theParticles){
@@ -104,14 +105,14 @@ public abstract class CCParticleCPUEmitter implements CCIParticleEmitter{
 		if(theSize > _myEmitMesh.numberOfVertices()){
 			_myVertexBuffer = CCBufferUtil.newDirectFloatBuffer(theSize * 3);
 			_myColorBuffer = CCBufferUtil.newDirectFloatBuffer(theSize * 4);
-			_myPositionBuffer = CCBufferUtil.newDirectFloatBuffer(theSize * 3);
+			_myPositionBuffer = CCBufferUtil.newDirectFloatBuffer(theSize * 4);
 			_myInfoBuffer = CCBufferUtil.newDirectFloatBuffer(theSize * 4);
 			_myVelocityBuffer = CCBufferUtil.newDirectFloatBuffer(theSize * 3);
 			_myFillArray = new float[theSize * 4];
 		}else{
 			_myVertexBuffer.limit(theSize * 3);
 			_myColorBuffer.limit(theSize * 4);
-			_myPositionBuffer.limit(theSize * 3);
+			_myPositionBuffer.limit(theSize * 4);
 			_myInfoBuffer.limit(theSize * 4);
 			_myVelocityBuffer.limit(theSize * 3);
 		}
@@ -207,7 +208,7 @@ public abstract class CCParticleCPUEmitter implements CCIParticleEmitter{
 			
 			_myEmitMesh.clearAll();
 			_myEmitMesh.vertices(_myVertexBuffer);
-			_myEmitMesh.textureCoords(0, _myPositionBuffer, 3);
+			_myEmitMesh.textureCoords(0, _myPositionBuffer, 4);
 			_myEmitMesh.textureCoords(1, _myInfoBuffer, 4);
 			_myEmitMesh.textureCoords(2, _myVelocityBuffer, 3);
 			_myEmitMesh.textureCoords(3, _myColorBuffer, 4);

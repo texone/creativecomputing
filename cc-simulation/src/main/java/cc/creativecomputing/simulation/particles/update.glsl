@@ -85,7 +85,7 @@ uniform vec3 moveAll;
 
 void main (){
 	vec2 texID = gl_FragCoord.xy;
-	vec3 position = texture2DRect (positionTexture, texID).xyz;
+	vec4 position = texture2DRect (positionTexture, texID);
 	vec3 velocity = texture2DRect (velocityTexture, texID).xyz;
 	vec4 infos = texture2DRect (infoTexture, texID);
 	vec4 groupInfos = texture2DRect (groupInfoTexture, infos.zw);
@@ -106,11 +106,11 @@ void main (){
 	
 	/*
 	for(int i = 0; i < constraints.length;i++){
-		velocity = constraints[i].constraint(velocity, position,texID, deltaTime);
+		velocity = constraints[i].constraint(velocity, position.xyz,texID, deltaTime);
 	}
 	
 	for(int i = 0; i < impulses.length;i++){
-		velocity += impulses[i].impulse(position,velocity, texID, deltaTime);
+		velocity += impulses[i].impulse(position.xyz,velocity, texID, deltaTime);
 	}
 	*/
 	vec4 lastInfo = texture2DRect(infoTexture, texID);
@@ -126,10 +126,10 @@ void main (){
 		lastInfo.w
 	);
 	
-	if(myAge >= lastInfo.y && lastInfo.z < 0.0)position = vec3(1000000,0,0);
+	if(myAge >= lastInfo.y && lastInfo.z < 0.0)position.xyz = vec3(1000000,0,0);
 	
 	vec3 staticPosition = texture2DRect (staticPositions, texID).xyz;
-	vec4 newPosition = vec4(mix(position + deltaTime * velocity, staticPosition, staticPositionBlend),1);
+	vec4 newPosition = vec4(mix(position.xyz + deltaTime * velocity , staticPosition, staticPositionBlend),1);
 	newPosition.xyz += moveAll;
 	
 	gl_FragData[0] = newPosition;

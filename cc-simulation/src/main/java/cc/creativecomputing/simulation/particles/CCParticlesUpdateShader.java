@@ -84,7 +84,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 			myForcesBuffer.append(myForce.shaderSource());
 			myForcesApplyBuffer.append("	acceleration = acceleration + ");
 			myForcesApplyBuffer.append(myForce.parameter("function"));
-			myForcesApplyBuffer.append("(position,velocity,infos,groupInfos,texID,deltaTime) * lifeTimeBlend(infos, groupInfos, ");
+			myForcesApplyBuffer.append("(position.xyz,velocity,infos,groupInfos,texID,deltaTime) * lifeTimeBlend(infos, groupInfos, ");
 			myForcesApplyBuffer.append(myForce.parameter("index"));
 			myForcesApplyBuffer.append(");\n");
 			
@@ -102,7 +102,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 			myConstraint.setShader(this);
 			myConstraint.setParticles(theParticles);
 			myConstraintBuffer.append(myConstraint.shaderSource());
-			myConstraintApplyBuffer.append("	velocity = " + myConstraint.parameter("function") + "(velocity, position,texID, deltaTime);");
+			myConstraintApplyBuffer.append("	velocity = " + myConstraint.parameter("function") + "(velocity, position.xyz,texID, deltaTime);");
 		}
 		
 		shaderSource.setDefine("constraints", myConstraintBuffer.toString());
