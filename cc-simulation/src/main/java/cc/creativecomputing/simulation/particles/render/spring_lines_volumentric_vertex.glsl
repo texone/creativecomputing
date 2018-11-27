@@ -38,8 +38,8 @@ void main (){
 
 		
 	gl_FrontColor = vec4(1.0);
-	if(gl_MultiTexCoord0.x == 0){
-		//myAlpha = 0;
+	if(gl_MultiTexCoord0.x <= 0){
+		myAlpha = 0;
 	} else {
 		
 		vec4 tmp = p0;

@@ -269,4 +269,11 @@ public class CCAABoundingRectangle{
 		_myMinCorner.multiplyLocal(theXscale, theYscale);
 		_myMaxCorner.multiplyLocal(theXscale, theYscale);
 	}
+
+	public CCVector2 norm(CCVector2 thePosition) {
+		return new CCVector2(
+			CCMath.norm(thePosition.x, _myMinCorner.x, _myMaxCorner.x),
+			CCMath.norm(thePosition.y, _myMinCorner.y, _myMaxCorner.y)
+		);
+	}
 }

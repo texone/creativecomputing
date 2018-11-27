@@ -85,6 +85,8 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	
 	private CCColladaSceneNodeMaterial _myMaterial;
 	
+	private CCColladaGeometry _myGeometry;
+	
 	
 	// fassade
 	
@@ -177,9 +179,9 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				break;
 			case "instance_geometry":
 				String myGeometryURL = myChild.attribute("url").replace("#", "");
-				CCColladaGeometry myGeometry = theLoader.geometries().element(myGeometryURL);
-				if(myGeometry.data().size() == 0)return;
-				CCColladaGeometryData myGeometryData = myGeometry.data().get(0);
+				_myGeometry = theLoader.geometries().element(myGeometryURL);
+				if(_myGeometry.data().size() == 0)return;
+				CCColladaGeometryData myGeometryData = _myGeometry.data().get(0);
 				
 				CCMesh myGeometryMesh = new CCVBOMesh(myGeometryData.drawMode());
 				myGeometryMesh.vertices(myGeometryData.positions());
@@ -239,6 +241,10 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				myVertices.rewind();
 			}
 		}
+	}
+	
+	public CCColladaGeometry geometry() {
+		return _myGeometry;
 	}
 	
 	public CCAABB bounds() {

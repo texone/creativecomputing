@@ -19,6 +19,7 @@ import java.util.Map;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.io.xml.CCDataElement;
+import cc.creativecomputing.math.CCVector3;
 
 /**
  * @author christianriekoff
@@ -123,6 +124,31 @@ public abstract class CCColladaGeometryData extends CCColladaSubTag {
 	
 	public int stride(){
 		return _myStride;
+	}
+	
+	public List<CCVector3> vertices() {
+		CCColladaGeometryInput myInput = _myInputMap.get("POSITION");
+		
+		float[][] myPoints = myInput._mySource.pointMatrix();
+		List<CCVector3> myResult = new ArrayList<>(); 
+		for(int i = 0; i < myPoints.length;i++) {
+			myResult.add(new CCVector3(
+				myPoints[i][0],
+				myPoints[i][1],
+				myPoints[i][2]
+			));
+		}
+		return myResult;
+	}
+	
+	public List<Integer> vertexIDs(){
+		CCColladaGeometryInput myInput = _myInputMap.get("POSITION");
+		List<Integer> myResult = new ArrayList<>(); 
+		for(int i = 0; i < _myNumberOfVertices; i++){
+			int myIndex = _myPointIndices[i * _myStride + myInput._myOffset];
+			myResult.add(myIndex);
+		}
+		return myResult;
 	}
 	
 	public int positionOffset(){

@@ -81,7 +81,9 @@ public class CCCamera{
 	private double _myAspect = 0.75;
 
 	// Clip Planes
+	@CCProperty(name = "near")
 	private double _myNearClip;
+	@CCProperty(name = "far")
 	private double _myFarClip;
 
 	/**
