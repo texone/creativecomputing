@@ -3108,8 +3108,8 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		ellipse(thePosition.x, thePosition.y, theWidth, theHeight);
 	}
 	
-	public void ellipse(final CCVector2 thePosition, final double theWidth, final double theHeight, boolean theFill){
-		ellipse(thePosition.x, thePosition.y, 0, theWidth, theHeight, theFill);
+	public void ellipse(final CCVector2 thePosition, final double theWidth, final double theHeight, boolean theDrawOutline){
+		ellipse(thePosition.x, thePosition.y, 0, theWidth, theHeight, theDrawOutline);
 	}
 	
 	public void ellipse(final CCVector3 thePosition, final double theDiameter){
@@ -4570,6 +4570,20 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		gl.glDisable(GL.GL_LINE_SMOOTH);
 		gl.glDisable(GL2.GL_POLYGON_SMOOTH);
 		gl.glDisable(GL.GL_BLEND);
+	}
+	
+	public void pointSmooth(){
+		gl.glEnable(GL2.GL_POINT_SMOOTH);
+	}
+	public void noPointSmooth(){
+		gl.glDisable(GL2.GL_POINT_SMOOTH);
+	}
+	
+	public void lineSmooth(){
+		gl.glEnable(GL2.GL_LINE_SMOOTH);
+	}
+	public void noLineSmooth(){
+		gl.glDisable(GL2.GL_LINE_SMOOTH);
 	}
 
 	//////////////////////////////////////////////////////////////
