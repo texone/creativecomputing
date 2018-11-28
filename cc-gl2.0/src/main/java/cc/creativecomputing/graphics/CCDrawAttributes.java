@@ -18,12 +18,18 @@ public class CCDrawAttributes {
 	@CCProperty(name = "depth mask")
 	private boolean _cDepthMask = true;
 	
-	@CCProperty(name = "stroke weight", min = 0.1, max = 50)
-	private double _cStrokeWeight = 1;
+	@CCProperty(name = "line width", min = 0.1, max = 50)
+	private double _cLineWidth = 1;
+	@CCProperty(name = "line smooth")
+	private boolean _cLineSmooth = false;
+	
 	@CCProperty(name = "point size", min = 0.1, max = 50)
 	private double _cPointSize = 1;
+	@CCProperty(name = "point smooth")
+	private boolean _cPointSmooth = false;
+	
 	@CCProperty(name = "color")
-	private CCColor _cColor = new CCColor();
+	public CCColor color = new CCColor();
 	@CCProperty(name = "cullface")
 	private CCCullFace _cCullFace = CCCullFace.NONE;
 	
@@ -44,9 +50,13 @@ public class CCDrawAttributes {
 		
 		g.blend(_cBlendMode);
 		g.polygonMode(_cPolygonMode);
-		g.strokeWeight(_cStrokeWeight);
+		
+		g.lineWidth(_cLineWidth);
+		if(_cLineSmooth)g.lineSmooth();
+		
 		g.pointSize(_cPointSize);
-		g.color(_cColor);
+		if(_cPointSmooth)g.pointSmooth();
+		g.color(color);
 		
 		g.cullFace(_cCullFace);
 	}
