@@ -312,6 +312,10 @@ public class CCMatrix3x3 implements Cloneable, Externalizable{
 
         return this;
     }
+    
+    public void fromEulerAngles(double theXRotation, double theYRotation, double theZRotation) {
+    	set(new CCQuaternion().fromEulerAngles(theYRotation, theZRotation, theXRotation));
+    }
 
     /**
      * Sets the values of this matrix to the rotational value of the given quaternion.
