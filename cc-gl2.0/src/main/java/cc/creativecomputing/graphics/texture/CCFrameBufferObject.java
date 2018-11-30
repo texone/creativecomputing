@@ -131,6 +131,10 @@ public abstract class CCFrameBufferObject{
 		}
 	}
 	
+	public int attachments() {
+		return _myNumberOfAttachments;
+	}
+	
 	public int width(){
 		return _myWidth;
 	}
