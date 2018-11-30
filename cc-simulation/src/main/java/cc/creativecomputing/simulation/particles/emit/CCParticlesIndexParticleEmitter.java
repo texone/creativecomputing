@@ -173,7 +173,7 @@ public class CCParticlesIndexParticleEmitter extends CCParticleCPUEmitter{
 		if (_myFreeIndices.isEmpty())
 			return -1;
 
-		return _myFreeIndices.get(_myFreeIndices.size() - 1);
+		return _myFreeIndices.get(0);
 	}
 	
 	public CCParticle nextParticle(){
@@ -233,7 +233,7 @@ public class CCParticlesIndexParticleEmitter extends CCParticleCPUEmitter{
 		
 		if(_cTrackFreeParticles){
 			if(_myFreeIndices.isEmpty())return null;
-			myFreeIndex = _myFreeIndices.remove(_myFreeIndices.size() - 1);
+			myFreeIndex = _myFreeIndices.remove(0);
 		}else{
 			_myLastIndex++;
 			_myLastIndex %= _myNumberOfParticles;
