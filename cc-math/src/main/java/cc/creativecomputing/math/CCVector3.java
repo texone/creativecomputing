@@ -221,6 +221,16 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
 		// the vectors are sufficiently separated to use the cosine
 		return CCMath.acos(dot / normProduct);
 	}
+	
+
+
+	public static CCVector3 sphere(double theLat, double theLon, double theRadius) {
+		return new CCVector3(
+			CCMath.sin(theLat) * CCMath.cos(theLon) * theRadius,
+			CCMath.sin(theLat) * CCMath.sin(theLon) * theRadius,
+			CCMath.cos(theLat) * theRadius 
+		);
+	} 
 
 	@CCProperty(name = "x")
     public double x = 0f;
@@ -1319,5 +1329,5 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
 
 	public CCVector2 yz() {
 		return new CCVector2(y, z);
-	}     
+	}    
 }
