@@ -307,6 +307,7 @@ public class CCSpringForce extends CCForce {
 		_myKillSpringShader.start();
 		_myKillSpringShader.uniform1i("infoTexture", 0);
 		_myKillSpringShader.uniform1i("springIDs", 1);
+		_myKillSpringShader.uniform2f("dimension", _myWidth, _myHeight);
 		_myTMPBuffer.draw(g);
 		_myKillSpringShader.end();
 		g.noTexture();
