@@ -27,6 +27,7 @@
     </developers>
     
     <modules>
+        <module>cc-animation</module>
         <module>cc-app</module>
         <module>cc-artnet</module>
         <module>cc-control</module>
