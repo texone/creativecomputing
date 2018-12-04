@@ -24,7 +24,11 @@ void main (){
 	vec4 myValues = texture2DRect(infos, gl_Vertex.xy);
 	
 	float myAlpha = texture2DRect (lifeTimeBlends, vec2(myValues.x / myValues.y * (1 - myValues.z) * 100.0, lifeTimeID)).x;
-
+	if(myIndex.x < 0 ){
+		myAlpha = 0;
+		gl_Position = gl_ModelViewProjectionMatrix * vec4(10000,0,0,1);
+		return;
+	}
 	//compute vertices position in clip space
 	vec4 p1 = gl_ModelViewProjectionMatrix * texture2DRect(positions, myIndex.xy);
 	vec4 p0 = gl_ModelViewProjectionMatrix * texture2DRect(positions, gl_Vertex.xy);
@@ -46,9 +50,7 @@ void main (){
 		p0 = p1;
 		p1 = p0;
 	} 
-	if(myIndex.x <= 0){
-		myAlpha = 0;
-	}
+	
 	// offset position in screen space along line direction and orthogonal direction
 	p0.xy += lineDirProj.xy * offsets.xx * vec2(1.0,aspectRatio);
 	p0.xy += lineDirProj.yx * offsets.yy * vec2(1.0,aspectRatio) * vec2(1.0,-1.0);
