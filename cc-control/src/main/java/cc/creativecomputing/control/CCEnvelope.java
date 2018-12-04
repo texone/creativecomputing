@@ -2,9 +2,11 @@ package cc.creativecomputing.control;
 
 import cc.creativecomputing.control.timeline.TrackData;
 import cc.creativecomputing.control.timeline.point.LinearControlPoint;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.interpolate.CCInterpolatable;
+import cc.creativecomputing.math.interpolate.CCInterpolator;
 
-public class CCEnvelope implements CCInterpolatable<Double>{
+public class CCEnvelope implements CCInterpolatable<Double>, CCInterpolator{
 	
 	private TrackData _myCurrentCurve = null;
 	
@@ -36,6 +38,11 @@ public class CCEnvelope implements CCInterpolatable<Double>{
 		}catch(Exception e){
 			return 0d;
 		}
+	}
+	
+	@Override
+	public double interpolate(double theV0, double theV1, double theV2, double theV3, double theBlend, double... theparam) {
+		return CCMath.blend(theV1, theV2, interpolate(theBlend));
 	}
 
 	public void set(CCEnvelope theValue) {
