@@ -18,6 +18,8 @@
  */
 package cc.creativecomputing.graphics.camera;
 
+import cc.creativecomputing.animation.CCAnimation;
+import cc.creativecomputing.animation.CCAnimationManager;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.core.CCProperty;
@@ -36,29 +38,13 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCQuaternion;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.math.interpolate.CCInterpolator;
 
 /**
  * 
  * @author Jonathan Feinberg
  */
 public class CCCameraController {
-	
-	private static class InterpolationManager {
-		private AbstractInterp _myCurrentInterpolator = null;
-
-		protected synchronized void startInterpolation(final AbstractInterp interpolation) {
-			cancelInterpolation();
-			_myCurrentInterpolator = interpolation;
-			_myCurrentInterpolator.start();
-		}
-
-		protected synchronized void cancelInterpolation() {
-			if (_myCurrentInterpolator == null) return;
-			_myCurrentInterpolator.cancel();
-			_myCurrentInterpolator = null;
-		}
-
-	}
 	
 	private interface CCCameraMouseDragHandler {
 		void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY);
@@ -196,9 +182,8 @@ public class CCCameraController {
 	@CCProperty(name = "rotation mode")
 	private CCCameraRotationMode _cRotationMode = CCCameraRotationMode.FREE;
 
-	private final InterpolationManager _myRotationInterpolation = new InterpolationManager();
-	private final InterpolationManager _myCenterInterpolation = new InterpolationManager();
-	private final InterpolationManager _myDistanceInterps = new InterpolationManager();
+	private final CCAnimationManager _myAnimationManager = new CCAnimationManager();
+	
 
 	private final CCCameraMouseDragHandler _myPanHandler = new CCCameraMouseDragHandler() {
 		public void handleDrag(final double theMoveX, final double theMoveY, double theMouseX, double theMouseY) {
@@ -258,12 +243,10 @@ public class CCCameraController {
 	) {
 		_myApp = theApp;
 		
-		_myApp.animator().listener().add(new CCAnimatorAdapter() {
-			@Override
-			public void update(CCAnimator theAnimator) {
-				if(!_myIsActive)return;
-				feed();
-			}
+		_myApp.animator().updateEvents().add(a -> {
+			if(!_myIsActive)return;
+			_myAnimationManager.update(a);
+			feed();
 		});
 		
 		_myRelX = theRelX;
@@ -559,7 +542,8 @@ public class CCCameraController {
 	}
 
 	public void distance(final double theNewDistance, final double theAnimationTime) {
-		_myDistanceInterps.startInterpolation(new DistanceInterp(theNewDistance, theAnimationTime));
+		if(_myDistanceAnimation != null)_myDistanceAnimation.cancel();
+		_myAnimationManager.play(new CCDistanceAnimation(theAnimationTime,theNewDistance));
 	}
 
 	public CCVector3 lookAt() {
@@ -567,7 +551,8 @@ public class CCCameraController {
 	}
 
 	public void lookAt(final double x, final double y, final double z) {
-		_myCenterInterpolation.startInterpolation(new CenterInterp(new CCVector3(x, y, z), 0.3f));
+		if(_myCenterAnimation != null)_myCenterAnimation.cancel();
+		_myAnimationManager.play(new CCCenterAnimation(0.3, new CCVector3(x, y, z)));
 	}
 
 	public void lookAt(final double x, final double y, final double z, final double theDistance) {
@@ -622,6 +607,12 @@ public class CCCameraController {
 		_myCenter.addLocal(_myRotation.apply(new CCVector3(theMoveX, theMoveY, 0)));
 //		feed();
 	}
+	
+	public void pan(final double theMoveX, final double theMoveY, final double theDuration) {
+		if(_myCenterAnimation != null)_myCenterAnimation.cancel();
+		
+		_myAnimationManager.play(new CCCenterAnimation(theDuration, _myCenter.add(_myRotation.apply(new CCVector3(theMoveX, theMoveY, 0)))));
+	}
 
 	public void rotateX(final double angle) {
 		_myRotation.multiplyLocal(CCQuaternion.createFromAngleAxis(angle, CCVector3.UNIT_X));
@@ -647,140 +638,109 @@ public class CCCameraController {
 	public void setResetOnDoubleClick(final boolean resetOnDoubleClick) {
 		_myResetOnDoubleClick = resetOnDoubleClick;
 	}
+	
 
-	public void setState(final CCCameraState state) {
-		setState(state, 0.3f);
-	}
+	
+	private static class CCCameraInterpolator implements CCInterpolator{
 
-	public void setState(final CCCameraState state, final double theTime) {
-		if (theTime > 0) {
-			_myRotationInterpolation.startInterpolation(new RotationInterp(state._myRotation, theTime));
-			_myCenterInterpolation.startInterpolation(new CenterInterp(state._myCenter, theTime));
-			_myDistanceInterps.startInterpolation(new DistanceInterp(state._myDistance, theTime));
-		} else {
-			_myRotation = state._myRotation;
-			_myCenter.set(state._myCenter);
-			_myDistance = state._myDistance;
-		}
-//		feed();
-	}
-
-
-	abstract public class AbstractInterp extends CCAnimatorAdapter{
-		double _myTime;
-		final double _myDuration;
-
-		protected AbstractInterp(final double theDuration) {
-			_myDuration = theDuration;
+		@Override
+		public double interpolate(double theV0, double theV1, double theV2, double theV3, double theBlend, double... theparam) {
+			final double smooth = (theBlend * theBlend * (3 - 2 * theBlend));
+			return (theV2 * smooth) + (theV1 * (1 - smooth));
 		}
 		
-		protected double smooth(final double a, final double b, final double t) {
-			final double smooth = (t * t * (3 - 2 * t));
-			return (b * smooth) + (a * (1 - smooth));
-
-		}
-
-		void start() {
-			_myTime = 0;
-			_myApp.animator().listener().add(this);
-		}
-
-		void cancel() {
-			_myApp.animator().listener().remove(this);
-		}
-
-		public void update(CCAnimator theAnimator) {
-			_myTime += theAnimator.deltaTime();
-			final double t = _myTime / _myDuration;
-			if (t > .99) {
-				cancel();
-				setEndState();
-			} else {
-				interp(t);
-			}
-//			feed();
-		}
-
-		protected abstract void interp(double t);
-
-		protected abstract void setEndState();
+	}
+	
+	private CCInterpolator _myInterpolator = new CCCameraInterpolator();
+	
+	public void interpolator(CCInterpolator theInterpolator) {
+		_myInterpolator = theInterpolator;
+	}
+	
+	public double interpolate(double theA, double theB, double theT) {
+		return _myInterpolator.interpolate(theA, theA, theB, theB, theT);
 	}
 
-	class DistanceInterp extends AbstractInterp {
-		private final double _myStartDistance = _myDistance;
+	class CCDistanceAnimation extends CCAnimation{
+		private final double _myStartDistance;
 		private final double _myEndDistance;
 
-		public DistanceInterp(final double endDistance, final double theDuration) {
+		public CCDistanceAnimation(double theDuration, final double endDistance) {
 			super(theDuration);
+			_myStartDistance = _myDistance;
 			_myEndDistance = CCMath.constrain(endDistance, -_myMaximumDistance, _myMaximumDistance);
+			
+			progressEvents.add(a -> {
+				_myDistance = interpolate(_myStartDistance, _myEndDistance, a.progress());
+			});
 		}
 
-		@Override
-		protected void interp(final double t) {
-			_myDistance = smooth(_myStartDistance, _myEndDistance, t);
-		}
-
-		@Override
-		protected void setEndState() {
-			_myDistance = _myEndDistance;
+		protected void progress(final double t) {
+			
 		}
 	}
 
-	class CenterInterp extends AbstractInterp {
+	class CCCenterAnimation extends CCAnimation{
 		private final CCVector3 startCenter;
 		private final CCVector3 endCenter;
 
-		public CenterInterp(final CCVector3 theEndCenter, final double theDuration) {
+		public CCCenterAnimation(double theDuration, final CCVector3 theEndCenter) {
 			super(theDuration);
 			startCenter = new CCVector3(_myCenter);
 			endCenter = theEndCenter;
-		}
-		
-		protected CCVector3 smooth(final CCVector3 a, final CCVector3 b, final double t) {
-			return new CCVector3(
-				smooth(a.x, b.x, t), 
-				smooth(a.y, b.y, t), 
-				smooth(a.z, b.z, t)
-			);
-		}
-
-		@Override
-		protected void interp(final double t) {
-			_myCenter.set(smooth(startCenter, endCenter, t));
-		}
-
-		@Override
-		protected void setEndState() {
-			_myCenter.set(endCenter);
+			
+			progressEvents.add(a -> {
+				_myCenter.set(
+					interpolate(startCenter.x, endCenter.x, a.progress()), 
+					interpolate(startCenter.y, endCenter.y, a.progress()), 
+					interpolate(startCenter.z, endCenter.z, a.progress())
+				);
+			});
 		}
 	}
 
-	class RotationInterp extends AbstractInterp {
+	class CCRotationAnimation extends CCAnimation{
 		final CCQuaternion _myStartRotation;
 		final CCQuaternion _myEndRotation;
 
-		public RotationInterp(final CCQuaternion endRotation, final double theTime) {
-			super(theTime);
+		public CCRotationAnimation(double theDuration, final CCQuaternion endRotation) {
+			super(theDuration);
 			_myStartRotation = new CCQuaternion(_myRotation);
 			_myEndRotation = endRotation;
+			
+			playEvents.add(a -> {
+				_myRotateXAction.stop();
+				_myRotateYAction.stop();
+				_myRotateZAction.stop();
+			});
+			
+			progressEvents.add(a -> {
+				_myRotation.set(CCQuaternion.slerp(_myStartRotation, _myEndRotation, interpolate(0, 1, a.progress())));
+			});
 		}
+	}
 
-		@Override
-		void start() {
-			_myRotateXAction.stop();
-			_myRotateYAction.stop();
-			_myRotateZAction.stop();
-			super.start();
-		}
+	public void setState(final CCCameraState state) {
+		_myRotation = state._myRotation;
+		_myCenter.set(state._myCenter);
+		_myDistance = state._myDistance;
+	}
+	
+	private CCRotationAnimation _myRotationAnimation;
+	private CCCenterAnimation _myCenterAnimation;
+	private CCDistanceAnimation _myDistanceAnimation;
 
-		@Override
-		protected void interp(final double t) {
-			_myRotation.set(CCQuaternion.slerp(_myStartRotation, _myEndRotation, t));
-		}
+	public CCAnimation setState(final CCCameraState state, final double theTime) {
+		CCAnimation myResult;
+		
+		if(_myRotationAnimation != null) _myRotationAnimation.cancel();
+		if(_myCenterAnimation != null) _myCenterAnimation.cancel();
+		if(_myDistanceAnimation != null) _myDistanceAnimation.cancel();
+			
+		_myAnimationManager.play(new CCRotationAnimation(theTime, state._myRotation));
+		_myAnimationManager.play(new CCCenterAnimation(theTime, state._myCenter));
+		_myAnimationManager.play(myResult = new CCDistanceAnimation(theTime, state._myDistance));
 
-		@Override
-		protected void setEndState() {
-			_myRotation.set(_myEndRotation);
-		}
+		return myResult;
 	}
 }
