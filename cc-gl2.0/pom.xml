@@ -23,6 +23,11 @@
 			<artifactId>cc-control-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>cc.creativecomputing</groupId>
+			<artifactId>cc-animation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 </project>

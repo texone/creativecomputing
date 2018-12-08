@@ -52,7 +52,6 @@ public class CCCameraController {
 	
 	private abstract class CCDampedAction extends CCAnimatorAdapter{
 		private double _myVelocity;
-		private final double _myDamping;
 
 		public CCDampedAction() {
 			this(0.16);
@@ -60,7 +59,6 @@ public class CCCameraController {
 
 		public CCDampedAction(final double theFriction) {
 			_myVelocity = 0;
-			_myDamping = 1.0 - theFriction;
 			_myApp.animator().listener().add(this);
 		}
 
@@ -74,7 +72,7 @@ public class CCCameraController {
 			}
 			behave(_myVelocity);
 //			feed();
-			_myVelocity *= _myDamping;
+			_myVelocity *= 1 - _myFriction;
 			if (CCMath.abs(_myVelocity) < .001f) {
 				_myVelocity = 0;
 			}
@@ -152,6 +150,9 @@ public class CCCameraController {
 	private CCQuaternion _myRotation;
 	@CCProperty(name = "fov", min = 0, max = 90, readBack = true)
 	private double _myFoV = 45;
+	
+	@CCProperty(name = "friction", min = 0, max = 1)
+	private final double _myFriction = 0.16;
 
 	private CCCameraRotationMode _myDragConstraint = CCCameraRotationMode.FREE;
 	
@@ -244,7 +245,6 @@ public class CCCameraController {
 		_myApp = theApp;
 		
 		_myApp.animator().updateEvents().add(a -> {
-			if(!_myIsActive)return;
 			_myAnimationManager.update(a);
 			feed();
 		});
@@ -375,6 +375,7 @@ public class CCCameraController {
 	 * 
 	 * @param isMouseControlled
 	 */
+	@CCProperty(name = "active")
 	public void setActive(final boolean theIsActive) {
 		if (theIsActive == _myIsActive) {
 			return;
@@ -608,10 +609,12 @@ public class CCCameraController {
 //		feed();
 	}
 	
-	public void pan(final double theMoveX, final double theMoveY, final double theDuration) {
+	public CCAnimation pan(final double theMoveX, final double theMoveY, final double theDuration) {
 		if(_myCenterAnimation != null)_myCenterAnimation.cancel();
 		
-		_myAnimationManager.play(new CCCenterAnimation(theDuration, _myCenter.add(_myRotation.apply(new CCVector3(theMoveX, theMoveY, 0)))));
+		CCAnimation myAnimation = new CCCenterAnimation(theDuration, _myCenter.add(_myRotation.apply(new CCVector3(theMoveX, theMoveY, 0))));
+		_myAnimationManager.play(myAnimation);
+		return myAnimation;
 	}
 
 	public void rotateX(final double angle) {
@@ -721,7 +724,7 @@ public class CCCameraController {
 	}
 
 	public void setState(final CCCameraState state) {
-		_myRotation = state._myRotation;
+		_myRotation.set(state._myRotation);
 		_myCenter.set(state._myCenter);
 		_myDistance = state._myDistance;
 	}

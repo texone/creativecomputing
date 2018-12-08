@@ -3914,20 +3914,41 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * window coordinates using model, proj and view. The result
 	 * is stored in the returned vector
 	 */
-	public CCVector2 modelToScreen(final CCVector3 theObjectVector) {
+	public CCVector3 modelToScreen(final CCVector3 theObjectVector) {
 		return modelToScreen(theObjectVector.x,theObjectVector.y,theObjectVector.z);
 	}
 	
-	public CCVector2 modelToScreen(final double theX, final double theY, final double theZ){
-		CCMatrix4x4 myModelViewProjectionMatrix =  modelviewMatrix().multiply(projectionMatrix());
-		
-		CCVector4 myPosition = myModelViewProjectionMatrix.applyPost(new CCVector4(theX, theY, theZ,1));
-		CCVector2 myScreenCoord = new CCVector2(myPosition.x, myPosition.y).divideLocal(myPosition.w);
-		myScreenCoord.multiplyLocal(0.5);
-		myScreenCoord.addLocal( 0.5,0.5);
-		myScreenCoord.multiplyLocal(width(), height());
-		
-		return myScreenCoord;
+	public CCVector3 modelToScreen(final double theX, final double theY, final double theZ){
+//		CCMatrix4x4 myModelViewProjectionMatrix =  modelviewMatrix().multiply(projectionMatrix());
+//		
+//		CCVector4 myPosition = myModelViewProjectionMatrix.applyPost(new CCVector4(theX, theY, theZ,1));
+//		CCVector3 myScreenCoord = new CCVector3(myPosition.x, myPosition.y, myPosition.z).divideLocal(myPosition.w);
+//		myScreenCoord.multiplyLocal(0.5);
+//		myScreenCoord.addLocal( 0.5,0.5,0);
+//		myScreenCoord.multiplyLocal(width(), height(), 1);
+//		
+//		return myScreenCoord;
+	    // Modelview transform
+	      CCVector4 myView =  modelviewMatrix().applyPost(new CCVector4(theX, theY, theZ,1));
+	      
+	      // Projection transform,
+	      CCVector4 myProjection = projectionMatrix().applyPost(myView);
+	      
+	      // The result normalizes between -1 and 1
+	      myProjection.w=1.0/myProjection.w;
+	      
+	      // Perspective division
+	      myProjection.x*=myProjection.w;
+	      myProjection.y*=myProjection.w;
+	      myProjection.z*=myProjection.w;
+	      
+	      // Window coordinates
+	      // Map x, y to range 0-1
+	      double myScreenX = (myProjection.x*0.5+0.5)*width();
+	      double myScreenY =(myProjection.y*0.5+0.5)*height();
+	      // This is only correct when glDepthRange(0.0, 1.0)
+	      double myZ =(1.0+myProjection.z)*0.5;	// Between 0 and 1
+	      return new CCVector3(myScreenX, myScreenY, myZ);
 	}
 	
 	/**
@@ -4012,7 +4033,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @return
 	 */
 	public CCVector3 screenOrthogonal(CCVector3 thePosition){
-		CCVector2 myScreenCoords = modelToScreen(thePosition);
+		CCVector2 myScreenCoords = modelToScreen(thePosition).xy();
 		CCVector3 myModelCoords = screenToModel(myScreenCoords.x,myScreenCoords.y,0);
 		
 		CCVector3 myResult = myModelCoords.subtract(thePosition);

@@ -169,7 +169,23 @@ public class CCAABB {
 			CCMath.abs(t.z) <= (_myExtent.z + theAABB._myExtent.z);
 	}
 
-	
+	public void set(CCVector3 theMin, CCVector3 theMax) {
+		_myMax.x = theMax.x;
+		_myMax.y = theMax.y;
+		_myMax.z = theMax.z;
+		
+		_myMin.x = theMin.x;
+		_myMin.y = theMin.y;
+		_myMin.z = theMin.z;
+		
+		_myExtent.x = (_myMax.x - _myMin.x) / 2;
+		_myExtent.y = (_myMax.y - _myMin.y) / 2;
+		_myExtent.z = (_myMax.z - _myMin.z) / 2;
+		
+		_myCenter.x = _myMax.x - _myExtent.x;
+		_myCenter.y = _myMax.y - _myExtent.y;
+		_myCenter.z = _myMax.z - _myExtent.z;
+	}
 
 	public void set(final CCAABB theAABB) {
 		_myExtent.set(theAABB._myExtent);

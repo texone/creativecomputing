@@ -21,6 +21,10 @@ public class CCFilterHistoryBuffer {
 		reset();
 	}
 	
+	public int size() {
+		return _mySize;
+	}
+	
 	public void reset() {
 		_myUseableBuffer = new int[_myChannels];
 		_myIndex = new int[_myChannels];

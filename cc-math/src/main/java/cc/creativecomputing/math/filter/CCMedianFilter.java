@@ -39,7 +39,7 @@ public class CCMedianFilter extends CCFilter{
 	}
 	
 	public void reset() {
-		_myBuffer = new CCFilterHistoryBuffer(_myChannels,100);
+		_myBuffer = new CCFilterHistoryBuffer(_myChannels,_cBufferSize);
 	}
 	
 	@Override
@@ -47,6 +47,9 @@ public class CCMedianFilter extends CCFilter{
 		
 		if(theChannel >= _myChannels){
 			_myChannels = theChannel;
+			reset();
+		}
+		if(_myBuffer.size() != _cBufferSize) {
 			reset();
 		}
 		_myBuffer.append(theChannel, theData);

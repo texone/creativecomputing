@@ -201,9 +201,13 @@ public class CCCommandLineParser {
 		return _mySetOptions.get(theOption).values().size() > 1;
 	}
 	
-	public String customOptionValue(String theOption){
-		if(!_myCustomOptions.containsKey(theOption))return null;
+	public String customOptionValue(String theOption, String theDefault){
+		if(!_myCustomOptions.containsKey(theOption))return theDefault;
 		return _myCustomOptions.get(theOption).value();
+	}
+	
+	public String customOptionValue(String theOption) {
+		return customOptionValue(theOption, null);
 	}
 	
 	public List<String> customOptionValues(String theOption){
