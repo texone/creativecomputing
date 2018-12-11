@@ -23,6 +23,7 @@ import cc.creativecomputing.animation.CCAnimationManager;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.app.modules.CCAnimatorAdapter;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLListener;
 import cc.creativecomputing.gl.app.events.CCKeyAdapter;
 import cc.creativecomputing.gl.app.events.CCKeyEvent;
@@ -73,6 +74,7 @@ public class CCCameraController {
 			behave(_myVelocity);
 //			feed();
 			_myVelocity *= 1 - _myFriction;
+			CCLog.info(_myFriction);
 			if (CCMath.abs(_myVelocity) < .001f) {
 				_myVelocity = 0;
 			}
@@ -152,7 +154,7 @@ public class CCCameraController {
 	private double _myFoV = 45;
 	
 	@CCProperty(name = "friction", min = 0, max = 1)
-	private final double _myFriction = 0.16;
+	private double _myFriction = 0.16;
 
 	private CCCameraRotationMode _myDragConstraint = CCCameraRotationMode.FREE;
 	

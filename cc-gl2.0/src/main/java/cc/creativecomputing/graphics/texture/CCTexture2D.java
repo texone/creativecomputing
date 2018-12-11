@@ -176,12 +176,21 @@ public class CCTexture2D extends CCTexture{
 					theImage.buffer()
 				);
 			}catch(Exception e) {
+				CCImage myImage = new CCImage(100, 100);
+				CCGraphics.currentGL().glTexImage2D(
+					_myTarget.glID, 0, _myInternalFormat.glID, 
+					myImage.width(), myImage.height(), 0, 
+					_myFormat.glID, 
+					_myPixelType.glID, 
+					myImage.buffer()
+				);
+//				e.printStackTrace();
 //				CCLog.info(_myTarget);
-//				CCLog.info(theImage.internalFormat());
-//				CCLog.info(theImage.pixelFormat());
-//				CCLog.info(theImage.pixelType());
-//				CCLog.info(theImage.width());
-//				CCLog.info(theImage.height());
+//				CCLog.info(myImage.internalFormat());
+//				CCLog.info(myImage.pixelFormat());
+//				CCLog.info(myImage.pixelType());
+//				CCLog.info(myImage.width());
+//				CCLog.info(myImage.height());
 			}
 		}
 	}

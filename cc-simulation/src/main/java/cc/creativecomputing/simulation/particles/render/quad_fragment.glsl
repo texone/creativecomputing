@@ -27,5 +27,5 @@ void main(){
 	gl_FragColor = vec4(col, d * alpha2 * gl_Color.a);
 	float depthFade = smoothstep(zFade - zFadeRange , zFade, gl_TexCoord[0].z);
 	
-	gl_FragColor.a *= depthFade;
+	gl_FragColor.a *= depthFade * 1;
 }

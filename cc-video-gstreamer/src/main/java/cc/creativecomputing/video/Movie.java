@@ -35,7 +35,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.freedesktop.gstreamer.Buffer;
 import org.freedesktop.gstreamer.Bus;
 import org.freedesktop.gstreamer.Caps;
-import org.freedesktop.gstreamer.Element;
 import org.freedesktop.gstreamer.FlowReturn;
 import org.freedesktop.gstreamer.Format;
 import org.freedesktop.gstreamer.Fraction;
