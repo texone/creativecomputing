@@ -12,9 +12,6 @@ uniform float zFade;
 @CCProperty(name = "z fade range", min = 0, max = 500)
 uniform float zFadeRange;
 
-@CCProperty(name = "col", min = 0, max = 1)
-uniform vec3 col;
-
 @CCProperty(name = "alpha2", min = 0, max = 1)
 uniform float alpha2;
 
@@ -24,7 +21,7 @@ void main(){
 	
 	float d = 1 - (distance(gl_TexCoord[0].xy,vec2(0.5)) * 2);
 	d = smoothstep(thickness,thickness + 0.1 + z*0.7,d);
-	gl_FragColor = vec4(col, d * alpha2 * gl_Color.a);
+	gl_FragColor = vec4(gl_Color.rgb, d * alpha2 * gl_Color.a);
 	float depthFade = smoothstep(zFade - zFadeRange , zFade, gl_TexCoord[0].z);
 	
 	gl_FragColor.a *= depthFade * 1;

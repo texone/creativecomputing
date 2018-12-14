@@ -182,8 +182,12 @@ public class CCCameraController {
 		SUPPRESS_ROLL
 	}
 	
-	@CCProperty(name = "rotation mode")
+	@CCProperty(name = "rotation mode", readBack = true)
 	private CCCameraRotationMode _cRotationMode = CCCameraRotationMode.FREE;
+	
+	public void rotationMode(CCCameraRotationMode theRotationMode) {
+		_cRotationMode = theRotationMode;
+	}
 
 	private final CCAnimationManager _myAnimationManager = new CCAnimationManager();
 	
@@ -489,6 +493,9 @@ public class CCCameraController {
 			_myDragConstraint == CCCameraRotationMode.YAW ? 0 : dyMouse * panScale
 		);
 	}
+	
+	@CCProperty(name = "rotation speed", min = 0, max = 0.2)
+	private double _cMouseRotateSpeed = 0.1;
 
 	private void mouseRotate(final double theMoveX, final double theMoveY, double mouseX, double mouseY) {
 		final CCVector3 u = LOOK.multiply(100 + .6f * _myStartDistance).negate();
@@ -508,7 +515,7 @@ public class CCCameraController {
 		) {
 			final double adx = Math.abs(theMoveX) * (1 - eccentricity);
 			final CCVector3 vx = u.add(new CCVector3(adx, 0, 0));
-			_myRotateYAction.impulse(CCVector3.angle(u, vx) * xSign * 0.1);
+			_myRotateYAction.impulse(CCVector3.angle(u, vx) * xSign * _cMouseRotateSpeed);
 		}
 		if (
 			_myDragConstraint == CCCameraRotationMode.FREE || 
@@ -517,7 +524,7 @@ public class CCCameraController {
 		) {
 			final double ady = Math.abs(theMoveY) * (1 - rho);
 			final CCVector3 vy = u.add(new CCVector3(0, ady, 0));
-			_myRotateXAction.impulse(CCVector3.angle(u, vy) * ySign * 0.1);
+			_myRotateXAction.impulse(CCVector3.angle(u, vy) * ySign * _cMouseRotateSpeed);
 		}
 		if (
 			_myDragConstraint == CCCameraRotationMode.FREE || 
@@ -526,12 +533,12 @@ public class CCCameraController {
 			{
 				final double adz = Math.abs(theMoveY) * rho;
 				final CCVector3 vz = u.add(new CCVector3(0, adz, 0));
-				_myRotateZAction.impulse(CCVector3.angle(u, vz) * ySign * (mouseX < _myCamera.viewport().width() / 2 ? -1 : 1) * 0.1);
+				_myRotateZAction.impulse(CCVector3.angle(u, vz) * ySign * (mouseX < _myCamera.viewport().width() / 2 ? -1 : 1) * _cMouseRotateSpeed);
 			}
 			{
 				final double adz = Math.abs(theMoveX) * eccentricity;
 				final CCVector3 vz = u.add(new CCVector3(0, adz, 0));
-				_myRotateZAction.impulse(CCVector3.angle(u, vz) * -xSign * (mouseY > _myCamera.viewport().height() / 2 ? -1 : 1) * 0.1);
+				_myRotateZAction.impulse(CCVector3.angle(u, vz) * -xSign * (mouseY > _myCamera.viewport().height() / 2 ? -1 : 1) * _cMouseRotateSpeed);
 			}
 		}
 	}

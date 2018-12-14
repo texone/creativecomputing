@@ -32,6 +32,10 @@ void main (){
 	//compute vertices position in clip space
 	vec4 p1 = gl_ModelViewProjectionMatrix * texture2DRect(positions, myIndex.xy);
 	vec4 p0 = gl_ModelViewProjectionMatrix * texture2DRect(positions, gl_Vertex.xy);
+	
+	vec4 c1 = texture2DRect(colors, myIndex.xy);
+	vec4 c0 = texture2DRect(colors, gl_Vertex.xy);
+
 
 	//  line direction in screen space (perspective division required)
 	vec2 lineDirProj = radius * normalize(p0.xy/p0.w - p1.xy/p1.w);
@@ -41,14 +45,16 @@ void main (){
 		lineDirProj = -lineDirProj;
 
 		
-	gl_FrontColor = vec4(1.0);
+	
 	if(gl_MultiTexCoord0.x <= 0){
-	//	myAlpha = 0;
+		gl_FrontColor = c0;
 	} else {
 		
 		vec4 tmp = p0;
 		p0 = p1;
 		p1 = p0;
+		
+		gl_FrontColor = c1;
 	} 
 	
 	// offset position in screen space along line direction and orthogonal direction
@@ -60,6 +66,6 @@ void main (){
 	gl_Position = p0;
 	
 	
-	gl_FrontColor.a = myAlpha * myIndex.w;
+	gl_FrontColor.a *= myAlpha * myIndex.w;
 }
 	           

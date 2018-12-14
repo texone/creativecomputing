@@ -41,10 +41,16 @@ public class CCAnimationManager extends ArrayList<CCAnimation>{
 		theAnimation.play(_myTime);
 	}
 	
-	public void play(double theDelay, double theDuration, CCAnimationEvent theProgressEvent) {
+	public void progress(double theDelay, double theDuration, CCAnimationEvent theProgressEvent) {
 		CCAnimation myAnimation = new CCAnimation(theDuration);
 		myAnimation.delay(theDelay);
 		myAnimation.progressEvents.add(theProgressEvent);
+		play(myAnimation);
+	}
+	
+	public void finish(double theDuration, CCAnimationEvent theFinishEvent) {
+		CCAnimation myAnimation = new CCAnimation(theDuration);
+		myAnimation.finishEvents.add(theFinishEvent);
 		play(myAnimation);
 	}
 

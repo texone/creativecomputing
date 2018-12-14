@@ -1,0 +1,288 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {"Stripes": {
+      "name": "Stripes",
+      "value": {
+        "fragment": {
+          "name": "fragment",
+          "value": {
+            "stripes_fragment.glsl": {
+              "name": "stripes_fragment.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@4be9f69f"
+            },
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {
+                "global blend": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "global blend",
+                  "value": 0.23800000548362732
+                },
+                "stripe width": {
+                  "min": 10,
+                  "max": 1000,
+                  "name": "stripe width",
+                  "value": 129.7899932861328
+                },
+                "blend": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "blend",
+                  "value": 1
+                },
+                "x blend": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "x blend",
+                  "value": 0
+                },
+                "blendRange": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "blendRange",
+                  "value": 1
+                },
+                "X_ModBlend": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "X_ModBlend",
+                  "value": 0.28200000524520874
+                },
+                "y blend": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "y blend",
+                  "value": 0
+                },
+                "Y_Mod": {
+                  "min": -1,
+                  "max": 1,
+                  "name": "Y_Mod",
+                  "value": 1
+                },
+                "X_Mod": {
+                  "min": 0,
+                  "max": 100,
+                  "name": "X_Mod",
+                  "value": 100
+                }
+              }
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        },
+        "vertex": {
+          "name": "vertex",
+          "value": {
+            "stripes_vertex.glsl": {
+              "name": "stripes_vertex.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@73063a62"
+            },
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {}
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        }
+      }
+    }}
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "2560 x 1440"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 28.843838018774456
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}

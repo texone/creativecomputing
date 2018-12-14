@@ -44,7 +44,7 @@ void main (){
 	
 	vec4 gradientCol = texture2DRect (gradient, vec2(heightBlend * 100.0, 0));
 	
-	gl_FrontColor = vec4(1);
-	gl_FrontColor.a = myAlpha;// 1 -lifeTime.x / lifeTime.y ;
+	gl_FrontColor = texture2DRect(colors, gl_Vertex.xy);
+	gl_FrontColor.a *= myAlpha;// 1 -lifeTime.x / lifeTime.y ;
 }
 	           
