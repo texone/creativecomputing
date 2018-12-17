@@ -133,6 +133,7 @@ public class CCCameraController {
 	private final double _myStartDistance;
 	private final CCVector3 _myStartCenter;
 
+	@CCProperty(name = "reset on double click")
 	private boolean _myResetOnDoubleClick = true;
 	private double _myMaximumDistance = Double.MAX_VALUE;
 

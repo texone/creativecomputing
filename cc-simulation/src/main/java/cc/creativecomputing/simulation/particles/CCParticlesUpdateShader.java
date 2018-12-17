@@ -19,7 +19,7 @@ package cc.creativecomputing.simulation.particles;
 import java.nio.file.Path;
 import java.util.List;
 
-import cc.creativecomputing.core.logging.CCLog;
+//import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
@@ -108,7 +108,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		shaderSource.setDefine("constraints", myConstraintBuffer.toString());
 		shaderSource.setApply("constraints", myConstraintApplyBuffer.toString());
 		
-		CCLog.info(shaderSource.source());
+//		CCLog.info(shaderSource.source());
 		init(null, null, shaderSource.source());
 		
 		

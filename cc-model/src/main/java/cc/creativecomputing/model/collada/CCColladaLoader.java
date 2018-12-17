@@ -16,7 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 
@@ -75,7 +74,6 @@ public class CCColladaLoader {
 	 */
 	private void parseXML(Path thePath, boolean theUseNameKey) {
 		CCDataElement myRoot = CCXMLIO.createXMLElement(thePath, false);
-		CCLog.info(thePath);
 		if(myRoot == null){
 			throw new CCColladaLoaderException("File " + thePath + " does not exist. Make sure you pass a valid file.");
 		}

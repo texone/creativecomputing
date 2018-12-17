@@ -23,6 +23,7 @@ import java.util.Map;
 import cc.creativecomputing.control.code.CCShaderObject.CCShaderObjectType;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+//import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.texture.CCTexture;
 import cc.creativecomputing.io.CCBufferUtil;
@@ -85,7 +86,6 @@ public class CCGLProgram{
 			"}", 
 			CCShaderObjectType.FRAGMENT
 		);
-		CCLog.info(myResult._myFragmentShader);
 		myResult.link();
 		return myResult;
 	}
@@ -320,7 +320,6 @@ public class CCGLProgram{
 	public void link(){
 		GL2 gl = CCGraphics.currentGL();
 		gl.glLinkProgram(_myProgram);
-		CCLog.info(linkStatus(),getInfoLog());
 		if(!linkStatus()){
 			StringBuffer myReplyBuffer = new StringBuffer();
 			myReplyBuffer.append(getInfoLog());
