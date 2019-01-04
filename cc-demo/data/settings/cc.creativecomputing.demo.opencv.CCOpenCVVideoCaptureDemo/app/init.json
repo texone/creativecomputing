@@ -1,0 +1,470 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "draw contour": {
+        "name": "draw contour",
+        "value": true
+      },
+      "color": {
+        "a": 1,
+        "r": 0.9764705896377563,
+        "b": 0,
+        "g": 0,
+        "name": "color",
+        "value": {
+          "a": 1,
+          "r": 0.9764705896377563,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "morphology": {
+        "name": "morphology",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "morph type": {
+            "name": "morph type",
+            "value": "CLOSE"
+          },
+          "structure size": {
+            "min": 1,
+            "max": 10,
+            "name": "structure size",
+            "value": 1
+          },
+          "morph shape": {
+            "name": "morph shape",
+            "value": "RECT"
+          },
+          "border type": {
+            "name": "border type",
+            "value": "CONSTANT"
+          },
+          "iterations": {
+            "min": 1,
+            "max": 10,
+            "name": "iterations",
+            "value": 1
+          }
+        }
+      },
+      "hand tracker": {
+        "name": "hand tracker",
+        "value": {
+          "color": {
+            "a": 1,
+            "r": 1,
+            "b": 0,
+            "g": 0,
+            "name": "color",
+            "value": {
+              "a": 1,
+              "r": 1,
+              "b": 0,
+              "g": 0,
+              "blendable_type": "cc.creativecomputing.math.CCColor"
+            }
+          },
+          "hull color": {
+            "a": 1,
+            "r": 0.6000000238418579,
+            "b": 1,
+            "g": 1,
+            "name": "hull color",
+            "value": {
+              "a": 1,
+              "r": 0.6000000238418579,
+              "b": 1,
+              "g": 1,
+              "blendable_type": "cc.creativecomputing.math.CCColor"
+            }
+          }
+        }
+      },
+      "shader filter": {
+        "name": "shader filter",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": false
+          },
+          "shader": {
+            "name": "shader",
+            "value": {
+              "fragment": {
+                "name": "fragment",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "cv_shader_fragment.glsl": {
+                    "name": "cv_shader_fragment.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@519845c8"
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {
+                      "x min": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "x min",
+                        "value": 0.41200000047683716
+                      },
+                      "hue max": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "hue max",
+                        "value": 0.6200000047683716
+                      },
+                      "y min": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "y min",
+                        "value": 0
+                      },
+                      "hue min": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "hue min",
+                        "value": 0.39100000262260437
+                      },
+                      "y max": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "y max",
+                        "value": 0.8140000104904175
+                      },
+                      "x max": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "x max",
+                        "value": 0.7390000224113464
+                      },
+                      "sat min": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "sat min",
+                        "value": 0.0860000029206276
+                      },
+                      "sat max": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "sat max",
+                        "value": 1
+                      }
+                    }
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              },
+              "vertex": {
+                "name": "vertex",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "cv_shader_vertex.glsl": {
+                    "name": "cv_shader_vertex.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@3bb8d01a"
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "capture": {
+        "name": "capture",
+        "value": {
+          "saturation": {
+            "min": 0,
+            "max": 255,
+            "name": "saturation",
+            "value": 49.724998474121094
+          },
+          "brightness": {
+            "min": 0,
+            "max": 255,
+            "name": "brightness",
+            "value": 118.82999420166016
+          },
+          "exposure": {
+            "min": -11,
+            "max": 1,
+            "name": "exposure",
+            "value": -8.263999938964844
+          },
+          "contrast": {
+            "min": 0,
+            "max": 10,
+            "name": "contrast",
+            "value": 7.599999904632568
+          },
+          "temperatur": {
+            "min": 2800,
+            "max": 10000,
+            "name": "temperatur",
+            "value": 4600
+          }
+        }
+      },
+      "blur": {
+        "name": "blur",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": false
+          },
+          "size": {
+            "min": 1,
+            "max": 50,
+            "name": "size",
+            "value": 10
+          }
+        }
+      },
+      "threshold": {
+        "name": "threshold",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": false
+          },
+          "threshold type": {
+            "name": "threshold type",
+            "value": "BINARY"
+          },
+          "threshold": {
+            "min": 0,
+            "max": 255,
+            "name": "threshold",
+            "value": 146.625
+          },
+          "max value": {
+            "min": 0,
+            "max": 255,
+            "name": "max value",
+            "value": 255
+          }
+        }
+      },
+      "draw mat": {
+        "name": "draw mat",
+        "value": "THRESHOLD"
+      },
+      "hull color": {
+        "a": 1,
+        "r": 0,
+        "b": 1,
+        "g": 0.3176470696926117,
+        "name": "hull color",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 1,
+          "g": 0.3176470696926117,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "2560 x 1440"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1280
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 960
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 24.070405744238652
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}

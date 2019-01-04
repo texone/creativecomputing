@@ -18,6 +18,7 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 //import cc.creativecomputing.video.CCFFMPGMovie;
+//import cc.creativecomputing.video.CCFFMPGMovie;
 import cc.creativecomputing.video.CCVideoTexture;
 
 public class CCFFMPGDemo extends CCGL2Adapter {

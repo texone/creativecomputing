@@ -103,5 +103,15 @@
 			<artifactId>cc-video-gstreamer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>cc.creativecomputing</groupId>
+			<artifactId>cc-opencv</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv-platform</artifactId>
+			<version>1.4.3</version>
+		</dependency>
 	</dependencies>
 </project>
