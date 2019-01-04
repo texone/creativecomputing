@@ -176,7 +176,7 @@ public class CCChebFilter extends CCIIRFilter {
 	 * 
 	 * @param thePoles - the number of poles
 	 */
-	@CCProperty(name = "poles", min = 2, max = 20)
+	@CCProperty(name = "poles", min = 2, max = 20, defaultValue = 2)
 	public void poles(int thePoles) {
 		thePoles = thePoles / 2 * 2;
 		if (thePoles < 2) {
