@@ -195,6 +195,31 @@ public class CCTexture2D extends CCTexture{
 		}
 	}
 	
+	public void texImage2D(final Buffer theImage) {
+		GL2 gl = CCGraphics.currentGL();
+
+        // update the texture image:
+        gl.glEnable(_myTarget.glID);
+		gl.glBindTexture(_myTarget.glID, _myTextureIDs[_myTextureID]);
+		
+		gl.glTexImage2D(
+			_myTarget.glID, 0, _myInternalFormat.glID, 
+			_myWidth, _myHeight, 0, 
+			_myFormat.glID, 
+			_myPixelType.glID, 
+			theImage
+		);
+		gl.glBindTexture(_myTarget.glID, 0);
+		gl.glDisable(_myTarget.glID);
+//				e.printStackTrace();
+//				CCLog.info(_myTarget);
+//				CCLog.info(myImage.internalFormat());
+//				CCLog.info(myImage.pixelFormat());
+//				CCLog.info(myImage.pixelType());
+//				CCLog.info(myImage.width());
+//				CCLog.info(myImage.height());
+	}
+	
 	/**
 	 * Replaces the content of the texture with pixels from the frame buffer. You can use this method
 	 * to copy pixels from the frame buffer to a texture.
@@ -571,6 +596,16 @@ public class CCTexture2D extends CCTexture{
 		myBuffer.rewind();
 		
 		return new CCPixelMap(myBuffer, _myWidth, _myHeight, _myMustFlipVertically);
+	}
+	
+	public ByteBuffer getTexImage() {
+		ByteBuffer myBuffer = ByteBuffer.allocate(3 * _myWidth * _myHeight);
+		GL2 gl = CCGraphics.currentGL();
+		bind();
+		gl.glGetTexImage(_myTarget.glID, 0, CCPixelFormat.BGR.glID, CCPixelType.UNSIGNED_BYTE.glID, myBuffer);
+		myBuffer.rewind();
+		
+		return myBuffer;
 	}
 	
 	protected String checkError(GL gl, final String theString){
