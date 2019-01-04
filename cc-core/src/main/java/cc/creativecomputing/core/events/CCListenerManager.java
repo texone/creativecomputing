@@ -130,6 +130,12 @@ public class CCListenerManager<ListenerType> implements Iterable<ListenerType>{
 			_myListeners.remove(theListener);
 		}
 	}
+	
+	public void clear() {
+		synchronized (_myListeners) {
+			_myListeners.clear();
+		}
+	}
 
 	/**
 	 * An invocation handler used to dispatch the event(s) to all the listeners.
