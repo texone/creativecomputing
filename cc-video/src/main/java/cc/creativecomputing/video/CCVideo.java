@@ -51,7 +51,7 @@ public abstract class CCVideo extends CCImage {
 	public CCVideo(final CCAnimator theAnimator) {
 		super();
 		_myPixelStorageModes.alignment(1);
-		theAnimator.updateEvents().add(this::update);
+		if(theAnimator != null)theAnimator.updateEvents().add(this::update);
 	}
 	
 	public void update(CCAnimator theAnimator) {
