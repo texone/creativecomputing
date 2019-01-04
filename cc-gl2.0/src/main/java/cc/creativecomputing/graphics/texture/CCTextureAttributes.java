@@ -54,8 +54,9 @@ public class CCTextureAttributes {
 	 * Enables or disables mipmapping. Default is disabled.
 	 * @param theGenerateMipmaps
 	 */
-	public void generateMipmaps(final boolean theGenerateMipmaps) {
+	public CCTextureAttributes generateMipmaps(final boolean theGenerateMipmaps) {
 		_myGenerateMipmaps = theGenerateMipmaps;
+		return this;
 	}
 
 	/**
@@ -71,8 +72,9 @@ public class CCTextureAttributes {
 	 * selecting the best format for the context.
 	 * @param theInternalFormat
 	 */
-	public void internalFormat(CCPixelInternalFormat theInternalFormat) {
+	public CCTextureAttributes internalFormat(CCPixelInternalFormat theInternalFormat) {
 		_myPixelInternalFormat = theInternalFormat;
+		return this;
 	}
 
 	/**
@@ -89,8 +91,9 @@ public class CCTextureAttributes {
 	 * selecting the best format for the context.
 	 * @param theFormat
 	 */
-	public void format(CCPixelFormat theFormat) {
+	public CCTextureAttributes format(CCPixelFormat theFormat) {
 		_myPixelFormat = theFormat;
+		return this;
 	}
 
 	/**
@@ -106,8 +109,9 @@ public class CCTextureAttributes {
 	 * Sets the Texture's pixeltype.
 	 * @param thePixelType
 	 */
-	public void pixelType(CCPixelType thePixelType) {
+	public CCTextureAttributes pixelType(CCPixelType thePixelType) {
 		_myPixelType = thePixelType;
+		return this;
 	}
 
 	/**
@@ -124,9 +128,10 @@ public class CCTextureAttributes {
 	 * @param theWrapS
 	 * @param theWrapT
 	 */
-	public void wrap(final CCTextureWrap theWrapS, CCTextureWrap theWrapT) {
+	public CCTextureAttributes wrap(final CCTextureWrap theWrapS, CCTextureWrap theWrapT) {
 		wrapS(theWrapS);
 		wrapT(theWrapT);
+		return this;
 	}
 	
 	/**
@@ -134,17 +139,19 @@ public class CCTextureAttributes {
 	 * range of [0,1]. 
 	 * @param theWrap
 	 */
-	public void wrap(final CCTextureWrap theWrap) {
+	public CCTextureAttributes wrap(final CCTextureWrap theWrap) {
 		wrapS(theWrap);
 		wrapT(theWrap);
+		return this;
 	}
 
 	/**
 	 * Sets the horizontal wrapping behavior when a texture coordinate falls outside the range of [0,1].
 	 * @param theWrapS
 	 */
-	public void wrapS(CCTextureWrap theWrapS) {
+	public CCTextureAttributes wrapS(CCTextureWrap theWrapS) {
 		_myTextureWrapS = theWrapS;
+		return this;
 	}
 
 	/**
@@ -159,8 +166,9 @@ public class CCTextureAttributes {
 	 * Sets the verical wrapping behavior when a texture coordinate falls outside the range of [0,1].
 	 * @param theWrapT
 	 */
-	public void wrapT(CCTextureWrap theWrapT) {
+	public CCTextureAttributes wrapT(CCTextureWrap theWrapT) {
 		_myTextureWrapT = theWrapT;
+		return this;
 	}
 
 	/**
@@ -176,8 +184,9 @@ public class CCTextureAttributes {
 	 * Default is {@link CCTextureFilter#LINEAR} Possible values are:{@link CCTextureFilter#LINEAR}, {@link CCTextureFilter#NEAREST}
 	 * @param theMinFilter filtering behavior
 	 */
-	public void filter(CCTextureFilter theMinFilter) {
+	public CCTextureAttributes filter(CCTextureFilter theMinFilter) {
 		_myFilter = theMinFilter;
+		return this;
 	}
 
 	/**
@@ -194,8 +203,9 @@ public class CCTextureAttributes {
 	 * Default is {@link CCTextureFilter#LINEAR} Possible values are:{@link CCTextureFilter#LINEAR}, {@link CCTextureFilter#NEAREST}
 	 * @param theMipmapFilter filtering behavior when a texture is magnified
 	 */
-	public void mipmapFilter(CCTextureMipmapFilter theMipmapFilter) {
+	public CCTextureAttributes mipmapFilter(CCTextureMipmapFilter theMipmapFilter) {
 		_myMipmapFilter = theMipmapFilter;
+		return this;
 	}
 	
 	/**
