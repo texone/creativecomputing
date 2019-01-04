@@ -72,25 +72,6 @@ public class Movie extends CCMovieData {
 
 	private boolean _myIsDataUpdated = false;
 	private boolean _myIsSeeking = false;
-
-	public static ByteBuffer cloneByteBuffer(final ByteBuffer original) {
-	    // Create clone with same capacity as original.
-	    final ByteBuffer clone = (original.isDirect()) ?
-	        ByteBuffer.allocateDirect(original.capacity()) :
-	        ByteBuffer.allocate(original.capacity());
-
-	    // Create a read-only copy of the original.
-	    // This allows reading from the original without modifying it.
-	    final ByteBuffer readOnlyCopy = original.asReadOnlyBuffer();
-
-	    // Flip and read from the original.
-	    readOnlyCopy.flip();
-	    clone.put(readOnlyCopy);
-	    clone.position(original.position());
-	    clone.limit(original.limit());
-	    clone.order(original.order());
-	    return clone;
-	}
 	
 	private final Lock bufferLock = new ReentrantLock();
 	private class NewSampleListener implements AppSink.NEW_SAMPLE {
