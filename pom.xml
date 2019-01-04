@@ -53,8 +53,10 @@
         <module>cc-serial</module>
         <module>cc-simulation</module>
         <module>cc-video</module>
+		<module>cc-video-vlc</module>
         <module>cc-video-gstreamer</module>
         <module>cc-video-ffmpeg</module>
+        <module>cc-opencv</module>
         <module>cc-flightxml</module>
         <module>cc-demo</module>
 <!--
