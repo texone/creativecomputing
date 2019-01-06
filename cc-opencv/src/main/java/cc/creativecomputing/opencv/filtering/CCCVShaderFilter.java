@@ -52,6 +52,7 @@ public class CCCVShaderFilter extends CCImageProcessor{
 		g.texture(_myTexture);
 		_cShader.start();
 		_cShader.uniform1i("texture", 0);
+		_cShader.uniform2f("resolution",_myTexture.width(), _myTexture.height());
 		_myShaderBuffer.draw(g);
 		_cShader.end();
 		g.noTexture();

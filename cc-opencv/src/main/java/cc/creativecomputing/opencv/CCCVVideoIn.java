@@ -71,15 +71,6 @@ public abstract class CCCVVideoIn {
 	}
 
 	/**
-	 * Number of frames in the video file.
-	 * 
-	 * @return Number of frames in the video file.
-	 */
-	public double frameCount() {
-		return _myCapture.get(CV_CAP_PROP_FRAME_COUNT);
-	}
-
-	/**
 	 * Returns true if video capturing has been initialized already.
 	 * @return Returns true if video capturing has been initialized already.
 	 */

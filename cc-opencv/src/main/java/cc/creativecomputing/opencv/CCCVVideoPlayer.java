@@ -1,5 +1,6 @@
 package cc.creativecomputing.opencv;
 
+import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_FRAME_COUNT;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_POS_AVI_RATIO;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_POS_FRAMES;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_POS_MSEC;
@@ -7,13 +8,14 @@ import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_POS_MSEC;
 import org.bytedeco.javacpp.opencv_videoio.VideoCapture;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.math.CCMath;
 
 public class CCCVVideoPlayer extends CCCVVideoIn{
 	
 	@CCProperty(name = "loop start", min = 0, max = 1)
 	private double _cLoopStart = 0;
-	@CCProperty(name = "loop end", min = 0, max = 1)
-	private double _cLoopEnd = 1;
+	@CCProperty(name = "loop length", min = 0, max = 1)
+	private double _cLoopLength = 1;
 
 	
 	public CCCVVideoPlayer(String theFileName) {
@@ -81,10 +83,20 @@ public class CCCVVideoPlayer extends CCCVVideoIn{
 	public void positionRatio(double thePosition) {
 		_myCapture.set(CV_CAP_PROP_POS_AVI_RATIO, thePosition);
 	}
+
+	/**
+	 * Number of frames in the video file.
+	 * 
+	 * @return Number of frames in the video file.
+	 */
+	public double frameCount() {
+		return _myCapture.get(CV_CAP_PROP_FRAME_COUNT);
+	}
 	
 	@Override
 	protected void updateSettings() {
-		if(positionRatio() >= _cLoopEnd) {
+		double myEnd = CCMath.min(_cLoopStart+ _cLoopLength, (frameCount() - 2) / frameCount());
+		if(positionRatio() >= myEnd) {
 			positionRatio(_cLoopStart);
 		}
 	}
