@@ -90,6 +90,12 @@
             "name": "max gap",
             "value": 12
           },
+          "tip angle": {
+            "min": 0,
+            "max": 100,
+            "name": "tip angle",
+            "value": 50
+          },
           "color": {
             "a": 1,
             "r": 1,
@@ -151,7 +157,7 @@
                   },
                   "cv_shader_fragment.glsl": {
                     "name": "cv_shader_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@585d37fc"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@106b6d3a"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -233,7 +239,7 @@
                   },
                   "cv_shader_vertex.glsl": {
                     "name": "cv_shader_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@2693e46e"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@22adc21d"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -656,7 +662,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.497885517821366
+        "value": 29.646855550736294
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

@@ -14,7 +14,7 @@ import cc.creativecomputing.opencv.CCCVVideoCapture;
 import cc.creativecomputing.opencv.CCCVVideoIn;
 import cc.creativecomputing.opencv.CCCVVideoPlayer;
 
-public class CCOpenCVVideoCaptureDemo extends CCGL2Adapter {
+public class CCArucoCameraCalibration extends CCGL2Adapter {
 	
 	
 	
@@ -61,7 +61,7 @@ public class CCOpenCVVideoCaptureDemo extends CCGL2Adapter {
 	}
 
 	public static void main(String[] args) {
-		CCOpenCVVideoCaptureDemo demo = new CCOpenCVVideoCaptureDemo();
+		CCArucoCameraCalibration demo = new CCArucoCameraCalibration();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
 		myAppManager.glcontext().size(1280, 960);

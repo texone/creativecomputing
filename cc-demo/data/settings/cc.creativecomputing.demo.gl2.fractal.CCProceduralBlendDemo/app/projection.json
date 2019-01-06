@@ -1,0 +1,549 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "texture a": {
+        "name": "texture a",
+        "value": {
+          "generate mipmaps": {
+            "name": "generate mipmaps",
+            "value": false
+          },
+          "filter": {
+            "name": "filter",
+            "value": "LINEAR"
+          },
+          "path": {
+            "name": "path",
+            "value": "data\\gradient03.jpg"
+          },
+          "mipmap filter": {
+            "name": "mipmap filter",
+            "value": "NEAREST"
+          },
+          "wrap": {
+            "name": "wrap",
+            "value": "MIRRORED_REPEAT"
+          }
+        }
+      },
+      "shader": {
+        "name": "shader",
+        "value": {
+          "fragment": {
+            "name": "fragment",
+            "value": {
+              "auto save": {
+                "name": "auto save",
+                "value": true
+              },
+              "procedural_blend_fragment.glsl": {
+                "name": "procedural_blend_fragment.glsl",
+                "value": "cc.creativecomputing.control.code.CCShaderFile@610096c4"
+              },
+              "uniforms": {
+                "name": "uniforms",
+                "value": {
+                  "noise euclidian": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "noise euclidian",
+                    "value": 0
+                  },
+                  "blend progress": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend progress",
+                    "value": 0
+                  },
+                  "noise gain": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "noise gain",
+                    "value": 0.5
+                  },
+                  "noise scale": {
+                    "min": 0,
+                    "max": 50,
+                    "name": "noise scale",
+                    "value": 6.5
+                  },
+                  "noise speed": {
+                    "min": 0,
+                    "max": 5,
+                    "name": "noise speed",
+                    "value": 0.320000022649765
+                  },
+                  "blend offset": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend offset",
+                    "value": 0
+                  },
+                  "blend global": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend global",
+                    "value": 0.847000002861023
+                  },
+                  "blend B refract": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend B refract",
+                    "value": 0.06400000303983688
+                  },
+                  "blend x mod offset": {
+                    "min": -1,
+                    "max": 1,
+                    "name": "blend x mod offset",
+                    "value": -1
+                  },
+                  "blend x mod flip": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend x mod flip",
+                    "value": 0
+                  },
+                  "refraction": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "refraction",
+                    "value": 1
+                  },
+                  "noise lacunarity": {
+                    "min": 0,
+                    "max": 4,
+                    "name": "noise lacunarity",
+                    "value": 2
+                  },
+                  "octaves random": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "octaves random",
+                    "value": 1
+                  },
+                  "blend A refract": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend A refract",
+                    "value": 1
+                  },
+                  "blend x": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend x",
+                    "value": 0.597000002861023
+                  },
+                  "blend y": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend y",
+                    "value": 0
+                  },
+                  "noise triangular": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "noise triangular",
+                    "value": 1
+                  },
+                  "noise smooth": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "noise smooth",
+                    "value": 1
+                  },
+                  "noise octaves": {
+                    "min": 1,
+                    "max": 10,
+                    "name": "noise octaves",
+                    "value": 3.1510000228881836
+                  },
+                  "dt3 amount": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "dt3 amount",
+                    "value": 0
+                  },
+                  "blend x mod amt": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend x mod amt",
+                    "value": 0
+                  },
+                  "reverse blend": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "reverse blend",
+                    "value": 0.26100000739097595
+                  },
+                  "blend range": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend range",
+                    "value": 1
+                  },
+                  "B refract": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "B refract",
+                    "value": 0
+                  },
+                  "A refract": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "A refract",
+                    "value": 0.07500000298023224
+                  },
+                  "dt0 amount": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "dt0 amount",
+                    "value": 0.1509999930858612
+                  },
+                  "blend x mod": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "blend x mod",
+                    "value": 0
+                  },
+                  "dt2 amount": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "dt2 amount",
+                    "value": 0.2070000022649765
+                  },
+                  "dt1 amount": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "dt1 amount",
+                    "value": 0
+                  }
+                }
+              },
+              "save in file": {
+                "name": "save in file",
+                "value": true
+              }
+            }
+          },
+          "vertex": {
+            "name": "vertex",
+            "value": {
+              "auto save": {
+                "name": "auto save",
+                "value": true
+              },
+              "uniforms": {
+                "name": "uniforms",
+                "value": {}
+              },
+              "save in file": {
+                "name": "save in file",
+                "value": true
+              },
+              "procedural_blend_vertex.glsl": {
+                "name": "procedural_blend_vertex.glsl",
+                "value": "cc.creativecomputing.control.code.CCShaderFile@3efb5e72"
+              }
+            }
+          }
+        }
+      },
+      "texture b": {
+        "name": "texture b",
+        "value": {
+          "generate mipmaps": {
+            "name": "generate mipmaps",
+            "value": false
+          },
+          "filter": {
+            "name": "filter",
+            "value": "LINEAR"
+          },
+          "path": {
+            "name": "path",
+            "value": "data\\bike-shop.jpg"
+          },
+          "mipmap filter": {
+            "name": "mipmap filter",
+            "value": "NEAREST"
+          },
+          "wrap": {
+            "name": "wrap",
+            "value": "MIRRORED_REPEAT"
+          }
+        }
+      },
+      "use gradients": {
+        "name": "use gradients",
+        "value": true
+      },
+      "gradient2": {
+        "gradient": [
+          {
+            "a": 1,
+            "r": 0,
+            "b": 0.800000011920929,
+            "g": 0.4000000059604645,
+            "position": 0.1525423675775528
+          },
+          {
+            "a": 1,
+            "r": 1,
+            "b": 0,
+            "g": 0.4000000059604645,
+            "position": 0.2542372941970825
+          }
+        ],
+        "name": "gradient2",
+        "value": [
+          {},
+          {}
+        ]
+      },
+      "gradient0": {
+        "gradient": [
+          {
+            "a": 1,
+            "r": 1,
+            "b": 0.20000000298023224,
+            "g": 0.4000000059604645,
+            "position": 0.17514124512672424
+          },
+          {
+            "a": 1,
+            "r": 0.800000011920929,
+            "b": 0,
+            "g": 0,
+            "position": 0.6158192157745361
+          },
+          {
+            "a": 1,
+            "r": 0,
+            "b": 0.6000000238418579,
+            "g": 0.20000000298023224,
+            "position": 0.9322034120559692
+          }
+        ],
+        "name": "gradient0",
+        "value": [
+          {},
+          {},
+          {}
+        ]
+      },
+      "gradient1": {
+        "gradient": [
+          {
+            "a": 1,
+            "r": 1,
+            "b": 0.4000000059604645,
+            "g": 0.4000000059604645,
+            "position": 0.2542372941970825
+          },
+          {
+            "a": 1,
+            "r": 1,
+            "b": 1,
+            "g": 1,
+            "position": 0.4237288236618042
+          },
+          {
+            "a": 1,
+            "r": 0.800000011920929,
+            "b": 0,
+            "g": 0.800000011920929,
+            "position": 0.604519784450531
+          }
+        ],
+        "name": "gradient1",
+        "value": [
+          {},
+          {},
+          {}
+        ]
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "3072 x 1728"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": 0
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": 3840
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 800
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.47165978670417
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}

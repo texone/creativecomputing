@@ -1,0 +1,441 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "marker detection": {
+        "name": "marker detection",
+        "value": {
+          "Thresh Win Size Max": {
+            "min": 0,
+            "max": 100,
+            "name": "Thresh Win Size Max",
+            "value": 23
+          },
+          "dictionary": {
+            "name": "dictionary",
+            "value": "DICT_4X4_100"
+          },
+          "Thresh Win Size Min": {
+            "min": 0,
+            "max": 100,
+            "name": "Thresh Win Size Min",
+            "value": 3
+          },
+          "max perimeter": {
+            "min": 0,
+            "max": 10,
+            "name": "max perimeter",
+            "value": 4
+          },
+          "polygonal accuracy": {
+            "min": 0,
+            "max": 1,
+            "name": "polygonal accuracy",
+            "value": 0.05
+          },
+          "min perimeter": {
+            "min": 0,
+            "max": 1,
+            "name": "min perimeter",
+            "value": 0.03
+          },
+          "Thresh Win Size Step": {
+            "min": 0,
+            "max": 100,
+            "name": "Thresh Win Size Step",
+            "value": 10
+          }
+        }
+      },
+      "shader filter": {
+        "name": "shader filter",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "shader": {
+            "name": "shader",
+            "value": {
+              "fragment": {
+                "name": "fragment",
+                "value": {
+                  "aruco_shader_fragment.glsl": {
+                    "name": "aruco_shader_fragment.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@5b2e3f3a"
+                  },
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              },
+              "vertex": {
+                "name": "vertex",
+                "value": {
+                  "aruco_shader_vertex.glsl": {
+                    "name": "aruco_shader_vertex.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@5f326760"
+                  },
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "capture": {
+        "name": "capture",
+        "value": {
+          "saturation": {
+            "min": 0,
+            "max": 255,
+            "name": "saturation",
+            "value": 100
+          },
+          "brightness": {
+            "min": 0,
+            "max": 255,
+            "name": "brightness",
+            "value": 110.92500305175781
+          },
+          "exposure": {
+            "min": -11,
+            "max": 1,
+            "name": "exposure",
+            "value": 0
+          },
+          "contrast": {
+            "min": 0,
+            "max": 10,
+            "name": "contrast",
+            "value": 5
+          },
+          "temperatur": {
+            "min": 2800,
+            "max": 10000,
+            "name": "temperatur",
+            "value": 4981.60009765625
+          }
+        }
+      },
+      "blur": {
+        "name": "blur",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "size": {
+            "min": 1,
+            "max": 50,
+            "name": "size",
+            "value": 1
+          }
+        }
+      },
+      "threshold": {
+        "name": "threshold",
+        "value": {
+          "bypass": {
+            "name": "bypass",
+            "value": true
+          },
+          "threshold type": {
+            "name": "threshold type",
+            "value": "BINARY"
+          },
+          "threshold": {
+            "min": 0,
+            "max": 255,
+            "name": "threshold",
+            "value": 1
+          },
+          "max value": {
+            "min": 0,
+            "max": 255,
+            "name": "max value",
+            "value": 1
+          }
+        }
+      },
+      "draw mat": {
+        "name": "draw mat",
+        "value": "THRESHOLD"
+      },
+      "calibration": {
+        "name": "calibration",
+        "value": {
+          "Thresh Win Size Max": {
+            "min": 0,
+            "max": 100,
+            "name": "Thresh Win Size Max",
+            "value": 23
+          },
+          "marker length": {
+            "min": 0,
+            "max": 0.1,
+            "name": "marker length",
+            "value": 0.02
+          },
+          "dictionary": {
+            "name": "dictionary",
+            "value": "DICT_6X6_1000"
+          },
+          "Thresh Win Size Min": {
+            "min": 0,
+            "max": 100,
+            "name": "Thresh Win Size Min",
+            "value": 3
+          },
+          "max perimeter": {
+            "min": 0,
+            "max": 10,
+            "name": "max perimeter",
+            "value": 4
+          },
+          "polygonal accuracy": {
+            "min": 0,
+            "max": 1,
+            "name": "polygonal accuracy",
+            "value": 0.05
+          },
+          "squares y": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "squares y",
+            "value": 7
+          },
+          "squares x": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "squares x",
+            "value": 5
+          },
+          "use refining": {
+            "name": "use refining",
+            "value": true
+          },
+          "min perimeter": {
+            "min": 0,
+            "max": 1,
+            "name": "min perimeter",
+            "value": 0.03
+          },
+          "square length": {
+            "min": 0,
+            "max": 0.1,
+            "name": "square length",
+            "value": 0.04
+          },
+          "Thresh Win Size Step": {
+            "min": 0,
+            "max": 100,
+            "name": "Thresh Win Size Step",
+            "value": 10
+          }
+        }
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "3072 x 1728"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1280
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 720
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.62796695201757
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}

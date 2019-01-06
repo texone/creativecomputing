@@ -1,0 +1,14 @@
+{
+  "loop length": {
+    "min": 0,
+    "max": 1,
+    "name": "loop length",
+    "value": 0.09700000286102295
+  },
+  "loop start": {
+    "min": 0,
+    "max": 1,
+    "name": "loop start",
+    "value": 0.32600000500679016
+  }
+}
