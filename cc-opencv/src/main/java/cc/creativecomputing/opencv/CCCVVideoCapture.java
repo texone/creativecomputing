@@ -162,7 +162,7 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 	 * @param theExposure exposure
 	 */
 	public void exposure(double theExposure) {
-		_myCapture.set(CV_CAP_PROP_EXPOSURE, theExposure);
+//		_myCapture.set(CV_CAP_PROP_EXPOSURE, theExposure);
 	}
 
 	/*
@@ -203,10 +203,10 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 //			_myLastExposure = _cExpousure;
 //			return;
 //		}
-		temperature(_cTemperature);
-		contrast(_cContrast);
-		saturation(_cSaturation);
-		brightness(_cBrightness);
+//		temperature(_cTemperature);
+//		contrast(_cContrast);
+//		saturation(_cSaturation);
+//		brightness(_cBrightness);
 	}
 	
 	

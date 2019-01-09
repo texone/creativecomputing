@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>cc-opencv</artifactId>
-	<name>creative computing animation</name>
+	<name>creative computing opencv</name>
 
 	<dependencies>
 		<dependency>
@@ -20,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bytedeco.javacpp-presets</groupId>
-			<artifactId>opencv</artifactId>
+			<artifactId>opencv-platform</artifactId>
 			<version>3.4.3-1.4.3</version>
 		</dependency>
 		<dependency>
