@@ -41,7 +41,7 @@
           },
           "dictionary": {
             "name": "dictionary",
-            "value": "DICT_4X4_100"
+            "value": "DICT_6X6_100"
           },
           "Thresh Win Size Min": {
             "min": 0,
@@ -90,7 +90,7 @@
                 "value": {
                   "aruco_shader_fragment.glsl": {
                     "name": "aruco_shader_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@5b2e3f3a"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@3d7be3df"
                   },
                   "auto save": {
                     "name": "auto save",
@@ -111,7 +111,7 @@
                 "value": {
                   "aruco_shader_vertex.glsl": {
                     "name": "aruco_shader_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@5f326760"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@40ec3777"
                   },
                   "auto save": {
                     "name": "auto save",
@@ -128,41 +128,6 @@
                 }
               }
             }
-          }
-        }
-      },
-      "capture": {
-        "name": "capture",
-        "value": {
-          "saturation": {
-            "min": 0,
-            "max": 255,
-            "name": "saturation",
-            "value": 100
-          },
-          "brightness": {
-            "min": 0,
-            "max": 255,
-            "name": "brightness",
-            "value": 110.92500305175781
-          },
-          "exposure": {
-            "min": -11,
-            "max": 1,
-            "name": "exposure",
-            "value": 0
-          },
-          "contrast": {
-            "min": 0,
-            "max": 10,
-            "name": "contrast",
-            "value": 5
-          },
-          "temperatur": {
-            "min": 2800,
-            "max": 10000,
-            "name": "temperatur",
-            "value": 4981.60009765625
           }
         }
       },
@@ -213,27 +178,17 @@
       "calibration": {
         "name": "calibration",
         "value": {
+          "aspect ratio": {
+            "min": 0,
+            "max": 0.1,
+            "name": "aspect ratio",
+            "value": 0.1
+          },
           "Thresh Win Size Max": {
             "min": 0,
             "max": 100,
             "name": "Thresh Win Size Max",
             "value": 23
-          },
-          "marker length": {
-            "min": 0,
-            "max": 0.1,
-            "name": "marker length",
-            "value": 0.02
-          },
-          "dictionary": {
-            "name": "dictionary",
-            "value": "DICT_6X6_1000"
-          },
-          "Thresh Win Size Min": {
-            "min": 0,
-            "max": 100,
-            "name": "Thresh Win Size Min",
-            "value": 3
           },
           "max perimeter": {
             "min": 0,
@@ -241,27 +196,15 @@
             "name": "max perimeter",
             "value": 4
           },
+          "use fix aspect ratio": {
+            "name": "use fix aspect ratio",
+            "value": false
+          },
           "polygonal accuracy": {
             "min": 0,
             "max": 1,
             "name": "polygonal accuracy",
             "value": 0.05
-          },
-          "squares y": {
-            "min": -2147483648,
-            "max": 2147483647,
-            "name": "squares y",
-            "value": 7
-          },
-          "squares x": {
-            "min": -2147483648,
-            "max": 2147483647,
-            "name": "squares x",
-            "value": 5
-          },
-          "use refining": {
-            "name": "use refining",
-            "value": true
           },
           "min perimeter": {
             "min": 0,
@@ -280,6 +223,38 @@
             "max": 100,
             "name": "Thresh Win Size Step",
             "value": 10
+          },
+          "marker length": {
+            "min": 0,
+            "max": 0.1,
+            "name": "marker length",
+            "value": 0.02
+          },
+          "dictionary": {
+            "name": "dictionary",
+            "value": "DICT_6X6_1000"
+          },
+          "Thresh Win Size Min": {
+            "min": 0,
+            "max": 100,
+            "name": "Thresh Win Size Min",
+            "value": 3
+          },
+          "squares y": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "squares y",
+            "value": 7
+          },
+          "squares x": {
+            "min": -2147483648,
+            "max": 2147483647,
+            "name": "squares x",
+            "value": 5
+          },
+          "use refining": {
+            "name": "use refining",
+            "value": true
           }
         }
       }
@@ -426,7 +401,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.62796695201757
+        "value": 19.672027950017313
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

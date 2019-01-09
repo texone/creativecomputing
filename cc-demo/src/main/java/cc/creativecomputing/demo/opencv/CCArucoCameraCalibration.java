@@ -18,7 +18,7 @@ public class CCArucoCameraCalibration extends CCGL2Adapter {
 	
 	
 	
-	private boolean USE_CAPTURE = true;
+	private boolean USE_CAPTURE = false;
 	
 	@CCProperty(name = "capture")
 	private CCCVVideoCapture _myCapture;
@@ -39,7 +39,7 @@ public class CCArucoCameraCalibration extends CCGL2Adapter {
 			_myCapture.frameHeight(960);
 			_myVideoIn = _myCapture;
 		}else {
-			_myPlayer = new CCCVVideoPlayer(CCNIOUtil.dataPath("videos/hand01.mp4").toAbsolutePath().toString());
+			_myPlayer = new CCCVVideoPlayer(CCNIOUtil.dataPath("videos/charuco.mp4").toAbsolutePath().toString());
 			_myVideoIn = _myPlayer;
 		}
 		_myTexture = new CCCVTexture();

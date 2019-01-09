@@ -8,7 +8,12 @@ import static org.bytedeco.javacpp.opencv_aruco.drawDetectedMarkers;
 import static org.bytedeco.javacpp.opencv_aruco.getPredefinedDictionary;
 import static org.bytedeco.javacpp.opencv_aruco.interpolateCornersCharuco;
 import static org.bytedeco.javacpp.opencv_aruco.refineDetectedMarkers;
+import static org.bytedeco.javacpp.opencv_aruco.*;
 import static org.bytedeco.javacpp.opencv_calib3d.CALIB_FIX_ASPECT_RATIO;
+import static org.bytedeco.javacpp.opencv_core.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bytedeco.javacpp.opencv_aruco.CharucoBoard;
 import org.bytedeco.javacpp.opencv_aruco.DetectorParameters;
@@ -18,6 +23,8 @@ import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.MatVector;
 import org.bytedeco.javacpp.opencv_core.MatVectorVector;
 import org.bytedeco.javacpp.opencv_core.Size;
+import org.bytedeco.javacpp.indexer.DoubleIndexer;
+import org.bytedeco.javacpp.indexer.IntIndexer;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
@@ -27,12 +34,15 @@ import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.opencv.CCCVTexture;
+import cc.creativecomputing.opencv.CCCVUtil;
 import cc.creativecomputing.opencv.CCCVVideoCapture;
 import cc.creativecomputing.opencv.CCCVVideoIn;
 import cc.creativecomputing.opencv.CCCVVideoPlayer;
 import cc.creativecomputing.opencv.filtering.CCBlur;
 import cc.creativecomputing.opencv.filtering.CCCVShaderFilter;
 import cc.creativecomputing.opencv.filtering.CCThreshold;
+import cc.creativecomputing.video.CCVideoTexture;
+import cc.creativecomputing.video.Movie;
 
 public class CCArucoDemo extends CCGL2Adapter {
 
@@ -133,8 +143,48 @@ public class CCArucoDemo extends CCGL2Adapter {
 		protected MatVector _myRejected = new MatVector();
 		protected Mat _myIds = new Mat();
 
-		public CCMarkerDetection() {
+		protected Mat rvecs = new Mat();
+		protected Mat tvecs = new Mat();
+		
 
+		private Mat camMat = new Mat(3,3,CV_64F);
+		private Mat camDist = new Mat(5,1,CV_64F);
+
+		public CCMarkerDetection() {
+			DoubleIndexer myIndexer = camMat.createIndexer();
+			myIndexer.put(0, 4278.18153119249);
+			myIndexer.put(1, 0);
+			myIndexer.put(2, 220.22038500033852);
+			myIndexer.put(3, 0);
+			myIndexer.put(4, 2530.4829048778429);
+			myIndexer.put(5, 148.80000087208535);
+			myIndexer.put(6, 0);
+			myIndexer.put(7, 0);
+			myIndexer.put(8, 1);
+			
+
+//			myIndexer.put(0, 4278.18153119249);
+//			myIndexer.put(1, 0);
+//			myIndexer.put(2, 0);
+//			myIndexer.put(3, 0);
+//			myIndexer.put(4, 2530.4829048778429);
+//			myIndexer.put(5, 0);
+//			myIndexer.put(6, 220.22038500033852);
+//			myIndexer.put(7, 148.80000087208535);
+//			myIndexer.put(8, 1);
+			
+			DoubleIndexer myIndexer2 = camDist.createIndexer();
+//			myIndexer2.put(0, 12.154837218327105);
+//			myIndexer2.put(1, 933.11745331373641);
+//			myIndexer2.put(2, 3.7550942115312025);
+//			myIndexer2.put(3, 0.83757121026507453);
+//			myIndexer2.put(4, -10510.641074538722);
+
+			myIndexer2.put(0, 0);
+			myIndexer2.put(1, 0);
+			myIndexer2.put(2, 0);
+			myIndexer2.put(3, 0);
+			myIndexer2.put(4, 0);
 		}
 
 		public void detect(Mat theMat) {
@@ -156,9 +206,33 @@ public class CCArucoDemo extends CCGL2Adapter {
 			detectMarkers(theMat, _myDictionary, _myCorners, _myIds, myParameters, _myRejected, null, null);
 
 		}
+		
+		public void estimatePose() {
+			
+			estimatePoseSingleMarkers(_myCorners, 0.02f, camMat, camDist, rvecs, tvecs);
+			
+//			CCLog.info(tvecs);
+		}
 
 		public void drawMarkers(Mat theDrawMat) {
 			drawDetectedMarkers(theDrawMat, _myCorners);
+		}
+		
+		public void drawAxisF(Mat theDrawMat) {
+			for(int i = 0; i < rvecs.rows();i++) {
+				if(i == 0) {
+					DoubleIndexer myRIndexer = rvecs.row(i).createIndexer();
+					DoubleIndexer myTIndexer = tvecs.row(i).createIndexer();
+					CCLog.info(myTIndexer.get(0),myTIndexer.get(1),myTIndexer.get(2),myRIndexer.get(0),myRIndexer.get(1),myRIndexer.get(2));
+					
+					/*
+					 * float theta = (float)(Math.Sqrt(m.x*m.x + m.y*m.y + m.z*m.z)*180/Math.PI);
+Vector3 axis = new Vector3 (-m.x, m.y, -m.z);
+Quaternion rot = Quaternion.AngleAxis (theta, axis);
+					 */
+				}
+				drawAxis(theDrawMat, camMat, camDist,  rvecs.row(i), tvecs.row(i), 0.02f);
+			}
 		}
 
 	}
@@ -192,6 +266,9 @@ public class CCArucoDemo extends CCGL2Adapter {
 		private Size imgSize;
 		private Mat _myMat;
 		private CharucoBoard charucoboard;
+		
+
+		
 
 		public CCArucoCameraCalibration() {
 		}
@@ -211,31 +288,32 @@ public class CCArucoDemo extends CCGL2Adapter {
 
 			// interpolate charuco corners
 			if (_myIds.rows() > 0)
-				interpolateCornersCharuco(_myCorners, _myIds, theMat, charucoboard, _myCurrentCharucoCorners,
-						_myCurrentCharucoIds);
+				interpolateCornersCharuco(_myCorners, _myIds, theMat, charucoboard, _myCurrentCharucoCorners, _myCurrentCharucoIds);
 		}
 
+//		@CCProperty(name = "add frame")
 		public void addFrame() {
-			if (_myIds.rows() > 0) {
-				CCLog.info("Frame captured");
-				allCorners.push_back(_myCorners);
-				allIds.push_back(_myIds);
-				allImgs.push_back(_myMat);
-				imgSize = _myMat.size();
-			}
+			if (_myIds.rows() <= 0) return;
+			
+			allCorners.push_back(_myCorners);
+			allIds.push_back(_myIds);
+			allImgs.push_back(_myMat);
+			imgSize = _myMat.size();
+			
+
+//			calibrate();
+			CCLog.info("ADD FRAME", allImgs.size());
 		}
 
+//		@CCProperty(name = "calibrate")
 		public void calibrate() {
 			if (allIds.size() < 1) {
 				CCLog.error("Not enough captures for calibration");
 				return;
 			}
+			
+			CCLog.info("CALIBRATE");
 
-			Mat cameraMatrix = new Mat();
-			Mat distCoeffs = new Mat();
-			MatVector rvecs = new MatVector();
-			MatVector tvecs = new MatVector();
-			double repError;
 
 //		    if(_cUseFixAspectRatio) {
 //		        cameraMatrix = Mat.eye(3, 3, CV_64F).asMat();
@@ -244,21 +322,31 @@ public class CCArucoDemo extends CCGL2Adapter {
 
 			// prepare data for calibration
 			MatVector allCornersConcatenated = new MatVector();
-			Mat allIdsConcatenated = new Mat();
-			Mat markerCounterPerFrame = new Mat(allCorners.size());
-
+			Mat markerCounterPerFrame = new Mat((int)allCorners.size(), 1, CV_32SC1);
+			//CCCVUtil
+			IntIndexer markerCounterPerFrameIndexer = markerCounterPerFrame.createIndexer();
+			List<Integer> allIdsConcatenated = new ArrayList<>();
+			
 			for (int i = 0; i < allCorners.size(); i++) {
-				markerCounterPerFrame.getIntBuffer().put((int) allCorners.get(i).size());
+				markerCounterPerFrameIndexer.put(i,(int) allCorners.get(i).size());
+				IntIndexer myIDIndexer = allIds.get(i).createIndexer();
 				for (int j = 0; j < allCorners.get(i).size(); j++) {
 					allCornersConcatenated.put(allCorners.get(i).get(j));
-					allIdsConcatenated.getIntBuffer().put(allIds.get(i).getIntBuffer().get(j));
+					allIdsConcatenated.add(myIDIndexer.get(j));
 				}
 			}
+			Mat allIdsConcatenatedMat = new Mat(allIdsConcatenated.size(), 1, CV_32SC1);
+			IntIndexer allIdsConcatenatedIndexer = allIdsConcatenatedMat.createIndexer();
+			for(int i = 0; i < allIdsConcatenated.size(); i++) {
+				allIdsConcatenatedIndexer.put(i, allIdsConcatenated.get(i));
+			}
 
+			Mat cameraMatrix = new Mat();
+			Mat distCoeffs = new Mat();
 			// calibrate camera using aruco markers
 			double arucoRepErr = calibrateCameraAruco(
 				allCornersConcatenated, 
-				allIdsConcatenated, 
+				allIdsConcatenatedMat, 
 				markerCounterPerFrame,
 				charucoboard, 
 				imgSize, 
@@ -299,14 +387,50 @@ public class CCArucoDemo extends CCGL2Adapter {
 			}
 
 			// calibrate camera using charuco
-			repError = calibrateCameraCharuco(allCharucoCorners, allCharucoIds, charucoboard, imgSize, cameraMatrix, distCoeffs);
+			double repError = calibrateCameraCharuco(allCharucoCorners, allCharucoIds, charucoboard, imgSize, cameraMatrix, distCoeffs);
 
-//			boolean saveOk = saveCameraParams(outputFile, imgSize, aspectRatio, calibrationFlags, cameraMatrix,distCoeffs, repError);
-//			if (!saveOk) {
-//				CCLog.error("Cannot save output file");
-//				return;
-//			}
+			boolean saveOk = saveCameraParams(CCNIOUtil.dataPath("check.txt").toAbsolutePath().toString(), imgSize, 4f / 3f, 0, cameraMatrix,distCoeffs, repError);
+			if (!saveOk) {
+				CCLog.error("Cannot save output file");
+				return;
+			}
 
+		}
+		
+		/**
+		 */
+		public boolean saveCameraParams(String filename, Size imageSize, float aspectRatio, int flags, Mat cameraMatrix, Mat distCoeffs, double totalAvgErr) {
+			FileStorage fs = new FileStorage(filename, FileStorage.WRITE);
+			if (!fs.isOpened())
+				return false;
+
+//		    time_t tt;
+//		    time(&tt);
+//		    struct tm *t2 = localtime(&tt);
+//		    char buf[1024];
+//		    strftime(buf, sizeof(buf) - 1, "%c", t2);
+//
+//		    fs << "calibration_time" << buf;
+
+			fs.write("image_width", imageSize.width());
+			fs.write("image_height", imageSize.height());
+
+			if ((flags & CALIB_FIX_ASPECT_RATIO) > 0)
+				fs.write("aspectRatio", aspectRatio);
+
+//		    if(flags != 0) {
+//		        sprintf(buf, "flags: %s%s%s%s",
+//		                flags & CALIB_USE_INTRINSIC_GUESS ? "+use_intrinsic_guess" : "",
+//		                flags & CALIB_FIX_ASPECT_RATIO ? "+fix_aspectRatio" : "",
+//		                flags & CALIB_FIX_PRINCIPAL_POINT ? "+fix_principal_point" : "",
+//		                flags & CALIB_ZERO_TANGENT_DIST ? "+zero_tangent_dist" : "");
+//		    }
+
+			fs.write("flags", flags);
+			fs.write("camera_matrix", cameraMatrix);
+			fs.write("distortion_coefficients", distCoeffs);
+			fs.write("avg_reprojection_error", totalAvgErr);
+			return true;
 		}
 
 		public void drawCorners(Mat theMat) {
@@ -323,6 +447,10 @@ public class CCArucoDemo extends CCGL2Adapter {
 
 	@CCProperty(name = "player")
 	private CCCVVideoPlayer _myPlayer;
+	
+
+	private Movie _myData;
+	private CCVideoTexture _myVideoTexture;
 
 	private CCCVVideoIn _myVideoIn;
 
@@ -352,20 +480,40 @@ public class CCArucoDemo extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		if (USE_CAPTURE) {
-			_myCapture = new CCCVVideoCapture(0);
+			_myCapture = new CCCVVideoCapture(1);
 			_myCapture.exposure(-8);
 			_myCapture.frameWidth(1280);
 			_myCapture.frameHeight(960);
 			_myVideoIn = _myCapture;
 		} else {
-			_myPlayer = new CCCVVideoPlayer(CCNIOUtil.dataPath("videos/hand01.mp4").toAbsolutePath().toString());
+			_myPlayer = new CCCVVideoPlayer(CCNIOUtil.dataPath("videos/charuco.mp4").toAbsolutePath().toString());
 			_myVideoIn = _myPlayer;
+
+//			_myData = new Movie(theAnimator, CCNIOUtil.dataPath("videos/charuco.mp4"));//
+////			_myData.loop();
+//			_myData.endEvents.add(()->{_myData.stop();_myData.play();});
+//			_myData.play();
+//			
+//			_myVideoTexture = new CCVideoTexture(this,_myData);
 		}
 		_myTexture = new CCCVTexture();
 		_myTexture.mustFlipVertically(true);
 
-		_cFilter = new CCCVShaderFilter(CCNIOUtil.classPath(this, "aruco_shader_vertex.glsl"),
-				CCNIOUtil.classPath(this, "aruco_shader_fragment.glsl"));
+		_cFilter = new CCCVShaderFilter(
+			CCNIOUtil.classPath(this, "aruco_shader_vertex.glsl"),
+			CCNIOUtil.classPath(this, "aruco_shader_fragment.glsl")
+		);
+		
+		keyReleased().add(e -> {
+			switch(e.keyCode()) {
+			case VK_A:
+				_cCameraCalibration.addFrame();
+				break;
+			case VK_C:
+				_cCameraCalibration.calibrate();
+				break;
+			}
+		});
 	}
 
 	@Override
@@ -376,32 +524,46 @@ public class CCArucoDemo extends CCGL2Adapter {
 	public void display(CCGraphics g) {
 		g.clear();
 
-		Mat myOrigin = _myVideoIn.read();
-
+		Mat myOrigin;
+		
+//		if(_myVideoTexture.height() <= 0 || _myVideoTexture.width() <= 0)return;
+//		if(USE_CAPTURE) {
+			myOrigin = _myVideoIn.read();
+//		}else {
+//			myOrigin = new Mat(_myVideoTexture.height(), _myVideoTexture.width(), CV_8UC3);
+////			CCLog.info(myOrigin.getByteBuffer());
+//			myOrigin.getByteBuffer().rewind();
+//			myOrigin.getByteBuffer().put(_myVideoTexture.getTexImage());
+//			myOrigin.getByteBuffer().rewind();
+//		}
+//
 		Mat myDrawMat = new Mat();
-
-		if (_cDrawMat == CCDrawMat.ORIGIN)
+//
+//		if (_cDrawMat == CCDrawMat.ORIGIN)
 			myDrawMat = myOrigin.clone();
-		_cFilter.process(myOrigin);
-		_cFilter.preDisplay(g);
-		if (_cDrawMat == CCDrawMat.SHADER)
-			myDrawMat = myOrigin.clone();
-		_cBlur.process(myOrigin);
-		if (_cDrawMat == CCDrawMat.BLUR)
-			myDrawMat = myOrigin.clone();
-//		myOrigin = CCCVUtil.rgbToGray(myOrigin);
-		_cThreshold.process(myOrigin);
-		if (_cDrawMat == CCDrawMat.THRESHOLD)
-			myDrawMat = myOrigin.clone();
-
-//		myDrawMat = CCCVUtil.grayToRGB(myDrawMat);
-
-		_cMarkerDetection.detect(myOrigin);
+//		_cFilter.process(myOrigin);
+//		_cFilter.preDisplay(g);
+//		if (_cDrawMat == CCDrawMat.SHADER)
+//			myDrawMat = myOrigin.clone();
+//		_cBlur.process(myOrigin);
+//		if (_cDrawMat == CCDrawMat.BLUR)
+//			myDrawMat = myOrigin.clone();
+////		myOrigin = CCCVUtil.rgbToGray(myOrigin);
+//		_cThreshold.process(myOrigin);
+//		if (_cDrawMat == CCDrawMat.THRESHOLD)
+//			myDrawMat = myOrigin.clone();
+//
+////		myDrawMat = CCCVUtil.grayToRGB(myDrawMat);
+//
+//		_cMarkerDetection.detect(myOrigin);
 //		_cMarkerDetection.drawMarkers(myDrawMat);
-
+//
 		_cCameraCalibration.detectBoard(myOrigin);
+		_cCameraCalibration.estimatePose();
+		_cCameraCalibration.drawMarkers(myDrawMat);
 		_cCameraCalibration.drawCorners(myDrawMat);
-
+		_cCameraCalibration.drawAxisF(myDrawMat);
+//
 		_myTexture.image(myDrawMat);
 		g.ortho2D();
 		g.image(_myTexture, 0, 0);

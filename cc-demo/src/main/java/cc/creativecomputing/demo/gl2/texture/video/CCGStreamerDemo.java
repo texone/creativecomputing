@@ -28,8 +28,8 @@ public class CCGStreamerDemo extends CCGL2Adapter {
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		
 //		_myData = new CCGStreamerMovie(this, CCIOUtil.dataPath("videos/120116_spline2_fine2_1356x136_jpg.mov"));
-		_myData = new Movie(theAnimator, CCNIOUtil.dataPath("videos/sintel_trailer-1080p.mp4"));//
 //		_myData = new CCGStreamerMovie(this, "http://cabspotting.org/movies/lines-sf4hr.mpg");
+		_myData = new Movie(theAnimator, CCNIOUtil.dataPath("videos/sintel_trailer-1080p.mp4"));//
 		_myData.play();
 		
 		_myTexture = new CCVideoTexture(this,_myData);

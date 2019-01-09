@@ -48,11 +48,12 @@ void main(){
 	float bri = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;
 	result.rgb = mod((h.xxx + 0.5), 1);
 	float dHue = hue > hueMin && hue < hueMax;
-	float dSat = sat > satMin && sat < satMax;
+	float dSat = sat > satMin && sat <= satMax;
 	float dBri = bri > briMin && bri < briMax;
 	float dArea = uv.x > xMin && uv.x < xMax;
 	dArea *= uv.y > yMin && uv.y < yMax;
 	result.rgb = dArea * dHue * dBri * dSat;
 	result.a = 1;
+	//result.rgb = sat;
 	gl_FragColor = result;
 }

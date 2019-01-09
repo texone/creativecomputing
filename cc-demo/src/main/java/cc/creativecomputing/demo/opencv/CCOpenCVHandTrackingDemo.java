@@ -4,6 +4,7 @@ import org.bytedeco.javacpp.opencv_core.Mat;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -30,7 +31,11 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 	@CCProperty(name = "hull color")
 	private CCColor _cHullColor = new CCColor();
 	
-	private boolean USE_CAPTURE = false;
+
+	@CCProperty(name = "back color")
+	private CCColor _cBackColor = new CCColor();
+	
+	private boolean USE_CAPTURE = true;
 	
 	@CCProperty(name = "capture")
 	private CCCVVideoCapture _myCapture;
@@ -81,9 +86,10 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 		_cCameraController = new CCCameraController(this, g, 100);
 		if(USE_CAPTURE) {
 			_myCapture = new CCCVVideoCapture(1);
-			_myCapture.exposure(-8);
-			_myCapture.frameWidth(1280);
-			_myCapture.frameHeight(960);
+			CCLog.info(_myCapture.frameWidth(), _myCapture.frameHeight());
+//			_myCapture.exposure(-8);
+//			_myCapture.frameWidth(1280);
+//			_myCapture.frameHeight(960);
 			_myVideoIn = _myCapture;
 		}else {
 			_myPlayer = new CCCVVideoPlayer(CCNIOUtil.dataPath("videos/hand01.mp4").toAbsolutePath().toString());
@@ -107,8 +113,10 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
-		g.clear();
 		
+		g.clearColor(_cBackColor);
+		g.clear();
+		g.clearColor(1d);
 		
 		Mat myOrigin = _myVideoIn.read();
 		Mat myDrawMat = new Mat();
@@ -133,7 +141,7 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 		g.ortho2D();
 		
 //		_cCameraController.camera().draw(g);
-
+		g.color(1d);
 		g.image(_myTexture, 0,0);
 		g.color(_cContourColor);
 		
