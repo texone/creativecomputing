@@ -3942,10 +3942,12 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	      myProjection.y*=myProjection.w;
 	      myProjection.z*=myProjection.w;
 	      
+	      CCViewport myViewport = viewport();
+	      
 	      // Window coordinates
 	      // Map x, y to range 0-1
-	      double myScreenX = (myProjection.x*0.5+0.5)*width();
-	      double myScreenY =(myProjection.y*0.5+0.5)*height();
+	      double myScreenX = (myProjection.x*0.5+0.5)*myViewport.width();
+	      double myScreenY =(myProjection.y*0.5+0.5)*myViewport.height();
 	      // This is only correct when glDepthRange(0.0, 1.0)
 	      double myZ =(1.0+myProjection.z)*0.5;	// Between 0 and 1
 	      return new CCVector3(myScreenX, myScreenY, myZ);
@@ -4259,6 +4261,15 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 */
 	public void viewport(final int theX, final int theY, final int theWidth, final int theHeight) {
 		gl.glViewport(theX, theY, theWidth, theHeight);
+	}
+	
+	public void viewport(final CCViewport theViewport) {
+		viewport(theViewport.x(), theViewport.y(), theViewport.width(), theViewport.height());
+	}
+	
+	public CCViewport viewport() {
+		int[] myData = getIntArray(GL.GL_VIEWPORT, 4);
+		return new CCViewport(myData[0], myData[1], myData[2], myData[3]);
 	}
 
 	//////////////////////////////////////////////////////////////

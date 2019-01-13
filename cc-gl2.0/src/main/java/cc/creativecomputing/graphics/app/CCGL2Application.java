@@ -1,22 +1,16 @@
 package cc.creativecomputing.graphics.app;
 
-import java.nio.file.Path;
-
 import cc.creativecomputing.app.modules.CCAnimator;
-import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.app.modules.CCAnimator.CCAnimationMode;
-import cc.creativecomputing.control.CCPropertyMap;
+import cc.creativecomputing.app.modules.CCAnimatorListener;
 import cc.creativecomputing.control.code.memorycompile.CCInMemoryExecutionManager;
 import cc.creativecomputing.control.handles.CCObjectPropertyHandle;
-import cc.creativecomputing.control.handles.CCPropertyHandle;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.CCTimelineSynch;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLAdapter;
 import cc.creativecomputing.gl.app.CCGLListener;
 import cc.creativecomputing.graphics.CCGraphics;
-import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCGL2Application {
 	
