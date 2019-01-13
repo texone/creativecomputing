@@ -3,16 +3,11 @@ package cc.creativecomputing.opencv;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_BRIGHTNESS;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_CONTRAST;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_EXPOSURE;
-import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_FPS;
-import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_FRAME_COUNT;
-import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_FRAME_HEIGHT;
-import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_FRAME_WIDTH;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_GAIN;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_HUE;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_SATURATION;
-import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_TEMPERATURE;
+import static org.bytedeco.javacpp.opencv_videoio.*;
 
-import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_videoio.VideoCapture;
 
 import cc.creativecomputing.core.CCProperty;
@@ -36,6 +31,43 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 	
 	public CCCVVideoCapture(int theID) {
 		super(new VideoCapture(theID));
+	}
+	
+	@CCProperty(name = "show settings")
+	public void showSettings() {
+		_myCapture.set(CV_CAP_PROP_SETTINGS, 0);
+	}
+	
+	public double format() {
+		return _myCapture.get(CV_CAP_PROP_FORMAT);
+	}
+	
+	public CCCVVideoCapture format(int theFormat) {
+		_myCapture.set(CV_CAP_PROP_FORMAT, theFormat);
+		return this;
+	}
+	
+	public double fourcc() {
+		return _myCapture.get(CV_CAP_PROP_FOURCC);
+	}
+	
+	public CCCVVideoCapture fourcc(int theFourcc) {
+		_myCapture.set(CV_CAP_PROP_FOURCC, theFourcc);
+		return this;
+	}
+	
+	public double mode() {
+		return _myCapture.get(CV_CAP_PROP_MODE);
+	}
+	
+	public CCCVVideoCapture mode(int theMode) {
+		_myCapture.set(CV_CAP_PROP_MODE, theMode);
+		return this;
+	}
+	
+	public CCCVVideoCapture convertRGB(boolean theConvert) {
+		_myCapture.set(CV_CAP_PROP_CONVERT_RGB, theConvert ? 1 : 0);
+		return this;
 	}
 
 	/**
@@ -162,7 +194,7 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 	 * @param theExposure exposure
 	 */
 	public void exposure(double theExposure) {
-//		_myCapture.set(CV_CAP_PROP_EXPOSURE, theExposure);
+		_myCapture.set(CV_CAP_PROP_EXPOSURE, theExposure);
 	}
 
 	/*

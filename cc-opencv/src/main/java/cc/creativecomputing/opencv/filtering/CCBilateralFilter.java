@@ -18,7 +18,7 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
  * Sigma values: For simplicity, you can set the 2 sigma values to be the same.
  * If they are small (< 10), the filter will not have much effect, whereas if
  * they are large (> 150), they will have a very strong effect, making the image
- * look “cartoonish”.
+ * look "cartoonish".
  * <p>
  * Filter size: Large filters (d > 5) are very slow, so it is recommended to use
  * d=5 for real-time applications, and perhaps d=9 for offline applications that
@@ -40,8 +40,9 @@ public class CCBilateralFilter extends CCImageProcessor {
 	private int d = 0;
 
 	@Override
-	public void implementation(Mat theSource) {
+	public Mat implementation(Mat theSource) {
 		bilateralFilter(theSource, theSource, d, _cSigmaColor, _cSigmaSpace);
+		return theSource;
 	}
 
 }

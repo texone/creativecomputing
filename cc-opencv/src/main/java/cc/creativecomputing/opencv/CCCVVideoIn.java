@@ -8,12 +8,59 @@ import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_FRAME_WIDTH;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_videoio.VideoCapture;
 
+import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.events.CCListenerManager;
+import cc.creativecomputing.core.events.CCTriggerEvent;
+import cc.creativecomputing.core.logging.CCLog;
+
 public abstract class CCCVVideoIn {
+	
+	public static interface CCCVVideoInEvent{
+		public void event(Mat theMat);
+	}
 	
 	protected VideoCapture _myCapture;
 	
+	private Mat _myCurrentMat;
+	
+	public CCListenerManager<CCCVVideoInEvent> events = CCListenerManager.create(CCCVVideoInEvent.class);
+	
+	@CCProperty(name = "active", readBack = true)
+	private boolean _cActive = true;
+	
 	protected CCCVVideoIn(VideoCapture theCapture) {
 		_myCapture = theCapture;
+	}
+	
+	public void isActive(boolean theIsActive) {
+		_cActive = theIsActive;
+	}
+	
+	public boolean isActive() {
+		return _cActive;
+	}
+	
+	public void start() {
+		_myCurrentMat = read();
+		
+		new Thread(()->{
+			while(true) {
+				if(_cActive) {
+					_myCurrentMat = read();
+					events.proxy().event(_myCurrentMat);
+				}
+				try {
+					Thread.sleep(30);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+	
+	public Mat mat() {
+		return _myCurrentMat;
 	}
 	
 	/**

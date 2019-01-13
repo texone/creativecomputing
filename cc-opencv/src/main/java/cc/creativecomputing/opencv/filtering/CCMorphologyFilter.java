@@ -130,9 +130,10 @@ public class CCMorphologyFilter extends CCImageProcessor {
 	}
 
 	@Override
-	public void implementation(Mat theSource) {
+	public Mat implementation(Mat theSource) {
 		Mat myStructure = structuringElement(_cStructureShape, _cStructureSize);
 		morphologyEx(theSource, theSource, _cMorphType.id, myStructure, null, _cIterations, _cBorderType.id, morphologyDefaultBorderValue());
+		return theSource;
 	}
 
 }

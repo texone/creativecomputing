@@ -16,9 +16,10 @@ import org.bytedeco.javacpp.opencv_core.Mat;
 public class CCErosion extends CCMorphologyFilter {
 
 	@Override
-	public void implementation(Mat theSource) {
+	public Mat implementation(Mat theSource) {
 		Mat myStructure = structuringElement(_cStructureShape, _cStructureSize);
 		erode(theSource, theSource, myStructure, null, _cIterations, _cBorderType.id, morphologyDefaultBorderValue());
+		return theSource;
 	}
 
 }

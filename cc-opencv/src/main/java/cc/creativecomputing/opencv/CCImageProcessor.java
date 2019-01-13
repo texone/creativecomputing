@@ -54,13 +54,13 @@ public abstract class CCImageProcessor {
 	@CCProperty(name = "bypass")
 	protected boolean _cBypass = true;
 	
-	public abstract void implementation(Mat theSource);
+	public abstract Mat implementation(Mat theSource);
 	
-	public void process(Mat theSource) {
-		if(_cBypass)return;
+	public Mat process(Mat theSource) {
+		if(_cBypass)return theSource;
 		
 		
-		implementation(theSource);
+		return implementation(theSource);
 	}
 	
 	public void preDisplay(CCGraphics g) {

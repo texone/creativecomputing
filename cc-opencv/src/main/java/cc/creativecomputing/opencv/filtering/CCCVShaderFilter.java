@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import org.bytedeco.javacpp.opencv_core.Mat;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
@@ -20,6 +21,7 @@ public class CCCVShaderFilter extends CCImageProcessor{
 	private CCShaderBuffer _myShaderBuffer;
 	private CCCVTexture _myTexture;
 	private Mat _myCurrentMat;
+	private Mat _myCurrentOutput;
 	
 	public CCCVShaderFilter(Path theVertexShader, Path theFragmentShader) {
 		_cShader = new CCGLProgram(theVertexShader, theFragmentShader);
@@ -29,18 +31,20 @@ public class CCCVShaderFilter extends CCImageProcessor{
 	
 
 	@Override
-	public void implementation(Mat theSource) {
+	public Mat implementation(Mat theSource) {
 		_myCurrentMat = theSource.clone();
-		if(_myShaderBuffer == null)return;
-		theSource.getByteBuffer().rewind();
-		theSource.getByteBuffer().put(_myShaderBuffer.attachment(0).getTexImage());
-		theSource.getByteBuffer().rewind();
+		if(_myShaderBuffer == null)return theSource;
+		if(_myCurrentOutput == null)return theSource;
+		
+		return _myCurrentOutput;
 	}
 	
 	@Override
 	public void preDisplay(CCGraphics g) {
 		if(_myCurrentMat == null)return;
-			
+		if(_myCurrentOutput == null) {
+			_myCurrentOutput = _myCurrentMat.clone();
+		}
 		_myTexture.image(_myCurrentMat);
 		
 		boolean myAllocateData = _myShaderBuffer == null || _myCurrentMat.cols() != _myShaderBuffer.width() || _myCurrentMat.rows() != _myShaderBuffer.height();
@@ -57,7 +61,10 @@ public class CCCVShaderFilter extends CCImageProcessor{
 		_cShader.end();
 		g.noTexture();
 		
-		
+
+		_myCurrentOutput.getByteBuffer().rewind();
+		_myCurrentOutput.getByteBuffer().put(_myShaderBuffer.attachment(0).getTexImage());
+		_myCurrentOutput.getByteBuffer().rewind();
 	}
 	
 	public CCTexture2D inputTexture() {

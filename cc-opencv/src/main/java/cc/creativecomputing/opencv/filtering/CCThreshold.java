@@ -47,8 +47,9 @@ public class CCThreshold extends CCImageProcessor{
 	private double  _cMaxValue = 1;
 	
 	@Override
-	public void implementation(Mat theSource) {
+	public Mat implementation(Mat theSource) {
 		threshold(theSource, theSource, _cThreshold, _cMaxValue, _cThresholdType.id);
+		return theSource;
 	}
 
 	
