@@ -38,7 +38,7 @@ public class CameraTest {
             @Override
             public void run() {
                 SimpleVideoComponent vc = new SimpleVideoComponent();
-                Bin bin = Bin.launch("autovideosrc ! videoconvert ! capsfilter caps=video/x-raw,width=640,height=480", true);
+                Bin bin = Bin.launch("autovideosrc ! videoconvert ! capsfilter caps=video/x-raw,width=1280,height=960", true);
                 pipe = new Pipeline();
                 pipe.addMany(bin, vc.getElement());
                 Pipeline.linkMany(bin, vc.getElement());           

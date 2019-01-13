@@ -74,15 +74,16 @@ public class Movie extends CCMovieData {
 	private boolean _myIsSeeking = false;
 	
 	private final Lock bufferLock = new ReentrantLock();
+	
 	private class NewSampleListener implements AppSink.NEW_SAMPLE {
 
 		public  ByteBuffer clone(ByteBuffer original) {
-		       ByteBuffer clone = ByteBuffer.allocate(original.capacity());
-		       original.rewind();//copy from the beginning
-		       clone.put(original);
-		       original.rewind();
-		       clone.flip();
-		       return clone;
+			ByteBuffer clone = ByteBuffer.allocate(original.capacity());
+			original.rewind();//copy from the beginning
+			clone.put(original);
+			original.rewind();
+			clone.flip();
+			return clone;
 		}
 		
 		@Override
@@ -266,8 +267,10 @@ public class Movie extends CCMovieData {
 	public void dispose() {
 		if (_myPlaybin == null) return;
 
-		_myRGBSink.disconnect(_myNewSampleListener);
-		_myRGBSink.dispose();
+		if(_myRGBSink != null) {
+			_myRGBSink.disconnect(_myNewSampleListener);
+			_myRGBSink.dispose();
+		}
 		_myPlaybin.setState(org.freedesktop.gstreamer.State.NULL);
 		_myPlaybin.getState();
 		_myPlaybin.getBus().dispose();
