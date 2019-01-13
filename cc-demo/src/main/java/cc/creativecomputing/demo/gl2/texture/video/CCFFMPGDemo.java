@@ -36,7 +36,7 @@ public class CCFFMPGDemo extends CCGL2Adapter {
 //		_myData.loop();
 //		_myData.printInfo();
 //		_myTexture = new CCVideoTexture(this,_myData);
-//		
+		
 //		mousePressed().add(theMouseEvent -> {
 //			double myTime = theMouseEvent.x() / (double)g.width() * _myData.duration();
 //			_myData.time(myTime);

@@ -88,8 +88,9 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 			_myCapture = new CCCVVideoCapture(1);
 			CCLog.info(_myCapture.frameWidth(), _myCapture.frameHeight());
 //			_myCapture.exposure(-8);
-//			_myCapture.frameWidth(1280);
-//			_myCapture.frameHeight(960);
+			_myCapture.frameWidth(1280);
+			_myCapture.frameHeight(960);
+			_myCapture.frameRate(30);
 			_myVideoIn = _myCapture;
 		}else {
 			_myPlayer = new CCCVVideoPlayer(CCNIOUtil.dataPath("videos/hand01.mp4").toAbsolutePath().toString());
@@ -104,7 +105,7 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 		);
 		_cMorphology = new CCMorphologyFilter();
 		
-		_cHandTracker = new CCHandTracker();
+		_cHandTracker = new CCHandTracker(_myVideoIn);
 	}
 
 	@Override
@@ -113,6 +114,7 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
+		_cHandTracker.preDisplay(g);
 		
 		g.clearColor(_cBackColor);
 		g.clear();

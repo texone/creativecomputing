@@ -67,28 +67,82 @@
               },
               "procedural_blend_fragment.glsl": {
                 "name": "procedural_blend_fragment.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@5207069c"
+                "value": "cc.creativecomputing.control.code.CCShaderFile@7f6bb3bf"
               },
               "uniforms": {
                 "name": "uniforms",
                 "value": {
+                  "A distances.w": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "A distances.w",
+                    "value": 0.23800000548362732
+                  },
+                  "B distances.z": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "B distances.z",
+                    "value": 1
+                  },
+                  "A distances.x": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "A distances.x",
+                    "value": 0
+                  },
+                  "A distances.y": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "A distances.y",
+                    "value": 0
+                  },
+                  "A distances.z": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "A distances.z",
+                    "value": 1
+                  },
                   "noise euclidian": {
                     "min": 0,
                     "max": 1,
                     "name": "noise euclidian",
                     "value": 0
                   },
+                  "B distances.w": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "B distances.w",
+                    "value": 0.0860000029206276
+                  },
+                  "B distances.x": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "B distances.x",
+                    "value": 0.3580000102519989
+                  },
                   "blend progress": {
                     "min": 0,
                     "max": 1,
                     "name": "blend progress",
-                    "value": 0.3700000047683716
+                    "value": 0
+                  },
+                  "B distances.y": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "B distances.y",
+                    "value": 0
+                  },
+                  "B blend refract": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "B blend refract",
+                    "value": 0
                   },
                   "noise gain": {
                     "min": 0,
                     "max": 1,
                     "name": "noise gain",
-                    "value": 0.5
+                    "value": 0.6620000004768372
                   },
                   "noise scale": {
                     "min": 0,
@@ -100,7 +154,7 @@
                     "min": 0,
                     "max": 5,
                     "name": "noise speed",
-                    "value": 0.27000001072883606
+                    "value": 0.1600000113248825
                   },
                   "blend offset": {
                     "min": 0,
@@ -112,13 +166,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "blend global",
-                    "value": 0.847000002861023
-                  },
-                  "blend B refract": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "blend B refract",
-                    "value": 0.06400000303983688
+                    "value": 1
                   },
                   "blend x mod offset": {
                     "min": -1,
@@ -136,7 +184,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "refraction",
-                    "value": 0.8370000123977661
+                    "value": 1
                   },
                   "noise lacunarity": {
                     "min": 0,
@@ -148,19 +196,13 @@
                     "min": 0,
                     "max": 1,
                     "name": "octaves random",
-                    "value": 1
-                  },
-                  "blend A refract": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "blend A refract",
-                    "value": 1
+                    "value": 0.0636363636363636
                   },
                   "blend x": {
                     "min": 0,
                     "max": 1,
                     "name": "blend x",
-                    "value": 0.03200000151991844
+                    "value": 0
                   },
                   "blend y": {
                     "min": 0,
@@ -180,17 +222,23 @@
                     "name": "noise smooth",
                     "value": 1
                   },
+                  "blend random": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend random",
+                    "value": 0.09700000286102295
+                  },
+                  "A blend refract": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "A blend refract",
+                    "value": 0
+                  },
                   "noise octaves": {
                     "min": 1,
                     "max": 10,
                     "name": "noise octaves",
-                    "value": 3.63700008392334
-                  },
-                  "dt3 amount": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "dt3 amount",
-                    "value": 0.0430000014603138
+                    "value": 1
                   },
                   "blend x mod amt": {
                     "min": 0,
@@ -202,43 +250,37 @@
                     "min": 0,
                     "max": 1,
                     "name": "reverse blend",
-                    "value": 0.0430000014603138
+                    "value": 1
                   },
                   "blend range": {
                     "min": 0,
                     "max": 1,
                     "name": "blend range",
-                    "value": 1
+                    "value": 0.2070000022649765
                   },
                   "B refract": {
                     "min": 0,
                     "max": 1,
                     "name": "B refract",
-                    "value": 0.8370000123977661
+                    "value": 0.11818181818181817
                   },
                   "A refract": {
                     "min": 0,
                     "max": 1,
                     "name": "A refract",
-                    "value": 0.5419999957084656
+                    "value": 0.018181818181818188
                   },
                   "depth": {
                     "min": 0,
                     "max": 1,
                     "name": "depth",
-                    "value": 0.6200000047683716
+                    "value": 1
                   },
                   "depth start": {
                     "min": 0,
                     "max": 1,
                     "name": "depth start",
-                    "value": 0.9769999980926514
-                  },
-                  "dt0 amount": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "dt0 amount",
-                    "value": 0
+                    "value": 0.4545454545454546
                   },
                   "blend x mod": {
                     "min": 0,
@@ -246,17 +288,29 @@
                     "name": "blend x mod",
                     "value": 0
                   },
-                  "dt2 amount": {
+                  "blend distances.x": {
                     "min": 0,
                     "max": 1,
-                    "name": "dt2 amount",
+                    "name": "blend distances.x",
+                    "value": 0
+                  },
+                  "blend distances.w": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend distances.w",
+                    "value": 0
+                  },
+                  "blend distances.z": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend distances.z",
                     "value": 1
                   },
-                  "dt1 amount": {
+                  "blend distances.y": {
                     "min": 0,
                     "max": 1,
-                    "name": "dt1 amount",
-                    "value": 0.020999999716877937
+                    "name": "blend distances.y",
+                    "value": 0
                   }
                 }
               },
@@ -283,7 +337,7 @@
               },
               "procedural_blend_vertex.glsl": {
                 "name": "procedural_blend_vertex.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@7e081471"
+                "value": "cc.creativecomputing.control.code.CCShaderFile@3b991bd"
               }
             }
           }
@@ -466,7 +520,7 @@
             "min": 1,
             "max": 60,
             "name": "capture rate",
-            "value": 1
+            "value": 30
           },
           "record sequence": {},
           "height": {
@@ -621,7 +675,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.076890434758536
+        "value": 29.260853574797018
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

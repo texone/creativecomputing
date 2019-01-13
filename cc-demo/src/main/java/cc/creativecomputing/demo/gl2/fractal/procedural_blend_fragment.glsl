@@ -139,38 +139,19 @@ vec4 octavedVoronoise(vec2 s, float octaves, vec4 firstNoise, out vec2 texPos){
 	return myResult;
 }
 
-@CCProperty(name = "dt0 amount", min = 0, max = 1)
-uniform float _DistanceType0;
-@CCProperty(name = "dt1 amount", min = 0, max = 1)
-uniform float _DistanceType1;
-@CCProperty(name = "dt2 amount", min = 0, max = 1)
-uniform float _DistanceType2;
-@CCProperty(name = "dt3 amount", min = 0, max = 1)
-uniform float _DistanceType3;
-
 @CCProperty(name = "octaves random", min = 0, max = 1)
 uniform float _OctavesRandom;
 
-float noise(vec2 uv, out vec2 texPos){
+vec4 noise(vec2 uv, out vec2 texPos){
 	vec4 noiseVal = voronoi(uv * _NoiseScale, texPos);
-	float octaves = mix(_NoiseOctaves, noiseVal.z * _NoiseOctaves, _OctavesRandom);
-	vec4 noise = octavedVoronoise(uv * _NoiseScale, octaves, noiseVal, texPos);
-
-	float mySum = _DistanceType0 + _DistanceType1 + _DistanceType2 + _DistanceType3;
-	if(mySum <= 0.)mySum = 1.;
-	return (noise.x * _DistanceType0 + noise.y * _DistanceType1 + noise.z * _DistanceType2 + noise.w * _DistanceType3) / mySum;
-}
-
-vec4 octavedNoise3(vec2 uv, out vec2 texPos, out vec4 firstNoise){
-	vec4 noiseVal = voronoi(uv * _NoiseScale, texPos);
-	firstNoise = noiseVal;
 	float octaves = mix(_NoiseOctaves, noiseVal.z * _NoiseOctaves, _OctavesRandom);
 	return octavedVoronoise(uv * _NoiseScale, octaves, noiseVal, texPos);
 }
 
-vec4 octavedNoise(vec2 uv, out vec2 texPos){
-	vec4 firstNoise = vec4(0,0,0,0);
-	return octavedNoise3(uv, texPos, firstNoise);
+float distancedNoise(vec4 noise, vec4 distances){
+	float mySum = distances.x + distances.y + distances.z + distances.w;
+	if(mySum <= 0.)mySum = 1.;
+	return dot(noise, distances) / mySum;
 }
 
 
@@ -215,9 +196,15 @@ vec3 blender(vec2 uv, vec3 blends){
 	float globalBlend = max(0.001,_GlobalBlend);
 	float myOffsetSum = _X_Blend + _Y_Blend + globalBlend + _X_ModBlend;
 
+	float x = uv.x;
+	float y = uv.y;
+	if(_ReverseBlend > 0.5){
+		x = 1 - x;
+		y = 1 - y;
+	}
 	vec3 myModulation = blends * globalBlend;
-	myModulation += uv.x * _X_Blend;
-	myModulation += uv.y * _Y_Blend;
+	myModulation += x * _X_Blend;
+	myModulation += y * _Y_Blend;
 
 	if(_X_FlipMod > 0.){
 		float modu = modX(uv.x, 2.0);
@@ -243,18 +230,27 @@ vec3 blender(vec2 uv, vec3 blends){
 
 @CCProperty(name = "blend progress", min = 0, max = 1)
 uniform float _BlendProgress;
-@CCProperty(name = "blend A refract", min = 0, max = 1)
-uniform float _BlendARefract;
-@CCProperty(name = "blend B refract", min = 0, max = 1)
-uniform float _BlendBRefract;
-@CCProperty(name = "A refract", min = 0, max = 1)
-uniform float _ARefract;
-@CCProperty(name = "B refract", min = 0, max = 1)
-uniform float _BRefract;
-@CCProperty(name = "reverse blend", min = 0, max = 1)
+@CCProperty(name = "blend random", min = 0, max = 1)
 uniform float _BlendRandom;
 @CCProperty(name = "blend offset", min = 0, max = 1)
 uniform float _BlendOffset;
+@CCProperty(name = "blend distances", min = 0, max = 1)
+uniform vec4 _BlendDistances;
+
+@CCProperty(name = "A distances", min = 0, max = 1)
+uniform vec4 _ADistances;
+@CCProperty(name = "A refract", min = 0, max = 1)
+uniform float _ARefract;
+@CCProperty(name = "A blend refract", min = 0, max = 1)
+uniform float _BlendARefract;
+
+@CCProperty(name = "B distances", min = 0, max = 1)
+uniform vec4 _BDistances;
+@CCProperty(name = "B refract", min = 0, max = 1)
+uniform float _BRefract;
+@CCProperty(name = "B blend refract", min = 0, max = 1)
+uniform float _BlendBRefract;
+
 
 @CCProperty(name = "refraction", min = 0, max = 1)
 uniform float _Refraction;
@@ -269,30 +265,32 @@ uniform float _Depth;
 uniform float _DepthStart;
 
 void main(){
-	vec2 uv = gl_TexCoord[0].xy / vec2(1, aspect);
+	vec2 uv = gl_TexCoord[0].xy/ vec2(1, aspect);
 
 	vec2 noiseTexPos;
-	float f = noise(uv, noiseTexPos);
-	noiseTexPos *= vec2(aspect, 1.0) / _NoiseScale * 2.;
-	noiseTexPos = uv;
-	vec2 dir = normalize(vec2(cos(f * 6.2), sin(f * 6.2)));
-
+	vec4 f4 = noise(uv, noiseTexPos);
+	float fA = distancedNoise(f4, _ADistances);
+	float fB = distancedNoise(f4, _BDistances);
+	float f = distancedNoise(f4, _BlendDistances);
+	noiseTexPos *= 1 / _NoiseScale * 2.;
+	
 	vec3 blends = blender(noiseTexPos, vec3(_BlendARefract, _BlendBRefract, _BlendProgress));
 
 	float blendAR = linearstep(0.0, 1.0, blends.z * (1. + 2. * _BlendOffset));
 	float blendAB = linearstep(_BlendOffset, 1.0 + _BlendOffset, blends.z * (1. + 2. * _BlendOffset));
 	float blendBR = 1.0 - linearstep(2.0 * _BlendOffset, 1.0 + 2.0 * _BlendOffset, blends.z * (1. + 2. * _BlendOffset));
 
-	float noiseBlendARefraction = linearstep(f,f + _BlendRandom, blendAR * (1.0 + _BlendRandom)); 
-	float noiseBlendBRefraction = linearstep(f,f + _BlendRandom, blendBR * (1.0 + _BlendRandom)); 
+	float noiseBlendARefraction = linearstep(fA,fA + _BlendRandom, blendAR * (1.0 + _BlendRandom)); 
+	float noiseBlendBRefraction = linearstep(fB,fB + _BlendRandom, blendBR * (1.0 + _BlendRandom)); 
 	float noiseBlendAB          = linearstep(f,f + _BlendRandom, blendAB * (1.0 + _BlendRandom)); 
-	vec2 texUVDir = dir / aspect * _Refraction;
+	
+	vec2 texUVDirA = vec2(cos(fA * 6.2), sin(fA * 6.2)) / aspect * _Refraction;
+	vec2 texUVDirB = vec2(cos(fB * 6.2), sin(fB * 6.2)) / aspect * _Refraction;
 
 	vec2 muv = vec2(gl_TexCoord[0].x, 1 - gl_TexCoord[0].y);
-	vec4 color0 = tex2D(textureA, uv + texUVDir * (noiseBlendARefraction * _BlendARefract + _ARefract)); 
+	vec4 color0 = tex2D(textureA, uv + texUVDirA * (noiseBlendARefraction * _BlendARefract + _ARefract)); 
 	uv = vec2(uv.x, 1 - uv.y) * vec2(0.7,1);
-	vec4 color1 = tex2D(textureB, muv + texUVDir * (noiseBlendBRefraction * _BlendBRefract + _BRefract));
-	vec4 maskCol = texture3D(tex3D,vec3(muv + texUVDir * (noiseBlendBRefraction * _BlendBRefract + _BRefract),_DepthStart + _Depth * f));
+	vec4 maskCol = texture3D(tex3D,vec3(muv + texUVDirB * (noiseBlendBRefraction * _BlendBRefract + _BRefract),_DepthStart + _Depth * f));
 	vec4 col = mix(color0, maskCol, noiseBlendAB);   
 
 				//return col;//float4(f,f,f,1);//col;////float4(dir,0,1);//

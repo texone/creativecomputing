@@ -37,11 +37,11 @@
             "min": 0,
             "max": 100,
             "name": "Thresh Win Size Max",
-            "value": 23
+            "value": 46
           },
           "dictionary": {
             "name": "dictionary",
-            "value": "DICT_6X6_100"
+            "value": "DICT_4X4_100"
           },
           "Thresh Win Size Min": {
             "min": 0,
@@ -59,7 +59,7 @@
             "min": 0,
             "max": 1,
             "name": "polygonal accuracy",
-            "value": 0.05
+            "value": 0.009999999776482582
           },
           "min perimeter": {
             "min": 0,
@@ -75,59 +75,38 @@
           }
         }
       },
-      "shader filter": {
-        "name": "shader filter",
+      "capture": {
+        "name": "capture",
         "value": {
-          "bypass": {
-            "name": "bypass",
-            "value": true
+          "saturation": {
+            "min": 0,
+            "max": 255,
+            "name": "saturation",
+            "value": 100
           },
-          "shader": {
-            "name": "shader",
-            "value": {
-              "fragment": {
-                "name": "fragment",
-                "value": {
-                  "aruco_shader_fragment.glsl": {
-                    "name": "aruco_shader_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@3d7be3df"
-                  },
-                  "auto save": {
-                    "name": "auto save",
-                    "value": true
-                  },
-                  "uniforms": {
-                    "name": "uniforms",
-                    "value": {}
-                  },
-                  "save in file": {
-                    "name": "save in file",
-                    "value": true
-                  }
-                }
-              },
-              "vertex": {
-                "name": "vertex",
-                "value": {
-                  "aruco_shader_vertex.glsl": {
-                    "name": "aruco_shader_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@40ec3777"
-                  },
-                  "auto save": {
-                    "name": "auto save",
-                    "value": true
-                  },
-                  "uniforms": {
-                    "name": "uniforms",
-                    "value": {}
-                  },
-                  "save in file": {
-                    "name": "save in file",
-                    "value": true
-                  }
-                }
-              }
-            }
+          "brightness": {
+            "min": 0,
+            "max": 255,
+            "name": "brightness",
+            "value": 35.95500183105469
+          },
+          "exposure": {
+            "min": -11,
+            "max": 1,
+            "name": "exposure",
+            "value": 0
+          },
+          "contrast": {
+            "min": 0,
+            "max": 10,
+            "name": "contrast",
+            "value": 5
+          },
+          "temperatur": {
+            "min": 2800,
+            "max": 10000,
+            "name": "temperatur",
+            "value": 4800
           }
         }
       },
@@ -142,7 +121,7 @@
             "min": 1,
             "max": 50,
             "name": "size",
-            "value": 1
+            "value": 5
           }
         }
       },
@@ -161,13 +140,13 @@
             "min": 0,
             "max": 255,
             "name": "threshold",
-            "value": 1
+            "value": 133.11000061035156
           },
           "max value": {
             "min": 0,
             "max": 255,
             "name": "max value",
-            "value": 1
+            "value": 255
           }
         }
       },
@@ -175,86 +154,192 @@
         "name": "draw mat",
         "value": "THRESHOLD"
       },
-      "calibration": {
-        "name": "calibration",
+      "camera": {
+        "name": "camera",
         "value": {
-          "aspect ratio": {
+          "rotation speed": {
             "min": 0,
-            "max": 0.1,
-            "name": "aspect ratio",
+            "max": 0.2,
+            "name": "rotation speed",
             "value": 0.1
           },
-          "Thresh Win Size Max": {
-            "min": 0,
-            "max": 100,
-            "name": "Thresh Win Size Max",
-            "value": 23
-          },
-          "max perimeter": {
-            "min": 0,
-            "max": 10,
-            "name": "max perimeter",
-            "value": 4
-          },
-          "use fix aspect ratio": {
-            "name": "use fix aspect ratio",
-            "value": false
-          },
-          "polygonal accuracy": {
-            "min": 0,
-            "max": 1,
-            "name": "polygonal accuracy",
-            "value": 0.05
-          },
-          "min perimeter": {
-            "min": 0,
-            "max": 1,
-            "name": "min perimeter",
-            "value": 0.03
-          },
-          "square length": {
-            "min": 0,
-            "max": 0.1,
-            "name": "square length",
-            "value": 0.04
-          },
-          "Thresh Win Size Step": {
-            "min": 0,
-            "max": 100,
-            "name": "Thresh Win Size Step",
-            "value": 10
-          },
-          "marker length": {
-            "min": 0,
-            "max": 0.1,
-            "name": "marker length",
-            "value": 0.02
-          },
-          "dictionary": {
-            "name": "dictionary",
-            "value": "DICT_6X6_1000"
-          },
-          "Thresh Win Size Min": {
-            "min": 0,
-            "max": 100,
-            "name": "Thresh Win Size Min",
-            "value": 3
-          },
-          "squares y": {
-            "min": -2147483648,
-            "max": 2147483647,
-            "name": "squares y",
-            "value": 7
-          },
-          "squares x": {
-            "min": -2147483648,
-            "max": 2147483647,
-            "name": "squares x",
-            "value": 5
-          },
-          "use refining": {
-            "name": "use refining",
+          "reset on double click": {
+            "name": "reset on double click",
             "value": true
+          },
+          "distance": {
+            "min": 1,
+            "max": 20000,
+            "name": "distance",
+            "value": 140.93007148712826
+          },
+          "rotation mode": {
+            "name": "rotation mode",
+            "value": "FREE"
+          },
+          "center": {
+            "name": "center",
+            "value": {
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "name": "x",
+                "value": 0
+              },
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "name": "y",
+                "value": 0
+              },
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "rotation": {
+            "name": "rotation",
+            "value": {
+              "w": {
+                "min": -1,
+                "max": 1,
+                "name": "w",
+                "value": 1
+              },
+              "x": {
+                "min": -1,
+                "max": 1,
+                "name": "x",
+                "value": 0
+              },
+              "y": {
+                "min": -1,
+                "max": 1,
+                "name": "y",
+                "value": 0
+              },
+              "z": {
+                "min": -1,
+                "max": 1,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "reset": {},
+          "active": {"name": "active"},
+          "fov": {
+            "min": 0,
+            "max": 90,
+            "name": "fov",
+            "value": 45
+          },
+          "camera": {
+            "name": "camera",
+            "value": {
+              "far": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "far",
+                "value": 62353.82907247958
+              },
+              "position": {
+                "name": "position",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 100
+                  }
+                }
+              },
+              "up": {
+                "name": "up",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 1
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              },
+              "near": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "near",
+                "value": 62.353829072479584
+              },
+              "fov": {
+                "min": 0,
+                "max": 1.5707963267948966,
+                "name": "fov",
+                "value": 1.0471975511965976
+              },
+              "apect ratio": {
+                "min": 0.1,
+                "max": 10,
+                "name": "apect ratio",
+                "value": 1.7777777777777777
+              },
+              "target": {
+                "name": "target",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          },
+          "friction": {
+            "min": 0,
+            "max": 1,
+            "name": "friction",
+            "value": 0.16
           }
         }
       }
@@ -401,7 +486,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 19.672027950017313
+        "value": 29.445769373196153
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

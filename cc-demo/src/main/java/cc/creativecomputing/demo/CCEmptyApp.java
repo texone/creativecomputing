@@ -10,7 +10,8 @@ import cc.creativecomputing.math.CCMath;
 public class CCEmptyApp extends CCGL2Adapter{
 	
 	
-	
+
+	CCEmptyApp2 demo2 = new CCEmptyApp2();
 	
 	@Override
 	public void init(CCGraphics g) {
