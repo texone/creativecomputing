@@ -72,6 +72,10 @@ public abstract class CCIIRFilter extends CCFilter{
 		_myPreviousFrequency = -1.f;
 	}
 	
+	public void reset() {
+		initArrays();
+	}
+	
 	public CCIIRFilter(double freq, double sampleRate) {
 		this(1, freq, sampleRate);
 	}

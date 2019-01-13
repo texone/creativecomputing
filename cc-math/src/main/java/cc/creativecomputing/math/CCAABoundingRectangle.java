@@ -10,6 +10,8 @@
  */
 package cc.creativecomputing.math;
 
+import cc.creativecomputing.core.CCProperty;
+
 /**
  * Axis aligned bounding rectangle similar to a bounding box but for 2D context.
  * @author christian riekoff
@@ -20,11 +22,13 @@ public class CCAABoundingRectangle{
 	/**
 	 * minimum corner of the rectangle
 	 */
+	@CCProperty(name = "min")
 	private CCVector2 _myMinCorner;
 	
 	/**
 	 * maximum corner of the rectangle
 	 */
+	@CCProperty(name = "max")
 	private CCVector2 _myMaxCorner;
 	
 	/**

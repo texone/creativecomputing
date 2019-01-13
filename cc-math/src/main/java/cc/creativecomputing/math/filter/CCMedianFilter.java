@@ -46,7 +46,7 @@ public class CCMedianFilter extends CCFilter{
 	public double process(int theChannel, double theData, double theTime) {
 		
 		if(theChannel >= _myChannels){
-			_myChannels = theChannel;
+			_myChannels = theChannel + 1;
 			reset();
 		}
 		if(_myBuffer.size() != _cBufferSize) {
