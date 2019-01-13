@@ -122,6 +122,13 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 	public void update(CCAnimator theDeltaTime) {
 		_myTime += theDeltaTime.deltaTime();
 	}
+	
+	private double _myAspectRatio = -1;
+	
+	public CCSpringVolumentricLineRenderer apsectRatio(double theAspectRatio) {
+		_myAspectRatio = theAspectRatio;
+		return this;
+	}
 
 	@Override
 	public void display(CCGraphics g) {
@@ -142,7 +149,7 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 			_myShader.uniform1f("lifeTimeID", _myLifeTimeAlphaIndex);
 			_myShader.uniform1f("tanHalfFOV", CCMath.tan(g.camera().fov()) * g.height());
 			_myShader.uniform1f("time", _myTime);
-			_myShader.uniform1f("aspectRatio", g.aspectRatio());
+			_myShader.uniform1f("aspectRatio", _myAspectRatio < 0 ? g.aspectRatio() : _myAspectRatio);
 			_myShader.uniform2f("offset", i % _mySprings.numberOfXBuffers() * _myParticles.width(), i / _mySprings.numberOfXBuffers() * _myParticles.height());
 			_myMesh.draw(g);
 			g.noTexture();

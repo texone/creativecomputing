@@ -109,6 +109,13 @@ public class CCQuadRenderer extends CCParticleRenderer{
 		_myFadeOut = theFadeOut;
 	}
 
+	private double _myAspectRatio = -1;
+	
+	public CCQuadRenderer apsectRatio(double theAspectRatio) {
+		_myAspectRatio = theAspectRatio;
+		return this;
+	}
+
 	public void display(CCGraphics g){
 		if(!_cIsActive)return;
 		_cAttributes.start(g);
@@ -126,7 +133,7 @@ public class CCQuadRenderer extends CCParticleRenderer{
 		_myShader.uniform1f("lifeTimeID", _myLifeTimeAlphaIndex);
 		_myShader.uniform1f("tanHalfFOV", CCMath.tan(g.camera().fov()) * g.height());
 		_myShader.uniform1f("pointSize", _cPointSize);
-		_myShader.uniform1f("aspectRatio", g.width() / (float)g.height());
+		_myShader.uniform1f("aspectRatio", _myAspectRatio < 0 ? g.aspectRatio() : _myAspectRatio);
 		_myShader.uniform1f("alpha", _myFadeOut ? 0 : 1);
 		_myMesh.draw(g);
 		g.noTexture();
