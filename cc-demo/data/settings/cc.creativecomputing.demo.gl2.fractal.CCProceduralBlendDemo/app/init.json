@@ -67,7 +67,7 @@
               },
               "procedural_blend_fragment.glsl": {
                 "name": "procedural_blend_fragment.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@7f6bb3bf"
+                "value": "cc.creativecomputing.control.code.CCShaderFile@69c44bb9"
               },
               "uniforms": {
                 "name": "uniforms",
@@ -118,7 +118,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "B distances.x",
-                    "value": 0.3580000102519989
+                    "value": 0.32600000500679016
                   },
                   "blend progress": {
                     "min": 0,
@@ -196,7 +196,13 @@
                     "min": 0,
                     "max": 1,
                     "name": "octaves random",
-                    "value": 0.0636363636363636
+                    "value": 0
+                  },
+                  "t distances.w": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "t distances.w",
+                    "value": 0.09700000286102295
                   },
                   "blend x": {
                     "min": 0,
@@ -216,6 +222,24 @@
                     "name": "noise triangular",
                     "value": 1
                   },
+                  "t distances.z": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "t distances.z",
+                    "value": 1
+                  },
+                  "t refract": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "t refract",
+                    "value": 0.30000000000000004
+                  },
+                  "t distances.y": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "t distances.y",
+                    "value": 0
+                  },
                   "noise smooth": {
                     "min": 0,
                     "max": 1,
@@ -228,10 +252,28 @@
                     "name": "blend random",
                     "value": 0.09700000286102295
                   },
+                  "t distances.x": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "t distances.x",
+                    "value": 0
+                  },
+                  "t blend": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "t blend",
+                    "value": 0
+                  },
                   "A blend refract": {
                     "min": 0,
                     "max": 1,
                     "name": "A blend refract",
+                    "value": 0
+                  },
+                  "t blend refract": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "t blend refract",
                     "value": 0
                   },
                   "noise octaves": {
@@ -262,7 +304,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "B refract",
-                    "value": 0.11818181818181817
+                    "value": 0.42727272727272725
                   },
                   "A refract": {
                     "min": 0,
@@ -274,13 +316,13 @@
                     "min": 0,
                     "max": 1,
                     "name": "depth",
-                    "value": 1
+                    "value": 0
                   },
                   "depth start": {
                     "min": 0,
                     "max": 1,
                     "name": "depth start",
-                    "value": 0.4545454545454546
+                    "value": 0
                   },
                   "blend x mod": {
                     "min": 0,
@@ -337,7 +379,7 @@
               },
               "procedural_blend_vertex.glsl": {
                 "name": "procedural_blend_vertex.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@3b991bd"
+                "value": "cc.creativecomputing.control.code.CCShaderFile@429bde9c"
               }
             }
           }
@@ -356,7 +398,7 @@
           },
           "path": {
             "name": "path",
-            "value": "data\\found\\inshop\\content01.png"
+            "value": "data\\found\\01_IHK_GW_2019_WBM3.png"
           },
           "mipmap filter": {
             "name": "mipmap filter",
@@ -364,7 +406,7 @@
           },
           "wrap": {
             "name": "wrap",
-            "value": "MIRRORED_REPEAT"
+            "value": "CLAMP"
           }
         }
       },
@@ -508,7 +550,7 @@
             "min": -2147483648,
             "max": 2147483647,
             "name": "width",
-            "value": 1600
+            "value": 1024
           },
           "y": {
             "min": -2147483648,
@@ -527,7 +569,7 @@
             "min": -2147483648,
             "max": 2147483647,
             "name": "height",
-            "value": 1200
+            "value": 768
           },
           "record timeline loop": {}
         }
@@ -630,7 +672,7 @@
         "min": -2147483648,
         "max": 2147483647,
         "name": "width",
-        "value": 1600
+        "value": 1024
       },
       "inVsync": {
         "name": "inVsync",
@@ -644,7 +686,7 @@
         "min": -2147483648,
         "max": 2147483647,
         "name": "height",
-        "value": 1200
+        "value": 768
       }
     }
   },
@@ -675,7 +717,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.260853574797018
+        "value": 28.3948716930871
       },
       "exceptionHandling": {
         "name": "exceptionHandling",
