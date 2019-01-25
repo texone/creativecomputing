@@ -178,9 +178,39 @@
                     "type": "BEZIER",
                     "value": 0.018181818181818188,
                     "out": {
-                      "time": 180,
+                      "time": 184.93001306717167,
                       "type": "HANDLE",
                       "value": 0.018181818181818188
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 220.2617732696669,
+                      "type": "HANDLE",
+                      "value": 0.24545454545454548
+                    },
+                    "time": 225.19178633683856,
+                    "type": "BEZIER",
+                    "value": 0.24545454545454548,
+                    "out": {
+                      "time": 230.07995511223243,
+                      "type": "HANDLE",
+                      "value": 0.24545454545454548
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 265.11183122460614,
+                      "type": "HANDLE",
+                      "value": 0.018181818181818077
+                    },
+                    "time": 270,
+                    "type": "BEZIER",
+                    "value": 0.018181818181818077,
+                    "out": {
+                      "time": 270,
+                      "type": "HANDLE",
+                      "value": 0.018181818181818077
                     }
                   }
                 ]}
@@ -254,32 +284,17 @@
                   },
                   {
                     "in": {
-                      "time": 99.95869438799012,
+                      "time": 133.71976239903023,
                       "type": "HANDLE",
-                      "value": 0.15454545454545454
+                      "value": 0.19090909090909092
                     },
-                    "time": 99.95869438799012,
+                    "time": 141,
                     "type": "BEZIER",
-                    "value": 0.15454545454545454,
+                    "value": 0.19090909090909092,
                     "out": {
-                      "time": 107.2389319889599,
+                      "time": 148.27272748947144,
                       "type": "HANDLE",
-                      "value": 0.15454545454545454
-                    }
-                  },
-                  {
-                    "in": {
-                      "time": 132.71976239903023,
-                      "type": "HANDLE",
-                      "value": 0.4545454545454546
-                    },
-                    "time": 140,
-                    "type": "BEZIER",
-                    "value": 0.4545454545454546,
-                    "out": {
-                      "time": 147.27272748947144,
-                      "type": "HANDLE",
-                      "value": 0.4545454545454546
+                      "value": 0.19090909090909092
                     }
                   },
                   {
@@ -296,6 +311,16 @@
                       "type": "HANDLE",
                       "value": 0
                     }
+                  },
+                  {
+                    "time": 225,
+                    "type": "LINEAR",
+                    "value": 0.10909090909090913
+                  },
+                  {
+                    "time": 270,
+                    "type": "LINEAR",
+                    "value": 0
                   }
                 ]}
               },
@@ -392,62 +417,32 @@
                   },
                   {
                     "in": {
-                      "time": 43.63636374473572,
+                      "time": 75.95454573631287,
                       "type": "HANDLE",
-                      "value": 0.9454545454545454
+                      "value": 1
                     },
-                    "time": 50,
+                    "time": 82.5,
                     "type": "BEZIER",
-                    "value": 0.9454545454545454,
+                    "value": 1,
                     "out": {
-                      "time": 56.545454263687134,
+                      "time": 90.13636350631714,
                       "type": "HANDLE",
-                      "value": 0.9454545454545454
+                      "value": 1
                     }
                   },
                   {
                     "in": {
-                      "time": 73.45454573631287,
+                      "time": 134.86363649368286,
                       "type": "HANDLE",
                       "value": 0
                     },
-                    "time": 80,
+                    "time": 142.5,
                     "type": "BEZIER",
                     "value": 0,
                     "out": {
-                      "time": 87.63636350631714,
+                      "time": 142.5,
                       "type": "HANDLE",
                       "value": 0
-                    }
-                  },
-                  {
-                    "in": {
-                      "time": 102.36363649368286,
-                      "type": "HANDLE",
-                      "value": 0.9363636363636364
-                    },
-                    "time": 110,
-                    "type": "BEZIER",
-                    "value": 0.9363636363636364,
-                    "out": {
-                      "time": 117.63636350631714,
-                      "type": "HANDLE",
-                      "value": 0.9363636363636364
-                    }
-                  },
-                  {
-                    "in": {
-                      "time": 132.36363649368286,
-                      "type": "HANDLE",
-                      "value": 0.4545454545454546
-                    },
-                    "time": 140,
-                    "type": "BEZIER",
-                    "value": 0.4545454545454546,
-                    "out": {
-                      "time": 140,
-                      "type": "HANDLE",
-                      "value": 0.4545454545454546
                     }
                   }
                 ]}
@@ -460,43 +455,28 @@
                 "mute": false,
                 "TrackData": {"points": [
                   {
-                    "time": 30.219118110438124,
+                    "time": 30.25,
                     "type": "LINEAR",
-                    "value": 0.3545454545454545
+                    "value": 0
                   },
                   {
-                    "time": 55,
+                    "time": 47,
                     "type": "LINEAR",
-                    "value": 0.30000000000000004
+                    "value": 0
                   },
                   {
                     "in": {
-                      "time": 75.1944575775754,
+                      "time": 80.25,
                       "type": "HANDLE",
-                      "value": 0.30000000000000004
+                      "value": 0.44545454545454555
                     },
-                    "time": 75.1944575775754,
+                    "time": 80.25,
                     "type": "BEZIER",
-                    "value": 0.30000000000000004,
+                    "value": 0.44545454545454555,
                     "out": {
-                      "time": 81.5085955412089,
+                      "time": 86.5641379636335,
                       "type": "HANDLE",
-                      "value": 0.30000000000000004
-                    }
-                  },
-                  {
-                    "in": {
-                      "time": 88.6858620363665,
-                      "type": "HANDLE",
-                      "value": 1
-                    },
-                    "time": 95,
-                    "type": "BEZIER",
-                    "value": 1,
-                    "out": {
-                      "time": 95,
-                      "type": "HANDLE",
-                      "value": 1
+                      "value": 0.44545454545454555
                     }
                   }
                 ]}
@@ -584,6 +564,254 @@
                     }
                   }
                 ]}
+              },
+              {
+                "path": "app\\app\\shader\\fragment\\uniforms\\t blend",
+                "min": 0,
+                "max": 1,
+                "accumulate": false,
+                "mute": false,
+                "TrackData": {"points": [
+                  {
+                    "in": {
+                      "time": 30,
+                      "type": "HANDLE",
+                      "value": 0
+                    },
+                    "time": 30,
+                    "type": "BEZIER",
+                    "value": 0,
+                    "out": {
+                      "time": 32.72727280855179,
+                      "type": "HANDLE",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 42.27272719144821,
+                      "type": "HANDLE",
+                      "value": 0.6909090909090909
+                    },
+                    "time": 45,
+                    "type": "BEZIER",
+                    "value": 0.6909090909090909,
+                    "out": {
+                      "time": 45,
+                      "type": "HANDLE",
+                      "value": 0.6909090909090909
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 60,
+                      "type": "HANDLE",
+                      "value": 0.7090909090909091
+                    },
+                    "time": 60,
+                    "type": "BEZIER",
+                    "value": 0.7090909090909091,
+                    "out": {
+                      "time": 63.81818175315857,
+                      "type": "HANDLE",
+                      "value": 0.7090909090909091
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 76.18181824684143,
+                      "type": "HANDLE",
+                      "value": 0
+                    },
+                    "time": 80,
+                    "type": "BEZIER",
+                    "value": 0,
+                    "out": {
+                      "time": 80,
+                      "type": "HANDLE",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 190,
+                      "type": "HANDLE",
+                      "value": 0
+                    },
+                    "time": 190,
+                    "type": "BEZIER",
+                    "value": 0,
+                    "out": {
+                      "time": 194.90909069776535,
+                      "type": "HANDLE",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 205.09090930223465,
+                      "type": "HANDLE",
+                      "value": 1
+                    },
+                    "time": 210,
+                    "type": "BEZIER",
+                    "value": 1,
+                    "out": {
+                      "time": 210,
+                      "type": "HANDLE",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 240,
+                      "type": "HANDLE",
+                      "value": 1
+                    },
+                    "time": 240,
+                    "type": "BEZIER",
+                    "value": 1,
+                    "out": {
+                      "time": 243.81818175315857,
+                      "type": "HANDLE",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 256.18181824684143,
+                      "type": "HANDLE",
+                      "value": 0
+                    },
+                    "time": 260,
+                    "type": "BEZIER",
+                    "value": 0,
+                    "out": {
+                      "time": 260,
+                      "type": "HANDLE",
+                      "value": 0
+                    }
+                  }
+                ]}
+              },
+              {
+                "path": "app\\app\\shader\\fragment\\uniforms\\t refract",
+                "min": 0,
+                "max": 1,
+                "accumulate": false,
+                "mute": false,
+                "TrackData": {"points": [
+                  {
+                    "in": {
+                      "time": 30,
+                      "type": "HANDLE",
+                      "value": 0.30000000000000004
+                    },
+                    "time": 30,
+                    "type": "BEZIER",
+                    "value": 0.30000000000000004,
+                    "out": {
+                      "time": 33.81818175315857,
+                      "type": "HANDLE",
+                      "value": 0.30000000000000004
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 41.18181824684143,
+                      "type": "HANDLE",
+                      "value": 0.009090909090909038
+                    },
+                    "time": 45,
+                    "type": "BEZIER",
+                    "value": 0.009090909090909038,
+                    "out": {
+                      "time": 45,
+                      "type": "HANDLE",
+                      "value": 0.009090909090909038
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 60,
+                      "type": "HANDLE",
+                      "value": 0.009090909090909038
+                    },
+                    "time": 60,
+                    "type": "BEZIER",
+                    "value": 0.009090909090909038,
+                    "out": {
+                      "time": 62.72727280855179,
+                      "type": "HANDLE",
+                      "value": 0.009090909090909038
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 77.27272719144821,
+                      "type": "HANDLE",
+                      "value": 0.4636363636363636
+                    },
+                    "time": 80,
+                    "type": "BEZIER",
+                    "value": 0.4636363636363636,
+                    "out": {
+                      "time": 80,
+                      "type": "HANDLE",
+                      "value": 0.4636363636363636
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 190,
+                      "type": "HANDLE",
+                      "value": 0.44545454545454544
+                    },
+                    "time": 190,
+                    "type": "BEZIER",
+                    "value": 0.44545454545454544,
+                    "out": {
+                      "time": 194.88202071308365,
+                      "type": "HANDLE",
+                      "value": 0.44545454545454544
+                    }
+                  },
+                  {
+                    "in": {
+                      "time": 205.11797928691635,
+                      "type": "HANDLE",
+                      "value": 0.027272727272727226
+                    },
+                    "time": 210,
+                    "type": "BEZIER",
+                    "value": 0.027272727272727226,
+                    "out": {
+                      "time": 210,
+                      "type": "HANDLE",
+                      "value": 0.027272727272727226
+                    }
+                  },
+                  {
+                    "time": 240,
+                    "type": "LINEAR",
+                    "value": 0.018181818181818188
+                  },
+                  {
+                    "in": {
+                      "time": 256.7065803011692,
+                      "type": "HANDLE",
+                      "value": 0.44545454545454544
+                    },
+                    "time": 260,
+                    "type": "BEZIER",
+                    "value": 0.44545454545454544,
+                    "out": {
+                      "time": 260,
+                      "type": "HANDLE",
+                      "value": 0.44545454545454544
+                    }
+                  }
+                ]}
               }
             ],
             "TrackData": {"points": []}
@@ -596,9 +824,9 @@
     }],
     "TrackData": {"points": []}
   }],
-  "upper_bound": 410.2344814508028,
+  "upper_bound": 296.75368901937117,
   "Transport": {
-    "loop_end": 180,
+    "loop_end": 270,
     "loop_active": true,
     "marker": {"points": []},
     "loop_start": 0,
