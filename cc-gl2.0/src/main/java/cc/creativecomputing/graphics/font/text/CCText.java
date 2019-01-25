@@ -27,6 +27,7 @@ public class CCText extends CCMultiFontText{
 	 */
 	@CCProperty(name = "text")
 	public void text(final String theText) {
+		if(theText == null)return;
 		if(theText.equals(text()))return;
 		_myTextParts.get(0).text(theText);
 		breakText();

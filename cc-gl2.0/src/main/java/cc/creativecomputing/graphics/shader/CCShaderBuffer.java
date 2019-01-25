@@ -401,6 +401,18 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 		return getData(0, 0, 0, _myWidth, _myHeight);
 	}
 	
+	public ByteBuffer glReadBuffer(final int theAttachment) {
+		ByteBuffer myBuffer = ByteBuffer.allocate(3 * _myWidth * _myHeight);
+		GL2 gl = CCGraphics.currentGL();
+		gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, _myFrameBuffers[0]);
+		gl.glReadBuffer(_myDrawBuffers[theAttachment]);
+		gl.glReadPixels(0, 0, _myWidth, _myHeight, CCPixelFormat.BGR.glID, CCPixelType.UNSIGNED_BYTE.glID, myBuffer);
+		gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
+		myBuffer.rewind();
+		
+		return myBuffer;
+	}
+	
 	public FloatBuffer getData(final int theX, final int theY, final int theWidth, final int theHeight){
 		return getData(0, theX, theY, theWidth, theHeight);
 	}
@@ -464,6 +476,40 @@ public class CCShaderBuffer extends CCFrameBufferObject{
 		gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
 		i++;
 		return myResult.asFloatBuffer();
+	}
+	
+	public ByteBuffer getPBOBytes(final int theAttachment) {
+		return getPBOBytes(theAttachment, 0, 0, _myWidth, _myHeight);
+	}
+	
+	/**
+	 * @param theAttachment
+	 * @param theX
+	 * @param theY
+	 * @param theWidth
+	 * @param theHeight
+	 * @return
+	 */
+	public ByteBuffer getPBOBytes(final int theAttachment, final int theX, final int theY, final int theWidth, final int theHeight) {
+		if(_myPBO[0] == null){
+			_myPBO[0] = new CCPBO(_myNumberOfChannels * theWidth * theHeight * (_myNumberOfBits == 16 ? 2 : 4));
+			_myPBO[1] = new CCPBO(_myNumberOfChannels * theWidth * theHeight * (_myNumberOfBits == 16 ? 2 : 4));
+		}
+		
+		GL2 gl = CCGraphics.currentGL();
+		gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, _myFrameBuffers[0]);
+		gl.glReadBuffer(_myDrawBuffers[theAttachment]);
+		
+		_myPBO[i % 2].beginPack();
+		gl.glReadPixels(theX, theY, theWidth, theHeight,_myAttachments[theAttachment].format().glID,CCPixelType.UNSIGNED_BYTE.glID,0);
+		_myPBO[i % 2].endPack();
+		
+		ByteBuffer myResult = _myPBO[(i + 1) % 2].mapReadBuffer();
+		myResult.order(ByteOrder.LITTLE_ENDIAN);
+		_myPBO[(i + 1) % 2].unmapReadBuffer();
+		gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
+		i++;
+		return myResult;
 	}
 	
 	/**

@@ -3965,10 +3965,10 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	 * @return
 	 */
 	public CCVector3 screenToModel(final double theX, final double theY, final double theDepth) {
-
+		CCViewport myViewport = viewport();
 		/* transform to normalized coordinates in the range [-1, 1] */
 		CCVector2 myScreenCoord = new CCVector2(theX, theY);
-		myScreenCoord.divideLocal(width(), height());
+		myScreenCoord.divideLocal(myViewport.width(), myViewport.height());
 		myScreenCoord.subtractLocal(0.5, 0.5);
 		myScreenCoord.multiplyLocal(2);
 

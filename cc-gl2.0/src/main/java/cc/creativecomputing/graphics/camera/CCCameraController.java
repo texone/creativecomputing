@@ -119,6 +119,14 @@ public class CCCameraController {
 			_myDistance = theCameraController._myDistance;
 		}
 		
+		public double distance() {
+			return _myDistance;
+		}
+		
+		public void distance(double theDistance) {
+			 _myDistance = theDistance;
+		}
+		
 		public CCVector3 center() {
 			return _myCenter;
 		}
@@ -185,6 +193,8 @@ public class CCCameraController {
 	
 	@CCProperty(name = "rotation mode", readBack = true)
 	private CCCameraRotationMode _cRotationMode = CCCameraRotationMode.FREE;
+	@CCProperty(name = "invert")
+	private boolean _cInvert = false;
 	
 	public void rotationMode(CCCameraRotationMode theRotationMode) {
 		_cRotationMode = theRotationMode;
@@ -447,11 +457,15 @@ public class CCCameraController {
 		public void mouseDragged(CCMouseEvent theEvent) {
 			if(!_myIsActive)return;
 			
-			final double theMoveX = theEvent.x() - _myPMouseX;
-			final double theMoveY = _myPMouseY - (g.height() - theEvent.y());
+			double theMoveX = theEvent.x() - _myPMouseX;
+			double theMoveY = _myPMouseY - (g.height() - theEvent.y());
 			_myPMouseX = theEvent.x();
 			_myPMouseY = g.height() - theEvent.y();
 
+			if(_cInvert) {
+				theMoveX = -theMoveX;
+				theMoveY = -theMoveY;
+			}
 			if (theEvent.isShiftDown()) {
 				if (_myDragConstraint == null && Math.abs(theMoveX - theMoveY) > 1) {
 					_myDragConstraint = Math.abs(theMoveX) > Math.abs(theMoveY) ? CCCameraRotationMode.YAW : CCCameraRotationMode.PITCH;
