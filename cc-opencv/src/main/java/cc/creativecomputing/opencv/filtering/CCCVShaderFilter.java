@@ -45,6 +45,7 @@ public class CCCVShaderFilter extends CCImageProcessor{
 		if(_myCurrentOutput == null) {
 			_myCurrentOutput = _myCurrentMat.clone();
 		}
+//		_myCurrentOutput = _myCurrentMat.clone();
 		_myTexture.image(_myCurrentMat);
 		
 		boolean myAllocateData = _myShaderBuffer == null || _myCurrentMat.cols() != _myShaderBuffer.width() || _myCurrentMat.rows() != _myShaderBuffer.height();
@@ -61,10 +62,14 @@ public class CCCVShaderFilter extends CCImageProcessor{
 		_cShader.end();
 		g.noTexture();
 		
-
+//		_myShaderBuffer.attachment(0).getTexImage();
+try {
 		_myCurrentOutput.getByteBuffer().rewind();
 		_myCurrentOutput.getByteBuffer().put(_myShaderBuffer.attachment(0).getTexImage());
 		_myCurrentOutput.getByteBuffer().rewind();
+}catch(Exception e) {
+//	e.printStackTrace();
+}
 	}
 	
 	public CCTexture2D inputTexture() {

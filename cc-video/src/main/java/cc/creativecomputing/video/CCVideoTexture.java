@@ -33,6 +33,8 @@ public class CCVideoTexture extends CCTexture2D implements CCGLListener<CCGraphi
 	private CCImage _myUpdateVideo = null;
 	private CCImageEvent _myUpdateEvent = i -> _myUpdateVideo = i;
 	
+	private boolean reset = false;
+	
 	public CCVideoTexture(CCGL2Adapter theAdapter, CCVideo theVideoData, CCTextureTarget theTarget, final CCTextureAttributes theAttributes) {
 		super(theTarget, theAttributes, 1,800,200);
 		video(theVideoData);
@@ -62,13 +64,17 @@ public class CCVideoTexture extends CCTexture2D implements CCGLListener<CCGraphi
 		_myVideoData = theVideoData;
 		_myVideoData.initEvents.add(_myInitEvent);
 		_myVideoData.updateEvents.add(_myUpdateEvent);
+		
+		reset = true;
 	}
 	
 	public CCVideo video(){
 		return _myVideoData;
 	}
 
-	
+	public void reset() {
+		allocateData(800, 200, null);
+	}
 
 	@Override
 	public void reshape(CCGraphics theContext) {}
@@ -81,6 +87,10 @@ public class CCVideoTexture extends CCTexture2D implements CCGLListener<CCGraphi
 
 	@Override
 	public void display(CCGraphics theContext) {
+		if(reset) {
+			reset();
+			reset = false;
+		}
 		if(_myInitVideo != null){
 			allocateData(_myInitVideo.width(), _myInitVideo.height(), null);
 			data(_myInitVideo);

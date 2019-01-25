@@ -11,6 +11,8 @@ import static org.bytedeco.javacpp.opencv_videoio.*;
 import org.bytedeco.javacpp.opencv_videoio.VideoCapture;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.math.CCMath;
 
 public class CCCVVideoCapture extends CCCVVideoIn{
 	
@@ -24,6 +26,10 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 	private double _cSaturation = 100;
 	@CCProperty(name = "exposure", min = -11, max = 1)
 	private double _cExpousure = 0;
+	
+
+	@CCProperty(name = "update settings")
+	private boolean _cUpdateSettings = false;
 
 	public CCCVVideoCapture() {
 		super(new VideoCapture(0));
@@ -235,10 +241,11 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 //			_myLastExposure = _cExpousure;
 //			return;
 //		}
-//		temperature(_cTemperature);
-//		contrast(_cContrast);
-//		saturation(_cSaturation);
-//		brightness(_cBrightness);
+		if(!_cUpdateSettings)return;
+		temperature(_cTemperature);
+		contrast(_cContrast);
+		saturation(_cSaturation);
+		brightness(_cBrightness + CCMath.random());
 	}
 	
 	

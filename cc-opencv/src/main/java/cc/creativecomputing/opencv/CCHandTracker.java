@@ -46,10 +46,12 @@ public class CCHandTracker {
 	public static class CCVectorAndID{
 		public final CCVector2 vector;
 		public final int id;
+		public final boolean isDefect;
 		
-		public CCVectorAndID(CCVector2 theVector, int theID) {
+		public CCVectorAndID(CCVector2 theVector, int theID, boolean theIsDefect) {
 			vector = theVector;
 			id = theID;
+			isDefect = theIsDefect;
 		}
 
 		public double distance(CCVectorAndID theOther) {
@@ -156,7 +158,7 @@ public class CCHandTracker {
 	@CCProperty(name = "draw contour")
 	private boolean _cDrawContour = true;
 	
-	private Mat _myDrawMat = new Mat();
+	private Mat _myDrawMat = null;
 
 	private CCCVTexture _myTexture;
 	
@@ -171,7 +173,6 @@ public class CCHandTracker {
 		
 		_myVideoIn = theVideoIn;
 		_myVideoIn.events.add(mat -> {
-
 			if (_cDrawMat == CCDrawMat.ORIGIN)_myDrawMat = mat.clone();
 
 			mat = _cFilter.process(mat);
@@ -187,14 +188,16 @@ public class CCHandTracker {
 			mat = _cThreshold.process(mat);
 			if(_cDrawMat == CCDrawMat.THRESHOLD)_myDrawMat = CCCVUtil.grayToRGB(mat.clone());
 			
-			lock.lock();
 			trackHands(mat);
-			lock.unlock();
 			if(_cDrawContour)drawContour(_myDrawMat);
 		});
 		
 		_myTexture = new CCCVTexture();
 		_myTexture.mustFlipVertically(false);
+	}
+	
+	public void active(boolean isActive) {
+		_myVideoIn.isActive(isActive);
 	}
 	
 	public void reset() {
@@ -217,8 +220,11 @@ public class CCHandTracker {
 	}
 	
 	public void preDisplay(CCGraphics g) {
+		if(_myDrawMat == null)return;
+		lock.lock();
 		_cFilter.preDisplay(g);
 		_myTexture.image(_myDrawMat);
+		lock.unlock();
 		
 	}
 	
@@ -226,7 +232,7 @@ public class CCHandTracker {
 		List<CCVector2> myResult = new ArrayList<>();
 		for(int i = 0; i < theMat.rows();i++) {
 			Mat myPoint = theMat.row(i);
-			myResult.add(new CCVector2(myPoint.getIntBuffer().get(0),480 - myPoint.getIntBuffer().get(1)));
+			myResult.add(new CCVector2(myPoint.getIntBuffer().get(0),_myVideoIn.frameHeight() - myPoint.getIntBuffer().get(1)));
 		}
 		return myResult;
 	}
@@ -254,10 +260,6 @@ public class CCHandTracker {
 			}
 		}
 		
-		_myHandContour.clear();
-		_myHullWithDefects.clear();
-		_myFingerTips.clear();
-		
 		// check if we found big enough contour
 		if(myBiggestArea < _cMinSize || _myBiggestContourIndex < 0) {
 			reset();
@@ -266,7 +268,7 @@ public class CCHandTracker {
 		
 		_myHandContourMat = _myContours.get(_myBiggestContourIndex);
 			
-		_myHandContour = matToContour(_myHandContourMat);
+		List<CCVector2> myHandContour = matToContour(_myHandContourMat);
 			
 		Mat myHullPointsMat = new Mat();
 		Mat myHullIndicesMat = new Mat();
@@ -279,7 +281,7 @@ public class CCHandTracker {
 			Mat myRow = myHullIndicesMat.row(i);
 			int myID = myRow.getIntBuffer().get(0);
 			
-			_myConvexHull.add(new CCVectorAndID(_myHandContour.get(myID), myID));
+			_myConvexHull.add(new CCVectorAndID(myHandContour.get(myID), myID, false));
 		}
 			
 		Mat myDefectsMat = new Mat();
@@ -297,61 +299,77 @@ public class CCHandTracker {
 			myDefects.add(new CCConvexityDefect(myStartIndex,myFarthestIndex,myEndIndex, myDepth / 256d));
 		}
 	
-		_myHullWithDefects.clear();
+
+		List<CCVectorAndID> myHullWithDefects = new ArrayList<>();
 		Collections.sort(myDefects);
+		int myLastStart = 0;
 		for(int i = 0; i < myDefects.size();i++) {
 			CCConvexityDefect myDefect = myDefects.get(i);
 			CCConvexityDefect myNextDefect = myDefects.get((i + 1) % myDefects.size());
-	
-			if(_myHandContour.get(myDefect.start).distance(_myHandContour.get(myDefect.end))< _cMaxGap)continue;
-			_myHullWithDefects.add(new CCVectorAndID(_myHandContour.get(myDefect.center), myDefect.center));
-			_myHullWithDefects.add(new CCVectorAndID(_myHandContour.get(myDefect.end).add(_myHandContour.get(myNextDefect.start)).multiplyLocal(0.5) , myDefect.end));
+			if(myHandContour.get(myDefect.start).distance(myHandContour.get(myDefect.end))< _cMaxGap)continue;
+//			for(int j = myLastStart; j < myDefect.start;j++) {
+//				for(CCVectorAndID myHullPoint : _myConvexHull) {
+//					
+//				}
+//			}
+//			myLastStart = myDefect.start;
+			myHullWithDefects.add(new CCVectorAndID(myHandContour.get(myDefect.center), myDefect.center, true));
+			myHullWithDefects.add(new CCVectorAndID(myHandContour.get(myDefect.end) , myDefect.end, false));
 	
 		}
-			
-		_myFingerTips.clear();
+
+		List<CCVector3> myFingerTips = new ArrayList<>();
 		
-		_myCenter.set(0, 0);
+		CCVector2 myCenter = new CCVector2();
 		double centerCount = 0;
-		for(int i = 0; i < _myHullWithDefects.size();i++) {
+		for(int i = 0; i < myHullWithDefects.size();i++) {
 				
 			if(i % 2 == 1) {
-				CCVector2 myPrev = _myHullWithDefects.get(i - 1).vector;
-				CCVector2 myCurrent = _myHullWithDefects.get(i).vector;
-				CCVector2 myNext = _myHullWithDefects.get((i + 1) % _myHullWithDefects.size()).vector;
+				CCVector2 myPrev = myHullWithDefects.get(i - 1).vector;
+				CCVector2 myCurrent = myHullWithDefects.get(i).vector;
+				CCVector2 myNext = myHullWithDefects.get((i + 1) % myHullWithDefects.size()).vector;
 					
 				double myAngle = CCVector2.angle(myNext.subtract(myCurrent), myPrev.subtract(myCurrent));
 				myAngle = CCMath.degrees(myAngle);
 				centerCount++;
 				if(CCMath.abs(myAngle) < 50) {
-					_myFingerTips.add(new CCVector3(myCurrent.x,myCurrent.y,CCMath.max(myPrev.distance(myCurrent), myNext.distance(myCurrent))));
+					myFingerTips.add(new CCVector3(myCurrent.x,myCurrent.y,CCMath.max(myPrev.distance(myCurrent), myNext.distance(myCurrent))));
 				}
-				_myCenter.addLocal(myCurrent);
+				myCenter.addLocal(myCurrent);
 			}
 		}
-		_myCenter.multiplyLocal(1d/centerCount);
-		Collections.sort(_myFingerTips, (a,b) -> Double.compare(b.z, a.z));
+		myCenter.multiplyLocal(1d/centerCount);
+		Collections.sort(myFingerTips, (a,b) -> Double.compare(b.z, a.z));
+		
+		
+
+		lock.lock();
+		_myHandContour = myHandContour;
+		_myHullWithDefects = myHullWithDefects;
+		_myFingerTips = myFingerTips;
+		_myCenter = myCenter;
 		
 		// check if we found fingertipps
-		if(_myFingerTips.size() > 0) {
-			CCVector2 myNewTip = _myFingerTips.get(0).xy();
+		if(myFingerTips.size() > 0) {
+			CCVector2 myNewTip = myFingerTips.get(0).xy();
 			if(_myTip.isZero()) {
 				_myTip.set(myNewTip);
 			}else {
 				_myTip.x = _myTip.x * _cTipSmooth + myNewTip.x * (1 - _cTipSmooth);
 				_myTip.y = _myTip.y * _cTipSmooth + myNewTip.y * (1 - _cTipSmooth);
-				
+						
 				boolean myTipInRest = myNewTip.distance(_myTip) < _cRestSpeed;
-//				if(myTipInRest && !_myTipInRest) {
-					CCVector2 myDirection = _myTip.subtract(_myCenter).normalizeLocal();
-					_myStartAngle = CCMath.atan2(-myDirection.y, myDirection.x);
-//				}
+//							if(myTipInRest && !_myTipInRest) {
+				CCVector2 myDirection = _myTip.subtract(_myCenter).normalizeLocal();
+				_myStartAngle = CCMath.atan2(-myDirection.y, myDirection.x);
+//						}
 				_myProgressCenter = _myTip;
 				_myTipInRest = myTipInRest;
 			}
 		}else {
 			reset();
 		}
+		lock.unlock();
 	}
 	
 	public List<CCVector2> handContour(){
@@ -371,20 +389,20 @@ public class CCHandTracker {
 	}
 
 	public void drawContour(Mat theMat) {
-		lock.lock();
-		if (_myContours.size() <= 0)
-			return;
-		if (_myBiggestContourIndex < 0)
-			return;
-		if(_myBiggestContourIndex >= _myContours.size() )
-			return;
-
-		try {
-		drawContours(theMat, _myContours, _myBiggestContourIndex, new Scalar(_cContourColor.b * 255d, _cContourColor.g * 255d, _cContourColor.r * 255d, 255));
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		lock.unlock();
+//		lock.lock();
+//		if (_myContours.size() <= 0)
+//			return;
+//		if (_myBiggestContourIndex < 0)
+//			return;
+//		if(_myBiggestContourIndex >= _myContours.size() )
+//			return;
+//
+//		try {
+//		drawContours(theMat, _myContours, _myBiggestContourIndex, new Scalar(_cContourColor.b * 255d, _cContourColor.g * 255d, _cContourColor.r * 255d, 255));
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//		lock.unlock();
 		
 //		convexHull(_myHandContour, myHullPoints, false, true);
 //		drawContours(theMat, new MatVector(myHullPoints), 0, new Scalar(_cHullColor.b * 255d, _cHullColor.g * 255d, _cHullColor.r * 255d, 255));
@@ -400,7 +418,6 @@ public class CCHandTracker {
 	public void drawDebug(CCGraphics g) {
 		lock.lock();
 		g.color(_cContourColor);
-		
 		g.beginShape(CCDrawMode.LINE_LOOP);
 		_myHandContour.forEach(v -> g.vertex(v));
 		g.endShape();
@@ -416,6 +433,7 @@ public class CCHandTracker {
 		g.pointSmooth();
 		g.strokeWeight(2);
 		
+
 		for(int i = 0; i < _myHullWithDefects.size();i++) {
 			if(i % 2 == 0)g.color(1d,0,0);
 			else g.color(0d,1,0);
@@ -425,7 +443,8 @@ public class CCHandTracker {
 			double myRadius = 2;
 			
 			CCVector2 myCurrent = _myHullWithDefects.get(i).vector;
-			g.ellipse(myCurrent,myRadius,myRadius, false);
+			
+			g.ellipse(myCurrent.x, myCurrent.y,0,myRadius,myRadius, false);
 		}
 		
 		for(int i = 0; i < _myFingerTips.size();i++) {
@@ -495,7 +514,6 @@ public class CCHandTracker {
 		
 		if(myLastRestTime < _cMinRestTime && _myRestTime > _cMinRestTime) {
 			fixedTipEvents.proxy().event(_myTip);
-			CCLog.info("TIP");
 		}
 		
 //		_myTip.x = _cTipFilter.process(0, _myTip.x, theAnimator.deltaTime());
