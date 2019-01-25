@@ -33,6 +33,8 @@ public class CCProceduralBlendDemo extends CCGL2Adapter {
 	private CCTexture2D _cGradientTexture03;
 	private CCTexture2D _cGradientTexture04;
 	
+	private CCTexture2D _cTypoTexture;
+	
 	private CCTexture2D _myShopForeGround;
 	private CCTexture2D _myShopWindows;
 	
@@ -74,6 +76,8 @@ public class CCProceduralBlendDemo extends CCGL2Adapter {
 		_cGradientTexture03 = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("gradient03.jpg")));
 		_cGradientTexture04 = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("gradient04.jpg")));
 		
+		_cTypoTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("found/01_IHK_GW_2019_WBM3.png")));
+		
 		_myShopForeGround = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("found/shop_front.png")));
 		_myShopWindows = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("found/shop_windows.png")));
 
@@ -86,7 +90,7 @@ public class CCProceduralBlendDemo extends CCGL2Adapter {
 		_myGradients.add(_cGradient2);
 		
 
-		Path _myFolder = CCNIOUtil.dataPath("found/inShop/");
+		Path _myFolder = CCNIOUtil.dataPath("found/schwerin3/");
 		
 		List<Path> myFiles = CCNIOUtil.list(_myFolder, "png");
 		_myTexture3D = new CCTexture3D(CCImageIO.newImage(myFiles.get(0)), myFiles.size());

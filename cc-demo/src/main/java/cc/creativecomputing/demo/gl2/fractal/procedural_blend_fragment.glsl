@@ -251,6 +251,15 @@ uniform float _BRefract;
 @CCProperty(name = "B blend refract", min = 0, max = 1)
 uniform float _BlendBRefract;
 
+@CCProperty(name = "t distances", min = 0, max = 1)
+uniform vec4 _TDistances;
+@CCProperty(name = "t refract", min = 0, max = 1)
+uniform float _TRefract;
+@CCProperty(name = "t blend refract", min = 0, max = 1)
+uniform float _BlendTRefract;
+@CCProperty(name = "t blend", min = 0, max = 1)
+uniform float _TBlend;
+
 
 @CCProperty(name = "refraction", min = 0, max = 1)
 uniform float _Refraction;
@@ -271,6 +280,7 @@ void main(){
 	vec4 f4 = noise(uv, noiseTexPos);
 	float fA = distancedNoise(f4, _ADistances);
 	float fB = distancedNoise(f4, _BDistances);
+	float fT = distancedNoise(f4, _TDistances);
 	float f = distancedNoise(f4, _BlendDistances);
 	noiseTexPos *= 1 / _NoiseScale * 2.;
 	
@@ -283,18 +293,22 @@ void main(){
 	float noiseBlendARefraction = linearstep(fA,fA + _BlendRandom, blendAR * (1.0 + _BlendRandom)); 
 	float noiseBlendBRefraction = linearstep(fB,fB + _BlendRandom, blendBR * (1.0 + _BlendRandom)); 
 	float noiseBlendAB          = linearstep(f,f + _BlendRandom, blendAB * (1.0 + _BlendRandom)); 
+	float noiseBlendT          = linearstep(f,f + _BlendRandom, _TBlend * (1.0 + _BlendRandom)); 
 	
 	vec2 texUVDirA = vec2(cos(fA * 6.2), sin(fA * 6.2)) / aspect * _Refraction;
 	vec2 texUVDirB = vec2(cos(fB * 6.2), sin(fB * 6.2)) / aspect * _Refraction;
+	vec2 texUVDirT = vec2(cos(fT * 6.2), sin(fT * 6.2)) / aspect * _Refraction;
 
 	vec2 muv = vec2(gl_TexCoord[0].x, 1 - gl_TexCoord[0].y);
 	vec4 color0 = tex2D(textureA, uv + texUVDirA * (noiseBlendARefraction * _BlendARefract + _ARefract)); 
 	uv = vec2(uv.x, 1 - uv.y) * vec2(0.7,1);
 	vec4 maskCol = texture3D(tex3D,vec3(muv + texUVDirB * (noiseBlendBRefraction * _BlendBRefract + _BRefract),_DepthStart + _Depth * f));
 	vec4 col = mix(color0, maskCol, noiseBlendAB);   
-
+	
+	vec4 colorT = tex2D(textureB, uv * 2.5 + texUVDirT * (_BlendTRefract + _TRefract) - vec2(0.1,1.)) ; 
+	
 				//return col;//float4(f,f,f,1);//col;////float4(dir,0,1);//
 	f = noiseBlendAB;
-	gl_FragColor = col;
+	gl_FragColor = mix(col,colorT, colorT.a* noiseBlendT);
 	//gl_FragColor.a = maskCol.r;
 }
