@@ -301,8 +301,12 @@ void main(){
 
 	vec2 muv = vec2(gl_TexCoord[0].x, 1 - gl_TexCoord[0].y);
 	vec4 color0 = tex2D(textureA, uv + texUVDirA * (noiseBlendARefraction * _BlendARefract + _ARefract)); 
+	
+	color0 = smoothstep(0.,1.,color0) * 1.4 - 0.3;
 	uv = vec2(uv.x, 1 - uv.y) * vec2(0.7,1);
 	vec4 maskCol = texture3D(tex3D,vec3(muv + texUVDirB * (noiseBlendBRefraction * _BlendBRefract + _BRefract),_DepthStart + _Depth * f));
+	
+	maskCol = smoothstep(0.,1.,maskCol) * 1.2 - 0.1;
 	vec4 col = mix(color0, maskCol, noiseBlendAB);   
 	
 	vec4 colorT = tex2D(textureB, uv * 2.5 + texUVDirT * (_BlendTRefract + _TRefract) - vec2(0.1,1.)) ; 
