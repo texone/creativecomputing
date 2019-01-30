@@ -35,7 +35,7 @@ public class CCOpenCVVideoCaptureDemo extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		if(USE_CAPTURE) {
-			_myCapture = new CCCVVideoCapture(1);
+			_myCapture = new CCCVVideoCapture(0);
 //			_myCapture.exposure(-8);
 			//8.44715353E8 microsoft color
 			//-4.66162819E8 vision black

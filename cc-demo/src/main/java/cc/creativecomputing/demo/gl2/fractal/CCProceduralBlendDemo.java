@@ -14,7 +14,9 @@ import cc.creativecomputing.graphics.export.CCScreenCapture;
 import cc.creativecomputing.graphics.export.CCScreenCaptureController;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCInterpolatableData;
+import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
+import cc.creativecomputing.graphics.texture.CCTexture.CCTextureMipmapFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureWrap;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
@@ -62,6 +64,10 @@ public class CCProceduralBlendDemo extends CCGL2Adapter {
 	
 	@CCProperty(name = "screen capture")
 	private CCScreenCaptureController _cScreenCapture;
+	
+	private CCShaderBuffer _cShaderBuffer;
+	
+	private int scaler = 2;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
@@ -77,6 +83,9 @@ public class CCProceduralBlendDemo extends CCGL2Adapter {
 		_cGradientTexture04 = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("gradient04.jpg")));
 		
 		_cTypoTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("found/01_IHK_GW_2019_WBM3.png")));
+		_cTypoTexture.generateMipmaps(true);
+		_cTypoTexture.textureFilter(CCTextureFilter.LINEAR);
+		_cTypoTexture.textureMipmapFilter(CCTextureMipmapFilter.LINEAR);
 		
 		_myShopForeGround = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("found/shop_front.png")));
 		_myShopWindows = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("found/shop_windows.png")));
@@ -101,6 +110,8 @@ public class CCProceduralBlendDemo extends CCGL2Adapter {
 		for(Path myPath:myFiles) {
 			_myTexture3D.updateData(CCImageIO.newImage(myPath), i++);
 		}
+		
+		_cShaderBuffer = new CCShaderBuffer(1024 * scaler, 768 * scaler);
 	}
 	
 	
@@ -118,9 +129,10 @@ public class CCProceduralBlendDemo extends CCGL2Adapter {
 		if(_cTextureA.value() == null)return;
 		if(_cTextureB.value() == null)return;
 		
+		_cShaderBuffer.beginDraw(g);
 		if(_cUseGradients)g.texture(0, _myGradients.texture());
 		else g.texture(0, _cTextureA.value());
-		g.texture(1, _cTextureB.value());
+		g.texture(1, _cTypoTexture);
 		g.texture(2, _myTexture3D);
 		_cProgram.start();
 		_cProgram.uniform1f("aspect", g.width()/(double)g.height());
@@ -132,15 +144,18 @@ public class CCProceduralBlendDemo extends CCGL2Adapter {
 		g.textureCoords2D(0,0);
 		g.vertex(0,0);
 		g.textureCoords2D(1,0);
-		g.vertex(g.width(),0);
+		g.vertex(g.width() * scaler,0);
 		g.textureCoords2D(1,1);
-		g.vertex(g.width(),g.height());
+		g.vertex(g.width() * scaler,g.height() * scaler);
 		g.textureCoords2D(0,1);
-		g.vertex(0,g.height());
+		g.vertex(0,g.height() * scaler);
 		g.endShape();
 		_cProgram.end();
 		g.noTexture();
+		_cShaderBuffer.endDraw(g);
 		
+		_cShaderBuffer.attachment(0).textureFilter(CCTextureFilter.LINEAR);
+		g.image(_cShaderBuffer.attachment(0), 0,0,1024, 768);
 //		g.image(_myShopForeGround, 0,0,g.width(),g.height());
 ////		
 //		g.color(1d, 0.25d);

@@ -67,7 +67,7 @@
               },
               "procedural_blend_fragment.glsl": {
                 "name": "procedural_blend_fragment.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@30945034"
+                "value": "cc.creativecomputing.control.code.CCShaderFile@5d5ced56"
               },
               "uniforms": {
                 "name": "uniforms",
@@ -124,7 +124,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "blend progress",
-                    "value": 0.3011371326253463
+                    "value": 0
                   },
                   "B distances.y": {
                     "min": 0,
@@ -154,7 +154,7 @@
                     "min": 0,
                     "max": 5,
                     "name": "noise speed",
-                    "value": 0.07000001132488247
+                    "value": 0.08
                   },
                   "blend offset": {
                     "min": 0,
@@ -196,7 +196,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "octaves random",
-                    "value": 0.752491893872061
+                    "value": 0.0636363636363636
                   },
                   "t distances.w": {
                     "min": 0,
@@ -232,7 +232,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "t refract",
-                    "value": 0.2537437555035992
+                    "value": 0.44545454545454544
                   },
                   "t distances.y": {
                     "min": 0,
@@ -262,7 +262,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "t blend",
-                    "value": 0.12508798906172425
+                    "value": 0
                   },
                   "A blend refract": {
                     "min": 0,
@@ -280,7 +280,7 @@
                     "min": 1,
                     "max": 10,
                     "name": "noise octaves",
-                    "value": 4.986924765697048
+                    "value": 1
                   },
                   "blend x mod amt": {
                     "min": 0,
@@ -304,25 +304,25 @@
                     "min": 0,
                     "max": 1,
                     "name": "B refract",
-                    "value": 0.400235814270286
+                    "value": 0.11818181818181817
                   },
                   "A refract": {
                     "min": 0,
                     "max": 1,
                     "name": "A refract",
-                    "value": 0.4008786944338522
+                    "value": 0.018181818181818077
                   },
                   "depth": {
                     "min": 0,
                     "max": 1,
                     "name": "depth",
-                    "value": 0
+                    "value": 0.5181818181818182
                   },
                   "depth start": {
                     "min": 0,
                     "max": 1,
                     "name": "depth start",
-                    "value": 0.11543647924991388
+                    "value": 0
                   },
                   "blend x mod": {
                     "min": 0,
@@ -379,7 +379,7 @@
               },
               "procedural_blend_vertex.glsl": {
                 "name": "procedural_blend_vertex.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@1cc5c1a0"
+                "value": "cc.creativecomputing.control.code.CCShaderFile@71b0c5a3"
               }
             }
           }
@@ -402,7 +402,7 @@
           },
           "mipmap filter": {
             "name": "mipmap filter",
-            "value": "NEAREST"
+            "value": "LINEAR"
           },
           "wrap": {
             "name": "wrap",
@@ -562,7 +562,7 @@
             "min": 1,
             "max": 60,
             "name": "capture rate",
-            "value": 30
+            "value": 60
           },
           "record sequence": {},
           "height": {
@@ -612,7 +612,7 @@
         "min": -2147483648,
         "max": 2147483647,
         "name": "windowY",
-        "value": -1
+        "value": 0
       },
       "containerType": {
         "name": "containerType",
@@ -622,7 +622,7 @@
         "min": -2147483648,
         "max": 2147483647,
         "name": "windowX",
-        "value": -1
+        "value": 3840
       },
       "alwaysOnTop": {
         "name": "alwaysOnTop",
@@ -648,7 +648,7 @@
       },
       "undecorated": {
         "name": "undecorated",
-        "value": false
+        "value": true
       },
       "fullscreen": {
         "name": "fullscreen",
@@ -717,7 +717,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.094539243020026
+        "value": 29.285787583856923
       },
       "exceptionHandling": {
         "name": "exceptionHandling",
