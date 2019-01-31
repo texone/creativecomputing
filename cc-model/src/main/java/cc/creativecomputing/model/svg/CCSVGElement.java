@@ -22,6 +22,7 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.util.List;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -53,23 +54,33 @@ public abstract class CCSVGElement {
 	
 	protected CCSVGGroup parent;
 	
+	@CCProperty(name = "name")
 	protected String _myName;
 	
+	@CCProperty(name = "transform")
 	protected CCMatrix32 matrix;
 	
 	// set to false if the object is hidden in the layers palette
+	@CCProperty(name = "visible")
 	protected boolean visible = true;
 	
+	@CCProperty(name = "stroke")
 	protected boolean stroke;
+	@CCProperty(name = "strokeColor")
 	protected CCColor strokeColor;
+	@CCProperty(name = "stroke weight")
 	protected double strokeWeight; // default is 1
+	@CCProperty(name = "stroke cap")
 	protected CCStrokeCap strokeCap;
+	@CCProperty(name = "stroke join")
 	protected CCStrokeJoin strokeJoin;
 	CCSVGGradient strokeGradient;
 	Paint strokeGradientPaint;
 	String strokeName; // id of another object, gradients only?
 
+	@CCProperty(name = "fill")
 	protected boolean fill;
+	@CCProperty(name = "fill color")
 	protected CCColor fillColor;
 	CCSVGGradient fillGradient;
 	Paint fillGradientPaint;

@@ -2008,6 +2008,10 @@ public class CCMatrix4x4 implements Cloneable, Externalizable {
 
 		return theStore;
 	}
+	
+	public CCVector3 applyPrePoint(final CCVector3 thePoint){
+		return applyPrePoint(thePoint, null);
+	}
 
 	/**
 	 * Multiplies the given vector by this matrix (M * v). If supplied, the

@@ -268,6 +268,12 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 		
 	}
 	
+	public CCMatrix4x4 toWorld() {
+		CCMatrix4x4 myResult = new CCMatrix4x4();
+		matrixStack(myResult);
+		return myResult;
+	}
+	
 	public void resolveMissingNodes(CCColladaLoader theLoader) {
 		for(String myKey:_myNodeMap.keySet()) {
 			if(_myNodeMap.get(myKey) == null) {

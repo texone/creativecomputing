@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.io.xml.CCDataElement;
@@ -24,6 +25,8 @@ import cc.creativecomputing.model.svg.CCSVGElement.CCShapeKind;
 public class CCSVGGroup extends CCSVGElement implements Iterable<CCSVGElement>{
 	
 	protected List<CCSVGElement> _myChildren;
+	
+	@CCProperty(name = "elements")
 	protected HashMap<String, CCSVGElement> _myNameTable;
 
 	public CCSVGGroup(CCSVGGroup theParent, CCShapeKind theShapeKind) {

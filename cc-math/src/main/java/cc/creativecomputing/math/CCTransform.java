@@ -212,17 +212,17 @@ public class CCTransform implements Cloneable, Externalizable {
 		rotation(myQuat);
 	}
 	
-//	@CCProperty(name = "rotate x")
+	@CCProperty(name = "rotate x", defaultValue = 0)
 	public void rotateX(double theRotateX){
 		_myXRotation = CCMath.radians(theRotateX);
 		updateRotation();
 	}
-//	@CCProperty(name = "rotate y")
+	@CCProperty(name = "rotate y", defaultValue = 0)
 	public void rotateY(double theRotateY){
 		_myYRotation = CCMath.radians(theRotateY);
 		updateRotation();
 	}
-//	@CCProperty(name = "rotate z")
+	@CCProperty(name = "rotate z", defaultValue = 0)
 	public void rotateZ(double theRotateZ){
 		_myZRotation = CCMath.radians(theRotateZ);
 		updateRotation();
