@@ -38,18 +38,13 @@ public class CCTransform implements Cloneable, Externalizable {
 	/**
 	 * Identity transform.
 	 */
-	public static final CCTransform IDENTITY = new CCTransform(CCMatrix3x3.IDENTITY, CCVector3.ONE, CCVector3.ZERO, true, true, true);
+	public static final CCTransform IDENTITY = new CCTransform(CCMatrix3x3.IDENTITY, CCVector3.ONE, CCVector3.ZERO, true, true);
 
 	protected final CCMatrix3x3 _myMatrix = new CCMatrix3x3(CCMatrix3x3.IDENTITY);
 	@CCProperty(name = "translate")
 	protected final CCVector3 _myTranslation = new CCVector3(CCVector3.ZERO);
 	@CCProperty(name = "scale")
 	protected final CCVector3 _myScale = new CCVector3(CCVector3.ONE);
-
-	/**
-	 * true if this transform is guaranteed to be the identity matrix.
-	 */
-	protected boolean _myIsIdentity;
 
 	/**
 	 * true if the matrix portion of this transform is only rotation.
@@ -65,7 +60,6 @@ public class CCTransform implements Cloneable, Externalizable {
 	 * Constructs a new Transform object.
 	 */
 	public CCTransform() {
-		_myIsIdentity = true;
 		_myIsRotationMatrix = true;
 		_myIsUniformScale = true;
 	}
@@ -83,7 +77,6 @@ public class CCTransform implements Cloneable, Externalizable {
 		_myScale.set(theSource.scale());
 		_myTranslation.set(theSource.translation());
 
-		_myIsIdentity = theSource.isIdentity();
 		_myIsRotationMatrix = theSource.isRotationMatrix();
 		_myIsUniformScale = theSource.isUniformScale();
 
@@ -110,15 +103,12 @@ public class CCTransform implements Cloneable, Externalizable {
 		final CCMatrix3x3 theMatrix, 
 		final CCVector3 theScale, 
 		final CCVector3 theTranslation, 
-		final boolean theIsIdentity,
 		final boolean theIsRotationMatrix, 
 		final boolean theIsUniformScale
 	) {
 		_myMatrix.set(theMatrix);
 		_myScale.set(theScale);
 		_myTranslation.set(theTranslation);
-
-		_myIsIdentity = theIsIdentity;
 		_myIsRotationMatrix = theIsRotationMatrix;
 		_myIsUniformScale = theIsUniformScale;
 	}
@@ -135,7 +125,7 @@ public class CCTransform implements Cloneable, Externalizable {
 	 * @return true if this transform is guaranteed to be the identity matrix.
 	 */
 	public boolean isIdentity() {
-		return _myIsIdentity;
+		return _myScale.equals(CCVector3.ONE) && _myTranslation.equals(CCVector3.ZERO) && _myMatrix.isIdentity();
 	}
 
 	/**
@@ -161,7 +151,6 @@ public class CCTransform implements Cloneable, Externalizable {
 		_myMatrix.set(CCMatrix3x3.IDENTITY);
 		_myScale.set(CCVector3.ONE);
 		_myTranslation.set(CCVector3.ZERO);
-		_myIsIdentity = true;
 		_myIsRotationMatrix = true;
 		_myIsUniformScale = true;
 		return this;
@@ -212,17 +201,17 @@ public class CCTransform implements Cloneable, Externalizable {
 		rotation(myQuat);
 	}
 	
-	@CCProperty(name = "rotate x", defaultValue = 0)
+//	@CCProperty(name = "rotate x", defaultValue = 0)
 	public void rotateX(double theRotateX){
 		_myXRotation = CCMath.radians(theRotateX);
 		updateRotation();
 	}
-	@CCProperty(name = "rotate y", defaultValue = 0)
+//	@CCProperty(name = "rotate y", defaultValue = 0)
 	public void rotateY(double theRotateY){
 		_myYRotation = CCMath.radians(theRotateY);
 		updateRotation();
 	}
-	@CCProperty(name = "rotate z", defaultValue = 0)
+//	@CCProperty(name = "rotate z", defaultValue = 0)
 	public void rotateZ(double theRotateZ){
 		_myZRotation = CCMath.radians(theRotateZ);
 		updateRotation();
@@ -264,7 +253,6 @@ public class CCTransform implements Cloneable, Externalizable {
 	 */
 	public CCTransform translation(final double x, final double y, final double z) {
 		_myTranslation.set(x, y, z);
-		_myIsIdentity = false;
 		return this;
 	}
 
@@ -307,7 +295,6 @@ public class CCTransform implements Cloneable, Externalizable {
 		}
 
 		_myScale.set(x, y, z);
-		_myIsIdentity =  _myIsIdentity && x == 1.0 && y == 1.0 && z == 1.0;
 		_myIsUniformScale = x == y && y == z;
 		return this;
 	}
@@ -359,7 +346,6 @@ public class CCTransform implements Cloneable, Externalizable {
 			_myScale.set(source.scale());
 			_myTranslation.set(source.translation());
 
-			_myIsIdentity = false;
 			_myIsRotationMatrix = source.isRotationMatrix();
 			_myIsUniformScale = source.isUniformScale();
 		}
@@ -376,7 +362,6 @@ public class CCTransform implements Cloneable, Externalizable {
 	 */
 	public CCTransform translate(final double x, final double y, final double z) {
 		_myTranslation.addLocal(x, y, z);
-		_myIsIdentity = _myIsIdentity && _myTranslation.equals(CCVector3.ZERO);
 		return this;
 	}
 
@@ -388,7 +373,6 @@ public class CCTransform implements Cloneable, Externalizable {
 	 */
 	public CCTransform translate(final CCVector3 vec) {
 		_myTranslation.addLocal(vec);
-		_myIsIdentity = _myIsIdentity && _myTranslation.equals(CCVector3.ZERO);
 		return this;
 	}
 
@@ -407,7 +391,7 @@ public class CCTransform implements Cloneable, Externalizable {
 		if(theStore == null)theStore = new CCVector3();
 		
 
-		if (_myIsIdentity) {
+		if (isIdentity()) {
 			// No need to make changes
 			// Y = X
 			theStore.set(point);
@@ -450,12 +434,12 @@ public class CCTransform implements Cloneable, Externalizable {
 		}
 		if(theStore == null)theStore = new CCVector3(thePoint);
 
-		if (_myIsIdentity) {
+		if (isIdentity()) {
 			// No need to make changes
 			// P' = P
 			return theStore;
 		}
-
+		
 		// Back track translation
 		theStore.subtractLocal(_myTranslation);
 
@@ -499,7 +483,7 @@ public class CCTransform implements Cloneable, Externalizable {
 			theStore = new CCVector3();
 		}
 
-		if (_myIsIdentity) {
+		if (isIdentity()) {
 			// No need to make changes
 			// V' = V
 			theStore.set(theVector);
@@ -541,7 +525,7 @@ public class CCTransform implements Cloneable, Externalizable {
 
 		theVector = theVector.clone();
 
-		if (_myIsIdentity) {
+		if (isIdentity()) {
 			// No need to make changes
 			// V' = V
 			return theVector;
@@ -579,7 +563,7 @@ public class CCTransform implements Cloneable, Externalizable {
 	public CCTransform multiply(final CCTransform transformBy, CCTransform theStore) {
 		if(theStore == null)theStore = new CCTransform();
 
-		if (_myIsIdentity) {
+		if (isIdentity()) {
 			return theStore.set(transformBy);
 		}
 
@@ -643,8 +627,7 @@ public class CCTransform implements Cloneable, Externalizable {
 	 *            rotational.
 	 */
 	protected void updateFlags(final boolean rotationMatrixGuaranteed) {
-		_myIsIdentity = _myTranslation.equals(CCVector3.ZERO) && _myMatrix.isIdentity() && _myScale.equals(CCVector3.ONE);
-		if (_myIsIdentity) {
+		if (isIdentity()) {
 			_myIsRotationMatrix = true;
 			_myIsUniformScale = true;
 		} else {
@@ -661,7 +644,7 @@ public class CCTransform implements Cloneable, Externalizable {
 	public CCTransform invert() {
 		CCTransform result = new CCTransform();
 
-		if (_myIsIdentity) {
+		if (isIdentity()) {
 			result.setIdentity();
 			return result;
 		}
@@ -904,7 +887,6 @@ public class CCTransform implements Cloneable, Externalizable {
 		_myMatrix.set((CCMatrix3x3) in.readObject());
 		_myScale.set((CCVector3) in.readObject());
 		_myTranslation.set((CCVector3) in.readObject());
-		_myIsIdentity = in.readBoolean();
 		_myIsRotationMatrix = in.readBoolean();
 		_myIsUniformScale = in.readBoolean();
 	}
@@ -921,7 +903,6 @@ public class CCTransform implements Cloneable, Externalizable {
 		out.writeObject(_myMatrix);
 		out.writeObject(_myScale);
 		out.writeObject(_myTranslation);
-		out.writeBoolean(_myIsIdentity);
 		out.writeBoolean(_myIsRotationMatrix);
 		out.writeBoolean(_myIsUniformScale);
 	}
