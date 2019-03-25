@@ -20,6 +20,8 @@ import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector2;
+import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.forces.springs.CCSpringForce;
 
@@ -65,10 +67,10 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 //				_myMesh.addVertex(x,y,0);
 				
 				if(_myIncludeCaps) {
-					_myMesh.addTextureCoords(0, 0, 1);
-					_myMesh.addTextureCoords(0, 0, 1);
-					_myMesh.addTextureCoords(0, 0, 1);
-					_myMesh.addTextureCoords(0, 0, 1);
+					_myMesh.addTextureCoords(0, 0, 1, 0, 0);
+					_myMesh.addTextureCoords(0, 0, 1, 0, 0);
+					_myMesh.addTextureCoords(0, 0, 1, 0, 0);
+					_myMesh.addTextureCoords(0, 0, 1, 0, 0);
 	
 					_myMesh.addTextureCoords(1, 1.0f, 1.0f, 1.0f, 1.0f);
 					_myMesh.addTextureCoords(1, 1.0f,-1.0f, 1.0f, 0.0f);
@@ -81,10 +83,10 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 					_myMesh.addVertex(x,y,0);
 				}
 
-				_myMesh.addTextureCoords(0, 0, 1);
-				_myMesh.addTextureCoords(0, 0, 1);
-				_myMesh.addTextureCoords(0, 1, 0);
-				_myMesh.addTextureCoords(0, 1, 0);
+				_myMesh.addTextureCoords(0, 0, 1, 0, 0);
+				_myMesh.addTextureCoords(0, 0, 1, 0, 0);
+				_myMesh.addTextureCoords(0, 1, 0, 0, 0);
+				_myMesh.addTextureCoords(0, 1, 0, 0, 0);
 				
 				_myMesh.addTextureCoords(1, 0.0f,  1.0f, 0.5f, 1.0f);
 				_myMesh.addTextureCoords(1, 0.0f, -1.0f, 0.5f, 0.0f);
@@ -97,10 +99,10 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 				_myMesh.addVertex(x,y,0);
 		
 				if(_myIncludeCaps) {
-					_myMesh.addTextureCoords(0, 1, 0);
-					_myMesh.addTextureCoords(0, 1, 0);
-					_myMesh.addTextureCoords(0, 1, 0);
-					_myMesh.addTextureCoords(0, 1, 0);
+					_myMesh.addTextureCoords(0, 1, 0, 0, 0);
+					_myMesh.addTextureCoords(0, 1, 0, 0, 0);
+					_myMesh.addTextureCoords(0, 1, 0, 0, 0);
+					_myMesh.addTextureCoords(0, 1, 0, 0, 0);
 					
 					_myMesh.addTextureCoords(1, -1.0f, 1.0f, 0.0f, 1.0f);
 					_myMesh.addTextureCoords(1, -1.0f,-1.0f, 0.0f, 0.0f);
@@ -129,6 +131,8 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 		_myAspectRatio = theAspectRatio;
 		return this;
 	}
+	
+	public CCVector3 mouseCoords = new CCVector3(-1,-1, 0);
 
 	@Override
 	public void display(CCGraphics g) {
@@ -150,6 +154,7 @@ public class CCSpringVolumentricLineRenderer extends CCParticleRenderer{
 			_myShader.uniform1f("tanHalfFOV", CCMath.tan(g.camera().fov()) * g.height());
 			_myShader.uniform1f("time", _myTime);
 			_myShader.uniform1f("aspectRatio", _myAspectRatio < 0 ? g.aspectRatio() : _myAspectRatio);
+			_myShader.uniform3f("mouse", mouseCoords);
 			_myShader.uniform2f("offset", i % _mySprings.numberOfXBuffers() * _myParticles.width(), i / _mySprings.numberOfXBuffers() * _myParticles.height());
 			_myMesh.draw(g);
 			g.noTexture();

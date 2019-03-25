@@ -33,6 +33,7 @@ import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.particles.CCParticles;
 
 /**
@@ -116,6 +117,8 @@ public class CCQuadRenderer extends CCParticleRenderer{
 		_myAspectRatio = theAspectRatio;
 		return this;
 	}
+	
+	public CCVector3 mouseCoords = new CCVector3(-1,-1, 0);
 
 	public void display(CCGraphics g){
 		if(!_cIsActive)return;
@@ -135,6 +138,7 @@ public class CCQuadRenderer extends CCParticleRenderer{
 		_myShader.uniform1f("tanHalfFOV", CCMath.tan(g.camera().fov()) * g.height());
 		_myShader.uniform1f("pointSize", _cPointSize);
 		_myShader.uniform1f("aspectRatio", _myAspectRatio < 0 ? g.aspectRatio() : _myAspectRatio);
+		_myShader.uniform3f("mouse", mouseCoords);
 		_myShader.uniform1f("alpha", _myFadeOut ? 0 : 1);
 		_myMesh.draw(g);
 		g.noTexture();
