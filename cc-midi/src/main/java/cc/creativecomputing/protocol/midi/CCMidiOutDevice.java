@@ -23,7 +23,6 @@ import javax.sound.midi.Receiver;
 import cc.creativecomputing.control.CCSelection;
 import cc.creativecomputing.control.CCSelection.CCSelectionListener;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.protocol.midi.messages.CCMidiMessage;
 
 /**
@@ -40,10 +39,8 @@ public class CCMidiOutDevice extends CCMidiDevice{
 		infoMap.put("OFF", null);
 		for(Info myInfo:MidiSystem.getMidiDeviceInfo()){
 			String myName = myInfo.getVendor() + " : " + myInfo.getName();
-			CCLog.info(myName);
 			try {
 				MidiDevice myDevice = MidiSystem.getMidiDevice(myInfo);
-				CCLog.info(myName + ":" + myDevice.getMaxReceivers());
 				if (myDevice instanceof javax.sound.midi.Sequencer)continue;
 				if (myDevice.getMaxReceivers () == 0) continue;
 			} catch (MidiUnavailableException e) {
