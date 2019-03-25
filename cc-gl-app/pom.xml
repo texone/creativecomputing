@@ -10,14 +10,6 @@
   <artifactId>cc-gl-app</artifactId>
   <name>creative computing opengl app</name>
   
-  <repositories>
-    <!-- This repository should be used only for unreleased development versions, typically all release candidates and post builds -->
-    <repository>
-      <id>jogamp</id>
-      <url>http://jogamp.org/deployment/maven</url>
-    </repository>
-  </repositories>
-  
   <properties>
     <jogamp.version>2.3.2</jogamp.version>
   </properties>
