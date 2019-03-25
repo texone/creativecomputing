@@ -57,6 +57,9 @@ public abstract class CCMovieData extends CCVideo implements CCMovie{
 	public boolean isRunning() {
 		return _myIsRunning;
 	}
+	public boolean isPaused() {
+		return _myIsPaused;
+	}
 
 	/* (non-Javadoc)
 	 * @see cc.creativecomputing.texture_new.video.CCMovie#loop()
