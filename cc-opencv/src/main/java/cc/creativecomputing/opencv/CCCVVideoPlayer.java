@@ -16,6 +16,8 @@ public class CCCVVideoPlayer extends CCCVVideoIn{
 	private double _cLoopStart = 0;
 	@CCProperty(name = "loop length", min = 0, max = 1)
 	private double _cLoopLength = 1;
+	@CCProperty(name = "pause")
+	private boolean _cPause = false;
 
 	
 	public CCCVVideoPlayer(String theFileName) {
@@ -93,9 +95,20 @@ public class CCCVVideoPlayer extends CCCVVideoIn{
 		return _myCapture.get(CV_CAP_PROP_FRAME_COUNT);
 	}
 	
+	private boolean _myLastPause = false;
+	private double _myRatio = 0;
+	
 	@Override
 	protected void updateSettings() {
 		double myEnd = CCMath.min(_cLoopStart+ _cLoopLength, (frameCount() - 2) / frameCount());
+		if(_cPause != _myLastPause) {
+			_myRatio = positionRatio();
+		}
+		_myLastPause = _cPause;
+		
+		if(_cPause) {
+			positionRatio(_myRatio);
+		}
 		if(positionRatio() >= myEnd) {
 			positionRatio(_cLoopStart);
 		}

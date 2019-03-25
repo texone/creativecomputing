@@ -6,8 +6,6 @@ import static org.bytedeco.javacpp.opencv_aruco.drawDetectedMarkers;
 import static org.bytedeco.javacpp.opencv_aruco.estimatePoseSingleMarkers;
 import static org.bytedeco.javacpp.opencv_aruco.getPredefinedDictionary;
 import static org.bytedeco.javacpp.opencv_core.CV_64F;
-import static org.bytedeco.javacpp.opencv_calib3d.Rodrigues;
-import static org.bytedeco.javacpp.opencv_core.eigen;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -18,13 +16,13 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.bytedeco.javacpp.indexer.DoubleIndexer;
-import org.bytedeco.javacpp.indexer.FloatIndexer;
-import org.bytedeco.javacpp.indexer.IntIndexer;
 import org.bytedeco.javacpp.opencv_aruco.DetectorParameters;
 import org.bytedeco.javacpp.opencv_aruco.Dictionary;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.MatVector;
+import org.bytedeco.javacpp.indexer.DoubleIndexer;
+import org.bytedeco.javacpp.indexer.FloatIndexer;
+import org.bytedeco.javacpp.indexer.IntIndexer;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
@@ -32,15 +30,12 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.io.xml.CCXMLIO;
 import cc.creativecomputing.math.CCMath;
-import cc.creativecomputing.math.CCMatrix3x3;
-import cc.creativecomputing.math.CCMatrix4x4;
 import cc.creativecomputing.math.CCQuaternion;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.filter.CCMedianFilter;
 import cc.creativecomputing.opencv.filtering.CCBlur;
 import cc.creativecomputing.opencv.filtering.CCThreshold;
-import jogamp.opengl.egl.EGLExternalContext;
 
 public class CCMarkerDetection implements Iterable<CCMarker>{
 	
@@ -149,6 +144,7 @@ public class CCMarkerDetection implements Iterable<CCMarker>{
 		
 		_myVideoIn = theVideoIn;
 		_myVideoIn.events.add(mat -> {
+			if(mat == null)return;
 			lock.lock();
 			if (_cDrawMat == CCDrawMat.ORIGIN)
 				_myDrawMat = mat.clone();
@@ -436,10 +432,8 @@ Quaternion rot = Quaternion.AngleAxis (theta, axis);
 		Mat myResult = new Mat(myRows,myCols,CV_64F);
 		DoubleIndexer myIndexer = myResult.createIndexer();
 		int i = 0;
-		CCLog.info(myType, myRows, myCols);
 		for(CCDataElement myArrayArray:myMatrixValue.child("ArrayOfArrayOfDouble")) {
 			for(CCDataElement myArray:myArrayArray) {
-				CCLog.info(i,myArray.doubleContent());
 				myIndexer.put(i++, myArray.doubleContent());
 			}
 		}
