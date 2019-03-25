@@ -144,18 +144,18 @@ public class CCTexture2D extends CCTexture{
 		
 		for(int i = 0; i < _myTextureIDs.length;i++) {
 		
-		bind(i);
-		unpackStorage(_myStorageModes);
-		GL2 gl = CCGraphics.currentGL();
-		gl.glTexImage2D(
-			_myTarget.glID, 0, 
-			_myInternalFormat.glID, 
-			_myWidth, _myHeight, 0, 
-			_myFormat.glID, 
-			_myPixelType.glID, 
-			theBuffer
-		); 
-		defaultUnpackStorage();
+			bind(i);
+			unpackStorage(_myStorageModes);
+			GL2 gl = CCGraphics.currentGL();
+			gl.glTexImage2D(
+				_myTarget.glID, 0, 
+				_myInternalFormat.glID, 
+				_myWidth, _myHeight, 0, 
+				_myFormat.glID, 
+				_myPixelType.glID, 
+				theBuffer
+			); 
+			defaultUnpackStorage();
 		}
 	}
 	

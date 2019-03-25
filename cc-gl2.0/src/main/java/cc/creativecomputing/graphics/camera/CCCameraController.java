@@ -74,7 +74,6 @@ public class CCCameraController {
 			behave(_myVelocity);
 //			feed();
 			_myVelocity *= 1 - _myFriction;
-			CCLog.info(_myFriction);
 			if (CCMath.abs(_myVelocity) < .001f) {
 				_myVelocity = 0;
 			}
@@ -129,6 +128,10 @@ public class CCCameraController {
 		
 		public CCVector3 center() {
 			return _myCenter;
+		}
+		
+		public CCQuaternion rotation() {
+			return _myRotation;
 		}
 	}
 	
@@ -193,11 +196,21 @@ public class CCCameraController {
 	
 	@CCProperty(name = "rotation mode", readBack = true)
 	private CCCameraRotationMode _cRotationMode = CCCameraRotationMode.FREE;
+	@CCProperty(name = "pan", readBack = true)
+	private boolean _cPan = true;
+	@CCProperty(name = "zoom", readBack = true)
+	private boolean _cZoom = true;
 	@CCProperty(name = "invert")
 	private boolean _cInvert = false;
 	
 	public void rotationMode(CCCameraRotationMode theRotationMode) {
 		_cRotationMode = theRotationMode;
+	}
+	public void pan(boolean thePan) {
+		_cPan = thePan;
+	}
+	public void zoom(boolean theZoom) {
+		_cZoom = theZoom;
 	}
 
 	private final CCAnimationManager _myAnimationManager = new CCAnimationManager();
@@ -230,7 +243,7 @@ public class CCCameraController {
 
 		@Override
 		public void mouseWheelMoved(CCMouseWheelEvent theThe) {
-			_myDampedZoom.impulse(_myWheelScale * theThe.rotation());
+			if(_cZoom)_myDampedZoom.impulse(_myWheelScale * theThe.rotation());
 		}
 	};
 	
@@ -478,11 +491,11 @@ public class CCCameraController {
 
 			final CCMouseButton b = theEvent.button();
 			if (_myCenterDragHandler != null && (b == CCMouseButton.CENTER || (b == CCMouseButton.LEFT && theEvent.isMetaDown()))) {
-				_myCenterDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
+				if(_cPan)_myCenterDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
 			} else if (_myLeftDragHandler != null && b == CCMouseButton.LEFT) {
 				_myLeftDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
 			} else if (_myRightDraghandler != null && b == CCMouseButton.RIGHT) {
-				_myRightDraghandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
+				if(_cZoom)_myRightDraghandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
 			}
 		}
 	}

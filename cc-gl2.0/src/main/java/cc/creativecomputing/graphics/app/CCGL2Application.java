@@ -11,6 +11,7 @@ import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.gl.app.CCGLAdapter;
 import cc.creativecomputing.gl.app.CCGLListener;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.math.CCColor;
 
 public class CCGL2Application {
 	
@@ -80,7 +81,7 @@ public class CCGL2Application {
 			
 			@Override
 			public void stop(CCAnimator theAnimator) {
-				_myAdapter.start(theAnimator);
+				_myAdapter.stop(theAnimator);
 			}
 			
 			@Override
@@ -99,6 +100,8 @@ public class CCGL2Application {
 			
 			@Override
 			public void init(CCGraphics theG) {
+				theG.clearColor(CCColor.RED);
+				theG.clear();
 				_myAdapter.init(theG, _myAnimator);
 			
 				_myControlApp.setData(CCGL2Application.this, presetPath);

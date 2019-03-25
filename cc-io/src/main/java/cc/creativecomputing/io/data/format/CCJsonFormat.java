@@ -525,7 +525,6 @@ public class CCJsonFormat implements CCDataFormat<String> {
 		
 		char next = nextClean();
 		back();
-		CCLog.info(next);
 		if(next == '[') {
 			CCDataArray myArray = new CCDataArray();
 			read(myArray);
