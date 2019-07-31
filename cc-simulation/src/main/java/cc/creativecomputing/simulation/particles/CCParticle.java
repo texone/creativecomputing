@@ -88,6 +88,10 @@ public class CCParticle implements Comparable<CCParticle>{
 		return _myAge;
 	}
 	
+	public boolean isPermanent() {
+		return _myLifeTime < 0;
+	}
+	
 	public boolean isAllocated() {
 		return _myIsAllocated;
 	}

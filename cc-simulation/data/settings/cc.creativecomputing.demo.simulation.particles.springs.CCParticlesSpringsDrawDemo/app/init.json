@@ -59,7 +59,7 @@
                   },
                   "buffer_debug_fragment.glsl": {
                     "name": "buffer_debug_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@6586de38"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@6374e6ac"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -76,7 +76,7 @@
                   },
                   "buffer_debug_vertex.glsl": {
                     "name": "buffer_debug_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@22fd8f87"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@2d58eb63"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -247,7 +247,7 @@
                   },
                   "realsense_fragment.glsl": {
                     "name": "realsense_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@4a69a26"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@23d914a3"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -264,7 +264,7 @@
                   },
                   "realsense_vertex.glsl": {
                     "name": "realsense_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@529d64fa"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@7f22c6e7"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -296,7 +296,7 @@
                   },
                   "threshold_fragment.glsl": {
                     "name": "threshold_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@3682519c"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@824c74a"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -332,7 +332,7 @@
                 "value": {
                   "threshold_vertex.glsl": {
                     "name": "threshold_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@3d2594fc"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@4aa5ebc1"
                   },
                   "auto save": {
                     "name": "auto save",
@@ -365,7 +365,7 @@
                     "min": 0,
                     "max": 10,
                     "name": "point size",
-                    "value": 0.320000022649765
+                    "value": 1.7400000095367432
                   },
                   "shader": {
                     "name": "shader",
@@ -375,7 +375,7 @@
                         "value": {
                           "quad_fragment.glsl": {
                             "name": "quad_fragment.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@6913c58e"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@1af0767b"
                           },
                           "auto save": {
                             "name": "auto save",
@@ -431,7 +431,7 @@
                           },
                           "quad_vertex.glsl": {
                             "name": "quad_vertex.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@1166b034"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@2a04833f"
                           },
                           "uniforms": {
                             "name": "uniforms",
@@ -464,7 +464,7 @@
                       }
                     ]},
                     "name": "life time alpha",
-                    "value": "cc.creativecomputing.control.CCEnvelope@65f235c0"
+                    "value": "cc.creativecomputing.control.CCEnvelope@1c94dee6"
                   },
                   "draw attributes": {
                     "name": "draw attributes",
@@ -551,7 +551,7 @@
                           },
                           "spring_lines_volumentric_fragment.glsl": {
                             "name": "spring_lines_volumentric_fragment.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@516cbedd"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@74ddd104"
                           },
                           "uniforms": {
                             "name": "uniforms",
@@ -584,7 +584,7 @@
                                 "min": 0,
                                 "max": 1,
                                 "name": "alpha",
-                                "value": 1
+                                "value": 0.2070000022649765
                               }
                             }
                           },
@@ -599,7 +599,7 @@
                         "value": {
                           "spring_lines_volumentric_vertex.glsl": {
                             "name": "spring_lines_volumentric_vertex.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@8de0a7c"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@19e52420"
                           },
                           "auto save": {
                             "name": "auto save",
@@ -626,17 +626,17 @@
                     "curve": {"points": [
                       {
                         "in": {
-                          "time": 0,
+                          "time": 0.05859375,
                           "type": "HANDLE",
-                          "value": 0
+                          "value": 1
                         },
-                        "time": 0,
+                        "time": 0.05859375,
                         "type": "BEZIER",
-                        "value": 0,
+                        "value": 1,
                         "out": {
-                          "time": 0.07236842066049576,
+                          "time": 0.13096217066049576,
                           "type": "HANDLE",
-                          "value": 0
+                          "value": 1
                         }
                       },
                       {
@@ -656,22 +656,22 @@
                       },
                       {
                         "in": {
-                          "time": 0.8482730202376842,
+                          "time": 0.7584292702376842,
                           "type": "HANDLE",
-                          "value": 0
+                          "value": 1
                         },
-                        "time": 0.9765625,
+                        "time": 0.88671875,
                         "type": "BEZIER",
-                        "value": 0,
+                        "value": 1,
                         "out": {
-                          "time": 0.9765625,
+                          "time": 0.88671875,
                           "type": "HANDLE",
-                          "value": 0
+                          "value": 1
                         }
                       }
                     ]},
                     "name": "life time alpha",
-                    "value": "cc.creativecomputing.control.CCEnvelope@b4875f1"
+                    "value": "cc.creativecomputing.control.CCEnvelope@1923475f"
                   },
                   "draw attributes": {
                     "name": "draw attributes",
@@ -755,7 +755,7 @@
                 },
                 "source 0": {
                   "name": "source 0",
-                  "value": "cc.creativecomputing.control.code.CCShaderSource@3ee29b39"
+                  "value": "cc.creativecomputing.control.code.CCShaderSource@67804587"
                 },
                 "save in file": {
                   "name": "save in file",
@@ -790,7 +790,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@1e126959"
+                    "value": "cc.creativecomputing.control.CCEnvelope@43d2d9ba"
                   },
                   "force scale": {
                     "name": "force scale",
@@ -805,7 +805,7 @@
                         "min": -1,
                         "max": 1,
                         "name": "y",
-                        "value": 1
+                        "value": -1
                       },
                       "z": {
                         "min": -1,
@@ -844,7 +844,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@4e0f7cb7"
+                    "value": "cc.creativecomputing.control.CCEnvelope@1db0b93f"
                   },
                   "position": {
                     "name": "position",
@@ -890,7 +890,7 @@
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 0.8700000047683716
+                    "value": 0
                   },
                   "life time blend": {
                     "curve": {"points": [
@@ -906,7 +906,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@3aa70c83"
+                    "value": "cc.creativecomputing.control.CCEnvelope@27e93781"
                   },
                   "scale": {
                     "min": 0,
@@ -957,7 +957,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@720811db"
+                    "value": "cc.creativecomputing.control.CCEnvelope@24f3959c"
                   },
                   "drag": {
                     "min": 0,
@@ -1001,7 +1001,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@7f5de662"
+                    "value": "cc.creativecomputing.control.CCEnvelope@71b987b1"
                   },
                   "damping": {
                     "min": 0,
@@ -1036,7 +1036,7 @@
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 0.320000022649765
+                    "value": 0.02
                   },
                   "near max force": {
                     "min": 0,
@@ -1047,9 +1047,9 @@
                   "life time blend": {
                     "curve": {"points": [
                       {
-                        "time": 0,
+                        "time": 0.05078125,
                         "type": "LINEAR",
-                        "value": 0
+                        "value": 1
                       },
                       {
                         "time": 1,
@@ -1058,7 +1058,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@4a02c7fa"
+                    "value": "cc.creativecomputing.control.CCEnvelope@6958b1f8"
                   }
                 }
               }
@@ -1077,7 +1077,7 @@
                   "min": -2147483648,
                   "max": 2147483647,
                   "name": "free particles",
-                  "value": 230048
+                  "value": 250000
                 }
               }
             }}
@@ -1093,19 +1093,11 @@
             "name": "rotation speed",
             "value": 0.1
           },
-          "reset on double click": {
-            "name": "reset on double click",
-            "value": true
-          },
           "distance": {
             "min": 1,
             "max": 20000,
             "name": "distance",
-            "value": 1341.5253290105013
-          },
-          "rotation mode": {
-            "name": "rotation mode",
-            "value": "FREE"
+            "value": 1468.3315155283306
           },
           "invert": {
             "name": "invert",
@@ -1141,35 +1133,61 @@
                 "min": -1,
                 "max": 1,
                 "name": "w",
-                "value": -0.9984657296150797
+                "value": -0.9989766051878999
               },
               "x": {
                 "min": -1,
                 "max": 1,
                 "name": "x",
-                "value": 0.054443012536911
+                "value": -0.02018068098765698
               },
               "y": {
                 "min": -1,
                 "max": 1,
                 "name": "y",
-                "value": 0.007883802471798207
+                "value": 0.040282857771570466
               },
               "z": {
                 "min": -1,
                 "max": 1,
                 "name": "z",
-                "value": 0.006323830227189834
+                "value": -0.0039716208173237915
               }
             }
           },
-          "reset": {},
           "active": {"name": "active"},
+          "zoom": {
+            "name": "zoom",
+            "value": true
+          },
           "fov": {
             "min": 0,
             "max": 90,
             "name": "fov",
             "value": 45
+          },
+          "friction": {
+            "min": 0,
+            "max": 1,
+            "name": "friction",
+            "value": 0.16
+          },
+          "reset on double click": {
+            "name": "reset on double click",
+            "value": true
+          },
+          "rotation mode": {
+            "name": "rotation mode",
+            "value": "FREE"
+          },
+          "rotate only": {
+            "name": "rotate only",
+            "value": false
+          },
+          "reset": {},
+          "pan": {
+            "name": "pan",
+            "value": true
           },
           "camera": {
             "name": "camera",
@@ -1268,12 +1286,6 @@
                 }
               }
             }
-          },
-          "friction": {
-            "min": 0,
-            "max": 1,
-            "name": "friction",
-            "value": 0.16
           }
         }
       },
@@ -1296,7 +1308,7 @@
                   },
                   "buffer_debug_fragment.glsl": {
                     "name": "buffer_debug_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@4cd6d18a"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@6b436774"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -1313,7 +1325,7 @@
                   },
                   "buffer_debug_vertex.glsl": {
                     "name": "buffer_debug_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@1daed7f0"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@27523727"
                   },
                   "uniforms": {
                     "name": "uniforms",

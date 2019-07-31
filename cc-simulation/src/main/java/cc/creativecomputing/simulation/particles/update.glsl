@@ -17,6 +17,7 @@ uniform sampler2DRect groupInfoTexture;
 
 float lifeTimeBlend(vec4 infos, vec4 groupInfos, float forceIndex){
 	float progress = infos.x / infos.y;
+	if(infos.y <= 0)return 1;
 	//if(groupInfos.x >= 0.)progress = groupInfos.x;
 	return texture2DRect (lifeTimeBlends, vec2(progress * 100.0, forceIndex)).x;
 }
@@ -120,13 +121,13 @@ void main (){
 	float staticAge = texture2DRect (staticAges, texID).x;
 	
 	vec4 info = vec4(
-		mix(lastInfo.x + deltaTime, staticAge, useAgeBlends),
+		0,//mix(lastInfo.x + deltaTime, staticAge, useAgeBlends),
 		lastInfo.y,
 		lastInfo.z,
 		lastInfo.w
 	);
 	
-	if(myAge >= lastInfo.y && lastInfo.z < 0.0)position.xyz = vec3(1000000,0,0);
+	if(myAge >= lastInfo.y && lastInfo.y > 0 && lastInfo.z < 0.0)position.xyz = vec3(1000000,0,0);
 	
 	vec3 staticPosition = texture2DRect (staticPositions, texID).xyz;
 	vec4 newPosition = vec4(mix(position.xyz + deltaTime * velocity , staticPosition, staticPositionBlend),1);

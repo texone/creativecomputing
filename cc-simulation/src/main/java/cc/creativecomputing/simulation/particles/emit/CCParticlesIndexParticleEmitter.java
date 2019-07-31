@@ -281,7 +281,7 @@ public class CCParticlesIndexParticleEmitter extends CCParticleCPUEmitter{
 		synchronized(_myAllocatedParticles){
 			_myAllocatedParticles.add(myActiveParticle);
 			
-			if(_cTrackFreeParticles)_myParticleWaitingList.add(myActiveParticle);
+			if(_cTrackFreeParticles && !myActiveParticle.isPermanent())_myParticleWaitingList.add(myActiveParticle);
 		}
 		
 		return myActiveParticle;
