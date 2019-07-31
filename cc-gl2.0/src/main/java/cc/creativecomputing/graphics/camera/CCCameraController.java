@@ -260,6 +260,8 @@ public class CCCameraController {
 	
 	@CCProperty(name = "camera")
 	private CCCamera _myCamera;
+	@CCProperty(name = "rotate only")
+	public boolean rotateOnly = false;
 
 	public CCCameraController(final CCGL2Adapter theApp, final CCGraphics theG, final double theDistance) {
 		this(theApp, theG, 0,0,1,1,0, 0, 0, theDistance);
@@ -487,6 +489,10 @@ public class CCCameraController {
 				_myDragConstraint = _cRotationMode;
 			} else {
 				_myDragConstraint = CCCameraRotationMode.FREE;
+			}
+			
+			if(rotateOnly) {
+				_myRotateHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
 			}
 
 			final CCMouseButton b = theEvent.button();
