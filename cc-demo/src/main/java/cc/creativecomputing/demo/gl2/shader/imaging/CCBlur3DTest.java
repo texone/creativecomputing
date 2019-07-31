@@ -32,7 +32,7 @@ public class CCBlur3DTest extends CCGL2Adapter {
 
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 
-		_myBlur = new CCGPUSeperateGaussianBlur(20, g.width(), g.height(), 1);
+		_myBlur = new CCGPUSeperateGaussianBlur(120, g.width(), g.height(), 1);
 		
 		_myCameraController = new CCCameraController(this, g, 100);
 	}

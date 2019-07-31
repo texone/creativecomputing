@@ -27,6 +27,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 
 public class CCShaderMipmapping extends CCGL2Adapter {
 	
+	@CCProperty(name = "shader")
 	private CCGLProgram _myShader;
 	
 	private CCMesh _myMesh;
@@ -55,7 +56,7 @@ public class CCShaderMipmapping extends CCGL2Adapter {
 			}
 		}
 		
-		_myHeightMap = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/dice.jpg")));
+		_myHeightMap = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("textures/texone2.png")));
 		_myHeightMap.generateMipmaps(true);
 		_myHeightMap.textureFilter(CCTextureFilter.LINEAR);
 		_myHeightMap.textureMipmapFilter(CCTextureMipmapFilter.LINEAR);

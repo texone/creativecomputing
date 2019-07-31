@@ -105,7 +105,7 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 		);
 		_cMorphology = new CCMorphologyFilter();
 		
-		_cHandTracker = new CCHandTracker(_myVideoIn);
+		_cHandTracker = new CCHandTracker(_myVideoIn, null);
 	}
 
 	@Override
