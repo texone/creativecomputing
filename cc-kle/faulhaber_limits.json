@@ -1,0 +1,302 @@
+{"timelines": {"default": {
+  "lower_bound": 49.42859437895541,
+  "quantize": "SUBSTEP_4",
+  "timeline": [{
+    "path": "app",
+    "min": 0,
+    "max": 1,
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app\\app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [{
+        "path": "app\\app\\effects",
+        "min": 0,
+        "max": 1,
+        "accumulate": false,
+        "mute": false,
+        "Extras": {},
+        "eventTypes": "new",
+        "open": true,
+        "tracks": [{
+          "path": "app\\app\\effects\\offset",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "Extras": {},
+          "eventTypes": "new",
+          "open": true,
+          "tracks": [
+            {
+              "path": "app\\app\\effects\\offset\\rotation modulation",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [{
+                "path": "app\\app\\effects\\offset\\rotation modulation\\amounts",
+                "min": 0,
+                "max": 1,
+                "accumulate": false,
+                "mute": false,
+                "Extras": {},
+                "eventTypes": "new",
+                "open": true,
+                "tracks": [
+                  {
+                    "path": "app\\app\\effects\\offset\\rotation modulation\\amounts\\id",
+                    "min": -1,
+                    "max": 1,
+                    "accumulate": false,
+                    "mute": false,
+                    "TrackData": {"points": [
+                      {
+                        "time": 0,
+                        "type": "LINEAR",
+                        "value": 0.5
+                      },
+                      {
+                        "time": 5,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 10,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 15,
+                        "type": "LINEAR",
+                        "value": 0.5
+                      },
+                      {
+                        "time": 55.019408649841694,
+                        "type": "LINEAR",
+                        "value": 0.5
+                      },
+                      {
+                        "time": 60,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 65,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 70,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 75,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 80,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 85,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 90,
+                        "type": "LINEAR",
+                        "value": 0.5
+                      }
+                    ]}
+                  },
+                  {
+                    "path": "app\\app\\effects\\offset\\rotation modulation\\amounts\\constant",
+                    "min": -1,
+                    "max": 1,
+                    "accumulate": false,
+                    "mute": false,
+                    "TrackData": {"points": [
+                      {
+                        "time": 10,
+                        "type": "LINEAR",
+                        "value": 0.5
+                      },
+                      {
+                        "time": 15,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 20,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 25,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 30,
+                        "type": "LINEAR",
+                        "value": 0.5
+                      },
+                      {
+                        "time": 90.03386954272388,
+                        "type": "LINEAR",
+                        "value": 0.5181818181818182
+                      }
+                    ]}
+                  }
+                ],
+                "TrackData": {"points": []}
+              }],
+              "TrackData": {"points": []}
+            },
+            {
+              "path": "app\\app\\effects\\offset\\lift modulation",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [{
+                "path": "app\\app\\effects\\offset\\lift modulation\\amounts",
+                "min": 0,
+                "max": 1,
+                "accumulate": false,
+                "mute": false,
+                "Extras": {},
+                "eventTypes": "new",
+                "open": true,
+                "tracks": [
+                  {
+                    "path": "app\\app\\effects\\offset\\lift modulation\\amounts\\id",
+                    "min": -1,
+                    "max": 1,
+                    "accumulate": false,
+                    "mute": false,
+                    "TrackData": {"points": [
+                      {
+                        "time": 30.046474655150284,
+                        "type": "LINEAR",
+                        "value": 0.4636363636363636
+                      },
+                      {
+                        "time": 35,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 40,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 45,
+                        "type": "LINEAR",
+                        "value": 0.5000000000000001
+                      }
+                    ]}
+                  },
+                  {
+                    "path": "app\\app\\effects\\offset\\lift modulation\\amounts\\constant",
+                    "min": -1,
+                    "max": 1,
+                    "accumulate": false,
+                    "mute": false,
+                    "TrackData": {"points": [
+                      {
+                        "time": 40.020701923159635,
+                        "type": "LINEAR",
+                        "value": 0.5181818181818182
+                      },
+                      {
+                        "time": 45,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 50,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 55,
+                        "type": "LINEAR",
+                        "value": 0.5
+                      },
+                      {
+                        "time": 60,
+                        "type": "LINEAR",
+                        "value": 0.5
+                      },
+                      {
+                        "time": 65,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 69.96409921194898,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 75,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 85,
+                        "type": "LINEAR",
+                        "value": 0
+                      },
+                      {
+                        "time": 90,
+                        "type": "LINEAR",
+                        "value": 0.5
+                      }
+                    ]}
+                  }
+                ],
+                "TrackData": {"points": []}
+              }],
+              "TrackData": {"points": []}
+            }
+          ],
+          "TrackData": {"points": []}
+        }],
+        "TrackData": {"points": []}
+      }],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 78.61518460847952,
+  "Transport": {
+    "loop_end": 100,
+    "loop_active": true,
+    "marker": {"points": []},
+    "loop_start": 90,
+    "speed": 1
+  }
+}}}
