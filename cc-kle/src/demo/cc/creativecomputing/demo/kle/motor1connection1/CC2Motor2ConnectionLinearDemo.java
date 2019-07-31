@@ -33,8 +33,7 @@ import cc.creativecomputing.kle.sequence.CCSequenceRecorder;
 import cc.creativecomputing.math.filter.CCChebFilter;
 
 public class CC2Motor2ConnectionLinearDemo extends CCGL2Adapter {
-	
-
+	//profi music 05361 402348
 	@CCProperty(name = "multi camera controller")
 	private Map<String, CCCameraController> _myMultiControllerMap = new HashMap<>();
 	
