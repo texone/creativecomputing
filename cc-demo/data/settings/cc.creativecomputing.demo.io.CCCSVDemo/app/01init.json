@@ -1,0 +1,405 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "value scale": {
+        "min": 0,
+        "max": 10,
+        "name": "value scale",
+        "value": 1
+      },
+      "acc scale": {
+        "min": 0,
+        "max": 10,
+        "name": "acc scale",
+        "value": 7.170000076293945
+      },
+      "vel scale": {
+        "min": 0,
+        "max": 10,
+        "name": "vel scale",
+        "value": 4.230000019073486
+      },
+      "jerk scale": {
+        "min": 0,
+        "max": 10,
+        "name": "jerk scale",
+        "value": 5.529999732971191
+      },
+      "camera": {
+        "name": "camera",
+        "value": {
+          "rotation speed": {
+            "min": 0,
+            "max": 0.2,
+            "name": "rotation speed",
+            "value": 0.1
+          },
+          "reset on double click": {
+            "name": "reset on double click",
+            "value": true
+          },
+          "distance": {
+            "min": 1,
+            "max": 20000,
+            "name": "distance",
+            "value": 117.35433560985905
+          },
+          "rotation mode": {
+            "name": "rotation mode",
+            "value": "FREE"
+          },
+          "invert": {
+            "name": "invert",
+            "value": false
+          },
+          "center": {
+            "name": "center",
+            "value": {
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "name": "x",
+                "value": 138.9732642976775
+              },
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "name": "y",
+                "value": 312.2548300013145
+              },
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "rotation": {
+            "name": "rotation",
+            "value": {
+              "w": {
+                "min": -1,
+                "max": 1,
+                "name": "w",
+                "value": 1
+              },
+              "x": {
+                "min": -1,
+                "max": 1,
+                "name": "x",
+                "value": 0
+              },
+              "y": {
+                "min": -1,
+                "max": 1,
+                "name": "y",
+                "value": 0
+              },
+              "z": {
+                "min": -1,
+                "max": 1,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "reset": {},
+          "active": {"name": "active"},
+          "fov": {
+            "min": 0,
+            "max": 90,
+            "name": "fov",
+            "value": 45
+          },
+          "camera": {
+            "name": "camera",
+            "value": {
+              "far": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "far",
+                "value": 51961.52422706632
+              },
+              "position": {
+                "name": "position",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 100
+                  }
+                }
+              },
+              "up": {
+                "name": "up",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 1
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              },
+              "near": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "near",
+                "value": 51.96152422706632
+              },
+              "fov": {
+                "min": 0,
+                "max": 1.5707963267948966,
+                "name": "fov",
+                "value": 1.0471975511965976
+              },
+              "apect ratio": {
+                "min": 0.1,
+                "max": 10,
+                "name": "apect ratio",
+                "value": 2
+              },
+              "target": {
+                "name": "target",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          },
+          "friction": {
+            "min": 0,
+            "max": 1,
+            "name": "friction",
+            "value": 0.16
+          }
+        }
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "2560 x 1440"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1200
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 600
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 28.603602721014962
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}
