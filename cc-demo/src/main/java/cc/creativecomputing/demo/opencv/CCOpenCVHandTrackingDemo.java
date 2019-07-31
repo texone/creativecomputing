@@ -147,43 +147,43 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 		g.image(_myTexture, 0,0);
 		g.color(_cContourColor);
 		
-		g.beginShape(CCDrawMode.LINE_LOOP);
-		_cHandTracker.handContour().forEach(v -> g.vertex(v));
-		g.endShape();
+//		g.beginShape(CCDrawMode.LINE_LOOP);
+//		_cHandTracker.handContour().forEach(v -> g.vertex(v));
+//		g.endShape();
 		
 		g.strokeWeight(5);
 		g.color(_cHullColor);
 		
-		g.beginShape(CCDrawMode.LINE_LOOP);
-		_cHandTracker.hullWithDefects().forEach(v -> g.vertex(v.vector));
-		g.endShape();
+//		g.beginShape(CCDrawMode.LINE_LOOP);
+//		_cHandTracker.hullWithDefects().forEach(v -> g.vertex(v.vector));
+//		g.endShape();
 		
 		g.pointSize(10);
 		g.pointSmooth();
 		g.strokeWeight(2);
 		
-		for(int i = 0; i < _cHandTracker.hullWithDefects().size();i++) {
-			if(i % 2 == 0)g.color(1d,0,0);
-			else g.color(0d,1,0);
-			
-			if(i == 0)g.color(CCColor.CYAN);
-			
-			double myRadius = 2;
-			
-			CCVector2 myCurrent = _cHandTracker.hullWithDefects().get(i).vector;
-			g.ellipse(myCurrent,myRadius,myRadius, false);
-		}
-		
-		for(int i = 0; i < _cHandTracker.fingerTips().size();i++) {
-			
-			if(i == 0)g.color(CCColor.CYAN, 0.5);
-			else g.color(CCColor.MAGENTA, 0.5);
-			
-			CCVector3 myTip = _cHandTracker.fingerTips().get(i);
-			double myRadius = myTip.z / 5;
-			
-			g.ellipse(myTip.xy(),myRadius,myRadius, false);
-		}
+//		for(int i = 0; i < _cHandTracker.hullWithDefects().size();i++) {
+//			if(i % 2 == 0)g.color(1d,0,0);
+//			else g.color(0d,1,0);
+//			
+//			if(i == 0)g.color(CCColor.CYAN);
+//			
+//			double myRadius = 2;
+//			
+//			CCVector2 myCurrent = _cHandTracker.hullWithDefects().get(i).vector;
+//			g.ellipse(myCurrent,myRadius,myRadius, false);
+//		}
+//		
+//		for(int i = 0; i < _cHandTracker.fingerTips().size();i++) {
+//			
+//			if(i == 0)g.color(CCColor.CYAN, 0.5);
+//			else g.color(CCColor.MAGENTA, 0.5);
+//			
+//			CCVector3 myTip = _cHandTracker.fingerTips().get(i);
+//			double myRadius = myTip.z / 5;
+//			
+//			g.ellipse(myTip.xy(),myRadius,myRadius, false);
+//		}
 		
 		g.color(1d);
 	}
