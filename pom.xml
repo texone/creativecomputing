@@ -51,6 +51,7 @@
         <module>cc-net</module>
         <module>cc-p5</module>
         <module>cc-serial</module>
+        <module>cc-realsense</module>
         <module>cc-simulation</module>
         <module>cc-video</module>
 		<module>cc-video-vlc</module>

@@ -5,7 +5,6 @@ import static org.bytedeco.javacpp.opencv_imgproc.RETR_EXTERNAL;
 import static org.bytedeco.javacpp.opencv_imgproc.contourArea;
 import static org.bytedeco.javacpp.opencv_imgproc.convexHull;
 import static org.bytedeco.javacpp.opencv_imgproc.convexityDefects;
-import static org.bytedeco.javacpp.opencv_imgproc.drawContours;
 import static org.bytedeco.javacpp.opencv_imgproc.findContours;
 
 import java.nio.file.Path;
@@ -17,12 +16,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.MatVector;
-import org.bytedeco.javacpp.opencv_core.Scalar;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
@@ -32,9 +29,7 @@ import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.filter.CCOneEuroFilter;
-import cc.creativecomputing.math.spline.CCSplineSimplify;
-import cc.creativecomputing.math.spline.Simplify3D;
-import cc.creativecomputing.math.spline.SimplifyP5;
+import cc.creativecomputing.math.spline.CCSimplify3D;
 import cc.creativecomputing.opencv.filtering.CCBlur;
 import cc.creativecomputing.opencv.filtering.CCCVShaderFilter;
 import cc.creativecomputing.opencv.filtering.CCMorphologyFilter;
@@ -70,13 +65,11 @@ public class CCHandTracker2 {
 		int start;
 		int center;
 		int end;
-		double depth;
 		
-		public CCConvexityDefect(int theStart, int theCenter, int theEnd, double theDepth) {
+		public CCConvexityDefect(int theStart, int theCenter, int theEnd) {
 			start = theStart;
 			center = theCenter;
 			end = theEnd;
-			depth = theDepth;
 		}
 
 		@Override
@@ -131,7 +124,6 @@ public class CCHandTracker2 {
 	
 	private CCVector2 _myTip = new CCVector2();
 	private CCVector2 _myCenter = new CCVector2();
-	private CCVector2 _myProgressCenter = new CCVector2();
 	private boolean _myTipInRest = false;
 	private double _myRestTime = 0;
 	private double _myStartAngle = 0;
@@ -145,8 +137,6 @@ public class CCHandTracker2 {
 	private List<CCVector3> _myFingerTips = new ArrayList<>();
 	
 	public CCListenerManager<CCFixedTipEvent> fixedTipEvents = CCListenerManager.create(CCFixedTipEvent.class);
-	
-	private int _myBiggestContourIndex = -1;
 	
 	private CCCVVideoIn _myVideoIn;
 	
@@ -169,9 +159,6 @@ public class CCHandTracker2 {
 	private CCCVTexture _myTexture;
 	
 	final Lock lock = new ReentrantLock();
-	
-	private CCTexture2D _myMaskTexture;
-
 	
 	public CCHandTracker2(CCCVVideoIn theVideoIn, CCTexture2D theMaskTexture, Path theVertexHader, Path theFragmentShader) {
 		_myContours = new MatVector();
@@ -201,8 +188,6 @@ public class CCHandTracker2 {
 		
 		_myTexture = new CCCVTexture();
 		_myTexture.mustFlipVertically(false);
-		
-		_myMaskTexture = theMaskTexture;
 	}
 	
 	public void active(boolean isActive) {
@@ -239,6 +224,7 @@ public class CCHandTracker2 {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	private List<CCVector3> matToContour(Mat theMat){
 		List<CCVector3> myResult = new ArrayList<>();
 		for(int i = 0; i < theMat.rows();i++) {
@@ -257,6 +243,7 @@ public class CCHandTracker2 {
 		public boolean isHand = false;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private CCHandInfo getHandInfo(Mat theContour) {
 		CCHandInfo myResult = new CCHandInfo();
 		myResult.area = contourArea(theContour, false);
@@ -265,10 +252,9 @@ public class CCHandTracker2 {
 		myResult.isHand = true;
 		myResult.handContour = matToContour(theContour);
 		
-		List<CCVector3> simpleLine = Simplify3D.simplify(myResult.handContour, _cMaxGap, true);
+		List<CCVector3> simpleLine = CCSimplify3D.simplify(myResult.handContour, _cMaxGap, true);
 		if(simpleLine.size() > 4)simpleLine.remove(0);
 		
-		double myMinAngle = CCMath.TWO_PI;
 		for(int i = 0; i < simpleLine.size();i++) {
 			CCVector3 myPrev = simpleLine.get((i - 1 + simpleLine.size()) % simpleLine.size());
 			CCVector3 myCurrent = simpleLine.get(i);
@@ -303,9 +289,7 @@ public class CCHandTracker2 {
 			int myStartIndex = myRow.getIntBuffer().get(0);
 			int myEndIndex = myRow.getIntBuffer().get(1);
 			int myFarthestIndex = myRow.getIntBuffer().get(2);
-			int myDepth = myRow.getIntBuffer().get(3);
-				
-			myDefects.add(new CCConvexityDefect(myStartIndex,myFarthestIndex,myEndIndex, myDepth / 256d));
+			myDefects.add(new CCConvexityDefect(myStartIndex,myFarthestIndex,myEndIndex));
 		}
 	
 
@@ -314,17 +298,9 @@ public class CCHandTracker2 {
 		
 		
 		Collections.sort(myDefects);
-		myDefects.forEach(d -> {
-			for(CCVectorAndID myHullv:myResult.convexHull) {
-//				CCLog.info(myHullv.id);
-			}
-//			CCLog.info(d.start, d.center, d.end);
-		});
+	
 		for(int i = 0; i < myDefects.size();i++) {
 			CCConvexityDefect myDefect = myDefects.get(i);
-			CCConvexityDefect myNextDefect = myDefects.get((i + 1) % myDefects.size());
-			//if(myResult.handContour.get(myDefect.start).distance(myResult.handContour.get(myDefect.end)) < _cMaxGap)continue;
-
 			myResult.hullWithDefects.add(new CCVectorAndID(myResult.handContour.get(myDefect.center), myDefect.center, true));
 			myResult.hullWithDefects.add(new CCVectorAndID(myResult.handContour.get(myDefect.end) , myDefect.end, false));
 	
@@ -363,13 +339,9 @@ public class CCHandTracker2 {
 		if (_myContours.size() <= 0)
 			return;
 
-		// find the biggest contour (let's suppose it's our hand)
-		double myBiggestArea = 0.0;
 		double myFingers = 10;
 		double myAngle = 100;
 		CCHandInfo myBestFitInfo = null;
-//		CCLog.info();
-		int j = 0;
 		for (int i = 0; i < _myContours.size(); i++) {
 			CCHandInfo myInfo = getHandInfo(_myContours.get(i));
 		
@@ -379,12 +351,10 @@ public class CCHandTracker2 {
 			if(!myInfo.isHand)continue;
 			if(myInfo.fingerTips.size() <= 0)continue;
 			
-			j++;
 			if(myInfo.fingerTips.size()  < myFingers) {
 //				CCLog.info(myFingers, myInfo.fingerTips.size());
 				myFingers = myInfo.fingerTips.size();
 				myBestFitInfo = myInfo;
-				myBiggestArea = myBestFitInfo.area;
 			}else if(myInfo.fingerTips.size() == myFingers && myInfo.fingerTips.get(0).z < myAngle) {
 				myBestFitInfo = myInfo;
 				myAngle =  myInfo.fingerTips.get(0).z;
@@ -469,7 +439,7 @@ public class CCHandTracker2 {
 		_myHandContour.forEach(v -> g.vertex(v));
 		g.endShape();
 		
-		List<CCVector3> simpleLine = Simplify3D.simplify(_myHandContour, _cMaxGap, true);
+		List<CCVector3> simpleLine = CCSimplify3D.simplify(_myHandContour, _cMaxGap, true);
 		if(simpleLine.size() > 4)simpleLine.remove(0);
 //		CCLog.info(simpleLine.size(), _myHandContour.size());
 		g.color(_cHullColor);
@@ -609,9 +579,7 @@ public class CCHandTracker2 {
 //										if(myTipInRest && !_myTipInRest) {
 				CCVector2 myDirection = _myTip.subtract(_myCenter).normalizeLocal();
 				_myStartAngle = CCMath.atan2(-myDirection.y, myDirection.x);
-//								}
-				_myProgressCenter = _myTip;
-				_myTipInRest = myTipInRest;
+_myTipInRest = myTipInRest;
 			}
 		}else {
 			reset();

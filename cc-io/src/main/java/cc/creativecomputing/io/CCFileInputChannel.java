@@ -58,6 +58,15 @@ public class CCFileInputChannel {
 		}
 	}
 	
+	public int read(long theOffset, ByteBuffer theBuffer) {
+		try {
+			_myFileChannel.position(theOffset);
+			return _myFileChannel.read(theBuffer);
+		} catch (IOException e) {
+			throw new CCIOException(e);
+		}
+	}
+	
 	public void read(byte[] theBytes) {
 		ByteBuffer myBuffer = ByteBuffer.allocate(theBytes.length);
 		read(myBuffer);

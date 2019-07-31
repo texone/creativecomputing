@@ -3,9 +3,6 @@ package cc.creativecomputing.opencv;
 import static org.bytedeco.javacpp.opencv_imgproc.CHAIN_APPROX_SIMPLE;
 import static org.bytedeco.javacpp.opencv_imgproc.RETR_EXTERNAL;
 import static org.bytedeco.javacpp.opencv_imgproc.contourArea;
-import static org.bytedeco.javacpp.opencv_imgproc.convexHull;
-import static org.bytedeco.javacpp.opencv_imgproc.convexityDefects;
-import static org.bytedeco.javacpp.opencv_imgproc.drawContours;
 import static org.bytedeco.javacpp.opencv_imgproc.findContours;
 
 import java.nio.file.Path;
@@ -23,12 +20,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.MatVector;
-import org.bytedeco.javacpp.opencv_core.Scalar;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
@@ -39,9 +34,7 @@ import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector2i;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.filter.CCOneEuroFilter;
-import cc.creativecomputing.math.spline.CCSplineSimplify;
-import cc.creativecomputing.math.spline.Simplify3D;
-import cc.creativecomputing.math.spline.SimplifyP5;
+import cc.creativecomputing.math.spline.CCSimplify3D;
 import cc.creativecomputing.opencv.filtering.CCBlur;
 import cc.creativecomputing.opencv.filtering.CCCVShaderFilter;
 import cc.creativecomputing.opencv.filtering.CCMorphologyFilter;
@@ -257,7 +250,7 @@ public class CCHandTracker {
 			
 			center = myCenter.xy();
 			
-			simpleContour = Simplify3D.simplify(handContour, _cMaxGap, true);
+			simpleContour = CCSimplify3D.simplify(handContour, _cMaxGap, true);
 			if(simpleContour.size() > 4)simpleContour.remove(0);
 			
 			
