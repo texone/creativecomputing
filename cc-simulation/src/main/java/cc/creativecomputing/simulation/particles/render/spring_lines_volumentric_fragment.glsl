@@ -36,7 +36,7 @@ void main(){
 	float mouseFade = distance(gl_FragCoord.xy, mouse.xy) / (1500);
 	gl_FragColor.a *= depthFade * mix(1,smoothstep(0.0,1,mouseFade),min(1,mouse.z ));
 	//gl_FragColor.a = 0.1;
-gl_FragColor = vec4(1);
+//gl_FragColor = vec4(1);
 	//gl_FragColor = vec4(gl_TexCoord[0].xy, 0, 1);
 	
 }

@@ -121,7 +121,7 @@ void main (){
 	float staticAge = texture2DRect (staticAges, texID).x;
 	
 	vec4 info = vec4(
-		0,//mix(lastInfo.x + deltaTime, staticAge, useAgeBlends),
+		0,//mix(lastInfo.x + deltaTime, staticAge, useAgeBlends) * float(lastInfo.y > 0),
 		lastInfo.y,
 		lastInfo.z,
 		lastInfo.w

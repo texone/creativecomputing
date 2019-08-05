@@ -58,8 +58,8 @@ void main (){
 	} 
 	
 	// offset position in screen space along line direction and orthogonal direction
-	p0.xy += lineDirProj.xy * offsets.xx * vec2(1.0,aspectRatio);
-	p0.xy += lineDirProj.yx * offsets.yy * vec2(1.0,aspectRatio) * vec2(1.0,-1.0);
+	p0.xy += lineDirProj.xy * offsets.xx * vec2(1.0,aspectRatio );
+	p0.xy += lineDirProj.yx * offsets.yy * vec2(1.0,aspectRatio * 1) * vec2(1.0,-1.0);
 
 	gl_TexCoord[0].z = p0.z;
 	p0.xyz *= myIndex.w;

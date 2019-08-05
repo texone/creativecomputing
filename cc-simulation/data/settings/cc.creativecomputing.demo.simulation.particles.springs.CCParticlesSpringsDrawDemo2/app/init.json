@@ -59,7 +59,7 @@
                   },
                   "buffer_debug_fragment.glsl": {
                     "name": "buffer_debug_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@65e8101"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@5edc2a0a"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -76,7 +76,7 @@
                   },
                   "buffer_debug_vertex.glsl": {
                     "name": "buffer_debug_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@39f31e70"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@2c4deb52"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -247,7 +247,7 @@
                   },
                   "realsense_fragment.glsl": {
                     "name": "realsense_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@5630542d"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@27658bfe"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -264,7 +264,7 @@
                   },
                   "realsense_vertex.glsl": {
                     "name": "realsense_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@69c2571e"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@3ff43890"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -296,7 +296,7 @@
                   },
                   "threshold_fragment.glsl": {
                     "name": "threshold_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@6eee7faa"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@3c120f83"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -332,7 +332,7 @@
                 "value": {
                   "threshold_vertex.glsl": {
                     "name": "threshold_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@2d318352"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@39cb073a"
                   },
                   "auto save": {
                     "name": "auto save",
@@ -375,7 +375,7 @@
                         "value": {
                           "quad_fragment.glsl": {
                             "name": "quad_fragment.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@551cf17c"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@2892ab26"
                           },
                           "auto save": {
                             "name": "auto save",
@@ -431,7 +431,7 @@
                           },
                           "quad_vertex.glsl": {
                             "name": "quad_vertex.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@34b8893b"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@4e45d2fc"
                           },
                           "uniforms": {
                             "name": "uniforms",
@@ -464,7 +464,7 @@
                       }
                     ]},
                     "name": "life time alpha",
-                    "value": "cc.creativecomputing.control.CCEnvelope@41e2e228"
+                    "value": "cc.creativecomputing.control.CCEnvelope@39bdda4e"
                   },
                   "draw attributes": {
                     "name": "draw attributes",
@@ -551,7 +551,7 @@
                           },
                           "spring_lines_volumentric_fragment.glsl": {
                             "name": "spring_lines_volumentric_fragment.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@7f4732fd"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@783cb8f2"
                           },
                           "uniforms": {
                             "name": "uniforms",
@@ -599,7 +599,7 @@
                         "value": {
                           "spring_lines_volumentric_vertex.glsl": {
                             "name": "spring_lines_volumentric_vertex.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@325a63eb"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@38fbd953"
                           },
                           "auto save": {
                             "name": "auto save",
@@ -671,7 +671,7 @@
                       }
                     ]},
                     "name": "life time alpha",
-                    "value": "cc.creativecomputing.control.CCEnvelope@7bbf76e4"
+                    "value": "cc.creativecomputing.control.CCEnvelope@1fd9b946"
                   },
                   "draw attributes": {
                     "name": "draw attributes",
@@ -755,7 +755,7 @@
                 },
                 "source 0": {
                   "name": "source 0",
-                  "value": "cc.creativecomputing.control.code.CCShaderSource@63fd0251"
+                  "value": "cc.creativecomputing.control.code.CCShaderSource@4583bdbf"
                 },
                 "save in file": {
                   "name": "save in file",
@@ -767,56 +767,6 @@
           "forces": {
             "name": "forces",
             "value": {
-              "textureForceField": {
-                "name": "textureForceField",
-                "value": {
-                  "strength": {
-                    "min": 0,
-                    "max": 10,
-                    "name": "strength",
-                    "value": 7.820000171661377
-                  },
-                  "life time blend": {
-                    "curve": {"points": [
-                      {
-                        "time": 0.10546875,
-                        "type": "LINEAR",
-                        "value": 1
-                      },
-                      {
-                        "time": 1,
-                        "type": "LINEAR",
-                        "value": 1
-                      }
-                    ]},
-                    "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@1203a151"
-                  },
-                  "force scale": {
-                    "name": "force scale",
-                    "value": {
-                      "x": {
-                        "min": -1,
-                        "max": 1,
-                        "name": "x",
-                        "value": 1
-                      },
-                      "y": {
-                        "min": -1,
-                        "max": 1,
-                        "name": "y",
-                        "value": -1
-                      },
-                      "z": {
-                        "min": -1,
-                        "max": 1,
-                        "name": "z",
-                        "value": 1
-                      }
-                    }
-                  }
-                }
-              },
               "attractor": {
                 "name": "attractor",
                 "value": {
@@ -844,7 +794,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@a841140"
+                    "value": "cc.creativecomputing.control.CCEnvelope@2255e496"
                   },
                   "position": {
                     "name": "position",
@@ -906,7 +856,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@5c21519a"
+                    "value": "cc.creativecomputing.control.CCEnvelope@428166c7"
                   },
                   "scale": {
                     "min": 0,
@@ -957,7 +907,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@5c2914ac"
+                    "value": "cc.creativecomputing.control.CCEnvelope@1539bb73"
                   },
                   "drag": {
                     "min": 0,
@@ -980,7 +930,7 @@
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 1.190000057220459
+                    "value": 0
                   },
                   "life time blend": {
                     "curve": {"points": [
@@ -1001,7 +951,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@53af2f51"
+                    "value": "cc.creativecomputing.control.CCEnvelope@47f8231b"
                   },
                   "damping": {
                     "min": 0,
@@ -1036,7 +986,7 @@
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 0.02
+                    "value": 0.20999999344348907
                   },
                   "near max force": {
                     "min": 0,
@@ -1058,7 +1008,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@790b3a75"
+                    "value": "cc.creativecomputing.control.CCEnvelope@4a041e26"
                   }
                 }
               }
@@ -1097,7 +1047,7 @@
             "min": 1,
             "max": 20000,
             "name": "distance",
-            "value": 1468.3315155283306
+            "value": 514.5661269649914
           },
           "invert": {
             "name": "invert",
@@ -1110,19 +1060,19 @@
                 "min": -10000,
                 "max": 10000,
                 "name": "x",
-                "value": -61.44235993049017
+                "value": 1066.9033285497685
               },
               "y": {
                 "min": -10000,
                 "max": 10000,
                 "name": "y",
-                "value": 11.601043196589668
+                "value": 314.529350292943
               },
               "z": {
                 "min": -10000,
                 "max": 10000,
                 "name": "z",
-                "value": -95.2533772891831
+                "value": 8.10935647356279
               }
             }
           },
@@ -1308,7 +1258,7 @@
                   },
                   "buffer_debug_fragment.glsl": {
                     "name": "buffer_debug_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@4407d457"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@1683fe05"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -1325,7 +1275,7 @@
                   },
                   "buffer_debug_vertex.glsl": {
                     "name": "buffer_debug_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@1a7f3e86"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@5c00e1bf"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -1469,7 +1419,7 @@
         "min": -2147483648,
         "max": 2147483647,
         "name": "height",
-        "value": 1200
+        "value": 1368
       }
     }
   },
@@ -1480,11 +1430,11 @@
         "min": 0,
         "max": 1,
         "name": "fixed update time",
-        "value": 0.03333333333333333
+        "value": 1
       },
       "fix update time": {
         "name": "fix update time",
-        "value": true
+        "value": false
       },
       "framerate": {
         "min": -2147483648,
@@ -1494,13 +1444,13 @@
       },
       "animationMode": {
         "name": "animationMode",
-        "value": "AS_FAST_AS_POSSIBLE"
+        "value": "FRAMERATE_PRECISE"
       },
       "show frame rate": {
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 0
+        "value": 29.043910762584183
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

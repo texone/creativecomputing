@@ -15,8 +15,11 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.demo.simulation.particles.realsense.CCRealSenseForceField;
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.CCGraphics.CCPolygonMode;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
 import cc.creativecomputing.graphics.camera.CCCameraController;
@@ -47,24 +50,9 @@ import cc.creativecomputing.simulation.particles.render.CCParticleTriangleRender
 import cc.creativecomputing.simulation.particles.render.CCQuadRenderer;
 import cc.creativecomputing.simulation.particles.render.CCSpringVolumentricLineRenderer;
 
-public class CCParticlesSpringsDrawDemo extends CCGL2Adapter {
-	private List<CCGesture> _myGestures = new ArrayList<>();
+public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 
-	private void loadStrokes(int w, int h) {
-		CCDataElement myXML = CCXMLIO.createXMLElement(CCNIOUtil.dataPath("strokes.xml"));
-		for (CCDataElement myStrokeXML : myXML) {
-			CCGesture myStroke = new CCGesture(w, h);
-			for (CCDataElement myPointXML : myStrokeXML) {
-				// if(myPointXML.getFloat("x") == 0 && myPointXML.getFloat("y") == 0)continue;
-				myStroke.addPoint(
-					myPointXML.doubleAttribute("x"), 
-					myPointXML.doubleAttribute("y"),
-					myPointXML.doubleAttribute("p")
-				);
-			}
-			_myGestures.add(myStroke);
-		}
-	}
+	
 
 	@CCProperty(name = "particles")
 	private CCParticles _myParticles;
@@ -113,7 +101,7 @@ public class CCParticlesSpringsDrawDemo extends CCGL2Adapter {
 		myForces.add(new CCAttractor());
 		myForces.add(_mySprings = new CCSpringForce(4, 4f));
 		myForces.add(_myTargetForce = new CCTargetForce());
-		myForces.add(new CCTextureForceField2D(_RealSenseForceField.forceField(), new CCVector2(1920d, -1080d), new CCVector2(0.5, 0.5)));
+//		myForces.add(new CCTextureForceField2D(_RealSenseForceField.forceField(), new CCVector2(1920d, -1080d), new CCVector2(0.5, 0.5)));
 
 		List<CCParticleRenderer> myRenderer = new ArrayList<>();
 
@@ -135,59 +123,75 @@ public class CCParticlesSpringsDrawDemo extends CCGL2Adapter {
 
 		width = g.width();
 		height = g.height();
-		
-		/*
-		loadStrokes(g.width(), g.height());
-		for(CCGesture myGesture:_myGestures) {
-			CCParticle myLast = null;
-			for (CCVector3 myPoint : myGesture) {
-				CCVector3 myPosition = new CCVector3(myPoint.x - width / 2, myPoint.y - height / 2);
-				CCParticle myParticle = _myEmitter.emit(myPosition, new CCVector3(), 30);
-				myParticle.target().set(myPosition.x, myPosition.y, myPosition.z, 1);
-				if (myLast != null) {
-					_mySprings.addSpring(myParticle, myLast);
-				}
-	
-				myLast = myParticle;
-				_myNewTargets.add(myParticle);
-			}
-		}*/
-		
-		CCSVGDocument _myDocument = CCSVGIO.newSVG(CCNIOUtil.dataPath("notes01.svg"));
+		CCSVGDocument _myDocument = CCSVGIO.newSVG(CCNIOUtil.dataPath("Wittgenstein.svg"));
 		_mySplines = new ArrayList<>();
-		int c = 0;
 		for(CCLinearSpline mySpline:_myDocument.contours(1)) {
 			List<CCVector3> myPoints = new ArrayList<>();
 			double myLength = mySpline.totalLength();
-			int myNumberOfPoints = CCMath.ceil(myLength / 2);
-			for(int i = 0; i <= myNumberOfPoints;i++) {
-				double d = CCMath.norm(i, 0, myNumberOfPoints);
-				myPoints.add(mySpline.interpolate(d));
-				c++;
+			int myNumberOfPoints = CCMath.ceil(myLength / 1);
+			
+			for(int i = 0; i < myNumberOfPoints;i++) {
+				double d0 = CCMath.norm(i, 0, myNumberOfPoints);
+				double d1 = CCMath.norm(i + 1, 0, myNumberOfPoints);
+				CCVector3 p0 = mySpline.interpolate(d0);
+				CCVector3 p1 = mySpline.interpolate(d1);
+				CCVector3 dir = p1.subtract(p0).normalizeLocal();
+				myPoints.add(p0.add(dir.y*2, -dir.x*2,0));
+				myPoints.add(p0.add(-dir.y*2, dir.x*2,0));
 			}
 			_mySplines.add(myPoints);
 		}
 		
 		for(List<CCVector3> mySpline:_mySplines) {
 
-			CCParticle myLast = null;
+			CCParticle myLast0 = null;
+			CCParticle myLast1 = null;
 			
 			for(CCVector3 myPoint:mySpline) {
-				myPoint.x *= 0.75;
-				myPoint.y *= 0.75;
-				myPoint.y += 400;
-				CCVector3 myPosition = new CCVector3(myPoint.x - width / 2, myPoint.y - height / 2);
+				CCVector3 myPosition = new CCVector3(myPoint.x, myPoint.y);
 				CCParticle myParticle = _myEmitter.emit(myPosition, new CCVector3(), 30);
 				myParticle.target().set(myPosition.x, myPosition.y, myPosition.z, 1);
-				if (myLast != null) {
-					_mySprings.addSpring(myParticle, myLast);
+				if (myLast0 != null) {
+					_mySprings.addSpring(myParticle, myLast0);
 				}
-	
-				myLast = myParticle;
+				if (myLast1 != null) {
+					_mySprings.addSpring(myParticle, myLast1);
+//					_mySprings.addSpring(myLast0, myLast1);
+				}
+
+				myLast1 = myLast0;
+				myLast0 = myParticle;
 				_myNewTargets.add(myParticle);
-				c++;
 			}
 		}
+		
+
+//		CCParticle myLast0 = null;
+//		CCParticle myLast1 = null;
+//		for(int i = 0; i < 1000;i+=10) {
+//			
+//			
+//				CCVector3 myPosition = new CCVector3(i, 400 +(( i/10 %2 == 0) ? 30 : -30));
+//				CCParticle myParticle = _myEmitter.emit(myPosition, new CCVector3(), 30);
+//				myParticle.target().set(myPosition.x, myPosition.y, myPosition.z, 1);
+//				CCLog.info(myPosition, myParticle.index());
+//				
+//				if (myLast0 != null) {
+//					_mySprings.addSpring(myParticle, myLast0);
+//					CCLog.info("p 0");
+//				}
+//				if (myLast1 != null) {
+//					_mySprings.addSpring(myParticle, myLast1);
+//					CCLog.info("p 1");
+////					_mySprings.addSpring(myLast0, myLast1);
+////					CCLog.info("0 1");
+//				}
+//
+//				myLast1 = myLast0;
+//				myLast0 = myParticle;
+//				_myNewTargets.add(myParticle);
+//			
+//		}
 	}
 
 	int myIndex = 0;
@@ -251,7 +255,8 @@ public class CCParticlesSpringsDrawDemo extends CCGL2Adapter {
 		_myParticles.preDisplay(g);
 		g.clear();
 		g.pushMatrix();
-		//_cCameraController.camera().draw(g);
+//		g.ortho();
+		_cCameraController.camera().draw(g);
 		
 		g.pushMatrix();
 		g.scale(1,-1);
@@ -262,18 +267,30 @@ public class CCParticlesSpringsDrawDemo extends CCGL2Adapter {
 		g.noDepthTest();
 		g.color(0f, _cAlpha);
 		_myParticles.display(g);
-
-		g.blend();
+//
+//		g.blend();
 		g.popMatrix();
-
-		g.color(1d);
-//		CCLog.info(g.vendor());
-		_myDebugger.display(g);
-		_myParticleDebugger.display(g);
+		
+		g.pushAttribute();
+		g.polygonMode(CCPolygonMode.LINE);
+		g.color(1d,0,0);
+		for(List<CCVector3> mySpline :_mySplines) {
+			g.beginShape(CCDrawMode.TRIANGLE_STRIP);
+			for(CCVector3 myPoint:mySpline) {
+				g.vertex(myPoint);
+//				CCLog.info(myPoint);
+			}
+			g.endShape();
+		}
+		g.popAttribute();
+//		g.color(1d);
+////		CCLog.info(g.vendor());
+//		_myDebugger.display(g);
+//		_myParticleDebugger.display(g);
 	}
 
 	public static void main(String[] args) {
-		CCGL2Application myAppManager = new CCGL2Application(new CCParticlesSpringsDrawDemo());
+		CCGL2Application myAppManager = new CCGL2Application(new CCParticlesSpringsDrawDemo2());
 		myAppManager.glcontext().size(1800, 1368);
 		myAppManager.animator().framerate = 30;
 		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
