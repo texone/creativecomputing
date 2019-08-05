@@ -9,8 +9,10 @@ import org.librealsense.Device;
 import org.librealsense.DeviceList;
 import org.librealsense.Frame;
 import org.librealsense.FrameList;
+import org.librealsense.Intrinsics;
 import org.librealsense.Native;
 import org.librealsense.Pipeline;
+import org.librealsense.PipelineProfile;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
@@ -162,7 +164,9 @@ public class CCRealSense {
 		);
 
 		// start pipeline
-		pipeline.startWithConfig(config);
+		PipelineProfile myProfile = pipeline.startWithConfig(config);
+		Intrinsics myIntrinsics = myProfile.getStreams().get(0).getVideoStreamIntrinsics();
+		//myIntrinsics.
 
 		running = true;
 		_myThread.start();
@@ -171,7 +175,7 @@ public class CCRealSense {
 	public void update(CCAnimator theAnimator) {
 		if(_myInputChannel == null)return;
 		ByteBuffer myReadBuffer = ByteBuffer.allocateDirect((int)_myFrameSize);
-		_myInputChannel.read(_myFrame * _myFrameSize, myReadBuffer);
+		_myInputChannel.read(_myFrame * _myFrameSize, myReadBuffer); 
 		myReadBuffer.rewind();
 		
 		CCImage tmp = depthImage;
