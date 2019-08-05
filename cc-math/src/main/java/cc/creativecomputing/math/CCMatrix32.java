@@ -290,6 +290,46 @@ public class CCMatrix32 {
 	public CCVector2 transform(CCVector2 theSource) {
 		return transform(theSource, null);
 	}
+	
+	/**
+	 * Multiplies the given source vector against this matrix
+	 * @param theSource the vector to multiply with this matrix
+	 * @param theTarget if this vector is not null the result will be stored in this vector
+	 * @return the result of the multiplication
+	 */
+	public CCVector3 transform(final CCVector3 theSource, CCVector3 theTarget) {
+		if (theTarget == null) {
+			theTarget = new CCVector3();
+		}
+
+		theTarget.x = m00 * theSource.x + m01 * theSource.y + m02;
+		theTarget.y = m10 * theSource.x + m11 * theSource.y + m12;
+		return theTarget;
+	}
+	
+	/**
+	 * Multiplies the given source vector against this matrix
+	 * @param theSource the vector to multiply with this matrix
+	 * @param theTarget if this vector is not null the result will be stored in this vector
+	 * @return the result of the multiplication
+	 */
+	public CCVector3 transformLocal(final CCVector3 theSource) {
+		double x = theSource.x;
+		double y = theSource.y;
+
+		theSource.x = m00 * x + m01 * y + m02;
+		theSource.y = m10 * x + m11 * y + m12;
+		return theSource;
+	}
+	
+	/**
+	 * Multiplies the given source vector against this matrix
+	 * @param theSource the vector to multiply with this matrix
+	 * @return the result of the multiplication
+	 */
+	public CCVector3 transform(CCVector3 theSource) {
+		return transform(theSource, null);
+	}
 
 	/**
 	 * Multiply a two element vector against this matrix. If out is null or not length four, a new double array will be
