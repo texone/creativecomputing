@@ -41,7 +41,7 @@ public class CCSVGRectangle extends CCSVGElement{
 	}
 	
 	@Override
-	public List<CCLinearSpline> contours() {
+	public List<CCLinearSpline> contours(double theFlatness) {
 		CCLinearSpline myContour = new CCLinearSpline(true);
 		myContour.beginEditSpline();
 		myContour.addPoint(new CCVector3(_myCenter.x, _myCenter.y));

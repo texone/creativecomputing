@@ -44,7 +44,7 @@ public class CCSVGEllipse extends CCSVGElement{
 	}
 	
 	@Override
-	public List<CCLinearSpline> contours() {
+	public List<CCLinearSpline> contours(double theFlatness) {
 		CCLinearSpline myContour = new CCLinearSpline(true);
 		myContour.beginEditSpline();
 		for(int i = 0; i <= 360;i++){

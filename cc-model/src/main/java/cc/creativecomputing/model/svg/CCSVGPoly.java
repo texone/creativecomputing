@@ -33,7 +33,7 @@ public class CCSVGPoly extends CCSVGElement{
 	}
 	
 	@Override
-	public List<CCLinearSpline> contours() {
+	public List<CCLinearSpline> contours(double theFlatness) {
 		List<CCLinearSpline> myResult = new ArrayList<>();
 		myResult.add(_mySpline);
 		return myResult;

@@ -576,7 +576,6 @@ public class CCSVGPath extends CCSVGElement{
 	private GeneralPath _myPath;
 
 	private List<CCLinearSpline>_myContours = null;
-	private float _myFlatness = 1;
 	
 	private static Pattern PATTERN = Pattern.compile("([MmLlHhVvAaQqTtCcSsZz])|([-+]?((\\d*\\.\\d+)|(\\d+))([eE][-+]?\\d+)?)");
 
@@ -712,19 +711,11 @@ public class CCSVGPath extends CCSVGElement{
         }
     }
 	
-	/**
-	 * _myFlatness
-	 * @param theFlatness
-	 */
-	public void flatness(float theFlatness){
-		_myFlatness = theFlatness;
-	}
-	
-	private void createContours(){
+	private void createContours(double theFlatness){
 		_myContours = new ArrayList<>();
 		if(_myPath == null)return;
 		
-		PathIterator myIterator = _myPath.getPathIterator(null, _myFlatness);
+		PathIterator myIterator = _myPath.getPathIterator(null, theFlatness);
 		
 		CCLinearSpline myContour = null;
 		float[] myCoords = new float[2];
@@ -754,9 +745,10 @@ public class CCSVGPath extends CCSVGElement{
 		_myContours.add(myContour);
 	}
 	
-	public List<CCLinearSpline> contours(){
+	@Override
+	public List<CCLinearSpline> contours(double theFlatness){
 		if(_myContours == null){
-			createContours();
+			createContours(theFlatness);
 		}
 		return _myContours;
 	}
@@ -764,7 +756,7 @@ public class CCSVGPath extends CCSVGElement{
 	@Override
 	public void drawImplementation(CCGraphics g, boolean theFill) {
 		if(_myContours == null){
-			createContours();
+			createContours(1);
 		}
 //		System.out.println("DRAW:" + _mySegments.size());
 		for(CCLinearSpline myContour:_myContours){

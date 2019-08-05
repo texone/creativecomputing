@@ -28,7 +28,7 @@ abstract class CCSVGGradient extends CCSVGElement {
 	public void drawImplementation(CCGraphics g, boolean theFill) {}
 
 	@Override
-	public List<CCLinearSpline> contours() {
+	public List<CCLinearSpline> contours(double theFlatness) {
 		// TODO Auto-generated method stub
 		return null;
 	}

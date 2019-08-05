@@ -58,7 +58,7 @@ public abstract class CCSVGElement {
 	protected String _myName;
 	
 	@CCProperty(name = "transform")
-	protected CCMatrix32 matrix;
+	protected CCMatrix32 matrix = new CCMatrix32();
 	
 	// set to false if the object is hidden in the layers palette
 	@CCProperty(name = "visible")
@@ -231,7 +231,12 @@ public abstract class CCSVGElement {
 		}
 	}
 	
-	public abstract List<CCLinearSpline> contours();
+
+	public List<CCLinearSpline> contours(){
+		return contours(1);
+	}
+	
+	public abstract List<CCLinearSpline> contours(double theFlatness);
 	
 	private void readName(CCDataElement theSVG){
 		String myName = theSVG.attribute("id");
