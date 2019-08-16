@@ -22,34 +22,36 @@ public class CCCSVDemo extends CCGL2Adapter {
 	
 	@CCProperty(name = "camera")
 	private CCCameraController _cCameraController;
-	
+	int colums = 20;
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		CCDataElement myElements = CCCSVIO.createDataElement(CCNIOUtil.dataPath("csv/wippe02.csv"), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19", ",");
-		myData = new double[13][myElements.children().size()];
+		CCDataElement myElements = CCCSVIO.createDataElement(CCNIOUtil.dataPath("csv/wippe10.csv"), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19", ",");
+		myData = new double[colums][myElements.children().size()];
 		int i = 0;
+		
 		for(CCDataElement myElement:myElements) {
-			for(int j = 0; j < 13; j++) {
+			for(int j = 0; j < colums; j++) {
+//				CCLog.info(j, myElement.attribute(j+""));
 				myData[j][i] = myElement.doubleAttribute(j+"");
 			}
 			i++;
 			CCLog.info(i);
 		}
-		myVels = new double[13][myElements.children().size()];
+		myVels = new double[colums][myElements.children().size()];
 		for(i = 0; i < myElements.children().size() - 1;i++) {
-			for(int j = 0; j < 13; j++) {
+			for(int j = 0; j < colums; j++) {
 				myVels[j][i] = (myData[j][i + 1] - myData[j][i]) * 5;
 			}
 		}
-		myAccs = new double[13][myElements.children().size()];
+		myAccs = new double[colums][myElements.children().size()];
 		for(i = 0; i < myElements.children().size() - 2;i++) {
-			for(int j = 0; j < 13; j++) {
+			for(int j = 0; j < colums; j++) {
 				myAccs[j][i] = (myVels[j][i + 1] - myVels[j][i]) * 5;
 			}
 		}
-		myJerks = new double[13][myElements.children().size()];
+		myJerks = new double[colums][myElements.children().size()];
 		for(i = 0; i < myElements.children().size() - 3;i++) {
-			for(int j = 0; j < 13; j++) {
+			for(int j = 0; j < colums; j++) {
 				myJerks[j][i] = (myAccs[j][i + 1] - myAccs[j][i]) * 5;
 			}
 		}
@@ -72,11 +74,12 @@ public class CCCSVDemo extends CCGL2Adapter {
 
 	@Override
 	public void display(CCGraphics g) {
+		g.clearColor(0);
 		g.clear();
 		_cCameraController.camera().draw(g);
 		
 		g.color(255);
-		for(int i = 0; i < 13;i++) {
+		for(int i = 0; i < colums;i++) {
 			g.beginShape(CCDrawMode.LINE_STRIP);
 			for(int j = 0; j < myData[i].length;j++) {
 				g.vertex(j,myData[i][j] * _cValueScale + g.height()/2);
@@ -86,7 +89,7 @@ public class CCCSVDemo extends CCGL2Adapter {
 		}
 		
 		g.color(255,0,0);
-		for(int i = 0; i < 13;i++) {
+		for(int i = 0; i < colums;i++) {
 			g.beginShape(CCDrawMode.LINE_STRIP);
 			for(int j = 0; j < myVels[i].length;j++) {
 				g.vertex(j,myVels[i][j]  * _cVelScale + g.height()/2);
@@ -96,7 +99,7 @@ public class CCCSVDemo extends CCGL2Adapter {
 		}
 		
 		g.color(0,255,0);
-		for(int i = 0; i < 13;i++) {
+		for(int i = 0; i < colums;i++) {
 			g.beginShape(CCDrawMode.LINE_STRIP);
 			for(int j = 0; j < myAccs[i].length;j++) {
 				g.vertex(j,myAccs[i][j] *_cAccScale + g.height()/2);
@@ -106,7 +109,7 @@ public class CCCSVDemo extends CCGL2Adapter {
 		}
 		
 		g.color(0,0,255);
-		for(int i = 0; i < 13;i++) {
+		for(int i = 0; i < colums;i++) {
 			g.beginShape(CCDrawMode.LINE_STRIP);
 			for(int j = 0; j < myJerks[i].length;j++) {
 				g.vertex(j,myJerks[i][j] * _cJerkScale  + g.height()/2);
@@ -121,7 +124,7 @@ public class CCCSVDemo extends CCGL2Adapter {
 		CCCSVDemo demo = new CCCSVDemo();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);
-		myAppManager.glcontext().size(1200, 600);
+		myAppManager.glcontext().size(3800, 600);
 		myAppManager.animator().framerate = 30;
 		myAppManager.animator().animationMode = CCAnimator.CCAnimationMode.FRAMERATE_PRECISE;
 		myAppManager.start();
