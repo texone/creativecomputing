@@ -133,6 +133,8 @@ public class CCCatmulRomSpline extends CCSpline {
 	 */
 	protected void computeTotalLengthImpl() {
 		if (_myPoints.size() > 3) {
+			_mySegmentsLength.clear();
+			_myTotalLength = 0;
 			for (int i = 0; i < _myPoints.size() - 3; i++) {
 				double l = catmullRomLength(
 					_myPoints.get(i),

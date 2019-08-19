@@ -169,6 +169,8 @@ public class CCBezierSpline extends CCSpline {
 	@Override
 	public void computeTotalLengthImpl() {
 		if (_myPoints.size() > 1) {
+			_myTotalLength = 0;
+			_mySegmentsLength.clear();
 			for (int i = 0; i < _myPoints.size() - 3; i += 3) {
 				double l = bezierLength(
 					_myPoints.get(i),

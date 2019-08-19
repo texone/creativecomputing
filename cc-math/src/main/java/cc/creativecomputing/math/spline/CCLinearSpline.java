@@ -39,6 +39,8 @@ public class CCLinearSpline extends CCSpline{
 	@Override
 	public void computeTotalLengthImpl() {
 		_myLines.clear();
+		_myTotalLength = 0;
+		_mySegmentsLength.clear();
 		if (_myPoints.size() > 1) {
 			for (int i = 0; i < _myPoints.size() - 1; i++) {
 				CCLine3 myLine = new CCLine3(_myPoints.get(i), _myPoints.get(i + 1));

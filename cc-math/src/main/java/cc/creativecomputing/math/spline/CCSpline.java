@@ -103,7 +103,7 @@ public abstract class CCSpline implements Iterable<CCVector3>, CCInterpolatable<
 		_myIsModified = false;
 
 		if (_myPoints.size() >= 2 && _myIsClosed) {
-			_myPoints.add(_myPoints.get(0));
+			_myPoints.add(_myPoints.get(0).clone());
 		}
 
 		if (_myPoints.size() > 1) {
