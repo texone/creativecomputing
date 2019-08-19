@@ -65,7 +65,7 @@ public class CCNoiseCurveFieldDemo extends CCGL2Adapter {
 		myForces.add(_myForceField = new CCForceField());
 		myForces.add(_myAttractor = new CCAttractor());
 		
-		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 1000,1000);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), new ArrayList<CCConstraint>(),1000, 1000);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);

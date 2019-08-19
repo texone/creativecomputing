@@ -64,7 +64,7 @@ public class CCTerrainConstraintDemo extends CCGL2Adapter {
 			1,1,1
 		));
 		
-		_myParticles = new CCParticles(g, myForces, myConstraints, 700,700);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), myConstraints,700, 700);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);

@@ -15,11 +15,21 @@ uniform float staticPositionBlend;
 uniform sampler2DRect lifeTimeBlends;
 uniform sampler2DRect groupInfoTexture;
 
-float lifeTimeBlend(vec4 infos, vec4 groupInfos, float forceIndex){
-	float progress = infos.x / infos.y;
-	if(infos.y <= 0)return 1;
+@define blends
+
+float blend(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime, float forceIndex){
+
+	float myBlend = 0;
+	float myAmount = 0;
+	vec2 blendInfo;
+	
+@apply blends
+
+	if(myAmount == 0)myBlend /= myAmount;
+	//float progress = theInfos.x / theInfos.y;
+	if(theInfos.y <= 0)return 1;
 	//if(groupInfos.x >= 0.)progress = groupInfos.x;
-	return texture2DRect (lifeTimeBlends, vec2(progress * 100.0, forceIndex)).x;
+	return texture2DRect (lifeTimeBlends, vec2(myBlend * 100.0, forceIndex)).x;
 }
 
 float rand(vec2 n){

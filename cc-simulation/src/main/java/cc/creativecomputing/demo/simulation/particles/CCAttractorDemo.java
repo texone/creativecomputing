@@ -65,7 +65,7 @@ public class CCAttractorDemo extends CCGL2Adapter {
 			_myAttractors.add(myAttractor);
 		}
 		
-		_myParticles = new CCParticles(g,myForces, new ArrayList<CCConstraint>(),600,600);
+		_myParticles = new CCParticles(g,myForces, new ArrayList<>(),new ArrayList<CCConstraint>(),600, 600);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		_myParticles.reset(g);
 		

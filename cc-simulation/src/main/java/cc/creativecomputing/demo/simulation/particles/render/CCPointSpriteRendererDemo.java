@@ -74,7 +74,7 @@ public class CCPointSpriteRendererDemo extends CCGL2Adapter {
 		
 		_myRenderer = new CCPointSpriteRenderer(_myPointSpriteTexture,8, 3);
 		
-		_myParticles = new CCParticles(g, _myRenderer, myForces, myConstraints, 800, 800);
+		_myParticles = new CCParticles(g, _myRenderer, myForces, new ArrayList<>(), myConstraints, 800, 800);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 	}
 	

@@ -134,7 +134,7 @@ public class CCSpringsTrianglesEmitTest extends CCGL2Adapter {
 		myForces.add(_mySprings);
 
 		_myRenderer = new CCParticlePointRenderer();
-		_myParticles = new CCParticles(g, _myRenderer, myForces, myConstraints, 600, 600);
+		_myParticles = new CCParticles(g, _myRenderer, myForces, new ArrayList<>(), myConstraints, 600, 600);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 
 		List<Integer> _myIndices = new ArrayList<Integer>();

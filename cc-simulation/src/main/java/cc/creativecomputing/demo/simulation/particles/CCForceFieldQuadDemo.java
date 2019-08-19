@@ -75,7 +75,7 @@ public class CCForceFieldQuadDemo extends CCGL2Adapter {
 		myForces.add(new CCViscousDrag(0.3f));
 		myForces.add(_myForceField = new CCForceField());
 		
-		_myParticles = new CCParticles(g, new CCParticlePrimitiveRenderer(CCParticlePrimitive.BOX), myForces, new ArrayList<CCConstraint>(), 300,300);
+		_myParticles = new CCParticles(g, new CCParticlePrimitiveRenderer(CCParticlePrimitive.BOX), myForces, new ArrayList<>(), new ArrayList<CCConstraint>(),300, 300);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);

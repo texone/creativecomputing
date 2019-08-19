@@ -76,7 +76,7 @@ public class CCEmitFountainDemo extends CCGL2Adapter {
 		List<CCConstraint> myConstraints = new ArrayList<CCConstraint>();
 		myConstraints.add(new CCPlaneConstraint(new CCPlane(new CCVector3(0,1,0), -300), 1.0f, 0f, 0.1f));
 		
-		_myParticles = new CCParticles(g, myForces, myConstraints, 700, 700);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), myConstraints, 700, 700);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_myCameraController = new CCCameraController(this, g, 100);

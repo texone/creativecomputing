@@ -81,7 +81,7 @@ public class CCShapeConstraintDemo extends CCGL2Adapter {
 		myConstraints.add(new CCBoxConstraint(new CCVector3(0, 0, -200), new CCVector3(g.width(), g.height(), 200), 1, 1, 1));
 		myConstraints.add(_myShapeConstraint = new CCShapeConstraint(new CCVector3(1, 1, 1), new CCVector3(0,0,0), g.width(), g.height()));
 		
-		_myParticles = new CCParticles(g, myForces, myConstraints, 500,500);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), myConstraints,500, 500);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 	}
 

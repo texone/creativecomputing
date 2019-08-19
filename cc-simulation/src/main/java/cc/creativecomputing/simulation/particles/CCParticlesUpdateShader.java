@@ -19,6 +19,7 @@ package cc.creativecomputing.simulation.particles;
 import java.nio.file.Path;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 //import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
@@ -34,6 +35,7 @@ import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.simulation.particles.blends.CCBlend;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.impulses.CCImpulse;
@@ -54,6 +56,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 	protected String _myImpulsesParameter;
 	
 	private List<CCForce> _myForces;
+	private List<CCBlend> _myBlends;
 	private List<CCConstraint> _myConstraints;
 	
 	private CCTexture2D _myRandomTexture;
@@ -61,7 +64,8 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 	protected CCParticlesUpdateShader(
 		final CCParticles theParticles,
 		final CCGraphics theGraphics, 
-		final List<CCForce> theForces , 
+		final List<CCForce> theForces, 
+		final List<CCBlend> theBlends, 
 		final List<CCConstraint> theConstraints,
 		final List<CCImpulse> theImpulses,
 		final Path[] theShaderFile,
@@ -71,6 +75,27 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		super();
 
 		CCShaderSourceTemplate shaderSource = CCGLShader.buildSourceObject(theShaderFile);
+
+		
+		StringBuffer myBlendsBuffer = new StringBuffer();
+		StringBuffer myBlendsApplyBuffer = new StringBuffer();
+		
+		_myBlends = theBlends;
+		for(CCBlend myBlend:_myBlends){
+			myBlend.setShader(this);
+			myBlend.setParticles(theParticles);
+			myBlendsBuffer.append(myBlend.shaderSource());
+			myBlendsApplyBuffer.append("	blendInfo = ");
+			myBlendsApplyBuffer.append(myBlend.parameter("function"));
+			myBlendsApplyBuffer.append("(thePosition.xyz, theVelocity, theInfos, theGroupInfos, theTexID, theDeltaTime);\n");
+			
+			myBlendsApplyBuffer.append("	myBlend += blendInfo.x * blendInfo.y;\n");
+			myBlendsApplyBuffer.append("	myAmount += blendInfo.y;\n");
+			myBlendsApplyBuffer.append("	\n");
+		}
+		
+		shaderSource.setDefine("blends", myBlendsBuffer.toString());
+		shaderSource.setApply("blends", myBlendsApplyBuffer.toString());
 		
 		int myIndex = 0;
 		
@@ -84,7 +109,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 			myForcesBuffer.append(myForce.shaderSource());
 			myForcesApplyBuffer.append("	acceleration = acceleration + ");
 			myForcesApplyBuffer.append(myForce.parameter("function"));
-			myForcesApplyBuffer.append("(position.xyz,velocity,infos,groupInfos,texID,deltaTime) * lifeTimeBlend(infos, groupInfos, ");
+			myForcesApplyBuffer.append("(position.xyz,velocity,infos,groupInfos,texID,deltaTime) * blend(position.xyz,velocity,infos,groupInfos,texID,deltaTime, ");
 			myForcesApplyBuffer.append(myForce.parameter("index"));
 			myForcesApplyBuffer.append(");\n");
 			
@@ -108,7 +133,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		shaderSource.setDefine("constraints", myConstraintBuffer.toString());
 		shaderSource.setApply("constraints", myConstraintApplyBuffer.toString());
 		
-//		CCLog.info(shaderSource.source());
+		CCLog.info(shaderSource.source());
 		init(null, null, shaderSource.source());
 		
 		
@@ -128,6 +153,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		final CCParticles theParticles,
 		final CCGraphics theGraphics, 
 		final List<CCForce> theForces, 
+		final List<CCBlend> theBlends, 
 		final List<CCConstraint> theConstrains,
 		final List<CCImpulse> theImpulses,
 		final int theWidth,
@@ -137,6 +163,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 			theParticles,
 			theGraphics, 
 			theForces, 
+			theBlends,
 			theConstrains, 
 			theImpulses,
 			new Path[] {
@@ -183,6 +210,10 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		
 		for(CCForce myForce:_myForces){
 			myForce.setUniforms();
+		}
+		
+		for(CCBlend myBlend:_myBlends) {
+			myBlend.setUniforms();
 		}
 		
 		for(CCConstraint myConstraint:_myConstraints){

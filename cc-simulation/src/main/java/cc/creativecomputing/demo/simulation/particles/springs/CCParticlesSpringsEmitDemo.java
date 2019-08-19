@@ -89,7 +89,7 @@ public class CCParticlesSpringsEmitDemo extends CCGL2Adapter {
 //		myRenderer.add(new CCSpringLineRenderer(mySprings));
 		myRenderer.add(new CCQuadRenderer());
 		
-		_myParticles = new CCParticles(g,myRenderer, myForces, new ArrayList<>(),_myXres,_myYres);
+		_myParticles = new CCParticles(g,myRenderer, myForces, new ArrayList<>(),new ArrayList<>(),new ArrayList<>(), _myXres, _myYres);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 //		mySprings.setParticles(_myParticles);

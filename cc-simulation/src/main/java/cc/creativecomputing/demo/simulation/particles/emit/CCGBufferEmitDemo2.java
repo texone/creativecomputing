@@ -103,7 +103,7 @@ public class CCGBufferEmitDemo2 extends CCGL2Adapter {
 		
 		List<CCConstraint> myConstraints = new ArrayList<CCConstraint>();
 		
-		_myParticles = new CCParticles(g, new CCIndexedParticleRenderer(), myForces, myConstraints, 800, 800);
+		_myParticles = new CCParticles(g, new CCIndexedParticleRenderer(), myForces, new ArrayList<>(), myConstraints, 800, 800);
 		List<CCEmitter> myEmitter = new ArrayList<>();
 //		myEmitter.add(new CCRingEmitter());
 		myEmitter.add(new CCGBufferEmitter(_myGBuffer) );

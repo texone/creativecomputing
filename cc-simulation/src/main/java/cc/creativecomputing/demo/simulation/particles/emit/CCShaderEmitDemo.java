@@ -59,7 +59,7 @@ public class CCShaderEmitDemo extends CCGL2Adapter {
 		
 		List<CCConstraint> myConstraints = new ArrayList<CCConstraint>();
 		
-		_myParticles = new CCParticles(g, new CCIndexedParticleRenderer(), myForces, myConstraints, 2000, 2000);
+		_myParticles = new CCParticles(g, new CCIndexedParticleRenderer(), myForces, new ArrayList<>(), myConstraints, 2000, 2000);
 		List<CCEmitter> myEmitter = new ArrayList<>();
 		myEmitter.add(new CCRingEmitter());
 		myEmitter.add(new CCRingEmitter());

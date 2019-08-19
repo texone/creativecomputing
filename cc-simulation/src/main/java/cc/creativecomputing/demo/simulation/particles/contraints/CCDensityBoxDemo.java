@@ -68,7 +68,7 @@ public class CCDensityBoxDemo extends CCGL2Adapter {
 		final List<CCConstraint> myConstraints = new ArrayList<>();
 		myConstraints.add(new CCBoxConstraint(new CCVector3(-g.width()/2,-g.height()/2,-200), new CCVector3(g.width()/2, g.height()/2, 200), 1, 1, 1));
 		
-		_myParticles = new CCParticles(g, myForces, myConstraints, 500,500);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), myConstraints,500, 500);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);

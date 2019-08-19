@@ -40,6 +40,7 @@ import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.CCVector4;
+import cc.creativecomputing.simulation.particles.blends.CCBlend;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.emit.CCIParticleEmitter;
 import cc.creativecomputing.simulation.particles.emit.CCParticleCPUGroupEmitter;
@@ -77,6 +78,7 @@ public class CCParticles{
 
 	protected List<CCParticleRenderer> _myRenderer = new ArrayList<>();
 	protected List<CCForce> _myForces = new ArrayList<>();
+	protected List<CCBlend> _myBlends = new ArrayList<>();
 	protected List<CCConstraint> _myConstraints = new ArrayList<>();
 	protected List<CCImpulse> _myImpulses = new ArrayList<>();
 	
@@ -102,6 +104,8 @@ public class CCParticles{
 	private Map<String,CCParticleRenderer> _myRendererMap = new LinkedHashMap<>();
 	@CCProperty(name = "forces")
 	private Map<String, CCForce> _myForceMap = new LinkedHashMap<>();
+	@CCProperty(name = "blends")
+	private Map<String, CCBlend> _myBlendMap = new LinkedHashMap<>();
 	@CCProperty(name = "contraints")
 	private Map<String, CCConstraint> _myConstraintMap = new LinkedHashMap<>();
 	
@@ -126,19 +130,22 @@ public class CCParticles{
 	 * </p>
 	 * 
 	 * @param g graphics object used to initialize shaders and meshes for drawing
-	 * @param theDisplayShader custom shader for displaying the particles
 	 * @param theForces list with the forces applied to the particles
+	 * @param theBlends TODO
 	 * @param theConstraints list with constraints applied to the particles
 	 * @param theWidth width of particle system texture
 	 * @param theHeight height of the particle system texture
+	 * @param theDisplayShader custom shader for displaying the particles
 	 */
 	public CCParticles(
 		final CCGraphics g,
 		final List<CCParticleRenderer> theRenderer,
 		final List<CCForce> theForces, 
+		final List<CCBlend> theBlends, 
 		final List<CCConstraint> theConstraints, 
 		final List<CCImpulse> theImpulse, 
-		final int theWidth, final int theHeight
+		final int theWidth, 
+		final int theHeight
 	){
 		_myWidth = theWidth;
 		_myHeight = theHeight;
@@ -150,6 +157,7 @@ public class CCParticles{
 
 		_myRenderer = theRenderer;
 		_myForces = theForces;
+		_myBlends = theBlends;
 		_myConstraints = theConstraints;
 		_myImpulses = theImpulse;
 		
@@ -199,12 +207,17 @@ public class CCParticles{
 			_myForceMap.put(myForce.append(), myForce);
 		}
 		
+		for(CCBlend myBlend:_myBlends) {
+			myBlend.setSize(g, _myWidth, _myHeight);
+			_myBlendMap.put(myBlend.append(), myBlend);
+		}
+		
 		for(CCConstraint myConstraint:_myConstraints) {
 			myConstraint.setSize(g, _myWidth, _myHeight);
 			_myConstraintMap.put(myConstraint.append(), myConstraint);
 		}
 		
-		_myUpdateShader = new CCParticlesUpdateShader(this, g, _myForces, _myConstraints, _myImpulses,_myWidth,_myHeight);
+		_myUpdateShader = new CCParticlesUpdateShader(this, g, _myForces, _myBlends, _myConstraints, _myImpulses,_myWidth,_myHeight);
 		
 		reset(g);
 		
@@ -221,28 +234,38 @@ public class CCParticles{
 		final CCGraphics g,
 		List<CCParticleRenderer> theRender, 
 		List<CCForce> theForces, 
+		List<CCBlend> theBlends, 
 		List<CCConstraint> theConstraints, 
-		int theWidth, int theHeight
+		int theWidth, 
+		int theHeight
 	) {
-		this(g, theRender, theForces, theConstraints, new ArrayList<CCImpulse>(), theWidth, theHeight);
+		this(g, theRender, theForces, theBlends, theConstraints, new ArrayList<CCImpulse>(), theWidth, theHeight);
 	}
 	
 	public CCParticles(
-			final CCGraphics g,
-			CCParticleRenderer theRender, 
-			List<CCForce> theForces, 
-			List<CCConstraint> theConstraints, 
-			int theWidth, int theHeight
-		) {
-			this(g, CCCollectionUtil.createList(theRender), theForces, theConstraints, new ArrayList<CCImpulse>(), theWidth, theHeight);
-		}
+		final CCGraphics g,
+		CCParticleRenderer theRender, 
+		List<CCForce> theForces, 
+		List<CCBlend> theBlends, 
+		List<CCConstraint> theConstraints, 
+		int theWidth, 
+		int theHeight
+	) {
+		this(g, CCCollectionUtil.createList(theRender), theForces, theBlends, theConstraints, new ArrayList<CCImpulse>(), theWidth, theHeight);
+	}
 
-	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCConstraint> theConstraints, int theWidth, int theHeight) {
-		this(g, CCCollectionUtil.createList(new CCParticlePointRenderer()), theForces, theConstraints, theWidth, theHeight);
+	public CCParticles(
+		final CCGraphics g, 
+		List<CCForce> theForces, 
+		List<CCBlend> theBlends, 
+		List<CCConstraint> theConstraints, 
+		int theWidth, int theHeight
+	) {
+		this(g, CCCollectionUtil.createList(new CCParticlePointRenderer()), theForces, theBlends, theConstraints, theWidth, theHeight);
 	}
 
 	public CCParticles(final CCGraphics g, List<CCForce> theForces, List<CCConstraint> theConstraints) {
-		this(g, theForces, theConstraints,200,200);
+		this(g, theForces, new ArrayList<>(),theConstraints,200, 200);
 	}
 
 	public CCParticles(final CCGraphics g,List<CCForce> theForces) {

@@ -63,7 +63,7 @@ public class CCRealSenseForceFieldDemo extends CCGL2Adapter {
 		myForces.add(_myForceField);
 		myForces.add(new CCViscousDrag(0.3f));
 		
-		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 1000, 1000);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), new ArrayList<CCConstraint>(), 1000, 1000);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 	}
 

@@ -74,7 +74,7 @@ public class CCForceFieldTrailsDemo extends CCGL2Adapter {
 		myForces.add(new CCViscousDrag(0.3f));
 		myForces.add(_myForceField = new CCForceField());
 		
-		_myParticles = new CCParticles(g, myRender = new CCParticleTrailRenderer(20), myForces, new ArrayList<CCConstraint>(), 15,300);
+		_myParticles = new CCParticles(g, myRender = new CCParticleTrailRenderer(20), myForces, new ArrayList<>(), new ArrayList<CCConstraint>(),15, 300);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);

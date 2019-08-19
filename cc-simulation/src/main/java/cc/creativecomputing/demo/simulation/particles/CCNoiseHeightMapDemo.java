@@ -51,7 +51,7 @@ public class CCNoiseHeightMapDemo extends CCGL2Adapter {
 		myForces.add(new CCViscousDrag(0.3f));
 		myForces.add(_myForceField = new CCNoiseHeightMapForce());
 		
-		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 1000,1000);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), new ArrayList<CCConstraint>(),1000, 1000);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);

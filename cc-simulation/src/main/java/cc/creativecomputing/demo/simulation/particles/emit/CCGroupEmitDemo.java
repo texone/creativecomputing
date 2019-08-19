@@ -68,7 +68,7 @@ public class CCGroupEmitDemo extends CCGL2Adapter {
 		
 		List<CCConstraint> myConstraints = new ArrayList<CCConstraint>();
 		//
-		_myParticles = new CCParticles(g, new CCIndexedParticleRenderer(), myForces, myConstraints, size, size);
+		_myParticles = new CCParticles(g, new CCIndexedParticleRenderer(), myForces, new ArrayList<>(), myConstraints, size, size);
 		List<CCEmitter> myEmitter = new ArrayList<>();
 		_myGroupEmitter = new CCGroupEmitter();
 		myEmitter.add(_myGroupEmitter);

@@ -74,7 +74,7 @@ public class CCPointCurveFieldDemo extends CCGL2Adapter {
 		myForces.add(_myForceField);
 		myForces.add(_myAttractor);
 		
-		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 700,700);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), new ArrayList<CCConstraint>(),700, 700);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_myNoise = new CCSimplexNoise();

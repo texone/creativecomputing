@@ -46,7 +46,7 @@ public class CCGroupDemo extends CCGL2Adapter {
 		final List<CCForce> myForces = new ArrayList<>();
 		myForces.add(new CCGravity(new CCVector3(0,-1,0)));
 		
-		_myParticles = new CCParticles(g,myForces, new ArrayList<CCConstraint>(),100,100);
+		_myParticles = new CCParticles(g,myForces, new ArrayList<>(),new ArrayList<CCConstraint>(),100, 100);
 		_myParticles.addEmitter(_myEmitter = new CCParticleCPUGroupEmitter(_myParticles));
 		_myParticles.reset(g);
 		for(int i = 0; i < 3;i++) {

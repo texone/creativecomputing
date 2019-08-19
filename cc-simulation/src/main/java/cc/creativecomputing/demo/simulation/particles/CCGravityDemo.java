@@ -44,7 +44,7 @@ public class CCGravityDemo extends CCGL2Adapter {
 		final List<CCForce> myForces = new ArrayList<>();
 		myForces.add(new CCGravity(new CCVector3(0,-1,0)));
 		
-		_myParticles = new CCParticles(g,myForces, new ArrayList<CCConstraint>(),600,600);
+		_myParticles = new CCParticles(g,myForces, new ArrayList<>(),new ArrayList<CCConstraint>(),600, 600);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		_myParticles.reset(g);
 	}

@@ -62,7 +62,7 @@ public class CCDensityDemo extends CCGL2Adapter {
 		myForces.add(_myForceField = new CCForceField());
 		myForces.add(_myDensity = new CCDensity(g.width(), g.height()));
 		
-		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 500,500);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), new ArrayList<CCConstraint>(),500, 500);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		
 		_cCameraController = new CCCameraController(this, g, 100);

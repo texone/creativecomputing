@@ -41,7 +41,7 @@ public class CCParticlesBasicEmitDemo extends CCGL2Adapter {
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myParticles = new CCParticles(g,new ArrayList<>(), new ArrayList<CCConstraint>(),600,600);
+		_myParticles = new CCParticles(g,new ArrayList<>(), new ArrayList<>(),new ArrayList<CCConstraint>(),600, 600);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		_myParticles.reset(g);
 		

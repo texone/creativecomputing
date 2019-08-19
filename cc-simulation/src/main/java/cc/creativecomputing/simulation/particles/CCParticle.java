@@ -33,6 +33,7 @@ public class CCParticle implements Comparable<CCParticle>{
 	public CCVector3 _myPosition;
 	public CCVector3 _myVelocity;
 	public CCVector4 _myTarget;
+	public CCVector4 _myTexCoords;
 	
 	public int _myGroupIndex = -1;
 	public int _mySprings = 0;
@@ -49,6 +50,7 @@ public class CCParticle implements Comparable<CCParticle>{
 		_myPosition = new CCVector3();
 		_myVelocity = new CCVector3();
 		_myTarget = new CCVector4();
+		_myTexCoords = new CCVector4();
 		_myIsAllocated = false;
 		_myAge = 0;
 	}
@@ -59,6 +61,7 @@ public class CCParticle implements Comparable<CCParticle>{
 		_myPosition.set(0, 0, 0);
 		_myVelocity.set(0,0,0);
 		_myTarget.set(0,0,0,0);
+		_myTexCoords.set(0,0,0,0);
 		_myIsAllocated = false;
 		_myGroupIndex = -1;
 		_myAge = 0;
@@ -163,5 +166,9 @@ public class CCParticle implements Comparable<CCParticle>{
 	
 	public CCColor targetColor(){
 		return _myTargetColor;
+	}
+	
+	public CCVector4 texCoords() {
+		return _myTexCoords;
 	}
 }

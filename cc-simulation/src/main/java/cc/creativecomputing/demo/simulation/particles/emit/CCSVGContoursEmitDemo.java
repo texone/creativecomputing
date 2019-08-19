@@ -107,7 +107,7 @@ public class CCSVGContoursEmitDemo extends CCGL2Adapter{
 		List<CCConstraint> myConstraints = new ArrayList<CCConstraint>();
 		myConstraints.add(new CCPlaneConstraint(new CCPlane(new CCVector3(0,-1,0), 400)));
 		
-		_myParticles = new CCParticles(g, myForces, myConstraints, 700, 700);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), myConstraints, 700, 700);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 	}
 	

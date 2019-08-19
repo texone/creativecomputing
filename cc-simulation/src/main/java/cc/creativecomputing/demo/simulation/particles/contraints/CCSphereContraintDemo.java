@@ -52,7 +52,7 @@ public class CCSphereContraintDemo extends CCGL2Adapter {
 		final List<CCConstraint> myContraints = new ArrayList<>();
 		myContraints.add(new CCSphereConstraint(new CCVector3(), 200, 1, 1, 1));
 		
-		_myParticles = new CCParticles(g,myForces, myContraints,600,600);
+		_myParticles = new CCParticles(g,myForces, new ArrayList<>(),myContraints,600, 600);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		_myParticles.reset(g);
 		

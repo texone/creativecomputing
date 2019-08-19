@@ -88,7 +88,7 @@ public class CCPathFollowDemo extends CCGL2Adapter {
 		myForces.add(_myPathFollow);
 		myForces.add(new CCViscousDrag(0.3f));
 		// myForces.add(new CCGPUGravity(new CCVector3(50,0,0)));
-		_myParticles = new CCParticles(g, myForces, new ArrayList<CCConstraint>(), 700, 700);
+		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), new ArrayList<CCConstraint>(), 700, 700);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 		// _myParticles.make2D(true);
 

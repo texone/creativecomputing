@@ -75,7 +75,7 @@ public class CCTargetForce extends CCForce {
 
 		_myInitValueShader = new CCGLWriteDataShader();
 		
-		_myTargetBuffer = new CCShaderBuffer(16,4,_myWidth, _myHeight);
+		_myTargetBuffer = new CCShaderBuffer(32,4,_myWidth, _myHeight);
 		_myTargetBuffer.beginDraw(g);
 		g.clear();
 		_myTargetBuffer.endDraw(g);
@@ -147,6 +147,11 @@ public class CCTargetForce extends CCForce {
 	
 	public void addTarget(CCParticle theParticle){
 		g.textureCoords4D(0, theParticle.target());
+		g.vertex(theParticle.x(), theParticle.y());
+	}
+	
+	public void addTarget(CCParticle theParticle, CCVector3 theTarget){
+		g.textureCoords4D(0, theTarget.x, theTarget.y, theTarget.z, 1d);
 		g.vertex(theParticle.x(), theParticle.y());
 	}
 	
