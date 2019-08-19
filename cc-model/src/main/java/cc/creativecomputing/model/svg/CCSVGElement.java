@@ -594,6 +594,7 @@ public abstract class CCSVGElement {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private Paint calcGradientPaint(CCSVGGradient gradient, double theOpacity) {
 		if (gradient instanceof CCSVGLinearGradient) {
 			CCSVGLinearGradient grad = (CCSVGLinearGradient) gradient;

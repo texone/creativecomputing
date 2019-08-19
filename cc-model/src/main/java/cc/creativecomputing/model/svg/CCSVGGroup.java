@@ -21,7 +21,6 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.io.xml.CCDataElement;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
-import cc.creativecomputing.model.svg.CCSVGElement.CCShapeKind;
 
 public class CCSVGGroup extends CCSVGElement implements Iterable<CCSVGElement>{
 	
@@ -148,14 +147,16 @@ public class CCSVGGroup extends CCSVGElement implements Iterable<CCSVGElement>{
 		
 		List<CCLinearSpline> myResult = new ArrayList<>();
 		for(CCSVGElement myChild:_myChildren){
-			List<CCLinearSpline> myChildContours = myChild.contours(theFlatness);
 			
+			List<CCLinearSpline> myChildContours = myChild.contours(theFlatness);
+			if(myChild.name() != null && myChild.name().startsWith("l"))CCLog.info(myChild.name(),myChild.kind(),myChild,myChildContours.get(0).points());
 			if(myChildContours == null)continue;
 			
 			for(CCLinearSpline mySpline:myChildContours) {
 				for(CCVector3 myPoint:mySpline) {
 					transform().transformLocal(myPoint);
 				}
+				mySpline.computeTotalLengthImpl();
 			}
 			myResult.addAll(myChildContours);
 		}

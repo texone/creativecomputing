@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.io.xml.CCDataElement;
@@ -719,6 +720,7 @@ public class CCSVGPath extends CCSVGElement{
 		
 		CCLinearSpline myContour = null;
 		float[] myCoords = new float[2];
+
 		while(!myIterator.isDone()){
 			int mySegmentType = myIterator.currentSegment(myCoords);// +";"+myCoords[0]+";"+myCoords[1]
 			if(mySegmentType == PathIterator.SEG_MOVETO){
@@ -742,6 +744,7 @@ public class CCSVGPath extends CCSVGElement{
 		if(myContour == null)return;
 		
 		myContour.endEditSpline();
+		if(name() != null && name().startsWith("l"))CCLog.info(name(),myContour.points());
 		_myContours.add(myContour);
 	}
 	
