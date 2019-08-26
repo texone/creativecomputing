@@ -104,11 +104,11 @@ public class CCMath {
 	}
 	
 	public static int random(final int theMin) {
-		return CCMath.round(RANDOM.random(theMin));
+		return CCMath.floor(RANDOM.random(theMin));
 	}
 
 	public static int random(final int theMin, final int theMax) {
-		return CCMath.round(RANDOM.random(theMin, theMax));
+		return CCMath.floor(RANDOM.random(theMin, theMax));
 	}
 	
 	/**
