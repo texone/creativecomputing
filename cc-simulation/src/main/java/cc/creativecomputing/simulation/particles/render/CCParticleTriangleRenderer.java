@@ -114,7 +114,7 @@ public class CCParticleTriangleRenderer extends CCParticleRenderer{
 			}
 		}
 		
-		_myBuffer = new CCShaderBuffer(16, 3, 2,  _myParticles.width() * _myTriangleCount, _myParticles.height());
+		_myBuffer = new CCShaderBuffer(32, 3, 2,  _myParticles.width() * _myTriangleCount, _myParticles.height());
 	}
 	
 	private List<CCParticle> _myTriangles = new ArrayList<>();

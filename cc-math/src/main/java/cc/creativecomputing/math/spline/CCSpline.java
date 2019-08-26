@@ -174,6 +174,14 @@ public abstract class CCSpline implements Iterable<CCVector3>, CCInterpolatable<
 	public Iterator<CCVector3> iterator() {
 		return _myPoints.iterator();
 	}
+	
+	public CCVector3 first() {
+		return _myPoints.get(0);
+	}
+	
+	public CCVector3 last() {
+		return _myPoints.get(_myPoints.size() - 1);
+	}
 
 	protected abstract void computeTotalLengthImpl ();
 

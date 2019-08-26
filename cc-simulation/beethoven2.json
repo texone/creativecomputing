@@ -1,0 +1,220 @@
+{"timelines": {"default": {
+  "lower_bound": 0,
+  "quantize": "SUBSTEP_4",
+  "timeline": [{
+    "path": "app",
+    "min": 0,
+    "max": 1,
+    "accumulate": false,
+    "mute": false,
+    "Extras": {},
+    "eventTypes": "new",
+    "open": true,
+    "tracks": [{
+      "path": "app\\app",
+      "min": 0,
+      "max": 1,
+      "accumulate": false,
+      "mute": false,
+      "Extras": {},
+      "eventTypes": "new",
+      "open": true,
+      "tracks": [
+        {
+          "path": "app\\app\\document path offset",
+          "min": -1,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "TrackData": {"points": [
+            {
+              "in": {
+                "time": 30,
+                "type": "HANDLE",
+                "value": 0.4987707261292167
+              },
+              "time": 30,
+              "type": "BEZIER",
+              "value": 0.4987707261292167,
+              "out": {
+                "time": 47.73584961891174,
+                "type": "HANDLE",
+                "value": 0.4987707261292167
+              }
+            },
+            {
+              "in": {
+                "time": 60,
+                "type": "HANDLE",
+                "value": 1
+              },
+              "time": 95,
+              "type": "BEZIER",
+              "value": 1,
+              "out": {
+                "time": 150,
+                "type": "HANDLE",
+                "value": 1
+              }
+            },
+            {
+              "in": {
+                "time": 270,
+                "type": "HANDLE",
+                "value": 0
+              },
+              "time": 300,
+              "type": "BEZIER",
+              "value": 0,
+              "out": {
+                "time": 327.3584894835949,
+                "type": "HANDLE",
+                "value": 0
+              }
+            },
+            {
+              "in": {
+                "time": 422.6415105164051,
+                "type": "HANDLE",
+                "value": 0.46855345911949686
+              },
+              "time": 450,
+              "type": "BEZIER",
+              "value": 0.46855345911949686,
+              "out": {
+                "time": 502.8819974398754,
+                "type": "HANDLE",
+                "value": 0.46855345911949686
+              }
+            }
+          ]}
+        },
+        {
+          "path": "app\\app\\particles",
+          "min": 0,
+          "max": 1,
+          "accumulate": false,
+          "mute": false,
+          "Extras": {},
+          "eventTypes": "new",
+          "open": true,
+          "tracks": [
+            {
+              "path": "app\\app\\particles\\blends",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [{
+                "path": "app\\app\\particles\\blends\\texture",
+                "min": 0,
+                "max": 1,
+                "accumulate": false,
+                "mute": false,
+                "Extras": {},
+                "eventTypes": "new",
+                "open": true,
+                "tracks": [{
+                  "path": "app\\app\\particles\\blends\\texture\\channel blend",
+                  "min": 0,
+                  "max": 1,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 150,
+                      "type": "LINEAR",
+                      "value": 0
+                    },
+                    {
+                      "time": 300,
+                      "type": "LINEAR",
+                      "value": 1
+                    },
+                    {
+                      "time": 450,
+                      "type": "LINEAR",
+                      "value": 0
+                    }
+                  ]}
+                }],
+                "TrackData": {"points": []}
+              }],
+              "TrackData": {"points": []}
+            },
+            {
+              "path": "app\\app\\particles\\forces",
+              "min": 0,
+              "max": 1,
+              "accumulate": false,
+              "mute": false,
+              "Extras": {},
+              "eventTypes": "new",
+              "open": true,
+              "tracks": [{
+                "path": "app\\app\\particles\\forces\\pathTarget",
+                "min": 0,
+                "max": 1,
+                "accumulate": false,
+                "mute": false,
+                "Extras": {},
+                "eventTypes": "new",
+                "open": true,
+                "tracks": [{
+                  "path": "app\\app\\particles\\forces\\pathTarget\\strength",
+                  "min": 0,
+                  "max": 10,
+                  "accumulate": false,
+                  "mute": false,
+                  "TrackData": {"points": [
+                    {
+                      "time": 2.4842693564066383,
+                      "type": "LINEAR",
+                      "value": 0.02
+                    },
+                    {
+                      "time": 125.04155760580079,
+                      "type": "LINEAR",
+                      "value": 0.02
+                    },
+                    {
+                      "time": 237.66176842956838,
+                      "type": "LINEAR",
+                      "value": 0.002
+                    },
+                    {
+                      "time": 448.8246637241326,
+                      "type": "LINEAR",
+                      "value": 0.002
+                    },
+                    {
+                      "time": 476.9797164300746,
+                      "type": "LINEAR",
+                      "value": 0.02
+                    }
+                  ]}
+                }],
+                "TrackData": {"points": []}
+              }],
+              "TrackData": {"points": []}
+            }
+          ],
+          "TrackData": {"points": []}
+        }
+      ],
+      "TrackData": {"points": []}
+    }],
+    "TrackData": {"points": []}
+  }],
+  "upper_bound": 772.6077698424644,
+  "Transport": {
+    "loop_end": 480,
+    "loop_active": true,
+    "marker": {"points": []},
+    "loop_start": 0,
+    "speed": 1
+  }
+}}}
