@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.effects.CCEffectManager;
 import cc.creativecomputing.effects.CCEffectable;
 import cc.creativecomputing.math.CCMath;
