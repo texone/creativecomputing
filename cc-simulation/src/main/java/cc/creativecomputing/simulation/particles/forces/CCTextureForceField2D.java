@@ -27,6 +27,8 @@
 package cc.creativecomputing.simulation.particles.forces;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.graphics.CCDrawMode;
+import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.math.CCVector2;
@@ -45,7 +47,9 @@ public class CCTextureForceField2D extends CCForce{
 	
 	protected CCTexture2D _myTexture;
 	
+	@CCProperty(name = "texture scale")
 	private CCVector2 _myTextureScale;
+	@CCProperty(name = "texture offset")
 	private CCVector2 _myTextureOffset;
 	
 	@CCProperty(name = "force scale", min = -1, max = 1)
@@ -111,5 +115,22 @@ public class CCTextureForceField2D extends CCForce{
 		return _myTextureOffset;
 	}
 	
-	
+	public void display(CCGraphics g) {
+		g.pushMatrix();
+		g.scale(_myTextureScale.x , _myTextureScale.y);
+		g.translate(-_myTextureOffset.x, -_myTextureOffset.y);
+		g.texture(_myTexture);
+		g.beginShape(CCDrawMode.QUADS);
+		g.textureCoords2D(0, 0);
+		g.vertex(0,0);
+		g.textureCoords2D(1, 0);
+		g.vertex(1,0);
+		g.textureCoords2D(1, 1);
+		g.vertex(1,1);
+		g.textureCoords2D(0, 1);
+		g.vertex(0,1);
+		g.endShape();
+		g.noTexture();
+		g.popMatrix();
+	}
 }

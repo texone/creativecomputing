@@ -29,26 +29,22 @@ public abstract class CCConstraint extends CCGLProgramInterface {
 	protected CCParticlesUpdateShader _myVelocityShader;
 	
 	@CCProperty(name = "resilience", min = 0, max = 1)
-	private double _myResilience;
+	private double _myResilience = 0;
 	@CCProperty(name = "friction", min = 0, max = 1)
-	private double _myFriction;
+	private double _myFriction = 1;
 	@CCProperty(name = "minimal velocity", min = 0, max = 100)
-	private double _myMinimalVelocity;
+	private double _myMinimalVelocity = 1;
 	
 	private String _myResilienceParameter;
 	private String _myFrictionarameter;
 	private String _myMinimalVelocityParameter;
 	
-	public CCConstraint(final String theShaderTypeName, final double theResilience, final double theFriction, final double theMinimalVelocity){
+	public CCConstraint(final String theShaderTypeName){
 		super(theShaderTypeName);
 
 		_myResilienceParameter  = parameter("resilience");
 		_myFrictionarameter  = parameter("friction");
 		_myMinimalVelocityParameter  = parameter("minimalVelocity");
-
-		_myResilience = theResilience;
-		_myFriction = theFriction;
-		_myMinimalVelocity = theMinimalVelocity;
 	}
 	
 	@Override

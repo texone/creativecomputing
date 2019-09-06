@@ -25,6 +25,4 @@ vec3 function(vec3 theVelocity, vec3 thePosition, vec2 theTexID,float theDeltaTi
 		friction, 
 		minimalVelocity
 	);
-	
-	//return theVelocity * -1.0;
 }

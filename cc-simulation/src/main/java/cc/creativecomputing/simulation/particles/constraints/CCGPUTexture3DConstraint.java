@@ -51,10 +51,9 @@ public class CCGPUTexture3DConstraint extends CCConstraint{
 	public CCGPUTexture3DConstraint(
 		final CCTexture3D theTexture,
 		final CCVector3 theTextureScale,
-		final CCVector3 theTextureOffset,
-		final float theResilience, final float theFriction, final float theMinimalVelocity
+		final CCVector3 theTextureOffset
 	){
-		super("Texture3DConstraint", theResilience, theFriction, theMinimalVelocity);
+		super("Texture3DConstraint");
 		_myTexture = theTexture;
 		_myTextureScale = theTextureScale;
 		_myTextureOffset = theTextureOffset;

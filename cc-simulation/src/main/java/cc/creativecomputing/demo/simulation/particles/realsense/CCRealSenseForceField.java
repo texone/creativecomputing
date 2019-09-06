@@ -17,6 +17,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.realsense.CCRealSense;
 
 public class CCRealSenseForceField{
+	@CCProperty(name = "real sense")
 	private CCRealSense _myRealSense;
 	
 	private CCShaderBuffer _myDepthMap;

@@ -2,6 +2,7 @@ uniform sampler2DRect targetPositionTexture;
 
 uniform float strength;
 uniform float index;
+uniform float blend;
 
 uniform vec3 center;
 uniform float scale;

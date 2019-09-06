@@ -28,11 +28,8 @@ public class CCBoxConstraint extends CCConstraint{
 	@CCProperty(name = "max")
 	private CCVector3 _myMaxCorner;
 	
-	public CCBoxConstraint(
-		final CCVector3 theMinCorner, final CCVector3 theMaxCorner, 
-		final float theResilience, final float theFriction, final float theMinimalVelocity
-	) {
-		super("boxConstraint", theResilience, theFriction, theMinimalVelocity);
+	public CCBoxConstraint(final CCVector3 theMinCorner, final CCVector3 theMaxCorner) {
+		super("boxConstraint");
 		
 		_myMinCorner = new CCVector3(theMinCorner);
 		_myMaxCorner = new CCVector3(theMaxCorner);

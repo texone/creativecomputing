@@ -3,6 +3,7 @@ uniform float scale;
 uniform float strength;
 uniform vec3 offset;
 uniform float index;
+uniform float blend;
 
 uniform int octaves;
 uniform float gain;

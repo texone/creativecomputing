@@ -53,7 +53,7 @@ public class CCBoxConstraintDemo extends CCGL2Adapter {
 		myForces.add(_myForceField = new CCForceField());
 		
 		final List<CCConstraint> myConstraints = new ArrayList<>();
-		myConstraints.add(new CCBoxConstraint(new CCVector3(-200,-200,-200), new CCVector3(200, 200, 200), 1, 1, 1));
+		myConstraints.add(new CCBoxConstraint(new CCVector3(-200,-200,-200), new CCVector3(200, 200, 200)));
 		
 		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), myConstraints,700, 700);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));

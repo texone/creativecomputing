@@ -17,6 +17,7 @@ import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.demo.simulation.particles.realsense.CCRealSenseForceField;
+import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
@@ -38,10 +39,13 @@ import cc.creativecomputing.simulation.particles.blends.CCBlend;
 import cc.creativecomputing.simulation.particles.blends.CCConstantBlend;
 import cc.creativecomputing.simulation.particles.blends.CCLifeTimeBlend;
 import cc.creativecomputing.simulation.particles.blends.CCTextureBlend;
+import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
+import cc.creativecomputing.simulation.particles.constraints.CCPositionConstraint;
 import cc.creativecomputing.simulation.particles.emit.CCParticlesIndexParticleEmitter;
 import cc.creativecomputing.simulation.particles.forces.CCAttractor;
 import cc.creativecomputing.simulation.particles.forces.CCForce;
 import cc.creativecomputing.simulation.particles.forces.CCForceField;
+import cc.creativecomputing.simulation.particles.forces.CCGravity;
 import cc.creativecomputing.simulation.particles.forces.CCPathTargetForce;
 import cc.creativecomputing.simulation.particles.forces.CCTargetForce;
 import cc.creativecomputing.simulation.particles.forces.CCViscousDrag;
@@ -81,6 +85,8 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 	private CCPathTargetForce _myTargetForce;
 	private CCPathTargetForce _myTextTargetForce;
 	
+//	private CCPositionConstraint _myPositionConstraint;
+	
 	@CCProperty(name = "real sense")
 	private CCRealSenseForceField _RealSenseForceField;
 	
@@ -93,6 +99,7 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 	private CCTextureBlend _myTextureBlend;
 	
 	private CCTexture2D _myTexture;
+	private CCTexture2D _myLines;
 	int myPathResolution = 200;
 	
 	@CCProperty(name = "textpath speed", min = -10, max = 10)
@@ -102,17 +109,48 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 	@CCProperty(name = "document path scale")
 	private double _cDocumentPathScale = 500;
 
+	List<List<CCVector3>> mySplines = new ArrayList<>();
+	List<List<CCVector3>> myDebugTextSplines = new ArrayList<>();
+
+	List<List<CCVector3>> myDebugDocumentSplines = new ArrayList<>();
+	
+	private CCVector3 center(CCLinearSpline theSpline) {
+		CCVector3 myCenter = new CCVector3();
+		for(CCVector3 myPoint:theSpline) {
+			myCenter.addLocal(myPoint);
+		}
+		myCenter.multiplyLocal(1d / theSpline.points().size());
+		return myCenter;
+	}
+	
+	
+	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_cScreenCaptureController = new CCScreenCaptureController(this);
 		_RealSenseForceField = new CCRealSenseForceField(CCNIOUtil.dataPath("realsense02.byt"),1280,720);
 		_myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("Wittgenstein.png")));
+		_myLines = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("lines.jpg")));
 		
-		CCSVGDocument myZitat = CCSVGIO.newSVG(CCNIOUtil.dataPath("Zitat.svg"));
+		CCSVGDocument myZitat = CCSVGIO.newSVG(CCNIOUtil.dataPath("Zitat2.svg"));
 		List<CCLinearSpline> myZitatContours = myZitat.contours(1);
+		List<CCVector3> myZitatCenters = new ArrayList<>();
+		List<Double> myZitatLengths = new ArrayList<>();
+		List<Integer> myZitatCounts = new ArrayList<>();
+		for(CCLinearSpline mySpline:myZitatContours) {
+			myZitatCenters.add(center(mySpline));
+			myZitatLengths.add(mySpline.totalLength());
+			myZitatCounts.add(0);
+		}
 		
 		CCSVGDocument myDocument = CCSVGIO.newSVG(CCNIOUtil.dataPath("Wittgenstein.svg"));
 		List<CCLinearSpline> myDocumentContours = myDocument.contours(1);
+		List<CCVector3> myDocumentCenters = new ArrayList<>();
+		List<Double> myDocumentLengths = new ArrayList<>();
+		for(CCLinearSpline mySpline:myDocumentContours) {
+			myDocumentCenters.add(center(mySpline));
+			myDocumentLengths.add(mySpline.totalLength());
+		}
 		
 		
 //		frameRate(30);
@@ -123,12 +161,16 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 		myForces.add(_mySprings = new CCSpringForce(4, 4f));
 		myForces.add(_myTargetForce = new CCPathTargetForce(myDocumentContours.size(), myPathResolution));
 		myForces.add(_myTextTargetForce = new CCPathTargetForce(myZitatContours.size(), myPathResolution));
+		myForces.add(new CCGravity());
 //		myForces.add(new CCTextureForceField2D(_RealSenseForceField.forceField(), new CCVector2(1920d, -1080d), new CCVector2(0.5, 0.5)));
 		
 		List<CCBlend> myBlends = new ArrayList<>();
-		myBlends.add(new CCLifeTimeBlend());
+//		myBlends.add(new CCLifeTimeBlend());
 		myBlends.add(new CCConstantBlend());
 		myBlends.add(_myTextureBlend = new CCTextureBlend());
+		
+		List<CCConstraint> myConstraints = new ArrayList<>();
+//		myConstraints.add(_myPositionConstraint = new CCPositionConstraint(4));
 
 		CCParticleTriangleRenderer _myTriangleRenderer = new CCParticleTriangleRenderer(3);
 		_myTriangleRenderer.texture(_myTexture);
@@ -139,7 +181,7 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 		myRenderer.add(_myTriangleRenderer);
 		myRenderer.add(new CCQuadRenderer());
 
-		_myParticles = new CCParticles(g, myRenderer, myForces, myBlends, new ArrayList<>(), new ArrayList<>(), _myXres, _myYres);
+		_myParticles = new CCParticles(g, myRenderer, myForces, myBlends, myConstraints, new ArrayList<>(), _myXres, _myYres);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
 
 		_cCameraController = new CCCameraController(this, g, 100);
@@ -168,7 +210,6 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 			p++;
 		}
 		_myTargetForce.endSetPaths(g);
-		_myTargetForce.pathLength(myPathResolution);
 
 		_myTextTargetForce.beginSetPaths(g);
 		p = 0;
@@ -183,30 +224,54 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 			p++;
 		}
 		_myTextTargetForce.endSetPaths(g);
-		_myTextTargetForce.pathLength(myPathResolution);
 		
-		List<List<CCVector3>> mySplines = new ArrayList<>();
 		List<List<CCVector3>> myDocumentSplines = new ArrayList<>();
 		List<List<CCVector3>> myTextSplines = new ArrayList<>();
 		
 		int zc = 0;
 		int myDocumentPath = 0;
 		
-		for(CCLinearSpline mySpline:myDocumentContours) {
-			int myTextPath = (int)CCMath.map(zc++, 0, myDocumentContours.size(), 0, myZitatContours.size());
-			CCLinearSpline myTextSpline = myDocumentContours.get(myTextPath);
+		for(int s = 0; s < myDocumentContours.size();s++) {
+			CCLinearSpline mySpline = myDocumentContours.get(s);
+			CCVector3 myDocumentCenter = myDocumentCenters.get(s);
+			double myDocumentLength = mySpline.totalLength();
+			
+			double myMinDist = 10000000;
+			int zitatIndex = 0;
+			for(int t = 0; t < myZitatContours.size();t++) {
+				CCVector3 myZitatCenter = myZitatCenters.get(t);
+				double dist = myZitatCenter.distance(myDocumentCenter);
+				if( dist < myMinDist) {
+					zitatIndex = t;
+					myMinDist = dist;
+				}
+			}
+//			for(int t = 0; t < myZitatContours.size();t++) {
+//				double myZitatLength = myZitatLengths.get(t);
+//				double dist = CCMath.abs(myZitatLength - myDocumentLength);
+//				if( dist < myMinDist) {
+//					zitatIndex = t;
+//					myMinDist = dist;
+//				}
+//			}
+			CCLog.info(zitatIndex, myMinDist);
+			int myTextPath = zitatIndex;//(int)CCMath.map(zc++, 0, myDocumentContours.size(), 0, myZitatContours.size());
+			CCLinearSpline myTextSpline = myZitatContours.get(myTextPath);
 
 			List<CCVector3> myPoints = new ArrayList<>();
+			List<CCVector3> myTextDebugPoints = new ArrayList<>();
 			List<CCVector3> myDocumentPoints = new ArrayList<>();
 			List<CCVector3> myTextPoints = new ArrayList<>();
 			
-			double myDocumentLength = mySpline.totalLength();
-			double myTextSplineLength = myTextSpline.totalLength();
+
+			List<CCVector3> myDocumentDebugPoints = new ArrayList<>();
 			
-			double myRatio = 1;//myLength / myTextSplineLength;
+			
+			double myTextSplineLength = myTextSpline.totalLength();
+			double myRatio = myDocumentLength / myTextSplineLength;
 			
 			double textOffset = CCMath.random();
-			int myNumberOfPoints = CCMath.ceil(myDocumentLength / 1);
+			int myNumberOfPoints = CCMath.ceil(myDocumentLength);
 			
 			for(int i = 0; i < myNumberOfPoints - 1;i++) {
 				double d0 = CCMath.norm(i, 0, myNumberOfPoints);
@@ -214,6 +279,7 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 				
 				CCVector3 p0 = mySpline.interpolate(d0);
 				CCVector3 p1 = mySpline.interpolate(d1);
+				
 				CCVector3 dir = p1.subtract(p0).normalizeLocal();
 				myPoints.add(p0.add( dir.y * 10, -dir.x * 10, 0));
 				myPoints.add(p0.add(-dir.y * 10,  dir.x * 10, 0));
@@ -228,6 +294,12 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 				double td0= (d0 * myRatio + textOffset) % 1;
 				double td1= (d1 * myRatio + textOffset) % 1;
 				
+				CCVector3 ptd0 = myTextSpline.interpolate(td0);
+				CCVector3 ptd1 = myTextSpline.interpolate(td1);
+				CCVector3 dirT = ptd1.subtract(ptd0).normalizeLocal();
+				myTextDebugPoints.add(ptd0.add( dirT.y * 10, -dirT.x * 10, 0));
+				myTextDebugPoints.add(ptd1.add(-dirT.y * 10,  dirT.x * 10, 0));
+				
 				CCVector3 pt0 = new CCVector3(myTextPath,CCMath.blend(0d, myPathResolution, td0), 10);
 				CCVector3 pt1 = new CCVector3(myTextPath,CCMath.blend(0d, myPathResolution, td0), -10);
 				
@@ -237,6 +309,7 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 
 			myDocumentPath++;
 			mySplines.add(myPoints);
+			myDebugTextSplines.add(myTextDebugPoints);
 			myDocumentSplines.add(myDocumentPoints);
 			myTextSplines.add(myTextPoints);
 		}
@@ -252,15 +325,17 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 				CCVector3 myPoint = mySpline.get(i);
 				CCVector3 myPosition = new CCVector3(myPoint.x,  _myTexture.height() - myPoint.y);
 
-				CCParticle myParticle = _myEmitter.emit(myPosition, new CCVector3(), 30);
+				CCParticle myParticle = _myEmitter.emit(myPosition, new CCVector3());
 				myParticle.texCoords().set(myPosition.x / _myTexture.width(), myPosition.y / _myTexture.height(), 0, 0);
 				myParticle.target().set(myPosition.x, myPosition.y, myPosition.z, 1);
 				
 				if (myLast0 != null) {
 					_mySprings.addSpring(myParticle, myLast0);
+//					_myPositionConstraint.addJoint(myParticle, myLast0);
 				}
 				if (myLast1 != null) {
 					_mySprings.addSpring(myParticle, myLast1);
+//					_myPositionConstraint.addJoint(myParticle, myLast1);
 				}
 				_myTriangleRenderer.addTriangle(myParticle, myLast0, myLast1);
 			
@@ -296,32 +371,34 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 		_RealSenseForceField.preDisplay(g);
 		
 		_myTargetForce.beginSetTargets(g);
-		for(int i = 0; i < _myNewDocumentTargets.size();i++){
+		for(int i = 0; i < _myNewTargetParticles.size();i++){
 			CCParticle myParticle = _myNewTargetParticles.get(i);
 			CCVector3 myParticleTarget = _myNewDocumentTargets.get(i);
 			_myTargetForce.addTarget(myParticle, myParticleTarget);
 		}
 		_myTargetForce.endSetTargets(g);
-		_myNewDocumentTargets.clear();
 		
 		_myTextTargetForce.beginSetTargets(g);
-		for(int i = 0; i < _myNewTextTargets.size();i++){
+		for(int i = 0; i < _myNewTargetParticles.size();i++){
 			CCParticle myParticle = _myNewTargetParticles.get(i);
 			CCVector3 myParticleTarget = _myNewTextTargets.get(i);
 			_myTextTargetForce.addTarget(myParticle, myParticleTarget);
 		}
 		_myTextTargetForce.endSetTargets(g);
-		_myNewTextTargets.clear();
+		
 		
 		_myTextureBlend.beginSetBlends(g);
-		for(int i = 0; i < _myBlends.size();i++){
+		for(int i = 0; i < _myNewTargetParticles.size();i++){
 			CCParticle myParticle = _myNewTargetParticles.get(i);
 			CCVector3 myParticleBlends = _myBlends.get(i);
 			_myTextureBlend.addBlend(myParticle, myParticleBlends.x, myParticleBlends.y, myParticleBlends.z);
 		}
 		_myTextureBlend.endSetBlends(g);
-		_myBlends.clear();
 		
+		_myBlends.clear();
+
+		_myNewDocumentTargets.clear();
+		_myNewTextTargets.clear();
 		_myNewTargetParticles.clear();
 		
 		_myParticles.preDisplay(g);
@@ -339,10 +416,28 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 		g.color(255);
 		g.image(_myTextureBlend.texture(), 0,0);
 
+		g.image(_myLines, 0,0);
+		
 		g.blend();
 		g.noDepthTest();
 		g.color(0f, _cAlpha);
 		_myParticles.display(g);
+		
+		/*
+		g.color(1f,0.01);
+		for(int i = 0; i < myDebugTextSplines.size();i++) {
+			List<CCVector3> myTextPoints = myDebugTextSplines.get(i);
+			List<CCVector3> myPoints = mySplines.get(i);
+			g.beginShape(CCDrawMode.LINES);
+			for(int j = 0; j < myTextPoints.size();j++) {
+				CCVector3 myTextPoint = myTextPoints.get(j);
+				CCVector3 myPoint = myPoints.get(j);
+				g.vertex(myPoint.x, _myTexture.height() - myPoint.y);
+				g.vertex(myTextPoint.x, _myTexture.height() - myTextPoint.y);
+			}
+			g.endShape();
+		}*/
+		
 //
 //		g.blend();
 		g.popMatrix();

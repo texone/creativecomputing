@@ -87,7 +87,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 			myBlendsBuffer.append(myBlend.shaderSource());
 			myBlendsApplyBuffer.append("	blendInfo = ");
 			myBlendsApplyBuffer.append(myBlend.parameter("function"));
-			myBlendsApplyBuffer.append("(thePosition.xyz, theVelocity, theInfos, theGroupInfos, theTexID, theDeltaTime);\n");
+			myBlendsApplyBuffer.append("(thePosition.xyz, theVelocity, theInfos, theGroupInfos, theTexID, theDeltaTime, theBlend);\n");
 			
 			myBlendsApplyBuffer.append("	myBlend += blendInfo.x * blendInfo.y;\n");
 			myBlendsApplyBuffer.append("	myAmount += blendInfo.y;\n");
@@ -109,7 +109,9 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 			myForcesBuffer.append(myForce.shaderSource());
 			myForcesApplyBuffer.append("	acceleration = acceleration + ");
 			myForcesApplyBuffer.append(myForce.parameter("function"));
-			myForcesApplyBuffer.append("(position.xyz,velocity,infos,groupInfos,texID,deltaTime) * blend(position.xyz,velocity,infos,groupInfos,texID,deltaTime, ");
+			myForcesApplyBuffer.append("(position.xyz, velocity, infos, groupInfos, texID, deltaTime) * blend(position.xyz, velocity, infos, groupInfos, texID, deltaTime, ");
+			myForcesApplyBuffer.append(myForce.parameter("blend"));
+			myForcesApplyBuffer.append(", ");
 			myForcesApplyBuffer.append(myForce.parameter("index"));
 			myForcesApplyBuffer.append(");\n");
 			
@@ -133,7 +135,7 @@ public class CCParticlesUpdateShader extends CCGLProgram{
 		shaderSource.setDefine("constraints", myConstraintBuffer.toString());
 		shaderSource.setApply("constraints", myConstraintApplyBuffer.toString());
 		
-		CCLog.info(shaderSource.source());
+		//CCLog.info(shaderSource.source());
 		init(null, null, shaderSource.source());
 		
 		

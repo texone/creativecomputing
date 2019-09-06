@@ -41,10 +41,9 @@ public class CCTerrainConstraint extends CCConstraint{
 	private String _myExponentParameter;
 	
 	public CCTerrainConstraint(
-		final CCTexture2D theTexture, final CCVector3 theScale, final CCVector3 theOffset,
-		final float theResilience, final float theFriction, final float theMinimalVelocity
+		final CCTexture2D theTexture, final CCVector3 theScale, final CCVector3 theOffset
 	) {
-		super("terrainConstraint", theResilience, theFriction, theMinimalVelocity);
+		super("terrainConstraint");
 		
 		_myTexture = theTexture;
 		_myScale = new CCVector3(theScale);

@@ -203,6 +203,7 @@ public class CCParticlesSpringsEmitDemo extends CCGL2Adapter {
 	@Override
 	public void display(CCGraphics g) {
 		_myParticles.preDisplay(g);
+		g.clearColor(0);
 		g.clear();
 //		g.scale(0.5f);
 		g.pushMatrix();

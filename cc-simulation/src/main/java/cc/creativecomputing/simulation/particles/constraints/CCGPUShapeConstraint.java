@@ -46,10 +46,9 @@ public class CCGPUShapeConstraint extends CCConstraint{
 	}
 	
 	public CCGPUShapeConstraint(
-		final CCTexture2D theTexture, final CCVector3 theScale, final CCVector3 theOffset,
-		final float theResilience, final float theFriction, final float theMinimalVelocity
+		final CCTexture2D theTexture, final CCVector3 theScale, final CCVector3 theOffset
 	) {
-		super("shapeConstraint", theResilience, theFriction, theMinimalVelocity);
+		super("shapeConstraint");
 		
 		_myTexture = theTexture;
 		_myScale = theScale;

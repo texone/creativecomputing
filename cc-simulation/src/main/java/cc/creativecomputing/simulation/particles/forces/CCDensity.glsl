@@ -1,5 +1,6 @@
 uniform float strength;
 uniform float index;
+uniform float blend;
 
 uniform sampler2DRect forceTexture;
 

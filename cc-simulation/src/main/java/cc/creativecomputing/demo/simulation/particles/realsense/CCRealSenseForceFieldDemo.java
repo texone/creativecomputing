@@ -91,8 +91,9 @@ public class CCRealSenseForceFieldDemo extends CCGL2Adapter {
 		// g.rect(-width/2, -height/2, width, height);
 		
 		g.pushMatrix();
-		g.scale(1,-1);
-		g.image(_cForceField.forceField(),-g.width()/2, -g.height()/2, g.width(), g.height());
+//		g.scale(1,-1);
+//		g.image(_cForceField.forceField(),-g.width()/2, -g.height()/2, g.width(), g.height());
+		_myForceField.display(g);
 		g.popMatrix();
 		
 		g.pushAttribute();

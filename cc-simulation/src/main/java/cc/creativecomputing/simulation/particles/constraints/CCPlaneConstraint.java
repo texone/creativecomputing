@@ -24,16 +24,12 @@ public class CCPlaneConstraint extends CCConstraint{
 	
 	protected CCPlane _myPlane;
 	
-	public CCPlaneConstraint(CCPlane thePlane, final float theResilience, final float theFriction, final float theMinimalVelocity) {
-		super("PlaneConstraint", theResilience, theFriction, theMinimalVelocity);
+	public CCPlaneConstraint(CCPlane thePlane) {
+		super("PlaneConstraint");
 		
 		_myPlane = thePlane;
 		_myConstantParameter = parameter("planeConstant");
 		_myNormalParameter = parameter("planeNormal");
-	}
-	
-	public CCPlaneConstraint(CCPlane thePlane) {
-		this(thePlane,0,0,0);
 	}
 
 	public void setupParameter(final int theWidth, final int theHeight){

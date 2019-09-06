@@ -38,7 +38,11 @@ public abstract class CCForce extends CCGLProgramInterface{
 	@CCProperty(name = "strength", min = 0, max = 10)
 	protected double _cStrength = 1;
 	
+	@CCProperty(name = "blend", min = 0, max = 1)
+	protected double _cBlend = 1;
+	
 	protected String _myStrengthParameter;
+	protected String _myBlendParameter;
 	protected String _myIndexParameter;
 	
 	@CCProperty(name = "life time blend")
@@ -49,6 +53,7 @@ public abstract class CCForce extends CCGLProgramInterface{
 	protected CCForce(final String theShaderTypeName){
 		super(theShaderTypeName);
 		_myStrengthParameter = parameter("strength");
+		_myBlendParameter = parameter("blend");
 		_myIndexParameter = parameter("index");
 	}
 	
@@ -68,6 +73,7 @@ public abstract class CCForce extends CCGLProgramInterface{
 	public void setUniforms() {
 		super.setUniforms();
 		_myShader.uniform1f(_myStrengthParameter, _cStrength);
+		_myShader.uniform1f(_myBlendParameter, _cBlend);
 		_myShader.uniform1f(_myIndexParameter, _myIndex);
 	}
 	

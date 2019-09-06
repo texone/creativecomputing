@@ -17,13 +17,11 @@
 package cc.creativecomputing.simulation.particles.forces;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
-import cc.creativecomputing.graphics.texture.CCTexture.CCTextureFilter;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.particles.CCParticle;
 
@@ -103,6 +101,10 @@ public class CCPathTargetForce extends CCForce {
 		//_myPathBuffer.attachment(0).textureFilter(CCTextureFilter.LINEAR);
 	}
 	
+	public int pathResolution() {
+		return _myPathResolution;
+	}
+	
 	@Override
 	public void setShader(CCGLProgram theProgram) {
 		super.setShader(theProgram);
@@ -116,12 +118,6 @@ public class CCPathTargetForce extends CCForce {
 		_myPathAdd = thePathAdd;
 	}
 	
-	private double _myPathLength = 0;
-	
-	public void pathLength(double thePathLength) {
-		_myPathLength = thePathLength;
-	}
-	
 	@Override
 	public void setUniforms() {
 		super.setUniforms();
@@ -133,7 +129,7 @@ public class CCPathTargetForce extends CCForce {
 		_myShader.uniform1f(_myNearMaxForceParameter, _myNearMaxForce);
 
 		_myShader.uniform1f(_myPathAddParameter, _myPathAdd);
-		_myShader.uniform1f(_myPathLengthParameter, _myPathLength);
+		_myShader.uniform1f(_myPathLengthParameter, _myPathResolution);
 		
 //		_myShader.uniform2f(_myTextureSizeParameter, _myTexture.width(), _myTexture.height());
 //		_myShader.uniform1f(_myExponentParameter, _myExponent);

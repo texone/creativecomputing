@@ -33,7 +33,6 @@ import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
-import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.particles.CCParticle;
 
 public class CCTextureBlend extends CCBlend{
@@ -46,7 +45,6 @@ public class CCTextureBlend extends CCBlend{
 	private String _myBlendTextureParameter;
 	private String _myChannelAmountParameter;
 	private String _myGlobalAmountParameter;
-	private String _myChannelBlendParameter;
 	private String _myChannelBlendRangeParameter;
 	
 	@CCProperty(name = "r amount", min = 0, max = 1)
@@ -58,8 +56,7 @@ public class CCTextureBlend extends CCBlend{
 	@CCProperty(name = "global amount", min = 0, max = 1)
 	private double _cGlobalAmount = 0;
 
-	@CCProperty(name = "channel blend", min = 0, max = 1)
-	private double _cChannelBlend = 0;
+	
 	@CCProperty(name = "channel blend range", min = 0, max = 1)
 	private double _cChannelBlendRange = 0;
 
@@ -70,7 +67,6 @@ public class CCTextureBlend extends CCBlend{
 		
 		_myBlendTextureParameter = parameter("blendTexture");
 		_myChannelAmountParameter = parameter("channelAmounts");
-		_myChannelBlendParameter = parameter("channelBlend");
 		_myChannelBlendRangeParameter = parameter("channelBlendRange");
 		_myGlobalAmountParameter = parameter("globalAmount");
 	}
@@ -102,7 +98,6 @@ public class CCTextureBlend extends CCBlend{
 	public void setUniforms() {
 		super.setUniforms();
 		_myShader.uniform3f(_myChannelAmountParameter, _cChannelRAmount, _cChannelGAmount, _cChannelBAmount);
-		_myShader.uniform1f(_myChannelBlendParameter, _cChannelBlend);
 		_myShader.uniform1f(_myChannelBlendRangeParameter, _cChannelBlendRange);
 		_myShader.uniform1f(_myGlobalAmountParameter, _cGlobalAmount);
 	}

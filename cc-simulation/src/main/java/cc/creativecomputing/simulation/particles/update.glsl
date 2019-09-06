@@ -6,7 +6,6 @@ uniform float deltaTime;
 
 uniform sampler2DRect colorTexture;
 uniform sampler2DRect staticPositions;
-uniform sampler2DRect staticAges;
 uniform sampler2DRect positionTexture;
 uniform sampler2DRect velocityTexture;
 uniform sampler2DRect infoTexture;
@@ -17,7 +16,7 @@ uniform sampler2DRect groupInfoTexture;
 
 @define blends
 
-float blend(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime, float forceIndex){
+float blend(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime, float theBlend, float forceIndex){
 
 	float myBlend = 0;
 	float myAmount = 0;
@@ -25,9 +24,10 @@ float blend(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfo
 	
 @apply blends
 
-	if(myAmount == 0)myBlend /= myAmount;
+	if(myAmount != 0)myBlend /= myAmount;
+	myBlend = clamp(myBlend, 0, 1);
 	//float progress = theInfos.x / theInfos.y;
-	if(theInfos.y <= 0)return 1;
+	//if(theInfos.y <= 0)return 1;
 	//if(groupInfos.x >= 0.)progress = groupInfos.x;
 	return texture2DRect (lifeTimeBlends, vec2(myBlend * 100.0, forceIndex)).x;
 }
@@ -90,8 +90,6 @@ vec3 bounceReflection(
 
 @define constraints
 
-uniform float useAgeBlends;
-
 uniform vec3 moveAll;
 
 void main (){
@@ -127,11 +125,9 @@ void main (){
 	vec4 lastInfo = texture2DRect(infoTexture, texID);
 	float myAge = lastInfo.x;
 	vec2 myGroup = lastInfo.zw;
-
-	float staticAge = texture2DRect (staticAges, texID).x;
 	
 	vec4 info = vec4(
-		0,//mix(lastInfo.x + deltaTime, staticAge, useAgeBlends) * float(lastInfo.y > 0),
+		lastInfo.x + deltaTime * float(lastInfo.y > 0),
 		lastInfo.y,
 		lastInfo.z,
 		lastInfo.w

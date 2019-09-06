@@ -55,7 +55,7 @@ public class CCShapeConstraint extends CCConstraint{
 		final CCVector3 theScale, final CCVector3 theOffset,
 		final int theWidth, int theHeight
 	) {
-		super("shapeConstraint", 1, 1, 1);
+		super("shapeConstraint");
 		
 
 		_myLookUpBuffer = new CCShaderBuffer(theWidth, theHeight);

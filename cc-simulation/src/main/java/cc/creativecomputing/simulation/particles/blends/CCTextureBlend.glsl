@@ -3,10 +3,9 @@ uniform sampler2DRect blendTexture;
 uniform float amount;
 uniform vec3 channelAmounts;
 uniform float globalAmount;
-uniform float channelBlend;
 uniform float channelRange;
 
-vec2 function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime){
+vec2 function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime, float theBlend){
 
 	vec4 channelInfos = texture2DRect (blendTexture, theTexID);
 	
@@ -19,7 +18,7 @@ vec2 function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupIn
 	myModulation /= myOffsetSum;
 	float minMod = mix(myModulation - channelRange, 0, globalAmount);
 	float maxMod = mix(myModulation, 1, globalAmount);
-	float blendMod = mix(channelBlend * (1 + channelRange) - channelRange, channelBlend, globalAmount);
+	float blendMod = mix(theBlend * (1 + channelRange) - channelRange, theBlend, globalAmount);
 	myModulation = smoothstep(minMod, maxMod, blendMod);
 	myModulation = clamp(myModulation,0,1);
 	return vec2(myModulation, amount);

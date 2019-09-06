@@ -14,6 +14,7 @@ vec3 springForce2(vec3 thePosition1, vec3 thePosition2, float theRestLength){
 uniform int numberOfBuffers;
 uniform int xBuffers;
 uniform float index;
+uniform float blend;
 uniform float strength;
 uniform float damping;
 

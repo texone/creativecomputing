@@ -15,7 +15,6 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
@@ -53,7 +52,6 @@ public class CCSpringForce extends CCForce {
 	private String _myNumberOfBufferParameter;
 	private String _myXBufferParameter;
 	private String _myTextureSizeParameter;
-	
 	private String _myInfoTextureParameter;
 
 	private CCGLProgram _myInitValueShader;
@@ -320,7 +318,6 @@ public class CCSpringForce extends CCForce {
 		_myBuffer.beginDraw(g);
 		_myInitValueShader.start();
 		g.beginShape(CCDrawMode.POINTS);
-		double myMaxY = 0;
 		for(CCSpringInfo myInfo:_myChangedSprings) {
 			int myXOffset = myInfo.buffer % _myNumberOfXSpringBuffers;
 			int myYOffset = myInfo.buffer / _myNumberOfXSpringBuffers;

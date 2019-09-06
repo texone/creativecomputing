@@ -26,24 +26,15 @@
  */
 package cc.creativecomputing.simulation.particles.blends;
 
-import cc.creativecomputing.core.CCProperty;
-
 public class CCConstantBlend extends CCBlend{
-	
-	@CCProperty(name = "blend", min = 0, max = 1)
-	protected double _cBlend = 1;
-
-	protected String _myBlendParameter;
 	
 	public CCConstantBlend() {
 		super("constant");
-		_myBlendParameter = parameter("constantBlend");
 	}
 	
 	@Override
 	public void setUniforms() {
 		super.setUniforms();
-		_myShader.uniform1f(_myBlendParameter, _cBlend);
 	}
 	
 }

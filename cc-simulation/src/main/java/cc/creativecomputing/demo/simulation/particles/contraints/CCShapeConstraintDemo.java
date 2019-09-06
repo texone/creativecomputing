@@ -78,7 +78,7 @@ public class CCShapeConstraintDemo extends CCGL2Adapter {
 		_myDensity.textureOffset().set(0,0);
 
 		final List<CCConstraint> myConstraints = new ArrayList<>();
-		myConstraints.add(new CCBoxConstraint(new CCVector3(0, 0, -200), new CCVector3(g.width(), g.height(), 200), 1, 1, 1));
+		myConstraints.add(new CCBoxConstraint(new CCVector3(0, 0, -200), new CCVector3(g.width(), g.height(), 200)));
 		myConstraints.add(_myShapeConstraint = new CCShapeConstraint(new CCVector3(1, 1, 1), new CCVector3(0,0,0), g.width(), g.height()));
 		
 		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), myConstraints,500, 500);

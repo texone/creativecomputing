@@ -8,7 +8,7 @@ void main (){
 	vec4 particleInfo1 = texture2DRect(infoTexture, newSpringIDs.xy);
 	vec4 particleInfo2 = texture2DRect(infoTexture, mod(gl_FragCoord.xy,dimension));
 	
-	if(particleInfo1.y >= 0 && particleInfo1.x >= particleInfo1.y || particleInfo2.y >= 0 && particleInfo2.x >= particleInfo2.y){
+	if(particleInfo1.x >= particleInfo1.y || particleInfo2.x >= particleInfo2.y){
 		newSpringIDs.xy = float2(-1,-1);
 	}
 	

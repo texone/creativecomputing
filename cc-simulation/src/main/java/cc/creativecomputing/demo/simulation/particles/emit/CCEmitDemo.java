@@ -56,12 +56,12 @@ public class CCEmitDemo extends CCGL2Adapter {
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		List<CCForce> myForces = new ArrayList<>();
 		myForces.add(new CCGravity());
-		myForces.add(new CCForceField());
+		myForces.add(new CCForceField()); 
 		myForces.add(new CCViscousDrag());
 		
 		
 		List<CCConstraint> myConstraints = new ArrayList<CCConstraint>();
-		myConstraints.add(new CCPlaneConstraint(new CCPlane(new CCVector3(0,1,0), -300), 1.0f, 0f, 0.1f));
+		myConstraints.add(new CCPlaneConstraint(new CCPlane(new CCVector3(0,1,0), -300)));
 		
 		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), myConstraints, 800, 800);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));

@@ -244,6 +244,13 @@ public class CCParticlesIndexParticleEmitter extends CCParticleCPUEmitter{
 	
 	public CCParticle emit(
 		final CCVector3 thePosition, 
+		final CCVector3 theVelocity
+	){	
+		return emit(CCColor.WHITE, thePosition, theVelocity, -1);
+	}
+	
+	public CCParticle emit(
+		final CCVector3 thePosition, 
 		final CCVector3 theVelocity, 
 		final double theLifeTime
 	){	

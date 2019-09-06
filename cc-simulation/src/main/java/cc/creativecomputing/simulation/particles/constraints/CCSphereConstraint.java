@@ -33,10 +33,9 @@ public class CCSphereConstraint extends CCConstraint{
 	
 	public CCSphereConstraint(
 		final CCVector3 theCenter, final float theRadius, 
-		final float theResilience, final float theFriction, final float theMinimalVelocity,
 		final boolean theStayInside
 	) {
-		super("sphereConstraint", theResilience, theFriction, theMinimalVelocity);
+		super("sphereConstraint");
 		
 		_myCenter = new CCVector3(theCenter);
 		_myRadius = theRadius;
@@ -46,10 +45,9 @@ public class CCSphereConstraint extends CCConstraint{
 	}
 	
 	public CCSphereConstraint(
-		final CCVector3 theCenter, final float theRadius, 
-		final float theResilience, final float theFriction, final float theMinimalVelocity
+		final CCVector3 theCenter, final float theRadius
 	) {
-		this(theCenter, theRadius, theResilience, theFriction, theMinimalVelocity,false);
+		this(theCenter, theRadius, false);
 	}
 	
 	@Override

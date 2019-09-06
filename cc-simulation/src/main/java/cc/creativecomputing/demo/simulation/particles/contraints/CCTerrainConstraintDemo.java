@@ -60,8 +60,7 @@ public class CCTerrainConstraintDemo extends CCGL2Adapter {
 		myConstraints.add(new CCTerrainConstraint(
 			new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("heightmap.png")), CCTextureTarget.TEXTURE_RECT),
 			new CCVector3(4f,300,4f), 
-			new CCVector3(200, 00, 100),
-			1,1,1
+			new CCVector3(200, 00, 100)
 		));
 		
 		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), myConstraints,700, 700);
