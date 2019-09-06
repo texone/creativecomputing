@@ -73,7 +73,9 @@ public class CCRealSense {
 	private CCFileInputChannel _myInputChannel = null;
 	
 	private long _myFrameSize;
-	private long _myFrame;
+	private double _myFrame;
+	@CCProperty(name = "speed")
+	private double _mySpeed = 30;
 	private long _myNumberOfFrames;
 	
 	public CCRealSense(Path thePath, int theWidth, int theHeight) {
@@ -175,7 +177,7 @@ public class CCRealSense {
 	public void update(CCAnimator theAnimator) {
 		if(_myInputChannel == null)return;
 		ByteBuffer myReadBuffer = ByteBuffer.allocateDirect((int)_myFrameSize);
-		_myInputChannel.read(_myFrame * _myFrameSize, myReadBuffer); 
+		_myInputChannel.read((long)_myFrame * _myFrameSize, myReadBuffer); 
 		myReadBuffer.rewind();
 		
 		CCImage tmp = depthImage;
@@ -183,7 +185,7 @@ public class CCRealSense {
 		lastdepthImage = tmp;
 		depthImage.buffer(myReadBuffer.asShortBuffer());
 		
-		_myFrame++;
+		_myFrame += theAnimator.deltaTime() * _mySpeed;
 		_myFrame %= _myNumberOfFrames;
 	}
 
