@@ -34,7 +34,7 @@
         "min": -10,
         "max": 10,
         "name": "textpath speed",
-        "value": 2.580000162124634
+        "value": 4.340000152587891
       },
       "document path scale": {
         "min": -1.7976931348623157E308,
@@ -77,7 +77,7 @@
                   },
                   "buffer_debug_fragment.glsl": {
                     "name": "buffer_debug_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@570099a2"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@59e2b412"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -94,7 +94,7 @@
                   },
                   "buffer_debug_vertex.glsl": {
                     "name": "buffer_debug_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@633f94b0"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@5759a8"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -185,7 +185,7 @@
             "min": 1,
             "max": 60,
             "name": "capture rate",
-            "value": 10
+            "value": 30
           },
           "record sequence": {},
           "height": {
@@ -265,7 +265,7 @@
                   },
                   "realsense_fragment.glsl": {
                     "name": "realsense_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@5d712e24"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@88dd53e"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -282,7 +282,7 @@
                   },
                   "realsense_vertex.glsl": {
                     "name": "realsense_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@56d474ff"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@6fb326a8"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -314,7 +314,7 @@
                   },
                   "threshold_fragment.glsl": {
                     "name": "threshold_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@2f7dd3db"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@3df102a6"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -350,7 +350,7 @@
                 "value": {
                   "threshold_vertex.glsl": {
                     "name": "threshold_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@28f7daf9"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@7e7d34e1"
                   },
                   "auto save": {
                     "name": "auto save",
@@ -387,7 +387,7 @@
                         "value": {
                           "triangles_fragment.glsl": {
                             "name": "triangles_fragment.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@4fff3db5"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@4d49071d"
                           },
                           "auto save": {
                             "name": "auto save",
@@ -416,7 +416,7 @@
                           },
                           "triangles_vertex.glsl": {
                             "name": "triangles_vertex.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@1f304391"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@18d9b433"
                           },
                           "save in file": {
                             "name": "save in file",
@@ -510,7 +510,7 @@
                           },
                           "spring_lines_fragment.glsl": {
                             "name": "spring_lines_fragment.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@4584f4af"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@77807845"
                           },
                           "save in file": {
                             "name": "save in file",
@@ -527,7 +527,7 @@
                           },
                           "spring_lines_vertex.glsl": {
                             "name": "spring_lines_vertex.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@353b0901"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@1a457e6a"
                           },
                           "uniforms": {
                             "name": "uniforms",
@@ -623,7 +623,7 @@
                         "value": {
                           "quad_fragment.glsl": {
                             "name": "quad_fragment.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@7fc4d9cd"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@3326f37b"
                           },
                           "auto save": {
                             "name": "auto save",
@@ -679,7 +679,7 @@
                           },
                           "quad_vertex.glsl": {
                             "name": "quad_vertex.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@125ab986"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@2216b7b"
                           },
                           "uniforms": {
                             "name": "uniforms",
@@ -712,7 +712,7 @@
                       }
                     ]},
                     "name": "life time alpha",
-                    "value": "cc.creativecomputing.control.CCEnvelope@6e54426e"
+                    "value": "cc.creativecomputing.control.CCEnvelope@6c8fab06"
                   },
                   "draw attributes": {
                     "name": "draw attributes",
@@ -799,7 +799,7 @@
                           },
                           "spring_lines_volumentric_fragment.glsl": {
                             "name": "spring_lines_volumentric_fragment.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@270f3b70"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@25f956e3"
                           },
                           "uniforms": {
                             "name": "uniforms",
@@ -847,7 +847,7 @@
                         "value": {
                           "spring_lines_volumentric_vertex.glsl": {
                             "name": "spring_lines_volumentric_vertex.glsl",
-                            "value": "cc.creativecomputing.control.code.CCShaderFile@62edc3d"
+                            "value": "cc.creativecomputing.control.code.CCShaderFile@5ec66dda"
                           },
                           "auto save": {
                             "name": "auto save",
@@ -919,7 +919,7 @@
                       }
                     ]},
                     "name": "life time alpha",
-                    "value": "cc.creativecomputing.control.CCEnvelope@20033e3d"
+                    "value": "cc.creativecomputing.control.CCEnvelope@7d825cc7"
                   },
                   "draw attributes": {
                     "name": "draw attributes",
@@ -1003,7 +1003,7 @@
                 },
                 "source 0": {
                   "name": "source 0",
-                  "value": "cc.creativecomputing.control.code.CCShaderSource@54c69d36"
+                  "value": "cc.creativecomputing.control.code.CCShaderSource@5e57776c"
                 },
                 "save in file": {
                   "name": "save in file",
@@ -1060,7 +1060,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@3ab60c15"
+                    "value": "cc.creativecomputing.control.CCEnvelope@491db530"
                   },
                   "attractionSpeed": {
                     "min": 0,
@@ -1146,7 +1146,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@5d21417e"
+                    "value": "cc.creativecomputing.control.CCEnvelope@646bbc5"
                   }
                 }
               },
@@ -1163,7 +1163,7 @@
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 10
+                    "value": 0
                   },
                   "life time blend": {
                     "curve": {"points": [
@@ -1189,13 +1189,13 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@112a2f86"
+                    "value": "cc.creativecomputing.control.CCEnvelope@1700f790"
                   },
                   "scale": {
                     "min": 0,
                     "max": 10,
                     "name": "scale",
-                    "value": 0.5400000214576721
+                    "value": 0.9700000286102295
                   },
                   "lacunarity": {
                     "min": 0,
@@ -1207,13 +1207,86 @@
                     "min": 0,
                     "max": 3,
                     "name": "speed",
-                    "value": 0.19200000166893005
+                    "value": 0.02
                   },
                   "gain": {
                     "min": 0,
                     "max": 1,
                     "name": "gain",
                     "value": 0.7820000052452087
+                  }
+                }
+              },
+              "gravity": {
+                "name": "gravity",
+                "value": {
+                  "strength": {
+                    "min": 0,
+                    "max": 10,
+                    "name": "strength",
+                    "value": 1
+                  },
+                  "life time blend": {
+                    "curve": {"points": [
+                      {
+                        "time": 0.05078125,
+                        "type": "LINEAR",
+                        "value": 1
+                      },
+                      {
+                        "time": 1,
+                        "type": "LINEAR",
+                        "value": 1
+                      }
+                    ]},
+                    "name": "life time blend",
+                    "value": "cc.creativecomputing.control.CCEnvelope@780be5d3"
+                  },
+                  "random amount": {
+                    "name": "random amount",
+                    "value": {
+                      "x": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "x",
+                        "value": 0
+                      },
+                      "y": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "y",
+                        "value": 0
+                      },
+                      "z": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "z",
+                        "value": 0
+                      }
+                    }
+                  },
+                  "direction": {
+                    "name": "direction",
+                    "value": {
+                      "x": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "x",
+                        "value": 0
+                      },
+                      "y": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "y",
+                        "value": 0
+                      },
+                      "z": {
+                        "min": -1,
+                        "max": 1,
+                        "name": "z",
+                        "value": 0.10800004005432129
+                      }
+                    }
                   }
                 }
               },
@@ -1240,7 +1313,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@28611948"
+                    "value": "cc.creativecomputing.control.CCEnvelope@5c9b7bd7"
                   },
                   "drag": {
                     "min": 0,
@@ -1275,7 +1348,7 @@
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 0.01
+                    "value": 0.02
                   },
                   "near max force": {
                     "min": 0,
@@ -1297,7 +1370,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@22bd6ef5"
+                    "value": "cc.creativecomputing.control.CCEnvelope@6f306b12"
                   }
                 }
               },
@@ -1314,7 +1387,7 @@
                     "min": 0,
                     "max": 10,
                     "name": "strength",
-                    "value": 1.0800000429153442
+                    "value": 4.130000114440918
                   },
                   "life time blend": {
                     "curve": {"points": [
@@ -1335,13 +1408,13 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@7540f16d"
+                    "value": "cc.creativecomputing.control.CCEnvelope@7f1cbd13"
                   },
                   "damping": {
                     "min": 0,
                     "max": 0.1,
                     "name": "damping",
-                    "value": 0.08900000154972076
+                    "value": 0.023800000548362732
                   }
                 }
               }
@@ -1410,7 +1483,7 @@
                     "min": 0,
                     "max": 1,
                     "name": "g amount",
-                    "value": 0.17299999296665192
+                    "value": 0.03200000151991844
                   },
                   "global amount": {
                     "min": 0,
@@ -1458,7 +1531,7 @@
             "min": 1,
             "max": 20000,
             "name": "distance",
-            "value": 3808.01416208586
+            "value": 3224.175929566818
           },
           "invert": {
             "name": "invert",
@@ -1471,19 +1544,19 @@
                 "min": -10000,
                 "max": 10000,
                 "name": "x",
-                "value": 3935.9874096255858
+                "value": 3315.670644338584
               },
               "y": {
                 "min": -10000,
                 "max": 10000,
                 "name": "y",
-                "value": 2877.8602697567712
+                "value": 2942.272268276632
               },
               "z": {
                 "min": -10000,
                 "max": 10000,
                 "name": "z",
-                "value": -309.1010681745359
+                "value": -196.87338310200235
               }
             }
           },
@@ -1494,25 +1567,25 @@
                 "min": -1,
                 "max": 1,
                 "name": "w",
-                "value": -0.9995635751452747
+                "value": -0.9997369780542478
               },
               "x": {
                 "min": -1,
                 "max": 1,
                 "name": "x",
-                "value": 0.013869506879712333
+                "value": 0.012942727874116858
               },
               "y": {
                 "min": -1,
                 "max": 1,
                 "name": "y",
-                "value": -0.023745001665708594
+                "value": -0.01499678891449718
               },
               "z": {
                 "min": -1,
                 "max": 1,
                 "name": "z",
-                "value": -0.010792169273729444
+                "value": 0.011556678952920157
               }
             }
           },
@@ -1669,7 +1742,7 @@
                   },
                   "buffer_debug_fragment.glsl": {
                     "name": "buffer_debug_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@4b2ccf99"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@4b4cdaf7"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -1686,7 +1759,7 @@
                   },
                   "buffer_debug_vertex.glsl": {
                     "name": "buffer_debug_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@6b5410a9"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@4998d2cb"
                   },
                   "uniforms": {
                     "name": "uniforms",
