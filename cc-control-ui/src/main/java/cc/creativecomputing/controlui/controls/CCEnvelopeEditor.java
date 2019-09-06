@@ -33,7 +33,6 @@ import javax.swing.JPanel;
 import cc.creativecomputing.control.timeline.Track;
 import cc.creativecomputing.controlui.CCControlApp;
 import cc.creativecomputing.controlui.timeline.view.SwingCurvePanel;
-import cc.creativecomputing.core.logging.CCLog;
 
 /**
  * @author christianriekoff
@@ -96,7 +95,7 @@ public class CCEnvelopeEditor extends JFrame {
 		});
 		
 		if(CCControlApp.preferences.getInt(theTitle + "/x", -1) != -1){
-			CCLog.info(CCControlApp.preferences.getInt(theTitle + "/x", -1), CCControlApp.preferences.getInt(theTitle + "/y", -1));
+			//CCLog.info(CCControlApp.preferences.getInt(theTitle + "/x", -1), CCControlApp.preferences.getInt(theTitle + "/y", -1));
 			setLocation(
 				CCControlApp.preferences.getInt(theTitle + "/x", -1), 
 				CCControlApp.preferences.getInt(theTitle + "/y", -1)

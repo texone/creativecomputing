@@ -33,7 +33,6 @@ import cc.creativecomputing.controlui.timeline.controller.track.CCTrackControlle
 import cc.creativecomputing.controlui.timeline.view.SwingConstants;
 import cc.creativecomputing.controlui.timeline.view.transport.SwingRulerView;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 @SuppressWarnings("serial")
@@ -360,7 +359,6 @@ public abstract class SwingAbstractTrackDataView<ControllerType extends CCTrackC
 		    
 		    _myRenderBuffer = gfx_config.createCompatibleImage(getWidth(), getHeight(),Transparency.TRANSLUCENT);
 
-		    CCLog.info(_myRenderBuffer.getType(),BufferedImage.TYPE_INT_ARGB);
 //			_myRenderBuffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = _myRenderBuffer.getGraphics();
 
