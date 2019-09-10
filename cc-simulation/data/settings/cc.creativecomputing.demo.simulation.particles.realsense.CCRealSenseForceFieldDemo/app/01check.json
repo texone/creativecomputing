@@ -30,30 +30,6 @@
   "app": {
     "name": "app",
     "value": {
-      "field pos x": {
-        "min": -1,
-        "max": 1,
-        "name": "field pos x",
-        "value": -0.25999999046325684
-      },
-      "field pos y": {
-        "min": -1,
-        "max": 1,
-        "name": "field pos y",
-        "value": -0.02399998903274536
-      },
-      "field scale x": {
-        "min": 0,
-        "max": 1,
-        "name": "field scale x",
-        "value": 0.0015625
-      },
-      "field scale y": {
-        "min": 0,
-        "max": 1,
-        "name": "field scale y",
-        "value": 0.0020833333333333333
-      },
       "alpha": {
         "min": 0,
         "max": 1,
@@ -80,7 +56,7 @@
                         "min": 0,
                         "max": 1,
                         "name": "depth max",
-                        "value": 0.1080000028014183
+                        "value": 0.009999999776482582
                       },
                       "depth min": {
                         "min": 0,
@@ -92,7 +68,7 @@
                         "min": 0,
                         "max": 5,
                         "name": "mip pow",
-                        "value": 1.0800000429153442
+                        "value": 0.8849999904632568
                       },
                       "depth scale": {
                         "min": 0,
@@ -104,31 +80,31 @@
                         "min": 0,
                         "max": 1,
                         "name": "thresh depth scale",
-                        "value": 0.11900000274181366
+                        "value": 0.722000002861023
                       },
                       "mip boost": {
                         "min": 1,
                         "max": 5,
                         "name": "mip boost",
-                        "value": 1.3480000495910645
+                        "value": 5
                       },
                       "mip level": {
                         "min": 1,
                         "max": 20,
                         "name": "mip level",
-                        "value": 9.454999923706055
+                        "value": 6.700000286102295
                       },
                       "normal dist": {
                         "min": 0,
                         "max": 50,
                         "name": "normal dist",
-                        "value": 6.5
+                        "value": 2.200000047683716
                       }
                     }
                   },
                   "realsense_fragment.glsl": {
                     "name": "realsense_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@25ac886f"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@1d08c9d4"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -145,7 +121,7 @@
                   },
                   "realsense_vertex.glsl": {
                     "name": "realsense_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@2754a84d"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@17755e51"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -163,7 +139,70 @@
             "min": 0,
             "max": 150,
             "name": "blur radius",
-            "value": 60.30000305175781
+            "value": 43.35000228881836
+          },
+          "min": {
+            "name": "min",
+            "value": {
+              "x": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "x",
+                "value": -21
+              },
+              "y": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "y",
+                "value": -60
+              },
+              "z": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "z",
+                "value": 53
+              }
+            }
+          },
+          "max": {
+            "name": "max",
+            "value": {
+              "x": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "x",
+                "value": 100
+              },
+              "y": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "y",
+                "value": 36.879999999999995
+              },
+              "z": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "z",
+                "value": 180
+              }
+            }
+          },
+          "real sense": {
+            "name": "real sense",
+            "value": {
+              "recording Path": {
+                "name": "recording Path",
+                "value": "exports/realsense01.byt"
+              },
+              "end record": {},
+              "speed": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "speed",
+                "value": 30
+              },
+              "start record": {}
+            }
           },
           "threshold": {
             "name": "threshold",
@@ -177,7 +216,7 @@
                   },
                   "threshold_fragment.glsl": {
                     "name": "threshold_fragment.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@72ade35a"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@578c3a68"
                   },
                   "uniforms": {
                     "name": "uniforms",
@@ -186,7 +225,7 @@
                         "min": 0,
                         "max": 1,
                         "name": "depth max",
-                        "value": 0.045
+                        "value": 0.020999999716877937
                       },
                       "depth min": {
                         "min": 0,
@@ -213,7 +252,7 @@
                 "value": {
                   "threshold_vertex.glsl": {
                     "name": "threshold_vertex.glsl",
-                    "value": "cc.creativecomputing.control.code.CCShaderFile@27b84a57"
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@20b28bf2"
                   },
                   "auto save": {
                     "name": "auto save",
@@ -222,6 +261,53 @@
                   "uniforms": {
                     "name": "uniforms",
                     "value": {}
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "mesh": {
+            "name": "mesh",
+            "value": {
+              "fragment": {
+                "name": "fragment",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "realsense_mesh_fragment.glsl": {
+                    "name": "realsense_mesh_fragment.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@42dc2474"
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
+              },
+              "vertex": {
+                "name": "vertex",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "realsense_mesh_vertex.glsl": {
+                    "name": "realsense_mesh_vertex.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@74b50ff0"
                   },
                   "save in file": {
                     "name": "save in file",
@@ -253,7 +339,7 @@
                         },
                         "display_fragment.glsl": {
                           "name": "display_fragment.glsl",
-                          "value": "cc.creativecomputing.control.code.CCShaderFile@522e9431"
+                          "value": "cc.creativecomputing.control.code.CCShaderFile@af97a70"
                         },
                         "uniforms": {
                           "name": "uniforms",
@@ -274,7 +360,7 @@
                         },
                         "display_vertex.glsl": {
                           "name": "display_vertex.glsl",
-                          "value": "cc.creativecomputing.control.code.CCShaderFile@29e3e2a0"
+                          "value": "cc.creativecomputing.control.code.CCShaderFile@5b0267b7"
                         },
                         "uniforms": {
                           "name": "uniforms",
@@ -369,7 +455,7 @@
                 },
                 "source 0": {
                   "name": "source 0",
-                  "value": "cc.creativecomputing.control.code.CCShaderSource@5ed682c6"
+                  "value": "cc.creativecomputing.control.code.CCShaderSource@3ba55424"
                 },
                 "save in file": {
                   "name": "save in file",
@@ -390,6 +476,29 @@
                     "name": "strength",
                     "value": 10
                   },
+                  "texture scale": {
+                    "name": "texture scale",
+                    "value": {
+                      "x": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "x",
+                        "value": 1920
+                      },
+                      "y": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "y",
+                        "value": -1080
+                      }
+                    }
+                  },
+                  "blend": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend",
+                    "value": 1
+                  },
                   "life time blend": {
                     "curve": {"points": [
                       {
@@ -404,7 +513,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@e64787d"
+                    "value": "cc.creativecomputing.control.CCEnvelope@63fcb194"
                   },
                   "force scale": {
                     "name": "force scale",
@@ -428,6 +537,23 @@
                         "value": 1
                       }
                     }
+                  },
+                  "texture offset": {
+                    "name": "texture offset",
+                    "value": {
+                      "x": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "x",
+                        "value": 0.5
+                      },
+                      "y": {
+                        "min": -1.7976931348623157E308,
+                        "max": 1.7976931348623157E308,
+                        "name": "y",
+                        "value": 0.5
+                      }
+                    }
                   }
                 }
               },
@@ -438,6 +564,12 @@
                     "min": 0,
                     "max": 10,
                     "name": "strength",
+                    "value": 1
+                  },
+                  "blend": {
+                    "min": 0,
+                    "max": 1,
+                    "name": "blend",
                     "value": 1
                   },
                   "life time blend": {
@@ -454,7 +586,7 @@
                       }
                     ]},
                     "name": "life time blend",
-                    "value": "cc.creativecomputing.control.CCEnvelope@7b441be9"
+                    "value": "cc.creativecomputing.control.CCEnvelope@62ddb8f8"
                   },
                   "drag": {
                     "min": 0,
@@ -479,10 +611,215 @@
                   "min": -2147483648,
                   "max": 2147483647,
                   "name": "free particles",
-                  "value": 975842
+                  "value": 953503
                 }
               }
             }}
+          }
+        }
+      },
+      "camera": {
+        "name": "camera",
+        "value": {
+          "rotation speed": {
+            "min": 0,
+            "max": 0.2,
+            "name": "rotation speed",
+            "value": 0.1
+          },
+          "distance": {
+            "min": 1,
+            "max": 20000,
+            "name": "distance",
+            "value": 354.24417379495355
+          },
+          "invert": {
+            "name": "invert",
+            "value": false
+          },
+          "center": {
+            "name": "center",
+            "value": {
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "name": "x",
+                "value": 57.006696264625944
+              },
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "name": "y",
+                "value": -45.82513989968364
+              },
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "name": "z",
+                "value": 130.24204035712282
+              }
+            }
+          },
+          "rotation": {
+            "name": "rotation",
+            "value": {
+              "w": {
+                "min": -1,
+                "max": 1,
+                "name": "w",
+                "value": 6.870124139042751E-4
+              },
+              "x": {
+                "min": -1,
+                "max": 1,
+                "name": "x",
+                "value": 0.9945191224461387
+              },
+              "y": {
+                "min": -1,
+                "max": 1,
+                "name": "y",
+                "value": 0.06855519856004275
+              },
+              "z": {
+                "min": -1,
+                "max": 1,
+                "name": "z",
+                "value": -0.07893939354526906
+              }
+            }
+          },
+          "active": {"name": "active"},
+          "zoom": {
+            "name": "zoom",
+            "value": true
+          },
+          "fov": {
+            "min": 0,
+            "max": 90,
+            "name": "fov",
+            "value": 45
+          },
+          "friction": {
+            "min": 0,
+            "max": 1,
+            "name": "friction",
+            "value": 0.16
+          },
+          "reset on double click": {
+            "name": "reset on double click",
+            "value": true
+          },
+          "rotation mode": {
+            "name": "rotation mode",
+            "value": "FREE"
+          },
+          "rotate only": {
+            "name": "rotate only",
+            "value": false
+          },
+          "reset": {},
+          "pan": {
+            "name": "pan",
+            "value": true
+          },
+          "camera": {
+            "name": "camera",
+            "value": {
+              "far": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "far",
+                "value": 93530.74360871938
+              },
+              "position": {
+                "name": "position",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 100
+                  }
+                }
+              },
+              "up": {
+                "name": "up",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 1
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              },
+              "near": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "near",
+                "value": 93.53074360871938
+              },
+              "fov": {
+                "min": 0,
+                "max": 1.5707963267948966,
+                "name": "fov",
+                "value": 1.0471975511965976
+              },
+              "apect ratio": {
+                "min": 0.1,
+                "max": 10,
+                "name": "apect ratio",
+                "value": 1.7777777777777777
+              },
+              "target": {
+                "name": "target",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -629,7 +966,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 15.270704387505484
+        "value": 30.2925655985508
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

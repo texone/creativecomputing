@@ -1,0 +1,283 @@
+{
+  "name": "real sense",
+  "value": {
+    "shader": {
+      "name": "shader",
+      "value": {
+        "fragment": {
+          "name": "fragment",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {
+                "depth max": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "depth max",
+                  "value": 0.009999999776482582
+                },
+                "depth min": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "depth min",
+                  "value": 0
+                },
+                "mip pow": {
+                  "min": 0,
+                  "max": 5,
+                  "name": "mip pow",
+                  "value": 0.8849999904632568
+                },
+                "depth scale": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "depth scale",
+                  "value": 0.1080000028014183
+                },
+                "thresh depth scale": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "thresh depth scale",
+                  "value": 0.722000002861023
+                },
+                "mip boost": {
+                  "min": 1,
+                  "max": 5,
+                  "name": "mip boost",
+                  "value": 5
+                },
+                "mip level": {
+                  "min": 1,
+                  "max": 20,
+                  "name": "mip level",
+                  "value": 6.700000286102295
+                },
+                "normal dist": {
+                  "min": 0,
+                  "max": 50,
+                  "name": "normal dist",
+                  "value": 2.200000047683716
+                }
+              }
+            },
+            "realsense_fragment.glsl": {
+              "name": "realsense_fragment.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@1e32621b"
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        },
+        "vertex": {
+          "name": "vertex",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "realsense_vertex.glsl": {
+              "name": "realsense_vertex.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@e5b7356"
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {}
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        }
+      }
+    },
+    "blur radius": {
+      "min": 0,
+      "max": 150,
+      "name": "blur radius",
+      "value": 43.35000228881836
+    },
+    "min": {
+      "name": "min",
+      "value": {
+        "x": {
+          "min": -1.7976931348623157E308,
+          "max": 1.7976931348623157E308,
+          "name": "x",
+          "value": -21
+        },
+        "y": {
+          "min": -1.7976931348623157E308,
+          "max": 1.7976931348623157E308,
+          "name": "y",
+          "value": -60
+        },
+        "z": {
+          "min": -1.7976931348623157E308,
+          "max": 1.7976931348623157E308,
+          "name": "z",
+          "value": 53
+        }
+      }
+    },
+    "max": {
+      "name": "max",
+      "value": {
+        "x": {
+          "min": -1.7976931348623157E308,
+          "max": 1.7976931348623157E308,
+          "name": "x",
+          "value": 100
+        },
+        "y": {
+          "min": -1.7976931348623157E308,
+          "max": 1.7976931348623157E308,
+          "name": "y",
+          "value": 36.879999999999995
+        },
+        "z": {
+          "min": -1.7976931348623157E308,
+          "max": 1.7976931348623157E308,
+          "name": "z",
+          "value": 180
+        }
+      }
+    },
+    "real sense": {
+      "name": "real sense",
+      "value": {
+        "recording Path": {
+          "name": "recording Path",
+          "value": "exports/realsense01.byt"
+        },
+        "end record": {},
+        "speed": {
+          "min": -1.7976931348623157E308,
+          "max": 1.7976931348623157E308,
+          "name": "speed",
+          "value": 30
+        },
+        "start record": {}
+      }
+    },
+    "threshold": {
+      "name": "threshold",
+      "value": {
+        "fragment": {
+          "name": "fragment",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "threshold_fragment.glsl": {
+              "name": "threshold_fragment.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@7a96c5e6"
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {
+                "depth max": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "depth max",
+                  "value": 0.020999999716877937
+                },
+                "depth min": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "depth min",
+                  "value": 0
+                },
+                "depth scale": {
+                  "min": 0,
+                  "max": 1,
+                  "name": "depth scale",
+                  "value": 0
+                }
+              }
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        },
+        "vertex": {
+          "name": "vertex",
+          "value": {
+            "threshold_vertex.glsl": {
+              "name": "threshold_vertex.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@4ba67348"
+            },
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {}
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        }
+      }
+    },
+    "mesh": {
+      "name": "mesh",
+      "value": {
+        "fragment": {
+          "name": "fragment",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "realsense_mesh_fragment.glsl": {
+              "name": "realsense_mesh_fragment.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@77a91443"
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {}
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        },
+        "vertex": {
+          "name": "vertex",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {}
+            },
+            "realsense_mesh_vertex.glsl": {
+              "name": "realsense_mesh_vertex.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@3b5c4f3b"
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

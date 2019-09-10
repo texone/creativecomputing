@@ -1180,7 +1180,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	public void bindTexture(final int theTextureUnit, final CCTexture theTexture) {
 		_myTextures[theTextureUnit] = theTexture;
 		activeTexture(theTextureUnit);
-		gl.glEnable(_myTextures[theTextureUnit].target().glID);
+//		gl.glEnable(_myTextures[theTextureUnit].target().glID);
 		_myTextures[theTextureUnit].bind();
 		activeTexture(0);
 	}
@@ -1189,7 +1189,7 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 		for (int i = 0; i < _myTextures.length; i++) {
 			if (_myTextures[i] != null) {
 				gl.glActiveTexture(GL.GL_TEXTURE0 + i);
-				gl.glDisable(_myTextures[i].target().glID);
+//				gl.glDisable(_myTextures[i].target().glID);
 				_myTextures[i] = null;
 			}
 		}
@@ -3661,6 +3661,14 @@ public class CCGraphics extends CCGLGraphics<GL2>{
 	
 	public void textureCoords3D(double theX, double theY, double theZ){
 		gl.glTexCoord3d(theX, theY, theZ);
+	}
+	
+	public void textureCoords4D(CCVector4 theVector){
+		gl.glTexCoord4d(theVector.x, theVector.y, theVector.z, theVector.w);
+	}
+	
+	public void textureCoords4D(final double theX, final double theY, final double theZ, final double theW){
+		gl.glTexCoord4d(theX, theY, theZ, theW);
 	}
 	
 	public void textureCoords1D(final int theTextureUnit, final double theX) {

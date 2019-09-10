@@ -115,7 +115,7 @@ public class CCTextureBlend extends CCBlend{
 	}
 	
 	public void addBlend(CCParticle theParticle, double theR, double theG, double theB){
-		g.textureCoords4D(0, theR, theG, theB, 1d);
+		g.textureCoords4D(theR, theG, theB, 1d);
 		g.vertex(theParticle.x(), theParticle.y());
 	}
 	

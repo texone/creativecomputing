@@ -11,6 +11,7 @@ import org.librealsense.Frame;
 import org.librealsense.FrameList;
 import org.librealsense.Intrinsics;
 import org.librealsense.Native;
+import org.librealsense.Native.Option;
 import org.librealsense.Pipeline;
 import org.librealsense.PipelineProfile;
 
@@ -24,6 +25,7 @@ import cc.creativecomputing.image.CCPixelType;
 import cc.creativecomputing.io.CCFileInputChannel;
 import cc.creativecomputing.io.CCFileOutputChannel;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCVector2;
 
 /**
  * Intel RealSense Camera
@@ -47,6 +49,18 @@ public class CCRealSense {
 	private CCImage lastdepthImage;
 	
 	private Thread _myThread;
+	
+	/**
+	 * Focal length of the image plane, as a multiple of pixel width and height
+	 */
+	public CCVector2 depthFocalLength = new CCVector2();
+	
+	/**
+	 * Coordinate of the principal point of the image, as a pixel offset from the left top edge
+	 */
+	public CCVector2 depthOffset = new CCVector2();
+	
+	public double depthScale = 0.001;
 
 	public boolean savePointCloud = false;
 
@@ -80,17 +94,19 @@ public class CCRealSense {
 	
 	public CCRealSense(Path thePath, int theWidth, int theHeight) {
 		_myInputChannel = new CCFileInputChannel(thePath);
-		this.width = theWidth;
-		this.height = theHeight;
+		width = theWidth;
+		height = theHeight;
 
 		// create images
-		depthImage = new CCImage(this.width, this.height, CCPixelInternalFormat.LUMINANCE16, CCPixelFormat.LUMINANCE, CCPixelType.UNSIGNED_SHORT);
-		lastdepthImage = new CCImage(this.width, this.height, CCPixelInternalFormat.LUMINANCE16, CCPixelFormat.LUMINANCE, CCPixelType.UNSIGNED_SHORT);
+		depthImage = new CCImage(width, height, CCPixelInternalFormat.LUMINANCE16, CCPixelFormat.LUMINANCE, CCPixelType.UNSIGNED_SHORT);
+		lastdepthImage = new CCImage(width, height, CCPixelInternalFormat.LUMINANCE16, CCPixelFormat.LUMINANCE, CCPixelType.UNSIGNED_SHORT);
 		
 		_myFrameSize = width * height * 2;
 		
 		_myFrame = 0;
 		_myNumberOfFrames = _myInputChannel.size() / _myFrameSize;
+		
+		
 	}
 	
 	public void start() {
@@ -107,7 +123,8 @@ public class CCRealSense {
 	 * @param enableColorStream True if color stream should be enabled.
 	 */
 	public void start(int width, int height, int fps) {
-		DeviceList deviceList = this.context.queryDevices();
+		
+		DeviceList deviceList = context.queryDevices();
 		List<Device> devices = deviceList.getDevices();
 		for (Device device : devices) {
 		
@@ -129,47 +146,54 @@ public class CCRealSense {
 	/**
 	 * Start the camera.
 	 * 
-	 * @param device            Intel RealSense device to start.
-	 * @param width             Width of the camera image.
-	 * @param height            Height of the camera image.
-	 * @param fps               Frames per second to capture.
+	 * @param theDevice            Intel RealSense device to start.
+	 * @param theWidth             Width of the camera image.
+	 * @param theHeight            Height of the camera image.
+	 * @param theFPS               Frames per second to capture.
 	 * @param enableDepthStream True if depth stream should be enabled.
 	 * @param enableColorStream True if color stream should be enabled.
 	 */
-	public void start(Device device, int width, int height, int fps) {
+	public void start(Device theDevice, int theWidth, int theHeight, int theFPS) {
 		if (running)
 			return;
 
 		// set configuration
-		this.width = width;
-		this.height = height;
-		this.fps = fps;
+		width = theWidth;
+		height = theHeight;
+		fps = theFPS;
 
 		// create images
-		depthImage = new CCImage(this.width, this.height, CCPixelInternalFormat.LUMINANCE16, CCPixelFormat.LUMINANCE, CCPixelType.UNSIGNED_SHORT);
-		lastdepthImage = new CCImage(this.width, this.height, CCPixelInternalFormat.LUMINANCE16, CCPixelFormat.LUMINANCE, CCPixelType.UNSIGNED_SHORT);
+		depthImage = new CCImage(width, height, CCPixelInternalFormat.LUMINANCE16, CCPixelFormat.LUMINANCE, CCPixelType.UNSIGNED_SHORT);
+		lastdepthImage = new CCImage(width, height, CCPixelInternalFormat.LUMINANCE16, CCPixelFormat.LUMINANCE, CCPixelType.UNSIGNED_SHORT);
 
 		// create pipeline
 		pipeline = context.createPipeline();
 
 		Config config = Config.create();
 		
-		config.enableDevice(device);
+		config.enableDevice(theDevice);
 		
 		config.enableStream(
 			Native.Stream.RS2_STREAM_DEPTH, 
-			this.depthStreamIndex, 
-			this.width, 
-			this.height,
+			depthStreamIndex, 
+			width, 
+			height,
 			Native.Format.RS2_FORMAT_Z16, 
-			this.fps
+			fps
 		);
 
 		// start pipeline
 		PipelineProfile myProfile = pipeline.startWithConfig(config);
 		Intrinsics myIntrinsics = myProfile.getStreams().get(0).getVideoStreamIntrinsics();
-		//myIntrinsics.
-
+		
+		depthFocalLength.x = myIntrinsics.fx;
+		depthFocalLength.y = myIntrinsics.fy;
+		
+		depthOffset.x = myIntrinsics.ppx;
+		depthOffset.y = myIntrinsics.ppy;
+		
+		CCLog.info(depthFocalLength, depthOffset);
+		
 		running = true;
 		_myThread.start();
 	}
@@ -210,7 +234,7 @@ public class CCRealSense {
 	 * @return True if device is available.
 	 */
 	public boolean isCameraAvailable() {
-		DeviceList deviceList = this.context.queryDevices();
+		DeviceList deviceList = context.queryDevices();
 		return deviceList.getDeviceCount() > 0;
 	}
 
@@ -238,7 +262,7 @@ public class CCRealSense {
 	 * @param maxDepth Maximum depth value which translates to black.
 	 */
 	public void createDepthImage(int minDepth, int maxDepth) {
-		// this.depthImage.loadPixels();
+		// depthImage.loadPixels();
 
 //        for (int i = 0; i < width * height; i++)
 //        {
@@ -251,7 +275,7 @@ public class CCRealSense {
 //                depthImage.pixels[i] = toColor(0);
 //        }
 //
-//        this.depthImage.updatePixels();
+//        depthImage.updatePixels();
 	}
 	
 
@@ -289,7 +313,7 @@ public class CCRealSense {
 //    private void loadNativeLibraries()
 //    {
 //        String os = System.getProperty("os.name").toLowerCase();
-//        String libPath = ProcessingUtils.getLibPath(this.parent);
+//        String libPath = ProcessingUtils.getLibPath(parent);
 //
 //        if (os.contains("win")) {
 //            Native.loadNativeLibraries(Paths.get(libPath,"native/windows-x64").toString());

@@ -21,10 +21,12 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCBlendMode;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.graphics.camera.CCCameraController;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.image.CCImageIO;
@@ -32,6 +34,7 @@ import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
+import cc.creativecomputing.realsense.CCRealSenseTextures;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.constraints.CCConstraint;
 import cc.creativecomputing.simulation.particles.emit.CCParticlesIndexParticleEmitter;
@@ -51,13 +54,17 @@ public class CCRealSenseForceFieldDemo extends CCGL2Adapter {
 	private CCTextureForceField2D _myForceField;
 	
 	@CCProperty(name = "real sense")
-	private CCRealSenseForceField _cForceField;
+	private CCRealSenseTextures _cForceField;
 
+	
+	@CCProperty(name = "camera")
+	private CCCameraController _cCameraController;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_cForceField = new CCRealSenseForceField(CCNIOUtil.dataPath("realsense02.byt"),1280,720);
-//		_cForceField = new CCRealSenseForceField();
+		CCLog.info(g.maxTextureUnits(), g.maxCombinedTextureUnits());
+//		_cForceField = new CCRealSenseForceField(CCNIOUtil.dataPath("realsense02.byt"),1280,720);
+		_cForceField = new CCRealSenseTextures();
 		_myForceField = new CCTextureForceField2D(_cForceField.forceField(), new CCVector2(1920d, -1080d), new CCVector2(0.5, 0.5));
 		final List<CCForce> myForces = new ArrayList<CCForce>();
 		myForces.add(_myForceField);
@@ -65,6 +72,8 @@ public class CCRealSenseForceFieldDemo extends CCGL2Adapter {
 		
 		_myParticles = new CCParticles(g, myForces, new ArrayList<>(), new ArrayList<CCConstraint>(), 1000, 1000);
 		_myParticles.addEmitter(_myEmitter = new CCParticlesIndexParticleEmitter(_myParticles));
+		
+		_cCameraController = new CCCameraController(this, g, 100);
 	}
 
 	@Override
@@ -82,24 +91,31 @@ public class CCRealSenseForceFieldDemo extends CCGL2Adapter {
 	public void display(CCGraphics g) {
 		_cForceField.preDisplay(g);
 		_myParticles.preDisplay(g);
-		
+		g.clearColor(0);
+		g.clear();
 		g.blend();
-		g.color(0);
-		g.rect(-g.width() / 2, -g.height() / 2, g.width(), g.height());
+		//g.rect(-g.width() / 2, -g.height() / 2, g.width(), g.height());
+		g.pushMatrix();
+//		g.scale(1,-1);
+		g.ortho();
+		g.color(255);
+		g.image(_cForceField.forceField(),0,0, g.width(), g.height());
+		//_myForceField.display(g);
+		
+		g.rect(100, 100,_cForceField.amountInBounds * 1000,20);
+		g.popMatrix();
 		g.clearDepthBuffer();
 		g.color(1, 1f);
 		// g.rect(-width/2, -height/2, width, height);
 		
-		g.pushMatrix();
-//		g.scale(1,-1);
-//		g.image(_cForceField.forceField(),-g.width()/2, -g.height()/2, g.width(), g.height());
-		_myForceField.display(g);
-		g.popMatrix();
 		
+
+		_cCameraController.camera().draw(g);
+		_cForceField.drawPointCloud(g);
 		g.pushAttribute();
 		g.color(1f, alpha);
 		g.blend(CCBlendMode.ADD);
-		_myParticles.display(g);
+		//_myParticles.display(g);
 		g.blend();
 		g.popAttribute();
 	}

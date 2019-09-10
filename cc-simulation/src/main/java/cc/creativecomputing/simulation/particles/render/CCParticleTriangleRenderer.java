@@ -55,7 +55,7 @@ public class CCParticleTriangleRenderer extends CCParticleRenderer{
 		_myBuffer.beginDraw(g);
 		_myInitValueShader.start();
 		g.beginShape(CCDrawMode.QUADS);
-		g.textureCoords3D(0, -1f, -1f, 0);
+		g.textureCoords3D(-1f, -1f, 0);
 		g.vertex(0,0);
 		g.vertex(_myBuffer.width(),0);
 		g.vertex(_myBuffer.width(),_myBuffer.height());
@@ -79,20 +79,22 @@ public class CCParticleTriangleRenderer extends CCParticleRenderer{
 		
 		if(_myIndex > _myBuffer.width() * _myBuffer.height())return;
 		
-		g.noBlend();
-		_myBuffer.beginDraw(g);
-		_myInitValueShader.start();
+		CCMesh myMesh = new CCMesh(CCDrawMode.POINTS, _myTriangles.size());
 		g.beginShape(CCDrawMode.POINTS);
-		double myMaxY = 0;
 		for(CCParticle myParticle:_myTriangles) {
-				
-			g.textureCoords4D(0, myParticle.x(), myParticle.y(), 0, 1);
-			g.textureCoords4D(1, myParticle.texCoords().x, myParticle.texCoords().y, 0, 1);
-			g.vertex(_myIndex %  _myBuffer.width(), _myIndex /  _myBuffer.width());
+			myMesh.addVertex(_myIndex %  _myBuffer.width(), _myIndex /  _myBuffer.width());
+			myMesh.addTextureCoords(0, myParticle.x(), myParticle.y(), 0, 1);
+			myMesh.addTextureCoords(1, myParticle.texCoords().x, myParticle.texCoords().y, 0, 1);
+			
 			_myIndex++;
 		}
 			
 		g.endShape();
+		
+		g.noBlend();
+		_myBuffer.beginDraw(g);
+		_myInitValueShader.start();
+		myMesh.draw(g);
 		_myInitValueShader.end();
 		g.clearColor(0);
 		_myBuffer.endDraw(g);

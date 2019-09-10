@@ -88,8 +88,10 @@ public class CCTextureForceField2D extends CCForce{
 	@Override
 	public void setUniforms() {
 		super.setUniforms();
-		_myShader.uniform2f(_myTextureScaleParameter, _myTextureScale);
-		_myShader.uniform2f(_myTextureOffsetParameter, _myTextureOffset);
+		
+		_myShader.uniform2f(_myTextureScaleParameter, _myTextureScale.x , _myTextureScale.y);
+		_myShader.uniform2f(_myTextureOffsetParameter, -_myTextureOffset.x, -_myTextureOffset.y);
+	
 		_myShader.uniform2f(_myTextureSizeParameter, _myTexture.width(), _myTexture.height());
 		_myShader.uniform3f(_myForceScaleParameter, _myForceScale);
 	}
@@ -117,8 +119,10 @@ public class CCTextureForceField2D extends CCForce{
 	
 	public void display(CCGraphics g) {
 		g.pushMatrix();
+	
 		g.scale(_myTextureScale.x , _myTextureScale.y);
 		g.translate(-_myTextureOffset.x, -_myTextureOffset.y);
+		
 		g.texture(_myTexture);
 		g.beginShape(CCDrawMode.QUADS);
 		g.textureCoords2D(0, 0);

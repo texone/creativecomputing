@@ -6,15 +6,23 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.graphics.camera.CCCameraController;
+import cc.creativecomputing.realsense.CCRealSenseTextures;
 
 public class CCRealSenseCameraDemo extends CCGL2Adapter {
 	
 	@CCProperty(name = "force field")
-	private CCRealSenseForceField _cForceField;
+	private CCRealSenseTextures _cForceField;
+	
+	
+	@CCProperty(name = "camera")
+	private CCCameraController _cCameraController;
 
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_cForceField = new CCRealSenseForceField();
+		_cForceField = new CCRealSenseTextures();
+		
+		_cCameraController = new CCCameraController(this, g, 100);
 	}
 
 	@Override
@@ -26,7 +34,7 @@ public class CCRealSenseCameraDemo extends CCGL2Adapter {
 		_cForceField.preDisplay(g);
 		g.clear();
 		
-		
+		_cCameraController.camera().draw(g);
 		g.image(_cForceField.forceField(), 0,0);
 		g.image(_cForceField.depthMap(), 640,0);
 		

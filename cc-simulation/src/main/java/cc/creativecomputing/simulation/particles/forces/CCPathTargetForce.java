@@ -40,6 +40,9 @@ public class CCPathTargetForce extends CCForce {
 
 	private String _myPathAddParameter;
 	private String _myPathLengthParameter;
+	
+	private String _myNoiseAddParameter;
+	private String _myNoiseAmountParameter;
 
 	private int _myWidth;
 	private int _myHeight;
@@ -77,8 +80,12 @@ public class CCPathTargetForce extends CCForce {
 		_myMaxForceParameter = parameter("maxForce");
 		_myNearDistanceParameter = parameter("nearDistance");
 		_myNearMaxForceParameter = parameter("nearMaxForce");
+		
 		_myPathAddParameter = parameter("pathAdd");
 		_myPathLengthParameter = parameter("pathLength");
+
+		_myNoiseAddParameter = parameter("noiseAdd");
+		_myNoiseAmountParameter = parameter("noiseAmount");
 	}
 	
 	@Override
@@ -118,6 +125,18 @@ public class CCPathTargetForce extends CCForce {
 		_myPathAdd = thePathAdd;
 	}
 	
+	private double _myNoiseAdd = 0;
+	
+	public void noiseAdd(double theNoiseAdd) {
+		_myNoiseAdd = theNoiseAdd;
+	}
+	
+	private double _myNoiseAmount = 0;
+	
+	public void noiseAmount(double theNoiseAmount) {
+		_myNoiseAmount = theNoiseAmount;
+	}
+	
 	@Override
 	public void setUniforms() {
 		super.setUniforms();
@@ -130,6 +149,9 @@ public class CCPathTargetForce extends CCForce {
 
 		_myShader.uniform1f(_myPathAddParameter, _myPathAdd);
 		_myShader.uniform1f(_myPathLengthParameter, _myPathResolution);
+
+		_myShader.uniform1f(_myNoiseAddParameter, _myNoiseAdd);
+		_myShader.uniform1f(_myNoiseAmountParameter, _myNoiseAmount);
 		
 //		_myShader.uniform2f(_myTextureSizeParameter, _myTexture.width(), _myTexture.height());
 //		_myShader.uniform1f(_myExponentParameter, _myExponent);
@@ -180,7 +202,7 @@ public class CCPathTargetForce extends CCForce {
 	}
 	
 	public void addTarget(CCParticle theParticle, CCVector3 theTarget){
-		g.textureCoords4D(0, theTarget.x, theTarget.y, theTarget.z, 0);
+		g.textureCoords4D(theTarget.x, theTarget.y, theTarget.z, 0);
 		g.vertex(theParticle.x(), theParticle.y());
 	}
 	
@@ -202,12 +224,12 @@ public class CCPathTargetForce extends CCForce {
 	}
 	
 	public void setJump(int thePath,CCVector3 theJump) {
-		g.textureCoords4D(0, theJump.x, theJump.y, theJump.z, 0);
+		g.textureCoords4D(theJump.x, theJump.y, theJump.z, 0);
 		g.vertex(thePath, 0);
 	}
 	
 	public void addPath(int thePath, int theIndex, CCVector3 thePosition){
-		g.textureCoords4D(0, thePosition.x, thePosition.y, thePosition.z, 0);
+		g.textureCoords4D(thePosition.x, thePosition.y, thePosition.z, 0);
 		g.vertex(thePath, theIndex + 1);
 	}
 	

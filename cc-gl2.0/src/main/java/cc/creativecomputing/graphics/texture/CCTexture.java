@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCPixelStorageModes;
@@ -617,7 +618,10 @@ public abstract class CCTexture{
 	public ByteBuffer dataBuffer(int theLevel) {
 		GL2 gl = CCGraphics.currentGL();
 		size();
-		ByteBuffer myBuffer = ByteBuffer.allocate(size() * _myPixelType.bytesPerChannel * 4);
+
+		int devide = CCMath.pow(2,theLevel);
+		int size = _myWidth / devide * _myHeight / devide * _myDepth;
+		ByteBuffer myBuffer = ByteBuffer.allocate(size * _myPixelType.bytesPerChannel * 4);
 		gl.glGetTexImage(_myTarget.glID, theLevel, _myFormat.glID, _myPixelType.glID, myBuffer);
 		myBuffer.rewind();
 		return myBuffer;
@@ -732,12 +736,12 @@ public abstract class CCTexture{
 	public void bind(final int theID) {
 		GL2 gl = CCGraphics.currentGL();
 		gl.glBindTexture(_myTarget.glID, _myTextureIDs[theID]);
-		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, _myEnvironmentMode.glID);
-		
-		if(_myEnvironmentMode == CCTextureEnvironmentMode.BLEND) {
-			float[] myColor = {(float)_myBlendColor.r, (float)_myBlendColor.g, (float)_myBlendColor.b, (float)_myBlendColor.a};
-			gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, myColor,0);
-		}
+//		gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, _myEnvironmentMode.glID);
+//		
+//		if(_myEnvironmentMode == CCTextureEnvironmentMode.BLEND) {
+//			float[] myColor = {(float)_myBlendColor.r, (float)_myBlendColor.g, (float)_myBlendColor.b, (float)_myBlendColor.a};
+//			gl.glTexEnvfv(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_COLOR, myColor,0);
+//		}
 	}
 	
 	public void unbind() {

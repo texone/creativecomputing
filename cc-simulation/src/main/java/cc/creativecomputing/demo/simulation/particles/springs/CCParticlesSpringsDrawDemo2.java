@@ -16,7 +16,6 @@ import java.util.List;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
-import cc.creativecomputing.demo.simulation.particles.realsense.CCRealSenseForceField;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -33,6 +32,7 @@ import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 import cc.creativecomputing.model.svg.CCSVGDocument;
 import cc.creativecomputing.model.svg.CCSVGIO;
+import cc.creativecomputing.realsense.CCRealSenseTextures;
 import cc.creativecomputing.simulation.particles.CCParticle;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.blends.CCBlend;
@@ -88,7 +88,7 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 //	private CCPositionConstraint _myPositionConstraint;
 	
 	@CCProperty(name = "real sense")
-	private CCRealSenseForceField _RealSenseForceField;
+	private CCRealSenseTextures _RealSenseForceField;
 	
 	private List<CCParticle> _myNewTargetParticles = new ArrayList<>();
 	private List<CCVector3> _myNewDocumentTargets = new ArrayList<>();
@@ -128,7 +128,7 @@ public class CCParticlesSpringsDrawDemo2 extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_cScreenCaptureController = new CCScreenCaptureController(this);
-		_RealSenseForceField = new CCRealSenseForceField(CCNIOUtil.dataPath("realsense02.byt"),1280,720);
+		_RealSenseForceField = new CCRealSenseTextures(CCNIOUtil.dataPath("realsense02.byt"),1280,720);
 		_myTexture = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("Wittgenstein.png")));
 		_myLines = new CCTexture2D(CCImageIO.newImage(CCNIOUtil.dataPath("lines.jpg")));
 		

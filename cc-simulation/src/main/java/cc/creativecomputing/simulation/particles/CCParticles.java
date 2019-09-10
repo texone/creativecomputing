@@ -31,6 +31,7 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCCollectionUtil;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
+import cc.creativecomputing.graphics.CCVBOMesh;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCGLProgram.CCGLTextureUniform;
@@ -38,6 +39,7 @@ import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCGLSwapBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.CCVector4;
 import cc.creativecomputing.simulation.particles.blends.CCBlend;
@@ -89,6 +91,8 @@ public class CCParticles{
 	protected CCParticlesUpdateShader _myUpdateShader;
 	
 	protected CCGLWriteDataShader _mySetDataShader;
+	
+	protected CCVBOMesh _myResetMesh;
 	
 	protected CCGLSwapBuffer _mySwapTexture;
 	
@@ -154,7 +158,16 @@ public class CCParticles{
 		_myEnvelopeData = new CCParticleEnvelopeData(100, 100);
 		_mySwapTexture = new CCGLSwapBuffer(g, 32, 4, 4,_myWidth,_myHeight);
 		_myGroupData = new CCShaderBuffer(32, 4, 1, CCParticleCPUGroupEmitter.GROUP_WIDH,CCParticleCPUGroupEmitter.GROUP_WIDH);
-
+		
+		_myResetMesh = new CCVBOMesh(CCDrawMode.POINTS, _myWidth * _myHeight);
+	
+		for (int i = 0; i < _myWidth * _myHeight; i++){
+			_myResetMesh.addVertex(i % _myWidth,i / _myWidth);
+			_myResetMesh.addTextureCoords(0,Float.MAX_VALUE,Float.MAX_VALUE,Float.MIN_VALUE,0);
+			_myResetMesh.addTextureCoords(1, 1, 1, 1);
+			_myResetMesh.addTextureCoords(2, 0, 0, 0);
+			_myResetMesh.addTextureCoords(3, 1, 1, 1);
+		}
 		_myRenderer = theRenderer;
 		_myForces = theForces;
 		_myBlends = theBlends;
@@ -314,17 +327,7 @@ public class CCParticles{
 		
 		_mySwapTexture.beginDrawCurrent(g);
 		_mySetDataShader.start();
-		
-		g.beginShape(CCDrawMode.POINTS);
-		for (int i = 0; i < _myWidth * _myHeight; i++){
-			g.textureCoords4D(0, Float.MAX_VALUE,Float.MAX_VALUE,Float.MIN_VALUE,0);
-			g.textureCoords3D(1, 1, 1, 1);
-			g.textureCoords3D(2, 0, 0, 0);
-			g.textureCoords3D(3, 1, 1, 1);
-			g.vertex(i % _myWidth,i / _myWidth);
-		}
-		g.endShape();
-		
+		_myResetMesh.draw(g);
 		_mySetDataShader.end();
 		_mySwapTexture.endDrawCurrent(g);
 		
@@ -547,7 +550,6 @@ public class CCParticles{
 		int myTextureUnit = 0;
 		for(CCGLTextureUniform myTextureUniform:_myUpdateShader.textures()){
 			if(myTextureUniform.texture == null ) continue;
-			
 			g.bindTexture(myTextureUnit, myTextureUniform.texture);
 			myTextureUnit++;
 		}

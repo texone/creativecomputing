@@ -15,7 +15,6 @@ import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.demo.simulation.particles.realsense.CCRealSenseForceField;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
@@ -32,6 +31,7 @@ import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.spline.CCLinearSpline;
 import cc.creativecomputing.model.svg.CCSVGDocument;
 import cc.creativecomputing.model.svg.CCSVGIO;
+import cc.creativecomputing.realsense.CCRealSenseTextures;
 import cc.creativecomputing.simulation.particles.CCParticle;
 import cc.creativecomputing.simulation.particles.CCParticles;
 import cc.creativecomputing.simulation.particles.emit.CCParticlesIndexParticleEmitter;
@@ -91,7 +91,7 @@ public class CCParticlesSpringsDrawDemo extends CCGL2Adapter {
 	private CCTargetForce _myTargetForce;
 	
 	@CCProperty(name = "real sense")
-	private CCRealSenseForceField _RealSenseForceField;
+	private CCRealSenseTextures _RealSenseForceField;
 	
 	private List<CCParticle> _myNewTargets = new ArrayList<>();
 
@@ -103,7 +103,7 @@ public class CCParticlesSpringsDrawDemo extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		_cScreenCaptureController = new CCScreenCaptureController(this);
-		_RealSenseForceField = new CCRealSenseForceField(CCNIOUtil.dataPath("realsense02.byt"),1280,720);
+		_RealSenseForceField = new CCRealSenseTextures(CCNIOUtil.dataPath("realsense02.byt"),1280,720);
 
 		
 //		frameRate(30);
@@ -196,41 +196,7 @@ public class CCParticlesSpringsDrawDemo extends CCGL2Adapter {
 	public void update(final CCAnimator theAnimator) {
 		_RealSenseForceField.update(theAnimator);
 		
-//		List<CCVector3> mySpline = _mySplines.get(myIndex);
-//		CCParticle myLast = null;
-//		for (CCVector3 myPoint : mySpline) {
-//			CCVector3 myPosition = new CCVector3(myPoint.x - width / 2, myPoint.y - height / 2);
-//			CCParticle myParticle = _myEmitter.emit(myPosition, new CCVector3(), 3);
-//			myParticle.target().set(myPosition.x, myPosition.y, myPosition.z, 1);
-//			if (myLast != null) {
-//				_mySprings.addSpring(myParticle, myLast);
-//			}
-//
-//			myLast = myParticle;
-//			_myNewTargets.add(myParticle);
-//		}
-//
-//		myIndex++;
-//		myIndex %= _mySplines.size();
 
-		/**
-		CCGesture myGesture = _myGestures.get(myIndex);
-		CCParticle myLast = null;
-		for (CCVector3 myPoint : myGesture) {
-			CCVector3 myPosition = new CCVector3(myPoint.x - width / 2, myPoint.y - height / 2);
-			CCParticle myParticle = _myEmitter.emit(myPosition, new CCVector3(), 30);
-			myParticle.target().set(myPosition.x, myPosition.y, myPosition.z, 1);
-			if (myLast != null) {
-				_mySprings.addSpring(myParticle, myLast);
-			}
-
-			myLast = myParticle;
-			_myNewTargets.add(myParticle);
-		}
-
-		myIndex++;
-		myIndex %= _myGestures.size();
-**/
 		_myParticles.update(theAnimator);
 	}
 

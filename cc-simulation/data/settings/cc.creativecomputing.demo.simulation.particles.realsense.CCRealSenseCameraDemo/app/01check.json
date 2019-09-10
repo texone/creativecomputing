@@ -30,169 +30,396 @@
   "app": {
     "name": "app",
     "value": {
-      "shader": {
-        "name": "shader",
+      "force field": {
+        "name": "force field",
         "value": {
-          "fragment": {
-            "name": "fragment",
+          "shader": {
+            "name": "shader",
             "value": {
-              "auto save": {
-                "name": "auto save",
-                "value": true
-              },
-              "uniforms": {
-                "name": "uniforms",
+              "fragment": {
+                "name": "fragment",
                 "value": {
-                  "depth max": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "depth max",
-                    "value": 0.12999999523162842
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
                   },
-                  "depth min": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "depth min",
-                    "value": 0
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {
+                      "depth max": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "depth max",
+                        "value": 0.6890000104904175
+                      },
+                      "depth min": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "depth min",
+                        "value": 0.13300000131130219
+                      },
+                      "mip pow": {
+                        "min": 0,
+                        "max": 5,
+                        "name": "mip pow",
+                        "value": 0.33500000834465027
+                      },
+                      "depth scale": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "depth scale",
+                        "value": 0.26600000262260437
+                      },
+                      "thresh depth scale": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "thresh depth scale",
+                        "value": 0.3330000042915344
+                      },
+                      "mip boost": {
+                        "min": 1,
+                        "max": 5,
+                        "name": "mip boost",
+                        "value": 1.8399999141693115
+                      },
+                      "mip level": {
+                        "min": 1,
+                        "max": 20,
+                        "name": "mip level",
+                        "value": 8.809000015258789
+                      },
+                      "normal dist": {
+                        "min": 0,
+                        "max": 50,
+                        "name": "normal dist",
+                        "value": 11.59999942779541
+                      }
+                    }
                   },
-                  "mip pow": {
-                    "min": 0,
-                    "max": 5,
-                    "name": "mip pow",
-                    "value": 1.6850000619888306
+                  "realsense_fragment.glsl": {
+                    "name": "realsense_fragment.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@3b003e59"
                   },
-                  "depth scale": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "depth scale",
-                    "value": 0.26100000739097595
-                  },
-                  "thresh depth scale": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "thresh depth scale",
-                    "value": 0.0860000029206276
-                  },
-                  "mip boost": {
-                    "min": 1,
-                    "max": 5,
-                    "name": "mip boost",
-                    "value": 1.9559999704360962
-                  },
-                  "mip level": {
-                    "min": 1,
-                    "max": 20,
-                    "name": "mip level",
-                    "value": 10.290999412536621
-                  },
-                  "normal dist": {
-                    "min": 0,
-                    "max": 50,
-                    "name": "normal dist",
-                    "value": 11.350000381469727
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
                   }
                 }
               },
-              "realsense_fragment.glsl": {
-                "name": "realsense_fragment.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@1dc48909"
-              },
-              "save in file": {
-                "name": "save in file",
-                "value": true
+              "vertex": {
+                "name": "vertex",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "realsense_vertex.glsl": {
+                    "name": "realsense_vertex.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@2689b036"
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
               }
             }
           },
-          "vertex": {
-            "name": "vertex",
+          "blur radius": {
+            "min": 0,
+            "max": 150,
+            "name": "blur radius",
+            "value": 58.20000076293945
+          },
+          "real sense": {
+            "name": "real sense",
             "value": {
-              "auto save": {
-                "name": "auto save",
-                "value": true
+              "recording Path": {
+                "name": "recording Path",
+                "value": "exports/realsense01.byt"
               },
-              "realsense_vertex.glsl": {
-                "name": "realsense_vertex.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@45561676"
+              "end record": {},
+              "speed": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "speed",
+                "value": 30
               },
-              "uniforms": {
-                "name": "uniforms",
-                "value": {}
+              "start record": {}
+            }
+          },
+          "threshold": {
+            "name": "threshold",
+            "value": {
+              "fragment": {
+                "name": "fragment",
+                "value": {
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "threshold_fragment.glsl": {
+                    "name": "threshold_fragment.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@408b6878"
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {
+                      "depth max": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "depth max",
+                        "value": 1
+                      },
+                      "depth min": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "depth min",
+                        "value": 0
+                      },
+                      "depth scale": {
+                        "min": 0,
+                        "max": 1,
+                        "name": "depth scale",
+                        "value": 1
+                      }
+                    }
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
               },
-              "save in file": {
-                "name": "save in file",
-                "value": true
+              "vertex": {
+                "name": "vertex",
+                "value": {
+                  "threshold_vertex.glsl": {
+                    "name": "threshold_vertex.glsl",
+                    "value": "cc.creativecomputing.control.code.CCShaderFile@4677ce22"
+                  },
+                  "auto save": {
+                    "name": "auto save",
+                    "value": true
+                  },
+                  "uniforms": {
+                    "name": "uniforms",
+                    "value": {}
+                  },
+                  "save in file": {
+                    "name": "save in file",
+                    "value": true
+                  }
+                }
               }
             }
           }
         }
       },
-      "blur radius": {
-        "min": 0,
-        "max": 150,
-        "name": "blur radius",
-        "value": 50.55000305175781
-      },
-      "threshold": {
-        "name": "threshold",
+      "camera": {
+        "name": "camera",
         "value": {
-          "fragment": {
-            "name": "fragment",
+          "rotation speed": {
+            "min": 0,
+            "max": 0.2,
+            "name": "rotation speed",
+            "value": 0.1
+          },
+          "distance": {
+            "min": 1,
+            "max": 20000,
+            "name": "distance",
+            "value": 1161.1806345867656
+          },
+          "invert": {
+            "name": "invert",
+            "value": false
+          },
+          "center": {
+            "name": "center",
             "value": {
-              "auto save": {
-                "name": "auto save",
-                "value": true
+              "x": {
+                "min": -10000,
+                "max": 10000,
+                "name": "x",
+                "value": 852.6809149005774
               },
-              "threshold_fragment.glsl": {
-                "name": "threshold_fragment.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@424f68bd"
+              "y": {
+                "min": -10000,
+                "max": 10000,
+                "name": "y",
+                "value": 420.9669961002667
               },
-              "uniforms": {
-                "name": "uniforms",
+              "z": {
+                "min": -10000,
+                "max": 10000,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "rotation": {
+            "name": "rotation",
+            "value": {
+              "w": {
+                "min": -1,
+                "max": 1,
+                "name": "w",
+                "value": 1
+              },
+              "x": {
+                "min": -1,
+                "max": 1,
+                "name": "x",
+                "value": 0
+              },
+              "y": {
+                "min": -1,
+                "max": 1,
+                "name": "y",
+                "value": 0
+              },
+              "z": {
+                "min": -1,
+                "max": 1,
+                "name": "z",
+                "value": 0
+              }
+            }
+          },
+          "active": {"name": "active"},
+          "zoom": {
+            "name": "zoom",
+            "value": true
+          },
+          "fov": {
+            "min": 0,
+            "max": 90,
+            "name": "fov",
+            "value": 45
+          },
+          "friction": {
+            "min": 0,
+            "max": 1,
+            "name": "friction",
+            "value": 0.16
+          },
+          "reset on double click": {
+            "name": "reset on double click",
+            "value": true
+          },
+          "rotation mode": {
+            "name": "rotation mode",
+            "value": "FREE"
+          },
+          "rotate only": {
+            "name": "rotate only",
+            "value": false
+          },
+          "reset": {},
+          "pan": {
+            "name": "pan",
+            "value": true
+          },
+          "camera": {
+            "name": "camera",
+            "value": {
+              "far": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "far",
+                "value": 51961.52422706632
+              },
+              "position": {
+                "name": "position",
                 "value": {
-                  "depth max": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "depth max",
-                    "value": 0.03200000151991844
-                  },
-                  "depth min": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "depth min",
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
                     "value": 0
                   },
-                  "depth scale": {
-                    "min": 0,
-                    "max": 1,
-                    "name": "depth scale",
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 100
+                  }
+                }
+              },
+              "up": {
+                "name": "up",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 1
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
                     "value": 0
                   }
                 }
               },
-              "save in file": {
-                "name": "save in file",
-                "value": true
-              }
-            }
-          },
-          "vertex": {
-            "name": "vertex",
-            "value": {
-              "threshold_vertex.glsl": {
-                "name": "threshold_vertex.glsl",
-                "value": "cc.creativecomputing.control.code.CCShaderFile@68d4c961"
+              "near": {
+                "min": -1.7976931348623157E308,
+                "max": 1.7976931348623157E308,
+                "name": "near",
+                "value": 51.96152422706632
               },
-              "auto save": {
-                "name": "auto save",
-                "value": true
+              "fov": {
+                "min": 0,
+                "max": 1.5707963267948966,
+                "name": "fov",
+                "value": 1.0471975511965976
               },
-              "uniforms": {
-                "name": "uniforms",
-                "value": {}
+              "apect ratio": {
+                "min": 0.1,
+                "max": 10,
+                "name": "apect ratio",
+                "value": 2.1333333333333333
               },
-              "save in file": {
-                "name": "save in file",
-                "value": true
+              "target": {
+                "name": "target",
+                "value": {
+                  "x": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "x",
+                    "value": 0
+                  },
+                  "y": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "y",
+                    "value": 0
+                  },
+                  "z": {
+                    "min": -1.7976931348623157E308,
+                    "max": 1.7976931348623157E308,
+                    "name": "z",
+                    "value": 0
+                  }
+                }
               }
             }
           }
@@ -341,7 +568,7 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 29.445676598781723
+        "value": 29.04038937354072
       },
       "exceptionHandling": {
         "name": "exceptionHandling",

@@ -142,7 +142,7 @@ public class CCSpringForce extends CCForce {
 		_myBuffer.beginDraw(g);
 		_myInitValueShader.start();
 		g.beginShape(CCDrawMode.QUADS);
-		g.textureCoords3D(0, -1f, -1f, 0);
+		g.textureCoords3D(-1f, -1f, 0);
 		g.vertex(0,0);
 		g.vertex(_myBuffer.width(),0);
 		g.vertex(_myBuffer.width(),_myBuffer.height());
@@ -325,7 +325,7 @@ public class CCSpringForce extends CCForce {
 			double myX = myInfo.target.index() == -1 ? -1 : myInfo.target.index() % _myWidth;
 			double myY = myInfo.target.index() == -1 ? -1 : myInfo.target.index() / _myWidth;
 				
-			g.textureCoords4D(0, myX, myY, myInfo.restLength, myInfo.draw ? 1 : 0);
+			g.textureCoords4D(myX, myY, myInfo.restLength, myInfo.draw ? 1 : 0);
 			g.vertex(myInfo.particle.index() % _myWidth + myXOffset * _myWidth, myInfo.particle.index() / _myWidth + myYOffset * _myHeight);
 //			CCLog.info(myInfo.particle.index() % _myWidth + myXOffset * _myWidth, myInfo.particle.index() / _myWidth + myYOffset * _myHeight);
 		}

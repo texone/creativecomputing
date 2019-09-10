@@ -45,7 +45,7 @@ public class CCParticleEnvelopeData {
 				CCEnvelope myEnvelope = (CCEnvelope)myInterpolatable;
 				for(int i = 0; i < 100; i++){
 					double myVal = myEnvelope.interpolate(i / 100d);
-					g.textureCoords4D(0, myVal, myVal, myVal, 1d);
+					g.textureCoords4D(myVal, myVal, myVal, 1d);
 					g.vertex(i + 0.5, y + 0.5);
 				}
 			}

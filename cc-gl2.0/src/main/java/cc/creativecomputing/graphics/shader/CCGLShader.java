@@ -452,6 +452,12 @@ public class CCGLShader extends CCShaderObject{
 	private boolean loadShader(boolean theThrowException){
 		source(preprocessSources());
 		compile();
+		String myInfoLog = getInfoLog();
+		if(myInfoLog != null &&myInfoLog.contains("ERROR")) {
+			CCLog.info(getInfoLog());
+			CCLog.info(paths());
+			CCLog.info(preprocessSources());
+		}
 		if(!compileStatus()){
 			StringBuffer myReplyBuffer = new StringBuffer();
 			myReplyBuffer.append(getInfoLog());

@@ -37,6 +37,16 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-gl-app</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.creativecomputing</groupId>
+      <artifactId>cc-gl2.0</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.librealsense</groupId>
       <artifactId>realsense-jvm</artifactId>
       <version>2.2.10.4-0</version>
