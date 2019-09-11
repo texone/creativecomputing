@@ -108,6 +108,10 @@ public class TimelineContainer implements FileManagerListener, HistoryListener{
 		_myFileManager.extension(theExtension, theDescription);
 	}
 	
+	public void loadProject(Path thePath) {
+		_myFileManager.loadProject(thePath);
+	}
+	
 	public void loadFile(Path thePath){
 		_myFileManager.replaceCurrentTimeline(thePath);
 	}
