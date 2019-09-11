@@ -22,6 +22,7 @@ import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.shader.CCGLProgram;
 import cc.creativecomputing.graphics.shader.CCGLWriteDataShader;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.simulation.particles.CCParticle;
 
@@ -40,9 +41,11 @@ public class CCPathTargetForce extends CCForce {
 
 	private String _myPathAddParameter;
 	private String _myPathLengthParameter;
+	private String _myPathScaleParameter;
 	
 	private String _myNoiseAddParameter;
 	private String _myNoiseAmountParameter;
+	private String _myRandomAmountParameter;
 
 	private int _myWidth;
 	private int _myHeight;
@@ -59,6 +62,10 @@ public class CCPathTargetForce extends CCForce {
 	private double _myNearDistance;
 	@CCProperty(name = "near max force", min = 0, max = 10)
 	private double _myNearMaxForce;
+	@CCProperty(name = "path scale", min = 0, max = 3)
+	private double _cPathScale = 1;
+	@CCProperty(name = "random amount", min = 0, max = 1)
+	private double _cRandomAmount = 1;
 
 	private CCGLProgram _myInitValueShader;
 	
@@ -83,9 +90,11 @@ public class CCPathTargetForce extends CCForce {
 		
 		_myPathAddParameter = parameter("pathAdd");
 		_myPathLengthParameter = parameter("pathLength");
+		_myPathScaleParameter = parameter("pathScale");
 
 		_myNoiseAddParameter = parameter("noiseAdd");
 		_myNoiseAmountParameter = parameter("noiseAmount");
+		_myRandomAmountParameter = parameter("randomAmount");
 	}
 	
 	@Override
@@ -149,9 +158,11 @@ public class CCPathTargetForce extends CCForce {
 
 		_myShader.uniform1f(_myPathAddParameter, _myPathAdd);
 		_myShader.uniform1f(_myPathLengthParameter, _myPathResolution);
+		_myShader.uniform1f(_myPathScaleParameter, _cPathScale);
 
 		_myShader.uniform1f(_myNoiseAddParameter, _myNoiseAdd);
 		_myShader.uniform1f(_myNoiseAmountParameter, _myNoiseAmount);
+		_myShader.uniform1f(_myRandomAmountParameter, _cRandomAmount);
 		
 //		_myShader.uniform2f(_myTextureSizeParameter, _myTexture.width(), _myTexture.height());
 //		_myShader.uniform1f(_myExponentParameter, _myExponent);
@@ -201,9 +212,13 @@ public class CCPathTargetForce extends CCForce {
 		g.beginShape(CCDrawMode.POINTS);
 	}
 	
-	public void addTarget(CCParticle theParticle, CCVector3 theTarget){
-		g.textureCoords4D(theTarget.x, theTarget.y, theTarget.z, 0);
+	public void addTarget(CCParticle theParticle, CCVector3 theTarget, double theRandom){
+		g.textureCoords4D(theTarget.x, theTarget.y, theTarget.z, theRandom);
 		g.vertex(theParticle.x(), theParticle.y());
+	}
+	
+	public void addTarget(CCParticle theParticle, CCVector3 theTarget){
+		addTarget( theParticle, theTarget,0);
 	}
 	
 	public void endSetTargets(CCGraphics g){
@@ -224,7 +239,7 @@ public class CCPathTargetForce extends CCForce {
 	}
 	
 	public void setJump(int thePath,CCVector3 theJump) {
-		g.textureCoords4D(theJump.x, theJump.y, theJump.z, 0);
+		g.textureCoords4D(theJump.x, theJump.y, theJump.z, CCMath.random());
 		g.vertex(thePath, 0);
 	}
 	

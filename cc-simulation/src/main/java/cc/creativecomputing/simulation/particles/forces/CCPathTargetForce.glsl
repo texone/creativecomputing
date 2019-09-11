@@ -13,17 +13,18 @@ uniform float nearDistance;
 uniform float nearMaxForce;
 uniform float pathAdd;
 uniform float pathLength;
+uniform float pathScale;
 
 uniform float noiseAdd;
 uniform float noiseAmount;
+uniform float randomAmount;
 
 vec3 function(vec3 thePosition, vec3 theVelocity, vec4 theInfos, vec4 theGroupInfos, vec2 theTexID, float theDeltaTime){
 	
 	vec4 targetInfos = texture2DRect (targetPositionTexture, theTexID);
-	float noiseVal = noise(vec3(targetInfos.x * 100, noiseAdd * 0.05,0));
-	noiseVal *= 2;
-	noiseVal -= 1;
+	float noiseVal = sin(noiseAdd * 0.05 + targetInfos.w * randomAmount * 3.2);
 	noiseVal *= 10000 * noiseAmount;
+	targetInfos.y *= pathScale;
 	targetInfos.y += noiseVal;
 	targetInfos.y += pathAdd;
 	
