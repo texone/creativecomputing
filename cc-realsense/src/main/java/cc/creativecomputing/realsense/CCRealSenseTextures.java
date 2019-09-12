@@ -5,6 +5,7 @@ import java.nio.file.Path;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.events.CCListenerManager;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCVBOMesh;
@@ -16,6 +17,7 @@ import cc.creativecomputing.graphics.texture.CCTexture.CCTextureMipmapFilter;
 import cc.creativecomputing.graphics.texture.CCTexture.CCTextureTarget;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.io.CCNIOUtil;
+import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.CCVector4;
 
@@ -43,6 +45,11 @@ public class CCRealSenseTextures{
 	private float _cBlurRadius = MAXIMUM_BLUR_RADIUS;
 	@CCProperty(name = "mirror")
 	private boolean _cMirror = false;
+	@CCProperty(name = "use PBO")
+	private boolean _cUsePBO = false;
+	
+	@CCProperty(name = "smooth amount value", min = 0, max = 1)
+	private double _cSmoothAmountValue = 0.9;
 	
 	public CCRealSenseTextures() {
 		this(null,640,480);
@@ -195,17 +202,20 @@ public class CCRealSenseTextures{
 		g.noTexture();
 		_myData.endDraw(g);
 
-		long myMillis = System.currentTimeMillis();
-		FloatBuffer myData = _myData.getPBOData(3);
+		double myAmount = 0;
+//		long myMillis = System.currentTimeMillis();
+		FloatBuffer myData = _cUsePBO ? _myData.getPBOData(3) : _myData.getData(3);
 		double countZero = 0;
 		double countData = 0;
 		while(myData.hasRemaining()) {
 			CCVector4 myPoint = new CCVector4(myData.get(),myData.get(),myData.get(),myData.get());
 			if(myPoint.x == 0)countZero++;
-			else amountInBounds++;
+			else myAmount++;
 			//CCLog.info(myPoint);
 		}
-		amountInBounds /= _myRealSense.width * _myRealSense.height;
+		myAmount /= _myRealSense.width * _myRealSense.height;
+		
+		amountInBounds = CCMath.blend(myAmount, amountInBounds, _cSmoothAmountValue);
 		//CCLog.info( amountInBounds * 100, System.currentTimeMillis() - myMillis);
 		//CCLog.info(_myData.attachment(3).format(),_myData.attachment(3).pixelType());
 		//CCLog.info(_myData.attachment(3).dataBuffer(1).asFloatBuffer().capacity() / (320 * 240));
