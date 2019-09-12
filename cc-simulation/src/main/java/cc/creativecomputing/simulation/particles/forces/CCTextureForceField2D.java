@@ -90,7 +90,7 @@ public class CCTextureForceField2D extends CCForce{
 		super.setUniforms();
 		
 		_myShader.uniform2f(_myTextureScaleParameter, _myTextureScale.x , _myTextureScale.y);
-		_myShader.uniform2f(_myTextureOffsetParameter, -_myTextureOffset.x, -_myTextureOffset.y);
+		_myShader.uniform2f(_myTextureOffsetParameter, _myTextureOffset.x, _myTextureOffset.y);
 	
 		_myShader.uniform2f(_myTextureSizeParameter, _myTexture.width(), _myTexture.height());
 		_myShader.uniform3f(_myForceScaleParameter, _myForceScale);

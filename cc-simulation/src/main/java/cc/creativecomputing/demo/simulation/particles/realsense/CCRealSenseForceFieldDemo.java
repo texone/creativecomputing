@@ -99,8 +99,7 @@ public class CCRealSenseForceFieldDemo extends CCGL2Adapter {
 //		g.scale(1,-1);
 		g.ortho();
 		g.color(255);
-		g.image(_cForceField.forceField(),0,0, g.width(), g.height());
-		//_myForceField.display(g);
+//		g.image(_cForceField.forceField(),0,0, g.width(), g.height());
 		
 		g.rect(100, 100,_cForceField.amountInBounds * 1000,20);
 		g.popMatrix();
@@ -111,11 +110,12 @@ public class CCRealSenseForceFieldDemo extends CCGL2Adapter {
 		
 
 		_cCameraController.camera().draw(g);
+		//_myForceField.display(g);
 		_cForceField.drawPointCloud(g);
 		g.pushAttribute();
 		g.color(1f, alpha);
-		g.blend(CCBlendMode.ADD);
-		//_myParticles.display(g);
+		//g.blend(CCBlendMode.ADD);
+		_myParticles.display(g);
 		g.blend();
 		g.popAttribute();
 	}
