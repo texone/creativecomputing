@@ -214,12 +214,12 @@ public class CCShaderCompileControl extends CCValueControl<CCShaderSource, CCSha
 		_myEditorFrame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
-				CCControlApp.preferences.put(_myHandle.path().toString() + "/open" , true + "");
+				//CCControlApp.preferences.put(_myHandle.path().toString() + "/open" , true + "");
 			}
 			
 			@Override
 			public void windowClosed(WindowEvent e) {
-				CCControlApp.preferences.put(_myHandle.path().toString() + "/open" , false + "");
+				//CCControlApp.preferences.put(_myHandle.path().toString() + "/open" , false + "");
 			}
 		});
 		

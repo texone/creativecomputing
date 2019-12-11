@@ -236,6 +236,10 @@ public class CCControlApp  {
 		_myPropertyMap.rootHandle().preset(0);	
 	}
 	
+	public void preset(String thePreset) {
+		_myPropertyMap.rootHandle().preset(thePreset);	
+	}
+	
 	public TimelineContainer timeline(){
 		return _myTimelineContainer;
 	}
