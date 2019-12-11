@@ -19,13 +19,19 @@ import java.util.Queue;
 
 import javax.swing.WindowConstants;
 
+import com.jogamp.nativewindow.ScalableSurface;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
+
 import cc.creativecomputing.app.modules.CCAbstractAppModule;
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.control.CCPropertyFeedbackObject;
 import cc.creativecomputing.control.handles.CCPropertyListener;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.events.CCListenerManager;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.container.GLContainer;
 import cc.creativecomputing.gl.app.container.GLContainerType;
 import cc.creativecomputing.gl.app.container.GLJavaComponentContainer;
@@ -49,13 +55,6 @@ import cc.creativecomputing.gl.app.events.CCMouseReleasedListener;
 import cc.creativecomputing.gl.app.events.CCMouseWheelEvent;
 import cc.creativecomputing.gl.app.events.CCMouseWheelListener;
 import cc.creativecomputing.math.CCColor;
-
-import com.jogamp.nativewindow.ScalableSurface;
-import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLEventListener;
-import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.awt.GLCanvas;
 
 
 @SuppressWarnings({"rawtypes", "unchecked" })
@@ -170,6 +169,8 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 	public boolean alwaysOnTop = false;
 	@CCProperty(desc = "define the pixelscale of the gl container eiter IDENTITY or AUTOMAX default is AUTOMAX")
 	public CCPixelScale pixelScale = CCPixelScale.IDENTITY;
+	@CCProperty(name = "cursor")
+	public boolean cursor = true;
 	
 	protected GLContainer _myContainer;
 	
@@ -318,6 +319,17 @@ public abstract class CCAbstractGLContext<GLGraphicsType extends CCGLGraphics> e
 			@Override
 			public void onChange(Boolean theInVsync){
 				_myUpdateVsync = true;
+			}
+		});
+		
+		_myListenerMap.put("cursor", new CCPropertyListener<Boolean>() {
+			@Override
+			public void onChange(Boolean theUseCursor){
+				if(theUseCursor) {
+					cursor(CCCursor.DEFAULT_CURSOR);
+				}else {
+					noCursor();
+				}
 			}
 		});
 		
