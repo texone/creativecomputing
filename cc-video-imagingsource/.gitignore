@@ -1,0 +1,7 @@
+/.settings/
+/natives/
+/target/
+*.classpath
+*.project
+*.log
+/library/
