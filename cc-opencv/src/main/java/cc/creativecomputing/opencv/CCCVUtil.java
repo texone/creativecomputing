@@ -36,11 +36,11 @@ public class CCCVUtil {
 	    default:
 	        return "Invalid depth type of matrix!";
 	    }
-	}
+	} 
 
 //	public static String matType(Mat mat){
-//	    int mtype = mat.channels()
-//
+//	    int mtype = CV_8UC1;
+//	    
 //	    switch (mtype)
 //	    {
 //	    case CV_8UC1:  return "CV_8UC1";

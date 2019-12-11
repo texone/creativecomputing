@@ -54,7 +54,6 @@ public class CCCVShaderFilter extends CCImageProcessor{
 		_myCurrentMat = theSource.clone();
 		if(_myShaderBuffer == null)return theSource;
 		if(_myCurrentOutput == null)return theSource;
-		
 		return _myCurrentOutput;
 	}
 	
@@ -71,6 +70,7 @@ public class CCCVShaderFilter extends CCImageProcessor{
 		
 		if(myAllocateData) {
 			_myShaderBuffer = new CCShaderBuffer(_myCurrentMat.cols(), _myCurrentMat.rows());
+			_myCurrentOutput = _myCurrentMat.clone();
 		}
 		
 		g.texture(_myTexture);
@@ -82,18 +82,22 @@ public class CCCVShaderFilter extends CCImageProcessor{
 		for(CCCVTextureAddon myAddon:_myTextures) {
 			_cShader.uniform1i(myAddon.uniform, myAddon.channel);
 		}
-		_cShader.uniform2f("resolution",_myTexture.width(), _myTexture.height());
+		_cShader.uniform2f("resolution",_myShaderBuffer.width(), _myShaderBuffer.height());
 		_myShaderBuffer.draw(g);
 		_cShader.end();
 		g.noTexture();
 		
 		//		_myShaderBuffer.attachment(0).getTexImage();
 		try {
-				_myCurrentOutput.getByteBuffer().rewind();
-				_myCurrentOutput.getByteBuffer().put(_myShaderBuffer.attachment(0).getTexImage());
-				_myCurrentOutput.getByteBuffer().rewind();
+			_myCurrentOutput.getByteBuffer().rewind();
+			long myMills = System.currentTimeMillis();
+			_myShaderBuffer.attachment(0).usePBO(true);
+//			_myShaderBuffer.attachment(0).getTexImage();
+			_myCurrentOutput.getByteBuffer().put(_myShaderBuffer.attachment(0).getTexImage());//
+			CCLog.info(System.currentTimeMillis() - myMills);
+			_myCurrentOutput.getByteBuffer().rewind();
 		}catch(Exception e) {
-		//	e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	

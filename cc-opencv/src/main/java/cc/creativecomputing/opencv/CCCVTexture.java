@@ -2,7 +2,6 @@ package cc.creativecomputing.opencv;
 
 import org.bytedeco.javacpp.opencv_core.Mat;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.texture.CCPixelFormat;
 import cc.creativecomputing.graphics.texture.CCPixelType;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
@@ -16,8 +15,8 @@ public class CCCVTexture extends CCTexture2D{
 	}
 	
 	public void image(Mat theMat) {
+		if(theMat.empty())return;
 		boolean myAllocateData = theMat.cols() != width() || theMat.rows() != height();
-		
 		if(myAllocateData) {
 			allocateData(theMat.cols(), theMat.rows(), null);
 		}

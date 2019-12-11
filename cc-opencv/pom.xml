@@ -19,11 +19,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.bytedeco.javacpp-presets</groupId>
-			<artifactId>opencv-platform</artifactId>
-			<version>3.4.3-1.4.3</version>
-		</dependency>
-		<dependency>
 			<groupId>cc.creativecomputing</groupId>
 			<artifactId>cc-core</artifactId>
 			<version>${project.version}</version>
@@ -37,6 +32,21 @@
 			<groupId>cc.creativecomputing</groupId>
 			<artifactId>cc-gl2.0</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cc.creativecomputing</groupId>
+			<artifactId>cc-image</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cc.creativecomputing</groupId>
+			<artifactId>cc-video</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>opencv-platform</artifactId>
+			<version>3.4.3-1.4.3</version>
 		</dependency>
 	</dependencies>
 </project>

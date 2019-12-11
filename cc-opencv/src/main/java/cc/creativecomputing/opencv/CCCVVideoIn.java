@@ -23,6 +23,8 @@ public abstract class CCCVVideoIn {
 	
 	private Mat _myCurrentMat;
 	
+	private Mat _myBackgroundMat;
+	
 	public CCListenerManager<CCCVVideoInEvent> events = CCListenerManager.create(CCCVVideoInEvent.class);
 	
 	@CCProperty(name = "active", readBack = true)
@@ -30,6 +32,16 @@ public abstract class CCCVVideoIn {
 	
 	protected CCCVVideoIn(VideoCapture theCapture) {
 		_myCapture = theCapture;
+	}
+	
+	@CCProperty(name = "update background")
+	public void updateBackgroundFrame() {
+		_myBackgroundMat = _myCurrentMat.clone();
+		CCLog.info(_myBackgroundMat);
+	}
+	
+	public Mat background() {
+		return _myBackgroundMat;
 	}
 	
 	public void isActive(boolean theIsActive) {
@@ -42,7 +54,7 @@ public abstract class CCCVVideoIn {
 	
 	public void start() {
 		_myCurrentMat = read();
-		
+		updateBackgroundFrame();
 		new Thread(()->{
 			while(true) {
 				if(_cActive) {

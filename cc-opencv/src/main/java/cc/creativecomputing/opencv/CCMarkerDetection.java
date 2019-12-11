@@ -145,6 +145,7 @@ public class CCMarkerDetection implements Iterable<CCMarker>{
 		_myVideoIn = theVideoIn;
 		_myVideoIn.events.add(mat -> {
 			if(mat == null)return;
+			if(mat.empty())return;
 			lock.lock();
 			if (_cDrawMat == CCDrawMat.ORIGIN)
 				_myDrawMat = mat.clone();

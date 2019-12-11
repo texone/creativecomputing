@@ -1,13 +1,25 @@
 package cc.creativecomputing.opencv.filtering;
 
-import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_SHAPE_CROSS;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_SHAPE_ELLIPSE;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_SHAPE_RECT;
+import static org.bytedeco.javacpp.opencv_imgproc.MORPH_BLACKHAT;
+import static org.bytedeco.javacpp.opencv_imgproc.MORPH_CLOSE;
+import static org.bytedeco.javacpp.opencv_imgproc.MORPH_DILATE;
+import static org.bytedeco.javacpp.opencv_imgproc.MORPH_ERODE;
+import static org.bytedeco.javacpp.opencv_imgproc.MORPH_GRADIENT;
+import static org.bytedeco.javacpp.opencv_imgproc.MORPH_HITMISS;
+import static org.bytedeco.javacpp.opencv_imgproc.MORPH_OPEN;
+import static org.bytedeco.javacpp.opencv_imgproc.MORPH_TOPHAT;
+import static org.bytedeco.javacpp.opencv_imgproc.getStructuringElement;
+import static org.bytedeco.javacpp.opencv_imgproc.morphologyDefaultBorderValue;
+import static org.bytedeco.javacpp.opencv_imgproc.morphologyEx;
+
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.Size;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.opencv.CCImageProcessor;
-import cc.creativecomputing.opencv.CCImageProcessor.CCBorderType;
-import cc.creativecomputing.opencv.filtering.CCMorphologyFilter.CCMorphShape;
 
 /**
  * In short: A set of operations that process images based on shapes.
@@ -42,25 +54,25 @@ public class CCMorphologyFilter extends CCImageProcessor {
 	 *
 	 */
 	public static enum CCMorphShape {
-	/**
-	 * a rectangular structuring element:
-	 */
-	RECT(CV_SHAPE_RECT),
-	/**
-	 * a cross-shaped structuring element:
-	 */
-	CROSS(CV_SHAPE_CROSS),
-	/**
-	 * an elliptic structuring element, that is, a filled ellipse inscribed into the
-	 * rectangle Rect(0, 0, esize.width, 0.esize.height)
-	 */
-	ELLIPSE(CV_SHAPE_ELLIPSE);
-
-		public final int id;
-
-		private CCMorphShape(int theID) {
-			id = theID;
-		}
+		/**
+		 * a rectangular structuring element:
+		 */
+		RECT(CV_SHAPE_RECT),
+		/**
+		 * a cross-shaped structuring element:
+		 */
+		CROSS(CV_SHAPE_CROSS),
+		/**
+		 * an elliptic structuring element, that is, a filled ellipse inscribed into the
+		 * rectangle Rect(0, 0, esize.width, 0.esize.height)
+		 */
+		ELLIPSE(CV_SHAPE_ELLIPSE);
+	
+			public final int id;
+	
+			private CCMorphShape(int theID) {
+				id = theID;
+			}
 	}
 
 	@CCProperty(name = "morph shape")
