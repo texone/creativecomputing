@@ -57,6 +57,7 @@
 		<module>cc-video-vlc</module>
         <module>cc-video-gstreamer</module>
         <module>cc-video-ffmpeg</module>
+        <module>cc-video-imagingsource</module>
         <module>cc-opencv</module>
         <module>cc-flightxml</module>
         <module>cc-demo</module>
