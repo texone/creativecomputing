@@ -28,6 +28,7 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.Path;
+import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -40,11 +41,11 @@ import org.freedesktop.gstreamer.Format;
 import org.freedesktop.gstreamer.Fraction;
 import org.freedesktop.gstreamer.GstObject;
 import org.freedesktop.gstreamer.Sample;
-import org.freedesktop.gstreamer.SeekFlags;
-import org.freedesktop.gstreamer.SeekType;
 import org.freedesktop.gstreamer.Structure;
 import org.freedesktop.gstreamer.elements.AppSink;
 import org.freedesktop.gstreamer.elements.PlayBin;
+import org.freedesktop.gstreamer.event.SeekFlags;
+import org.freedesktop.gstreamer.event.SeekType;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.logging.CCLog;
@@ -315,8 +316,8 @@ public class Movie extends CCMovieData {
 			start = 0;
 			stop = t;
 		}
-
-		res = _myPlaybin.seek(rate * f, Format.TIME, SeekFlags.FLUSH, SeekType.SET, start, SeekType.SET, stop);
+		EnumSet<SeekFlags> myFlags = EnumSet.of(SeekFlags.FLUSH);
+		res = _myPlaybin.seek(rate * f, Format.TIME, myFlags, SeekType.SET, start, SeekType.SET, stop);
 		_myPlaybin.getState();
 
 		if (!res) {
@@ -359,8 +360,8 @@ public class Movie extends CCMovieData {
 	 */
 	@Override
 	public double duration() {
-		double sec = _myPlaybin.queryDuration().toSeconds();
-		double nanosec = _myPlaybin.queryDuration().getNanoSeconds();
+		double sec = _myPlaybin.queryDuration(TimeUnit.SECONDS);
+		double nanosec = _myPlaybin.queryDuration(TimeUnit.NANOSECONDS);
 		return sec + Video.nanoSecToSecFrac(nanosec);
 	}
 
@@ -370,8 +371,8 @@ public class Movie extends CCMovieData {
 	 */
 	@Override
 	public double time() {
-		double sec = _myPlaybin.queryPosition().toSeconds();
-		double nanosec = _myPlaybin.queryPosition().getNanoSeconds();
+		double sec = _myPlaybin.queryPosition(TimeUnit.SECONDS);
+		double nanosec = _myPlaybin.queryPosition(TimeUnit.NANOSECONDS);
 		return sec + Video.nanoSecToSecFrac(nanosec);
 	}
 
@@ -402,7 +403,8 @@ public class Movie extends CCMovieData {
 //		_myPlaybin.getState();
 
 		long pos = Video.secToNanoLong(where);
-		boolean res = _myPlaybin.seek(rate, Format.TIME, SeekFlags.FLUSH, SeekType.SET, pos, SeekType.NONE, -1);
+		EnumSet<SeekFlags> myFlags = EnumSet.of(SeekFlags.FLUSH);
+		boolean res = _myPlaybin.seek(rate, Format.TIME, myFlags, SeekType.SET, pos, SeekType.NONE, -1);
 		
 		
 		if (!res) {

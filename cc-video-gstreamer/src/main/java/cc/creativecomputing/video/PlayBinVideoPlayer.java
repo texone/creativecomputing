@@ -23,14 +23,13 @@ import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.Timer;
+
 import org.freedesktop.gstreamer.Bus;
 import org.freedesktop.gstreamer.Element;
 import org.freedesktop.gstreamer.ElementFactory;
-import org.freedesktop.gstreamer.Gst;
-import org.freedesktop.gstreamer.Message;
-import org.freedesktop.gstreamer.MessageType;
 import org.freedesktop.gstreamer.Structure;
 import org.freedesktop.gstreamer.elements.PlayBin;
+import org.freedesktop.gstreamer.message.Message;
 
 /**
  *
@@ -144,8 +143,8 @@ public class PlayBinVideoPlayer {
                 }
 
                 private long getTimeOffset(Structure struct) {
-                    long actualTime = playbin.getClock().getTime().toNanos()
-                            - playbin.getBaseTime().toNanos();
+                    long actualTime = playbin.getClock().getTime()
+                            - playbin.getBaseTime();
                     long runningTime = ((Long) struct.getValue("running-time"));
                     long duration = ((Long) struct.getValue("duration"));
                     long messageTime = runningTime + (duration / 2);

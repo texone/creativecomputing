@@ -27,6 +27,7 @@ import java.nio.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.EnumSet;
 import java.util.List;
 import java.lang.reflect.*;
 
@@ -34,6 +35,8 @@ import org.freedesktop.gstreamer.*;
 import org.freedesktop.gstreamer.Buffer;
 import org.freedesktop.gstreamer.device.*;
 import org.freedesktop.gstreamer.elements.*;
+import org.freedesktop.gstreamer.event.SeekFlags;
+import org.freedesktop.gstreamer.event.SeekType;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCSystem;
@@ -260,7 +263,8 @@ public class Capture extends CCVideo {
 			stop = t;
 		}
 
-		res = pipe.seek(rate * f, Format.TIME, SeekFlags.FLUSH, SeekType.SET, start, SeekType.SET, stop);
+		EnumSet<SeekFlags> myFlags = EnumSet.of(SeekFlags.FLUSH);
+		res = pipe.seek(rate * f, Format.TIME, myFlags, SeekType.SET, start, SeekType.SET, stop);
 		pipe.getState();
 
 		if (!res) {
@@ -315,8 +319,8 @@ public class Capture extends CCVideo {
 	 * @brief Returns length of movie in seconds
 	 */
 	public double duration() {
-		float sec = pipe.queryDuration().toSeconds();
-		float nanosec = pipe.queryDuration().getNanoSeconds();
+		float sec = pipe.queryDuration(TimeUnit.SECONDS);
+		float nanosec = pipe.queryDuration(TimeUnit.NANOSECONDS);
 		return sec + Video.nanoSecToSecFrac(nanosec);
 	}
 
@@ -333,8 +337,8 @@ public class Capture extends CCVideo {
 	 * @brief Returns location of playback head in units of seconds
 	 */
 	public double time() {
-		float sec = pipe.queryPosition().toSeconds();
-		float nanosec = pipe.queryPosition().getNanoSeconds();
+		float sec = pipe.queryPosition(TimeUnit.SECONDS);
+		float nanosec = pipe.queryPosition(TimeUnit.NANOSECONDS);
 		return sec + Video.nanoSecToSecFrac(nanosec);
 	}
 
@@ -574,7 +578,7 @@ public class Capture extends CCVideo {
 
 			// look for device
 			if (devices == null) {
-				DeviceMonitor monitor = DeviceMonitor.createNew();
+				DeviceMonitor monitor = new DeviceMonitor();
 				monitor.addFilter("Video/Source", null);
 				devices = monitor.getDevices();
 			}
@@ -738,7 +742,7 @@ public class Capture extends CCVideo {
 		String[] out;
 		if (CCSystem.os == CCOS.WINDOWS || CCSystem.os == CCOS.LINUX) {
 
-			DeviceMonitor monitor = DeviceMonitor.createNew();
+			DeviceMonitor monitor = new DeviceMonitor();
 			monitor.addFilter("Video/Source", null);
 			devices = monitor.getDevices();
 

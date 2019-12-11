@@ -37,20 +37,20 @@ public class CameraTest {
 
             @Override
             public void run() {
-                SimpleVideoComponent vc = new SimpleVideoComponent();
-                Bin bin = Bin.launch("autovideosrc ! videoconvert ! capsfilter caps=video/x-raw,width=1280,height=960", true);
-                pipe = new Pipeline();
-                pipe.addMany(bin, vc.getElement());
-                Pipeline.linkMany(bin, vc.getElement());           
-
-                JFrame f = new JFrame("Camera Test");
-                f.add(vc);
-                vc.setPreferredSize(new Dimension(640, 480));
-                f.pack();
-                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                
-                pipe.play();
-                f.setVisible(true);
+//                SimpleVideoComponent vc = new SimpleVideoComponent();
+//                Bin bin = Bin.launch("autovideosrc ! videoconvert ! capsfilter caps=video/x-raw,width=1280,height=960", true);
+//                pipe = new Pipeline();
+//                pipe.addMany(bin, vc.getElement());
+//                Pipeline.linkMany(bin, vc.getElement());           
+//
+//                JFrame f = new JFrame("Camera Test");
+//                f.add(vc);
+//                vc.setPreferredSize(new Dimension(640, 480));
+//                f.pack();
+//                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                
+//                pipe.play();
+//                f.setVisible(true);
             }
         });
     }
