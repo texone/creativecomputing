@@ -1,0 +1,316 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {"capture": {
+      "name": "capture",
+      "value": {
+        "Brightness": {
+          "name": "Brightness",
+          "value": {"value": {
+            "min": 0,
+            "max": 1,
+            "name": "value",
+            "value": 0
+          }}
+        },
+        "Saturation": {
+          "name": "Saturation",
+          "value": {"value": {
+            "min": 0,
+            "max": 1,
+            "name": "value",
+            "value": 0.25098039215686274
+          }}
+        },
+        "fps": {
+          "min": -3.4028235E38,
+          "max": 3.4028235E38,
+          "name": "fps",
+          "value": 28.97589111328125
+        },
+        "Exposure": {
+          "name": "Exposure",
+          "value": {
+            "auto": {
+              "name": "auto",
+              "value": true
+            },
+            "value": {
+              "min": 0,
+              "max": 1,
+              "name": "value",
+              "value": 0.5320000052452087
+            }
+          }
+        },
+        "Sharpness": {
+          "name": "Sharpness",
+          "value": {"value": {
+            "min": 0,
+            "max": 1,
+            "name": "value",
+            "value": 0
+          }}
+        },
+        "white auto": {
+          "name": "white auto",
+          "value": false
+        },
+        "Gamma": {
+          "name": "Gamma",
+          "value": {"value": {
+            "min": 0,
+            "max": 1,
+            "name": "value",
+            "value": 0.1903807615230461
+          }}
+        },
+        "white red": {
+          "min": -2147483648,
+          "max": 2147483647,
+          "name": "white red",
+          "value": 102
+        },
+        "Binning factor": {
+          "name": "Binning factor",
+          "value": {"value": {
+            "min": 0,
+            "max": 1,
+            "name": "value",
+            "value": 0
+          }}
+        },
+        "white blue": {
+          "min": -2147483648,
+          "max": 2147483647,
+          "name": "white blue",
+          "value": 67
+        },
+        "Hue": {
+          "name": "Hue",
+          "value": {"value": {
+            "min": 0,
+            "max": 1,
+            "name": "value",
+            "value": 0.5
+          }}
+        },
+        "Denoise": {
+          "name": "Denoise",
+          "value": {"value": {
+            "min": 0,
+            "max": 1,
+            "name": "value",
+            "value": 0
+          }}
+        },
+        "white green": {
+          "min": -2147483648,
+          "max": 2147483647,
+          "name": "white green",
+          "value": 53
+        },
+        "Gain": {
+          "name": "Gain",
+          "value": {
+            "auto": {
+              "name": "auto",
+              "value": true
+            },
+            "value": {
+              "min": 0,
+              "max": 1,
+              "name": "value",
+              "value": 0.6949999928474426
+            }
+          }
+        }
+      }
+    }}
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "cursor": {
+        "name": "cursor",
+        "value": true
+      },
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "3072 x 1728"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1280
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 960
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 1
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.382123328524457
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}

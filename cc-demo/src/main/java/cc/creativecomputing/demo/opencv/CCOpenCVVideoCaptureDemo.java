@@ -35,24 +35,24 @@ public class CCOpenCVVideoCaptureDemo extends CCGL2Adapter {
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		if(USE_CAPTURE) {
-			_myCapture = new CCCVVideoCapture(1);
+			_myCapture = new CCCVVideoCapture(0);
 //			_myCapture.exposure(-8);
 			//8.44715353E8 microsoft color
 			//-4.66162819E8 vision black
 			//-4.66162819E8
-//			_myCapture.frameWidth(1280);
-//			_myCapture.frameHeight(960);
-			_myCapture.format(CV_8UC3); // trying to set RGB3 requesting format
+			_myCapture.frameWidth(1024);
+			_myCapture.frameHeight(1024);
+//			_myCapture.format(CV_8UC3); // trying to set RGB3 requesting format
 //			_myCapture.mode(CV_CAP_MODE_RGB);
 //			_myCapture.convertRGB(true);
 			_myCapture.frameRate(30);
 			CCLog.info(_myCapture.frameRate());
 			_myVideoIn = _myCapture;
+			CCLog.info(_myCapture.fourcc());
 		}else {
 			_myPlayer = new CCCVVideoPlayer(CCNIOUtil.dataPath("videos/hand01.mp4").toAbsolutePath().toString());
 			_myVideoIn = _myPlayer;
 		}
-		CCLog.info(_myCapture.fourcc());
 		_myTexture = new CCCVTexture();
 		_myTexture.mustFlipVertically(true);
 	}

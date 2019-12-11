@@ -92,7 +92,7 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 	
 	private CCGLSwapBuffer _mySwapBuffer;
 	
-//	@CCProperty(name = "reaction diffusion shader")
+	@CCProperty(name = "reaction diffusion shader")
 	private CCGLProgram _myReactiveDiffusionProgram;
 	
 	private CCShaderBuffer _myInterpolationMap;
@@ -162,6 +162,7 @@ public class CCReactiveDiffusionDemo extends CCGL2Adapter {
 			for(double y = 0; y <= 100;y++){
 				double myYBlend = y / 100;
 				CCVector3 myPos = _myBlendSpline.interpolate(myXBlend, myYBlend);
+				if(myPos == null)break;
 				g.textureCoords3D(myPos.x, myPos.y, myPos.z);
 				g.vertex(x + 0.5, y + 0.5);
 			}

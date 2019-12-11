@@ -1,0 +1,417 @@
+{
+  "synch": {
+    "name": "synch",
+    "value": {
+      "synch": {
+        "name": "synch",
+        "value": "OFF"
+      },
+      "midi in": {
+        "name": "midi in",
+        "value": {"device": {
+          "name": "device",
+          "value": "OFF"
+        }}
+      },
+      "bpm": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "bpm",
+        "value": 120
+      },
+      "time offset": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "time offset",
+        "value": 0
+      }
+    }
+  },
+  "app": {
+    "name": "app",
+    "value": {
+      "diffuse amp": {
+        "min": 0,
+        "max": 1,
+        "name": "diffuse amp",
+        "value": 1
+      },
+      "density scale": {
+        "min": 0,
+        "max": 0.1,
+        "name": "density scale",
+        "value": 0.1
+      },
+      "light x": {
+        "min": -1,
+        "max": 1,
+        "name": "light x",
+        "value": 0.21000003814697266
+      },
+      "spline 1": {
+        "name": "spline 1",
+        "closed": false,
+        "type": "bezier",
+        "value": "cc.creativecomputing.math.spline.CCBezierSpline@32862a11",
+        "points": [
+          {
+            "x": 0.4060150384902954,
+            "y": 1,
+            "z": 0
+          },
+          {
+            "x": 0.8007518649101257,
+            "y": 0.9423868060112,
+            "z": 0
+          },
+          {
+            "x": 0.9661654233932495,
+            "y": 0.5185185074806213,
+            "z": 0
+          },
+          {
+            "x": 0.6954887509346008,
+            "y": 0.004115226212888956,
+            "z": 0
+          }
+        ]
+      },
+      "light y": {
+        "min": -1,
+        "max": 1,
+        "name": "light y",
+        "value": 0.42200005054473877
+      },
+      "spline 0": {
+        "name": "spline 0",
+        "closed": false,
+        "type": "bezier",
+        "value": "cc.creativecomputing.math.spline.CCBezierSpline@4eb51eb1",
+        "points": [
+          {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          {
+            "x": 0.4887218177318573,
+            "y": 0.8930041193962097,
+            "z": 0
+          },
+          {
+            "x": 0.6541353464126587,
+            "y": 0.6213991641998291,
+            "z": 0
+          },
+          {
+            "x": 0.5607143044471741,
+            "y": 0,
+            "z": 0
+          }
+        ]
+      },
+      "specular pow": {
+        "min": 0,
+        "max": 10,
+        "name": "specular pow",
+        "value": 10
+      },
+      "viscosity scale": {
+        "min": 0,
+        "max": 0.1,
+        "name": "viscosity scale",
+        "value": 0.1
+      },
+      "speed": {
+        "min": 0,
+        "max": 50,
+        "name": "speed",
+        "value": 5.900000095367432
+      },
+      "specular amp": {
+        "min": 0,
+        "max": 1,
+        "name": "specular amp",
+        "value": 0.46000000834465027
+      },
+      "specular bright pow": {
+        "min": 0,
+        "max": 10,
+        "name": "specular bright pow",
+        "value": 1.1800000667572021
+      },
+      "light z": {
+        "min": -1,
+        "max": 1,
+        "name": "light z",
+        "value": 1
+      },
+      "v scale": {
+        "min": 0,
+        "max": 4,
+        "name": "v scale",
+        "value": 1.4160000085830688
+      },
+      "drawMask": {
+        "name": "drawMask",
+        "value": false
+      },
+      "mask val": {
+        "min": 0,
+        "max": 1,
+        "name": "mask val",
+        "value": 1
+      },
+      "strokeweight": {
+        "min": 0,
+        "max": 50,
+        "name": "strokeweight",
+        "value": 9.199999809265137
+      },
+      "specular bright amp": {
+        "min": 0,
+        "max": 1,
+        "name": "specular bright amp",
+        "value": 0
+      },
+      "density": {
+        "min": 0,
+        "max": 1,
+        "name": "density",
+        "value": 0.41200000047683716
+      },
+      "f": {
+        "min": 0,
+        "max": 1,
+        "name": "f",
+        "value": 0.7390000224113464
+      },
+      "recfraction": {
+        "min": 0,
+        "max": 1000,
+        "name": "recfraction",
+        "value": 500
+      },
+      "k": {
+        "min": 0,
+        "max": 1,
+        "name": "k",
+        "value": 0.41200000047683716
+      },
+      "lighting": {
+        "name": "lighting",
+        "value": {"fragment": {
+          "name": "fragment",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "lighting.glsl": {
+              "name": "lighting.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@50e98825"
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {}
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        }}
+      },
+      "draw parameter space": {
+        "name": "draw parameter space",
+        "value": true
+      },
+      "viscosity": {
+        "min": 0,
+        "max": 1,
+        "name": "viscosity",
+        "value": 0.3140000104904175
+      },
+      "mask strokeweight": {
+        "min": 0,
+        "max": 500,
+        "name": "mask strokeweight",
+        "value": 171
+      },
+      "draw lighted": {
+        "name": "draw lighted",
+        "value": false
+      },
+      "reset": {},
+      "diffusion y": {
+        "min": 0,
+        "max": 2,
+        "name": "diffusion y",
+        "value": 0.2879999876022339
+      },
+      "diffusion x": {
+        "min": 0,
+        "max": 2,
+        "name": "diffusion x",
+        "value": 0.8420000076293945
+      }
+    }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
+  },
+  "gl context": {
+    "name": "gl context",
+    "value": {
+      "cursor": {
+        "name": "cursor",
+        "value": true
+      },
+      "device setup": {
+        "name": "device setup",
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "3072 x 1728"
+          }
+        }
+      },
+      "visible": {
+        "name": "visible",
+        "value": true
+      },
+      "pixelScale": {
+        "name": "pixelScale",
+        "value": "IDENTITY"
+      },
+      "resizable": {
+        "name": "resizable",
+        "value": true
+      },
+      "windowY": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowY",
+        "value": -1
+      },
+      "containerType": {
+        "name": "containerType",
+        "value": "NEWT"
+      },
+      "windowX": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "windowX",
+        "value": -1
+      },
+      "alwaysOnTop": {
+        "name": "alwaysOnTop",
+        "value": false
+      },
+      "assetPaths": {
+        "name": "assetPaths",
+        "value": ""
+      },
+      "title": {
+        "name": "title",
+        "value": "Creative Computing Application"
+      },
+      "antialiasing": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "antialiasing",
+        "value": 8
+      },
+      "displayMode": {
+        "name": "displayMode",
+        "value": "WINDOW"
+      },
+      "undecorated": {
+        "name": "undecorated",
+        "value": false
+      },
+      "fullscreen": {
+        "name": "fullscreen",
+        "value": false
+      },
+      "background": {
+        "a": 1,
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "name": "background",
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
+      },
+      "width": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "width",
+        "value": 1000
+      },
+      "inVsync": {
+        "name": "inVsync",
+        "value": false
+      },
+      "closeOperation": {
+        "name": "closeOperation",
+        "value": "HIDE_ON_CLOSE"
+      },
+      "height": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "height",
+        "value": 1000
+      }
+    }
+  },
+  "animator": {
+    "name": "animator",
+    "value": {
+      "fixed update time": {
+        "min": 0,
+        "max": 1,
+        "name": "fixed update time",
+        "value": 0.04
+      },
+      "fix update time": {
+        "name": "fix update time",
+        "value": false
+      },
+      "framerate": {
+        "min": -2147483648,
+        "max": 2147483647,
+        "name": "framerate",
+        "value": 30
+      },
+      "animationMode": {
+        "name": "animationMode",
+        "value": "FRAMERATE_PRECISE"
+      },
+      "show frame rate": {
+        "min": -1.7976931348623157E308,
+        "max": 1.7976931348623157E308,
+        "name": "show frame rate",
+        "value": 29.467666602820056
+      },
+      "exceptionHandling": {
+        "name": "exceptionHandling",
+        "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
+      }
+    }
+  }
+}

@@ -60,8 +60,9 @@ void main(){
     	k = uv.x * 0.1;
     	F = uv.y * 0.1;
     }
-    
-    
+    vec2 kf2 = texture2D(interpolationMap, uv.xy).xy * 0.1;
+    k = kf2.x;
+    F = kf2.y;
     vec4 data = texture2DRect(dataBuffer, gl_FragCoord.xy);
     
 	float u = data.x;

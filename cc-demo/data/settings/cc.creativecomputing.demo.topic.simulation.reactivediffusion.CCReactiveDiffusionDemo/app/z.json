@@ -1,4 +1,4 @@
-{"value": {
+{
   "synch": {
     "name": "synch",
     "value": {
@@ -12,41 +12,6 @@
           "name": "device",
           "value": "OFF"
         }}
-      },
-      "animator": {
-        "name": "animator",
-        "value": {
-          "fixed update time": {
-            "min": 0,
-            "max": 1,
-            "name": "fixed update time",
-            "value": 1
-          },
-          "fix update time": {
-            "name": "fix update time",
-            "value": false
-          },
-          "framerate": {
-            "min": -2147483648,
-            "max": 2147483647,
-            "name": "framerate",
-            "value": 30
-          },
-          "animationMode": {
-            "name": "animationMode",
-            "value": "FRAMERATE_PRECISE"
-          },
-          "show frame rate": {
-            "min": -1.7976931348623157E308,
-            "max": 1.7976931348623157E308,
-            "name": "show frame rate",
-            "value": 9.528382239819662
-          },
-          "exceptionHandling": {
-            "name": "exceptionHandling",
-            "value": "THROW"
-          }
-        }
       },
       "bpm": {
         "min": -2147483648,
@@ -69,7 +34,7 @@
         "min": 0,
         "max": 1,
         "name": "diffuse amp",
-        "value": 1
+        "value": 0
       },
       "density scale": {
         "min": 0,
@@ -81,75 +46,33 @@
         "min": -1,
         "max": 1,
         "name": "light x",
-        "value": 0.21000003814697266
+        "value": 0
       },
       "spline 1": {
         "name": "spline 1",
         "closed": false,
         "type": "bezier",
-        "value": "cc.creativecomputing.math.spline.CCBezierSpline@3a5db7c6",
-        "points": [
-          {
-            "x": 0,
-            "y": 1,
-            "z": 0
-          },
-          {
-            "x": 0.8821428418159485,
-            "y": 1,
-            "z": 0
-          },
-          {
-            "x": 0.8357142806053162,
-            "y": 0.6770427823066711,
-            "z": 0
-          },
-          {
-            "x": 0.6499999761581421,
-            "y": 0,
-            "z": 0
-          }
-        ]
+        "value": "cc.creativecomputing.math.spline.CCBezierSpline@55fd96c6",
+        "points": []
       },
       "light y": {
         "min": -1,
         "max": 1,
         "name": "light y",
-        "value": 0.42200005054473877
+        "value": 0
       },
       "spline 0": {
         "name": "spline 0",
         "closed": false,
         "type": "bezier",
-        "value": "cc.creativecomputing.math.spline.CCBezierSpline@1a8fd1a5",
-        "points": [
-          {
-            "x": 0,
-            "y": 1,
-            "z": 0
-          },
-          {
-            "x": 0.49240121245384216,
-            "y": 0.9422110319137573,
-            "z": 0
-          },
-          {
-            "x": 0.688373863697052,
-            "y": 0.6884422046132386,
-            "z": 0
-          },
-          {
-            "x": 0.5607143044471741,
-            "y": 0,
-            "z": 0
-          }
-        ]
+        "value": "cc.creativecomputing.math.spline.CCBezierSpline@171abf43",
+        "points": []
       },
       "specular pow": {
         "min": 0,
         "max": 10,
         "name": "specular pow",
-        "value": 10
+        "value": 0
       },
       "viscosity scale": {
         "min": 0,
@@ -161,31 +84,31 @@
         "min": 0,
         "max": 50,
         "name": "speed",
-        "value": 5.900000095367432
+        "value": 0.1
       },
       "specular amp": {
         "min": 0,
         "max": 1,
         "name": "specular amp",
-        "value": 0.46000000834465027
+        "value": 0
       },
       "specular bright pow": {
         "min": 0,
         "max": 10,
         "name": "specular bright pow",
-        "value": 1.1800000667572021
+        "value": 0
       },
       "light z": {
         "min": -1,
         "max": 1,
         "name": "light z",
-        "value": 1
+        "value": 0
       },
       "v scale": {
         "min": 0,
         "max": 4,
         "name": "v scale",
-        "value": 1.4160000085830688
+        "value": 0.1
       },
       "drawMask": {
         "name": "drawMask",
@@ -201,7 +124,7 @@
         "min": 0,
         "max": 50,
         "name": "strokeweight",
-        "value": 9.199999809265137
+        "value": 4
       },
       "specular bright amp": {
         "min": 0,
@@ -219,13 +142,43 @@
         "min": 0,
         "max": 1,
         "name": "f",
-        "value": 0.7110000252723694
+        "value": 0
+      },
+      "recfraction": {
+        "min": 0,
+        "max": 1000,
+        "name": "recfraction",
+        "value": 500
       },
       "k": {
         "min": 0,
         "max": 1,
         "name": "k",
-        "value": 0.17100000381469727
+        "value": 0
+      },
+      "lighting": {
+        "name": "lighting",
+        "value": {"fragment": {
+          "name": "fragment",
+          "value": {
+            "auto save": {
+              "name": "auto save",
+              "value": true
+            },
+            "lighting.glsl": {
+              "name": "lighting.glsl",
+              "value": "cc.creativecomputing.control.code.CCShaderFile@40da64d9"
+            },
+            "uniforms": {
+              "name": "uniforms",
+              "value": {}
+            },
+            "save in file": {
+              "name": "save in file",
+              "value": true
+            }
+          }
+        }}
       },
       "draw parameter space": {
         "name": "draw parameter space",
@@ -241,44 +194,50 @@
         "min": 0,
         "max": 500,
         "name": "mask strokeweight",
-        "value": 171
+        "value": 4
       },
       "draw lighted": {
         "name": "draw lighted",
         "value": true
-      },
-      "reaction diffusion shader": {
-        "name": "reaction diffusion shader",
-        "value": {"shader objects": {
-          "name": "shader objects",
-          "value": {"fragment": {
-            "name": "fragment",
-            "source": "\nuniform float dt;\n\nuniform sampler2DRect dataBuffer;\n\nuniform vec2 iResolution;\n\nuniform int reset;\n\nfloat rand(vec2 co){\n\t// implementation found at: lumina.sourceforge.net/Tutorials/Noise.html\n\treturn fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n}\n\n// nine point stencil\nvec2 laplacian(vec2 position) {\n    vec4 P = vec4(1.0, 1.0, 0.0, -1.0);\n\treturn  \n\t0.5 * texture2DRect( dataBuffer,  position - P.xy ).xy + // first row\n\t1.0 * texture2DRect( dataBuffer,  position - P.zy ).xy +\n\t0.5 * texture2DRect( dataBuffer,  position - P.wy ).xy +\n\t1.0 * texture2DRect( dataBuffer,  position - P.xz ).xy - // second row\n\t6.0 * texture2DRect( dataBuffer,  position        ).xy +\n\t1.0 * texture2DRect( dataBuffer,  position + P.xz ).xy +\n\t0.5 * texture2DRect( dataBuffer,  position + P.wy ).xy +  // third row\n\t1.0 * texture2DRect( dataBuffer,  position + P.zy ).xy +\n\t0.5 * texture2DRect( dataBuffer,  position + P.xy ).xy;\t\n}\n\nuniform float drawParameterSpace;\n\nuniform sampler2D interpolationMap;\nuniform float kBlend;\nuniform float fBlend;\n\nuniform vec2 Diffusion;\nuniform float vScale;\n\nvoid main(){\n    vec2 uv = gl_FragCoord.xy / iResolution.xy;\n    \n    gl_FragColor = vec4(0.0,0.0,0.0,1.0);\n    \n    if(reset == 1) {\n        float rnd = rand(uv) + (sin(50.*uv.x)+sin(50.*uv.y))*0.;\n        if(rnd>0.5) gl_FragColor.x=.5;\n        else gl_FragColor.y=.5;\n        return;\n    }\n    \n    float k = uv.x * 0.1;// + 0.0;\n    float F = uv.y * 0.1;// + 0.0;\n    \n    vec2 kf = texture2D(interpolationMap, vec2(kBlend, fBlend)).xy * 0.1;\n    \n    k = kf.x;\n    F = kf.y;\n    \n    if(drawParameterSpace == 1.0){\n    \tk = uv.x * 0.1;\n    \tF = uv.y * 0.1;\n    }\n    \n    \n    vec4 data = texture2DRect(dataBuffer, gl_FragCoord.xy);\n    \n\tfloat u = data.x;\n\tfloat v = data.y;\n\tfloat uvv\t= u * v * v;\n    \n\tvec2 Duv = laplacian(gl_FragCoord.xy) * Diffusion; \n\tfloat du = Duv.x - uvv + F * (1.0 - u);\n\tfloat dv = Duv.y + uvv - (F + k) * v;\n\n\tu += du * dt;\n\tv += dv * dt * vScale;\n    gl_FragColor.xy = clamp(vec2(u,v * (1.0 - data.z)), 0., 1.); \n    gl_FragColor.z = data.z;\n}",
-            "value": "cc.creativecomputing.control.code.CCShaderObject@79b275b4"
-          }}
-        }}
       },
       "reset": {},
       "diffusion y": {
         "min": 0,
         "max": 2,
         "name": "diffusion y",
-        "value": 0.2879999876022339
+        "value": 0.3
       },
       "diffusion x": {
         "min": 0,
         "max": 2,
         "name": "diffusion x",
-        "value": 0.8420000076293945
+        "value": 0.8
       }
     }
+  },
+  "real compile": {
+    "name": "real compile",
+    "value": false
   },
   "gl context": {
     "name": "gl context",
     "value": {
+      "cursor": {
+        "name": "cursor",
+        "value": true
+      },
       "device setup": {
         "name": "device setup",
-        "value": {}
+        "value": {
+          "devices": {
+            "name": "devices",
+            "value": "\\Display0"
+          },
+          "configurations": {
+            "name": "configurations",
+            "value": "3072 x 1728"
+          }
+        }
       },
       "visible": {
         "name": "visible",
@@ -344,7 +303,13 @@
         "b": 0,
         "g": 0,
         "name": "background",
-        "value": "ff000000"
+        "value": {
+          "a": 1,
+          "r": 0,
+          "b": 0,
+          "g": 0,
+          "blendable_type": "cc.creativecomputing.math.CCColor"
+        }
       },
       "width": {
         "min": -2147483648,
@@ -375,7 +340,7 @@
         "min": 0,
         "max": 1,
         "name": "fixed update time",
-        "value": 0.04
+        "value": 1
       },
       "fix update time": {
         "name": "fix update time",
@@ -395,12 +360,16 @@
         "min": -1.7976931348623157E308,
         "max": 1.7976931348623157E308,
         "name": "show frame rate",
-        "value": 9.528382239819662
+        "value": 29.94729276473407
       },
       "exceptionHandling": {
         "name": "exceptionHandling",
         "value": "THROW"
+      },
+      "pause": {
+        "name": "pause",
+        "value": false
       }
     }
   }
-}}
+}
