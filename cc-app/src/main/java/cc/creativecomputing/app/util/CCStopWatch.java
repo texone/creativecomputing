@@ -49,6 +49,8 @@ public class CCStopWatch{
 
 		private String _myName = "undefined";
 		private LinkedList<Double> _myHistory = null;
+		
+		public double average;
 
 		public CCStopWatchItem(String theItemName) {
 			_myName = theItemName;
@@ -75,7 +77,10 @@ public class CCStopWatch{
 			_myHistory.push(_myCurrentTime);
 			double myResult = _myCurrentTime;
 			_myCurrentTime = 0;
-			
+			for(double myValue:_myHistory) {
+				average += myValue;
+			}
+			average /= _myHistorySum.size();
 			return myResult;
 		}
 
@@ -179,6 +184,7 @@ public class CCStopWatch{
 	private String _myCurrentItemName = null;
 
 	private static CCStopWatch _myInstance = null;
+	
 
 	public CCStopWatch() {
 	}
