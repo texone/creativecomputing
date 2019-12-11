@@ -38,6 +38,7 @@ import cc.creativecomputing.graphics.shader.CCGLProgram.CCGLTextureUniform;
 import cc.creativecomputing.graphics.shader.CCShaderBuffer;
 import cc.creativecomputing.graphics.texture.CCGLSwapBuffer;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
+import cc.creativecomputing.graphics.util.CCStopWatchGraph;
 import cc.creativecomputing.io.CCNIOUtil;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector3;
@@ -201,6 +202,16 @@ public class CCParticles{
 		
 		_mySwapTexture = new CCGLSwapBuffer(g, 32, 4, 4,_myWidth,_myHeight);
 		_myGroupData = new CCShaderBuffer(32, 4, 1, CCParticleCPUGroupEmitter.GROUP_WIDH,CCParticleCPUGroupEmitter.GROUP_WIDH);
+		
+		_myResetMesh = new CCVBOMesh(CCDrawMode.POINTS, _myWidth * _myHeight);
+		
+		for (int i = 0; i < _myWidth * _myHeight; i++){
+			_myResetMesh.addVertex(i % _myWidth,i / _myWidth);
+			_myResetMesh.addTextureCoords(0,Float.MAX_VALUE,Float.MAX_VALUE,Float.MIN_VALUE,0);
+			_myResetMesh.addTextureCoords(1, 1, 1, 1);
+			_myResetMesh.addTextureCoords(2, 0, 0, 0);
+			_myResetMesh.addTextureCoords(3, 1, 1, 1);
+		}
 	}
 	
 	protected void setup(final CCGraphics g, CCParticleSetup theSetup) {
