@@ -786,7 +786,7 @@ public class CCCameraController {
 		_myAnimationManager.play(new CCRotationAnimation(theTime, state._myRotation));
 		_myAnimationManager.play(new CCCenterAnimation(theTime, state._myCenter));
 		_myAnimationManager.play(myResult = new CCDistanceAnimation(theTime, state._myDistance));
-
+		
 		return myResult;
 	}
 }

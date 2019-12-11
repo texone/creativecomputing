@@ -232,11 +232,11 @@ public class CCVector3 implements Cloneable, Externalizable, CCDataSerializable,
 		);
 	} 
 
-	@CCProperty(name = "x")
+	@CCProperty(name = "x", readBack= true)
     public double x = 0f;
-	@CCProperty(name = "y")
+	@CCProperty(name = "y", readBack= true)
 	public double y = 0f;
-	@CCProperty(name = "z")
+	@CCProperty(name = "z", readBack= true)
 	public double z = 0f;
 
     /**

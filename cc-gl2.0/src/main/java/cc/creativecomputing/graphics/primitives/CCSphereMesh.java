@@ -70,7 +70,7 @@ public class CCSphereMesh extends CCVBOMesh{
 					_myRadius * z
 				
 				);
-				addTextureCoords(myPhi,myTheta);
+				addTextureCoords(1 - myPhi,myTheta);
 			}
 		}
 

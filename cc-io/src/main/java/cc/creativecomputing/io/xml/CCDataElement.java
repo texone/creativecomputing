@@ -1076,7 +1076,7 @@ public class CCDataElement implements Iterable<CCDataElement>{
 		if (isTextElement()){
 			if (cdata){
 				result.append("<![CDATA[");
-				result.append(name());
+				result.append(text());
 				result.append("]]>");
 			}else{
 				String myText = new String(_myName);

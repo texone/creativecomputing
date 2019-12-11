@@ -68,7 +68,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 	private List<CCColladaSceneNode> _myNodes = new ArrayList<CCColladaSceneNode>();
 	
 	private CCMatrix4x4 _myMatrix;
-	@CCProperty(name = "transform")
+	//@CCProperty(name = "transform")
 	private CCTransform _myTransform;
 	private CCColladaSceneNodeType _myType;
 	

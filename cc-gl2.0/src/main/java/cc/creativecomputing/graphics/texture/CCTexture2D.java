@@ -599,8 +599,25 @@ public class CCTexture2D extends CCTexture{
 	}
 	
 	public ByteBuffer getTexImage() {
-		ByteBuffer myBuffer = ByteBuffer.allocate(3 * _myWidth * _myHeight);
 		GL2 gl = CCGraphics.currentGL();
+//		if(_myUsePBO) {
+//			if(_myBufferObject == null) {
+//				_myBufferObject = new CCBufferObject();
+//			}
+//			int mySize = _myPixelType.bytesPerChannel * _myFormat.numberOfChannels * _myWidth * _myHeight;
+//			gl.glBindBuffer(GL2.GL_PIXEL_PACK_BUFFER, _myBufferObject.id());
+//			gl.glBufferData(GL2.GL_PIXEL_PACK_BUFFER,mySize, null, GL2.GL_STREAM_READ);
+//			
+//			ByteBuffer myBuffer = ByteBuffer.allocate(3 * _myWidth * _myHeight);
+//			gl.glReadPixels(0, 0, width(), height(), CCPixelFormat.BGR.glID, CCPixelType.UNSIGNED_BYTE.glID, CCPixelType.UNSIGNED_BYTE.glID, 0);
+////			gl.glGetTexImage(_myTarget.glID, 0, CCPixelFormat.BGR.glID, CCPixelType.UNSIGNED_BYTE.glID, null);
+//			gl.glMapBuffer(GL2.GL_PIXEL_PACK_BUFFER, GL2.GL_READ_ONLY); 
+//			gl.glUnmapBuffer(GL2.GL_PIXEL_PACK_BUFFER);
+//			gl.glBindBuffer(GL2.GL_PIXEL_PACK_BUFFER, 0); 
+//			return null;
+//		}
+		ByteBuffer myBuffer = ByteBuffer.allocate(3 * _myWidth * _myHeight);
+		
 		bind();
 		gl.glGetTexImage(_myTarget.glID, 0, CCPixelFormat.BGR.glID, CCPixelType.UNSIGNED_BYTE.glID, myBuffer);
 		myBuffer.rewind();

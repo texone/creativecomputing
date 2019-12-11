@@ -15,7 +15,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCPixelStorageModes;
@@ -597,7 +596,7 @@ public abstract class CCTexture{
 		
 		_myWidth = theImage.width();
 		_myHeight = theImage.height();
-		
+
 		bind();
 
 		GL2 gl = CCGraphics.currentGL();

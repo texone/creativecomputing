@@ -9,29 +9,29 @@ import cc.creativecomputing.math.CCColor;
 public class CCDrawAttributes {
 
 	@CCProperty(name = "blend mode")
-	private CCBlendMode _cBlendMode = CCBlendMode.BLEND;
+	public CCBlendMode _cBlendMode = CCBlendMode.BLEND;
 	@CCProperty(name = "polygon mode")
-	private CCPolygonMode _cPolygonMode = CCPolygonMode.FILL;
+	public CCPolygonMode _cPolygonMode = CCPolygonMode.FILL;
 	
 	@CCProperty(name = "depth test")
-	private boolean _cDepthTest = true;
+	public boolean _cDepthTest = true;
 	@CCProperty(name = "depth mask")
-	private boolean _cDepthMask = true;
+	public boolean _cDepthMask = true;
 	
 	@CCProperty(name = "line width", min = 0.1, max = 50)
-	private double _cLineWidth = 1;
+	public double _cLineWidth = 1;
 	@CCProperty(name = "line smooth")
-	private boolean _cLineSmooth = false;
+	public boolean _cLineSmooth = false;
 	
 	@CCProperty(name = "point size", min = 0.1, max = 50)
-	private double _cPointSize = 1;
+	public double _cPointSize = 1;
 	@CCProperty(name = "point smooth")
-	private boolean _cPointSmooth = false;
+	public boolean _cPointSmooth = false;
 	
 	@CCProperty(name = "color")
 	public CCColor color = new CCColor();
 	@CCProperty(name = "cullface")
-	private CCCullFace _cCullFace = CCCullFace.NONE;
+	public CCCullFace _cCullFace = CCCullFace.NONE;
 	
 	
 	public void start(CCGraphics g){

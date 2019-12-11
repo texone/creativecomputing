@@ -10,11 +10,15 @@
  */
 package cc.creativecomputing.graphics.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import cc.creativecomputing.app.util.CCStopWatch;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.core.logging.CCLog;
+import cc.creativecomputing.core.util.CCFormatUtil;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.math.CCColor;
@@ -66,7 +70,7 @@ public class CCStopWatchGraph extends CCStopWatch{
 	private float[] _myLastHeights;
 	private float _myLastTextHeight = 0;
 	
-	private void drawItem(CCGraphics g, CCStopWatchItem theItem) {
+	private void drawItem(CCGraphics g, CCStopWatchItem theItem, int theIndex) {
 
 		// label
 		CCColor myColor = _myColors[_myLastColorIdx];
@@ -77,7 +81,7 @@ public class CCStopWatchGraph extends CCStopWatch{
 		float myWidth = g.width() * _cWidth;
 
 		if (theItem.history().size() > 0) {
-			g.text(theItem.name() + " : " + theItem.history().peek(), 10 + myWidth, 10 + (float) (theItem._myLastHeight) * _cScale);
+			g.text(theItem.name() + " : " + CCFormatUtil.nd(theItem.average, 5), 10 + myWidth, theIndex * 20 );//10 + (float) (theItem._myLastHeight) * _cScale
 		}
 
 		g.color(myColor.r, myColor.g, myColor.b, 0.25f);
@@ -133,9 +137,12 @@ public class CCStopWatchGraph extends CCStopWatch{
 		_myLastColorIdx = 0;
 
 		g.beginOrtho2D();
-
-			for (CCStopWatchItem myItem : items()) {
-				drawItem(g, myItem);
+			List<CCStopWatchItem> myItems = new ArrayList<>( items());
+			Collections.sort(myItems, (a,b) -> Double.compare(a.average, b.average));
+			
+			int i = 0;
+			for (CCStopWatchItem myItem : myItems) {
+				drawItem(g, myItem, i++);
 			}
 
 		// draw frame and grid
