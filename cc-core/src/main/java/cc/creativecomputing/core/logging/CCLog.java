@@ -28,35 +28,34 @@ import java.util.logging.XMLFormatter;
  * <p>This is a little wrapper around java.util.logging to create a more convenient
  * way to log application states to stderr, stdout and/or a logfile. Usage sample:</p>
  * <blockquote><pre>CCLog.warn("what is wrong here?!");</pre></blockquote>
- * 
+ * <p>
  * The logger can be configured using environment variables. Default logging to the console
  * is always active and cannot be disabled. The logging is enabled while calling CCLog.[warn,error,info]("")
  * for the first time.
- * 
+ * <p>
  * Available Environment Variables are: 
  * CC_LOG_HANDLERS=[FILE,TCP] - enable additional handlers. Multiple values allowed
  * Note about TCP: the receiver needs to be up and running before the application starts. 
  * Otherwise an exception will be thrown. There is no reconnection in case of connection
  * loss, simple because it takes to long.
- * 
+ * <p>
  * Configure console output:
- * CC_LOG_CONSOLE_FORMAT=[CCSimpleLogFormatter,SimpleFormatter,XMLFormatter] - choose one. 
- * CC_LOG_CONSOLE_VERBOSITY=[SEVERE,WARNING,INFO,CONFIG,FINE,FINER,FINEST] - set verbosity level. Default is INFO
- * 
+ * <li>CC_LOG_CONSOLE_FORMAT=[CCSimpleLogFormatter,SimpleFormatter,XMLFormatter] - choose one. 
+ * <li>CC_LOG_CONSOLE_VERBOSITY=[SEVERE,WARNING,INFO,CONFIG,FINE,FINER,FINEST] - set verbosity level. Default is INFO
+ * <p>
  * Configure file output:
- * CC_LOG_FILE_FORMAT=[CCSimpleLogFormatter,SimpleFormatter,XMLFormatter] - choose one. 
- * CC_LOG_FILE_VERBOSITY=[SEVERE,WARNING,INFO,CONFIG,FINE,FINER,FINEST] - set verbosity level. Default is INFO
- * CC_LOG_FILE_PATH=[path to write the logfile to] - Default is "log/"
- * 
+ * <li>CC_LOG_FILE_FORMAT=[CCSimpleLogFormatter,SimpleFormatter,XMLFormatter] - choose one. 
+ * <li>CC_LOG_FILE_VERBOSITY=[SEVERE,WARNING,INFO,CONFIG,FINE,FINER,FINEST] - set verbosity level. Default is INFO
+ * <li>CC_LOG_FILE_PATH=[path to write the logfile to] - Default is "log/"
+ * <p>
  * Configure TCP output:
- * CC_LOG_TCP_FORMAT=[CCSimpleLogFormatter,SimpleFormatter,XMLFormatter] - choose one. 
- * CC_LOG_TCP_VERBOSITY=[SEVERE,WARNING,INFO,CONFIG,FINE,FINER,FINEST] - set verbosity level. Default is INFO
- * CC_LOG_TCP_HOST=[hostname] - set the hostname to send the log data to. Default is "127.0.0.1" 
- * CC_LOG_TCP_PORT=[port] - set the port to send the data to. Default is "6767"
- * 
+ * <li>CC_LOG_TCP_FORMAT=[CCSimpleLogFormatter,SimpleFormatter,XMLFormatter] - choose one. 
+ * <li>CC_LOG_TCP_VERBOSITY=[SEVERE,WARNING,INFO,CONFIG,FINE,FINER,FINEST] - set verbosity level. Default is INFO
+ * <li>CC_LOG_TCP_HOST=[hostname] - set the hostname to send the log data to. Default is "127.0.0.1" 
+ * <li>CC_LOG_TCP_PORT=[port] - set the port to send the data to. Default is "6767"
+ * <p>
  * @example cc.creativecomputing.demo.logging;
  * @author sebastian heymann
- * @nosuperclasses
  */
 
 // TODO: Timing the whole thing would be interesting.
