@@ -35,6 +35,8 @@ public abstract class CCVideo extends CCImage {
 	 */
 	protected boolean _myIsFirstFrame;
 	
+	protected boolean _myIsActive;
+	
 	/**
 	 * Keep the listeners for init events
 	 */
@@ -55,6 +57,14 @@ public abstract class CCVideo extends CCImage {
 	}
 	
 	public void update(CCAnimator theAnimator) {
+	}
+	
+	public void active(boolean theIsActive) {
+		_myIsActive = theIsActive;
+	}
+	
+	public boolean isActive() {
+		return _myIsActive;
 	}
 	
 }

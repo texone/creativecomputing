@@ -17,7 +17,6 @@ import cc.creativecomputing.graphics.texture.CCTexture2D;
 import cc.creativecomputing.graphics.texture.CCTextureAttributes;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageEvent;
-import cc.creativecomputing.video.CCVideo;
 
 /**
  * @author christianriekoff
@@ -31,7 +30,7 @@ public class CCVideoTexture extends CCTexture2D implements CCGLListener<CCGraphi
 	private CCImageEvent _myInitEvent = i -> _myInitVideo = i;
 	
 	private CCImage _myUpdateVideo = null;
-	private CCImageEvent _myUpdateEvent = i -> _myUpdateVideo = i;
+	private CCImageEvent _myUpdateEvent = this::updateVideo;
 	
 	private boolean reset = false;
 	
@@ -54,6 +53,10 @@ public class CCVideoTexture extends CCTexture2D implements CCGLListener<CCGraphi
 	public CCVideoTexture(CCVideo theVideoData){
 		super(theVideoData);
 		video(theVideoData);
+	}
+	
+	private void updateVideo(CCImage theImage) {
+		_myUpdateVideo = theImage;
 	}
 	
 	public void video(CCVideo theVideoData){
@@ -104,6 +107,7 @@ public class CCVideoTexture extends CCTexture2D implements CCGLListener<CCGraphi
 			_myInitVideo = null;
 		}
 		if(_myUpdateVideo != null){
+
 			data(_myUpdateVideo);
 			_myUpdateVideo = null;
 		}
