@@ -179,10 +179,6 @@ public class CCParticles{
 		init(g);
 	}
 	
-	public List<CCForce> forces(){
-		return _myForces;
-	}
-	
 	public interface CCParticleSetup{
 		public void setup(CCParticles theParticles);
 	}
@@ -593,6 +589,14 @@ public class CCParticles{
 	
 	public void staticPositionBlend(float theBlend){
 		_myUpdateShader.staticPositionBlend(theBlend);
+	}
+	
+	public List<CCForce> forces(){
+		return _myForces;
+	}
+	
+	public List<CCBlend> blends(){
+		return _myBlends;
 	}
 	
 	public List<CCParticleRenderer> renderer() {
