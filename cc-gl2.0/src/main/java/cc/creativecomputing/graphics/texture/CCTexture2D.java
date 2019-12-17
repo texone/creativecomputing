@@ -372,15 +372,15 @@ public class CCTexture2D extends CCTexture{
 
 	        _myBufferObject.unbind();
 		}else {
-			
-			int myWidth = CCMath.min(theWidth, _myWidth - theDestX);
-			int myHeight = CCMath.min(theHeight, _myHeight - theDestY);
-			gl.glTexSubImage2D(
-				_myTarget.glID, 0, 
-				theDestX, theDestY, 
-				myWidth, myHeight, 
-				_myFormat.glID, myType.glID, theImage.buffer()
-			);
+				int myWidth = CCMath.min(theWidth, _myWidth - theDestX);
+				int myHeight = CCMath.min(theHeight, _myHeight - theDestY);
+				
+				gl.glTexSubImage2D(
+					_myTarget.glID, 0, 
+					theDestX, theDestY, 
+					myWidth, myHeight, 
+					_myFormat.glID, myType.glID, theImage.buffer()
+				);
 		}
 		
 		defaultUnpackStorage();

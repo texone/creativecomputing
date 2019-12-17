@@ -10,6 +10,7 @@
  */
 package cc.creativecomputing.video;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCGLListener;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -107,7 +108,7 @@ public class CCVideoTexture extends CCTexture2D implements CCGLListener<CCGraphi
 			_myInitVideo = null;
 		}
 		if(_myUpdateVideo != null){
-
+			//usePBO(true);
 			data(_myUpdateVideo);
 			_myUpdateVideo = null;
 		}
