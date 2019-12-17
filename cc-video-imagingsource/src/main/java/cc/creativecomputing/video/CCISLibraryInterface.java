@@ -190,6 +190,13 @@ public interface CCISLibraryInterface extends Library {
 	 */
 	public void IC_ReleaseGrabber(PointerByReference hGrabber);
 
+	/**
+	 * Type declaration for the frame ready callback function.
+	 * 
+	 * @see #IC_SetFrameReadyCallback
+	 * @see #IC_SetCallbacks
+	 * 
+	 */
 	public interface FRAME_READY_CALLBACK extends Callback {
 		void invoke(Pointer hGrabber, Pointer pData, long frameNumber, Pointer userdata);
 	}
@@ -209,20 +216,31 @@ public interface CCISLibraryInterface extends Library {
 	 */
 	public int IC_SetFrameReadyCallback(Pointer hGrabber, FRAME_READY_CALLBACK cb, Pointer x1_argument_in_void_userdata);
 
-//	/**	Set callback function
-//		@param hGrabber      Handle to a grabber object.
-//		@param cb Callback function of type FRAME_READY_CALLBACK, can be NULL, if no callback is needed
-//		@param dlcb Callback function of type DEVICE:LOST_CALLBACK, can be NULL, if no device lost handler is needed
-//		@param x1_argument_in_void_userdata Pointer to some userdata.
-//
-//		@sa FRAME_READY_CALLBACK
-//	*/
-//	public int IC_SetCallbacks(
-//		Pointer				hGrabber,
-//		FRAME_READY_CALLBACK	cb,
-//		void*					x1_argument_in_void_userdata,
-//		DEVICE_LOST_CALLBACK	dlCB,
-//		void*					x2_argument_in_void_userdata);
+	/**
+	 * Type declaration for the device lost callback function.
+	 * 
+	 * @see IC_SetCallbacks
+	 */
+	public interface DEVICE_LOST_CALLBACK extends Callback {
+		void invoke(Pointer hGrabber, Pointer userdata);
+	}
+
+	/**
+	 * Set callback function
+	 * 
+	 * @param hGrabber                     Handle to a grabber object.
+	 * @param cb                           Callback function of type
+	 *                                     FRAME_READY_CALLBACK, can be NULL, if no
+	 *                                     callback is needed
+	 * @param dlcb                         Callback function of type
+	 *                                     DEVICE:LOST_CALLBACK, can be NULL, if no
+	 *                                     device lost handler is needed
+	 * @param x1_argument_in_void_userdata Pointer to some userdata.
+	 * 
+	 * @sa FRAME_READY_CALLBACK
+	 */
+	public int IC_SetCallbacks(Pointer hGrabber, FRAME_READY_CALLBACK cb, Pointer x1_argument_in_void_userdata,
+			DEVICE_LOST_CALLBACK dlCB, Pointer x2_argument_in_void_userdata);
 
 	/**
 	 * Set Continuous mode

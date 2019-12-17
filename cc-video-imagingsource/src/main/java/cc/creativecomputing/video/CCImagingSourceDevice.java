@@ -26,6 +26,7 @@ import cc.creativecomputing.image.CCPixelType;
 import cc.creativecomputing.math.CCMath;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector2i;
+import cc.creativecomputing.video.CCISLibraryInterface.DEVICE_LOST_CALLBACK;
 import cc.creativecomputing.video.CCISLibraryInterface.FRAME_READY_CALLBACK;
 
 /** Simple example of JNA interface mapping and usage. */
@@ -280,21 +281,28 @@ public class CCImagingSourceDevice extends CCVideo{
 		
 		
 		
-		frameReadyCallback((data,frame)->{
-			if(!_myIsActive)return;
-			_myWidth = videoFormatWidth();
-			_myHeight = videoFormatHeight();
-			
-			if (!bufferLock.tryLock()) {
-				return;
+		callbacks(
+			(data,frame)->{
+
+//CCLog.info("VIDEO");
+				if(!_myIsActive)return;
+				_myWidth = videoFormatWidth();
+				_myHeight = videoFormatHeight();
+				
+				if (!bufferLock.tryLock()) {
+					return;
+				}
+				ByteBuffer myBuffer = data.getByteBuffer(0, _myWidth * _myHeight * 3);
+				buffer(myBuffer);
+				bufferLock.unlock();
+				
+				_myIsDataUpdated = true;
+				
+			},
+			()->{
+				CCLog.info("LOST DEVICE");
 			}
-			ByteBuffer myBuffer = data.getByteBuffer(0, _myWidth * _myHeight * 3);
-			buffer(myBuffer);
-			bufferLock.unlock();
-			
-			_myIsDataUpdated = true;
-			
-		});
+		);
 		continuousMode(true);
 		
 		for(String myProperty:enumProperties()) {
@@ -619,6 +627,14 @@ public class CCImagingSourceDevice extends CCVideo{
 	
 	private FRAME_READY_CALLBACK _myCallback;
 	
+	/**
+	 * Enable frame ready callback.
+	 * 
+	 * @param theEvent Callback function 
+	 * 
+	 * @see #CCISFrameReady
+	 * 
+	 */
 	public void frameReadyCallback(CCISFrameReady theEvent) {
 		if(_myCallback == null) {
 			_myCallback = new FRAME_READY_CALLBACK() {
@@ -632,6 +648,52 @@ public class CCImagingSourceDevice extends CCVideo{
 			_myInterface.IC_SetFrameReadyCallback(_myGrabberPointer, _myCallback, null);
 		}
 		_myFrameEvents.add(theEvent);
+	}
+	
+
+	public static interface CCISDeviceLostEvent{
+		public void onDeviceLost();
+	}
+	
+	private CCListenerManager<CCISDeviceLostEvent> _myDeviceLostEvents = CCListenerManager.create(CCISDeviceLostEvent.class);
+	
+	private DEVICE_LOST_CALLBACK _myDeviceLostCallback;
+	
+	/**
+	 * Set callback function
+	 * 
+	 * @param cb                           Callback function of type
+	 *                                     FRAME_READY_CALLBACK, can be NULL, if no
+	 *                                     callback is needed
+	 * @param dlcb                         Callback function of type
+	 *                                     DEVICE:LOST_CALLBACK, can be NULL, if no
+	 *                                     device lost handler is needed
+	 * @param x1_argument_in_void_userdata Pointer to some userdata.
+	 * 
+	 * @sa FRAME_READY_CALLBACK
+	 */
+	public void callbacks(CCISFrameReady theFrameReadyEvent, CCISDeviceLostEvent theDeviceLostEvent) {
+		if(_myCallback == null && _myDeviceLostCallback == null) {
+			_myCallback = new FRAME_READY_CALLBACK() {
+
+				@Override
+				public void invoke(Pointer hGrabber, Pointer pData, long frameNumber, Pointer userdata) {
+					_myFrameEvents.proxy().onFrame(pData, frameNumber);
+				}
+				
+			};
+			
+			_myDeviceLostCallback = new DEVICE_LOST_CALLBACK() {
+
+				@Override
+				public void invoke(Pointer hGrabber, Pointer userdata) {
+					_myDeviceLostEvents.proxy().onDeviceLost();
+				}
+				
+			};
+			_myInterface.IC_SetCallbacks(_myGrabberPointer, _myCallback, null, _myDeviceLostCallback,null);
+		}
+		_myFrameEvents.add(theFrameReadyEvent);
 	}
 	
 	/**
