@@ -231,6 +231,7 @@ public class CCHandTracker {
 	private List<CCHandInfo> _myTrackedObjects = new ArrayList<>();
 	
 	private Map<Integer, CCHandInfo> _myCVHandMap = new HashMap<>();
+	private List<CCHandInfo> _myCVHands = new ArrayList<>();
 	private List<CCHandInfo> _myHands = new ArrayList<>();
 	
 	private Queue<CCHandInfo> _myAddedHands = new LinkedList<>();
@@ -276,13 +277,17 @@ public class CCHandTracker {
 	
 	private void processVideo() {
 		while(true) {
-			check();
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(!_myVideoIn.isActive()) {
+				try {
+					Thread.sleep(30);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else {
+				check();
 			}
+
 		}
 	}
 	
@@ -301,12 +306,18 @@ public class CCHandTracker {
 	private Mat _myLastMat;
 	
 	private void check() {
+		long mills = System.currentTimeMillis();
 		if(_myPassImage == null)return;
-	
+
 		if(!lockProcess.tryLock())return;
+
+		
 		Mat mat = new Mat(_myPassImage.height(), _myPassImage.width(), CV_8UC3);//, (ByteBuffer)image.buffer()
 		
 		ByteBuffer original = (ByteBuffer)_myPassImage.buffer();
+		
+		_myPassImage = null;
+		if(original == null)return;
 		ByteBuffer clone = ByteBuffer.allocate(original.capacity());
 		original.rewind();//copy from the beginning
 		clone.put(original);
@@ -372,11 +383,11 @@ public class CCHandTracker {
 		
 		trackHands(mat);
 		mat.close();
-		
+
+		System.out.println(System.currentTimeMillis() - mills);
 	}
 	
 	private void updateVideo(CCImage theImage) {
-
 		if(!lockProcess.tryLock())return;
 		_myPassImage = theImage;
 		lockProcess.unlock();
@@ -404,7 +415,7 @@ public class CCHandTracker {
 		CCHandInfo myResult = new CCHandInfo();
 		double area = contourArea(theContour, false);
 		if(area < _cMinSize)return myResult;
-		
+		//CCLog.info(area);
 		
 		List<CCVector3> handContour = matToContour(theContour);
 		
@@ -490,11 +501,14 @@ public class CCHandTracker {
 			
 		theLastHand.center.x = theNewHand.center.x * (1 - _cTipSmooth) + theLastHand.center.x * _cTipSmooth;
 		theLastHand.center.y = theNewHand.center.y * (1 - _cTipSmooth) + theLastHand.center.y * _cTipSmooth;
-
-		if(theNewHand.tip.isZero()) return;
+		if(theNewHand.tip.isZero()) {
+//			CCLog.info(theNewHand.tip.isZero(),theLastHand.tip);
+		//	return;
+		}else {
 		
-		theLastHand.tip.x = theNewHand.tip.x * (1 - _cTipSmooth) + theLastHand.tip.x * _cTipSmooth;
-		theLastHand.tip.y = theNewHand.tip.y * (1 - _cTipSmooth) + theLastHand.tip.y * _cTipSmooth;
+			theLastHand.tip.x = theNewHand.tip.x * (1 - _cTipSmooth) + theLastHand.tip.x * _cTipSmooth;
+			theLastHand.tip.y = theNewHand.tip.y * (1 - _cTipSmooth) + theLastHand.tip.y * _cTipSmooth;
+		}
 			
 		double myJitter = theNewHand.tip.distance(theLastHand.tip);
 		theLastHand.jitter = myJitter * (1 - _cJitterSmooth) + theLastHand.jitter * _cJitterSmooth;
@@ -620,7 +634,6 @@ public class CCHandTracker {
 		double myAngle = 100;
 		CCHandInfo myBestFitInfo = null;
 		
-		if(!lock.tryLock())return;
 		
 		_myTrackedObjects.clear();
 		for (int i = 0; i < _myContours.size(); i++) {
@@ -641,7 +654,10 @@ public class CCHandTracker {
 			}
 		}
 		correlatePositions(_myTrackedObjects);
-		
+
+		if(!lock.tryLock())return;
+		_myCVHands.clear();
+		_myCVHandMap.values().forEach(v -> _myCVHands.add(v.clone()));
 		lock.unlock();
 	}
 	
@@ -657,9 +673,8 @@ public class CCHandTracker {
 		_myTransform.scale(1 / _cResize.scaleX(), 1 / _cResize.scaleY(), 1);
 		
 		if(!lock.tryLock())return;
-		
 		_myHands.clear();
-		_myCVHandMap.values().forEach(v -> _myHands.add(v.clone()));
+		_myCVHands.forEach(v -> _myHands.add(v.clone()));
 		lock.unlock();
 	}
 	
@@ -759,7 +774,7 @@ public class CCHandTracker {
 		
 		for(CCHandInfo myInfo:_myHands) {
 			if(myInfo.validFrames < _cMinValidFrames) {
-				CCLog.info(myInfo.validFrames);
+				//CCLog.info(myInfo.validFrames);
 				continue;
 			}
 			g.color(1d);
