@@ -271,6 +271,10 @@ public class CCDate {
 		return _myCalendar.get(Calendar.MILLISECOND);
 	}
 	
+	public void milliSeconds(int theMilli){
+		_myCalendar.set(Calendar.MILLISECOND, theMilli);
+	}
+	
 	public double secondProgress(){
 		return (milliSeconds() / 1000d);
 	}
