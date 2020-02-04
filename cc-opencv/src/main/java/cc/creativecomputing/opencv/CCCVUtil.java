@@ -1,6 +1,7 @@
 package cc.creativecomputing.opencv;
 
 import static org.bytedeco.javacpp.opencv_imgproc.CV_GRAY2RGB;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_RGBA2RGB;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_RGB2GRAY;
 import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
 import static org.bytedeco.javacpp.opencv_core.*;
@@ -18,6 +19,12 @@ public class CCCVUtil {
 	public static Mat grayToRGB(Mat theSource) {
 		Mat myResult = new Mat();
 		cvtColor(theSource, myResult, CV_GRAY2RGB);
+		return myResult;
+	}
+	
+	public static Mat RGBAToRGB(Mat theSource) {
+		Mat myResult = new Mat();
+		cvtColor(theSource, myResult, CV_RGBA2RGB);
 		return myResult;
 	}
 	

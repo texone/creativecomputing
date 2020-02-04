@@ -1,6 +1,7 @@
 package cc.creativecomputing.opencv;
 
 import static org.bytedeco.javacpp.opencv_core.CV_8UC3;
+import static org.bytedeco.javacpp.opencv_core.CV_8UC4;
 import static org.bytedeco.javacpp.opencv_core.min;
 import static org.bytedeco.javacpp.opencv_core.flip;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
@@ -154,10 +155,6 @@ public class CCHandTracker {
 	@CCProperty(name = "threshold")
 	private CCThreshold _cThreshold = new CCThreshold();
 	
-	@CCProperty(name = "color")
-	private CCColor _cContourColor = new CCColor();
-	@CCProperty(name = "hull color")
-	private CCColor _cHullColor = new CCColor();
 	@CCProperty(name = "max gap", min = 0, max = 100)
 	private double _cMaxGap = 30;
 	@CCProperty(name = "tip angle", min = 0, max = 100)
@@ -206,11 +203,11 @@ public class CCHandTracker {
 		MASKED,
 		EXTRACT,
 		RESIZE,
+		BLUR,
 		COLOR_CONVERSION,
 		BACKGROUND,
 		COLOR_RANGE,
 		MORPHOLOGY,
-		BLUR,
 		POST_BLUR,
 		THRESHOLD
 	}
@@ -307,12 +304,14 @@ public class CCHandTracker {
 	
 	private void check() {
 		long mills = System.currentTimeMillis();
+		
 		if(_myPassImage == null)return;
 
 		if(!lockProcess.tryLock())return;
-
 		
-		Mat mat = new Mat(_myPassImage.height(), _myPassImage.width(), CV_8UC3);//, (ByteBuffer)image.buffer()
+		int myMatType = _myPassImage.pixelFormat().numberOfChannels == 3 ? CV_8UC3 : CV_8UC4;
+		
+		Mat mat = new Mat(_myPassImage.height(), _myPassImage.width(), myMatType);//, (ByteBuffer)image.buffer()
 		
 		ByteBuffer original = (ByteBuffer)_myPassImage.buffer();
 		
@@ -333,6 +332,8 @@ public class CCHandTracker {
 			return;
 		}
 		
+		if(myMatType == CV_8UC4)mat =CCCVUtil.RGBAToRGB(mat);
+		
 		if(_cPause) {
 			if(_myLastMat == null)_myLastMat = mat.clone();
 			mat = _myLastMat.clone();
@@ -342,7 +343,14 @@ public class CCHandTracker {
 		
 		checkDebugMat(CCDrawMat.INPUT, mat);
 		
-		if(_cMask)min(_myMask, mat, mat); 
+		
+		if(_cMask) {
+			if(_myMask.cols() == mat.cols() && _myMask.rows() == mat.rows()) {
+				min(_myMask, mat, mat); 
+			}else {
+				//throw new RuntimeException("Mask has to match the camera resolution of: " + mat.cols() + " , " + mat.rows());
+			}
+		}
 		checkDebugMat(CCDrawMat.MASKED, mat);
 		
 		mat = _cExtract.process(mat);
@@ -690,6 +698,106 @@ public class CCHandTracker {
 		lockDebug.unlock();
 	}
 	
+	@CCProperty(name = "draw contour")
+	private boolean _cDrawContour = false;
+	@CCProperty(name = "color")
+	private CCColor _cContourColor = new CCColor();
+	
+	private void drawContour(CCHandInfo myInfo, CCGraphics g) {
+		if(!_cDrawContour)return;
+		
+		g.color(_cContourColor);
+		g.beginShape(CCDrawMode.LINE_LOOP);
+		myInfo.handContour.forEach(v -> g.vertex(v));
+		g.endShape();
+	}
+
+	@CCProperty(name = "draw hull")
+	private boolean _cDrawHull = false;
+	@CCProperty(name = "hull color")
+	private CCColor _cHullColor = new CCColor();
+	
+	private void drawHull(CCHandInfo myInfo, CCGraphics g) {
+		if(!_cDrawHull)return;
+		
+		g.color(_cHullColor);
+		g.beginShape(CCDrawMode.LINE_LOOP);
+		myInfo.simpleContour.forEach(v -> g.vertex(v));
+		g.endShape();
+	}
+
+	@CCProperty(name = "draw simple contour")
+	private boolean _cDrawSimpleContour = false;
+	@CCProperty(name = "contour radius")
+	private double _cContourRadius = 1;
+	
+	private void drawSimpleContour(CCHandInfo myInfo, CCGraphics g) {
+		if(!_cDrawSimpleContour)return;
+		
+		for(int i = 0; i < myInfo.simpleContour.size();i++) {		
+			g.color(_cHullColor);
+			if(i == 0)g.color(CCColor.WHITE);
+	
+			CCVector3 myCurrent = myInfo.simpleContour.get(i);		
+			g.ellipse(myCurrent.x, myCurrent.y,0,_cContourRadius,_cContourRadius, false);
+		}
+	}
+	
+	@CCProperty(name = "draw finger tips")
+	private boolean _cDrawFingerTip = false;
+	@CCProperty(name = "tip radius")
+	private double _cTipRadius = 10;
+	
+	private void drawFingerTips(CCHandInfo myInfo, CCGraphics g) {
+		if(!_cDrawFingerTip)return;
+		
+		for(int i = 0; i < myInfo.fingerTips.size();i++) {
+			
+			if(i == 0)g.color(CCColor.CYAN, 0.5);
+			else g.color(CCColor.MAGENTA, 0.5);
+			
+			CCVector3 myTip = myInfo.fingerTips.get(i);
+			
+			g.ellipse(myTip.xy(),_cTipRadius,_cTipRadius, false);
+		}
+	}
+	
+
+	@CCProperty(name = "draw center tip")
+	private boolean _cDrawCenterTip = false;
+	
+	private void drawTipCenter(CCHandInfo myInfo, CCGraphics g) {
+		if(!_cDrawCenterTip)return;
+		g.color(CCColor.RED);
+		g.ellipse(myInfo.tip,3,3, true);
+		double r = CCMath.min(myInfo.validFrames,20) * 0.2;
+		g.ellipse(myInfo.center,r,r, true);
+
+		g.color(CCColor.RED);
+		g.text(myInfo.id, myInfo.center);
+		
+		g.line(myInfo.center, myInfo.tip);
+	}
+	
+
+	@CCProperty(name = "draw jitter")
+	private boolean _cDrawJitter = false;
+
+	@CCProperty(name = "jitter scale")
+	private double _cJitterScale = 5;
+	
+	private void drawJitter(CCHandInfo myInfo, CCGraphics g) {
+		if(!_cDrawJitter)return;
+
+		g.rect(myInfo.center.x,myInfo.center.y,_cMaxJitter * 5,10);
+		g.color(CCColor.GREEN);
+		g.rect(myInfo.center.x,myInfo.center.y,myInfo.jitter * 5,10);
+	}
+	
+
+	@CCProperty(name = "draw selection")
+	private boolean _cDrawSelection = false;
+	
 	public void drawDebug(CCGraphics g) {
 		if(!_myVideoIn.isActive())return;
 	
@@ -712,61 +820,19 @@ public class CCHandTracker {
 		g.popMatrix();
 		
 
-		g.pushMatrix();
-//		g.applyTransform(_myHandInfoTransform);
 		for(CCHandInfo myInfo:_myHands) {
 //			if(myInfo.validFrames < 20)continue;
-			g.color(_cContourColor);
-			g.beginShape(CCDrawMode.LINE_LOOP);
-			myInfo.handContour.forEach(v -> g.vertex(v));
-			g.endShape();
 			
-			g.color(_cHullColor);
-			g.beginShape(CCDrawMode.LINE_LOOP);
-			myInfo.simpleContour.forEach(v -> g.vertex(v));
-			g.endShape();
+			drawContour(myInfo,g);
+			drawHull(myInfo, g);
+			drawSimpleContour(myInfo, g);
+			drawFingerTips(myInfo, g);
+			drawTipCenter(myInfo, g);
+			drawJitter(myInfo, g);
 			
-			g.pointSize(3);
-			g.pointSmooth();
-			g.beginShape(CCDrawMode.POINTS);
-			myInfo.simpleContour.forEach(v -> g.vertex(v));
-			g.endShape();
-			
-			double myRadius = 1;
-			for(int i = 0; i < myInfo.simpleContour.size();i++) {		
-				g.color(_cHullColor);
-				if(i == 0)g.color(CCColor.WHITE);
-		
-				CCVector3 myCurrent = myInfo.simpleContour.get(i);		
-				g.ellipse(myCurrent.x, myCurrent.y,0,myRadius,myRadius, false);
-			}
-	
-			
-			for(int i = 0; i < myInfo.fingerTips.size();i++) {
-				
-				if(i == 0)g.color(CCColor.CYAN, 0.5);
-				else g.color(CCColor.MAGENTA, 0.5);
-				
-				CCVector3 myTip = myInfo.fingerTips.get(i);
-				myRadius = 10;
-				
-				g.ellipse(myTip.xy(),myRadius,myRadius, false);
-			}
-			g.color(CCColor.RED);
-			g.ellipse(myInfo.tip,3,3, true);
-			
-			double r = CCMath.min(myInfo.validFrames,20) * 0.2;
-			g.ellipse(myInfo.center,r,r, true);
-
-			g.rect(myInfo.center.x,myInfo.center.y,_cMaxJitter * 5,10);
-			g.color(CCColor.GREEN);
-			g.rect(myInfo.center.x,myInfo.center.y,myInfo.jitter * 5,10);
-			
-			g.color(CCColor.RED);
-			g.text(myInfo.id, myInfo.center);
 		}
 
-		g.popMatrix();
+		if(_cDrawSelection)drawSelection(g);
 	}
 	
 	public void drawSelection(CCGraphics g) {
