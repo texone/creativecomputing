@@ -181,6 +181,9 @@ public class CCHandTracker {
 	private double _cRestSpeed = 1;
 	@CCProperty(name = "progress angle", min = 0, max = 360)
 	private double _cProgressAngle = 0;
+
+	@CCProperty(name = "selection radius", min = 0, max = 50)
+	private double _cSelectionRadius = 20;
 	@CCProperty(name = "line strength", min = 0, max = 50)
 	private double _cLineStrength = 0;
 	@CCProperty(name = "line color")
@@ -449,8 +452,8 @@ public class CCHandTracker {
 			double myAngle = CCVector2.angle(myNext.subtract(myCurrent).xy(), myPrev.subtract(myCurrent).xy());
 			double myLength = myNext.distance(myCurrent) + myPrev.distance(myCurrent);
 			
-			myAngle = CCMath.abs(CCMath.degrees(myAngle));
-			if(myAngle > 0 && myAngle < _cTipAngle) {
+			myAngle = CCMath.degrees(myAngle);
+			if(myAngle < 0 && myAngle > -_cTipAngle) {
 				fingerTips.add(new CCVector3(myCurrent.x,myCurrent.y,CCMath.abs(myAngle)));
 			}
 		}
@@ -513,7 +516,6 @@ public class CCHandTracker {
 //			CCLog.info(theNewHand.tip.isZero(),theLastHand.tip);
 		//	return;
 		}else {
-		
 			theLastHand.tip.x = theNewHand.tip.x * (1 - _cTipSmooth) + theLastHand.tip.x * _cTipSmooth;
 			theLastHand.tip.y = theNewHand.tip.y * (1 - _cTipSmooth) + theLastHand.tip.y * _cTipSmooth;
 		}
@@ -526,7 +528,7 @@ public class CCHandTracker {
 		}
 				
 		double myLastRestTime = theLastHand.restFrames;
-		if(theLastHand.jitter < _cMaxRestJitter)theLastHand.restFrames++;
+		if(theLastHand.jitter < _cMaxJitter)theLastHand.restFrames++;
 		else {
 			theLastHand.restFrames = 0;
 		}
@@ -706,10 +708,13 @@ public class CCHandTracker {
 	private void drawContour(CCHandInfo myInfo, CCGraphics g) {
 		if(!_cDrawContour)return;
 		
+		g.pushAttribute();
+		g.strokeWeight(2);
 		g.color(_cContourColor);
 		g.beginShape(CCDrawMode.LINE_LOOP);
 		myInfo.handContour.forEach(v -> g.vertex(v));
 		g.endShape();
+		g.popAttribute();
 	}
 
 	@CCProperty(name = "draw hull")
@@ -719,11 +724,8 @@ public class CCHandTracker {
 	
 	private void drawHull(CCHandInfo myInfo, CCGraphics g) {
 		if(!_cDrawHull)return;
+
 		
-		g.color(_cHullColor);
-		g.beginShape(CCDrawMode.LINE_LOOP);
-		myInfo.simpleContour.forEach(v -> g.vertex(v));
-		g.endShape();
 	}
 
 	@CCProperty(name = "draw simple contour")
@@ -733,6 +735,14 @@ public class CCHandTracker {
 	
 	private void drawSimpleContour(CCHandInfo myInfo, CCGraphics g) {
 		if(!_cDrawSimpleContour)return;
+		
+		g.pushAttribute();
+		g.strokeWeight(2);
+		g.color(_cHullColor);
+		g.beginShape(CCDrawMode.LINE_LOOP);
+		myInfo.simpleContour.forEach(v -> g.vertex(v));
+		g.endShape();
+		g.popAttribute();
 		
 		for(int i = 0; i < myInfo.simpleContour.size();i++) {		
 			g.color(_cHullColor);
@@ -774,7 +784,7 @@ public class CCHandTracker {
 		g.ellipse(myInfo.center,r,r, true);
 
 		g.color(CCColor.RED);
-		g.text(myInfo.id, myInfo.center);
+		g.text(myInfo.id, myInfo.center.x,myInfo.center.y - 10		);
 		
 		g.line(myInfo.center, myInfo.tip);
 	}
@@ -789,9 +799,14 @@ public class CCHandTracker {
 	private void drawJitter(CCHandInfo myInfo, CCGraphics g) {
 		if(!_cDrawJitter)return;
 
-		g.rect(myInfo.center.x,myInfo.center.y,_cMaxJitter * 5,10);
 		g.color(CCColor.GREEN);
-		g.rect(myInfo.center.x,myInfo.center.y,myInfo.jitter * 5,10);
+		g.rect(myInfo.center.x,myInfo.center.y,myInfo.jitter * _cJitterScale,10);
+		
+
+		g.color(CCColor.WHITE);
+		g.line(myInfo.center.x + _cMaxJitter * _cJitterScale,myInfo.center.y +10,
+		myInfo.center.x + _cMaxJitter * _cJitterScale,myInfo.center.y);
+		g.text((int)myInfo.jitter, myInfo.center.x + 2,myInfo.center.y + 2);
 	}
 	
 
