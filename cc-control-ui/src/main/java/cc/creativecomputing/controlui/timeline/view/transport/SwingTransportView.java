@@ -154,7 +154,6 @@ public class SwingTransportView extends JPanel implements CCZoomable, CCTranspor
 		time(0);
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e-> {
 			if(e.getID() != KeyEvent.KEY_PRESSED)return false;
-			System.out.println(e.getID() == KeyEvent.KEY_PRESSED);
 			switch(e.getKeyCode()){
 			case KeyEvent.VK_SPACE:
 				if (_myTimelineContainer.activeTimeline().transportController().isPlaying()) {

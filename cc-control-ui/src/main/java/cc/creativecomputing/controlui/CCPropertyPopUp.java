@@ -83,12 +83,12 @@ public class CCPropertyPopUp extends JPopupMenu {
 			
 			@Override
 			public void menuDeselected(MenuEvent e) {
-				System.out.println("deselected");
+				//System.out.println("deselected");
 			}
 			
 			@Override
 			public void menuCanceled(MenuEvent e) {
-				System.out.println("canceled");
+				//System.out.println("canceled");
 			}
 		});
 		add(_myPresetMenue);

@@ -223,6 +223,8 @@ public class CCHandTracker {
 
 	private CCCVTexture _myDebugTexture;
 	private boolean _myUpdateDebugTexture;
+
+	private CCCVTexture _myTexture;
 	
 	final Lock lock = new ReentrantLock();
 	final Lock lockProcess = new ReentrantLock();
@@ -258,6 +260,9 @@ public class CCHandTracker {
 		
 		_myDebugTexture = new CCCVTexture();
 		_myDebugTexture.mustFlipVertically(false);
+		
+		_myTexture = new CCCVTexture();
+		_myTexture.mustFlipVertically(false);
 		
 		_cProcessor = new Thread(this::processVideo);
 		_cProcessor.start();
@@ -344,6 +349,7 @@ public class CCHandTracker {
 			_myLastMat = mat.clone();
 		}
 		
+		_myInputMat = mat.clone();
 		checkDebugMat(CCDrawMat.INPUT, mat);
 		
 		
@@ -693,10 +699,14 @@ public class CCHandTracker {
 		//_myBackgroundTexture.image(_myVideoIn.background());
 		if(!_myVideoIn.isActive())return;
 		if(!_myIsInDebug)return;
-		if(!_myUpdateDebugTexture)return;
 		if(_myDebugMat == null)return;
+		if(_myInputMat == null)return;
 		if(!lockDebug.tryLock())return;
-		_myDebugTexture.image(_myDebugMat);
+		_myTexture.image(_myDebugMat);
+
+		if(_myUpdateDebugTexture) {
+			_myDebugTexture.image(_myInputMat);
+		}
 		lockDebug.unlock();
 	}
 	
@@ -889,8 +899,12 @@ public class CCHandTracker {
 		return _myDebugMat;
 	}
 	
-	public CCTexture2D texture() {
+	public CCTexture2D debugTexture() {
 		return _myDebugTexture;
+	}
+	
+	public CCTexture2D texture() {
+		return _myTexture;
 	}
 //	
 //	public CCTexture2D backgroundTexture() {
