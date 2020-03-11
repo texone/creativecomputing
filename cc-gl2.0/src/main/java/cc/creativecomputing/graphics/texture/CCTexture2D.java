@@ -14,6 +14,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCBufferObject;
 import cc.creativecomputing.graphics.CCBufferObject.CCBufferTarget;
 import cc.creativecomputing.graphics.CCBufferObject.CCUsageFrequency;
@@ -197,7 +198,8 @@ public class CCTexture2D extends CCTexture{
 	
 	public void texImage2D(final Buffer theImage) {
 		GL2 gl = CCGraphics.currentGL();
-
+		
+		
         // update the texture image:
         gl.glEnable(_myTarget.glID);
 		gl.glBindTexture(_myTarget.glID, _myTextureIDs[_myTextureID]);

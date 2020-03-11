@@ -201,6 +201,8 @@ public class CCHandTracker {
 	
 	private boolean _myIsInDebug = false;
 	
+	private boolean _myIsInConfig = false;
+	
 	private static enum CCDrawMat{
 		INPUT,
 		MASKED,
@@ -274,6 +276,10 @@ public class CCHandTracker {
 	
 	public void isInDebug(boolean isInDebug) {
 		_myIsInDebug = isInDebug;
+	}
+	
+	public void isInConfig(boolean isInConfig) {
+		_myIsInConfig = isInConfig;
 	}
 	
 	public void updateDebugTexture(boolean theUpdateDebugTexture) {
@@ -352,6 +358,10 @@ public class CCHandTracker {
 		_myInputMat = mat.clone();
 		checkDebugMat(CCDrawMat.INPUT, mat);
 		
+		if(_myIsInConfig) {
+			_myDebugMat = mat.clone();
+			return;
+		}
 		
 		if(_cMask) {
 			if(_myMask.cols() == mat.cols() && _myMask.rows() == mat.rows()) {
@@ -841,10 +851,10 @@ public class CCHandTracker {
 			break;
 		}
 		_myDebugTexture.mustFlipVertically(false);
-		g.image(_myDebugTexture, 0,0);
+		g.image(_myTexture, 0,0);
 		g.popMatrix();
 		
-
+		if(_myIsInConfig)return;
 		for(CCHandInfo myInfo:_myHands) {
 //			if(myInfo.validFrames < 20)continue;
 			
