@@ -15,6 +15,7 @@ import java.io.StreamTokenizer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector3;
 

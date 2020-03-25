@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCGraphics.CCColorMaterialMode;
 import cc.creativecomputing.math.CCAABB;
@@ -124,13 +125,13 @@ public class CCModel {
 //		}
 //		_myTransformationMatrix.transform(_myBoundingBox.min());
 //		_myTransformationMatrix.transform(_myBoundingBox.max());
-		for(CCObjectGroup myGroup:_myObjectGroupMap.values()){
-			for(CCObject myObject:myGroup.objects()){
+		CCLog.info(_myObjectMap.size());
+		for(CCObject myObject:_myObjectMap.values()){
+			CCLog.info(myObject.name());
 				if(!myObject.isActiv())continue;
 				for(CCSegment mySegment:myObject.segments()){
 					mySegment.convert(theGenerateNormal);
 				}
-			}
 		}
 		
 	}

@@ -12,6 +12,7 @@ package cc.creativecomputing.model.obj;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.CCMesh;
@@ -208,6 +209,7 @@ public class CCSegment {
 	
 	public void draw(CCGraphics g){
 		if(_myMesh == null){
+			if(vertices() == null)return;
 			int myNumberOfVertices = vertices().size();
 			_myMesh = new CCMesh(CCDrawMode.TRIANGLES, myNumberOfVertices);
 			_myMesh.vertices(vertices());
