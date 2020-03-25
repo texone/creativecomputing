@@ -74,6 +74,11 @@ public class CCCatmulRomSpline extends CCSpline {
 		computeTotalLentgh();
 	}
 	
+	public void finishSpline() {
+		_myIsModified = false;
+		computeTotalLentgh();
+	}
+	
 	/**
      * Compute the length on a catmull rom spline between control point 1 and 2
      * @param theP0 control point 0
@@ -131,7 +136,7 @@ public class CCCatmulRomSpline extends CCSpline {
 	/**
 	 * This method computes the Catmull Rom curve length.
 	 */
-	protected void computeTotalLengthImpl() {
+	public void computeTotalLengthImpl() {
 		if (_myPoints.size() > 3) {
 			_mySegmentsLength.clear();
 			_myTotalLength = 0;
@@ -243,7 +248,7 @@ public class CCCatmulRomSpline extends CCSpline {
 	@Override
 	public List<CCVector3> points() {
 		if(_myPoints.size() < 2)return _myPoints;
-		return _myPoints.subList(1, _myPoints.size() - 1);
+		return _myPoints.subList(1, _myPoints.size() - 2);
 	}
 	
 	/**
