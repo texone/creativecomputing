@@ -3,6 +3,7 @@ package cc.creativecomputing.image.format;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
 import java.nio.file.Path;
 
 import ar.com.hjg.pngj.IImageLine;
@@ -26,8 +27,6 @@ public class CCPNGFormat extends CCStreamBasedTextureFormat{
 	public CCImage createImage(InputStream theStream, CCPixelInternalFormat theInternalFormat, CCPixelFormat thePixelFormat, String theFileSuffix) throws CCImageException {
 		PngReader myPngReader = new PngReader(theStream);
 		ImageInfo myInfo = myPngReader.imgInfo;
-		
-		
 		CCImage myImage = new CCImage();
 		
 		switch(myInfo.channels) {
@@ -65,7 +64,7 @@ public class CCPNGFormat extends CCStreamBasedTextureFormat{
 			int _myWidth = myImageLineInt.getSize() / myInfo.channels;
 			myImage.width(_myWidth);
 			myImage.height(_myHeight);
-			
+			CCLog.info(myInfo.bitDepth);
 			switch(myInfo.bitDepth) {
 			case 8:
 				myImage.pixelType(CCPixelType.UNSIGNED_BYTE);
@@ -79,6 +78,19 @@ public class CCPNGFormat extends CCStreamBasedTextureFormat{
 				}
 				myBuffer.rewind();
 				myImage.buffer(myBuffer);
+				break;
+			case 16:
+				myImage.pixelType(CCPixelType.UNSIGNED_SHORT);
+				ShortBuffer myShortBuffer = CCBufferUtil.newDirectShortBuffer(myLineSet.size() * myImageLineInt.getSize());
+				for(int y = 0; y < myLineSet.size(); y++){
+					ImageLineInt myImageLine = (ImageLineInt)myLineSet.getImageLine(y);
+					for(int x = 0; x < myImageLine.getSize(); x++){
+						myShortBuffer.put((short)myImageLine.getElem(x));
+					}
+					
+				}
+				myShortBuffer.rewind();
+				myImage.buffer(myShortBuffer);
 				break;
 			}	
 		}
