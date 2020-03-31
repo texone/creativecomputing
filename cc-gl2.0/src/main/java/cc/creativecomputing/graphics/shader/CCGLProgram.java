@@ -327,6 +327,8 @@ public class CCGLProgram{
 //			onError().proxy().onError(this);
 //			if(theThrowException)
 //				throw new CCShaderException(_myInfoLog);
+				if(_myFragmentShader!=null)CCLog.info(_myFragmentShader.paths());
+				if(_myVertexShader!=null)CCLog.info(_myFragmentShader.paths());
 				CCLog.info(_myInfoLog);
 //			return false;
 		}else{
