@@ -13,9 +13,9 @@ public class CCProcessingChain extends CCImageProcessor{
 	private Map<String, CCImageProcessor> _cProcessorMap = new LinkedHashMap<>();
 
 	@Override
-	public Mat implementation(Mat theSource) {
-		_cProcessorMap.forEach((k,v)->v.process(theSource));
-		return theSource;
+	public Mat implementation(Mat...theSources) {
+		_cProcessorMap.forEach((k,v)->v.process(theSources));
+		return theSources[0];
 	}
 
 }

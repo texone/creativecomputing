@@ -235,12 +235,12 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 	
 	@Override
 	protected void updateSettings() {
-//		if(_cExpousure != _myLastExposure) {
-//			exposure(_cExpousure);
-//			brightness(0);
-//			_myLastExposure = _cExpousure;
-//			return;
-//		}
+		if(_cExpousure != _myLastExposure) {
+			exposure(_cExpousure);
+			brightness(0);
+			_myLastExposure = _cExpousure;
+			return;
+		}
 		if(!_cUpdateSettings)return;
 		temperature(_cTemperature);
 		contrast(_cContrast);

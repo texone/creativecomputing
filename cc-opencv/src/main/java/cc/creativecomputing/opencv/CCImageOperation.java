@@ -7,20 +7,19 @@ import org.bytedeco.javacpp.opencv_core.Mat;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.graphics.CCGraphics;
 
-public abstract class CCImageProcessor {
-	
+public abstract class CCImageOperation {
 	
 	
 	@CCProperty(name = "bypass")
 	protected boolean _cBypass = true;
 	
-	public abstract Mat implementation(Mat...theSources);
+	public abstract Mat implementation(Mat theSource0, Mat theSource1);
 	
-	public Mat process(Mat...theSources) {
-		if(_cBypass)return theSources[0];
+	public Mat process(Mat theSource0, Mat theSource1) {
+		if(_cBypass)return theSource0;
 		
 		
-		return implementation(theSources);
+		return implementation(theSource0,theSource1);
 	}
 	
 	public void preDisplay(CCGraphics g) {

@@ -44,6 +44,7 @@ import cc.creativecomputing.math.CCVector2i;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.filter.CCOneEuroFilter;
 import cc.creativecomputing.math.spline.CCSimplify3D;
+import cc.creativecomputing.opencv.filtering.CCAbsDifference;
 import cc.creativecomputing.opencv.filtering.CCBackgroundSubtractorKNN;
 import cc.creativecomputing.opencv.filtering.CCBackgroundSubtractorMOG2;
 import cc.creativecomputing.opencv.filtering.CCBlur;
@@ -146,7 +147,9 @@ public class CCHandTracker {
 	private CCBackgroundSubtractorMOG2 _cBackgroundMog2 = new CCBackgroundSubtractorMOG2();
 	
 	@CCProperty(name = "morphology")
-	private CCMorphologyFilter _cMorphology = new CCMorphologyFilter();;
+	private CCMorphologyFilter _cMorphology = new CCMorphologyFilter();
+	@CCProperty(name = "abs difference")
+	private CCAbsDifference _cAbsDifference = new CCAbsDifference();
 
 
 	@CCProperty(name = "post blur")
@@ -209,6 +212,7 @@ public class CCHandTracker {
 		EXTRACT,
 		RESIZE,
 		BLUR,
+		ABS_DIFFERENCE,
 		COLOR_CONVERSION,
 		BACKGROUND,
 		COLOR_RANGE,
@@ -284,6 +288,15 @@ public class CCHandTracker {
 	
 	public void updateDebugTexture(boolean theUpdateDebugTexture) {
 		_myUpdateDebugTexture = theUpdateDebugTexture;
+	}
+	
+	private boolean _myUpdateDifferenceMat = true;
+	
+	private Mat _myDifferenceMat;
+	
+	@CCProperty(name = "update difference mat")
+	public void updateDifferenceMat(){
+		_myUpdateDifferenceMat = true;
 	}
 	
 	private void processVideo() {
@@ -377,6 +390,8 @@ public class CCHandTracker {
 		
 		mat = _cResize.process(mat);
 		checkDebugMat(CCDrawMat.RESIZE, mat);
+		
+		
 
 		mat = _cBlur.process(mat);
 		checkDebugMat(CCDrawMat.BLUR, mat);
@@ -384,6 +399,13 @@ public class CCHandTracker {
 		
 		mat = _cConvert.process(mat);
 		checkDebugMat(CCDrawMat.COLOR_CONVERSION, mat);
+		
+		if(_myUpdateDifferenceMat || _myDifferenceMat == null) {
+			_myDifferenceMat = mat.clone();
+			_myUpdateDifferenceMat = false;
+		}
+		mat = _cAbsDifference.process(mat, _myDifferenceMat);
+		checkDebugMat(CCDrawMat.ABS_DIFFERENCE, mat);
 //		
 		mat = _cBackgroundKNN.process(mat);
 		mat = _cBackgroundMog2.process(mat);
