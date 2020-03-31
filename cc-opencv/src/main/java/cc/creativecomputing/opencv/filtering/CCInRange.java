@@ -33,11 +33,11 @@ public class CCInRange extends CCImageProcessor{
 	private int _cMaxBrightness = 255;
 	
 	@Override
-	public Mat implementation(Mat theSource) {
-		if(theSource.channels() == 1)return theSource;
+	public Mat implementation(Mat...theSources) {
+		if(theSources[0].channels() == 1)return theSources[0];
 		Mat mask1 = new Mat();
 		try {
-			inRange(theSource, new Mat(1, 1, CV_32SC4, new Scalar(_cMinHue, _cMinSaturation, _cMinBrightness, 0)), new Mat(1, 1, CV_32SC4, new Scalar(_cMaxHue, _cMaxSaturation, _cMaxBrightness, 0)), mask1);
+			inRange(theSources[0], new Mat(1, 1, CV_32SC4, new Scalar(_cMinHue, _cMinSaturation, _cMinBrightness, 0)), new Mat(1, 1, CV_32SC4, new Scalar(_cMaxHue, _cMaxSaturation, _cMaxBrightness, 0)), mask1);
 		}catch(Exception e) {
 			
 		}

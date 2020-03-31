@@ -50,10 +50,10 @@ public class CCCVShaderFilter extends CCImageProcessor{
 	
 
 	@Override
-	public Mat implementation(Mat theSource) {
-		_myCurrentMat = theSource.clone();
-		if(_myShaderBuffer == null)return theSource;
-		if(_myCurrentOutput == null)return theSource;
+	public Mat implementation(Mat...theSources) {
+		_myCurrentMat = theSources[0].clone();
+		if(_myShaderBuffer == null)return theSources[0];
+		if(_myCurrentOutput == null)return theSources[0];
 		return _myCurrentOutput;
 	}
 	

@@ -1,8 +1,9 @@
 package cc.creativecomputing.opencv.filtering;
 
+import static org.bytedeco.javacpp.opencv_video.createBackgroundSubtractorMOG2;
+
 import org.bytedeco.javacpp.opencv_core.Mat;
-import static org.bytedeco.javacpp.opencv_imgproc.*;
-import static org.bytedeco.javacpp.opencv_video.*;
+import org.bytedeco.javacpp.opencv_video.BackgroundSubtractorMOG2;
 
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.opencv.CCImageProcessor;
@@ -26,12 +27,12 @@ public class CCBackgroundSubtractorMOG2 extends CCImageProcessor{
 	}
 
 	@Override
-	public Mat implementation(Mat theSource) {
+	public Mat implementation(Mat...theSources) {
 		_myBackgroundSubtractor.setDetectShadows(_cDetectShadows);
 		_myBackgroundSubtractor.setVarThreshold(_cVarThreshold);
 		_myBackgroundSubtractor.setHistory(_cHistory);
-		_myBackgroundSubtractor.apply(theSource, theSource,_cLearningRate);
-		return theSource;
+		_myBackgroundSubtractor.apply(theSources[0], theSources[0],_cLearningRate);
+		return theSources[0];
 	}
 
 }

@@ -105,9 +105,9 @@ public class CCColorConversion extends CCImageProcessor{
 	protected CCConversionCode _cConversionType = CCConversionCode.RGB2HSV;
 	
 	@Override
-	public Mat implementation(Mat theSource) {
-		if(theSource.channels() == 1)return theSource;
-		cvtColor(theSource.clone(), theSource,  _cConversionType.id);
-		return theSource;
+	public Mat implementation(Mat...theSources) {
+		if(theSources[0].channels() == 1)return theSources[0];
+		cvtColor(theSources[0].clone(), theSources[0],  _cConversionType.id);
+		return theSources[0];
 	}
 }

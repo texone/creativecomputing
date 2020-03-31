@@ -66,13 +66,13 @@ public class CCCVResize extends CCImageProcessor{
 	protected CCInterpolationType _cInterpolationType = CCInterpolationType.NEAREST;
 	
 	@Override
-	public Mat implementation(Mat theSource) {
-		int myWidth = (int)(theSource.cols() * _cScale) / 4 * 4;
-		int myHeight = (int)(theSource.rows() * _cScale) / 4 * 4;
-		_myScaleX = (double)myWidth / theSource.cols();
-		_myScaleY = (double)myHeight / theSource.rows();
-		resize(theSource, theSource, new Size(myWidth, myHeight), _cScale, _cScale, _cInterpolationType.id);
-		return theSource;
+	public Mat implementation(Mat...theSources) {
+		int myWidth = (int)(theSources[0].cols() * _cScale) / 4 * 4;
+		int myHeight = (int)(theSources[0].rows() * _cScale) / 4 * 4;
+		_myScaleX = (double)myWidth / theSources[0].cols();
+		_myScaleY = (double)myHeight / theSources[0].rows();
+		resize(theSources[0], theSources[0], new Size(myWidth, myHeight), _cScale, _cScale, _cInterpolationType.id);
+		return theSources[0];
 	}
 
 	public double scaleX() {

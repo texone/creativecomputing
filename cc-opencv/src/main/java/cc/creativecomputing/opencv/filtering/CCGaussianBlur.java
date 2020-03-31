@@ -21,9 +21,9 @@ public class CCGaussianBlur extends CCImageProcessor{
 	private double _cSigma = 1;
 	
 	@Override
-	public Mat implementation(Mat theSource) {
-		GaussianBlur(theSource, theSource, new Size(_cSize,_cSize),_cSigma);
-		return theSource;
+	public Mat implementation(Mat...theSources) {
+		GaussianBlur(theSources[0], theSources[0], new Size(_cSize,_cSize),_cSigma);
+		return theSources[0];
 	}
 
 	

@@ -18,9 +18,9 @@ public class CCBlur extends CCImageProcessor{
 	private int _cSize = 1;
 	
 	@Override
-	public Mat implementation(Mat theSource) {
-		blur(theSource.clone(), theSource, new Size(_cSize,_cSize));
-		return theSource;
+	public Mat implementation(Mat...theSources) {
+		blur(theSources[0].clone(), theSources[0], new Size(_cSize,_cSize));
+		return theSources[0];
 	}
 
 	

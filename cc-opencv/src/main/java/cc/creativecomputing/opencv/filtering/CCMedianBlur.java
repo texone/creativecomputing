@@ -18,9 +18,9 @@ public class CCMedianBlur extends CCImageProcessor{
 	private int _cSize = 1;
 	
 	@Override
-	public Mat implementation(Mat theSource) {
-		medianBlur(theSource.clone(), theSource, _cSize * 2 + 1);
-		return theSource;
+	public Mat implementation(Mat...theSources) {
+		medianBlur(theSources[0].clone(), theSources[0], _cSize * 2 + 1);
+		return theSources[0];
 	}
 
 	

@@ -29,17 +29,17 @@ public class CCCVExtract extends CCImageProcessor{
 	private int _myY = 0;
 	
 	@Override
-	public Mat implementation(Mat theSource) {
-		if(_cX1 <= _cX0)return theSource;
-		if(_cY1 <= _cY0)return theSource;
+	public Mat implementation(Mat...theSources) {
+		if(_cX1 <= _cX0)return theSources[0];
+		if(_cY1 <= _cY0)return theSources[0];
 		
-		int myWidth = (int)(theSource.cols() * (_cX1 - _cX0)) / 4 * 4;
-		int myHeight = (int)(theSource.rows() *(_cY1 - _cY0)) / 4 * 4;
+		int myWidth = (int)(theSources[0].cols() * (_cX1 - _cX0)) / 4 * 4;
+		int myHeight = (int)(theSources[0].rows() *(_cY1 - _cY0)) / 4 * 4;
 		
-		_myX = (int)(theSource.cols() * _cX0);
-		_myY = (int)(theSource.rows() * _cY0);
+		_myX = (int)(theSources[0].cols() * _cX0);
+		_myY = (int)(theSources[0].rows() * _cY0);
 		
-		return new Mat(theSource, new Rect(_myX, _myY, myWidth,myHeight));
+		return new Mat(theSources[0], new Rect(_myX, _myY, myWidth,myHeight));
 	}
 
 	public int x() {

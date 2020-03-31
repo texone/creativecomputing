@@ -16,10 +16,10 @@ import org.bytedeco.javacpp.opencv_core.Mat;
 public class CCDilation extends CCMorphologyFilter {
 
 	@Override
-	public Mat implementation(Mat theSource) {
+	public Mat implementation(Mat...theSources) {
 		Mat myStructure = structuringElement(_cStructureShape, _cStructureSize);
-		dilate(theSource, theSource, myStructure, null, _cIterations, _cBorderType.id, morphologyDefaultBorderValue());
-		return theSource;
+		dilate(theSources[0], theSources[0], myStructure, null, _cIterations, _cBorderType.id, morphologyDefaultBorderValue());
+		return theSources[0];
 	}
 
 }

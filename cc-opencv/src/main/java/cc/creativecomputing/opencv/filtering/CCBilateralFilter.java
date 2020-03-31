@@ -40,9 +40,9 @@ public class CCBilateralFilter extends CCImageProcessor {
 	private int d = 0;
 
 	@Override
-	public Mat implementation(Mat theSource) {
-		bilateralFilter(theSource, theSource, d, _cSigmaColor, _cSigmaSpace);
-		return theSource;
+	public Mat implementation(Mat...theSources) {
+		bilateralFilter(theSources[0], theSources[0], d, _cSigmaColor, _cSigmaSpace);
+		return theSources[0];
 	}
 
 }

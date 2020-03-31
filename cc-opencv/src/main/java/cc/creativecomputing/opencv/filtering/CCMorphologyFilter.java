@@ -1,5 +1,12 @@
 package cc.creativecomputing.opencv.filtering;
 
+import static org.bytedeco.javacpp.opencv_core.BORDER_CONSTANT;
+import static org.bytedeco.javacpp.opencv_core.BORDER_ISOLATED;
+import static org.bytedeco.javacpp.opencv_core.BORDER_REFLECT;
+import static org.bytedeco.javacpp.opencv_core.BORDER_REFLECT_101;
+import static org.bytedeco.javacpp.opencv_core.BORDER_REPLICATE;
+import static org.bytedeco.javacpp.opencv_core.BORDER_TRANSPARENT;
+import static org.bytedeco.javacpp.opencv_core.BORDER_WRAP;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_SHAPE_CROSS;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_SHAPE_ELLIPSE;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_SHAPE_RECT;
@@ -46,6 +53,48 @@ import cc.creativecomputing.opencv.CCImageProcessor;
  *
  */
 public class CCMorphologyFilter extends CCImageProcessor {
+	
+	/**
+	 * Various border types
+	 * @author chris
+	 *
+	 */
+	public static enum CCBorderType{
+		/**
+		 * iiiiii|abcdefgh|iiiiiii
+		 */
+		CONSTANT ( BORDER_CONSTANT  ),
+		/**
+		 * aaaaaa|abcdefgh|hhhhhhh
+		 */
+		REPLICATE ( BORDER_REPLICATE  ),
+		/**
+		 * fedcba|abcdefgh|hgfedcb
+		 */
+		REFLECT( BORDER_REFLECT   ),
+		/**
+		 * cdefgh|abcdefgh|abcdefg
+		 */
+		WRAP ( BORDER_WRAP  ),
+		/**
+		 * gfedcb|abcdefgh|gfedcba
+		 */
+		REFLECT_101 ( BORDER_REFLECT_101  ),
+		/**
+		 * uvwxyz|abcdefgh|ijklmno
+		 */
+		TRANSPARENT ( BORDER_TRANSPARENT  ),
+		/**
+		 * 
+		 */
+		ISOLATED ( BORDER_ISOLATED  );
+		
+		public final int id;
+		
+		private CCBorderType(int theID) {
+			id = theID;
+		}
+	}
 
 	/**
 	 * Shape of the structuring element
@@ -142,10 +191,10 @@ public class CCMorphologyFilter extends CCImageProcessor {
 	}
 
 	@Override
-	public Mat implementation(Mat theSource) {
+	public Mat implementation(Mat...theSources) {
 		Mat myStructure = structuringElement(_cStructureShape, _cStructureSize);
-		morphologyEx(theSource, theSource, _cMorphType.id, myStructure, null, _cIterations, _cBorderType.id, morphologyDefaultBorderValue());
-		return theSource;
+		morphologyEx(theSources[0], theSources[0], _cMorphType.id, myStructure, null, _cIterations, _cBorderType.id, morphologyDefaultBorderValue());
+		return theSources[0];
 	}
 
 }

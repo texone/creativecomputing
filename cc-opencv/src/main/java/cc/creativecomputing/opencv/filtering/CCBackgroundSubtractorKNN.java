@@ -25,12 +25,12 @@ public class CCBackgroundSubtractorKNN extends CCImageProcessor{
 	}
 
 	@Override
-	public Mat implementation(Mat theSource) {
+	public Mat implementation(Mat...theSources) {
 		_myBackgroundSubtractorKNN.setDetectShadows(_cDetectShadows);
 		_myBackgroundSubtractorKNN.setDist2Threshold(_cDistance * _cDistance);
 		_myBackgroundSubtractorKNN.setHistory(_cHistory);
-		_myBackgroundSubtractorKNN.apply(theSource, theSource, _cLearningRate);
-		return theSource;
+		_myBackgroundSubtractorKNN.apply(theSources[0], theSources[0], _cLearningRate);
+		return theSources[0];
 	}
 
 }
