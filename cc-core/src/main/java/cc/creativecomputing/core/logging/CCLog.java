@@ -350,6 +350,10 @@ public class CCLog {
 	 * @param theObjects the Objects to log
 	 */
 	public static void info(Object...theObjects) {
+		if(theObjects == null) {
+			log(Level.INFO, "null");
+			return;
+		}
 		StringBuffer myMessage = new StringBuffer();
 		for(Object myObject:theObjects) {
 			if(myObject == null){
