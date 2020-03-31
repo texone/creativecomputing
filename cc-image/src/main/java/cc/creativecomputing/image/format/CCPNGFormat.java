@@ -11,7 +11,6 @@ import ar.com.hjg.pngj.IImageLineSet;
 import ar.com.hjg.pngj.ImageInfo;
 import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.PngReader;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.image.CCImageException;
 import cc.creativecomputing.image.CCPixelFormat;
@@ -64,7 +63,7 @@ public class CCPNGFormat extends CCStreamBasedTextureFormat{
 			int _myWidth = myImageLineInt.getSize() / myInfo.channels;
 			myImage.width(_myWidth);
 			myImage.height(_myHeight);
-			CCLog.info(myInfo.bitDepth);
+			myImage.mustFlipVertically(true);
 			switch(myInfo.bitDepth) {
 			case 8:
 				myImage.pixelType(CCPixelType.UNSIGNED_BYTE);
