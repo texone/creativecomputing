@@ -4,7 +4,6 @@ import java.nio.Buffer;
 
 import org.bytedeco.javacpp.opencv_core.Mat;
 
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.texture.CCPixelFormat;
 import cc.creativecomputing.graphics.texture.CCPixelType;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
@@ -24,13 +23,11 @@ public class CCCVTexture extends CCTexture2D{
 			allocateData(theMat.cols(), theMat.rows(), null);
 		}
 		
-		CCLog.info();
 		if(theMat.channels() == 1) {
 			theMat = CCCVUtil.grayToRGB(theMat);
 		}
 		
 		Buffer myBuffer = theMat.createBuffer();
-		CCLog.info(myBuffer.capacity(), myBuffer.position(), myBuffer.limit());
 		texImage2D(myBuffer);
 	}
 }

@@ -7,6 +7,7 @@ import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_POS_MSEC;
 
 import org.bytedeco.javacpp.opencv_videoio.VideoCapture;
 
+import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
 import cc.creativecomputing.math.CCMath;
 

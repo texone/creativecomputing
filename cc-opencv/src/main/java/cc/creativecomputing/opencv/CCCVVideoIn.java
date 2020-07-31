@@ -173,7 +173,7 @@ public abstract class CCCVVideoIn {
 	 * @return true in the case of success.
 	 */
 	public boolean retrieve(Mat theMat, int theChannel) {
-		updateSettings();
+//		updateSettings();$$$
 		return _myCapture.retrieve(theMat, theChannel);
 	}
 

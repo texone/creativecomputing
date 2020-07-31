@@ -1,16 +1,13 @@
 package cc.creativecomputing.opencv;
 
-import static org.bytedeco.javacpp.opencv_core.CV_8UC3;
-import static org.bytedeco.javacpp.opencv_core.CV_8UC4;
-import static org.bytedeco.javacpp.opencv_core.min;
 import static org.bytedeco.javacpp.opencv_core.flip;
+import static org.bytedeco.javacpp.opencv_core.min;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
 import static org.bytedeco.javacpp.opencv_imgproc.CHAIN_APPROX_SIMPLE;
 import static org.bytedeco.javacpp.opencv_imgproc.RETR_EXTERNAL;
 import static org.bytedeco.javacpp.opencv_imgproc.contourArea;
 import static org.bytedeco.javacpp.opencv_imgproc.findContours;
 
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +23,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.MatVector;
-import org.bytedeco.javacpp.opencv_stitching.MultiBandBlender;
 
 import cc.creativecomputing.app.modules.CCAnimator;
 import cc.creativecomputing.core.CCProperty;
@@ -35,14 +31,15 @@ import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.graphics.CCDrawMode;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.texture.CCTexture2D;
-import cc.creativecomputing.image.CCImage;
 import cc.creativecomputing.math.CCColor;
 import cc.creativecomputing.math.CCMath;
+import cc.creativecomputing.math.CCPolygon2;
 import cc.creativecomputing.math.CCTransform;
 import cc.creativecomputing.math.CCVector2;
 import cc.creativecomputing.math.CCVector2i;
 import cc.creativecomputing.math.CCVector3;
 import cc.creativecomputing.math.filter.CCOneEuroFilter;
+import cc.creativecomputing.math.spline.CCLinearSpline;
 import cc.creativecomputing.math.spline.CCSimplify3D;
 import cc.creativecomputing.opencv.filtering.CCAbsDifference;
 import cc.creativecomputing.opencv.filtering.CCBackgroundSubtractorKNN;
@@ -53,8 +50,7 @@ import cc.creativecomputing.opencv.filtering.CCCVResize;
 import cc.creativecomputing.opencv.filtering.CCColorConversion;
 import cc.creativecomputing.opencv.filtering.CCInRange;
 import cc.creativecomputing.opencv.filtering.CCMorphologyFilter;
-import cc.creativecomputing.opencv.filtering.CCThreshold;
-import cc.creativecomputing.video.CCVideo;;
+import cc.creativecomputing.opencv.filtering.CCThreshold;;
 
 public class CCHandTracker {
 	
@@ -160,8 +156,14 @@ public class CCHandTracker {
 	
 	@CCProperty(name = "max gap", min = 0, max = 100)
 	private double _cMaxGap = 30;
+	@CCProperty(name = "start end gap", min = 0, max = 100)
+	private double _cStartEndDistance = 30;
+	@CCProperty(name = "min mask distance", min = 0, max = 100)
+	private double _cMinMaskDistance = 30;
 	@CCProperty(name = "tip angle", min = 0, max = 100)
 	private double _cTipAngle = 50;
+	@CCProperty(name = "min length", min = 0, max = 500)
+	private double _cMinLength = 30;
 	@CCProperty(name = "tip smooth", min = 0, max = 1)
 	private double _cTipSmooth = 0;
 	@CCProperty(name = "jitter smooth", min = 0, max = 1)
@@ -200,7 +202,7 @@ public class CCHandTracker {
 	
 	public CCListenerManager<CCFixedTipEvent> fixedTipEvents = CCListenerManager.create(CCFixedTipEvent.class);
 	
-	private CCVideo _myVideoIn;
+	private CCCVVideoIn _myVideoIn;
 	
 	private boolean _myIsInDebug = false;
 	
@@ -247,22 +249,23 @@ public class CCHandTracker {
 	private Queue<CCHandInfo> _myRemovedHands = new LinkedList<>();
 	private int _myIDCounter;
 	
-	private Thread _cProcessor;
-	
-	private CCImage _myPassImage;
-
 	private CCTransform _myTransform = new CCTransform();
 	
 	private Mat _myMask;
 	
-	public CCHandTracker(CCVideo theVideoIn, Path theMaskTexture) {
+	@CCProperty(name = "mask outline")
+	private CCLinearSpline _myMaskSpline = new CCLinearSpline();
+	
+	private CCPolygon2 _myMaskPolygon = new CCPolygon2();
+	
+	public CCHandTracker(CCCVVideoIn theVideoIn, Path theMaskTexture) {
 		_myVideoIn = theVideoIn;
 		_myMask = new Mat();
 		 flip(imread(theMaskTexture.toAbsolutePath().toString()), _myMask, 0);
 		
 		_myContours = new MatVector();
 		
-		_myVideoIn.updateEvents.add(this::updateVideo);
+		_myVideoIn.events.add(this::updateVideo);
 		
 		_myDebugTexture = new CCCVTexture();
 		_myDebugTexture.mustFlipVertically(false);
@@ -270,8 +273,8 @@ public class CCHandTracker {
 		_myTexture = new CCCVTexture();
 		_myTexture.mustFlipVertically(false);
 		
-		_cProcessor = new Thread(this::processVideo);
-		_cProcessor.start();
+//		_cProcessor = new Thread(this::processVideo);
+//		_cProcessor.start();
 	}
 	
 	public CCTransform transform() {
@@ -299,22 +302,6 @@ public class CCHandTracker {
 		_myUpdateDifferenceMat = true;
 	}
 	
-	private void processVideo() {
-		while(true) {
-			if(!_myVideoIn.isActive()) {
-				try {
-					Thread.sleep(30);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}else {
-				check();
-			}
-
-		}
-	}
-	
 	private void checkDebugMat(CCDrawMat theMode, Mat theMat) {
 		if(!_myIsInDebug)return;
 		if(_cDrawMat != theMode)return;
@@ -329,121 +316,105 @@ public class CCHandTracker {
 	
 	private Mat _myLastMat;
 	
-	private void check() {
-		long mills = System.currentTimeMillis();
-		
-		if(_myPassImage == null)return;
+	private int activeThreads = 0;
+	
+	private class CCMatHandler implements Runnable{
 
-		if(!lockProcess.tryLock())return;
+		private Mat mat;
 		
-		int myMatType = _myPassImage.pixelFormat().numberOfChannels == 3 ? CV_8UC3 : CV_8UC4;
-		
-		Mat mat = new Mat(_myPassImage.height(), _myPassImage.width(), myMatType);//, (ByteBuffer)image.buffer()
-		
-		ByteBuffer original = (ByteBuffer)_myPassImage.buffer();
-		
-		_myPassImage = null;
-		if(original == null)return;
-		ByteBuffer clone = ByteBuffer.allocate(original.capacity());
-		original.rewind();//copy from the beginning
-		clone.put(original);
-		original.rewind();
-		clone.flip();
-		lockProcess.unlock();
-		
-		mat.getByteBuffer().rewind();
-		mat.getByteBuffer().put( clone);
-		mat.getByteBuffer().rewind();
-		if(mat.empty()) {
-			mat.close();
-			return;
+		public CCMatHandler(Mat theMat) {
+			mat = theMat;
 		}
-		
-		if(myMatType == CV_8UC4)mat =CCCVUtil.RGBAToRGB(mat);
-		
-		if(_cPause) {
-			if(_myLastMat == null)_myLastMat = mat.clone();
-			mat = _myLastMat.clone();
-		}else {
-			_myLastMat = mat.clone();
-		}
-		
-		_myInputMat = mat.clone();
-		checkDebugMat(CCDrawMat.INPUT, mat);
-		
-		if(_myIsInConfig) {
-			_myDebugMat = mat.clone();
-			return;
-		}
-		
-		if(_cMask) {
-			if(_myMask.cols() == mat.cols() && _myMask.rows() == mat.rows()) {
-				min(_myMask, mat, mat); 
-			}else {
-				//throw new RuntimeException("Mask has to match the camera resolution of: " + mat.cols() + " , " + mat.rows());
+		@Override
+		public void run() {
+			try {
+				if(activeThreads > 0)return;
+				activeThreads++;
+				long mills = System.currentTimeMillis();
+				
+				if(_cPause) {
+					if(_myLastMat == null)_myLastMat = mat.clone();
+					mat = _myLastMat.clone();
+				}else {
+					_myLastMat = mat.clone();
+				}
+				
+				_myInputMat = mat.clone();
+				checkDebugMat(CCDrawMat.INPUT, mat);
+				
+				if(_myIsInConfig) {
+					_myDebugMat = mat.clone();
+					return;
+				}
+				
+				if(_cMask) {
+					if(_myMask.cols() == mat.cols() && _myMask.rows() == mat.rows()) {
+						min(_myMask, mat, mat); 
+					}else {
+						//throw new RuntimeException("Mask has to match the camera resolution of: " + mat.cols() + " , " + mat.rows());
+					}
+				}
+				checkDebugMat(CCDrawMat.MASKED, mat);
+				
+				mat = _cExtract.process(mat);
+				checkDebugMat(CCDrawMat.EXTRACT, mat);
+				
+				mat = _cResize.process(mat);
+				checkDebugMat(CCDrawMat.RESIZE, mat);
+				
+				mat = _cBlur.process(mat);
+				checkDebugMat(CCDrawMat.BLUR, mat);
+				
+				mat = _cConvert.process(mat);
+				checkDebugMat(CCDrawMat.COLOR_CONVERSION, mat);
+				
+				if(_myUpdateDifferenceMat || _myDifferenceMat == null) {
+					_myDifferenceMat = mat.clone();
+					_myUpdateDifferenceMat = false;
+				}
+				mat = _cAbsDifference.process(mat, _myDifferenceMat);
+				checkDebugMat(CCDrawMat.ABS_DIFFERENCE, mat);
+				mat = _cBackgroundKNN.process(mat);
+				mat = _cBackgroundMog2.process(mat);
+				checkDebugMat(CCDrawMat.BACKGROUND, mat);
+	
+				mat = _cInRange.process(mat);
+				checkDebugMat(CCDrawMat.COLOR_RANGE, mat);
+				
+				if(mat.channels() == 3) {
+					mat = CCCVUtil.rgbToGray(mat);
+				}
+				
+				mat = _cMorphology.process(mat);
+				checkDebugMat(CCDrawMat.MORPHOLOGY, mat);
+				
+	
+				mat = _cPostBlur.process(mat);
+				checkDebugMat(CCDrawMat.POST_BLUR, mat);
+				
+				mat = _cThreshold.process(mat);
+				checkDebugMat(CCDrawMat.THRESHOLD, mat);
+				
+				trackHands(mat);
+				mat.close();
+				activeThreads--;
+			//	CCLog.info("Tracking loop:",System.currentTimeMillis() - mills);
+			}catch(Exception e) {
+				activeThreads--;
 			}
 		}
-		checkDebugMat(CCDrawMat.MASKED, mat);
-		
-		mat = _cExtract.process(mat);
-		checkDebugMat(CCDrawMat.EXTRACT, mat);
-		
-		mat = _cResize.process(mat);
-		checkDebugMat(CCDrawMat.RESIZE, mat);
 		
 		
-
-		mat = _cBlur.process(mat);
-		checkDebugMat(CCDrawMat.BLUR, mat);
-		
-		
-		mat = _cConvert.process(mat);
-		checkDebugMat(CCDrawMat.COLOR_CONVERSION, mat);
-		
-		if(_myUpdateDifferenceMat || _myDifferenceMat == null) {
-			_myDifferenceMat = mat.clone();
-			_myUpdateDifferenceMat = false;
-		}
-		mat = _cAbsDifference.process(mat, _myDifferenceMat);
-		checkDebugMat(CCDrawMat.ABS_DIFFERENCE, mat);
-//		
-		mat = _cBackgroundKNN.process(mat);
-		mat = _cBackgroundMog2.process(mat);
-		checkDebugMat(CCDrawMat.BACKGROUND, mat);
-//
-
-		mat = _cInRange.process(mat);
-		checkDebugMat(CCDrawMat.COLOR_RANGE, mat);
-		
-		
-		if(mat.channels() == 3) {
-			mat = CCCVUtil.rgbToGray(mat);
-		}
-		
-		mat = _cMorphology.process(mat);
-		checkDebugMat(CCDrawMat.MORPHOLOGY, mat);
-		
-
-		mat = _cPostBlur.process(mat);
-		checkDebugMat(CCDrawMat.POST_BLUR, mat);
-		
-		mat = _cThreshold.process(mat);
-		checkDebugMat(CCDrawMat.THRESHOLD, mat);
-		
-		trackHands(mat);
-		mat.close();
-
-		System.out.println(System.currentTimeMillis() - mills);
 	}
 	
-	private void updateVideo(CCImage theImage) {
-		if(!lockProcess.tryLock())return;
-		_myPassImage = theImage;
-		lockProcess.unlock();
+	
+	private void updateVideo(Mat theImage) {
+//		if(!_myIsPostFirstFrame)return;
+		new Thread(new CCMatHandler(theImage.clone())).start();
 	}
 	
 	public void active(boolean isActive) {
-		_myVideoIn.active(isActive);
+		_myVideoIn.isActive(isActive);
 	}
 	
 	private List<CCVector3> matToContour(Mat theMat){
@@ -477,7 +448,13 @@ public class CCHandTracker {
 		CCVector2 center = myCenter.xy();
 		
 		List<CCVector3> simpleContour = CCSimplify3D.simplify(handContour, _cMaxGap, true);
-		if(simpleContour.size() > 4)simpleContour.remove(0);
+		
+		if(simpleContour.size() > 3) {
+			CCVector3 first = simpleContour.get(0);
+			CCVector3 last = simpleContour.get(simpleContour.size() - 1);
+			
+			if(first.distance(last) < _cStartEndDistance)simpleContour.remove(0);
+		}
 		
 		
 		List<CCVector3> fingerTips = new ArrayList<>();
@@ -488,10 +465,11 @@ public class CCHandTracker {
 			CCVector3 myNext = simpleContour.get((i + 1) % simpleContour.size());
 				
 			double myAngle = CCVector2.angle(myNext.subtract(myCurrent).xy(), myPrev.subtract(myCurrent).xy());
-			double myLength = myNext.distance(myCurrent) + myPrev.distance(myCurrent);
+			double myLength = CCMath.max(myNext.distance(myCurrent), myPrev.distance(myCurrent));
 			
+			double myMaskDistance = _myMaskPolygon.distance(new CCVector2(myCurrent.x,myCurrent.y));
 			myAngle = CCMath.degrees(myAngle);
-			if(myAngle < 0 && myAngle > -_cTipAngle) {
+			if(myAngle < 0 && myAngle > -_cTipAngle && myLength > _cMinLength && myMaskDistance > _cMinMaskDistance) {
 				fingerTips.add(new CCVector3(myCurrent.x,myCurrent.y,CCMath.abs(myAngle)));
 			}
 		}
@@ -574,7 +552,9 @@ public class CCHandTracker {
 		theLastHand.progress = CCMath.saturate(theLastHand.restFrames / _cMinRestFrames);
 				
 		if(myLastRestTime < _cMinRestFrames && theLastHand.restFrames >= _cMinRestFrames) {
-			fixedTipEvents.proxy().event(theLastHand.tip);
+//			if(_myBoundingPolygon== null || _myBoundingPolygon.vertices().size() < 3 || _myBoundingPolygon.isInShape(theLastHand.tip)) {
+				fixedTipEvents.proxy().event(theLastHand.tip);
+//			}
 		}
 	}
 	
@@ -713,30 +693,35 @@ public class CCHandTracker {
 		return _myHands;
 	}
 	
+	private boolean _myIsPostFirstFrame = false;
+	
 	public void update(CCAnimator theAnimator) {
+		//CCLog.info("activethreads",activeThreads);
+		_myIsPostFirstFrame = true;
 		if(!_myVideoIn.isActive()) {
 			return;
 		}
-		
 		_myTransform.scale(1 / _cResize.scaleX(), 1 / _cResize.scaleY(), 1);
-		
+		_myMaskPolygon.vertices().clear();
+		for(CCVector3 myVertex:_myMaskSpline) {
+			_myMaskPolygon.addVertex(myVertex.x*_myTexture.width(), (1 - myVertex.y) * _myTexture.height());
+		}
 		if(!lock.tryLock())return;
 		_myHands.clear();
 		_myCVHands.forEach(v -> _myHands.add(v.clone()));
 		lock.unlock();
 	}
 	
-
 	public void preDisplay(CCGraphics g) {
 		//_myBackgroundTexture.image(_myVideoIn.background());
 		if(!_myVideoIn.isActive())return;
 		if(!_myIsInDebug)return;
-		if(_myDebugMat == null)return;
-		if(_myInputMat == null)return;
 		if(!lockDebug.tryLock())return;
-		_myTexture.image(_myDebugMat);
-
-		if(_myUpdateDebugTexture) {
+			if(_myDebugMat != null) {
+				_myTexture.image(_myDebugMat);
+			}
+			//CCLog.info("PRE",_myInputMat);
+		if(_myUpdateDebugTexture && _myInputMat != null) {
 			_myDebugTexture.image(_myInputMat);
 		}
 		lockDebug.unlock();
@@ -758,6 +743,23 @@ public class CCHandTracker {
 		g.endShape();
 		g.popAttribute();
 	}
+	
+	@CCProperty(name = "draw mask contour")
+	private boolean _cDraMaskwContour = false;
+	@CCProperty(name = "mask color color")
+	private CCColor _cMaskContourColor = new CCColor();
+	
+	private void drawMaskContour(CCGraphics g) {
+		if(!_cDraMaskwContour)return;
+		
+		g.pushAttribute();
+		g.strokeWeight(2);
+		g.color(_cMaskContourColor);
+		g.beginShape(CCDrawMode.LINE_LOOP);
+		_myMaskPolygon.vertices().forEach(v -> g.vertex(v));
+		g.endShape();
+		g.popAttribute();
+	} 
 
 	@CCProperty(name = "draw hull")
 	private boolean _cDrawHull = false;
@@ -852,8 +854,30 @@ public class CCHandTracker {
 	}
 	
 
+	@CCProperty(name = "draw image")
+	private boolean _cDrawImage = true;
+
 	@CCProperty(name = "draw selection")
 	private boolean _cDrawSelection = false;
+	
+//	@CCProperty(name = "spline")
+//	private CCLinearSpline _cSpline = new CCLinearSpline();
+//	
+//	private CCPolygon2 _myBoundingPolygon = new CCPolygon2();
+//	
+//	@CCProperty(name = "draw spline")
+//	private boolean _cDrawSpline = false;
+//	
+//	public void drawSpline(CCGraphics g) {
+//		if(!_cDrawSpline)return;
+//		
+//		g.color(255);
+//		g.beginShape(CCDrawMode.LINE_STRIP);
+//		for(CCVector2 v:_myBoundingPolygon.vertices()) {
+//			 g.vertex(v);
+//		}
+//		g.endShape();
+//	}
 	
 	public void drawDebug(CCGraphics g) {
 		if(!_myVideoIn.isActive())return;
@@ -873,9 +897,10 @@ public class CCHandTracker {
 			break;
 		}
 		_myDebugTexture.mustFlipVertically(false);
-		g.image(_myTexture, 0,0);
+		if(_cDrawImage)g.image(_myTexture, 0,0);
 		g.popMatrix();
 		
+//		drawSpline(g);
 		if(_myIsInConfig)return;
 		for(CCHandInfo myInfo:_myHands) {
 //			if(myInfo.validFrames < 20)continue;
@@ -889,6 +914,7 @@ public class CCHandTracker {
 			
 		}
 
+		drawMaskContour(g);
 		if(_cDrawSelection)drawSelection(g);
 	}
 	

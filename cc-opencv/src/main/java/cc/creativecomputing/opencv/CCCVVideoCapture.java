@@ -2,16 +2,20 @@ package cc.creativecomputing.opencv;
 
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_BRIGHTNESS;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_CONTRAST;
+import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_CONVERT_RGB;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_EXPOSURE;
+import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_FORMAT;
+import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_FOURCC;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_GAIN;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_HUE;
+import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_MODE;
 import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_SATURATION;
-import static org.bytedeco.javacpp.opencv_videoio.*;
+import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_SETTINGS;
+import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_TEMPERATURE;
 
 import org.bytedeco.javacpp.opencv_videoio.VideoCapture;
 
 import cc.creativecomputing.core.CCProperty;
-import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 public class CCCVVideoCapture extends CCCVVideoIn{
@@ -30,6 +34,9 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 
 	@CCProperty(name = "update settings")
 	private boolean _cUpdateSettings = false;
+
+	@CCProperty(name = "update exposure")
+	private boolean _cUpdateExposure = false;
 
 	public CCCVVideoCapture() {
 		super(new VideoCapture(0));
@@ -235,13 +242,15 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 	
 	@Override
 	protected void updateSettings() {
-		if(_cExpousure != _myLastExposure) {
+		if(_cUpdateExposure && _cExpousure != _myLastExposure) {
 			exposure(_cExpousure);
 			brightness(0);
 			_myLastExposure = _cExpousure;
 			return;
 		}
+		
 		if(!_cUpdateSettings)return;
+		
 		temperature(_cTemperature);
 		contrast(_cContrast);
 		saturation(_cSaturation);
