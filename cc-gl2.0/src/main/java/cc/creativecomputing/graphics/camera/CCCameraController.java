@@ -202,6 +202,8 @@ public class CCCameraController {
 	private boolean _cZoom = true;
 	@CCProperty(name = "invert")
 	private boolean _cInvert = false;
+	@CCProperty(name = "always rotate")
+	private boolean _cAlwaysRotate = false;
 	
 	public void rotationMode(CCCameraRotationMode theRotationMode) {
 		_cRotationMode = theRotationMode;
@@ -447,8 +449,12 @@ public class CCCameraController {
 		
 		@Override
 		public void mouseReleased(CCMouseEvent theEvent) {
+			CCLog.info("mouseReleased");;
 			_myDragConstraint = null;
+			_myIsPressed = false;
 		}
+		
+		public boolean _myIsPressed = false;
 		
 		@Override
 		public void mousePressed(CCMouseEvent theEvent) {
@@ -457,6 +463,8 @@ public class CCCameraController {
 			
 			_myPMouseX = theEvent.x();
 			_myPMouseY = g.height() - theEvent.y();
+			
+			_myIsPressed = true;
 		}
 		
 		@Override
@@ -498,9 +506,11 @@ public class CCCameraController {
 			final CCMouseButton b = theEvent.button();
 			if (_myCenterDragHandler != null && (b == CCMouseButton.CENTER || (b == CCMouseButton.LEFT && theEvent.isMetaDown()))) {
 				if(_cPan)_myCenterDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
-			} else if (_myLeftDragHandler != null && b == CCMouseButton.LEFT) {
+			} 
+			if (_myLeftDragHandler != null && (b == CCMouseButton.LEFT || _cAlwaysRotate && !_cPan && !_cZoom)) {
 				_myLeftDragHandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
-			} else if (_myRightDraghandler != null && b == CCMouseButton.RIGHT) {
+			} 
+			if (_myRightDraghandler != null && b == CCMouseButton.RIGHT) {
 				if(_cZoom)_myRightDraghandler.handleDrag(theMoveX, theMoveY, theEvent.x(), g.height() - theEvent.y());
 			}
 		}

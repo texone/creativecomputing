@@ -458,8 +458,8 @@ public class CCGLShader extends CCShaderObject{
 			CCLog.info(paths());
 			CCLog.info(preprocessSources());
 		}
-		CCLog.info(paths());
-		CCLog.info(getInfoLog());
+//		CCLog.info(paths());
+//		CCLog.info(getInfoLog());
 		if(!compileStatus()){
 			StringBuffer myReplyBuffer = new StringBuffer();
 			myReplyBuffer.append(getInfoLog());
