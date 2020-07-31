@@ -42,6 +42,7 @@
         <module>cc-image</module>
         <module>cc-ies</module>
         <module>cc-io</module>
+        <module>cc-pdf</module>
         <module>cc-kle</module>
         <module>cc-math</module>
         <module>cc-midi</module>

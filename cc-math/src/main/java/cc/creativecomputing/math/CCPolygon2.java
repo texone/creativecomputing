@@ -82,7 +82,15 @@ public class CCPolygon2 implements Iterable<CCVector2>{
 		return closestPoint(thePoint.x, thePoint.y);
 	}
 	
+	public double distance(final CCVector2 thePoint) {
+		CCVector2 myClosestPoint = closestPoint(thePoint);
+		if(myClosestPoint==null)return Double.MAX_VALUE;
+		return myClosestPoint.distance(thePoint);
+	}
+	
 	public boolean isInShape(final double theX, final double theY){
+		if(_myVertices.size() < 3)return false;
+		
 		double R = 0;
 
 		for (int i = 0; i < _myVertices.size(); i++){

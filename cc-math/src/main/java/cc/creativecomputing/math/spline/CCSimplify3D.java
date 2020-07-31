@@ -130,8 +130,11 @@ public class CCSimplify3D {
 
 			// find index of point with maximum square distance from first and last point
 			for (int i = range.first + 1; i < range.last; ++i) {
-				double sqDist = getSquareSegmentDistance(points.get(i), points.get(range.first),
-						points.get(range.last));
+				double sqDist = getSquareSegmentDistance(
+					points.get(i), 
+					points.get(range.first),
+					points.get(range.last)
+				);
 
 				if (sqDist > maxSqDist) {
 					index = i;
@@ -154,5 +157,64 @@ public class CCSimplify3D {
 
 		return newPoints;
 	}
+	
+	private static double perpendicularDistance(CCVector3 pt, CCVector3 lineStart, CCVector3 lineEnd) {
+        double dx = lineEnd.x - lineStart.x;
+        double dy = lineEnd.y - lineStart.y;
+ 
+        // Normalize
+        double mag = Math.hypot(dx, dy);
+        if (mag > 0.0) {
+            dx /= mag;
+            dy /= mag;
+        }
+        double pvx = pt.x - lineStart.x;
+        double pvy = pt.y - lineStart.y;
+ 
+        // Get dot product (project pv onto normalized direction)
+        double pvdot = dx * pvx + dy * pvy;
+ 
+        // Scale line direction vector and subtract it from pv
+        double ax = pvx - pvdot * dx;
+        double ay = pvy - pvdot * dy;
+ 
+        return Math.hypot(ax, ay);
+    }
+	
+	public static void ramerDouglasPeucker(List<CCVector3> pointList, double epsilon, List<CCVector3> out) {
+        if (pointList.size() < 2) throw new IllegalArgumentException("Not enough points to simplify");
+ 
+        // Find the point with the maximum distance from line between the start and end
+        double dmax = 0.0;
+        int index = 0;
+        int end = pointList.size() - 1;
+        for (int i = 1; i < end; ++i) {
+            double d = perpendicularDistance(pointList.get(i), pointList.get(0), pointList.get(end));
+            if (d > dmax) {
+                index = i;
+                dmax = d;
+            }
+        }
+ 
+        // If max distance is greater than epsilon, recursively simplify
+        if (dmax > epsilon) {
+            List<CCVector3> recResults1 = new ArrayList<>();
+            List<CCVector3> recResults2 = new ArrayList<>();
+            List<CCVector3> firstLine = pointList.subList(0, index + 1);
+            List<CCVector3> lastLine = pointList.subList(index, pointList.size());
+            ramerDouglasPeucker(firstLine, epsilon, recResults1);
+            ramerDouglasPeucker(lastLine, epsilon, recResults2);
+ 
+            // build the result list
+            out.addAll(recResults1.subList(0, recResults1.size() - 1));
+            out.addAll(recResults2);
+            if (out.size() < 2) throw new RuntimeException("Problem assembling output");
+        } else {
+            // Just return start and end points
+            out.clear();
+            out.add(pointList.get(0));
+            out.add(pointList.get(pointList.size() - 1));
+        }
+    }
 
 }
