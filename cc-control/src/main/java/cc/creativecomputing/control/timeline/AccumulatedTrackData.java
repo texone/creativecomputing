@@ -40,7 +40,7 @@ public class AccumulatedTrackData extends TrackData{
 	private double _myResolution = 1.0 / 60.0;
 	
 	public AccumulatedTrackData(Track theTrack) {
-		super(theTrack);
+		super();
 	}
 	
 	/* (non-Javadoc)

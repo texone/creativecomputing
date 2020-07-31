@@ -76,7 +76,7 @@ public class FileManager {
 			
 			CCDataObject myTrackDataData = theTransportData.getObject(TrackData.TRACKDATA_ELEMENT);
 			if(myTrackDataData != null) {
-				TrackData myTrackData = new TrackData(null);
+				TrackData myTrackData = new TrackData();
 				myTrackData.data(myTrackDataData);
 				theTransportController.trackData(myTrackData);
 			}

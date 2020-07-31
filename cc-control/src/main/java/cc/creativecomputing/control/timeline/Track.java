@@ -19,7 +19,7 @@ public class Track extends AbstractTrack{
 	
 	public Track(CCPropertyHandle<?> theProperty){
 		super(theProperty);
-		_myTrackData = new TrackData(this);
+		_myTrackData = new TrackData();
 	}
 	
 	public void extras(Map<String, String> theExtras) {

@@ -112,7 +112,7 @@ public class CCTransportController extends CCTrackDataController implements CCZo
 	public CCTransportController(TimelineController theTimelineController) {
 		super(theTimelineController, null);
 		_myTimelineController = theTimelineController;
-		_myMarkerList = new TrackData(null);
+		_myMarkerList = new TrackData();
 		
 		_myIsPlaying = false;
 		_myCurrentTime = 0;

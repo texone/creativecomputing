@@ -11,7 +11,7 @@ public class CCEnvelope implements CCInterpolatable<Double>, CCInterpolator{
 	private TrackData _myCurrentCurve = null;
 	
 	public CCEnvelope(){
-		_myCurrentCurve = new TrackData(null);
+		_myCurrentCurve = new TrackData();
 		_myCurrentCurve.add(new LinearControlPoint(0, 0));
 		_myCurrentCurve.add(new LinearControlPoint(1, 1));
 	}

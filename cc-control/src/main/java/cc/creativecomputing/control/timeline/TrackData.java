@@ -1,7 +1,6 @@
 package cc.creativecomputing.control.timeline;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -10,12 +9,12 @@ import java.util.TreeSet;
 import cc.creativecomputing.control.timeline.point.BezierControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint;
 import cc.creativecomputing.control.timeline.point.ControlPoint.ControlPointType;
-import cc.creativecomputing.io.data.CCDataArray;
-import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.control.timeline.point.LinearControlPoint;
 import cc.creativecomputing.control.timeline.point.MarkerPoint;
 import cc.creativecomputing.control.timeline.point.StepControlPoint;
 import cc.creativecomputing.control.timeline.point.TimedEventPoint;
+import cc.creativecomputing.io.data.CCDataArray;
+import cc.creativecomputing.io.data.CCDataObject;
 import cc.creativecomputing.math.CCMath;
 
 public class TrackData extends TreeSet<ControlPoint>{
@@ -25,25 +24,11 @@ public class TrackData extends TreeSet<ControlPoint>{
 	 */
 	private static final long serialVersionUID = 6993915141725326263L;
 
-	private static class TimelineComparator implements Comparator<ControlPoint> {
-		public int compare(ControlPoint p1, ControlPoint p2) {
-			if (p1.time() < p2.time()) {
-				return -1;
-			} else if (p1.time() == p2.time()) {
-				return 0;
-			}
-			return 1;
-		}
-	}
-
 	private int _mySize = 0;
 	protected boolean _myDirtyFlag = false;
-	
-	protected Track _myTrack;
 
-	public TrackData(Track theTrack) {
-		super(new TimelineComparator());
-		_myTrack = theTrack;
+	public TrackData() {
+		super((p1,p2)->Double.compare(p1.time(), p2.time()));
 	}
 	
 	public void accumulate() {
