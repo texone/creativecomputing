@@ -175,15 +175,9 @@ public class CCHandTracker {
 	private double _cMinSize = 2;
 	@CCProperty(name = "max jitter", min = 0, max = 100)
 	private double _cMaxJitter = 30;
-	@CCProperty(name = "max rest jitter", min = 0, max = 100)
-	private double _cMaxRestJitter = 5;
 	@CCProperty(name = "min valid frames", min = 0, max = 100)
 	private double _cMinValidFrames = 20;
-	@CCProperty(name = "tip filter")
-	private CCOneEuroFilter _cTipFilter = new CCOneEuroFilter();
 
-	@CCProperty(name = "rest speed")
-	private double _cRestSpeed = 1;
 	@CCProperty(name = "progress angle", min = 0, max = 360)
 	private double _cProgressAngle = 0;
 
@@ -459,17 +453,21 @@ public class CCHandTracker {
 		
 		List<CCVector3> fingerTips = new ArrayList<>();
 		
+		CCVector3 minTip = null;
+		double myMinAngle = 360;
+		
 		for(int i = 0; i < simpleContour.size();i++) {
 			CCVector3 myPrev = simpleContour.get((i - 1 + simpleContour.size()) % simpleContour.size());
 			CCVector3 myCurrent = simpleContour.get(i);
 			CCVector3 myNext = simpleContour.get((i + 1) % simpleContour.size());
 				
-			double myAngle = CCVector2.angle(myNext.subtract(myCurrent).xy(), myPrev.subtract(myCurrent).xy());
+			double myAngle = -CCVector2.angle(myNext.subtract(myCurrent).xy(), myPrev.subtract(myCurrent).xy());
 			double myLength = CCMath.max(myNext.distance(myCurrent), myPrev.distance(myCurrent));
 			
 			double myMaskDistance = _myMaskPolygon.distance(new CCVector2(myCurrent.x,myCurrent.y));
 			myAngle = CCMath.degrees(myAngle);
-			if(myAngle < 0 && myAngle > -_cTipAngle && myLength > _cMinLength && myMaskDistance > _cMinMaskDistance) {
+			
+			if(myAngle > 0 && myAngle < _cTipAngle && myLength > _cMinLength && myMaskDistance > _cMinMaskDistance) {
 				fingerTips.add(new CCVector3(myCurrent.x,myCurrent.y,CCMath.abs(myAngle)));
 			}
 		}
@@ -528,6 +526,9 @@ public class CCHandTracker {
 			
 		theLastHand.center.x = theNewHand.center.x * (1 - _cTipSmooth) + theLastHand.center.x * _cTipSmooth;
 		theLastHand.center.y = theNewHand.center.y * (1 - _cTipSmooth) + theLastHand.center.y * _cTipSmooth;
+
+		double myJitter = theNewHand.tip.distance(theLastHand.tip);
+		
 		if(theNewHand.tip.isZero()) {
 //			CCLog.info(theNewHand.tip.isZero(),theLastHand.tip);
 		//	return;
@@ -536,7 +537,6 @@ public class CCHandTracker {
 			theLastHand.tip.y = theNewHand.tip.y * (1 - _cTipSmooth) + theLastHand.tip.y * _cTipSmooth;
 		}
 			
-		double myJitter = theNewHand.tip.distance(theLastHand.tip);
 		theLastHand.jitter = myJitter * (1 - _cJitterSmooth) + theLastHand.jitter * _cJitterSmooth;
 		theLastHand.validFrames++;
 		if(!theNewHand.isValid()) {
@@ -544,7 +544,7 @@ public class CCHandTracker {
 		}
 				
 		double myLastRestTime = theLastHand.restFrames;
-		if(theLastHand.jitter < _cMaxJitter)theLastHand.restFrames++;
+		if(theLastHand.jitter < _cMaxJitter && !theLastHand.tip.isZero())theLastHand.restFrames++;
 		else {
 			theLastHand.restFrames = 0;
 		}
@@ -760,20 +760,13 @@ public class CCHandTracker {
 		g.endShape();
 		g.popAttribute();
 	} 
-
-	@CCProperty(name = "draw hull")
-	private boolean _cDrawHull = false;
-	@CCProperty(name = "hull color")
-	private CCColor _cHullColor = new CCColor();
 	
-	private void drawHull(CCHandInfo myInfo, CCGraphics g) {
-		if(!_cDrawHull)return;
-
-		
-	}
+	
 
 	@CCProperty(name = "draw simple contour")
 	private boolean _cDrawSimpleContour = false;
+	@CCProperty(name = "simple contour color")
+	private CCColor _cSimpleContourColor = CCColor.CYAN.clone();
 	@CCProperty(name = "contour radius")
 	private double _cContourRadius = 1;
 	
@@ -782,14 +775,14 @@ public class CCHandTracker {
 		
 		g.pushAttribute();
 		g.strokeWeight(2);
-		g.color(_cHullColor);
+		g.color(_cSimpleContourColor);
 		g.beginShape(CCDrawMode.LINE_LOOP);
 		myInfo.simpleContour.forEach(v -> g.vertex(v));
 		g.endShape();
 		g.popAttribute();
 		
 		for(int i = 0; i < myInfo.simpleContour.size();i++) {		
-			g.color(_cHullColor);
+			g.color(_cSimpleContourColor);
 			if(i == 0)g.color(CCColor.WHITE);
 	
 			CCVector3 myCurrent = myInfo.simpleContour.get(i);		
@@ -906,7 +899,6 @@ public class CCHandTracker {
 //			if(myInfo.validFrames < 20)continue;
 			
 			drawContour(myInfo,g);
-			drawHull(myInfo, g);
 			drawSimpleContour(myInfo, g);
 			drawFingerTips(myInfo, g);
 			drawTipCenter(myInfo, g);
@@ -922,6 +914,7 @@ public class CCHandTracker {
 		if(!_myVideoIn.isActive())return;
 		
 		for(CCHandInfo myInfo:_myHands) {
+			if(myInfo.tip.isZero())continue;
 			if(myInfo.validFrames < _cMinValidFrames) {
 				//CCLog.info(myInfo.validFrames);
 				continue;
