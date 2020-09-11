@@ -130,6 +130,13 @@ public class CCAABoundingRectangle{
 			
 	}
 	
+	public CCVector2 overlap(CCAABoundingRectangle theRectangle) {
+		return new CCVector2(
+			CCMath.max(0, CCMath.min(_myMaxCorner.x, theRectangle._myMaxCorner.x) - CCMath.max(_myMinCorner.x, theRectangle._myMinCorner.x)),
+			CCMath.max(0, CCMath.min(_myMaxCorner.y, theRectangle._myMaxCorner.y) - CCMath.max(_myMinCorner.y, theRectangle._myMinCorner.y))
+		);
+	}
+	
 	/**
 	 * Moves the rectangle to the given position
 	 * @param theX 
@@ -139,8 +146,7 @@ public class CCAABoundingRectangle{
 		double myWidth = width();
 		double myHeight = height();
 		_myMinCorner.set(theX, theY);
-		_myMaxCorner.set(theX, theY);
-		_myMaxCorner.add(myWidth, myHeight);
+		_myMaxCorner.set(theX - myWidth, theY + myWidth);
 	}
 	
 	/**
