@@ -122,11 +122,14 @@ public class CCAABoundingRectangle{
 	 * @return
 	 */
 	public boolean isColliding(final CCAABoundingRectangle theBounds) {
-		return 
-			theBounds.min().x < max().x &&
-			theBounds.max().x > min().x &&
-			theBounds.min().y < max().y &&
-			theBounds.max().y > min().y;
+		if(min().x >= theBounds.max().x || max().x <= theBounds.min().x)return false;
+        if(min().y >= theBounds.max().y || max().x <= theBounds.min().x) return false;
+        return true;
+//		return 
+//			theBounds.min().x < max().x &&
+//			theBounds.max().x > min().x &&
+//			theBounds.min().y < max().y &&
+//			theBounds.max().y > min().y;
 			
 	}
 	
