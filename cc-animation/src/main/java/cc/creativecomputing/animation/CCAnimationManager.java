@@ -81,5 +81,9 @@ public class CCAnimationManager extends ArrayList<CCAnimation>{
 			if(!a.isRunning())remove(a);
 		});
 	}
+	
+	public void skip() {
+		clear();
+	}
 
 }
