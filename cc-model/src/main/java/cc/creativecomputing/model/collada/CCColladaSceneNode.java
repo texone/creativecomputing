@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.core.util.CCStringUtil;
 import cc.creativecomputing.graphics.CCCamera;
 import cc.creativecomputing.graphics.CCDrawMode;
@@ -219,7 +220,7 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				break;
 			}
 		}
-		
+	//	CCLog.info(name());
 		if(instanceType() == CCColladaSceneNodeInstanceType.GEOMETRY){
 			CCMatrix4x4 myStack = new CCMatrix4x4();
 			matrixStack(myStack);
@@ -240,6 +241,8 @@ public class CCColladaSceneNode extends CCColladaElement implements Iterable<CCC
 				}
 				myVertices.rewind();
 			}
+		}else {
+			
 		}
 	}
 	

@@ -27,7 +27,7 @@ public abstract class CCCVVideoIn {
 	
 	public CCListenerManager<CCCVVideoInEvent> events = CCListenerManager.create(CCCVVideoInEvent.class);
 	
-	@CCProperty(name = "active", readBack = true)
+	//@CCProperty(name = "active", readBack = true)
 	private boolean _cActive = true;
 	
 	protected CCCVVideoIn(VideoCapture theCapture) {

@@ -40,6 +40,14 @@ public class Rectangle {
     public double deltay() {
         return original_top - top;
     }
+    
+    public double midx() {
+        return (left + right()) / 2;
+    }
+
+    public double midy() {
+        return (top + bottom()) / 2;
+    }
 
 	public boolean overlap(Rectangle other) {
 		if (left >= other.right() || other.left >= right())
@@ -61,6 +69,10 @@ public class Rectangle {
         left = CCMath.max(left, other.left);
         top = CCMath.max(top, other.top);
         return new Rectangle(left, top, overlapx(other), overlapy(other));
+    }
+    
+    public CCVector2 center_vec(Rectangle other) {
+        return new CCVector2(midx() - other.midx(), midy() - other.midy());
     }
 
 	public void rotate(double theta) {

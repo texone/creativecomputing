@@ -44,7 +44,7 @@ public class RectangleOverlapDemo extends CCGL2Adapter {
 		for(int i = 0; i < 100;i++) {
 			rects.add(randomRectangle(true));
 		}
-		strategy = new RectangleAnnealingStrategy(rects);
+		strategy = new RectangleSeparationStrategy(rects);
 		
 	}
 	
