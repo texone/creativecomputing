@@ -77,9 +77,7 @@ public class CCHandTracker {
 		private double restFrames = 0;
 		private double progress = 0;
 		
-		public boolean isValid() {
-			return fingerTips.size() <= 1 && jitter < 30;
-		}
+		
 		
 		private List<CCVector3> copyList(List<CCVector3> theList){
 			List<CCVector3> clone = new ArrayList<>();
@@ -539,9 +537,6 @@ public class CCHandTracker {
 			
 		theLastHand.jitter = myJitter * (1 - _cJitterSmooth) + theLastHand.jitter * _cJitterSmooth;
 		theLastHand.validFrames++;
-		if(!theNewHand.isValid()) {
-			theLastHand.validFrames=0;
-		}
 				
 		double myLastRestTime = theLastHand.restFrames;
 		if(theLastHand.jitter < _cMaxJitter && !theLastHand.tip.isZero())theLastHand.restFrames++;
@@ -928,8 +923,8 @@ public class CCHandTracker {
 			g.beginShape(CCDrawMode.TRIANGLE_STRIP);
 			for(double a = _cProgressAngle * myInfo.progress; a < _cProgressAngle;a++) {
 				double myAngle = CCMath.radians(a) - startAngle - CCMath.radians(_cProgressAngle / 2);// - CCMath.HALF_PI;
-				g.vertex(CCVector2.circlePoint(myAngle, 20 - _cLineStrength / 2, myInfo.tip.x, myInfo.tip.y));
-				g.vertex(CCVector2.circlePoint(myAngle, 20 + _cLineStrength / 2, myInfo.tip.x, myInfo.tip.y));
+				g.vertex(CCVector2.circlePoint(myAngle, _cSelectionRadius - _cLineStrength / 2, myInfo.tip.x, myInfo.tip.y));
+				g.vertex(CCVector2.circlePoint(myAngle, _cSelectionRadius + _cLineStrength / 2, myInfo.tip.x, myInfo.tip.y));
 			}
 			g.endShape();
 			
@@ -938,8 +933,8 @@ public class CCHandTracker {
 			g.beginShape(CCDrawMode.TRIANGLE_STRIP);
 			for(double a = 0; a < _cProgressAngle * myInfo.progress;a++) {
 				double myAngle = CCMath.radians(a) - startAngle - CCMath.radians(_cProgressAngle / 2);// - CCMath.HALF_PI;
-				g.vertex(CCVector2.circlePoint(myAngle, 20 - _cProgressStrength / 2, myInfo.tip.x, myInfo.tip.y));
-				g.vertex(CCVector2.circlePoint(myAngle, 20 + _cProgressStrength / 2, myInfo.tip.x, myInfo.tip.y));
+				g.vertex(CCVector2.circlePoint(myAngle, _cSelectionRadius - _cProgressStrength / 2, myInfo.tip.x, myInfo.tip.y));
+				g.vertex(CCVector2.circlePoint(myAngle, _cSelectionRadius + _cProgressStrength / 2, myInfo.tip.x, myInfo.tip.y));
 			}
 			g.endShape();
 		}
