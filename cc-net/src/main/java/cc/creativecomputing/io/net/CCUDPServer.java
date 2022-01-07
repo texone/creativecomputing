@@ -176,7 +176,6 @@ public class CCUDPServer<MessageType> extends CCNetServer<DatagramChannel, Messa
 			while (_myIsConnected) {
 				SocketAddress myAddress = _myChannel.receive(receiveBuffer);
 				receiveBuffer.flip();
-				CCLog.info("RECEIVE");
 				dispatchMessage(new CCNetMessage<MessageType>(_myCodec.decode(receiveBuffer), myAddress, System.currentTimeMillis()));
 			}
 			_myChannel.close();
