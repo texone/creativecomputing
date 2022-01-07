@@ -16,6 +16,7 @@ import static org.bytedeco.javacpp.opencv_videoio.CV_CAP_PROP_TEMPERATURE;
 import org.bytedeco.javacpp.opencv_videoio.VideoCapture;
 
 import cc.creativecomputing.core.CCProperty;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.math.CCMath;
 
 public class CCCVVideoCapture extends CCCVVideoIn{
@@ -31,19 +32,30 @@ public class CCCVVideoCapture extends CCCVVideoIn{
 	@CCProperty(name = "exposure", min = -11, max = 1)
 	private double _cExpousure = 0;
 	
+	private int _myID;
+	
 
 	@CCProperty(name = "update settings")
 	private boolean _cUpdateSettings = false;
 
 	@CCProperty(name = "update exposure")
 	private boolean _cUpdateExposure = false;
+	@CCProperty(name = "debug reconnect")
+	private boolean _cDebugReconnect = false;
 
 	public CCCVVideoCapture() {
-		super(new VideoCapture(0));
+		this(0);
 	}
 	
 	public CCCVVideoCapture(int theID) {
 		super(new VideoCapture(theID));
+		_myID = theID;
+	}
+	
+	@Override
+	public void reconnect() {
+		_myCapture = new VideoCapture(_myID);
+		if(_cDebugReconnect)CCLog.info("Reconnect tracking cam");
 	}
 	
 	@CCProperty(name = "show settings")

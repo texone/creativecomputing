@@ -48,8 +48,10 @@ import cc.creativecomputing.opencv.filtering.CCBlur;
 import cc.creativecomputing.opencv.filtering.CCCVExtract;
 import cc.creativecomputing.opencv.filtering.CCCVResize;
 import cc.creativecomputing.opencv.filtering.CCColorConversion;
+import cc.creativecomputing.opencv.filtering.CCFlip;
 import cc.creativecomputing.opencv.filtering.CCInRange;
 import cc.creativecomputing.opencv.filtering.CCMorphologyFilter;
+import cc.creativecomputing.opencv.filtering.CCRotate90;
 import cc.creativecomputing.opencv.filtering.CCThreshold;;
 
 public class CCHandTracker {
@@ -118,6 +120,15 @@ public class CCHandTracker {
 	
 	@CCProperty(name = "mask")
 	private boolean _cMask = true;
+	
+	@CCProperty(name = "mask flip")
+	private CCFlip _cMaskFlip = new CCFlip();
+	
+	@CCProperty(name = "flip")
+	private CCFlip _cFlip = new CCFlip();
+	
+	@CCProperty(name = "rotate")
+	private CCRotate90 _cRotate = new CCRotate90();
 	
 	@CCProperty(name = "extact")
 	private CCCVExtract _cExtract = new CCCVExtract();
@@ -316,13 +327,16 @@ public class CCHandTracker {
 		
 		public CCMatHandler(Mat theMat) {
 			mat = theMat;
+			mat = _cFlip.process(mat);
+			mat = _cRotate.process(mat);
 		}
 		@Override
 		public void run() {
 			try {
-				if(activeThreads > 0)return;
-				activeThreads++;
-				long mills = System.currentTimeMillis();
+				//if(activeThreads > 0)return;
+				//CCLog.info(activeThreads);
+				//activeThreads++;
+				//long mills = System.currentTimeMillis();
 				
 				if(_cPause) {
 					if(_myLastMat == null)_myLastMat = mat.clone();
@@ -332,21 +346,26 @@ public class CCHandTracker {
 				}
 				
 				_myInputMat = mat.clone();
+				//_myInputMat = _cFlip.process(_myInputMat);
+				//_myInputMat = _cRotate.process(_myInputMat);
 				checkDebugMat(CCDrawMat.INPUT, mat);
-				
+
 				if(_myIsInConfig) {
 					_myDebugMat = mat.clone();
+					activeThreads++;
 					return;
 				}
 				
 				if(_cMask) {
 					if(_myMask.cols() == mat.cols() && _myMask.rows() == mat.rows()) {
-						min(_myMask, mat, mat); 
+						min(_cMaskFlip.process(_myMask.clone()), mat, mat); 
 					}else {
 						//throw new RuntimeException("Mask has to match the camera resolution of: " + mat.cols() + " , " + mat.rows());
 					}
 				}
 				checkDebugMat(CCDrawMat.MASKED, mat);
+				
+				
 				
 				mat = _cExtract.process(mat);
 				checkDebugMat(CCDrawMat.EXTRACT, mat);
@@ -389,10 +408,10 @@ public class CCHandTracker {
 				
 				trackHands(mat);
 				mat.close();
-				activeThreads--;
+				//activeThreads--;
 			//	CCLog.info("Tracking loop:",System.currentTimeMillis() - mills);
 			}catch(Exception e) {
-				activeThreads--;
+				//activeThreads--;
 			}
 		}
 		
@@ -648,9 +667,11 @@ public class CCHandTracker {
 		findContours(myGrayMat, _myContours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 		
 		// we need at least one contour to work
+		
+		/*
 		if (_myContours.size() <= 0)
 			return;
-
+*/
 		// find the biggest contour (let's suppose it's our hand)
 
 		double myFingers = 10;
@@ -792,16 +813,15 @@ public class CCHandTracker {
 	
 	private void drawFingerTips(CCHandInfo myInfo, CCGraphics g) {
 		if(!_cDrawFingerTip)return;
+
+		g.color(CCColor.MAGENTA, 0.5);
 		
-		for(int i = 0; i < myInfo.fingerTips.size();i++) {
-			
-			if(i == 0)g.color(CCColor.CYAN, 0.5);
-			else g.color(CCColor.MAGENTA, 0.5);
-			
-			CCVector3 myTip = myInfo.fingerTips.get(i);
-			
-			g.ellipse(myTip.xy(),_cTipRadius,_cTipRadius, false);
-		}
+		myInfo.fingerTips.forEach(myTip -> g.ellipse(myTip.xy(),_cTipRadius,_cTipRadius, false));
+		
+		if(myInfo.tip.isZero())return;
+		
+		g.color(CCColor.CYAN, 0.5);
+		g.ellipse(myInfo.tip,_cTipRadius,_cTipRadius, false);
 	}
 	
 

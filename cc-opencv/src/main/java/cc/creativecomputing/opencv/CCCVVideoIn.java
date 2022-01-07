@@ -30,6 +30,9 @@ public abstract class CCCVVideoIn {
 	//@CCProperty(name = "active", readBack = true)
 	private boolean _cActive = true;
 	
+	@CCProperty(name = "reconnect")
+	private boolean _cReconnect = false;
+	
 	protected CCCVVideoIn(VideoCapture theCapture) {
 		_myCapture = theCapture;
 	}
@@ -52,17 +55,28 @@ public abstract class CCCVVideoIn {
 		return _cActive;
 	}
 	
+	public void reconnect() {
+		
+	}
+	
 	public void start() {
 		_myCurrentMat = read();
 		updateBackgroundFrame();
 		new Thread(()->{
 			while(true) {
-				if(_cActive) {
-					_myCurrentMat = read();
-					events.proxy().event(_myCurrentMat);
-				}
+				
 				try {
-					Thread.sleep(30);
+					if(_cActive) {
+						_myCurrentMat = read();
+						//CCLog.info(_cReconnect, _myCurrentMat.arrayWidth());
+						if(_cReconnect && _myCurrentMat.arrayWidth() == 0) {
+							reconnect();
+							Thread.sleep(1000);
+						}else {
+							events.proxy().event(_myCurrentMat);
+						}
+					}
+					Thread.sleep(60);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
