@@ -105,7 +105,6 @@ public class CCArtNetNodeDiscovery implements CCArtNetServerPacketReceivedListen
 
 	@Override
 	public void artNetPacketReceived(ArtNetPacket thePacket) {
-		CCLog.info(thePacket);
 		if (thePacket.opCode != CCArtNetOpCode.POLL_REPLY) return;
         
 		discoverNode((ArtPollReplyPacket) thePacket);

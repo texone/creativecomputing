@@ -34,7 +34,7 @@ public class CCArtNetCodec implements CCNetPacketCodec<ArtNetPacket>{
 		theData.rewind();
 		byte[] myData = theData.array();
 		
-		CCLog.info("creating packet instance for opcode: 0x" + ByteUtils.hex(opCode, 4));
+		//CCLog.info("creating packet instance for opcode: 0x" + ByteUtils.hex(opCode, 4));
 		ArtNetPacket myPacket = CCArtNetOpCode.createPacket(opCode);
 		if(myPacket == null)return null;
 		myPacket.decode(myData);
