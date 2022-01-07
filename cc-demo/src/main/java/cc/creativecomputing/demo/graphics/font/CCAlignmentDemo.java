@@ -16,6 +16,7 @@ import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
 import cc.creativecomputing.graphics.app.CCGL2Application;
+import cc.creativecomputing.graphics.font.CCCharSet;
 import cc.creativecomputing.graphics.font.CCFont;
 import cc.creativecomputing.graphics.font.CCFontIO;
 import cc.creativecomputing.graphics.font.text.CCLineBreakMode;
@@ -33,14 +34,15 @@ public class CCAlignmentDemo extends CCGL2Adapter {
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		_myFont = CCFontIO.createTextureMapFont( "Arial", 20);
+		CCFontIO.printFontList();
+		_myFont = CCFontIO.createTextureMapFont( "data/font/SolexBol.ttf", 20, CCCharSet.EXTENDED_CHARSET);
 		
 		_myBlockText = new CCText(_myFont);
 		_myBlockText.lineBreak(CCLineBreakMode.BLOCK);
 		_myBlockText.position(0,0);
 		_myBlockText.dimension(150, 100);
 		_myBlockText.align(CCTextAlign.JUSTIFY);
-		_myBlockText.text("Use CCBlockText to display text in a defined block.");
+		_myBlockText.text("Use CCBlockText to display text in a defined block €.");
 		
 		_myTextBlockHeight = _myBlockText.height();
 	}

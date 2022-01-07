@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.creativecomputing.app.modules.CCAnimator;
+import cc.creativecomputing.core.logging.CCLog;
 import cc.creativecomputing.gl.app.CCAbstractGLContext.CCPixelScale;
 import cc.creativecomputing.graphics.CCGraphics;
 import cc.creativecomputing.graphics.app.CCGL2Adapter;
@@ -39,14 +40,16 @@ public class CCTextDemo extends CCGL2Adapter {
 	
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
-		String myFont = "arial";
+		String myFont = "Courier New Bold";
 		float mySize = 24;
-		
+		for(String font:CCFontIO.list()) {
+			CCLog.info(font);
+		}
 		_myText = CCLoremIpsumGenerator.generate(40);
 		
-		_myTexts.add(createText("GLUT",CCFontIO.createGlutFont(CCGlutFontType.BITMAP_TIMES_ROMAN_24, CCCharSet.EXTENDED_CHARSET)));
-		_myTexts.add(createText("OUTLINE",CCFontIO.createOutlineFont(myFont, mySize, CCCharSet.EXTENDED_CHARSET, 30)));
-		_myTexts.add(createText("VECTOR",CCFontIO.createVectorFont(myFont, mySize, CCCharSet.EXTENDED_CHARSET)));
+		//_myTexts.add(createText("GLUT",CCFontIO.createGlutFont(CCGlutFontType.BITMAP_TIMES_ROMAN_24, CCCharSet.EXTENDED_CHARSET)));
+		//_myTexts.add(createText("OUTLINE",CCFontIO.createOutlineFont(myFont, mySize, CCCharSet.EXTENDED_CHARSET, 30)));
+		//_myTexts.add(createText("VECTOR",CCFontIO.createVectorFont(myFont, mySize, CCCharSet.EXTENDED_CHARSET)));
 		_myTexts.add(createText("TEXTURE MAP",CCFontIO.createTextureMapFont(myFont, mySize, true, CCCharSet.EXTENDED_CHARSET)));
 		
 		keyPressed().add(theEvent -> {

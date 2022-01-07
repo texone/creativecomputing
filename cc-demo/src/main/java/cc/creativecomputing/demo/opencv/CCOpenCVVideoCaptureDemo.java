@@ -22,8 +22,7 @@ public class CCOpenCVVideoCaptureDemo extends CCGL2Adapter {
 	
 	private boolean USE_CAPTURE = true;
 	
-	@CCProperty(name = "capture")
-	private CCCVVideoCapture _myCapture;
+	
 	
 	@CCProperty(name = "player")
 	private CCCVVideoPlayer _myPlayer;
@@ -32,23 +31,27 @@ public class CCOpenCVVideoCaptureDemo extends CCGL2Adapter {
 	
 	private CCCVTexture _myTexture;
 
+	private void initCam() {
+		CCCVVideoCapture _myCapture = new CCCVVideoCapture(1);
+//		_myCapture.exposure(-8);
+		//8.44715353E8 microsoft color
+		//-4.66162819E8 vision black
+		//-4.66162819E8
+		_myCapture.frameWidth(1440);
+		_myCapture.frameHeight(1080);
+//		_myCapture.format(CV_8UC3); // trying to set RGB3 requesting format
+//		_myCapture.mode(CV_CAP_MODE_RGB);
+//		_myCapture.convertRGB(true);
+		_myCapture.frameRate(30);
+		CCLog.info(_myCapture.frameRate());
+		_myVideoIn = _myCapture;
+		CCLog.info(_myCapture.fourcc());
+		//_myCapture.start();
+	}
 	@Override
 	public void init(CCGraphics g, CCAnimator theAnimator) {
 		if(USE_CAPTURE) {
-			_myCapture = new CCCVVideoCapture(0);
-//			_myCapture.exposure(-8);
-			//8.44715353E8 microsoft color
-			//-4.66162819E8 vision black
-			//-4.66162819E8
-			_myCapture.frameWidth(1024);
-			_myCapture.frameHeight(1024);
-//			_myCapture.format(CV_8UC3); // trying to set RGB3 requesting format
-//			_myCapture.mode(CV_CAP_MODE_RGB);
-//			_myCapture.convertRGB(true);
-			_myCapture.frameRate(30);
-			CCLog.info(_myCapture.frameRate());
-			_myVideoIn = _myCapture;
-			CCLog.info(_myCapture.fourcc());
+			initCam();
 		}else {
 			_myPlayer = new CCCVVideoPlayer(CCNIOUtil.dataPath("videos/hand01.mp4").toAbsolutePath().toString());
 			_myVideoIn = _myPlayer;
@@ -66,7 +69,11 @@ public class CCOpenCVVideoCaptureDemo extends CCGL2Adapter {
 		g.clear();
 		
 		Mat myOrigin = _myVideoIn.read();
-//		CCLog.info(myOrigin);
+		if(myOrigin.arrayWidth() == 0) {
+			CCLog.info("Lost cam");
+			initCam();
+		}
+		CCLog.info(myOrigin);
 		_myTexture.image(myOrigin);
 		g.ortho2D();
 		g.image(_myTexture, 0,0);

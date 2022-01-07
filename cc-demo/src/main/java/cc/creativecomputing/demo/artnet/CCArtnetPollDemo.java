@@ -13,7 +13,7 @@ import cc.creativecomputing.graphics.app.CCGL2Application;
 
 public class CCArtnetPollDemo extends CCGL2Adapter {
 	
-	@CCProperty(name = "artnet")
+	//@CCProperty(name = "artnet")
     private CCArtNet _myArtnet;
 	
 	private long _myStartMillis = 0;
@@ -32,18 +32,16 @@ public class CCArtnetPollDemo extends CCGL2Adapter {
 		ArtDmxPacket dmx = new ArtDmxPacket();
         dmx.setUniverse(0,0);
         dmx.setSequenceID(0);
-        int myMillis = (int)(System.currentTimeMillis() - _myStartMillis);
-        
-        myMillis %= 10000;
-        byte[] buffer = CCBitUtil.split(myMillis);
-        CCLog.info(myMillis, buffer[0], buffer[1], buffer[2], buffer[3]);
+        byte[] buffer = new byte[512];//CCBitUtil.split(myMillis);
+        //CCLog.info(myMillis, buffer[0], buffer[1], buffer[2], buffer[3]);
 
-        dmx.setDMX(buffer, buffer.length);
-        _myArtnet.unicastPacket(dmx, "127.0.0.1");
         
-//      for (int i = 0; i < buffer.length; i++) {
-//      buffer[i] = (byte) (Math.sin(theAnimator.time()  + i * 0.8) * 127 + 128);
-//  }
+        
+      for (int i = 0; i < buffer.length; i++) {
+	      buffer[i] = (byte) (Math.sin(theAnimator.time()  + i * 0.8) * 127 + 128);
+	      
+      }dmx.setDMX(buffer, buffer.length);
+      _myArtnet.unicastPacket(dmx, "127.0.0.1");
 	}
 
 	@Override
@@ -52,7 +50,6 @@ public class CCArtnetPollDemo extends CCGL2Adapter {
 	}
 
 	public static void main(String[] args) {
-
 		CCArtnetPollDemo demo = new CCArtnetPollDemo();
 
 		CCGL2Application myAppManager = new CCGL2Application(demo);

@@ -273,8 +273,13 @@ uniform float _Depth;
 @CCProperty(name = "depth start", min = 0, max = 1)
 uniform float _DepthStart;
 
+vec3 pal( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
+{
+    return a + b*cos( 6.28318*(c*t+d) );
+}
+
 void main(){
-	vec2 uv = gl_TexCoord[0].xy/ vec2(1, aspect);
+	vec2 uv = gl_TexCoord[0].xy/ vec2(1.25, aspect) * 0.9;
 
 	vec2 noiseTexPos;
 	vec4 f4 = noise(uv, noiseTexPos);
@@ -302,18 +307,20 @@ void main(){
 	vec2 muv = vec2(gl_TexCoord[0].x, 1 - gl_TexCoord[0].y);
 	vec4 color0 = tex2D(textureA, uv + texUVDirA * (noiseBlendARefraction * _BlendARefract + _ARefract)); 
 	color0 = color0 * 1.3 - 0.1;
-	//color0 = pow(color0,vec4(1.2)) * 1.2;
+	color0 = vec4(pal( uv.x+texUVDirB.x+time*0.1, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.33,0.67) ),1);
 	//color0 = smoothstep(0.,1.,color0) * 1.2 - 0.;
 	uv = vec2(uv.x, 1 - uv.y) * vec2(0.7,1);
 	vec4 maskCol = texture3D(tex3D,vec3(muv + texUVDirB * (noiseBlendBRefraction * _BlendBRefract + _BRefract),_DepthStart + _Depth * f));
-	
+
 	maskCol = maskCol * 1.4 - 0.2;
+	maskCol = vec4(pal( uv.y+texUVDirB.y+time*0.2, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.33,0.67) ),1);
 	vec4 col = mix(color0, maskCol, noiseBlendAB);   
 	
 	vec4 colorT = texture2DLod(textureB, uv * 2.5 + texUVDirT * (_BlendTRefract + _TRefract) - vec2(0.1,1.4),1.5) ; 
 	
 				//return col;//float4(f,f,f,1);//col;////float4(dir,0,1);//
 	f = noiseBlendAB;
-	gl_FragColor = mix(col,colorT, colorT.a* noiseBlendT);
+	gl_FragColor = mix(col,colorT, 0);
+	//gl_FragColor = vec4(pal( uv.x+texUVDirB.x, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.33,0.67) ),1);
 	//gl_FragColor.a = maskCol.r;
 }
