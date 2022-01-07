@@ -70,6 +70,7 @@ public class CCCharSet {
 		EXTENDED_CHARSET.addUnicodeBlock(CCUnicodeBlock.LATIN_EXTENDED_A);
 		EXTENDED_CHARSET.addUnicodeBlock(CCUnicodeBlock.GENERAL_PUNCTUATION);
 		EXTENDED_CHARSET.addUnicodeBlock(CCUnicodeBlock.SUPERSCRIPTS_AND_SUBSCRIPTS);
+		EXTENDED_CHARSET.addUnicodeBlock(CCUnicodeBlock.CURRENCY_SYMBOLS);
 	}
 
     private char[] _myChars;
