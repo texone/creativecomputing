@@ -60,7 +60,7 @@ public class CCOpenCVHandTrackingDemo extends CCGL2Adapter {
 			_myVideoIn = _myPlayer;
 		}
 		
-		_cHandTracker = new CCHandTracker(null, null);
+		_cHandTracker = new CCHandTracker(_myVideoIn, null);
 	}
 
 	@Override

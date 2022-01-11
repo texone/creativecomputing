@@ -254,6 +254,14 @@ public class CCHandTracker {
 	
 	private CCTransform _myTransform = new CCTransform();
 	
+	@CCProperty(name = "track hands")
+	private boolean _cTrackHands = true;
+	
+	@CCProperty(name = "circle max gap", min = 0, max = 100)
+	private double _cCircleMaxGap = 30;
+	@CCProperty(name = "max size")
+	private double _cMaxSize = 2;
+	
 	private Mat _myMask;
 	
 	@CCProperty(name = "mask outline")
@@ -264,7 +272,7 @@ public class CCHandTracker {
 	public CCHandTracker(CCCVVideoIn theVideoIn, Path theMaskTexture) {
 		_myVideoIn = theVideoIn;
 		_myMask = new Mat();
-		 flip(imread(theMaskTexture.toAbsolutePath().toString()), _myMask, 0);
+		if(theMaskTexture != null) flip(imread(theMaskTexture.toAbsolutePath().toString()), _myMask, 0);
 		
 		_myContours = new MatVector();
 		
@@ -444,71 +452,101 @@ public class CCHandTracker {
 	
 	private CCHandInfo getHandInfo(Mat theContour) {
 		CCHandInfo myResult = new CCHandInfo();
-		double area = contourArea(theContour, false);
-		if(area < _cMinSize)return myResult;
-		//CCLog.info(area);
 		
-		List<CCVector3> handContour = matToContour(theContour);
-		
-		CCVector3 myCenter = new CCVector3();
-		for(CCVector3 myVector:handContour) {
-			myCenter.addLocal(myVector);
-		}
-		myCenter.multiplyLocal(1d/handContour.size());
-		
-		CCVector2 center = myCenter.xy();
-		
-		List<CCVector3> simpleContour = CCSimplify3D.simplify(handContour, _cMaxGap, true);
-		
-		if(simpleContour.size() > 3) {
-			CCVector3 first = simpleContour.get(0);
-			CCVector3 last = simpleContour.get(simpleContour.size() - 1);
+		if(_cTrackHands) {
+			double area = contourArea(theContour, false);
+			if(area < _cMinSize)return myResult;
+			//CCLog.info(area);
 			
-			if(first.distance(last) < _cStartEndDistance)simpleContour.remove(0);
-		}
-		
-		
-		List<CCVector3> fingerTips = new ArrayList<>();
-		
-		CCVector3 minTip = null;
-		double myMinAngle = 360;
-		
-		for(int i = 0; i < simpleContour.size();i++) {
-			CCVector3 myPrev = simpleContour.get((i - 1 + simpleContour.size()) % simpleContour.size());
-			CCVector3 myCurrent = simpleContour.get(i);
-			CCVector3 myNext = simpleContour.get((i + 1) % simpleContour.size());
-				
-			double myAngle = -CCVector2.angle(myNext.subtract(myCurrent).xy(), myPrev.subtract(myCurrent).xy());
-			double myLength = CCMath.max(myNext.distance(myCurrent), myPrev.distance(myCurrent));
+			List<CCVector3> handContour = matToContour(theContour);
 			
-			double myMaskDistance = _myMaskPolygon.distance(new CCVector2(myCurrent.x,myCurrent.y));
-			myAngle = CCMath.degrees(myAngle);
-			
-			if(myAngle > 0 && myAngle < _cTipAngle && myLength > _cMinLength && myMaskDistance > _cMinMaskDistance) {
-				fingerTips.add(new CCVector3(myCurrent.x,myCurrent.y,CCMath.abs(myAngle)));
+			CCVector3 myCenter = new CCVector3();
+			for(CCVector3 myVector:handContour) {
+				myCenter.addLocal(myVector);
 			}
+			myCenter.multiplyLocal(1d/handContour.size());
+			
+			CCVector2 center = myCenter.xy();
+			
+			List<CCVector3> simpleContour = CCSimplify3D.simplify(handContour, _cMaxGap, true);
+			
+			if(simpleContour.size() > 3) {
+				CCVector3 first = simpleContour.get(0);
+				CCVector3 last = simpleContour.get(simpleContour.size() - 1);
+				
+				if(first.distance(last) < _cStartEndDistance)simpleContour.remove(0);
+			}
+			
+			
+			List<CCVector3> fingerTips = new ArrayList<>();
+			
+			for(int i = 0; i < simpleContour.size();i++) {
+				CCVector3 myPrev = simpleContour.get((i - 1 + simpleContour.size()) % simpleContour.size());
+				CCVector3 myCurrent = simpleContour.get(i);
+				CCVector3 myNext = simpleContour.get((i + 1) % simpleContour.size());
+					
+				double myAngle = -CCVector2.angle(myNext.subtract(myCurrent).xy(), myPrev.subtract(myCurrent).xy());
+				double myLength = CCMath.max(myNext.distance(myCurrent), myPrev.distance(myCurrent));
+				
+				double myMaskDistance = _myMaskPolygon.distance(new CCVector2(myCurrent.x,myCurrent.y));
+				myAngle = CCMath.degrees(myAngle);
+				
+				if(myAngle > 0 && myAngle < _cTipAngle && myLength > _cMinLength && myMaskDistance > _cMinMaskDistance) {
+					fingerTips.add(new CCVector3(myCurrent.x,myCurrent.y,CCMath.abs(myAngle)));
+				}
+			}
+			Collections.sort(fingerTips, (a,b) -> Double.compare(a.z, b.z));
+			CCVector2 tip = new CCVector2();
+			double startAngle = 0;
+			if(fingerTips != null && fingerTips.size() > 0) {
+				tip = fingerTips.get(0).xy();
+				CCVector2 myDirection = tip.subtract(center).normalizeLocal();
+				startAngle = CCMath.atan2(-myDirection.y, myDirection.x);
+			}
+			
+			myResult.area = area;
+			myResult.isHand = true;
+			
+			myResult.handContour = handContour;
+			myResult.simpleContour = simpleContour;
+			myResult.fingerTips = fingerTips;
+			
+			myResult.center = center;
+			myResult.tip = tip;
+			myResult.startAngle = startAngle;
+			
+		}else {
+			List<CCVector3> handContour = matToContour(theContour);
+			double area = contourArea(theContour, false);
+
+			if(area < _cMinSize)return myResult;
+			if(area > _cMaxSize)return myResult;
+			CCVector3 myCenter = new CCVector3();
+			for(CCVector3 myVector:handContour) {
+				myCenter.addLocal(myVector);
+			}
+			myCenter.multiplyLocal(1d/handContour.size());
+			
+			CCVector2 center = myCenter.xy();
+			
+			List<CCVector3> simpleContour = CCSimplify3D.simplify(handContour, _cCircleMaxGap, true);
+			
+			List<CCVector3> fingerTips = new ArrayList<>();
+			fingerTips.add(new CCVector3(myCenter.x,myCenter.y,CCMath.abs(2)));
+			
+			myResult.area = area;
+			myResult.isHand = true;
+			
+			myResult.handContour = handContour;
+			myResult.simpleContour = simpleContour;
+			myResult.fingerTips = fingerTips;
+			
+			myResult.center = center;
+			myResult.tip = center;
+			myResult.startAngle = 2;
 		}
-		Collections.sort(fingerTips, (a,b) -> Double.compare(a.z, b.z));
-		CCVector2 tip = new CCVector2();
-		double startAngle = 0;
-		if(fingerTips != null && fingerTips.size() > 0) {
-			tip = fingerTips.get(0).xy();
-			CCVector2 myDirection = tip.subtract(center).normalizeLocal();
-			startAngle = CCMath.atan2(-myDirection.y, myDirection.x);
-		}
-		
-		myResult.area = area;
-		myResult.isHand = true;
-		
-		myResult.handContour = handContour;
-		myResult.simpleContour = simpleContour;
-		myResult.fingerTips = fingerTips;
-		
-		myResult.center = center;
-		myResult.tip = tip;
-		myResult.startAngle = startAngle;
-		
 		return myResult;
+		
 	}
 	
 	private Map<Double, List<CCVector2i>> createDistanceMap(final List<CCHandInfo> theNewHands, double theDistanceThreshold){
@@ -685,11 +723,12 @@ public class CCHandTracker {
 			if(myBestFitInfo == null) {
 				myBestFitInfo = myInfo;
 			}
+			
 			if(!myInfo.isHand)continue;
 			_myTrackedObjects.add(myInfo);
 			if(myInfo.fingerTips.size() <= 0)continue;
 			
-			if(myInfo.fingerTips.size()  < myFingers) {
+			if(myInfo.fingerTips.size() < myFingers) {
 				myFingers = myInfo.fingerTips.size();
 				myBestFitInfo = myInfo;
 			}else if(myInfo.fingerTips.size() == myFingers && myInfo.fingerTips.get(0).z < myAngle) {
@@ -750,7 +789,8 @@ public class CCHandTracker {
 	
 	private void drawContour(CCHandInfo myInfo, CCGraphics g) {
 		if(!_cDrawContour)return;
-		
+
+		//CCLog.info("Draw C",_myIsInConfig);
 		g.pushAttribute();
 		g.strokeWeight(2);
 		g.color(_cContourColor);
@@ -907,7 +947,7 @@ public class CCHandTracker {
 		_myDebugTexture.mustFlipVertically(false);
 		if(_cDrawImage)g.image(_myTexture, 0,0);
 		g.popMatrix();
-		
+		//CCLog.info("Draw Debug",_myIsInConfig);
 //		drawSpline(g);
 		if(_myIsInConfig)return;
 		for(CCHandInfo myInfo:_myHands) {
